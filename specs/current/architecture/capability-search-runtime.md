@@ -77,6 +77,14 @@ citations. The existing source identity includes path and range, so distinct
 matching lines remain separately navigable and repeated semantic identities
 within one message use the existing persistence deduplication.
 
+Webfetch preserves the decoded text supplied by native text resources and the
+formatting supplied by the existing HTML converters. Its sole output boundary
+externalizes embedded attachments and applies the UTF-8 byte budget without
+trimming, removing trailing whitespace, collapsing blank lines or rewriting
+line endings. Hard breaks and code whitespace remain source content; metadata
+counts the actual retained output. Existing line-first clipping and complete
+UTF-8 prefix handling retain their output limit and omission notice.
+
 Webfetch and the two Exa consumers share one Hypertext Transfer Protocol (HTTP) response-body owner. The
 existing overall/parent deadline stays active through headers, body consumption
 and normal conversion, and is cleared once in the outer finally. Each physical

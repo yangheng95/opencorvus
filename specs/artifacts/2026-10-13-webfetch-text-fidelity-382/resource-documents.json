@@ -1,0 +1,14 @@
+{
+  "/article.html": {
+    "contentType": "text/html; charset=utf-8",
+    "body": "<!doctype html><html><head><title>382 Line-break sample</title></head><body><p>First line<br>Second line</p><pre>    first \t\n\n\n\n      second  </pre><p>After.</p></body></html>",
+    "expected": "382 Line-break sample\n\nFirst line  \nSecond line\n\n    first \t\n\n\n\n      second  \n\nAfter.",
+    "title": "382 Line-break sample"
+  },
+  "/article.md": {
+    "contentType": "text/markdown; charset=utf-8",
+    "body": "---\r\ntitle: 382 Markdown sample\r\n---\r\n\r\n    indented code\r\n    next\r\n\r\nFirst line  \r\nSecond line\r\n\r\n```text\r\n  first \t\r\n\r\n\r\n\r\n  second  \r\n```\r\n",
+    "expected": "---\r\ntitle: 382 Markdown sample\r\n---\r\n\r\n    indented code\r\n    next\r\n\r\nFirst line  \r\nSecond line\r\n\r\n```text\r\n  first \t\r\n\r\n\r\n\r\n  second  \r\n```\r\n",
+    "title": "382 Markdown sample"
+  }
+}

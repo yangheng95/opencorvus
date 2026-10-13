@@ -232,7 +232,7 @@ test("fetched document metadata preserves published titles, resource content and
           ),
         )
         expect(markdownFormats.map((value) => value.output)).toEqual(
-          Array(3).fill('---\ntitle: "发布者 & 标题"\n---\n# Article heading\nActual Markdown body'),
+          Array(3).fill(markdownBodies["markdown-quoted"]),
         )
         for (const value of markdownFormats)
           expect(value.sources[0]).toMatchObject({
@@ -243,7 +243,7 @@ test("fetched document metadata preserves published titles, resource content and
           })
         const folded = await executeWebFetch({ url: `${server.url}markdown-folded`, format: "markdown" }, ctx)
         expect(folded).toMatchObject({
-          output: "---\ntitle: >-\n  发布者\n  完整标题\n---\nActual Markdown body",
+          output: markdownBodies["markdown-folded"],
           sources: [
             {
               type: "source-url",
@@ -260,13 +260,9 @@ test("fetched document metadata preserves published titles, resource content and
           title: "Published XHTML title",
           provider: "opencorvus-webfetch",
         })
-        const literalResources = {
-          "markdown-malformed": "---\ntitle: [unfinished\n---\nActual Markdown body",
-          "markdown-script": "---javascript\n({ title: 'Computed script label' })\n---\nLiteral remote resource",
-        }
         for (const route of ["markdown-malformed", "markdown-script"] as const) {
           const value = await executeWebFetch({ url: `${server.url}${route}`, format: "markdown" }, ctx)
-          expect(value.output).toBe(literalResources[route])
+          expect(value.output).toBe(markdownBodies[route])
           expect(value.sources).toEqual([urlSource({ url: `${server.url}${route}`, provider: "opencorvus-webfetch" })])
         }
         const markdownPersisted = await persistMessageSources({

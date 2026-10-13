@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [382 网页读取的语义空白保真](records/2026-10/2026-10-13-webfetch-text-fidelity-382.md)：真实HTTP合同、Sol流式读取和桌面工具正文验证。
+
 - [382 工具结果恢复断点](records/2026-10/2026-10-13-source-result-recovery-382.md)：两种授权模式的来源丢失与成功结果误判证据，生产修复待继续。
 
 - [用量自然周期、时间桶与控件生命周期](records/2026-10/2026-10-13-usage-time-boundaries.md)：半小时/午夜夏令时统计与连续键盘操作。

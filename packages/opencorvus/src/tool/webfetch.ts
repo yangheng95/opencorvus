@@ -281,15 +281,13 @@ function externalizeEmbeddedDataUrls(text: string) {
 
 function formatFetchedText(text: string) {
   const externalized = externalizeEmbeddedDataUrls(text)
-  const normalized = externalized.output
-    .replace(/\r\n?/g, "\n")
-    .replace(/[ \t]+\n/g, "\n")
-    .replace(/\n{4,}/g, "\n\n\n")
-    .trim()
-  const originalBytes = Buffer.byteLength(normalized, "utf8")
+  // Converters own formatting; native text owns its whitespace. The output
+  // boundary only externalizes attachments and applies the byte budget.
+  const content = externalized.output
+  const originalBytes = Buffer.byteLength(content, "utf8")
   if (originalBytes <= TEXT_OUTPUT_MAX_BYTES) {
     return {
-      output: normalized,
+      output: content,
       metadata: {
         originalBytes,
         shownBytes: originalBytes,
@@ -300,7 +298,7 @@ function formatFetchedText(text: string) {
     }
   }
 
-  const lines = normalized.split("\n")
+  const lines = content.split("\n")
   const shown: string[] = []
   let shownBytes = 0
   for (const line of lines) {
@@ -311,7 +309,7 @@ function formatFetchedText(text: string) {
     shownBytes += separatorBytes + lineBytes
   }
   if (shown.length === 0) {
-    const head = decodeUtf8Prefix(Buffer.from(normalized, "utf8"), TEXT_OUTPUT_MAX_BYTES)
+    const head = decodeUtf8Prefix(Buffer.from(content, "utf8"), TEXT_OUTPUT_MAX_BYTES)
     shown.push(head)
     shownBytes = Buffer.byteLength(head, "utf8")
   }

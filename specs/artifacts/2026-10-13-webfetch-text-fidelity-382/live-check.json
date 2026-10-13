@@ -1,0 +1,35 @@
+{
+  "observedAt": "2026-10-13T06:33:35.408Z",
+  "passed": true,
+  "access": "Read-only canonical SQLite BEGIN/ROLLBACK and production completedToolOutcomeOutput",
+  "sessionID": "ses_h9hSZADKVzpohRVKZuw2",
+  "finalMessageID": "msg_g0VXuOb5v00oO128rwgX",
+  "tools": [
+    {
+      "resourcePath": "/article.html",
+      "toolPartID": "prt_g0VXuOXkY00ezqIYWeVb",
+      "messageID": "msg_g0VXuOWeC00KHdNRuUIX",
+      "bytes": 86,
+      "sourcePartID": "prt_g0VXuOY7d00W2jtIMv5z",
+      "sourceTitle": "382 Line-break sample",
+      "exactBody": true,
+      "exactMetadata": true
+    },
+    {
+      "resourcePath": "/article.md",
+      "toolPartID": "prt_g0VXuOagm00OjzKbdGJK",
+      "messageID": "msg_g0VXuOYNg003rXTloL5j",
+      "bytes": 143,
+      "sourcePartID": "prt_g0VXuOawW00jTIL2yw6L",
+      "sourceTitle": "382 Markdown sample",
+      "exactBody": true,
+      "exactMetadata": true
+    }
+  ],
+  "providerRequests": 6,
+  "model": "gpt-6.1-sol",
+  "streaming": true,
+  "everyRequestHTTP200AndEOF": true,
+  "nativeDeadlineAt": 1791873529557,
+  "boundary": "Backend acceptance only; desktop visual and native physical shutdown remain separately required"
+}

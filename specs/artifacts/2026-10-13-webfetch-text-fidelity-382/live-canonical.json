@@ -1,0 +1,392 @@
+{
+  "session": {
+    "id": "ses_h9hSZADKVzpohRVKZuw2",
+    "directory": "D:\\myhexin-local\\opencorvus\\.tmp-webfetch-text-fidelity-382\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\de7f8b88-0240-471d-8dea-119013a85d8f",
+    "kind": "assistant"
+  },
+  "messages": [
+    {
+      "id": "msg_hkPxozuYrDhaY6f9JLZU",
+      "author": "user",
+      "role": "user",
+      "time": {
+        "created": 1791873006502
+      },
+      "agent": "chat",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "tools": {
+        "delegate_agent": true,
+        "panel_expert_squad_inspect": true,
+        "panel_query_task": true,
+        "panel_query_task_artifacts": true,
+        "panel_create_task": true,
+        "panel_wake_mission": true,
+        "panel_wake_work": true,
+        "panel_send_task_message": true,
+        "panel_respond_interaction": true,
+        "panel_cancel_task": true,
+        "panel_update_checks": true,
+        "panel_select_workspace": true,
+        "panel_update_goal": true,
+        "panel_delete_goal": true,
+        "question": true,
+        "bash": true,
+        "read": true,
+        "glob": true,
+        "search_code": true,
+        "edit": true,
+        "write": true,
+        "apply_patch": true,
+        "todo": true,
+        "schedule": true
+      },
+      "extra": {
+        "wake_reason": {
+          "source": "api.chat",
+          "requestID": "2f3a036e-f80d-4f7f-80d4-305ad5d4114b",
+          "requestFingerprint": "73d09f7ebfab750903c4acfb8cbeabb02f86ff3a9d1bf79f452da5dc577ccf6d"
+        },
+        "surface": "right-sidebar",
+        "project_memory_user_input": {
+          "version": 1,
+          "surface": "api.chat",
+          "literalText": "请使用 webfetch，以 markdown 格式分别读取 http://127.0.0.1:18497/article.html 和 http://127.0.0.1:18497/article.md 。这是两份公开的排版样本，请根据实际读取结果，简短比较显式换行、缩进代码和代码中的空行，并在回答中给出两份来源的 Markdown 链接。只需读取并解释这两份文档。"
+        },
+        "source": "right-sidebar-conversation",
+        "experience": "chat"
+      },
+      "orderKey": "v1:0001791873006502:0000000000000030:0000000000000000:message:msg_hkPxozuYrDhaY6f9JLZU"
+    },
+    {
+      "id": "msg_g0VXuOWeC00KHdNRuUIX",
+      "author": "chat",
+      "role": "assistant",
+      "time": {
+        "created": 1791873006748,
+        "completed": 1791873012932
+      },
+      "parentID": "msg_hkPxozuYrDhaY6f9JLZU",
+      "acceptedInputMessageIDs": [
+        "msg_hkPxozuYrDhaY6f9JLZU"
+      ],
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "agent": "chat",
+      "path": {
+        "cwd": "D:\\myhexin-local\\opencorvus\\.tmp-webfetch-text-fidelity-382\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\de7f8b88-0240-471d-8dea-119013a85d8f",
+        "root": "D:\\myhexin-local\\opencorvus\\.tmp-webfetch-text-fidelity-382\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\de7f8b88-0240-471d-8dea-119013a85d8f"
+      },
+      "cost": 0,
+      "tokens": {
+        "total": 30096,
+        "input": 30061,
+        "output": 35,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      },
+      "billing": {
+        "status": "priced"
+      },
+      "finish": "tool-calls",
+      "orderKey": "v1:0001791873006748:0000000000000030:0000000000000000:message:msg_g0VXuOWeC00KHdNRuUIX"
+    },
+    {
+      "id": "msg_g0VXuOYNg003rXTloL5j",
+      "author": "chat",
+      "role": "assistant",
+      "time": {
+        "created": 1791873013412,
+        "completed": 1791873023646
+      },
+      "parentID": "msg_hkPxozuYrDhaY6f9JLZU",
+      "acceptedInputMessageIDs": [
+        "msg_hkPxozuYrDhaY6f9JLZU"
+      ],
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "agent": "chat",
+      "path": {
+        "cwd": "D:\\myhexin-local\\opencorvus\\.tmp-webfetch-text-fidelity-382\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\de7f8b88-0240-471d-8dea-119013a85d8f",
+        "root": "D:\\myhexin-local\\opencorvus\\.tmp-webfetch-text-fidelity-382\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\de7f8b88-0240-471d-8dea-119013a85d8f"
+      },
+      "cost": 0,
+      "tokens": {
+        "total": 30295,
+        "input": 8244,
+        "output": 35,
+        "reasoning": 0,
+        "cache": {
+          "read": 22016,
+          "write": 0
+        }
+      },
+      "billing": {
+        "status": "priced"
+      },
+      "finish": "tool-calls",
+      "orderKey": "v1:0001791873013412:0000000000000030:0000000000000000:message:msg_g0VXuOYNg003rXTloL5j"
+    },
+    {
+      "id": "msg_g0VXuOb5v00oO128rwgX",
+      "author": "chat",
+      "role": "assistant",
+      "time": {
+        "created": 1791873023843,
+        "completed": 1791873039238
+      },
+      "parentID": "msg_hkPxozuYrDhaY6f9JLZU",
+      "acceptedInputMessageIDs": [
+        "msg_hkPxozuYrDhaY6f9JLZU"
+      ],
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "agent": "chat",
+      "path": {
+        "cwd": "D:\\myhexin-local\\opencorvus\\.tmp-webfetch-text-fidelity-382\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\de7f8b88-0240-471d-8dea-119013a85d8f",
+        "root": "D:\\myhexin-local\\opencorvus\\.tmp-webfetch-text-fidelity-382\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\de7f8b88-0240-471d-8dea-119013a85d8f"
+      },
+      "cost": 0,
+      "tokens": {
+        "total": 30567,
+        "input": 263,
+        "output": 224,
+        "reasoning": 0,
+        "cache": {
+          "read": 30080,
+          "write": 0
+        }
+      },
+      "billing": {
+        "status": "priced"
+      },
+      "finish": "stop",
+      "orderKey": "v1:0001791873023843:0000000000000030:0000000000000000:message:msg_g0VXuOb5v00oO128rwgX"
+    }
+  ],
+  "parts": [
+    {
+      "id": "prt_hMsXQKxck1NBgqkfscDr",
+      "messageID": "msg_hkPxozuYrDhaY6f9JLZU",
+      "type": "text",
+      "text": "请使用 webfetch，以 markdown 格式分别读取 http://127.0.0.1:18497/article.html 和 http://127.0.0.1:18497/article.md 。这是两份公开的排版样本，请根据实际读取结果，简短比较显式换行、缩进代码和代码中的空行，并在回答中给出两份来源的 Markdown 链接。只需读取并解释这两份文档。",
+      "metadata": {
+        "catalog_snapshot_ref": "/attachment/prj_hofAiaAc2CEp6CxMpMJ5/39470e6b1d05e363aac5c24e2c0e04407e48117f27f7d30cc7c8a1c7e7b3513a.json",
+        "catalog_snapshot_hash": "39470e6b1d05e363aac5c24e2c0e04407e48117f27f7d30cc7c8a1c7e7b3513a"
+      }
+    },
+    {
+      "id": "prt_g0VXuOWpJ00c7wL3aG4A",
+      "messageID": "msg_g0VXuOWeC00KHdNRuUIX",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXuOY7d00W2jtIMv5z",
+      "messageID": "msg_g0VXuOWeC00KHdNRuUIX",
+      "type": "source-url",
+      "sourceId": "d250bb4475a949969608350901ef20ab2b72e2cd8dc4a34eea46ff50ec705faa",
+      "url": "http://127.0.0.1:18497/article.html",
+      "title": "382 Line-break sample",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXuOY9000Bq9ZnTv2e",
+      "messageID": "msg_g0VXuOWeC00KHdNRuUIX",
+      "type": "step-finish",
+      "reason": "tool-calls",
+      "cost": 0,
+      "tokens": {
+        "total": 30096,
+        "input": 30061,
+        "output": 35,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      },
+      "billing": {
+        "status": "priced"
+      }
+    },
+    {
+      "id": "prt_g0VXuOZK800j8eCZTCLw",
+      "messageID": "msg_g0VXuOYNg003rXTloL5j",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXuOawW00jTIL2yw6L",
+      "messageID": "msg_g0VXuOYNg003rXTloL5j",
+      "type": "source-url",
+      "sourceId": "b2b99cdbe3a93341d91433326fb075184116ba37852d7a3b75107633df39f5a1",
+      "url": "http://127.0.0.1:18497/article.md",
+      "title": "382 Markdown sample",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXuOaxQ008hQjc8NCj",
+      "messageID": "msg_g0VXuOYNg003rXTloL5j",
+      "type": "step-finish",
+      "reason": "tool-calls",
+      "cost": 0,
+      "tokens": {
+        "total": 30295,
+        "input": 8244,
+        "output": 35,
+        "reasoning": 0,
+        "cache": {
+          "read": 22016,
+          "write": 0
+        }
+      },
+      "billing": {
+        "status": "priced"
+      }
+    },
+    {
+      "id": "prt_g0VXuObls00iTITdgU93",
+      "messageID": "msg_g0VXuOb5v00oO128rwgX",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXuOdEr005Xmzo6PTJ",
+      "messageID": "msg_g0VXuOb5v00oO128rwgX",
+      "type": "text",
+      "text": "根据实际读取的 Markdown 结果：\n\n- **显式换行**：两份文档都保留了 `First line` 末尾的两个空格，随后换到 `Second line`，即 Markdown 的显式换行写法。\n- **缩进代码**：HTML 样本转换后以缩进形式呈现 `first` 和 `second`；Markdown 样本保留了四空格缩进的 `indented code`、`next`，另有一个标注为 `text` 的围栏代码块。\n- **代码中的空行**：两份结果都保留了 `first` 与 `second` 之间的多个空行，没有压缩成一行；Markdown 样本的空行位于围栏代码块内，代码范围更明确。\n\n来源：[HTML 排版样本](http://127.0.0.1:18497/article.html) · [Markdown 排版样本](http://127.0.0.1:18497/article.md)",
+      "time": {
+        "start": 1791873032085,
+        "end": 1791873038755
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "msg_09b2e0c60a7a748b016acdd00801808191897f6da68106e381",
+          "phase": "final_answer"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXuOf5J00Ri6z7J99q",
+      "messageID": "msg_g0VXuOb5v00oO128rwgX",
+      "type": "step-finish",
+      "reason": "stop",
+      "cost": 0,
+      "tokens": {
+        "total": 30567,
+        "input": 263,
+        "output": 224,
+        "reasoning": 0,
+        "cache": {
+          "read": 30080,
+          "write": 0
+        }
+      },
+      "billing": {
+        "status": "priced"
+      }
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VXuOXkY00ezqIYWeVb",
+      "messageID": "msg_g0VXuOWeC00KHdNRuUIX",
+      "request": {
+        "type": "tool-request",
+        "callID": "call_b8f0e42cd5c949fc97eff4c0ee4ea343",
+        "tool": "webfetch",
+        "input": {
+          "url": "http://127.0.0.1:18497/article.html",
+          "format": "markdown"
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_04b396d8b4b6679e016acdcff2ea688191ae2fa5178770c752"
+          }
+        },
+        "time": {
+          "start": 1791873010986
+        }
+      },
+      "outcome": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hqKiU2bS7gHt5r1NUgfG",
+        "title": "http://127.0.0.1:18497/article.html (text/html; charset=utf-8)",
+        "metadata": {
+          "originalBytes": 86,
+          "shownBytes": 86,
+          "webfetchOutputClipped": false,
+          "webfetchEmbeddedAttachmentCount": 0,
+          "truncated": false
+        },
+        "time": {
+          "end": 1791873012397
+        }
+      },
+      "output": "382 Line-break sample\n\nFirst line  \nSecond line\n\n    first \t\n\n\n\n      second  \n\nAfter."
+    },
+    {
+      "id": "prt_g0VXuOagm00OjzKbdGJK",
+      "messageID": "msg_g0VXuOYNg003rXTloL5j",
+      "request": {
+        "type": "tool-request",
+        "callID": "call_d7108b4b98b14a9f9d9c0c8d23c3349d",
+        "tool": "webfetch",
+        "input": {
+          "url": "http://127.0.0.1:18497/article.md",
+          "format": "markdown"
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_09443fa0ab644c9d016acdcffe02b88191998bac42eb491dc8"
+          }
+        },
+        "time": {
+          "start": 1791873022284
+        }
+      },
+      "outcome": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hDxLfHzJyuqL84rF7Hfh",
+        "title": "http://127.0.0.1:18497/article.md (text/markdown; charset=utf-8)",
+        "metadata": {
+          "originalBytes": 143,
+          "shownBytes": 143,
+          "webfetchOutputClipped": false,
+          "webfetchEmbeddedAttachmentCount": 0,
+          "truncated": false
+        },
+        "time": {
+          "end": 1791873023249
+        }
+      },
+      "output": "---\r\ntitle: 382 Markdown sample\r\n---\r\n\r\n    indented code\r\n    next\r\n\r\nFirst line  \r\nSecond line\r\n\r\n```text\r\n  first \t\r\n\r\n\r\n\r\n  second  \r\n```\r\n"
+    }
+  ],
+  "observations": [
+    {
+      "resourcePath": "/article.html",
+      "toolPartID": "prt_g0VXuOXkY00ezqIYWeVb",
+      "messageID": "msg_g0VXuOWeC00KHdNRuUIX",
+      "bytes": 86,
+      "sourcePartID": "prt_g0VXuOY7d00W2jtIMv5z",
+      "sourceTitle": "382 Line-break sample",
+      "exactBody": true,
+      "exactMetadata": true
+    },
+    {
+      "resourcePath": "/article.md",
+      "toolPartID": "prt_g0VXuOagm00OjzKbdGJK",
+      "messageID": "msg_g0VXuOYNg003rXTloL5j",
+      "bytes": 143,
+      "sourcePartID": "prt_g0VXuOawW00jTIL2yw6L",
+      "sourceTitle": "382 Markdown sample",
+      "exactBody": true,
+      "exactMetadata": true
+    }
+  ],
+  "finalMessageID": "msg_g0VXuOb5v00oO128rwgX"
+}

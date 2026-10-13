@@ -132,7 +132,7 @@ for (const item of cases)
           }
           if (item.name === "document directory and parent image") {
             const plain = await executeWebFetch({ url, format: "text" }, ctx)
-            expect(plain.output).toBe("Etiquette")
+            expect(plain.output).toBe("Etiquette\n\n")
           }
         },
       })
