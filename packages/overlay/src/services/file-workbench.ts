@@ -55,6 +55,32 @@ export interface FileOperationScope {
   authority?: ApiAuthority
 }
 
+export type FileRefreshState =
+  | { status: "loaded" }
+  | { status: "failed"; error: unknown }
+  | {
+      status: "retired"
+      reason: "scope" | "superseded" | "not-started"
+      observedFailure?: { error: unknown }
+    }
+
+export type FileRefreshTarget = { kind: "directory"; path: string } | { kind: "search"; query: string }
+export interface FileRefreshReceipt {
+  target: FileRefreshTarget
+  state: FileRefreshState
+}
+
+/** Collect every started read without replacing a preceding failure or implying ownership. */
+export async function collectFileRefreshReceipts(
+  reads: readonly { target: FileRefreshTarget; result: Promise<FileRefreshState> }[],
+): Promise<FileRefreshReceipt[]> {
+  const settled = await Promise.allSettled(reads.map((read) => read.result))
+  return settled.map((result, index) => ({
+    target: reads[index]!.target,
+    state: result.status === "fulfilled" ? result.value : { status: "failed", error: result.reason },
+  }))
+}
+
 export interface FileEditorTarget extends FileOperationScope {
   path: string
   range?: SourceFileRange

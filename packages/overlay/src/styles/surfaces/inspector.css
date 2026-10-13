@@ -722,6 +722,12 @@
   padding: var(--ui-gap-sm) var(--ui-gap-md);
 }
 
+.file-explorer-action-feedback {
+  display: grid;
+  gap: var(--ui-gap-sm);
+  min-width: 0;
+}
+
 .file-explorer-feedback .oc-feedback__diagnostic {
   max-height: min(30vh, calc(200px * var(--ui-scale)));
   overflow: auto;

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Explorer操作结果与刷新回执](2026-10-13-file-operation-outcomes.md)：双失败、部分完成与当前读owner合同。
+
 - [390 MCP 文件与资源引用](2026-10-13-mcp-content-boundaries-390.md)：共享物化补齐、35项正向测试及真实Sol结果交付。
 
 - [386 Sources多文件与刷新实页](2026-10-13-source-reopen-386.md)：真实读取、刷新定位通过；原Provider请求失败与尺寸通知问题保留。

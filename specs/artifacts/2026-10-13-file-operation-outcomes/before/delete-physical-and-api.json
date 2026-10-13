@@ -1,0 +1,61 @@
+{
+  "quarantinedText": "delete-case b.txt\r\n",
+  "quarantinedBytes": [
+    100,
+    101,
+    108,
+    101,
+    116,
+    101,
+    45,
+    99,
+    97,
+    115,
+    101,
+    32,
+    98,
+    46,
+    116,
+    120,
+    116,
+    13,
+    10
+  ],
+  "requests": [
+    {
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "delete-case/a.txt",
+          "message": "File entry not found: delete-case/a.txt"
+        }
+      },
+      "requestID": "9bc3393b-6217-44f5-a891-d4aeb66b34ff",
+      "status": 404,
+      "path": "delete-case/a.txt"
+    },
+    {
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "delete-case/b.txt",
+          "message": "File entry not found: delete-case/b.txt"
+        }
+      },
+      "requestID": "1850b5c3-253d-4e61-a71e-fb6a0057aad3",
+      "status": 404,
+      "path": "delete-case/b.txt"
+    },
+    {
+      "body": {
+        "type": "text",
+        "content": "delete-case b.txt\r\n",
+        "revision": "c516992383c0e41824ec6a59250318a278e721e7262f3521018c087767ca0e99"
+      },
+      "requestID": "f3d29ae1-36fc-418b-ae22-05f62ae1dd0b",
+      "status": 200,
+      "path": "quarantine/delete-b.txt"
+    }
+  ],
+  "phase": "After the only real UI delete batch"
+}

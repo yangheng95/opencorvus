@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Explorer操作结果与刷新回执](2026-10-13-file-operation-outcomes/README.md)：真实多失败、桌面复核及聚焦正向证据。
+
 - [389 电子表格全屏弹层](2026-10-13-spreadsheet-fullscreen-popups-389/README.md)：菜单、颜色对话框、缩放、提示、真实CSV和三轮独立服务收尾。
 
 - [390 MCP 文件与引用](2026-10-13-mcp-content-boundaries-390/README.md)：真实工具内容、0/60字节存储与下载、11次流式请求和原owner收尾。

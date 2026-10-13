@@ -1,0 +1,211 @@
+Browser tab: 15, Title: "OpenCorvus", URL: "http://127.0.0.1:18445/ui/".
+0 AXWebArea OpenCorvus, URL: 127.0.0.1:18445/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: 收起侧边栏, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: 文件, ID: menubar-cl-1-menubar-menu-cl-702-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: 编辑, ID: menubar-cl-1-menubar-menu-cl-704-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-706-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: 帮助, ID: menubar-cl-1-menubar-menu-cl-708-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: 对话快捷入口, ID: workspaceNavigation
+				11 container 对话快捷入口
+					12 button 对话
+					13 button Mission 看板
+					14 button 定时
+					15 button 专家团
+					16 pop up button (collapsed) Description: 更多, ID: dropdownmenu-cl-120-trigger, Secondary Actions: Expand
+					17 button 设置
+				18 button 关于
+				19 pop up button (collapsed) Description: OpenCorvus 菜单, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus 官网, Value: opencorvus.com/zh-cn/
+						24 button 搜索任务或运行命令
+						25 button (collapsed) Description: 收件箱, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container 对话导航
+								29 button 新对话
+							30 container workLedgerProjectsScroll
+								31 text 项目
+								32 pop up button (collapsed) Description: 整理侧边栏, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: 创建项目, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								34 container
+									35 button (expanded) Description: 收起 scoped-project, Secondary Actions: Collapse
+									36 container
+										37 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+										38 button Chat
+										39 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-187-trigger, Secondary Actions: Expand
+									40 button (expanded) Description: 收起 project, Secondary Actions: Collapse
+								41 container 最近
+									42 text 最近
+									43 container
+										44 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+										45 button Chat
+										46 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-200-trigger, Secondary Actions: Expand
+						47 container 连接诊断
+							48 container Description: 连接诊断 · 在线 · 端口 18445, ID: connBadge
+								49 text 在线
+				50 splitter Description: 调整左侧面板大小, Value: 280, ID: leftPaneResizer
+				51 container workspaceMain
+					52 container chatSection
+						53 container Description: 正在加载 Task, ID: taskSwitchProgress
+						54 container
+							55 text Chat
+							56 pop up button (collapsed) Description: 项目操作, ID: dropdownmenu-cl-206-trigger, Secondary Actions: Expand
+							57 container Description: 非进行中, ID: taskStatus
+								58 text 非进行中
+							59 button 侧聊
+							60 container solidChatHeaderRuntimeActions
+								61 pop up button (collapsed) Description: 环境信息, Secondary Actions: Expand
+								62 checkbox Description: 关闭右侧面板, Value: 1
+						63 container
+							64 container Description: 对话, ID: chatScroll
+							65 container chatHomeComposition
+								66 container chatForm
+									67 splitter Description: 拖拽调整消息输入框大小, Value: 42
+									68 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, ID: chatTextarea
+									69 pop up button (collapsed) Description: 添加支持的文件, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+									70 text Code
+									71 text Chat
+									72 pop up button (collapsed) Description: Dynamic, Secondary Actions: Expand
+									73 pop up button (collapsed) Description: 授权模式，当前为 完全访问, Help: 授权模式：完全访问, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									74 pop up button (collapsed) Description: OpenCorvus 模型 选择模型，点击切换, Help: OpenCorvus 模型：选择模型, Secondary Actions: Expand
+										75 text 选择模型
+									76 button (disabled) Description: 发送, Help: 请先选择模型，再发送消息。, ID: chatSend
+					77 splitter Description: 调整右侧面板大小, Value: 380, ID: rightDockResizer
+					78 container Description: 工具面板, ID: rightDock
+						79 container tabs-cl-64
+							80 tab group 已打开的工具
+								81 container
+									82 tab (selected, settable, boolean) Description: 文件, Value: 1, ID: tabs-cl-64-trigger-explorer
+									83 button Description: 关闭标签页, Help: 关闭标签页 (Delete)
+							84 pop up button (collapsed) Description: 添加工具, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
+							85 button 关闭面板
+							86 container Description: 文件, ID: centerWorkbenchExplorer
+								87 container 资源管理器
+									88 search text field (settable) 搜索文件
+									89 container
+										90 text 已移动到 ../a.txt
+										91 text 已确认完成 1 项。
+										92 text move-case/.ignore：无法移动所选文件或文件夹。
+										119 container
+											120 button (expanded) 详细信息, Secondary Actions: Collapse
+												121 text 详细信息
+											122 text HTTP PATCH 500 file/item?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cfile-outcomes-after-01a133%5Cproject%5Cscoped-project
+
+Request ID: 3807edcf-e1d7-473a-b05b-83b8f98fb568
+
+ApiError: API 500 file/item?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cfile-outcomes-after-01a133%5Cproject%5Cscoped-project: Internal server error. See x-opencorvus-request-id for diagnostics.
+    at Pe (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:67:140642)
+    at async Pp (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:72:10856)
+    at async http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:221:604
+    at async Le (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:221:1410)
+    at async fi (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:221:442)
+    at async Lt (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:221:7091)
+
+response body:
+{
+  "name": "UnknownError",
+  "data": {
+    "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+  }
+}
+										95 text 文件夹 move-case：无法加载文件
+										138 container
+											139 button (expanded) 详细信息, Secondary Actions: Collapse
+												140 text 详细信息
+											141 text HTTP GET 500 file?path=move-case&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cfile-outcomes-after-01a133%5Cproject%5Cscoped-project
+
+Request ID: 06e4bc0f-b7e6-4ec0-8b54-f2d07a0f377d
+
+ApiError: API 500 file?path=move-case&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cfile-outcomes-after-01a133%5Cproject%5Cscoped-project: Internal server error. See x-opencorvus-request-id for diagnostics.
+    at Pe (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:67:140642)
+    at async w$ (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:72:10073)
+    at async nt (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:220:15204)
+    at async Promise.allSettled (index 0)
+    at async vj (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:72:5921)
+    at async http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:221:715
+    at async Le (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:221:1410)
+    at async fi (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:221:442)
+    at async Lt (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:221:7091)
+
+response body:
+{
+  "name": "UnknownError",
+  "data": {
+    "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+  }
+}
+										98 text 文件夹 ..：无法加载文件
+										142 container
+											143 button (expanded) 详细信息, Secondary Actions: Collapse
+												144 text 详细信息
+											145 text HTTP GET 500 file?path=..&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cfile-outcomes-after-01a133%5Cproject%5Cscoped-project
+
+Request ID: 19c34b03-fa99-45ff-8db4-14ad5a6e105b
+
+ApiError: API 500 file?path=..&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cfile-outcomes-after-01a133%5Cproject%5Cscoped-project: Internal server error. See x-opencorvus-request-id for diagnostics.
+    at Pe (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:67:140642)
+    at async w$ (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:72:10073)
+    at async nt (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:220:15204)
+    at async Promise.allSettled (index 1)
+    at async vj (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:72:5921)
+    at async http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:221:715
+    at async Le (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:221:1410)
+    at async fi (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:221:442)
+    at async Lt (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:221:7091)
+
+response body:
+{
+  "name": "UnknownError",
+  "data": {
+    "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+  }
+}
+										101 text 文件夹 .：无法加载文件
+										146 container
+											147 button (expanded) 详细信息, Secondary Actions: Collapse
+												148 text 详细信息
+											149 text HTTP GET 500 file?path=&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cfile-outcomes-after-01a133%5Cproject%5Cscoped-project
+
+Request ID: 9194289e-2da1-41e9-8b5a-110a96877a0b
+
+ApiError: API 500 file?path=&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cfile-outcomes-after-01a133%5Cproject%5Cscoped-project: Internal server error. See x-opencorvus-request-id for diagnostics.
+    at Pe (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:67:140642)
+    at async w$ (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:72:10073)
+    at async nt (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:220:15204)
+    at async Promise.allSettled (index 2)
+    at async vj (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:72:5921)
+    at async http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:221:715
+    at async Le (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:221:1410)
+    at async fi (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:221:442)
+    at async Lt (http://127.0.0.1:18445/ui/assets/main-7A9jsB2h.js:221:7091)
+
+response body:
+{
+  "name": "UnknownError",
+  "data": {
+    "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+  }
+}
+										123 text 无法加载 delete-case
+										124 text 无法加载文件
+										125 button (collapsed) 详细信息, Secondary Actions: Expand
+											126 text 详细信息
+										127 button 重试
+										128 text 无法加载 move-case
+										129 text 无法加载文件
+										130 button (collapsed) 详细信息, Secondary Actions: Expand
+											131 text 详细信息
+										132 button 重试
+									133 container
+										134 text 无法加载文件
+										135 button (collapsed) 详细信息, Secondary Actions: Expand
+											136 text 详细信息
+										137 button 重试
+
+The focused UI element is 147 button (expanded) 详细信息, Secondary Actions: Collapse

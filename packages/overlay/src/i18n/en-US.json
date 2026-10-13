@@ -551,7 +551,6 @@
   "provider.label.env": "Env",
   "provider.label.no_models": "none",
   "provider.models.count": "{{count}} models",
-  "provider.models.count_one": "{{count}} model",
   "provider.models.more": "+{{count}} more",
   "chat.git.commit": "Commit",
   "chat.git.message": "Message",
@@ -1451,10 +1450,17 @@
     "other": "Uploaded {{count}} files to {{target}}"
   },
   "explorer.upload_failed": "Unable to upload the files.",
-  "explorer.upload_reload_error": {
-    "one": "Uploaded {{count}} file to {{target}}, but the file list could not be reloaded.",
-    "other": "Uploaded {{count}} files to {{target}}, but the file list could not be reloaded."
+  "explorer.confirmed_items": {
+    "one": "{{count}} completed item confirmed.",
+    "other": "{{count}} completed items confirmed."
   },
+  "explorer.no_completed_items": "No completed file changes were confirmed.",
+  "explorer.operation_stopped": "The operation stopped before completing this step.",
+  "explorer.open_stopped": "Opening the file was stopped.",
+  "explorer.member_failure": "{{path}}: {{message}}",
+  "explorer.refresh_unconfirmed": "The refresh has not been confirmed.",
+  "explorer.directory_refresh_result": "Folder {{path}}: {{message}}",
+  "explorer.search_refresh_result": "Search “{{query}}”: {{message}}",
   "explorer.create_failed": "Unable to create the file or folder.",
   "explorer.rename_failed": "Unable to rename the file or folder.",
   "explorer.copy_failed": "Unable to copy the selected files or folders.",
@@ -2216,5 +2222,6 @@
   "project_runtime.interactive_delivery": "Interactive artifact",
   "settings.git_preferences": "Git",
   "settings.offer_git_init": "Offer Git initialization",
-  "settings.offer_git_init_hint": "When explicitly opening a non-Git directory, ask before creating a repository. Startup only reads existing state."
+  "settings.offer_git_init_hint": "When explicitly opening a non-Git directory, ask before creating a repository. Startup only reads existing state.",
+  "provider.models.count_one": "{{count}} model"
 }

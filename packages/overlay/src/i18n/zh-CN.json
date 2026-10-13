@@ -551,7 +551,6 @@
   "provider.label.env": "环境变量",
   "provider.label.no_models": "无",
   "provider.models.count": "{{count}} 个模型",
-  "provider.models.count_one": "{{count}} 个模型",
   "provider.models.more": "另有 {{count}} 个",
   "chat.git.commit": "提交",
   "chat.git.message": "提交信息",
@@ -1450,10 +1449,17 @@
     "other": "已上传 {{count}} 个文件到 {{target}}"
   },
   "explorer.upload_failed": "无法上传文件。",
-  "explorer.upload_reload_error": {
-    "one": "已上传 {{count}} 个文件到 {{target}}，但未能重新加载文件列表。",
-    "other": "已上传 {{count}} 个文件到 {{target}}，但未能重新加载文件列表。"
+  "explorer.confirmed_items": {
+    "one": "已确认完成 {{count}} 项。",
+    "other": "已确认完成 {{count}} 项。"
   },
+  "explorer.no_completed_items": "尚未确认任何已完成的文件更改。",
+  "explorer.operation_stopped": "操作在完成此步骤前已停止。",
+  "explorer.open_stopped": "已停止打开文件。",
+  "explorer.member_failure": "{{path}}：{{message}}",
+  "explorer.refresh_unconfirmed": "刷新尚未确认。",
+  "explorer.directory_refresh_result": "文件夹 {{path}}：{{message}}",
+  "explorer.search_refresh_result": "搜索“{{query}}”：{{message}}",
   "explorer.create_failed": "无法创建文件或文件夹。",
   "explorer.rename_failed": "无法重命名文件或文件夹。",
   "explorer.copy_failed": "无法复制所选文件或文件夹。",
@@ -2215,5 +2221,6 @@
   "project_runtime.interactive_delivery": "交互产物",
   "settings.git_preferences": "Git",
   "settings.offer_git_init": "打开目录时询问是否初始化 Git",
-  "settings.offer_git_init_hint": "手动打开非 Git 目录时先询问，确认后才创建仓库。应用启动只读取现有状态。"
+  "settings.offer_git_init_hint": "手动打开非 Git 目录时先询问，确认后才创建仓库。应用启动只读取现有状态。",
+  "provider.models.count_one": "{{count}} 个模型"
 }

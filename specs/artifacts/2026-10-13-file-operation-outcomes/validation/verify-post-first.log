@@ -1,0 +1,21 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ undefined
+- 'file'
+
+    at file:///D:/myhexin-local/opencorvus/.tmp-codex-file-outcomes-01a133/verify-post.mjs:47:8
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: undefined,
+  expected: 'file',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v25.7.0

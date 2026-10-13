@@ -518,6 +518,21 @@ publication followed by reload failure retains its committed-upload meaning.
 Expanded directory failures derive from the current directory error Map;
 feedback and diagnostic scrolling stay within a bounded Explorer region.
 
+One Explorer action outcome retains its actual completed receipts, the failed
+member or operation cause, and every started directory/search refresh receipt.
+Completed counts derive only from successful responses. Member failure and
+subsequent refresh failure remain independent original diagnostics; all started
+reads settle before that action owner publishes its final outcome. A current
+read is loaded only after its scope/token-owned result is published. Superseded,
+unstarted or scope-retired reads have explicit retired receipts, never inferred
+refresh success. Current actions can show completed work with unconfirmed
+refresh; retired project/authority/selection owners cannot publish old feedback.
+Upload uses the same refresh receipt contract and retains independent admission.
+Directory and search owners remain the only read state, without a second queue
+or waiting cache. Creating a file retains its successful creation separately
+from the editor's actual opened, stopped or failed post-open result. Stable
+failure and refresh facts preserve their Details owner across language changes.
+
 Explorer rows retain their render identity through equivalent directory refreshes.
 The key derives from the existing API authority revision, directory, committed
 selection epoch, row kind, physical node type and exact normalized path. Ordinary
