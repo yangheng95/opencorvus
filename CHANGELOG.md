@@ -19,6 +19,8 @@
 
 - 表格的工作表标签、侧栏和通知名称随界面语言切换；已打开的保护范围列表同步更新标题与正文，并保留工作表编辑、侧栏选项和宽度。
 
+- 表格权限面板的新增详情和确认返回列表保留当前语言标题；范围校验信息随语言切换更新，原范围、说明和权限选项继续保留。
+
 - 可编辑表格明确提示编辑仅保留在当前视图，离开或折叠前可下载修改后的工作表；说明 CSV 仅保留单元格值。提示随语言切换，全屏仍保留完整工作表操作区域。
 
 - 服务商搜索的显示数量与实际行集合一致，修复已配置项被目录重复计入总数的问题；服务商、发现模型、模型选择与用量统计共用模型数量翻译，英文单模型使用正确单数，发现成功提示跟随当前界面语言。
@@ -71,6 +73,8 @@
 - Providers with saved keys can discover models before any model has been configured. OpenCorvus live refresh can restore empty catalogs or catalogs fully filtered by model settings. Global and project discovery use their own configured endpoints, while model selection continues to show runnable models.
 
 - Spreadsheet sheet-tab, Sidebar and notification names follow the interface language. Open protection-range lists refresh their title and content while retaining workbook edits, selected panel options and width.
+
+- Spreadsheet permission details opened from Add and lists returned from Confirm retain current-language titles. Range validation messages update with the language while preserving entered ranges, descriptions and permission choices.
 
 - Editable spreadsheets now explain that edits stay in the current view and that changed sheets should be downloaded before leaving or collapsing it. The localized note clarifies that CSV retains cell values and leaves the workbook usable in fullscreen.
 

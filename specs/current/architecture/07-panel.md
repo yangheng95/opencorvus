@@ -2463,6 +2463,11 @@ the current locale in its memo inputs, so keyed labels and render-time panel
 text refresh without replacing component state, width or the workbook. Previously
 translated titles and stored translated panel state remain separate consumer
 contracts; this does not claim every panel snapshot is locale-reactive.
+The protection panel keeps the locale key in both List Add and successful Detail
+Confirm title producers. Its range error is derived from the current ranges by
+the existing checker at render time, and that same result governs display and
+Confirm. Description, choices, workbook and original validation order remain
+owned by their existing state and services.
 
 Shared artifact action controls preserve native focus while an operation owns
 their busy state. Native disabled is reserved for genuinely unavailable actions;

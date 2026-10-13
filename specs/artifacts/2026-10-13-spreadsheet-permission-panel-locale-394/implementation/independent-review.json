@@ -1,0 +1,42 @@
+{
+  "iteration": 394,
+  "reviewer": "audit_ui",
+  "qualification": "Static source, scope, type and installed-consumer review only; not UI acceptance",
+  "result": "No concrete implementation issue found in the reviewed five vendor files",
+  "reviewedInputs": [
+    ".tmp-spreadsheet-permission-panel-locale-394/apply-vendor.mjs",
+    ".tmp-spreadsheet-permission-panel-locale-394/vendor-before",
+    "patches/@univerjs%2Fsheets-ui@0.25.1.patch"
+  ],
+  "actualConsumer": "node_modules/.bun/@univerjs+sheets-ui@0.25.1+fb6a3c66a95eaf3d/node_modules/@univerjs/sheets-ui",
+  "resolutionOrigin": "packages/overlay/node_modules/@univerjs/preset-sheets-core/package.json real path, createRequire",
+  "vendorFiles": [
+    "lib/index.js",
+    "lib/es/index.js",
+    "lib/cjs/index.js",
+    "lib/umd/index.js",
+    "lib/types/views/permission/panel-detail/PermissionDetailMainPart.d.ts"
+  ],
+  "findings": [
+    "List Add and Footer Confirm-success return pass the existing title key; correct OpenPanel and List Edit producers remain unchanged",
+    "Detail derives the translated error from its current ranges using the existing checker and shares the result with FormLayout and Footer guard",
+    "MainPart retains parsing, invalid/reversed range handling, upper-bound normalization and RangeSelector unit/sheet identifiers; it reports ranges without duplicate validation",
+    "Original checker, permission command sequence, async Confirm logic and active-sheet cleanup remain unchanged",
+    "UMD Gd/Yd title bindings and Kd/Jd range/error bindings are valid; removed Jd error setter and Kd injector/permissionId have no remaining references in those scopes",
+    "MainPart type removes the obsolete permissionId and callback error argument; util checker return contract and Footer permission props remain unchanged",
+    "All four runtime files have zero syntax parse diagnostics and source outside the four reviewed function scopes matches the saved before source",
+    "Current sheets-ui patch has fourteen intended file sections, including the thirteen existing 392 sections and the new MainPart declaration; ui/design patches have no task diff"
+  ],
+  "pendingRealAcceptance": [
+    "Same-instance bilingual title and overlap error with preserved ranges and description",
+    "Valid range clears the error and permission Confirm reaches the list through the actual local permission flow",
+    "Returned-list title updates and temporary rule cleanup succeeds",
+    "Root screenshot review, build/typecheck and final service shutdown evidence"
+  ],
+  "actionsNotPerformed": [
+    "Product or dependency edits",
+    "UI automated tests or browser operations",
+    "Service, model or credential use",
+    "Shared documentation, commit or delegation"
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "iteration": 394,
+  "selection": "Explicit allowlist only; no built UI, full vendor runtime, canonical database, environment, auth or models. JPEG and gzip evidence retain exact original bytes.",
+  "generatedDocuments": [
+    "README.md",
+    "archive-check.json"
+  ],
+  "files": [
+    {
+      "source": ".tmp-spreadsheet-permission-panel-locale-394/screenshots/before-detail-en.png",
+      "path": "screenshots/before-detail-en.jpg",
+      "compression": "none",
+      "qualification": "JPEG original bytes; source suffix was png",
+      "sourceBytes": 78868,
+      "archivedBytes": 78868,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "before-detail-en.png"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-panel-locale-394/screenshots/before-normal-dialog-overlap-en.png",
+      "path": "screenshots/before-normal-dialog-overlap-en.jpg",
+      "compression": "none",
+      "qualification": "JPEG original bytes; source suffix was png",
+      "sourceBytes": 81464,
+      "archivedBytes": 81464,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "before-normal-dialog-overlap-en.png"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-panel-locale-394/screenshots/before-normal-dialog-overlap-zh.png",
+      "path": "screenshots/before-normal-dialog-overlap-zh.jpg",
+      "compression": "none",
+      "qualification": "JPEG original bytes; source suffix was png",
+      "sourceBytes": 76079,
+      "archivedBytes": 76079,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "before-normal-dialog-overlap-zh.png"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-panel-locale-394/screenshots/after-ordinary-focus-blocked.png",
+      "path": "screenshots/after-ordinary-focus-blocked.jpg",
+      "compression": "none",
+      "qualification": "JPEG original bytes; source suffix was png",
+      "sourceBytes": 79955,
+      "archivedBytes": 79955,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "after-ordinary-focus-blocked.png"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-panel-locale-394/before/en-normal-overlap-through-dialog-ax.txt",
+      "path": "observations/before-en-normal-overlap-through-dialog-ax.txt",
+      "compression": "none",
+      "qualification": "source evidence",
+      "sourceBytes": 13385,
+      "archivedBytes": 13385
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-panel-locale-394/before/zh-normal-overlap-through-dialog-ax.txt",
+      "path": "observations/before-zh-normal-overlap-through-dialog-ax.txt",
+      "compression": "none",
+      "qualification": "source evidence",
+      "sourceBytes": 13037,
+      "archivedBytes": 13037
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-panel-locale-394/after-ordinary-focus-blocked-ax.txt",
+      "path": "observations/after-ordinary-focus-blocked-ax.txt",
+      "compression": "none",
+      "qualification": "source evidence",
+      "sourceBytes": 12309,
+      "archivedBytes": 12309
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-panel-locale-394/build.log",
+      "path": "logs/build.log.gz",
+      "compression": "gzip",
+      "qualification": "source evidence",
+      "sourceBytes": 73840,
+      "archivedBytes": 10876
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-panel-locale-394/typecheck.log",
+      "path": "logs/typecheck.log.gz",
+      "compression": "gzip",
+      "qualification": "source evidence",
+      "sourceBytes": 16,
+      "archivedBytes": 36
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-panel-locale-394/install.log",
+      "path": "logs/install.log.gz",
+      "compression": "gzip",
+      "qualification": "source evidence",
+      "sourceBytes": 178,
+      "archivedBytes": 164
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-panel-locale-394/patch-commit.log",
+      "path": "logs/patch-commit.log.gz",
+      "compression": "gzip",
+      "qualification": "source evidence",
+      "sourceBytes": 137,
+      "archivedBytes": 138
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-panel-locale-394/docs-plan.log",
+      "path": "logs/docs-plan.log.gz",
+      "compression": "gzip",
+      "qualification": "source evidence",
+      "sourceBytes": 106,
+      "archivedBytes": 115
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-panel-locale-394/docs-plan-after.log",
+      "path": "logs/docs-plan-after.log.gz",
+      "compression": "gzip",
+      "qualification": "source evidence",
+      "sourceBytes": 106,
+      "archivedBytes": 115
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-panel-locale-394/apply-vendor.mjs",
+      "path": "implementation/apply-vendor.mjs",
+      "compression": "none",
+      "qualification": "source evidence",
+      "sourceBytes": 4724,
+      "archivedBytes": 4724
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-panel-locale-394/vendor-files.json",
+      "path": "implementation/vendor-files.json",
+      "compression": "none",
+      "qualification": "source evidence",
+      "sourceBytes": 623,
+      "archivedBytes": 623
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-panel-locale-394/independent-review.json",
+      "path": "implementation/independent-review.json",
+      "compression": "none",
+      "qualification": "source evidence",
+      "sourceBytes": 2750,
+      "archivedBytes": 2750
+    },
+    {
+      "source": "patches/@univerjs%2Fsheets-ui@0.25.1.patch",
+      "path": "implementation/sheets-ui.patch.gz",
+      "compression": "gzip",
+      "qualification": "394 patch snapshot, retaining 392 inherited changes",
+      "sourceBytes": 1117389,
+      "archivedBytes": 494636
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/394-before/owner.json",
+      "path": "logs/before/owner.json",
+      "compression": "none",
+      "qualification": "source evidence",
+      "sourceBytes": 154,
+      "archivedBytes": 154
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/394-before/ready.json",
+      "path": "logs/before/ready.json",
+      "compression": "none",
+      "qualification": "source evidence",
+      "sourceBytes": 343,
+      "archivedBytes": 343
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/394-before/terminal.json",
+      "path": "logs/before/terminal.json",
+      "compression": "none",
+      "qualification": "source evidence",
+      "sourceBytes": 210,
+      "archivedBytes": 210
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/394-before/stdout.log",
+      "path": "logs/before/stdout.log.gz",
+      "compression": "gzip",
+      "qualification": "source evidence",
+      "sourceBytes": 51,
+      "archivedBytes": 69
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/394-before/stderr.log",
+      "path": "logs/before/stderr.log.gz",
+      "compression": "gzip",
+      "qualification": "source evidence",
+      "sourceBytes": 117774,
+      "archivedBytes": 10130
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/394-after/owner.json",
+      "path": "logs/failed-after/owner.json",
+      "compression": "none",
+      "qualification": "source evidence",
+      "sourceBytes": 154,
+      "archivedBytes": 154
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/394-after/ready.json",
+      "path": "logs/failed-after/ready.json",
+      "compression": "none",
+      "qualification": "source evidence",
+      "sourceBytes": 343,
+      "archivedBytes": 343
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/394-after/terminal.json",
+      "path": "logs/failed-after/terminal.json",
+      "compression": "none",
+      "qualification": "source evidence",
+      "sourceBytes": 210,
+      "archivedBytes": 210
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/394-after/stdout.log",
+      "path": "logs/failed-after/stdout.log.gz",
+      "compression": "gzip",
+      "qualification": "source evidence",
+      "sourceBytes": 51,
+      "archivedBytes": 69
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/394-after/stderr.log",
+      "path": "logs/failed-after/stderr.log.gz",
+      "compression": "gzip",
+      "qualification": "source evidence",
+      "sourceBytes": 97959,
+      "archivedBytes": 8763
+    }
+  ]
+}

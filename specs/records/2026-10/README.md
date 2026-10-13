@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [394 表格权限面板语言](2026-10-13-spreadsheet-permission-panel-locale-394.md)：权限标题与范围错误的同实例语言合同。
+
 - [390 执行轮次身份](2026-10-13-execution-actor-identity-390.md)：真实输入身份、成员最终正文与Sources、协议回放和单agent验收。
 
 - [持续目标重复崩溃与子 Task](2026-10-13-continuous-goal-repeated-recovery.md)：连续中断、恢复身份和真实子任务验收。

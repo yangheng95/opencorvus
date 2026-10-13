@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [394 表格权限面板语言](2026-10-13-spreadsheet-permission-panel-locale-394/README.md)：标题/错误前态、精确依赖修改与396联合真实后态入口。
+
 - [390 执行轮次身份](2026-10-05-connection-workspace-authority/execution-actor-identity-390/README.md)：共享身份契约和真实模型/页面证据。
 
 - [持续目标重复恢复证据](2026-10-13-continuous-goal-repeated-recovery/README.md)：逐代中断事实、真实模型请求和独立二次复核。

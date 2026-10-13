@@ -1,0 +1,105 @@
+{
+  "kind": "Archive safety, exact immutable evidence byte preservation and local-document links; not UI automation or product acceptance",
+  "gzipRestoration": [
+    {
+      "path": "logs/build.log.gz",
+      "decodedBytes": 73840,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/typecheck.log.gz",
+      "decodedBytes": 16,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/install.log.gz",
+      "decodedBytes": 178,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/patch-commit.log.gz",
+      "decodedBytes": 137,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/docs-plan.log.gz",
+      "decodedBytes": 106,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/docs-plan-after.log.gz",
+      "decodedBytes": 106,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "implementation/sheets-ui.patch.gz",
+      "decodedBytes": 1117389,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/before/stdout.log.gz",
+      "decodedBytes": 51,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/before/stderr.log.gz",
+      "decodedBytes": 117774,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/failed-after/stdout.log.gz",
+      "decodedBytes": 51,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/failed-after/stderr.log.gz",
+      "decodedBytes": 97959,
+      "matchesSourceBytes": true
+    }
+  ],
+  "images": [
+    {
+      "path": "screenshots/before-detail-en.jpg",
+      "sourceFilename": "before-detail-en.png",
+      "format": "JPEG",
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "screenshots/before-normal-dialog-overlap-en.jpg",
+      "sourceFilename": "before-normal-dialog-overlap-en.png",
+      "format": "JPEG",
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "screenshots/before-normal-dialog-overlap-zh.jpg",
+      "sourceFilename": "before-normal-dialog-overlap-zh.png",
+      "format": "JPEG",
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "screenshots/after-ordinary-focus-blocked.jpg",
+      "sourceFilename": "after-ordinary-focus-blocked.png",
+      "format": "JPEG",
+      "matchesSourceBytes": true
+    }
+  ],
+  "credentialScan": {
+    "textFilesInspected": 26,
+    "patternFamilies": [
+      "provider-key",
+      "bearer-value",
+      "credential-assignment",
+      "private-key"
+    ],
+    "hits": 0,
+    "qualification": "Bounded pattern scan, no claim of universal secret detection; no auth/models were read or copied"
+  },
+  "localLinks": {
+    "count": 44,
+    "broken": 0
+  },
+  "selection": {
+    "allowlistedCopiedFiles": 27,
+    "fullRuntimeOrCredentialDirectoriesCopied": false
+  }
+}

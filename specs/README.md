@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [394 表格权限面板语言](records/2026-10/2026-10-13-spreadsheet-permission-panel-locale-394.md)：标题producer与范围错误派生的当前语言调查和桌面验收。
+
 - [390 执行轮次身份](artifacts/2026-10-05-connection-workspace-authority/execution-actor-identity-plan-390.md)：真实输入、生命周期与成员流式归属。
 
 - [持续目标重复崩溃与子 Task](records/2026-10/2026-10-13-continuous-goal-repeated-recovery.md)：连续两次真实中断、正式启动恢复和 Mission 子任务计量验收。
