@@ -1,0 +1,69 @@
+[1/5] START test/continuous-goal-runtime.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+[goal-runtime-stage] accepted C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-mrnZIU\test-85180-xNbX6l\goal-stream-restart-QMXzPF
+[goal-runtime-stage] owner exited
+[goal-runtime-stage] recovery stream requested
+[goal-runtime-stage] result {"outcome":"recovered","goal":{"id":"pev_g0VXwJ4Sq00ifnJhLGhl","revision":"pev_g0VXwJ4Sq00ifnJhLGhl","owner":{"kind":"chat","id":"ses_-zUS3gvXWzzKKltQ1zm0"},"objective":"Return one visible streamed response","status":"budget_limited","reason":"turn_budget","turnBudget":1,"tokensUsed":0,"turnsAccepted":1,"createdAt":1791901259444,"updatedAt":1791901259444,"sessionID":"ses_-zUS3gvXWzzKKltQ1zm0","projectID":"prj_hPRhLJaumlgwChh00Z9S","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-mrnZIU\\test-85180-xNbX6l\\fixtures\\memory-IpEP2S"},"request":{"id":"pev_hEWq5NAQXBnj5WSFKvGc","goalID":"pev_g0VXwJ4Sq00ifnJhLGhl","revision":"pev_g0VXwJ4Sq00ifnJhLGhl","frontier":"start","number":1},"controllerInputs":["msg_h3P7vRFySk29gP8yqSgB"],"replies":[{"id":"msg_g0VXwJ6Zj009mL0RV5F8","parentID":"msg_h3P7vRFySk29gP8yqSgB","text":"provider reply 2"}]}
+(pass) a fresh process settles the same accepted goal input after its streamed owner exits [18963.75ms]
+
+ 1 pass
+ 0 fail
+ 4 expect() calls
+Ran 1 test across 1 file. [22.02s]
+[1/5] DONE test/continuous-goal-runtime.test.ts exit=0 duration=22.84s
+[2/5] START test/task-control-terminal-owner.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a local post-turn pipeline owns domain settlement until its exact terminal-success delivery [5524.63ms]
+(pass) a live peer terminal owner schedules recheck and then delivers its exact success [4624.00ms]
+(pass) a live peer terminal owner schedules recheck and then recovers partial after physical exit [3759.32ms]
+
+ 3 pass
+ 0 fail
+ 18 expect() calls
+Ran 3 tests across 1 file. [17.52s]
+[2/5] DONE test/task-control-terminal-owner.test.ts exit=0 duration=17.83s
+[3/5] START test/mission-streamed-recovery.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a Mission recovers a committed side effect, corrects a stale continuation and starts its independent verifier [68944.52ms]
+
+ 1 pass
+ 0 fail
+ 34 expect() calls
+Ran 1 test across 1 file. [72.69s]
+[3/5] DONE test/mission-streamed-recovery.test.ts exit=0 duration=73.01s
+[4/5] START test/mission-process-recovery.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) canonical Mission close and process reconciliation > scopes pending Mission delete recovery by Project while sibling cleanup remains actionable [5229.68ms]
+(pass) canonical Mission close and process reconciliation > discovers one Project's Mission recovery candidates through fixed cursor pages [7117.10ms]
+(pass) canonical Mission close and process reconciliation > startup discovers one pure closing occurrence and resumes its original provenance [3134.37ms]
+(pass) canonical Mission close and process reconciliation > preserves an exact live Prompt owner and its persisted assistant frontier [2356.91ms]
+
+ 4 pass
+ 0 fail
+ 8 expect() calls
+Ran 4 tests across 1 file. [19.71s]
+[4/5] DONE test/mission-process-recovery.test.ts exit=0 duration=19.95s
+[5/5] START test/continuous-goal-crash-checker.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) task crash checker selects current output with exact accepted-input and physical-reader authority [1.09ms]
+(pass) mission crash checker selects current output with exact accepted-input and physical-reader authority [0.19ms]
+(pass) Mission runtime recovery carries the exact opened event, dead generation and interrupted frontier [0.08ms]
+(pass) Mission repeated recovery replays the previously accepted runtime input and its immutable first-crash cause [0.26ms]
+(pass) inactivity evidence consists of business frontiers and physical reader progress [0.15ms]
+(pass) Mission child cut binds its actual creation Tool and Task ingress to the original goal input [0.33ms]
+
+ 6 pass
+ 0 fail
+ 9 expect() calls
+Ran 6 tests across 1 file. [971.00ms]
+[5/5] DONE test/continuous-goal-crash-checker.test.ts exit=0 duration=1.22s

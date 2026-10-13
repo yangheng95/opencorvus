@@ -3,6 +3,8 @@
 方案与冻结预算见 [本轮记录](../../records/2026-10/2026-10-13-continuous-goal-repeated-recovery.md)。
 
 - [主 agent 二次复核](parent-review.md)：共享机制审查、基线和最终复核。
+- [合并后Mission进程回归](integrated-mission-driver.log)与[合并后Goal/Task合同](integrated-goal-control.log)：25项92断言通过。
+- [独立谱系导出](capture-session-lineage.ts)与[持久化证据复核](review-evidence.mjs)：只读复核三次成功run的物理恢复、公共完成与用量归属。
 - [Chat 进程基线](parent-chat-baseline.log)：受控 Provider 集成通过；不等同真实模型验收。
 
 | run | 结果 | 真实请求 | goal tokens |

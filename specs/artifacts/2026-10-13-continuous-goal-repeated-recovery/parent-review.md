@@ -106,3 +106,11 @@ bun script/run-tests.ts test/continuous-goal-runtime.test.ts
 独立重建child Session后代集合，与原Provider usage账本逐ID比较：子Task已结算1270875 tokens全部关联原goal，且恢复进程新增child usage；goal总计2110219 tokens与账本求和相等。1600000是新自动轮次准入阈值，已经接受的Task生产、独立复核与当前Mission输入可以继续结算，因此不能把它解释为进行中执行的硬费用上限。中断但Provider未返回usage的成本仍为unknown。
 
 两个服务均退出，去重端口关闭，auth/models隔离副本已清理。原始审计目录的递归删除曾被自动审批以“blocked by policy”拒绝，没有给出更具体原因；没有重试或绕过，保留本地原目录，仅提交逐JSON解压校验后的归档及关键独立证据。
+
+### 合并后的交付复核
+
+实现与五次真实运行证据提交为`47623d693`。随后合并已发布的`origin/main`至`f6c93a756`，只出现三份spec索引的新增条目冲突，均保留双方条目；合并提交`5dc7c0c2f`。上游改动为Provider配置/发现投影、Session fork/附件和UI，未改动本轮三个生产修复点。真实Provider运行按前述锁定基线记录，不伪称在后来合并版本重新执行。
+
+在合并后的代码上完成25项、92断言聚焦复测，全部通过：Mission真实进程driver10/19；Chat进程恢复1/4；terminal owner3/18；完整streamed恢复1/34；Mission恢复与跨Project发现4/8；checker6/9。完整日志为`integrated-mission-driver.log`和`integrated-goal-control.log`。正常工具/调度链、caller取消、重复死亡接管、关闭及删除恢复和精确项目隔离均按本次相关范围复测。
+
+部分原始日志包含运行器输出中的行尾空白，按原字节压缩为`.log.gz`后逐字节解压比较，未裁剪失败内容；原日志继续保留本地。提交文件排除全部原始`*-audit`目录，只保留其完整压缩归档、receipt及独立关键事实。

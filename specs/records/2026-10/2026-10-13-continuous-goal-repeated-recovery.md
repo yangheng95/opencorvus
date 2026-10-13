@@ -1,5 +1,7 @@
 # 持续目标重复崩溃与 Mission 子 Task 真实验收
 
+最终交付复核：三项生产修复和五次真实运行证据已完成独立复核；Task两次崩溃、Mission修后两次崩溃及Mission子Task一次崩溃均通过。原两次失败保留。合并远端`f6c93a756`后25项92断言聚焦回归全通过，详见同轮artifact的`parent-review.md`与`integrated-*.log`。
+
 ## Recall
 
 - 用户继续要求“继续测试修复”，授权同一独立 agent、隔离工作树与真实 Provider 配对配置。先覆盖 Task、Mission 恢复进程再次崩溃，由第三个正式服务自动恢复；再覆盖 Mission 真实子 Task 中断恢复与目标用量归属。禁止再次委托、UI 自动化、人工续跑输入和直接调用 reconciler 替代启动发现。独立 agent 不提交或推送；父 agent 维护索引、复核和 Git 交付。
