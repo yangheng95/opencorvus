@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [原生 Git 写入根因](records/2026-10/2026-10-14-project-metadata-latency.md)：真实字节活动、共享期限排查及junction index/dirty语义；完整修复继续进行。
+
 - [公共URL编辑器保存校验](records/2026-10/2026-10-14-channel-url-validation.md)：原字段约束、真实保存和保留原值的验收调查。
 
 - [Task持久受理回执](records/2026-10/2026-10-14-task-acceptance-receipt.md)：协调指导及交互回答在持久受理后返回，后台扫描沿原权威继续。

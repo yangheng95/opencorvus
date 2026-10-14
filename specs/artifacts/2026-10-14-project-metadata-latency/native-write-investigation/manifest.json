@@ -1,0 +1,834 @@
+{
+  "files": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic\\original-input.json",
+      "file": "native-dry-run-diagnostic/original-input.json.gz",
+      "bytes": 2332,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic\\parent-joined.json",
+      "file": "native-dry-run-diagnostic/parent-joined.json.gz",
+      "bytes": 452,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic\\stdout.bin",
+      "file": "native-dry-run-diagnostic/stdout.bin.gz",
+      "bytes": 1132,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic\\stderr.bin",
+      "file": "native-dry-run-diagnostic/stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic\\evidence\\native-host-ready.json",
+      "file": "native-dry-run-diagnostic/evidence/native-host-ready.json.gz",
+      "bytes": 1330,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic\\evidence\\native-host-settled.json",
+      "file": "native-dry-run-diagnostic/evidence/native-host-settled.json.gz",
+      "bytes": 2461,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic\\evidence\\native-host-stderr.bin",
+      "file": "native-dry-run-diagnostic/evidence/native-host-stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic\\evidence\\native-host-stdout.bin",
+      "file": "native-dry-run-diagnostic/evidence/native-host-stdout.bin.gz",
+      "bytes": 1132,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic\\queries\\events.json",
+      "file": "native-dry-run-diagnostic/queries/events.json.gz",
+      "bytes": 1639,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic\\queries\\index-after.bin",
+      "file": "native-dry-run-diagnostic/queries/index-after.bin.gz",
+      "bytes": 137,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic\\queries\\index-before.bin",
+      "file": "native-dry-run-diagnostic/queries/index-before.bin.gz",
+      "bytes": 137,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic\\queries\\input.json",
+      "file": "native-dry-run-diagnostic/queries/input.json.gz",
+      "bytes": 513,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic\\queries\\request-1\\input.json",
+      "file": "native-dry-run-diagnostic/queries/request-1/input.json.gz",
+      "bytes": 1149,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic\\queries\\request-1\\ready.json",
+      "file": "native-dry-run-diagnostic/queries/request-1/ready.json.gz",
+      "bytes": 240,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic\\queries\\request-1\\settled.json",
+      "file": "native-dry-run-diagnostic/queries/request-1/settled.json.gz",
+      "bytes": 188,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic\\queries\\stderr.bin",
+      "file": "native-dry-run-diagnostic/queries/stderr.bin.gz",
+      "bytes": 436,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic\\queries\\stdout.bin",
+      "file": "native-dry-run-diagnostic/queries/stdout.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic\\queries\\summary.json",
+      "file": "native-dry-run-diagnostic/queries/summary.json.gz",
+      "bytes": 2535,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic-r2\\original-input.json",
+      "file": "native-dry-run-diagnostic-r2/original-input.json.gz",
+      "bytes": 2347,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic-r2\\parent-joined.json",
+      "file": "native-dry-run-diagnostic-r2/parent-joined.json.gz",
+      "bytes": 451,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic-r2\\stdout.bin",
+      "file": "native-dry-run-diagnostic-r2/stdout.bin.gz",
+      "bytes": 590,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic-r2\\stderr.bin",
+      "file": "native-dry-run-diagnostic-r2/stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic-r2\\evidence\\native-host-ready.json",
+      "file": "native-dry-run-diagnostic-r2/evidence/native-host-ready.json.gz",
+      "bytes": 1333,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic-r2\\evidence\\native-host-run-error.json",
+      "file": "native-dry-run-diagnostic-r2/evidence/native-host-run-error.json.gz",
+      "bytes": 3013,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic-r2\\evidence\\native-host-settled.json",
+      "file": "native-dry-run-diagnostic-r2/evidence/native-host-settled.json.gz",
+      "bytes": 5280,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic-r2\\evidence\\native-host-stderr.bin",
+      "file": "native-dry-run-diagnostic-r2/evidence/native-host-stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic-r2\\evidence\\native-host-stdout.bin",
+      "file": "native-dry-run-diagnostic-r2/evidence/native-host-stdout.bin.gz",
+      "bytes": 590,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic-r2\\queries\\events.json",
+      "file": "native-dry-run-diagnostic-r2/queries/events.json.gz",
+      "bytes": 784,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic-r2\\queries\\index-before.bin",
+      "file": "native-dry-run-diagnostic-r2/queries/index-before.bin.gz",
+      "bytes": 137,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic-r2\\queries\\input.json",
+      "file": "native-dry-run-diagnostic-r2/queries/input.json.gz",
+      "bytes": 513,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic-r2\\queries\\request-1\\input.json",
+      "file": "native-dry-run-diagnostic-r2/queries/request-1/input.json.gz",
+      "bytes": 1161,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-dry-run-diagnostic-r2\\queries\\request-1\\ready.json",
+      "file": "native-dry-run-diagnostic-r2/queries/request-1/ready.json.gz",
+      "bytes": 240,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-clock\\original-input.json",
+      "file": "native-silent-clock/original-input.json.gz",
+      "bytes": 2287,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-clock\\parent-joined.json",
+      "file": "native-silent-clock/parent-joined.json.gz",
+      "bytes": 452,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-clock\\stdout.bin",
+      "file": "native-silent-clock/stdout.bin.gz",
+      "bytes": 1291,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-clock\\stderr.bin",
+      "file": "native-silent-clock/stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-clock\\evidence\\native-host-ready.json",
+      "file": "native-silent-clock/evidence/native-host-ready.json.gz",
+      "bytes": 1317,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-clock\\evidence\\native-host-settled.json",
+      "file": "native-silent-clock/evidence/native-host-settled.json.gz",
+      "bytes": 2460,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-clock\\evidence\\native-host-stderr.bin",
+      "file": "native-silent-clock/evidence/native-host-stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-clock\\evidence\\native-host-stdout.bin",
+      "file": "native-silent-clock/evidence/native-host-stdout.bin.gz",
+      "bytes": 1291,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-clock\\queries\\events.json",
+      "file": "native-silent-clock/queries/events.json.gz",
+      "bytes": 1799,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-clock\\queries\\summary.json",
+      "file": "native-silent-clock/queries/summary.json.gz",
+      "bytes": 2705,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-long\\original-input.json",
+      "file": "native-silent-long/original-input.json.gz",
+      "bytes": 2280,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-long\\parent-joined.json",
+      "file": "native-silent-long/parent-joined.json.gz",
+      "bytes": 451,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-long\\stdout.bin",
+      "file": "native-silent-long/stdout.bin.gz",
+      "bytes": 923,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-long\\stderr.bin",
+      "file": "native-silent-long/stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-long\\evidence\\native-host-ready.json",
+      "file": "native-silent-long/evidence/native-host-ready.json.gz",
+      "bytes": 1315,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-long\\evidence\\native-host-settled.json",
+      "file": "native-silent-long/evidence/native-host-settled.json.gz",
+      "bytes": 2459,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-long\\evidence\\native-host-stderr.bin",
+      "file": "native-silent-long/evidence/native-host-stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-long\\evidence\\native-host-stdout.bin",
+      "file": "native-silent-long/evidence/native-host-stdout.bin.gz",
+      "bytes": 923,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-long\\queries\\events.json",
+      "file": "native-silent-long/queries/events.json.gz",
+      "bytes": 1311,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-silent-long\\queries\\summary.json",
+      "file": "native-silent-long/queries/summary.json.gz",
+      "bytes": 1435,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-output-probe\\original-input.json",
+      "file": "native-output-probe/original-input.json.gz",
+      "bytes": 2290,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-output-probe\\parent-joined.json",
+      "file": "native-output-probe/parent-joined.json.gz",
+      "bytes": 452,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-output-probe\\stdout.bin",
+      "file": "native-output-probe/stdout.bin.gz",
+      "bytes": 3089,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-output-probe\\stderr.bin",
+      "file": "native-output-probe/stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-output-probe\\evidence\\native-host-ready.json",
+      "file": "native-output-probe/evidence/native-host-ready.json.gz",
+      "bytes": 1318,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-output-probe\\evidence\\native-host-settled.json",
+      "file": "native-output-probe/evidence/native-host-settled.json.gz",
+      "bytes": 2461,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-output-probe\\evidence\\native-host-stderr.bin",
+      "file": "native-output-probe/evidence/native-host-stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-output-probe\\evidence\\native-host-stdout.bin",
+      "file": "native-output-probe/evidence/native-host-stdout.bin.gz",
+      "bytes": 3089,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-output-probe\\queries\\events.json",
+      "file": "native-output-probe/queries/events.json.gz",
+      "bytes": 3985,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-output-probe\\queries\\index-after.bin",
+      "file": "native-output-probe/queries/index-after.bin.gz",
+      "bytes": 137,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-output-probe\\queries\\index-before.bin",
+      "file": "native-output-probe/queries/index-before.bin.gz",
+      "bytes": 137,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-output-probe\\queries\\input.json",
+      "file": "native-output-probe/queries/input.json.gz",
+      "bytes": 553,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-output-probe\\queries\\observed-stderr.bin",
+      "file": "native-output-probe/queries/observed-stderr.bin.gz",
+      "bytes": 740644,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-output-probe\\queries\\observed-stdout.bin",
+      "file": "native-output-probe/queries/observed-stdout.bin.gz",
+      "bytes": 3457024,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-output-probe\\queries\\output-chunks.ndjson",
+      "file": "native-output-probe/queries/output-chunks.ndjson.gz",
+      "bytes": 467116,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-output-probe\\queries\\request-1\\input.json",
+      "file": "native-output-probe/queries/request-1/input.json.gz",
+      "bytes": 1125,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-output-probe\\queries\\request-1\\ready.json",
+      "file": "native-output-probe/queries/request-1/ready.json.gz",
+      "bytes": 240,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-output-probe\\queries\\request-1\\settled.json",
+      "file": "native-output-probe/queries/request-1/settled.json.gz",
+      "bytes": 188,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-output-probe\\queries\\summary.json",
+      "file": "native-output-probe/queries/summary.json.gz",
+      "bytes": 6288,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\original-input.json",
+      "file": "native-link-index-protocol/original-input.json.gz",
+      "bytes": 2339,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\parent-joined.json",
+      "file": "native-link-index-protocol/parent-joined.json.gz",
+      "bytes": 452,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\stdout.bin",
+      "file": "native-link-index-protocol/stdout.bin.gz",
+      "bytes": 2626,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\stderr.bin",
+      "file": "native-link-index-protocol/stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\evidence\\native-host-ready.json",
+      "file": "native-link-index-protocol/evidence/native-host-ready.json.gz",
+      "bytes": 1332,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\evidence\\native-host-settled.json",
+      "file": "native-link-index-protocol/evidence/native-host-settled.json.gz",
+      "bytes": 2461,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\evidence\\native-host-stderr.bin",
+      "file": "native-link-index-protocol/evidence/native-host-stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\evidence\\native-host-stdout.bin",
+      "file": "native-link-index-protocol/evidence/native-host-stdout.bin.gz",
+      "bytes": 2626,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\1-stderr.bin",
+      "file": "native-link-index-protocol/queries/1-stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\1-stdout.bin",
+      "file": "native-link-index-protocol/queries/1-stdout.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\10-stderr.bin",
+      "file": "native-link-index-protocol/queries/10-stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\10-stdout.bin",
+      "file": "native-link-index-protocol/queries/10-stdout.bin.gz",
+      "bytes": 158,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\11-stderr.bin",
+      "file": "native-link-index-protocol/queries/11-stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\11-stdout.bin",
+      "file": "native-link-index-protocol/queries/11-stdout.bin.gz",
+      "bytes": 13,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\12-stderr.bin",
+      "file": "native-link-index-protocol/queries/12-stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\12-stdout.bin",
+      "file": "native-link-index-protocol/queries/12-stdout.bin.gz",
+      "bytes": 13,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\13-stderr.bin",
+      "file": "native-link-index-protocol/queries/13-stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\13-stdout.bin",
+      "file": "native-link-index-protocol/queries/13-stdout.bin.gz",
+      "bytes": 43,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\14-stderr.bin",
+      "file": "native-link-index-protocol/queries/14-stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\14-stdout.bin",
+      "file": "native-link-index-protocol/queries/14-stdout.bin.gz",
+      "bytes": 101,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\2-stderr.bin",
+      "file": "native-link-index-protocol/queries/2-stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\2-stdout.bin",
+      "file": "native-link-index-protocol/queries/2-stdout.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\3-stderr.bin",
+      "file": "native-link-index-protocol/queries/3-stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\3-stdout.bin",
+      "file": "native-link-index-protocol/queries/3-stdout.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\4-stderr.bin",
+      "file": "native-link-index-protocol/queries/4-stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\4-stdout.bin",
+      "file": "native-link-index-protocol/queries/4-stdout.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\5-stderr.bin",
+      "file": "native-link-index-protocol/queries/5-stderr.bin.gz",
+      "bytes": 101,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\5-stdout.bin",
+      "file": "native-link-index-protocol/queries/5-stdout.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\6-input.bin",
+      "file": "native-link-index-protocol/queries/6-input.bin.gz",
+      "bytes": 101,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\6-stderr.bin",
+      "file": "native-link-index-protocol/queries/6-stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\6-stdout.bin",
+      "file": "native-link-index-protocol/queries/6-stdout.bin.gz",
+      "bytes": 41,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\7-input.bin",
+      "file": "native-link-index-protocol/queries/7-input.bin.gz",
+      "bytes": 58,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\7-stderr.bin",
+      "file": "native-link-index-protocol/queries/7-stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\7-stdout.bin",
+      "file": "native-link-index-protocol/queries/7-stdout.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\8-stderr.bin",
+      "file": "native-link-index-protocol/queries/8-stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\8-stdout.bin",
+      "file": "native-link-index-protocol/queries/8-stdout.bin.gz",
+      "bytes": 119,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\9-stderr.bin",
+      "file": "native-link-index-protocol/queries/9-stderr.bin.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\9-stdout.bin",
+      "file": "native-link-index-protocol/queries/9-stdout.bin.gz",
+      "bytes": 25,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\raw-link.bin",
+      "file": "native-link-index-protocol/queries/raw-link.bin.gz",
+      "bytes": 101,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\records.json",
+      "file": "native-link-index-protocol/queries/records.json.gz",
+      "bytes": 3714,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\native-link-index-protocol\\queries\\summary.json",
+      "file": "native-link-index-protocol/queries/summary.json.gz",
+      "bytes": 4427,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\fixture-lock-retirement-r2.json",
+      "file": "tools/fixture-lock-retirement-r2.json.gz",
+      "bytes": 1466,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\fixture-lock-retirement.json",
+      "file": "tools/fixture-lock-retirement.json.gz",
+      "bytes": 1393,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\preparation.json",
+      "file": "tools/preparation.json.gz",
+      "bytes": 329,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\prepare-link-protocol.mjs",
+      "file": "tools/prepare-link-protocol.mjs.gz",
+      "bytes": 466,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\prepare-output-probe.mjs",
+      "file": "tools/prepare-output-probe.mjs.gz",
+      "bytes": 1985,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\prepare-silent-clock.mjs",
+      "file": "tools/prepare-silent-clock.mjs.gz",
+      "bytes": 566,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\prepare-silent-long.mjs",
+      "file": "tools/prepare-silent-long.mjs.gz",
+      "bytes": 551,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\prepare.mjs",
+      "file": "tools/prepare.mjs.gz",
+      "bytes": 1225,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\retire-fixture-lock.mjs",
+      "file": "tools/retire-fixture-lock.mjs.gz",
+      "bytes": 2829,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\retire-second-lock.mjs",
+      "file": "tools/retire-second-lock.mjs.gz",
+      "bytes": 2195,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\run-link-protocol.mjs",
+      "file": "tools/run-link-protocol.mjs.gz",
+      "bytes": 5180,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\run-native-r2.mjs",
+      "file": "tools/run-native-r2.mjs.gz",
+      "bytes": 5181,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\run-native.mjs",
+      "file": "tools/run-native.mjs.gz",
+      "bytes": 5178,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\run-output-probe.mjs",
+      "file": "tools/run-output-probe.mjs.gz",
+      "bytes": 5166,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\run-silent-clock.mjs",
+      "file": "tools/run-silent-clock.mjs.gz",
+      "bytes": 5164,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\run-silent-long.mjs",
+      "file": "tools/run-silent-long.mjs.gz",
+      "bytes": 5162,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\second-lock-retirement.json",
+      "file": "tools/second-lock-retirement.json.gz",
+      "bytes": 1237,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\tools\\dry-run-diagnostic.ts",
+      "file": "tools/targets/dry-run-diagnostic.ts.gz",
+      "bytes": 4787,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\tools\\link-index-protocol.ts",
+      "file": "tools/targets/link-index-protocol.ts.gz",
+      "bytes": 2805,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\tools\\native-host.ts",
+      "file": "tools/targets/native-host.ts.gz",
+      "bytes": 11577,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\tools\\output-probe.ts",
+      "file": "tools/targets/output-probe.ts.gz",
+      "bytes": 5506,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\tools\\silent-clock.ts",
+      "file": "tools/targets/silent-clock.ts.gz",
+      "bytes": 2063,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\tools\\silent-long.ts",
+      "file": "tools/targets/silent-long.ts.gz",
+      "bytes": 1326,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\project-metadata-before-01a133\\retired-index-lock-stage-01a133\\original-dry-run-index.lock",
+      "file": "retired-locks/original-dry-run-index.lock.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\project-metadata-before-01a133\\retired-index-lock-stage-01a133\\second-dry-run-index.lock",
+      "file": "retired-locks/second-dry-run-index.lock.gz",
+      "bytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-git-stage-01a133\\root-review.json",
+      "file": "root-review.json.gz",
+      "bytes": 1248,
+      "gzip": true
+    }
+  ],
+  "atUtc": "2026-10-14T06:05:34.806Z",
+  "qualification": "Exact original captures, original retirement inputs and original index lock bytes. Credentials, catalogs, databases, executables and fixture .git repository are excluded. Repository command input/output and real link blob remain captured."
+}

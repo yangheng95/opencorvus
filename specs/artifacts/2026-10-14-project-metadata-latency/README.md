@@ -5,3 +5,5 @@
 上一目录浏览的成功正常推送与远端确认由[previous-delivery](previous-delivery/README.md)承接，原失败仍在原浏览归档。[完整新调查](investigation/README.md)保留25个原阶段、80原内部进程请求、5原图和真正客户端超时。各层资格分别保留；任何未取得的阶段、进程身份或退出不能由最后200/0补造。
 
 [共享源条目读取](source-entry-read/README.md)保留后续2100原capture：完整失败/修正、24项最终正向测试、两服务的34原HTTP及8张人工复核原图；native add dry-run超时与未资格写入范围明确保留。
+
+[原生写入调查](native-write-investigation/README.md)保留138原capture/4842523B：真实leaf活动与53ms终止结算、静默进程期限、原锁及raw link提交后的错误T；写入和比较修复仍未实施。

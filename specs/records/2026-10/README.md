@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [原生 Git 写入根因](2026-10-14-project-metadata-latency.md)：活动性取证、raw-link实际Git协议与全部写入口影响；无产品写入修复通过声明。
+
 - [公共URL编辑器保存校验](2026-10-14-channel-url-validation.md)：原生字段ValidityState与公共URL实际配置读回。
 
 - [Task持久受理回执](2026-10-14-task-acceptance-receipt.md)：协调指导及交互回答在持久受理后返回，后台扫描沿原权威继续。

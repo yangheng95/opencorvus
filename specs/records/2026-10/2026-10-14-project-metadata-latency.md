@@ -95,3 +95,37 @@ Root独立复核两次新原Native运行：directory-query的12条生产hostGit�
 normal Worktree/GC同语义的五条真实git status --porcelain均0（control922ms，其余155–265ms），该读取没有元数据all扫描放大。随后combined native git add --dry-run --all原运行在无输出后达到外层120秒真实无活动期限，原inactivity_timeout/1、全Job收束保留；未取得Git自身退出、输入流或index前后保存，不倒填它们。原生写入口问题尚未修复，将在下一批结合实际请求/期限/结算开展横审，不能把读修复外推成整个Git能力完成。当前无外部依赖阻塞，持续目标active。
 
 本轮[完整2100原capture](../../artifacts/2026-10-14-project-metadata-latency/source-entry-read/README.md)共3290049B，包括协议、原失败、修正运行、34原HTTP、两完整服务日志、426内部request原件及8原图；manifest只用于真实capture/存储/提交身份，不用源码摘要或像素gate验功能。一次缩减格式差异的辅助探针先因import路径错误、后因printer比较不等失败，未改产品；保留原工作文件，没有把该非功能检查设成交付门槛。范围提交/同步/推送由后续真实Git收据记录，不预写成功。
+
+## 下一轮 Recall：原生写入与真实终止阶段
+
+上一轮为实质进展：共享读取8da864d505ffdbf40ecc561f177730b60df42235实际提交2121路径，原普通index精确同步为空。首次正常push的全部hooks通过，远端并发已到8da，原expected-c6 ref拒绝/1保留；重新fresh fetch/merge、完整待推送集合复核后正常push0/Everything up-to-date，最后HEAD/upstream/remote fe0989e1456a58bbef73e5bc60167aa37163548a、8da ancestor0、own scope clean。实际回执在.tmp-codex-project-meta-01a133/source-delivery-*和source-final-proof-*。这次0没有新对象上传，不把并发推送归为Root上传。原追加调查文档9469完整Markdown和136原immutable Git blob已独立复核，不按其委托文案重新启用子agent。
+
+用户“停止所有子agent，你自己验收”继续有效：仅Root执行，未委托。本轮初始status为foreign task-api/交互恢复、代理设置、408记录与共享索引等修改，保留。相关代码、当前共享源条目架构及上一真实失败已重读。没有新branch/worktree/粗回退或发布授权；没有新模型调用。
+
+全仓当前写入口调查发现：Vcs.commit→hostGit add --all；Snapshot.add→独立git-dir/work-tree及可选index；Build pinBuildObservationTree→私有index read-tree HEAD/add -A；Worktree主目录merge恢复→normal status目录aggregate再分块git add paths；GitHub CLI三个提交路径→Bun shell git add .。EngineGit的checkpoint用raw-blob/index事务，上一实际Task baseline/result已资格其终端link正文。这些是不同生产入口，不能修一个按钮后判共同写能力完成。Snapshot和Build原配置、clean filters/属性、ignore、tracked删除/rename、gitlinks、index锁/用户并发、Task/Mission/Session发生实例、正常/终态/重试/重启及多Project仍需完整分析，尚未批准产品替换。
+
+原remaining运行只记录normal五phase成功，随后hostGit(default90秒)未返回，外层120秒无输出到期，最后whole Job三joins完整。没有记录leaf onSpawned、原Git请求/终止调用与原index-before落盘，无法据外层报错判定Git默认期限、Native admission、termination或output drain哪个异常。Process.runHost原参数确实经runRequest传入共享Facade；原timed-out handle须另取证，而不是假设已经证明共享底层正常或简单提高期限。
+
+先准备新的单次只读dry-run诊断，仍使用原有限combined root，不覆盖旧run。保存index-before与输入后才调用实际hostGit；在自有隔离进程透明绑定原Process.runHost onSpawned/terminate、原terminal/settled/outputSettled及现WindowsRequestObserver。记录真实阶段事件，不加定时heartbeat、不改Git90秒或外围900000/120000ms设置；这些实际事件输出可自然刷新外围活动期限，不能回写旧run或称产品超时已修复。每次只一个leaf Git，完整stdout/stderr及异常均保留，未知不能倒填。原handle自然结束或原限期结算后才检查原index与fixture实体；若仍缺阶段，先修工具链并收集同一真实路径。
+
+下一候选能力须保持单一source-entry选择及原Git属性/clean-filter/配置，用实际普通文件有限path输入、终端raw link/嵌套gitlink的明确index合同；具体API和事务未冻结，不先实现手写index或抹去用户暂存状态。先独立验证Windows junction在native Git已跟踪link状态与raw正文的真实语义。正式修复后必须正向Git/checker、真实开发/ui提交交互/原截图及必要的已授权Sol验收，再范围提交/fresh合并/正常push。当前为调查，不宣称写入修复或总体完成。
+
+新诊断第一run真实leaf128，index.lock0B/creation04:45:32.1839042Z来自原dry-run窗口；当前Git/supervisor存活实例都晚于原closure，相关自有namespace的command-line匹配只有检查shell。精确dev/inode/birthtimeNs/mtimeNs确认后，同卷单文件rename保留原锁（最初Date精度和跨C/D rename工具错误保留且未移动），没有删除用户数据或终止用户进程。第二run原leaf ready85588/Helper63316/owner91032及真实Git90秒输入已捕获；到外层120秒原终止，事件只有admitted/spawned，内层terminate/joins/hostGit返回均未观察，后读ready存在而cancel/settled不存在。不能把外层whole Job收束倒填为内层request收束。
+
+立即按共享期限异常横审：当前util/process单一25ms Atomics.waitAsync clock同时服务physical admission/abort/deadline、inactivity、5秒settlement；全部host/task/Plugin/SDK入口需纳入。现04-extensions公开合同及814540/581fee/08d944历史已读，尚不移除其clock或keepalive。下一最小只读checker用真实Node静默进程，对当前生产host/task facade的冷读、一次自然成功后的再次调用、串并行/两目录、单deadline与单inactivity分别资格；单独原Atomics.waitAsync和host timer事实用来区别宿主机制。外围原20秒cap/10秒无活动属于这个新checker；不重启Git失败owner、不提高产品期限、不生成heartbeat。先取原handle/错误/输出/marker事实再选择修复，现mock局部settlement测试不冒充真实运行。
+
+冷host静默真实Node进程已原0完整资格：Bun1.4的原waitAsync在298ms返回timed-out（启动加载期间host timer297ms），实际spawn68824后523ms原inactivity terminate被调用，约41ms收齐terminal/settled/output，明确reason inactivity_timeout/code1和原错误正文。此证据排除这个新冷host实例的clock失效，不外推到Task/Mission或Git。Git原hostGit会内部收集stdout/stderr直到返回，缺少final输出不等于leaf没有字节；可能持续warning刷新90秒活动期限。下一诊断在原单消费者byte source上透明观察并原样yield，保存实际完整chunk/时间/累计量，不另消费输出；显式4MiB诊断保留容量属于checker、触发output_limit必须保完整已取得内容与原三joins，不能冒充产品90秒timeout或正常写入。仅真实首次数据/容量变化事件输出，没有周期heartbeat。
+
+## 原生输出根因与链接写入语义证据
+
+output-probe真实hostGit原spawn77756后48.048秒才出现首stderr203B/首stdout4096B，随后真实字节持续增加（1/2/3MiB分别约70.6/95.0/118.6秒）。约125.648秒触发预声明4MiB诊断容量；原output_limit terminate、terminal/settled/output三joins及实际Native request零active在53ms收齐，terminate-returned随后保留。观察完整原stdout3457024B、stderr740644B，原index137B前后相同；source volume events自然刷新外围期限，没有修改产品90秒或旧发生实例。stderr明确显示多层重复aliases/root-back的embedded Git警告，stdout列出递归路径。当前小物理图被Native Git add展开，持续输出本应刷新内层真实活动期限；旧外围监控只看到未转发的聚合结果，错误地把活跃leaf判为无活动。没有证据支持删除共享clock或延长产品期限。
+
+无额外timer/Atomic probe的10秒真实静默Node也原0：spawn80932→10007ms inactivity terminate→55ms内原三joins及错误正文完整，进一步排除短窗口探针掩盖长期clock失效这一候选。代码上Host/Task/Plugin/SDK共用同一个clock、控制signal和settlement契约；实际Git此次output_limit也走该唯一终止路径并完整归零。这些精确实例足以改变本Git调查行动，不泛称所有Task/Mission/retry/restart端到端已验。
+
+新的独立link-index-protocol有限仓库实际14条hostGit均0，约5.7秒父run正常结束。真实raw readlink→hash-object stdin→update-index 120000→普通commit成功，HEAD blob与原raw字节完全相同；但commit后原native status为` T root-link`，core.symlinks=true仍同样T，原native raw diff显示120000→160000。因此当前Task canonical raw-link捕获与Native Windows Git将junction当embedded Git目录的比较语义存在真实冲突，可能令Vcs/File/Build/Snapshot比较、commit后的dirty与后续merge恢复继续错误；不能把有限staging通过当完整修复。
+
+已查阅当前实际Git2.45相关[git-add](https://git-scm.com/docs/git-add/2.45.0)的literal/NUL path输入、[update-index](https://git-scm.com/docs/git-update-index/2.43.0)和[hash-object](https://git-scm.com/docs/git-hash-object/2.43.0)的实际对象协议；资料只支持下一实验，不证明本机index/clean filter/事务正确。现Engine canonical index-lock准备/安装/ownership清理、前驱index保真与rollback已读，不能复制另一套竞争锁或用隔离Engine配置抹掉用户clean filters。
+
+后续完整修复必须同时分析并实现：以唯一gitSourcePaths选择有限普通文件/删除/rename、raw terminal links与真实gitlinks；保留各入口Git属性/clean filters/ignore/scoped index；当前index内容与合法user staging和外部Git竞争按原atomic index锁契约收敛；HEAD/index/raw工作树链接比较由真实Git blob及lstat/readlink产生，不能用Native错误T隐藏真实变化、缓存旧dirty或创造平行协议。范围覆盖Vcs、Snapshot、Build私有观察树、Worktree merge恢复及GitHub CLI；外部原生Git工具行为作为明确边界，不借更换用户junction掩盖兼容差异。方案尚未冻结，当前无产品staging或status补丁，避免先交付只能通过单按钮的改动。下一轮继续真实事务/比较与完整消费者方案，当前goal active。
+
+[六原发生实例的完整138 capture](../../artifacts/2026-10-14-project-metadata-latency/native-write-investigation/README.md)已归档4842523B，Root独立逐chunk核对：stdout844chunks/3457024B、stderr3639chunks/740644B，最大观测静默间隔48047ms小于90000ms，真实output-limit请求和原Native settled身份一致、active0、原三joins53ms完成。最初R2 leaf结算缺失仍未知，不能由后一个成功结算补造。新repo .git/数据库/auth/models/executable均不归档；原真实Git输入/输出、raw-link字节与两个已退休0B锁保留。此轮没有产品修复、新的UI或模型通过声明；文档范围提交与正常Git收尾不替代未达成的写入/准确比较/真实页面与必要模型验收。
