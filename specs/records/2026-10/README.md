@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [双成员来源与切换](2026-10-14-dual-member-sources.md)：修复同名成员辨识；15条真实Sol流、21张原图、独立来源与双向阅读恢复。
+
 - [原生 Git 写入根因](2026-10-14-project-metadata-latency.md)：活动性取证、raw-link实际Git协议与全部写入口影响；无产品写入修复通过声明。
 
 - [公共URL编辑器保存校验](2026-10-14-channel-url-validation.md)：原生字段ValidityState与公共URL实际配置读回。

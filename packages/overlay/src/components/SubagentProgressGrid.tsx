@@ -7,6 +7,8 @@ import {
 import {
   subagentProgressCardID,
   subagentProgressEvents,
+  isSubagentActivityRecord,
+  subagentSessionIdentity,
   type SubagentProgressEvent,
 } from "../utils/subagent-presentation"
 import { normalizeAgentRole } from "../utils/message"
@@ -20,6 +22,7 @@ import { Icon } from "./ui/Icon"
 import { isAgentActivityTerminalStatus } from "../utils/agent-activity"
 import { DelegatedContextDisclosure } from "./DelegatedContextDisclosure"
 import { StaticTextPart } from "./TextPart"
+import { SubagentSessionIdentity } from "./SubagentSessionIdentity"
 
 const SUBAGENT_PROGRESS_PREVIEW_LIMIT = 4
 
@@ -105,6 +108,12 @@ function SubagentProgressCard(props: { sessionID: string; onOpen: (sessionID: st
     return item
   })
   const role = createMemo(() => normalizeAgentRole(record().stage))
+  const identity = createMemo(() =>
+    subagentSessionIdentity(
+      record(),
+      conversationAgentRecordsForSource(boardStore.selectedSource).filter(isSubagentActivityRecord),
+    ),
+  )
   const events = createMemo(() =>
     subagentProgressEvents({
       record: record(),
@@ -135,7 +144,9 @@ function SubagentProgressCard(props: { sessionID: string; onOpen: (sessionID: st
       <header class="subagent-progress-card__header">
         <span class="subagent-progress-card__identity">
           <Avatar role={role()} />
-          <strong>{record().agentID}</strong>
+          <strong>
+            <SubagentSessionIdentity identity={identity()} />
+          </strong>
         </span>
         <Button
           type="button"
@@ -143,8 +154,8 @@ function SubagentProgressCard(props: { sessionID: string; onOpen: (sessionID: st
           variant="ghost"
           size="mini"
           tone="neutral"
-          aria-label={t("subagent.progress.open", { agent: record().agentID })}
-          title={t("subagent.progress.open", { agent: record().agentID })}
+          aria-label={t("subagent.progress.open", { agent: identity().label })}
+          title={t("subagent.progress.open", { agent: identity().label })}
           onClick={(event) => {
             event.stopPropagation()
             open()
@@ -157,7 +168,7 @@ function SubagentProgressCard(props: { sessionID: string; onOpen: (sessionID: st
       <div
         class="subagent-progress-card__events"
         role="log"
-        aria-label={t("subagent.progress.activity", { agent: record().agentID })}
+        aria-label={t("subagent.progress.activity", { agent: identity().label })}
       >
         <Show when={inputPreview()}>
           {(preview) => (

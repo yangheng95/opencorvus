@@ -1,0 +1,52 @@
+{
+  "taskID": "tsk_g00VY03x7l00hBFRdf8z",
+  "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+  "databaseVersion": [
+    {
+      "user_version": 1
+    }
+  ],
+  "sources": [
+    {
+      "sessionID": "ses_hdvEOzMlLHl6S8MoqpRU",
+      "partID": "prt_g0VY045Vq00G05gcZV75",
+      "line": 2,
+      "messageID": "msg_g0VY043y200x66jz1wP9",
+      "toolPartID": "prt_g0VY045Ka00iIXRNuoyX",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project\\README.md",
+      "range": {
+        "startLine": 2,
+        "endLine": 2
+      }
+    },
+    {
+      "sessionID": "ses_ha8862QlAlLJD7Ku0sM0",
+      "partID": "prt_g0VY04LWg00GMoipa9RF",
+      "line": 3,
+      "messageID": "msg_g0VY04Jzh00VYQzN6jyh",
+      "toolPartID": "prt_g0VY04LOA00p7ZHT2ggF",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project\\README.md",
+      "range": {
+        "startLine": 3,
+        "endLine": 3
+      }
+    }
+  ],
+  "retention": [
+    {
+      "taskID": "tsk_g00VY03x7l00hBFRdf8z",
+      "messages": 13,
+      "parts": 38,
+      "tools": 8,
+      "artifacts": 10
+    },
+    {
+      "taskID": "tsk_g00VXzxrgf006IiPmdKz",
+      "messages": 17,
+      "parts": 48,
+      "tools": 14,
+      "artifacts": 15
+    }
+  ],
+  "boundary": "Read-only actual SQLite facts and real provider/native evidence. UI conclusions rely on original screenshots and manual interaction; after run reads the same completed Task, not a new live multi-member qualification."
+}

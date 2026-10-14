@@ -3258,6 +3258,28 @@
   white-space: nowrap;
 }
 
+.subagent-session-identity {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+}
+
+.subagent-session-identity__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.subagent-session-identity__suffix {
+  flex: none;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: var(--ui-font-caption);
+  font-weight: var(--ui-font-weight-body);
+  white-space: pre;
+}
+
 .subagent-progress-card__events {
   min-width: 0;
   display: flex;

@@ -99,6 +99,34 @@ export function subagentSessionRecords(records: readonly AgentActivityRecord[]):
   return [...bySession.values()]
 }
 
+export interface SubagentSessionIdentity {
+  sessionID: string
+  agentID: string
+  suffix: string
+  label: string
+}
+
+/** Disambiguate same-role Sessions using their actual identity, independent of execution status. */
+export function subagentSessionIdentity(
+  record: Pick<AgentActivityRecord, "sessionID" | "agentID">,
+  records: readonly Pick<AgentActivityRecord, "sessionID" | "agentID">[],
+): SubagentSessionIdentity {
+  const peers = records.filter((peer) => peer.agentID === record.agentID && peer.sessionID !== record.sessionID)
+  let length = Math.min(4, record.sessionID.length)
+  while (
+    length < record.sessionID.length &&
+    peers.some((peer) => peer.sessionID.endsWith(record.sessionID.slice(-length)))
+  )
+    length++
+  const suffix = peers.length ? record.sessionID.slice(-length) : ""
+  return {
+    sessionID: record.sessionID,
+    agentID: record.agentID,
+    suffix,
+    label: suffix ? `${record.agentID} · ${suffix}` : record.agentID,
+  }
+}
+
 export function subagentProgressCardID(sessionID: string): string {
   const value = String(sessionID || "").trim()
   if (!value) throw new Error("subagent progress card requires a sessionID")

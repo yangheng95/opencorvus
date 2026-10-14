@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [双成员来源与切换](records/2026-10/2026-10-14-dual-member-sources.md)：修复同名成员辨识；15条真实Sol流、21张原图、独立来源与双向阅读恢复。
+
 - [原生 Git 写入根因](records/2026-10/2026-10-14-project-metadata-latency.md)：真实字节活动、共享期限排查及junction index/dirty语义；完整修复继续进行。
 
 - [公共URL编辑器保存校验](records/2026-10/2026-10-14-channel-url-validation.md)：原字段约束、真实保存和保留原值的验收调查。

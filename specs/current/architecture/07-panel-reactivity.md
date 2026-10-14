@@ -617,6 +617,15 @@ including when a source grid changes column count. User input or successful
 settlement retires the pending restoration before new reading observations.
 Parent disposal clears the Map and retires the retained presentation.
 
+Member selection labels use the real agent role and, when that role belongs to
+multiple distinct Sessions, a short suffix of the actual Session ID. Suffixes
+extend when necessary to distinguish the current peers, and the full identity
+remains available on hover. The selector, member list, progress cards and their
+accessible names share this presentation. Activity updates and later execution
+occurrences keep the same Session value; they do not recreate selector options
+when identity labels are unchanged. Conversation targets and reading positions
+remain keyed by the complete canonical target.
+
 Each shared scroll-controller caller supplies an explicit initial bottom or
 position intent. A restored position remains owned by that controller until
 content reaches it and the Dock/content geometry stabilizes across consecutive

@@ -1,0 +1,90 @@
+{
+  "runs": [
+    {
+      "phase": "live",
+      "requests": 13,
+      "occurrence": "dual-member-sources-416-0ee5cd72-43f4-4273-b3b2-6ebb006d42b0",
+      "terminal": {
+        "occurrenceID": "dual-member-sources-416-0ee5cd72-43f4-4273-b3b2-6ebb006d42b0",
+        "pid": 86336,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "pairedCleanupComplete": true
+    },
+    {
+      "phase": "after",
+      "requests": 2,
+      "occurrence": "dual-member-sources-416-d6d360e3-5866-413d-969a-fcef016e5c11",
+      "terminal": {
+        "occurrenceID": "dual-member-sources-416-d6d360e3-5866-413d-969a-fcef016e5c11",
+        "pid": 91128,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "pairedCleanupComplete": true
+    }
+  ],
+  "handles": {
+    "beforeBuild": {
+      "handle": 96480,
+      "chunk": "cdf286",
+      "exitCode": 0
+    },
+    "beforeNative": {
+      "handle": 78510,
+      "chunk": "790a17",
+      "exitCode": 0
+    },
+    "beforeCreate": {
+      "chunk": "00b3ba",
+      "exitCode": 0
+    },
+    "afterBuild": {
+      "handle": 45417,
+      "chunk": "c036d6",
+      "exitCode": 0
+    },
+    "overlayTypes": {
+      "handle": 26513,
+      "chunk": "043aff",
+      "exitCode": 0
+    },
+    "afterNative": {
+      "handle": 67825,
+      "chunk": "db2e78",
+      "exitCode": 0
+    },
+    "afterShutdown": {
+      "chunk": "747752",
+      "exitCode": 0,
+      "httpStatus": 200
+    },
+    "afterCurrentFacts": [
+      {
+        "chunk": "da3491",
+        "exitCode": 1,
+        "error": "SQLITE_BUSY_RECOVERY"
+      },
+      {
+        "chunk": "a7720b",
+        "exitCode": 0
+      }
+    ],
+    "afterPriorFacts": {
+      "chunk": "fbf29b",
+      "exitCode": 0
+    },
+    "closedTabs": [
+      "36",
+      "37",
+      "38"
+    ],
+    "screenshots": 21,
+    "browserRecovery": "Tab37 changed to 0x0, then screenshot/input CDP timeout after explicit 1280x720 restoration. Fresh owned tab38 in the same browser restored real actions/screenshots. Original reading positions were established anew and manually compared in 17/19 and 18/20. Temporary viewport reset and visibility restored to false."
+  }
+}

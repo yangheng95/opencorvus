@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [双成员来源与切换](2026-10-14-dual-member-sources/README.md)：修复同名成员辨识；15条真实Sol流、21张原图、独立来源与双向阅读恢复。
+
 - [原生 Git 写入证据](2026-10-14-project-metadata-latency/native-write-investigation/README.md)：138原capture、4MiB输出/原结算及raw link原生状态冲突。
 
 - [公共URL编辑器保存校验](2026-10-14-channel-url-validation/README.md)：第27批真实原页面、配置选择和独立运行原件。
