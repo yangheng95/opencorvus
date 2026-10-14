@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [完整配置快照替换](2026-10-14-config-snapshot-replacement/README.md)：第28批实际页面、服务与当前配置原件。
+
 - [双成员来源与切换](2026-10-14-dual-member-sources/README.md)：修复同名成员辨识；15条真实Sol流、21张原图、独立来源与双向阅读恢复。
 
 - [原生 Git 写入证据](2026-10-14-project-metadata-latency/native-write-investigation/README.md)：138原capture、4MiB输出/原结算及raw link原生状态冲突。

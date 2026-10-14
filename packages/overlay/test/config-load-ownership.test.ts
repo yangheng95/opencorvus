@@ -3,7 +3,7 @@ import { configure } from "../src/services/api"
 import { loadConfigInfo, loadProviderInfo } from "../src/services/config-load"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import type { HostTransport, TransportRequest } from "../src/services/host-transport"
-import { appStore, setAppStore } from "../src/store/app"
+import { appStore, setAppStore, setConfigSnapshot } from "../src/store/app"
 import { setBoardStore } from "../src/store/board"
 import { DEFAULT_SETTINGS, setSettingsStore } from "../src/store/settings"
 
@@ -22,6 +22,32 @@ beforeEach(() => {
   setAppStore({ config: { permission_mode: "ask" }, providerCatalog: null })
 })
 afterEach(() => __setHostTransportForTest(undefined))
+
+test("project load publishes its complete configuration and settled channel resources", async () => {
+  const accepted = { server: { hostname: "127.0.0.1" }, locale: "zh-CN" }
+  const channels = [{ id: "owned-channel", status: "missing" }]
+  setConfigSnapshot({ server: { hostname: "127.0.0.1", publicUrl: "http://127.0.0.1:2" }, model: "owned/previous" })
+  transport((request) => request.path === "config" ? accepted : channels)
+  expect(await loadConfigInfo()).toEqual([])
+  expect({ config: appStore.config, channels: appStore.channels, issues: appStore.configLoadIssues }).toEqual({
+    config: accepted, channels, issues: [],
+  })
+})
+
+test("global provider load publishes the complete global configuration with catalog and authentication", async () => {
+  setSettingsStore("directory", "")
+  const accepted = { locale: "en-US" }
+  const catalog = { connected: ["owned-global"] }
+  const authentication = { "owned-global": { type: "api" } }
+  setConfigSnapshot({ server: { publicUrl: "http://127.0.0.1:2" }, locale: "zh-CN" })
+  transport((request) => request.path === "global/providers"
+    ? { catalog }
+    : request.path === "global/config" ? accepted : authentication)
+  expect(await loadProviderInfo(undefined, { directory: "" })).toEqual([])
+  expect({ config: appStore.config, catalog: appStore.providerCatalog, authentication: appStore.providerAuth, issues: appStore.providerLoadIssues }).toEqual({
+    config: accepted, catalog, authentication, issues: [],
+  })
+})
 
 test("default provider refresh loads the active project's catalog and retains its saved authorization", async () => {
   const requests: TransportRequest[] = []

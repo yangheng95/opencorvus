@@ -1,4 +1,5 @@
-import { appStore, setAppStore, type ConfigLoadIssue, type ProviderLoadIssue } from "../store/app"
+import { batch } from "solid-js"
+import { appStore, setAppStore, setConfigSnapshot, type ConfigLoadIssue, type ProviderLoadIssue } from "../store/app"
 import { settingsStore } from "../store/settings"
 import { ApiError, apiJsonWithTimeout, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { activeProjectDirectory } from "./project-directory"
@@ -157,10 +158,12 @@ export async function loadConfigInfo(
     issues.push({ resource: "channel", message: providerLoadErrorMessage(channelResult.reason) })
   }
 
-  setAppStore({
-    ...(config ? { config } : {}),
-    ...(channels ? { channels } : {}),
-    configLoadIssues: issues,
+  batch(() => {
+    if (config) setConfigSnapshot(config)
+    setAppStore({
+      ...(channels ? { channels } : {}),
+      configLoadIssues: issues,
+    })
   })
 
   return issues
@@ -220,14 +223,16 @@ export async function loadProviderInfo(
       issues.push(providerLoadIssue("config", configResult.reason))
     }
     const settledIssues = dedupeProviderLoadIssues(issues)
-    setAppStore({
-      ...(config ? { config } : {}),
-      ...(providerCatalog ? { providerCatalog } : {}),
-      ...(providerAuth ? { providerAuth } : {}),
-      providerLoadIssues: settledIssues,
-      ...((providerCatalog || providerAuth) && {
-        providerAuthRefreshRevision: appStore.providerAuthRefreshRevision + 1,
-      }),
+    batch(() => {
+      if (config) setConfigSnapshot(config)
+      setAppStore({
+        ...(providerCatalog ? { providerCatalog } : {}),
+        ...(providerAuth ? { providerAuth } : {}),
+        providerLoadIssues: settledIssues,
+        ...((providerCatalog || providerAuth) && {
+          providerAuthRefreshRevision: appStore.providerAuthRefreshRevision + 1,
+        }),
+      })
     })
     return settledIssues
   }

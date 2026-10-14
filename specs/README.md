@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [完整配置快照替换](records/2026-10/2026-10-14-config-snapshot-replacement.md)：清空已持久化但当前界面旧值残留的共享配置调查。
+
 - [双成员来源与切换](records/2026-10/2026-10-14-dual-member-sources.md)：修复同名成员辨识；15条真实Sol流、21张原图、独立来源与双向阅读恢复。
 
 - [原生 Git 写入根因](records/2026-10/2026-10-14-project-metadata-latency.md)：真实字节活动、共享期限排查及junction index/dirty语义；完整修复继续进行。

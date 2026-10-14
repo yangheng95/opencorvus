@@ -178,6 +178,11 @@ const DEFAULT_APP_STATE: AppState = {
 
 export const [appStore, setAppStore] = createStore<AppState>({ ...DEFAULT_APP_STATE })
 
+/** Publish a complete accepted server configuration, including removed keys. */
+export function setConfigSnapshot(value: Record<string, unknown> | null): void {
+  setAppStore("config", reconcile(value, { merge: false }))
+}
+
 // ── Log helpers ──
 
 const LOG_LEVEL_ORDER: Record<LogLevel, number> = {

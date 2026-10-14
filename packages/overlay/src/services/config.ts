@@ -4,7 +4,7 @@
 import { ApiError, apiJson, configure as configureApi } from "./api"
 import { readConfigMutationReceipt } from "./config-mutation-receipt"
 import { captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
-import { appStore, setAppStore, type ProjectLoadIssue } from "../store/app"
+import { appStore, setAppStore, setConfigSnapshot, type ProjectLoadIssue } from "../store/app"
 import { settingsStore } from "../store/settings"
 import { t } from "../utils/i18n"
 import { loadConfigInfo } from "./config-load"
@@ -160,10 +160,10 @@ export async function patchConfig(diff: Record<string, any>, options: ConfigRequ
     })
   } catch (error) {
     const committed = committedConfigFromError(error)
-    if (committed && configResponseStillOwned(options, selectionEpoch)) setAppStore("config", committed)
+    if (committed && configResponseStillOwned(options, selectionEpoch)) setConfigSnapshot(committed)
     throw error
   }
-  if (configResponseStillOwned(options, selectionEpoch)) setAppStore("config", saved)
+  if (configResponseStillOwned(options, selectionEpoch)) setConfigSnapshot(saved)
   return saved
 }
 
@@ -183,7 +183,7 @@ export async function patchGlobalConfig(
     })
   } catch (error) {
     const committed = committedConfigFromError(error)
-    if (committed && configResponseStillOwned(options, selectionEpoch)) setAppStore("config", committed)
+    if (committed && configResponseStillOwned(options, selectionEpoch)) setConfigSnapshot(committed)
     throw error
   }
 }
@@ -460,7 +460,7 @@ async function updateConfigPath(
   mutator(next)
   const diff = mergePatchDiff(current || {}, next)
   if (diff === undefined) {
-    if (isApiAuthorityCurrent(authority) && ownsResponse()) setAppStore("config", current)
+    if (isApiAuthorityCurrent(authority) && ownsResponse()) setConfigSnapshot(current)
     return current
   }
   let saved: Record<string, any>
@@ -473,10 +473,10 @@ async function updateConfigPath(
     })
   } catch (error) {
     const committed = committedConfigFromError(error)
-    if (committed && isApiAuthorityCurrent(authority) && ownsResponse()) setAppStore("config", committed)
+    if (committed && isApiAuthorityCurrent(authority) && ownsResponse()) setConfigSnapshot(committed)
     throw error
   }
-  if (isApiAuthorityCurrent(authority) && ownsResponse()) setAppStore("config", saved)
+  if (isApiAuthorityCurrent(authority) && ownsResponse()) setConfigSnapshot(saved)
   return saved
 }
 

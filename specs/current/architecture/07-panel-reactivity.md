@@ -40,6 +40,16 @@ results and explicitly committed errors remain original facts; obsolete UI
 projection, feedback and finally retire. Source-local busy state resets through
 its existing source effect, without another epoch or request owner.
 
+Accepted complete configuration responses use the app store's single
+setConfigSnapshot helper and the existing Solid reconcile utility. Normal writes,
+explicitly committed error receipts, unchanged readbacks and project/global loads
+replace the complete configuration projection, including removed root and nested
+keys. Loaders batch that publication with their original resource results. The
+existing request, connection, selection and write owners still decide admission;
+original returns, committed errors, permission serialization and scope reset keep
+their contracts. Field components consume that one snapshot without compensating
+local writes or another configuration cache.
+
 Network proxy tests capture the existing draft generation as well as their
 operation and scope owner. Edited fields, purpose switches and accepted config
 hydration advance that same draft generation, retiring the old result or error

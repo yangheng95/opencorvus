@@ -1,0 +1,681 @@
+{
+  "capturedAt": "2026-10-14T06:16:43.275Z",
+  "purpose": "Lossless originals and resource identity, not a mutable-source functional hash gate.",
+  "runs": [
+    {
+      "stage": "before",
+      "pid": 90492,
+      "occurrence": {
+        "pid": 90492,
+        "processInstanceID": "win32:639275548584137936",
+        "occurrenceID": "46f1296c-359b-4e96-8c5e-30d86039330b"
+      },
+      "port": 18686,
+      "participantPort": 18687,
+      "uiDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-channel-url-01a133\\ui-after02",
+      "physicalExit": 0,
+      "inferenceRequests": 0,
+      "privacy": [
+        {
+          "file": "stdout.log",
+          "bytes": 0,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        },
+        {
+          "file": "stderr.log",
+          "bytes": 0,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        },
+        {
+          "file": "runtime/log/2026-10-14T060739-90492-1.log",
+          "bytes": 92882,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        }
+      ]
+    },
+    {
+      "stage": "after",
+      "pid": 40144,
+      "occurrence": {
+        "pid": 40144,
+        "processInstanceID": "win32:639275551036831834",
+        "occurrenceID": "7a23183b-6851-4249-903a-7e65c3ddd580"
+      },
+      "port": 18688,
+      "participantPort": 18689,
+      "uiDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-snapshot-01a133\\ui-after",
+      "physicalExit": 0,
+      "inferenceRequests": 0,
+      "privacy": [
+        {
+          "file": "stdout.log",
+          "bytes": 0,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        },
+        {
+          "file": "stderr.log",
+          "bytes": 0,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        },
+        {
+          "file": "runtime/log/2026-10-14T061144-40144-1.log",
+          "bytes": 109544,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        }
+      ]
+    }
+  ],
+  "retainedHTTPSelections": [
+    {
+      "stage": "before",
+      "name": "read-cleared.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-config-snapshot-01a133%5Cbefore%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2072,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": null
+    },
+    {
+      "stage": "before",
+      "name": "read-original.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-config-snapshot-01a133%5Cbefore%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2129,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": "http://127.0.0.1:18687/original"
+    },
+    {
+      "stage": "after",
+      "name": "read-baseline.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-config-snapshot-01a133%5Cafter%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 1225,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": null
+    },
+    {
+      "stage": "after",
+      "name": "read-cleared-zh.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-config-snapshot-01a133%5Cafter%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2072,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": null
+    },
+    {
+      "stage": "after",
+      "name": "read-cleared.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-config-snapshot-01a133%5Cafter%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2072,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": null
+    },
+    {
+      "stage": "after",
+      "name": "read-corrected.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-config-snapshot-01a133%5Cafter%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2127,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": "HTTP://127.0.0.1:18689/review"
+    },
+    {
+      "stage": "after",
+      "name": "read-invalid.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-config-snapshot-01a133%5Cafter%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2127,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": "HTTP://127.0.0.1:18689/review"
+    },
+    {
+      "stage": "after",
+      "name": "read-original.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-config-snapshot-01a133%5Cafter%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2129,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": "http://127.0.0.1:18689/original"
+    },
+    {
+      "stage": "after",
+      "name": "read-reopened.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-config-snapshot-01a133%5Cafter%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2085,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": null
+    },
+    {
+      "stage": "after",
+      "name": "snapshot-deleted.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-config-snapshot-01a133%5Cafter%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2085,
+      "selection": "Only actual network.proxy URL and purpose booleans; full configuration/credentials not retained.",
+      "proxy": null
+    },
+    {
+      "stage": "after",
+      "name": "snapshot-saved.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-config-snapshot-01a133%5Cafter%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2165,
+      "selection": "Only actual network.proxy URL and purpose booleans; full configuration/credentials not retained.",
+      "proxy": {
+        "url": "http://127.0.0.1:18689",
+        "llmProvider": false,
+        "webResearch": false
+      }
+    }
+  ],
+  "screenshots": [
+    "01-before-saved.png",
+    "02-before-clear-stale.png",
+    "03-after-en-saved.png",
+    "04-after-en-cleared.png",
+    "05-after-en-reopened-empty.png",
+    "06-after-zh-new-value.png",
+    "07-after-zh-invalid-draft.png",
+    "08-after-zh-cleared.png",
+    "09-after-zh-proxy-saved.png",
+    "10-after-zh-proxy-deleted.png",
+    "11-after-zh-reopened-empty.png"
+  ],
+  "limits": [
+    "11 partial HTTP GET selections, not full config or eight actual UI PATCH bodies.",
+    "Mock transport service tests are local positive contracts, not browser or end-to-end qualification.",
+    "Global permission, committed409, no-diff and connection/project UI departure have only local contracts this batch.",
+    "No real Provider/Sol, channel sends, user credential or proxy connectivity qualification."
+  ],
+  "files": [
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/before/exit.json",
+      "saved": "runs/before/exit.json.gz",
+      "originalBytes": 88
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/before/owner.json",
+      "saved": "runs/before/owner.json.gz",
+      "originalBytes": 220
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/before/physical-pair-cleanup.json",
+      "saved": "runs/before/physical-pair-cleanup.json.gz",
+      "originalBytes": 211
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/before/privacy-qualified.json",
+      "saved": "runs/before/privacy-qualified.json.gz",
+      "originalBytes": 653
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/before/project-authorities.json",
+      "saved": "runs/before/project-authorities.json.gz",
+      "originalBytes": 643
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/before/read-cleared.json",
+      "saved": "runs/before/read-cleared.json.gz",
+      "originalBytes": 349
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/before/read-original.json",
+      "saved": "runs/before/read-original.json.gz",
+      "originalBytes": 378
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/before/ready.json",
+      "saved": "runs/before/ready.json.gz",
+      "originalBytes": 1732
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/before/terminal.json",
+      "saved": "runs/before/terminal.json.gz",
+      "originalBytes": 237
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/before/redacted-logs/2026-10-14T060739-90492-1.log",
+      "saved": "runs/before/logs/2026-10-14T060739-90492-1.log.gz",
+      "originalBytes": 92882
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/before/redacted-logs/stderr.log",
+      "saved": "runs/before/logs/stderr.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/before/redacted-logs/stdout.log",
+      "saved": "runs/before/logs/stdout.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after/exit.json",
+      "saved": "runs/after/exit.json.gz",
+      "originalBytes": 88
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after/owner.json",
+      "saved": "runs/after/owner.json.gz",
+      "originalBytes": 220
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after/physical-pair-cleanup.json",
+      "saved": "runs/after/physical-pair-cleanup.json.gz",
+      "originalBytes": 211
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after/privacy-qualified.json",
+      "saved": "runs/after/privacy-qualified.json.gz",
+      "originalBytes": 654
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after/project-authorities.json",
+      "saved": "runs/after/project-authorities.json.gz",
+      "originalBytes": 638
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after/read-baseline.json",
+      "saved": "runs/after/read-baseline.json.gz",
+      "originalBytes": 348
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after/read-cleared-zh.json",
+      "saved": "runs/after/read-cleared-zh.json.gz",
+      "originalBytes": 348
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after/read-cleared.json",
+      "saved": "runs/after/read-cleared.json.gz",
+      "originalBytes": 348
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after/read-corrected.json",
+      "saved": "runs/after/read-corrected.json.gz",
+      "originalBytes": 375
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after/read-invalid.json",
+      "saved": "runs/after/read-invalid.json.gz",
+      "originalBytes": 375
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after/read-original.json",
+      "saved": "runs/after/read-original.json.gz",
+      "originalBytes": 377
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after/read-reopened.json",
+      "saved": "runs/after/read-reopened.json.gz",
+      "originalBytes": 348
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after/ready.json",
+      "saved": "runs/after/ready.json.gz",
+      "originalBytes": 1730
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after/snapshot-deleted.json",
+      "saved": "runs/after/snapshot-deleted.json.gz",
+      "originalBytes": 324
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after/snapshot-saved.json",
+      "saved": "runs/after/snapshot-saved.json.gz",
+      "originalBytes": 413
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after/terminal.json",
+      "saved": "runs/after/terminal.json.gz",
+      "originalBytes": 237
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after/redacted-logs/2026-10-14T061144-40144-1.log",
+      "saved": "runs/after/logs/2026-10-14T061144-40144-1.log.gz",
+      "originalBytes": 109544
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after/redacted-logs/stderr.log",
+      "saved": "runs/after/logs/stderr.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after/redacted-logs/stdout.log",
+      "saved": "runs/after/logs/stdout.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/before-parent.log",
+      "saved": "checks/before-parent.log.gz",
+      "originalBytes": 49
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/before-parent.exit",
+      "saved": "checks/before-parent.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after-parent.log",
+      "saved": "checks/after-parent.log.gz",
+      "originalBytes": 49
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/after-parent.exit",
+      "saved": "checks/after-parent.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/privacy-before.log",
+      "saved": "checks/privacy-before.log.gz",
+      "originalBytes": 172
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/privacy-before.exit",
+      "saved": "checks/privacy-before.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/privacy-after.log",
+      "saved": "checks/privacy-after.log.gz",
+      "originalBytes": 173
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/privacy-after.exit",
+      "saved": "checks/privacy-after.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/overlay-typecheck.log",
+      "saved": "checks/overlay-typecheck.log.gz",
+      "originalBytes": 15
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/overlay-typecheck.exit",
+      "saved": "checks/overlay-typecheck.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/ui-build.log",
+      "saved": "checks/ui-build.log.gz",
+      "originalBytes": 68391
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/ui-build.exit",
+      "saved": "checks/ui-build.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/service-contracts.log",
+      "saved": "checks/service-contracts.log.gz",
+      "originalBytes": 4933
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/service-contracts.exit",
+      "saved": "checks/service-contracts.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/service-contracts-final.log",
+      "saved": "checks/service-contracts-final.log.gz",
+      "originalBytes": 5071
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/service-contracts-final.exit",
+      "saved": "checks/service-contracts-final.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/service-contracts-current.log",
+      "saved": "checks/service-contracts-current.log.gz",
+      "originalBytes": 5060
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/service-contracts-current.exit",
+      "saved": "checks/service-contracts-current.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/read-after-baseline.log",
+      "saved": "checks/read-after-baseline.log.gz",
+      "originalBytes": 198
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/read-after-baseline.exit",
+      "saved": "checks/read-after-baseline.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/read-after-cleared-zh.log",
+      "saved": "checks/read-after-cleared-zh.log.gz",
+      "originalBytes": 200
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/read-after-cleared-zh.exit",
+      "saved": "checks/read-after-cleared-zh.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/read-after-cleared.log",
+      "saved": "checks/read-after-cleared.log.gz",
+      "originalBytes": 197
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/read-after-cleared.exit",
+      "saved": "checks/read-after-cleared.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/read-after-corrected.log",
+      "saved": "checks/read-after-corrected.log.gz",
+      "originalBytes": 226
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/read-after-corrected.exit",
+      "saved": "checks/read-after-corrected.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/read-after-invalid.log",
+      "saved": "checks/read-after-invalid.log.gz",
+      "originalBytes": 224
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/read-after-invalid.exit",
+      "saved": "checks/read-after-invalid.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/read-after-original.log",
+      "saved": "checks/read-after-original.log.gz",
+      "originalBytes": 227
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/read-after-original.exit",
+      "saved": "checks/read-after-original.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/read-after-reopened.log",
+      "saved": "checks/read-after-reopened.log.gz",
+      "originalBytes": 198
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/read-after-reopened.exit",
+      "saved": "checks/read-after-reopened.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/read-before-cleared.log",
+      "saved": "checks/read-before-cleared.log.gz",
+      "originalBytes": 198
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/read-before-cleared.exit",
+      "saved": "checks/read-before-cleared.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/read-before-original.log",
+      "saved": "checks/read-before-original.log.gz",
+      "originalBytes": 228
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/read-before-original.exit",
+      "saved": "checks/read-before-original.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/snapshot-after-deleted.log",
+      "saved": "checks/snapshot-after-deleted.log.gz",
+      "originalBytes": 173
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/snapshot-after-deleted.exit",
+      "saved": "checks/snapshot-after-deleted.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/snapshot-after-saved.log",
+      "saved": "checks/snapshot-after-saved.log.gz",
+      "originalBytes": 239
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/snapshot-after-saved.exit",
+      "saved": "checks/snapshot-after-saved.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/docs-final.log",
+      "saved": "checks/docs-final.log.gz",
+      "originalBytes": 104
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/docs-final.exit",
+      "saved": "checks/docs-final.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/architecture-final.log",
+      "saved": "checks/architecture-final.log.gz",
+      "originalBytes": 139
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/architecture-final.exit",
+      "saved": "checks/architecture-final.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/setup.mjs",
+      "saved": "inputs/setup.mjs.gz",
+      "originalBytes": 8653
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/runtime.ts",
+      "saved": "inputs/runtime.ts.gz",
+      "originalBytes": 8510
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/launch.ps1",
+      "saved": "inputs/launch.ps1.gz",
+      "originalBytes": 4873
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/privacy.ts",
+      "saved": "inputs/privacy.ts.gz",
+      "originalBytes": 2104
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/run.mjs",
+      "saved": "inputs/run.mjs.gz",
+      "originalBytes": 883
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/read.mjs",
+      "saved": "inputs/read.mjs.gz",
+      "originalBytes": 1878
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/snapshot.mjs",
+      "saved": "inputs/snapshot.mjs.gz",
+      "originalBytes": 1673
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/app.ts.before",
+      "saved": "inputs/app.ts.before.gz",
+      "originalBytes": 9147
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/config.ts.before",
+      "saved": "inputs/config.ts.before.gz",
+      "originalBytes": 19991
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/config-load.ts.before",
+      "saved": "inputs/config-load.ts.before.gz",
+      "originalBytes": 10791
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/permission-mode.ts.before",
+      "saved": "inputs/permission-mode.ts.before.gz",
+      "originalBytes": 2488
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/config-service-fail-fast.test.ts.before",
+      "saved": "inputs/config-service-fail-fast.test.ts.before.gz",
+      "originalBytes": 3245
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/config-load-ownership.test.ts.before",
+      "saved": "inputs/config-load-ownership.test.ts.before.gz",
+      "originalBytes": 3333
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/baseline.json",
+      "saved": "inputs/baseline.json.gz",
+      "originalBytes": 93
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/stage-final.mjs",
+      "saved": "inputs/stage-final.mjs.gz",
+      "originalBytes": 3655
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/commit-final.mjs",
+      "saved": "inputs/commit-final.mjs.gz",
+      "originalBytes": 3429
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/shared-final.json",
+      "saved": "inputs/shared-final.json.gz",
+      "originalBytes": 1314
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/finalize-docs.mjs",
+      "saved": "inputs/finalize-docs.mjs.gz",
+      "originalBytes": 6764
+    },
+    {
+      "source": ".tmp-codex-config-snapshot-01a133/archive.mjs",
+      "saved": "inputs/archive.mjs.gz",
+      "originalBytes": 6086
+    }
+  ]
+}

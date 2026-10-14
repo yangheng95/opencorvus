@@ -1,9 +1,12 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { configure } from "../src/services/api"
-import { patchConfig } from "../src/services/config"
+import { patchConfig, patchGlobalConfig, updateConfig } from "../src/services/config"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import { HOST_CAPABILITIES, type HostTransport, type TransportRequest, type TransportResponse } from "../src/services/host-transport"
-import { appStore, setAppStore } from "../src/store/app"
+import { appStore, setAppStore, setConfigSnapshot } from "../src/store/app"
+import { setBoardStore } from "../src/store/board"
+import { setSettingsStore } from "../src/store/settings"
+import { setPermissionMode } from "../src/services/permission-mode"
 
 function fakeTransport(responder: (req: TransportRequest) => TransportResponse<unknown>): HostTransport {
   return {
@@ -26,6 +29,107 @@ describe("config service fail-fast writes", () => {
     __setHostTransportForTest(undefined)
     configure({ directory: "" })
     setAppStore({ connected: false, config: null })
+  })
+
+  test("successful PATCH publishes the complete accepted configuration", async () => {
+    const accepted = { network: { proxy: { url: "http://127.0.0.1:1", llmProvider: false, webResearch: false } } }
+    configure({ directory: "C:/Users/example/project" })
+    setAppStore("connected", true)
+    setConfigSnapshot({ server: { publicUrl: "http://127.0.0.1:2" }, model: "owned/previous" })
+    __setHostTransportForTest(fakeTransport(() => ({ status: 200, ok: true, headers: {}, body: accepted })))
+
+    expect(await patchConfig({ server: null, model: null, ...accepted })).toEqual(accepted)
+    expect(appStore.config).toEqual(accepted)
+  })
+
+  test("the global permission writer publishes its complete accepted configuration", async () => {
+    const accepted = { permission_mode: "ask" }
+    const requests: TransportRequest[] = []
+    configure({ directory: "" })
+    setBoardStore({ board: null, selectedSource: null })
+    setSettingsStore("directory", "")
+    setAppStore("connected", true)
+    setConfigSnapshot({ server: { publicUrl: "http://127.0.0.1:2" }, permission_mode: "full_access" })
+    __setHostTransportForTest(fakeTransport((request) => {
+      requests.push(request)
+      return { status: 200, ok: true, headers: {}, body: accepted }
+    }))
+
+    setPermissionMode("ask")
+    await new Promise<void>((resolve) => setImmediate(resolve))
+    expect(appStore.config).toEqual(accepted)
+    expect(requests.map(({ method, path, body }) => ({ method, path, body }))).toEqual([
+      { method: "PATCH", path: "global/config", body: { kind: "json", value: accepted } },
+    ])
+  })
+
+  test("GET-to-PATCH publishes exact nested and root deletions from the accepted snapshot", async () => {
+    const current = { server: { hostname: "127.0.0.1", publicUrl: "http://127.0.0.1:2" }, model: "owned/previous" }
+    const accepted = { server: { hostname: "127.0.0.1" } }
+    const requests: TransportRequest[] = []
+    configure({ directory: "C:/Users/example/project" })
+    setAppStore("connected", true)
+    setConfigSnapshot(current)
+    __setHostTransportForTest(fakeTransport((request) => {
+      requests.push(request)
+      return { status: 200, ok: true, headers: {}, body: request.method === "GET" ? current : accepted }
+    }))
+
+    expect(await updateConfig((config) => {
+      delete config.server.publicUrl
+      delete config.model
+    })).toEqual(accepted)
+    expect(appStore.config).toEqual(accepted)
+    expect(requests.map(({ method, body }) => ({ method, body }))).toEqual([
+      { method: "GET", body: undefined },
+      { method: "PATCH", body: { kind: "json", value: { server: { publicUrl: null }, model: null } } },
+    ])
+  })
+
+  test("an unchanged GET publishes its complete current configuration", async () => {
+    const accepted = { locale: "zh-CN" }
+    const requests: TransportRequest[] = []
+    configure({ directory: "C:/Users/example/project" })
+    setAppStore("connected", true)
+    setConfigSnapshot({ server: { publicUrl: "http://127.0.0.1:2" }, locale: "en-US" })
+    __setHostTransportForTest(fakeTransport((request) => {
+      requests.push(request)
+      return { status: 200, ok: true, headers: {}, body: accepted }
+    }))
+
+    expect(await updateConfig(() => {})).toEqual(accepted)
+    expect(appStore.config).toEqual(accepted)
+    expect(requests.map(({ method, path }) => ({ method, path }))).toEqual([{ method: "GET", path: "config" }])
+  })
+
+  test.each([
+    ["ProjectConfigCommittedReconcileError", patchConfig],
+    ["GlobalConfigCommittedReconcileError", patchGlobalConfig],
+  ] as const)("%s publishes its complete committed snapshot with the original error", async (name, write) => {
+    const accepted = { locale: "zh-CN" }
+    const body = { name, data: { committed: true, message: "Owned runtime reconciliation failed", config: accepted, failures: ["owned projection"] } }
+    configure({ directory: "C:/Users/example/project" })
+    setAppStore("connected", true)
+    setConfigSnapshot({ server: { publicUrl: "http://127.0.0.1:2" }, locale: "en-US" })
+    __setHostTransportForTest(fakeTransport(() => ({ status: 409, ok: false, headers: {}, body })))
+
+    await expect(write({ server: null, locale: "zh-CN" })).rejects.toMatchObject({ name: "ApiError", status: 409, body })
+    expect(appStore.config).toEqual(accepted)
+  })
+
+  test("GET-to-PATCH publishes a complete committed receipt before returning its error", async () => {
+    const accepted = { server: { hostname: "127.0.0.1" } }
+    const current = { server: { hostname: "127.0.0.1", publicUrl: "http://127.0.0.1:2" } }
+    const body = { name: "ProjectConfigCommittedReconcileError", data: { committed: true, message: "Owned runtime reconciliation failed", config: accepted, failures: ["owned projection"] } }
+    configure({ directory: "C:/Users/example/project" })
+    setAppStore("connected", true)
+    setConfigSnapshot(current)
+    __setHostTransportForTest(fakeTransport((request) => request.method === "GET"
+      ? { status: 200, ok: true, headers: {}, body: current }
+      : { status: 409, ok: false, headers: {}, body }))
+
+    await expect(updateConfig((config) => { delete config.server.publicUrl })).rejects.toMatchObject({ name: "ApiError", status: 409, body })
+    expect(appStore.config).toEqual(accepted)
   })
 
   test("disconnected config write exposes its explicit failure and retains the current config", async () => {
