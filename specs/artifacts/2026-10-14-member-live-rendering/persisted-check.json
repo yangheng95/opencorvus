@@ -1,0 +1,42 @@
+{
+  "databaseVersion": [
+    {
+      "user_version": 1
+    }
+  ],
+  "member": "ses_-zUS0WzzQzzDOGrIbYwN",
+  "parent": "ses_-zUS0X33CzzWEKMgCk98",
+  "retained": {
+    "messages": 8,
+    "parts": 19,
+    "tools": 2,
+    "outcomes": 2
+  },
+  "userMessageID": "msg_g0VXzUz7600DioAWQXRh",
+  "assistantMessageID": "msg_g0VXzV1GA00jCoOvj44p",
+  "finish": "stop",
+  "bodyLength": 2206,
+  "sources": [
+    {
+      "id": "prt_g0VXzT1aI00JO1cB0C6R",
+      "messageID": "msg_g0VXzT02A00m7QiMOU17",
+      "toolPartID": "prt_g0VXzT1RQ00Sw5aMtFYd",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project\\README.md",
+      "range": {
+        "startLine": 2,
+        "endLine": 3
+      }
+    },
+    {
+      "id": "prt_g0VXzV1D300qq21kRblf",
+      "messageID": "msg_g0VXzUz9Z006ftbWblHm",
+      "toolPartID": "prt_g0VXzV0ro00t3TTbwCnT",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project\\README.md",
+      "range": {
+        "startLine": 2,
+        "endLine": 3
+      }
+    }
+  ],
+  "authority": "Read-only production SQLite records; exact retained IDs and payloads, real public input/result and completed read bindings. This is not UI acceptance."
+}

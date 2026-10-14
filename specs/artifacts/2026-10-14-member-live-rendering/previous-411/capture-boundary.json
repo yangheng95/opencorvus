@@ -1,0 +1,38 @@
+{
+  "files": [
+    {
+      "name": "push.log",
+      "capturedAsFile": true
+    },
+    {
+      "name": "push-exit.json",
+      "capturedAsFile": true
+    },
+    {
+      "name": "fetch-after-race.log",
+      "capturedAsFile": false
+    },
+    {
+      "name": "merge-after-race.log",
+      "capturedAsFile": true
+    },
+    {
+      "name": "push-after-race.log",
+      "capturedAsFile": true
+    },
+    {
+      "name": "push-after-race-exit.json",
+      "capturedAsFile": true
+    },
+    {
+      "name": "remote-after-push.txt",
+      "capturedAsFile": true
+    }
+  ],
+  "fetchMergeTool": {
+    "chunk": "662d1a",
+    "exitCode": 0,
+    "output": "Already up to date.; full pending set contained only 3aa6db050243f5358724107e3de984de900cf34b"
+  },
+  "boundary": "The empty fetch stream did not produce a Tee file. Keep the actual tool receipt boundary instead of inventing an empty original log."
+}

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [成员侧栏实时呈现](2026-10-14-member-live-rendering.md)：真实已有成员增量、正文与Sources挂载身份调查。
+
 - [项目元数据慢读取](2026-10-14-project-metadata-latency.md)：共享入口横审、有限Git根与原Native阶段调查。
 
 - [归档工作搜索](2026-10-14-archive-search.md)：Root独立调查及现有归档搜索能力接入方案。

@@ -1,0 +1,63 @@
+# 成员侧栏实时呈现
+
+## Recall
+
+用户要求持续自主迭代，重点包括Sources显示及成员侧栏反复Rendering。最新人工指令只允许单agent开发，覆盖旧goal中的Astra文字；本轮不调用开发子agent或其他聊天。用户已授权使用现有OpenAI凭据和gpt-6.1-sol做真实端到端验收。旧数据已清理，schema v1自动迁移基线已交付，不再次清空数据库。
+
+上一轮411为progress：3aa6db050243f5358724107e3de984de900cf34b记录14张原图、MDN冷页复制观察与当前Sources首个指针/键盘复制。正常push59492全部hook通过后因远端前进到356cb5ba9返回1；fresh fetch/merge后仅411待推，原97930 join43f69d exit0，ls-remote精确3aa6db050。首轮Native超时和重跑原工具exit字段缺失均保留，不改写为完整通过。冷页面Clipboard机制仍未知。本轮承接原推送日志，不重复该实验。
+
+开始git status包含其他compaction、ArchivePanel、locale、CHANGELOG、07-panel及索引修改，全部保留。只当前分支、范围提交，fresh fetch/merge、完整pending检查和正常push；不创建分支/工作树，不发布。
+
+## 已读资料和搜索
+
+已重读411 Recall、389完整成员刷新失败方案及390执行身份交付、388历史Key修复和406长历史记录；现行07-panel-reactivity的唯一投影、成员target/request分离、Markdown已完成产物、阅读锚点契约；当前SubagentConversationPanel、ConversationCard、TextPart、text-part-model、markdown-render及worker，SourceParts、公共Session路由和410成熟Native包装器。全仓相关Rendering定义唯一呈现点在TextPart；成员读取resource、live reconciliation及目标Key均已定位。没有发现需要新增的UI自动测试，也不运行现存UI测试。
+
+## 问题深度与范围
+
+原用户现象为成员正文间重复Rendering及Sources视觉噪声。现行TextPart仅在pending且尚无已呈现HTML时显示占位；既有完成产物按正文/streaming/语言/标签匹配，可跨组件重挂载复用。SubagentConversationPanel同目标失败使用resource唯一storage保留已接受正文，hidden不改变targetKey，真正换Session/authority/source/directory才退休实例。ConversationCard的非keyed分支读取响应式node，避免每个投影对象改变都重建Bubble。以上代码排除了已知旧分支，但不能证明用户原闪烁已全面解决。
+
+直接触发仍待实页确定：新流文本首次渲染、已有完成正文被卸载、真正目标切换或异步历史刷新。根因未知，不能增加延时占位、扩大缓存、双份正文或把读取失败隐藏。389的失败退休和390的actor漂移已有各自修复，不以它们代替当前增量资格。当前仅调查UI数据消费；公共API/schema、Provider协议、调度/队列不计划改变。若发现轮次、恢复或终态异常，立即横审Task/Mission/Session全部生产入口、串并行与多项目，再判定根因。
+
+## 本轮执行与验收
+
+复用390真实隔离项目与原成员历史，先只读确认主/子Session、Source/Tool绑定及现有配置；使用当前源码的独立Node Vite构建，通过正式开发服务`http://localhost:18527/ui/`呈现。浏览器沿已选4，只开自有新页，不动用户服务/窗口。无UI自动化、伪事件、数据库注入或合成消息。
+
+初始读取原成员历史，展开Sources和正文；若公开Session authority允许给该既有非Task成员发送真实用户输入，使用同一个成员完成一次只读来源核对与连续Markdown回答，真实输入只涉及隔离项目的公开测试材料。它是被测产品会话，不委派开发/调查工作，不创建多个执行成员。通过已读公开API发输入、由真实模型/工具自然产生事件；若该authority不允许，记录明确错误契约，不旁路Task worker或强行写消息。先依据实际路由和持久化事实确认方法再执行。
+
+使用410原NativeService/ProcessFacade启动、Provider审计和shutdown机制，仅调整明确runtime/project/diagnostic绑定；完整auth/models配对，启动前分别验证凭据可用、模型已投影和实际gpt-6.1-sol流式一致。总请求上限12，既有无活动180秒、Native固定600秒不扩限。构建与所有调查脚本在启动计时前准备；交互后立即关闭，避免占用活服务期限做长篇分析。
+
+界面只通过CUA实际操作、原截图和人工查看，最多辅助只读当前DOM/日志事实，不写断言或注入UI。观察原已完成段在新流期间、关闭重开、All agents往返是否保持可读及Source展开；首次新段短暂Rendering与旧段反复卸载分开记录。既有项目只有一个成员时不冒称两个不同成员切换已验证。后端只读checker核对原历史事实与本轮新增真实输入/完成消息/工具/来源、实际模型及原Native边界；不能用后台通过替代视觉。
+
+有真实产品失败后先追加调用点/公共契约/风险与根因方案，再改唯一实现、当前架构和必要语言字段，重新真实呈现截图。未知就保留未知，不制造补丁。最后关闭自有页、公开shutdown、join原启动句柄，核对原PID/启动身份、物理/output/request及配对退休，归档原失败和成功；更新三索引、docs与架构检查、范围commit和正常push。持续goal保持active。
+
+## 准备失败与新基线范围
+
+首个Vite命令错指根node_modules，MODULE_NOT_FOUND原日志保留；按overlay package.json的真实Node入口重跑，原47107 exit0、52秒完成。首个Native原f4fc87 exit1：390历史库为未标版本的旧库，生产DatabaseUnavailableError明确拒绝。Target85436/Host90128、output/request完整结算1，复制auth/models已退休；该库未改版本或删除。这是当前迁移基线的明确错误合同，不能以SQLite只读查询成功冒充当前产品可打开。
+
+因此停止复用390作为当前运行输入，改全新member-live-rendering-412-fresh隔离runtime/project，原600秒固定期限及180秒无活动不变。沿390已审成熟初始Git/正式配置建立路径，由当前生产数据库创建v1；测试README含明确标注的虚构测试价格/交付文字，用真实read产生来源。正常Web UI发送一条输入，让**一个被测产品成员**只读该文件并简答；开发、审计与实现仍只有root，不委派开发工作或再创建成员。之后向这个真实新成员公开Session输入一条较长Markdown说明，以既有完成正文观察新流、关闭重开及成员列表往返。两个业务输入及预检共享新scope预先声明的20次请求上限，不扩展已关闭首轮的12次或租约。原390与405数据均保留。
+
+公开路由已读：PublicSessionPromptInput要求唯一用户messageID；Mission有专门authority，Task投影worker返回明确拒绝，普通session-local成员不属于二者。输入使用正式Identifier生成messageID，通过正式路由由真实User/模型/Tool产生消息，不能手动造Part或Source。若自然委派未形成或正式路由拒绝，保留实际错误，不旁路。
+
+## 真实入口失败、根因与实施方案
+
+fresh正式页面28自然生成主ses_-zUS0X33CzzWEKMgCk98和唯一成员ses_-zUS0WzzQzzDOGrIbYwN。01图为真实read来源与已完成短答。尝试页面已有Add guidance/Steer输入，02图明确报“没有活动Task”；该输入未送达，不能计作新成员流。Clear按钮仅清错误，实际文本仍保留；关闭页面后不声称草稿已清空。公开shutdown200，原42056 join1114aa exit0，Native与配对退休已完成。初次页面在服务监听前打开产生错误页27，浏览器因其内部data URL拒绝绑定，公开API无法手动关闭；它未被标记保留，本轮不绕策略或改浏览器机制，未将其计为产品页面。
+
+根因是唯一显示helper `workerSteerTargetSessionID`只排除非agent、root本身和orchestrator，rootSessionID为空仍返回子Session。全部三个调用点为Card、ChatBubble和递归WorkerChild卡片，统一从board的rootTaskSessionID读取，后者明确对非Task source返回空字符串；发送端随后activeTaskID为空而报错。全仓定义/调用/同语义sendOperatorSteer/OperatorSteerBox与03-control已读；该功能的唯一公开合同是Task持久协调请求，不是普通Session直接回复。旧历史65d0bfc98已存在宽松显示条件，后续协调请求不可变身份修复没有修改该helper。因此问题是共享呈现适用范围错误，并未进入后台调度/队列或产生新执行轮次。
+
+实施仅在现有helper要求非空Task根Session，然后保持原成员/root/orchestrator判断，三个呈现入口同步获得相同适用范围。普通对话成员仍可读、复制和打开Source；继续工作沿原主对话输入。不给发送失败添加Session.prompt后备路由，也不把Task协调请求的artifact ID变成另一种消息身份。API、数据、worker descriptor、Provider、消息事实与业务调度不变；无新增语言字符串。风险是Task根尚未加载时控件暂不可用，这符合发送所需的实际目标条件，根解析后响应式恢复。纯UI适用条件修复，无新增或运行UI自动化测试；全仓helper搜索未发现相关UI自动测试。Task协调发送合同未修改，当前本轮尚没有新的Task UI资格，不能宣称全部Task场景已验收。
+
+修后使用同fresh v1历史、独立after诊断scope及新构建，600秒/20请求/180秒无活动不变。先呈现成员完整正文、复制和Source实际行定位，再关闭重开/All agents往返；为继续原Rendering目标，按原公开Session方案给已存在普通成员发送一个明确真实输入，观察原段和新流，不把该诊断输入包装成修复后的Steer功能。发生新共享执行异常仍立即横审。初始7条模型请求的准确总数以最终生产审计确认，不预先写通过。
+
+## 修后实际验收与边界
+
+修后原48085构建exit0、65秒；overlay typecheck原28642 exit0。页面29的03图呈现同一成员完整短答及可用Source/复制操作；04实际文件第2—3行选中，05返回同一正文。Task-only指导入口的适用条件已按唯一helper统一；本轮没有普通成员的直接回复新功能，也未改后台协调请求。
+
+之后按独立诊断方案公开提交真实输入msg_g0VXzUz7600DioAWQXRh，原55177 join d986d1 exit0，HTTP200，最终Message msg_g0VXzV1GA00jCoOvj44p自然finish=stop、2206字元正文，12编号小节及末尾表格可见。06为新流13秒原短答/原来源仍可读，07为新流37秒All agents列表返回，旧段仍在原阅读位置。本轮人工观察没有看到该旧段反复Rendering；初始冷页加载时的正常首次Rendering不计为复发。没有连续帧录像或组件生命周期观测，因此不宣称所有瞬时闪烁均被排除。
+
+随后流中关闭面板；以Playwright checkbox locator重开在命令派发前超时，真实AX仍为关闭。再次读取时新流已Idle，使用实际AX控件打开，08只资格为**完成态重开**，不能写成流中重开通过。09工具已知剪贴板观察准备后，单次Source复制和实际Ctrl+V为完整README.md:2-3，草稿用fill空串清除未发送。10长正文中段与11最终表格均人工查看。仅一成员，两个不同成员切换、当前Task指导实页与流中关闭/重开的完整组合仍未验证。
+
+页面29关闭后立即公开shutdown200，原31830 join7db3eb exit0；after Target69052/Host原实例、output/request及auth/models退休原件完整。before为7条、after为5条，共12条实际gpt-6.1-sol流式请求，均200/reader settled/eof。旧库拒绝scope为0请求、原exit1，独立保留。真实SQLite checker逐项证明原8消息及全部原Part/Tool/outcome保持，新增输入角色/父子会话/最终输出与公共response一致，两份Source各自绑定completed read和精确2—3行，schema仍v1。
+
+归档首次7eabba exit1发生在承接411空输出fetch的Tee文件不存在；实际业务检查已执行，但归档不完整。修正归档器按源文件真实存在性记录捕获边界，已有产物只作原字节同一性核对，不覆盖原图/失败；原初版脚本保留archive-first.cjs.gz，完整重跑04301f exit0。空fetch的原工具662d1a exit0及完整pending事实注明为工具回执，不捏造原日志文件。不是产品测试失败或新服务重跑。
+
+[完整证据](../../artifacts/2026-10-14-member-live-rendering/README.md)包含11张原图、三scope实际边界、真实输入/响应/只读数据和411正常推送原件。下一批仍须继续Rendering剩余组合与Task实页资格；当前修复不能作为原所有UI问题已解决的声明。

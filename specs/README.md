@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [成员侧栏实时呈现](records/2026-10/2026-10-14-member-live-rendering.md)：真实已有成员增量、正文与Sources挂载身份调查。
+
 - [项目元数据慢读取](records/2026-10/2026-10-14-project-metadata-latency.md)：原163秒读取的共享入口、Git/Native阶段资格与根因调查。
 
 - [归档工作搜索](records/2026-10/2026-10-14-archive-search.md)：既有服务器查询接入、跨分页查找与真实页面验收。

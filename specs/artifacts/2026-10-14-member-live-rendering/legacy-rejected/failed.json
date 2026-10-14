@@ -1,0 +1,10 @@
+{
+  "pid": 85436,
+  "occurrence": "member-live-rendering-412-2cfa33d6-f61d-438a-a0d7-918e304fd3b9",
+  "error": {
+    "name": "DatabaseUnavailableError",
+    "message": "DatabaseUnavailableError: This unversioned database predates the supported migration baseline. Establish the current baseline through explicitly authorized database maintenance."
+  },
+  "actionRequired": "parent-owner-public-shutdown-then-physical-exit-and-paired-cleanup",
+  "credentialCleanup": "unverified-parent-owned"
+}

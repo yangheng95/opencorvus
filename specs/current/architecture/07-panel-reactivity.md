@@ -654,6 +654,12 @@ physical runtime shutdown cannot extend already completed work.
 
 ## Failure Contract
 
+Inline operator guidance requires the selected Task's resolved root Session.
+The shared target helper then selects a non-root, non-orchestrator agent for
+the existing Task coordination route. Card, ChatBubble and nested worker cards
+use this same applicability rule. Ordinary Session members retain transcript,
+copy and Source actions; they do not expose the Task-only guidance form.
+
 - Missing or drifted `agentID`, `sessionID`, `messageID`, Slice revision, parent,
   channel, or order ownership fails explicitly.
 - The selected-Task conversation alert represents project-directory preparation

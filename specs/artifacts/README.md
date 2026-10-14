@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [成员侧栏实时呈现](2026-10-14-member-live-rendering/README.md)：真实已有成员增量、正文与Sources挂载身份调查。
+
 - [项目元数据慢读取](2026-10-14-project-metadata-latency/README.md)：上一浏览正常交付与新有限阶段原件。
 
 - [归档工作搜索](2026-10-14-archive-search/README.md)：真实归档查询、分页、恢复与原始页面证据。

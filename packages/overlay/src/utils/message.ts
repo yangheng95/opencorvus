@@ -56,7 +56,9 @@ export function workerSteerTargetSessionID(
   node: { kind: string; sessionID?: string | null; stage?: string | null },
   rootSessionID?: string,
 ): string | undefined {
-  if (node.kind !== "agent") return undefined
+  // Inline guidance writes a Task coordination request, so its target must
+  // belong to a resolved Task scope before any card offers the control.
+  if (!rootSessionID || node.kind !== "agent") return undefined
   const sessionID = node.sessionID || undefined
   if (!sessionID || sessionID === rootSessionID || node.stage === "orchestrator") return undefined
   return sessionID
