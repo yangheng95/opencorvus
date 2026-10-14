@@ -44,3 +44,15 @@
 ### 提交竞争的真实回执
 
 首次正常提交包装器在写Git对象前观察到共享HEAD已变化，按现有保护退出1；没有提交失败内容或覆盖他人提交。原输出保留。重新读取HEAD并从其树生成只含本批源、原件和精确共享patch的私有index，再正常提交；不rebase/reset/删锁/绕hook。
+
+## 交付审阅补充：原件范围的文档校正（修改前分析）
+
+本批产品已正常提交9fc9fb7bbd05e7c84d9962375922d72d6cccf9b5，parent a169819b823871bd18efc98908dcd6ec5743ddb2，113路径，原逐blob身份核对及精确index结算0；release与module精确该树检查0（1163 modules/5936 edges/4 imports）。自己组件/record/artifact范围与HEAD一致，普通暂存区空。
+
+fresh fetch/merge后完整pending还含独立用户授权的compaction物理checker提交a169819b8，产品源码只涉及其原checker/worker，不是本批UI。Root只读该不可变提交的源差异和原始gzip报告：8手动/自动case、24真实cut/recover/inspect阶段、46流式loopback请求的实际exit/settlement、第三进程snapshot、原user身份/选段、helper真实Tool流和当前checkpoint全部符合原合同。没有新增调用、委托或消息。
+
+审阅发现README和qualification的人工概括写范围[26,80)，而8个原始receipt与原source.correctionExcerpt均为offset27/end81：原前缀27 UTF-16单位，选段54单位。全仓对应记录检索将定位该概括的全部调用；校正只覆盖事实错误的说明数字，不改任何原始报告、summary、实现、数据库、模型结果、公共错误或资格状态。直接根因是人工重复填写边界时偏一位，真实数据链各处一致，证据排除生产选段/恢复机制异常；不能把它冒充新的共享调度故障或抹除原Luna语义失败。
+
+这两份文档当前无其他未提交修改，允许在精确原文上修为[27,81)，保留原始不可变提交/报告并归档本次只读对照脚本与实际0输出。同步文档检查、范围提交；属于完整pending事实审阅所需的窄校正，不扩大为该任务的新模型/Task/Mission验收。其已有README索引路径不变，无需新增平行规格。
+
+补充全仓文档检索还定位到当前compaction-stress record的3处同一人工范围概括，该文件当前同样无未提交修改。它们一并按原始receipt改为[27,81)，只改这3个token。原观察/运行状态与语义失败全部保留，不改原输入、报告或实现。最终校正范围是README一句、qualification两个数字、原record三处范围；本record中的旧数字是错误定位的原观察，明确保留为调查证据。

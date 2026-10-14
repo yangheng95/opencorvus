@@ -1,0 +1,106 @@
+{
+  "capturedAt": "2026-10-14T03:22:45.921Z",
+  "files": [
+    {
+      "source": "commit-final.log",
+      "saved": "commit-final.log.gz",
+      "originalBytes": 10232
+    },
+    {
+      "source": "commit-final.exit",
+      "saved": "commit-final.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": "commit-final-receipt.json",
+      "saved": "commit-final-receipt.json.gz",
+      "originalBytes": 349
+    },
+    {
+      "source": "commit-final-created.json",
+      "saved": "commit-final-created.json.gz",
+      "originalBytes": 9072
+    },
+    {
+      "source": "reconcile-check.log",
+      "saved": "reconcile-check.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": "reconcile-check.exit",
+      "saved": "reconcile-check.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": "exact-release.log",
+      "saved": "exact-release.log.gz",
+      "originalBytes": 179
+    },
+    {
+      "source": "exact-release.exit",
+      "saved": "exact-release.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": "exact-module.log",
+      "saved": "exact-module.log.gz",
+      "originalBytes": 241
+    },
+    {
+      "source": "exact-module.exit",
+      "saved": "exact-module.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": "fetch-current.log",
+      "saved": "fetch-current.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": "fetch-current.exit",
+      "saved": "fetch-current.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": "merge-current.log",
+      "saved": "merge-current.log.gz",
+      "originalBytes": 20
+    },
+    {
+      "source": "merge-current.exit",
+      "saved": "merge-current.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": "peer-crash-review.log",
+      "saved": "peer-crash-review.log.gz",
+      "originalBytes": 457
+    },
+    {
+      "source": "peer-crash-review.exit",
+      "saved": "peer-crash-review.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": "peer-crash-review.json",
+      "saved": "peer-crash-review.json.gz",
+      "originalBytes": 2291
+    },
+    {
+      "source": "review-peer-crash.mjs",
+      "saved": "review-peer-crash.mjs.gz",
+      "originalBytes": 3040
+    },
+    {
+      "source": "correct-peer-range.mjs",
+      "saved": "correct-peer-range.mjs.gz",
+      "originalBytes": 755
+    },
+    {
+      "source": "compaction-record.before.md",
+      "saved": "compaction-record.before.md.gz",
+      "originalBytes": 237086
+    }
+  ],
+  "purpose": "Original commit/physical-report review evidence; no new Provider, browser or child-agent request."
+}

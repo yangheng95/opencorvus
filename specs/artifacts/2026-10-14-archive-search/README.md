@@ -9,3 +9,5 @@
 - [previous-delivery](previous-delivery/README.md)：B19/B20/B21及其记录现已确认upstream；恢复后的原checker18owners/23sites通过，本任务正常push实际0（899ffcb33..356cb5ba9，全部原hook通过）。此前阻塞原件保持在B21交付目录，不改写历史失败。
 
 两个自有页面均关闭。两轮正常settlement、父真实exit0、双端口0后精确删除自有假auth/models同对；完整后台原日志328259/356328字节、stdout/stderr各0，隐私checker0。原件无损gzip见[捕获清单](manifest.json)。仅桌面中英Chat/跨Project查询、分页和恢复资格；未独立操作Task/Mission恢复、永久删除、模型或调度。精确提交与正常push按后续真实回执结算。
+
+- [提交后审阅与范围校正](delivery/README.md)：本批113路径正常提交、精确树检查与待推送原件范围的独立对照。
