@@ -1,0 +1,482 @@
+{
+  "capturedAt": "2026-10-14T05:09:27.535Z",
+  "purpose": "Lossless original evidence and exact resource identity, not mutable-source checksum or a functional hash gate.",
+  "runs": [
+    {
+      "stage": "before",
+      "pid": 77252,
+      "occurrence": {
+        "pid": 77252,
+        "processInstanceID": "win32:639275506700346543",
+        "occurrenceID": "6dd80fb7-0b65-4f1d-aa74-6f4d861bfb4b"
+      },
+      "port": 18670,
+      "participantPort": 18671,
+      "proxyPorts": [
+        18672,
+        18673
+      ],
+      "uiDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-palette-item-identity-01a133\\ui-after",
+      "physicalExit": 0,
+      "proxyRequests": 4,
+      "inferenceRequests": 0,
+      "privacy": [
+        {
+          "file": "stdout.log",
+          "bytes": 0,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        },
+        {
+          "file": "stderr.log",
+          "bytes": 0,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        },
+        {
+          "file": "runtime/log/2026-10-14T045750-77252-1.log",
+          "bytes": 92519,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        }
+      ]
+    },
+    {
+      "stage": "after",
+      "pid": 69440,
+      "occurrence": {
+        "pid": 69440,
+        "processInstanceID": "win32:639275509034905789",
+        "occurrenceID": "16659c2c-d9dc-4706-9265-488f53b8bf54"
+      },
+      "port": 18674,
+      "participantPort": 18675,
+      "proxyPorts": [
+        18676,
+        18677
+      ],
+      "uiDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-network-draft-01a133\\ui-after",
+      "physicalExit": 0,
+      "proxyRequests": 11,
+      "inferenceRequests": 0,
+      "privacy": [
+        {
+          "file": "stdout.log",
+          "bytes": 0,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        },
+        {
+          "file": "stderr.log",
+          "bytes": 0,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        },
+        {
+          "file": "runtime/log/2026-10-14T050144-69440-1.log",
+          "bytes": 136802,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        }
+      ]
+    }
+  ],
+  "failureExits": {
+    "formal-before": "1"
+  },
+  "retainedHTTPReceipts": 7,
+  "rawGroups": [
+    {
+      "stage": "before",
+      "name": "check-formal-progress.json",
+      "count": 1
+    },
+    {
+      "stage": "before",
+      "name": "check-formal-ready-receipts.json",
+      "count": 2
+    },
+    {
+      "stage": "after",
+      "name": "check-formal-receipts.json",
+      "count": 2
+    },
+    {
+      "stage": "after",
+      "name": "check-ui-final-receipts.json",
+      "count": 2
+    }
+  ],
+  "limits": [
+    "Six formal current proxy error contracts and one original DirectoryRequiredError body.",
+    "Nine manual UI test-button requests have TCP/screenshot/log evidence; their HTTP response bodies are not separately retained.",
+    "No external reachability, real credentials or Provider inference qualification."
+  ],
+  "files": [
+    {
+      "source": ".tmp-codex-network-draft-01a133/before/check-formal-progress.json",
+      "saved": "runs/before/check-formal-progress.json.gz",
+      "originalBytes": 467
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/before/check-formal-ready-progress.json",
+      "saved": "runs/before/check-formal-ready-progress.json.gz",
+      "originalBytes": 1328
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/before/check-formal-ready-receipts.json",
+      "saved": "runs/before/check-formal-ready-receipts.json.gz",
+      "originalBytes": 2072
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/before/exit.json",
+      "saved": "runs/before/exit.json.gz",
+      "originalBytes": 88
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/before/owner.json",
+      "saved": "runs/before/owner.json.gz",
+      "originalBytes": 211
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/before/physical-pair-cleanup.json",
+      "saved": "runs/before/physical-pair-cleanup.json.gz",
+      "originalBytes": 211
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/before/privacy-qualified.json",
+      "saved": "runs/before/privacy-qualified.json.gz",
+      "originalBytes": 653
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/before/project-authorities.json",
+      "saved": "runs/before/project-authorities.json.gz",
+      "originalBytes": 633
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/before/proxy-requests.json",
+      "saved": "runs/before/proxy-requests.json.gz",
+      "originalBytes": 914
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/before/proxy-terminal.json",
+      "saved": "runs/before/proxy-terminal.json.gz",
+      "originalBytes": 1106
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/before/ready.json",
+      "saved": "runs/before/ready.json.gz",
+      "originalBytes": 1857
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/before/terminal.json",
+      "saved": "runs/before/terminal.json.gz",
+      "originalBytes": 228
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/before/redacted-logs/2026-10-14T045750-77252-1.log",
+      "saved": "runs/before/logs/2026-10-14T045750-77252-1.log.gz",
+      "originalBytes": 92519
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/before/redacted-logs/stderr.log",
+      "saved": "runs/before/logs/stderr.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/before/redacted-logs/stdout.log",
+      "saved": "runs/before/logs/stdout.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/after/check-formal-progress.json",
+      "saved": "runs/after/check-formal-progress.json.gz",
+      "originalBytes": 1326
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/after/check-formal-receipts.json",
+      "saved": "runs/after/check-formal-receipts.json.gz",
+      "originalBytes": 2070
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/after/check-ui-final-progress.json",
+      "saved": "runs/after/check-ui-final-progress.json.gz",
+      "originalBytes": 1326
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/after/check-ui-final-receipts.json",
+      "saved": "runs/after/check-ui-final-receipts.json.gz",
+      "originalBytes": 4304
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/after/exit.json",
+      "saved": "runs/after/exit.json.gz",
+      "originalBytes": 88
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/after/owner.json",
+      "saved": "runs/after/owner.json.gz",
+      "originalBytes": 211
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/after/physical-pair-cleanup.json",
+      "saved": "runs/after/physical-pair-cleanup.json.gz",
+      "originalBytes": 211
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/after/privacy-qualified.json",
+      "saved": "runs/after/privacy-qualified.json.gz",
+      "originalBytes": 654
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/after/project-authorities.json",
+      "saved": "runs/after/project-authorities.json.gz",
+      "originalBytes": 628
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/after/proxy-requests.json",
+      "saved": "runs/after/proxy-requests.json.gz",
+      "originalBytes": 2512
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/after/proxy-terminal.json",
+      "saved": "runs/after/proxy-terminal.json.gz",
+      "originalBytes": 2844
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/after/ready.json",
+      "saved": "runs/after/ready.json.gz",
+      "originalBytes": 1845
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/after/terminal.json",
+      "saved": "runs/after/terminal.json.gz",
+      "originalBytes": 228
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/after/redacted-logs/2026-10-14T050144-69440-1.log",
+      "saved": "runs/after/logs/2026-10-14T050144-69440-1.log.gz",
+      "originalBytes": 136802
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/after/redacted-logs/stderr.log",
+      "saved": "runs/after/logs/stderr.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/after/redacted-logs/stdout.log",
+      "saved": "runs/after/logs/stdout.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/before-parent.log",
+      "saved": "checks/before-parent.log.gz",
+      "originalBytes": 49
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/before-parent.exit",
+      "saved": "checks/before-parent.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/privacy-before.log",
+      "saved": "checks/privacy-before.log.gz",
+      "originalBytes": 172
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/privacy-before.exit",
+      "saved": "checks/privacy-before.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/after-parent.log",
+      "saved": "checks/after-parent.log.gz",
+      "originalBytes": 49
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/after-parent.exit",
+      "saved": "checks/after-parent.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/privacy-after.log",
+      "saved": "checks/privacy-after.log.gz",
+      "originalBytes": 173
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/privacy-after.exit",
+      "saved": "checks/privacy-after.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/formal-before-ready.log",
+      "saved": "checks/formal-before-ready.log.gz",
+      "originalBytes": 391
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/formal-before-ready.exit",
+      "saved": "checks/formal-before-ready.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/formal-after.log",
+      "saved": "checks/formal-after.log.gz",
+      "originalBytes": 384
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/formal-after.exit",
+      "saved": "checks/formal-after.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/formal-ui-final.log",
+      "saved": "checks/formal-ui-final.log.gz",
+      "originalBytes": 387
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/formal-ui-final.exit",
+      "saved": "checks/formal-ui-final.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/overlay-typecheck.log",
+      "saved": "checks/overlay-typecheck.log.gz",
+      "originalBytes": 15
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/overlay-typecheck.exit",
+      "saved": "checks/overlay-typecheck.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/ui-build.log",
+      "saved": "checks/ui-build.log.gz",
+      "originalBytes": 67519
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/ui-build.exit",
+      "saved": "checks/ui-build.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/docs-current.log",
+      "saved": "checks/docs-current.log.gz",
+      "originalBytes": 104
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/docs-current.exit",
+      "saved": "checks/docs-current.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/architecture-current.log",
+      "saved": "checks/architecture-current.log.gz",
+      "originalBytes": 139
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/architecture-current.exit",
+      "saved": "checks/architecture-current.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/docs-final.log",
+      "saved": "checks/docs-final.log.gz",
+      "originalBytes": 104
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/docs-final.exit",
+      "saved": "checks/docs-final.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/architecture-final.log",
+      "saved": "checks/architecture-final.log.gz",
+      "originalBytes": 139
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/architecture-final.exit",
+      "saved": "checks/architecture-final.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/formal-before.log",
+      "saved": "checks/formal-before.log.gz",
+      "originalBytes": 409
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/formal-before.exit",
+      "saved": "checks/formal-before.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/setup.mjs",
+      "saved": "inputs/setup.mjs.gz",
+      "originalBytes": 2265
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/runtime.ts",
+      "saved": "inputs/runtime.ts.gz",
+      "originalBytes": 10781
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/launch.ps1",
+      "saved": "inputs/launch.ps1.gz",
+      "originalBytes": 5098
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/privacy.ts",
+      "saved": "inputs/privacy.ts.gz",
+      "originalBytes": 2104
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/run.mjs",
+      "saved": "inputs/run.mjs.gz",
+      "originalBytes": 881
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/check.mjs",
+      "saved": "inputs/check.mjs.gz",
+      "originalBytes": 2239
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/check.initial.mjs",
+      "saved": "inputs/check.initial.mjs.gz",
+      "originalBytes": 2177
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/NetworkPanel.before.tsx",
+      "saved": "inputs/NetworkPanel.before.tsx.gz",
+      "originalBytes": 14505
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/baseline.json",
+      "saved": "inputs/baseline.json.gz",
+      "originalBytes": 174
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/prepare-git.mjs",
+      "saved": "inputs/prepare-git.mjs.gz",
+      "originalBytes": 2102
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/stage-final.mjs",
+      "saved": "inputs/stage-final.mjs.gz",
+      "originalBytes": 3381
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/commit-final.mjs",
+      "saved": "inputs/commit-final.mjs.gz",
+      "originalBytes": 3433
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/shared-final.json",
+      "saved": "inputs/shared-final.json.gz",
+      "originalBytes": 1098
+    },
+    {
+      "source": ".tmp-codex-network-draft-01a133/archive.mjs",
+      "saved": "inputs/archive.mjs.gz",
+      "originalBytes": 7813
+    }
+  ]
+}

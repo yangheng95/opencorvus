@@ -15,6 +15,8 @@
 
 #### 修复
 
+- 代理测试期间编辑连接草稿后，迟到的结果按原草稿退休；测试按钮仍等待真实请求结束再恢复，可继续测试当前输入。
+
 - 命令面板使用 Chat/Work 的统一体验图标，并在工作项提示中显示类型与项目；同项目同名记录可清楚区分，原始标题和选择目标保持。
 
 - 正常助手消息完成时同步关闭已成功工具的权限续行；静默写入、导入与相同完成重放共用原事务。退休写入失败保留真实错误并回滚本次消息发布，已提交的工具结果继续可恢复。
@@ -131,6 +133,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Editing a proxy draft retires an in-flight test's result for the previous draft. The test button still recovers after the actual request settles, allowing the current input to be tested again.
 
 - The command palette uses the shared Chat/Work experience icons and shows each work item's type beside its project, making equal titles within one project distinguishable while preserving original titles and selection targets.
 

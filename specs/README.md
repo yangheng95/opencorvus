@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [代理测试的编辑草稿](records/2026-10/2026-10-14-network-test-draft.md)：在途代理测试、草稿编辑与真实回调所有权调查。
+
 - [活动Task指导与侧栏流式恢复](records/2026-10/2026-10-14-active-task-dock.md)：真实活动协调、成员增量及流中关闭重开验收。
 
 - [命令面板工作项身份](records/2026-10/2026-10-14-palette-item-identity.md)：同名Chat/Work辨识、当前语言类型与真实选择调查。

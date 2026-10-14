@@ -59,7 +59,7 @@ interface NetworkOperationOwner {
   selectionEpoch: number
   taskID: string
   directory: string
-  configGeneration: number
+  draftGeneration: number
 }
 
 function describeFailure(error: unknown): string {
@@ -82,7 +82,7 @@ export default function NetworkPanel() {
   const [testResult, setTestResult] = createSignal<NetworkProxyTestResult | null>(null)
   const proxyConfigured = createMemo(() => !!(appStore.config as any)?.network?.proxy)
   let operationGeneration = 0
-  let configGeneration = 0
+  let draftGeneration = 0
   let scopeIdentity = ""
   let feedbackTimer: ReturnType<typeof setTimeout> | undefined
 
@@ -104,7 +104,7 @@ export default function NetworkPanel() {
       feedbackTimer = undefined
     }
     const proxy = configuredProxy()
-    configGeneration += 1
+    draftGeneration += 1
     setLlmProvider(proxy.llmProvider)
     setWebResearch(proxy.webResearch)
     setUrl(proxy.url)
@@ -120,7 +120,7 @@ export default function NetworkPanel() {
       selectionEpoch: boardStore.selectEpoch,
       taskID: String(activeTaskID() || "").trim(),
       directory: activeProjectDirectory().trim(),
-      configGeneration,
+      draftGeneration,
     }
   }
 
@@ -134,14 +134,14 @@ export default function NetworkPanel() {
     )
   }
 
-  function ownsUnchangedConfig(owner: NetworkOperationOwner): boolean {
-    return ownsScope(owner) && owner.configGeneration === configGeneration
+  function ownsCurrentDraft(owner: NetworkOperationOwner): boolean {
+    return ownsScope(owner) && owner.draftGeneration === draftGeneration
   }
 
   function scheduleOwnedFeedbackClear(owner: NetworkOperationOwner, clear: () => void): void {
     if (feedbackTimer) clearTimeout(feedbackTimer)
     feedbackTimer = setTimeout(() => {
-      if (ownsScope(owner) && owner.configGeneration === configGeneration) clear()
+      if (ownsCurrentDraft(owner)) clear()
       feedbackTimer = undefined
     }, 1800)
   }
@@ -153,6 +153,7 @@ export default function NetworkPanel() {
   })
 
   function clearFeedback() {
+    draftGeneration += 1
     setError(null)
     setSaved(false)
     setStatusMessage(null)
@@ -234,7 +235,7 @@ export default function NetworkPanel() {
         return
       }
       if (!ownsScope(owner)) return
-      const completionOwner = { ...owner, configGeneration }
+      const completionOwner = { ...owner, draftGeneration }
       setSaved(true)
       scheduleOwnedFeedbackClear(completionOwner, () => setSaved(false))
     } catch (err) {
@@ -257,7 +258,7 @@ export default function NetworkPanel() {
         return
       }
       if (!ownsScope(owner)) return
-      const completionOwner = { ...owner, configGeneration }
+      const completionOwner = { ...owner, draftGeneration }
       setStatusMessage(t("network.proxy.deleted"))
       scheduleOwnedFeedbackClear(completionOwner, () => setStatusMessage(null))
     } catch (err) {
@@ -277,9 +278,9 @@ export default function NetworkPanel() {
     setTesting(true)
     try {
       const result = await testNetworkProxy(proxyDraft(input), owner.authority)
-      if (ownsUnchangedConfig(owner)) setTestResult(result)
+      if (ownsCurrentDraft(owner)) setTestResult(result)
     } catch (err) {
-      if (ownsUnchangedConfig(owner)) {
+      if (ownsCurrentDraft(owner)) {
         setTestResult({
           ok: false,
           status: "error",

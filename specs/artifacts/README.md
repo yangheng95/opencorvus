@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [代理测试的编辑草稿](2026-10-14-network-test-draft/README.md)：第25批真实代理入口、页面与独立生命周期证据。
+
 - [活动Task指导与侧栏流式恢复](2026-10-14-active-task-dock/README.md)：真实活动协调、成员增量及流中关闭重开验收。
 
 - [命令面板工作项身份](2026-10-14-palette-item-identity/README.md)：第24批原页面、正式输入与独立生命周期证据。

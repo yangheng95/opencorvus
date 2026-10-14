@@ -40,6 +40,13 @@ results and explicitly committed errors remain original facts; obsolete UI
 projection, feedback and finally retire. Source-local busy state resets through
 its existing source effect, without another epoch or request owner.
 
+Network proxy tests capture the existing draft generation as well as their
+operation and scope owner. Edited fields, purpose switches and accepted config
+hydration advance that same draft generation, retiring the old result or error
+projection. The original HTTP operation keeps its lifetime and clears its busy
+state only on its actual settlement. A new test of the current draft uses the
+same public endpoint and physical transport; editing adds no cancellation or retry.
+
 Provider settings retain separate form, catalog-refresh and model-refresh feedback
 owners. Each stores message keys, variables and original diagnostic details;
 summaries translate at render time and details use the existing native disclosure.

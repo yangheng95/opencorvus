@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [代理测试的编辑草稿](2026-10-14-network-test-draft.md)：当前草稿代际与真实HTTP/桌面复核方案。
+
 - [活动Task指导与侧栏流式恢复](2026-10-14-active-task-dock.md)：真实活动协调、成员增量及流中关闭重开验收。
 
 - [命令面板工作项身份](2026-10-14-palette-item-identity.md)：canonical体验呈现、跨项目同名候选与Root实际桌面验收。
