@@ -1,0 +1,9 @@
+{
+  "status": "exact_authored_content_match",
+  "left": "cross-model-policy-revisions-range",
+  "right": "cross-model-policy-revisions-sol",
+  "messages": 32,
+  "textCharacters": 460712,
+  "toolResults": 10,
+  "scope": "Exact canonical authored roles, authors, text and Tool input/output in timeline order. Execution IDs/times/model metadata and model-generated compactor messages naturally differ."
+}

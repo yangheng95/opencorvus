@@ -1,0 +1,70 @@
+{
+  "status": "partial",
+  "matrixStatus": "failed",
+  "distinctLocalContracts": 43,
+  "inputErrorQualifications": 2,
+  "local": {
+    "policyActionResume": 16,
+    "nativeReference": 7,
+    "transcriptBudget": 6,
+    "workingContext": 9,
+    "readPressure": 5
+  },
+  "typecheck": {
+    "command": "node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit --project <temporary expanded compaction config>",
+    "process": 94675,
+    "joinedExit": 0,
+    "log": "policy-revisions-typecheck-confirmed-final.log.gz",
+    "config": "policy-revisions-typecheck.json"
+  },
+  "toolCalibration": "The first repeated typecheck mistakenly supplied --project to root Turbo. Its CLI rejected the option before checking types. The corrected direct TypeScript command joined with exit 0; retain both logs.",
+  "independentReview": {
+    "exit": 0,
+    "log": "policy-revisions-independent-review.log.gz",
+    "scope": "All three original reports, streamed request sidecars, canonical usage, real action files and Tool outcomes, original source roles and text, and matched authored corpus."
+  },
+  "manualCodeReview": [
+    "Alternating case is confined to the existing checker; fixed grant/revoke authored values are preserved.",
+    "Exact resume keeps immutable original update and probe identities, and creates only subsequent revisions.",
+    "Retained-range references derive from the existing source receipt; the canonical reader and persisted schemas are unchanged.",
+    "Current-scope probes are registered before requests. The oracle grades actual Tool/file effects and distinguishes full-history failures.",
+    "No product default-model change, fallback, host semantic authorization gate, UI or scheduler change."
+  ],
+  "realRuns": [
+    {
+      "name": "cross-model-policy-revisions",
+      "requests": 67,
+      "joinedProcess": 72291,
+      "joinedExit": 1
+    },
+    {
+      "name": "cross-model-policy-revisions-range",
+      "requests": 73,
+      "joinedProcess": 92328,
+      "joinedExit": 1
+    },
+    {
+      "name": "cross-model-policy-revisions-sol",
+      "requests": 90,
+      "joinedProcess": 13421,
+      "joinedExit": 0
+    }
+  ],
+  "settledTotal": 999,
+  "phaseRequests": 230,
+  "operatingCeiling": 1100,
+  "activeRequests": 0,
+  "limits": [
+    "Residual Luna incomplete-read/action failure means the overall alternating matrix is failed.",
+    "Five authored rounds are not statistical model rankings or general guarantees.",
+    "Physical crash of selected-source publication, larger histories/catalogs, cross-vendor and native product state remain open."
+  ],
+  "docs": {
+    "exit": 0,
+    "commands": [
+      "bun run docs:check",
+      "bun run check:architecture-index"
+    ],
+    "log": "policy-revisions-docs.log.gz"
+  }
+}

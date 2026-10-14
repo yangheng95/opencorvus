@@ -142,6 +142,14 @@ Project memory has three explicitly scoped authorities:
    enough quotation context or retained every instruction; real action tests
    measure that semantic boundary separately.
 
+   A bounded retained-user field reference carries the exact original offset,
+   limit and end with `scope=retained_user_excerpt`, derived from that same Tool
+   receipt. The canonical reader still pages the full original field; a cursor
+   beyond the referenced excerpt is not a demand to read every archived byte.
+   Read receipts describe delivery, not semantic reading obligations. Newly
+   arrived user fields take precedence over rechecking already retained history;
+   an older source remains available for concrete gaps or contradictions.
+
    Omitted fields keep `ReadCompactionEvidence` references. The one reader resolves text, input,
    output, structured failure and provenance metadata from the Session snapshot
    bound when compaction dispatches, including original Parts referenced by older

@@ -1,7 +1,7 @@
 {
   "priorRequests": 99,
-  "total": 769,
-  "authorizedTotal": 820,
+  "total": 999,
+  "authorizedTotal": 1100,
   "runs": [
     {
       "name": "text-three-rounds",
@@ -474,6 +474,51 @@
       "passedActions": 10,
       "passedFields": 50,
       "summary": "cross-model-user-retention-eager-revoke-summary.json"
+    },
+    {
+      "name": "cross-model-policy-revisions",
+      "status": "failed",
+      "requests": 67,
+      "model": "openai/gpt-6-luna",
+      "credentialsRemoved": true,
+      "completedCheckpoints": 5,
+      "actualActions": 10,
+      "passedActions": 6,
+      "passedFields": 35,
+      "summary": "cross-model-policy-revisions-summary.json",
+      "sourceRolePreserved": 2,
+      "fullPassed": 4,
+      "compactedPassed": 2
+    },
+    {
+      "name": "cross-model-policy-revisions-range",
+      "status": "failed",
+      "requests": 73,
+      "model": "openai/gpt-6-luna",
+      "credentialsRemoved": true,
+      "completedCheckpoints": 5,
+      "actualActions": 10,
+      "passedActions": 8,
+      "passedFields": 42,
+      "sourceRolePreserved": 4,
+      "fullPassed": 4,
+      "compactedPassed": 4,
+      "summary": "cross-model-policy-revisions-range-summary.json"
+    },
+    {
+      "name": "cross-model-policy-revisions-sol",
+      "status": "passed",
+      "requests": 90,
+      "model": "openai/gpt-6.1-sol",
+      "credentialsRemoved": true,
+      "completedCheckpoints": 5,
+      "actualActions": 10,
+      "passedActions": 10,
+      "passedFields": 50,
+      "sourceRolePreserved": 5,
+      "fullPassed": 5,
+      "compactedPassed": 5,
+      "summary": "cross-model-policy-revisions-sol-summary.json"
     }
   ],
   "authorizationPolicy": "User explicitly allows increasing request limits as needed; retain bounded per-run budgets and exact accounting.",
@@ -516,5 +561,16 @@
     "requests": 72,
     "phaseRequests": 151,
     "summary": "user-retention-matrix-summary.json"
+  },
+  "latestAlternatingPolicyMatrix": {
+    "status": "failed",
+    "reason": "Luna incomplete-read and action failures remain",
+    "runs": [
+      "cross-model-policy-revisions",
+      "cross-model-policy-revisions-range",
+      "cross-model-policy-revisions-sol"
+    ],
+    "requests": 230,
+    "summary": "policy-revisions-matrix-summary.json"
   }
 }

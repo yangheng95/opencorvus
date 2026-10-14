@@ -1,0 +1,79 @@
+{
+  "status": "failed",
+  "reason": "Residual Luna incomplete-read and action failures remain; Sol success does not erase them.",
+  "priorRequests": 769,
+  "phaseRequests": 230,
+  "total": 999,
+  "comparison": {
+    "status": "exact_authored_content_match",
+    "left": "cross-model-policy-revisions-range",
+    "right": "cross-model-policy-revisions-sol",
+    "messages": 32,
+    "textCharacters": 460712,
+    "toolResults": 10,
+    "scope": "Exact canonical authored roles, authors, text and Tool input/output in timeline order. Execution IDs/times/model metadata and model-generated compactor messages naturally differ."
+  },
+  "runs": [
+    {
+      "name": "cross-model-policy-revisions",
+      "status": "failed",
+      "model": "openai/gpt-6-luna",
+      "requests": 67,
+      "completedCheckpoints": 5,
+      "actualActions": 10,
+      "passedActions": 6,
+      "passedFields": 35,
+      "sourceRolePreserved": 2,
+      "fullPassed": 4,
+      "compactedPassed": 2,
+      "limits": [
+        "A failed full-history action is a baseline reasoning failure, not attributed solely to compression.",
+        "Exact authored revisions alternate kind and change scope; this is a bounded five-round observation.",
+        "No opaque native persistence, cross-vendor or general reliability guarantee."
+      ]
+    },
+    {
+      "name": "cross-model-policy-revisions-range",
+      "status": "failed",
+      "model": "openai/gpt-6-luna",
+      "requests": 73,
+      "completedCheckpoints": 5,
+      "actualActions": 10,
+      "passedActions": 8,
+      "passedFields": 42,
+      "sourceRolePreserved": 4,
+      "fullPassed": 4,
+      "compactedPassed": 4,
+      "limits": [
+        "A failed full-history action is a baseline reasoning failure, not attributed solely to compression.",
+        "Exact authored revisions alternate kind and change scope; this is a bounded five-round observation.",
+        "No opaque native persistence, cross-vendor or general reliability guarantee."
+      ]
+    },
+    {
+      "name": "cross-model-policy-revisions-sol",
+      "status": "passed",
+      "model": "openai/gpt-6.1-sol",
+      "requests": 90,
+      "completedCheckpoints": 5,
+      "actualActions": 10,
+      "passedActions": 10,
+      "passedFields": 50,
+      "sourceRolePreserved": 5,
+      "fullPassed": 5,
+      "compactedPassed": 5,
+      "limits": [
+        "A failed full-history action is a baseline reasoning failure, not attributed solely to compression.",
+        "Exact authored revisions alternate kind and change scope; this is a bounded five-round observation.",
+        "No opaque native persistence, cross-vendor or general reliability guarantee."
+      ]
+    }
+  ],
+  "localContracts": 43,
+  "inputErrorQualifications": 2,
+  "limits": [
+    "Authored five-round histories, not a statistical model ranking.",
+    "Per-model defaults and naturally different execution histories; no product model switch or fallback.",
+    "Physical crash, larger scale, native product state and cross-vendor fidelity remain open."
+  ]
+}

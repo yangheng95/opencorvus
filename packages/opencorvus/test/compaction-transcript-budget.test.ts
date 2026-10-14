@@ -5,6 +5,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import { SessionCompaction } from "@/session/compaction"
 import { CompactionEvidenceReader } from "@/session/compaction-evidence-reader"
+import { CompactionUserText } from "@/session/compaction-user-text"
 import { AssistantDiagnostics } from "@/session/assistant-diagnostics"
 import { RequestBudget } from "@/session/request-budget"
 import { Message } from "@/session/message"
@@ -271,6 +272,48 @@ test("packing many individually short fields respects the whole request budget",
       milliseconds: performance.now() - started,
     }),
   )
+})
+
+test("bounded retained-user references recover their exact selected range through the canonical reader", async () => {
+  const source = corpus()
+  const original = source.messages[0]!
+  const part = original.parts.find((part): part is Message.TextPart => part.type === "text")!
+  const offset = part.text.indexOf("Current authorization:") - 2000
+  const quote = part.text.slice(offset, offset + 4400)
+  const before = structuredClone(original)
+  const options = { toolCallId: "select_range", messages: [], context: {}, abortSignal: new AbortController().signal }
+  const result = (await CompactionUserText.create([original], () => {}).execute!(
+    { excerpts: [{ part_id: part.id, text: quote }] },
+    options,
+  )) as { output: string }
+  const retained = CompactionUserText.project(CompactionUserText.Receipt.parse(JSON.parse(result.output)), [original])
+  const rendered = field(text(projected(retained, 0).messages), "text")
+    .trim()
+    .split("\n")
+    .map((line) => JSON.parse(line))
+  const reference = rendered.find((value) => value.kind === "compaction_evidence_reference")
+  expect(reference).toMatchObject({
+    scope: "retained_user_excerpt",
+    partID: part.id,
+    field: "text",
+    offset,
+    limit: 4400,
+    end: offset + 4400,
+  })
+  const page = (await CompactionEvidenceReader.create([original]).execute!(
+    { part_id: reference.partID, field: reference.field, offset: reference.offset, limit: reference.limit },
+    { ...options, toolCallId: "read_retained_range" },
+  )) as { output: string }
+  expect(JSON.parse(page.output)).toMatchObject({
+    content: quote,
+    offset,
+    end: offset + 4400,
+    nextOffset: offset + 4400,
+    totalChars: part.text.length,
+    originalRole: "user",
+    originalAuthor: "user",
+  })
+  expect(original).toEqual(before)
 })
 
 test("file-backed output keeps its authoritative file and exact reader content", async () => {

@@ -5,6 +5,7 @@
  * COMPARE_NATIVE=1 adds a one-checkpoint experimental native reference lane to policy cases.
  * CONTEXT_TOKENS optionally lowers the configured prompt ceiling for read-window stress.
  * FULL_CONTEXT_TOKENS sets the separate full-history policy control ceiling (default at least 256000).
+ * NONCE_SEED optionally fixes twelve lowercase hex digits for matched authored-corpus comparisons; omit on resume.
  * Auth and model catalog are copied together into an isolated disposable runtime.
  */
 import assert from "node:assert/strict"
@@ -32,6 +33,9 @@ const rounds = Number(env("ROUNDS") ?? "1")
 const compareNative = env("COMPARE_NATIVE") === "1"
 const contextTokens = Number(env("CONTEXT_TOKENS") ?? "256000")
 const fullContextTokens = Number(env("FULL_CONTEXT_TOKENS") ?? Math.max(256000, contextTokens))
+const nonceSeed = env("NONCE_SEED") ?? randomBytes(6).toString("hex")
+assert(/^[a-f0-9]{12}$/.test(nonceSeed), "NONCE_SEED must be twelve lowercase hexadecimal digits")
+if (env("RESUME_REPORT")) assert.equal(env("NONCE_SEED"), undefined, "An exact resume retains its original corpus seed")
 const hostTemporaryRoot = os.tmpdir()
 const caseNames = [
   "text-start",
@@ -82,9 +86,9 @@ const resume = await (async () => {
   assert.equal(previous.rounds, rounds, "Retain the original planned round count")
   assert(descriptor.round <= rounds, "Resume within the original planned rounds")
   const expected = CompactionPolicyCase.Action.parse(last.expected)
-  const nonce = expected.policy_revision.slice("POLICY-".length)
+  const nonce = expected.artifact_id.slice("ARTIFACT-".length)
   assert.deepEqual(
-    CompactionPolicyCase.definition(last.name, nonce).expected,
+    CompactionPolicyCase.definition(last.name, nonce, descriptor.round).expected,
     expected,
     "Exact original corpus identity",
   )
@@ -200,7 +204,6 @@ const authority = await (async () => {
   }
 })()
 let activity = Date.now()
-const nonceSeed = randomBytes(6).toString("hex")
 using audit = new RealProviderAudit(
   modelID,
   maxRequests,
@@ -213,10 +216,15 @@ using audit = new RealProviderAudit(
   authority,
   {
     redactor,
-    probes: caseNames.map((name) => ({
-      id: name,
-      text: name === resume?.name ? `REGION-${resume.nonce}` : `REGION-${nonceSeed}-${name}`,
-    })),
+    probes: caseNames.flatMap((name) => {
+      const nonce = name === resume?.name ? resume.nonce : `${nonceSeed}-${name}`
+      return name === "policy-revisions"
+        ? Array.from({ length: rounds }, (_, index) => ({
+            id: `${name}.r${index + 1}`,
+            text: CompactionPolicyCase.definition(name, nonce, index + 1).expected.region,
+          }))
+        : [{ id: name, text: `REGION-${nonce}` }]
+    }),
   },
 )
 const [
@@ -261,6 +269,7 @@ const report = {
   compareNative,
   contextTokens,
   fullContextTokens,
+  ...(!resume ? { nonceSeed } : {}),
   ...(resume ? { resumedFrom: resume.reportPath, resume: resume.descriptor } : {}),
   credential: "available",
   modelProjection: "pending",

@@ -566,3 +566,20 @@ This phase consumes **151** requests including failures; [the ledger](final-requ
 These are bounded observations on authored histories. Source selection and quotation context still depend on model reasoning. Physical process-crash validation with the new selection capability, richer alternating authorization histories, larger catalogs/scaling, native product persistence, cross-vendor coverage and whole-OS power loss remain open. No perfect retention or private Codex equivalence is claimed.
 
 Implementation/evidence is committed as `d6fc0a555`. The [first normal push log](user-retention-push-shared-owner-block.log.gz) preserves a shared-workspace blocker after successful migrations/type/route/docs checks: another task's uncommitted Permission source has two control-lease acquire sites while the registry declares one. Its source/validation/registration must converge before normal synchronization; the hook was not bypassed.
+
+
+## Alternating authorization and retained source ranges
+
+The [matrix](policy-revisions-matrix-summary.json) remains **failed**. Each new round alternates release/draft and changes scope in a new long original user message; an exact Tool/file action is checked against the latest source in independent full and compacted histories. The retained-user reference now identifies its precise original offset/limit/end. This removes the observed ambiguity between reading a selected excerpt and reopening its entire archived field.
+
+| Run | Calls | Full actions | Compacted actions | Fields | Current user-role text |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| [Luna baseline](cross-model-policy-revisions-summary.json) | 67 | 4/5 | 2/5 | 35/50 | 2/5 |
+| [Luna explicit range](cross-model-policy-revisions-range-summary.json) | 73 | 4/5 | 4/5 | 42/50 | 4/5 |
+| [Sol same authored corpus](cross-model-policy-revisions-sol-summary.json) | 90 | 5/5 | 5/5 | 50/50 | 5/5 |
+
+The [direct corpus comparison](policy-revisions-matched-corpus.json) compares original canonical roles/authors/text and Tool inputs/outputs: 32 messages, 460,712 text characters, ten Tool results. This is not a model ranking. The final Luna round still fails, including its full-history control; Sol success does not erase that result. No product model default changed.
+
+The [qualification](policy-revisions-qualification.json) records 43 distinct local contracts, two input-error qualifications, expanded types, manual source review and independent request/usage/action/source-role verification. The [artifact manifest](policy-revisions-artifact-manifest.json) lists all original reports, request sidecars, logs, source-role reports and review scripts. Raw report/sidecar/log archives keep their original bytes; this archival check is separate from behavioral acceptance. The three review scripts read the recorded isolated databases and action files; they make no Provider calls. Runtime paths in original reports identify those local evidence databases, not portable dependencies.
+
+Phase use is 230; cumulative settled use is **999**, ceiling **1,100**, no active run. All three processes joined and credential/catalog copies were removed. Remaining requirements include Luna incomplete-reading/supersession failures, physical-crash validation of selected source publication, larger histories/catalogs and cross-vendor/native product state. Finite authored histories do not establish perfect retention or private Codex parity.
