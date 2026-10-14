@@ -1,0 +1,54 @@
+# 取消窗口内激活围栏的原始原因传播
+
+## Recall
+
+用户要求单agent持续自主体验、查根因并修复，真实验证后提交推送；原goal中的Astra文字已由最新人工约束覆盖。425已以72c2240efee578f7cf71b8571613d62110dd86cc正常推送且远端确认，9张Sources/成员完成态原图、3条真实Sol流及物理收尾已归档，前一goal turn为progress。本轮426不创建开发子agent或产品子成员，不清库，不重写迁移，不发布、不新建分支/worktree。已有412/416/417历史保持，仅在自有隔离项目创建一个普通被测Task以实际Stop复验；允许已授权完整auth/models及gpt-6.1-sol，所有请求流式，凭据不入日志/spec/提交。
+
+## Recall资料、全仓搜索与修改前分析
+
+已读417真实Stop后UnknownError及task.cancelled事实、425复核、03-control取消provenance合同；task-root-fact-store全部两类围栏及所有生产调用；cancellation-projection/cancellation-origin/task-lifecycle、Task API cancelTaskOnce的请求先落盘/物理收尾/最后终态顺序；Session.persistMessage、Part与Provider活动的统一activation fence、SessionLoop terminalizeIncompleteAssistant/publishTerminal、Message.fromError；dispatch preparation与lineage已复用的taskCancellationAuthorityExecutionErrorInTransaction；Task-root lease renewal、既有fact-store/lease/cancellation测试。
+
+可观察现象：417真实Task停止后生命周期是cancelled，原assistant却保存UnknownError，文字为Task-root activation fence rejected且status=cancelling。当前源码同分支仍存在。直接触发是取消请求已经在SQLite事务中落盘，而当前租约、执行epoch和assistant激活仍属原轮次；物理Prompt取消/最终终态尚未完成，正文、Part、Provider接受或租约续期进入围栏。围栏正确拒绝新工作，但把这个有明确持久取消原因的拒绝抛成普通Error。SessionLoop/Message.fromError只能按普通故障保存UnknownError，形成取消和错误双重呈现。
+
+深层原因是取消权威只在dispatch preparation与lineage commit连接到现有typed ExecutionCancellationError，Task-root写围栏缺少同一连接。已有取消物理信号不保证先于取消落盘后的任何同步围栏检查；依赖最后abort.reason不能根治。禁止放宽围栏、延迟持久取消、捕获关键词、合成状态或隐藏UI错误。现有canonical helper已经从真实cancellation-request事件复用actor/source/surface/requestID/reason/mission/tool身份和causationEventID，本轮不建立新错误或第二份取消状态。
+
+全仓定义/调用搜索确认当前生产唯一lease围栏用于renewTaskRootIngressLease、assertTaskRootAssistantActivationFenceInTransaction，再由Session写消息/Part/Provider活动共用；同文件assertTaskRootActivationFenceInTransaction仅fact-store测试调用，是测试仍在检查另一条reducer围栏的死公开函数，没有生产或其他仓库调用。它不能证明真实写入口行为。删除此测试专用旧函数，并把原not.toThrow断言改为当前生产lease围栏返回的真实identity正向断言，属于当前根因/测试影响范围，非无关清理。模块不是包公开exports；不保留兼容别名。
+
+## 共享机制横审
+
+| 范围 | 已读当前证据与本轮合同 |
+| --- | --- |
+| 全部生产取消入口 | Task API、HTTP Stop、panel/control、Mission关闭/删除及恢复最终使用同一Task cancellation-request/epoch权威；直接普通Session abort仍由原物理Prompt origin负责，不凭Task名称匹配。 |
+| Task/Mission/Session轮次 | helper按原TaskID与当前cancelling request读取；只有原lease仍最新、epoch匹配且activation未consumed才重用其原因。旧epoch、替换lease、已消费activation仍由现有Superseded错误处理，不借新轮次取消覆盖旧身份。Mission相关origin字段完整保留。非Task Session无activation，不进入本围栏。 |
+| 正常与终态 | active写入返回原identity；取消中拒绝新写并返回原typed取消。已接受活动的结算仍走现有allowAcceptedActivitySettlement路径，精确outcome后才能结束assistant；不以取消阻止结算。已终态/terminalConversation的既有时间规则及Task reducer不变。 |
+| 重试、重启与恢复 | lease renewal与Session写共用该围栏；现有取消恢复从原request重入，旧epoch/lease的Superseded分类保持。没有新重试、扫描、轮询、恢复权威或默认失败退化。 |
+| 串并行、多项目 | DB事务按Task与ingress/lease身份查询；增加同项目active peer正向合同及两类原始取消来源，证明目标取消与peer可写的明确结果。当前无新的多项目真实运行资格，不用局部测试声称完成全矩阵；所有入口最终复用同一事务判断。 |
+
+## 实施前方案与验收
+
+1. 先补正向回归：真实生产写入Task/opened/ingress/lease和原取消请求，当前生产围栏应返回ExecutionCancellationError及原origin，Message.fromError应投影MessageAbortedError。修改前应实际失败并保留日志。覆盖用户及Mission来源、活动peer、已接受结算、旧epoch分类；原测试改为生产函数的正向返回合同，不增加UI自动化。
+2. 仅在原拒绝分支的非permanent情况调用已有canonical取消helper，有取消即抛原typed对象，其余原错误和拒绝规则保持；不改API/schema/Provider/模型策略/调度门槛。删除仅测试使用的旧围栏函数。保留已交付数据格式，风险为import graph与取消结算分类，使用真实当前checker和聚焦测试复核。
+3. 使用当前正式bundle、成熟413 NativeServiceCancellation/foreground ProcessFacade、独立18573/ui、自有页面与600秒硬期限、180秒无活动、最多12条流式请求。复制完整auth/models并分别验证credential/catalog/actualModel。通过正式CLI/API创建一条明确只由当前被测执行者生成长文本的Task；不委派、不创建成员、不运行shell或改文件。在真实活动窗口点击产品Stop，截图人工核对消息/Task取消，按真实原request、epoch、provider及SQLite事件确认终态与原原因。若没有命中活动窗口或出现其他错误，保留失败并修验收，不伪称通过。
+4. 物理收尾仍要求公开shutdown、原句柄join、host/target原实例dead_or_reused、physical/output/request完整与配对退休。后台聚焦测试不能代替真实Stop；真实Stop正常不代替确定性取消窗口合同。更新03-control及三索引、docs/architecture/typecheck，审查差异后范围提交、fresh fetch/merge/pending审查与正常push，整体goal保持active。
+
+## 修改前确定性复现
+
+正式后端runner的首版测试输入缺少TaskCancellationRequested必填summary，被真实事件schema拒绝；第二版取消两例已到达目标并显示普通Error，但跨epoch例因Task fixture metadata为空被Task投影拒绝。两份准备错误分别保留contracts-input-error.log、contracts-partial-preparation-error.log，仅修测试输入，没有改生产。修正后的原62529 join03c0dc exit1：1 pass、2 fail；旧epoch保持TaskRootActivationSupersededError通过，用户与Mission取消两例都在真实生产lease围栏失败，错误明确latest仍为原lease、consumed=false、epoch=1/1、status=cancelling，实际类型为Error而非ExecutionCancellationError。现证据足以按既定方案修改当前生产路径，不依赖旧截图或模型自述。
+
+## 实施与真实验收
+
+生产改动只在当前lease/epoch、未消费activation的原拒绝分支复用canonical取消helper；删除仅测试使用的旧围栏函数，原fact-store测试直接验证生产lease围栏的返回身份。原89017 join85d150 exit0，三个聚焦后端文件11项/36断言通过，包含用户/Mission原始来源、原取消事件、MessageAbortedError投影、同项目active peer、已接受结算和旧epoch身份。没有扩大围栏准入或新增取消状态。
+
+首次真实scope为cancellation-activation-426-after-a290be66-39c8-4460-98c4-83239f92b4fe，18573/ui。正式CLI提交requestID=0f0e9c21-3f31-4140-b32a-c57fb8eb8de0，HTTP500来自公共SDK相对路径对合法Unicode空白文件名的误拒；按该requestID只读查询Task行为零。原始500、请求与服务错误保留，未宣称Stop通过。该新根因、全仓影响与正式SDK构建记在[427方案](2026-10-15-unicode-workspace-path.md)，修复前后公开path及真实Git源树20项/20断言通过。两项修复共31项/56断言。
+
+427修复后开启独立scope cancellation-activation-426-retry-83ad0bb9-8faf-4a61-b629-291879515867，18575/ui；原600秒资源期限、180秒无活动、最多12请求保持，不延长已退出scope。原文件不改名、不删除，完全相同请求及requestID经正式CLI成功接受为Task tsk_g00VY2jUZd007UlLTDM5。只读最终查询该requestID恰有这一个Task；原69dd70 exit0。实际只有root与orchestrator两个Session角色，没有创建成员或运行工具。
+
+在真实gpt-6.1-sol正文持续增长时人工点击Stop。原图01记录Running39秒的活动正文，02记录Cancelled44秒与保留的部分正文。SQLite原145fc4 exit0：取消请求pev_g0VY2jgFL00FYicNQRVp与终态pev_g0VY2jgGl003t92bOJRz均epoch1、correlation bfd9c588-af0d-4ba7-845d-f83c3e6937e5。assistant msg_h7E3DFttC6IMUpFAnuqx保存MessageAbortedError，原actor=user/source=task.cancel/surface=overlay.composer_stop/requestID/reason/causationEventID完整；message明确含Task-root activation act_g0VY2jVC000Bo9G9AfzI is inapplicable under Task及原取消事件，证明本次真实运行实际进入已修复的canonical围栏取消分支，而非只命中普通物理abort。原streaming观察中同一assistant尚未completed，排除以已有完成态冒充活动Stop。
+
+真实页面仍显示通用红色Error details和原ExecutionCancellationError诊断，本批没有重做取消视觉文案或隐藏错误；交付是生产错误分类和来源完整性，不能宣称该通用错误块的体验已改进。Source复核另实际打开原423首NBSP文件，编辑器显示IDENTITY_LEADING_NBSP_423，原图归427证据。自有页3、4已关闭、viewport已复位；发现的非自有页2保持原状，没有操作。
+
+两scope均复制完整auth/models且分别验证凭据可用、目标模型投影和实际请求一致。第一scope两条Sol流为200/eof；retry四条均200且读取器结算，三条eof、被Stop的实际orchestrator业务流为aborted，不能写成全部eof。第一scope公开shutdown200、原19738 join6b30e0 exit0；retry公开shutdown200、原45110 join9f6644 exit0。两次原Native实例均物理/output/request收尾且复制配对退休，回执独立于Task业务终态。审阅脚本archive.ts按持久身份及原事件正向核对，输出review-result.json并归档，不包含凭据或完整数据库文件。
+
+正式SDK build原8280a6 exit0；根typecheck原2e850f exit0，8包全部通过。默认用户库只读观察仍user_version=1、size=1970176、mtime=2026-10-13T19:11:57.627Z；本批真实业务只用自有隔离runtime，不据此扩大为任意用户自定义目录的历史结论。没有schema版本变更、清库或发布；文档和架构检查在最终记录落盘后执行，范围提交与正常push按当前仓库流程完成。
+
+最终记录落盘后docs:check原6c6426 exit0（345操作/26分组），architecture-index原3fdc2a exit0（20文档及全部链接）。原59257f披露复核实际解压两目录文本并与内存中的真实凭据值比对，通过；不输出或归档凭据值。最终差异审阅包含源码、正向测试、架构合同、索引和必要运行证据，原有两处未跟踪Bun目录保留。用户再次追问schema版本时重读迁移registry与历史提交，确认本批没有改变v1/v2；基线与后续权限数据迁移的解释沿用已交付的构建数据库边界证据。

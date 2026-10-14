@@ -34,6 +34,7 @@ import {
   type TaskRootIngressProjection,
 } from "./task-root-ingress-reducer"
 import { taskLifecycleProjectionInTransaction } from "./task-lifecycle"
+import { taskCancellationAuthorityExecutionErrorInTransaction } from "./cancellation-projection"
 import {
   isTaskRootIngressIntegrityError,
   TaskRootActivationSupersededError,
@@ -606,6 +607,14 @@ export function assertTaskRootActivationLeaseFenceInTransaction(
     const detail =
       `Task-root activation fence rejected ${input.activationID}; ` +
       `latest=${latest?.id ?? "none"} expiry=${lease.expires_at} deadline=${policy.absoluteDeadline ?? "none"} consumed=${activationConsumed} epoch=${lifecycle.epoch}/${ingress.execution_epoch} status=${lifecycle.status}`
+    if (!permanent) {
+      const cancellation = taskCancellationAuthorityExecutionErrorInTransaction(
+        db,
+        ingress.task_id,
+        `Task-root activation ${input.activationID}`,
+      )
+      if (cancellation) throw cancellation
+    }
     throw permanent ? new TaskRootActivationSupersededError(ingress.id, detail) : new Error(detail)
   }
   return {
@@ -770,19 +779,6 @@ export function assertTaskRootAssistantActivationFenceInTransaction(
         `Task-root assistant ${input.assistantMessageID} cannot settle before every accepted activity has an exact outcome`,
       )
     }
-  }
-}
-
-export function assertTaskRootActivationFenceInTransaction(
-  db: Database.TxOrDb,
-  input: { ingressID: string; activationID: string; now: number; readEvidence?: TaskRootIngressEvidenceReader },
-): void {
-  const facts = taskRootIngressFactsInTransaction(db, input.ingressID, input.readEvidence)
-  const projection = reduceTaskRootIngressFacts(facts, input.now)
-  if (projection.state !== "leased" || projection.activationID !== input.activationID) {
-    throw new Error(
-      `Task-root activation fence rejected ${input.activationID}; current projection is ${projection.state}`,
-    )
   }
 }
 

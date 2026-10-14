@@ -982,3 +982,7 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [构建数据库边界](2026-10-14-build-database-boundary.md)：真实调用链、内存迁移检查与独立构建运行目录。
 
 - [Sources与成员侧栏继续体验](2026-10-15-source-member-review.md)：真实交互、根因调查与当前验收边界。
+
+- [取消激活原因传播](2026-10-15-cancellation-activation-provenance.md)：共享取消审计、正向合同及真实Stop。
+
+- [Unicode空白文件身份](2026-10-15-unicode-workspace-path.md)：原创建500、唯一路径合同与同请求重试。

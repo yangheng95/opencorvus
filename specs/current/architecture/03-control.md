@@ -109,6 +109,13 @@ prompt owner and activity monitor, and its origin is preserved in the assistant
 error and durable `session.error` event. Downstream layers never reconstruct a
 caller from the reason string.
 
+The Task-root write/renewal fence uses that same durable cancellation authority
+while the original lease and execution epoch still own an unconsumed activation.
+It rejects new work with the original typed cancellation, preserving its request
+and causation event through Message error projection. Replaced leases, consumed
+activations and superseded epochs retain their existing fence classification;
+accepted activity settlement retains its separate exact-outcome contract.
+
 Graceful shutdown distinguishes physical Prompt ownership from Task execution.
 The exact cancellation receipt captures the current input occurrence before
 requesting physical abort. A genuinely published idle or terminal input retains

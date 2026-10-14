@@ -12,7 +12,7 @@ export function isCanonicalProjectRelativePath(value: unknown): value is string 
   if (
     typeof value !== "string" ||
     !value ||
-    value !== value.trim() ||
+    value.startsWith(" ") ||
     value !== value.normalize("NFC") ||
     value.includes("\\")
   ) {

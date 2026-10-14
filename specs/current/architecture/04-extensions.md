@@ -118,6 +118,13 @@ when its optional foreground Boolean is absent; a present value must be Boolean.
 including gated shell admission, emit true and require its explicit acknowledgement in the exact ready marker.
 Ordinary/background requests retain their canonical fields and remain eligible for exact-occurrence recovery.
 
+SDK `project-path.ts` owns the canonical project-relative path predicate reused
+by Plugin workspace trees, Task Artifact paths, package authoring and metric
+working directories. Non-ASCII whitespace belongs to the exact filename and is
+preserved. Explicit ASCII edge-space, segment, device-name, NFC and root/path
+boundary constraints retain their current contracts; consumers do not trim or
+rename an accepted path.
+
 `public-package-release.ts` is the sole util → SDK → Plugin release orchestrator. It builds and stages each package,
 removes workspace-only export conditions, resolves `workspace:`/`catalog:` versions, inspects each packed manifest, and
 publishes only those exact archives in dependency order. Its Windows helper is built from the locked Cargo graph. Both

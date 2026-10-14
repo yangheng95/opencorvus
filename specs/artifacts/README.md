@@ -462,3 +462,7 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [构建数据库边界](2026-10-14-build-database-boundary/README.md)：隔离复现、完整构建与实际用户库只读观察。
 
 - [Sources与成员侧栏继续体验](2026-10-15-source-member-review/README.md)：原图、Provider与物理退出事实。
+
+- [取消激活原因传播](2026-10-15-cancellation-activation-provenance/README.md)：确定性复现、原事件和实际资源收尾。
+
+- [Unicode空白文件身份](2026-10-15-unicode-workspace-path/README.md)：实际快照、路径/字节身份及Task验收。

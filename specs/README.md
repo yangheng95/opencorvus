@@ -3433,3 +3433,7 @@ The current connection-workspace authority record also includes metadata selecti
 - [构建数据库边界](records/2026-10/2026-10-14-build-database-boundary.md)：完整Overlay构建链与用户运行数据隔离审计。
 
 - [Sources与成员侧栏继续体验](records/2026-10/2026-10-15-source-member-review.md)：当前真实历史的来源与成员阅读。
+
+- [取消激活原因传播](records/2026-10/2026-10-15-cancellation-activation-provenance.md)：原取消请求与Task-root围栏错误分类。
+
+- [Unicode空白文件身份](records/2026-10/2026-10-15-unicode-workspace-path.md)：修复真实Task源树对合法文件名的误拒绝。

@@ -8,7 +8,7 @@ import { writeTaskUpdateInTransaction } from "@/engine/state"
 import {
   acceptTaskRootIngressInTransaction,
   acquireTaskRootIngressLease,
-  assertTaskRootActivationFenceInTransaction,
+  assertTaskRootActivationLeaseFenceInTransaction,
   projectTaskRootIngress,
 } from "@/engine/task-root-fact-store"
 import { Identifier } from "@/id/id"
@@ -248,15 +248,14 @@ describe("Task-root fact persistence", () => {
           projection: { state: "ready" },
           blockedByIngressID: first.id,
         })
-        expect(() =>
+        expect(
           Database.immediateTransaction((db) =>
-            assertTaskRootActivationFenceInTransaction(db, {
-              ingressID: first.id,
+            assertTaskRootActivationLeaseFenceInTransaction(db, {
               activationID: lease.activationID,
               now: now + 4,
             }),
           ),
-        ).not.toThrow()
+        ).toEqual({ ingressID: first.id, taskID, ownerOccurrenceID: "owner-1", expiresAt: lease.expiresAt })
         expect(() =>
           Database.immediateTransaction((db) =>
             acceptTaskRootIngressInTransaction(db, {
