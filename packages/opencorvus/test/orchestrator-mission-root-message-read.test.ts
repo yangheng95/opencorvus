@@ -118,6 +118,7 @@ test("Mission acceptance wake reads its exact Mission-authored Task-root message
         },
         {
           toolCallId: "call_mission_root_message",
+          context: {},
           messages: [],
           abortSignal: new AbortController().signal,
         },
@@ -374,6 +375,7 @@ test("Mission acceptance wake reads its exact Mission-authored Task-root message
         },
         {
           toolCallId: "call_delivered_mission_root_message",
+          context: {},
           messages: [],
           abortSignal: new AbortController().signal,
         },
@@ -414,6 +416,7 @@ test("Mission acceptance wake reads its exact Mission-authored Task-root message
           },
           {
             toolCallId: "call_wrong_mission_source",
+            context: {},
             messages: [],
             abortSignal: new AbortController().signal,
           },

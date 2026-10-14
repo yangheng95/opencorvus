@@ -94,7 +94,7 @@ export function createOrchestratorInteractionTools(input: {
   return {
     read_task_message: tool({
       description:
-        "Read the exact real-participant Task-root Message authorized by the current wake. For a current rootMessage, call this before any wait, lifecycle decision, or scheduler response so the new Mission/operator/orchestrator input is not inferred from older conversation history. The initial Task creator request is already the normal User Request and is not eligible for this tool. This tool never grants broad root-Session history access.",
+        "Retrieve the exact real-participant Task-root Message authorized by the current wake. That original Message is already visible in the Orchestrator conversation with its real role and author; use this tool to reread its exact text and attachment references when needed. The initial Task creator request is already the normal User Request and is not eligible for this tool. This tool never grants broad root-Session history access.",
       inputSchema: z
         .object({
           message_id: z.string().min(1).describe("Exact authorized task-root message ID."),

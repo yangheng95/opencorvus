@@ -122,6 +122,12 @@ Project memory has three explicitly scoped authorities:
    fingerprint in the existing canonical Tool request/outcome store. The host
    validates provenance and capacity, not the meaning of authorization. It
    cannot promote Tool quotations or assistant paraphrases to user instructions.
+   Task-root participant input first follows the existing single-record delivery
+   into its Orchestrator Session, preserving the real Message/Part identity,
+   body, role and author. This applies to each accepted current root input, not
+   only scheduler deliveries. Compaction can then select that actual source
+   through its ordinary Session snapshot; it does not widen the reader to other
+   Sessions or turn a root-message Tool quote into a user instruction.
    Only a completed, published checkpoint makes its selection effective. The
    latest successful selection at or before the active checkpoint applies until
    replaced; an explicit empty selection releases it. Failed helpers have no

@@ -1,0 +1,379 @@
+{
+  "status": "passed_mechanics",
+  "runs": [
+    {
+      "name": "runtime-user-selection-task-after-repair",
+      "status": "passed",
+      "owner": "task",
+      "cut": "after-checkpoint",
+      "localRequests": 30,
+      "finalUsageReceipts": 28,
+      "interruptedStreams": 2,
+      "settledBackends": [
+        {
+          "pid": 85156,
+          "exitCode": null,
+          "signalCode": "SIGKILL",
+          "forcedCleanup": false
+        },
+        {
+          "pid": 25096,
+          "exitCode": null,
+          "signalCode": "SIGTERM",
+          "forcedCleanup": false
+        }
+      ],
+      "cases": [
+        {
+          "name": "alpha",
+          "ownerID": "tsk_g00VXzfDZX00XG88l5pa",
+          "sessionID": "ses_-zUS0KkgxzznBL1lw6hs",
+          "rootSessionID": "ses_-zUS0KmGPzzVnKDj1ZSS",
+          "originalUser": {
+            "messageID": "msg_g0VXzfGhk0060ebOV6sU",
+            "partID": "prt_g0VXzfGhl00MojdUJngv",
+            "role": "user",
+            "author": "user",
+            "offset": 25,
+            "end": 166,
+            "text": "Current user correction for alpha: only read this project's evidence. region=REGION-alpha; permission=read-only. A release is not authorized."
+          },
+          "selections": [
+            {
+              "generation": "before",
+              "helperID": "msg_g0VXzfIsJ005Tpg9w01L",
+              "callID": "retain_msg_g0VXzfIsJ005Tpg9w01L",
+              "requestPartID": "prt_g0VXzfIwS00YxPWJ8Vwz"
+            }
+          ],
+          "summaryID": "msg_g0VXzfIsJ005Tpg9w01L",
+          "controlID": "sctl_g0VXzfImE00wlr5dF5D",
+          "control": "consumed",
+          "normalRecoveredRequests": 1,
+          "trace": "TRACE-NATIVE-alpha-17031",
+          "interruptedMessageID": "msg_hzcceLfRYXGixc5Cm7L9",
+          "completionTool": "no_action"
+        },
+        {
+          "name": "beta",
+          "ownerID": "tsk_g00VXzfEPl00UcV8gQlJ",
+          "sessionID": "ses_-zUS0KjdLzzx4Kyk6PPL",
+          "rootSessionID": "ses_-zUS0KlQEzzdgG31BFxl",
+          "originalUser": {
+            "messageID": "msg_g0VXzfGn600JltVkAlle",
+            "partID": "prt_g0VXzfGn6001dwk0czeo",
+            "role": "user",
+            "author": "user",
+            "offset": 24,
+            "end": 163,
+            "text": "Current user correction for beta: only read this project's evidence. region=REGION-beta; permission=read-only. A release is not authorized."
+          },
+          "selections": [
+            {
+              "generation": "before",
+              "helperID": "msg_g0VXzfIvy00V7mgjWzOE",
+              "callID": "retain_msg_g0VXzfIvy00V7mgjWzOE",
+              "requestPartID": "prt_g0VXzfIzh00LEkP9sS9D"
+            }
+          ],
+          "summaryID": "msg_g0VXzfIvy00V7mgjWzOE",
+          "controlID": "sctl_g0VXzfIuS00FfKKTknA",
+          "control": "consumed",
+          "normalRecoveredRequests": 1,
+          "trace": "TRACE-NATIVE-beta-17031",
+          "interruptedMessageID": "msg_hmN1PU1mZkV9x1OsFnUI",
+          "completionTool": "no_action"
+        }
+      ]
+    },
+    {
+      "name": "runtime-user-selection-mission-after-repair",
+      "status": "passed",
+      "owner": "mission",
+      "cut": "after-checkpoint",
+      "localRequests": 28,
+      "finalUsageReceipts": 26,
+      "interruptedStreams": 2,
+      "settledBackends": [
+        {
+          "pid": 86788,
+          "exitCode": null,
+          "signalCode": "SIGKILL",
+          "forcedCleanup": false
+        },
+        {
+          "pid": 82108,
+          "exitCode": null,
+          "signalCode": "SIGTERM",
+          "forcedCleanup": false
+        }
+      ],
+      "cases": [
+        {
+          "name": "alpha",
+          "ownerID": "f5074bded18a450b",
+          "sessionID": "ses_-zUS0KmYLzz9wdO0uknL",
+          "rootSessionID": "ses_-zUS0KmYLzz9wdO0uknL",
+          "originalUser": {
+            "messageID": "msg_h8oOBPvzCkZ8kp0sMhVm",
+            "partID": "prt_hNG8mltHDgVAGsdljTjV",
+            "role": "user",
+            "author": "user",
+            "offset": 25,
+            "end": 166,
+            "text": "Current user correction for alpha: only read this project's evidence. region=REGION-alpha; permission=read-only. A release is not authorized."
+          },
+          "selections": [
+            {
+              "generation": "before",
+              "helperID": "msg_g0VXzfH1V00b68XCr2gT",
+              "callID": "retain_msg_g0VXzfH1V00b68XCr2gT",
+              "requestPartID": "prt_g0VXzfH6e00j1WcBlwLW"
+            }
+          ],
+          "summaryID": "msg_g0VXzfH1V00b68XCr2gT",
+          "controlID": "sctl_g0VXzfH0l004fmaQ5AF",
+          "control": "consumed",
+          "normalRecoveredRequests": 2,
+          "trace": "TRACE-NATIVE-alpha-17031",
+          "interruptedMessageID": "msg_g0VXzfHY400qooo0GFXE",
+          "completionTool": "panel_complete_mission"
+        },
+        {
+          "name": "beta",
+          "ownerID": "b3da7825434bcd39",
+          "sessionID": "ses_-zUS0KlQ6zz27R5v1klU",
+          "rootSessionID": "ses_-zUS0KlQ6zz27R5v1klU",
+          "originalUser": {
+            "messageID": "msg_hC35H3SrEV6ASF51CI1r",
+            "partID": "prt_hx8QnBGrncnWgn3tJicX",
+            "role": "user",
+            "author": "user",
+            "offset": 24,
+            "end": 163,
+            "text": "Current user correction for beta: only read this project's evidence. region=REGION-beta; permission=read-only. A release is not authorized."
+          },
+          "selections": [
+            {
+              "generation": "before",
+              "helperID": "msg_g0VXzfH8x00VFH37ONE5",
+              "callID": "retain_msg_g0VXzfH8x00VFH37ONE5",
+              "requestPartID": "prt_g0VXzfHDE002MhzZihBe"
+            }
+          ],
+          "summaryID": "msg_g0VXzfH8x00VFH37ONE5",
+          "controlID": "sctl_g0VXzfH8300IWf9kp67",
+          "control": "consumed",
+          "normalRecoveredRequests": 2,
+          "trace": "TRACE-NATIVE-beta-17031",
+          "interruptedMessageID": "msg_g0VXzfHgs00JpdwRI1hZ",
+          "completionTool": "panel_complete_mission"
+        }
+      ]
+    },
+    {
+      "name": "runtime-user-selection-task-during-repair",
+      "status": "passed",
+      "owner": "task",
+      "cut": "during-compaction",
+      "localRequests": 32,
+      "finalUsageReceipts": 30,
+      "interruptedStreams": 2,
+      "settledBackends": [
+        {
+          "pid": 90024,
+          "exitCode": null,
+          "signalCode": "SIGKILL",
+          "forcedCleanup": false
+        },
+        {
+          "pid": 85568,
+          "exitCode": null,
+          "signalCode": "SIGTERM",
+          "forcedCleanup": false
+        }
+      ],
+      "cases": [
+        {
+          "name": "alpha",
+          "ownerID": "tsk_g00VXzgH5M00ynVbep95",
+          "sessionID": "ses_-zUS0JhS8zzUpZZJxeTz",
+          "rootSessionID": "ses_-zUS0JihyzzjXAEos7AJ",
+          "originalUser": {
+            "messageID": "msg_g0VXzgJjI00EZH4xmjCo",
+            "partID": "prt_g0VXzgJjJ001x203mISH",
+            "role": "user",
+            "author": "user",
+            "offset": 25,
+            "end": 166,
+            "text": "Current user correction for alpha: only read this project's evidence. region=REGION-alpha; permission=read-only. A release is not authorized."
+          },
+          "selections": [
+            {
+              "generation": "before",
+              "helperID": "msg_g0VXzgLUL00fGzK352zM",
+              "callID": "retain_msg_g0VXzgLUL00fGzK352zM",
+              "requestPartID": "prt_g0VXzgLZg00aei53wEoE"
+            },
+            {
+              "generation": "recover",
+              "helperID": "msg_g0VXzgqih008zIFmBe5U",
+              "callID": "retain_msg_g0VXzgqih008zIFmBe5U",
+              "requestPartID": "prt_g0VXzgqzQ00Q7x1lrQOo"
+            }
+          ],
+          "summaryID": "msg_g0VXzgqih008zIFmBe5U",
+          "controlID": "sctl_g0VXzgLQK00mI3ZCxrB",
+          "control": "consumed",
+          "normalRecoveredRequests": 1,
+          "trace": "TRACE-NATIVE-alpha-17031",
+          "interruptedMessageID": "msg_g0VXzgLUL00fGzK352zM",
+          "completionTool": "no_action"
+        },
+        {
+          "name": "beta",
+          "ownerID": "tsk_g00VXzgHqf00OVBA9J26",
+          "sessionID": "ses_-zUS0JgYHzzRr0Fgazyk",
+          "rootSessionID": "ses_-zUS0Ji1qzzaX5MXpp1b",
+          "originalUser": {
+            "messageID": "msg_g0VXzgJmP00r9F5o7kLt",
+            "partID": "prt_g0VXzgJmP00vS7HUOGTF",
+            "role": "user",
+            "author": "user",
+            "offset": 24,
+            "end": 163,
+            "text": "Current user correction for beta: only read this project's evidence. region=REGION-beta; permission=read-only. A release is not authorized."
+          },
+          "selections": [
+            {
+              "generation": "before",
+              "helperID": "msg_g0VXzgLhE00l1zlDHO2m",
+              "callID": "retain_msg_g0VXzgLhE00l1zlDHO2m",
+              "requestPartID": "prt_g0VXzgLjY003kPSbPK7j"
+            },
+            {
+              "generation": "recover",
+              "helperID": "msg_g0VXzgqvg00T7pb2kFzS",
+              "callID": "retain_msg_g0VXzgqvg00T7pb2kFzS",
+              "requestPartID": "prt_g0VXzgr2g005FbhgYVWc"
+            }
+          ],
+          "summaryID": "msg_g0VXzgqvg00T7pb2kFzS",
+          "controlID": "sctl_g0VXzgLe1006bmhYJG0",
+          "control": "consumed",
+          "normalRecoveredRequests": 1,
+          "trace": "TRACE-NATIVE-beta-17031",
+          "interruptedMessageID": "msg_g0VXzgLhE00l1zlDHO2m",
+          "completionTool": "no_action"
+        }
+      ]
+    },
+    {
+      "name": "runtime-user-selection-mission-during-repair",
+      "status": "passed",
+      "owner": "mission",
+      "cut": "during-compaction",
+      "localRequests": 30,
+      "finalUsageReceipts": 28,
+      "interruptedStreams": 2,
+      "settledBackends": [
+        {
+          "pid": 54928,
+          "exitCode": null,
+          "signalCode": "SIGKILL",
+          "forcedCleanup": false
+        },
+        {
+          "pid": 84012,
+          "exitCode": null,
+          "signalCode": "SIGTERM",
+          "forcedCleanup": false
+        }
+      ],
+      "cases": [
+        {
+          "name": "alpha",
+          "ownerID": "ecc76ec862ba2a80",
+          "sessionID": "ses_-zUS0Jj3dzzLg0K7cdCa",
+          "rootSessionID": "ses_-zUS0Jj3dzzLg0K7cdCa",
+          "originalUser": {
+            "messageID": "msg_h6KvChHLK3WHvpLDJlpK",
+            "partID": "prt_hL9hnBDZ2CUOjRF0hJSX",
+            "role": "user",
+            "author": "user",
+            "offset": 25,
+            "end": 166,
+            "text": "Current user correction for alpha: only read this project's evidence. region=REGION-alpha; permission=read-only. A release is not authorized."
+          },
+          "selections": [
+            {
+              "generation": "before",
+              "helperID": "msg_g0VXzgJu100Sg1tZ5MMk",
+              "callID": "retain_msg_g0VXzgJu100Sg1tZ5MMk",
+              "requestPartID": "prt_g0VXzgJxj00uCu28ciR7"
+            },
+            {
+              "generation": "recover",
+              "helperID": "msg_g0VXzgp9G0062lTAoHZs",
+              "callID": "retain_msg_g0VXzgp9G0062lTAoHZs",
+              "requestPartID": "prt_g0VXzgpIV00a5UsUXvDN"
+            }
+          ],
+          "summaryID": "msg_g0VXzgp9G0062lTAoHZs",
+          "controlID": "sctl_g0VXzgJtY00Vvqp5aWH",
+          "control": "consumed",
+          "normalRecoveredRequests": 2,
+          "trace": "TRACE-NATIVE-alpha-17031",
+          "interruptedMessageID": "msg_g0VXzgJu100Sg1tZ5MMk",
+          "completionTool": "panel_complete_mission"
+        },
+        {
+          "name": "beta",
+          "ownerID": "168610a837364e0c",
+          "sessionID": "ses_-zUS0Ji1gzzde3amUxuz",
+          "rootSessionID": "ses_-zUS0Ji1gzzde3amUxuz",
+          "originalUser": {
+            "messageID": "msg_h8WMaAgmiMbyuETnzs41",
+            "partID": "prt_hBIKEmMumhlPNyotrf52",
+            "role": "user",
+            "author": "user",
+            "offset": 24,
+            "end": 163,
+            "text": "Current user correction for beta: only read this project's evidence. region=REGION-beta; permission=read-only. A release is not authorized."
+          },
+          "selections": [
+            {
+              "generation": "before",
+              "helperID": "msg_g0VXzgK2d004kDkRo7HI",
+              "callID": "retain_msg_g0VXzgK2d004kDkRo7HI",
+              "requestPartID": "prt_g0VXzgK4w00HRYKmnBX7"
+            },
+            {
+              "generation": "recover",
+              "helperID": "msg_g0VXzgpGk00eOnjlUt1J",
+              "callID": "retain_msg_g0VXzgpGk00eOnjlUt1J",
+              "requestPartID": "prt_g0VXzgpL100D2hIAwqcg"
+            }
+          ],
+          "summaryID": "msg_g0VXzgpGk00eOnjlUt1J",
+          "controlID": "sctl_g0VXzgK2000tRLpI2sV",
+          "control": "consumed",
+          "normalRecoveredRequests": 2,
+          "trace": "TRACE-NATIVE-beta-17031",
+          "interruptedMessageID": "msg_g0VXzgK2d004kDkRo7HI",
+          "completionTool": "panel_complete_mission"
+        }
+      ]
+    }
+  ],
+  "cases": 8,
+  "localRequests": 120,
+  "finalUsageReceipts": 112,
+  "interruptedStreams": 8,
+  "paidRequestsAdded": 0,
+  "paidCumulative": 999,
+  "limits": [
+    "Scripted transport proves source delivery, storage and physical backend recovery; not real-model instruction reasoning.",
+    "Luna alternating-read/action failure, larger scale, cross-vendor/native product state and whole-OS power loss remain open."
+  ]
+}

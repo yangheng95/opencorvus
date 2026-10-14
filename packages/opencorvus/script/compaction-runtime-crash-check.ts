@@ -42,23 +42,32 @@ const databasePath = path.join(runtime.runtimeRoot, "data", "opencorvus.db")
 const evidenceRoot = reportPath + ".evidence"
 await fs.mkdir(evidenceRoot, { recursive: true })
 const target = { providerID: "opencorvus-compaction-crash", modelID: "checkpoint" }
-const cases = ["alpha", "beta"].map((name) => ({
-  name,
-  project: path.join(runtime.processRoot, "project-" + name),
-  trace: `TRACE-NATIVE-${name}-17031`,
-  ownerID: "",
-  sessionID: "",
-  rootSessionID: "",
-  cutMessageID: "",
-  producerMessageIDs: [] as string[],
-  evidencePartID: "",
-  steps: 0,
-  summaries: 0,
-  recoveredRequests: 0,
-  held: false,
-  summaryRequest: undefined as Promise<unknown> | undefined,
-  summarySettlement: undefined as unknown,
-}))
+const localRequestLimit = 40
+const cases = ["alpha", "beta"].map((name) => {
+  const correctionQuote = `Current user correction for ${name}: only read this project's evidence. region=REGION-${name}; permission=read-only. A release is not authorized.`
+  return {
+    name,
+    stage: "initial" as "initial" | "correction" | "exercise",
+    correctionQuote,
+    correctionText: `历史说明😀：项目 ${name} 的旧范围已过期。\n${correctionQuote}\nContinue only under the correction above.`,
+    acceptedInputs: [] as Row[],
+    sourceSelections: [] as Row[],
+    project: path.join(runtime.processRoot, "project-" + name),
+    trace: `TRACE-NATIVE-${name}-17031`,
+    ownerID: "",
+    sessionID: "",
+    rootSessionID: "",
+    cutMessageID: "",
+    producerMessageIDs: [] as string[],
+    evidencePartID: "",
+    steps: 0,
+    summaries: 0,
+    recoveredRequests: 0,
+    held: false,
+    summaryRequest: undefined as Promise<unknown> | undefined,
+    summarySettlement: undefined as unknown,
+  }
+})
 const requests: Row[] = []
 const errors: string[] = []
 const children: ReturnType<typeof launch>[] = []
@@ -71,6 +80,7 @@ let result: Row = {
   ownerKind,
   cut,
   remoteModelRequests: 0,
+  localRequestLimit,
   runtime: runtime.runtimeRoot,
   databasePath,
   cases,
@@ -240,7 +250,7 @@ const provider = Bun.serve({
       const body = (await request.json()) as Row
       assert.equal(body.stream, true)
       assert.equal(body.model, target.modelID)
-      assert(requests.length < 24, "Finite local request ceiling")
+      assert(requests.length < localRequestLimit, "Finite local request ceiling")
       const sessionID = request.headers.get("x-opencorvus-session")!
       const owned = owner(sessionID)
       assert(owned, "Provider request must belong to a created owner")
@@ -249,7 +259,15 @@ const provider = Bun.serve({
       Object.assign(item, { ownerID: owned.ownerID, rootSessionID: owned.rootSessionID, sessionID })
       const names = (body.tools ?? []).map((tool: Row) => tool.function.name)
       const compaction = names.includes("ReadCompactionEvidence")
-      requests.push({ generation, project: item.name, sessionID, compaction, textOnlyHelper: names.length === 0, body })
+      requests.push({
+        generation,
+        stage: item.stage,
+        project: item.name,
+        sessionID,
+        compaction,
+        textOnlyHelper: names.length === 0,
+        body,
+      })
       console.log(
         JSON.stringify({ stage: "provider", generation, project: item.name, compaction, count: requests.length }),
       )
@@ -290,6 +308,29 @@ const provider = Bun.serve({
         new Response(chunk({ role: "assistant", content: value }, null) + chunk({}, "stop") + "data: [DONE]\n\n", {
           headers: { "content-type": "text/event-stream" },
         })
+      const call = (toolName: string, callID: string, input: unknown, prefix = "") => {
+        assert(names.includes(toolName), "Use an actually granted Tool")
+        return new Response(
+          (prefix ? chunk({ role: "assistant", content: prefix }, null) : "") +
+            chunk(
+              {
+                role: "assistant",
+                tool_calls: [
+                  {
+                    index: 0,
+                    id: callID,
+                    type: "function",
+                    function: { name: toolName, arguments: JSON.stringify(input) },
+                  },
+                ],
+              },
+              null,
+            ) +
+            chunk({}, "tool_calls") +
+            "data: [DONE]\n\n",
+          { headers: { "content-type": "text/event-stream" } },
+        )
+      }
       const hold = (messageID: string) => {
         item.cutMessageID = messageID
         item.held = true
@@ -306,18 +347,148 @@ const provider = Bun.serve({
           { headers: { "content-type": "text/event-stream" } },
         )
       }
-      if (names.length === 0) return text(`Isolated ${item.name} compaction ${ownerKind}`)
+      if (names.length === 0) {
+        const instruction = body.messages.findLast((message: Row) => message.role === "user")?.content
+        if (
+          typeof instruction === "string" &&
+          instruction.startsWith("Maintain the Project MEMORY.MD from the evidence below.")
+        ) {
+          const header = instruction.split("\nCURRENT PROJECT MEMORY.MD\n")[0]!
+          const revision = header.match(/^baseRevision must be (\d+)\.$/m)
+          const occurrences = header.match(/^coveredOccurrenceIDs must be exactly (\[[^\n]+\])\.$/m)
+          assert(revision && occurrences, "The scripted Organizer follows its exact declared terminal envelope")
+          return text(
+            JSON.stringify({
+              baseRevision: Number(revision[1]),
+              coveredOccurrenceIDs: JSON.parse(occurrences[1]!),
+              disposition: "organized",
+              markdown: "Compaction recovery fixture. Original participant messages remain authoritative.",
+            }),
+          )
+        }
+        return text(`Isolated ${item.name} compaction ${ownerKind}`)
+      }
       const snapshot = facts(item)
+      if (generation === "before" && ownerKind === "task" && !compaction && item.stage !== "initial") {
+        const currentInput = snapshot.messages.findLast(
+          (message) =>
+            message.data.role === "user" &&
+            message.data.author === "user" &&
+            message.data.extra?.task_root_message?.source === "compaction-recovery-check",
+        )
+        assert(currentInput, "The accepted current Task input has an exact participant Message")
+        const callID = `input_${item.stage}_${item.name}`
+        const read = snapshot.tools.find((tool) => tool.data.callID === callID)
+        if (!read)
+          return call("read_task_message", callID, {
+            message_id: currentInput.id,
+            reason: "Read this exact current operator input before the scheduler decision or evidence work.",
+          })
+        assert(
+          snapshot.outcomes.some(
+            (outcome) => outcome.request_part_id === read.id && outcome.data.outcome === "completed",
+          ),
+          "The actual current input reader completes before the scripted decision",
+        )
+      }
+      if (generation === "before" && item.stage !== "exercise") {
+        assert.equal(compaction, false, "Setup input completes before the pressure exercise")
+        if (ownerKind === "mission")
+          return text(`Recorded ${item.name} ${item.stage} setup input. Await next user input.`)
+        const opened = snapshot.events.findLast((event) => event.type === "task.execution.opened")!
+        assert(opened, "Real Task execution owns setup input")
+        return call("no_action", `setup_${item.stage}_${item.name}`, {
+          observed_task: { epoch: 1, status: "active", openedEventID: opened.id, terminalEventID: null },
+          reason: `Recorded ${item.stage} input; the caller will supply the next bounded user request.`,
+        })
+      }
       if (compaction) {
         item.summaries++
         const evidence = snapshot.tools.filter((tool) => tool.data.tool === "read").at(-1)!
         assert(evidence, "Compaction follows an actual persisted evidence read")
+        const source = snapshot.parts.find(
+          (part) =>
+            part.data.type === "text" &&
+            part.data.text === item.correctionText &&
+            snapshot.messages.some(
+              (message) =>
+                message.id === part.message_id &&
+                message.session_id === sessionID &&
+                message.data.role === "user" &&
+                message.data.author === "user",
+            ),
+        )
+        assert(source, "The owning compactor history contains the exact earlier public user correction")
+        const helper = snapshot.messages
+          .filter((message) => message.session_id === sessionID && message.data.author === "compaction")
+          .at(-1)!
+        assert(helper, "Real compactor assistant owns the helper Tools")
+        const selected = snapshot.tools.find(
+          (tool) =>
+            tool.message_id === helper.id &&
+            tool.data.tool === "RetainCompactionUserText" &&
+            snapshot.outcomes.some(
+              (outcome) => outcome.request_part_id === tool.id && outcome.data.outcome === "completed",
+            ),
+        )
+        if (!selected)
+          return call("RetainCompactionUserText", `retain_${helper.id}`, {
+            excerpts: [{ part_id: source.id, text: item.correctionQuote }],
+          })
+        const selectedOutcome = snapshot.outcomes.find((outcome) => outcome.request_part_id === selected.id)!
+        const receipt = JSON.parse(selectedOutcome.data.output)
+        assert.equal(receipt.status, "retained")
+        assert.deepEqual(
+          receipt.sources.map((value: Row) => ({
+            messageID: value.messageID,
+            partID: value.partID,
+            originalRole: value.originalRole,
+            originalAuthor: value.originalAuthor,
+            offset: value.offset,
+            end: value.end,
+          })),
+          [
+            {
+              messageID: source.message_id,
+              partID: source.id,
+              originalRole: "user",
+              originalAuthor: "user",
+              offset: item.correctionText.indexOf(item.correctionQuote),
+              end: item.correctionText.indexOf(item.correctionQuote) + item.correctionQuote.length,
+            },
+          ],
+        )
+        if (!item.sourceSelections.some((value) => value.helperID === helper.id))
+          item.sourceSelections.push({
+            generation,
+            helperID: helper.id,
+            source,
+            receipt,
+            requestPartID: selected.id,
+            callID: selected.data.callID,
+          })
+        const notes = snapshot.tools.find(
+          (tool) =>
+            tool.message_id === helper.id &&
+            tool.data.tool === "SaveCompactionNotes" &&
+            snapshot.outcomes.some(
+              (outcome) => outcome.request_part_id === tool.id && outcome.data.outcome === "completed",
+            ),
+        )
+        if (!notes)
+          return call("SaveCompactionNotes", `notes_${helper.id}`, {
+            notes: `Retained the genuine user correction from Part ${source.id}. Preserve original ${item.trace}, next_offset=17031 and read Part ${evidence.id}, call ${evidence.data.callID}.`,
+          })
+        const retainedFrame = body.messages.find(
+          (message: Row) => message.role === "tool" && message.tool_call_id === selected.data.callID,
+        )
+        assert.deepEqual(
+          JSON.parse(retainedFrame.content),
+          receipt,
+          "Notes retain the genuine original-user selection exchange",
+        )
         if (generation === "before" && cut === "during-compaction") {
           item.evidencePartID = evidence.id
-          const helper = snapshot.messages
-            .filter((m) => m.session_id === sessionID && m.data.author === "compaction")
-            .at(-1)!
-          assert(helper, "Actual compactor assistant required at the cut")
           return hold(helper.id)
         }
         return text(
@@ -369,6 +540,17 @@ const provider = Bun.serve({
         assert(item.steps < 4, "Only four original scheduler steps")
       } else {
         item.recoveredRequests++
+        const userText = body.messages
+          .filter((message: Row) => message.role === "user")
+          .flatMap((message: Row) =>
+            typeof message.content === "string"
+              ? [message.content]
+              : message.content.filter((part: Row) => part.type === "text").map((part: Row) => part.text),
+          )
+        assert(
+          userText.includes(item.correctionQuote),
+          "Recovered normal request receives the exact selected original user quote",
+        )
         if (cut === "after-checkpoint") {
           const toolResult = body.messages.find((m: Row) => m.role === "tool" && m.tool_call_id === `late_${item.name}`)
           assert(toolResult?.content.includes(item.trace), "Recovered request contains the original late Tool trace")
@@ -402,27 +584,11 @@ const provider = Bun.serve({
               }
         callID = `recovered_${item.name}`
       }
-      assert(names.includes(toolName), "Use an actually granted Tool")
-      return new Response(
-        (generation === "before" && item.steps === 1
-          ? chunk({ role: "assistant", content: `Earlier ${item.name} evidence. `.repeat(1000) }, null)
-          : "") +
-          chunk(
-            {
-              tool_calls: [
-                {
-                  index: 0,
-                  id: callID,
-                  type: "function",
-                  function: { name: toolName, arguments: JSON.stringify(input) },
-                },
-              ],
-            },
-            null,
-          ) +
-          chunk({}, "tool_calls") +
-          "data: [DONE]\n\n",
-        { headers: { "content-type": "text/event-stream" } },
+      return call(
+        toolName,
+        callID,
+        input,
+        generation === "before" && item.steps === 1 ? `Earlier ${item.name} evidence. `.repeat(1000) : "",
       )
     } catch (error) {
       errors.push(String(error))
@@ -470,6 +636,7 @@ try {
   children.push(backend)
   await ready(backend)
   for (const item of cases) {
+    const initialText = `This is bounded coordination without child Tasks. Record initial region=OLD-${item.name}, permission=release, then wait for the next user input.`
     const created = (await json(
       backend,
       item.project,
@@ -479,17 +646,18 @@ try {
             requestID: crypto.randomUUID(),
             productPillar: "work",
             title: `Compaction crash ${item.name}`,
-            request: "Read the project evidence and preserve its exact trace through compaction.",
+            request: initialText,
             promptProfile: "base",
             model: `${target.providerID}/${target.modelID}`,
           }
         : {
             requestID: crypto.randomUUID(),
             productPillar: "work",
-            text: "This is bounded coordination without child Tasks. Read the project evidence, preserve its exact trace and cursor through compaction, then complete this Mission through its completion Tool.",
+            text: initialText,
             model: `${target.providerID}/${target.modelID}`,
           },
     )) as Row
+    item.acceptedInputs.push({ stage: "initial", text: initialText, response: created })
     item.ownerID = ownerKind === "task" ? created.task_id : created.missionID
     item.rootSessionID =
       ownerKind === "task"
@@ -498,6 +666,62 @@ try {
               db.query<Row, [string]>("SELECT session_id FROM engine_task WHERE id=?").get(item.ownerID)!.session_id,
           )
         : created.sessionID
+  }
+  for (const stage of ["initial", "correction"] as const) {
+    const completed = await waitFor(`both ${stage} input replies`, backend, () => {
+      const snapshots = cases.map(facts)
+      const done = cases.every((item, index) => {
+        const snapshot = snapshots[index]!
+        if (ownerKind === "task") {
+          const tool = snapshot.tools.find((value) => value.data.callID === `setup_${stage}_${item.name}`)
+          return (
+            tool &&
+            snapshot.outcomes.some(
+              (value) => value.request_part_id === tool.id && value.data.outcome === "completed",
+            ) &&
+            snapshot.messages.some(
+              (value) => value.id === tool.message_id && typeof value.data.time.completed === "number",
+            )
+          )
+        }
+        const text = `Recorded ${item.name} ${stage} setup input. Await next user input.`
+        return snapshot.parts.some(
+          (part) =>
+            part.data.type === "text" &&
+            part.data.text === text &&
+            snapshot.messages.some(
+              (message) =>
+                message.id === part.message_id &&
+                message.data.author === "mission" &&
+                typeof message.data.time.completed === "number",
+            ),
+        )
+      })
+      return { activity: activity(snapshots), value: done ? snapshots : undefined }
+    })
+    await save(`setup-${stage}-facts.json`, completed)
+    for (const item of cases) {
+      item.stage = stage === "initial" ? "correction" : "exercise"
+      const text =
+        item.stage === "correction"
+          ? item.correctionText
+          : "Continue the unfinished investigation: read the project evidence and preserve its exact trace and cursor through compaction."
+      const response = await json(
+        backend,
+        item.project,
+        ownerKind === "task" ? `/task/${item.ownerID}/message` : "/mission/wake",
+        ownerKind === "task"
+          ? { text, source: "compaction-recovery-check" }
+          : {
+              requestID: crypto.randomUUID(),
+              productPillar: "work",
+              missionID: item.ownerID,
+              text,
+              model: `${target.providerID}/${target.modelID}`,
+            },
+      )
+      item.acceptedInputs.push({ stage: item.stage, text, response })
+    }
   }
   const before = await waitFor("both durable crash boundaries", backend, () => {
     const snapshots = cases.map(facts)
@@ -588,10 +812,17 @@ try {
     const marker = current.parts.findLast((part) => part.data.type === "compaction")!
     assert(marker, "Recovered history owns a completed checkpoint")
     const item = cases[index]!
-    await save(
-      `${item.name}-checkpoint.json`,
-      await CompactionPolicyCase.checkCheckpoint(item.sessionID, marker.message_id),
+    const checkpoint = await CompactionPolicyCase.checkCheckpoint(item.sessionID, marker.message_id)
+    assert(
+      checkpoint.retainedUserSources.some(
+        (source: Row) =>
+          source.role === "user" &&
+          source.author === "user" &&
+          source.parts.some((part: Row) => part.text === item.correctionQuote),
+      ),
+      "The replayed checkpoint retains the exact prior original user correction",
     )
+    await save(`${item.name}-checkpoint.json`, checkpoint)
     if (ownerKind === "mission") {
       assert.equal(
         current.events.findLast((event) => event.type === "mission.execution.opened")?.id,

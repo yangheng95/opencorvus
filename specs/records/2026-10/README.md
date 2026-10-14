@@ -144,7 +144,7 @@
 
 - [Venice 用量与共享后台停机](2026-10-13-venice-stream-usage.md)：协议、取消根因与横向验收。
 
-- [上下文压缩压力测试](2026-10-13-compaction-stress.md)：999 次真实请求；保留 Luna 交替授权失败；新增中段原文 8 类真实进程恢复验收，24 子进程阶段通过，整体目标仍未完成。
+- [上下文压缩压力测试](2026-10-13-compaction-stress.md)：999 次真实请求；修复 Task 用户原文投递边界，Task/Mission 双项目 8 项压缩重启验收通过；保留 Luna 语义失败与未验收范围。
 
 - [Provider 地址编辑合同](2026-10-13-provider-address-intent.md)：新建/显式修改与未编辑配置保真。
 

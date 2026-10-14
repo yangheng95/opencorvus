@@ -1,0 +1,260 @@
+{
+  "status": "passed_mechanics",
+  "goalStatus": "incomplete",
+  "rootCause": "Ordinary accepted Task-root participant Messages stayed outside Orchestrator history; the original user authority was available only through a scoped Tool quote and could not be retained by the Session compactor.",
+  "repair": "Use the existing original-Message delivery for every current rootMessage before Orchestrator preparation, preserving one identity/body/role/author and existing Project/Task lineage fences. Update the matching prompt/Tool instructions; keep exact scoped rereading.",
+  "finalMatrix": {
+    "cases": 8,
+    "configurations": 4,
+    "projectsPerConfiguration": 2,
+    "localRequests": 120,
+    "finalUsageReceipts": 112,
+    "interruptedStreams": 8,
+    "summary": "runtime-user-selection-matrix-summary.json"
+  },
+  "processes": [
+    {
+      "name": "runtime-user-selection-baseline",
+      "handle": 69511,
+      "joinedExit": 0
+    },
+    {
+      "name": "runtime-user-selection-task-after",
+      "handle": 38996,
+      "joinedExit": 1
+    },
+    {
+      "name": "runtime-user-selection-task-read-after",
+      "handle": 40019,
+      "joinedExit": 1
+    },
+    {
+      "name": "runtime-user-selection-mission-after",
+      "handle": 48878,
+      "joinedExit": 1
+    },
+    {
+      "name": "runtime-user-selection-task-after-repair",
+      "handle": 83536,
+      "joinedExit": 0
+    },
+    {
+      "name": "runtime-user-selection-mission-after-repair",
+      "handle": 29845,
+      "joinedExit": 0
+    },
+    {
+      "name": "runtime-user-selection-task-during-repair",
+      "handle": 85986,
+      "joinedExit": 0
+    },
+    {
+      "name": "runtime-user-selection-mission-during-repair",
+      "handle": 53005,
+      "joinedExit": 0
+    }
+  ],
+  "runs": [
+    {
+      "name": "runtime-user-selection-baseline",
+      "status": "passed",
+      "requests": 16,
+      "owner": "task",
+      "cut": "after-checkpoint",
+      "settlement": [
+        {
+          "pid": 84336,
+          "exitCode": null,
+          "signalCode": "SIGKILL",
+          "forcedCleanup": false
+        },
+        {
+          "pid": 71560,
+          "exitCode": null,
+          "signalCode": "SIGTERM",
+          "forcedCleanup": false
+        }
+      ]
+    },
+    {
+      "name": "runtime-user-selection-task-after",
+      "status": "failed",
+      "requests": 15,
+      "owner": "task",
+      "cut": "after-checkpoint",
+      "settlement": [
+        {
+          "pid": 88480,
+          "exitCode": null,
+          "signalCode": "SIGTERM",
+          "forcedCleanup": false
+        }
+      ]
+    },
+    {
+      "name": "runtime-user-selection-task-read-after",
+      "status": "failed",
+      "requests": 19,
+      "owner": "task",
+      "cut": "after-checkpoint",
+      "settlement": [
+        {
+          "pid": 31796,
+          "exitCode": null,
+          "signalCode": "SIGTERM",
+          "forcedCleanup": false
+        }
+      ]
+    },
+    {
+      "name": "runtime-user-selection-mission-after",
+      "status": "failed",
+      "requests": 40,
+      "owner": "mission",
+      "cut": "after-checkpoint",
+      "settlement": [
+        {
+          "pid": 7072,
+          "exitCode": null,
+          "signalCode": "SIGKILL",
+          "forcedCleanup": false
+        },
+        {
+          "pid": 40416,
+          "exitCode": null,
+          "signalCode": "SIGTERM",
+          "forcedCleanup": false
+        }
+      ]
+    },
+    {
+      "name": "runtime-user-selection-task-after-repair",
+      "status": "passed",
+      "requests": 30,
+      "owner": "task",
+      "cut": "after-checkpoint",
+      "settlement": [
+        {
+          "pid": 85156,
+          "exitCode": null,
+          "signalCode": "SIGKILL",
+          "forcedCleanup": false
+        },
+        {
+          "pid": 25096,
+          "exitCode": null,
+          "signalCode": "SIGTERM",
+          "forcedCleanup": false
+        }
+      ]
+    },
+    {
+      "name": "runtime-user-selection-mission-after-repair",
+      "status": "passed",
+      "requests": 28,
+      "owner": "mission",
+      "cut": "after-checkpoint",
+      "settlement": [
+        {
+          "pid": 86788,
+          "exitCode": null,
+          "signalCode": "SIGKILL",
+          "forcedCleanup": false
+        },
+        {
+          "pid": 82108,
+          "exitCode": null,
+          "signalCode": "SIGTERM",
+          "forcedCleanup": false
+        }
+      ]
+    },
+    {
+      "name": "runtime-user-selection-task-during-repair",
+      "status": "passed",
+      "requests": 32,
+      "owner": "task",
+      "cut": "during-compaction",
+      "settlement": [
+        {
+          "pid": 90024,
+          "exitCode": null,
+          "signalCode": "SIGKILL",
+          "forcedCleanup": false
+        },
+        {
+          "pid": 85568,
+          "exitCode": null,
+          "signalCode": "SIGTERM",
+          "forcedCleanup": false
+        }
+      ]
+    },
+    {
+      "name": "runtime-user-selection-mission-during-repair",
+      "status": "passed",
+      "requests": 30,
+      "owner": "mission",
+      "cut": "during-compaction",
+      "settlement": [
+        {
+          "pid": 54928,
+          "exitCode": null,
+          "signalCode": "SIGKILL",
+          "forcedCleanup": false
+        },
+        {
+          "pid": 84012,
+          "exitCode": null,
+          "signalCode": "SIGTERM",
+          "forcedCleanup": false
+        }
+      ]
+    }
+  ],
+  "localContracts": {
+    "postRepair": 20,
+    "deliveryActorsAndImmutability": 5,
+    "exactRootReader": 2,
+    "userSource": 13,
+    "earlierRecoveryBoundary": 4,
+    "earlierBoundaryScope": "Four unchanged standalone recovery contracts also passed earlier this phase; do not count repeated runs twice."
+  },
+  "toolchain": {
+    "expandedTypes": {
+      "handle": 20668,
+      "joinedExit": 0,
+      "config": "runtime-user-selection-typecheck.json",
+      "log": "runtime-user-selection-repair-typecheck-final.log.gz"
+    },
+    "oldTypeFailure": "Three existing root-reader test ToolExecutionOptions lacked context; they now supply context={} and the original checks pass.",
+    "fixtureFailures": [
+      "The first ownership lookup assumed Part rows carried session_id and skipped the required current-root read.",
+      "The faithful Task run completed read_task_message but still had its original participant in the root Session.",
+      "Mission calibration returned invalid plain text to Memory Organizer JSON requests; three retries per input exhausted the local cap. The repaired fixture returns the exact declared revision/occurrence envelope and nonempty neutral Markdown."
+    ]
+  },
+  "sourceReview": [
+    "Only Orchestrator input delivery/instructions, focused tests and the existing runtime checker changed.",
+    "Normal and terminal-conversation invocation share the original delivery primitive; scheduler provenance remains checked.",
+    "Initial creator, direct Session/Mission inputs and worker steering keep their existing owners.",
+    "No cross-Session compactor read widening, synthetic user copy, shadow authorization, model default change, schema migration or UI implementation."
+  ],
+  "paidRequestsAdded": 0,
+  "paidCumulative": 999,
+  "totalLocalRequestsThisPhase": 210,
+  "limits": [
+    "Scripted transport establishes mechanical delivery/publication/recovery, not real-model permission judgment.",
+    "Luna alternating authorization still fails.",
+    "Large history/catalog scaling, broader providers/native product state and whole-OS power loss remain open.",
+    "Direct terminal-conversation and non-operator root participants share the audited path and positive author contracts; this matrix uses public operator inputs, not separate end-to-end runs of every participant kind."
+  ],
+  "docs": {
+    "exit": 0,
+    "commands": [
+      "bun run docs:check",
+      "bun run check:architecture-index"
+    ],
+    "log": "runtime-user-selection-docs.log.gz"
+  }
+}

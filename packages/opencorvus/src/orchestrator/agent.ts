@@ -448,7 +448,7 @@ export namespace Orchestrator {
       const agentSession = await taskOrchestratorSession(task)
       agentSessionID = agentSession.id
       agentSessionInfo = agentSession
-      if (event?.rootMessage?.schedulerDelivery) {
+      if (event?.rootMessage) {
         await deliverTaskRootMessageToOrchestratorSession({
           task,
           messageID: event.rootMessage.messageID,
@@ -1242,7 +1242,7 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
   if (event?.rootMessage) {
     currentIngressCount += 1
     lines.push(
-      `Current rootMessage=${event.rootMessage.messageID}; kind=${event.rootMessage.kind}. This exact real-participant message is the current input for this wake. ${event.rootMessage.schedulerDelivery ? "It is the visible current input in the Orchestrator conversation; act on it directly." : "Read it through read_task_message before any wait or lifecycle decision."} Do not infer its contents from older conversation history.`,
+      `Current rootMessage=${event.rootMessage.messageID}; kind=${event.rootMessage.kind}. This exact real-participant message is the visible current input in the Orchestrator conversation; read its original body directly. Use read_task_message when you need to retrieve that exact authorized source again. Do not infer its contents from older conversation history.`,
     )
     if (event.rootMessage.schedulerDelivery) {
       lines.push(
@@ -1738,9 +1738,7 @@ async function buildSystemParts(
     ctx.push("## Current Wake Root Message")
     ctx.push(`- message_id=${event.rootMessage.messageID}; kind=${event.rootMessage.kind}`)
     ctx.push(
-      event.rootMessage.schedulerDelivery
-        ? "- This exact real-participant Message is the visible current input in the Orchestrator conversation. Its body remains in this one Message/Part authority."
-        : "- This exact real-participant Message is the current ingress. Its body remains in the original Message/Part authority; read it through read_task_message before acting on this wake.",
+      "- This exact real-participant Message is the visible current input in the Orchestrator conversation. Its original role, author and body remain in this one Message/Part authority. Read it directly; read_task_message retrieves the same authorized source when needed.",
     )
     if (event.rootMessage.schedulerDelivery) {
       if (!task.session_id) throw new Error(`Task ${task.id} scheduler wake has no root Session.`)

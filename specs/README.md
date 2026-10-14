@@ -148,7 +148,7 @@
 
 - [Venice 用量与共享后台停机](records/2026-10/2026-10-13-venice-stream-usage.md)：唯一适配器计量、共享取消顺序与真实视觉/进程证据。
 
-- [上下文压缩压力测试](records/2026-10/2026-10-13-compaction-stress.md)：999 次真实请求；保留 Luna 交替授权失败；新增中段原文 8 类真实进程恢复验收，24 子进程阶段通过，整体目标仍未完成。
+- [上下文压缩压力测试](records/2026-10/2026-10-13-compaction-stress.md)：999 次真实请求；修复 Task 用户原文投递边界，Task/Mission 双项目 8 项压缩重启验收通过；保留 Luna 语义失败与未验收范围。
 
 - [Provider 地址编辑合同](records/2026-10/2026-10-13-provider-address-intent.md)：真实无效保存根因、显式地址意图与双语验收。
 

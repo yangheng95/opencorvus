@@ -28,7 +28,7 @@ afterEach(async () => {
  * 09:49:02, taking the orchestrator loop down with it.
  */
 describe("accepted Task-root Message delivery", () => {
-  async function acceptedRootMessage(title: string) {
+  async function acceptedRootMessage(title: string, author = "mission") {
     const taskID = Identifier.ascending("task")
     const root = await Session.create({ kind: "root", title })
     const now = Date.now()
@@ -54,7 +54,7 @@ describe("accepted Task-root Message delivery", () => {
         id: messageID,
         sessionID: root.id,
         role: "user",
-        author: "mission",
+        author,
         time: { created: now + 1 },
         agent: "orchestrator",
         model: { providerID: "openai", modelID: "gpt-5.6-terra" },
@@ -75,37 +75,40 @@ describe("accepted Task-root Message delivery", () => {
     return { taskID, root, orchestrator, messageID }
   }
 
-  test("delivers a Message that was accepted before it was delivered", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const accepted = await acceptedRootMessage("Scheduler input accepted before delivery")
-        await deliverTaskRootMessageToOrchestratorSession({
-          task: requireTask(accepted.taskID),
-          messageID: accepted.messageID,
-          orchestratorSessionID: accepted.orchestrator.id,
-        })
-        const delivered = Database.use((db) =>
-          db
-            .select({ sessionID: MessageTable.session_id, data: MessageTable.data })
-            .from(MessageTable)
-            .where(eq(MessageTable.id, accepted.messageID))
-            .get(),
-        )
-        expect({
-          sessionID: delivered?.sessionID,
-          author: (delivered?.data as { author?: string } | undefined)?.author,
-          role: (delivered?.data as { role?: string } | undefined)?.role,
-        }).toEqual({
-          sessionID: accepted.orchestrator.id,
-          // Position moved; what was said did not.
-          author: "mission",
-          role: "user",
-        })
-      },
-    })
-  })
+  test.each(["user", "mission", "orchestrator", "goal-controller"])(
+    "delivers an accepted %s Message with its original identity and author",
+    async (author) => {
+      await using project = await memoryProject()
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const accepted = await acceptedRootMessage(`${author} input accepted before delivery`, author)
+          await deliverTaskRootMessageToOrchestratorSession({
+            task: requireTask(accepted.taskID),
+            messageID: accepted.messageID,
+            orchestratorSessionID: accepted.orchestrator.id,
+          })
+          const delivered = Database.use((db) =>
+            db
+              .select({ sessionID: MessageTable.session_id, data: MessageTable.data })
+              .from(MessageTable)
+              .where(eq(MessageTable.id, accepted.messageID))
+              .get(),
+          )
+          expect({
+            sessionID: delivered?.sessionID,
+            author: (delivered?.data as { author?: string } | undefined)?.author,
+            role: (delivered?.data as { role?: string } | undefined)?.role,
+          }).toEqual({
+            sessionID: accepted.orchestrator.id,
+            // Position moved; what was said did not.
+            author,
+            role: "user",
+          })
+        },
+      })
+    },
+  )
 
   test("still refuses to rewrite what an accepted Message said, or to touch it in place", async () => {
     await using project = await memoryProject()
@@ -114,7 +117,11 @@ describe("accepted Task-root Message delivery", () => {
       fn: async () => {
         const accepted = await acceptedRootMessage("Scheduler input that must stay exact")
         const original = Database.use((db) =>
-          db.select({ data: MessageTable.data }).from(MessageTable).where(eq(MessageTable.id, accepted.messageID)).get(),
+          db
+            .select({ data: MessageTable.data })
+            .from(MessageTable)
+            .where(eq(MessageTable.id, accepted.messageID))
+            .get(),
         )!
         // A relocation that rewrites the author is not a relocation.
         expect(() =>
