@@ -1,0 +1,2067 @@
+{
+  "source": "ses_-zUS2EY0ezzjFidQwBy1",
+  "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\project",
+  "copied": {
+    "route": "/session/ses_-zUS2EY0ezzjFidQwBy1/side-chat?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Clong-source-reading-406-live%5Cproject",
+    "method": "POST",
+    "startedAt": "2026-10-13T23:15:47.564Z",
+    "completedAt": "2026-10-13T23:15:53.767Z",
+    "durationMs": 6203.187900000001,
+    "status": 200,
+    "body": {
+      "id": "ses_-zUS1WHYVzzCkuryRz7b",
+      "slug": "happy-comet",
+      "version": "local",
+      "projectID": "prj_hgzD0UvE0KaucpYh7k6L",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\project",
+      "title": "Side chat · 请独立完成一次逐条阅读，不委派其他agent、不写文件、不使用脚本批量读取。README.md恰好包含R01到R36共36条资料，每条4行。请从第一条开始...",
+      "kind": "assistant",
+      "metadata": {
+        "configOverlay": {},
+        "sideChat": {
+          "sourceSessionID": "ses_-zUS2EY0ezzjFidQwBy1",
+          "inheritedMessageIDs": [
+            "msg_g0VXyTiRq00OQaigWA1i",
+            "msg_g0VXyTiRq01UGEXD2rYr",
+            "msg_g0VXyTiRq02ZrCs8EgwP",
+            "msg_g0VXyTiRq03Df9sa89OW",
+            "msg_g0VXyTiRq04i2apsL8WN",
+            "msg_g0VXyTiRq05hJ5cpa7fY",
+            "msg_g0VXyTiRq06lV1J7RxIQ",
+            "msg_g0VXyTiRq075WBavt5Sk",
+            "msg_g0VXyTiRq08vGJaaO3MS",
+            "msg_g0VXyTiRq09kIAf4P1At",
+            "msg_g0VXyTiRq0A7woAqfWT2",
+            "msg_g0VXyTiRq0BX6cjQ58Se",
+            "msg_g0VXyTiRq0CeOTUjv5Pm",
+            "msg_g0VXyTiRq0DgLsuGEr2X",
+            "msg_g0VXyTiRq0EyWnYMOVsK",
+            "msg_g0VXyTiRq0FV6RqBVF1N",
+            "msg_g0VXyTiRq0GmNJjY7srq",
+            "msg_g0VXyTiRq0HQxkHwNoD0",
+            "msg_g0VXyTiRq0Iq0fREREEg",
+            "msg_g0VXyTiRq0JJICqeSUqP",
+            "msg_g0VXyTiRq0KL8tluwnbH",
+            "msg_g0VXyTiRq0Lxued05fQf",
+            "msg_g0VXyTiRq0MqRzGIEyDF",
+            "msg_g0VXyTiRq0N4zIYbfkuf",
+            "msg_g0VXyTiRq0O1Wwpsh58g",
+            "msg_g0VXyTiRq0PrDxmiZYDd",
+            "msg_g0VXyTiRq0QdQqFkhMop",
+            "msg_g0VXyTiRq0R2U46aEXoq",
+            "msg_g0VXyTiRq0Sg6VrZMYOp",
+            "msg_g0VXyTiRq0Ti55TaQFB1",
+            "msg_g0VXyTiRq0UME4xn3KB8",
+            "msg_g0VXyTiRq0V5fMqNep3X",
+            "msg_g0VXyTiRq0Wpz9vPg2mU",
+            "msg_g0VXyTiRq0Xtp09Z979z",
+            "msg_g0VXyTiRq0YhK4ii9Tm1",
+            "msg_g0VXyTiRq0ZS07IPJ8Gi",
+            "msg_g0VXyTiRq0ajXH0GRRX7",
+            "msg_g0VXyTiRq0bwT207HkP1"
+          ]
+        }
+      },
+      "permission": [
+        {
+          "permission": "delegate_agent",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_expert_squad_inspect",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_query_task",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_query_task_artifacts",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_create_task",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_wake_mission",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_wake_work",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_send_task_message",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_respond_interaction",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_cancel_task",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_update_checks",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_select_workspace",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_update_goal",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_delete_goal",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "question",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "bash",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "read",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "glob",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "search_code",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "edit",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "write",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "apply_patch",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "todo",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "schedule",
+          "pattern": "*",
+          "action": "allow"
+        }
+      ],
+      "time": {
+        "created": 1791933349072,
+        "updated": 1791933349072
+      }
+    }
+  },
+  "settledObservedAfterMs": 6307.3019,
+  "totalObservedMs": 11381.9805,
+  "observations": [
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:47.564Z",
+        "completedAt": "2026-10-13T23:15:47.572Z",
+        "durationMs": 8.407700000000002,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 22,
+        "nPage": 14557,
+        "nBackfill": 22,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d5549786dc3"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:47.675Z",
+        "completedAt": "2026-10-13T23:15:47.676Z",
+        "durationMs": 1.058099999999996,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 22,
+        "nPage": 14557,
+        "nBackfill": 22,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d5549786dc3"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:47.777Z",
+        "completedAt": "2026-10-13T23:15:47.778Z",
+        "durationMs": 0.8099999999999739,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 22,
+        "nPage": 14557,
+        "nBackfill": 22,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d5549786dc3"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:47.879Z",
+        "completedAt": "2026-10-13T23:15:47.880Z",
+        "durationMs": 0.8618000000000166,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 22,
+        "nPage": 14557,
+        "nBackfill": 22,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d5549786dc3"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:47.981Z",
+        "completedAt": "2026-10-13T23:15:48.995Z",
+        "durationMs": 1013.9354000000001,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 22,
+        "nPage": 14557,
+        "nBackfill": 22,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d5549786dc3"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:49.096Z",
+        "completedAt": "2026-10-13T23:15:49.535Z",
+        "durationMs": 439.30459999999994,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 318,
+        "nPage": 14711,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d56a6283e4b"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:49.636Z",
+        "completedAt": "2026-10-13T23:15:49.683Z",
+        "durationMs": 47.14480000000003,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 797,
+        "nPage": 14745,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d56a6283e4b"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:49.784Z",
+        "completedAt": "2026-10-13T23:15:49.813Z",
+        "durationMs": 28.864100000000235,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 1308,
+        "nPage": 14783,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d56a6283e4b"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:49.914Z",
+        "completedAt": "2026-10-13T23:15:49.974Z",
+        "durationMs": 59.17290000000003,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 1938,
+        "nPage": 14826,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d56a6283e4b"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:50.075Z",
+        "completedAt": "2026-10-13T23:15:50.177Z",
+        "durationMs": 102.07439999999997,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 2522,
+        "nPage": 14863,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d56a6283e4b"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:50.278Z",
+        "completedAt": "2026-10-13T23:15:50.972Z",
+        "durationMs": 694.0527999999999,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 539,
+        "nPage": 14893,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d5734a938d7"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:51.072Z",
+        "completedAt": "2026-10-13T23:15:51.161Z",
+        "durationMs": 88.56820000000016,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 1087,
+        "nPage": 14916,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d5734a938d7"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:51.262Z",
+        "completedAt": "2026-10-13T23:15:51.268Z",
+        "durationMs": 5.541200000000117,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 1774,
+        "nPage": 14942,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d5734a938d7"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:51.369Z",
+        "completedAt": "2026-10-13T23:15:51.474Z",
+        "durationMs": 104.76810000000023,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 3122,
+        "nPage": 14990,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d5734a938d7"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:51.575Z",
+        "completedAt": "2026-10-13T23:15:51.719Z",
+        "durationMs": 144.72870000000057,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 4831,
+        "nPage": 15080,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d5734a938d7"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:51.821Z",
+        "completedAt": "2026-10-13T23:15:51.939Z",
+        "durationMs": 117.77710000000025,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6087,
+        "nPage": 15160,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d5734a938d7"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:52.039Z",
+        "completedAt": "2026-10-13T23:15:53.080Z",
+        "durationMs": 1040.2930000000006,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 920,
+        "nPage": 15216,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:53.180Z",
+        "completedAt": "2026-10-13T23:15:53.208Z",
+        "durationMs": 27.96929999999975,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 1764,
+        "nPage": 15259,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:53.309Z",
+        "completedAt": "2026-10-13T23:15:53.435Z",
+        "durationMs": 125.35499999999956,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 3543,
+        "nPage": 15346,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:53.535Z",
+        "completedAt": "2026-10-13T23:15:53.641Z",
+        "durationMs": 105.48400000000038,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 5292,
+        "nPage": 15429,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:53.742Z",
+        "completedAt": "2026-10-13T23:15:53.756Z",
+        "durationMs": 13.460500000000138,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 5932,
+        "nPage": 15450,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:53.857Z",
+        "completedAt": "2026-10-13T23:15:53.858Z",
+        "durationMs": 0.6224000000001979,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:53.972Z",
+        "completedAt": "2026-10-13T23:15:53.973Z",
+        "durationMs": 0.7309999999997672,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:54.075Z",
+        "completedAt": "2026-10-13T23:15:54.872Z",
+        "durationMs": 796.9236999999994,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:54.974Z",
+        "completedAt": "2026-10-13T23:15:54.976Z",
+        "durationMs": 1.5621000000001004,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:55.078Z",
+        "completedAt": "2026-10-13T23:15:55.079Z",
+        "durationMs": 0.75,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:55.181Z",
+        "completedAt": "2026-10-13T23:15:55.182Z",
+        "durationMs": 0.7155999999995402,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:55.284Z",
+        "completedAt": "2026-10-13T23:15:55.285Z",
+        "durationMs": 0.7427000000006956,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:55.387Z",
+        "completedAt": "2026-10-13T23:15:55.388Z",
+        "durationMs": 0.6367000000000189,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:55.490Z",
+        "completedAt": "2026-10-13T23:15:55.491Z",
+        "durationMs": 0.7758999999996377,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:55.593Z",
+        "completedAt": "2026-10-13T23:15:55.594Z",
+        "durationMs": 0.8379000000004453,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:55.696Z",
+        "completedAt": "2026-10-13T23:15:55.697Z",
+        "durationMs": 0.7521999999999025,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:55.799Z",
+        "completedAt": "2026-10-13T23:15:55.800Z",
+        "durationMs": 0.697199999998702,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:55.902Z",
+        "completedAt": "2026-10-13T23:15:55.903Z",
+        "durationMs": 0.7736000000004424,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:56.005Z",
+        "completedAt": "2026-10-13T23:15:56.006Z",
+        "durationMs": 0.8415999999997439,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:56.108Z",
+        "completedAt": "2026-10-13T23:15:56.109Z",
+        "durationMs": 0.7617000000009284,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:56.212Z",
+        "completedAt": "2026-10-13T23:15:56.212Z",
+        "durationMs": 0.7111000000004424,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:56.314Z",
+        "completedAt": "2026-10-13T23:15:56.315Z",
+        "durationMs": 0.7864000000008673,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:56.417Z",
+        "completedAt": "2026-10-13T23:15:56.418Z",
+        "durationMs": 0.6734999999989668,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:56.520Z",
+        "completedAt": "2026-10-13T23:15:56.521Z",
+        "durationMs": 0.7755999999990308,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:56.623Z",
+        "completedAt": "2026-10-13T23:15:56.623Z",
+        "durationMs": 0.9406999999991967,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:56.727Z",
+        "completedAt": "2026-10-13T23:15:56.729Z",
+        "durationMs": 2.0235000000011496,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:56.832Z",
+        "completedAt": "2026-10-13T23:15:56.832Z",
+        "durationMs": 0.684400000000096,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:56.936Z",
+        "completedAt": "2026-10-13T23:15:56.936Z",
+        "durationMs": 0.7459999999991851,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:57.039Z",
+        "completedAt": "2026-10-13T23:15:57.040Z",
+        "durationMs": 0.6714999999985594,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:57.143Z",
+        "completedAt": "2026-10-13T23:15:57.144Z",
+        "durationMs": 1.2163000000000466,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:57.247Z",
+        "completedAt": "2026-10-13T23:15:57.247Z",
+        "durationMs": 0.6946000000007189,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:57.350Z",
+        "completedAt": "2026-10-13T23:15:57.352Z",
+        "durationMs": 1.6236000000008062,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:57.455Z",
+        "completedAt": "2026-10-13T23:15:57.457Z",
+        "durationMs": 2.081399999999121,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:57.560Z",
+        "completedAt": "2026-10-13T23:15:57.561Z",
+        "durationMs": 0.9540999999990163,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:57.663Z",
+        "completedAt": "2026-10-13T23:15:57.664Z",
+        "durationMs": 0.8169999999990978,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:57.789Z",
+        "completedAt": "2026-10-13T23:15:57.793Z",
+        "durationMs": 3.8632999999990716,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:57.900Z",
+        "completedAt": "2026-10-13T23:15:57.902Z",
+        "durationMs": 1.2924000000002707,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:58.005Z",
+        "completedAt": "2026-10-13T23:15:58.006Z",
+        "durationMs": 0.9213999999992666,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:58.109Z",
+        "completedAt": "2026-10-13T23:15:58.111Z",
+        "durationMs": 1.437099999999191,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:58.214Z",
+        "completedAt": "2026-10-13T23:15:58.216Z",
+        "durationMs": 2.5131000000001222,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:58.320Z",
+        "completedAt": "2026-10-13T23:15:58.321Z",
+        "durationMs": 1.1090999999996711,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:58.424Z",
+        "completedAt": "2026-10-13T23:15:58.425Z",
+        "durationMs": 0.9776000000001659,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:58.527Z",
+        "completedAt": "2026-10-13T23:15:58.528Z",
+        "durationMs": 1.1881999999986874,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:58.631Z",
+        "completedAt": "2026-10-13T23:15:58.632Z",
+        "durationMs": 0.7930000000014843,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:58.735Z",
+        "completedAt": "2026-10-13T23:15:58.736Z",
+        "durationMs": 0.792699999999968,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:58.839Z",
+        "completedAt": "2026-10-13T23:15:58.840Z",
+        "durationMs": 0.8798000000006141,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    },
+    {
+      "healthy": {
+        "route": "/global/health",
+        "method": "GET",
+        "startedAt": "2026-10-13T23:15:58.942Z",
+        "completedAt": "2026-10-13T23:15:58.944Z",
+        "durationMs": 1.6651999999994587,
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+          }
+        }
+      },
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "wal": {
+        "state": "observed",
+        "mxFrame": 6003,
+        "nPage": 15452,
+        "nBackfill": 6003,
+        "headerCopiesAgree": true,
+        "salt": "b67e0d58767f8eb6"
+      }
+    }
+  ],
+  "boundary": "Actual public copy and health requests through all canonical target publication phase receipts. Indexed read-only SQL observes the new target/project after actual request admission; an unbounded target check follows at closure. Includes at least five seconds after all receipts and passive WAL-index observations; no UI automation."
+}

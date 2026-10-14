@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [SQLite 周期回写](2026-10-14-sqlite-checkpoint/README.md)：真实持久重读、并发读者、全回执和回写后健康观测。
+
 - [资源表单反馈位置](2026-10-14-resource-form-feedback/README.md)：原始提交区域、位置修复与人工视觉复核。
 
 - [本地Skill来源校验](2026-10-14-skill-source-validation/README.md)：Root独立生产入口、真实目录输入与桌面原图记录。

@@ -1,0 +1,45 @@
+$ bun script/run-tests.ts test/storage/database-checkpoint.test.ts test/runtime-execution-settlement.test.ts
+[1/2] START test/storage/database-checkpoint.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) the production checkpoint owner writes exact committed rows into the main database file [1406.07ms]
+(pass) a held reader keeps its original snapshot and the owner checkpoints the complete new value after release [2390.49ms]
+(pass) close, reopen and reset each retain the exact data of their physical connection [2919.08ms]
+(pass) a worker releases its SQLite connection before synchronous handback and reports its actual exit result [650.38ms]
+(pass) a worker preserves the actual invalid database code and releases the file for replacement [41.28ms]
+(pass) the production owner exposes the actual checkpoint failure and formal reset restores exact writes [1500.91ms]
+(pass) server settlement joins a real checkpoint exit and rollback resumes the production cadence [4872.19ms]
+
+ 7 pass
+ 0 fail
+ 24 expect() calls
+Ran 7 tests across 1 file. [15.96s]
+[1/2] DONE test/storage/database-checkpoint.test.ts exit=0 duration=16.52s
+[2/2] START test/runtime-execution-settlement.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) runtime execution settlement authority > fences and cancels Task activation before Session prompt settlement, then admits rollback [270.00ms]
+(pass) runtime execution settlement authority > returns shutdown cancellation and admits a successor after owner release [0.56ms]
+(pass) runtime execution settlement authority > reports the exact active Instance authority and converges on the same settlement gate [1375.21ms]
+(pass) runtime execution settlement authority > publishes terminal protocol evidence while an owned execution is being terminated [1.94ms]
+(pass) runtime execution settlement authority > classifies a wake rejected by the production server settlement reason [1.31ms]
+(pass) runtime execution settlement authority > cancels an unfinished protocol subscriber after terminal facts are fenced [1.21ms]
+(pass) runtime execution settlement authority > bounds Project Git lock inactivity and admits settlement after the held lifecycle exits [61.57ms]
+(pass) runtime execution settlement authority > retains process occurrence across protocol inactivity and converges after late settlement [51.33ms]
+(pass) runtime execution settlement authority > cancels the physical owner and settles the gate after the owner exits [0.44ms]
+(pass) runtime execution settlement authority > returns the typed admission error while a settlement phase owns the kind [0.17ms]
+(pass) runtime execution settlement authority > reopens admission under the same gate token and starts the registered durable rescan [0.15ms]
+(pass) runtime execution settlement authority > restores every owned admission and reports an aggregate when one reopen listener fails [0.33ms]
+(pass) runtime execution settlement authority > drains existing database lifecycle effects then returns a typed error until admission reopens [0.87ms]
+(pass) runtime execution settlement authority > rejects a Protocol append before insertion while database settlement owns new access [1367.19ms]
+(pass) runtime execution settlement authority > blocks late Instance creation with a typed error and admits a fresh owner after handoff release [951.52ms]
+(pass) runtime execution settlement authority > settles a durable Session wake loop before the runtime gate releases ownership [1392.33ms]
+(pass) runtime execution settlement authority > bounds a held Message bridge lifecycle and retains the process occurrence after late settlement [277.02ms]
+
+ 17 pass
+ 0 fail
+ 32 expect() calls
+Ran 17 tests across 1 file. [7.45s]
+[2/2] DONE test/runtime-execution-settlement.test.ts exit=0 duration=7.63s

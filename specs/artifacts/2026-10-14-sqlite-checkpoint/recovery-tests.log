@@ -1,0 +1,86 @@
+$ bun script/run-tests.ts test/bus-durable-outbox.test.ts test/bus-writer-cross-process.test.ts test/session/fork-atomic-transcript.test.ts test/task-event-projection-contract.test.ts test/task-control-terminal-owner.test.ts test/mission-execution-cross-process-reconciliation.test.ts
+[1/6] START test/bus-durable-outbox.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) durable Bus publication outbox > settles durable publications created by an owned subscriber before disposing test state [3037.79ms]
+(pass) durable Bus publication outbox > scopes one durable subscriber identity independently to each live Project Instance [6171.24ms]
+(pass) durable Bus publication outbox > recovers the exact pending publications of each Project beside completed history [6124.44ms]
+(pass) durable Bus publication outbox > retains the Project lease until an asynchronous durable subscriber settles [2489.16ms]
+(pass) durable Bus publication outbox > cancels a real durable subscriber at shutdown and replays its retained receipt in a successor [3665.69ms]
+(pass) durable Bus publication outbox > recovers a Message source commit with the same occurrence after a successor runtime starts [3523.12ms]
+(pass) durable Bus publication outbox > retries only the unsettled subscriber receipt within one exact phase [3487.24ms]
+(pass) durable Bus publication outbox > coalesces concurrent manual retries behind one durable occurrence owner [2551.53ms]
+(pass) durable Bus publication outbox > settles durable scheduler acceptance despite a failed transient Global projection [2385.30ms]
+(pass) durable Bus publication outbox > retries only the unsettled Global subscriber receipt [2679.57ms]
+(pass) durable Bus publication outbox > settles a failed non-durable local projection after one delivery attempt [1992.50ms]
+
+ 11 pass
+ 0 fail
+ 52 expect() calls
+Ran 11 tests across 1 file. [46.53s]
+[1/6] DONE test/bus-durable-outbox.test.ts exit=0 duration=47.72s
+[2/6] START test/bus-writer-cross-process.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) concurrent durable Bus publications deliver exact values and preserve replay receipts [13115.57ms]
+
+ 1 pass
+ 0 fail
+ 32 expect() calls
+Ran 1 test across 1 file. [14.04s]
+[2/6] DONE test/bus-writer-cross-process.test.ts exit=0 duration=14.19s
+[3/6] START test/session/fork-atomic-transcript.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Session fork commits the target and its transcript in one transaction > a fork's first observable state is the complete bounded transcript with remapped identities [1856.97ms]
+(pass) Session fork commits the target and its transcript in one transaction > a bounded fork stops before the cut message [1570.42ms]
+(pass) Session fork commits the target and its transcript in one transaction > a mid-clone storage failure restores the source-only state, and retry publishes one complete fork [1838.46ms]
+
+ 3 pass
+ 0 fail
+ 5 expect() calls
+Ran 3 tests across 1 file. [6.04s]
+[3/6] DONE test/session/fork-atomic-transcript.test.ts exit=0 duration=6.21s
+[4/6] START test/task-event-projection-contract.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) projects normalized Part ownership and Protocol envelope identity into conversation transport [2861.08ms]
+(pass) projects each reused Session lifecycle event from its exact occurrence descriptor [3573.98ms]
+
+ 2 pass
+ 0 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [8.82s]
+[4/6] DONE test/task-event-projection-contract.test.ts exit=0 duration=9.07s
+[5/6] START test/task-control-terminal-owner.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a local post-turn pipeline owns domain settlement until its exact terminal-success delivery [4802.77ms]
+(pass) a live peer terminal owner schedules recheck and then delivers its exact success [2373.75ms]
+(pass) a live peer terminal owner schedules recheck and then recovers partial after physical exit [2366.09ms]
+
+ 3 pass
+ 0 fail
+ 18 expect() calls
+Ran 3 tests across 1 file. [11.27s]
+[5/6] DONE test/task-control-terminal-owner.test.ts exit=0 duration=11.51s
+[6/6] START test/mission-execution-cross-process-reconciliation.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) two backend processes join one exact operator request and reject accepted-input drift [26499.79ms]
+(pass) a peer process takes over the exact close occurrence after the fenced owner dies [10593.50ms]
+(pass) a peer close settles the exact live streamed Mission Prompt before committing closed [15739.29ms]
+(pass) a peer close wins the wake-before-bundle cross-process ordering with one typed terminal outcome [15285.42ms]
+(pass) a peer close wins the wake-blocked cross-process ordering with one typed terminal outcome [11802.90ms]
+
+ 5 pass
+ 0 fail
+ 5 expect() calls
+Ran 5 tests across 1 file. [80.75s]
+[6/6] DONE test/mission-execution-cross-process-reconciliation.test.ts exit=0 duration=80.90s

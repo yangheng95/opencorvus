@@ -701,11 +701,17 @@ test(
 test("gracefully retires a settled connection with a retained completed prepared query", async () => {
   const { Database } = await import("../../src/storage/db")
   await createTestDatabase()
+  const project = {
+    id: "prj_retained_query", worktree: "D:/retained-query", generation: crypto.randomUUID(),
+    sandboxes: ["已提交的项目"], time_created: 1, time_updated: 1,
+  }
+  Database.use((db) => db.insert(ProjectTable).values(project).run())
   const retainedQuery = Database.Client().select().from(ProjectTable).prepare()
   try {
-    expect(retainedQuery.all()).toEqual([])
+    const committed = retainedQuery.all()
+    expect(committed).toEqual([expect.objectContaining(project)])
     Database.close()
-    expect(Database.use((db) => db.select().from(ProjectTable).all())).toEqual([])
+    expect(Database.use((db) => db.select().from(ProjectTable).all())).toEqual(committed)
     Database.close()
   } finally {
     retainedQuery.finalize()

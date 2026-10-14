@@ -259,6 +259,7 @@ export namespace Server {
         "session_wake_loop",
         "task_cancellation",
         "detached_dispatch_pipeline",
+        "database_checkpoint",
       ])
       runtimeExecutionGate.requestCancellation(
         [
@@ -268,6 +269,7 @@ export namespace Server {
           "session_wake_loop",
           "detached_dispatch_pipeline",
           "protocol_publication",
+          "database_checkpoint",
         ],
         new Error(reason),
       )
@@ -334,6 +336,7 @@ export namespace Server {
           "session_wake_loop",
           "task_cancellation",
           "detached_dispatch_pipeline",
+          "database_checkpoint",
         ],
         settlementInactivityTimeoutMilliseconds,
       )

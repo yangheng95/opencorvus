@@ -1,0 +1,6791 @@
+[
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:30.857Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 10,
+      "checkpointedFrames": 10,
+      "duration": 0.3241000000000014
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:31.979Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 12,
+      "checkpointedFrames": 12,
+      "duration": 6.352900000000005
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:33.117Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 14,
+      "checkpointedFrames": 14,
+      "duration": 6.078199999999995
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:34.227Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 5,
+      "checkpointedFrames": 5,
+      "duration": 5.035700000000006
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:35.303Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 8,
+      "checkpointedFrames": 8,
+      "duration": 9.519999999999996
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:36.747Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 856,
+      "checkpointedFrames": 856,
+      "duration": 193.05559999999997
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:37.957Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 454,
+      "checkpointedFrames": 454,
+      "duration": 118.6706
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:39.020Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 454,
+      "checkpointedFrames": 454,
+      "duration": 0.305499999999995
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:40.227Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 28,
+      "checkpointedFrames": 28,
+      "duration": 18.2838
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:41.507Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 206.6551
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:42.564Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.21240000000000236
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:43.618Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2558999999999969
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:44.668Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.20609999999999928
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:45.709Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.1708999999999996
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:46.770Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.29759999999999565
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:47.837Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2453000000000003
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:48.931Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.20370000000000488
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:50.188Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2857999999999947
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:51.448Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2202000000000055
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:52.508Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2702999999999989
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:53.729Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.25319999999999254
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:54.958Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.33259999999999934
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:56.038Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.21280000000000143
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:57.178Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2143999999999977
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:58.290Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2623999999999995
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:57:59.414Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2027000000000001
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:00.489Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.24559999999999604
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:01.549Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.22210000000000463
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:02.609Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2569999999999979
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:03.664Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.19600000000000506
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:04.727Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.23049999999999926
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:05.801Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2535999999999987
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:06.846Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.19650000000000034
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:07.916Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2342999999999975
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:08.961Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.1869999999999976
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:10.023Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2727000000000004
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:11.075Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.21770000000000067
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:12.167Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.25089999999999435
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:13.253Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.3049999999999997
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:14.322Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2686999999999955
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:15.373Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2721000000000018
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:16.426Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.23349999999999937
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:17.476Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.18439999999999657
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:18.527Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2004000000000019
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:19.591Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.22060000000000457
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:20.640Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.29120000000000346
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:21.687Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.20300000000000296
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:22.740Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2552000000000021
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:23.793Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.20400000000000063
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:24.855Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.30980000000000274
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:25.913Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2799000000000049
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:26.982Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.36529999999999774
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:28.115Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.1927999999999983
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:29.174Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.20310000000000628
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:30.228Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.25789999999999935
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:31.276Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2851999999999961
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:32.330Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.25099999999999767
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:33.385Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.27120000000000033
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:34.463Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.238900000000001
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:35.513Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.18089999999999407
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:36.570Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.25039999999999907
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:37.627Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.23469999999999658
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:38.679Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2453000000000003
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:39.730Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.1892000000000067
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:40.799Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2528999999999968
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:41.852Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2364999999999995
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:42.915Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.29579999999999984
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:43.987Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.6951999999999998
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:45.036Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.3196000000000012
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:46.086Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.24569999999999936
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:47.144Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.17039999999999367
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:48.206Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.3164999999999978
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:49.264Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.26950000000000074
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:50.311Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.19030000000000058
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:51.362Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2313999999999936
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:52.414Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2615000000000052
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:53.479Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.24389999999999645
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:54.551Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2640999999999991
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:55.620Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.292500000000004
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:56.686Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.18090000000000117
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:57.735Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.19580000000000553
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:58.785Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2242999999999995
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:58:59.830Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.18740000000000379
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:00.883Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.24140000000000583
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:01.932Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.1862999999999957
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:02.993Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.26559999999999917
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:04.048Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.18720000000000425
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:05.096Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.188600000000001
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:06.144Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.21990000000000265
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:07.191Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.17199999999999704
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:08.241Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.26149999999999807
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:09.305Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.28180000000000405
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:10.382Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2856999999999985
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:11.437Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2903999999999982
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:12.498Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.29359999999999786
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:13.562Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.29120000000000346
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:14.615Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.17419999999999902
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:15.666Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2265999999999977
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:16.722Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2493999999999943
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:17.766Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.17709999999999582
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:18.817Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.19939999999999714
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:19.891Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.3211999999999975
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:20.940Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.1957000000000022
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:21.986Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.19130000000000535
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:23.029Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.17499999999999716
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:24.069Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.15690000000000026
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:25.115Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.15630000000000166
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:26.163Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.21189999999999998
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:27.204Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.1781000000000006
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:28.245Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.16920000000000002
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:29.285Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.28190000000000026
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:30.327Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.169399999999996
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:31.456Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.1786999999999992
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:32.493Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.15559999999999974
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:33.534Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.1816999999999993
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:34.668Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2325000000000017
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:35.742Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 1.045499999999997
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:36.799Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2831999999999937
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:37.835Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.14599999999999724
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:38.870Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.15109999999999957
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:39.903Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.1465999999999994
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:40.935Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.13440000000000296
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:41.970Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.13830000000000098
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:43.029Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2102000000000004
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:44.086Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.15339999999999776
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:45.138Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 368,
+      "checkpointedFrames": 368,
+      "duration": 0.2700000000000031
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-13T23:59:45.325Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "aa37f376-07e2-4631-a363-4af7e523e482",
+      "method": "POST",
+      "path": "/session/ses_-zUS2EY0ezzjFidQwBy1/side-chat",
+      "status": "started"
+    },
+    "message": "request"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:47.021Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 2011,
+      "checkpointedFrames": 2011,
+      "duration": 542.093
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:48.914Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 6809,
+      "checkpointedFrames": 6809,
+      "duration": 620.2688
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:50.310Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 10974,
+      "checkpointedFrames": 10974,
+      "duration": 233.06080000000003
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-13T23:59:51.672Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "aa37f376-07e2-4631-a363-4af7e523e482",
+      "method": "POST",
+      "path": "/session/ses_-zUS2EY0ezzjFidQwBy1/side-chat",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 6347
+    },
+    "message": "request"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:51.729Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 17240,
+      "checkpointedFrames": 17240,
+      "duration": 260.4786
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:54.186Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 17320,
+      "checkpointedFrames": 17320,
+      "duration": 1401.6862
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:55.221Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 17320,
+      "checkpointedFrames": 17320,
+      "duration": 0.1382000000000012
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:56.273Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 9.509900000000002
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:57.319Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1973999999999947
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:58.357Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15149999999999864
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T23:59:59.392Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1465999999999994
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:00.424Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1329000000000029
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:01.457Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14869999999999806
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:02.491Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1410000000000018
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:03.525Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1631999999999998
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:04.559Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13700000000000045
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:05.593Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.16310000000000002
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:06.633Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.16750000000000043
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:07.674Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14730000000000132
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:08.728Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.25379999999999825
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:09.771Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.3047000000000004
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:10.806Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14419999999999789
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:11.840Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15439999999999898
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:12.878Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1612000000000009
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:13.909Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14329999999999998
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:14.946Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1722999999999999
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:15.982Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2120000000000033
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:17.017Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14420000000000144
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:18.057Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.18880000000000052
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:19.097Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1910000000000025
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:20.130Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13039999999999807
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:21.169Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1372
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:22.202Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15080000000000027
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:23.244Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.19709999999999894
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:24.284Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.19789999999999708
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:25.321Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1661999999999999
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:26.354Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1385000000000005
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:27.389Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.16029999999999944
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:28.434Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14470000000000027
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:29.494Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.23169999999999646
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:30.551Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2342000000000013
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:31.621Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.19829999999999615
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:32.653Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1463000000000001
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:33.697Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.19440000000000168
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:34.739Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.16900000000000404
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:35.780Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.16339999999999932
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:36.815Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.16900000000000048
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:37.851Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1444999999999972
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:38.887Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.19440000000000168
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:39.922Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1495999999999995
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:40.955Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.25069999999999837
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:41.995Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.20570000000000022
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:43.032Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14620000000000033
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:44.067Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14850000000000207
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:45.114Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.291400000000003
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:46.150Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2010000000000005
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:47.184Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15320000000000178
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:48.218Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1493000000000002
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:49.252Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14240000000000208
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:50.286Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14879999999999782
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:51.360Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.19519999999999982
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:52.395Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2347999999999999
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:53.452Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1739999999999995
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:54.528Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.231899999999996
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:55.575Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14629999999999654
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:56.634Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.21600000000000108
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:57.686Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.22169999999999845
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:58.737Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2243000000000066
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:00:59.788Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.18779999999999575
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:00.899Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2691999999999979
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:01.955Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2850999999999999
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-14T00:01:02.533Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "1c39dd53-7af6-48e6-a8ef-6908f2e74483",
+      "method": "GET",
+      "path": "/session/ses_-zUS2EY0ezzjFidQwBy1/side-chat",
+      "status": "started"
+    },
+    "message": "request"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-14T00:01:02.539Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "1c39dd53-7af6-48e6-a8ef-6908f2e74483",
+      "method": "GET",
+      "path": "/session/ses_-zUS2EY0ezzjFidQwBy1/side-chat",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 6
+    },
+    "message": "request"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:03.019Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2635999999999967
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:04.070Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.17659999999999343
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:05.123Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15870000000000317
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:06.792Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.5630000000000166
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:07.907Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.20839999999999748
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:08.981Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2682000000000002
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:10.043Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2044999999999959
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:11.096Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2418000000000049
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:12.175Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.28240000000000265
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:13.238Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1828000000000003
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:14.294Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2530000000000001
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:15.337Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2191000000000045
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:16.373Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14780000000000015
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:17.415Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.18709999999999738
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:18.458Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1811000000000007
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:19.500Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1678999999999995
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:20.543Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.17940000000000111
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:21.594Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.25440000000000396
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:22.630Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.16419999999999746
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:23.680Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1805000000000021
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:24.719Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.17350000000000065
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:25.757Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.16490000000000293
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:26.792Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1856999999999971
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:27.830Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1681999999999988
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:28.868Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15090000000000003
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:29.909Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.16310000000000002
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:30.943Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14649999999999963
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:31.992Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.19539999999999935
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:33.026Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14039999999999964
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:34.090Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.29650000000000176
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:35.136Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.23519999999999897
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:36.208Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.27360000000000184
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:37.250Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.31280000000000285
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:38.286Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.17020000000000124
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:39.368Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2541999999999973
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:40.410Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.22409999999999997
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:41.461Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.18840000000000146
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:42.497Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.20199999999999818
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-14T00:01:43.545Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "7a44ba59-eda9-4d3e-b0a3-f9a0cec0a3ab",
+      "method": "POST",
+      "path": "/session/ses_-zUS2EY0ezzjFidQwBy1/side-chat",
+      "status": "started"
+    },
+    "message": "request"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:44.140Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2137999999999991
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:45.569Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 5288,
+      "checkpointedFrames": 5288,
+      "duration": 144.28310000000002
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:47.095Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 14765,
+      "checkpointedFrames": 14765,
+      "duration": 284.852
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-14T00:01:47.246Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "7a44ba59-eda9-4d3e-b0a3-f9a0cec0a3ab",
+      "method": "POST",
+      "path": "/session/ses_-zUS2EY0ezzjFidQwBy1/side-chat",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 3701
+    },
+    "message": "request"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:49.048Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 17483,
+      "checkpointedFrames": 17483,
+      "duration": 855.3106
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:50.085Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 17483,
+      "checkpointedFrames": 17483,
+      "duration": 0.14710000000000178
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:51.120Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 17483,
+      "checkpointedFrames": 17483,
+      "duration": 0.1399000000000008
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:52.153Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 17483,
+      "checkpointedFrames": 17483,
+      "duration": 0.1457000000000015
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:53.227Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 17483,
+      "checkpointedFrames": 17483,
+      "duration": 0.21940000000000026
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:54.284Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 9.000499999999999
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:55.323Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15229999999999677
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:56.355Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14869999999999806
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:57.393Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1772999999999989
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:58.429Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.16339999999999932
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:01:59.465Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15270000000000294
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:00.499Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.19470000000000098
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:01.533Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.16110000000000113
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:02.575Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.21950000000000003
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:03.609Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1451999999999991
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:04.642Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14369999999999905
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:05.679Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15350000000000108
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:06.712Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13470000000000226
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:07.742Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12490000000000023
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:08.774Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13319999999999865
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:09.804Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13510000000000133
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:10.836Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12379999999999924
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:11.870Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2198999999999991
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:12.900Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13260000000000005
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:13.950Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1424999999999983
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:14.984Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14740000000000109
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:16.016Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14410000000000167
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:17.048Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15869999999999962
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:18.079Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1346999999999987
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:19.120Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14800000000000324
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:20.152Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12959999999999994
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:21.183Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12900000000000134
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:22.214Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14359999999999928
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:23.243Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.09450000000000003
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:24.275Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12659999999999982
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:25.321Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.17500000000000426
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:26.353Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13340000000000174
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:27.384Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13250000000000028
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:28.417Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14420000000000144
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:29.450Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1548000000000016
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:30.482Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14119999999999777
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:31.514Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12359999999999971
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:32.546Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.11899999999999977
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:33.576Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.09509999999999863
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:34.608Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.0945999999999998
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:35.639Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12249999999999872
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:36.670Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12379999999999924
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:37.702Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12869999999999848
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:38.734Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14280000000000115
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:39.764Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12790000000000035
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:40.796Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.10689999999999955
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:41.825Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.10229999999999961
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:42.857Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1280000000000001
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:43.887Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12909999999999755
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:44.921Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14520000000000266
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:45.952Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13359999999999772
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:46.984Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1374999999999993
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:48.014Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13119999999999976
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:49.044Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.09479999999999933
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:50.075Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.10070000000000334
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:51.105Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.11149999999999949
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:52.138Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14029999999999987
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:53.169Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12199999999999989
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:54.198Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12989999999999924
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:55.230Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12780000000000058
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:56.261Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.10529999999999973
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:57.292Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.10170000000000101
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:58.322Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13329999999999842
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:02:59.355Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14150000000000063
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:00.386Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12600000000000122
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:01.420Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13240000000000052
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:02.450Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.11839999999999762
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:03.482Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12870000000000203
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:04.513Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.11880000000000024
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:05.543Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.09029999999999916
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:06.574Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.10219999999999985
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:07.605Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1208999999999989
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:08.635Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.11400000000000077
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:09.667Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12869999999999848
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:10.697Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12199999999999989
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:11.732Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13940000000000197
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:12.765Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13729999999999976
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:13.797Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1534000000000013
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:14.844Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.11840000000000117
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:15.874Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.09539999999999793
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:16.906Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12519999999999953
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:17.937Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12989999999999924
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:18.968Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13200000000000145
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:20.001Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14310000000000045
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:21.033Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13929999999999865
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:22.065Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.136099999999999
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:23.099Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.16400000000000148
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:24.130Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.11060000000000159
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:25.160Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.09649999999999892
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:26.191Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.09189999999999898
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:27.222Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1363000000000021
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:28.255Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14670000000000272
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:29.286Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.129999999999999
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:30.319Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13710000000000022
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:31.349Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12320000000000064
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:32.381Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14680000000000248
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:33.411Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.10540000000000305
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:34.441Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.09710000000000107
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:35.477Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.19550000000000267
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:36.510Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.096700000000002
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:37.542Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.11739999999999995
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:38.573Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12250000000000227
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:39.607Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14720000000000155
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:40.639Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13119999999999976
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:41.672Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13470000000000226
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:42.704Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14229999999999876
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:43.736Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13260000000000005
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:44.768Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13640000000000185
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:45.800Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13210000000000122
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:46.831Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13000000000000256
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:47.865Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14270000000000138
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:48.894Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.10559999999999903
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:49.927Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.10689999999999955
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:50.957Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.09849999999999781
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:51.989Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13710000000000022
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:53.021Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13980000000000103
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:54.058Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13329999999999842
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:55.090Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13860000000000028
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:56.122Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13090000000000046
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:57.179Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1629000000000005
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:58.218Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1493000000000002
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:03:59.258Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15899999999999892
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:00.293Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1457000000000015
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:01.339Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2787000000000006
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:02.382Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.17079999999999984
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:03.423Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.17430000000000234
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:04.480Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15370000000000061
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:05.535Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1624000000000052
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:06.660Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.19999999999998863
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:07.707Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1466999999999956
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:08.778Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.22849999999999682
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:09.881Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.31809999999998695
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:10.927Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2857000000000056
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:11.961Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14210000000000278
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:13.001Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.126100000000001
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:14.038Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1636000000000024
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:15.073Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14470000000000027
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:16.105Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15409999999999968
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:17.145Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2732000000000028
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:18.179Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14390000000000214
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:19.211Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13700000000000045
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:20.253Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2079000000000022
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:21.288Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14329999999999998
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:22.321Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13519999999999754
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:23.361Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.16159999999999997
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:24.398Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2455999999999996
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:25.440Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.18379999999999797
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:26.504Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.20570000000000022
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:27.572Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2336000000000027
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:28.644Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.2301000000000002
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:29.684Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1518999999999977
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:30.726Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.18100000000000094
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:31.788Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.22930000000000206
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:32.833Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15740000000000265
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:33.872Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.17040000000000077
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:34.911Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1495000000000033
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:35.945Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.11949999999999861
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:36.978Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12070000000000292
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:38.014Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15520000000000067
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:39.049Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14920000000000044
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:40.087Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15690000000000026
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:41.123Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14410000000000167
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:42.159Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15790000000000148
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:43.194Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1617999999999995
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:44.228Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.17980000000000018
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:45.259Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1294000000000004
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:46.294Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15390000000000015
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:47.327Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12570000000000192
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:48.361Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1372
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:49.396Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12569999999999837
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:50.505Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.20570000000000022
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:51.561Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.20289999999999964
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:52.599Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14419999999999789
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:53.635Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1883000000000017
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:54.682Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.16089999999999804
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:56.189Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.20600000000001728
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:57.235Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.21860000000000213
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:58.271Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14499999999999957
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:04:59.320Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.21880000000000166
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:00.354Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14350000000000307
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:01.388Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15000000000000213
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:02.419Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14199999999999946
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:03.453Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1316999999999986
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:04.487Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13619999999999877
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:05.520Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13140000000000285
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:06.552Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14319999999999666
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:07.583Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14110000000000156
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:08.614Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12539999999999907
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:09.651Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.15719999999999956
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:10.683Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1366999999999976
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:11.714Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1338000000000008
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:12.749Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12849999999999895
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:13.780Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1382000000000012
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:14.812Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.09190000000000254
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:15.845Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14390000000000214
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:16.875Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1056999999999988
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:17.906Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.14350000000000307
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:18.936Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.10949999999999704
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:19.968Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1363999999999983
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:20.999Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.11719999999999686
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:22.033Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.13250000000000028
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:23.067Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1507000000000005
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:24.099Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1274000000000015
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:25.131Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.1501000000000019
+    },
+    "message": "checkpoint"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-14T00:05:26.163Z",
+    "service": "db",
+    "logDomain": "non-session",
+    "data": {
+      "source": "periodic",
+      "mode": "PASSIVE",
+      "busy": 0,
+      "logFrames": 18,
+      "checkpointedFrames": 18,
+      "duration": 0.12720000000000198
+    },
+    "message": "checkpoint"
+  }
+]

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [SQLite 周期回写](2026-10-14-sqlite-checkpoint.md)：统一回写策略、关闭/重启/多进程合同与真实页面验收。
+
 - [资源表单反馈位置](2026-10-14-resource-form-feedback.md)：Skill安装与MCP新增的当前viewport反馈调查。
 
 - [本地Skill来源校验](2026-10-14-skill-source-validation.md)：目录结构错误的400合同、有效来源与共享恢复隔离。

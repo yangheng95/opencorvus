@@ -42,6 +42,22 @@ Bus的投递请求注册、control lease取得、成功/失败receipt加lease释
 outbox及规范receipt/lease仍是唯一持久事实，重试和重启读取原occurrence，不另建投递状态。
 该有界队列只减少物理提交并让出事件循环，不改变事件内容、phase顺序或SQLite持久化配置。
 
+## SQLite 回写与连接生命周期
+
+SQLite的周期回写由成功初始化的物理连接统一拥有：同一个不保活进程的定时器在每个
+PASSIVE checkpoint工作线程真实退出后间隔1秒再次执行，代替提交内1000页阈值，连续业务写入不重置计时。
+WAL/NORMAL同步级别与业务事务原子性保持；它不承诺每次提交抗掉电，也不保证WAL硬性尺寸上限。
+每轮工作线程只打开已有数据库、回写、退休statement并严格关闭连接；内嵌入口同时用于源码和编译产物。
+工作线程保持进程存活至真实exit。同步关闭/重置、TRUNCATE/VACUUM先取得在途线程的SQLite资源释放回执，
+再执行原操作；60秒仍无法确认释放时报明确错误并保留owner，不能删除或重开文件。资源释放不代替线程exit。
+周期从排程开始登记到现有RuntimeExecutionSettlement的`database_checkpoint`类别。Server统一关闭新入场，
+取消尚未启动的定时器并等待已运行线程实际退出；不以显式process.exit代替结算。rollback恢复周期，
+已提交handoff后的新授权Database访问可恢复同一物理连接的周期；当前关闭阶段拒绝该入场。
+关闭成功后清理定时器，不可用连接退休周期任务。定时器脱离已关闭的数据库调用上下文，旧回调按实际
+SQLite句柄和回写job确认归属；不产生业务消息、额外进程、业务写入或第二套持久化状态。
+PASSIVE的busy/部分进度在下次周期继续；非暂态回写错误进入现有DatabaseUnavailableError，
+真实SQLite错误码保留，非SQLite错误为`SQLITE_CHECKPOINT_FAILED`，操作为`Database.checkpoint`。
+
 ## 数据库版本化迁移
 
 当前版本从新建的版本1基线开始支持自动迁移。唯一 registry 位于

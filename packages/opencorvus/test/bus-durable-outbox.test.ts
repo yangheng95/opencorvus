@@ -139,6 +139,51 @@ describe("durable Bus publication outbox", () => {
     }
   })
 
+  test("recovers the exact pending publications of each Project beside completed history", async () => {
+    await using first = await memoryProject("recovery-first")
+    await using second = await memoryProject("recovery-second")
+    const received = { first: [] as string[], second: [] as string[] }
+    const stops: Array<() => void> = []
+    let completed!: Bus.Publication
+    let firstPending!: Bus.Publication
+    let secondPending!: Bus.Publication
+    try {
+      await Instance.provide({ directory: first.path, fn: () => {
+        stops.push(Bus.subscribe(ReceiptEvent, event => received.first.push(event.properties.value), {
+          durableID: "test.pending-project-recovery", effect: "idempotent_by_occurrence",
+        }))
+        completed = Bus.publishOwned(ReceiptEvent, { value: "completed-first" })
+      } })
+      await Instance.provide({ directory: second.path, fn: () => {
+        stops.push(Bus.subscribe(ReceiptEvent, event => received.second.push(event.properties.value), {
+          durableID: "test.pending-project-recovery", effect: "idempotent_by_occurrence",
+        }))
+      } })
+      await waitForPublication(completed.occurrenceID)
+      await Promise.all(Bus.TestHooks.outbox().map(row => waitForPublication(row.occurrence_id)))
+      {
+        using _suppression = Bus.TestHooks.suppressAutomaticDurableDrain()
+        await Instance.provide({ directory: first.path, fn: () => {
+          firstPending = Bus.publishOwned(ReceiptEvent, { value: "pending-first" })
+        } })
+        await Instance.provide({ directory: second.path, fn: () => {
+          secondPending = Bus.publishOwned(ReceiptEvent, { value: "pending-second" })
+        } })
+      }
+      expect(Bus.TestHooks.outbox().map(row => row.occurrence_id).sort())
+        .toEqual([firstPending.occurrenceID, secondPending.occurrenceID].sort())
+      await Instance.provide({ directory: first.path, fn: () => Bus.resumeDurablePublications() })
+      await waitForPublication(firstPending.occurrenceID)
+      expect(Bus.TestHooks.outbox().map(row => row.occurrence_id)).toEqual([secondPending.occurrenceID])
+      await Instance.provide({ directory: second.path, fn: () => Bus.resumeDurablePublications() })
+      await waitForPublication(secondPending.occurrenceID)
+      expect(received).toEqual({ first: ["completed-first", "pending-first"], second: ["pending-second"] })
+      expect(completedPhases(completed.occurrenceID)).toEqual(["exact", "global", "wildcard"])
+    } finally {
+      for (const stop of stops) stop()
+    }
+  })
+
   test("retains the Project lease until an asynchronous durable subscriber settles", async () => {
     await using project = await memoryProject()
     let release!: () => void

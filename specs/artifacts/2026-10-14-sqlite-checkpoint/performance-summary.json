@@ -1,0 +1,93 @@
+[
+  {
+    "name": "live",
+    "target": "ses_-zUS1ZqFOzzqevqpRfYI",
+    "copyMs": 10427.629500000001,
+    "settledMs": 10537.315100000002,
+    "totalObservedMs": 15599.0863,
+    "healthSamples": 77,
+    "healthMaximumMs": 1912.4947,
+    "receipts": {
+      "publications": 263,
+      "phases": 789
+    }
+  },
+  {
+    "name": "profile",
+    "target": "ses_-zUS1WHYVzzCkuryRz7b",
+    "copyMs": 6203.187900000001,
+    "settledMs": 6307.3019,
+    "totalObservedMs": 11381.9805,
+    "healthSamples": 63,
+    "healthMaximumMs": 1040.2930000000006,
+    "receipts": {
+      "publications": 263,
+      "phases": 789
+    }
+  },
+  {
+    "name": "recovery",
+    "target": "ses_-zUS1RtdlzzCybDTfePM",
+    "copyMs": 5498.2325,
+    "settledMs": 5602.7599,
+    "totalObservedMs": 10661.6543,
+    "healthSamples": 68,
+    "healthMaximumMs": 1195.2426999999998,
+    "receipts": {
+      "publications": 263,
+      "phases": 789
+    }
+  },
+  {
+    "name": "worker",
+    "target": "ses_-zUS1LDkEzziK70Z8jNu",
+    "copyMs": 6353.0061,
+    "settledMs": 6418.3580999999995,
+    "totalObservedMs": 11502.0386,
+    "healthSamples": 72,
+    "healthMaximumMs": 657.7935000000002,
+    "receipts": {
+      "publications": 263,
+      "phases": 789
+    }
+  },
+  {
+    "name": "worker-profile",
+    "target": "ses_-zUS1JIkUzzcQLjv3sRZ",
+    "copyMs": 4002.1453,
+    "settledMs": 4108.0105,
+    "totalObservedMs": 9143.5741,
+    "healthSamples": 71,
+    "healthMaximumMs": 456.5123,
+    "receipts": {
+      "publications": 263,
+      "phases": 789
+    }
+  },
+  {
+    "name": "worker-repeat",
+    "target": "ses_-zUS1JA3HzzP8nJGhde7",
+    "copyMs": 2900.7453,
+    "settledMs": 3005.3696999999997,
+    "totalObservedMs": 8043.8078,
+    "healthSamples": 64,
+    "healthMaximumMs": 476.46930000000003,
+    "receipts": {
+      "publications": 263,
+      "phases": 789
+    }
+  },
+  {
+    "name": "runtime-owner",
+    "target": "ses_-zUS1GjEhzzfPZBNfCV2",
+    "copyMs": 3387.8547,
+    "settledMs": 3673.5571,
+    "totalObservedMs": 8757.5889,
+    "healthSamples": 70,
+    "healthMaximumMs": 351.9551,
+    "receipts": {
+      "publications": 263,
+      "phases": 789
+    }
+  }
+]

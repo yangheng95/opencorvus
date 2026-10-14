@@ -1,0 +1,74 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\bus-delivery-transaction.test.ts:
+(pass) queued delivery writes return their exact committed rows across bounded batches [645.28ms]
+(pass) a rejected delivery rolls back its savepoint while adjacent deliveries commit [420.45ms]
+(pass) a source transaction receives the explicit retired-context admission error [413.20ms]
+
+test\bus-durable-outbox.test.ts:
+(pass) durable Bus publication outbox > settles durable publications created by an owned subscriber before disposing test state [2521.54ms]
+killed 1 dangling process
+(fail) durable Bus publication outbox > scopes one durable subscriber identity independently to each live Project Instance [6688.90ms]
+  ^ this test timed out after 5000ms.
+
+# Unhandled error between tests
+-------------------------------
+915 |     }
+916 |     const owner = lifecycleOwner
+917 |     if (!owner) return
+918 |     const effectOwner = effectOwnerContext.tryUse()
+919 |     if (effectOwner && !effectOwner.closed && owner.acceptedEffects.has(effectOwner)) return
+920 |     throw lifecycleConflict(operation, owner)
+                ^
+error: Database.use rejected because Database.resetFiles owns the database lifecycle
+      at assertDatabaseAccess (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:920:11)
+      at use (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1509:5)
+      at findByRegisteredSandbox (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\project.ts:1101:27)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\project.ts:570:28)
+      at fromDirectory (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\project.ts:621:24)
+      at async stage (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\open-lifecycle.ts:38:28)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:169:73)
+-------------------------------
+
+(pass) durable Bus publication outbox > retains the Project lease until an asynchronous durable subscriber settles [3252.82ms]
+(pass) durable Bus publication outbox > cancels a real durable subscriber at shutdown and replays its retained receipt in a successor [4361.70ms]
+(pass) durable Bus publication outbox > recovers a Message source commit with the same occurrence after a successor runtime starts [4258.50ms]
+(pass) durable Bus publication outbox > retries only the unsettled subscriber receipt within one exact phase [3917.19ms]
+(pass) durable Bus publication outbox > coalesces concurrent manual retries behind one durable occurrence owner [2122.28ms]
+(pass) durable Bus publication outbox > settles durable scheduler acceptance despite a failed transient Global projection [2867.11ms]
+(pass) durable Bus publication outbox > retries only the unsettled Global subscriber receipt [3615.90ms]
+(pass) durable Bus publication outbox > settles a failed non-durable local projection after one delivery attempt [2873.92ms]
+
+test\bus-writer-cross-process.test.ts:
+(pass) concurrent durable Bus publications deliver exact values and preserve replay receipts [12286.06ms]
+
+test\session\fork-atomic-transcript.test.ts:
+(pass) Session fork commits the target and its transcript in one transaction > a fork's first observable state is the complete bounded transcript with remapped identities [1924.43ms]
+(pass) Session fork commits the target and its transcript in one transaction > a bounded fork stops before the cut message [2052.09ms]
+(pass) Session fork commits the target and its transcript in one transaction > a mid-clone storage failure restores the source-only state, and retry publishes one complete fork [2335.08ms]
+
+test\task-event-projection-contract.test.ts:
+(pass) projects normalized Part ownership and Protocol envelope identity into conversation transport [2629.25ms]
+(pass) projects each reused Session lifecycle event from its exact occurrence descriptor [2208.36ms]
+
+test\task-control-terminal-owner.test.ts:
+(pass) a local post-turn pipeline owns domain settlement until its exact terminal-success delivery [2274.02ms]
+(pass) a live peer terminal owner schedules recheck and then delivers its exact success [2319.88ms]
+(pass) a live peer terminal owner schedules recheck and then recovers partial after physical exit [2466.01ms]
+
+test\mission-execution-cross-process-reconciliation.test.ts:
+(pass) two backend processes join one exact operator request and reject accepted-input drift [21741.81ms]
+(pass) a peer process takes over the exact close occurrence after the fenced owner dies [11540.90ms]
+(pass) a peer close settles the exact live streamed Mission Prompt before committing closed [15077.48ms]
+(pass) a peer close wins the wake-before-bundle cross-process ordering with one typed terminal outcome [14616.20ms]
+(pass) a peer close wins the wake-blocked cross-process ordering with one typed terminal outcome [20442.44ms]
+
+1 tests failed:
+(fail) durable Bus publication outbox > scopes one durable subscriber identity independently to each live Project Instance [6688.90ms]
+  ^ this test timed out after 5000ms.
+
+ 26 pass
+ 1 fail
+ 1 error
+ 105 expect() calls
+Ran 27 tests across 7 files. [154.92s]

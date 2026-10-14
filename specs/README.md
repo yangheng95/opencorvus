@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [SQLite 周期回写](records/2026-10/2026-10-14-sqlite-checkpoint.md)：共享连接生命周期、真实回写页数与长历史复制全时段响应。
+
 - [资源表单反馈位置](records/2026-10/2026-10-14-resource-form-feedback.md)：唯一反馈、16张原图、真实在途收起/换项目与成功安装。
 
 - [本地Skill来源校验](records/2026-10/2026-10-14-skill-source-validation.md)：本地结构输入400合同、10项正向测试与6张真实原图。

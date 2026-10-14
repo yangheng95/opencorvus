@@ -1,0 +1,52 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\storage\schema-migration.test.ts:
+(pass) the immutable migration target constructs the current application schema [4790.06ms]
+(pass) the production opener creates and reopens the current database version and identity [1562.98ms]
+(pass) the production opener diagnoses a pre-baseline database and retains its physical identity [1506.71ms]
+(pass) sequential revisions retain rowid, Unicode text and binary values while adding a required default [57.96ms]
+(pass) an explicit version migration renames the original field before reaching the new canonical table [48.70ms]
+(pass) the complete current baseline advances to a declared revision with its real objects and identity retained [1225.33ms]
+(pass) table reconstruction preserves foreign-key relationships and composite identities [69.18ms]
+(pass) a new trigger enforces its declared current write contract after upgrading existing rows [57.99ms]
+(pass) an unsupported field removal returns a migration contract and retains the exact original schema and values [44.32ms]
+(pass) a failed new uniqueness constraint rolls back every pending revision and leaves a usable backup [45.70ms]
+(pass) a final data validation error rolls back structure, data and version together [52.23ms]
+(pass) a newer database returns an exact version error with its committed data retained [34.11ms]
+(pass) the pre-upgrade backup includes committed records still resident in the write-ahead log [61.37ms]
+(pass) independent database files keep their own history, identities and upgrade backups [104.53ms]
+(pass) two production processes reopen the same current baseline and the original database identity [4129.97ms]
+(pass) a killed migration writer recovers its original committed rows and upgrades on the next open [310.48ms]
+(pass) a backup filesystem failure retains the old database and a later retry completes the same upgrade [54.57ms]
+(pass) a migration with broken references returns an integrity failure and restores the original database [45.92ms]
+(pass) two first-start processes create one current database and converge on its physical identity [1815.81ms]
+(pass) two independent writer processes upgrade a versioned database once and preserve its rows [286.41ms]
+
+test\storage\schema-contract.test.ts:
+(pass) creates the complete current schema directly from the canonical DDL [68.79ms]
+(pass) accepted Task request, channel, and creation-contract claims are immutable until owner retention [87.64ms]
+(pass) uses one explicit application table registry for the canonical SQLite schema [120.83ms]
+(pass) reports invalid and duplicate application schema declarations [0.61ms]
+(pass) reports the required migration for a current-version database missing a canonical fact table [1577.36ms]
+(pass) reports the required migration for a current-version database missing its Project fence [1339.32ms]
+(pass) preserves an unknown application table with an explicit migration-required error [1299.56ms]
+(pass) preserves the exact current-version database when its schema needs an undeclared migration [1008.18ms]
+(pass) reports the migration-required contract for an undeclared WAL-backed table [1273.67ms]
+(pass) reopens a freshly reset database with the exact current schema [1523.35ms]
+(fail) reopens production Native and Capsule v2 bindings through the indexed current epoch [5205.92ms]
+  ^ this test timed out after 5000ms.
+(pass) reports a data-migration contract for a v1 Task process binding [3650.05ms]
+(pass) reports data-integrity errors for structurally invalid recognized v2 Native and Capsule bindings [6408.47ms]
+(pass) gracefully retires a settled connection with a retained completed prepared query [952.04ms]
+
+test\shared-database-multi-backend.test.ts:
+(pass) shared SQLite backend startup > keeps two independent backend processes healthy on one database [10540.89ms]
+
+1 tests failed:
+(fail) reopens production Native and Capsule v2 bindings through the indexed current epoch [5205.92ms]
+  ^ this test timed out after 5000ms.
+
+ 34 pass
+ 1 fail
+ 125 expect() calls
+Ran 35 tests across 3 files. [52.44s]

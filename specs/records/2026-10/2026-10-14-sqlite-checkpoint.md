@@ -1,0 +1,95 @@
+# SQLite 周期回写与长历史响应
+
+## Recall
+
+用户要求持续自主体验、修复UI/UX和功能，最近明确只使用单agent；旧goal内三个Astra文本已失效，不委托。Sources与成员Rendering仍属整体目标，不能用本轮数据库优化宣称全部完成。旧数据已按授权回收、MySQL转换已删除、版本1迁移基线已交付，不再删除或重建用户库。后续schema/持久语义改变必须追加保留数据的版本化迁移。
+
+上一goal轮是progress：`b3fb10aad`合并持久Bus写入并每256项让出事件循环，`8f9783541`/`b4244f4fb`追加真实回写证据；正常hooks通过，main远端`548660a8b`包含本批全部内容，最后push-confirm原句柄37104 exit0/Everything up-to-date。共享HEAD随后为其他已授权compaction提交`3e9f3b59b`，当前还有Question/Git/Provider/文件链接/SDK等未提交改动；保存且不混入本批。storage/db、storage/schema-contract测试与02-data架构当前diff为空。
+
+继续使用已读benchmark-debug-template技能，但UI只做真实交互/截图/人工复核，不运行UI自动化。已读AGENTS、407完整Recall/回写证据、02-data、Database全部开关库/事务/effect owner/维护方法、现有SQLite statement finalization helper、migration与schema/transaction测试、shared-database-multi-backend实际进程checker和memory/db fixture。全仓检索configureSqlite、wal_autocheckpoint/wal_checkpoint、Database.close/resetFiles/reset/checkpointTruncate及同语义路径：一个生产连接配置面；ProjectGC调用显式TRUNCATE/VACUUM；CLI与脚本/测试复用Database同步close，96个测试调用点。生产源码未使用跨await的SQLite iterate/iterator；同步Database回调已有Promise拒绝合同。无本轮UI自动化路径。
+
+## 根因、边界与风险
+
+固定真实主Session `ses_-zUS2EY0ezzjFidQwBy1`有38消息、37完成正文、36次read/36组Source行范围，来自同一144行README。407最后正式复制9678ms，263个publication/789份phase在9775ms结算；25次health最大908ms。实际连接WAL（Write-Ahead Log，预写日志）、synchronous=NORMAL、1000页自动checkpoint。10次慢COMMIT共4700.682ms，每次同一WAL salt、两份头一致、nBackfill从0到mxFrame，实际回写1079—1763页；其余281次外层事务COMMIT均≤50ms。源原子复制约0.3秒，不能误认是整份源事务本身占用9秒。
+
+直接触发点是当前线程的提交跨1000页后执行同步PASSIVE回写。连续阶段修改相同索引页时反复回写；407减少事务数量并修复连续占用，但未把物理回写从每次越界提交中合并。该配置作用于所有Task/Mission/Session、消息/来源/permission/lease/terminal/outbox/恢复写入，并非Side私有。源事务、SQL约束、规范receipt、publication/Project生命周期已在407正向物理测试覆盖；本轮仍需重跑共享恢复、串并行、多Project/多进程与当前版本迁移路径。
+
+[SQLite官方WAL说明](https://www.sqlite.org/wal.html)允许应用用周期或空闲时机统一checkpoint；[checkpoint API](https://www.sqlite.org/c3ref/wal_checkpoint_v2.html)说明PASSIVE不等待其他读写者，部分回写由后续同一策略继续，FULL/RESTART/TRUNCATE另有主动维护语义。当前接口同步，直接引入独立worker还需要改变物理退出、reset删除、编译打包和所有close调用者；本轮先用同一连接的周期合并，保持这些公共合同。此选择不能证明回写本身永不阻塞，必须实测全时段健康请求；未达原目标继续调查，不调大超时。
+
+NORMAL仍不承诺掉电前每次提交均已完成fsync。本轮保持WAL/NORMAL及事务原子性，只改变自动回写的触发节奏；周期策略可能保留更多尚待回写的页，长期读快照仍可能阻止回写。不能宣称硬性WAL大小上限或掉电零损失。关闭/重置仍完成原最终TRUNCATE，故不能只验请求完成而遗漏尾部工作；必须观察复制完成后多个周期、全回执、原物理shutdown和持久重读。
+
+## 唯一实现与公开合同
+
+1. 在现有Database配置面将默认1000页提交内回写替换为单一周期策略。每个成功初始化的物理连接只有一个unref定时器，间隔1000ms，在上一轮回写结束后再开始计时，避免慢回写后的追赶循环；不因每次业务写入重新延期，因此持续写入仍有周期机会。原开库PASSIVE和显式关闭/维护TRUNCATE保留各自生命周期语义，统一一个执行原语读取真实busy/log/checkpointed结果并完成statement.finalize。
+2. 定时器通过Database.runOutsideContext脱离调用者已退休的事务/effect owner；持有实际SQLite对象，与state.sqlite比较归属。回调同步完成SQL再重新排程，不增worker、进程、业务队列、持久表、消息、可选旧策略或第二状态来源。关闭成功后退休定时器；关闭失败仍保留原有效连接的策略，数据库不可用时退休。启动/迁移失败不会启动周期任务。
+3. busy/部分checkpoint是当前周期的真实结果，下一周期继续；明确SQLITE_BUSY/LOCKED机器错误记录实际阻塞后按同一策略继续。其他故障通过现有DatabaseUnavailableError/normalizeError收敛，保留真实SQLite代码；非SQLite意外错误使用明确`SQLITE_CHECKPOINT_FAILED`，operation为`Database.checkpoint`，业务访问随后取得该错误，不能在后台静默失效。
+4. schema、版本1、Message/Source/Bus/LLM（Large Language Model，大语言模型）语义均不改变；本轮不需要新迁移。没有新增产品文案/控件，UI源码不改。日志只记录回写来源/模式/真实页数/耗时/错误，不记录SQL参数、凭据或模型内容。
+
+## 正向验收与实施顺序
+
+- 新聚焦后台测试：通过真实生产Database写入项目数据，周期回写后从复制的主DB文件读取精确Unicode/大字段行，证明数据已真正进入主文件；第二个真实SQLite读快照保持原行并在释放后完成回写；关闭/重开/重置后新连接继续回写其精确数据；主动关闭实际底层handle触发明确异步不可用错误，再由正式reset恢复。该底层handle故障是局部物理接口契约，不能冒称磁盘故障E2E。
+- 已检索到的schema-contract最后一个关闭测试以空数组为核心，改成真实project行在retained prepared query、关闭、重开后保持相同值。重跑migration、transaction、schema、shared-database-multi-backend、Bus outbox/四进程、Task/Mission终态与原子fork的相关正向checker。避免全量bun test。
+- 正式开发服务复用自有406运行数据，不重建数据库。先核查原18521端口与auth/models副本已退休，再经原Native Host复制完整配对并分别验凭据usable、模型目录projected、actualModel=gpt-6.1-sol且流式。新独立occurrence预算8请求、600秒物理租约，真实请求180秒无活动界限；原句柄必须join，停止自有服务后才回收配对。
+- 性能仍要求原38消息复制POST与全部263/789回执在5秒内；贯穿请求及完成后至少5秒持续观察health，结合真实checkpoint日志确认回写有进行且没有遗漏尾部阻塞。必要时扩大重复/并发输入，但不能用复制数量冒充新来源。
+- 使用正式`/ui`真实新建侧聊，截图人工核对引用、Source身份及主区读位。类型检查/日志/DOM不能代替视觉。数据库失败/多进程路径单列资格，不冒称全部UI已覆盖。
+- 归档specs/artifacts、同步三处索引与02-data架构，运行docs:check。所有本批修改做范围提交，fresh fetch/merge、审阅全部待推送提交并正常push。持续goal保持active。
+
+## 实施与运行器纠正
+
+初步四项真实回写/读快照/关闭重开/实际handle丢失测试与六项事务合同共10项38断言通过，Backend typecheck通过。直接`bun test`的35项迁移/schema/双进程组中34项通过，Native/Capsule重开在5206ms超过默认5000ms；同输入单独重跑3981ms/4断言通过，未改超时。随后直接7文件共享组26项通过、双Project Bus案例6689ms超时，Bun报告杀掉1个dangling子进程，之后仍在Project.fromDirectory的原异步stage撞到afterEach Database.resetFiles，产生明确lifecycle拒绝。不能把这个拒绝误认成定时回写的数据损坏，也不能用单例通过隐去原失败。
+
+横审实际执行链确认验收命令没有使用仓库声明的入口：package.json的`test`是`script/run-tests.ts`，它原本逐文件走isolated-test-entry、原物理监督器及输出结算，使用明确的60秒每测试物理所有权界限和360秒输出无活动监控；bunfig特别说明默认timeout不从配置生效。先前直接调用Bun默认5秒正是其注释已防范的过期entry自动杀进程路径。修复验收调用，使用`bun run test`明确选择本批12个非UI文件，原断言、产品配置和5秒正式API性能指标不变；原错误日志保留，正式运行结果尚待完成。已经经过的Task/Mission正常/终态/死亡接管/流式关闭和物理四进程输出暂为局部直接调用证据，最终资格以正式逐文件运行器的原句柄结算为准。
+
+正式后态使用产品自身checkpoint日志，不增加事务堆栈包装。HTTP观察器仍核对新目标的全部回执，但以原project_id/time_created索引限定到实际请求接受后的写入，降低全历史扫描对被测服务的干扰；闭合检查还须不带该时间过滤重查完整目标，证明范围相同。请求/回执完成后再观察至少5秒health与WAL-index状态，保留尾部回写成本。当前UI已通过真实构建输出到独立408 bundle，不覆盖其他任务的dist或启动独立Vite服务。
+
+正式12文件运行器已完成72项/273断言，全部逐文件exit0，原总句柄48214也join exit0。Native/Capsule重开及双Project Bus原案例均在原正式所有权合同内通过；此前直接调用产生的两个5秒超时和清理竞争仍保留原日志，不改写为全程无失败。真实API与UI后态此时尚未开始，不由这些后台通过推断性能或视觉达标。
+
+首个正式后态**未通过性能目标**：POST10428ms、完整回执10537ms，观察15599ms（尾部≥5秒），77次health最大1912ms。实际周期回写的几个非空操作为438/741/1062/852/32ms，窗口总约3125ms；虽少于407同步回写4701ms，剩余整条路径仍慢，不能只把这个CPU/I/O段移到后台便声称根因已全部修好。只读界面实际打开Side14，38条历史与Source行范围可见，2张截图人工查看；没有发新模型问题。Target51748、原Host整体物理/输出/请求与配对退休完成，服务21773和API36375均join exit0。
+
+当前周期同线程候选不交付为性能修复。先保留其实际代码/测试快照及失败原记录，追加一次独立CPU（Central Processing Unit，中央处理器）profile，沿原正式服务/同历史/全回执/尾部health采样完整请求。仍为新8请求/600秒物理occurrence，配对预检与原句柄结算不变。需要结合完整调用栈判断其余7秒的来源，再决定独立回写执行器或更低层写入改进；不继续盲调周期、不引入fallback、不改变5秒指标。任何替代实施须先补全连接关闭、错误归一化、重置、重启、并发和编译打包影响分析。
+
+## 完整采样后的共享恢复查询修复
+
+第二次同候选正式运行仍未达标：POST6203ms/全回执6307ms，health最大1040ms。Target80172/原Host已正常关闭，21696与98194均join exit0，profile完整生成。6203ms窗口755样本、最大间隔277ms：Bus批提交栈约1916ms，周期checkpoint约1657ms，InstanceBootstrap→resumeDurablePublications约1219ms；这些父子栈不可重复相加。第三条辅助模型流在HTTP完成约7秒后才EOF，不能把该复制延迟归咎于等模型回答。
+
+代码证实另一共享根因：resume先查目录内所有历史occurrence ID，再对每条读取完整payload和三个phase receipt；已完成历史也承担四次SQL与解析。当前唯一生产入口是InstanceBootstrap，因此Task/Mission/Session首次/重启/缓存重建、各Project及全部事件类型都会受影响；TestHooks.outbox另有全行读取后逐条phase过滤。目录边界、source outbox不可变、阶段回执为事实、待重试retry_at/owner.pending、逐项当前状态重读、executeDurableOccurrence及错误/关闭合同均须保留。
+
+先修这个已证实的读取放大，再评估是否仍需独立回写。只在Bus定义一个基于现有exact/wildcard/global回执的SQL谓词，通过原唯一复合索引判断缺失的阶段；resume的初始目录查询直接筛选待恢复ID，后续每条的原authority/phase重读保持，防止选择后并发完成或保留删除的竞争。TestHooks.outbox使用同一个谓词，删除原JS逐行过滤；不添加缓存、状态列、索引或schema迁移，不跳过未完成事件，不改变调度/重试或事件数量。新测试由真实发布、已完成回执和两个Project的真实待恢复事件构成，验证按原Project恢复后的精确值及三个phase结果。原正式72项结果仍对应此前候选；修改Bus后重跑官方Bus、四进程、原子复制和相关Task/Mission恢复合同，正式长历史性能仍须重新通过5秒标准。
+
+## 独立回写连接的生命周期替代（实施前分析）
+
+加入共享恢复谓词后，第三轮正式复制仍为5498ms/全回执5603ms，68次health最大1195ms；三次周期回写共2103ms。Target89984已通过公共shutdown和原92740句柄exit0结算并退休凭据配对。不能通过放宽5秒标准交付。现删除同线程周期执行路径，改用同一个周期所有者启动一次性数据库工作线程；这不是LLM子agent。
+
+[Bun Workers官方文档](https://bun.sh/docs/runtime/workers)与[Node.js worker_threads公共合同](https://nodejs.org/api/worker_threads.html)支持eval、MessageChannel、共享内存和exit。私有原生探针已经完成1354页PASSIVE回写，严格关闭独立SQLite连接后发布共享完成状态，原Worker exit0，随后进程已消失；只证明源码运行，编译产物仍需独立确认。
+
+每个成功初始化的主连接只有一个1000ms周期和至多一个在途回写。每轮Worker仅以readwrite打开已有主库，执行PASSIVE，finalize statement并strict close，之后用专用MessagePort发送结构化真实结果、共享原子状态通知文件资源已释放；Worker保持ref直到真实exit，周期从exit之后重新计时。空闲仅有unref定时器，避免让短命CLI常驻。Worker不写业务数据、不执行迁移、不创建文件、不含凭据、无第二持久状态。
+
+同步close/reset/error cleanup与显式TRUNCATE/VACUUM先等待当前回写连接释放，再执行原动作。这个同步等待只存在文件生命周期边界，不在业务请求内；最多60秒是释放所有权的明确故障界限，不是性能达标界限。超时或释放失败明确报错并保留原owner，禁止继续删除/重开。文件资源释放与Worker线程exit分开记录：同步边界只保证前者，真实exit由原ref Worker和Promise继续拥有，不能用共享确认伪称物理退出。旧连接的迟到回调通过实际SQLite对象及Job身份识别，不能使重开的连接不可用或重排旧周期。
+
+Worker初始化、checkpoint和close都在唯一try/finally归并结果；保留SQLite机器错误码，busy/locked按同一周期继续，其他错误进入DatabaseUnavailableError。主线程不终止正在执行SQLite的worker，不增加fallback。compiled Bun必须实际运行同一模块，证明内嵌代码无需外部worker路径或额外打包入口。原4项测试中的强关主handle定时检测是同线程实现细节，应替换为真实独立库损坏/释放错误合同；主handle非公开外部关闭不是新策略检测职责。正向新增真实回写job、错误码、release后重开和真实exit验证，保留读快照/主文件数据/正式close-reset路径。全局数据库与Bus目录/Project边界、业务事务、迁移baseline保持原合同。
+
+源码和编译产物的同一startCheckpoint模块都完成实际回写：1354页，主文件单独复制后精确1200行，compiled Worker实际exit0，原编译/运行命令exit0。新5项测试首跑中3项观察器读取整个SHM（Shared Memory，共享内存）遇到Windows EBUSY，原因是读取跨过SQLite字节锁区域；独立回写与损坏文件两项已通过。观察器改成只读前100字节的WAL索引头，5项全部通过（16断言）；这是观察器修正，未改变产品或放松输出断言。显式关闭等待只确认文件资源回执，异步exited仍确认线程终止；错误后仍保留主连接的情况下恢复同一周期，失败release则保留owner，避免无回写或误删文件。
+
+工作线程候选正式12文件完成74项/287断言、原54893句柄exit0；最终类型检查51391 exit0，docs:check 345操作/26组通过。首个真实API复制6353ms、全263/789回执6418ms、72次health最大658ms，尾部仍≥5秒，未达5秒目标。浏览器此前仅打开未选中会话的主页；复制后再选中主Session并打开侧栏，经真实UI新建Side18的服务端请求3701ms。两份新侧聊均38消息/36source-file/263publication/789phase，闭合SQL不带时间或Project过滤，范围与观察器相同。两组新副本不计作新来源或新模型阅读。
+
+真实中文UI截图03—07人工查看：R03附近主阅读位置在打开侧栏、复制和展开历史后保持，Side18参考历史38条，read与Source行范围均可见。首次用早先AX索引点复制5—8时读到9—12；真实粘贴也为9—12。重新按当前侧栏内完整按钮名称精确定位点击后，剪贴板和实际粘贴都为5—8，草稿已清空且未发送。现仅能确认这次语义定位操作正确，首次索引点击差异根因未知，不能擅自宣布源数据错误或完全修好。命令面板对该历史标题初次搜索无结果，展开项目列表后可进入；搜索覆盖范围待后续专项调查。
+
+Target85072通过公共shutdown，原Native/Host物理、输出、请求关闭和配对退休完成，原服务26142/观察器62328均join exit0；自有Tab11关闭。工作线程减轻最大健康阻塞，但首次访问和已打开会话的差异仍需完整调用栈证明。追加一个独立worker-profile occurrence，保持同一38消息历史、模型配对和8请求/600秒原所有权，先在未打开UI时做一次CPU采样及全回执/尾部健康，再正常关闭。该调查不延长旧owner、不修改5秒标准或业务事件。
+
+最终复核补充生产错误归一化的正向案例：在正式隔离测试库完成TRUNCATE后，仅覆盖其真实主文件SQLite头，观察后台独立连接返回SQLITE_NOTADB并由生产周期owner发布明确Database.checkpoint不可用状态；随后正式reset恢复精确新行。测试写入前验证目标位于本测试进程根目录。此案例证明真实损坏文件进入公共错误合同，不代表操作系统I/O中断、掉电或全部磁盘故障资格。
+
+## 提交前共享退出审计：显式process.exit边界
+
+复核serve.ts 340行发现真实服务在公共shutdown结算后显式process.exit(0)，因此此前“ref线程保活”仅适用于自然退出，不能证明该入口已等待回写线程。已完成的Native physical exit只证明进程退出与OS资源释放，不得冒充线程优雅结算。横向读取Server.settleCurrentProcessExecution全部调用、releaseRuntimeHandoff commit/rollback、RuntimeExecutionSettlement所有类别/入场/取消/重开监听、同步Database close/reset与现有runtime-execution-settlement测试；生产关闭和重启共享此机制，Task/Mission/Session/多Project共用进程数据库，不是Side私有问题。
+
+使用现有RuntimeExecutionSettlement增加database_checkpoint类别，周期定时器从排程时就持有reservation（执行登记）。取消尚未执行的周期会清理定时器并结算原登记；已经开始的SQLite工作不被强杀，登记只随实际Worker exit及owner错误处理结束而结算。Server统一关闭该类别入场、请求取消待执行周期，并在现有共享waitForIdle列表加入该类别。rollback通过既有onAdmissionReopened恢复唯一周期，commit不重开任务；不用新的生命周期队列/状态机/后备路径。同步close/reset仍先释放实际文件资源，迟到线程由原登记拥有至退出。异常硬退出、进程强杀和掉电不承诺优雅结算。
+
+此次公开类别增加前全仓检索RuntimeExecutionKind/reserve/closeAdmission/onAdmissionReopened与Server结算入口，runtime/server文件当前diff为空，限定修改本类别与列表。新增正向实际数据库回写/共享结算/rollback继续写入合同，重跑runtime-execution-settlement及原真实Native shutdown，再交付；此前74项与17条Sol请求证据保留其候选对应范围。
+
+## 最终资格与未完成范围
+
+最后生命周期候选的真实Native服务Target30964、occurrence sqlite-checkpoint-408-58f89ffa-9a6c-480a-bed4-10526442d411：3条Sol200/EOF，复制3388ms、全回执3674ms、70次health最大352ms，尾部>5秒。public shutdown通过新database_checkpoint共享结算；原服务47790 join exit0，原Host/Native/output/request完成，配对退休。未再改UI，因此此前Side18人工截图对应相同UI及复制数据合同。
+
+最终7项数据库回写测试24断言、17项共享runtime测试32断言通过，原51712 join exit0；它们新增并覆盖实际损坏文件→Database.checkpoint/SQLITE_NOTADB→正式reset精确写入，以及实际Worker exit先于Server settlement、rollback恢复周期、committed handoff后新授权访问恢复同一物理连接。Client只在原访问校验成功之后确保唯一周期，不延后已存在的计时；runtime关闭入场时schedule被同一类别拒绝。
+
+6个本批独立真实服务共20条Sol流全200/EOF，所有原进程、输出、请求与auth/models副本已退休。源码与编译Worker probe均实测。完整记录进入specs/artifacts/2026-10-14-sqlite-checkpoint；原失败候选、官方runner纠正、主线程采样与6.35秒波动保留。最新3次API为4.00/2.90/3.39秒，不声称所有负载下稳定<5秒；复制波动、初次历史标题搜索覆盖以及先前AX索引复制差异仍需后续调查，整个Sources/成员Rendering持续goal不标complete。

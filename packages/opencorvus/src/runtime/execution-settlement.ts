@@ -6,6 +6,7 @@ export type RuntimeExecutionKind =
   | "session_wake_loop"
   | "protocol_publication"
   | "detached_dispatch_pipeline"
+  | "database_checkpoint"
 
 export class RuntimeExecutionAdmissionClosedError extends Error {
   override readonly name = "RuntimeExecutionAdmissionClosedError"

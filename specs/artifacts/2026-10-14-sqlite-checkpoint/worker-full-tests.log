@@ -1,0 +1,195 @@
+$ bun script/run-tests.ts test/storage/database-checkpoint.test.ts test/storage/database-transaction-contract.test.ts test/storage/schema-migration.test.ts test/storage/schema-contract.test.ts test/shared-database-multi-backend.test.ts test/bus-delivery-transaction.test.ts test/bus-durable-outbox.test.ts test/bus-writer-cross-process.test.ts test/session/fork-atomic-transcript.test.ts test/task-event-projection-contract.test.ts test/task-control-terminal-owner.test.ts test/mission-execution-cross-process-reconciliation.test.ts
+[1/12] START test/storage/database-checkpoint.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) the production checkpoint owner writes exact committed rows into the main database file [1636.29ms]
+(pass) a held reader keeps its original snapshot and the owner checkpoints the complete new value after release [2608.91ms]
+(pass) close, reopen and reset each retain the exact data of their physical connection [3624.83ms]
+(pass) a worker releases its SQLite connection before synchronous handback and reports its actual exit result [1490.08ms]
+(pass) a worker preserves the actual invalid database code and releases the file for replacement [71.09ms]
+
+ 5 pass
+ 0 fail
+ 16 expect() calls
+Ran 5 tests across 1 file. [12.65s]
+[1/12] DONE test/storage/database-checkpoint.test.ts exit=0 duration=13.74s
+[2/12] START test/storage/database-transaction-contract.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Database.transaction synchronous library boundary > returns exact scalar, object identity and undefined from the committed callback [496.71ms]
+(pass) Database.transaction synchronous library boundary > nested rollback preserves the committed rows and ordered post-commit effects [9.46ms]
+(pass) Database.transaction synchronous library boundary > Promise and thenable results return the exact synchronous error with committed state preserved [5.84ms]
+(pass) Database.immediateTransaction synchronous library boundary > returns exact scalar, object identity and undefined from the committed callback [0.79ms]
+(pass) Database.immediateTransaction synchronous library boundary > nested rollback preserves the committed rows and ordered post-commit effects [3.36ms]
+(pass) Database.immediateTransaction synchronous library boundary > Promise and thenable results return the exact synchronous error with committed state preserved [2.46ms]
+
+ 6 pass
+ 0 fail
+ 26 expect() calls
+Ran 6 tests across 1 file. [2.19s]
+[2/12] DONE test/storage/database-transaction-contract.test.ts exit=0 duration=2.57s
+[3/12] START test/storage/schema-migration.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) the immutable migration target constructs the current application schema [5414.29ms]
+(pass) the production opener creates and reopens the current database version and identity [1743.49ms]
+(pass) the production opener diagnoses a pre-baseline database and retains its physical identity [2212.15ms]
+(pass) sequential revisions retain rowid, Unicode text and binary values while adding a required default [60.67ms]
+(pass) an explicit version migration renames the original field before reaching the new canonical table [64.95ms]
+(pass) the complete current baseline advances to a declared revision with its real objects and identity retained [1828.66ms]
+(pass) table reconstruction preserves foreign-key relationships and composite identities [107.20ms]
+(pass) a new trigger enforces its declared current write contract after upgrading existing rows [53.90ms]
+(pass) an unsupported field removal returns a migration contract and retains the exact original schema and values [42.83ms]
+(pass) a failed new uniqueness constraint rolls back every pending revision and leaves a usable backup [55.09ms]
+(pass) a final data validation error rolls back structure, data and version together [47.49ms]
+(pass) a newer database returns an exact version error with its committed data retained [36.52ms]
+(pass) the pre-upgrade backup includes committed records still resident in the write-ahead log [167.97ms]
+(pass) independent database files keep their own history, identities and upgrade backups [123.49ms]
+(pass) two production processes reopen the same current baseline and the original database identity [5025.40ms]
+(pass) a killed migration writer recovers its original committed rows and upgrades on the next open [298.50ms]
+(pass) a backup filesystem failure retains the old database and a later retry completes the same upgrade [58.76ms]
+(pass) a migration with broken references returns an integrity failure and restores the original database [53.92ms]
+(pass) two first-start processes create one current database and converge on its physical identity [1988.99ms]
+(pass) two independent writer processes upgrade a versioned database once and preserve its rows [332.81ms]
+
+ 20 pass
+ 0 fail
+ 64 expect() calls
+Ran 20 tests across 1 file. [21.37s]
+[3/12] DONE test/storage/schema-migration.test.ts exit=0 duration=21.62s
+[4/12] START test/storage/schema-contract.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) creates the complete current schema directly from the canonical DDL [97.54ms]
+(pass) accepted Task request, channel, and creation-contract claims are immutable until owner retention [98.73ms]
+(pass) uses one explicit application table registry for the canonical SQLite schema [96.61ms]
+(pass) reports invalid and duplicate application schema declarations [0.51ms]
+(pass) reports the required migration for a current-version database missing a canonical fact table [1439.17ms]
+(pass) reports the required migration for a current-version database missing its Project fence [1443.03ms]
+(pass) preserves an unknown application table with an explicit migration-required error [1438.42ms]
+(pass) preserves the exact current-version database when its schema needs an undeclared migration [1424.35ms]
+(pass) reports the migration-required contract for an undeclared WAL-backed table [1473.77ms]
+(pass) reopens a freshly reset database with the exact current schema [1831.79ms]
+(pass) reopens production Native and Capsule v2 bindings through the indexed current epoch [13722.36ms]
+(pass) reports a data-migration contract for a v1 Task process binding [7827.97ms]
+(pass) reports data-integrity errors for structurally invalid recognized v2 Native and Capsule bindings [13793.62ms]
+(pass) gracefully retires a settled connection with a retained completed prepared query [1728.27ms]
+
+ 14 pass
+ 0 fail
+ 50 expect() calls
+Ran 14 tests across 1 file. [48.91s]
+[4/12] DONE test/storage/schema-contract.test.ts exit=0 duration=49.19s
+[5/12] START test/shared-database-multi-backend.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) shared SQLite backend startup > keeps two independent backend processes healthy on one database [18261.46ms]
+
+ 1 pass
+ 0 fail
+ 11 expect() calls
+Ran 1 test across 1 file. [19.94s]
+[5/12] DONE test/shared-database-multi-backend.test.ts exit=0 duration=20.20s
+[6/12] START test/bus-delivery-transaction.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) queued delivery writes return their exact committed rows across bounded batches [675.96ms]
+(pass) a rejected delivery rolls back its savepoint while adjacent deliveries commit [465.62ms]
+(pass) a source transaction receives the explicit retired-context admission error [434.47ms]
+
+ 3 pass
+ 0 fail
+ 4 expect() calls
+Ran 3 tests across 1 file. [2.73s]
+[6/12] DONE test/bus-delivery-transaction.test.ts exit=0 duration=2.92s
+[7/12] START test/bus-durable-outbox.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) durable Bus publication outbox > settles durable publications created by an owned subscriber before disposing test state [2630.08ms]
+(pass) durable Bus publication outbox > scopes one durable subscriber identity independently to each live Project Instance [4453.41ms]
+(pass) durable Bus publication outbox > recovers the exact pending publications of each Project beside completed history [5125.00ms]
+(pass) durable Bus publication outbox > retains the Project lease until an asynchronous durable subscriber settles [2500.00ms]
+(pass) durable Bus publication outbox > cancels a real durable subscriber at shutdown and replays its retained receipt in a successor [4743.91ms]
+(pass) durable Bus publication outbox > recovers a Message source commit with the same occurrence after a successor runtime starts [5400.00ms]
+(pass) durable Bus publication outbox > retries only the unsettled subscriber receipt within one exact phase [2954.11ms]
+(pass) durable Bus publication outbox > coalesces concurrent manual retries behind one durable occurrence owner [2402.55ms]
+(pass) durable Bus publication outbox > settles durable scheduler acceptance despite a failed transient Global projection [2514.12ms]
+(pass) durable Bus publication outbox > retries only the unsettled Global subscriber receipt [2762.13ms]
+(pass) durable Bus publication outbox > settles a failed non-durable local projection after one delivery attempt [3157.76ms]
+
+ 11 pass
+ 0 fail
+ 52 expect() calls
+Ran 11 tests across 1 file. [43.41s]
+[7/12] DONE test/bus-durable-outbox.test.ts exit=0 duration=43.65s
+[8/12] START test/bus-writer-cross-process.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) concurrent durable Bus publications deliver exact values and preserve replay receipts [15991.41ms]
+
+ 1 pass
+ 0 fail
+ 32 expect() calls
+Ran 1 test across 1 file. [17.75s]
+[8/12] DONE test/bus-writer-cross-process.test.ts exit=0 duration=17.99s
+[9/12] START test/session/fork-atomic-transcript.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Session fork commits the target and its transcript in one transaction > a fork's first observable state is the complete bounded transcript with remapped identities [2886.66ms]
+(pass) Session fork commits the target and its transcript in one transaction > a bounded fork stops before the cut message [2694.89ms]
+(pass) Session fork commits the target and its transcript in one transaction > a mid-clone storage failure restores the source-only state, and retry publishes one complete fork [2883.17ms]
+
+ 3 pass
+ 0 fail
+ 5 expect() calls
+Ran 3 tests across 1 file. [9.59s]
+[9/12] DONE test/session/fork-atomic-transcript.test.ts exit=0 duration=9.82s
+[10/12] START test/task-event-projection-contract.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) projects normalized Part ownership and Protocol envelope identity into conversation transport [3219.06ms]
+(pass) projects each reused Session lifecycle event from its exact occurrence descriptor [4106.78ms]
+
+ 2 pass
+ 0 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [11.46s]
+[10/12] DONE test/task-event-projection-contract.test.ts exit=0 duration=11.82s
+[11/12] START test/task-control-terminal-owner.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a local post-turn pipeline owns domain settlement until its exact terminal-success delivery [4461.94ms]
+(pass) a live peer terminal owner schedules recheck and then delivers its exact success [4160.11ms]
+(pass) a live peer terminal owner schedules recheck and then recovers partial after physical exit [4128.42ms]
+
+ 3 pass
+ 0 fail
+ 18 expect() calls
+Ran 3 tests across 1 file. [14.96s]
+[11/12] DONE test/task-control-terminal-owner.test.ts exit=0 duration=15.24s
+[12/12] START test/mission-execution-cross-process-reconciliation.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) two backend processes join one exact operator request and reject accepted-input drift [34043.32ms]
+(pass) a peer process takes over the exact close occurrence after the fenced owner dies [14006.92ms]
+(pass) a peer close settles the exact live streamed Mission Prompt before committing closed [19858.91ms]
+(pass) a peer close wins the wake-before-bundle cross-process ordering with one typed terminal outcome [15184.27ms]
+(pass) a peer close wins the wake-blocked cross-process ordering with one typed terminal outcome [15657.29ms]
+
+ 5 pass
+ 0 fail
+ 5 expect() calls
+Ran 5 tests across 1 file. [99.93s]
+[12/12] DONE test/mission-execution-cross-process-reconciliation.test.ts exit=0 duration=100.12s

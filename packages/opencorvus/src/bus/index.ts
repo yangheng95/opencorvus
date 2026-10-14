@@ -12,7 +12,7 @@ import {
   RuntimeExecutionSettlement,
   type RuntimeExecutionReservation,
 } from "../runtime/execution-settlement"
-import { Database, and, asc, eq, inArray, isNotNull, isNull } from "../storage/db"
+import { Database, and, asc, eq, inArray, isNotNull, isNull, notExists, or } from "../storage/db"
 import {
   BusPublicationAttemptReceiptTable,
   BusPublicationDeliveryReceiptTable,
@@ -659,6 +659,17 @@ export namespace Bus {
       )).get()))
   }
 
+  function unfinishedPublication(db: Database.TxOrDb) {
+    return or(...(["exact", "wildcard", "global"] as const).map((phase) => notExists(
+      db.select({ id: BusPublicationPhaseReceiptTable.id })
+        .from(BusPublicationPhaseReceiptTable)
+        .where(and(
+          eq(BusPublicationPhaseReceiptTable.occurrence_id, BusPublicationOutboxTable.occurrence_id),
+          eq(BusPublicationPhaseReceiptTable.phase, phase),
+        )),
+    )))
+  }
+
   function settlePhase(id: string, phase: DurablePhase) {
     return commitDeliveryTransaction((db) => db.insert(BusPublicationPhaseReceiptTable).values({
       id: Identifier.deterministic("call", `bus-phase\0${id}\0${phase}`),
@@ -997,7 +1008,7 @@ export namespace Bus {
       db
         .select({ id: BusPublicationOutboxTable.occurrence_id })
         .from(BusPublicationOutboxTable)
-        .where(eq(BusPublicationOutboxTable.directory, directory))
+        .where(and(eq(BusPublicationOutboxTable.directory, directory), unfinishedPublication(db)))
         .all(),
     )
     for (const row of rows) {
@@ -1301,12 +1312,7 @@ export namespace Bus {
     }
 
     export function outbox() {
-      return Database.use((db) => db.select().from(BusPublicationOutboxTable).all().filter((row) => {
-        const phases = db.select({ phase: BusPublicationPhaseReceiptTable.phase })
-          .from(BusPublicationPhaseReceiptTable)
-          .where(eq(BusPublicationPhaseReceiptTable.occurrence_id, row.occurrence_id)).all()
-        return new Set(phases.map((item) => item.phase)).size < 3
-      }))
+      return Database.use((db) => db.select().from(BusPublicationOutboxTable).where(unfinishedPublication(db)).all())
     }
 
     export function deliveries(occurrenceID: string) {

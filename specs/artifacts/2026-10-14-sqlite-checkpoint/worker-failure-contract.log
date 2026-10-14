@@ -1,0 +1,17 @@
+$ bun script/run-tests.ts test/storage/database-checkpoint.test.ts
+[1/1] START test/storage/database-checkpoint.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) the production checkpoint owner writes exact committed rows into the main database file [1620.96ms]
+(pass) a held reader keeps its original snapshot and the owner checkpoints the complete new value after release [2437.77ms]
+(pass) close, reopen and reset each retain the exact data of their physical connection [3031.70ms]
+(pass) a worker releases its SQLite connection before synchronous handback and reports its actual exit result [1244.64ms]
+(pass) a worker preserves the actual invalid database code and releases the file for replacement [63.81ms]
+(pass) the production owner exposes the actual checkpoint failure and formal reset restores exact writes [1628.67ms]
+
+ 6 pass
+ 0 fail
+ 19 expect() calls
+Ran 6 tests across 1 file. [12.58s]
+[1/1] DONE test/storage/database-checkpoint.test.ts exit=0 duration=13.25s

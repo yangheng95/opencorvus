@@ -1,4 +1,10 @@
 import { queryAllFinalized } from "./sqlite-statement"
+import { startCheckpoint, type CheckpointResult } from "./checkpoint-worker"
+import {
+  RuntimeExecutionAdmissionClosedError,
+  RuntimeExecutionSettlement,
+  type RuntimeExecutionReservation,
+} from "../runtime/execution-settlement"
 import { Database as BunDatabase } from "bun:sqlite"
 import { eq, sql } from "drizzle-orm"
 import { drizzle, type SQLiteBunDatabase } from "drizzle-orm/bun-sqlite"
@@ -753,6 +759,25 @@ function assertCurrentDataIntegrity(
   }
 }
 
+function checkpointSqlite(sqlite: BunDatabase, mode: "PASSIVE" | "TRUNCATE", source: "open" | "close" | "maintenance") {
+  const started = performance.now()
+  const result = queryAllFinalized<Omit<CheckpointResult, "duration">>(sqlite, `PRAGMA wal_checkpoint(${mode})`)[0]
+  if (!result) throw new Error("SQLite checkpoint did not return its completion result")
+  log.debug("checkpoint", {
+    source, mode, busy: result.busy, logFrames: result.log, checkpointedFrames: result.checkpointed,
+    duration: performance.now() - started,
+  })
+  return result
+}
+
+function isCheckpointBlocked(error: unknown) {
+  return errorGraph(error).some((cause) => {
+    const code = stringField(cause, "code")
+    return code === "SQLITE_BUSY" || code?.startsWith("SQLITE_BUSY_") ||
+      code === "SQLITE_LOCKED" || code?.startsWith("SQLITE_LOCKED_")
+  })
+}
+
 function configureSqlite(sqlite: BunDatabase) {
   // auto_vacuum must be set before any table is created. An existing database
   // retains that physical setting during schema migration; changing it needs
@@ -767,16 +792,20 @@ function configureSqlite(sqlite: BunDatabase) {
   sqlite.run("PRAGMA auto_vacuum = INCREMENTAL")
   sqlite.run("PRAGMA journal_mode = WAL")
   sqlite.run("PRAGMA synchronous = NORMAL")
+  // The connection owner checkpoints on a regular cadence. Avoid repeatedly
+  // writing overlapping index pages inside a burst of otherwise small commits.
+  sqlite.run("PRAGMA wal_autocheckpoint = 0")
   sqlite.run("PRAGMA cache_size = -64000")
   sqlite.run("PRAGMA foreign_keys = ON")
-  // Cap WAL file size on disk — anything above the limit is truncated at
-  // the next checkpoint instead of staying resident.
+  // Limit retained allocation when a completed checkpoint permits WAL reuse.
+  // Active readers and ongoing writes can keep a larger log temporarily.
   sqlite.run("PRAGMA journal_size_limit = 67108864")
-  sqlite.run("PRAGMA wal_checkpoint(PASSIVE)")
+  checkpointSqlite(sqlite, "PASSIVE", "open")
 }
 
 export namespace Database {
   const RESET_EFFECT_INACTIVITY_TIMEOUT_MS = 60_000
+  const CHECKPOINT_INTERVAL_MS = 1_000
 
   // SQLite state is process-wide and single-source: `<Global.Path.data>/opencorvus.db`.
   // Project-scoped routing (`Instance.directory`) selects which project rows
@@ -806,6 +835,97 @@ export namespace Database {
     unavailable: undefined as DatabaseUnavailableErrorData | undefined,
     rollbackRequired: false,
     connectionEpoch: 0,
+    checkpointTimer: undefined as ReturnType<typeof setTimeout> | undefined,
+    checkpointJob: undefined as ReturnType<typeof startCheckpoint> | undefined,
+    checkpointAdmission: undefined as RuntimeExecutionReservation | undefined,
+  }
+
+  function stopCheckpoint() {
+    clearTimeout(state.checkpointTimer)
+    state.checkpointTimer = undefined
+    state.checkpointAdmission?.settle()
+    state.checkpointAdmission = undefined
+  }
+
+  RuntimeExecutionSettlement.onAdmissionReopened("database_checkpoint", () => {
+    if (state.sqlite) scheduleCheckpoint(state.sqlite)
+  })
+
+  function scheduleCheckpoint(sqlite: BunDatabase) {
+    if (state.sqlite !== sqlite || state.unavailable || state.checkpointTimer || state.checkpointJob) return
+    let admission: RuntimeExecutionReservation
+    try {
+      admission = RuntimeExecutionSettlement.reserve("database_checkpoint", `database-checkpoint:${state.connectionEpoch}`)
+    } catch (error) {
+      if (error instanceof RuntimeExecutionAdmissionClosedError) return
+      throw error
+    }
+    state.checkpointAdmission = admission
+    admission.onCancel(() => {
+      if (state.checkpointAdmission === admission) stopCheckpoint()
+      // An already-running SQLite operation owns its real thread exit. A
+      // shutdown cancellation cannot interrupt it midway through file writes.
+    })
+    state.checkpointTimer = runOutsideContext(() => setTimeout(() => {
+      state.checkpointTimer = undefined
+      state.checkpointAdmission = undefined
+      admission.settleWith((async () => {
+        if (state.sqlite !== sqlite || state.unavailable) return
+        let job: ReturnType<typeof startCheckpoint> | undefined
+        try {
+          job = startCheckpoint(Path())
+          state.checkpointJob = job
+          const result = await job.exited
+          if (state.sqlite !== sqlite || state.checkpointJob !== job) return
+          state.checkpointJob = undefined
+          log.debug("checkpoint", {
+            source: "periodic", mode: "PASSIVE", busy: result.busy,
+            logFrames: result.log, checkpointedFrames: result.checkpointed, duration: result.duration,
+          })
+        } catch (error) {
+          if (state.sqlite !== sqlite || (job && state.checkpointJob !== job)) return
+          if (job) {
+            try {
+              job.release()
+              state.checkpointJob = undefined
+            } catch (releaseError) {
+              error = new AggregateError([error, releaseError], "SQLite checkpoint and resource release failed", { cause: error })
+            }
+          }
+          const blocked = !state.checkpointJob && isCheckpointBlocked(error)
+          if (blocked) {
+            log.debug("checkpoint blocked", { error: error instanceof Error ? error.message : String(error) })
+          } else {
+            const failure = isUnavailableError(error) ? error : new DatabaseUnavailableError({
+              path: Path(), operation: "Database.checkpoint", code: "SQLITE_CHECKPOINT_FAILED",
+              message: `SQLite checkpoint failed: ${error instanceof Error ? error.message : String(error)}`,
+            }, { cause: error })
+            const normalized = normalizeError(failure, "Database.checkpoint")
+            log.error("checkpoint failed", { error: normalized instanceof Error ? normalized.message : String(normalized) })
+            return
+          }
+        }
+        // Measure the interval from completion, so slow I/O cannot create a
+        // catch-up loop. New writes never postpone the next scheduled attempt.
+        scheduleCheckpoint(sqlite)
+      })())
+    }, CHECKPOINT_INTERVAL_MS).unref())
+  }
+
+  function releaseCheckpoint() {
+    const job = state.checkpointJob
+    if (!job) return
+    const error = job.release()
+    state.checkpointJob = undefined
+    // A later strict close or maintenance operation can fail while this main
+    // connection remains valid. Preserve its cadence until retirement succeeds.
+    if (state.sqlite) scheduleCheckpoint(state.sqlite)
+    if (error && !isCheckpointBlocked(error)) {
+      throw isUnavailableError(error) ? error : new DatabaseUnavailableError({
+        path: Path(), operation: "Database.checkpoint", code: stringField(error, "code") ?? "SQLITE_CHECKPOINT_FAILED",
+        message: `SQLite checkpoint failed: ${error.message}`,
+      }, { cause: error })
+    }
   }
 
   type EffectOwner = { closed: boolean }
@@ -940,8 +1060,10 @@ export namespace Database {
     checkpoint: boolean
     closeMode: "graceful" | "strict"
   }) {
+    releaseCheckpoint()
     const sqlite = state.sqlite
     if (!sqlite) {
+      stopCheckpoint()
       state.rollbackRequired = false
       if (input.clearUnavailable) state.unavailable = undefined
       client.reset()
@@ -952,9 +1074,10 @@ export namespace Database {
       sqlite.run("ROLLBACK")
       state.rollbackRequired = false
     }
-    if (input.checkpoint && state.unavailable === undefined) sqlite.run("PRAGMA wal_checkpoint(TRUNCATE)")
+    if (input.checkpoint && state.unavailable === undefined) checkpointSqlite(sqlite, "TRUNCATE", "close")
     sqlite.close(input.closeMode === "strict")
 
+    stopCheckpoint()
     state.sqlite = undefined
     state.rollbackRequired = false
     if (input.clearUnavailable) state.unavailable = undefined
@@ -978,12 +1101,14 @@ export namespace Database {
     for (const candidate of errorGraph(error)) {
       if (!DatabaseUnavailableError.isInstance(candidate)) continue
       if (!state.unavailable) state.unavailable = candidate.data
+      stopCheckpoint()
       client.reset()
       return new DatabaseUnavailableError(state.unavailable, { cause: error })
     }
     const data = unavailableDataFromSqlite(error, operation, Path())
     if (!data) return undefined
     if (!state.unavailable) state.unavailable = data
+    stopCheckpoint()
     client.reset()
     return new DatabaseUnavailableError(state.unavailable, error instanceof Error ? { cause: error } : undefined)
   }
@@ -1097,7 +1222,11 @@ export namespace Database {
 
   export function Client() {
     assertDatabaseAccess("Database.Client")
-    return client()
+    const db = client()
+    // A new admitted access after a completed embedded-server handoff resumes
+    // this physical connection; an active runtime settlement still rejects it.
+    if (state.sqlite) scheduleCheckpoint(state.sqlite)
+    return db
   }
 
   /** Process-local identity of the currently open physical SQLite handle.
@@ -1267,7 +1396,9 @@ export namespace Database {
       Client()
       const sqlite = state.sqlite
       if (!sqlite) return
-      sqlite.run("PRAGMA wal_checkpoint(TRUNCATE)")
+      releaseCheckpoint()
+      checkpointSqlite(sqlite, "TRUNCATE", "maintenance")
+      scheduleCheckpoint(sqlite)
     } catch (error) {
       throwNormalized(error, "Database.checkpointTruncate")
     }
@@ -1283,7 +1414,9 @@ export namespace Database {
       Client()
       const sqlite = state.sqlite
       if (!sqlite) return
+      releaseCheckpoint()
       sqlite.run("VACUUM")
+      scheduleCheckpoint(sqlite)
     } catch (error) {
       throwNormalized(error, "Database.vacuum")
     }
