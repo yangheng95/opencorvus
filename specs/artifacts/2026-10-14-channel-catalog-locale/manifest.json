@@ -1,0 +1,904 @@
+{
+  "capturedAt": "2026-10-14T06:51:34.350Z",
+  "purpose": "Lossless actual originals and resource identity; no mutable-source checksum or UI pixel oracle.",
+  "runs": [
+    {
+      "stage": "before",
+      "pid": 88848,
+      "occurrence": {
+        "pid": 88848,
+        "processInstanceID": "win32:639275560257214258",
+        "occurrenceID": "e2da0306-59da-4349-ab74-fe6b442c3a34"
+      },
+      "port": 18690,
+      "participantPort": 18691,
+      "uiDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-snapshot-01a133\\ui-after",
+      "physicalExit": 0,
+      "inferenceRequests": 0,
+      "privacy": [
+        {
+          "file": "stdout.log",
+          "bytes": 0,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        },
+        {
+          "file": "stderr.log",
+          "bytes": 0,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        },
+        {
+          "file": "runtime/log/2026-10-14T062706-88848-1.log",
+          "bytes": 101664,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        }
+      ]
+    },
+    {
+      "stage": "after",
+      "pid": 80700,
+      "occurrence": {
+        "pid": 80700,
+        "processInstanceID": "win32:639275565928881226",
+        "occurrenceID": "03a67fcb-d88b-4e96-b986-ee48824a592b"
+      },
+      "port": 18692,
+      "participantPort": 18693,
+      "uiDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-channel-catalog-locale-01a133\\ui-after",
+      "physicalExit": 0,
+      "inferenceRequests": 0,
+      "privacy": [
+        {
+          "file": "stdout.log",
+          "bytes": 0,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        },
+        {
+          "file": "stderr.log",
+          "bytes": 0,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        },
+        {
+          "file": "runtime/log/2026-10-14T063634-80700-1.log",
+          "bytes": 134297,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        }
+      ]
+    }
+  ],
+  "httpRecords": [
+    {
+      "stage": "before",
+      "name": "catalog-seed.json",
+      "method": "PATCH",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-catalog-locale-01a133%5Cbefore%5Cproject",
+      "body": {
+        "channel": {
+          "telegram": {
+            "enabled": false
+          },
+          "matrix": {
+            "homeserver": "http://127.0.0.1:18691"
+          },
+          "irc": {
+            "host": "127.0.0.1",
+            "nick": "owned-local"
+          }
+        }
+      },
+      "status": 200,
+      "responseBytes": 1363,
+      "selection": "Only exact non-secret owned input, HTTP status and original response length. Full configuration response is not retained."
+    },
+    {
+      "stage": "before",
+      "name": "catalog-receipt.json",
+      "method": "GET",
+      "route": "/channel?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-catalog-locale-01a133%5Cbefore%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 19552,
+      "selection": "Complete actual public channel catalog response retained, containing only catalog metadata, configured status and runtime diagnostics; not configuration values/authentication.",
+      "count": 27,
+      "selections": [
+        {
+          "id": "slack",
+          "status": "missing",
+          "runtimeStatus": "disabled",
+          "fields": 4
+        },
+        {
+          "id": "telegram",
+          "status": "disabled",
+          "runtimeStatus": "disabled",
+          "fields": 2
+        },
+        {
+          "id": "matrix",
+          "status": "partial",
+          "runtimeStatus": "disabled",
+          "fields": 4
+        },
+        {
+          "id": "irc",
+          "status": "configured",
+          "runtimeStatus": "unavailable",
+          "fields": 7
+        }
+      ]
+    },
+    {
+      "stage": "after",
+      "name": "catalog-seed.json",
+      "method": "PATCH",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-catalog-locale-01a133%5Cafter%5Cproject",
+      "body": {
+        "channel": {
+          "telegram": {
+            "enabled": false
+          },
+          "matrix": {
+            "homeserver": "http://127.0.0.1:18693"
+          },
+          "irc": {
+            "host": "127.0.0.1",
+            "nick": "owned-local"
+          }
+        }
+      },
+      "status": 200,
+      "responseBytes": 1363,
+      "selection": "Only exact non-secret owned input, HTTP status and original response length. Full configuration response is not retained."
+    },
+    {
+      "stage": "after",
+      "name": "catalog-receipt.json",
+      "method": "GET",
+      "route": "/channel?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-catalog-locale-01a133%5Cafter%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 24100,
+      "selection": "Complete actual public channel catalog response retained, containing only catalog metadata, configured status and runtime diagnostics; not configuration values/authentication.",
+      "count": 27,
+      "selections": [
+        {
+          "id": "slack",
+          "status": "missing",
+          "runtimeStatus": "disabled",
+          "fields": 4
+        },
+        {
+          "id": "telegram",
+          "status": "disabled",
+          "runtimeStatus": "disabled",
+          "fields": 2
+        },
+        {
+          "id": "matrix",
+          "status": "partial",
+          "runtimeStatus": "disabled",
+          "fields": 4
+        },
+        {
+          "id": "irc",
+          "status": "configured",
+          "runtimeStatus": "unavailable",
+          "fields": 7
+        }
+      ]
+    },
+    {
+      "stage": "after",
+      "name": "read-current-irc.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-catalog-locale-01a133%5Cafter%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2245,
+      "selection": "Only exact non-secret IRC field keys and enabled/host/nickname/TLS values; full config and credential-shaped fields are not retained.",
+      "keys": [
+        "enabled",
+        "host",
+        "nick",
+        "tls"
+      ],
+      "irc": {
+        "enabled": true,
+        "host": "127.0.0.1",
+        "nick": "owned-local-reviewed",
+        "tls": true
+      }
+    },
+    {
+      "stage": "after",
+      "name": "read-public-cleared.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-catalog-locale-01a133%5Cafter%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2245,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": null
+    },
+    {
+      "stage": "after",
+      "name": "read-public-invalid.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-catalog-locale-01a133%5Cafter%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2302,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": "http://127.0.0.1:18693/original"
+    },
+    {
+      "stage": "after",
+      "name": "read-public-saved.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-catalog-locale-01a133%5Cafter%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2302,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": "http://127.0.0.1:18693/original"
+    },
+    {
+      "stage": "after",
+      "name": "read-saved-irc.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-catalog-locale-01a133%5Cafter%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2245,
+      "selection": "Only exact non-secret IRC field keys and enabled/host/nickname/TLS values; full config and credential-shaped fields are not retained.",
+      "keys": [
+        "enabled",
+        "host",
+        "nick",
+        "tls"
+      ],
+      "irc": {
+        "enabled": true,
+        "host": "127.0.0.1",
+        "nick": "owned-local-reviewed",
+        "tls": true
+      }
+    }
+  ],
+  "screenshots": [
+    "01-before-zh-catalog.png",
+    "02-before-zh-partial.png",
+    "03-before-zh-matrix-editor.png",
+    "04-before-zh-configured-unavailable.png",
+    "05-before-zh-irc-editor.png",
+    "06-before-zh-reef-editor-top.png",
+    "07-before-zh-reef-editor-bottom.png",
+    "08-after-en-catalog.png",
+    "09-after-en-slack-editor.png",
+    "10-after-zh-catalog.png",
+    "11-after-zh-slack-editor.png",
+    "12-after-zh-telegram-editor.png",
+    "13-after-zh-discord-editor.png",
+    "14-after-zh-feishu-top.png",
+    "15-after-zh-feishu-bottom.png",
+    "16-after-zh-whatsapp-top.png",
+    "17-after-zh-whatsapp-bottom.png",
+    "18-after-zh-googlechat-editor.png",
+    "19-after-zh-msteams-editor.png",
+    "20-after-zh-line-editor.png",
+    "21-after-zh-matrix-editor.png",
+    "22-after-zh-mattermost-editor.png",
+    "23-after-zh-signal-editor.png",
+    "24-after-zh-wecom-top.png",
+    "25-after-zh-wecom-bottom.png",
+    "26-after-zh-dingtalk-top.png",
+    "27-after-zh-dingtalk-bottom.png",
+    "28-after-zh-clickclack-editor.png",
+    "29-after-zh-imessage-editor.png",
+    "30-after-zh-irc-editor.png",
+    "31-after-zh-configured-unavailable.png",
+    "32-after-zh-nextcloud-editor.png",
+    "33-after-zh-nostr-editor.png",
+    "34-after-zh-qqbot-editor.png",
+    "35-after-zh-raft-editor.png",
+    "36-after-zh-reef-top.png",
+    "37-after-zh-reef-bottom.png",
+    "38-after-zh-sms-editor.png",
+    "39-after-zh-synology-editor.png",
+    "40-after-zh-tlon-editor.png",
+    "41-after-zh-twitch-editor.png",
+    "42-after-zh-zalo-editor.png",
+    "43-after-zh-zalouser-editor.png",
+    "44-after-zh-irc-saved.png",
+    "45-after-zh-irc-reopened.png",
+    "46-after-zh-public-saved.png",
+    "47-after-zh-public-invalid.png",
+    "48-after-zh-public-cleared.png",
+    "49-after-zh-public-reopened-empty.png",
+    "50-after-en-partial.png",
+    "51-after-en-configured-unavailable.png",
+    "52-after-en-irc-reopened.png"
+  ],
+  "limits": [
+    "Two full public catalog bodies are retained; two config preparation responses and five actual config GET responses retain only their explicitly declared safe selections.",
+    "Three manual UI PATCH response bodies are not separately retained.",
+    "The repeated original AST failure is captured with actual exit1; only corrected complete migration source is retained, not an invented pre-fix full file.",
+    "52 originals were personally viewed; no screenshot baseline, DOM assertion, component render or UI automated test.",
+    "Open-modal locale switching, channel credentials/sends/connectivity, real Provider/Sol and backend-error feedback are not qualified this batch."
+  ],
+  "files": [
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/before/catalog-receipt.json",
+      "saved": "runs/before/catalog-receipt.json.gz",
+      "originalBytes": 898
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/before/catalog-seed.json",
+      "saved": "runs/before/catalog-seed.json.gz",
+      "originalBytes": 584
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/before/catalog.body.json",
+      "saved": "runs/before/catalog.body.json.gz",
+      "originalBytes": 19552
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/before/editor-observation.json",
+      "saved": "runs/before/editor-observation.json.gz",
+      "originalBytes": 1544
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/before/exit.json",
+      "saved": "runs/before/exit.json.gz",
+      "originalBytes": 88
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/before/owner.json",
+      "saved": "runs/before/owner.json.gz",
+      "originalBytes": 215
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/before/physical-pair-cleanup.json",
+      "saved": "runs/before/physical-pair-cleanup.json.gz",
+      "originalBytes": 211
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/before/privacy-qualified.json",
+      "saved": "runs/before/privacy-qualified.json.gz",
+      "originalBytes": 654
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/before/project-authorities.json",
+      "saved": "runs/before/project-authorities.json.gz",
+      "originalBytes": 678
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/before/ready.json",
+      "saved": "runs/before/ready.json.gz",
+      "originalBytes": 1762
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/before/terminal.json",
+      "saved": "runs/before/terminal.json.gz",
+      "originalBytes": 232
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/before/redacted-logs/2026-10-14T062706-88848-1.log",
+      "saved": "runs/before/logs/2026-10-14T062706-88848-1.log.gz",
+      "originalBytes": 101664
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/before/redacted-logs/stderr.log",
+      "saved": "runs/before/logs/stderr.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/before/redacted-logs/stdout.log",
+      "saved": "runs/before/logs/stdout.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after/catalog-receipt.json",
+      "saved": "runs/after/catalog-receipt.json.gz",
+      "originalBytes": 897
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after/catalog-seed.json",
+      "saved": "runs/after/catalog-seed.json.gz",
+      "originalBytes": 583
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after/catalog.body.json",
+      "saved": "runs/after/catalog.body.json.gz",
+      "originalBytes": 24100
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after/exit.json",
+      "saved": "runs/after/exit.json.gz",
+      "originalBytes": 88
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after/locale-observation.json",
+      "saved": "runs/after/locale-observation.json.gz",
+      "originalBytes": 1226
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after/owner.json",
+      "saved": "runs/after/owner.json.gz",
+      "originalBytes": 215
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after/physical-pair-cleanup.json",
+      "saved": "runs/after/physical-pair-cleanup.json.gz",
+      "originalBytes": 211
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after/privacy-qualified.json",
+      "saved": "runs/after/privacy-qualified.json.gz",
+      "originalBytes": 654
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after/project-authorities.json",
+      "saved": "runs/after/project-authorities.json.gz",
+      "originalBytes": 673
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after/read-current-irc.json",
+      "saved": "runs/after/read-current-irc.json.gz",
+      "originalBytes": 531
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after/read-public-cleared.json",
+      "saved": "runs/after/read-public-cleared.json.gz",
+      "originalBytes": 355
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after/read-public-invalid.json",
+      "saved": "runs/after/read-public-invalid.json.gz",
+      "originalBytes": 384
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after/read-public-saved.json",
+      "saved": "runs/after/read-public-saved.json.gz",
+      "originalBytes": 384
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after/read-saved-irc.json",
+      "saved": "runs/after/read-saved-irc.json.gz",
+      "originalBytes": 531
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after/ready.json",
+      "saved": "runs/after/ready.json.gz",
+      "originalBytes": 1765
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after/terminal.json",
+      "saved": "runs/after/terminal.json.gz",
+      "originalBytes": 232
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after/redacted-logs/2026-10-14T063634-80700-1.log",
+      "saved": "runs/after/logs/2026-10-14T063634-80700-1.log.gz",
+      "originalBytes": 134297
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after/redacted-logs/stderr.log",
+      "saved": "runs/after/logs/stderr.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after/redacted-logs/stdout.log",
+      "saved": "runs/after/logs/stdout.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/before-parent.log",
+      "saved": "checks/before-parent.log.gz",
+      "originalBytes": 49
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/before-parent.exit",
+      "saved": "checks/before-parent.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after-parent.log",
+      "saved": "checks/after-parent.log.gz",
+      "originalBytes": 49
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/after-parent.exit",
+      "saved": "checks/after-parent.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/privacy-before.log",
+      "saved": "checks/privacy-before.log.gz",
+      "originalBytes": 173
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/privacy-before.exit",
+      "saved": "checks/privacy-before.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/privacy-after.log",
+      "saved": "checks/privacy-after.log.gz",
+      "originalBytes": 173
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/privacy-after.exit",
+      "saved": "checks/privacy-after.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/implement-current.log",
+      "saved": "checks/implement-current.log.gz",
+      "originalBytes": 61
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/implement-current.exit",
+      "saved": "checks/implement-current.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/format-current.log",
+      "saved": "checks/format-current.log.gz",
+      "originalBytes": 103
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/format-current.exit",
+      "saved": "checks/format-current.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/sdk-generation.log",
+      "saved": "checks/sdk-generation.log.gz",
+      "originalBytes": 1755
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/sdk-generation.exit",
+      "saved": "checks/sdk-generation.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/sdk-generation-current.log",
+      "saved": "checks/sdk-generation-current.log.gz",
+      "originalBytes": 1760
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/sdk-generation-current.exit",
+      "saved": "checks/sdk-generation-current.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/core-contracts.log",
+      "saved": "checks/core-contracts.log.gz",
+      "originalBytes": 1240
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/core-contracts.exit",
+      "saved": "checks/core-contracts.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/core-contracts-current.log",
+      "saved": "checks/core-contracts-current.log.gz",
+      "originalBytes": 1240
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/core-contracts-current.exit",
+      "saved": "checks/core-contracts-current.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/catalog-typecheck.log",
+      "saved": "checks/catalog-typecheck.log.gz",
+      "originalBytes": 15
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/catalog-typecheck.exit",
+      "saved": "checks/catalog-typecheck.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/i18n-current.log",
+      "saved": "checks/i18n-current.log.gz",
+      "originalBytes": 78
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/i18n-current.exit",
+      "saved": "checks/i18n-current.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/overlay-typecheck.log",
+      "saved": "checks/overlay-typecheck.log.gz",
+      "originalBytes": 15
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/overlay-typecheck.exit",
+      "saved": "checks/overlay-typecheck.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/core-typecheck.log",
+      "saved": "checks/core-typecheck.log.gz",
+      "originalBytes": 74
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/core-typecheck.exit",
+      "saved": "checks/core-typecheck.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/runtime-typecheck.log",
+      "saved": "checks/runtime-typecheck.log.gz",
+      "originalBytes": 16
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/runtime-typecheck.exit",
+      "saved": "checks/runtime-typecheck.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/ui-build.log",
+      "saved": "checks/ui-build.log.gz",
+      "originalBytes": 71443
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/ui-build.exit",
+      "saved": "checks/ui-build.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/seed-before.log",
+      "saved": "checks/seed-before.log.gz",
+      "originalBytes": 191
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/seed-before.exit",
+      "saved": "checks/seed-before.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/catalog-before.log",
+      "saved": "checks/catalog-before.log.gz",
+      "originalBytes": 715
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/catalog-before.exit",
+      "saved": "checks/catalog-before.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/seed-after.log",
+      "saved": "checks/seed-after.log.gz",
+      "originalBytes": 190
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/seed-after.exit",
+      "saved": "checks/seed-after.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/catalog-after.log",
+      "saved": "checks/catalog-after.log.gz",
+      "originalBytes": 713
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/catalog-after.exit",
+      "saved": "checks/catalog-after.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/read-irc-saved.log",
+      "saved": "checks/read-irc-saved.log.gz",
+      "originalBytes": 452
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/read-irc-saved.exit",
+      "saved": "checks/read-irc-saved.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/read-irc-current.log",
+      "saved": "checks/read-irc-current.log.gz",
+      "originalBytes": 452
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/read-irc-current.exit",
+      "saved": "checks/read-irc-current.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/read-public-saved.log",
+      "saved": "checks/read-public-saved.log.gz",
+      "originalBytes": 231
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/read-public-saved.exit",
+      "saved": "checks/read-public-saved.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/read-public-invalid.log",
+      "saved": "checks/read-public-invalid.log.gz",
+      "originalBytes": 233
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/read-public-invalid.exit",
+      "saved": "checks/read-public-invalid.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/read-public-cleared.log",
+      "saved": "checks/read-public-cleared.log.gz",
+      "originalBytes": 204
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/read-public-cleared.exit",
+      "saved": "checks/read-public-cleared.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/docs-final.log",
+      "saved": "checks/docs-final.log.gz",
+      "originalBytes": 104
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/docs-final.exit",
+      "saved": "checks/docs-final.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/architecture-final.log",
+      "saved": "checks/architecture-final.log.gz",
+      "originalBytes": 139
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/architecture-final.exit",
+      "saved": "checks/architecture-final.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/implement-initial.log",
+      "saved": "checks/implement-initial.log.gz",
+      "originalBytes": 756
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/implement-initial.exit",
+      "saved": "checks/implement-initial.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/packages__channel-config__src__index.ts.before",
+      "saved": "inputs/packages__channel-config__src__index.ts.before.gz",
+      "originalBytes": 46202
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/packages__opencorvus__src__channel__catalog.ts.before",
+      "saved": "inputs/packages__opencorvus__src__channel__catalog.ts.before.gz",
+      "originalBytes": 306
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/packages__opencorvus__src__channel__registry.ts.before",
+      "saved": "inputs/packages__opencorvus__src__channel__registry.ts.before.gz",
+      "originalBytes": 2258
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/packages__overlay__src__components__settings__ChannelsPanel.tsx.before",
+      "saved": "inputs/packages__overlay__src__components__settings__ChannelsPanel.tsx.before.gz",
+      "originalBytes": 21813
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/packages__overlay__src__i18n__en-US.json.before",
+      "saved": "inputs/packages__overlay__src__i18n__en-US.json.before.gz",
+      "originalBytes": 146641
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/packages__overlay__src__i18n__zh-CN.json.before",
+      "saved": "inputs/packages__overlay__src__i18n__zh-CN.json.before.gz",
+      "originalBytes": 143750
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/packages__sdk__js__src__gen__types.gen.ts.before",
+      "saved": "inputs/packages__sdk__js__src__gen__types.gen.ts.before.gz",
+      "originalBytes": 1010083
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/packages__sdk__openapi.json.before",
+      "saved": "inputs/packages__sdk__openapi.json.before.gz",
+      "originalBytes": 5972454
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/setup.mjs",
+      "saved": "inputs/setup.mjs.gz",
+      "originalBytes": 10154
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/runtime.ts",
+      "saved": "inputs/runtime.ts.gz",
+      "originalBytes": 8480
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/launch.ps1",
+      "saved": "inputs/launch.ps1.gz",
+      "originalBytes": 4882
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/privacy.ts",
+      "saved": "inputs/privacy.ts.gz",
+      "originalBytes": 2104
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/run.mjs",
+      "saved": "inputs/run.mjs.gz",
+      "originalBytes": 890
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/inspect.mjs",
+      "saved": "inputs/inspect.mjs.gz",
+      "originalBytes": 2714
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/read.mjs",
+      "saved": "inputs/read.mjs.gz",
+      "originalBytes": 1885
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/read-saved.mjs",
+      "saved": "inputs/read-saved.mjs.gz",
+      "originalBytes": 1307
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/implement.mjs",
+      "saved": "inputs/implement.mjs.gz",
+      "originalBytes": 10187
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/locale-patches.json",
+      "saved": "inputs/locale-patches.json.gz",
+      "originalBytes": 21706
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/catalog-original.json",
+      "saved": "inputs/catalog-original.json.gz",
+      "originalBytes": 47426
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/baseline.json",
+      "saved": "inputs/baseline.json.gz",
+      "originalBytes": 438
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/stage-final.mjs",
+      "saved": "inputs/stage-final.mjs.gz",
+      "originalBytes": 3665
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/commit-final.mjs",
+      "saved": "inputs/commit-final.mjs.gz",
+      "originalBytes": 3434
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/shared-final.json",
+      "saved": "inputs/shared-final.json.gz",
+      "originalBytes": 23102
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/prepare-docs.mjs",
+      "saved": "inputs/prepare-docs.mjs.gz",
+      "originalBytes": 4656
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/final-results.mjs",
+      "saved": "inputs/final-results.mjs.gz",
+      "originalBytes": 3521
+    },
+    {
+      "source": ".tmp-codex-channel-catalog-locale-01a133/archive.mjs",
+      "saved": "inputs/archive.mjs.gz",
+      "originalBytes": 7594
+    }
+  ]
+}

@@ -2906,6 +2906,15 @@ Skill issue projection checks its owning directory before committing the result.
 Channel rows use generated ChannelListResponse and display configuration status
 and runtime status separately; missing configuration is not runtime availability.
 
+The current GET /channel field descriptor provides labelKey and an optional
+example-or-hint placeholder, using the shared ChannelFieldPlaceholder schema.
+The interface translates label and hint keys in its current locale and preserves
+technical examples exactly. Configuration descriptions derive from typed status;
+required fields being present does not assert a running connection. Runtime
+diagnostics retain their original runtime_detail. The old fixed summary, label
+and string-placeholder response is replaced by this descriptor in the generated
+OpenAPI and SDK, without a compatibility reader or persisted-config change.
+
 The Channel public-URL editor validates its native URL input and HTTP(S) pattern
 before acquiring a save owner or calling the configuration writer. Blur and save
 share that same field validity, including case-insensitive schemes and empty-value

@@ -1,14 +1,14 @@
 import z from "zod"
 import { Config } from "@/config/config"
 import { ChannelSupervisor } from "./supervisor"
-import { ChannelCatalog, channelState } from "./catalog"
+import { ChannelCatalog, ChannelFieldPlaceholder, ChannelFieldType, channelState } from "./catalog"
 
 export namespace ChannelRegistry {
   export const Field = z.object({
     key: z.string(),
-    label: z.string(),
-    type: z.enum(["boolean", "text", "secret"]),
-    placeholder: z.string().optional(),
+    labelKey: z.string(),
+    type: ChannelFieldType,
+    placeholder: ChannelFieldPlaceholder.optional(),
   })
 
   export const Info = z.object({
@@ -16,7 +16,6 @@ export namespace ChannelRegistry {
     name: z.string(),
     docs_url: z.string().url(),
     status: z.enum(["disabled", "configured", "partial", "missing"]),
-    summary: z.string(),
     runtime_status: z.enum(["disabled", "unavailable", "starting", "running", "stopped", "error"]),
     runtime_detail: z.string(),
     fields: Field.array(),
@@ -34,12 +33,11 @@ export namespace ChannelRegistry {
           name: item.name,
           docs_url: item.docsUrl,
           status: state.status,
-          summary: item.implementation.kind === "planned" ? item.implementation.reason : state.summary,
           runtime_status: runtime.status,
           runtime_detail: runtime.detail,
           fields: item.fields.map((field) => ({
             key: field.key,
-            label: field.label,
+            labelKey: field.labelKey,
             type: field.type,
             ...(field.placeholder ? { placeholder: field.placeholder } : {}),
           })),

@@ -1,6 +1,7 @@
 export {
   ChannelCatalog,
   ChannelFieldType,
+  ChannelFieldPlaceholder,
   ChannelId,
   ChannelSurface,
   buildChannelSchema,

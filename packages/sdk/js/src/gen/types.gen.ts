@@ -6571,8 +6571,16 @@ export type ChannelListResponses = {
     docs_url: string
     fields: Array<{
       key: string
-      label: string
-      placeholder?: string
+      labelKey: string
+      placeholder?:
+        | {
+            kind: "example"
+            value: string
+          }
+        | {
+            key: string
+            kind: "hint"
+          }
       type: "boolean" | "text" | "secret"
     }>
     id: string
@@ -6580,7 +6588,6 @@ export type ChannelListResponses = {
     runtime_detail: string
     runtime_status: "disabled" | "unavailable" | "starting" | "running" | "stopped" | "error"
     status: "disabled" | "configured" | "partial" | "missing"
-    summary: string
   }>
 }
 

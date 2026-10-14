@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [通道目录与表单当前语言](2026-10-14-channel-catalog-locale/README.md)：第29批真实catalog与独立编辑器原件。
+
 - [流中成员切换](2026-10-14-live-member-switching/README.md)：19条Sol真实失败基线：共享并发入口缺口与取消fence错误；17项契约通过，修复待完成。
 
 - [完整配置快照替换](2026-10-14-config-snapshot-replacement/README.md)：第28批实际页面、服务与当前配置原件。

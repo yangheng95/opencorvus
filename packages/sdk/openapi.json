@@ -22100,11 +22100,44 @@
                             "key": {
                               "type": "string"
                             },
-                            "label": {
+                            "labelKey": {
                               "type": "string"
                             },
                             "placeholder": {
-                              "type": "string"
+                              "oneOf": [
+                                {
+                                  "properties": {
+                                    "kind": {
+                                      "const": "example",
+                                      "type": "string"
+                                    },
+                                    "value": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "kind",
+                                    "value"
+                                  ],
+                                  "type": "object"
+                                },
+                                {
+                                  "properties": {
+                                    "key": {
+                                      "type": "string"
+                                    },
+                                    "kind": {
+                                      "const": "hint",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "kind",
+                                    "key"
+                                  ],
+                                  "type": "object"
+                                }
+                              ]
                             },
                             "type": {
                               "enum": [
@@ -22117,7 +22150,7 @@
                           },
                           "required": [
                             "key",
-                            "label",
+                            "labelKey",
                             "type"
                           ],
                           "type": "object"
@@ -22152,9 +22185,6 @@
                           "missing"
                         ],
                         "type": "string"
-                      },
-                      "summary": {
-                        "type": "string"
                       }
                     },
                     "required": [
@@ -22162,7 +22192,6 @@
                       "name",
                       "docs_url",
                       "status",
-                      "summary",
                       "runtime_status",
                       "runtime_detail",
                       "fields"

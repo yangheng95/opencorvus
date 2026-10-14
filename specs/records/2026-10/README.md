@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [通道目录与表单当前语言](2026-10-14-channel-catalog-locale.md)：唯一语言来源和当前公共字段描述合同。
+
 - [流中成员切换](2026-10-14-live-member-switching.md)：19条Sol真实失败基线：共享并发入口缺口与取消fence错误；17项契约通过，修复待完成。
 
 - [完整配置快照替换](2026-10-14-config-snapshot-replacement.md)：完整响应的单一接收、原归属与删除投影。

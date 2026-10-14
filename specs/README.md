@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [通道目录与表单当前语言](records/2026-10/2026-10-14-channel-catalog-locale.md)：目录描述协议、真实四状态及编辑器本地化调查。
+
 - [流中成员切换](records/2026-10/2026-10-14-live-member-switching.md)：19条Sol真实失败基线：共享并发入口缺口与取消fence错误；17项契约通过，修复待完成。
 
 - [完整配置快照替换](records/2026-10/2026-10-14-config-snapshot-replacement.md)：清空已持久化但当前界面旧值残留的共享配置调查。

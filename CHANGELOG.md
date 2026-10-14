@@ -15,6 +15,8 @@
 
 #### 修复
 
+- 通道目录说明、编辑字段和提示跟随当前界面语言，技术示例保持原值，并分别呈现配置与运行状态。通道 API 使用 labelKey 与 example/hint 占位结构，客户端应使用同步更新的 SDK。
+
 - 清空或删除配置后，界面接收完整服务器快照并同步移除旧字段；修复通道公网地址清空后重新显示旧值的问题，保留原项目和请求归属。
 
 - 通道公共 URL 在保存前执行字段校验，非法输入保留草稿并显示当前语言的行内错误；修正地址及大小写 HTTP(S) 可正常保存。
@@ -139,6 +141,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Channel descriptions, editor fields and hints follow the current interface language while preserving technical examples and separate configuration/runtime states. The channel API now uses labelKey and example/hint placeholder descriptors; clients should use the updated SDK.
 
 - Complete server configuration snapshots now retire removed fields in the interface, fixing a cleared channel public URL reappearing while preserving project and request ownership.
 

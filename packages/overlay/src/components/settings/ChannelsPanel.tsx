@@ -402,7 +402,7 @@ export default function ChannelsPanel(props: { directory: string }) {
                     <SettingsRow
                       class="channel-settings-row"
                       title={<strong>{item.name}</strong>}
-                      desc={item.summary}
+                      desc={t(`channel.description.${item.status}`)}
                       meta={
                         <small class="channel-doc-credit">
                           {t("channel.tutorial_credit", { source: "OpenClaw Docs" })}
@@ -526,7 +526,7 @@ export default function ChannelsPanel(props: { directory: string }) {
                           checked={currentVal() !== false}
                           onChange={(checked) => handleFieldChange(field.key, checked)}
                         >
-                          {field.label}
+                          {t(field.labelKey)}
                         </Switch>
                       </div>
                     )
@@ -535,13 +535,15 @@ export default function ChannelsPanel(props: { directory: string }) {
                   const inputType = field.type === "secret" ? "password" : "text"
                   return (
                     <TextField.Root as="label">
-                      <TextField.Label>{field.label}</TextField.Label>
-                      {/* Channel schemas own these placeholders; render the configured example verbatim. */}
+                      <TextField.Label>{t(field.labelKey)}</TextField.Label>
+                      {/* Catalog examples retain their identity; product hints use the current locale. */}
                       <TextField.Input
                         type={inputType}
                         name={name}
                         value={String(currentVal() ?? "")}
-                        placeholder={field.placeholder || ""}
+                        placeholder={field.placeholder?.kind === "hint"
+                          ? t(field.placeholder.key)
+                          : field.placeholder?.value ?? ""}
                         onInput={(e) => handleFieldChange(field.key, e.currentTarget.value)}
                       />
                     </TextField.Root>
