@@ -1,0 +1,99 @@
+{
+  "version": "0.1.26",
+  "entries": 18,
+  "desktop": 10,
+  "cli": 8,
+  "allPublished": true,
+  "rows": [
+    {
+      "id": "desktop-windows-x64-msi",
+      "fileName": "OpenCorvus_0.1.26_x64_en-US.msi",
+      "linkedToPublishedAsset": true
+    },
+    {
+      "id": "desktop-windows-x64-exe",
+      "fileName": "OpenCorvus_0.1.26_x64-setup.exe",
+      "linkedToPublishedAsset": true
+    },
+    {
+      "id": "desktop-macos-x64-dmg",
+      "fileName": "OpenCorvus_0.1.26_x64.dmg",
+      "linkedToPublishedAsset": true
+    },
+    {
+      "id": "desktop-macos-arm64-dmg",
+      "fileName": "OpenCorvus_0.1.26_aarch64.dmg",
+      "linkedToPublishedAsset": true
+    },
+    {
+      "id": "desktop-linux-x64-appimage",
+      "fileName": "OpenCorvus_0.1.26_amd64.AppImage",
+      "linkedToPublishedAsset": true
+    },
+    {
+      "id": "desktop-linux-x64-deb",
+      "fileName": "OpenCorvus_0.1.26_amd64.deb",
+      "linkedToPublishedAsset": true
+    },
+    {
+      "id": "desktop-linux-x64-rpm",
+      "fileName": "OpenCorvus-0.1.26-1.x86_64.rpm",
+      "linkedToPublishedAsset": true
+    },
+    {
+      "id": "desktop-linux-arm64-appimage",
+      "fileName": "OpenCorvus_0.1.26_aarch64.AppImage",
+      "linkedToPublishedAsset": true
+    },
+    {
+      "id": "desktop-linux-arm64-deb",
+      "fileName": "OpenCorvus_0.1.26_arm64.deb",
+      "linkedToPublishedAsset": true
+    },
+    {
+      "id": "desktop-linux-arm64-rpm",
+      "fileName": "OpenCorvus-0.1.26-1.aarch64.rpm",
+      "linkedToPublishedAsset": true
+    },
+    {
+      "id": "cli-windows-x64-tar-gz",
+      "fileName": "opencorvus-windows-x64.tar.gz",
+      "linkedToPublishedAsset": true
+    },
+    {
+      "id": "cli-windows-x64-tar-gz-compatible",
+      "fileName": "opencorvus-windows-x64-baseline.tar.gz",
+      "linkedToPublishedAsset": true
+    },
+    {
+      "id": "cli-macos-x64-tar-gz",
+      "fileName": "opencorvus-darwin-x64.tar.gz",
+      "linkedToPublishedAsset": true
+    },
+    {
+      "id": "cli-macos-x64-tar-gz-compatible",
+      "fileName": "opencorvus-darwin-x64-baseline.tar.gz",
+      "linkedToPublishedAsset": true
+    },
+    {
+      "id": "cli-macos-arm64-tar-gz",
+      "fileName": "opencorvus-darwin-arm64.tar.gz",
+      "linkedToPublishedAsset": true
+    },
+    {
+      "id": "cli-linux-x64-tar-gz",
+      "fileName": "opencorvus-linux-x64.tar.gz",
+      "linkedToPublishedAsset": true
+    },
+    {
+      "id": "cli-linux-x64-tar-gz-compatible",
+      "fileName": "opencorvus-linux-x64-baseline.tar.gz",
+      "linkedToPublishedAsset": true
+    },
+    {
+      "id": "cli-linux-arm64-tar-gz",
+      "fileName": "opencorvus-linux-arm64.tar.gz",
+      "linkedToPublishedAsset": true
+    }
+  ]
+}

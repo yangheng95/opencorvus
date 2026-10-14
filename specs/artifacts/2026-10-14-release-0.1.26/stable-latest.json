@@ -1,0 +1,27 @@
+{
+  "version": "0.1.26",
+  "notes": "",
+  "pub_date": "2026-10-14T09:50:51.000Z",
+  "platforms": {
+    "linux-x86_64": {
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.26/OpenCorvus_0.1.26_amd64.AppImage",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUaWFuRW1GUVdybExYRFRyQkZSUytQa21KakIrb2VRWUZqem9RcnRHQmZQR1FCSjF2bUxzc0l4cUNOOXFGVmhjenlHa1hMeUlpWWJ1MFVHYVlMMXBncGlONEc1SU8yQ1EwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkxOTcyNzIwCWZpbGU6T3BlbkNvcnZ1c18wLjEuMjZfYW1kNjQuQXBwSW1hZ2UKTjRtYWt5Rng5bkQvMmdBc0h2dlExRGx5RGs3elI0S21kVEFXNzU0OS9ML21VdDlwc3lJcnUrZ0NGMVRRQ20rc3lIL1JSVko3U1dXZFBqQldCN0xpQlE9PQo="
+    },
+    "linux-aarch64": {
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.26/OpenCorvus_0.1.26_aarch64.AppImage",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUaWFuRW1GUVdybE0xbzJhM2wyZ0JjTSt1bTJBNFY1U1VMZllua1hEZHBZS2Q5YkxQazhQMU0xMjNhUFMvLzNCT3lhOHVkNzhPTUxwRFd4UDBlMGVjeUZxRWNoZ2pLS3dJPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkxOTcyNzc3CWZpbGU6T3BlbkNvcnZ1c18wLjEuMjZfYWFyY2g2NC5BcHBJbWFnZQpYM2VrQk43aEtZZ2RHMmpHVk5ZNkRRU1FUK0VCeTBNNnJmTFJWMkpjWFBQaUZITmdwcjVRUGY4djFtSE4yblV5NXhZNnk1ZEtOSWQyTGVNYmN3aTBBZz09Cg=="
+    },
+    "darwin-x86_64": {
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.26/OpenCorvus_0.1.26_x64.app.tar.gz",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUaWFuRW1GUVdybEs2SUxubEIva3hKTGZ0VUJaS1F0UUFSd3lWclJ2OXFVTGRoeWlpTmR4VWV3RGxYM2xtRUNsN3ZYSmhmUWM5YXNYeEFsb3Z4MlhLRXlzdGFBSVFscXdzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkxOTczMzEwCWZpbGU6T3BlbkNvcnZ1cy5hcHAudGFyLmd6Cnh2ajhJZExsLyt2eDhzVElwU1BOWTFhdHNtNTM0ZWJHc2dqcEVoUis3NG80cVlOQWt2SFkzdjdQNFR6Z3NiTjY5TkVISXQ0TkJnRmwzMVpzY1JjdEFRPT0K"
+    },
+    "darwin-aarch64": {
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.26/OpenCorvus_0.1.26_aarch64.app.tar.gz",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUaWFuRW1GUVdybElGNjNwQkVLTWVjUUxDVGpsaGM1VnFnNDJobGtJY0F0TnFmVE1rQmlxSmhodGhIQVc2cWZqMnhYdmh0Q3RUNlVvU0QrZ213amZWMUFwbVcyZGFZS2djPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkxOTcyODIzCWZpbGU6T3BlbkNvcnZ1cy5hcHAudGFyLmd6Cnhxd0lSdllLYk5VS2ZGeFdVRENzcng0QlpkdVdCSDhlbDFlWGZxeUZKc3hXZndLQWNQdVpLTm44ZnMwQWlRTFRiRE5TdXlwam5nVDdLTUYxRzJ2UUJBPT0K"
+    },
+    "windows-x86_64": {
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.26/OpenCorvus_0.1.26_x64-setup.exe",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUaWFuRW1GUVdybEtlTFdiZUl0RHpJQ0E0ZlBubjFzRFhyQ01MRWJwZHVyeXcwdkc2bnRWZEpPcnBaR3UzeFJmOFNOWUc5RGZDK2hneFlnUmIvY2ZURjVGZVlOS3F4MGdZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkxOTcyODgxCWZpbGU6T3BlbkNvcnZ1c18wLjEuMjZfeDY0LXNldHVwLmV4ZQo4Zlk0dEp6QitqSGF5VTNuNEp5Qml0aTNQVjNheUYyQituL2NTRFBoZDVXOTE1TDQzUjlMYTNpM3FvRDBSOHFXeXRKak5nL2ZqemkzZjNROEE5TzhDUT09Cg=="
+    }
+  }
+}

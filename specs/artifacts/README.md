@@ -1,6 +1,6 @@
 # Artifact entry points
 
-- [0.1.26 整合与发布证据](2026-10-14-release-0.1.26/README.md)：原始失败、契约复验、生成与正式发布回执。
+- [0.1.26 整合与发布证据](2026-10-14-release-0.1.26/README.md)：原始失败、59/83项复验、正式29资源/18下载入口、公开原图及联合超时/官网补部署。
 
 - [侧栏Rendering根因](2026-10-14-sidebar-render-root/README.md)：单agent真实流式生命周期、历史修复复核与OpenAPI闭合。
 

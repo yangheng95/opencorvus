@@ -1,0 +1,36 @@
+{
+  "observedAt": "2026-10-14T18:55:33.3978925+08:00",
+  "upstream": "c76e8dd021bff0d73483fa477eca608fde01da33",
+  "worktrees": [
+    {
+      "path": "D:/myhexin-local/opencorvus",
+      "head": "c76e8dd021bff0d73483fa477eca608fde01da33",
+      "absorbedByUpstream": true,
+      "status": [
+        " M specs/artifacts/2026-10-14-release-0.1.26/README.md",
+        " M specs/records/2026-10/2026-10-14-release-0.1.26.md",
+        "?? .bun/",
+        "?? packages/opencorvus/bun/"
+      ]
+    },
+    {
+      "path": "C:/Users/hengu/.codex/worktrees/agent-execution-redesign/opencorvus",
+      "head": "a0a879ed759f980e6d72c9df7a10b51bb2d8f1a2",
+      "absorbedByUpstream": true,
+      "status": []
+    },
+    {
+      "path": "C:/Users/hengu/.codex/worktrees/continuous-goal-mode/opencorvus",
+      "head": "7897d1bd1c535446b1f8dbedd22fb8f49c3884bf",
+      "absorbedByUpstream": true,
+      "status": []
+    },
+    {
+      "path": "C:/Users/hengu/.codex/worktrees/dependabot-upgrades/opencorvus",
+      "head": "a89cb2852031bc302d01d369ea1f99500eeff408",
+      "absorbedByUpstream": true,
+      "status": []
+    }
+  ],
+  "remainingPrimaryChanges": "本轮待提交文档证据；原 Bun 缓存保留"
+}
