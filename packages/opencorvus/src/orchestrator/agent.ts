@@ -431,6 +431,7 @@ export namespace Orchestrator {
 
     let agentSessionID: string | undefined
     let agentSessionInfo: Session.Info | undefined
+    let executionInputMessageID: string | undefined
     let wakeStartMessageID: string | undefined
     let promptInFlight = false
     let schedulerMcpOwner: MCP.ScopedConnectionOwner | undefined
@@ -563,6 +564,7 @@ export namespace Orchestrator {
           : undefined
       const currentSchedulerInputMessageID = event?.rootMessage ? event.rootMessage.messageID : undefined
       const currentVisibleInputMessageID = currentControlMessage?.messageID ?? currentSchedulerInputMessageID
+      executionInputMessageID = currentVisibleInputMessageID
       const resolveRuntimeSystem = async () => {
         requireTask(taskID)
         const liveTaskProjection = await describeTask(taskID)
@@ -943,6 +945,10 @@ export namespace Orchestrator {
         }
         promptInFlight = false
       } finally {
+        const occurrence = SessionStatus.executionOccurrence(agentSession.id)
+        if (!executionInputMessageID && promptGenerationOwner && occurrence?.owner === promptGenerationOwner) {
+          executionInputMessageID = occurrence.inputMessageID
+        }
         // SessionPrompt cancellation rejects attached callers before its
         // background loop finishes unwinding the active model-turn owner.
         // Exceptional exits therefore have to settle that exact run-once
@@ -1066,13 +1072,18 @@ export namespace Orchestrator {
       //      decides whether to retry / restart / fail. We do NOT stamp
       //      task.error on an abort: aborts are control-flow signals,
       //      not task-broken states.
-      const wasCtrlAborted = executionSignal.aborted
+      const cancellation = isExecutionCancellationError(error)
+        ? error
+        : isExecutionCancellationError(executionSignal.reason)
+          ? executionSignal.reason
+          : undefined
+      const wasCancelled = executionSignal.aborted || cancellation !== undefined
       // A second wake may attach to the Session while the current prompt owner
       // is still unwinding. Its natural closure rejects that attached caller
       // with this exact disposition; the occurrence is not a provider,
       // scheduler, or Task failure. The accepted ingress remains authoritative and
       // will reconstruct current facts on its own turn.
-      if (error instanceof SessionPromptLoopFinishedError && !wasCtrlAborted) {
+      if (error instanceof SessionPromptLoopFinishedError && !wasCancelled) {
         log.info("orchestrator prompt owner closed before attached wake produced a result", {
           taskID,
           note: event?.note,
@@ -1083,21 +1094,22 @@ export namespace Orchestrator {
       const structured = serializeOrchestratorTaskError(error)
       const latestMessageID = agentSessionID ? await latestSessionMessageID(agentSessionID) : undefined
       const failedBeforeMessageMaterialized =
-        !wasCtrlAborted && (!agentSessionID || latestMessageID === wakeStartMessageID)
+        !wasCancelled && (!agentSessionID || latestMessageID === wakeStartMessageID)
       const abortReasonText = (() => {
-        if (!wasCtrlAborted) return undefined
+        if (!wasCancelled) return undefined
+        if (cancellation) return cancellation.origin.reason
         const reason = executionSignal.reason
         if (typeof reason === "string" && reason.length > 0) return reason
         if (reason instanceof Error && reason.message) return reason.message
         return "orchestrator aborted"
       })()
-      const logLevel = wasCtrlAborted ? log.info : log.error
-      logLevel(wasCtrlAborted ? "orchestrator aborted mid-prompt" : "orchestrator failed", {
+      const logLevel = wasCancelled ? log.info : log.error
+      logLevel(wasCancelled ? "orchestrator aborted mid-prompt" : "orchestrator failed", {
         taskID,
         note: event?.note,
-        errorName: wasCtrlAborted ? "OrchestratorAborted" : structured.envelope.errorName,
-        error: wasCtrlAborted ? abortReasonText : structured.message,
-        data: wasCtrlAborted ? undefined : structured.envelope.data,
+        errorName: wasCancelled ? "OrchestratorAborted" : structured.envelope.errorName,
+        error: wasCancelled ? abortReasonText : structured.message,
+        data: wasCancelled ? undefined : structured.envelope.data,
       })
       if (AgentTrace.isEnabled() && agentSessionInfo) {
         recordOrchestratorTurnTraceBestEffort(agentSessionInfo, {
@@ -1105,8 +1117,20 @@ export namespace Orchestrator {
           taskID,
           agentName: "orchestrator",
           kind: "orchestrator_wake_failure",
-          error: wasCtrlAborted ? abortReasonText : structured.message,
+          error: wasCancelled ? abortReasonText : structured.message,
         })
+      }
+      if (wasCancelled && agentSessionInfo && executionInputMessageID) {
+        try {
+          await publishSettledSessionTerminalStatus({
+            session: agentSessionInfo,
+            taskID,
+            inputMessageID: executionInputMessageID,
+            status: { type: "terminal", reason: "aborted", error: abortReasonText },
+          })
+        } catch (settlementError) {
+          if (!(settlementError instanceof NotFoundError)) throw settlementError
+        }
       }
       if (terminalConversation) throw error
       if (failedBeforeMessageMaterialized) {
@@ -1125,12 +1149,10 @@ export namespace Orchestrator {
             sessionID: agentSessionID,
             error,
           })
-        } else if (wasCtrlAborted) {
-          // Abort path: synthesize an envelope from the ctrl reason so the
-          // artifact records the explicit cancellation reason — the next wake's
-          // describe needs to know WHY the prior turn was interrupted, not just
-          // that it threw an opaque "session cancelled" Error from
-          // SessionPromptState.cancel.
+        } else if (wasCancelled) {
+          // The Prompt and wake have independent controllers. Keep the
+          // original cancellation reason in the interruption artifact;
+          // the assistant Message retains its structured origin.
           await recordOrchestratorSessionErrorEnvelope({
             taskID,
             sessionID: agentSessionID,
@@ -1154,14 +1176,12 @@ export namespace Orchestrator {
       // already exhausted here; there is no remaining prompt owner and no
       // automatic wake. Persist terminal Session/Task truth and require an
       // explicit Retry to open another execution window.
-      if (!wasCtrlAborted) {
+      if (!wasCancelled) {
         try {
           await settleOrchestratorExecutionFailure({
             taskID,
             session: agentSessionInfo,
-            inputMessageID: agentSessionID
-              ? SessionStatus.executionOccurrence(agentSessionID)?.inputMessageID
-              : undefined,
+            inputMessageID: executionInputMessageID,
             envelope: structured.envelope,
             taskError: structured.taskError,
           })

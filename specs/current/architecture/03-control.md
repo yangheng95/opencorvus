@@ -116,6 +116,15 @@ and causation event through Message error projection. Replaced leases, consumed
 activations and superseded epochs retain their existing fence classification;
 accepted activity settlement retains its separate exact-outcome contract.
 
+Orchestrator and standalone delegation treat an original typed Prompt
+cancellation as cancellation independently of their outer wake or parent
+signal. After physical Prompt settlement, the Orchestrator publishes aborted
+for its captured input Message through the existing settled publication owner.
+That input comes from its actual control/scheduler Message or the occurrence
+bound to its captured Prompt owner. Later Session inputs keep their own facts;
+ordinary Provider failures retain terminal/error and the first-terminal latch
+keeps its existing authority.
+
 Graceful shutdown distinguishes physical Prompt ownership from Task execution.
 The exact cancellation receipt captures the current input occurrence before
 requesting physical abort. A genuinely published idle or terminal input retains

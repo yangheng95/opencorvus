@@ -231,7 +231,11 @@ export const DelegateAgentTool = Tool.define(DELEGATE_AGENT_TOOL_ID, {
         output,
       }
     } catch (error) {
-      if (ctx.abort.aborted || (error != null && Message.AbortedError.isInstance(error))) {
+      if (
+        ctx.abort.aborted ||
+        isExecutionCancellationError(error) ||
+        (error != null && Message.AbortedError.isInstance(error))
+      ) {
         if (ctx.abort.aborted) SessionPrompt.cancel(child.id, child.directory, childCancellationOrigin())
         await SessionStatus.set(
           child.id,

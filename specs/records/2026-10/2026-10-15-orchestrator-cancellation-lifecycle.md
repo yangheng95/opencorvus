@@ -1,0 +1,60 @@
+# 独立Prompt取消的执行终态
+
+## Recall
+
+持续单agent自主迭代，最新人工要求覆盖旧goal中的多agent文字。上一goal turn为progress：173938d4ac8f24b412c372fc9f19e40c9097e4eb已正常推送并fresh fetch确认，31项后端合同、8包类型检查和真实Sol活动Stop已交付。当前HEAD相同，仅原有.bun、packages/opencorvus/bun未跟踪，保留。本批428不创建开发子agent，不创建产品执行成员；测试中的隔离Session夹具不是模型委派。已有412/426历史保留，不清库、不改schema、不重写事件、不发布、不创建分支/worktree。真实Provider仍使用已授权完整auth/models和gpt-6.1-sol，所有请求流式，凭据不入日志/spec/提交。
+
+## 已读资料与修改前分析
+
+已读426 Recall、原Stop截图与facts-stopped、03-control、07-panel/07-panel-reactivity、所有SessionStatus.set和publishSettledSessionTerminalStatus生产调用、Orchestrator.processTask/processInvocation及外层loop、Task cancelTaskOnce、cancellation-scope、Task-agent lifecycle、SessionLoop/Prompt state/status-publication、Wake、projectedAdapterError、delegate_agent及其后端测试。全仓搜索类型定义、调用、同语义取消判断与既有决策；本次尚无产品源码修改。browser验收继续使用computer-use技能推荐的Browser API，只操作自有隔离页面；不操作已有非自有IAB页2或用户窗口。
+
+现象是426真实Task主视图Cancelled44秒仍呈现红色Error details。数据明确：原assistant为MessageAbortedError且来源完整；原agent.execution.lifecycle seq8是idle，Task seq9取消；seq11随后却发布terminal/error，文字ExecutionCancellationError: Operator stopped the active task from the composer。不能先把它当CSS问题或隐藏诊断。该原始事实已存在提交证据中，不重写历史来通过。
+
+直接生产根因：orchestrator/agent.ts catch只用executionSignal.aborted识别取消，而SessionPrompt.cancel会以原ExecutionCancellationError立即拒绝附加调用者；该物理Prompt信号与根wake executionSignal是独立控制对象。即使Prompt已被明确取消，wake信号仍可未abort，catch便记录普通stream-error并进入settleOrchestratorExecutionFailure，实际发布错误终态。该函数在Task已终态检查之前发布Session事实，因此已Cancelled的Task仍收到错误执行状态。426只修写围栏到Message的typed原因，未修该独立catch，故未根治显示冲突。
+
+横查发现同语义独立父/子信号入口delegate_agent已导入canonical isExecutionCancellationError，来源传递正确，但catch只识别父abort和Message.AbortedError；原Prompt直接抛ExecutionCancellationError亦会进入error分支。共享根因为只认外部控制器而忽略原typed取消，不新增关键词/状态推测。SessionWake.loopFailureDisposition和projectedAdapterError已正确识别同一typed协议；SessionLoop已跳过把typed取消发布成普通错误。SessionActor只有定义没有仓库生产调用，其字符串取消旧设计不属于本次实际入口，记录排除，不扩大清理。
+
+## 共享机制、影响与风险
+
+| 范围 | 当前证据与决定 |
+| --- | --- |
+| Task/Mission/Session入口 | 普通Task、Mission相关Task和terminal-conversation共用processInvocation；所有Task取消入口落原request再收物理Prompt。独立Session及delegate_agent保留其各自原控制者；修typed分类而不把Task cancelled名称当取消证据。 |
+| 原轮次与正常/终态 | 保留已有ExecutionCancellationError原origin；Prompt inner finally已经等待原run-once wake或物理owner收尾，再清运行合同，外层catch才执行。取消终态仍通过唯一publishSettledSessionTerminalStatus，保留先到终态闩锁及确切input身份；普通Provider故障仍terminal/error。 |
+| 重试/恢复 | Task cancel刻意publishTerminalStatus=false，防止历史终态保留成为取消门槛；不修改该合同，不把运行时物理收尾退化为UI状态。恢复继续读取原协议事件，旧历史error不重写。没有新队列、重试、扫描或自动wake。 |
+| 串并行/多项目 | 原项目独立publication owner和Session/input复合身份保持；真实Task FIFO限制同一root并写。聚焦合同验证原取消、普通错误及独立peer；不同Project夹具独立运行，不能用其替代真实多项目并发资格。 |
+| UI与公开协议 | UI当前按真实terminal/error渲染红块是正确的，先修生产状态。没有新Message/Part或协议字段，无schema迁移；原取消原因仍通过消息和真实诊断可读。成员历史中MessageAbortedError的单独展示行为本批未取得同类真实证据，保留待后续体验，不能宣称已全部解决。 |
+
+主要风险是把普通故障错误归类为取消，或取消后留下idle而非执行终态；必须同时验证typed取消在外部信号未abort时得到aborted事实、原真正Provider故障得到error事实，且真实页面新Stop收敛为Cancelled。附加执行轮次身份须在修改时复核，不以当前Session名猜测原input。没有持久格式变更或数据迁移。
+
+## 实施前方案与验收
+
+1. 先增加聚焦非UI正向合同，进入真实Orchestrator和delegate_agent catch，隔离模型/Prompt边界只用于确定性复现，不冒充端到端。覆盖用户/Mission原typed取消、外部父信号仍有效、普通故障的明确terminal/error及独立peer状态；保留修改前失败日志。不得新增或运行UI自动化测试。
+2. Orchestrator用原typed取消或已有外部abort识别取消，日志/取消诊断保留原reason；在物理finally之后通过唯一settled publication发布该确切输入的aborted。保留真实故障路径、Task取消物理合同和terminal latch，不新增fallback。delegate_agent同一catch补原typed取消判断。若发现调用身份缺口，先记录证据再修当前owner，不能加并行状态源。
+3. 先用现有正式UI bundle在新自有18577/ui重读426原错误页，截图人工确认before；收尾后改生产。后续18579/ui运行修复后的真实服务，600秒硬期限/180秒无活动/最多12流式请求，完整配对预检；正式CLI仅创建一条当前执行者直接长文的Task，活动正文点击Stop，截图并人工复核、只读原事件/消息/epoch/Request核对新aborted终态。刷新自有页面确认hydration，再验证语言切换和原诊断可见范围。不伪称旧历史已修复。
+4. 公开shutdown、原进程句柄join、exact实例物理/output/request收尾与复制配对退休均有独立回执；复用成熟413 wrapper，必要工具错误先修后重跑。根类型、当前文档/架构及聚焦合同检查，差异复核、范围提交、fresh fetch/merge完整pending检查与正常push。goal保持active，自主进入后续批次。
+
+## 修改前复现与实施决定
+
+正式聚焦runner首版原94799 exit1，1 pass/5 fail；四项用户/Mission取消均实际到达目标catch并发布error。第五项是测试错误读取TaskRow.status（当前Task状态来自生命周期投影），已保留contracts-preparation-error.log并改用唯一taskLifecycleProjection，不改生产来满足过期字段。修正后原56987的结果以原日志为准。两条真实Provider故障对照及独立peer状态是必要正向资格，不新增UI断言。
+
+真实before服务18577完成凭据/catalog/actual gpt-6.1-sol流式预检，人工打开原426 Task，01-before-cancelled-error.jpg在实际1280×720默认桌面视口显示Cancelled与红色错误块，已人工查看；未调整viewport。自有页面已关闭，非自有页2保持原状；公开shutdown200、原17265 exit0，原物理与配对退休回执保留。
+
+终态发布前另核查身份：旧错误catch临时读取Session当前occurrence，不能作为后来输入的取消权威。实施时保留本次已派生的control/scheduler input；仅在Prompt内部创建creator输入的真实路径，物理finally读取与本次捕获Prompt owner相同的原occurrence，记录其input。取消及普通故障均向该确切input发布，不能晚到时改写新input；现有terminal latch保持。没有新的持久身份/配置或兼容路径。
+
+修正fixture后的原56987 join65dc46 exit1：2 pass/4 fail；两个普通Provider错误对照通过，用户/Mission在两处生产catch的四例均实际得到terminal/error而非期望aborted，复现根因。按已落盘方案修改Orchestrator typed分类、原取消reason及捕获input的settled publication，并补delegate_agent同类判定；没有前端源码改动或错误过滤。
+
+## 最终真实验收
+
+正式后端runner原24681 joindc79be exit0：本批6项/19断言、原取消协议5项/14断言、实际公共abort/跨两项目shutdown与队列保留4项/9断言均通过。按确切执行轮次风险补跑原71611 join574d81 exit0，Session occurrence生命周期7项/14断言通过，覆盖连续输入、standby、失败发布后闩锁恢复和同步重入；合计22项/56断言。Prompt/模型mock边界只作为确定性单元合同，没有模型请求，不冒充真实端到端。根typecheck原78341 join05ac4a exit0，8包通过（本次后端重新执行，其余7包缓存）；新测试仅格式化，没有改变测试语义。
+
+真实after scope为orchestrator-cancellation-428-after-a459789d-278d-4e52-9127-b79fbb69c02e，18579/ui，使用当前后端源码和与before相同的正式前端bundle。正式CLI原1fa1a6 exit0，创建tsk_g00VY2rPuS00esj4xonG，requestID=b17d154a-9be9-4eba-979c-515f03612c52；仅root/orchestrator两Session，没有产品成员、工具调用或新开发agent。原b3006d只读事实证明assistant尚未completed且实际lifecycle为streaming；02原图显示真实增长正文与Running22秒。人工点击Stop后03显示Cancelled29秒，正文原段落保留。
+
+原f0f72c事实与4b21d9审阅：原取消事件pev_g0VY2rXX900gKPVR5vmN、Task终态pev_g0VY2rXYQ001OtzejQKX均epoch1/correlation=7151f328-c452-4e38-8440-edec9ca5e816。assistant msg_h9r1JjubdenvUHg7YOqv为MessageAbortedError，保留user/task.cancel/overlay.composer_stop、原requestID/reason和causationEventID；实际再次进入426修复的Task-root围栏分支。当前lifecycle pev_g0VY2rXYZ00PUqiAn5AB针对该assistant.parentID原control输入发布terminal/aborted/error=原reason。原OrchestratorAborted中断artifact仍存在，原故障与来源没有被隐藏。
+
+人工刷新后04仍显示同一取消事实与正文；通过当前设置切换简体中文并返回，05/07显示已取消29秒和本地化控件。实际打开环境信息，当前仅有项目、分支与文件工具，不把它宣称为取消原因展示入口。原5e27bc正式GET session.messages HTTP200完整返回同一MessageAbortedError及结构化取消origin，与SQLite原件一致。另在修复后服务真实打开旧426历史，06仍呈现原错误详情；它的错误lifecycle不可改写，明确证明本批修生产者而非用UI遮蔽历史错误。最后返回新Task并截图07，七张原图均人工查看。没有新的UI自动化、截图断言或源码文案断言。
+
+before为当前旧历史复验，不是新创建业务Task的旧版Stop；实际只有两条Sol预检流均200/eof。after四条实际gpt-6.1-sol流均200，三条eof、一条实际orchestrator业务流在Stop时aborted，读取器均结算。完整auth/models各自预检和原scope预算保持。after公开shutdown原1f16f3 HTTP200、原42937 join416400 exit0；before原17265 exit0。两scope各自physical/output/request完整、exact host/target实例退场及复制配对退休；Task业务取消与Native物理收尾分别记录。自有页面均关闭，未设置viewport override，非自有页2仍保留。
+
+默认用户库当前只读观察仍user_version=1、size=1970176、mtime=2026-10-13T19:11:57.627Z；产品验收只使用原自有隔离runtime。没有迁移、数据清空或发布。本批只对真实主Task Stop取得Provider端到端资格，Mission/delegate入口是已注明边界的后端合同，不泛称全场景真实验收。必要脚本、失败/成功日志、public Message回执及物理事实归档；文档和架构检查在最终记录落盘后执行，随后范围提交和正常push。
+
+最终docs:check原daa1a8 exit0（345操作/26分组），architecture-index原d0fb77 exit0（20文档及全部链接）。原197715实际解压62个证据文件中的文本，并与内存中的真实凭据值比较，通过披露复核；不输出或提交凭据值。完整源差异审阅与git diff --check通过，提交只含本批两个生产入口、聚焦后端测试、03-control合同及对应方案/索引/证据，保留原有两处未跟踪Bun目录。

@@ -466,3 +466,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [取消激活原因传播](2026-10-15-cancellation-activation-provenance/README.md)：确定性复现、原事件和实际资源收尾。
 
 - [Unicode空白文件身份](2026-10-15-unicode-workspace-path/README.md)：实际快照、路径/字节身份及Task验收。
+
+- [独立Prompt取消执行终态](2026-10-15-orchestrator-cancellation-lifecycle/README.md)：原事件、正向合同与人工页面复核。
