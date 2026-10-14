@@ -104,7 +104,13 @@ Prepare/Register/Before/After四原Native client均0，注册4+只读4/13共21�
 
 工具原件保留：首baseline复制将SDK OpenAPI写错为js/openapi而ENOENT；六已复制原件保，剩余两个从明确Git HEAD读取并标记来源，不伪造未捕获before diff。首工具构造器准确seam有两个匹配而失败，七prepared脚本已写、Native wrapper未改/无进程；更正唯一wrapper后再syntax和首次Prepare。第一个派生review错误按猜测payload keys筛root/ignore，accepted子集为空而完整原请求仍在；原review0保留，更正后按实际原log prefix分类，Root58/ignore43原请求收齐，final review0。所有纠错均不覆盖原输出或使用可变源码摘要验收。
 
-非Windows宿主、unknown target IO、所有并发迟到时序与external drag/drop仍未资格，最后外部retarget不承诺原子性；完整目标持续active。当前正常文档/架构、归档、范围提交与latest upstream/normal push收尾尚待回执，不声明整个持续目标完成。
+非Windows宿主、unknown target IO、所有并发迟到时序与external drag/drop仍未资格，最后外部retarget不承诺原子性；完整目标持续active，不声明整个持续目标完成。
+
+当前范围提交b767b93259c9c4766d91b70c1a0bd168df4b5971已经成功，217条路径；真实index只精确收回本任务patch后为空。201份原捕获与原件/committed archive直接字节相同。当前docs:check345/26、architecture19及本scope diff check均0。fresh fetch/merge后Root完整核验四待推送提交：已授权本地Provider身份e3c3d1aa73bfc2b071180d85a21773bdcc4b79b7、纯文档/原406计划79ee5303953bdb14bd71683d96796535a3f00c12、本浏览b767b9325和IPv6零段0fe812062088fc2aa6bc5f388d6e03b6ac078ae6；新增第四项先触发review原1，全文读其单一函数/正向51/91/真实配置/原图及正常进程收尾后重新fresh sync/review0，没有按标题放行。peer截图复核不称Root本浏览的新UI操作或重跑。
+
+本轮正常push原1，2026-10-14T01:25:32.343Z至01:26:49.624Z，全部8包typecheck和route/docs通过，在control-lease-owners拦下：working permission/authority.ts有2个acquire site，DECLARED_OWNERS仍声明1。实际全源码与差异确认它是其它尚未提交的354行权限恢复改动：一个原MCP恢复helper的lease获取（当前345行），一个正常canonical start与lease同事务的新获取（1107行）。该354行改动没有混入本217条交付；当前HEAD自身仍是原单入口及声明1。不能只改checker数字并提交与HEAD源码不一致的声明，也不能把未经本批完整Task/Mission/Session恢复验收的权限改动一并发布。未绕过hook、创建branch/worktree、移动用户文件或修改对方权限源。登记失败不等于已观察到生产调度事故；不借此声称共享权限恢复已修好或已资格。
+
+本轮四项仍未推送，原stdout/stderr/exit、fresh fetch/merge、完整pending review与commit/index证据保存；原1不覆盖为0。后续先核对该权限变更与声明是否已作为同一已授权验证交付收敛；状态改变后fresh fetch/merge、重新审完整待推送集合和必要检查，正常push及精确远端ancestor确认。Root自身所有页面/服务/模型均已闭合；浏览功能本地实现与验收已达成，远端交付尚未达成，持续目标保持active。
 
 ## 第一阶段有限真实调查输入
 

@@ -1,0 +1,6 @@
+{
+  "exitCode": 1,
+  "stdout": "",
+  "stderr": "file:///D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/review-browse-outgoing.mjs:10\r\nif(pending.some(id=>!known.includes(id)))throw Error('New outgoing commit requires independent review')\r\n                                               ^\r\n\r\nError: New outgoing commit requires independent review\r\n    at file:///D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/review-browse-outgoing.mjs:10:48\r\n    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)\r\n    at async node:internal/modules/esm/loader:639:26\r\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)\r\n\r\nNode.js v25.7.0\r\n",
+  "atUtc": "2026-10-14T01:21:46.083Z"
+}

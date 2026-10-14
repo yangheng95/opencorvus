@@ -1,0 +1,52 @@
+ M packages/opencorvus/script/compaction-policy-case.ts
+ M packages/opencorvus/script/replay-compaction-errors-validator.ts
+ M packages/opencorvus/src/agent/prompt/compaction.txt
+ M packages/opencorvus/src/file/index.ts
+ M packages/opencorvus/src/permission/authority.ts
+ M packages/opencorvus/src/server/routes/file.ts
+ M packages/opencorvus/src/session/compaction-evidence-reader.ts
+ M packages/opencorvus/src/session/compaction-working-context.ts
+ M packages/opencorvus/src/session/compaction.ts
+ M packages/opencorvus/src/session/index.ts
+ M packages/opencorvus/src/session/message.ts
+ M packages/opencorvus/src/work-ledger/projection.ts
+ M packages/opencorvus/test/compaction-integrity.test.ts
+ M packages/opencorvus/test/compaction-policy-action.test.ts
+ M packages/opencorvus/test/file-ignore-coordinate-contract.test.ts
+ M packages/opencorvus/test/file-link-entry-contract.test.ts
+ M packages/opencorvus/test/memory/session-memory.test.ts
+ M packages/opencorvus/test/permission-two-mode.test.ts
+ M packages/overlay/src/components/CommandPalette.tsx
+ M packages/overlay/src/components/FileExplorerPanel.tsx
+ M packages/overlay/src/components/InteractionCard.tsx
+ M packages/overlay/src/components/ui/Checkbox.tsx
+ M packages/overlay/src/components/ui/ComboboxControl.tsx
+ M packages/overlay/src/i18n/en-US.json
+ M packages/overlay/src/i18n/zh-CN.json
+ M packages/overlay/src/services/file-workbench.ts
+ M packages/overlay/src/services/provider-form.ts
+ M packages/overlay/src/styles/surfaces/card.css
+ M packages/overlay/src/styles/surfaces/cmdk.css
+ M packages/overlay/test/provider-form.test.ts
+ M packages/sdk/js/src/gen/sdk.gen.ts
+ M packages/sdk/js/src/gen/types.gen.ts
+ M packages/sdk/openapi.json
+ M packages/web/src/content/docs/reference/api.mdx
+ M packages/web/src/content/docs/zh-cn/reference/api.mdx
+ M specs/README.md
+ M specs/artifacts/2026-10-13-compaction-stress/final-request-ledger.json
+ M specs/artifacts/2026-10-14-directory-target-navigation/README.md
+ M specs/artifacts/README.md
+ M specs/current/architecture/07-panel.md
+ M specs/current/architecture/project-memory.md
+ M specs/records/2026-10/2026-10-13-compaction-stress.md
+ M specs/records/2026-10/2026-10-14-directory-target-navigation.md
+ M specs/records/2026-10/2026-10-14-execution-owner-recovery-406.md
+ M specs/records/2026-10/README.md
+?? .bun/
+?? packages/opencorvus/bun/
+?? packages/opencorvus/src/session/compaction-user-text.ts
+?? packages/opencorvus/test/compaction-user-text.test.ts
+?? packages/opencorvus/test/fixture/permission-execution-owner-process-worker.ts
+?? packages/opencorvus/test/permission-execution-owner-process.test.ts
+?? packages/opencorvus/test/work-ledger-search.test.ts

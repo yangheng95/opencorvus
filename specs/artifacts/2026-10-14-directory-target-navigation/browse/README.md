@@ -11,3 +11,5 @@
 关闭Root自有Tab5后，精确参数普通shutdown和原launcher/native均0，三joins、四writes及physical/output/request完成，原birth退休/port释放。旧迁移修复318e80577的fresh fetch/merge、正常push0和精确远端证明承接在previous-relocation-delivery。
 
 非Windows宿主、未知target IO、全部并发迟到窗口、external drag/drop与原子外部retarget仍未资格。构建/类型/归档不替视觉或真实功能；持续目标保持active，不声明全平台、发布或整个目标完成。
+
+当前功能范围提交b767b9325已完成。正常push原1被共享未提交permission/authority两个入口与声明1的不一致拦下；当前HEAD自身原单入口/声明1一致，本浏览没有混入权限改动。具体代码/提交范围、四未推送提交和后续动作见当前Recall。原检查失败与进程关闭证据保持，本地验收通过不冒充远端交付。
