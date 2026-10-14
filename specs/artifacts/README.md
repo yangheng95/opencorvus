@@ -149,7 +149,7 @@
 
 - [388 MCP 结构化结果](2026-10-13-mcp-structured-result-388/README.md)：后台红绿、12次真实Sol流式请求、页面截图与正常收尾。
 
-- [上下文压缩压力测试](2026-10-13-compaction-stress/README.md)：999 次真实请求；修复 Task 用户原文投递边界，Task/Mission 双项目 8 项压缩重启验收通过；保留 Luna 语义失败与未验收范围。
+- [上下文压缩压力测试](2026-10-13-compaction-stress/README.md)：999 次真实请求；目录分页支持有界请求，256 来源完成；1,024 来源触及 20 步上限，原始证据完整保留；96 项契约通过，Luna 语义与规模验收仍未全部通过。
 
 - [持续目标真实崩溃恢复](2026-10-13-continuous-goal-crash-recovery/README.md)：Task/Mission正式启动恢复、真实Provider与计量证据。
 

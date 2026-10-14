@@ -1,0 +1,25 @@
+{
+  "mechanicalReview": "passed",
+  "largeCatalogCompletion": "failed_at_1024_sources",
+  "paidRequests": 0,
+  "results": [
+    {
+      "sources": 256,
+      "observedStatus": "completed",
+      "requests": 19,
+      "pages": 8,
+      "catalogChars": 122871,
+      "deliveredChars": 122871,
+      "originalMessages": 258
+    },
+    {
+      "sources": 1024,
+      "observedStatus": "step_limit",
+      "requests": 20,
+      "pages": 10,
+      "catalogChars": 490743,
+      "deliveredChars": 163067,
+      "originalMessages": 1026
+    }
+  ]
+}

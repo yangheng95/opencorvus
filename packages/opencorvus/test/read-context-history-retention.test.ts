@@ -296,7 +296,10 @@ test("uses the same exact failure occurrence and convergence evidence in normal 
   expect(diagnostics(await Message.toModelMessages(history, model))).toEqual(expected)
   expect(
     diagnostics(
-      SessionCompaction.TestHooks.compactionTranscriptMessages(history, {
+      SessionCompaction.TestHooks.createCompactionTranscript(history, {
+        id: "msg_compactor_context",
+        sessionID: assistant.info.sessionID,
+      }).render({
         system: [],
         tools: {},
         promptText: "Summarize the failure.",

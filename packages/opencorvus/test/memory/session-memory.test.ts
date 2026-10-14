@@ -785,7 +785,11 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
             (part) => part.type === "tool" && part.callID === toolCallID && part.state.status === "completed",
           )
           const providerProjection = await Message.toModelMessages([summary], resolvedModel)
-          const transcriptProjection = SessionCompaction.TestHooks.compactionTranscriptMessages([summary], {
+          const transcript = SessionCompaction.TestHooks.createCompactionTranscript([summary], {
+            id: "msg_compactor_memory",
+            sessionID: session.id,
+          })
+          const transcriptProjection = transcript.render({
             system: [],
             tools: {},
             promptText: "Summarize the checkpoint.",
@@ -852,7 +856,25 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
                   },
                 ],
               },
-              { role: "user", content: [{ type: "text", text: "Summarize the checkpoint." }] },
+              {
+                role: "user",
+                content: [
+                  { type: "text", text: "Summarize the checkpoint." },
+                  {
+                    type: "text",
+                    text: JSON.stringify({
+                      kind: "compaction_catalog_reference",
+                      messageID: "msg_compactor_memory",
+                      field: "catalog",
+                      messageCount: 1,
+                      inlineMessages: 1,
+                      totalChars: transcript.catalog.content.length,
+                      nextOffset: null,
+                      offsetUnit: "utf16_code_units",
+                    }),
+                  },
+                ],
+              },
             ],
             compactedEvents: [session.id],
             controlStatus: { status: "consumed" },

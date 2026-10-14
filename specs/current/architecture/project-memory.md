@@ -79,8 +79,11 @@ Project memory has three explicitly scoped authorities:
 
    The compaction transcript includes original authors and exact text/Tool Part
    and call identities. Text, Tool fields and redacted Message diagnostics use
-   one request-budget-aware projection: exact source references form the minimum;
-   complete fields are expanded in stable ascending additional estimated size,
+   one request-budget-aware projection. A compiled minimum catalog records the
+   complete selected history with original roles, Message/Part/call identities
+   and exact omitted-field references. Only a chronological prefix of complete
+   catalog Messages is inline when that index exceeds the request window;
+   complete fields in that prefix expand in stable ascending additional estimated size,
    then optional bounded previews consume remaining space. System instructions,
    prepared Tool schemas and the final summarizer prompt share that same budget.
    Original chronology and identities remain unchanged. Incremental script counts
@@ -88,6 +91,20 @@ Project memory has three explicitly scoped authorities:
    still apply, including on later evidence-read steps. Required context that
    cannot fit produces a durable ContextOverflowError rather than a checkpoint.
    Token estimates do not guarantee fit under every model's exact tokenizer.
+   The helper prompt carries `compaction_catalog_reference` with its real helper
+   Message identity and the exact UTF-16 offset of the next unlisted Message.
+   `ReadCompactionEvidence(message_id=helper, field=catalog)` pages that same bound
+   catalog through the existing read-window fitting. Its content is one JSON
+   array of minimal transcript projections; pages may split serialized records.
+   Readers preserve unfinished fragments and exact IDs across pages/notes.
+   Catalog ownership is assistant/compaction; the indexed original source role
+   and author remain distinct. Catalog pages are projection data, not user
+   authority. The ordinary Part readers recover the complete original fields.
+   Catalogs are compiled once per attempt, not a new persistent content store;
+   actual read and note Tool Parts retain their normal durable evidence.
+   Paging bounds request size, not total work: existing helper step limits can
+   still end a large scan with `CompactionContinuationMissingError`. Original
+   history remains authoritative after such a failed attempt.
    Initial packing runs after the shared LLM entry has composed request language,
    plugin transformations, parameters and actual Tool declarations. This final
    envelope supplies the same input ceiling used by the ordinary request checks.

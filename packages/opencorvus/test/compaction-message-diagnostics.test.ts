@@ -110,7 +110,10 @@ function expectExactFailure(data: any, info: Message.Assistant) {
 
 test("long error-only diagnostics publish an exact Message evidence locator", () => {
   const info = failedInfo()
-  const projected = SessionCompaction.TestHooks.compactionTranscriptMessages([{ info, parts: [] }], {
+  const projected = SessionCompaction.TestHooks.createCompactionTranscript([{ info, parts: [] }], {
+    id: "msg_compactor_diagnostics",
+    sessionID: info.sessionID,
+  }).render({
     system: [],
     tools: {},
     promptText: "Summarize the diagnostics.",

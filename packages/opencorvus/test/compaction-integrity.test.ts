@@ -264,7 +264,10 @@ describe("compaction request and continuation contracts", () => {
       { info: { id: "msg_result", role: "assistant", agent: "work", author: "work" }, parts: [part] },
     ] as Message.WithParts[]
     const transcript = JSON.stringify(
-      SessionCompaction.TestHooks.compactionTranscriptMessages(history, {
+      SessionCompaction.TestHooks.createCompactionTranscript(history, {
+        id: "msg_compactor_integrity",
+        sessionID: part.sessionID,
+      }).render({
         system: [],
         tools: {},
         promptText: "Summarize the result.",

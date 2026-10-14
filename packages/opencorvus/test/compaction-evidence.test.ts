@@ -169,7 +169,10 @@ describe("compaction evidence fidelity", () => {
   test("exposes exact text, input and trace locators in the bounded transcript", () => {
     const { messages } = history()
     const transcript = JSON.stringify(
-      SessionCompaction.TestHooks.compactionTranscriptMessages(messages, {
+      SessionCompaction.TestHooks.createCompactionTranscript(messages, {
+        id: "msg_compactor_evidence",
+        sessionID: messages[0]!.info.sessionID,
+      }).render({
         system: [],
         tools: {},
         promptText: "Summarize the evidence.",

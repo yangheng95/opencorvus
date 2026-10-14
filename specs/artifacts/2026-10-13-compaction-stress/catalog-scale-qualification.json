@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-14",
+  "status": "partial",
+  "requestCapacity": 19000,
+  "helperStepLimit": 20,
+  "paidRequestsAdded": 0,
+  "cumulativePaidRequests": 999,
+  "mechanicalContracts": {
+    "status": "passed",
+    "distinctTests": 96,
+    "files": 9,
+    "groups": {
+      "transcriptBudget": 13,
+      "evidence": 10,
+      "integrity": 13,
+      "messageDiagnostics": 10,
+      "sessionMemory": 12,
+      "contextHistoryRetention": 11,
+      "workingContext": 9,
+      "readPressure": 5,
+      "userText": 13
+    }
+  },
+  "actualLocalPaths": {
+    "mechanicalReview": "passed",
+    "largeCatalogCompletion": "failed_at_1024_sources",
+    "paidRequests": 0,
+    "results": [
+      {
+        "sources": 256,
+        "observedStatus": "completed",
+        "requests": 19,
+        "pages": 8,
+        "catalogChars": 122871,
+        "deliveredChars": 122871,
+        "originalMessages": 258
+      },
+      {
+        "sources": 1024,
+        "observedStatus": "step_limit",
+        "requests": 20,
+        "pages": 10,
+        "catalogChars": 490743,
+        "deliveredChars": 163067,
+        "originalMessages": 1026
+      }
+    ]
+  },
+  "expandedTypecheck": {
+    "exitCode": 0,
+    "session": 58685
+  },
+  "joins": [
+    {
+      "session": 67710,
+      "exitCode": 0
+    },
+    {
+      "session": 75231,
+      "exitCode": 0
+    },
+    {
+      "session": 57042,
+      "exitCode": 0
+    },
+    {
+      "session": 5556,
+      "exitCode": 0
+    },
+    {
+      "session": 45619,
+      "exitCode": 0
+    }
+  ],
+  "scope": "One compiled source catalog and bounded rendering path, existing evidence reader, ordinary durable Tool pages/notes, unchanged original Session history.",
+  "limits": [
+    "1024-source completion failed at the existing 20-step limit; the positive error contract is not successful compression.",
+    "Loopback provider scripts prove persistence, request, trace and exact-source mechanics, not semantic model selection or catalog understanding.",
+    "Catalog construction and bound snapshots use memory linear in source history.",
+    "Real Luna alternating authorization remains failed; broader providers, native product persistence and whole-OS power loss are unqualified."
+  ],
+  "review": "Read archived actual requests, Tool calls/results, cumulative read receipts, original and reopened Messages, checkpoint/control state, exact source selection and normal replay; no mutable-source hash gate.",
+  "documentChecks": {
+    "exitCode": 0,
+    "session": 86564,
+    "commands": [
+      "docs:check",
+      "check:architecture-index"
+    ]
+  }
+}
