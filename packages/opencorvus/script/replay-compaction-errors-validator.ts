@@ -1,6 +1,10 @@
 import { Database } from "bun:sqlite"
 import { CompactionHandoff } from "../src/session/compaction-handoff"
 import { Message } from "../src/session/message"
+import { CompactionUserText } from "../src/session/compaction-user-text"
+import { projectToolPartInTransaction } from "../src/session/tool-part-facts"
+import { drizzle } from "drizzle-orm/bun-sqlite"
+import type { Database as StoredDatabase } from "../src/storage/db"
 
 function requiredEnv(name: string) {
   const value = process.env[name]?.trim()
@@ -61,10 +65,16 @@ try {
   }
   for (const entry of marker.covered_parts ?? []) {
     const source = messages.find((message) => message.id === entry.messageID)
-    if (source?.role !== "assistant") throw new Error(`Checkpoint ${summaryID} has no covered assistant ${entry.messageID}`)
-    const partIDs = new Set(database.query<{ id: string }, [string, string]>(
-      "SELECT id FROM part WHERE message_id = ? UNION ALL SELECT id FROM tool_part_request WHERE message_id = ?",
-    ).all(entry.messageID, entry.messageID).map((part) => part.id))
+    if (source?.role !== "assistant")
+      throw new Error(`Checkpoint ${summaryID} has no covered assistant ${entry.messageID}`)
+    const partIDs = new Set(
+      database
+        .query<{ id: string }, [string, string]>(
+          "SELECT id FROM part WHERE message_id = ? UNION ALL SELECT id FROM tool_part_request WHERE message_id = ?",
+        )
+        .all(entry.messageID, entry.messageID)
+        .map((part) => part.id),
+    )
     for (const bound of entry.parts) {
       if (!partIDs.has(bound.partID)) throw new Error(`Checkpoint ${summaryID} has no covered Part ${bound.partID}`)
     }
@@ -73,6 +83,29 @@ try {
     .map((part) => part.text)
     .join("\n\n")
   if (!text.trim()) throw new Error(`Checkpoint ${summaryID} has no final visible continuation`)
+  const reader = drizzle({ client: database }) as unknown as StoredDatabase.TxOrDb
+  const history: Message.WithParts[] = messages.map((info) => ({
+    info,
+    parts: database
+      .query<{ id: string; data: string }, [string]>(
+        "SELECT id, data FROM part WHERE message_id = ? ORDER BY time_created, id",
+      )
+      .all(info.id)
+      .map((row) => ({ ...JSON.parse(row.data), id: row.id, sessionID, messageID: info.id })),
+  }))
+  for (const message of history) {
+    const requests = database
+      .query<
+        { id: string; message_id: string; data: string; time_created: number },
+        [string, string]
+      >("SELECT * FROM tool_part_request WHERE message_id = ? AND json_extract(data, '$.tool') = ? ORDER BY time_created, id")
+      .all(message.info.id, CompactionUserText.TOOL_NAME)
+    for (const request of requests) {
+      const part = projectToolPartInTransaction(reader, { ...request, data: JSON.parse(request.data) })
+      if (part) message.parts.push(part)
+    }
+  }
+  const retained = CompactionUserText.project(CompactionUserText.selection(history, summaryID), history)
   console.log(
     JSON.stringify({
       status: "valid_checkpoint",
@@ -83,6 +116,12 @@ try {
       anchorID: marker.anchor_id,
       tailStartID: marker.tail_start_id,
       summaryCharacters: text.length,
+      retainedUserSources: retained.map((message) => ({
+        messageID: message.info.id,
+        role: message.info.role,
+        author: message.info.author,
+        parts: message.parts.map((part) => ({ partID: part.id, ...(part.type === "text" ? { text: part.text } : {}) })),
+      })),
       coveredMessages: marker.covered_parts?.length ?? 0,
       coveredParts: marker.covered_parts?.reduce((count, entry) => count + entry.parts.length, 0) ?? 0,
     }),

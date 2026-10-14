@@ -19,6 +19,7 @@ import { Session } from "../../src/session"
 import { SessionCompaction } from "../../src/session/compaction"
 import { CompactionEvidenceReader } from "../../src/session/compaction-evidence-reader"
 import { CompactionWorkingContext } from "../../src/session/compaction-working-context"
+import { CompactionUserText } from "../../src/session/compaction-user-text"
 import { SessionControl } from "../../src/session/control"
 import { LLM } from "../../src/session/llm"
 import { SessionLoop } from "../../src/session/loop"
@@ -474,6 +475,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
               expect(Object.keys(processInput.tools)).toEqual([
                 CompactionEvidenceReader.TOOL_NAME,
                 CompactionWorkingContext.TOOL_NAME,
+                CompactionUserText.TOOL_NAME,
               ])
               expect(processInput.stopWhen).toHaveLength(2)
               await Session.updatePart({

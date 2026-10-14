@@ -157,7 +157,8 @@ export namespace CompactionEvidenceReader {
     throw new EvidenceReadError(`Part ${part.id} has no readable ${field} field.`)
   }
 
-  export function create(messages: Message.WithParts[], fitPage?: PageFitter): AITool {
+  /** Bind exact canonical and recorded copy identities once for source readers. */
+  export function bind(messages: Message.WithParts[]) {
     const parts = readableParts(messages)
     const owners = new Map(messages.map((message) => [message.info.id, message.info]))
     const origins = new Map<string, { partID: string; owner: Message.Info; source: MessageCopyEvidence.Source }>()
@@ -187,6 +188,28 @@ export namespace CompactionEvidenceReader {
         }
       }
     }
+    return {
+      owners,
+      diagnosticOrigins,
+      resolvePart(partID: string) {
+        const origin = origins.get(partID)
+        const part = parts.get(origin?.partID ?? partID)
+        if (origin && (!part || MessageCopyEvidence.digest(origin.owner, part) !== origin.source.sha256)) {
+          throw new EvidenceReadError(
+            `Copied evidence ${partID} no longer matches its recorded source snapshot. Read the current Part ${origin.partID} explicitly.`,
+            "COMPACTION_EVIDENCE_STALE",
+          )
+        }
+        if (!part) throw new EvidenceReadError(`Part ${partID} is not readable in the bound Session snapshot.`)
+        const owner = owners.get(part.messageID)
+        if (!owner) throw new EvidenceReadError(`Part ${partID} has no owner in the bound Session snapshot.`)
+        return { part, owner, origin: origin?.source }
+      },
+    }
+  }
+
+  export function create(messages: Message.WithParts[], fitPage?: PageFitter): AITool {
+    const { owners, diagnosticOrigins, resolvePart } = bind(messages)
     return tool({
       description:
         "Read exact text, Tool input/output/failure/metadata by part_id, or credential-redacted assistant diagnostics by message_id. " +
@@ -249,15 +272,7 @@ export namespace CompactionEvidenceReader {
         } else {
           if (!input.part_id || input.message_id !== undefined)
             throw new EvidenceReadError("Part fields require exactly one part_id locator.")
-          const origin = origins.get(input.part_id)
-          const part = parts.get(origin?.partID ?? input.part_id)
-          if (origin && (!part || MessageCopyEvidence.digest(origin.owner, part) !== origin.source.sha256)) {
-            throw new EvidenceReadError(
-              `Copied evidence ${input.part_id} no longer matches its recorded source snapshot. Read the current Part ${origin.partID} explicitly.`,
-              "COMPACTION_EVIDENCE_STALE",
-            )
-          }
-          if (!part) throw new EvidenceReadError(`Part ${input.part_id} is not readable in the bound Session snapshot.`)
+          const { part, owner, origin } = resolvePart(input.part_id)
           resolved = await fieldValue(part, input.field)
           identity = {
             sessionID: part.sessionID,
@@ -266,14 +281,14 @@ export namespace CompactionEvidenceReader {
             ...(origin
               ? {
                   requestedSource: {
-                    sessionID: origin.source.sessionID,
-                    messageID: origin.source.messageID,
-                    partID: origin.source.partID,
+                    sessionID: origin.sessionID,
+                    messageID: origin.messageID,
+                    partID: origin.partID,
                   },
                 }
               : {}),
-            originalRole: owners.get(part.messageID)?.role,
-            originalAuthor: owners.get(part.messageID)?.author,
+            originalRole: owner.role,
+            originalAuthor: owner.author,
             ...(part.type === "tool" ? { callID: part.callID, tool: part.tool } : {}),
           }
         }

@@ -1,0 +1,167 @@
+{
+  "phase": "Original user-text retention",
+  "archives": [
+    {
+      "path": "cross-model-user-retention-grant.json.gz",
+      "sourceBytes": 178238,
+      "archiveBytes": 14024
+    },
+    {
+      "path": "cross-model-user-retention-grant.json.requests.json.gz",
+      "sourceBytes": 57936,
+      "archiveBytes": 4531
+    },
+    {
+      "path": "cross-model-user-retention-grant.log.gz",
+      "sourceBytes": 594,
+      "archiveBytes": 253
+    },
+    {
+      "path": "cross-model-user-retention-read-repair-grant.json.gz",
+      "sourceBytes": 266118,
+      "archiveBytes": 18354
+    },
+    {
+      "path": "cross-model-user-retention-read-repair-grant.json.requests.json.gz",
+      "sourceBytes": 116477,
+      "archiveBytes": 7729
+    },
+    {
+      "path": "cross-model-user-retention-read-repair-grant.log.gz",
+      "sourceBytes": 607,
+      "archiveBytes": 267
+    },
+    {
+      "path": "cross-model-user-retention-eager-grant.json.gz",
+      "sourceBytes": 234996,
+      "archiveBytes": 17315
+    },
+    {
+      "path": "cross-model-user-retention-eager-grant.json.requests.json.gz",
+      "sourceBytes": 86940,
+      "archiveBytes": 6690
+    },
+    {
+      "path": "cross-model-user-retention-eager-grant.log.gz",
+      "sourceBytes": 541,
+      "archiveBytes": 227
+    },
+    {
+      "path": "cross-model-user-retention-eager-revoke.json.gz",
+      "sourceBytes": 231451,
+      "archiveBytes": 16981
+    },
+    {
+      "path": "cross-model-user-retention-eager-revoke.json.requests.json.gz",
+      "sourceBytes": 88744,
+      "archiveBytes": 7210
+    },
+    {
+      "path": "cross-model-user-retention-eager-revoke.log.gz",
+      "sourceBytes": 547,
+      "archiveBytes": 230
+    },
+    {
+      "path": "user-retention-local.log.gz",
+      "sourceBytes": 209141,
+      "archiveBytes": 20639
+    },
+    {
+      "path": "user-retention-regression.log.gz",
+      "sourceBytes": 304520,
+      "archiveBytes": 29976
+    },
+    {
+      "path": "user-retention-final-local.log.gz",
+      "sourceBytes": 235884,
+      "archiveBytes": 22183
+    },
+    {
+      "path": "user-retention-atomic-final.log.gz",
+      "sourceBytes": 1225,
+      "archiveBytes": 616
+    },
+    {
+      "path": "user-retention-pressure.log.gz",
+      "sourceBytes": 3098,
+      "archiveBytes": 970
+    },
+    {
+      "path": "user-retention-order-before.log.gz",
+      "sourceBytes": 3332,
+      "archiveBytes": 1304
+    },
+    {
+      "path": "user-retention-order-final.log.gz",
+      "sourceBytes": 233365,
+      "archiveBytes": 21488
+    },
+    {
+      "path": "user-retention-errors-final.log.gz",
+      "sourceBytes": 1595,
+      "archiveBytes": 729
+    },
+    {
+      "path": "user-retention-typecheck.log.gz",
+      "sourceBytes": 269,
+      "archiveBytes": 230
+    },
+    {
+      "path": "user-retention-typecheck-final.log.gz",
+      "sourceBytes": 9438,
+      "archiveBytes": 979
+    },
+    {
+      "path": "user-retention-typecheck-repair.log.gz",
+      "sourceBytes": 2146,
+      "archiveBytes": 548
+    },
+    {
+      "path": "user-retention-typecheck-verified.log.gz",
+      "sourceBytes": 167,
+      "archiveBytes": 160
+    },
+    {
+      "path": "user-retention-typecheck-delivery.log.gz",
+      "sourceBytes": 167,
+      "archiveBytes": 160
+    },
+    {
+      "path": "user-retention-typecheck-order.log.gz",
+      "sourceBytes": 167,
+      "archiveBytes": 160
+    },
+    {
+      "path": "user-retention-typecheck-final-verified.log.gz",
+      "sourceBytes": 167,
+      "archiveBytes": 160
+    },
+    {
+      "path": "user-retention-review.cjs.gz",
+      "sourceBytes": 4501,
+      "archiveBytes": 1858
+    },
+    {
+      "path": "user-retention-action-review.cjs.gz",
+      "sourceBytes": 5167,
+      "archiveBytes": 1936
+    },
+    {
+      "path": "user-retention-docs-delivery.log.gz",
+      "sourceBytes": 247,
+      "archiveBytes": 180
+    }
+  ],
+  "reports": [
+    "cross-model-user-retention-eager-grant-role-evidence.json",
+    "cross-model-user-retention-eager-grant-summary.json",
+    "cross-model-user-retention-eager-revoke-role-evidence.json",
+    "cross-model-user-retention-eager-revoke-summary.json",
+    "cross-model-user-retention-grant-role-evidence.json",
+    "cross-model-user-retention-grant-summary.json",
+    "cross-model-user-retention-read-repair-grant-role-evidence.json",
+    "cross-model-user-retention-read-repair-grant-summary.json",
+    "user-retention-matrix-summary.json"
+  ],
+  "note": "Archives preserve authored test evidence and failed calibration. Behavioral/role/effect checks establish acceptance; gzip equality only verifies archive preservation."
+}

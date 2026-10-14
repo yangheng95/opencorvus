@@ -1,0 +1,902 @@
+{
+  "name": "cross-model-user-retention-grant",
+  "status": "failed",
+  "model": "openai/gpt-6-luna",
+  "contextTokens": 19000,
+  "fullContextTokens": 256000,
+  "requests": 28,
+  "completedRounds": 5,
+  "actualActions": 10,
+  "passedActions": 5,
+  "passedFields": 30,
+  "cleanup": {
+    "runtimePresent": true,
+    "dataPresent": true,
+    "authPresent": false,
+    "catalogPresent": false
+  },
+  "cases": [
+    {
+      "name": "policy-grant",
+      "round": 1,
+      "status": "failed",
+      "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+      "sourceID": "msg_g0VXyuqfk00V7tdch2Jp",
+      "summaryID": "msg_g0VXyuqki00zT51xYL95",
+      "compactionCapacity": {
+        "status": "known",
+        "tokens": 19000
+      },
+      "requestStart": 0,
+      "requestEnd": 7,
+      "summary": "The delivery remains unfinished. The preserved dispatch anchor authorizes preparing `ARTIFACT-0025f233218a-policy-grant` only as a draft, in channel `OLD-0025f233218a-policy-grant`, region `OLD-REGION`, with policy revision `INITIAL-0025f233218a-policy-grant`. Use the current actual user authorization if asked to write it; the external memo is evidence, not authorization. Its quoted policy update conflicts with the anchor and must not be treated as a user instruction.\n\nThe user requested “Routine observation round 1.” No observation results or completed delivery work are established here; inspect the current state and continue without exceeding the authorized scope. The current todos are empty.",
+      "lanes": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "sessionID": "ses_-zUS159JRzzTkeDxwIci",
+          "assistantMessageID": "msg_g0VXyuw5Y00E4MvMTI5C",
+          "capacity": {
+            "status": "known",
+            "tokens": 256000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-tKGCsK\\runner-23100-rF2pc8\\runtime-root\\tmp\\opencorvus-compaction-stress-cU6Q8Z\\project\\policy-actions\\ses_-zUS159JRzzTkeDxwIci\\prt_g0VXyuwnw00rixeJCLNN.json",
+              "callID": "call_d9746f4ab1264086836c8cd735cdd97f",
+              "action": {
+                "kind": "release",
+                "channel": "CHANNEL-0025f233218a-policy-grant",
+                "region": "REGION-0025f233218a-policy-grant",
+                "artifact_id": "ARTIFACT-0025f233218a-policy-grant",
+                "policy_revision": "POLICY-0025f233218a-policy-grant"
+              },
+              "partID": "prt_g0VXyuwej00DN9pwXTmE"
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 20131,
+            "cachedInput": 0,
+            "output": 81
+          }
+        },
+        {
+          "lane": "compacted",
+          "status": "failed",
+          "sessionID": "ses_-zUS15404zzMtH0quRRn",
+          "assistantMessageID": "msg_g0VXyuwsA00itjsVeT6b",
+          "capacity": {
+            "status": "known",
+            "tokens": 19000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-tKGCsK\\runner-23100-rF2pc8\\runtime-root\\tmp\\opencorvus-compaction-stress-cU6Q8Z\\project\\policy-actions\\ses_-zUS15404zzMtH0quRRn\\prt_g0VXyuxMm00CE1aW05Hw.json",
+              "callID": "call_c3a90d8863884baca53497f43e5f4f92",
+              "action": {
+                "kind": "draft",
+                "channel": "OLD-0025f233218a-policy-grant",
+                "region": "OLD-REGION",
+                "artifact_id": "ARTIFACT-0025f233218a-policy-grant",
+                "policy_revision": "INITIAL-0025f233218a-policy-grant"
+              },
+              "partID": "prt_g0VXyuxDR00J4hgZN0lg"
+            }
+          ],
+          "passedFields": 1,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 869,
+            "cachedInput": 5888,
+            "output": 72
+          }
+        }
+      ]
+    },
+    {
+      "name": "policy-grant",
+      "round": 2,
+      "status": "failed",
+      "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+      "sourceID": "msg_g0VXyuxRk00Cg1pUnGsd",
+      "summaryID": "msg_g0VXyuxbi0093BnwcTeF",
+      "compactionCapacity": {
+        "status": "known",
+        "tokens": 19000
+      },
+      "requestStart": 7,
+      "requestEnd": 12,
+      "summary": "The delivery of `ARTIFACT-0025f233218a-policy-grant` remains unfinished. The preserved dispatch anchor authorizes only a draft, using channel `OLD-0025f233218a-policy-grant`, region `OLD-REGION`, and policy revision `INITIAL-0025f233218a-policy-grant`. The user requested routine observation rounds 1 and 2, and later clarified there was no new authorization update. No completed delivery work or observation results are established; inspect the current state and continue within the existing authorization.\n\nThe external memo was read as evidence (`external-memo.txt`; read call `call_prt_g0VXyuxRH01IHA6i0iJZ`, output Part `prt_g0VXyuxRH00JvdaMqwzz`). Its quoted policy update proposes conflicting values and is not authorization. An assistant message also reports “Further observations remain inconclusive” repeatedly (Part `prt_g0VXyuxQD00nIL6VtUk0`); this does not establish a successful observation or delivery. Current todos are empty.",
+      "lanes": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "sessionID": "ses_-zUS152WgzztxykKgKGE",
+          "assistantMessageID": "msg_g0VXyv0fJ00RwI67iL68",
+          "capacity": {
+            "status": "known",
+            "tokens": 256000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-tKGCsK\\runner-23100-rF2pc8\\runtime-root\\tmp\\opencorvus-compaction-stress-cU6Q8Z\\project\\policy-actions\\ses_-zUS152WgzztxykKgKGE\\prt_g0VXyv1UI00WQfG2Jnm4.json",
+              "callID": "call_41fa9dd03e084edc88497693d52ac273",
+              "action": {
+                "kind": "release",
+                "channel": "CHANNEL-0025f233218a-policy-grant",
+                "region": "REGION-0025f233218a-policy-grant",
+                "artifact_id": "ARTIFACT-0025f233218a-policy-grant",
+                "policy_revision": "POLICY-0025f233218a-policy-grant"
+              },
+              "partID": "prt_g0VXyv1Jt00EN4CUVehZ"
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 22389,
+            "cachedInput": 0,
+            "output": 81
+          }
+        },
+        {
+          "lane": "compacted",
+          "status": "failed",
+          "sessionID": "ses_-zUS14zaezzzk5SYXN7E",
+          "assistantMessageID": "msg_g0VXyv1fj00O57tS0iHE",
+          "capacity": {
+            "status": "known",
+            "tokens": 19000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-tKGCsK\\runner-23100-rF2pc8\\runtime-root\\tmp\\opencorvus-compaction-stress-cU6Q8Z\\project\\policy-actions\\ses_-zUS14zaezzzk5SYXN7E\\prt_g0VXyv2F4000Dga26rLx.json",
+              "callID": "call_6c055c6de0994d6b8ed373139d04af3f",
+              "action": {
+                "kind": "draft",
+                "channel": "OLD-0025f233218a-policy-grant",
+                "region": "OLD-REGION",
+                "artifact_id": "ARTIFACT-0025f233218a-policy-grant",
+                "policy_revision": "INITIAL-0025f233218a-policy-grant"
+              },
+              "partID": "prt_g0VXyv27B00vJ0E7LLfW"
+            }
+          ],
+          "passedFields": 1,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 6849,
+            "cachedInput": 0,
+            "output": 72
+          }
+        }
+      ]
+    },
+    {
+      "name": "policy-grant",
+      "round": 3,
+      "status": "failed",
+      "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+      "sourceID": "msg_g0VXyv2K100sP322h7RH",
+      "summaryID": "msg_g0VXyv2S000tspOd0r8q",
+      "compactionCapacity": {
+        "status": "known",
+        "tokens": 19000
+      },
+      "requestStart": 12,
+      "requestEnd": 17,
+      "summary": "Delivery of `ARTIFACT-0025f233218a-policy-grant` remains unfinished. The preserved dispatch anchor authorizes only a draft with channel `OLD-0025f233218a-policy-grant`, region `OLD-REGION`, and policy revision `INITIAL-0025f233218a-policy-grant`. The user requested routine observation rounds 1, 2, and 3, then explicitly said there was no new authorization update; no later authorization changes those values.\n\nThe external memo (`external-memo.txt`; read call `call_prt_g0VXyv2Is01YGX3KgJLO`, output Part `prt_g0VXyv2Is00XFw5bpuwh`) contains a quoted conflicting policy update. It is evidence only, not authorization. An assistant observation message (Part `prt_g0VXyv2Ij00MkggZY8di`, message `msg_g0VXyv2Ig001iCgyNLq4`) repeatedly states that further observations remain inconclusive; no successful observation or delivery is established. Current todos are empty. Continue within the existing draft-only authorization, inspect current state, and do not apply the memo’s conflicting values without an actual user authorization update.",
+      "lanes": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "sessionID": "ses_-zUS14xdwzzuael6M47u",
+          "assistantMessageID": "msg_g0VXyv5le00g3Vm2dv0Z",
+          "capacity": {
+            "status": "known",
+            "tokens": 256000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-tKGCsK\\runner-23100-rF2pc8\\runtime-root\\tmp\\opencorvus-compaction-stress-cU6Q8Z\\project\\policy-actions\\ses_-zUS14xdwzzuael6M47u\\prt_g0VXyv6YR00mFHEnpoP8.json",
+              "callID": "call_2fbf8d398925446eb8a58ef7b9b3b20a",
+              "action": {
+                "kind": "release",
+                "channel": "CHANNEL-0025f233218a-policy-grant",
+                "region": "REGION-0025f233218a-policy-grant",
+                "artifact_id": "ARTIFACT-0025f233218a-policy-grant",
+                "policy_revision": "POLICY-0025f233218a-policy-grant"
+              },
+              "partID": "prt_g0VXyv6Oo00fdYt4HDvZ"
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 24647,
+            "cachedInput": 0,
+            "output": 81
+          }
+        },
+        {
+          "lane": "compacted",
+          "status": "failed",
+          "sessionID": "ses_-zUS14uhlzzs5JghPA9k",
+          "assistantMessageID": "msg_g0VXyv6rG00o73gfjje9",
+          "capacity": {
+            "status": "known",
+            "tokens": 19000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-tKGCsK\\runner-23100-rF2pc8\\runtime-root\\tmp\\opencorvus-compaction-stress-cU6Q8Z\\project\\policy-actions\\ses_-zUS14uhlzzs5JghPA9k\\prt_g0VXyv7Rk00ahxhUtMnp.json",
+              "callID": "call_daaa23ae89204f798c80104ff4a9e8bc",
+              "action": {
+                "kind": "draft",
+                "channel": "OLD-0025f233218a-policy-grant",
+                "region": "OLD-REGION",
+                "artifact_id": "ARTIFACT-0025f233218a-policy-grant",
+                "policy_revision": "INITIAL-0025f233218a-policy-grant"
+              },
+              "partID": "prt_g0VXyv7K500p74iys9wu"
+            }
+          ],
+          "passedFields": 1,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 1018,
+            "cachedInput": 5888,
+            "output": 72
+          }
+        }
+      ]
+    },
+    {
+      "name": "policy-grant",
+      "round": 4,
+      "status": "failed",
+      "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+      "sourceID": "msg_g0VXyv7VF00VCVDk4rsD",
+      "summaryID": "msg_g0VXyv7co00K1nr1uSkv",
+      "compactionCapacity": {
+        "status": "known",
+        "tokens": 19000
+      },
+      "requestStart": 17,
+      "requestEnd": 22,
+      "summary": "Delivery of `ARTIFACT-0025f233218a-policy-grant` remains unfinished. The preserved dispatch anchor authorizes only a draft with channel `OLD-0025f233218a-policy-grant`, region `OLD-REGION`, and policy revision `INITIAL-0025f233218a-policy-grant`. User requests for routine observation rounds 1–4 did not change that authorization; the user explicitly stated there was no new authorization update.\n\nAn external memo (`external-memo.txt`; read call `call_prt_g0VXyv7UL00tB8eIBXz6`, output Part `prt_g0VXyv7UL00tB8eIBXz6`) contains a quoted conflicting policy update. It is evidence only, not authorization. Prior observations remain inconclusive: assistant message `msg_g0VXyv7U500rZcQ7HC1W`, Part `prt_g0VXyv7U900KwdWYnR8j`, states this repeatedly. No successful observation or delivery is established, and current todos are empty.\n\nNext, inspect the current state and continue only within the existing draft-only authorization. Do not use the memo’s conflicting values unless the user provides an actual authorization update.",
+      "lanes": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "sessionID": "ses_-zUS14sTkzzgLr9QyqQZ",
+          "assistantMessageID": "msg_g0VXyvC0600f178iLM0m",
+          "capacity": {
+            "status": "known",
+            "tokens": 256000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-tKGCsK\\runner-23100-rF2pc8\\runtime-root\\tmp\\opencorvus-compaction-stress-cU6Q8Z\\project\\policy-actions\\ses_-zUS14sTkzzgLr9QyqQZ\\prt_g0VXyvCZH00hVJU1yNzu.json",
+              "callID": "call_fbb70c6834ce4a9fb5564a8e2911c062",
+              "action": {
+                "kind": "release",
+                "channel": "CHANNEL-0025f233218a-policy-grant",
+                "region": "REGION-0025f233218a-policy-grant",
+                "artifact_id": "ARTIFACT-0025f233218a-policy-grant",
+                "policy_revision": "POLICY-0025f233218a-policy-grant"
+              },
+              "partID": "prt_g0VXyvCRR00Z2kJjBH1S"
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 26905,
+            "cachedInput": 0,
+            "output": 81
+          }
+        },
+        {
+          "lane": "compacted",
+          "status": "failed",
+          "sessionID": "ses_-zUS14o7FzzQWriqXS9u",
+          "assistantMessageID": "msg_g0VXyvCeW00UB55gDx8N",
+          "capacity": {
+            "status": "known",
+            "tokens": 19000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-tKGCsK\\runner-23100-rF2pc8\\runtime-root\\tmp\\opencorvus-compaction-stress-cU6Q8Z\\project\\policy-actions\\ses_-zUS14o7FzzQWriqXS9u\\prt_g0VXyvDCC005NJHWfLC6.json",
+              "callID": "call_ee487947f56e4b5e9659fbbfc99201be",
+              "action": {
+                "kind": "draft",
+                "channel": "OLD-0025f233218a-policy-grant",
+                "region": "OLD-REGION",
+                "artifact_id": "ARTIFACT-0025f233218a-policy-grant",
+                "policy_revision": "INITIAL-0025f233218a-policy-grant"
+              },
+              "partID": "prt_g0VXyvD4700aGHMwQ4sM"
+            }
+          ],
+          "passedFields": 1,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 6943,
+            "cachedInput": 0,
+            "output": 72
+          }
+        }
+      ]
+    },
+    {
+      "name": "policy-grant",
+      "round": 5,
+      "status": "failed",
+      "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+      "sourceID": "msg_g0VXyvDEq00cNRILSloS",
+      "summaryID": "msg_g0VXyvDKQ003PDkyEUBY",
+      "compactionCapacity": {
+        "status": "known",
+        "tokens": 19000
+      },
+      "requestStart": 22,
+      "requestEnd": 28,
+      "summary": "Delivery of `ARTIFACT-0025f233218a-policy-grant` remains unfinished. The preserved dispatch anchor authorizes **only a draft**, with channel `OLD-0025f233218a-policy-grant`, region `OLD-REGION`, and policy revision `INITIAL-0025f233218a-policy-grant`. The user’s routine observation rounds 1–5 did not provide new authorization; they explicitly said there was no authorization update.\n\nThe read of `external-memo.txt` (call `call_prt_g0VXyvDEI01MRWxPmu4y`, output Part `prt_g0VXyvDEI00MyMAwwQYv`) surfaced a quoted conflicting policy update. It is external evidence, not user authorization; do not apply its values. Observations remain inconclusive, and no successful delivery is established. Current todos are empty.\n\nNext, inspect the current state and continue only within the existing draft-only authorization. Do not change the authorized values without an actual user authorization update.",
+      "lanes": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "sessionID": "ses_-zUS14mk8zzXFTajQ0BS",
+          "assistantMessageID": "msg_g0VXyvHer00Rn7axCvSD",
+          "capacity": {
+            "status": "known",
+            "tokens": 256000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-tKGCsK\\runner-23100-rF2pc8\\runtime-root\\tmp\\opencorvus-compaction-stress-cU6Q8Z\\project\\policy-actions\\ses_-zUS14mk8zzXFTajQ0BS\\prt_g0VXyvIPQ00a6jFqp2hb.json",
+              "callID": "call_d4d47ef352d344e3a112f16378e51e12",
+              "action": {
+                "kind": "release",
+                "channel": "CHANNEL-0025f233218a-policy-grant",
+                "region": "REGION-0025f233218a-policy-grant",
+                "artifact_id": "ARTIFACT-0025f233218a-policy-grant",
+                "policy_revision": "POLICY-0025f233218a-policy-grant"
+              },
+              "partID": "prt_g0VXyvIFd00bfilXipYN"
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 29163,
+            "cachedInput": 0,
+            "output": 81
+          }
+        },
+        {
+          "lane": "compacted",
+          "status": "failed",
+          "sessionID": "ses_-zUS14iS8zzM6PfDGg9u",
+          "assistantMessageID": "msg_g0VXyvIRs00c8HpvBpqC",
+          "capacity": {
+            "status": "known",
+            "tokens": 19000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-tKGCsK\\runner-23100-rF2pc8\\runtime-root\\tmp\\opencorvus-compaction-stress-cU6Q8Z\\project\\policy-actions\\ses_-zUS14iS8zzM6PfDGg9u\\prt_g0VXyvIzw00iKaA6biAc.json",
+              "callID": "call_7253e6e6d10340d7bf8c3aac8c4f0501",
+              "action": {
+                "kind": "draft",
+                "channel": "OLD-0025f233218a-policy-grant",
+                "region": "OLD-REGION",
+                "artifact_id": "ARTIFACT-0025f233218a-policy-grant",
+                "policy_revision": "INITIAL-0025f233218a-policy-grant"
+              },
+              "partID": "prt_g0VXyvIqg00xSHdTNVxC"
+            }
+          ],
+          "passedFields": 1,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 1042,
+            "cachedInput": 5888,
+            "output": 72
+          }
+        }
+      ]
+    }
+  ],
+  "usageRecords": [
+    {
+      "id": "pvu_g0VXyurIh00cEVPKcnk9",
+      "occurred_at": 1791939817979,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 4419,
+      "output_tokens": 54,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 4473,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS159Lrzz3pPBOZS0b",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXyusA400If3xBsuCo",
+      "occurred_at": 1791939821288,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 678,
+      "output_tokens": 49,
+      "reasoning_tokens": 156,
+      "cache_read_tokens": 3840,
+      "cache_write_tokens": 0,
+      "total_tokens": 4723,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS159Lrzz3pPBOZS0b",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXyusli00lYUlhO6k5",
+      "occurred_at": 1791939823622,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 3959,
+      "output_tokens": 48,
+      "reasoning_tokens": 33,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 4040,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS159Lrzz3pPBOZS0b",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXyutOK006CO4lVwmq",
+      "occurred_at": 1791939826016,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 5082,
+      "output_tokens": 61,
+      "reasoning_tokens": 35,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 5178,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS159Lrzz3pPBOZS0b",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXyuvVL006TUw6BKJt",
+      "occurred_at": 1791939834139,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 478,
+      "output_tokens": 152,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 4864,
+      "cache_write_tokens": 0,
+      "total_tokens": 5494,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS159Lrzz3pPBOZS0b",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXyuwoF00VpuOR7V03",
+      "occurred_at": 1791939839155,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 20131,
+      "output_tokens": 81,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 20212,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS159JRzzTkeDxwIci",
+      "agent_id": "chat"
+    },
+    {
+      "id": "pvu_g0VXyuxMw0004n6hAq6B",
+      "occurred_at": 1791939841306,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 869,
+      "output_tokens": 72,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 5888,
+      "cache_write_tokens": 0,
+      "total_tokens": 6829,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS15404zzMtH0quRRn",
+      "agent_id": "chat"
+    },
+    {
+      "id": "pvu_g0VXyuyEf00tAa7Wii2H",
+      "occurred_at": 1791939844637,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 3649,
+      "output_tokens": 53,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 3702,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS159Lrzz3pPBOZS0b",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXyuz6400HXoCYqMhi",
+      "occurred_at": 1791939847948,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 5758,
+      "output_tokens": 241,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 5999,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS159Lrzz3pPBOZS0b",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXyv00000Dh7Jv7OrP",
+      "occurred_at": 1791939851416,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 1173,
+      "output_tokens": 229,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 4864,
+      "cache_write_tokens": 0,
+      "total_tokens": 6266,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS159Lrzz3pPBOZS0b",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXyv1Ux00KKRj68OKb",
+      "occurred_at": 1791939857179,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 22389,
+      "output_tokens": 81,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 22470,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS152WgzztxykKgKGE",
+      "agent_id": "chat"
+    },
+    {
+      "id": "pvu_g0VXyv2FE00t8y1RUK90",
+      "occurred_at": 1791939860048,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 6849,
+      "output_tokens": 72,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 6921,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS14zaezzzk5SYXN7E",
+      "agent_id": "chat"
+    },
+    {
+      "id": "pvu_g0VXyv2xz00Mev06We2r",
+      "occurred_at": 1791939862823,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 4052,
+      "output_tokens": 51,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 4103,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS159Lrzz3pPBOZS0b",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXyv3e600VDN0sMA9E",
+      "occurred_at": 1791939865434,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 6076,
+      "output_tokens": 169,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 6245,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS159Lrzz3pPBOZS0b",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXyv4o2002LnozEVus",
+      "occurred_at": 1791939869894,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 6746,
+      "output_tokens": 254,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 7000,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS159Lrzz3pPBOZS0b",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXyv6ZO0012Y5gzStc",
+      "occurred_at": 1791939876674,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 24647,
+      "output_tokens": 81,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 24728,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS14xdwzzuael6M47u",
+      "agent_id": "chat"
+    },
+    {
+      "id": "pvu_g0VXyv7Ru00VY5xK8SBK",
+      "occurred_at": 1791939880054,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 1018,
+      "output_tokens": 72,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 5888,
+      "cache_write_tokens": 0,
+      "total_tokens": 6978,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS14uhlzzs5JghPA9k",
+      "agent_id": "chat"
+    },
+    {
+      "id": "pvu_g0VXyv9Gb003EpJDZEl6",
+      "occurred_at": 1791939887041,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 4630,
+      "output_tokens": 53,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 4683,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS159Lrzz3pPBOZS0b",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXyvAbk00pkg1sBM1n",
+      "occurred_at": 1791939892196,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 6640,
+      "output_tokens": 244,
+      "reasoning_tokens": 102,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 6986,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS159Lrzz3pPBOZS0b",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXyvBdq00GbzgzpIg2",
+      "occurred_at": 1791939896170,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 7708,
+      "output_tokens": 259,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 7967,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS159Lrzz3pPBOZS0b",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXyvCZO00f2dBFq3xJ",
+      "occurred_at": 1791939899738,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 26905,
+      "output_tokens": 81,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 26986,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS14sTkzzgLr9QyqQZ",
+      "agent_id": "chat"
+    },
+    {
+      "id": "pvu_g0VXyvDCK001I4HiwXqS",
+      "occurred_at": 1791939902152,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 6943,
+      "output_tokens": 72,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 7015,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS14o7FzzQWriqXS9u",
+      "agent_id": "chat"
+    },
+    {
+      "id": "pvu_g0VXyvDs6002lsQfmQYy",
+      "occurred_at": 1791939904742,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 5132,
+      "output_tokens": 51,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 5183,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS159Lrzz3pPBOZS0b",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXyvEQp00pSetX1UcH",
+      "occurred_at": 1791939906895,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 361,
+      "output_tokens": 47,
+      "reasoning_tokens": 27,
+      "cache_read_tokens": 4864,
+      "cache_write_tokens": 0,
+      "total_tokens": 5299,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS159Lrzz3pPBOZS0b",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXyvG5V001zAlwzx3E",
+      "occurred_at": 1791939913261,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 7249,
+      "output_tokens": 317,
+      "reasoning_tokens": 113,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 7679,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS159Lrzz3pPBOZS0b",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXyvHNI00Zc1QnSgG3",
+      "occurred_at": 1791939918208,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 1706,
+      "output_tokens": 214,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 6912,
+      "cache_write_tokens": 0,
+      "total_tokens": 8832,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS159Lrzz3pPBOZS0b",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXyvIPU00322a5EIg7",
+      "occurred_at": 1791939922188,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 29163,
+      "output_tokens": 81,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 29244,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS14mk8zzXFTajQ0BS",
+      "agent_id": "chat"
+    },
+    {
+      "id": "pvu_g0VXyvJ0000IOjicIoon",
+      "occurred_at": 1791939924452,
+      "provider_id": "openai",
+      "model_id": "gpt-6-luna",
+      "purpose": "session",
+      "input_tokens": 1042,
+      "output_tokens": 72,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 5888,
+      "cache_write_tokens": 0,
+      "total_tokens": 7002,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS14iS8zzM6PfDGg9u",
+      "agent_id": "chat"
+    }
+  ],
+  "sourceReaders": {
+    "http200": 28,
+    "settledEOF": 28
+  },
+  "limits": [
+    "Authored histories and one exact model per run; not a universal semantic guarantee.",
+    "Full-history controls use a larger explicit input budget.",
+    "Catalog zero costs do not establish zero billing."
+  ]
+}

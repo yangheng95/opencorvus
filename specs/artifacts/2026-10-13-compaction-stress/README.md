@@ -1,9 +1,9 @@
 # Compaction stress evidence — 2026-10-13
 
-All real calls use the configured `openai/gpt-6.1-sol`, streamed through the
-production Provider/LLM and compaction processor in an isolated runtime. Inputs
-are authored benchmark histories. This is integration/semantic evidence, not a
-full browser, Task/Mission scheduling, or native Codex comparison benchmark.
+Initial real calls use `openai/gpt-6.1-sol`; later sections identify additional
+models and runtime recovery experiments. Model calls stream through the production
+Provider/LLM and compaction processor in isolated runtimes. Inputs are authored
+benchmark histories. Each section states its scope and limits.
 
 | Run | Requests | Result and meaning |
 | --- | ---: | --- |
@@ -23,7 +23,7 @@ full browser, Task/Mission scheduling, or native Codex comparison benchmark.
 | [policy-actions-real-resume](policy-actions-real-resume.json) | 12 | Reopens that exact fifth-round history; checkpoint and both actual Tool actions pass. |
 | [native-policy-real](native-policy-real.json) | 20 | Two one-checkpoint native/full/portable comparisons pass six actual actions and 30 fields. |
 
-Total: **271** real requests. The user authorized increasing limits as needed;
+Initial phase total: **271** real requests. The user authorized increasing limits as needed;
 the latest native comparison retained a 40-request hard cap and used 20. The final
 accepted text/Tool/file/failure/diagnostic cases score **78/78** fields over nine completed
 rounds; this finite, single-model corpus is not a general reliability estimate.
@@ -545,3 +545,22 @@ Reproduce with Bun 1.4.0 and the single `packages/opencorvus/script/compaction-r
 The first [0-request startup failure](cross-model-luna-revoke.json.gz) found an independent model-projection defect: the Codex OAuth hook required a decimal model version and compared it as a floating-point number. The parser now handles integer major and optional integer minor components under the existing admission policy. The [catalog baseline](cross-model-projection-catalog-baseline.log.gz) reproduces both local failures; [seven focused contracts](cross-model-projection-repair.log.gz) and [expanded TypeScript](cross-model-projection-typecheck.log.gz) pass after repair. The target stays exactly openai/gpt-6-luna. No source credentials, model declarations, request transport, configured limits or product permission policy are changed.
 
 [The artifact manifest](cross-model-artifact-manifest.json) retains original failed/successful reports, request sidecars, local calibration logs and independent summaries. The [preflight](cross-model-luna-preflight.json) is a source inventory, not proof of usable model projection; the original failure demonstrates that distinction. The previous Sol pressure matrix remains a separate reference with different authored identifiers. These samples do not establish a statistical model ranking, cross-vendor coverage or universal compression fidelity. [Documentation checks](cross-model-docs-delivery.log.gz) accompany this evidence delivery; the source-authority defect remains an explicit unfinished requirement.
+
+## Original user-text retention
+
+[The final Luna matrix](user-retention-matrix-summary.json) passes **20/20 actual actions, 100/100 fields and 10/10 original authorization user-role projections** across grant/revoke and five checkpoints each. The compactor/compacted ceiling remains 19,000 tokens, the full-history control 256,000. Each passing run uses 36 streamed requests; original Parts, outgoing request roles, actual Tool inputs/outcomes and action files are independently verified.
+
+| Intervention | Requests | Actions | Authorization role retained | Result |
+| --- | ---: | ---: | ---: | --- |
+| [Initial source retention](cross-model-user-retention-grant-summary.json) | 28 | 5/10 | 0/5 | Failed: mistyped source ID followed by unsupported inference. |
+| [Read-error guidance](cross-model-user-retention-read-repair-grant-summary.json) | 51 | 8/10 | 0/5 | Failed: original page cleared into notes, later paraphrase/guessed offset rejected. |
+| [Select while visible: grant](cross-model-user-retention-eager-grant-summary.json) | 36 | 10/10 | 5/5 | Passed. |
+| [Select while visible: revoke](cross-model-user-retention-eager-revoke-summary.json) | 36 | 10/10 | 5/5 | Passed. |
+
+The role evidence reports ([initial](cross-model-user-retention-grant-role-evidence.json), [read repair](cross-model-user-retention-read-repair-grant-role-evidence.json), [grant](cross-model-user-retention-eager-grant-role-evidence.json), [revoke](cross-model-user-retention-eager-revoke-role-evidence.json)) preserve original authorization text/identity, exact selected excerpts, failed and successful Tool facts, and outgoing request probes. Early correct actions with assistant-only authorization remain distinct from preserved user role.
+
+This phase consumes **151** requests including failures; [the ledger](final-request-ledger.json) totals **769**, ceiling 820, with no live run and all four copied auth/catalog pairs removed after joined completion. The model chooses excerpts through a visible Tool; the host validates exact source/provenance/range/capacity only. It never upgrades assistant or Tool text to user authority.
+
+[The archive manifest](user-retention-artifact-manifest.json) preserves all original reports/sidecars, failed calibration logs, final checks and review scripts. Final local coverage is **95 distinct positive contracts**, including actual streamed compactor/notes/repeated-checkpoint/copy/provider-role replay, current source validation at atomic publication, source edits, Unicode, reversed parallel Tool-result order and capacity. [Expanded TypeScript](user-retention-typecheck-final-verified.log.gz) and [documentation checks](user-retention-docs-delivery.log.gz) accompany the delivery.
+
+These are bounded observations on authored histories. Source selection and quotation context still depend on model reasoning. Physical process-crash validation with the new selection capability, richer alternating authorization histories, larger catalogs/scaling, native product persistence, cross-vendor coverage and whole-OS power loss remain open. No perfect retention or private Codex equivalence is claimed.

@@ -116,6 +116,32 @@ Project memory has three explicitly scoped authorities:
    only a completed final summary can publish the Session checkpoint. Existing
    helper step limits and capacity failures remain explicit resource boundaries.
 
+   `RetainCompactionUserText` lets the compactor select contiguous verbatim
+   excerpts from original user text. A successful visible Tool result records
+   exact source identities, role/author, Unicode-safe ranges and a fixed-source
+   fingerprint in the existing canonical Tool request/outcome store. The host
+   validates provenance and capacity, not the meaning of authorization. It
+   cannot promote Tool quotations or assistant paraphrases to user instructions.
+   Only a completed, published checkpoint makes its selection effective. The
+   latest successful selection at or before the active checkpoint applies until
+   replaced; an explicit empty selection releases it. Failed helpers have no
+   selection authority. Replay derives text from the original Part under its
+   original user Message identity and chronology; already retained full inputs
+   stay whole. Exact copy ancestry uses the same bound evidence resolver.
+   Changed/missing sources produce typed integrity errors. No user Message is
+   synthesized and no second permissions or content store exists.
+
+   The helper preserves the actual selection call/result exchange across saved
+   working notes and prices it within the existing working allowance. Checkpoint
+   reduction includes newly replayed user excerpts, including sources brought
+   back from an earlier checkpoint. Excerpt ranges are annotated only in the
+   disposable compactor transcript; provider metadata and persistent Message
+   formats remain unchanged. MEMORY.MD remains the literal completed assistant
+   summary; retained user text is original-source replay, not assistant memory
+   with elevated authority. Exact provenance does not prove the model selected
+   enough quotation context or retained every instruction; real action tests
+   measure that semantic boundary separately.
+
    Omitted fields keep `ReadCompactionEvidence` references. The one reader resolves text, input,
    output, structured failure and provenance metadata from the Session snapshot
    bound when compaction dispatches, including original Parts referenced by older

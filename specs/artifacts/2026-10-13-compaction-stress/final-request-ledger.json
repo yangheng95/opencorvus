@@ -1,7 +1,7 @@
 {
   "priorRequests": 99,
-  "total": 618,
-  "authorizedTotal": 740,
+  "total": 769,
+  "authorizedTotal": 820,
   "runs": [
     {
       "name": "text-three-rounds",
@@ -426,6 +426,54 @@
       "passedFields": 46,
       "summary": "cross-model-luna-grant-summary.json",
       "failureEvidence": "cross-model-luna-authority-loss.json"
+    },
+    {
+      "name": "cross-model-user-retention-grant",
+      "status": "failed",
+      "requests": 28,
+      "model": "openai/gpt-6-luna",
+      "credentialsRemoved": true,
+      "completedCheckpoints": 5,
+      "actualActions": 10,
+      "passedActions": 5,
+      "passedFields": 30,
+      "summary": "cross-model-user-retention-grant-summary.json"
+    },
+    {
+      "name": "cross-model-user-retention-read-repair-grant",
+      "status": "failed",
+      "requests": 51,
+      "model": "openai/gpt-6-luna",
+      "credentialsRemoved": true,
+      "completedCheckpoints": 5,
+      "actualActions": 10,
+      "passedActions": 8,
+      "passedFields": 42,
+      "summary": "cross-model-user-retention-read-repair-grant-summary.json"
+    },
+    {
+      "name": "cross-model-user-retention-eager-grant",
+      "status": "passed",
+      "requests": 36,
+      "model": "openai/gpt-6-luna",
+      "credentialsRemoved": true,
+      "completedCheckpoints": 5,
+      "actualActions": 10,
+      "passedActions": 10,
+      "passedFields": 50,
+      "summary": "cross-model-user-retention-eager-grant-summary.json"
+    },
+    {
+      "name": "cross-model-user-retention-eager-revoke",
+      "status": "passed",
+      "requests": 36,
+      "model": "openai/gpt-6-luna",
+      "credentialsRemoved": true,
+      "completedCheckpoints": 5,
+      "actualActions": 10,
+      "passedActions": 10,
+      "passedFields": 50,
+      "summary": "cross-model-user-retention-eager-revoke-summary.json"
     }
   ],
   "authorizationPolicy": "User explicitly allows increasing request limits as needed; retain bounded per-run budgets and exact accounting.",
@@ -456,5 +504,17 @@
     "passedFields": 96,
     "requests": 88,
     "summary": "cross-model-luna-matrix-summary.json"
+  },
+  "latestSourceRetentionMatrix": {
+    "status": "passed",
+    "model": "openai/gpt-6-luna",
+    "completedCheckpoints": 10,
+    "actualActions": 20,
+    "passedActions": 20,
+    "passedFields": 100,
+    "sourceRolePreserved": 10,
+    "requests": 72,
+    "phaseRequests": 151,
+    "summary": "user-retention-matrix-summary.json"
   }
 }

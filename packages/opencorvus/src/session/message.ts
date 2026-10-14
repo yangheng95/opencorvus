@@ -16,6 +16,7 @@ import { decodeDataUrlBase64Bytes, decodeTextBytes, isDecodableText } from "./te
 import { attachmentNameFromUrl } from "@/storage/attachment-reference"
 import { CompactionHandoff } from "./compaction-handoff"
 import { CompactionCoverage } from "./compaction-coverage"
+import { CompactionUserText } from "./compaction-user-text"
 import { sideChatIdentity } from "@/chat/side-chat-identity"
 import { MessageCopyEvidence } from "./copy-evidence"
 import { AssistantDiagnostics } from "./assistant-diagnostics"
@@ -1623,6 +1624,19 @@ export namespace Message {
         if (coveredIDs.has(result[index]!.info.id)) result.splice(index, 1)
       }
       result.splice(result.findIndex((message) => message.info.id === marker.info.id) + 1, 0, ...suffixes)
+      const chronological = [...sources.values()].reverse()
+      const selected = CompactionUserText.project(CompactionUserText.selection(chronological, marker.info.id), chronological)
+      const positions = new Map(chronological.map((message, index) => [message.info.id, index]))
+      const existing = new Set(result.map((message) => message.info.id))
+      for (const source of selected) {
+        if (existing.has(source.info.id)) continue
+        const sourcePosition = positions.get(source.info.id)!
+        const summaryPosition = result.findIndex((message) => message.info.id === marker.info.id)
+        const next = result.findIndex((message, index) => index > summaryPosition &&
+          (positions.get(message.info.id) ?? -1) > sourcePosition)
+        result.splice(next < 0 ? result.length : next, 0, source)
+        existing.add(source.info.id)
+      }
       const anchorID = part?.anchor_id
       const projectedAnchorIndex = anchorID ? result.findIndex((message) => message.info.id === anchorID) : -1
       if (projectedAnchorIndex >= 0) {

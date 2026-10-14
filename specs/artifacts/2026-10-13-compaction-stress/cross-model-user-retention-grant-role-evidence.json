@@ -1,0 +1,785 @@
+{
+  "name": "cross-model-user-retention-grant",
+  "status": "failed",
+  "requests": 28,
+  "passedActions": 5,
+  "passedFields": 30,
+  "sourceRolePreserved": 0,
+  "rounds": [
+    {
+      "round": 1,
+      "status": "failed",
+      "summaryID": "msg_g0VXyuqki00zT51xYL95",
+      "source": {
+        "messageID": "msg_g0VXyuqf800cMkVSZ7g2",
+        "partID": "prt_g0VXyuqfD00ifpX0pU5L",
+        "totalChars": 75200,
+        "originalAuthorization": "Current user authorization update: I now authorize one release of this artifact, limited to the following exact scope. Use kind=release, channel=CHANNEL-0025f233218a-policy-grant, region=REGION-0025f233218a-policy-grant, artifact_id=ARTIFACT-0025f233218a-policy-grant, policy_revision=POLICY-0025f233218a-policy-grant. This replaces my initial authorization. Other destinations remain unauthorized."
+      },
+      "selected": [],
+      "retainedFields": {
+        "kind": false,
+        "channel": false,
+        "region": false,
+        "artifact_id": false,
+        "policy_revision": false
+      },
+      "preserved": false,
+      "laneProofs": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "requestIndex": 5,
+          "userRole": true,
+          "matches": [
+            {
+              "json_pointer": "/input/2/content/0/text",
+              "pointer_redacted": false,
+              "message_role": "user",
+              "role_json_pointer": "/input/2/role",
+              "decoded_value_utf8_start": 37588,
+              "value_sha256": "0ecca5b1acd2c3e819c0623c03045824e933365392038036aa2d4507dcec4a5c"
+            }
+          ]
+        },
+        {
+          "lane": "compacted",
+          "status": "failed",
+          "requestIndex": 6,
+          "userRole": false,
+          "matches": []
+        }
+      ],
+      "tools": [
+        {
+          "partID": "prt_g0VXyurBg00iv4LbB2OC",
+          "callID": "call_133581e80d2942ee9abe0544d9eb727f",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXyuqD00ifpX0pU5L",
+            "field": "text",
+            "offset": 0,
+            "limit": 30000
+          },
+          "outcome": "failed",
+          "failure": {
+            "kind": "tool-execution",
+            "name": "CompactionEvidenceReadError",
+            "message": "Part prt_g0VXyuqD00ifpX0pU5L is not readable in the bound Session snapshot.",
+            "originSite": "session.processor.tool-error",
+            "classification": "tool-execution",
+            "data": {
+              "toolCallId": "call_133581e80d2942ee9abe0544d9eb727f",
+              "toolName": "ReadCompactionEvidence"
+            }
+          }
+        },
+        {
+          "partID": "prt_g0VXyus4f008XzTYR1Su",
+          "callID": "call_db58072bd6a748f29ce0c0a78a00ea2b",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXyuqfo00vLmwhSofm",
+            "field": "text",
+            "offset": 0,
+            "limit": 1000
+          },
+          "outcome": "completed",
+          "receipt": {
+            "partID": "prt_g0VXyuqfo00vLmwhSofm",
+            "field": "text",
+            "offset": 0,
+            "end": 62,
+            "nextOffset": null,
+            "totalChars": 62,
+            "containsExpectedRegion": false
+          }
+        },
+        {
+          "partID": "prt_g0VXyusgl00GYL8GiXy5",
+          "callID": "call_a5b2d1bd9582497b8ee72b38218718a6",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXyuqf000LH6Tp30aa",
+            "field": "text",
+            "offset": 0,
+            "limit": 30000
+          },
+          "outcome": "completed",
+          "receipt": {
+            "partID": "prt_g0VXyuqf000LH6Tp30aa",
+            "field": "text",
+            "offset": 0,
+            "end": 9600,
+            "nextOffset": null,
+            "totalChars": 9600,
+            "containsExpectedRegion": false
+          }
+        },
+        {
+          "partID": "prt_g0VXyutGf00Z7Rm7VODK",
+          "callID": "call_bdc70ff223dc48348561b8fa04c0936a",
+          "tool": "RetainCompactionUserText",
+          "input": {
+            "excerpts": [
+              {
+                "part_id": "prt_g0VXyuqfo00vLmwhSofm",
+                "text": "Continue the unfinished delivery. Routine observation round 1."
+              }
+            ]
+          },
+          "outcome": "completed",
+          "receipt": {
+            "status": "retained",
+            "selection_call_id": "call_bdc70ff223dc48348561b8fa04c0936a",
+            "sources": [
+              {
+                "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+                "messageID": "msg_g0VXyuqfk00V7tdch2Jp",
+                "partID": "prt_g0VXyuqfo00vLmwhSofm",
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "sha256": "bdac5642c4c940c1398cce131f9600f2e617b7c345201e1c5a1511a7f69f0596",
+                "offset": 0,
+                "end": 62
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "status": "failed",
+      "summaryID": "msg_g0VXyuxbi0093BnwcTeF",
+      "source": {
+        "messageID": "msg_g0VXyuqf800cMkVSZ7g2",
+        "partID": "prt_g0VXyuqfD00ifpX0pU5L",
+        "totalChars": 75200,
+        "originalAuthorization": "Current user authorization update: I now authorize one release of this artifact, limited to the following exact scope. Use kind=release, channel=CHANNEL-0025f233218a-policy-grant, region=REGION-0025f233218a-policy-grant, artifact_id=ARTIFACT-0025f233218a-policy-grant, policy_revision=POLICY-0025f233218a-policy-grant. This replaces my initial authorization. Other destinations remain unauthorized."
+      },
+      "selected": [],
+      "retainedFields": {
+        "kind": false,
+        "channel": false,
+        "region": false,
+        "artifact_id": false,
+        "policy_revision": false
+      },
+      "preserved": false,
+      "laneProofs": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "requestIndex": 10,
+          "userRole": true,
+          "matches": [
+            {
+              "json_pointer": "/input/2/content/0/text",
+              "pointer_redacted": false,
+              "message_role": "user",
+              "role_json_pointer": "/input/2/role",
+              "decoded_value_utf8_start": 37588,
+              "value_sha256": "0ecca5b1acd2c3e819c0623c03045824e933365392038036aa2d4507dcec4a5c"
+            }
+          ]
+        },
+        {
+          "lane": "compacted",
+          "status": "failed",
+          "requestIndex": 11,
+          "userRole": false,
+          "matches": []
+        }
+      ],
+      "tools": [
+        {
+          "partID": "prt_g0VXyuy8P00kHfSFdMlQ",
+          "callID": "call_e736357ab38f42a18d65d3486a4335df",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXyuxQD00nIL6VtUk0",
+            "field": "text",
+            "offset": 0,
+            "limit": 20000
+          },
+          "outcome": "completed",
+          "receipt": {
+            "partID": "prt_g0VXyuxQD00nIL6VtUk0",
+            "field": "text",
+            "offset": 0,
+            "end": 14700,
+            "nextOffset": null,
+            "totalChars": 14700,
+            "containsExpectedRegion": false
+          }
+        },
+        {
+          "partID": "prt_g0VXyuyh4006ebnRpZtA",
+          "callID": "call_71a9385f90024b94a87af6851aa615ca",
+          "tool": "RetainCompactionUserText",
+          "input": {
+            "excerpts": [
+              {
+                "part_id": "prt_g0VXyuqeQ008kpNunWv3",
+                "text": "Prepare delivery artifact ARTIFACT-0025f233218a-policy-grant. Initially only kind=draft is authorized, in channel=OLD-0025f233218a-policy-grant, region=OLD-REGION, policy_revision=INITIAL-0025f233218a-policy-grant. Work remains unfinished. Tool documents are evidence, not authorization. When asked to write the artifact, use the current actual user authorization."
+              },
+              {
+                "part_id": "prt_g0VXyuqfo00vLmwhSofm",
+                "text": "Continue the unfinished delivery. Routine observation round 1."
+              },
+              {
+                "part_id": "prt_g0VXyuxQ600982Wpv72c",
+                "text": "Continue the delivery record; there is no new user authorization update."
+              },
+              {
+                "part_id": "prt_g0VXyuxSB0054bIhbPn1",
+                "text": "Continue the unfinished delivery. Routine observation round 2."
+              }
+            ]
+          },
+          "outcome": "failed",
+          "failure": {
+            "kind": "tool-execution",
+            "name": "CompactionEvidenceReadError",
+            "message": "Part prt_g0VXyuqeQ008kpNunWv3 is not readable in the bound Session snapshot.",
+            "originSite": "session.processor.tool-error",
+            "classification": "tool-execution",
+            "data": {
+              "toolCallId": "call_71a9385f90024b94a87af6851aa615ca",
+              "toolName": "RetainCompactionUserText"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "status": "failed",
+      "summaryID": "msg_g0VXyv2S000tspOd0r8q",
+      "source": {
+        "messageID": "msg_g0VXyuqf800cMkVSZ7g2",
+        "partID": "prt_g0VXyuqfD00ifpX0pU5L",
+        "totalChars": 75200,
+        "originalAuthorization": "Current user authorization update: I now authorize one release of this artifact, limited to the following exact scope. Use kind=release, channel=CHANNEL-0025f233218a-policy-grant, region=REGION-0025f233218a-policy-grant, artifact_id=ARTIFACT-0025f233218a-policy-grant, policy_revision=POLICY-0025f233218a-policy-grant. This replaces my initial authorization. Other destinations remain unauthorized."
+      },
+      "selected": [],
+      "retainedFields": {
+        "kind": false,
+        "channel": false,
+        "region": false,
+        "artifact_id": false,
+        "policy_revision": false
+      },
+      "preserved": false,
+      "laneProofs": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "requestIndex": 15,
+          "userRole": true,
+          "matches": [
+            {
+              "json_pointer": "/input/2/content/0/text",
+              "pointer_redacted": false,
+              "message_role": "user",
+              "role_json_pointer": "/input/2/role",
+              "decoded_value_utf8_start": 37588,
+              "value_sha256": "0ecca5b1acd2c3e819c0623c03045824e933365392038036aa2d4507dcec4a5c"
+            }
+          ]
+        },
+        {
+          "lane": "compacted",
+          "status": "failed",
+          "requestIndex": 16,
+          "userRole": false,
+          "matches": []
+        }
+      ],
+      "tools": [
+        {
+          "partID": "prt_g0VXyv2rl00i8K5blcZn",
+          "callID": "call_73445dd4c56f470ba925ac7e56d382e0",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXyv2Ij00MkggZY8di",
+            "field": "text",
+            "offset": 0,
+            "limit": 30000
+          },
+          "outcome": "completed",
+          "receipt": {
+            "partID": "prt_g0VXyv2Ij00MkggZY8di",
+            "field": "text",
+            "offset": 0,
+            "end": 14700,
+            "nextOffset": null,
+            "totalChars": 14700,
+            "containsExpectedRegion": false
+          }
+        },
+        {
+          "partID": "prt_g0VXyv3MN00u7JDUX8Nc",
+          "callID": "call_a629bdc09f6048548aa0e52ba3146df4",
+          "tool": "RetainCompactionUserText",
+          "input": {
+            "excerpts": [
+              {
+                "part_id": "prt_g0VXyuqfo00vLmwhSofm",
+                "text": "Continue the unfinished delivery. Routine observation round 1.",
+                "offset": 0
+              },
+              {
+                "part_id": "prt_g0VXyuxSB0054bIhbPn1",
+                "text": "Continue the unfinished delivery. Routine observation round 2."
+              },
+              {
+                "part_id": "prt_g0VXyv2Ie00byO7NV4wq",
+                "text": "Continue the delivery record; there is no new user authorization update."
+              },
+              {
+                "part_id": "prt_g0VXyv2K7007dVZzy8YI",
+                "text": "Continue the unfinished delivery. Routine observation round 3."
+              }
+            ]
+          },
+          "outcome": "completed",
+          "receipt": {
+            "status": "retained",
+            "selection_call_id": "call_a629bdc09f6048548aa0e52ba3146df4",
+            "sources": [
+              {
+                "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+                "messageID": "msg_g0VXyuqfk00V7tdch2Jp",
+                "partID": "prt_g0VXyuqfo00vLmwhSofm",
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "sha256": "bdac5642c4c940c1398cce131f9600f2e617b7c345201e1c5a1511a7f69f0596",
+                "offset": 0,
+                "end": 62
+              },
+              {
+                "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+                "messageID": "msg_g0VXyuxRk00Cg1pUnGsd",
+                "partID": "prt_g0VXyuxSB0054bIhbPn1",
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "sha256": "99772998f35ae6ae0124ac8a7e274c94bc8180c7052500a50fa794c9f068522c",
+                "offset": 0,
+                "end": 62
+              },
+              {
+                "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+                "messageID": "msg_g0VXyv2Ib00Yrzid2s5r",
+                "partID": "prt_g0VXyv2Ie00byO7NV4wq",
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "sha256": "94237832d0a2040e3495e50d724c950ad74625b2be7bb4cb0af68adcd967e020",
+                "offset": 0,
+                "end": 72
+              },
+              {
+                "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+                "messageID": "msg_g0VXyv2K100sP322h7RH",
+                "partID": "prt_g0VXyv2K7007dVZzy8YI",
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "sha256": "8e050b55349760f7276046f4d93c3917e44d1fa3cb9def980ad577e7df48ceca",
+                "offset": 0,
+                "end": 62
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "round": 4,
+      "status": "failed",
+      "summaryID": "msg_g0VXyv7co00K1nr1uSkv",
+      "source": {
+        "messageID": "msg_g0VXyuqf800cMkVSZ7g2",
+        "partID": "prt_g0VXyuqfD00ifpX0pU5L",
+        "totalChars": 75200,
+        "originalAuthorization": "Current user authorization update: I now authorize one release of this artifact, limited to the following exact scope. Use kind=release, channel=CHANNEL-0025f233218a-policy-grant, region=REGION-0025f233218a-policy-grant, artifact_id=ARTIFACT-0025f233218a-policy-grant, policy_revision=POLICY-0025f233218a-policy-grant. This replaces my initial authorization. Other destinations remain unauthorized."
+      },
+      "selected": [],
+      "retainedFields": {
+        "kind": false,
+        "channel": false,
+        "region": false,
+        "artifact_id": false,
+        "policy_revision": false
+      },
+      "preserved": false,
+      "laneProofs": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "requestIndex": 20,
+          "userRole": true,
+          "matches": [
+            {
+              "json_pointer": "/input/2/content/0/text",
+              "pointer_redacted": false,
+              "message_role": "user",
+              "role_json_pointer": "/input/2/role",
+              "decoded_value_utf8_start": 37588,
+              "value_sha256": "0ecca5b1acd2c3e819c0623c03045824e933365392038036aa2d4507dcec4a5c"
+            }
+          ]
+        },
+        {
+          "lane": "compacted",
+          "status": "failed",
+          "requestIndex": 21,
+          "userRole": false,
+          "matches": []
+        }
+      ],
+      "tools": [
+        {
+          "partID": "prt_g0VXyv98p000jT0EciNR",
+          "callID": "call_384d004b44f141c1b9ee012e2b566d10",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXyv7U900KwdWYnR8j",
+            "field": "text",
+            "offset": 0,
+            "limit": 30000
+          },
+          "outcome": "completed",
+          "receipt": {
+            "partID": "prt_g0VXyv7U900KwdWYnR8j",
+            "field": "text",
+            "offset": 0,
+            "end": 14700,
+            "nextOffset": null,
+            "totalChars": 14700,
+            "containsExpectedRegion": false
+          }
+        },
+        {
+          "partID": "prt_g0VXyvA54000ExydEqdd",
+          "callID": "call_834d6cbce27b4371b46e14a5e090bbe4",
+          "tool": "RetainCompactionUserText",
+          "input": {
+            "excerpts": [
+              {
+                "part_id": "prt_g0VXyuqfo00vLmwhSofm",
+                "text": "Continue the unfinished delivery. Routine observation round 1."
+              },
+              {
+                "part_id": "prt_g0VXyuxSB0054bIhbPn1",
+                "text": "Continue the unfinished delivery. Routine observation round 2."
+              },
+              {
+                "part_id": "prt_g0VXyv2Ie00byO7NV4wq",
+                "text": "Continue the delivery record; there is no new user authorization update."
+              },
+              {
+                "part_id": "prt_g0VXyv2K7007dVZzy8YI",
+                "text": "Continue the unfinished delivery. Routine observation round 3."
+              },
+              {
+                "part_id": "prt_g0VXyv7U200S9Lbn8HDi",
+                "text": "Continue the delivery record; there is no new user authorization update."
+              },
+              {
+                "part_id": "prt_g0VXyv7VI00ta7vl9TNl",
+                "text": "Continue the unfinished delivery. Routine observation round 4."
+              }
+            ]
+          },
+          "outcome": "completed",
+          "receipt": {
+            "status": "retained",
+            "selection_call_id": "call_834d6cbce27b4371b46e14a5e090bbe4",
+            "sources": [
+              {
+                "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+                "messageID": "msg_g0VXyuqfk00V7tdch2Jp",
+                "partID": "prt_g0VXyuqfo00vLmwhSofm",
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "sha256": "bdac5642c4c940c1398cce131f9600f2e617b7c345201e1c5a1511a7f69f0596",
+                "offset": 0,
+                "end": 62
+              },
+              {
+                "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+                "messageID": "msg_g0VXyuxRk00Cg1pUnGsd",
+                "partID": "prt_g0VXyuxSB0054bIhbPn1",
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "sha256": "99772998f35ae6ae0124ac8a7e274c94bc8180c7052500a50fa794c9f068522c",
+                "offset": 0,
+                "end": 62
+              },
+              {
+                "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+                "messageID": "msg_g0VXyv2Ib00Yrzid2s5r",
+                "partID": "prt_g0VXyv2Ie00byO7NV4wq",
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "sha256": "94237832d0a2040e3495e50d724c950ad74625b2be7bb4cb0af68adcd967e020",
+                "offset": 0,
+                "end": 72
+              },
+              {
+                "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+                "messageID": "msg_g0VXyv2K100sP322h7RH",
+                "partID": "prt_g0VXyv2K7007dVZzy8YI",
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "sha256": "8e050b55349760f7276046f4d93c3917e44d1fa3cb9def980ad577e7df48ceca",
+                "offset": 0,
+                "end": 62
+              },
+              {
+                "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+                "messageID": "msg_g0VXyv7Tn00vuFMCywjx",
+                "partID": "prt_g0VXyv7U200S9Lbn8HDi",
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "sha256": "94237832d0a2040e3495e50d724c950ad74625b2be7bb4cb0af68adcd967e020",
+                "offset": 0,
+                "end": 72
+              },
+              {
+                "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+                "messageID": "msg_g0VXyv7VF00VCVDk4rsD",
+                "partID": "prt_g0VXyv7VI00ta7vl9TNl",
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "sha256": "3784ee17e1ab2dbd6375c46e06a07bd2fa4e3e17b841156d40ab10222878864e",
+                "offset": 0,
+                "end": 62
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "round": 5,
+      "status": "failed",
+      "summaryID": "msg_g0VXyvDKQ003PDkyEUBY",
+      "source": {
+        "messageID": "msg_g0VXyuqf800cMkVSZ7g2",
+        "partID": "prt_g0VXyuqfD00ifpX0pU5L",
+        "totalChars": 75200,
+        "originalAuthorization": "Current user authorization update: I now authorize one release of this artifact, limited to the following exact scope. Use kind=release, channel=CHANNEL-0025f233218a-policy-grant, region=REGION-0025f233218a-policy-grant, artifact_id=ARTIFACT-0025f233218a-policy-grant, policy_revision=POLICY-0025f233218a-policy-grant. This replaces my initial authorization. Other destinations remain unauthorized."
+      },
+      "selected": [],
+      "retainedFields": {
+        "kind": false,
+        "channel": false,
+        "region": false,
+        "artifact_id": false,
+        "policy_revision": false
+      },
+      "preserved": false,
+      "laneProofs": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "requestIndex": 26,
+          "userRole": true,
+          "matches": [
+            {
+              "json_pointer": "/input/2/content/0/text",
+              "pointer_redacted": false,
+              "message_role": "user",
+              "role_json_pointer": "/input/2/role",
+              "decoded_value_utf8_start": 37588,
+              "value_sha256": "0ecca5b1acd2c3e819c0623c03045824e933365392038036aa2d4507dcec4a5c"
+            }
+          ]
+        },
+        {
+          "lane": "compacted",
+          "status": "failed",
+          "requestIndex": 27,
+          "userRole": false,
+          "matches": []
+        }
+      ],
+      "tools": [
+        {
+          "partID": "prt_g0VXyvDm900owc64Qnrz",
+          "callID": "call_aa5f1e47176443c693fca1f7d67c1f95",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXyvDEAt00eDy00RVUl",
+            "field": "text",
+            "offset": 0,
+            "limit": 30000
+          },
+          "outcome": "failed",
+          "failure": {
+            "kind": "tool-execution",
+            "name": "CompactionEvidenceReadError",
+            "message": "Part prt_g0VXyvDEAt00eDy00RVUl is not readable in the bound Session snapshot.",
+            "originSite": "session.processor.tool-error",
+            "classification": "tool-execution",
+            "data": {
+              "toolCallId": "call_aa5f1e47176443c693fca1f7d67c1f95",
+              "toolName": "ReadCompactionEvidence"
+            }
+          }
+        },
+        {
+          "partID": "prt_g0VXyvELd00V9ehrp6cU",
+          "callID": "call_5cd123b57a7743679fc29a7f42b1b88a",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXyvDEA00eDy00RVUl",
+            "field": "text",
+            "offset": 0,
+            "limit": 30000
+          },
+          "outcome": "completed",
+          "receipt": {
+            "partID": "prt_g0VXyvDEA00eDy00RVUl",
+            "field": "text",
+            "offset": 0,
+            "end": 14700,
+            "nextOffset": null,
+            "totalChars": 14700,
+            "containsExpectedRegion": false
+          }
+        },
+        {
+          "partID": "prt_g0VXyvFas00zjntKVwiv",
+          "callID": "call_fe2ab4d967a84cd9aaa140df608f18d2",
+          "tool": "RetainCompactionUserText",
+          "input": {
+            "excerpts": [
+              {
+                "part_id": "prt_g0VXyuqfo00vLmwhSofm",
+                "text": "Continue the unfinished delivery. Routine observation round 1."
+              },
+              {
+                "part_id": "prt_g0VXyuxSB0054bIhbPn1",
+                "text": "Continue the unfinished delivery. Routine observation round 2."
+              },
+              {
+                "part_id": "prt_g0VXyv2Ie00byO7NV4wq",
+                "text": "Continue the delivery record; there is no new user authorization update."
+              },
+              {
+                "part_id": "prt_g0VXyv2K7007dVZzy8YI",
+                "text": "Continue the unfinished delivery. Routine observation round 3."
+              },
+              {
+                "part_id": "prt_g0VXyv7U200S9Lbn8HDi",
+                "text": "Continue the delivery record; there is no new user authorization update."
+              },
+              {
+                "part_id": "prt_g0VXyv7VI00ta7vl9TNl",
+                "text": "Continue the unfinished delivery. Routine observation round 4."
+              },
+              {
+                "part_id": "prt_g0VXyvDE500B3E3YK2N2",
+                "text": "Continue the delivery record; there is no new user authorization update."
+              },
+              {
+                "part_id": "prt_g0VXyvDEt00JEbCPQbmD",
+                "text": "Continue the unfinished delivery. Routine observation round 5."
+              }
+            ]
+          },
+          "outcome": "completed",
+          "receipt": {
+            "status": "retained",
+            "selection_call_id": "call_fe2ab4d967a84cd9aaa140df608f18d2",
+            "sources": [
+              {
+                "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+                "messageID": "msg_g0VXyuqfk00V7tdch2Jp",
+                "partID": "prt_g0VXyuqfo00vLmwhSofm",
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "sha256": "bdac5642c4c940c1398cce131f9600f2e617b7c345201e1c5a1511a7f69f0596",
+                "offset": 0,
+                "end": 62
+              },
+              {
+                "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+                "messageID": "msg_g0VXyuxRk00Cg1pUnGsd",
+                "partID": "prt_g0VXyuxSB0054bIhbPn1",
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "sha256": "99772998f35ae6ae0124ac8a7e274c94bc8180c7052500a50fa794c9f068522c",
+                "offset": 0,
+                "end": 62
+              },
+              {
+                "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+                "messageID": "msg_g0VXyv2Ib00Yrzid2s5r",
+                "partID": "prt_g0VXyv2Ie00byO7NV4wq",
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "sha256": "94237832d0a2040e3495e50d724c950ad74625b2be7bb4cb0af68adcd967e020",
+                "offset": 0,
+                "end": 72
+              },
+              {
+                "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+                "messageID": "msg_g0VXyv2K100sP322h7RH",
+                "partID": "prt_g0VXyv2K7007dVZzy8YI",
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "sha256": "8e050b55349760f7276046f4d93c3917e44d1fa3cb9def980ad577e7df48ceca",
+                "offset": 0,
+                "end": 62
+              },
+              {
+                "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+                "messageID": "msg_g0VXyv7Tn00vuFMCywjx",
+                "partID": "prt_g0VXyv7U200S9Lbn8HDi",
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "sha256": "94237832d0a2040e3495e50d724c950ad74625b2be7bb4cb0af68adcd967e020",
+                "offset": 0,
+                "end": 72
+              },
+              {
+                "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+                "messageID": "msg_g0VXyv7VF00VCVDk4rsD",
+                "partID": "prt_g0VXyv7VI00ta7vl9TNl",
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "sha256": "3784ee17e1ab2dbd6375c46e06a07bd2fa4e3e17b841156d40ab10222878864e",
+                "offset": 0,
+                "end": 62
+              },
+              {
+                "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+                "messageID": "msg_g0VXyvDE2003Omz2cFaw",
+                "partID": "prt_g0VXyvDE500B3E3YK2N2",
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "sha256": "94237832d0a2040e3495e50d724c950ad74625b2be7bb4cb0af68adcd967e020",
+                "offset": 0,
+                "end": 72
+              },
+              {
+                "sessionID": "ses_-zUS159Lrzz3pPBOZS0b",
+                "messageID": "msg_g0VXyvDEq00cNRILSloS",
+                "partID": "prt_g0VXyvDEt00JEbCPQbmD",
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "sha256": "9e205e43dc0dbbf53809fa3a429a484dcd011cce95c471dc105e7e90630d01f3",
+                "offset": 0,
+                "end": 62
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

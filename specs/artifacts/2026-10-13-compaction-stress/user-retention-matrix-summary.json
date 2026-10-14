@@ -1,0 +1,54 @@
+{
+  "status": "passed",
+  "model": "openai/gpt-6-luna",
+  "compactedInputCeiling": 19000,
+  "fullInputCeiling": 256000,
+  "completedCheckpoints": 10,
+  "actualActions": 20,
+  "passedActions": 20,
+  "passedFields": 100,
+  "sourceRolePreserved": 10,
+  "requests": 72,
+  "phaseRequests": 151,
+  "priorRequests": 618,
+  "total": 769,
+  "runs": [
+    {
+      "name": "cross-model-user-retention-grant",
+      "status": "failed",
+      "requests": 28,
+      "passedActions": 5,
+      "passedFields": 30,
+      "sourceRolePreserved": 0
+    },
+    {
+      "name": "cross-model-user-retention-read-repair-grant",
+      "status": "failed",
+      "requests": 51,
+      "passedActions": 8,
+      "passedFields": 42,
+      "sourceRolePreserved": 0
+    },
+    {
+      "name": "cross-model-user-retention-eager-grant",
+      "status": "passed",
+      "requests": 36,
+      "passedActions": 10,
+      "passedFields": 50,
+      "sourceRolePreserved": 5
+    },
+    {
+      "name": "cross-model-user-retention-eager-revoke",
+      "status": "passed",
+      "requests": 36,
+      "passedActions": 10,
+      "passedFields": 50,
+      "sourceRolePreserved": 5
+    }
+  ],
+  "limits": [
+    "Authored histories, one exact model per run; no universal retention or private Codex equivalence claim.",
+    "The first two interventions remain failures; passing controls do not erase them.",
+    "Role preservation is independently verified from original text and outgoing request roles, not summary self-report."
+  ]
+}

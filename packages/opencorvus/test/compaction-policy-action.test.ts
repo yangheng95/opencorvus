@@ -56,6 +56,10 @@ test("an interrupted middle probe resumes its original action and finishes later
   await exercise("policy-grant", 3, false, false, true)
 }, 90_000)
 
+test("streamed user-source selection survives notes, three checkpoints, copies and actual user-role wire replay", async () => {
+  await exercise("policy-grant", 3, false, false, false, false, true)
+}, 180_000)
+
 async function exercise(
   name: CompactionPolicyCase.Name,
   rounds: number,
@@ -63,6 +67,7 @@ async function exercise(
   interrupted = false,
   probeInterrupted = false,
   pressure = false,
+  retain = false,
 ) {
   const corpus = CompactionPolicyCase.definition(name, `local-${name}`)
   const requests: any[] = []
@@ -102,7 +107,15 @@ async function exercise(
           expect(userContent).toContain(corpus.longUpdate)
         }
         // Deliberately scripted: this validates real compaction transport, not policy reasoning.
-        response =
+        if (retain && compactorRequests <= 2) {
+          const source = await MessageStore.get({ sessionID: entries[0].sessionID, messageID: entries[0].updateID })
+          const selected = source.parts.find((part) => part.type === "text")!
+          const functionName = compactorRequests === 1 ? "RetainCompactionUserText" : "SaveCompactionNotes"
+          const args = compactorRequests === 1 ? { excerpts: [{ part_id: selected.id, text: corpus.update }] }
+            : { notes: "Current user authorization retained in its exact original user Part. Finish the checkpoint." }
+          response = emit({ role: "assistant", tool_calls: [{ index: 0, id: `call_select_${compactorRequests}`,
+            type: "function", function: { name: functionName, arguments: JSON.stringify(args) } }] }, null) + emit({}, "tool_calls")
+        } else response =
           emit(
             {
               role: "assistant",
@@ -112,6 +125,11 @@ async function exercise(
           ) + emit({}, "stop")
       } else {
         expect(names).toEqual([CompactionPolicyCase.toolName])
+        if (retain) {
+          const userText = body.messages.filter((message: any) => message.role === "user")
+            .map((message: any) => typeof message.content === "string" ? message.content : JSON.stringify(message.content)).join("\n")
+          expect(userText).toContain(corpus.update)
+        }
         const args = wrong ? { ...corpus.expected, channel: "WRONG-DESTINATION" } : corpus.expected
         response =
           emit(
@@ -255,7 +273,7 @@ async function exercise(
         expect(entries).toHaveLength(probeInterrupted ? 1 : interrupted ? 2 : rounds)
         const graded = probeInterrupted ? resumed : interrupted ? [entries[0], ...resumed] : entries
         expect(graded.map((entry) => entry.status)).toEqual(Array(rounds).fill(wrong ? "failed" : "passed"))
-        expect(requests).toHaveLength(rounds * 3 + (probeInterrupted ? 1 : 0))
+        expect(requests).toHaveLength(rounds * 3 + (probeInterrupted ? 1 : 0) + (retain ? 2 : 0))
         if (pressure) {
           expect(
             requests[1].messages
@@ -265,6 +283,11 @@ async function exercise(
           ).toContain(corpus.longUpdate)
         }
         for (const entry of graded) {
+          if (retain) {
+            expect(entry.retainedUserSources).toEqual([{ messageID: entry.updateID, role: "user", author: "user",
+              parts: [{ partID: expect.any(String), text: corpus.update }] }])
+            expect(entry.checkpoint.retainedUserSources).toEqual(entry.retainedUserSources)
+          }
           expect(entry.compactionCapacity).toEqual({ status: "known", tokens: pressure ? 19_000 : 256_000 })
           expect(entry.checkpoint).toMatchObject({ status: "valid_checkpoint", processExitCode: 0 })
           expect(entry.reopen).toBe("exact projection identities")

@@ -51,6 +51,7 @@ import { inlineBase64DataUrlMatch, inlineBase64DataUrlSnippet } from "@/util/inl
 import { withKeyedLock } from "@/util/lock"
 import { SessionControl } from "./control"
 import { CompactionHandoff } from "./compaction-handoff"
+import { CompactionUserText } from "./compaction-user-text"
 import { CompactionCoverage } from "./compaction-coverage"
 import { SessionStatus as SessionStatusLifecycle } from "./status"
 import { SessionPromptState } from "./prompt/state"
@@ -70,7 +71,6 @@ import {
   isToolRequestPartData,
   reconcileToolRequestFact,
   projectToolPartInTransaction,
-  projectPartInTransaction,
   toolOutcomeData,
   toolOutcomePartIdentity,
   toolRequestData,
@@ -1725,18 +1725,28 @@ export namespace Session {
       if (existingCheckpoint && existingCheckpoint.id !== input.part.id) {
         throw new Error(`Compaction checkpoint assistant ${input.info.id} already owns checkpoint ${existingCheckpoint.id}`)
       }
-      const continuationParts = db
-        .select()
-        .from(PartTable)
-        .where(eq(PartTable.message_id, input.info.id))
-        .orderBy(PartTable.time_created, PartTable.id)
-        .all()
-        .map((row) => projectPartInTransaction(db, row))
+      const continuationParts = MessageStore.getInTransaction(db, {
+        sessionID: input.info.sessionID, messageID: input.info.id,
+      }).parts
       const continuation = Message.compactionContinuationTextParts(continuationParts)
         .map((item) => item.text)
         .join("\n\n")
       if (!continuation.trim()) {
         throw new Error(`Compaction checkpoint assistant ${input.info.id} must contain final-step visible text`)
+      }
+      const selection = CompactionUserText.readReceipt(continuationParts)
+      if (selection?.sources.length) {
+        const selectedSources = [...new Set(selection.sources.map((source) => source.messageID))].map((messageID) =>
+          MessageStore.getInTransaction(db, { sessionID: input.info.sessionID, messageID }))
+        CompactionUserText.project(selection, selectedSources)
+        const sourceParent = MessageStore.getInTransaction(db, {
+          sessionID: input.info.sessionID, messageID: input.info.parentID,
+        })
+        for (const source of selectedSources) {
+          if (source.info.time.created > sourceParent.info.time.created ||
+            (source.info.time.created === sourceParent.info.time.created && source.info.id > sourceParent.info.id))
+            throw new CompactionUserText.IntegrityError("A retained user source is newer than the compaction input.")
+        }
       }
       for (const entry of input.part.covered_parts ?? []) {
         CompactionCoverage.assertSource(entry, MessageStore.getInTransaction(db, {

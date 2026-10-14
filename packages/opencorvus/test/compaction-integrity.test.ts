@@ -9,6 +9,7 @@ import { Session } from "@/session"
 import { SessionCompaction } from "@/session/compaction"
 import { CompactionEvidenceReader } from "@/session/compaction-evidence-reader"
 import { CompactionWorkingContext } from "@/session/compaction-working-context"
+import { CompactionUserText } from "@/session/compaction-user-text"
 import { ContextBudget } from "@/session/context-budget"
 import { RequestBudget } from "@/session/request-budget"
 import { SessionControl } from "@/session/control"
@@ -594,6 +595,9 @@ describe("real local streaming compaction transport", () => {
                 }),
                 expect.objectContaining({
                   function: expect.objectContaining({ name: CompactionWorkingContext.TOOL_NAME }),
+                }),
+                expect.objectContaining({
+                  function: expect.objectContaining({ name: CompactionUserText.TOOL_NAME }),
                 }),
               ],
             })
