@@ -1,0 +1,61 @@
+{
+  "capturedAt": 1791946352831,
+  "files": [
+    {
+      "source": "root-before/authority.ts",
+      "destination": "root-before/authority.ts.gz",
+      "originalBytes": 73163
+    },
+    {
+      "source": "root-before/callers.txt",
+      "destination": "root-before/callers.txt.gz",
+      "originalBytes": 5468
+    },
+    {
+      "source": "root-before/database.ts",
+      "destination": "root-before/database.ts.gz",
+      "originalBytes": 70811
+    },
+    {
+      "source": "root-before/head.txt",
+      "destination": "root-before/head.txt.gz",
+      "originalBytes": 41
+    },
+    {
+      "source": "root-before/history.txt",
+      "destination": "root-before/history.txt.gz",
+      "originalBytes": 1058
+    },
+    {
+      "source": "root-before/module-topology.ts",
+      "destination": "root-before/module-topology.ts.gz",
+      "originalBytes": 14364
+    },
+    {
+      "source": "root-before/session-index.ts",
+      "destination": "root-before/session-index.ts.gz",
+      "originalBytes": 121334
+    },
+    {
+      "source": "root-before/status.txt",
+      "destination": "root-before/status.txt.gz",
+      "originalBytes": 189
+    },
+    {
+      "source": "root-before/working-diff.patch",
+      "destination": "root-before/working-diff.patch.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": "capture-406-delivery.mjs",
+      "destination": "capture-406-delivery.mjs.gz",
+      "originalBytes": 1422
+    },
+    {
+      "source": "capture-initial.mjs",
+      "destination": "capture-initial.mjs.gz",
+      "originalBytes": 1085
+    }
+  ],
+  "boundary": "Initial source/reader evidence only; no 407 production or runtime qualification"
+}

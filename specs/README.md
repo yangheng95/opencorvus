@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [407 消息完成与续行退休](records/2026-10/2026-10-14-message-continuation-retirement-407.md)：普通Ask正常完成边界、共享事务/import影响与Question终态并行只读审计，承接406正常交付。
+
 - [Sources网页导航与浅色阅读](records/2026-10/2026-10-14-source-navigation.md)：实际网页目标、返回后的阅读所有权与主题资格。
 
 - [命令面板全历史搜索](records/2026-10/2026-10-14-command-search.md)：完整查询、分页、当前可见快捷键与真实Sources入口验收。

@@ -1,0 +1,228 @@
+{
+  "capturedAt": 1791946286029,
+  "files": [
+    {
+      "source": "delivery-commands/commit01/owner-start.json",
+      "destination": "commit01/owner-start.json.gz",
+      "originalBytes": 294,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/commit01/owner.json",
+      "destination": "commit01/owner.json.gz",
+      "originalBytes": 631,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/commit01/stdout.log",
+      "destination": "commit01/stdout.log.gz",
+      "originalBytes": 187,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/commit01/stderr.log",
+      "destination": "commit01/stderr.log.gz",
+      "originalBytes": 2502,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/reconcile01/owner-start.json",
+      "destination": "reconcile01/owner-start.json.gz",
+      "originalBytes": 281,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/reconcile01/owner.json",
+      "destination": "reconcile01/owner.json.gz",
+      "originalBytes": 618,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/reconcile01/stdout.log",
+      "destination": "reconcile01/stdout.log.gz",
+      "originalBytes": 0,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/reconcile01/stderr.log",
+      "destination": "reconcile01/stderr.log.gz",
+      "originalBytes": 2507,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/reconcile02/owner-start.json",
+      "destination": "reconcile02/owner-start.json.gz",
+      "originalBytes": 281,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/reconcile02/owner.json",
+      "destination": "reconcile02/owner.json.gz",
+      "originalBytes": 618,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/reconcile02/stdout.log",
+      "destination": "reconcile02/stdout.log.gz",
+      "originalBytes": 0,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/reconcile02/stderr.log",
+      "destination": "reconcile02/stderr.log.gz",
+      "originalBytes": 40942,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/reconcile03/owner-start.json",
+      "destination": "reconcile03/owner-start.json.gz",
+      "originalBytes": 281,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/reconcile03/owner.json",
+      "destination": "reconcile03/owner.json.gz",
+      "originalBytes": 618,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/reconcile03/stdout.log",
+      "destination": "reconcile03/stdout.log.gz",
+      "originalBytes": 90,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/reconcile03/stderr.log",
+      "destination": "reconcile03/stderr.log.gz",
+      "originalBytes": 0,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/fetch-final01/owner-start.json",
+      "destination": "fetch-final01/owner-start.json.gz",
+      "originalBytes": 206,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/fetch-final01/owner.json",
+      "destination": "fetch-final01/owner.json.gz",
+      "originalBytes": 543,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/fetch-final01/stdout.log",
+      "destination": "fetch-final01/stdout.log.gz",
+      "originalBytes": 0,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/fetch-final01/stderr.log",
+      "destination": "fetch-final01/stderr.log.gz",
+      "originalBytes": 0,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/merge-final01/owner-start.json",
+      "destination": "merge-final01/owner-start.json.gz",
+      "originalBytes": 225,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/merge-final01/owner.json",
+      "destination": "merge-final01/owner.json.gz",
+      "originalBytes": 562,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/merge-final01/stdout.log",
+      "destination": "merge-final01/stdout.log.gz",
+      "originalBytes": 20,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/merge-final01/stderr.log",
+      "destination": "merge-final01/stderr.log.gz",
+      "originalBytes": 0,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/push01/owner-start.json",
+      "destination": "push01/owner-start.json.gz",
+      "originalBytes": 205,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/push01/owner.json",
+      "destination": "push01/owner.json.gz",
+      "originalBytes": 542,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/push01/stdout.log",
+      "destination": "push01/stdout.log.gz",
+      "originalBytes": 2325,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/push01/stderr.log",
+      "destination": "push01/stderr.log.gz",
+      "originalBytes": 1270,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/fetch-after01/owner-start.json",
+      "destination": "fetch-after01/owner-start.json.gz",
+      "originalBytes": 206,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/fetch-after01/owner.json",
+      "destination": "fetch-after01/owner.json.gz",
+      "originalBytes": 543,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/fetch-after01/stdout.log",
+      "destination": "fetch-after01/stdout.log.gz",
+      "originalBytes": 0,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/fetch-after01/stderr.log",
+      "destination": "fetch-after01/stderr.log.gz",
+      "originalBytes": 0,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "final-commit.json",
+      "destination": "final-commit.json.gz",
+      "originalBytes": 160392,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "index-reconcile.json",
+      "destination": "index-reconcile.json.gz",
+      "originalBytes": 192465,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "reconcile-index.mjs",
+      "destination": "reconcile-index.mjs.gz",
+      "originalBytes": 2397,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "reconcile-index01-before-atomic.mjs",
+      "destination": "reconcile-index01-before-atomic.mjs.gz",
+      "originalBytes": 2432,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "reconcile-index02-before-combined.mjs",
+      "destination": "reconcile-index02-before-combined.mjs.gz",
+      "originalBytes": 2345,
+      "directBytesIdentical": true
+    }
+  ],
+  "boundary": "Exact command/source identity capture; not a functional or source-hash gate"
+}

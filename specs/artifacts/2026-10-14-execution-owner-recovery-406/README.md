@@ -12,5 +12,6 @@
 - [UI/安装库原摘录](scratch406-ui-source-excerpts.json.gz)、[调用与检索](scratch406-ui-callers.json.gz)
 - [捕获清单](manifest.json)
 - [方案文档检查原结果](plan-checks/manifest.json)：首检查与并行file.list错误契约生成差异、当前原生成器同步和原检查重跑0，失败完整保留。
+- [实际提交与正常推送回执](after-delivery01/README.md)：dcc2469e2、原index锁失败、精确同步、正常全hook/push0及upstream祖先确认，由407承接。
 
 gzip解压逐字节与原捕获比较只证明保存身份，不当源摘要或功能验收。未复制数据库、凭据、模型目录、私有bundle或运行中的新scope；未知与未跑矩阵仍见原方案。

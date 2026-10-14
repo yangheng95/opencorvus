@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [407 消息完成与续行退休](2026-10-14-message-continuation-retirement-407/README.md)：实施前真实源码/caller/history与406提交、锁竞争和正常push回执承接。
+
 - [Sources网页导航与浅色阅读](2026-10-14-source-navigation/README.md)：实际网页目标、返回后的阅读所有权与主题资格。
 
 - [命令面板全历史搜索](2026-10-14-command-search/README.md)：完整查询、分页、当前可见快捷键与真实Sources入口验收。
