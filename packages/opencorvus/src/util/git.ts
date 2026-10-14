@@ -34,6 +34,7 @@ export interface GitOptions {
   timeoutMs?: number
   /** Named band; ignored when `timeoutMs` is supplied. */
   timeoutProfile?: GitTimeoutProfile
+  input?: AsyncIterable<Uint8Array>
 }
 
 const GIT_PROCESS_CONFIG = ["-c", "core.longPaths=true"] as const
@@ -62,8 +63,8 @@ export function resolveGitTimeoutMs(opts: Pick<GitOptions, "timeoutMs" | "timeou
 /**
  * Run a git command.
  *
- * Uses Process helpers with stdin ignored to avoid protocol pipe inheritance
- * issues in embedded/client environments.
+ * Uses the supervised Process input stream when supplied; otherwise ignores
+ * stdin to avoid protocol pipe inheritance in embedded/client environments.
  *
  * Timeout resolution order: `opts.timeoutMs` > `opts.timeoutProfile` >
  * legacy default (90s). The timeout is an inactivity window: stdout or
@@ -84,7 +85,8 @@ async function executeGit(
   const result = await run(command, {
     cwd: opts.cwd,
     ...(exactEnv ? { exactEnv } : { env: opts.env }),
-    stdin: "ignore",
+    stdin: opts.input ? "pipe" : "ignore",
+    input: opts.input,
     nothrow: true,
     inactivityTimeoutMs: timeoutMs,
     inactivityTimeoutMessage: timeoutMessage,

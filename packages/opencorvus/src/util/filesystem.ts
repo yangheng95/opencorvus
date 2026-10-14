@@ -75,6 +75,11 @@ export namespace Filesystem {
     return statSync(p, { throwIfNoEntry: false }) ?? undefined
   }
 
+  /** A .git file also identifies a linked checkout. */
+  export function isGitRepo(directory: string): boolean {
+    return stat(join(directory, ".git")) !== undefined
+  }
+
   export async function size(p: string): Promise<number> {
     const s = stat(p)?.size ?? 0
     return typeof s === "bigint" ? Number(s) : s

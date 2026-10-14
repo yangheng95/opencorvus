@@ -5,6 +5,7 @@ import { which } from "@/util/which"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { AsyncLocalStorage } from "node:async_hooks"
+import { gitSourcePaths } from "@/util/git-source-paths"
 import type { Stats } from "node:fs"
 
 export type EngineGitRepository = Readonly<{
@@ -385,14 +386,12 @@ export const EngineGitProcess = {
   unmerged(repository: EngineGitRepository) {
     return execute(["ls-files", "--unmerged", "-z", "--", "."], inRepository(repository))
   },
-  snapshotPaths(repository: EngineGitRepository) {
-    return execute(
-      ["ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", "."],
-      inRepository(repository),
-    )
+  async snapshotPaths(repository: EngineGitRepository) {
+    return (await gitSourcePaths(repository.workTree, (args, input) => execute(args, inRepository(repository), input)))
+      .paths
   },
-  sourceSnapshotPaths(cwd: string) {
-    return execute(["ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", "."], { cwd })
+  async sourceSnapshotPaths(cwd: string) {
+    return (await gitSourcePaths(cwd, (args, input) => execute(args, { cwd }, input))).paths
   },
   stageEntries(repository: EngineGitRepository) {
     return execute(["ls-files", "--stage", "-z", "--", "."], inRepository(repository))

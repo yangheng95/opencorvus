@@ -57,3 +57,41 @@ Root自有IAB4 Tab6通过当前开发/ui真实选择control Chat→Runtime，观
 已读SourceTreeSnapshot与EngineGit snapshotPaths/sourceSnapshotPaths生产调用：git.ts canonical snapshot capture、execution-capsule/tree-digest.ts源树初/终两次枚举及nested repo；filesystemTreeSnapshot本身采用lstat目录遍历，不能把它与Git source枚举混作同一合格路径。Task/Mission archive共同buildProjectArchive→listGitIncludedFiles→git ls-files cached/others；addProjectFile只lstat终端，不证明所有祖先link处理。File.status先diff，再ls-files others并逐项readText；Vcs.diff还对每个untracked做git diff numstat/patch。Worktree/GC默认为normal status需独立验证；Snapshot untracked=no排除该项扫描，仍保其其它合同。相关源已读，实际Capsule/Task/Mission archive、跨scope目标、重试/重启及全部终态矩阵尚未执行，不能判仅meta局部问题。
 
 因此本轮先交付范围清晰的根因证据与完整共享调查，产品源码未修改、修复尚未完成。下一轮须继续冻结单一Git/目录entry枚举契约，核对所有生产消费者与现ignore、tracked/delete/rename、目录link/嵌套仓库、串并行/多Project和实际Task/Mission/Capsule数据，保留用户untracked能力与长路径配置；不得靠去掉untracked、提高timeout、后台预热缓存、增加影子目录或消息遮蔽当前根因。工具第一次归档README补丁因错误spec锚点原失败、没有文件变动；核对实际末行后修正，原tool错误保留在chat，不伪造独立进程退出文件。文档检查、范围提交、fresh同步/完整pending审阅与正常push仍需实际收尾；总体goal active。
+
+## 继续轮次 Recall 与目录边界候选资格
+
+上一轮实质进展：调查与697原件已提交e286cd6a9a6206f6876022a49aab37ce6a5417a3；Root正常push原0，但原stdout为Everything up-to-date，表明该次没有新对象上传，不能冒称自己上传此前他任务已推送的对象。fresh最终HEAD/upstream/remote50cf35a83baa9467e59aa91f541fc0d53dd8756b、e286 ancestor0、own record/artifact clean、index空，原证明在.tmp-codex-project-meta-01a133。Root全文复核新增纯文档27/81范围修正、artifact checker gzip/qualification合同及唯一成员指导helper适用条件，保留其Task实页/完整流中关开未资格。不恢复子agent。当前foreign permission/session/ledger、投影测试退役与共享spec记录/索引保留。
+
+已继续读EngineGitProcess的单一隔离runtime/固定配置/实际runner，git.ts canonical raw-blob snapshot中的lstat/readlink/120000路径，SourceTreeSnapshot的stable root/file/symlink、nested repo与初/终两次Git枚举，Task/Mission shared archive；当前terminal link本来有entry身份保存合同，而legacy ls-files扫描未给junction自身、反而自动展开后代。原Git for Windows2.45 dirent明确只把SYMLINK tag当link，MOUNT_POINT进入directory分类，是本机观察的机制依据；较新宿主是否改变该行为未知，不用换机器或猜测升级代替修复。[对应源码](https://github.com/git-for-windows/git/blob/v2.45.1.windows.1/compat/win32/dirent.c)。
+
+本阶段先资格成熟Git目录边界和ignore输入协议，不修改产品。沿上轮仍保存的control/healthy/combined有限根做只读输入，新directory-query Native发生实例和独立home/runtime；原before namespace不重启、不重新准备、无Auth/models。实际生产hostGit分别调用ls-files cached -z、others/exclude-standard/directory -z（保长路径配置、不改当前Gitglobal config）、已声明目录的literal pathspec及check-ignore -z -v --stdin/non-matching相关原协议。查询结果必须保完整NUL bytes、argv/cwd/时间与原Native输出/结算；输入固定、不搜索用户目录，不按结果迭代猜路径。复制工具版本与原input后才执行，900000/120000ms外层和fast/default原期限分别保持，观察过期续原handle。
+
+资格目标是确认directory边界是否在两自指组合中有限返回、哪些路径仍完整可见、empty/ignored/link/nested Git目录怎样表示；不把directory aggregate当最终逐文件结果。候选最终共享primitive必须由当前Git index与当前Git ignore权威、真实非跟随entry遍历产生完整源集合，caller原scoped runner只负责传递其现repo/index/ignore配置。至少覆盖tracked/delete/rename、未跟踪普通文件、terminal file/dir links与broken/outside links、嵌套仓库、特殊字符、parent ignore与否定、嵌套ignore、index下已有alias后代、同Project并行/A-B、Task/Mission/Capsule实际调用。原native Git VCS stage/commit等写路径也须查清影响；还没有冻结替换代码，拒绝以目录计数、省略链接或隐藏错误作修复。确认这些规则后再写正式单一实现方案与正向验收，不引入缓存、fallback或第二Git配置。
+
+## 单人实施方案：共享源条目读取
+
+Root独立复核两次新原Native运行：directory-query的12条生产hostGit命令均0，combined目录aggregate 282ms，literal alias 197ms；semantic-query的真实NUL标准输入/四字段输出保存完整，check-ignore能返回实际.gitignore来源/行/规则/路径，glob查询只能返回父aggregate，不能用于展开。原Native/parent均0并保三joins。方案据此冻结：新增唯一GitSourcePaths枚举，以调用者原scoped Git runner读取cached index和others/exclude-standard/directory边界；只展开真正普通目录，逐层用Git check-ignore --no-index --verbose --non-matching -z --stdin裁决。终端junction/symlink作为一个条目，保留raw readlink，不展开目标；普通空目录不产生源文件，嵌套Git仓库保持一个边界条目。Git index中的删除路径保留；tracked路径若中间祖先已经变为链接，返回明确linked_ancestor错误，不能读取另一棵树。NUL协议、忽略否定、真实I/O错误必须校验，禁止静默空集合。
+
+迁移本次已找到的全部全untracked读取：Vcs.info、Vcs.diff、File.status、EngineGit snapshotPaths/sourceSnapshotPaths、Task/Mission shared archive及其Capsule调用。保留调用者原Git隔离配置、长路径、期限与流式Process runner，GitOptions仅增加现Process已支持的输入流透传。Vcs.info的tracked porcelain与完整untracked entry集合共同构成当前计数，公开字段保持；链接计一个真实条目而非重复后代。Vcs.diff/File.status读取终端链接正文时使用raw readlink；嵌套Git目录在父diff中按边界给零文本统计。Capsule/Engine沿现lstat/readlink/raw-blob合同保存链接；archive沿现普通文件合同不导出链接目标。旧全untracked读取同步删除，不留下备用枚举。
+
+当前Git add --all写入口、normal Worktree/GC dirty检查与此次源条目读取不同：不擅自把原生Git提交替换为手写index协议。必须独立资格并如实记录结果；若junction写入仍放大，它是下一范围的未解决问题，不能据读入口通过宣称整个Git能力完成。权限、Session/Mission调度、消息、模型、数据库schema不改，当前无凭据/新模型验收需求。
+
+归档影响复核发现fileCount当前取候选paths长度，而addProjectFile会跳过链接和目录，manifest与实际ZIP文件数有机会分离。此次新增准确终端entry后该影响必须同时收敛：addProjectFile回传实际普通文件导出事实，Task/Mission公共buildProjectArchive累加同一个计数，manifest及返回值共用该事实；不将链接数伪称已导出文件数。新增实际ZIP读取正向验收。
+
+规模影响复核：递归每目录单独check-ignore会令Git进程数随目录数增长，影响现2300文件/23目录的真实Engine拓扑合同。采用同一物理枚举的逐层候选批次，每层一次真实Git ignore流式请求，先过滤再进入下一层；一层中的多个普通目录共用该请求。仍仅有一个当前实现，终端link不入候选目录队列，无跨请求缓存。追加现2300文件checker，修改后重新执行接口与桌面资格。
+
+验收：真实Git正向集合包含tracked/deleted/rename、普通未跟踪文件、忽略否定/目录规则/嵌套规则、特殊字符、嵌套仓库、healthy/self/ancestor/combined链接和linked_ancestor明确错误；实际Host runner及Engine隔离runner都执行，A/B串并行结果精确。继续现原有限fixture的GET/vcs必须在产品15秒读取内200、branch/计数正确。Root启动新的隔离开发/ui，英语/中文Runtime与A/B切换实际操作、截图人工复核；不得运行UI自动化。聚焦现source-tree、Engine raw-import、VCS服务和新增共享枚举测试，失败保原件后修根因。新原run单独namespace/原deadline/原结算，保留之前失败；文档检查、范围提交、fresh merge/完整pending审阅、正常push后进入下一批。
+
+## 单人实现、原失败与最终资格
+
+共享gitSourcePaths已替换全仓找到的全untracked读取，没有留下旧全扫描备用路径。GitOptions输入仍经现supervised Process；Engine隔离runner传同一个真实work-tree/index/ignore配置。现Project.isGitRepo委托Filesystem同一磁盘marker实现。Vcs tracked status与完整entry count合并，link正文为raw readlink（非UTF-8按binary）；File status沿原native path合同返回。Task/Mission ZIP的manifest及返回值共用实际导出文件数。新的[当前架构](../../current/architecture/git-source-entry-enumeration.md)定义这些公开边界。
+
+原检查器失败完整保留：首轮移动.git遭Windows EPERM，改真实separate-git-dir初始化；消费者期望错误地把File API native path写作斜杠，按原合同修正。早期工具沿用Bun1.3.14；r3虽更换外层1.4 executable，package脚本child仍走PATH旧1.3.14，原stdout证明，不冒称1.4。r4与最终breadth同时固定原child PATH，全部实际test stdout1.4.0。追加checkpoint最初嵌套toMatchObject/expect.any(String)会把实际baseline commit改成matcher对象；独立原probe before字符串/after对象直接复现，改用原标量断言后真实Git tree、两个120000 blob与result正文均0且匹配。r4最后旧期望3 untracked与checkpoint实际已发布index不符，删除该过期假设，改验真正最终index四条路径与mode。没有为测试恢复旧实现，失败发生实例均未重启/覆盖。
+
+最终native-source-breadth真实原0：24 pass / 1 POSIX-only skip / 83 assertions；六个文件包括新entry/consumer、VCS服务、source tree、raw import和2300-file真实Engine拓扑。最后2300文件/23目录仍保一blob import/一index import及现进程数合同。真实Task baseline/result、ZIP已实际执行；这只资格数据/checkpoint/归档路径，不冒称模型或Mission执行、重试/重启端到端。无新凭据、catalog或模型调用。最终typecheck、docs:check、architecture index（20）和module topology均原0；这些不替代下面视觉资格。
+
+第一服务18462的17原TCP操作与8次手工流程取得combined2133ms/200、6entry、control4entry；Root查看5张原JPEG。逐层合并后新的18463/当前开发/ui再次17原TCP操作：冷combined1198ms/200、6entry，五根分别4/2/2/2/6，八次并发全部200且Project隔离，最长这些vcs2710ms（并发最长2895ms）。Root IAB4自有Tab8英文combined→设置中文→control→combined，3张最终1280×720原JPEG逐图人工查看，branch及6/4/6正确，未用DOM文本/像素/评分替代图片。Root Tab7/8分别关闭；各原固定cap不变，普通shutdown200，Native/parent0、physical/output/request三joins完整；原237/189内部请求均原ID/PID一致、active0。原十份小正文与五link dev/inode/raw target仍保留。
+
+normal Worktree/GC同语义的五条真实git status --porcelain均0（control922ms，其余155–265ms），该读取没有元数据all扫描放大。随后combined native git add --dry-run --all原运行在无输出后达到外层120秒真实无活动期限，原inactivity_timeout/1、全Job收束保留；未取得Git自身退出、输入流或index前后保存，不倒填它们。原生写入口问题尚未修复，将在下一批结合实际请求/期限/结算开展横审，不能把读修复外推成整个Git能力完成。当前无外部依赖阻塞，持续目标active。
+
+本轮[完整2100原capture](../../artifacts/2026-10-14-project-metadata-latency/source-entry-read/README.md)共3290049B，包括协议、原失败、修正运行、34原HTTP、两完整服务日志、426内部request原件及8原图；manifest只用于真实capture/存储/提交身份，不用源码摘要或像素gate验功能。一次缩减格式差异的辅助探针先因import路径错误、后因printer比较不等失败，未改产品；保留原工作文件，没有把该非功能检查设成交付门槛。范围提交/同步/推送由后续真实Git收据记录，不预写成功。

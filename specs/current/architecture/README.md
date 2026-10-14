@@ -18,6 +18,7 @@ file.
 - [Task control plane](task-control-plane.md)
 - [Continuous goal execution intent](continuous-goal.md)
 - [Task runtime directory ownership](task-runtime-directory.md)
+- [Git source entry enumeration](git-source-entry-enumeration.md)
 - [Server runtime readiness](server-runtime-readiness.md)
 
 ## Agents, tools, and extensions

@@ -22,6 +22,7 @@ import { isUtf8 } from "node:buffer"
 import { withKeyedLock } from "../util/lock"
 import { CROSS_PROCESS_LOCK_RETRY, SHARED_JSON_FACT_QUEUE_TIMEOUT_MS, withProcessLock } from "../util/process-lock"
 import { hostGit } from "../util/git"
+import { gitSourcePaths } from "../util/git-source-paths"
 import { AttachmentStore } from "../storage/attachment-store"
 
 export namespace File {
@@ -828,29 +829,28 @@ export namespace File {
       }
     }
 
-    const untrackedOutput = (
-      await hostGit(
-        ["-c", "core.fsmonitor=false", "-c", "core.quotepath=false", "ls-files", "--others", "--exclude-standard"],
-        { cwd: Instance.directory, timeoutProfile: "default" },
+    for (const filepath of (
+      await gitSourcePaths(Instance.directory, (args, input) =>
+        hostGit(["-c", "core.fsmonitor=false", "-c", "core.quotepath=false", ...args], {
+          cwd: Instance.directory,
+          timeoutProfile: "default",
+          input,
+        }),
       )
-    ).text()
-
-    if (untrackedOutput.trim()) {
-      const untrackedFiles = untrackedOutput.trim().split("\n")
-      for (const filepath of untrackedFiles) {
-        try {
-          const content = await Filesystem.readText(path.join(Instance.directory, filepath))
-          const lines = content.split("\n").length
-          changedFiles.push({
-            path: filepath,
-            added: lines,
-            removed: 0,
-            status: "added",
-          })
-        } catch {
-          continue
-        }
-      }
+    ).untracked) {
+      const absolute = path.join(Instance.directory, filepath)
+      const entry = await fs.promises.lstat(absolute)
+      const content = entry.isSymbolicLink()
+        ? await fs.promises.readlink(absolute)
+        : entry.isFile()
+          ? await Filesystem.readText(absolute)
+          : undefined
+      changedFiles.push({
+        path: filepath,
+        added: content === undefined ? 0 : content.split("\n").length,
+        removed: 0,
+        status: "added",
+      })
     }
 
     // Get deleted files

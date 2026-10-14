@@ -49,10 +49,8 @@ export type ExecutionCapsuleDirectoryEntryIdentity = {
   type: "directory" | "file" | "symlink" | "other"
 }
 
-function sourcePaths(output: Buffer, root: string): string[] {
-  if (output.length === 0) return []
-  if (output.at(-1) !== 0) throw new Error(`Execution Capsule source enumeration for ${root} was not NUL-terminated`)
-  return output.subarray(0, -1).toString().split("\0").filter(ProjectRuntimePaths.isSourceEnumerationAllowed).toSorted()
+function sourcePaths(paths: string[]): string[] {
+  return paths.filter(ProjectRuntimePaths.isSourceEnumerationAllowed).toSorted()
 }
 
 async function sameFilesystemPath(left: string, right: string): Promise<boolean> {
@@ -321,27 +319,14 @@ async function selectedTreeSnapshot(
         continue
       }
       const listed = await EngineGitProcess.sourceSnapshotPaths(absolute)
-      if (listed.exitCode !== 0) {
-        await assertDirectoryStable(stableRoot, absolute, captured.stat, captured.real)
-        const detail = listed.stderr.toString().trim() || listed.stdout.toString().trim() || "git ls-files failed"
-        throw new Error(`Execution Capsule nested source enumeration failed: ${detail}`)
-      }
-      const initialSourcePaths = sourcePaths(listed.stdout, absolute)
+      const initialSourcePaths = sourcePaths(listed)
       const nested = await selectedTreeSnapshot(absolute, initialSourcePaths, projectedPath)
       const finalTopLevel = await EngineGitProcess.topLevel(absolute)
       const finalListed = await EngineGitProcess.sourceSnapshotPaths(absolute)
-      if (
-        finalTopLevel.exitCode !== 0 ||
-        !(await sameFilesystemPath(finalTopLevel.text().trim(), absolute)) ||
-        finalListed.exitCode !== 0
-      ) {
+      if (finalTopLevel.exitCode !== 0 || !(await sameFilesystemPath(finalTopLevel.text().trim(), absolute))) {
         inspectionConflict(absolute, "source_enumeration_changed")
       }
-      assertExecutionCapsuleSourceEnumerationStable(
-        absolute,
-        initialSourcePaths,
-        sourcePaths(finalListed.stdout, absolute),
-      )
+      assertExecutionCapsuleSourceEnumerationStable(absolute, initialSourcePaths, sourcePaths(finalListed))
       await assertDirectoryStable(stableRoot, absolute, captured.stat, captured.real)
       files.push(...nested.files)
       continue
@@ -365,16 +350,11 @@ export async function executionCapsuleSourceTreeSnapshot(root: string): Promise<
   const stableRoot = await captureStableRoot(root)
   const listed = await EngineGitProcess.sourceSnapshotPaths(root)
   await assertRootStable(stableRoot)
-  if (listed.exitCode !== 0) {
-    const detail = listed.stderr.toString().trim() || listed.stdout.toString().trim() || "git ls-files failed"
-    throw new Error(`Execution Capsule source enumeration failed: ${detail}`)
-  }
-  const initialSourcePaths = sourcePaths(listed.stdout, root)
+  const initialSourcePaths = sourcePaths(listed)
   const snapshot = await selectedTreeSnapshot(root, initialSourcePaths)
   const finalListed = await EngineGitProcess.sourceSnapshotPaths(root)
   await assertRootStable(stableRoot)
-  if (finalListed.exitCode !== 0) inspectionConflict(root, "source_enumeration_changed")
-  assertExecutionCapsuleSourceEnumerationStable(root, initialSourcePaths, sourcePaths(finalListed.stdout, root))
+  assertExecutionCapsuleSourceEnumerationStable(root, initialSourcePaths, sourcePaths(finalListed))
   return snapshot
 }
 

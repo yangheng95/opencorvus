@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [项目元数据共享条目修复](2026-10-14-project-metadata-latency.md)：唯一枚举、真实桌面/checkpoint/ZIP验收与未解决的原生写入范围。
+
 - [408 保存批准决定与安全升级](2026-10-14-grant-decision-recovery-408.md)：唯一授权决定、历史保真、WAL文件独占候选与原客户端消费边界；当前调查/实验准备。
 
 - [代理测试的编辑草稿](2026-10-14-network-test-draft.md)：当前草稿代际与真实HTTP/桌面复核方案。

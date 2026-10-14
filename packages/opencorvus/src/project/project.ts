@@ -36,11 +36,7 @@ export namespace Project {
    * directory is outside every active reclamation for this Project. Existing
    * Task facts keep using `assertDurableAdmissionOpen` and therefore continue
    * on primary or sibling directories. */
-  export function assertDirectoryOwnerAdmissionOpen(
-    db: Database.TxOrDb,
-    projectID: string,
-    directory: string,
-  ): void {
+  export function assertDirectoryOwnerAdmissionOpen(db: Database.TxOrDb, projectID: string, directory: string): void {
     assertDurableAdmissionOpen(db, projectID)
     let reclamation = ProjectDirectoryAdmission.projectReclamation(db, projectID, directory)
     if (!reclamation && !ProjectDirectoryAdmission.directoryPresentSync(directory)) {
@@ -464,7 +460,7 @@ export namespace Project {
    * `Worktree.create` throw WorktreeCreateFailedError forever.
    */
   export function isGitRepo(directory: string): boolean {
-    return Filesystem.stat(path.join(directory, ".git")) !== undefined
+    return Filesystem.isGitRepo(directory)
   }
 
   export const Info = z
@@ -1213,10 +1209,7 @@ export namespace Project {
     return occurrence(id)?.project
   }
 
-  export async function initGit(
-    directory: string,
-    options?: Parameters<typeof fromDirectory>[1],
-  ) {
+  export async function initGit(directory: string, options?: Parameters<typeof fromDirectory>[1]) {
     if (isGitRepo(directory)) {
       const current = await fromDirectory(directory, options)
       return InitGitResult.parse({
@@ -1450,7 +1443,10 @@ export namespace Project {
       const physicalRegistration = await capturePhysicalRegistrationAuthority(projectID, [target])
       await physicalRegistration.revalidate()
       const admittedOccurrence = await ProjectDirectoryAdmission.observeDirectory(target)
-      if (!admission.occurrence || !ProjectDirectoryAdmission.sameOccurrence(admission.occurrence, admittedOccurrence)) {
+      if (
+        !admission.occurrence ||
+        !ProjectDirectoryAdmission.sameOccurrence(admission.occurrence, admittedOccurrence)
+      ) {
         throw new DirectoryOccurrenceChangedError({
           directory: target,
           message: `Task execution directory occurrence changed during durable admission: ${target}`,

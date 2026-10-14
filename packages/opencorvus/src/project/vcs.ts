@@ -2,8 +2,12 @@ import { BusEvent } from "@/bus/bus-event"
 import { Bus } from "@/bus"
 import z from "zod"
 import path from "path"
+import fs from "node:fs/promises"
+import { isUtf8 } from "node:buffer"
+import { formatPatch, structuredPatch } from "diff"
 import { Log } from "@/util/log"
 import { hostGit as git, type GitResult } from "@/util/git"
+import { gitSourcePaths } from "@/util/git-source-paths"
 import { createInstanceState } from "./instance-state"
 import { ProjectInstanceContext } from "./instance-context"
 import { Project } from "./project"
@@ -125,13 +129,6 @@ function parseNumstat(text: string) {
   return stats
 }
 
-function parseZeroSeparatedFiles(text: string) {
-  return zeroSeparatedRecords(text, "vcs file list").map((file) => {
-    if (!file) throw new Error("vcs file list returned an empty path")
-    return normalizeGitPath(file)
-  })
-}
-
 function mergeDiffItems(...lists: DiffItem[][]) {
   const out = new Map<string, DiffItem>()
   for (const item of lists.flat()) {
@@ -164,15 +161,28 @@ async function hasHead(cwd: string) {
 }
 
 async function untrackedFiles(cwd: string) {
-  return parseZeroSeparatedFiles(
-    await gitText(
-      git(["ls-files", "--others", "--exclude-standard", "-z", "--", "."], {
-        cwd,
-        timeoutProfile: "default",
-      }),
-      "vcs untracked files",
-    ),
+  return (await gitSourcePaths(cwd)).untracked
+}
+
+async function untrackedEntryDiff(cwd: string, file: string, options?: DiffOptions) {
+  const absolute = path.join(cwd, file)
+  const entry = await fs.lstat(absolute)
+  if (entry.isDirectory() && !entry.isSymbolicLink()) {
+    return { stat: { additions: 0, deletions: 0, binary: true } satisfies DiffStat, patch: undefined }
+  }
+  if (!entry.isSymbolicLink()) return undefined
+  const bytes = await fs.readlink(absolute, { encoding: "buffer" })
+  if (!isUtf8(bytes)) return { stat: { additions: 0, deletions: 0, binary: true } satisfies DiffStat, patch: undefined }
+  const target = bytes.toString()
+  const patch = formatPatch(
+    structuredPatch("/dev/null", file, "", target, undefined, undefined, {
+      context: options?.context ?? PATCH_CONTEXT_LINES,
+    }),
   )
+  return {
+    stat: { additions: target.split("\n").length, deletions: 0, binary: false } satisfies DiffStat,
+    patch: `new file mode 120000\n${patch}`,
+  }
 }
 
 async function statUntracked(cwd: string, file: string): Promise<DiffStat> {
@@ -316,12 +326,14 @@ async function diffFiles(
     const batch = items.slice(index, index + PATCH_LOAD_CONCURRENCY)
     const loaded = await Promise.all(
       batch.map(async (item) => {
-        const stat = stats.get(item.file) ?? (item.code === "??" ? await statUntracked(cwd, item.file) : undefined)
+        const entry = item.code === "??" ? await untrackedEntryDiff(cwd, item.file, options) : undefined
+        const stat =
+          entry?.stat ?? stats.get(item.file) ?? (item.code === "??" ? await statUntracked(cwd, item.file) : undefined)
         if (!stat) throw new Error(`vcs diff numstat omitted ${item.file}`)
         if (stat.binary || aggregateCapped) return { item, stat, rawPatch: undefined }
         const rawPatch =
           item.code === "??"
-            ? await patchUntracked(cwd, item.file, options)
+            ? (entry?.patch ?? (await patchUntracked(cwd, item.file, options)))
             : await gitText(
                 git(
                   [
@@ -447,13 +459,13 @@ export namespace Vcs {
 
   function parse(
     text: string,
-    input: { initialized: boolean; branch?: string; commit?: string; hasRemote: boolean },
+    input: { initialized: boolean; branch?: string; commit?: string; hasRemote: boolean; untracked?: number },
   ): Info {
     let ahead = 0
     let behind = 0
     let staged = 0
     let modified = 0
-    let untracked = 0
+    let untracked = input.untracked ?? 0
     let conflicts = 0
 
     const records = zeroSeparatedRecords(text, "vcs status")
@@ -725,17 +737,18 @@ export namespace Vcs {
     const commit = head ? await currentCommit(currentProject().directory) : undefined
     const rawBranch = await currentBranch()
     const branch = commit ? rawBranch : undefined
-    const [text, hasRemote] = await Promise.all([
+    const [text, hasRemote, untracked] = await Promise.all([
       gitText(
-        git(["status", "--porcelain=v1", "-z", "--branch", "--untracked-files=all"], {
+        git(["status", "--porcelain=v1", "-z", "--branch", "--untracked-files=no"], {
           cwd: currentProject().directory,
           timeoutProfile: "default",
         }),
         "vcs status",
       ),
       hasConfiguredRemote(currentProject().directory),
+      untrackedFiles(currentProject().directory),
     ])
-    return parse(text, { initialized: true, branch, commit, hasRemote })
+    return parse(text, { initialized: true, branch, commit, hasRemote, untracked: untracked.length })
   }
 
   export async function diff(mode: Mode, options?: DiffOptions): Promise<FileDiff[]> {

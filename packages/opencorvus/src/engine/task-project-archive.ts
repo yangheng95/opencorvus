@@ -5,7 +5,8 @@ import { EngineService } from "@/task-api"
 import { Project } from "@/project/project"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Filesystem } from "@/util/filesystem"
-import { hostGit as git } from "@/util/git"
+import { gitSourcePaths } from "@/util/git-source-paths"
+import { hostGit } from "@/util/git"
 import { requireTask } from "./store"
 
 export type ProjectArchive = {
@@ -34,6 +35,7 @@ type TaskExecutionFlow = {
 const ARCHIVE_MAX_STRING_CHARS = 16_384
 const ARCHIVE_MAX_ARRAY_ITEMS = 500
 const ARCHIVE_MAX_DEPTH = 12
+const PROJECT_FILE_SELECTION = "Git index + Git ignore-filtered physical entries + OpenCorvus runtime filter"
 
 function safeArchiveSegment(value: string): string {
   const cleaned = value
@@ -48,14 +50,6 @@ function zipPath(...parts: string[]): string {
   return parts.join("/").replace(/\\/g, "/")
 }
 
-function parseGitNulList(output: string): string[] {
-  return output
-    .split("\0")
-    .filter((item) => item.length > 0)
-    .filter(ProjectRuntimePaths.isSourceArchiveAllowed)
-    .toSorted()
-}
-
 function assertRelativeProjectFile(relativePath: string): void {
   if (!relativePath) throw new Error("Empty project archive path")
   if (path.isAbsolute(relativePath)) throw new Error(`Absolute project archive path: ${relativePath}`)
@@ -66,27 +60,15 @@ function assertRelativeProjectFile(relativePath: string): void {
 }
 
 async function listGitIncludedFiles(projectDir: string): Promise<string[]> {
-  const result = await git(
-    [
-      "-c",
-      "core.fsmonitor=false",
-      "-c",
-      "core.quotepath=false",
-      "ls-files",
-      "--cached",
-      "--others",
-      "--exclude-standard",
-      "-z",
-      "--",
-      ".",
-    ],
-    { cwd: projectDir, timeoutProfile: "default" },
-  )
-  if (result.exitCode !== 0) {
-    const detail = result.stderr.toString().trim() || result.stdout.toString().trim() || "git ls-files failed"
-    throw new Error(`Project archive file listing failed: ${detail}`)
-  }
-  return parseGitNulList(result.text())
+  return (
+    await gitSourcePaths(projectDir, (args, input) =>
+      hostGit(["-c", "core.fsmonitor=false", "-c", "core.quotepath=false", ...args], {
+        cwd: projectDir,
+        timeoutProfile: "default",
+        input,
+      }),
+    )
+  ).paths.filter(ProjectRuntimePaths.isSourceArchiveAllowed)
 }
 
 async function addJson(zip: ZipWriter<Blob>, name: string, value: unknown): Promise<void> {
@@ -123,14 +105,15 @@ function boundArchiveValue(value: unknown, depth = 0): unknown {
   return out
 }
 
-async function addProjectFile(zip: ZipWriter<Blob>, projectDir: string, relativePath: string): Promise<void> {
+async function addProjectFile(zip: ZipWriter<Blob>, projectDir: string, relativePath: string): Promise<boolean> {
   assertRelativeProjectFile(relativePath)
   const absolute = path.join(projectDir, relativePath)
   const stat = await fs.lstat(absolute)
-  if (stat.isSymbolicLink()) return
-  if (!stat.isFile()) return
+  if (stat.isSymbolicLink()) return false
+  if (!stat.isFile()) return false
   const data = new Uint8Array(await Filesystem.readArrayBuffer(absolute))
   await zip.add(zipPath("project", ...relativePath.split(/[\\/]+/)), new Uint8ArrayReader(data))
+  return true
 }
 
 async function collectTaskExecutionFlow(input: {
@@ -165,7 +148,7 @@ async function collectTaskExecutionFlow(input: {
       worktree: input.project.worktree,
     },
     projectFileRoot: "project/",
-    projectFileSelection: "git ls-files --cached --others --exclude-standard -z -- . + OpenCorvus runtime filter",
+    projectFileSelection: PROJECT_FILE_SELECTION,
     projectFileCount: input.fileCount,
     executionFlowRoot: "opencorvus-task-execution-flow/",
     executionFiles,
@@ -236,7 +219,7 @@ async function addMissionExecutionFlow(
       worktree: input.project.worktree,
     },
     projectFileRoot: "project/",
-    projectFileSelection: "git ls-files --cached --others --exclude-standard -z -- . + OpenCorvus runtime filter",
+    projectFileSelection: PROJECT_FILE_SELECTION,
     projectFileCount: input.fileCount,
     executionFlowRoot: `${flowRoot}/`,
     executionFiles,
@@ -264,16 +247,17 @@ async function buildProjectArchive(input: {
   }
   const files = await listGitIncludedFiles(input.project.worktree)
   const zip = new ZipWriter(new BlobWriter("application/zip"))
+  let fileCount = 0
   for (const file of files) {
-    await addProjectFile(zip, input.project.worktree, file)
+    if (await addProjectFile(zip, input.project.worktree, file)) fileCount += 1
   }
-  await input.addExecutionFlow(zip, files.length)
+  await input.addExecutionFlow(zip, fileCount)
   const blob = await zip.close()
   const bytes = new Uint8Array(await blob.arrayBuffer())
   return {
     bytes,
     filename: `${safeArchiveSegment(input.filenameSubject)}-project.zip`,
-    fileCount: files.length,
+    fileCount,
   }
 }
 

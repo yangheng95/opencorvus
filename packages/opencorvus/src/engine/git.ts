@@ -82,19 +82,28 @@ function beginCheckpointRequest(input: {
 }) {
   return Database.immediateTransaction((db) => {
     const id = checkpointRequestID(input.taskID, input.operationKey)
-    const existing = db.select().from(EngineGitCheckpointRequestTable)
-      .where(eq(EngineGitCheckpointRequestTable.id, id)).get()
+    const existing = db
+      .select()
+      .from(EngineGitCheckpointRequestTable)
+      .where(eq(EngineGitCheckpointRequestTable.id, id))
+      .get()
     if (existing) {
-      const outcome = db.select().from(EngineGitCheckpointOutcomeTable)
-        .where(eq(EngineGitCheckpointOutcomeTable.request_id, id)).get()
+      const outcome = db
+        .select()
+        .from(EngineGitCheckpointOutcomeTable)
+        .where(eq(EngineGitCheckpointOutcomeTable.request_id, id))
+        .get()
       // A completed operation key is absorbing. Historical cutover can prove
       // its outcome even when the pre-cutover writer did not retain its exact
       // write-ahead input; replay must return that receipt, never repeat Git.
       if (outcome) return { request: existing, outcome: outcome.result }
       if (
-        existing.task_id !== input.taskID || existing.stage !== input.stage ||
-        existing.operation_key !== input.operationKey || JSON.stringify(existing.input) !== JSON.stringify(input.effectInput)
-      ) throw new Error(`Git checkpoint request ${id} replay changed its exact input`)
+        existing.task_id !== input.taskID ||
+        existing.stage !== input.stage ||
+        existing.operation_key !== input.operationKey ||
+        JSON.stringify(existing.input) !== JSON.stringify(input.effectInput)
+      )
+        throw new Error(`Git checkpoint request ${id} replay changed its exact input`)
       throw new GitCheckpointOutcomeUnknownError(id)
     }
     input.admission?.(db)
@@ -113,8 +122,11 @@ function beginCheckpointRequest(input: {
 
 function settleCheckpointRequest(requestID: string, result: Record<string, unknown>) {
   Database.immediateTransaction((db) => {
-    const existing = db.select().from(EngineGitCheckpointOutcomeTable)
-      .where(eq(EngineGitCheckpointOutcomeTable.request_id, requestID)).get()
+    const existing = db
+      .select()
+      .from(EngineGitCheckpointOutcomeTable)
+      .where(eq(EngineGitCheckpointOutcomeTable.request_id, requestID))
+      .get()
     if (existing) {
       if (JSON.stringify(existing.result) !== JSON.stringify(result)) {
         throw new Error(`Git checkpoint request ${requestID} replay changed its outcome`)
@@ -503,10 +515,7 @@ async function checkpointWithGitMaintenanceOperation(input: CheckpointMaintenanc
             gitLease,
             registerFinalizedTransaction: (transaction) =>
               registerFinalizedTransaction({
-                rollback: async () => [
-                  ...(await transaction.rollback()),
-                  ...(await restoreOriginalProjectMetadata()),
-                ],
+                rollback: async () => [...(await transaction.rollback()), ...(await restoreOriginalProjectMetadata())],
                 cleanup: transaction.cleanup,
               }),
           })
@@ -954,9 +963,6 @@ async function prepareRepository(input: {
       return { error: `Repository ${input.repository.path} has unresolved index stages.` }
     }
     const listed = await EngineGitProcess.snapshotPaths(target)
-    if (listed.exitCode !== 0) {
-      return { error: gitOutputError(listed, `Git snapshot path enumeration failed for ${input.repository.path}`) }
-    }
     const existing = await EngineGitProcess.stageEntries(target)
     if (existing.exitCode !== 0) {
       return { error: gitOutputError(existing, `Git index mode inspection failed for ${input.repository.path}`) }
@@ -974,7 +980,7 @@ async function prepareRepository(input: {
       }
     }
     const declared = new Set(filesOwnedByRepository(input.declaredFiles, input.repository, input.repositories))
-    const paths = new Set(zeroSeparated(listed.stdout, `snapshot paths in ${input.repository.path}`))
+    const paths = new Set(listed)
     for (const value of declared) paths.add(value)
     phase.enumeration = performance.now() - enumerationStarted
 
@@ -1395,35 +1401,45 @@ function baseline(task: TaskRow) {
 }
 
 function checkpointOutcome(taskID: string, operationKey: string): Record<string, unknown> | undefined {
-  return Database.use((db) => db.select({ result: EngineGitCheckpointOutcomeTable.result })
-    .from(EngineGitCheckpointRequestTable)
-    .innerJoin(EngineGitCheckpointOutcomeTable, eq(
-      EngineGitCheckpointOutcomeTable.request_id,
-      EngineGitCheckpointRequestTable.id,
-    ))
-    .where(and(
-      eq(EngineGitCheckpointRequestTable.task_id, taskID),
-      eq(EngineGitCheckpointRequestTable.operation_key, operationKey),
-    )).get()?.result)
+  return Database.use(
+    (db) =>
+      db
+        .select({ result: EngineGitCheckpointOutcomeTable.result })
+        .from(EngineGitCheckpointRequestTable)
+        .innerJoin(
+          EngineGitCheckpointOutcomeTable,
+          eq(EngineGitCheckpointOutcomeTable.request_id, EngineGitCheckpointRequestTable.id),
+        )
+        .where(
+          and(
+            eq(EngineGitCheckpointRequestTable.task_id, taskID),
+            eq(EngineGitCheckpointRequestTable.operation_key, operationKey),
+          ),
+        )
+        .get()?.result,
+  )
 }
 
 function projectGitTask(task: TaskRow): TaskRow {
   const epoch = executionEpoch(task.id)
   const baselineValue = checkpointOutcome(task.id, checkpointOperationKey(task.id, "baseline", epoch))
   const resultValue = checkpointOutcome(task.id, checkpointOperationKey(task.id, "result", epoch))
-  const history = Database.use((db) => db.select({ result: EngineGitCheckpointOutcomeTable.result })
-    .from(EngineGitCheckpointRequestTable)
-    .innerJoin(EngineGitCheckpointOutcomeTable, eq(
-      EngineGitCheckpointOutcomeTable.request_id,
-      EngineGitCheckpointRequestTable.id,
-    ))
-    .where(and(
-      eq(EngineGitCheckpointRequestTable.task_id, task.id),
-      eq(EngineGitCheckpointRequestTable.stage, "result"),
-    ))
-    .orderBy(asc(EngineGitCheckpointRequestTable.time_created)).all()
-    .map((row) => row.result)
-    .filter((row) => !("error" in row)))
+  const history = Database.use((db) =>
+    db
+      .select({ result: EngineGitCheckpointOutcomeTable.result })
+      .from(EngineGitCheckpointRequestTable)
+      .innerJoin(
+        EngineGitCheckpointOutcomeTable,
+        eq(EngineGitCheckpointOutcomeTable.request_id, EngineGitCheckpointRequestTable.id),
+      )
+      .where(
+        and(eq(EngineGitCheckpointRequestTable.task_id, task.id), eq(EngineGitCheckpointRequestTable.stage, "result")),
+      )
+      .orderBy(asc(EngineGitCheckpointRequestTable.time_created))
+      .all()
+      .map((row) => row.result)
+      .filter((row) => !("error" in row)),
+  )
   const metadata = structuredClone(dict(task.metadata))
   metadata.git = {
     ...(baselineValue && !("error" in baselineValue) ? { branch: baselineValue.branch, baseline: baselineValue } : {}),
@@ -1607,7 +1623,10 @@ async function commitAcceptanceRound(input: {
   if (admitted.outcome) {
     return "error" in admitted.outcome
       ? { mode: "skipped", error: String(admitted.outcome.error) }
-      : { mode: "created_commit", commit: typeof admitted.outcome.commit === "string" ? admitted.outcome.commit : undefined }
+      : {
+          mode: "created_commit",
+          commit: typeof admitted.outcome.commit === "string" ? admitted.outcome.commit : undefined,
+        }
   }
   log.info("commitAcceptanceRound: repository-tree checkpoint start", { cwd })
   const result = await checkpointWithGitMaintenance({
@@ -1683,16 +1702,21 @@ export namespace EngineGit {
    * explicit operator reconciliation. Ordinary execution never guesses an
    * unreceipted Git effect and never replays it under a new activity identity. */
   export function reconcileCheckpoint(input: { requestID: string; result: Record<string, unknown> }) {
-    const request = Database.use((db) => db.select({ id: EngineGitCheckpointRequestTable.id })
-      .from(EngineGitCheckpointRequestTable)
-      .where(eq(EngineGitCheckpointRequestTable.id, input.requestID)).get())
+    const request = Database.use((db) =>
+      db
+        .select({ id: EngineGitCheckpointRequestTable.id })
+        .from(EngineGitCheckpointRequestTable)
+        .where(eq(EngineGitCheckpointRequestTable.id, input.requestID))
+        .get(),
+    )
     if (!request) throw new Error(`Git checkpoint request not found: ${input.requestID}`)
     settleCheckpointRequest(input.requestID, input.result)
     return input.result
   }
 
   export function setCheckpointOutcomePersistenceHookForTest(hook: CheckpointOutcomePersistenceHook) {
-    if (checkpointOutcomePersistenceHookForTest) throw new Error("Git checkpoint outcome persistence hook is already installed")
+    if (checkpointOutcomePersistenceHookForTest)
+      throw new Error("Git checkpoint outcome persistence hook is already installed")
     checkpointOutcomePersistenceHookForTest = hook
     return {
       [Symbol.dispose]() {
@@ -1770,23 +1794,23 @@ export namespace EngineGit {
     const snapshot = next.tree
     const time = Date.now()
     await persistProducedCheckpointOutcome(admitted.request.id, {
-          mode: next.mode,
-          branch,
-          commit: next.commit,
-          message: next.message,
-          head_before: next.head_before,
-          repositories: "repositories" in next ? next.repositories : undefined,
-          checkpoint_receipt: next.checkpoint_receipt,
-          snapshot,
-          workspace_tree_sha256: executionBaselineTreeSHA256,
-          dirty: next.dirty,
-          staged: 0,
-          modified: next.dirty ? 1 : 0,
-          untracked: 0,
-          conflicts: 0,
-          ahead: 0,
-          behind: 0,
-          time,
+      mode: next.mode,
+      branch,
+      commit: next.commit,
+      message: next.message,
+      head_before: next.head_before,
+      repositories: "repositories" in next ? next.repositories : undefined,
+      checkpoint_receipt: next.checkpoint_receipt,
+      snapshot,
+      workspace_tree_sha256: executionBaselineTreeSHA256,
+      dirty: next.dirty,
+      staged: 0,
+      modified: next.dirty ? 1 : 0,
+      untracked: 0,
+      conflicts: 0,
+      ahead: 0,
+      behind: 0,
+      time,
     })
     return { task: projectGitTask(task) }
   }
@@ -1839,21 +1863,21 @@ export namespace EngineGit {
     const branch = next.ref === "HEAD" ? undefined : next.ref.replace(/^refs\/heads\//, "")
     const time = Date.now()
     await persistProducedCheckpointOutcome(admitted.request.id, {
-          mode: next.mode,
-          branch,
-          commit: next.commit,
-          message: next.message,
-          head_before: next.head_before,
-          repositories: "repositories" in next ? next.repositories : undefined,
-          checkpoint_receipt: next.checkpoint_receipt,
-          dirty: next.dirty,
-          staged: 0,
-          modified: next.dirty ? 1 : 0,
-          untracked: 0,
-          conflicts: 0,
-          ahead: 0,
-          behind: 0,
-          time,
+      mode: next.mode,
+      branch,
+      commit: next.commit,
+      message: next.message,
+      head_before: next.head_before,
+      repositories: "repositories" in next ? next.repositories : undefined,
+      checkpoint_receipt: next.checkpoint_receipt,
+      dirty: next.dirty,
+      staged: 0,
+      modified: next.dirty ? 1 : 0,
+      untracked: 0,
+      conflicts: 0,
+      ahead: 0,
+      behind: 0,
+      time,
     })
     return { task: projectGitTask(task) }
   }
