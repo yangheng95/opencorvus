@@ -58,3 +58,27 @@ before为当前旧历史复验，不是新创建业务Task的旧版Stop；实际
 默认用户库当前只读观察仍user_version=1、size=1970176、mtime=2026-10-13T19:11:57.627Z；产品验收只使用原自有隔离runtime。没有迁移、数据清空或发布。本批只对真实主Task Stop取得Provider端到端资格，Mission/delegate入口是已注明边界的后端合同，不泛称全场景真实验收。必要脚本、失败/成功日志、public Message回执及物理事实归档；文档和架构检查在最终记录落盘后执行，随后范围提交和正常push。
 
 最终docs:check原daa1a8 exit0（345操作/26分组），architecture-index原d0fb77 exit0（20文档及全部链接）。原197715实际解压62个证据文件中的文本，并与内存中的真实凭据值比较，通过披露复核；不输出或提交凭据值。完整源差异审阅与git diff --check通过，提交只含本批两个生产入口、聚焦后端测试、03-control合同及对应方案/索引/证据，保留原有两处未跟踪Bun目录。
+
+## Recall：交付后待机边界复核
+
+57735b87c45f39bb6aae49f778f546a55dfe29e9已正常推送并fresh fetch确认，上一批为progress，工作区仅原有两处未跟踪目录。仍只使用当前agent，既有授权/隔离/禁止UI自动化/迁移/清库/发布约束全部保持。本补充先复核、落盘再修改；不能把上一批活动Stop通过扩大为待机与关闭全矩阵。
+
+重读SessionPromptState.cancelMatch证实原CancellationReceipt在取消瞬间只为owner匹配且尚非idle/terminal的输入设置inputMessageID；已结算输入的回执明确没有该身份。cancellation-scope正是按该原始回执保留idle/terminal。新增Orchestrator取消publisher若只使用预先已派生的本轮input，可能在已完成输入返回待机到附加调用者结算之间发布aborted，绕过此保留合同。当前这是代码确定的风险窗口，尚未用本轮真实回执证明，应先做聚焦正向复现，不先声明已发生用户事故。
+
+方案：在现有真实Orchestrator catch合同中增加已接受idle输入和真实SessionPromptState owner/cancel/finish回执，保留wake信号有效，验证原idle与独立peer保持。若失败，物理finally在等待原owner资源前捕获同owner的canonical CancellationReceipt对象；只有其原input匹配时发布取消终态，回执标明已结算则保留原事实。没有该物理回执的独立typed围栏拒绝仍按原typed权威处理，不能把未知伪装为已结算。该对象仅为原回执的临时引用，不能新增持久影子状态或另一取消索引。原错误路径、终态闩锁和active Stop保持。
+
+验证先保留修改前回归，再复跑聚焦后端合同和原occurrence合同；新独立18581/ui、原600秒/180秒/12条流预算、完整配对预检后再次真实活动Stop，截图人工复核和原事实核对，公开shutdown/原句柄join/物理与配对退休。补充证据放当前artifact下standby目录，同一方案/架构合同更新，范围提交、fresh fetch/merge和正常push，不停在风险记录。
+
+首版待机夹具创建真实Prompt owner，却遗漏消费和结算已安装的run-once wake；原47502在afterEach等待该未结算合同，120秒hook超时。未冒充产品失败；先检查唯一生产consumeWake/settleConsumedWake和物理finally，再按原request b1174c01-a510-45a8-ab67-d11fb57f2b8f及owner77140/helper81564/target32524的精确实例均exact_live确认，通过原cancel_file主动收尾；原47502 join4fbc35 exit1、190.71秒，错误日志及请求/实例回执保留。没有重启同一运行、杀同名进程或操作用户窗口。
+
+夹具按真实已接受输入的消费→idle→wake结算修正后，原97619 join737164 exit1：唯一待机例实际进入当前Orchestrator catch，原idle被改为terminal/aborted，已取得有效复现。实施决定为物理finally在等待原owner结束之前保留同owner的canonical CancellationReceipt临时引用；回执指明本次输入已结算或属于别的input时不发布新的取消终态。普通typed围栏拒绝没有物理回执仍保留typed分类与精确本轮input，不能用当前idle事后猜测取消瞬间状态。
+
+补充实施后原33779 join0dc478 exit0：7项执行分类/22断言（新增真实待机回执）、4项公共abort与跨两项目关闭/9断言、7项occurrence发布/14断言；原5ea970取消协议5项/14断言也通过。当前共23项/59断言。根typecheck原68120 join402aaf exit0，8包通过。原1300a2按原实例逐一观察，准备失败夹具owner/helper/target均dead_or_reused，fixture-physical-retired.json保留；没有以原超时或人工收尾替代产品通过。
+
+补充真实scope为orchestrator-cancellation-428-standby-d7d8a498-1475-4554-9e68-34763df99c83，18581/ui，预算和完整配对规则未变。正式CLI原1369a1 exit0接受tsk_g00VY2wVPp007jvlKjOJ，requestID=baed3326-63eb-4e2d-931a-80a9ee5241d2；原9e9784为实际streaming只读观察。诊断reader搬入standby子目录时relative import多了一层，首读模块定位失败，原4272d0保留；只修自有reader的相对路径后按原命令成功，不重启服务或重建Task。
+
+人工在实际正文增长的Running38秒点击Stop；原618cf5与e408a1确认当前input msg_task-root-control_art_hPnfVDJQMEpG09FqRtzy_art_hPnfVDJQMEpG09FqRtzy得到terminal/aborted及原reason，MessageAbortedError结构化origin和Task取消epoch1/correlation一致；正式session.messages HTTP200返回同一原错误。standby/01—03原图分别是活动正文、Cancelled45秒、页面刷新后的相同结果，默认1280×720且均人工查看。无产品成员/工具调用；已接受idle的保留由真实后端回执合同证明，不把此活动UI Stop冒充用户真实待机窗口资格。
+
+四条实际gpt-6.1-sol流均200且读取器结算，三条eof加业务流一条aborted。公开shutdown原715b13 HTTP200、原21081 joinc5b63b exit0，physical/output/request与复制配对退休完整。自有页关闭，非自有页2保留；无新UI源码、UI自动化或schema变更。补充记录、原始准备失败和最后真实证据归档于同一artifact的standby目录，最终文档检查及范围提交/正常push独立执行。
+
+补充最终docs:check原032d62 exit0（345操作/26分组），architecture-index原22705b exit0（20文档及全部链接）。原57ea5f对standby目录48个文件的解压文本执行真实凭据披露复核，通过；仅保留非秘密结果。修改前原件、有效失败、夹具准备错误与精确收尾均独立保留。最终差异仅补原回执准入、正向待机合同、既有架构/记录/索引和补充证据，不混入原有未跟踪目录或前一批已提交产物。

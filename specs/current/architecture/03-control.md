@@ -124,6 +124,12 @@ That input comes from its actual control/scheduler Message or the occurrence
 bound to its captured Prompt owner. Later Session inputs keep their own facts;
 ordinary Provider failures retain terminal/error and the first-terminal latch
 keeps its existing authority.
+The physical finally retains its exact owner's original CancellationReceipt
+before joining cleanup. That receipt's admitted input controls cancellation
+publication: a previously idle/terminal input or another input keeps its
+original lifecycle. A typed fence rejection without a physical cancellation
+receipt retains its typed cancellation authority; current post-cleanup status
+does not reconstruct what was active when cancellation began.
 
 Graceful shutdown distinguishes physical Prompt ownership from Task execution.
 The exact cancellation receipt captures the current input occurrence before

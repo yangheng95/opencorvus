@@ -987,4 +987,4 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 
 - [Unicode空白文件身份](2026-10-15-unicode-workspace-path.md)：原创建500、唯一路径合同与同请求重试。
 
-- [独立Prompt取消执行终态](2026-10-15-orchestrator-cancellation-lifecycle.md)：取消catch根因、共享审计及真实Stop。
+- [独立Prompt取消执行终态](2026-10-15-orchestrator-cancellation-lifecycle.md)：取消catch根因、共享审计、待机回执及真实Stop。

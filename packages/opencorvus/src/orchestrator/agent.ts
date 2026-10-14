@@ -61,7 +61,7 @@ import { AgentRunError, buildHardErrorFromFinalMessage } from "@/agent/run-error
 import { Session } from "@/session"
 import { SessionContext } from "@/session/context"
 import { SessionPrompt } from "@/session/prompt"
-import { SessionPromptLoopFinishedError } from "@/session/prompt/state"
+import { SessionPromptLoopFinishedError, SessionPromptState } from "@/session/prompt/state"
 import { SessionStatus } from "@/session/status"
 import { publishSessionStatus, publishSettledSessionTerminalStatus } from "@/session/status-publication"
 import { Message } from "@/session/message"
@@ -432,6 +432,7 @@ export namespace Orchestrator {
     let agentSessionID: string | undefined
     let agentSessionInfo: Session.Info | undefined
     let executionInputMessageID: string | undefined
+    let promptCancellationReceipt: SessionPromptState.CancellationReceipt | undefined
     let wakeStartMessageID: string | undefined
     let promptInFlight = false
     let schedulerMcpOwner: MCP.ScopedConnectionOwner | undefined
@@ -945,6 +946,9 @@ export namespace Orchestrator {
         }
         promptInFlight = false
       } finally {
+        promptCancellationReceipt = promptGenerationOwner
+          ? SessionPromptState.cancellationReceipt(agentSession.id, agentSession.directory, promptGenerationOwner)
+          : undefined
         const occurrence = SessionStatus.executionOccurrence(agentSession.id)
         if (!executionInputMessageID && promptGenerationOwner && occurrence?.owner === promptGenerationOwner) {
           executionInputMessageID = occurrence.inputMessageID
@@ -1120,7 +1124,12 @@ export namespace Orchestrator {
           error: wasCancelled ? abortReasonText : structured.message,
         })
       }
-      if (wasCancelled && agentSessionInfo && executionInputMessageID) {
+      if (
+        wasCancelled &&
+        agentSessionInfo &&
+        executionInputMessageID &&
+        (!promptCancellationReceipt || promptCancellationReceipt.inputMessageID === executionInputMessageID)
+      ) {
         try {
           await publishSettledSessionTerminalStatus({
             session: agentSessionInfo,

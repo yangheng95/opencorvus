@@ -18,6 +18,8 @@ import { ProtocolStore } from "@/protocol/store"
 import { Provider } from "@/provider/provider"
 import { Session } from "@/session"
 import { SessionPrompt } from "@/session/prompt"
+import { SessionPromptState } from "@/session/prompt/state"
+import { SessionRuntimeContractStore } from "@/session/runtime-contract"
 import { ExecutionCancellationError, createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import { SessionStatus } from "@/session/status"
 import { Database } from "@/storage/db"
@@ -73,25 +75,30 @@ async function inputOccurrence(sessionID: string, agent: string) {
   return input.id
 }
 
-for (const source of ["user", "mission", "provider"] as const) {
+for (const source of ["user", "mission", "provider", "standby"] as const) {
   test(`Orchestrator records the exact ${source} disposition while its wake signal remains active`, async () => {
     await using project = await memoryProject(`orchestrator-disposition-${source}`)
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         ensureTaskMessageProtocolBridge()
+        let standbyOwner: AbortSignal | undefined
         using runner = TaskControlTestHooks.replaceTaskIngressRunner({
           runner: async (input) => {
             expect(input.signal.aborted).toBe(false)
-            return {
-              finalMessageID: await Orchestrator.processTask(
-                input.taskID,
-                input.event,
-                input.signal,
-                input.wakeID,
-                input.activationID,
-                input.predecessorID,
-              ),
+            try {
+              return {
+                finalMessageID: await Orchestrator.processTask(
+                  input.taskID,
+                  input.event,
+                  input.signal,
+                  input.wakeID,
+                  input.activationID,
+                  input.predecessorID,
+                ),
+              }
+            } finally {
+              if (standbyOwner) SessionPromptState.clearCancellationReceipt(sessionID, standbyOwner)
             }
           },
         })
@@ -107,12 +114,30 @@ for (const source of ["user", "mission", "provider"] as const) {
           inputID = input.reply_to_message_id!
           const contract = SessionPrompt.getSessionRuntimeContract(sessionID)
           taskID = contract!.identity.taskID!
-          SessionStatus.beginExecutionOccurrence(sessionID, inputID)
-          await SessionStatus.set(sessionID, { type: "streaming" }, { taskID })
+          if (source === "standby") {
+            standbyOwner = SessionPromptState.start(sessionID, project.path)
+            if (!standbyOwner) throw new Error("Expected the actual standby Prompt owner")
+            SessionPrompt.capturePromptOwner(sessionID, project.path)
+            SessionRuntimeContractStore.consumeWake(sessionID)
+            standbyOwner.addEventListener(
+              "abort",
+              () => {
+                void SessionPromptState.finish(sessionID, standbyOwner!, project.path)
+              },
+              { once: true },
+            )
+          }
+          SessionStatus.beginExecutionOccurrence(sessionID, inputID, standbyOwner)
+          const statusOptions = { taskID, promptGenerationOwner: standbyOwner }
+          await SessionStatus.set(sessionID, { type: "streaming" }, statusOptions)
+          if (source === "standby") {
+            await SessionStatus.set(sessionID, { type: "idle" }, statusOptions)
+            SessionRuntimeContractStore.settleConsumedWake(sessionID)
+          }
           if (source === "provider") throw new Error(reason)
           const origin = createExecutionCancellationOrigin({
-            actor: source,
-            source: source === "user" ? "task.cancel" : "mission.abort",
+            actor: source === "mission" ? "mission" : "user",
+            source: source === "mission" ? "mission.abort" : "task.cancel",
             surface: "runtime",
             reason,
             taskID,
@@ -133,12 +158,21 @@ for (const source of ["user", "mission", "provider"] as const) {
               { taskID, source: origin.source, correlationID: origin.requestID },
             ),
           )
-          throw new ExecutionCancellationError({
+          const cancellation = new ExecutionCancellationError({
             source: "session_prompt",
             sessionID,
             message: reason,
             origin: { ...origin, causationEventID: requested.id },
           })
+          if (source === "standby") {
+            const receipt = SessionPromptState.cancel(sessionID, project.path, {
+              origin: cancellation.origin,
+              settlementRequired: true,
+            })
+            if (!receipt) throw new Error("Expected the actual settled-input cancellation receipt")
+            throw receipt.error
+          }
+          throw cancellation
         })
         const peer = await Session.create({ kind: "assistant", title: "Independent active peer" })
         const peerInput = await inputOccurrence(peer.id, "work")
@@ -157,11 +191,14 @@ for (const source of ["user", "mission", "provider"] as const) {
         await awaitTaskMessageProtocolBridgeIdle()
         expect(lifecycle(sessionID, inputID)).toMatchObject({
           inputMessageID: inputID,
-          status: {
-            type: "terminal",
-            reason: source === "provider" ? "error" : "aborted",
-            error: source === "provider" ? `Error: ${reason}` : reason,
-          },
+          status:
+            source === "standby"
+              ? { type: "idle" }
+              : {
+                  type: "terminal",
+                  reason: source === "provider" ? "error" : "aborted",
+                  error: source === "provider" ? `Error: ${reason}` : reason,
+                },
         })
         expect(lifecycle(peer.id, peerInput)).toMatchObject({
           inputMessageID: peerInput,
