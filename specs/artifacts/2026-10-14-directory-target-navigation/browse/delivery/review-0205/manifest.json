@@ -1,0 +1,105 @@
+{
+  "atUtc": "2026-10-14T02:10:14.516Z",
+  "reviewedHead": "3b4f968014e3acd60f3537368a057d085c850369",
+  "upstream": "ba5f55cb3647385db64bc77a93260619e2ef3fb5",
+  "pending": [
+    "e3c3d1aa73bfc2b071180d85a21773bdcc4b79b7",
+    "79ee5303953bdb14bd71683d96796535a3f00c12",
+    "b767b93259c9c4766d91b70c1a0bd168df4b5971",
+    "0fe812062088fc2aa6bc5f388d6e03b6ac078ae6",
+    "d6fc0a5550744633c52e77d71025f093c73df376",
+    "3c5f8d2a0c66bc1f316df6fa6f07cf8f50c44dcd",
+    "ce798bfc4c97a9d817b7a1c637553cd6bb577e3f",
+    "8c42e5d39806cd844a7f072439580e8e32b1402f",
+    "2d800e4a92a1508f1386be8e01a4d309d08f11d6",
+    "8408335850339b2afc85b4da676e92095cb8ce69",
+    "3b4f968014e3acd60f3537368a057d085c850369"
+  ],
+  "push": {
+    "command": [
+      "git",
+      "push"
+    ],
+    "atUtc": "2026-10-14T02:06:32.087Z",
+    "completedAtUtc": "2026-10-14T02:07:30.281Z",
+    "exitCode": 1,
+    "signal": null,
+    "stdoutFile": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-push-normal-1791943592087.stdout.log",
+    "stderrFile": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-push-normal-1791943592087.stderr.log"
+  },
+  "files": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-fetch-fresh-1791943543143.stdout.log",
+      "file": "browse-fetch-fresh-1791943543143.stdout.log.gz",
+      "originalBytes": 0,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-fetch-fresh-1791943543143.stderr.log",
+      "file": "browse-fetch-fresh-1791943543143.stderr.log.gz",
+      "originalBytes": 0,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-fetch-fresh-1791943543143.exit.json",
+      "file": "browse-fetch-fresh-1791943543143.exit.json.gz",
+      "originalBytes": 442,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-merge-fresh-1791943544295.stdout.log",
+      "file": "browse-merge-fresh-1791943544295.stdout.log.gz",
+      "originalBytes": 20,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-merge-fresh-1791943544295.stderr.log",
+      "file": "browse-merge-fresh-1791943544295.stderr.log.gz",
+      "originalBytes": 0,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-merge-fresh-1791943544295.exit.json",
+      "file": "browse-merge-fresh-1791943544295.exit.json.gz",
+      "originalBytes": 447,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-push-normal-1791943592087.stdout.log",
+      "file": "browse-push-normal-1791943592087.stdout.log.gz",
+      "originalBytes": 1860,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-push-normal-1791943592087.stderr.log",
+      "file": "browse-push-normal-1791943592087.stderr.log.gz",
+      "originalBytes": 1105,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-push-normal-1791943592087.exit.json",
+      "file": "browse-push-normal-1791943592087.exit.json.gz",
+      "originalBytes": 427,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-outgoing-review-1791943564662.json",
+      "file": "browse-outgoing-review-1791943564662.json.gz",
+      "originalBytes": 3407394,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\review-browse-outgoing.mjs",
+      "file": "review-browse-outgoing.mjs.gz",
+      "originalBytes": 15087,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-outgoing-run-1791943564691.json",
+      "file": "browse-outgoing-run-1791943564691.json.gz",
+      "originalBytes": 891,
+      "decodedEqualsOriginalCapture": true
+    }
+  ],
+  "qualification": "Root-only independent outgoing review and exact original Git captures; existing local product/UI qualification unchanged. No new UI/model acceptance run, no credential copy, no delegated work. Remote delivery remains unmet."
+}

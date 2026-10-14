@@ -112,6 +112,12 @@ Prepare/Register/Before/After四原Native client均0，注册4+只读4/13共21�
 
 本轮四项仍未推送，原stdout/stderr/exit、fresh fetch/merge、完整pending review与commit/index证据保存；原1不覆盖为0。后续先核对该权限变更与声明是否已作为同一已授权验证交付收敛；状态改变后fresh fetch/merge、重新审完整待推送集合和必要检查，正常push及精确远端ancestor确认。Root自身所有页面/服务/模型均已闭合；浏览功能本地实现与验收已达成，远端交付尚未达成，持续目标保持active。
 
+### 后续独立交付复核（2026-10-14T02:05Z）
+
+Root确认本聊天仅自己运行，继续不委托。本次是实质复核进展：重读当前Recall，全文审阅新增压缩保留d6fc0a555及其原20动作/100字段/10角色/72流矩阵、定时任务语言8c42e5d398及10项57断言和真实定义读回、命令搜索2d800e4a9及13项48断言/四个真实运行共8条精确Sol流200/EOF和物理/输出/请求/凭据目录配对退休；相应3c5f8d2a0、840833585、3b4f96801均为spec与原回执交付。Root亲自查看定时任务原图07/11、搜索原图11/16，未冒称自己的新UI交互或新模型调用。压缩仅资格已读的有限Luna保留矩阵，未声明跨模型普适语义；日期未来定义未触发调度；搜索authority切换/人为迟到竞态未资格。
+
+fresh fetch/merge均0，完整11项upstream..HEAD复核0，HEAD=3b4f968014e3acd60f3537368a057d085c850369。本浏览源自b767后的产品差异为空，201固定原件与已提交blob/原捕获直接字节相同，自己的产品/spec/artifact范围clean、真实暂存区空。正常push原1（02:06:32.087Z–02:07:30.281Z）：8包类型通过、6缓存/2实际执行，route/docs0，随后同一未提交权限源码2入口/登记1拒绝；后续hooks未到达。精确公开远端读回仍ba5f55cb3647385db64bc77a93260619e2ef3fb5。12份完整原捕获与独立review见[本次归档](../../artifacts/2026-10-14-directory-target-navigation/browse/delivery/review-0205/README.md)，原首失败仍保留。未修改对方源码/登记、绕hook或发送跨聊天消息；该权限恢复真实验收仍在其独立用户聊天进行，不能以本浏览合格替代。持续goal保持active，远端交付仍未满足；收敛后须重新fresh同步、核整个pending集合、正常push与远端确认。
+
 ## 第一阶段有限真实调查输入
 
 先准备并审阅唯一新scratch工具，再Root另授执行；当前未创建运行目录、数据或服务。新owned run为C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/directory-target-before-01a133，port18455，prefix/evidence directory-target-before。两个独立物理Git根沿成熟project/project-b布局、exclusive新run、原manifest UUID（Universally Unique Identifier，通用唯一标识符）/dev/inode/birth保存；source CLI（Command-Line Interface，命令行接口）/真实localhost:18455/ui与正式private immutable bin/ui，不单开Vite。构建先结束再启动；所有后端source与private资源身份按原输入/asset/真实错误记录，不用可变源码hash当功能门。
