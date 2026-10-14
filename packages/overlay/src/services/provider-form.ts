@@ -5,6 +5,36 @@ export interface ProviderFormValues {
   models: string
 }
 
+function sanitizeProviderId(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9-_]/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+}
+
+/** Resolve the declaration key shared by the form preview, discovery and save. */
+export function providerFormID(input: { existing?: string | null; id: string; name: string; api: string }): string {
+  if (input.existing) return input.existing
+  const explicit = sanitizeProviderId(input.id) || sanitizeProviderId(input.name)
+  if (explicit) return explicit
+  try {
+    const url = new URL(input.api.trim())
+    const host = url.hostname
+    if (host.startsWith("[") && host.endsWith("]")) {
+      return sanitizeProviderId(`ipv6-${host.slice(1, -1)}${url.port ? `-${url.port}` : ""}`)
+    }
+    if (/^\d+(?:\.\d+){3}$/.test(host) || host === "localhost" || host.endsWith(".localhost")) {
+      return sanitizeProviderId(url.host)
+    }
+    const parts = host.split(".").filter(Boolean)
+    return sanitizeProviderId(parts.length >= 2 ? parts[parts.length - 2]! : (parts[0] ?? ""))
+  } catch {
+    return ""
+  }
+}
+
 type ProviderDefinition = Record<string, unknown>
 
 type ProviderFormApiCode = "PROVIDER_API_REQUIRED" | "PROVIDER_API_INVALID"

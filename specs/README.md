@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [本地Provider自动标识](records/2026-10/2026-10-14-provider-local-identity.md)：IP/localhost与端口派生、单一表单身份及真实保存调查。
+
 - [SQLite 周期回写](records/2026-10/2026-10-14-sqlite-checkpoint.md)：共享连接生命周期、真实回写页数与长历史复制全时段响应。
 
 - [资源表单反馈位置](records/2026-10/2026-10-14-resource-form-feedback.md)：唯一反馈、16张原图、真实在途收起/换项目与成功安装。

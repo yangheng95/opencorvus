@@ -1,0 +1,17 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+const stage=process.argv[2]
+assert.equal(['before','after'].includes(stage),true)
+const root=path.resolve('.tmp-codex-provider-local-identity-01a133/'+stage),ready=JSON.parse(fs.readFileSync(root+'/ready.json','utf8'))
+const directory=path.join(root,'project'),url=`http://127.0.0.1:${ready.port}/config?directory=${encodeURIComponent(directory)}`
+const response=await fetch(url);assert.equal(response.status,200)
+const config=await response.json(),expected=stage==='before'?[['0',ready.endpointA]]:[['127-0-0-1-18645',ready.endpointA],['127-0-0-1-18647',ready.endpointB]]
+const entries=expected.map(([id,api])=>{
+ const entry=config.provider[id]
+ assert.equal(entry.name,id);assert.equal(entry.api,api)
+ assert.deepEqual(entry.env,[]);assert.deepEqual(entry.models,{})
+ return {id,...entry}
+})
+fs.writeFileSync(root+'/config-qualified.json',JSON.stringify({at:new Date().toISOString(),stage,url,status:response.status,directory,entries,boundary:'Actual public config after Root UI acceptance. This checks declaration identity and endpoint ownership, with no Provider connection or model inference qualification.'},null,2)+'\n')
+console.log(JSON.stringify({stage,status:response.status,entries}))

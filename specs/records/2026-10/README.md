@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [本地Provider自动标识](2026-10-14-provider-local-identity.md)：新表单的地址标识与端口碰撞根因/影响。
+
 - [SQLite 周期回写](2026-10-14-sqlite-checkpoint.md)：统一回写策略、关闭/重启/多进程合同与真实页面验收。
 
 - [资源表单反馈位置](2026-10-14-resource-form-feedback.md)：Skill安装与MCP新增的当前viewport反馈调查。

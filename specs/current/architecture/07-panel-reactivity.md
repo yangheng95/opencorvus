@@ -50,6 +50,16 @@ can retain both messages. A successful refresh clears its own operation feedback
 Existing API authority, directory selection and operation generation govern publication
 and retirement, without a second state owner or automatic mutation retry.
 
+Provider form declaration identity has one owner in the existing provider-form
+service, shared by preview, discovery and save. Editing retains its actual existing
+ID; explicit IDs and display names retain their prior priority and normalization.
+New IPv4, localhost and .localhost entries use the normalized full host with its
+non-default port. IPv6 entries retain their normalized address and non-default
+port under the ipv6 prefix. Ordinary DNS entries retain the existing brand-label
+derivation. Existing declarations are not renamed. Conflicting derived or explicit
+IDs use the existing configuration conflict contract; paths, query strings and
+protocols are not a general uniqueness guarantee.
+
 Accepted Provider mutations publish their captured API authority, actual global or
 project scope and affected Provider IDs to current subscribers, independently of
 the initiating form's lifetime. Shared registry outcomes explicitly address all

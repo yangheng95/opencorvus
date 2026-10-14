@@ -18,6 +18,7 @@ import { onProviderMutation, providerMutationScope, publishProviderMutation } fr
 import {
   applyProviderForm,
   ProviderFormApiError,
+  providerFormID,
   providerFormValues,
   validateProviderFormApi,
   type ProviderFormValues,
@@ -600,28 +601,8 @@ export default function ProvidersPanel() {
     setDiscoveredModelCount(null)
   }
 
-  function sanitizeProviderId(value: string): string {
-    return value
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-z0-9-_]/g, "-")
-      .replace(/-+/g, "-")
-      .replace(/^-|-$/g, "")
-  }
-
-  function providerIdFromApi(value: string): string {
-    try {
-      const host = new URL(value.trim()).hostname
-      const parts = host.split(".").filter(Boolean)
-      const source = parts.length >= 2 ? parts[parts.length - 2] : (parts[0] ?? "")
-      return sanitizeProviderId(source)
-    } catch {
-      return ""
-    }
-  }
-
   function formProviderId(): string {
-    return editing() || sanitizeProviderId(formId()) || sanitizeProviderId(formName()) || providerIdFromApi(formApi())
+    return providerFormID({ existing: editing(), id: formId(), name: formName(), api: formApi() })
   }
 
   async function handleDiscoverModels() {

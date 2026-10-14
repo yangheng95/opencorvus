@@ -1,10 +1,59 @@
 import { describe, expect, test } from "bun:test"
 import {
   applyProviderForm,
+  providerFormID,
   providerFormValues,
   providerModelIDs,
   validateProviderFormApi,
 } from "../src/services/provider-form"
+
+describe("provider declaration identity", () => {
+  test.each([
+    ["http://127.0.0.1:18645/v1", "127-0-0-1-18645"],
+    ["http://127.0.0.1:18647/v1", "127-0-0-1-18647"],
+    ["http://10.0.0.2:8080/v1", "10-0-0-2-8080"],
+    ["http://127.1:18645/v1", "127-0-0-1-18645"],
+    ["http://[::1]:18645/v1", "ipv6-1-18645"],
+    ["http://[0:0:0:0:0:0:0:1]:18645/v1", "ipv6-1-18645"],
+    ["http://[::2]:18645/v1", "ipv6-2-18645"],
+    ["http://[2001:db8::1]:8080/v1", "ipv6-2001-db8-1-8080"],
+    ["http://localhost:18645/v1", "localhost-18645"],
+    ["http://localhost:18647/v1", "localhost-18647"],
+    ["http://models.localhost:18645/v1", "models-localhost-18645"],
+    ["http://localhost:80/v1", "localhost"],
+    ["https://localhost:443/v1", "localhost"],
+    ["https://api.openai.com/v1", "openai"],
+    ["https://api.anthropic.com/v1", "anthropic"],
+    ["https://gateway.example/v1", "gateway"],
+  ])("projects %s to its declaration key", (api, expected) => {
+    expect(providerFormID({ id: "", name: "", api })).toBe(expected)
+  })
+
+  test.each([
+    [{ existing: "Existing_ID", id: "new-id", name: "New name" }, "Existing_ID"],
+    [{ existing: "0", id: "", name: "" }, "0"],
+    [{ id: " My_Custom_ID ", name: "Local models" }, "my_custom_id"],
+    [{ id: "", name: " Local Models " }, "local-models"],
+  ] as const)("retains existing and explicit declaration ownership %#", (identity, expected) => {
+    expect(providerFormID({ ...identity, api: "http://127.0.0.1:18645/v1" })).toBe(expected)
+  })
+
+  test("creates two complete declarations for two local services", () => {
+    const declarations = Object.fromEntries(
+      ["http://127.0.0.1:18645/v1", "http://127.0.0.1:18647/v1"].map((api) => {
+        const id = providerFormID({ id: "", name: "", api })
+        return [
+          id,
+          applyProviderForm({ id, current: undefined, initial: null, values: { name: "", api, env: "", models: "" } }),
+        ]
+      }),
+    )
+    expect(declarations).toEqual({
+      "127-0-0-1-18645": { name: "127-0-0-1-18645", api: "http://127.0.0.1:18645/v1", env: [], models: {} },
+      "127-0-0-1-18647": { name: "127-0-0-1-18647", api: "http://127.0.0.1:18647/v1", env: [], models: {} },
+    })
+  })
+})
 
 const original = {
   name: "Local catalog",

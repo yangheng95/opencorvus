@@ -13,6 +13,8 @@
 
 #### 修复
 
+- 新增本地模型服务商时，自动标识保留完整 IP、localhost 或 IPv6 地址及非默认端口，同一地址的不同端口可分别保存；编辑已有服务商时保持原标识。
+
 - 侧聊自动重连时使用当前连接状态显示提示，原断流诊断保留在日志；真正的会话与操作失败继续显示。重连后的同一问题保留可编辑草稿和原回答归属。
 
 - 问题历史按当前语言显示空标题和真实终态，区分到期与基础设施关闭；原问题正文、答案和时间保持，切换语言后历史提示同步更新。
@@ -111,6 +113,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- New local model providers derive their IDs from the complete IP, localhost or IPv6 address and non-default port, allowing services on different ports to be saved separately. Editing retains the existing provider ID.
 
 - Side Chat reconnect feedback follows the current connection while preserving the original interruption diagnostic in logs. Session and action failures remain visible, and the same Question retains its editable draft and answer owner after recovery.
 

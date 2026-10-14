@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [本地Provider自动标识](2026-10-14-provider-local-identity/README.md)：Root独立修前/修后、正向业务与真实桌面证据。
+
 - [SQLite 周期回写](2026-10-14-sqlite-checkpoint/README.md)：真实持久重读、并发读者、全回执和回写后健康观测。
 
 - [资源表单反馈位置](2026-10-14-resource-form-feedback/README.md)：原始提交区域、位置修复与人工视觉复核。

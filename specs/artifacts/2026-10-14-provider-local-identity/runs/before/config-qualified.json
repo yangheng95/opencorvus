@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-14T00:44:57.062Z",
+  "stage": "before",
+  "url": "http://127.0.0.1:18642/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-provider-local-identity-01a133%5Cbefore%5Cproject",
+  "status": 200,
+  "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-local-identity-01a133\\before\\project",
+  "entries": [
+    {
+      "id": "0",
+      "api": "http://127.0.0.1:18643/v1",
+      "name": "0",
+      "env": [],
+      "models": {}
+    }
+  ],
+  "boundary": "Actual public config after Root UI acceptance. This checks declaration identity and endpoint ownership, with no Provider connection or model inference qualification."
+}
