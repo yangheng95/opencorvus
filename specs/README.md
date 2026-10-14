@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [归档工作搜索](records/2026-10/2026-10-14-archive-search.md)：既有服务器查询接入、跨分页查找与真实页面验收。
+
 - [首次复制的浏览器观测顺序](records/2026-10/2026-10-14-clipboard-first-observation.md)：区分首次工具交接、页面复制与后续观察的真实顺序。
 
 - [407 消息完成与续行退休](records/2026-10/2026-10-14-message-continuation-retirement-407.md)：普通Ask正常完成边界、共享事务/import影响与Question终态并行只读审计，承接406正常交付。

@@ -8,6 +8,8 @@
 
 #### 调整
 
+- 归档页支持搜索全部已归档工作；查询覆盖未加载的分页记录，清除搜索恢复列表，恢复记录后保留当前查询。
+
 - 更新日志按界面语言显示独立的中文或英文正文、摘要、搜索结果、日期和官网链接；历史版本保留原始日期、来源和发布状态。
 - 待办状态与优先级、专家团演进统计、提交说明和用量单位使用现有国际化目录，日期与数字格式跟随界面语言。
 
@@ -116,6 +118,8 @@
 ### en-US
 
 #### Changed
+
+- Search all archived work from Settings, including records beyond the loaded page. Clearing search restores the list, and restoring a record keeps the current query.
 
 - Release notes use independently authored English or Chinese bodies, summaries, search results, dates and website links according to the interface language. Historical dates, sources and release status are retained.
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.

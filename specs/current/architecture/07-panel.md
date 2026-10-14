@@ -2991,6 +2991,17 @@ Loaded logs have one local literal, case-insensitive query through the shared se
 
 Support ZIP exports exact retained raw files, canonical-time formatted records and original subject details. Historical timestamp/ts fields are diagnostic content rather than alternate clocks. Logging is diagnostic presentation; these records do not synthesize conversation participants or replace durable activity/occurrence timestamps.
 
+## Archive queries
+
+Settings Archive passes its current search to the existing archived Work Ledger
+reader. Search runs over the complete archive before cursor pagination; it does
+not filter only the loaded rows. Query replacement and API authority changes
+retire the previous request, rows and cursor through the existing request owner.
+Continuation and post-mutation reload keep the current query. The shared search
+field stays editable during reads and is disabled during a row mutation; clearing
+it reloads the first unfiltered page. Empty results are localized separately from
+an empty archive. Restore/delete and their focus ownership remain unchanged.
+
 ## Command palette queries
 
 The command palette reads current, unarchived Chat/Task/Mission records through the

@@ -19,6 +19,7 @@ import { ArmedConfirmButton } from "../ui/ArmedConfirmButton"
 import { Badge } from "../ui/Badge"
 import { Button } from "../ui/Button"
 import { Icon, type IconName } from "../ui/Icon"
+import { SearchField } from "../ui/SearchField"
 import { SettingsDetailSection, SettingsEmpty, SettingsPanel, SettingsRow } from "./layout"
 
 const ARCHIVE_PAGE_SIZE = 100
@@ -44,6 +45,7 @@ function archivedAt(row: WorkLedgerItemRow): number {
 }
 
 export default function ArchivePanel() {
+  const [search, setSearch] = createSignal("")
   const [rows, setRows] = createSignal<WorkLedgerItemRow[]>([])
   const [nextCursor, setNextCursor] = createSignal<WorkLedgerCursor | null>(null)
   const [loading, setLoading] = createSignal(false)
@@ -95,6 +97,7 @@ export default function ArchivePanel() {
     setError("")
     try {
       const result = await loadArchivedWorkLedger({
+        search: search().trim(),
         limit: ARCHIVE_PAGE_SIZE,
         cursor,
         signal: requestController.signal,
@@ -209,6 +212,7 @@ export default function ArchivePanel() {
     setLoading(true)
     try {
       const result = await loadArchivedWorkLedger({
+        search: search().trim(),
         limit: ARCHIVE_PAGE_SIZE,
         cursor: null,
         signal: requestController.signal,
@@ -252,6 +256,8 @@ export default function ArchivePanel() {
 
   createEffect(() => {
     captureApiAuthority()
+    // Query replacement retires the current page and its cursor with the same request owner.
+    search()
     requestGeneration += 1
     controller?.abort()
     controller = undefined
@@ -272,6 +278,13 @@ export default function ArchivePanel() {
       <Show when={error() && rows().length > 0}>
         <Feedback tone="error">{error()}</Feedback>
       </Show>
+      <SearchField
+        clearable
+        value={search()}
+        placeholder={t("archive.search_placeholder")}
+        onValueChange={setSearch}
+        disabled={!!busyID()}
+      />
       <SettingsDetailSection
         title={
           <span ref={headingElement} tabIndex={-1} data-ui="archive-heading-focus">
@@ -288,7 +301,11 @@ export default function ArchivePanel() {
             </Button>
           }>{error()}</Feedback>
         }>
-        <Show when={rows().length > 0} fallback={<SettingsEmpty>{loading() ? t("common.loading") : t("archive.empty")}</SettingsEmpty>}>
+        <Show when={rows().length > 0} fallback={
+          <SettingsEmpty>
+            {loading() ? t("common.loading") : search().trim() ? t("archive.no_results") : t("archive.empty")}
+          </SettingsEmpty>
+        }>
           <For each={rows()}>
             {(row) => (
               <SettingsRow

@@ -1,0 +1,431 @@
+{
+  "capturedAt": "2026-10-14T03:17:50.037Z",
+  "purpose": "Lossless original evidence capture; not a source checksum or a functional acceptance gate",
+  "files": [
+    {
+      "source": ".tmp-codex-archive-search-01a133/before/archive-create-receipts.json",
+      "destination": "runs/before/archive-create-receipts.json.gz",
+      "originalBytes": 359838
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/before/archive-inputs.json",
+      "destination": "runs/before/archive-inputs.json.gz",
+      "originalBytes": 25263
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/before/archive-readback-receipts.json",
+      "destination": "runs/before/archive-readback-receipts.json.gz",
+      "originalBytes": 61289
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/before/exit.json",
+      "destination": "runs/before/exit.json.gz",
+      "originalBytes": 88
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/before/owner.json",
+      "destination": "runs/before/owner.json.gz",
+      "originalBytes": 207
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/before/physical-pair-cleanup.json",
+      "destination": "runs/before/physical-pair-cleanup.json.gz",
+      "originalBytes": 211
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/before/privacy-qualified.json",
+      "destination": "runs/before/privacy-qualified.json.gz",
+      "originalBytes": 654
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/before/project-authorities.json",
+      "destination": "runs/before/project-authorities.json.gz",
+      "originalBytes": 638
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/before/ready.json",
+      "destination": "runs/before/ready.json.gz",
+      "originalBytes": 1742
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/before/terminal.json",
+      "destination": "runs/before/terminal.json.gz",
+      "originalBytes": 224
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/before/redacted-logs/2026-10-14T030503-90472-1.log",
+      "destination": "runs/before/logs/2026-10-14T030503-90472-1.log.gz",
+      "originalBytes": 328259
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/before/redacted-logs/stderr.log",
+      "destination": "runs/before/logs/stderr.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/before/redacted-logs/stdout.log",
+      "destination": "runs/before/logs/stdout.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/after/archive-create-receipts.json",
+      "destination": "runs/after/archive-create-receipts.json.gz",
+      "originalBytes": 359097
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/after/archive-inputs.json",
+      "destination": "runs/after/archive-inputs.json.gz",
+      "originalBytes": 25156
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/after/exit.json",
+      "destination": "runs/after/exit.json.gz",
+      "originalBytes": 88
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/after/owner.json",
+      "destination": "runs/after/owner.json.gz",
+      "originalBytes": 207
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/after/physical-pair-cleanup.json",
+      "destination": "runs/after/physical-pair-cleanup.json.gz",
+      "originalBytes": 211
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/after/privacy-qualified.json",
+      "destination": "runs/after/privacy-qualified.json.gz",
+      "originalBytes": 654
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/after/project-authorities.json",
+      "destination": "runs/after/project-authorities.json.gz",
+      "originalBytes": 633
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/after/ready.json",
+      "destination": "runs/after/ready.json.gz",
+      "originalBytes": 1725
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/after/restore-readback-receipts.json",
+      "destination": "runs/after/restore-readback-receipts.json.gz",
+      "originalBytes": 60897
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/after/terminal.json",
+      "destination": "runs/after/terminal.json.gz",
+      "originalBytes": 224
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/after/redacted-logs/2026-10-14T031048-77892-1.log",
+      "destination": "runs/after/logs/2026-10-14T031048-77892-1.log.gz",
+      "originalBytes": 356328
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/after/redacted-logs/stderr.log",
+      "destination": "runs/after/logs/stderr.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/after/redacted-logs/stdout.log",
+      "destination": "runs/after/logs/stdout.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/setup.mjs",
+      "destination": "inputs/setup.mjs.gz",
+      "originalBytes": 728
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/runtime.ts",
+      "destination": "inputs/runtime.ts.gz",
+      "originalBytes": 8432
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/launch.ps1",
+      "destination": "inputs/launch.ps1.gz",
+      "originalBytes": 4724
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/privacy.ts",
+      "destination": "inputs/privacy.ts.gz",
+      "originalBytes": 2104
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/archive-data.mjs",
+      "destination": "inputs/archive-data.mjs.gz",
+      "originalBytes": 3020
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/restore-readback.mjs",
+      "destination": "inputs/restore-readback.mjs.gz",
+      "originalBytes": 2317
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/ArchivePanel.before.tsx",
+      "destination": "inputs/ArchivePanel.before.tsx.gz",
+      "originalBytes": 14519
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/run.mjs",
+      "destination": "inputs/run.mjs.gz",
+      "originalBytes": 882
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/archive.mjs",
+      "destination": "inputs/archive.mjs.gz",
+      "originalBytes": 6855
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/prepare-git.mjs",
+      "destination": "inputs/prepare-git.mjs.gz",
+      "originalBytes": 1266
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/stage-final.mjs",
+      "destination": "inputs/stage-final.mjs.gz",
+      "originalBytes": 3366
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/commit-final.mjs",
+      "destination": "inputs/commit-final.mjs.gz",
+      "originalBytes": 3440
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/before-parent.log",
+      "destination": "checks/before-parent.log.gz",
+      "originalBytes": 49
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/before-parent.exit",
+      "destination": "checks/before-parent.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/after-parent.log",
+      "destination": "checks/after-parent.log.gz",
+      "originalBytes": 49
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/after-parent.exit",
+      "destination": "checks/after-parent.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/privacy-before.log",
+      "destination": "checks/privacy-before.log.gz",
+      "originalBytes": 173
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/privacy-before.exit",
+      "destination": "checks/privacy-before.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/privacy-after.log",
+      "destination": "checks/privacy-after.log.gz",
+      "originalBytes": 173
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/privacy-after.exit",
+      "destination": "checks/privacy-after.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/search-business.log",
+      "destination": "checks/search-business.log.gz",
+      "originalBytes": 666
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/search-business.exit",
+      "destination": "checks/search-business.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/overlay-typecheck.log",
+      "destination": "checks/overlay-typecheck.log.gz",
+      "originalBytes": 15
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/overlay-typecheck.exit",
+      "destination": "checks/overlay-typecheck.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/ui-build.log",
+      "destination": "checks/ui-build.log.gz",
+      "originalBytes": 67955
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/ui-build.exit",
+      "destination": "checks/ui-build.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/i18n-check.log",
+      "destination": "checks/i18n-check.log.gz",
+      "originalBytes": 78
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/i18n-check.exit",
+      "destination": "checks/i18n-check.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/docs-plan.log",
+      "destination": "checks/docs-plan.log.gz",
+      "originalBytes": 104
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/docs-plan.exit",
+      "destination": "checks/docs-plan.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/docs-current.log",
+      "destination": "checks/docs-current.log.gz",
+      "originalBytes": 104
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/docs-current.exit",
+      "destination": "checks/docs-current.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/architecture-current.log",
+      "destination": "checks/architecture-current.log.gz",
+      "originalBytes": 139
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/architecture-current.exit",
+      "destination": "checks/architecture-current.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/docs-final.log",
+      "destination": "checks/docs-final.log.gz",
+      "originalBytes": 104
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/docs-final.exit",
+      "destination": "checks/docs-final.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/architecture-final.log",
+      "destination": "checks/architecture-final.log.gz",
+      "originalBytes": 139
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/architecture-final.exit",
+      "destination": "checks/architecture-final.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/data-before.log",
+      "destination": "checks/data-before.log.gz",
+      "originalBytes": 147
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/data-before.exit",
+      "destination": "checks/data-before.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/data-before-readback.log",
+      "destination": "checks/data-before-readback.log.gz",
+      "originalBytes": 147
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/data-before-readback.exit",
+      "destination": "checks/data-before-readback.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/data-after.log",
+      "destination": "checks/data-after.log.gz",
+      "originalBytes": 146
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/data-after.exit",
+      "destination": "checks/data-after.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/restore-readback.log",
+      "destination": "checks/restore-readback.log.gz",
+      "originalBytes": 115
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/restore-readback.exit",
+      "destination": "checks/restore-readback.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/commit-first.log",
+      "destination": "checks/commit-first.log.gz",
+      "originalBytes": 653
+    },
+    {
+      "source": ".tmp-codex-archive-search-01a133/commit-first.exit",
+      "destination": "checks/commit-first.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-automation-timestamp-locale-01a133/fetch-resume.log",
+      "destination": "previous-delivery/fetch-resume.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-automation-timestamp-locale-01a133/fetch-resume.exit",
+      "destination": "previous-delivery/fetch-resume.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-automation-timestamp-locale-01a133/merge-resume.log",
+      "destination": "previous-delivery/merge-resume.log.gz",
+      "originalBytes": 20
+    },
+    {
+      "source": ".tmp-codex-automation-timestamp-locale-01a133/merge-resume.exit",
+      "destination": "previous-delivery/merge-resume.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-automation-timestamp-locale-01a133/lease-resume.log",
+      "destination": "previous-delivery/lease-resume.log.gz",
+      "originalBytes": 187
+    },
+    {
+      "source": ".tmp-codex-automation-timestamp-locale-01a133/lease-resume.exit",
+      "destination": "previous-delivery/lease-resume.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-automation-timestamp-locale-01a133/push-resume.log",
+      "destination": "previous-delivery/push-resume.log.gz",
+      "originalBytes": 3631
+    },
+    {
+      "source": ".tmp-codex-automation-timestamp-locale-01a133/push-resume.exit",
+      "destination": "previous-delivery/push-resume.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-automation-timestamp-locale-01a133/resume-review.json",
+      "destination": "previous-delivery/resume-review.json.gz",
+      "originalBytes": 1166
+    },
+    {
+      "source": ".tmp-codex-automation-timestamp-locale-01a133/resume-push-receipt.json",
+      "destination": "previous-delivery/resume-push-receipt.json.gz",
+      "originalBytes": 1262
+    },
+    {
+      "source": ".tmp-codex-automation-timestamp-locale-01a133/push-resume.mjs",
+      "destination": "previous-delivery/push-resume.mjs.gz",
+      "originalBytes": 2465
+    }
+  ]
+}
