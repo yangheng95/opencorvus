@@ -9,5 +9,8 @@
 - `frozen-install.log.gz`：冻结依赖安装的实际输出。
 - `generate.log.gz`：唯一生成器刷新专家团 revision registry，源码已是 2026.10.14.1。
 - `worktree-inventory.json`：普通合并后的全部 Git 工作树、原 HEAD、ancestry 和各工作树真实 status；主目录当时包含本轮待提交版本准备。
+- `fixed-point.log.gz`：已提交 a73080f68 的第二次完整生成，exit0、tracked diff 为空；原缓存保持。
+- `push.log.gz`：完整正常 pre-push 与首次 push 回执，origin/main 到 a73080f68，扫描 0 hits；GitHub 原 Rust 告警保留。
+- `release-admission.json`：canonical run38546102976 的实际 source、created_at 和 prepare 成功；矩阵当时仍运行，不能当发布完成回执。
 
 正式 workflow/source、GitHub/更新通道/官网公开回执在发布完成后追加。版本资源的真实签名和资产完整性继续由 canonical workflow 检查，不用可变源码摘要替代行为验收。
