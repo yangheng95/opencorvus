@@ -370,6 +370,7 @@ function topRowCandidates(input: Required<Pick<WorkLedgerListInput, "limit">> & 
           AND (
             ${search ?? null} IS NULL
             OR 'chat' LIKE ${search ?? null} ESCAPE '\\'
+            OR json_extract(${SessionTable.metadata}, '$.conversation.experience') LIKE ${search ?? null} ESCAPE '\\'
             OR ${SessionTable.title} LIKE ${search ?? null} ESCAPE '\\'
             OR ${SessionTable.id} LIKE ${search ?? null} ESCAPE '\\'
             OR ${SessionTable.directory} LIKE ${search ?? null} ESCAPE '\\'

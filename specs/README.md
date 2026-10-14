@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Work体验搜索与归档恢复](records/2026-10/2026-10-14-archive-experience-search.md)：共享experience字段搜索及Mission/Work真实恢复入口调查。
+
 - [成员侧栏实时呈现](records/2026-10/2026-10-14-member-live-rendering.md)：真实已有成员增量、正文与Sources挂载身份调查。
 
 - [项目元数据慢读取](records/2026-10/2026-10-14-project-metadata-latency.md)：原163秒读取的共享入口、Git/Native阶段资格与根因调查。

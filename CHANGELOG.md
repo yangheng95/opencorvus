@@ -15,6 +15,8 @@
 
 #### 修复
 
+- 工作记录和归档搜索支持真实的 Work 会话类型，改名后的会话仍可按类型查找；命令面板使用服务器接受的工作项，保留 Mission 子项和本地命令的原筛选规则。
+
 - 权限执行开始与原进程租约同时提交；另一个后端恢复时确认原执行者确已退出，避免活跃工具的真实结果被抢写为未知。恢复按原项目、尝试和租约收敛，租约自然到期不被当作进程死亡。
 
 - 问题选项的短标题与说明分行显示，并为实际选择控件提供独立名称和描述；说明可原生点击选择。键盘选择保留侧聊标题、目标和输入区的位置，现有技能与连接复选框使用当前语言名称。
@@ -125,6 +127,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Work Ledger and Archive searches match the canonical Work conversation experience after renaming. The command palette uses accepted server items while retaining its Mission descendant and local action filters.
 
 - Permission execution starts and its original process lease commit together. Recovery verifies that the original executor has exited before settling an unfinished attempt, preserving live tools' real results. Recovery retains the exact project, attempt and lease; natural lease expiry is not treated as process death.
 

@@ -73,12 +73,17 @@ const LOCALES: Array<{ id: string; label: string }> = [
 type PaletteLedgerRow = WorkLedgerChatRow | WorkLedgerTaskRow | WorkLedgerMissionRow
 type LedgerSearch = { query: string; authority: ApiAuthority; controller: AbortController }
 
-function paletteLedgerRows(rows: readonly WorkLedgerRow[]): PaletteLedgerRow[] {
+function paletteLedgerRows(rows: readonly WorkLedgerRow[], query: string): PaletteLedgerRow[] {
   const entries: PaletteLedgerRow[] = []
   for (const row of rows) {
     if (row.kind === "project") continue
-    entries.push(row)
-    if (row.kind === "mission") entries.push(...row.tasks)
+    // Mission results include descendants whose individual relevance is selected here.
+    if (row.kind === "mission") {
+      if (rowMatches(row, query)) entries.push(row)
+      entries.push(...row.tasks.filter((task) => rowMatches(task, query)))
+    } else {
+      entries.push(row)
+    }
   }
   return entries
 }
@@ -97,7 +102,7 @@ function rowCommandHint(row: PaletteLedgerRow): string {
   return directory || row.kind
 }
 
-function rowMatches(row: PaletteLedgerRow, query: string): boolean {
+function rowMatches(row: WorkLedgerMissionRow | WorkLedgerTaskRow, query: string): boolean {
   return matchesSearchParts(query, [row.title, row.id, row.directory, row.kind])
 }
 
@@ -129,7 +134,6 @@ export function CommandPalette(props: {
         label: row.title || row.id,
         hint: rowCommandHint(row),
         group: t("cmdk.group.tasks"),
-        keywords: `${row.id} ${row.directory} ${row.kind}`,
         icon: rowCommandIcon(row),
         run: async () => {
           if (row.kind === "mission") {
@@ -236,7 +240,7 @@ export function CommandPalette(props: {
   const visibleCommands = createMemo(() => {
     const query = paletteQuery().trim()
     const visible = commands().filter((command) => query
-      ? commandMatches(command, query)
+      ? command.id.startsWith("ledger:") || commandMatches(command, query)
       : command.id.startsWith("ledger:") || command.visibleWhenEmpty)
     let previousGroup = ""
     let shortcutIndex = 0
@@ -272,8 +276,8 @@ export function CommandPalette(props: {
           authority: search.authority,
         })
         if (!ownsSearch(search)) return
-        for (const row of paletteLedgerRows(result.rows)) {
-          if (rowMatches(row, search.query)) rows.set(`${row.kind}:${row.id}`, row)
+        for (const row of paletteLedgerRows(result.rows, search.query)) {
+          rows.set(`${row.kind}:${row.id}`, row)
         }
         cursor = result.nextCursor
       } while (cursor && (search.query ? rows.size === priorCount : rows.size < RECENT_COMMAND_LIMIT))

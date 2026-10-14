@@ -11,8 +11,43 @@ import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(resetMemoryDatabase)
 
+test("canonical Work experience searches preserve active, archived, Project and cursor identities after renaming", async () => {
+  await using first = await memoryProject("experience-first")
+  await using second = await memoryProject("experience-second")
+  const create = (directory: string, label: string) => Instance.provide({ directory, fn: async () => {
+    const active = await createRightSidebarConversationSession("work", { title: `${label} current` })
+    const archived = await createRightSidebarConversationSession("work", { title: `${label} retained` })
+    await createRightSidebarConversationSession("chat", { title: `${label} conversation` })
+    await Session.setArchived({ sessionID: archived.id, time: Date.now() })
+    return { active, archived }
+  } })
+  const left = await create(first.path, "Alpha"), right = await create(second.path, "Beta")
+  const identities = (rows: Awaited<ReturnType<typeof listWorkLedger>>["rows"]) => rows.map(row => ({
+    id: row.id, experience: row.kind === "chat" ? row.experience : row.kind,
+  })).sort((a, b) => a.id.localeCompare(b.id))
+  expect(identities((await listWorkLedger({ search: "WoRk" })).rows)).toEqual([
+    { id: left.active.id, experience: "work" as const }, { id: right.active.id, experience: "work" as const },
+  ].sort((a, b) => a.id.localeCompare(b.id)))
+  expect(identities((await listWorkLedger({ search: "work", directory: first.path })).rows))
+    .toEqual([{ id: left.active.id, experience: "work" }])
+  expect(identities((await listArchivedWorkLedger({ search: "work" })).rows)).toEqual([
+    { id: left.archived.id, experience: "work" as const }, { id: right.archived.id, experience: "work" as const },
+  ].sort((a, b) => a.id.localeCompare(b.id)))
+  expect(identities((await listArchivedWorkLedger({ search: "work", directory: second.path })).rows))
+    .toEqual([{ id: right.archived.id, experience: "work" }])
+  const page = await listWorkLedger({ search: "work", limit: 1 })
+  expect(page.rows.length).toBe(1)
+  const cursor = page.nextCursor!
+  const next = await listWorkLedger({ search: "work", limit: 1,
+    cursorPinned: cursor.pinned, cursorUpdated: cursor.updated, cursorRowKey: cursor.rowKey,
+  })
+  expect(identities([...page.rows, ...next.rows])).toEqual([
+    { id: left.active.id, experience: "work" as const }, { id: right.active.id, experience: "work" as const },
+  ].sort((a, b) => a.id.localeCompare(b.id)))
+})
+
 async function titles(values: string[]) {
-  const rows = []
+  const rows: Session.Info[] = []
   for (const title of values) rows.push(await createRightSidebarConversationSession("chat", { title }))
   return rows
 }

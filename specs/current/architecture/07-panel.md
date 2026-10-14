@@ -3009,9 +3009,17 @@ existing Work Ledger search and public cursor. An empty query shows up to nine
 recent selectable items; Project rows do not consume that allowance. Nonempty
 queries use bounded pages, with explicit continuation, and flatten only the
 canonical Mission child Tasks. Search covers original titles, IDs, directories
-and technical kinds. The shared active/archive projection treats percent,
+and technical kinds, including each conversation's canonical Chat/Work experience.
+The shared active/archive projection treats percent,
 underscore and backslash literally using one escaped SQL LIKE parameter;
 archive visibility and directory boundaries remain unchanged.
+
+Top-level selectable item membership comes from the Work Ledger response.
+The palette keeps its existing parent/child relevance selection when expanding
+a Mission's complete Task collection. Accepted ledger items proceed directly
+to the visible command list; local action commands retain their text filter.
+Conversation experience is read from the same canonical metadata used to
+classify that conversation and to produce its public row.
 
 Each query owns its existing AbortController and captured API authority. Query
 replacement, closing, reopening and authority changes retire prior responses,
