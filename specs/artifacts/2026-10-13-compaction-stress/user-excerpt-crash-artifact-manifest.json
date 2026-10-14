@@ -1,0 +1,21 @@
+{
+  "artifacts": [
+    "user-selection-crash-smoke.json.gz",
+    "user-selection-crash-smoke-summary.json",
+    "user-selection-crash-matrix.json.gz",
+    "user-selection-crash-matrix-summary.json",
+    "user-excerpt-crash-matrix.json.gz",
+    "user-excerpt-crash-matrix-summary.json",
+    "selection-crash-smoke.log.gz",
+    "selection-crash-matrix.log.gz",
+    "excerpt-crash-matrix.log.gz",
+    "selection-crash-local.log.gz",
+    "selection-crash-typecheck.log.gz",
+    "excerpt-crash-typecheck.log.gz",
+    "user-excerpt-crash-review.cjs",
+    "user-excerpt-crash-typecheck.json",
+    "user-excerpt-crash-qualification.json",
+    "excerpt-crash-docs.log.gz"
+  ],
+  "scope": "Current physical user-excerpt publication phase; archive byte equality proves preservation only."
+}

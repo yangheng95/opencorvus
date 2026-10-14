@@ -1,0 +1,45 @@
+{
+  "extends": "D:/myhexin-local/opencorvus/packages/opencorvus/tsconfig.json",
+  "include": [
+    "D:/myhexin-local/opencorvus/packages/opencorvus/src/**/*.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/script/compaction-stress.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/compaction-policy-action.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/compaction-native-reference.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/compaction-transcript-budget.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/context-budget-decision.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/compaction-evidence.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/compaction-message-diagnostics.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/compaction-integrity.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/read-context-history-retention.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/memory/session-memory.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/compaction-read-pressure.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/compaction-working-context.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/real-provider-audit.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/session/processor-retry-diagnostics.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/script/compaction-runtime-crash-check.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/mission-process-recovery.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/compaction-recovery-boundary.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/openai-codex-model-projection.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/compaction-user-text.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/script/replay-compaction-errors-validator.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/script/compaction-crash-check.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/script/compaction-crash-worker.ts"
+  ],
+  "exclude": [
+    "D:/myhexin-local/opencorvus/packages/opencorvus/src/skill/builtin/**/*"
+  ],
+  "compilerOptions": {
+    "lib": [
+      "ESNext",
+      "DOM",
+      "DOM.Iterable",
+      "DOM.AsyncIterable"
+    ],
+    "typeRoots": [
+      "D:/myhexin-local/opencorvus/packages/opencorvus/node_modules/@types"
+    ],
+    "types": [
+      "bun"
+    ]
+  }
+}

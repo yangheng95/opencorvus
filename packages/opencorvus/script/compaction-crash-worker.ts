@@ -11,6 +11,7 @@ import { SessionControl } from "@/session/control"
 import { SessionLoop } from "@/session/loop"
 import { SessionMemory } from "@/memory/session-memory"
 import { SessionPromptOwner } from "@/session/prompt/owner"
+import { CompactionUserText } from "@/session/compaction-user-text"
 import { Identifier } from "@/id/id"
 import { Database } from "@/storage/db"
 import { Bus } from "@/bus"
@@ -26,6 +27,8 @@ const [mode, cut, controlKind, directory, statePath, endpoint] = process.argv.sl
 assert(mode && cut && controlKind && directory && statePath && endpoint, "Exact isolated worker arguments required")
 const model = { providerID: "compaction-crash-local", modelID: "checkpoint" }
 const checkpoint = "Verified correction: retain eu-west; permission: read only; evidence trace CRASH-317."
+const correctionText = "Correction: use eu-west. Permission remains read only."
+const correctionPrefix = "Earlier location: us-east.\n"
 const codes: Record<string, number> = {
   streaming: 81,
   summary_saved: 82,
@@ -126,17 +129,21 @@ await Instance.provide({
         }
       }
       assert.deepEqual(comparable, state.original, "Original authored source facts must survive byte-for-field")
+      const selection = CompactionUserText.selection(history)
       return {
         memory: await SessionMemory.read(state.sessionID),
         control: SessionControl.get(state.controlID),
         projection: (await Message.filterCompacted(MessageStore.stream(state.sessionID))).map((m) => m.info.id),
         originalIDs: original.map((m) => m.info.id),
+        retained: CompactionUserText.project(selection, history),
+        selection,
         summaries: history
           .filter((m) => m.info.author === "compaction")
           .map((m) => ({
             info: m.info,
             text: SessionMemory.continuationText(m.parts),
             checkpoints: m.parts.filter((part) => part.type === "compaction"),
+            selected: CompactionUserText.readReceipt(m.parts),
           })),
       }
     }
@@ -174,10 +181,18 @@ await Instance.provide({
         },
       })
       await assistant(session.id, initial.id, "Verified trace CRASH-317; source bytes remain durable. ".repeat(700))
-      const correction = await source(session.id, "Correction: use eu-west. Permission remains read only.")
+      const correction = await source(
+        session.id,
+        `${correctionPrefix}${correctionText}\nPrevious values above are superseded by this correction.`,
+      )
+      await assistant(session.id, correction.id, "Continue preserving the original correction. ".repeat(300))
+      const neutral = await source(
+        session.id,
+        "Continue the unfinished investigation; this input adds no authorization.",
+      )
       const control = await SessionCompaction.create({
         sessionID: session.id,
-        source: correction,
+        source: neutral,
         model,
         auto: controlKind === "automatic",
       })
@@ -186,7 +201,9 @@ await Instance.provide({
         sessionID: session.id,
         projectID: session.projectID,
         controlID: control.id,
-        sourceID: correction.id,
+        sourceID: neutral.id,
+        correction: original.find((message) => message.info.id === correction.id),
+        correctionExcerpt: { text: correctionText, offset: correctionPrefix.length },
         stableID: stable.id,
         initialID: initial.id,
         originalIDs: original.map((m) => m.info.id),
@@ -240,6 +257,12 @@ await Instance.provide({
     } else {
       state = JSON.parse(await fs.readFile(statePath, "utf8"))
     }
+    const expectedRetained = {
+      ...state.correction,
+      parts: state.correction.parts.map((part: Message.Part) =>
+        part.type === "text" ? { ...part, text: state.correctionExcerpt.text } : part,
+      ),
+    }
     const before = await snapshot()
     if (mode === "inspect") {
       process.stdout.write(JSON.stringify({ stage: "inspect", snapshot: before }) + "\n")
@@ -256,6 +279,16 @@ await Instance.provide({
         before.memory?.sourceMessageID,
         cut === "checkpoint_saved" ? state.interruptedMessageID : state.stableID,
       )
+      const interrupted = before.summaries.find((summary) => summary.info.id === state.interruptedMessageID)!
+      assert(interrupted.selected, "Successful original-user selection is durable before each physical cut")
+      assert.deepEqual(CompactionUserText.project(interrupted.selected, state.original), [expectedRetained])
+      if (cut === "checkpoint_saved") {
+        assert.deepEqual(before.selection, interrupted.selected, "Committed checkpoint owns the effective selection")
+        assert.deepEqual(before.retained, [expectedRetained])
+      } else {
+        assert.deepEqual(before.retained, [], "Prior checkpoint retains its original empty selection")
+        assert(before.projection.includes(state.correction.info.id), "Uncompacted original correction stays in history")
+      }
       process.stdout.write(JSON.stringify({ stage: "recovery-start", cut, controlKind, before }) + "\n")
     }
     const result = await SessionLoop.loop({
@@ -273,9 +306,16 @@ await Instance.provide({
     assert.deepEqual(after.projection, [
       state.initialID,
       summaryID,
+      state.correction.info.id,
       state.sourceID,
       ...(controlKind === "automatic" ? [result.info.id] : []),
     ])
+    assert.deepEqual(after.retained, [expectedRetained], "Recovered checkpoint replays the exact original user excerpt")
+    const selected = after.summaries.find((summary) => summary.info.id === summaryID)!.selected
+    assert.deepEqual(after.selection, selected, "Only the published checkpoint supplies current authority")
+    assert.equal(selected?.sources[0]?.partID, state.correction.parts[0].id)
+    assert.equal(selected?.sources[0]?.offset, correctionPrefix.length)
+    assert.equal(selected?.sources[0]?.end, correctionPrefix.length + correctionText.length)
     if (controlKind === "manual") assert.equal(result.info.id, summaryID)
     else {
       assert.equal(result.info.role === "assistant" && result.info.finish, "stop")

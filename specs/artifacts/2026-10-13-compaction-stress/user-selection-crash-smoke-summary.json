@@ -1,0 +1,86 @@
+{
+  "status": "passed",
+  "scope": "Physical child interruption and fresh-process user-source selection reconstruction; scripted streaming mechanics only.",
+  "cases": [
+    {
+      "cut": "streaming",
+      "kind": "automatic",
+      "status": "passed",
+      "phases": [
+        {
+          "mode": "cut",
+          "exit": 81,
+          "settled": true
+        },
+        {
+          "mode": "recover",
+          "exit": 0,
+          "settled": true
+        },
+        {
+          "mode": "inspect",
+          "exit": 0,
+          "settled": true
+        }
+      ],
+      "requests": 7,
+      "source": {
+        "sessionID": "ses_-zUS0bOjvzzWkJoG890O",
+        "messageID": "msg_g0VXzObHv005qAUtzxQX",
+        "partID": "prt_g0VXzObI100aEpnGunE4",
+        "text": "Correction: use eu-west. Permission remains read only."
+      },
+      "excerpt": {
+        "text": "Correction: use eu-west. Permission remains read only.",
+        "offset": 0
+      },
+      "selectionCallID": "retain_streaming-automatic_recover",
+      "summaryID": "msg_g0VXzP6Xx00GRnKcf2FF",
+      "continuations": 1
+    },
+    {
+      "cut": "checkpoint_saved",
+      "kind": "automatic",
+      "status": "passed",
+      "phases": [
+        {
+          "mode": "cut",
+          "exit": 84,
+          "settled": true
+        },
+        {
+          "mode": "recover",
+          "exit": 0,
+          "settled": true
+        },
+        {
+          "mode": "inspect",
+          "exit": 0,
+          "settled": true
+        }
+      ],
+      "requests": 4,
+      "source": {
+        "sessionID": "ses_-zUS0bOjkzzDHsDQRlsp",
+        "messageID": "msg_g0VXzObIA00785xzqeep",
+        "partID": "prt_g0VXzObIE00936Hd8N25",
+        "text": "Correction: use eu-west. Permission remains read only."
+      },
+      "excerpt": {
+        "text": "Correction: use eu-west. Permission remains read only.",
+        "offset": 0
+      },
+      "selectionCallID": "retain_checkpoint_saved-automatic_cut",
+      "summaryID": "msg_g0VXzObMn00aPcyLpWlw",
+      "continuations": 1
+    }
+  ],
+  "physicalChildPhases": 6,
+  "localRequests": 11,
+  "remoteModelRequests": 0,
+  "paidCumulativeUnchanged": 999,
+  "limits": [
+    "No real-model semantic reasoning claim.",
+    "Task/Mission formal backend selection recovery and whole-OS power loss remain unqualified."
+  ]
+}

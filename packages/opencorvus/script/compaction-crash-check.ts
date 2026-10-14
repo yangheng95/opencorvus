@@ -30,6 +30,7 @@ const { runHostCommandWithInactivity } = await import("@/shell/command-inactivit
 const { declareNativeTaskProcessDeployment } = await import("@/runtime/task-process-deployment")
 declareNativeTaskProcessDeployment()
 const requests = new Map<string, Array<Record<string, unknown>>>()
+const sourcePaths = new Map<string, string>()
 const cases: Array<Record<string, unknown>> = []
 const runnerErrors: Array<{ name: string; message: string; stack?: string }> = []
 let physicallySettled = true
@@ -44,7 +45,8 @@ const server = Bun.serve({
     assert.equal(body.model, "checkpoint")
     const rows = requests.get(key!)
     assert(rows, "Only the exact created case may use this transport")
-    rows.push({ mode, body })
+    const observed: Record<string, unknown> = { mode, body }
+    rows.push(observed)
     console.log(JSON.stringify({ case: key, stage: "provider-request", mode, count: rows.length }))
     const chunk = (delta: unknown, finish: string | null) =>
       `data: ${JSON.stringify({
@@ -54,6 +56,84 @@ const server = Bun.serve({
         model: "checkpoint",
         choices: [{ index: 0, delta, finish_reason: finish }],
       })}\n\n`
+    const source = JSON.parse(await fs.readFile(sourcePaths.get(key!)!, "utf8"))
+    const correction = source.correction.parts.find((part: any) => part.type === "text")
+    const excerpt = source.correctionExcerpt
+    assert.equal(correction.text.slice(excerpt.offset, excerpt.offset + excerpt.text.length), excerpt.text)
+    const messages = body.messages as any[]
+    const tools = (body.tools as any[]).map((tool) => tool.function.name)
+    if (tools.includes("ReadCompactionEvidence")) {
+      const retainID = `retain_${key}_${mode}`
+      const notesID = `notes_${key}_${mode}`
+      const retained = messages.find((message) => message.role === "tool" && message.tool_call_id === retainID)
+      const noted = messages.find((message) => message.role === "tool" && message.tool_call_id === notesID)
+      const call = (name: string, id: string, input: unknown) => {
+        assert(tools.includes(name), "Use an actually granted compactor Tool")
+        return new Response(
+          chunk(
+            {
+              role: "assistant",
+              tool_calls: [{ index: 0, id, type: "function", function: { name, arguments: JSON.stringify(input) } }],
+            },
+            null,
+          ) +
+            chunk({}, "tool_calls") +
+            "data: [DONE]\n\n",
+          { headers: { "content-type": "text/event-stream" } },
+        )
+      }
+      if (!retained) {
+        observed.helperStep = "select"
+        return call("RetainCompactionUserText", retainID, {
+          excerpts: [{ part_id: correction.id, text: excerpt.text }],
+        })
+      }
+      const receipt = JSON.parse(retained.content)
+      assert.equal(receipt.status, "retained")
+      assert.deepEqual(
+        receipt.sources.map((item: any) => ({
+          messageID: item.messageID,
+          partID: item.partID,
+          originalRole: item.originalRole,
+          originalAuthor: item.originalAuthor,
+          offset: item.offset,
+          end: item.end,
+        })),
+        [
+          {
+            messageID: source.correction.info.id,
+            partID: correction.id,
+            originalRole: "user",
+            originalAuthor: "user",
+            offset: excerpt.offset,
+            end: excerpt.offset + excerpt.text.length,
+          },
+        ],
+      )
+      observed.selection = receipt
+      if (!noted) {
+        observed.helperStep = "notes"
+        return call("SaveCompactionNotes", notesID, {
+          notes:
+            "The original user correction is selected. Preserve that genuine selection and original trace CRASH-317 in the final checkpoint.",
+        })
+      }
+      assert.equal(JSON.parse(noted.content).status, "saved")
+      observed.helperStep = "summary"
+    } else {
+      const text = messages
+        .filter((message) => message.role === "user")
+        .flatMap((message) =>
+          typeof message.content === "string"
+            ? [message.content]
+            : message.content.filter((part: any) => part.type === "text").map((part: any) => part.text),
+        )
+      assert(
+        text.includes(excerpt.text),
+        "Actual automatic continuation receives the exact selected quote in user role",
+      )
+      observed.retainedUserText = excerpt.text
+    }
     if (key?.startsWith("streaming-") && mode === "cut") {
       let timer: ReturnType<typeof setTimeout> | undefined
       const encoder = new TextEncoder()
@@ -115,6 +195,7 @@ async function scenario(cut: string, kind: string) {
   const report: Record<string, any> = { cut, kind, status: "running", scope, phases: [] }
   cases.push(report)
   requests.set(key, [])
+  sourcePaths.set(key, statePath)
   let settled = true
   try {
     await fs.mkdir(directory)
@@ -185,7 +266,13 @@ async function scenario(cut: string, kind: string) {
     const continuations = phaseRequests.filter((item) => !compactions.includes(item))
     assert.deepEqual(
       compactions.map((item) => item.mode),
-      cut === "checkpoint_saved" ? ["cut"] : ["cut", "recover"],
+      cut === "checkpoint_saved" ? ["cut", "cut", "cut"] : ["cut", "cut", "cut", "recover", "recover", "recover"],
+    )
+    assert.deepEqual(
+      compactions.map((item) => item.helperStep),
+      cut === "checkpoint_saved"
+        ? ["select", "notes", "summary"]
+        : ["select", "notes", "summary", "select", "notes", "summary"],
     )
     assert.deepEqual(
       continuations.map((item) => item.mode),

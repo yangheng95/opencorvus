@@ -1,0 +1,302 @@
+{
+  "status": "passed",
+  "scope": "Physical child interruption and fresh-process user-source selection reconstruction; scripted streaming mechanics only.",
+  "cases": [
+    {
+      "cut": "summary_saved",
+      "kind": "automatic",
+      "status": "passed",
+      "phases": [
+        {
+          "mode": "cut",
+          "exit": 82,
+          "settled": true
+        },
+        {
+          "mode": "recover",
+          "exit": 0,
+          "settled": true
+        },
+        {
+          "mode": "inspect",
+          "exit": 0,
+          "settled": true
+        }
+      ],
+      "requests": 7,
+      "source": {
+        "sessionID": "ses_-zUS0acQKzzfmm7jCaET",
+        "messageID": "msg_g0VXzPNbr006sIqQMGC3",
+        "partID": "prt_g0VXzPNbx00T3KrCLfJf",
+        "text": "Correction: use eu-west. Permission remains read only."
+      },
+      "excerpt": {
+        "text": "Correction: use eu-west. Permission remains read only.",
+        "offset": 0
+      },
+      "selectionCallID": "retain_summary_saved-automatic_recover",
+      "summaryID": "msg_g0VXzPsrn00JKiUVdBHk",
+      "continuations": 1
+    },
+    {
+      "cut": "streaming",
+      "kind": "automatic",
+      "status": "passed",
+      "phases": [
+        {
+          "mode": "cut",
+          "exit": 81,
+          "settled": true
+        },
+        {
+          "mode": "recover",
+          "exit": 0,
+          "settled": true
+        },
+        {
+          "mode": "inspect",
+          "exit": 0,
+          "settled": true
+        }
+      ],
+      "requests": 7,
+      "source": {
+        "sessionID": "ses_-zUS0acX7zz6tgfuQbyY",
+        "messageID": "msg_g0VXzPNUq00uKtlqHSHQ",
+        "partID": "prt_g0VXzPNUt00xocToz17c",
+        "text": "Correction: use eu-west. Permission remains read only."
+      },
+      "excerpt": {
+        "text": "Correction: use eu-west. Permission remains read only.",
+        "offset": 0
+      },
+      "selectionCallID": "retain_streaming-automatic_recover",
+      "summaryID": "msg_g0VXzPskQ00DY9UWsjAp",
+      "continuations": 1
+    },
+    {
+      "cut": "summary_saved",
+      "kind": "manual",
+      "status": "passed",
+      "phases": [
+        {
+          "mode": "cut",
+          "exit": 82,
+          "settled": true
+        },
+        {
+          "mode": "recover",
+          "exit": 0,
+          "settled": true
+        },
+        {
+          "mode": "inspect",
+          "exit": 0,
+          "settled": true
+        }
+      ],
+      "requests": 6,
+      "source": {
+        "sessionID": "ses_-zUS0acWfzz1E3tULeDr",
+        "messageID": "msg_g0VXzPNV800gjRmDNbHk",
+        "partID": "prt_g0VXzPNVE00Kd9Ce8fgq",
+        "text": "Correction: use eu-west. Permission remains read only."
+      },
+      "excerpt": {
+        "text": "Correction: use eu-west. Permission remains read only.",
+        "offset": 0
+      },
+      "selectionCallID": "retain_summary_saved-manual_recover",
+      "summaryID": "msg_g0VXzPskq00mWJXTkDfe",
+      "continuations": 0
+    },
+    {
+      "cut": "streaming",
+      "kind": "manual",
+      "status": "passed",
+      "phases": [
+        {
+          "mode": "cut",
+          "exit": 81,
+          "settled": true
+        },
+        {
+          "mode": "recover",
+          "exit": 0,
+          "settled": true
+        },
+        {
+          "mode": "inspect",
+          "exit": 0,
+          "settled": true
+        }
+      ],
+      "requests": 6,
+      "source": {
+        "sessionID": "ses_-zUS0acPGzzhN4n4uurM",
+        "messageID": "msg_g0VXzPNcg00K6nBe2mEh",
+        "partID": "prt_g0VXzPNco00g1g4I7aWG",
+        "text": "Correction: use eu-west. Permission remains read only."
+      },
+      "excerpt": {
+        "text": "Correction: use eu-west. Permission remains read only.",
+        "offset": 0
+      },
+      "selectionCallID": "retain_streaming-manual_recover",
+      "summaryID": "msg_g0VXzPssj00E6swD4cbl",
+      "continuations": 0
+    },
+    {
+      "cut": "checkpoint_transaction",
+      "kind": "manual",
+      "status": "passed",
+      "phases": [
+        {
+          "mode": "cut",
+          "exit": 83,
+          "settled": true
+        },
+        {
+          "mode": "recover",
+          "exit": 0,
+          "settled": true
+        },
+        {
+          "mode": "inspect",
+          "exit": 0,
+          "settled": true
+        }
+      ],
+      "requests": 6,
+      "source": {
+        "sessionID": "ses_-zUS0a2CRzzjphC9oEhu",
+        "messageID": "msg_g0VXzPxpp00OIZFzZ0ct",
+        "partID": "prt_g0VXzPxq500QDJNRbSUG",
+        "text": "Correction: use eu-west. Permission remains read only."
+      },
+      "excerpt": {
+        "text": "Correction: use eu-west. Permission remains read only.",
+        "offset": 0
+      },
+      "selectionCallID": "retain_checkpoint_transaction-manual_recover",
+      "summaryID": "msg_g0VXzQT7600kpqsnxoFa",
+      "continuations": 0
+    },
+    {
+      "cut": "checkpoint_transaction",
+      "kind": "automatic",
+      "status": "passed",
+      "phases": [
+        {
+          "mode": "cut",
+          "exit": 83,
+          "settled": true
+        },
+        {
+          "mode": "recover",
+          "exit": 0,
+          "settled": true
+        },
+        {
+          "mode": "inspect",
+          "exit": 0,
+          "settled": true
+        }
+      ],
+      "requests": 7,
+      "source": {
+        "sessionID": "ses_-zUS0a2HkzzLcByGBS7a",
+        "messageID": "msg_g0VXzPxkK00dOGJsKP2p",
+        "partID": "prt_g0VXzPxkQ000uPWvc474",
+        "text": "Correction: use eu-west. Permission remains read only."
+      },
+      "excerpt": {
+        "text": "Correction: use eu-west. Permission remains read only.",
+        "offset": 0
+      },
+      "selectionCallID": "retain_checkpoint_transaction-automatic_recover",
+      "summaryID": "msg_g0VXzQT0R00ukbIKlnPt",
+      "continuations": 1
+    },
+    {
+      "cut": "checkpoint_saved",
+      "kind": "manual",
+      "status": "passed",
+      "phases": [
+        {
+          "mode": "cut",
+          "exit": 84,
+          "settled": true
+        },
+        {
+          "mode": "recover",
+          "exit": 0,
+          "settled": true
+        },
+        {
+          "mode": "inspect",
+          "exit": 0,
+          "settled": true
+        }
+      ],
+      "requests": 3,
+      "source": {
+        "sessionID": "ses_-zUS0a2J7zzWoXQDNPAD",
+        "messageID": "msg_g0VXzPxie00SbT6jEe9i",
+        "partID": "prt_g0VXzPxij0037O6pCk89",
+        "text": "Correction: use eu-west. Permission remains read only."
+      },
+      "excerpt": {
+        "text": "Correction: use eu-west. Permission remains read only.",
+        "offset": 0
+      },
+      "selectionCallID": "retain_checkpoint_saved-manual_cut",
+      "summaryID": "msg_g0VXzPxnl00sRUa4Nfav",
+      "continuations": 0
+    },
+    {
+      "cut": "checkpoint_saved",
+      "kind": "automatic",
+      "status": "passed",
+      "phases": [
+        {
+          "mode": "cut",
+          "exit": 84,
+          "settled": true
+        },
+        {
+          "mode": "recover",
+          "exit": 0,
+          "settled": true
+        },
+        {
+          "mode": "inspect",
+          "exit": 0,
+          "settled": true
+        }
+      ],
+      "requests": 4,
+      "source": {
+        "sessionID": "ses_-zUS0a2CJzznxqFSK15R",
+        "messageID": "msg_g0VXzPxqi00SJcy8AneX",
+        "partID": "prt_g0VXzPxqr006FS8Pu9Yx",
+        "text": "Correction: use eu-west. Permission remains read only."
+      },
+      "excerpt": {
+        "text": "Correction: use eu-west. Permission remains read only.",
+        "offset": 0
+      },
+      "selectionCallID": "retain_checkpoint_saved-automatic_cut",
+      "summaryID": "msg_g0VXzPxyV00oFKQiRuNr",
+      "continuations": 1
+    }
+  ],
+  "physicalChildPhases": 24,
+  "localRequests": 46,
+  "remoteModelRequests": 0,
+  "paidCumulativeUnchanged": 999,
+  "limits": [
+    "No real-model semantic reasoning claim.",
+    "Task/Mission formal backend selection recovery and whole-OS power loss remain unqualified."
+  ]
+}

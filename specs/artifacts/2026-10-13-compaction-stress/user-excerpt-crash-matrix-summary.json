@@ -1,0 +1,302 @@
+{
+  "status": "passed",
+  "scope": "Physical child interruption and fresh-process user-source selection reconstruction; scripted streaming mechanics only.",
+  "cases": [
+    {
+      "cut": "streaming",
+      "kind": "manual",
+      "status": "passed",
+      "phases": [
+        {
+          "mode": "cut",
+          "exit": 81,
+          "settled": true
+        },
+        {
+          "mode": "recover",
+          "exit": 0,
+          "settled": true
+        },
+        {
+          "mode": "inspect",
+          "exit": 0,
+          "settled": true
+        }
+      ],
+      "requests": 6,
+      "source": {
+        "sessionID": "ses_-zUS0Z9EkzzqJxWWfcgo",
+        "messageID": "msg_g0VXzQqpH00eYxkWjpgA",
+        "partID": "prt_g0VXzQqpM00sOAiK2uWC",
+        "text": "Earlier location: us-east.\nCorrection: use eu-west. Permission remains read only.\nPrevious values above are superseded by this correction."
+      },
+      "excerpt": {
+        "text": "Correction: use eu-west. Permission remains read only.",
+        "offset": 27
+      },
+      "selectionCallID": "retain_streaming-manual_recover",
+      "summaryID": "msg_g0VXzRM4w00sqhsZVIrG",
+      "continuations": 0
+    },
+    {
+      "cut": "summary_saved",
+      "kind": "automatic",
+      "status": "passed",
+      "phases": [
+        {
+          "mode": "cut",
+          "exit": 82,
+          "settled": true
+        },
+        {
+          "mode": "recover",
+          "exit": 0,
+          "settled": true
+        },
+        {
+          "mode": "inspect",
+          "exit": 0,
+          "settled": true
+        }
+      ],
+      "requests": 7,
+      "source": {
+        "sessionID": "ses_-zUS0Z9AYzzj09aN0uW7",
+        "messageID": "msg_g0VXzQqrj00e3fUyzYMl",
+        "partID": "prt_g0VXzQqro00L7GGSVcjw",
+        "text": "Earlier location: us-east.\nCorrection: use eu-west. Permission remains read only.\nPrevious values above are superseded by this correction."
+      },
+      "excerpt": {
+        "text": "Correction: use eu-west. Permission remains read only.",
+        "offset": 27
+      },
+      "selectionCallID": "retain_summary_saved-automatic_recover",
+      "summaryID": "msg_g0VXzRM7p00gWCk15Rny",
+      "continuations": 1
+    },
+    {
+      "cut": "summary_saved",
+      "kind": "manual",
+      "status": "passed",
+      "phases": [
+        {
+          "mode": "cut",
+          "exit": 82,
+          "settled": true
+        },
+        {
+          "mode": "recover",
+          "exit": 0,
+          "settled": true
+        },
+        {
+          "mode": "inspect",
+          "exit": 0,
+          "settled": true
+        }
+      ],
+      "requests": 6,
+      "source": {
+        "sessionID": "ses_-zUS0Z9MbzzlDkiSkcv0",
+        "messageID": "msg_g0VXzQqfp00AsXiy7pPW",
+        "partID": "prt_g0VXzQqfu00hm0MXoT0z",
+        "text": "Earlier location: us-east.\nCorrection: use eu-west. Permission remains read only.\nPrevious values above are superseded by this correction."
+      },
+      "excerpt": {
+        "text": "Correction: use eu-west. Permission remains read only.",
+        "offset": 27
+      },
+      "selectionCallID": "retain_summary_saved-manual_recover",
+      "summaryID": "msg_g0VXzRLvW00VBEg1KMXJ",
+      "continuations": 0
+    },
+    {
+      "cut": "streaming",
+      "kind": "automatic",
+      "status": "passed",
+      "phases": [
+        {
+          "mode": "cut",
+          "exit": 81,
+          "settled": true
+        },
+        {
+          "mode": "recover",
+          "exit": 0,
+          "settled": true
+        },
+        {
+          "mode": "inspect",
+          "exit": 0,
+          "settled": true
+        }
+      ],
+      "requests": 7,
+      "source": {
+        "sessionID": "ses_-zUS0Z9Jtzz8udMo0GJf",
+        "messageID": "msg_g0VXzQqhy00dpyDihAV0",
+        "partID": "prt_g0VXzQqi200ZdqalhKtr",
+        "text": "Earlier location: us-east.\nCorrection: use eu-west. Permission remains read only.\nPrevious values above are superseded by this correction."
+      },
+      "excerpt": {
+        "text": "Correction: use eu-west. Permission remains read only.",
+        "offset": 27
+      },
+      "selectionCallID": "retain_streaming-automatic_recover",
+      "summaryID": "msg_g0VXzRLxi00DkVqvJ8q8",
+      "continuations": 1
+    },
+    {
+      "cut": "checkpoint_transaction",
+      "kind": "manual",
+      "status": "passed",
+      "phases": [
+        {
+          "mode": "cut",
+          "exit": 83,
+          "settled": true
+        },
+        {
+          "mode": "recover",
+          "exit": 0,
+          "settled": true
+        },
+        {
+          "mode": "inspect",
+          "exit": 0,
+          "settled": true
+        }
+      ],
+      "requests": 6,
+      "source": {
+        "sessionID": "ses_-zUS0Ya3TzzcemjF40dk",
+        "messageID": "msg_g0VXzRPxn00hg9w4lrty",
+        "partID": "prt_g0VXzRPxs00DI3APhEP8",
+        "text": "Earlier location: us-east.\nCorrection: use eu-west. Permission remains read only.\nPrevious values above are superseded by this correction."
+      },
+      "excerpt": {
+        "text": "Correction: use eu-west. Permission remains read only.",
+        "offset": 27
+      },
+      "selectionCallID": "retain_checkpoint_transaction-manual_recover",
+      "summaryID": "msg_g0VXzRvDH00oxY5Jq2uZ",
+      "continuations": 0
+    },
+    {
+      "cut": "checkpoint_saved",
+      "kind": "automatic",
+      "status": "passed",
+      "phases": [
+        {
+          "mode": "cut",
+          "exit": 84,
+          "settled": true
+        },
+        {
+          "mode": "recover",
+          "exit": 0,
+          "settled": true
+        },
+        {
+          "mode": "inspect",
+          "exit": 0,
+          "settled": true
+        }
+      ],
+      "requests": 4,
+      "source": {
+        "sessionID": "ses_-zUS0Ya3Xzz35zAec1nc",
+        "messageID": "msg_g0VXzRPxh00Wd6PqJKRs",
+        "partID": "prt_g0VXzRPxm00D3MWRynTu",
+        "text": "Earlier location: us-east.\nCorrection: use eu-west. Permission remains read only.\nPrevious values above are superseded by this correction."
+      },
+      "excerpt": {
+        "text": "Correction: use eu-west. Permission remains read only.",
+        "offset": 27
+      },
+      "selectionCallID": "retain_checkpoint_saved-automatic_cut",
+      "summaryID": "msg_g0VXzRQ0S003uJbWE1sy",
+      "continuations": 1
+    },
+    {
+      "cut": "checkpoint_saved",
+      "kind": "manual",
+      "status": "passed",
+      "phases": [
+        {
+          "mode": "cut",
+          "exit": 84,
+          "settled": true
+        },
+        {
+          "mode": "recover",
+          "exit": 0,
+          "settled": true
+        },
+        {
+          "mode": "inspect",
+          "exit": 0,
+          "settled": true
+        }
+      ],
+      "requests": 3,
+      "source": {
+        "sessionID": "ses_-zUS0Ya3JzzzqPqvUllZ",
+        "messageID": "msg_g0VXzRPy400CK2ruYTdF",
+        "partID": "prt_g0VXzRPy900tEd8l6tC2",
+        "text": "Earlier location: us-east.\nCorrection: use eu-west. Permission remains read only.\nPrevious values above are superseded by this correction."
+      },
+      "excerpt": {
+        "text": "Correction: use eu-west. Permission remains read only.",
+        "offset": 27
+      },
+      "selectionCallID": "retain_checkpoint_saved-manual_cut",
+      "summaryID": "msg_g0VXzRQ0q002JCsJwlMv",
+      "continuations": 0
+    },
+    {
+      "cut": "checkpoint_transaction",
+      "kind": "automatic",
+      "status": "passed",
+      "phases": [
+        {
+          "mode": "cut",
+          "exit": 83,
+          "settled": true
+        },
+        {
+          "mode": "recover",
+          "exit": 0,
+          "settled": true
+        },
+        {
+          "mode": "inspect",
+          "exit": 0,
+          "settled": true
+        }
+      ],
+      "requests": 7,
+      "source": {
+        "sessionID": "ses_-zUS0Ya3Jzz4bOTFLji1",
+        "messageID": "msg_g0VXzRPxz00WxvcVOhmU",
+        "partID": "prt_g0VXzRPy300qJ34K0ZkC",
+        "text": "Earlier location: us-east.\nCorrection: use eu-west. Permission remains read only.\nPrevious values above are superseded by this correction."
+      },
+      "excerpt": {
+        "text": "Correction: use eu-west. Permission remains read only.",
+        "offset": 27
+      },
+      "selectionCallID": "retain_checkpoint_transaction-automatic_recover",
+      "summaryID": "msg_g0VXzRvDE00YVuJr03LL",
+      "continuations": 1
+    }
+  ],
+  "physicalChildPhases": 24,
+  "localRequests": 46,
+  "remoteModelRequests": 0,
+  "paidCumulativeUnchanged": 999,
+  "limits": [
+    "No real-model semantic reasoning claim.",
+    "Task/Mission formal backend selection recovery and whole-OS power loss remain unqualified."
+  ]
+}

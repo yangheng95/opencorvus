@@ -1,0 +1,86 @@
+{
+  "status": "passed_mechanics",
+  "goalStatus": "incomplete",
+  "scope": "Manual/automatic standalone Session compaction, selected original middle text through real child exits and fresh-process recovery.",
+  "finalMatrix": {
+    "name": "user-excerpt-crash-matrix",
+    "cases": 8,
+    "physicalChildPhases": 24,
+    "localStreamedRequests": 46,
+    "process": 48526,
+    "joinedExit": 0,
+    "selectionRange": {
+      "offset": 26,
+      "end": 80,
+      "unit": "utf16_code_units"
+    }
+  },
+  "calibration": [
+    {
+      "name": "user-selection-crash-smoke",
+      "cases": 2,
+      "physicalChildPhases": 6,
+      "localStreamedRequests": 11,
+      "process": 74073,
+      "joinedExit": 0
+    },
+    {
+      "name": "user-selection-crash-matrix",
+      "cases": 8,
+      "physicalChildPhases": 24,
+      "localStreamedRequests": 46,
+      "process": 93958,
+      "joinedExit": 0
+    }
+  ],
+  "localContracts": {
+    "count": 17,
+    "suites": {
+      "recoveryBoundary": 4,
+      "userText": 13
+    },
+    "process": 45620,
+    "joinedExit": 0,
+    "log": "selection-crash-local.log.gz"
+  },
+  "types": {
+    "process": 74111,
+    "joinedExit": 0,
+    "command": "node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit --project <expanded checker config>",
+    "config": "user-excerpt-crash-typecheck.json",
+    "log": "excerpt-crash-typecheck.log.gz"
+  },
+  "independentReview": {
+    "script": "user-excerpt-crash-review.cjs",
+    "status": "passed",
+    "objects": [
+      "Authored source and exact selected range",
+      "Captured streamed Tool call/result pairs retained across notes",
+      "Before/after published checkpoint and selection receipt identity",
+      "Fresh third-process snapshot equals recovery snapshot",
+      "Automatic normal continuation original user-role text",
+      "Expected physical exits and child/output settlement"
+    ]
+  },
+  "sourceReview": [
+    "Original correction is separated from the neutral compaction input, so extra user-source projection is exercised.",
+    "The current fixture selects only the original middle range; full-source pilot reports are calibration evidence.",
+    "Existing physical cut sites and recovery loop remain the only implementation.",
+    "No product behavior, stored schema, model default, UI, permission or scheduling change."
+  ],
+  "paidRequests": 0,
+  "paidCumulative": 999,
+  "limits": [
+    "Luna alternating-authorization incomplete-read and full/compacted action failures remain open.",
+    "These scripted loopback requests establish mechanics, not model reasoning quality.",
+    "Task/Mission formal backend selection publication, larger histories/catalogs, cross-vendor/native product state and whole-OS power loss remain open."
+  ],
+  "docs": {
+    "exit": 0,
+    "commands": [
+      "bun run docs:check",
+      "bun run check:architecture-index"
+    ],
+    "log": "excerpt-crash-docs.log.gz"
+  }
+}
