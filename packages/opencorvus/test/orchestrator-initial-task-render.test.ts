@@ -41,7 +41,7 @@ const expectedRoutineToolIDs = [
   "cancel_subagent",
   "capability_search",
   "create_continuous_goal",
-  "dispatch_agent",
+  "dispatch_agents",
   "edit",
   "evolve_expert_squad_from_feedback",
   "external_code_search",

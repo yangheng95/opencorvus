@@ -1,0 +1,58 @@
+{
+  "observedAt": "2026-10-14T17:49:29.4826880+08:00",
+  "integrationCommit": "5ffc59b4bafb9d918725f0775240009f2e7b4671",
+  "worktrees": [
+    {
+      "path": "D:/myhexin-local/opencorvus",
+      "head": "5ffc59b4bafb9d918725f0775240009f2e7b4671",
+      "absorbed": true,
+      "status": [
+        " M CHANGELOG.md",
+        " M bun.lock",
+        " M packages/channel-config/package.json",
+        " M packages/channel-runtime/package.json",
+        " M packages/opencorvus/generated/expert-squad-revisions.ts",
+        " M packages/opencorvus/native/process-supervisor/Cargo.lock",
+        " M packages/opencorvus/native/process-supervisor/Cargo.toml",
+        " M packages/opencorvus/package.json",
+        " M packages/opencorvus/test/orchestrator-initial-task-render.test.ts",
+        " M packages/opencorvus/test/tool-result-control-protocol.test.ts",
+        " M packages/overlay/package.json",
+        " M packages/overlay/src-tauri/Cargo.lock",
+        " M packages/overlay/src-tauri/Cargo.toml",
+        " M packages/overlay/src-tauri/tauri.conf.json",
+        " M packages/plugin/package.json",
+        " M packages/sdk/js/package.json",
+        " M packages/transport-protocol/package.json",
+        " M packages/util/package.json",
+        " M specs/README.md",
+        " M specs/artifacts/README.md",
+        " M specs/records/2026-10/README.md",
+        "?? .bun/",
+        "?? packages/opencorvus/bun/"
+      ]
+    },
+    {
+      "path": "C:/Users/hengu/.codex/worktrees/agent-execution-redesign/opencorvus",
+      "head": "a0a879ed759f980e6d72c9df7a10b51bb2d8f1a2",
+      "absorbed": true,
+      "status": []
+    },
+    {
+      "path": "C:/Users/hengu/.codex/worktrees/continuous-goal-mode/opencorvus",
+      "head": "7897d1bd1c535446b1f8dbedd22fb8f49c3884bf",
+      "absorbed": true,
+      "status": []
+    },
+    {
+      "path": "C:/Users/hengu/.codex/worktrees/dependabot-upgrades/opencorvus",
+      "head": "b447754badc57bf172b0498057adb06ae46bd774",
+      "absorbed": true,
+      "status": []
+    }
+  ],
+  "preservedCachePaths": [
+    ".bun/install/cache",
+    "packages/opencorvus/bun/@t@"
+  ]
+}

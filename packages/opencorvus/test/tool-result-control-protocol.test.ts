@@ -3241,23 +3241,30 @@ describe("single Tool-result turn-control protocol", () => {
           tool: "wait",
           state: { status: "running", input: {}, time: { start: Date.now() } },
         })
-        Database.transaction((db) =>
-          db
-            .insert(PermissionExecutionResultTable)
-            .values({
-              attempt_id: "pat_legacy_tool_control",
-              result: {
-                kind: "json",
-                value: {
-                  title: "Wait Scheduled",
-                  output: "scheduled",
-                  metadata: { opencorvusParkAfterToolResult: true },
-                },
-              },
-              time_created: Date.now(),
-            })
-            .run(),
-        )
+        await Config.updateProjectPatch({ permission_mode: "full_access" })
+        const legacyResult = {
+          title: "Wait Scheduled",
+          output: "scheduled",
+          metadata: { opencorvusParkAfterToolResult: true },
+        }
+        expect(await PermissionAuthority.authorizeAndExecute({
+          projectID: Instance.project.id,
+          sessionID: session.id,
+          messageID: assistant.id,
+          toolCallID: part.callID,
+          toolPartID: part.id,
+          providerKind: "projected",
+          providerID: "legacy-control-test",
+          providerDigest: "legacy-control-test",
+          toolName: "wait",
+          args: {},
+        }, async () => legacyResult)).toEqual(legacyResult)
+        const legacyHistory = await PermissionAuthority.history()
+        const legacyRequestID = legacyHistory.find((event) => event.tool_call_id === part.callID)!.request_id
+        expect(legacyHistory.filter((event) => event.request_id === legacyRequestID)
+          .map((event) => event.event_type)).toEqual([
+          "stale", "execution_succeeded", "execution_started", "allowed_once", "requested",
+        ])
         Database.close()
         let observed: unknown
         try {

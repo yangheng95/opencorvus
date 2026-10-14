@@ -4,9 +4,19 @@
 
 ## 未发布
 
+## 0.1.26 - 2026-10-14
+
 ### zh-CN
 
+#### 新增
+
+- Chat、Task 与 Mission 支持持续目标模式，保留目标、状态和执行进展；重开与进程恢复沿同一持久化目标继续。
+
 #### 调整
+
+- 原始压缩证据提供可分页的事实目录树；读取完整用户文本、工具输入输出、失败诊断及调用来源时保留原消息身份和可用响应预算。连续压缩继续引用原始持久化事实。
+- Git 源条目读取与暂存共用物理条目定义，正确处理链接、文件/目录类型变化和真实索引事务；生成提交信息时缺少模型配置会显示可操作的设置入口。
+- 整合十项 Dependabot 依赖升级，并更新工具目录、权限执行结果与进程恢复的后端契约验证。
 
 - 归档页支持搜索全部已归档工作；查询覆盖未加载的分页记录，清除搜索恢复列表，恢复记录后保留当前查询。
 
@@ -135,9 +145,23 @@
 - 补齐中文文档代码框的终端标题、复制提示和反馈；源文件 URL 使用对应文档集合的语言。
 - 模型服务商的地址校验说明改为页面可见的本地化提示。
 
+#### 用户影响与已知限制
+
+- 已建立受支持数据库基线的数据使用版本化自动迁移，升级前创建备份并保留历史、原批准和结果。尚未版本化的旧库返回 `SCHEMA_BASELINE_REQUIRED` 并保留数据，需要独立且明确授权的维护；程序不会自动删除旧库。
+- 压缩的原始证据保留和预算处理已有改进，但长用户文本、多次授权修订与连续压缩的真实模型测试仍有失败，不保证模型准确沿用最新指令，也不宣称已达到 Codex 等效或无损语义压缩。
+- Linux/macOS 上，Bun 运行时仍可能错误解析包含字面反斜杠的合法文件名，影响路径读取与实体身份校验；[上游问题仍在处理](https://github.com/oven-sh/bun/issues/33403)。保留原测试与诊断，不将 Windows 验收当作跨平台问题已修复。
+
 ### en-US
 
+#### Added
+
+- Continuous goals are available in Chat, Task and Mission, retaining the goal, status and execution progress. Reopening and process recovery continue from the same persisted goal.
+
 #### Changed
+
+- Original compaction evidence has a paged factual directory tree. Reading complete user text, tool inputs and outputs, failure diagnostics and call provenance preserves source-message identities and the available response budget. Repeated compaction continues to refer to the original persisted facts.
+- Git source reading and staging share physical entry identities, including links, file/directory type changes and actual index transactions. Commit-message generation shows an actionable settings entry when model configuration is missing.
+- Integrated ten Dependabot dependency upgrades and aligned backend checks for tool catalogs, permission execution results and process recovery.
 
 - Search all archived work from Settings, including records beyond the loaded page. Clearing search restores the list, and restoring a record keeps the current query.
 
@@ -265,6 +289,12 @@
 - Fixed documentation language changes reverting to an earlier preference on return to the homepage. Documentation and other website pages share one language preference.
 - Added Chinese terminal titles, copy hints and feedback for documentation code frames. Source-file URLs use the language of their document collection.
 - Provider address validation now shows a visible, localized explanation in the form.
+
+#### User impact and known limitations
+
+- Supported database baselines use automatic versioned migrations with a pre-upgrade backup, retaining history, original approvals and results. An unversioned legacy database returns `SCHEMA_BASELINE_REQUIRED` and keeps the data for separately authorized maintenance; the application does not automatically delete old databases.
+- Original evidence retention and compaction budgeting have improved, but real-model tests still fail on long user text, repeated authorization revisions and consecutive compaction. Accurate continuation from the latest instruction is not guaranteed, and Codex parity or lossless semantic compression is not claimed.
+- On Linux and macOS, the Bun runtime can still misresolve valid filenames containing literal backslashes, affecting path reads and physical identity checks. [The upstream issue remains open](https://github.com/oven-sh/bun/issues/33403). Original tests and diagnostics are retained; Windows acceptance does not establish a cross-platform fix.
 
 ## 0.1.25 - 2026-10-12
 

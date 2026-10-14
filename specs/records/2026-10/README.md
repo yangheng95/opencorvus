@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [工作树收敛与 0.1.26 发布](2026-10-14-release-0.1.26.md)：现有工作树完整整合、双语更新日志与 canonical 发布验收。
+
 - [侧栏Rendering根因](2026-10-14-sidebar-render-root.md)：单agent真实流式生命周期、历史修复复核与OpenAPI闭合。
 
 - [Git 源条目写入与单人验收](2026-10-14-project-metadata-latency.md)：全部应用暂存入口、索引事务、类型变化及流式配置错误；已知问题收敛后结束迭代。
