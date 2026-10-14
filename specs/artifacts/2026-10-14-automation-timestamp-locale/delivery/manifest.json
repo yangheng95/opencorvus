@@ -1,0 +1,28 @@
+{
+  "scope": "Root B19/B20/B21 own normal delivery checkpoint; not a successful push",
+  "ownCommits": [
+    "e3c3d1aa73bfc2b071180d85a21773bdcc4b79b7",
+    "0fe812062088fc2aa6bc5f388d6e03b6ac078ae6",
+    "8c42e5d39806cd844a7f072439580e8e32b1402f"
+  ],
+  "sourceSnapshot": "8408335850339b2afc85b4da676e92095cb8ce69",
+  "upstreamAtAttempt": "ba5f55cb3647385db64bc77a93260619e2ef3fb5",
+  "completePendingAtAttempt": [
+    "e3c3d1aa73bfc2b071180d85a21773bdcc4b79b7",
+    "79ee5303953bdb14bd71683d96796535a3f00c12",
+    "b767b93259c9c4766d91b70c1a0bd168df4b5971",
+    "0fe812062088fc2aa6bc5f388d6e03b6ac078ae6",
+    "d6fc0a5550744633c52e77d71025f093c73df376",
+    "3c5f8d2a0c66bc1f316df6fa6f07cf8f50c44dcd",
+    "ce798bfc4c97a9d817b7a1c637553cd6bb577e3f",
+    "8c42e5d39806cd844a7f072439580e8e32b1402f",
+    "2d800e4a92a1508f1386be8e01a4d309d08f11d6",
+    "8408335850339b2afc85b4da676e92095cb8ce69"
+  ],
+  "normalPushActualExit": 1,
+  "checks": "Eight typechecks successful, seven cached and core freshly executed; routes/docs0; original control lease owner check then1. Later hooks were not reached, and earlier exact own topology remains separate evidence.",
+  "blocker": "Other active user task permission/authority.ts has two acquire sites; current owner census declares one. Root neither changes that task source/index/process nor bypasses hooks.",
+  "next": "Await actual coupled ownership repair, or explicit user authorization for the single cross-chat locating reminder already requested. Re-run original checker, fresh fetch/merge, complete pending review and own normal push; verify actual remote. New snapshot or new pending delivery requires renewed review.",
+  "goalAudit": "This is the first blocking goal turn for this shared condition; multiple failed commands in the same turn are not three consecutive goal turns. Goal remains active; no user stop/pause request for the main goal.",
+  "at": "2026-10-14T01:53:48.233Z"
+}

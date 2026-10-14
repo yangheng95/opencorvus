@@ -2,7 +2,7 @@
 
 - [命令面板全历史搜索](2026-10-14-command-search/README.md)：完整查询、分页、当前可见快捷键与真实Sources入口验收。
 
-- [定时任务时间语言](2026-10-14-automation-timestamp-locale/README.md)：实际定义/API/日期页面与独立运行证据。
+- [定时任务时间语言](2026-10-14-automation-timestamp-locale/README.md)：实际定义/API/日期页面与独立运行，含正常提交和共享push失败原件。
 
 - [IPv6 Provider零段位置](2026-10-14-provider-ipv6-segments/README.md)：修前冲突、修后声明和独立运行原件。
 

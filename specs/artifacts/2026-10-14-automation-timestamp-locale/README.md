@@ -10,3 +10,5 @@
 - previous-delivery：B19 e3c3d1aa7和B20 0fe8120620各自正常commit/逐blob核对/精确索引结算/exact topology/同步原件。B19两次正常push均1原件完整保留：先并行Combobox类型错误，后类型通过但权限租约登记失败。两批尚待本任务正常push，不能借其他用户任务的推送充当自己回执。
 
 当前仅桌面中英资格。Provider title/专家团日期另有未验证线索，不扩大到未亲自查看的页面；调度器、SDK、绝对时间、时区和原定义不在产品修改范围。
+
+[本批正常commit及三批本任务正常push失败的精确原回执](delivery/README.md)。源改动均已提交，尚未成功推送；不是版本发布或全目标完成。

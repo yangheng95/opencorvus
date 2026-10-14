@@ -2,7 +2,7 @@
 
 - [命令面板全历史搜索](records/2026-10/2026-10-14-command-search.md)：完整查询、分页、当前可见快捷键与真实Sources入口验收。
 
-- [定时任务时间语言](records/2026-10/2026-10-14-automation-timestamp-locale.md)：显示日期与应用语言的单一投影和真实页面资格。
+- [定时任务时间语言](records/2026-10/2026-10-14-automation-timestamp-locale.md)：日期/频率的当前语言投影、真实页面及三批正常推送阻塞原件。
 
 - [IPv6 Provider零段位置](records/2026-10/2026-10-14-provider-ipv6-segments.md)：完整地址编码与真实表单冲突调查，Root独立验收。
 
