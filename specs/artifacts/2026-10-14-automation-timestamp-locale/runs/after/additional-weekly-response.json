@@ -1,0 +1,14 @@
+{
+  "input": {
+    "name": "Owned calendar weekly",
+    "target": {
+      "scope": "session",
+      "sessionId": "ses_-zUS0xr4rzzSUNp0oUat"
+    },
+    "recurrence": "DTSTART;TZID=Asia/Shanghai:20301014T123400\nRRULE:FREQ=WEEKLY;BYDAY=FR",
+    "executionMode": "local",
+    "prompt": "Owned future weekly calendar presentation; no execution during this qualification."
+  },
+  "status": 201,
+  "body": "{\"id\":\"atm_g0VXz29o000c92fYtSM2\",\"revisionId\":\"atm_g0VXz29o000c92fYtSM2\",\"name\":\"Owned calendar weekly\",\"nextRun\":1918528440000}"
+}

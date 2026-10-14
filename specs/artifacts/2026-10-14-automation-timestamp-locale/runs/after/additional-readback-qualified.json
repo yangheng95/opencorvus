@@ -1,0 +1,77 @@
+{
+  "action": "readback",
+  "url": "http://127.0.0.1:18656/global/automations",
+  "status": 200,
+  "entries": [
+    {
+      "key": "weekdays",
+      "definition": {
+        "id": "atm_g0VXz29nV004NZck0l1a",
+        "revisionId": "atm_g0VXz29nV004NZck0l1a",
+        "name": "Owned calendar weekdays",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_-zUS0xr4rzzSUNp0oUat"
+        },
+        "recurrence": "DTSTART;TZID=Asia/Shanghai:20301014T123400\nRRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Owned future weekdays calendar presentation; no execution during this qualification.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 1918182840000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "history": []
+    },
+    {
+      "key": "weekly",
+      "definition": {
+        "id": "atm_g0VXz29o000c92fYtSM2",
+        "revisionId": "atm_g0VXz29o000c92fYtSM2",
+        "name": "Owned calendar weekly",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_-zUS0xr4rzzSUNp0oUat"
+        },
+        "recurrence": "DTSTART;TZID=Asia/Shanghai:20301014T123400\nRRULE:FREQ=WEEKLY;BYDAY=FR",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Owned future weekly calendar presentation; no execution during this qualification.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 1918528440000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "history": []
+    },
+    {
+      "key": "advanced",
+      "definition": {
+        "id": "atm_g0VXz29oB00Js01pep9M",
+        "revisionId": "atm_g0VXz29oB00Js01pep9M",
+        "name": "Owned calendar advanced",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_-zUS0xr4rzzSUNp0oUat"
+        },
+        "recurrence": "DTSTART;TZID=Asia/Shanghai:20301014T123437\nRRULE:FREQ=DAILY;COUNT=4",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Owned future advanced calendar presentation; no execution during this qualification.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 1918182877000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "history": []
+    }
+  ],
+  "boundary": "Three real public future definitions only. Calendar anchors, exact revisions and raw rules retained; no fire, run or inference qualification."
+}

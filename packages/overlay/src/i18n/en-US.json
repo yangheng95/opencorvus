@@ -669,6 +669,7 @@
   "automations.recurrence.weekdays": "Weekdays",
   "automations.recurrence.weekly": "Every week",
   "automations.recurrence.custom": "Advanced RRULE",
+  "automations.recurrence.summary": "{{schedule}} at {{time}} · {{timeZone}}",
   "automations.time": "Time",
   "automations.start_date": "Start date",
   "automations.start_date_help": "Run on or after this date in the selected time zone.",

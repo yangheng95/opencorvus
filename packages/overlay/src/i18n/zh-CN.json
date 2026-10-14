@@ -669,6 +669,7 @@
   "automations.recurrence.weekdays": "工作日",
   "automations.recurrence.weekly": "每周",
   "automations.recurrence.custom": "高级 RRULE",
+  "automations.recurrence.summary": "{{schedule}} {{time}} · {{timeZone}}",
   "automations.time": "时间",
   "automations.start_date": "开始日期",
   "automations.start_date_help": "在所选时区中，从此日期起执行。",

@@ -1,0 +1,27 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+const [stage,action]=process.argv.slice(2)
+assert.equal(['before','after'].includes(stage),true);assert.equal(['create','readback'].includes(action),true)
+const root=path.resolve('.tmp-codex-automation-timestamp-locale-01a133/'+stage),ready=JSON.parse(fs.readFileSync(root+'/ready.json','utf8')),url=`http://127.0.0.1:${ready.port}/global/automations`
+const input={name:'Owned calendar locale',target:{scope:'session',sessionId:ready.sessions[0].sessionID},recurrence:'DTSTART;TZID=Asia/Shanghai:20301014T123400\nRRULE:FREQ=DAILY',executionMode:'local',prompt:'Owned future date presentation qualification; no execution during this qualification.'}
+let created
+if(action==='create'){
+ assert.equal(fs.existsSync(root+'/automation-created.json'),false,'Fresh own definition occurrence required')
+ fs.writeFileSync(root+'/automation-input.json',JSON.stringify(input,null,2)+'\n')
+ const response=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(input)})
+ const raw=await response.text();fs.writeFileSync(root+'/automation-create-response.json',JSON.stringify({status:response.status,body:raw},null,2)+'\n')
+ assert.equal(response.status,201);created=JSON.parse(raw)
+ assert.equal(created.name,input.name);assert.equal(created.nextRun,1918182840000)
+ fs.writeFileSync(root+'/automation-created.json',JSON.stringify(created,null,2)+'\n')
+}else created=JSON.parse(fs.readFileSync(root+'/automation-created.json','utf8'))
+const response=await fetch(url);assert.equal(response.status,200)
+const definitions=await response.json(),definition=definitions.find(x=>x.id===created.id)
+assert.equal(definition.id,created.id);assert.equal(definition.revisionId,created.revisionId)
+assert.equal(definition.name,input.name);assert.equal(definition.prompt,input.prompt)
+assert.deepEqual(definition.target,input.target);assert.equal(definition.recurrence,input.recurrence)
+assert.equal(definition.nextRun,1918182840000);assert.equal(definition.status,'active');assert.equal(definition.lastRun,null)
+const runs=await fetch(`${url}/${encodeURIComponent(created.id)}/runs`);assert.equal(runs.status,200)
+const history=await runs.json();assert.deepEqual(history,[])
+fs.writeFileSync(root+`/automation-${action}-qualified.json`,JSON.stringify({stage,action,url,createStatus:action==='create'?201:undefined,readStatus:response.status,runStatus:runs.status,definition,history,boundary:'Actual public future definition. Exact 2030 instant and original revision retained; no scheduler fire, run or inference is qualified.'},null,2)+'\n')
+console.log(JSON.stringify({stage,action,readStatus:200,id:definition.id,revisionId:definition.revisionId,nextRun:definition.nextRun,recurrence:definition.recurrence,target:definition.target,history}))

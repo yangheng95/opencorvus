@@ -1,0 +1,10 @@
+{
+  "name": "Owned calendar locale",
+  "target": {
+    "scope": "session",
+    "sessionId": "ses_-zUS0xr4rzzSUNp0oUat"
+  },
+  "recurrence": "DTSTART;TZID=Asia/Shanghai:20301014T123400\nRRULE:FREQ=DAILY",
+  "executionMode": "local",
+  "prompt": "Owned future date presentation qualification; no execution during this qualification."
+}

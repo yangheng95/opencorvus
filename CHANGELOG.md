@@ -13,6 +13,8 @@
 
 #### 修复
 
+- 定时任务的日期、基础重复频率和星期跟随当前界面语言；列表、详情与搜索共用摘要，高级日历规则保留完整原表达式。
+
 - IPv6 模型服务商的自动标识保留压缩零段的位置，两个非零段相同但零段位置不同的地址可分别保存。已保存的服务商标识保持不变。
 
 - 新增本地模型服务商时，自动标识保留完整 IP、localhost 或 IPv6 地址及非默认端口，同一地址的不同端口可分别保存；编辑已有服务商时保持原标识。
@@ -115,6 +117,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Scheduled task dates, basic recurrence descriptions and weekday names follow the current interface language. Lists, details and search share the same summary, while advanced calendar rules retain their complete original expression.
 
 - IPv6 provider IDs preserve the position of compressed zero segments, so addresses with the same nonzero groups in different positions can be saved separately. Existing provider IDs remain unchanged.
 

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [定时任务时间语言](records/2026-10/2026-10-14-automation-timestamp-locale.md)：显示日期与应用语言的单一投影和真实页面资格。
+
 - [IPv6 Provider零段位置](records/2026-10/2026-10-14-provider-ipv6-segments.md)：完整地址编码与真实表单冲突调查，Root独立验收。
 
 - [406 原执行者恢复与选项呈现](records/2026-10/2026-10-14-execution-owner-recovery-406.md)：Permission物理effect owner/CAS与Project隔离、Question后续权威、原选项语义布局，405正常交付后继续。

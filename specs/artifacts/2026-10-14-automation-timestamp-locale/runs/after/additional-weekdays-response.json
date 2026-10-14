@@ -1,0 +1,14 @@
+{
+  "input": {
+    "name": "Owned calendar weekdays",
+    "target": {
+      "scope": "session",
+      "sessionId": "ses_-zUS0xr4rzzSUNp0oUat"
+    },
+    "recurrence": "DTSTART;TZID=Asia/Shanghai:20301014T123400\nRRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR",
+    "executionMode": "local",
+    "prompt": "Owned future weekdays calendar presentation; no execution during this qualification."
+  },
+  "status": 201,
+  "body": "{\"id\":\"atm_g0VXz29nV004NZck0l1a\",\"revisionId\":\"atm_g0VXz29nV004NZck0l1a\",\"name\":\"Owned calendar weekdays\",\"nextRun\":1918182840000}"
+}

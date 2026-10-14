@@ -193,17 +193,3 @@ export function automationRecurrenceUpdate(existing: string, input: AutomationRe
     return undefined
   return next
 }
-
-export function recurrenceSummary(recurrence: string): string {
-  const rule = recurrence.match(/(?:^|\n)RRULE:([^\n]+)/i)?.[1] ?? recurrence
-  const parsed = parseAutomationRecurrence(recurrence)
-  const schedule =
-    rule === "FREQ=DAILY"
-      ? "Daily"
-      : rule === "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR"
-        ? "Weekdays"
-        : rule.startsWith("FREQ=WEEKLY;BYDAY=")
-          ? `Weekly (${rule.slice("FREQ=WEEKLY;BYDAY=".length)})`
-          : rule
-  return parsed.startDate ? `${schedule} at ${parsed.time} · ${parsed.timeZone}` : schedule
-}

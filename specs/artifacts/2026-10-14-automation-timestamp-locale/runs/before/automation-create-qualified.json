@@ -1,0 +1,29 @@
+{
+  "stage": "before",
+  "action": "create",
+  "url": "http://127.0.0.1:18654/global/automations",
+  "createStatus": 201,
+  "readStatus": 200,
+  "runStatus": 200,
+  "definition": {
+    "id": "atm_g0VXz0UOO00XtaNptsC0",
+    "revisionId": "atm_g0VXz0UOO00XtaNptsC0",
+    "name": "Owned calendar locale",
+    "target": {
+      "scope": "session",
+      "sessionId": "ses_-zUS0zXTUzzYR3GQvbLm"
+    },
+    "recurrence": "DTSTART;TZID=Asia/Shanghai:20301014T123400\nRRULE:FREQ=DAILY",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "Owned future date presentation qualification; no execution during this qualification.",
+    "status": "active",
+    "lastRun": null,
+    "nextRun": 1918182840000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  "history": [],
+  "boundary": "Actual public future definition. Exact 2030 instant and original revision retained; no scheduler fire, run or inference is qualified."
+}

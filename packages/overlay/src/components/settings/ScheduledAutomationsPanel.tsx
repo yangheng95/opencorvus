@@ -9,7 +9,6 @@ import {
   buildAutomationRecurrence,
   browserTimeZone,
   parseAutomationRecurrence,
-  recurrenceSummary,
   type AutomationRecurrencePreset,
   type AutomationWeekday,
 } from "../../services/automation-recurrence"
@@ -34,7 +33,7 @@ import { loadDiscoveredProjects, type DiscoveredProject } from "../../services/w
 import { loadProviderInfo } from "../../services/config-load"
 import { connectedModelOptions, type ConnectedModelOption } from "../../services/llm"
 import { closeConfigDialog } from "../../services/config-dialog-control"
-import { t } from "../../utils/i18n"
+import { localeTag, t } from "../../utils/i18n"
 import { ArmedConfirmButton } from "../ui/ArmedConfirmButton"
 import { AutoGrowTextarea } from "../ui/AutoGrowTextarea"
 import { Badge, type BadgeTone } from "../ui/Badge"
@@ -146,10 +145,20 @@ function selectOption<T extends string>(options: SelectOption<T>[], value: T): S
 
 function formatTimestamp(value: number | null): string {
   if (!value) return t("automations.never")
-  return new Intl.DateTimeFormat(undefined, {
+  return new Intl.DateTimeFormat(localeTag(), {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(value))
+}
+
+function recurrenceSummary(recurrence: string): string {
+  const parsed = parseAutomationRecurrence(recurrence)
+  if (parsed.preset === "custom") return parsed.customRule
+  const schedule =
+    parsed.preset === "weekly"
+      ? `${t("automations.recurrence.weekly")} (${t(`automations.weekday.${parsed.weekday}`)})`
+      : t(`automations.recurrence.${parsed.preset}`)
+  return t("automations.recurrence.summary", { schedule, time: parsed.time, timeZone: parsed.timeZone })
 }
 
 function statusTone(status: AutomationView["status"]): BadgeTone {

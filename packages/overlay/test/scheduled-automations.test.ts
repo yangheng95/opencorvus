@@ -5,7 +5,6 @@ import {
   automationRecurrenceUpdate,
   buildAutomationRecurrence,
   parseAutomationRecurrence,
-  recurrenceSummary,
   type AutomationRecurrenceInput,
 } from "../src/services/automation-recurrence"
 import {
@@ -37,7 +36,6 @@ test("recurrence presets emit one anchored RFC 5545 schedule with an explicit IA
     timeZone: "America/New_York",
   })
   expect(daily).toBe("DTSTART;TZID=America/New_York:20261225T093000\nRRULE:FREQ=DAILY")
-  expect(recurrenceSummary(daily)).toBe("Daily at 09:30 · America/New_York")
 
   const weekdays = buildAutomationRecurrence({
     preset: "weekdays",
@@ -109,15 +107,32 @@ test("creation defaults use the selected time zone at the supplied instant", () 
   })
 })
 
-test("recurrence summaries qualify UTC anchors across basic and advanced rules", () => {
-  expect(recurrenceSummary("DTSTART:20261219T153000Z\nRRULE:FREQ=WEEKLY;BYDAY=SA")).toBe(
-    "Weekly (SA) at 15:30 · UTC",
-  )
-  expect(recurrenceSummary("DTSTART:20261219T083000Z\nRRULE:FREQ=DAILY")).toBe("Daily at 08:30 · UTC")
-  expect(recurrenceSummary("DTSTART:20261219T083037Z\nRRULE:FREQ=DAILY;COUNT=4")).toBe(
-    "FREQ=DAILY;COUNT=4 at 08:30 · UTC",
-  )
-  expect(recurrenceSummary("RRULE:FREQ=MONTHLY;BYMONTHDAY=19")).toBe("FREQ=MONTHLY;BYMONTHDAY=19")
+test("UTC anchors project exact calendar data and complete advanced expressions", () => {
+  expect(parseAutomationRecurrence("DTSTART:20261219T153000Z\nRRULE:FREQ=WEEKLY;BYDAY=SA")).toEqual({
+    preset: "weekly",
+    startDate: "2026-12-19",
+    weekday: "SA",
+    time: "15:30",
+    timeZone: "UTC",
+    customRule: "",
+  })
+  expect(parseAutomationRecurrence("DTSTART:20261219T083000Z\nRRULE:FREQ=DAILY")).toEqual({
+    preset: "daily",
+    startDate: "2026-12-19",
+    weekday: "SA",
+    time: "08:30",
+    timeZone: "UTC",
+    customRule: "",
+  })
+  const advanced = "DTSTART:20261219T083037Z\nRRULE:FREQ=DAILY;COUNT=4"
+  expect(parseAutomationRecurrence(advanced)).toEqual({
+    preset: "custom",
+    startDate: "2026-12-19",
+    weekday: "SA",
+    time: "08:30",
+    timeZone: "UTC",
+    customRule: advanced,
+  })
 })
 
 test("editing unrelated fields keeps the complete stored calendar and UTC spelling", () => {

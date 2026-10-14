@@ -1,0 +1,14 @@
+{
+  "input": {
+    "name": "Owned calendar advanced",
+    "target": {
+      "scope": "session",
+      "sessionId": "ses_-zUS0xr4rzzSUNp0oUat"
+    },
+    "recurrence": "DTSTART;TZID=Asia/Shanghai:20301014T123437\nRRULE:FREQ=DAILY;COUNT=4",
+    "executionMode": "local",
+    "prompt": "Owned future advanced calendar presentation; no execution during this qualification."
+  },
+  "status": 201,
+  "body": "{\"id\":\"atm_g0VXz29oB00Js01pep9M\",\"revisionId\":\"atm_g0VXz29oB00Js01pep9M\",\"name\":\"Owned calendar advanced\",\"nextRun\":1918182877000}"
+}

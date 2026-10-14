@@ -671,6 +671,14 @@ the parent history keymap owns only its directly focused viewport. Opening the
 already selected source from the Board reveals that conversation without another
 selection epoch, hydration or file-owner transition.
 
+Scheduled timestamp presentation uses the current application locale while
+retaining the original instant and existing browser time-zone semantics. List,
+detail and search share one localized recurrence summary built from the existing
+calendar parser. Basic frequency and weekday names use current translations;
+advanced expressions retain their complete authored rule as technical content.
+The machine calendar service owns parsing, serialization and edit comparison,
+without a parallel hard-coded English presentation export.
+
 Scheduled automation basic fields own an explicit start date, time, time zone
 and weekly day. The date/weekday of today are creation defaults only; changing
 unrelated fields omits recurrence from the existing PATCH. Seconds and advanced

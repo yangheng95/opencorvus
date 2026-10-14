@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [定时任务时间语言](2026-10-14-automation-timestamp-locale.md)：宿主locale断开根因、真实未来定义和中英日期呈现。
+
 - [IPv6 Provider零段位置](2026-10-14-provider-ipv6-segments.md)：冒号清洗丢失结构的根因、正向输出与真实页面资格。
 
 - [406 原执行者恢复与选项呈现](2026-10-14-execution-owner-recovery-406.md)：共享Permission死活owner与结果结算，Question恢复边界及三源UI语义布局。

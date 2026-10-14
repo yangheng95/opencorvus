@@ -1,0 +1,37 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+const action=process.argv[2]
+assert.equal(['create','readback'].includes(action),true)
+const root=path.resolve('.tmp-codex-automation-timestamp-locale-01a133/after'),ready=JSON.parse(fs.readFileSync(root+'/ready.json','utf8')),url=`http://127.0.0.1:${ready.port}/global/automations`
+const cases=[
+ {key:'weekdays',recurrence:'DTSTART;TZID=Asia/Shanghai:20301014T123400\nRRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR',nextRun:Date.UTC(2030,9,14,4,34)},
+ {key:'weekly',recurrence:'DTSTART;TZID=Asia/Shanghai:20301014T123400\nRRULE:FREQ=WEEKLY;BYDAY=FR',nextRun:Date.UTC(2030,9,18,4,34)},
+ {key:'advanced',recurrence:'DTSTART;TZID=Asia/Shanghai:20301014T123437\nRRULE:FREQ=DAILY;COUNT=4',nextRun:Date.UTC(2030,9,14,4,34,37)},
+]
+let receipts
+if(action==='create'){
+ if(fs.existsSync(root+'/additional-created.json'))throw Error('Fresh own definition occurrence required')
+ receipts=[]
+ for(const item of cases){
+  const input={name:'Owned calendar '+item.key,target:{scope:'session',sessionId:ready.sessions[0].sessionID},recurrence:item.recurrence,executionMode:'local',prompt:'Owned future '+item.key+' calendar presentation; no execution during this qualification.'}
+  const response=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(input)}),body=await response.text()
+  fs.writeFileSync(root+`/additional-${item.key}-response.json`,JSON.stringify({input,status:response.status,body},null,2)+'\n')
+  assert.equal(response.status,201);const created=JSON.parse(body);assert.equal(created.nextRun,item.nextRun)
+  receipts.push({key:item.key,input,created})
+  fs.writeFileSync(root+'/additional-created.json',JSON.stringify(receipts,null,2)+'\n')
+ }
+}else receipts=JSON.parse(fs.readFileSync(root+'/additional-created.json','utf8'))
+const response=await fetch(url);assert.equal(response.status,200);const definitions=await response.json(),entries=[]
+for(const item of cases){
+ const receipt=receipts.find(x=>x.key===item.key),definition=definitions.find(x=>x.id===receipt.created.id)
+ assert.equal(definition.id,receipt.created.id);assert.equal(definition.revisionId,receipt.created.revisionId)
+ assert.equal(definition.name,receipt.input.name);assert.equal(definition.prompt,receipt.input.prompt)
+ assert.deepEqual(definition.target,receipt.input.target);assert.equal(definition.recurrence,item.recurrence)
+ assert.equal(definition.nextRun,item.nextRun);assert.equal(definition.status,'active');assert.equal(definition.lastRun,null)
+ const runs=await fetch(`${url}/${encodeURIComponent(definition.id)}/runs`);assert.equal(runs.status,200)
+ const history=await runs.json();assert.deepEqual(history,[])
+ entries.push({key:item.key,definition,history})
+}
+fs.writeFileSync(root+`/additional-${action}-qualified.json`,JSON.stringify({action,url,status:200,entries,boundary:'Three real public future definitions only. Calendar anchors, exact revisions and raw rules retained; no fire, run or inference qualification.'},null,2)+'\n')
+console.log(JSON.stringify({action,status:200,entries:entries.map(x=>({key:x.key,id:x.definition.id,revisionId:x.definition.revisionId,nextRun:x.definition.nextRun,recurrence:x.definition.recurrence}))}))
