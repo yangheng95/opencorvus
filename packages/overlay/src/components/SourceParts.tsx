@@ -252,7 +252,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
             <Icon name={icon()} size="compact" />
             <span class="msg-source-chip__content">
               <span class="msg-source-chip__label">{label()}</span>
-              <Show when={location()}>{(value) => <span class="msg-source-chip__detail msg-source-chip__location">{value()}</span>}</Show>
+              <Show when={location()}>{(value) => <span class="msg-source-chip__detail">{value()}</span>}</Show>
             </span>
           </Tooltip.Trigger>
         </Match>

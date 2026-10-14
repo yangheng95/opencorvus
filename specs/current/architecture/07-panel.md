@@ -963,7 +963,11 @@ Web citations put the host before the exact navigation fragment in their
 secondary caption, keeping website provenance visible when a long text anchor is
 clipped. Short chapters with the same publisher title remain distinguishable.
 The shared activation name carries the same location. URL captions
-use the existing two-line clamp pattern while their Tooltip retains the full URL.
+use the shared two-line auxiliary-caption pattern while their Tooltip retains the full URL.
+File directory/location captions use that same pattern, keeping long directories
+bounded when the file workbench narrows the transcript. The complete original
+path/range remains in the accessible action name, Tooltip, copy and open actions;
+the presentation clamp never changes source identity or persisted text.
 Source activation, group
 expansion and excerpt expansion use the existing transcript reading-intent
 notification. The nearest transcript pauses follow-to-bottom while

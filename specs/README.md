@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Sources阅读迭代](records/2026-10/2026-10-14-sources-reading-iteration.md)：多来源展开、长文件身份与准确跳转的单agent真实体验。
+
 - [工作树收敛与 0.1.26 发布](records/2026-10/2026-10-14-release-0.1.26.md)：全部工作树已吸收，五平台与官网已公开；保留联合40分钟超时及补部署回执。
 
 - [侧栏Rendering根因](records/2026-10/2026-10-14-sidebar-render-root.md)：单agent真实流式生命周期、历史修复复核与OpenAPI闭合。

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Sources阅读迭代](2026-10-14-sources-reading-iteration.md)：多来源展开、长文件身份与准确跳转的单agent真实体验。
+
 - [工作树收敛与 0.1.26 发布](2026-10-14-release-0.1.26.md)：现有工作树已整合，五平台正式版本/更新通道/官网已交付；原联合期限未通过。
 
 - [侧栏Rendering根因](2026-10-14-sidebar-render-root.md)：单agent真实流式生命周期、历史修复复核与OpenAPI闭合。
