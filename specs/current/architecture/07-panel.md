@@ -2924,6 +2924,15 @@ feedback retires on public-URL edits without clearing a channel editor's own slo
 The lower-level configuration string and explicit environment contracts remain
 unchanged; this editor does not introduce a second URL parser or migrate old data.
 
+Channel save and tutorial feedback stores message keys, variables and original
+details, translating summaries in the current interface locale. Catalog failures
+retain their original service diagnostic under the same native Details disclosure.
+Successful saves retain the existing 2600 ms dismissal; errors remain readable
+until explicit feedback retirement or scope change. An accepted committed-config
+receipt reports saved settings with reconciliation issues. Public-URL hydration
+subscribes only to accepted configuration and the existing authority, selection
+and directory scope; ordinary save settlement preserves the authored draft.
+
 The desktop updater checks the compiled signed release channel at app startup,
 on visibility return, and hourly while visible, independently of backend
 health. The native updater owns signature verification and the prepared package;

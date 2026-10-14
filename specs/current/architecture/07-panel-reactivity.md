@@ -64,6 +64,13 @@ Details keeps original HTTP, path, request ID and error evidence through the
 shared error formatter. Changing locale preserves the original draft and feedback
 fact, with the existing scope, draft, busy and feedback-timer owners unchanged.
 
+Channel feedback likewise retains translation keys and original details in its
+existing form slot. Only success feedback starts the original dismissal timer;
+errors stay available through native Details. Public-URL hydration observes the
+accepted store value and existing scope, independently of the save busy owner.
+A rejected write therefore preserves its draft, while accepted configuration or
+a new authority, selection or directory hydrates the corresponding value.
+
 Provider settings retain separate form, catalog-refresh and model-refresh feedback
 owners. Each stores message keys, variables and original diagnostic details;
 summaries translate at render time and details use the existing native disclosure.

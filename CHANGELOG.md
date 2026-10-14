@@ -15,6 +15,8 @@
 
 #### 修复
 
+- 通道页的保存、加载和教程错误使用当前语言摘要，并可展开原始详情；错误持续保留供查阅。公网地址保存失败后保留输入草稿，修正问题后可直接重试。
+
 - 生产专家团与可移植模板的包修订 `2026.10.14.1`（2026-10-14）统一使用集合委派，单成员使用一成员集合；修复 OpenAI 单步工具调用策略下独立成员被逐轮串行安排的问题。平台 `orchestrator-base` 能力集同步改用集合委派，引用它的冻结包使用当前平台定义；已绑定任务保留原包字节、显式能力引用与历史，已安装包通过现有授权更新流程接受新修订。
 
 - 通道目录说明、编辑字段和提示跟随当前界面语言，技术示例保持原值，并分别呈现配置与运行状态。通道 API 使用 labelKey 与 example/hint 占位结构，客户端应使用同步更新的 SDK。
@@ -143,6 +145,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Channel save, load and tutorial errors use the current interface language with expandable original details that remain available for review. A failed public base URL save preserves the authored draft for correction and retry.
 
 - Production Expert Squads and the portable template use collection dispatch in package revision `2026.10.14.1` (2026-10-14), including one-member collections. This fixes independent workers being scheduled serially under OpenAI's per-step tool-call policy. The platform `orchestrator-base` capability set also grants collection dispatch, and frozen packages referencing it resolve the current platform definition. Bound Tasks retain their original package bytes, explicit capability references and history; installed packages receive the revision through the existing authorized update flow.
 

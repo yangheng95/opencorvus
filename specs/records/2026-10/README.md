@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [通道反馈的当前语言](2026-10-14-channel-feedback-locale.md)：反馈事实、计时与自有真实409故障恢复。
+
 - [生产集合委派](2026-10-14-scheduler-frontier-grants.md)：统一平台/生产包/模板的并发能力及真实重叠验收。
 
 - [通道目录与表单当前语言](2026-10-14-channel-catalog-locale.md)：唯一语言来源和当前公共字段描述合同。

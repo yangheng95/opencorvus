@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [通道反馈的当前语言](records/2026-10/2026-10-14-channel-feedback-locale.md)：原错误详情、成功语言冻结与真实配置冲突调查。
+
 - [生产集合委派](records/2026-10/2026-10-14-scheduler-frontier-grants.md)：统一平台/生产包/模板的并发能力及真实重叠验收。
 
 - [通道目录与表单当前语言](records/2026-10/2026-10-14-channel-catalog-locale.md)：目录描述协议、真实四状态及编辑器本地化调查。

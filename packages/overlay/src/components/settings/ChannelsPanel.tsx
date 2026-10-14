@@ -10,7 +10,8 @@ import { t } from "../../utils/i18n"
 import { appStore } from "../../store/app"
 import { boardStore } from "../../store/board"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
-import { currentProjectConfigRequestOptions, updateConfig } from "../../services/config"
+import { committedConfigFromError, currentProjectConfigRequestOptions, updateConfig } from "../../services/config"
+import { formatErrorDetails } from "../../utils/error-details"
 import { activeProjectDirectory } from "../../services/project-directory"
 import { getHostTransport } from "../../services/host-transport-runtime"
 import { nativeOpen } from "../../utils/native"
@@ -37,6 +38,12 @@ const CHANNEL_RUNTIME_TONES: Record<ChannelEntry["runtime_status"], SettingsStat
 }
 
 type ChannelSaveKind = "channel" | "public-url"
+
+interface ChannelNotice {
+  key: string
+  variables?: Record<string, string>
+  details?: string
+}
 
 interface ChannelSaveOwner {
   readonly authority: ApiAuthority
@@ -65,7 +72,7 @@ export default function ChannelsPanel(props: { directory: string }) {
     null,
   )
   const [fieldValues, setFieldValues] = createSignal<Record<string, any>>({})
-  const [notice, setNotice] = createSignal("")
+  const [notice, setNotice] = createSignal<ChannelNotice | null>(null)
   const [noticeTone, setNoticeTone] = createSignal("")
   const [noticeFormIdentity, setNoticeFormIdentity] = createSignal("catalog")
   const [savingOwner, setSavingOwner] = createSignal<ChannelSaveOwner | null>(null)
@@ -89,13 +96,13 @@ export default function ChannelsPanel(props: { directory: string }) {
   const [localPublicUrl, setLocalPublicUrl] = createSignal("")
   const [publicUrlInvalid, setPublicUrlInvalid] = createSignal(false)
   let publicUrlInput: HTMLInputElement | undefined
-  // Sync local input from store when it changes
+  // Hydrate from accepted configuration or a new scope, independently of save settlement.
   createEffect(() => {
-    const storeUrl = publicUrl()
-    if (savingOwner()?.formKind !== "public-url") {
-      setLocalPublicUrl(storeUrl)
-      setPublicUrlInvalid(false)
-    }
+    captureApiAuthority().revision
+    boardStore.selectEpoch
+    props.directory.trim()
+    setLocalPublicUrl(publicUrl())
+    setPublicUrlInvalid(false)
   })
 
   const editingEntry = createMemo(() => channels().find((c) => c.id === editingID()) ?? null)
@@ -176,7 +183,12 @@ export default function ChannelsPanel(props: { directory: string }) {
     return true
   }
 
-  function beginSave(formKind: ChannelSaveKind, directory: string, channelID = "", authority = captureApiAuthority()): ChannelSaveOwner {
+  function beginSave(
+    formKind: ChannelSaveKind,
+    directory: string,
+    channelID = "",
+    authority = captureApiAuthority(),
+  ): ChannelSaveOwner {
     const owner = {
       authority,
       selectionEpoch: boardStore.selectEpoch,
@@ -222,11 +234,19 @@ export default function ChannelsPanel(props: { directory: string }) {
         config.channel[entry.id] = structuredClone(values)
       }, requestOptions)
       if (!ownsSave(owner)) return
-      showNotice(t("common.saved"), "active", "catalog")
+      showNotice({ key: "common.saved" }, "active", "catalog")
       closeEditWithoutInvalidation()
     } catch (e) {
       if (ownsSave(owner)) {
-        showNotice(e instanceof Error ? e.message : String(e), "error", `channel:${owner.channelID}`)
+        showNotice(
+          {
+            key: committedConfigFromError(e) ? "channel.config_saved_with_issues" : "channel.save_failed",
+            variables: { name: entry.name },
+            details: formatErrorDetails(e),
+          },
+          "error",
+          `channel:${owner.channelID}`,
+        )
       }
     } finally {
       if (ownsSave(owner)) setSavingOwner(null)
@@ -261,24 +281,33 @@ export default function ChannelsPanel(props: { directory: string }) {
         if (current.server.publicUrl === undefined) delete current.server.publicUrl
         if (Object.keys(current.server).length === 0) delete current.server
       }, requestOptions)
-      if (ownsSave(owner)) showNotice(t("common.saved"), "active", "catalog")
+      if (ownsSave(owner)) showNotice({ key: "common.saved" }, "active", "catalog")
     } catch (e) {
-      if (ownsSave(owner)) showNotice(e instanceof Error ? e.message : String(e), "error", "catalog")
+      if (ownsSave(owner))
+        showNotice(
+          {
+            key: committedConfigFromError(e) ? "channel.config_saved_with_issues" : "channel.public_url_save_failed",
+            details: formatErrorDetails(e),
+          },
+          "error",
+          "catalog",
+        )
     } finally {
       if (ownsSave(owner)) setSavingOwner(null)
     }
   }
 
-  function showNotice(msg: string, tone = "", ownerFormIdentity = formIdentity()) {
+  function showNotice(value: ChannelNotice, tone = "", ownerFormIdentity = formIdentity()) {
     if (noticeTimer) clearTimeout(noticeTimer)
+    noticeTimer = undefined
     const generation = ++noticeGeneration
-    setNotice(msg)
+    setNotice(value)
     setNoticeTone(tone)
     setNoticeFormIdentity(ownerFormIdentity)
-    if (msg) {
+    if (tone !== "error") {
       noticeTimer = setTimeout(() => {
         if (generation !== noticeGeneration) return
-        setNotice("")
+        setNotice(null)
         noticeTimer = undefined
       }, 2600)
     }
@@ -288,7 +317,7 @@ export default function ChannelsPanel(props: { directory: string }) {
     noticeGeneration++
     if (noticeTimer) clearTimeout(noticeTimer)
     noticeTimer = undefined
-    setNotice("")
+    setNotice(null)
     setNoticeTone("")
     setNoticeFormIdentity("catalog")
   }
@@ -320,8 +349,11 @@ export default function ChannelsPanel(props: { directory: string }) {
       if (ownsTutorial(owner)) clearNotice()
     } catch (error) {
       if (!ownsTutorial(owner)) return
-      const detail = error instanceof Error ? error.message : String(error)
-      showNotice(`${t("channel.tutorial_hint")}: ${detail}`, "error", owner.formIdentity)
+      showNotice(
+        { key: "channel.tutorial_open_failed", details: formatErrorDetails(error) },
+        "error",
+        owner.formIdentity,
+      )
       queueMicrotask(() => {
         if (ownsTutorial(owner) && owner.trigger.isConnected) owner.trigger.focus()
       })
@@ -341,8 +373,9 @@ export default function ChannelsPanel(props: { directory: string }) {
         data-ui="channel-settings-notice"
         role={noticeTone() === "error" ? "alert" : "status"}
         aria-live={noticeTone() === "error" ? "assertive" : "polite"}
+        details={notice()?.details}
       >
-        {notice()}
+        {notice() ? t(notice()!.key, notice()!.variables) : null}
       </Feedback>
     )
   }
@@ -351,7 +384,11 @@ export default function ChannelsPanel(props: { directory: string }) {
     <>
       <SettingsPanel class="channel-panel">
         <For each={appStore.configLoadIssues.filter((issue) => issue.resource === "channel")}>
-          {(issue) => <Feedback tone="error">{issue.message}</Feedback>}
+          {(issue) => (
+            <Feedback tone="error" details={issue.message}>
+              {t("channel.catalog_load_failed")}
+            </Feedback>
+          )}
         </For>
         <Show when={notice() && noticeFormIdentity() === "catalog"}>{noticeState()}</Show>
 
@@ -362,7 +399,9 @@ export default function ChannelsPanel(props: { directory: string }) {
                 <TextField.Label>{t("channel.public_url")}</TextField.Label>
                 {/* Fixed example URL; the locale-sensitive field label/hint already carries the instruction. */}
                 <TextField.Input
-                  ref={(input) => { publicUrlInput = input }}
+                  ref={(input) => {
+                    publicUrlInput = input
+                  }}
                   type="url"
                   pattern="[Hh][Tt][Tt][Pp][Ss]?://.+"
                   aria-label={t("channel.public_url")}
@@ -541,9 +580,11 @@ export default function ChannelsPanel(props: { directory: string }) {
                         type={inputType}
                         name={name}
                         value={String(currentVal() ?? "")}
-                        placeholder={field.placeholder?.kind === "hint"
-                          ? t(field.placeholder.key)
-                          : field.placeholder?.value ?? ""}
+                        placeholder={
+                          field.placeholder?.kind === "hint"
+                            ? t(field.placeholder.key)
+                            : (field.placeholder?.value ?? "")
+                        }
                         onInput={(e) => handleFieldChange(field.key, e.currentTarget.value)}
                       />
                     </TextField.Root>
