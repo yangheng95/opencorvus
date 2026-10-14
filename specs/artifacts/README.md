@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [流中成员切换](2026-10-14-live-member-switching/README.md)：19条Sol真实失败基线：共享并发入口缺口与取消fence错误；17项契约通过，修复待完成。
+
 - [完整配置快照替换](2026-10-14-config-snapshot-replacement/README.md)：第28批实际页面、服务与当前配置原件。
 
 - [双成员来源与切换](2026-10-14-dual-member-sources/README.md)：修复同名成员辨识；15条真实Sol流、21张原图、独立来源与双向阅读恢复。

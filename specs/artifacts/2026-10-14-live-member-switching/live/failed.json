@@ -1,0 +1,10 @@
+{
+  "pid": 80656,
+  "occurrence": "live-member-switching-417-71c19625-3150-4317-a12c-fd756b882717",
+  "error": {
+    "name": "Error",
+    "message": "TASK_TERMINAL_CANCELLED: task cancelled"
+  },
+  "actionRequired": "parent-owner-public-shutdown-then-physical-exit-and-paired-cleanup",
+  "credentialCleanup": "unverified-parent-owned"
+}

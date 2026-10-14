@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [流中成员切换](2026-10-14-live-member-switching.md)：19条Sol真实失败基线：共享并发入口缺口与取消fence错误；17项契约通过，修复待完成。
+
 - [完整配置快照替换](2026-10-14-config-snapshot-replacement.md)：完整响应的单一接收、原归属与删除投影。
 
 - [双成员来源与切换](2026-10-14-dual-member-sources.md)：修复同名成员辨识；15条真实Sol流、21张原图、独立来源与双向阅读恢复。

@@ -1,0 +1,40 @@
+{
+  "requests": 19,
+  "terminals": {
+    "eof": 18,
+    "aborted": 1
+  },
+  "native": {
+    "occurrenceID": "live-member-switching-417-71c19625-3150-4317-a12c-fd756b882717",
+    "pid": 80656,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "physicalCompletion": true,
+  "pairedCleanupComplete": true,
+  "tests": 17,
+  "expectCalls": 34,
+  "build": {
+    "handle": 95266,
+    "chunk": "77fe16",
+    "exitCode": 0
+  },
+  "nativeJoin": {
+    "handle": 81176,
+    "chunk": "13bb98",
+    "exitCode": 0
+  },
+  "taskCreate": {
+    "chunk": "c730ae",
+    "exitCode": 0
+  },
+  "contractsJoin": {
+    "handle": 12632,
+    "chunk": "450c73",
+    "exitCode": 0
+  },
+  "screenshots": 14,
+  "closedTab": "39",
+  "businessOutcome": "Explicit parallel execution requirement unmet; owned diagnostic Task cancelled, not qualified as completed."
+}

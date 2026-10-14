@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [流中成员切换](records/2026-10/2026-10-14-live-member-switching.md)：19条Sol真实失败基线：共享并发入口缺口与取消fence错误；17项契约通过，修复待完成。
+
 - [完整配置快照替换](records/2026-10/2026-10-14-config-snapshot-replacement.md)：清空已持久化但当前界面旧值残留的共享配置调查。
 
 - [双成员来源与切换](records/2026-10/2026-10-14-dual-member-sources.md)：修复同名成员辨识；15条真实Sol流、21张原图、独立来源与双向阅读恢复。
