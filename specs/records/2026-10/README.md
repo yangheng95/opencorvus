@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Sources网页导航与浅色阅读](2026-10-14-source-navigation.md)：实际网页目标、返回后的阅读所有权与主题资格。
+
 - [命令面板全历史搜索](2026-10-14-command-search.md)：完整查询、分页、当前可见快捷键与真实Sources入口验收。
 
 - [定时任务时间语言](2026-10-14-automation-timestamp-locale.md)：宿主locale断开根因、真实未来定义、中英呈现及正常commit/push原件。

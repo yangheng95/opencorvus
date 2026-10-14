@@ -1,0 +1,54 @@
+[
+  {
+    "phase": "before-excerpt-key",
+    "data": {
+      "main": 1668.6666259765625,
+      "side": [
+        {
+          "class": "side-chat-panel__scroll",
+          "content": 3454,
+          "height": 328,
+          "label": null,
+          "top": 2098
+        },
+        {
+          "class": "oc-disclosure__content msg-source-excerpt__body",
+          "content": 516,
+          "height": 287,
+          "label": "Source excerpt: URLSearchParams: sort() method - Web APIs | MDN",
+          "top": 0
+        }
+      ]
+    }
+  },
+  {
+    "phase": "after-excerpt-key",
+    "data": {
+      "main": 1668.6666259765625,
+      "side": [
+        {
+          "class": "side-chat-panel__scroll",
+          "content": 3454,
+          "height": 328,
+          "label": null,
+          "top": 2344
+        },
+        {
+          "class": "oc-disclosure__content msg-source-excerpt__body",
+          "content": 516,
+          "height": 287,
+          "label": "Source excerpt: URLSearchParams: sort() method - Web APIs | MDN",
+          "top": 229.3333282470703
+        }
+      ]
+    }
+  },
+  {
+    "phase": "focused-excerpt-home",
+    "data": {
+      "excerpt": 0,
+      "main": 1668.6666259765625,
+      "outer": 2344
+    }
+  }
+]

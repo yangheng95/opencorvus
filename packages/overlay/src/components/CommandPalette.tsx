@@ -342,18 +342,6 @@ export function CommandPalette(props: {
 
   function close() {
     palette.close()
-    // Return focus to whatever the operator was on before the palette
-    // grabbed it. Wrap in try because the prior element may have been
-    // removed from the DOM during the palette's lifetime (e.g. the
-    // operator ran a command that re-rendered the conversation).
-    if (priorFocus && document.contains(priorFocus)) {
-      try {
-        priorFocus.focus()
-      } catch {
-        /* ignore — best-effort */
-      }
-    }
-    priorFocus = null
   }
 
   function runCommand(cmd: Command | null) {
@@ -438,7 +426,18 @@ export function CommandPalette(props: {
         event.preventDefault()
         inputRef?.focus()
       }}
-      onCloseAutoFocus={(event) => event.preventDefault()}
+      onCloseAutoFocus={(event) => {
+        const restore = !event.defaultPrevented
+        event.preventDefault()
+        if (palette.open()) return
+        const target = priorFocus
+        priorFocus = null
+        // Combobox selection focuses its input after onChange. Restore only
+        // once that focus scope has retired, preserving a command's new focus.
+        if (restore && target?.isConnected && target.getClientRects().length > 0) {
+          target.focus({ preventScroll: true })
+        }
+      }}
     >
       <ComboboxControl<Command>
         class="cmdk-combobox"

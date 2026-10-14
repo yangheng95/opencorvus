@@ -1,0 +1,39 @@
+[
+  {
+    "phase": "pointer-light",
+    "focus": {
+      "label": "复制来源位置：URLSearchParams: sort() method - Web APIs | MDN",
+      "tag": "BUTTON"
+    }
+  },
+  {
+    "phase": "keyboard-locale",
+    "focus": {
+      "label": "Copy source location: URLSearchParams: sort() method - Web APIs | MDN",
+      "tag": "BUTTON"
+    }
+  },
+  {
+    "phase": "escape-excerpt",
+    "focus": {
+      "label": "Source excerpt: URLSearchParams: sort() method - Web APIs | MDN",
+      "tag": "DIV"
+    }
+  },
+  {
+    "phase": "settings-command",
+    "focus": {
+      "label": "Search settings pages...",
+      "tag": "INPUT",
+      "text": ""
+    }
+  },
+  {
+    "phase": "new-chat-command",
+    "focus": {
+      "id": "chatTextarea",
+      "label": null,
+      "tag": "TEXTAREA"
+    }
+  }
+]

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Sources网页导航与浅色阅读](records/2026-10/2026-10-14-source-navigation.md)：实际网页目标、返回后的阅读所有权与主题资格。
+
 - [命令面板全历史搜索](records/2026-10/2026-10-14-command-search.md)：完整查询、分页、当前可见快捷键与真实Sources入口验收。
 
 - [定时任务时间语言](records/2026-10/2026-10-14-automation-timestamp-locale.md)：日期/频率的当前语言投影、真实页面及三批正常推送阻塞原件。

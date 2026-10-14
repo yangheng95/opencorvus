@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Sources网页导航与浅色阅读](2026-10-14-source-navigation/README.md)：实际网页目标、返回后的阅读所有权与主题资格。
+
 - [命令面板全历史搜索](2026-10-14-command-search/README.md)：完整查询、分页、当前可见快捷键与真实Sources入口验收。
 
 - [定时任务时间语言](2026-10-14-automation-timestamp-locale/README.md)：实际定义/API/日期页面与独立运行，含正常提交和共享push失败原件。

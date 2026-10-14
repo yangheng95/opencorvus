@@ -3015,6 +3015,11 @@ retry removes its focused button, only that still-current operation may restore
 the search input, and only if focus has fallen to the document body. It preserves
 scroll position and does not override a new user focus target.
 
+Closing the palette restores its original visible focus target through the
+Dialog's close-auto-focus lifecycle, after Combobox selection has finished
+focusing its own input. A newly opened palette or a command's new focus target
+keeps ownership; there is no immediate competing focus write in the close action.
+
 The shared ComboboxControl supplies Kobalte's public translation callbacks from
 the existing UI locale, including candidate counts, localized numbers, selection
 announcements and suggestion labels. Original option text is preserved. This

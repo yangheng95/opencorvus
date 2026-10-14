@@ -1,0 +1,197 @@
+{
+  "runs": [
+    {
+      "name": "before",
+      "occurrence": "source-navigation-410-73e7b915-f7cd-4ada-81b3-97c2547e57b5",
+      "pid": 73924,
+      "preflight": {
+        "sessionID": "ses_hHwCSizcDoytUCVDInVk",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "status": 200,
+          "streaming": true,
+          "reader": {
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1791942650067,
+            "boundAt": 1791942650087,
+            "chunkCount": 23,
+            "byteCount": 39821,
+            "firstByteReadAt": 1791942650087,
+            "lastByteReadAt": 1791942656485,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hHwCSizcDoytUCVDInVk",
+              "streamRequest": {
+                "requestID": "msg_hj0w7BkgSKJD1Qjc8nSN",
+                "agentID": "memory",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VXz6jG8003FLWqfwAP",
+                "attempt": 0
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1791942656486
+            }
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "status": 200,
+          "streaming": true,
+          "reader": {
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1791942649729,
+            "boundAt": 1791942649731,
+            "chunkCount": 39,
+            "byteCount": 515056,
+            "firstByteReadAt": 1791942649732,
+            "lastByteReadAt": 1791942651380,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hHwCSizcDoytUCVDInVk",
+              "streamRequest": {
+                "requestID": "msg_hj0w7BkgSKJD1Qjc8nSN",
+                "agentID": "chat",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VXz6jVn00UwDdaAsKn",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VXz6jGG00bMXIbWjII"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1791942651979
+            }
+          }
+        }
+      ],
+      "originalHandle": 32933,
+      "originalHandleExitCode": 0,
+      "handleEvidence": "Original tool execution joined during this manual qualification; native original settlement is preserved separately.",
+      "pairedCleanupComplete": true
+    },
+    {
+      "name": "after",
+      "occurrence": "source-navigation-410-9832947b-d2b4-4852-a749-326520af4b03",
+      "pid": 88716,
+      "preflight": {
+        "sessionID": "ses_hyhejRevndRIR4AKSCt4",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "status": 200,
+          "streaming": true,
+          "reader": {
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1791943493756,
+            "boundAt": 1791943493758,
+            "chunkCount": 18,
+            "byteCount": 40305,
+            "firstByteReadAt": 1791943493760,
+            "lastByteReadAt": 1791943501744,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hyhejRevndRIR4AKSCt4",
+              "streamRequest": {
+                "requestID": "msg_hFsjfMKH6aKjbxty3Ykk",
+                "agentID": "memory",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VXzAH5H00O7M0ziLdS",
+                "attempt": 0
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1791943502031
+            }
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "status": 200,
+          "streaming": true,
+          "reader": {
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1791943494878,
+            "boundAt": 1791943494880,
+            "chunkCount": 45,
+            "byteCount": 515056,
+            "firstByteReadAt": 1791943494881,
+            "lastByteReadAt": 1791943496246,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hyhejRevndRIR4AKSCt4",
+              "streamRequest": {
+                "requestID": "msg_hFsjfMKH6aKjbxty3Ykk",
+                "agentID": "chat",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VXzAHKh0003WxIF1sx",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VXzAH5Y00MVePD78wl"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1791943496463
+            }
+          }
+        }
+      ],
+      "originalHandle": 29447,
+      "originalHandleExitCode": 0,
+      "handleEvidence": "Original tool execution joined during this manual qualification; native original settlement is preserved separately.",
+      "pairedCleanupComplete": true
+    }
+  ],
+  "originalSourceSessions": [
+    {
+      "id": "ses_-zUS2MLXZzzk58TG4GTB",
+      "kind": "assistant",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\source-reading-405-live\\project",
+      "sources": 7
+    },
+    {
+      "id": "ses_-zUS2N5z9zzkTWMo2EWo",
+      "kind": "assistant",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\source-reading-405-live\\project",
+      "sources": 7
+    }
+  ],
+  "sourceCount": 14,
+  "messageCount": 18,
+  "toolCount": 10,
+  "originalHistory": "Exact canonical identities, URL/path, Source-to-Tool bindings, completed Tool outcomes and message facts equal the retained real 405 history.",
+  "boundary": "Real SQLite/provider/native facts only; visual and keyboard observations were reviewed manually, without UI automated assertions."
+}
