@@ -1,0 +1,92 @@
+{
+  "name": "catalog-evidence-luna",
+  "model": "openai/gpt-6-luna",
+  "status": "failed",
+  "requests": 13,
+  "originalMessages": 1029,
+  "fields": 11,
+  "passedFields": 3,
+  "sourceInActualUserRole": false,
+  "catalogPages": 6,
+  "farthestCatalogPosition": 62719,
+  "catalogChars": 350555,
+  "toolFailures": [
+    {
+      "tool": "ReadCompactionEvidence",
+      "input": {
+        "message_id": "msg_g0VY09yDI00JWWsWlikO",
+        "field": "catalog",
+        "offset": 24523,
+        "limit": 30000
+      },
+      "failure": {
+        "kind": "tool-execution",
+        "name": "CompactionEvidenceReadError",
+        "message": "The evidence read window is full. Preserve the facts and exact next cursor already learned with SaveCompactionNotes, then continue reading.",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_946d0e2740c14086aa844fe969437b0c",
+          "toolName": "ReadCompactionEvidence"
+        }
+      }
+    }
+  ],
+  "metrics": {
+    "region": {
+      "expected": "REGION-7be39fa820d4-catalog-evidence",
+      "actual": "OLD-REGION",
+      "pass": false
+    },
+    "evidence": {
+      "expected": "EVIDENCE-312a79f046c8",
+      "actual": "Conversation record states deployment permission is denied and analysis is authorized; no validation result or source identifiers are provided.",
+      "pass": false
+    },
+    "input_reference": {
+      "expected": "INPUT-2090259e7c8c",
+      "actual": "unknown",
+      "pass": false
+    },
+    "trace_id": {
+      "expected": "TRACE-2a902f3e4b57",
+      "actual": "unknown",
+      "pass": false
+    },
+    "call_id": {
+      "expected": "call_9cfba5c3b539",
+      "actual": "unknown",
+      "pass": false
+    },
+    "part_id": {
+      "expected": "prt_g0VY09xvw01n87kFmwAz",
+      "actual": "unknown",
+      "pass": false
+    },
+    "next_offset": {
+      "expected": 17031,
+      "actual": "unknown",
+      "pass": false
+    },
+    "permission": {
+      "expected": "denied",
+      "actual": "denied",
+      "pass": true
+    },
+    "validation": {
+      "expected": "pending",
+      "actual": "pending",
+      "pass": true
+    },
+    "rollback_owner": {
+      "expected": "unknown",
+      "actual": "unknown",
+      "pass": true
+    },
+    "failure_name": {
+      "expected": "EvidenceReadFailure",
+      "actual": "unknown",
+      "pass": false
+    }
+  }
+}

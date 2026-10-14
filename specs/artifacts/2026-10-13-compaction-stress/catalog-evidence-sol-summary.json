@@ -1,0 +1,92 @@
+{
+  "name": "catalog-evidence-sol",
+  "model": "openai/gpt-6.1-sol",
+  "status": "passed",
+  "requests": 73,
+  "originalMessages": 1029,
+  "fields": 11,
+  "passedFields": 11,
+  "sourceInActualUserRole": true,
+  "catalogPages": 40,
+  "farthestCatalogPosition": 350555,
+  "catalogChars": 350555,
+  "toolFailures": [
+    {
+      "tool": "ReadCompactionEvidence",
+      "input": {
+        "message_id": "msg_g0VY071NQ00CzLK3staD",
+        "field": "diagnostics",
+        "offset": 0,
+        "limit": 30000
+      },
+      "failure": {
+        "kind": "tool-execution",
+        "name": "CompactionEvidenceReadError",
+        "message": "Message msg_g0VY071NQ00CzLK3staD has no readable diagnostics in the bound Session snapshot.",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_0c55cd9c640e4229a6c42063ede55f61",
+          "toolName": "ReadCompactionEvidence"
+        }
+      }
+    }
+  ],
+  "metrics": {
+    "region": {
+      "expected": "REGION-7be39fa820d4-catalog-evidence",
+      "actual": "REGION-7be39fa820d4-catalog-evidence",
+      "pass": true
+    },
+    "evidence": {
+      "expected": "EVIDENCE-312a79f046c8",
+      "actual": "EVIDENCE-312a79f046c8",
+      "pass": true
+    },
+    "input_reference": {
+      "expected": "INPUT-2090259e7c8c",
+      "actual": "INPUT-2090259e7c8c",
+      "pass": true
+    },
+    "trace_id": {
+      "expected": "TRACE-2a902f3e4b57",
+      "actual": "TRACE-2a902f3e4b57",
+      "pass": true
+    },
+    "call_id": {
+      "expected": "call_9cfba5c3b539",
+      "actual": "call_9cfba5c3b539",
+      "pass": true
+    },
+    "part_id": {
+      "expected": "prt_g0VY071NS00pnfhO4WeU",
+      "actual": "prt_g0VY071NS00pnfhO4WeU",
+      "pass": true
+    },
+    "next_offset": {
+      "expected": 17031,
+      "actual": 17031,
+      "pass": true
+    },
+    "permission": {
+      "expected": "denied",
+      "actual": "denied",
+      "pass": true
+    },
+    "validation": {
+      "expected": "pending",
+      "actual": "pending",
+      "pass": true
+    },
+    "rollback_owner": {
+      "expected": "unknown",
+      "actual": "unknown",
+      "pass": true
+    },
+    "failure_name": {
+      "expected": "EvidenceReadFailure",
+      "actual": "EvidenceReadFailure",
+      "pass": true
+    }
+  }
+}

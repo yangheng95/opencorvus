@@ -80,6 +80,32 @@ export namespace CompactionPolicyCase {
     }
   }
 
+  export async function checkpointProjection(input: {
+    canonical: Message.WithParts[]
+    projected: Message.WithParts[]
+    anchorID: string
+    summaryID: string
+    sourceID: string
+  }) {
+    const { CompactionUserText } = await import("@/session/compaction-user-text")
+    const retained = CompactionUserText.project(
+      CompactionUserText.selection(input.canonical, input.summaryID),
+      input.canonical,
+    ).filter((message) => message.info.id !== input.anchorID && message.info.id !== input.sourceID)
+    assert.deepEqual(
+      input.projected.map((message) => message.info.id),
+      [input.anchorID, input.summaryID, ...retained.map((message) => message.info.id), input.sourceID],
+      "Checkpoint replay contains the anchor, actual summary, exact selected sources and neutral latest input",
+    )
+    assert.deepEqual(input.projected.slice(2, -1), retained, "Additional history is exact selected user-source replay")
+    return retained.map((message) => ({
+      messageID: message.info.id,
+      role: message.info.role,
+      author: message.info.author,
+      parts: message.parts.map((part) => ({ partID: part.id, ...(part.type === "text" ? { text: part.text } : {}) })),
+    }))
+  }
+
   export async function history(input: { target: { providerID: string; modelID: string }; project: string }) {
     const [{ Session }, { Identifier }] = await Promise.all([import("@/session"), import("@/id/id")])
     return {
@@ -542,25 +568,14 @@ export namespace CompactionPolicyCase {
         const projected = await Message.filterCompacted(MessageStore.stream(session.id))
         const summary = projected.findLast((message) => message.info.role === "assistant" && message.info.summary)
         assert(summary, "Compaction must publish its checkpoint")
-        assert.deepEqual(projected[0]?.info.id, anchor.id, "Original request anchor remains first")
-        assert.deepEqual(projected[1]?.info.id, summary.info.id, "Actual checkpoint follows the anchor")
-        assert.deepEqual(projected.at(-1)?.info.id, source.id, "Neutral latest input keeps its real request position")
         const canonical = await Session.messages({ sessionID: session.id })
-        const { CompactionUserText } = await import("@/session/compaction-user-text")
-        const retained = CompactionUserText.project(
-          CompactionUserText.selection(canonical, summary.info.id),
+        entry.retainedUserSources = await checkpointProjection({
           canonical,
-        ).filter((message) => message.info.id !== anchor.id && message.info.id !== source.id)
-        assert.deepEqual(projected.slice(2, -1), retained, "Additional history is exact selected user-source replay")
-        entry.retainedUserSources = retained.map((message) => ({
-          messageID: message.info.id,
-          role: message.info.role,
-          author: message.info.author,
-          parts: message.parts.map((part) => ({
-            partID: part.id,
-            ...(part.type === "text" ? { text: part.text } : {}),
-          })),
-        }))
+          projected,
+          anchorID: anchor.id,
+          summaryID: summary.info.id,
+          sourceID: source.id,
+        })
         entry.checkpoint = await checkCheckpoint(session.id, summary.info.id, input.redact)
         entry.summary = Message.compactionContinuationTextParts(summary.parts)
           .map((part) => part.text)

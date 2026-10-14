@@ -1,7 +1,7 @@
 {
   "priorRequests": 99,
-  "total": 999,
-  "authorizedTotal": 1100,
+  "total": 1085,
+  "authorizedTotal": 1200,
   "runs": [
     {
       "name": "text-three-rounds",
@@ -519,6 +519,30 @@
       "fullPassed": 5,
       "compactedPassed": 5,
       "summary": "cross-model-policy-revisions-sol-summary.json"
+    },
+    {
+      "name": "catalog-evidence-sol",
+      "status": "passed",
+      "requests": 73,
+      "model": "openai/gpt-6.1-sol",
+      "credentialsRemoved": true,
+      "completedCheckpoints": 1,
+      "passedFields": 11,
+      "fields": 11,
+      "sourceRolePreserved": 1,
+      "summary": "catalog-evidence-sol-summary.json"
+    },
+    {
+      "name": "catalog-evidence-luna",
+      "status": "failed",
+      "requests": 13,
+      "model": "openai/gpt-6-luna",
+      "credentialsRemoved": true,
+      "completedCheckpoints": 1,
+      "passedFields": 3,
+      "fields": 11,
+      "sourceRolePreserved": 0,
+      "summary": "catalog-evidence-luna-summary.json"
     }
   ],
   "authorizationPolicy": "User explicitly allows increasing request limits as needed; retain bounded per-run budgets and exact accounting.",
@@ -572,5 +596,14 @@
     ],
     "requests": 230,
     "summary": "policy-revisions-matrix-summary.json"
+  },
+  "latestCatalogMatrix": {
+    "status": "failed",
+    "sol": "passed",
+    "luna": "failed",
+    "sourceObservations": 1024,
+    "contextTokens": 19000,
+    "helperSteps": 80,
+    "summary": "catalog-model-matrix-summary.json"
   }
 }

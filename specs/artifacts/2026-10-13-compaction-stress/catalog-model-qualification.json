@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-14",
+  "status": "failed",
+  "mechanicalReview": "passed",
+  "localContracts": 23,
+  "expandedTypecheck": {
+    "session": 91247,
+    "exitCode": 0
+  },
+  "runs": [
+    {
+      "name": "catalog-evidence-sol",
+      "session": 32144,
+      "exitCode": 0,
+      "requests": 73
+    },
+    {
+      "name": "catalog-evidence-luna",
+      "session": 2855,
+      "exitCode": 1,
+      "requests": 13
+    }
+  ],
+  "paidAdded": 86,
+  "cumulativePaid": 1085,
+  "operatingCeiling": 1200,
+  "activeRun": null,
+  "credentialsRemoved": true,
+  "authoredTextMatched": true,
+  "cause": "Luna voluntarily finalized at12 helper requests while most catalog sources were undiscovered; a recoverable earlier read-window error was followed by successful reads. It released selections and emitted OLD-REGION, so the continuation had neither the later original user role nor its failure evidence. The80-step limit was not exhausted.",
+  "limits": [
+    "Sol passed one authored case; this is not general reliability.",
+    "No paired full-history answer lane in this catalog case.",
+    "Prior Luna alternating action failures remain failed.",
+    "Broader providers/native state/whole-OS power loss remain open."
+  ],
+  "nextInvestigation": "A bounded hierarchical catalog with factual role/Tool/diagnostic range metadata could reduce linear source discovery. This is an untested context/data representation hypothesis; no host semantic gate or production model switch is authorized by these results.",
+  "documentChecks": {
+    "exitCode": 0,
+    "commands": [
+      "docs:check",
+      "check:architecture-index"
+    ]
+  }
+}
