@@ -23,7 +23,7 @@ import {
 } from "./invocation"
 import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicyTable } from "./permission.sql"
 import { durableExecutionResult, resultFromDurable } from "./execution-result"
-import { MessageTable, ToolPartRequestTable, ToolPartOutcomeTable } from "@/session/session.sql"
+import { SessionTable, MessageTable, ToolPartRequestTable, ToolPartOutcomeTable } from "@/session/session.sql"
 import {
   acquireControlLeaseInTransaction,
   assertControlLeaseInTransaction,
@@ -1288,7 +1288,11 @@ export namespace PermissionAuthority {
       outcome = await exactContinuation.run(request.id, resume)
     } catch (error) {
       if (error instanceof StaleContinuationError || error instanceof TaskRootActivationSupersededError) {
-        retireContinuation(request, error.message)
+        try {
+          retireContinuation(request, error.message)
+        } catch (retirementError) {
+          throw new AggregateError([error, retirementError], `Permission continuation ${request.id} failed to retire`)
+        }
       }
       throw error
     }
@@ -1309,12 +1313,14 @@ export namespace PermissionAuthority {
 
   export function retireMessageContinuations(input: { sessionID: string; messageID: string }): void {
     Database.immediateTransaction((db) => {
-      const message = db.select({ data: MessageTable.data }).from(MessageTable).where(and(
+      const message = db.select({ data: MessageTable.data, projectID: SessionTable.project_id }).from(MessageTable)
+        .innerJoin(SessionTable, eq(SessionTable.id, MessageTable.session_id)).where(and(
         eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID),
       )).get()
-      const data = message?.data as { role?: string; time?: { completed?: number } } | undefined
-      if (data?.role !== "assistant" || data.time?.completed === undefined) return
-      for (const row of requestedRows({ ...input, projectID: Instance.project.id })) {
+      if (!message) return
+      const data = message.data as { role?: string; time?: { completed?: number } }
+      if (data.role !== "assistant" || data.time?.completed === undefined) return
+      for (const row of requestedRows({ ...input, projectID: message.projectID })) {
         if (!continuationReady(row)) continue
         const outcome = db.select({ data: ToolPartOutcomeTable.data }).from(ToolPartRequestTable)
           .innerJoin(ToolPartOutcomeTable, eq(ToolPartOutcomeTable.request_part_id, ToolPartRequestTable.id))
@@ -1332,16 +1338,10 @@ export namespace PermissionAuthority {
    * same dead request is rescanned by every later bootstrap.
    */
   function retireContinuation(request: Request, reason: string): void {
-    try {
+    Database.immediateTransaction(() => {
       if (staleFor(request.id)) return
       appendEvent(request, "stale", { reason })
-    } catch (error) {
-      log.error("permission continuation retirement failed", {
-        requestID: request.id,
-        sessionID: request.sessionID,
-        error: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
-      })
-    }
+    })
   }
 
   function continuationReady(row: LedgerRow): boolean {
@@ -1385,13 +1385,20 @@ export namespace PermissionAuthority {
     try {
       return await resumeRequest(request)
     } catch (error) {
-      const stale = error instanceof StaleContinuationError || error instanceof TaskRootActivationSupersededError
+      let retired: boolean | "unknown" = "unknown"
+      let retirementReadError: unknown
+      try {
+        retired = Boolean(staleFor(request.id))
+      } catch (readError) {
+        retirementReadError = readError
+      }
       log.error("permission continuation recovery failed", {
         requestID: request.id,
         sessionID: request.sessionID,
         toolName: request.toolName,
-        retired: stale,
-        error: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+        retired,
+        error,
+        retirementReadError,
       })
       return "failed"
     }

@@ -15,6 +15,7 @@ import { completedToolExecutionResult } from "../../src/session/tool-outcome-fac
 import { recoverCompletedToolResult } from "../../src/session/tool-result-recovery"
 import { Database, sql } from "../../src/storage/db"
 import { PartTable } from "../../src/session/session.sql"
+import { withTimeout } from "../../src/util/await-with-timeout"
 import { completedReadResult } from "../fixture/completed-read-result"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
@@ -92,15 +93,21 @@ test("concurrent recovery publishes the same complete canonical result", async (
 
 test("the Tool completion publication observes its complete Source transaction", async () => {
   await readScope("full_access", async (value) => {
-    const observations: string[][] = []
+    const observed = Promise.withResolvers<string[]>()
+    void observed.promise.catch(() => undefined)
     const stop = Bus.subscribe(Message.Event.PartUpdated, async ({ properties }) => {
       if (properties.part.id !== value.part.id || properties.part.type !== "tool" || properties.part.state.status !== "completed") return
-      observations.push((await MessageStore.parts(value.assistant.id)).map((part) => part.type))
+      try {
+        observed.resolve((await MessageStore.parts(value.assistant.id)).map((part) => part.type))
+      } catch (error) {
+        observed.reject(error)
+        throw error
+      }
     })
     try {
       await recoverCompletedToolResult(value.part)
-      await Database.awaitEffectIdle(10_000)
-      expect(observations).toEqual([["tool", "source-file"]])
+      expect(await withTimeout(observed.promise, 10_000, "Actual Tool completion publication"))
+        .toEqual(["tool", "source-file"])
     } finally { stop() }
   })
 })

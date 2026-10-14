@@ -33,6 +33,7 @@ import { Message } from "./message"
 import { MessageCopyEvidence } from "./copy-evidence"
 import { AssistantDiagnostics } from "./assistant-diagnostics"
 import { MessageStore } from "./message-store"
+import { PermissionAuthority } from "@/permission/authority"
 import { SessionEvents } from "./events"
 import { Instance } from "../project/instance"
 import path from "path"
@@ -1492,6 +1493,7 @@ export namespace Session {
             throw new Error(`Completed assistant Message ${msg.id} is immutable`)
           }
           persisted = messageWithPersistedCreated(prior, existing.time_created)
+          PermissionAuthority.retireMessageContinuations({ sessionID: msg.sessionID, messageID: msg.id })
           return
         }
         if (prior.role === "assistant" && persistedMessage.role === "assistant") {
@@ -1564,6 +1566,9 @@ export namespace Session {
         .onConflictDoUpdate({ target: MessageTable.id, set: { data } })
         .run()
       commit?.(db)
+      if (persistedMessage.role === "assistant" && persistedMessage.time.completed !== undefined) {
+        PermissionAuthority.retireMessageContinuations({ sessionID, messageID: id })
+      }
       if (options.publishCreated && !existing) {
         Bus.publishOwnedInTransaction(Message.Event.Created, { info: persistedMessage })
       }

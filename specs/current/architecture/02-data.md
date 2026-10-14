@@ -32,6 +32,14 @@ Message 开放，终态重放保留原 completed 时间。各 Tool 的 park/hand
 进程退出不会移除启动恢复入口。权限请求首写与身份检查同事务，读取按 request identity
 而非 requested 事件条数计数。Mission 的中断归属仍由正式 process-recovery 协议结算。
 
+正常完成、silent 写入、bundle、atomic/import 与不可变完成 payload 的相同重放，均在
+唯一 `upsertMessageRow` 内复用该退休 writer。原 Message 和真实 Session 的 Project
+共同确定候选，不依赖当前环境 Project。Message、退休事实与原发布 outbox 同事务；
+退休写入错误、复合 Part 或 completion callback 错误均回滚本次外层写入，此前已提交
+的真实 Tool/result 保持。恢复入口继续处理历史完成消息，不注册后提交扫描或新队列。
+原 stale/superseded 错误与退休写错误同时出现时，AggregateError 保留两项原始原因；
+逐请求恢复隔离保持，日志的 retired 读取真实账本，诊断读取失败明确为 unknown。
+
 ## 事件投递的数据库提交
 
 Bus的投递请求注册、control lease取得、成功/失败receipt加lease释放及phase receipt，

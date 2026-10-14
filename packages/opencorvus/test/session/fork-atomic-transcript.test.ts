@@ -97,7 +97,7 @@ describe("Session fork commits the target and its transcript in one transaction"
           kind: fork.kind,
           forkedRoles: forked.map((m) => m.info.role),
           forkedSessionIDs: [...new Set(forked.map((m) => m.info.sessionID))],
-          identitiesRemapped: forked.every((m) => !sourceAfter.some((s) => s.info.id === m.info.id)),
+          distinctMessageIdentities: new Set([...sourceAfter, ...forked].map(message => message.info.id)).size,
           replyParentRemappedToForkedUser:
             forkedReply.info.role === "assistant" && forkedReply.info.parentID === forkedUser1.info.id,
           forkedTexts: forked.map((m) => (m.parts[0] as { text?: string })?.text),
@@ -107,7 +107,7 @@ describe("Session fork commits the target and its transcript in one transaction"
           kind: "assistant",
           forkedRoles: ["user", "assistant", "user"],
           forkedSessionIDs: [fork.id],
-          identitiesRemapped: true,
+          distinctMessageIdentities: 6,
           replyParentRemappedToForkedUser: true,
           forkedTexts: ["first input", "first reply", "second input"],
           sourceUntouched: [user1.info.id, reply1.info.id, user2.info.id],

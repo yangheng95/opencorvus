@@ -148,7 +148,7 @@ for (const scenario of ["live-same-project", "live-two-projects", "dead-unexpire
             state: { status: "completed", output: csv } })
           expect(structuredClone(completed.snapshot.result.result)).toMatchObject({ kind: "json", value: { output: csv } })
           expect(completed.snapshot.ledger.map((row: any) => row.event_type)).toEqual([
-            "requested", "allowed_once", "execution_started", "execution_succeeded",
+            "requested", "allowed_once", "execution_started", "execution_succeeded", "stale",
           ])
           expect(completed.snapshot.lease.id).toBe(original.snapshot.lease.id)
           expect(completed.snapshot.lease.expires_at).toBeLessThan(completed.snapshot.grant.expires_at)

@@ -15,6 +15,8 @@
 
 #### 修复
 
+- 正常助手消息完成时同步关闭已成功工具的权限续行；静默写入、导入与相同完成重放共用原事务。退休写入失败保留真实错误并回滚本次消息发布，已提交的工具结果继续可恢复。
+
 - 工作记录和归档搜索支持真实的 Work 会话类型，改名后的会话仍可按类型查找；命令面板使用服务器接受的工作项，保留 Mission 子项和本地命令的原筛选规则。
 
 - 权限执行开始与原进程租约同时提交；另一个后端恢复时确认原执行者确已退出，避免活跃工具的真实结果被抢写为未知。恢复按原项目、尝试和租约收敛，租约自然到期不被当作进程死亡。
@@ -127,6 +129,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Completed assistant messages now retire successful permission continuations in the same transaction, including silent writes, imports and identical completion replay. Retirement failures propagate and roll back that Message publication while preserving previously committed Tool results for recovery.
 
 - Work Ledger and Archive searches match the canonical Work conversation experience after renaming. The command palette uses accepted server items while retaining its Mission descendant and local action filters.
 

@@ -96,6 +96,13 @@ test("message settlement waits for all Tools and retains the abandoned Provider'
           .filter((part) => part.type === "tool")
           .map((part) => part.state.status),
       ).toEqual(["completed", "completed"])
+      const history = await PermissionAuthority.history()
+      for (const callID of [first.callID, second.callID]) {
+        const requestID = history.find(row => row.event_type === "requested" && row.tool_call_id === callID)!.request_id
+        expect(history.filter(row => row.request_id === requestID).map(row => row.event_type)).toEqual([
+          "stale", "execution_succeeded", "execution_started", "allowed_once", "requested",
+        ])
+      }
     })
   })
 })
@@ -186,7 +193,7 @@ test("repeated observations of one request resolve one canonical continuation an
   })
 })
 
-test("a completed Tool remains discoverable until its Message completion is durable", async () => {
+test("durable Message completion automatically retires its actual completed Tool continuation", async () => {
   await scope(async (value) => {
     expect(await PermissionAuthority.resumeExactContinuation(value.request, async () => "resumed")).toBe("resumed")
     expect(PermissionAuthority.approvedMessageContinuations(value.request).map((request) => request.id)).toEqual([
@@ -196,12 +203,13 @@ test("a completed Tool remains discoverable until its Message completion is dura
       expect(
         Session.completeRecoveredToolMessage({ sessionID: value.session.id, messageID: value.assistant.id, owner }),
       ).toMatchObject({ status: "completed", info: { time: { completed: expect.any(Number) } } })
-      PermissionAuthority.retireMessageContinuations(value.request)
     })
     expect((await PermissionAuthority.history()).filter((row) => row.event_type === "stale")).toMatchObject([
       { request_id: value.request.id, reason: "The continuation reached its persisted conclusion" },
     ])
-    expect(await PermissionAuthority.resumeApprovedContinuations()).toBe(0)
+    expect((await PermissionAuthority.history()).map(row => row.event_type)).toEqual([
+      "stale", "execution_succeeded", "execution_started", "allowed_once", "requested",
+    ])
   })
 })
 
@@ -255,7 +263,6 @@ test("permission recovery reports a foreign Project ownership error", async () =
         await expect(SessionLoop.resumePermissionContinuation(value.request)).rejects.toThrow(
           "belongs to a different Project",
         )
-        expect(PermissionAuthority.approvedMessageContinuations(value.request)).toEqual([])
       },
     })
   })

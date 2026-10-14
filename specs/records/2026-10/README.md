@@ -12,7 +12,7 @@
 
 - [首次复制的浏览器观测顺序](2026-10-14-clipboard-first-observation.md)：区分首次工具交接、页面复制与后续观察的真实顺序。
 
-- [407 消息完成与续行退休](2026-10-14-message-continuation-retirement-407.md)：普通Ask normal完成退休与Question/UI终态并行审计；当前仅调查，生产未授权。
+- [407 消息完成与续行退休](2026-10-14-message-continuation-retirement-407.md)：正常完成同事务退休、真实跨进程与公开错误验收、Sol桌面原图及下一批grant/Question共享边界。
 
 - [Sources网页导航与浅色阅读](2026-10-14-source-navigation.md)：实际网页目标、返回后的阅读所有权与主题资格。
 

@@ -37,3 +37,134 @@ audit_functionality只读完整canonical writer、所有silent/replay/recovered/
 Root亲读agent原module-topology-analysis：仅复用当前checker五个pure AST（Abstract Syntax Tree，抽象语法树）函数读取当前1163模块/5936边，baseline SCC=0、Authority→Session runtime path=null；虚拟加入Session→Authority值import仍0。这是可核代码图证据，不能预设“避环必须新抽leaf”，最小方向优先复用既有writer。没有运行clean-import/产品模块/服务，这份图不证明运行时初始化通过；最终真实checker仍需执行。strict错误传播、upsert早return、atomic part次序、全部caller/reply/public风险仍等完整报告，生产冻结。
 
 407初始文档原docs650b20/architecture5bf10b各exit0，345ops/26groups、19current/links，原600s physical/output/request完整。初次README补丁猜错现有标题而整体拒绝，没有部分写入；Root读取真实标题后精确重补，未覆盖其他索引排序。新增407条目与406原交付回执须范围提交/正常push；后续任何方案扩展仍先更新本Recall与实证边界。
+
+## Root 完整复核与本批实施方案
+
+初始方案356cb5ba96077a43ff3e212ce9e43d5078224ff1已经在upstream。恢复后真实git status仅其他compaction/ArchivePanel/locales/索引改动；fresh fetch c0bf80、merge bed980各0，完整pending最初只有另一已授权Sources证据提交3aa6db050，Root亲读其全部Recall、执行与数据检查原件后再次读取pending已为空。本轮未伪造为Root自己的push回执，不重做406验收。
+
+Root已亲读两个agent完整只读报告、原Permission authorize/decision/reply及全部退休调用、canonical upsert十个直接caller与Part/callback次序、外层immediate/savepoint/Bus outbox、实际serverErrorResponse、现有正式process checker和实际read-result fixture。静态runtime图仍0 SCC，无证据需要新leaf。现有完整定义/全仓caller/同语义raw UPDATE/历史patch由artifact保留；两个raw Message UPDATE不新增assistant completed，不另增writer。Agent只读未启动服务/模型/测试；报告不是新验收。
+
+### 精确生产变更
+
+1. `session/index.ts`静态值import既有PermissionAuthority。在唯一`upsertMessageRow`内，真实Message insert及原commit callback完成后、Created/Updated outbox之前，调用现有`retireMessageContinuations`；仅已完成assistant进入此调用。已completed且payload严格相等的原早return也复用同writer，保留不可变payload、created/completed、callback/outbox原合同。Silent、bundle与import不按publish flag排除；两调用点仍同一canonical函数和同一退休实现，不注册新callback/aftercommit/队列。
+2. `permission/authority.ts`同writer在原同步immediate事务读取exact Message JOIN其真实Session，按持久化Session.project_id筛同Session/Message的canonical requested；不依赖ambient Instance，不加import Project限制或执行路由旁路。已有normal/recovery admission校验保持。
+3. 私有`retireContinuation`在一个immediate事务检查已有stale并用现有appendEvent追加，删除吞写错误的catch。正常写失败必须回滚本次completed Message/退休/outbox；已经提交的原Tool/result仍是真实成功。immutable replay失败不改旧Message；Bundle/atomic的后续Part/callback失败也回滚同外事务，不能后提交补写。
+4. `resumeExactContinuation`原StaleContinuationError/TaskRootActivationSupersededError与退休写同时失败时，用AggregateError保留两个真实原因；成功退休后仍抛原typed错误。`recoverContinuation`维持每item隔离，其日志的retired须来自实际stale ledger，diagnostic读取失败明确unknown且不能破坏其他item恢复。已有recovery退休caller有历史completed/replay用途，继续复用同writer，不删除合法入口。
+
+实际public错误：live waiter决定200与后续Prompt完成不同阶段；后续退休失败按原Prompt错误合同退出，不反悔决定。无waiter的reply先commit真实decision/userInput/outbox，再await续行；退休失败原Promise reject，现有UnknownError/500加request-id，决定不会回滚。重复reply原won=false不强制恢复；Task reply、deletion cancel输给允许的resume同样传播真实失败。数据库Unavailable的既有503保持。无SDK/route/错误schema变化，不更改原Task activation fence、Full access同结果退休、Mission owner/frontier/wake。
+
+### 共享横面与明确后续项
+
+普通Main/Global/Work/Side/non-Task child、CLI/ACP/channel/control、Task-root retained/worker/delegate、Mission共享上述writer。未完Message维持原候选；同Message首个Tool成功不退休，最后真实completed且exact Tool outcome才退休各请求。其他新Message仍活不影响旧Message结论；同库多进程immediate串行与stale同事务读写提供幂等。Fork/Side-copy新IDs不复制ledger；foreign ambient import用原真实Session Project；真实owner删除后的历史孤立行不能凭本改动补造事实。性能只测原SQL查询，不先加DDL或缓存。
+
+本批正常完成接线修复的合同是现有`decision_slot`已经承认的Ask候选；**不是全部授权复用缺陷已解决**。另一共享根因已证：activeGrant分支写grant_used却没有decision_slot，decisionFor/list/pending/continuationReady均只读唯一槽，effect admission又实际使用grant_used.id。历史从43636df96存在；同request竞争、撤销/失效及老库事实迁移必须独立完整处理。连续下一批优先根治这条授权决定合同，不能在list/retire加双reader、从success猜批准或原样回写不可变历史；如持久语义演进，使用当前版本化自动迁移，0001基线不改。本批不引入schema/格式变化，也不宣称grant-reused请求已退休。
+
+MCP App在Message已经完成后才追加独立Tool的实际调用边界，历史已删owner、普通Question空waiter/真实基础设施终态、Task两层live-owner保护和standalone冷Question历史均保持未满足，不从两文件修复外推。Question只读报告纳下一批精确计划，当前不与Authority并写。Root已完整读Q的37文件索引/调用与原red04/live01资格：已有Tool interruption没有Question terminal、accepted source发现和双层Task准入是相连共享问题；单fixedID不证明可重入A2A业务，405原失败不抹除。
+
+### 当前授权实施与验证
+
+完成上面源码/报告分析后，Root授权本批两生产文件及直接相关正向功能测试实施。先将正式process live完成期望改为五个真实事件并运行原checker见红，再改生产、重跑同入口；dead未完仍是原unknown四事件合同。聚焦新增测试复用成熟actual read/processor/SQLite/Bus原语，证明normal完成、同Message多Tool、silent/immutable replay/bundle/atomic、trueSessionProject import、原stale写失败→明确错误及完整原Message/outbox/Tool/result→解除测试故障后同canonical写成功；局部fixture不冒端到端。触及的旧显式manual retire改为自动接线行为，负向核心断言移除或改明确正向状态/错误，不保留旧实现迎合测试。
+
+服务与模型首次helper必须Root逐项亲审后另准启动。正式真实process入口沿原600s parent/180s child/30s resource/60s close reserve，原句柄physical/output/request均join；不延截止、不监听长日志。支持检查为相关backend套件、core types、真实module-topology含四clean imports、docs与architecture。UI测试禁止运行；检索到的四个mixed projection测试由UI agent只读逐项分析，Root另落最小删除范围后执行，不能为保留卡片自动断言继续留绘制fixture。
+
+Root本批真实桌面目标为开发服务`/ui`普通Ask可见原批准、真实Tool结果、自然completed Message及同Request退休完整账本，再截图人工复核；需要Sol时使用既有明确授权auth+完整models同对，精确目标gpt-6.1-sol/所有请求流式，各个预检与实际请求独立核对。直到这些事实发生前，不计新页面、模型或端到端通过。所有失败/未跑格保留原限界；无版本/发布/tag/PR变化。当前批交付后继续grant与Q审计，不结束goal。
+
+### 已检索到的 UI 自动化删除范围
+
+Root已逐个全文读四文件并亲读tree-writer真实调用：resetWriter修改cardTreeStore并发布可见revision；applyEvent/ingest/commit进入真实卡树投影，RAF桩与settlePublication模拟绘制。删card断言后仍保留该fixture不符合用户禁令，初步「仅删card断言」建议撤回。
+
+本批整删`tree-writer-incremental-projection.test.ts`（3例）、`tree-writer-review-stream.test.ts`（2例）、`projection-prerequisite-recovery.test.ts`（2例）；`tree-writer-message-facts.test.ts`删11例及其RAF/paint/reset/apply/commit/i18n/card-tree专用fixture，只原样保留现有`history coverage and actor integrity have precise preparation errors`一例、所需info输入helper和prepareConversationView import。Root确认这两个错误输入在3344/3359纯局部Map/字段校验抛明确错误，尚未commit/卡树/本地化或绘制；这是既有数据完整性正向错误契约，不新建UI自动化或测试旁路。
+
+合计删除18个界面自动化例，不运行这四原路径。专用fixture全在四文件内部；全仓精确引用仅文档统计/历史记录，生产无import，默认overlay通用枚举runner仍服务其他非UI测试，不删共享runner/配置或伪改历史验收数字。删除会失去这18例自动卡树/可见revision覆盖，按当前规范由真实页面人工验收承担，不能说删后数值就是视觉通过。无UI生产功能变更、不新增测试替代，不扫描无关路径；完整原文件/调用证据由agent保存供Root复核。
+
+### Root 服务准备（启动仍须后端修复与 checker 通过）
+
+Root亲读成熟406/frontend-u3/run-validation全源和当前Vite config，复用同Node build/现有typecheck/owned_tree600s闭合，只换407鲜目录并去掉未改CSS的额外检查；私有当前bundle位于`.tmp-message-retirement-407/native-bundle/bin/ui`，同目录复制已验证Bun1.4，不覆盖包dist或用户bundle。构建不是视觉证明，不启动独立Vite服务器。
+
+真实Sol服务复用已亲审的405 ordinary CLI native Host/Target launch、source-reading-405 wrapper及public-shutdown/paired cleanup全过程，唯一准备变化为鲜407路径/Bun私有bundle/本批evidence prefix；Builtin Base、NativeService、不创建Task，当前生产源码普通serve及localhost选定端口/ui。原authSource与完整相邻models经stageDiagnosticProvider配对，先验证Auth可用、实际所有投影gpt-6.1-sol与流式preflight，再Root发普通public conversation原输入。原服务600000ms、提前60000ms关闭、HTTP30s、cumulative maxRequests20（含全部预检）不续期；每请求真实reader/EOF和实际模型由原RealProviderAudit记录。原两copied文件只在Host/Target/Job/output/request/端口均闭合后退休，失败仍保留精确原回执。
+
+本批新会话使用当前公开config设Ask me，原public prompt请求读取本scope的非敏感外部CSV；批准必须Root在真实页面选择allow_once，不能脚本代答或教host选择Tool。自然Tool/result/Message完成后读取公开history和conversation完整身份，再截图人工复核。在closeBy之前立即关闭Root页并原public shutdown/join，随后做完整分析；不能为分析占用活服务期限。尚未启动时不宣称凭据/模型预检或页面通过。Helper虽沿既有已验证机制，准备差异/精确命令仍在启动前保存，所有授权仅本scope，不动用户进程/窗口/其他测试服务。
+
+## 实施前红态与准备实际结果
+
+Root亲读原checker stderr和原owner：`process-red01`原66438，parent84456→child89340/6e29a5cc-6059-4cfc-9c81-3a55582a3e55，started1791948135771/deadline1791948735771，原600s；实际177.97s、2 pass/2 fail/32 assert，outer1。两live fail均在完整ledger五事件对照：原Tool completed/result真实，实际仅requested/allowed_once/start/success，缺stale；dead unexpired/expired各pass，后者实际自然等租约到期，不改clock/deadline/死亡。四scope清理原件保留，主agent负责原工具句柄join；不把红结果计新绿格。
+
+Root当前UI准备原57138 join a71795 exit0：typecheck70092/0cb678e5-9cb1-4152-8b38-a10f0033d771与Node build83744/a47ef9b4-c9a9-41e1-9a67-173e8e8b01f7均0，原started1791948125630/deadline1791948725630，actual finished1791948200461；physical/output/request与isolated runtime退休完整。只支持源码/构建资格，没有页面/Sol通过。Bun私有副本实际--version1.4.0；launch准备只换私有Bun路径和407 shutdown引用，复用原405 wrapper，fresh owned运行目录拟`C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/message-retirement-407-live01`，不重用旧库/期限/服务。
+
+Root另亲读`focused-test-plan.md`批准局部positive writer准备：真实ReadTool/result+processor+held exact Prompt；在原nested savepoint里计算候选完成DTO再明确rollback，只是局部候选而非已commit Message/自然模型终态，完整原Message/Tool/result/ledger/outbox必须保持原事实。测试选定canonical writer才唯一commit。TEMP trigger仅exactrequest的stale INSERT映射真实SQL错误；完整rollback后解除故障同原输入成功。原typed错误+退休SQL错误验证AggregateError两原原因。若真实bundle/Part合同拒绝所选输入，保留错误复核，不放宽生产immutable合同或伪造历史。Public无waiter首次新fixture仍待精确输入审阅，未运行格不得冒通过。
+
+407生产两文件已按方案实施，Root完整diff复核：两upsert点共用原retirement，trueSessionProject JOIN，strict事务、双原错误和actualstale diagnostic。正式module原96365 join cdd080 exit0，1163模块/5936边、无retained SCC、4实际clean imports；core types原83126 join687d8c exit0，原Node tsc，均600s原预算/physical-output-request完整。没有放宽checker预算。
+
+首次聚焦原19822 exit1已实际join：新10例9pass/1fail/99assert，原settlement10例8pass/2fail/22assert。Root亲读完整原stderr及实际代码：两history失败是测试误按ASC期待，但公开history1456明确rowid DESC、原真实账本均已有五事件；early准备失败在新Source Part的orderKey drift，rollback DTO带准备落库时间，而正式新Part2459–2460按本次首次提交时间校验。只修测试期待与尚未commit DTO的排序投影，保留真实ID/tool binding/body/时间及原已存Part排序；不放宽生产immutability/orderKey合同。若下一个实际错误为completed Message新Source的普通writer准入，继续按真实compound writer合同分析，不能删除必要Source或偷加生产绕路制造通过。三原失败及源保留，不将17局部pass算批次完整绿。
+
+真实process-green01原57611已由agent原join0：4pass/58，八child exits[0,0,0,0,23,0,23,0]，两live每a/b均自然completed+五ledger，四scope physical/output/request/providers/resource/handlers全部实际true。源冻结及原期限定格保持；Root随后独立读全原summary/ledger，不外推Task/Mission完成。
+
+Root亲审Sol launch/shutdown对成熟405的完整diff，只有私有Bun路径和407 shutdown/Functions引用；原wrapper不改。批准本次首次精确NativeService启动：fresh C用户目录`message-retirement-407-live01`、evidence`.tmp-message-retirement-407/sol-manual01`、port18537、prefix`message-retirement-407-live01`、原builtin Base selection、cumulative request budget20。正式process和core/module已绿；局部DTO准备重跑仍未结束，独立限制不冒整个批次绿。所有原UI路径不运行，真实页面Root手动批准/截图；按Native原600s/close reserve及时收尾后再分析。
+
+第二次focused原99847已join1：新9pass/1fail/99，settlement10pass/23。新Source排序修正后，真实bare bundle再次明确拒绝completed header后新Source，必须原compound settledToolPartID合同。Root批准把该真实错误及完整rollback保留为positive错误契约，再按现有合法流程：原生产计算候选saveMessage→同canonical persistCompletedToolResult提交真实Tool及全部Sources→updateMessage同原不可变payload，验证equal早return自动退休与完整原SourcePayload/Tool绑定/result。不删Source、放宽生产immutable合同或声称bare bundle支持late companion；原failed源/日志均保留。
+
+Root首轮Sol原75558 join1：自有37页已关闭，原public shutdown d4b8f1 exit0、HTTP200；native Host51424/Target88160在原deadline1791950003783前03:48:59实际exited/0，physical/output/request与原auth/models配对退休均真实完成。实际UI原AllowOnce、CSV三行、自然final总7与公开五ledger已读回，2原JPEG人工看；这证明业务结果，不等于原全scope资格0。
+
+全审计6条实际gpt-6.1-sol/streaming/HTTP200/reader settled，其中第5条（activity act_g0VXzZsbD00t3cbL9Oc3、assistant msg_g0VXzZsTb00XxqTEWuhS、attempt0）在1791949595780读ECONNRESET、terminal=error；第6条同exact activity/assistant attempt1于1791949600645 EOF，原Message自然stop1791949600668。错误早于03:48:58正常shutdown，不能误归后台关闭或伪用户取消。原NativeService qualifier要求每条EOF，真实报OWNED_PROVIDER_REQUEST_INVALID，qualified-surface文件未产生；不能把outer1写绿。TCP（Transmission Control Protocol，传输控制协议）谁发reset当前未知；已有retry及全部生产入口/终态数据流须只读核对，不以模型自述、标题或“偶发”降级。
+
+补验为新鲜`message-retirement-407-replay01`/port18538/evidence sol-manual02，same reviewed NativeService/真实CSV/page/schema/全部原checker，不改qualifier或生产重试策略；原20累计请求已用6，新scope最多14，两个scope合计不超过20。新600s是独立轮次原物理期限，不续旧服务/旧deadline。原scope全部物理闭合才可再次stage同授权auth/models对；没有新policy/model/凭据refresh。原失败与新结果独立归档。启动仍先保存精确命令/源并按原scope关闭，不能凭补验抹第5错误或宣称全网络路径根治。
+
+## 最新原执行与公开接口证据缺口
+
+最终聚焦 `focused-green03` 原26948 join ea2bc6 exit0：两文件20个不同测试、130assert（新增10/107，原settlement10/23）；原截止1791950713322，实际1791950180487已完整physical/output/request。原前两失败、输入与Source compound合同修正均保留，未放宽生产不可变约束。
+
+第二Sol原3029 join4293e8 exit0：fresh replay01，Host86452/Target77628，原occurrence message-retirement-407-replay01-b3f4e312-480e-4ccc-afb5-e3930c6a4ede、deadline1791950732501。原5条实际gpt-6.1-sol/streaming/HTTP200/settled/EOF、各attempt0；原qualified-surface-completion真实产生。原shutdown24f950 exit0/HTTP200，physical/output/request/成对清理完整，页38已关闭。Auth可用/完整models投影/实际请求分别核实，累计两轮11请求≤20。原Session ses_h4hXUDuBGmYtwdebEqFd，requested per_h3XR45PPwVEy347nd6n6、read Message msg_g0VXzcPJr00orq7zPnbA、自然Tool completed/Message completed与五事件读回；2原JPEG人看真实AllowOnce和自然结果总7。本批4张原截图不是自动视觉断言。原第一轮outer1仍失败；只读全共享重试报告确认SDK maxRetries0/唯一activity attempt owner/实际原read已先退休，错误在随后不同answer Message，Tool已开始的attempt禁止危险重试。TCP reset发起者与该轮SQL activity outcome未实测，未改产品或qualifier冒修复网络。
+
+公开无waiter `public-reply01` 原94120 joinadeefe exit1，0pass/1fail/8assert，约4s。原pending HTTP200、reply500及request-id已真实发生，但账本只requested/allowed_once、Provider0，没有execution_started/result，不能将500归因本批退休SQL错误。原500完整日志未在断言前保存是checker证据顺序缺口；fixture providerID builtin与真实public builtin read不同只是代码线索，具体错误仍未知。原执行/Provider/listener/Instance真实闭合；continuation reject原joined:false保留，不把HTTP500当完成验收。
+
+Root全文复读原public测试、Server.stop全运行器settlement、真实hydration与controlled streaming Provider，授权先修checker观测顺序：reply后Log.flush并保存隔离原日志；每关键断言前先保存真实ledger/Message/result/outbox；失败finally仍保存。fresh public02仅诊断，原90s/closeBy75s/HTTP30s/test120/wrapper600，fixture和生产不改，原0/1保持。真实POST/两进程新origin尚未授实施；不得先猜或改变provider identity制造期望500。
+
+相关七backend文件全读后，只对三文件过期负向核心改当前正向原ledger/Message/error/两个Project各自结果及fork真实distinct identities；未运行，需public根因取证和精准新origin通过后再原聚焦组。UI四删减文件未运行；全部当前修改须范围提交/正常上游merge和push，不以局部绿宣告批次交付。
+
+Root已全文亲读408 grant UI投影报告：晚Asked未查决定、Task真实Replied缺精确resolved通知、Board直接slot读取、autoReply冷投影和历史index本地化均是下一批契约范围。索引事件/迁移方案未选、混合旧进程升级仍未知；仅让UI agent继续只读ACP/CLI/channel原消费者和已有真实取消/settlement API，不改共享Authority/生产或跑UI自动测试。
+
+public02 原73507 join261f60 exit1，仍0/1/8。Root亲读exact-reply-server-error与owner：同HTTP request-id69ab6905-69bd-4f59-a663-637f1f28c93f的实际CorruptCatalogOccurrenceError(code=unbound)，readInput669→readAssistant693→resumeOwnedPermissionInvocation4968，原输入msg_g0VXzg6ZX001YtiziziL确无snapshot binding。断言前完整事实为requested/allowed_once、Tool running与results[]、Provider0；这是02确证前置，未到本批退休。原01无该轮完整logger，仍未知，不拿02日志替换01事实。原test开始1791951075574/deadline1791951165574/end1791951080130；wrapper0之外真实exit1，physical/output/request均闭合，原listener/Instance/Providerclosed与执行join真实，原assert-rejected continuationJoined:false保留。
+
+Root已全文读现有public process worker与SessionLoop Catalog恢复，继续只读最小真实POST/session→POST/message→natural Asked生命周期；正常dispose是否占cancel slot/终态化Tool需沿原调用证据判断。若cancel已赢，不改回pending；只有必要时才选既有owned process Asked前approval crash/reopen，禁止偷偷手绑Catalog或改共享fixture身份制造公开准入。新origin尚未启动。
+
+Root的原公开事实核验脚本check-sol-evidence.mjs，经原Native delivery wrapper ca30be exit0，parent85304→12680/f6172f36-7b74-4e0b-a947-3789aa7aa317、started1791951243199/deadline1791951843199、end1791951243485，physical/output/request完整。核对两真实Session/Project/request/Tool/call/attempt/source绑定、完整五事件、Tool→Message→stale时间、自然final与conversation身份集合；验证原6请求一error后同activity retry和第二5EOF及真实闭合。只核验已捕获API/物理回执，不是新模型轮或UI自动化。两个原final和4原JPEG人工语义仍Root负责，source-free安全白名单从原audit选择真实物理metadata，未替换原全audit或认证数据。
+
+### 公开终态回复修正方案（实施前）
+
+Root与backend agent完整源码复核：Instance.disposeAll先等真实active serving lease，公开POST/message持该lease，直接dispose会等住而不能取代Prompt结算。真实Server.stop→settleCurrentProcessExecution→terminateCurrentProcessOwnedExecution先向精确Prompt发process.shutdown，再由原abortOpenToolParts提交executionInterruptionFailure和真实time.end，等待finished后dispose。该链未写pending Permission decision；Authority disposer只使原waiter PermissionPaused，Session树删除的cancelPendingForSessions是不同调用。源码支持pending request +真正terminal Tool，尚需03实测；任何实际cancel胜出保留，不能回改pending。
+
+本case改用controlled Provider的现成firstPromptToolCall read、真实POST/session/POST/message进入原Catalog/实际builtin read身份，等待公开pending的原Asked。随后原Server.stop(true)，观察原HTTP Promise fulfilled/rejected的真实原结算，旧listener单独标闭合；正常重新Server.listen复用原持久会话。读取原完整Message/Tool/request/ledger，验证实际执行中断错误及原requested pending，再装exactrequest stale INSERT TEMP故障。新的无waiter公开reply真实提交operator decision/userInput/owned outbox，原terminal Tool返回unresumable，strict retirement真实SQL故障映射原UnknownError500/request-id。Log与完整事实先保存再断言。解除测试故障，用原SessionLoop continuation得到unresumable与真实stale、原Toolerror完整保持及Message终态按真实合同收敛；不用此case要求CSV physical effect或成功结果。
+
+此场景为真实正常shutdown后的公开终态恢复错误合同；成功Tool/result保留由聚焦20/130、真实process4/58与第二Sol5EOF分别证明，不能混淆证据层级。只改新public测试及其scope回执，不改生产、shared fixture、Catalog校验、模型流程或time/death。原90s/closeBy75s/HTTP30s/test120/wrapper600不延，两个listener/Provider响应/原Prompt及续行Promise均按其原真实结算观察。03源准备完成由Root全文审后执行；不新增两个process harness，未来只有真实生命周期不能满足原pending时再独立分析。
+
+Root全文亲读新public源两段/实际原shutdown failure primitive、processor正常completion和server gate释放，准03。03原68654 join6ba903 exit1，0/1/14，parent89016→89648/c788a871-c29a-4175-9ade-a9b057da5a0f、原wrapper开始1791951955522/deadline1791952555522/end1791951973990；真实test13108/0b840da7-8d68-43a2-a8b7-c7b48fe642f5开始1791951963726/closeBy1791952038726/deadline1791952053726/end1791951973528。实际旧listener正常stop、原HTTP TypeError/socket closed已观察结算、新listener正常重开；原pending/真实MessageAbortedError和terminal Tool均符合当前合同。reply同request-id5fd217d6-c623-4fff-a89f-1d6b70af672d真实500，本次确到目标strict退休。
+
+03错误仅checker将Log序列化type误期待SQLiteError。原实际type=Error，code=SQLITE_CONSTRAINT_TRIGGER、errno1811、message精确PUBLIC_MESSAGE_RETIREMENT_COMMIT_CUT，stack仍原SQLiteError→Authority.appendEvent294→retireContinuation1343。Root亲读全部原stderr/owner/final，准只将checker期待改真实type/code/errno/message，logger与生产保持，原源/失败不覆盖。fresh04同原预算补验解除fault后的完整收敛，03未执行该后半段，不能称全部公开格绿。旧/新listener、原HTTP、Provider3响应、Instance与wrapperphysical/output/request实际闭合，cleanup[]；continuation未启动保持not_started。04绿后按已亲审三窄positive修正执行原七backend组，不跑任何UI自动测试。
+
+public04 原93256 joinb597e4 exit0，1/0/22，parent77692实际end1791952055176早于原wrapper deadline1791952637131；真实test85820 deadline1791952135574/end1791952054753。实际SQL error type/code/errno/message和公开UnknownError500/request-id一致；原operator决定/userInput/outbox已commit，原Message/真实Toolerror完整保持；解除fault原continuation unresumable→requested/allowed_once/stale。旧/新listener、原HTTP genuine rejected观察join、continuation fulfilled join、Provider3 responses、Instance与physical/output/request全部闭合，cleanup[]。该public格是正常停机后的terminal Tool合同，不写CSV成功或模型自然final；后者为另三类原验收。Root随后独立读原四HTTP/error/ledger/source回执。
+
+原七文件related01原65944已准并由backend agent启动；七原源冻结related-actual01，600s原wrapper与正常selected入口不变，未跑UI路径。结果仍需原join和Root证据复核；没有为直接fixture缺Catalog放宽产品。
+
+### 关联 checker 的真实事件等待边界
+
+related01 原65944 joinded247 exit1，parent71164 started1791952075411/deadline1791952675411/end1791952219511，physical/output/request完整；七文件36pass/1fail/145assert。唯一失败tool-result-recovery第103行：Source事务观察array当时[]，其余六文件全部绿；不能据空array判产品丢事件。Root全文亲读原测试、七组stderr、Session.persistCompletedToolResult、Bus真实owned publication/Database effect与idle、server双结算及agent完整横审。
+
+原test用Database.awaitEffectIdle作为Bus订阅完成边界，但Bus1097–1110的effect仅启动/登记独立protocol_publication并不return其Promise；DB idle1635–1682只等待activeEffects。Durable publication仍由原exact/wildcard/global/receipt owner持有，当前delivery-transaction的setTimeout批提交可使该回调晚于DB idle；test随即unsubscribe。585c引入旧test时Bus已此独立owner形状，b3fb新增真实提交yield而没有改变DB idle合同。当前这次原失败的瞬时outbox phase未保存，保持未知；此producer不调用upsertMessageRow，不能归407完成接线。
+
+全仓awaitEffectIdle生产外部caller只有Server352，随后仍按原Instance/gate并在359实际wait protocol_publication；Database自己的reset/close/gate为DB边界。Main/Side/Work/Task/Mission、正常/终态/串并行/multiProject和restart/retry均共享原Bus occurrence/原phase owner，DB idle不授新事件权限，也不是其恢复事实。没有代码或当前运行证据需要改产品队列或等待边界。
+
+Root授权仅此一测试复用Promise.withResolvers，在原exact completed Tool PartUpdated callback读取真实完整MessageStore.parts并resolve；真实读错reject原错误。用既有withTimeout10000等待该实际回调后，保留原tool/source完整正向输出期待及finally unsubscribe；不手动resume/replay Bus、不合成事件/改Source/延时/新增队列。fresh单文件正式重验，原related01失败与源保留，其余六绿文件不无目标重跑。此为真实局部事件/事务合同，非UI或模型端到端。
+
+Root亲读最终单例patch与related-tool-publication02原owner/stderr：原39835 joinb20388 exit0，11/0/44，parent51324→83112/9feb926f-d85a-4592-9b57-4afb91b05642，started1791952464127/deadline1791953064127/end1791952501739，physical/output/request完整。实际PartUpdated callback确读完整tool/source-file；DB/Bus生产未改，原36/1仍红记录而最终去重关联37/145。本批最终11个selected文件共62不同tests/355assert：focused20/130、realprocess4/58、public1/22、related37/145；重复执行不累计。backend最终10路径为2生产/6改旧backend测试/2新backend测试，全部原句柄已join，agent冻结交接；Root独占最后文档/档案/提交/上游merge与正常push。
+
+## 当前交付范围与明确未满足项
+
+本批修复现有decision_slot承认的Ask续行在正常完成Message时的事务退休，含silent/identical replay/bundle/atomic/import、真实Session Project及严格错误。未改schema/版本/发布、授权复用、原effect lease、Provider重试、Question或Task/Mission终态准入；UI仅删除18自动化例，保留1纯prepare错误契约。4张真实桌面原JPEG人工确认审批和正常结果，独立Sol补验5EOF/原preflight和paired cleanup实际通过；首轮读reset资格失败保留，不能宣称网络根因已修。
+
+仍未满足：grant_used槽/竞争/所有原消费者/历史索引与混合旧进程升级；Question accepted源/冷历史/Tool interruption terminal和Task双层live/unknownowner；MCP App completed Message之后新Tool的协调，真实远端MCPtask；已删除owner或Project转移/import旧账本归属；Task retained真实typed final、Mission/Work独立Question自然业务结束；真实OS unknown/live跨120s的Sol effect。当前聚焦Task activation/result为local合同，不冒publicTask E2E；公开terminal停机恢复不冒CSV效果。本批完成后按这些共享问题进入408，不结束goal。
+
+档案排除auth/models/用户或runtime DB/私有bundle/完整Sol Provider payload；related01 stdout含旧controlled Provider完整body，也显式排除，只保留原owner/完整stderr和必要metadata。gzip逐字节往返只证明档案完整，不当功能/hash gate；原失败源与修正原因均单独保留。最终docs/index、范围commit与正常upstream同步/push尚待实际回执，未发生前不写为已交付。
+
+最终档案原archive407-delivery01/2e322e exit0，parent83196→69108/ff7cb9f5-6a38-4087-bbc3-20834ec2da84、started1791952760281/deadline1791953360281/end1791952762732，physical/output/request完整。delivery01清单560条，9明确排除、551文件/10,515,185bytes；配置HTTP body的减少逐件注明，4JPEG原图。audit01另保留60原件；不是运行替身。Root全文复核范围准备637路径，两个生产/八backend测试/四UI测试删减/两当前架构/本spec/本artifact，CHANGELOG只本批中英各1条、三README只407原行，未把peer改动混入。
+
+最终docs407-delivery01/5d5543 exit0：345ops/26groups，parent91132→72096/5699d993-5ff7-4d2e-8b20-d08dc6d97919、started1791952945963/deadline1791953545963/end1791952951604。architecture407-delivery01/c651f0 exit0：实际当前20documents/全部链接，parent80256→85684/6beead71-2128-4b98-ad5b-a8606e542ebb、started1791952945947/deadline1791953545947/end1791952946496。两者physical/output/request完整；并行任务新增当前文档使数量由早前19→20，不回改早前真实结果。prepare407-delivery01/fee5f6 exit0仅临时独立index与scope审查，尚不是commit或push。

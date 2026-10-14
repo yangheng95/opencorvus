@@ -1,0 +1,306 @@
+{
+  "capturedAt": 1791948101836,
+  "files": [
+    {
+      "source": "functionality/analysis.md",
+      "destination": "functionality/analysis.md.gz",
+      "originalBytes": 22677
+    },
+    {
+      "source": "functionality/grant-used-followup.md",
+      "destination": "functionality/grant-used-followup.md.gz",
+      "originalBytes": 19420
+    },
+    {
+      "source": "functionality/source-manifest.json",
+      "destination": "functionality/source-manifest.json.gz",
+      "originalBytes": 1730
+    },
+    {
+      "source": "functionality/status-before.txt",
+      "destination": "functionality/status-before.txt.gz",
+      "originalBytes": 195
+    },
+    {
+      "source": "functionality/status-after.txt",
+      "destination": "functionality/status-after.txt.gz",
+      "originalBytes": 502
+    },
+    {
+      "source": "functionality/callers-all-repository.txt",
+      "destination": "functionality/callers-all-repository.txt.gz",
+      "originalBytes": 81837
+    },
+    {
+      "source": "functionality/message-callers.txt",
+      "destination": "functionality/message-callers.txt.gz",
+      "originalBytes": 5376
+    },
+    {
+      "source": "functionality/retirement-callers.txt",
+      "destination": "functionality/retirement-callers.txt.gz",
+      "originalBytes": 2086
+    },
+    {
+      "source": "functionality/grant-decision-callers.txt",
+      "destination": "functionality/grant-decision-callers.txt.gz",
+      "originalBytes": 2306
+    },
+    {
+      "source": "functionality/history-grant-used.txt",
+      "destination": "functionality/history-grant-used.txt.gz",
+      "originalBytes": 64
+    },
+    {
+      "source": "functionality/history-completed-immutability.txt",
+      "destination": "functionality/history-completed-immutability.txt.gz",
+      "originalBytes": 74
+    },
+    {
+      "source": "functionality/history-retire-catch.txt",
+      "destination": "functionality/history-retire-catch.txt.gz",
+      "originalBytes": 65
+    },
+    {
+      "source": "functionality/history-recent.txt",
+      "destination": "functionality/history-recent.txt.gz",
+      "originalBytes": 922
+    },
+    {
+      "source": "functionality/history-e08017392.patch",
+      "destination": "functionality/history-e08017392.patch.gz",
+      "originalBytes": 30604
+    },
+    {
+      "source": "functionality/history-86fbe0bca.patch",
+      "destination": "functionality/history-86fbe0bca.patch.gz",
+      "originalBytes": 6996
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/script/check/module-topology.ts",
+      "destination": "functionality/source/packages/opencorvus/script/check/module-topology.ts.gz",
+      "originalBytes": 14364
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/bus/index.ts",
+      "destination": "functionality/source/packages/opencorvus/src/bus/index.ts.gz",
+      "originalBytes": 55540
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/cli/cmd/import.ts",
+      "destination": "functionality/source/packages/opencorvus/src/cli/cmd/import.ts.gz",
+      "originalBytes": 2174
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/interactive-artifact/mcp-app-host.ts",
+      "destination": "functionality/source/packages/opencorvus/src/interactive-artifact/mcp-app-host.ts.gz",
+      "originalBytes": 16251
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/mission/process-recovery.ts",
+      "destination": "functionality/source/packages/opencorvus/src/mission/process-recovery.ts.gz",
+      "originalBytes": 15878
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/permission/authority.ts",
+      "destination": "functionality/source/packages/opencorvus/src/permission/authority.ts.gz",
+      "originalBytes": 73163
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/permission/permission.sql.ts",
+      "destination": "functionality/source/packages/opencorvus/src/permission/permission.sql.ts.gz",
+      "originalBytes": 5408
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/permission/project-authority.ts",
+      "destination": "functionality/source/packages/opencorvus/src/permission/project-authority.ts.gz",
+      "originalBytes": 2385
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/permission/types.ts",
+      "destination": "functionality/source/packages/opencorvus/src/permission/types.ts.gz",
+      "originalBytes": 1631
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/project/bootstrap.ts",
+      "destination": "functionality/source/packages/opencorvus/src/project/bootstrap.ts.gz",
+      "originalBytes": 8741
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/project/instance-state.ts",
+      "destination": "functionality/source/packages/opencorvus/src/project/instance-state.ts.gz",
+      "originalBytes": 325
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/project/instance.ts",
+      "destination": "functionality/source/packages/opencorvus/src/project/instance.ts.gz",
+      "originalBytes": 83394
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/project/state.ts",
+      "destination": "functionality/source/packages/opencorvus/src/project/state.ts.gz",
+      "originalBytes": 8977
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/server/error-handler.ts",
+      "destination": "functionality/source/packages/opencorvus/src/server/error-handler.ts.gz",
+      "originalBytes": 9325
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/server/routes/permission.ts",
+      "destination": "functionality/source/packages/opencorvus/src/server/routes/permission.ts.gz",
+      "originalBytes": 3341
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/session/copy-evidence.ts",
+      "destination": "functionality/source/packages/opencorvus/src/session/copy-evidence.ts.gz",
+      "originalBytes": 3483
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/session/index.ts",
+      "destination": "functionality/source/packages/opencorvus/src/session/index.ts.gz",
+      "originalBytes": 121334
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/session/loop.ts",
+      "destination": "functionality/source/packages/opencorvus/src/session/loop.ts.gz",
+      "originalBytes": 245716
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/session/processor.ts",
+      "destination": "functionality/source/packages/opencorvus/src/session/processor.ts.gz",
+      "originalBytes": 84980
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/session/prompt/state.ts",
+      "destination": "functionality/source/packages/opencorvus/src/session/prompt/state.ts.gz",
+      "originalBytes": 46280
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/session/session.sql.ts",
+      "destination": "functionality/source/packages/opencorvus/src/session/session.sql.ts.gz",
+      "originalBytes": 19195
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/session/tool-outcome-facts.ts",
+      "destination": "functionality/source/packages/opencorvus/src/session/tool-outcome-facts.ts.gz",
+      "originalBytes": 4137
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/storage/db.ts",
+      "destination": "functionality/source/packages/opencorvus/src/storage/db.ts.gz",
+      "originalBytes": 70811
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/src/task-api/task-root-message.ts",
+      "destination": "functionality/source/packages/opencorvus/src/task-api/task-root-message.ts.gz",
+      "originalBytes": 4812
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/test/session/completed-failure-write.test.ts",
+      "destination": "functionality/source/packages/opencorvus/test/session/completed-failure-write.test.ts.gz",
+      "originalBytes": 2588
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/test/session/permission-message-settlement.test.ts",
+      "destination": "functionality/source/packages/opencorvus/test/session/permission-message-settlement.test.ts.gz",
+      "originalBytes": 10682
+    },
+    {
+      "source": "functionality/source/packages/opencorvus/test/storage/database-transaction-contract.test.ts",
+      "destination": "functionality/source/packages/opencorvus/test/storage/database-transaction-contract.test.ts.gz",
+      "originalBytes": 3913
+    },
+    {
+      "source": "ui/question-recovery-analysis.md",
+      "destination": "ui/question-recovery-analysis.md.gz",
+      "originalBytes": 25173
+    },
+    {
+      "source": "ui/ui-test-scope-analysis.md",
+      "destination": "ui/ui-test-scope-analysis.md.gz",
+      "originalBytes": 16269
+    },
+    {
+      "source": "ui/capture.json",
+      "destination": "ui/capture.json.gz",
+      "originalBytes": 394
+    },
+    {
+      "source": "ui/source-excerpts.json",
+      "destination": "ui/source-excerpts.json.gz",
+      "originalBytes": 666633
+    },
+    {
+      "source": "ui/callers.json",
+      "destination": "ui/callers.json.gz",
+      "originalBytes": 29157
+    },
+    {
+      "source": "ui/history.json",
+      "destination": "ui/history.json.gz",
+      "originalBytes": 38332
+    },
+    {
+      "source": "ui/source-working-diff.patch",
+      "destination": "ui/source-working-diff.patch.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": "ui/ui-test-scope/capture.json",
+      "destination": "ui/ui-test-scope/capture.json.gz",
+      "originalBytes": 11023
+    },
+    {
+      "source": "ui/ui-test-scope/dependency-excerpts.json",
+      "destination": "ui/ui-test-scope/dependency-excerpts.json.gz",
+      "originalBytes": 46200
+    },
+    {
+      "source": "ui/ui-test-scope/original/packages/overlay/test/projection-prerequisite-recovery.test.ts",
+      "destination": "ui/ui-test-scope/original/packages/overlay/test/projection-prerequisite-recovery.test.ts.gz",
+      "originalBytes": 6592
+    },
+    {
+      "source": "ui/ui-test-scope/original/packages/overlay/test/tree-writer-incremental-projection.test.ts",
+      "destination": "ui/ui-test-scope/original/packages/overlay/test/tree-writer-incremental-projection.test.ts.gz",
+      "originalBytes": 9222
+    },
+    {
+      "source": "ui/ui-test-scope/original/packages/overlay/test/tree-writer-message-facts.test.ts",
+      "destination": "ui/ui-test-scope/original/packages/overlay/test/tree-writer-message-facts.test.ts.gz",
+      "originalBytes": 15626
+    },
+    {
+      "source": "ui/ui-test-scope/original/packages/overlay/test/tree-writer-review-stream.test.ts",
+      "destination": "ui/ui-test-scope/original/packages/overlay/test/tree-writer-review-stream.test.ts.gz",
+      "originalBytes": 3306
+    },
+    {
+      "source": "ui/ui-test-scope/original-sources.json",
+      "destination": "ui/ui-test-scope/original-sources.json.gz",
+      "originalBytes": 85363
+    },
+    {
+      "source": "ui/ui-test-scope/original-working-diff.patch",
+      "destination": "ui/ui-test-scope/original-working-diff.patch.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": "ui/ui-test-scope/projection-call-chain.json",
+      "destination": "ui/ui-test-scope/projection-call-chain.json.gz",
+      "originalBytes": 77237
+    },
+    {
+      "source": "ui/ui-test-scope/reference-queries.json",
+      "destination": "ui/ui-test-scope/reference-queries.json.gz",
+      "originalBytes": 100073
+    },
+    {
+      "source": "capture-audit.mjs",
+      "destination": "capture-audit.mjs.gz",
+      "originalBytes": 2282
+    }
+  ],
+  "boundary": "Complete frozen read-only audits and exact original source/caller/history. No runtime, Provider, UI, test or migration acceptance."
+}

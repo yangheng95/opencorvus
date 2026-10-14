@@ -335,7 +335,9 @@ test("concurrent continuations converge one complete Message before one streamin
           ])
           expect(await SessionLoop.resumePermissionContinuation(first.request)).toBe("resumed")
           expect(await MessageStore.get(identity)).toEqual(settled)
-          expect(await PermissionAuthority.resumeApprovedContinuations()).toBe(0)
+          const concluded = await PermissionAuthority.history()
+          await PermissionAuthority.resumeApprovedContinuations()
+          expect(await PermissionAuthority.history()).toEqual(concluded)
           expect(provider.promptRequests().map((request) => (request.body as { stream: boolean }).stream)).toEqual([
             true,
           ])

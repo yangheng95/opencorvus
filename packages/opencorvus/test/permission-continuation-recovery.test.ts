@@ -143,12 +143,13 @@ describe("Permission continuation recovery", () => {
           }),
         )
         try {
-          expect(await PermissionAuthority.resumeApprovedContinuations()).toBe(0)
+          await PermissionAuthority.resumeApprovedContinuations()
           expect(ledgerEvents("stale")).toMatchObject([
             { reason: expect.stringContaining("collector reducer output changed") },
           ])
-          expect(await PermissionAuthority.resumeApprovedContinuations()).toBe(0)
-          expect(resume.mock.calls).toHaveLength(1)
+          const settled = await PermissionAuthority.history()
+          await PermissionAuthority.resumeApprovedContinuations()
+          expect(await PermissionAuthority.history()).toEqual(settled)
         } finally {
           resume.mockRestore()
         }
@@ -172,15 +173,17 @@ describe("Permission continuation recovery", () => {
           },
         })
 
-        // Recovery converges instead of throwing, and reports nothing resumed.
-        expect(await PermissionAuthority.resumeApprovedContinuations()).toBe(0)
+        // The full ledger records the deterministic retirement and remains stable on replay.
+        await PermissionAuthority.resumeApprovedContinuations()
         expect(ledgerEvents("stale")).toMatchObject([
           { reason: expect.stringContaining("already terminal") },
         ])
 
-        // The retired request is never rescanned by a later bootstrap.
-        expect(await PermissionAuthority.resumeApprovedContinuations()).toBe(0)
-        expect(ledgerEvents("stale")).toHaveLength(1)
+        const settled = await PermissionAuthority.history()
+        await PermissionAuthority.resumeApprovedContinuations()
+        expect(await PermissionAuthority.history()).toEqual(settled)
+        expect((await MessageStore.get({ sessionID: invocation.session.id, messageID: invocation.assistant.id })).parts)
+          .toMatchObject([{ id: invocation.partID, state: { status: "error", failure: TERMINAL_FAILURE } }])
       },
     })
   })
@@ -253,17 +256,27 @@ describe("Permission continuation recovery", () => {
   test("scans only the continuations owned by the admitted project", async () => {
     await using owner = await memoryProject()
     await using bystander = await memoryProject()
-    await Instance.provide({
+    const original = await Instance.provide({
       directory: owner.path,
       fn: async () => {
-        await approvedInvocation({ directory: owner.path, callID: "owned-continuation" })
+        const invocation = await approvedInvocation({ directory: owner.path, callID: "owned-continuation" })
+        return { invocation, ledger: await PermissionAuthority.history() }
       },
     })
     await Instance.provide({
       directory: bystander.path,
       fn: async () => {
-        expect(await PermissionAuthority.resumeApprovedContinuations()).toBe(0)
-        expect(ledgerEvents("stale")).toHaveLength(0)
+        const local = await approvedInvocation({ directory: bystander.path, callID: "local-continuation" })
+        using replay = spyOn(SessionLoop, "resumePermissionContinuation").mockImplementation(request =>
+          PermissionAuthority.resumeExactContinuation(request, () => settleFixtureInvocation(request)))
+        expect(await PermissionAuthority.resumeApprovedContinuations()).toBe(1)
+        expect((await PermissionAuthority.history()).map(row => row.event_type)).toEqual([
+          "stale", "execution_succeeded", "execution_started", "allowed_once", "requested",
+        ])
+        expect((await MessageStore.get({ sessionID: local.session.id, messageID: local.assistant.id })).info.time.completed)
+          .toBeNumber()
+        const originalProject = original.ledger.find(row => row.event_type === "requested")!.project_id!
+        expect(await PermissionAuthority.history(originalProject)).toEqual(original.ledger)
       },
     })
   })
@@ -327,10 +340,9 @@ describe("Permission continuation recovery", () => {
         try {
           SessionPromptState.bindMessageOwner(invocation.session.id, invocation.assistant.id, owner)
 
-          // The live Turn is the sole writer: recovery neither settles the open
-          // assistant Message nor retires the request.
-          expect(await PermissionAuthority.resumeApprovedContinuations()).toBe(0)
-          expect(ledgerEvents("stale")).toHaveLength(0)
+          const activeLedger = await PermissionAuthority.history()
+          await PermissionAuthority.resumeApprovedContinuations()
+          expect(await PermissionAuthority.history()).toEqual(activeLedger)
           const held = await MessageStore.get({
             sessionID: invocation.session.id,
             messageID: invocation.assistant.id,
@@ -376,10 +388,9 @@ describe("Permission continuation recovery", () => {
           { reason: expect.stringContaining("Full-access inline execution") },
         ])
 
-        // The retired request is invisible to recovery, so a project open never
-        // replays a live session's own inline Tool calls back onto it.
-        expect(await PermissionAuthority.resumeApprovedContinuations()).toBe(0)
-        expect(ledgerEvents("stale")).toHaveLength(1)
+        const concluded = await PermissionAuthority.history()
+        await PermissionAuthority.resumeApprovedContinuations()
+        expect(await PermissionAuthority.history()).toEqual(concluded)
       },
     })
   })

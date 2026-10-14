@@ -62,13 +62,23 @@ one writer transaction. Pending Tools keep the Message open. Park/handoff contro
 from the whole Message; abandoned Provider activity retains its actual interruption. Successful
 requests remain discoverable until Message completion is durable, then the canonical retirement
 writer closes them. A process cut after the Tool result therefore still has a startup entry.
+Normal assistant completion, silent writes, bundles, atomic imports and identical immutable
+completion replay enter that same retirement writer from the canonical Message-row writer.
+It reads the exact persisted Message and Session Project, not the ambient Project. Retirement
+and Message publication belong to the original synchronous transaction; a retirement write
+error rolls back this Message write and its outbox while preserving any earlier committed
+Tool result. A compound Part or completion-callback failure also rolls back the outer write.
+Recovery retains the same writer for historical completed Messages. Retirement failures are
+propagated; if an original stale-continuation or superseded-activation error also occurs,
+an AggregateError retains both causes. Per-request recovery remains isolated and reports
+retirement only from the actual ledger, with an explicitly unknown diagnostic read on failure.
 Mission interruption uses its existing process-recovery owner, frontier and wake protocol before
 retiring the original Tool request; generic Prompt acquisition cannot consume Mission's dead-owner
 evidence. This adds no permission queue, schema migration or second Mission recovery protocol.
 
 ## Transport contract
 
-The Overlay, Application Client Protocol (ACP), command-line interface, channel runtime, protocol mirror, server routes, and generated Software Development Kit share the same request identity and decisions. Presentation adapters may translate labels, but they cannot invent approval scopes or settle outside the canonical reply/revoke APIs.
+The Overlay, Agent Client Protocol (ACP), command-line interface, channel runtime, protocol mirror, server routes, and generated Software Development Kit share the same request identity and decisions. Presentation adapters may translate labels, but they cannot invent approval scopes or settle outside the canonical reply/revoke APIs.
 
 Standalone Session hydration and ordered connection snapshots carry mandatory
 `pendingPermissions` arrays from that ledger. Exact durable Project and Session lineage admit
@@ -92,4 +102,7 @@ denial-only turns are not automatically rewritten or repaired by startup recover
 - Large Language Model telemetry may record operational metadata; prompt, message, response, and Tool content capture remains disabled without a separate opt-in contract.
 - OAuth diagnostics may record server/host/correlation metadata but never authorization URLs, state, code, token values, or pending-state lists.
 - Public unknown HTTP errors use a generic body and a request identifier; full diagnostics remain server-side.
+- A no-waiter permission reply commits its real decision and authored outbox before awaiting
+  continuation recovery. A subsequent retirement failure follows that public error contract;
+  it does not revoke or roll back the already committed operator decision.
 - Query metric evaluators remain typed named projections rather than arbitrary Structured Query Language (SQL).
