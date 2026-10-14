@@ -1,0 +1,42 @@
+{
+  "capturedAt": "2026-10-14T00:44:51.021Z",
+  "commit": "ba5f55cb3647385db64bc77a93260619e2ef3fb5",
+  "originalCommitExec": {
+    "id": 27474,
+    "exit": 0,
+    "joinChunk": "5f4251"
+  },
+  "originalPushExec": {
+    "id": 37802,
+    "exit": 0,
+    "joinChunk": "e9085a"
+  },
+  "remoteVerification": {
+    "chunk": "64b6de",
+    "fetchExit": 0,
+    "ancestorExit": 0
+  },
+  "files": [
+    {
+      "source": "delivery-commit.json",
+      "target": "delivery-commit.json.gz",
+      "originalBytes": 175
+    },
+    {
+      "source": "delivery-push01.log",
+      "target": "delivery-push01.log.gz",
+      "originalBytes": 3690
+    },
+    {
+      "source": "delivery-push01.exit",
+      "target": "delivery-push01.exit.gz",
+      "originalBytes": 3
+    },
+    {
+      "source": "delivery-push01-pending.txt",
+      "target": "delivery-push01-pending.txt.gz",
+      "originalBytes": 42
+    }
+  ],
+  "integrity": "Exact gzip read-back of original outputs; no mutable source hash gate"
+}

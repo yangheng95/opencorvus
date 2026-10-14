@@ -4,6 +4,7 @@
 
 - [本批交付与原证据](delivery01/README.md)：453个原证据文件及19原JPEG；正式前端检查与六人工页面闭合，四Task前置/目标红和双owner新Permission异常分别保存。
 - [交付文档检查](checks01/manifest.json)：原文档与架构索引检查stdout/stderr/exit，两个实际退出0；不替代真实页面。
+- [正常提交与推送](delivery/manifest.json)：ba5f55cb3原范围提交、完整单提交pending、正常push全部checker通过，远端祖先确认。
 
 - [恢复权威分析](analysis.md.gz)
 - [UI根因与视觉边界](ui-analysis.md.gz)

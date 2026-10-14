@@ -6,7 +6,7 @@
 
 404 范围提交 e70e3dc55cc7c9627b81fc3f6b12274394240f64 已正常推送，原push02 join0且fresh fetch确认远端祖先。真实 Git 基线/read/页面 Stop 取消、Main Dialog/inline/SideChat 同 Request 草稿重连、普通 Session 崩溃后的完整当前可回答集合、真实 Sol Question 自然准确回答均有原证据。Task source-only red03、ASCII310 原 Windows native cwd267、Task 正常业务完成/result checkpoint 与 Work/Mission 独立页面 Question 尚未满足，不能继承成通过。404 所有 Root 页面/服务/模型与 Agent 正式 checker 均已关闭，不能沿用其已结束的期限重新起任务。
 
-405当前交付范围仅A/C八个前端/纯transport测试文件、单一panel reactivity合同与唯一CHANGELOG未发布双语条目。38tests/97assert、types/private build、六真实人工页及19原JPEG已闭合；delivery01 capture453原证据、docs345ops/26groups0、architecture19docs0。Task red04真实普通Tool中断仍Question pending，live01真实B接管活A且Permission outcome_slot冲突，均未改backend或冒已修复；短Connecting窗口和C infrastructure历史视觉未满足。范围commit/push尚待Root本轮完成，原精确命令/owner/失败与收尾在下文；下一406完整authority分析必须先读再落Recall，不重跑或覆盖405scope。
+405当前交付范围仅A/C八个前端/纯transport测试文件、单一panel reactivity合同与唯一CHANGELOG未发布双语条目。38tests/97assert、types/private build、六真实人工页及19原JPEG已闭合；delivery01 capture453原证据、docs345ops/26groups0、architecture19docs0。Task red04真实普通Tool中断仍Question pending，live01真实B接管活A且Permission outcome_slot冲突，均未改backend或冒已修复；短Connecting窗口和C infrastructure历史视觉未满足。范围提交ba5f55cb3647385db64bc77a93260619e2ef3fb5及正常push已完成，原精确命令/owner/失败与收尾在下文；下一406完整authority分析必须先读再落Recall，不重跑或覆盖405scope。
 
 已读：404 Recall/原红与交接、task-question-recovery-authority-review、实际 Question 六个生产入口、Task root activation/dispatch 与 SessionLoop interruption、Mission process recovery、host/bootstrap、Question 唯一原发布事实和 pending waiter；当前 panel reactivity、Task control/runtime directory。全仓只读 callers 与 source-excerpts 由功能 agent 冻结到 .tmp-task-question-recovery-405；Root需复核完整反馈才批准生产。UI agent 阅读404五原JPEG及当前 SideChatPanel/service、interaction/transcript/CardParts，未运行页面或 UI 自动化。
 
@@ -125,3 +125,7 @@ Root当前405交付仅A/C前端源及原调查，不改backend、削弱唯一约
 Root全文复核live01-summary与181个精确backend公开证据路径。原live01未读effect lease行，实际lease ID/owner未知，不从当前代码反填。archive-delivery01/allowlist全源、README、closure及排除规则也已复核；批准首次capture到本artifact的全新delivery01，453个原文件、19原JPEG、13,194,636原字节。已有计划四gzip及manifest不覆盖；runtime DB/auth/models/完整Provider请求/私有bundle/peer全source树排除，原scope/日志/失败完整。byte read-back只证明不可变capture保留身份，不作功能/sourcehash验收；原backend失败不能因closure或capture变通过。Root本六original exec均已实际join0，backend五scope全部原join，capture还逐一复核原page/product/relay/declared checks/cleanup。
 
 Root首次capture原exec chunk6fad58退出0，delivery01实际453+README/manifest=455文件，19原JPEG和全部gzip read-back精确。原frontend8源未再修改，因此不重复已经通过的38/97/type/build；docs原chunk1e30b8退出0（345ops/26groups），architecture原chunka02af5退出0（19current documents/链接全有效），原stdout/stderr/exit保存在独立checks01。Rootfresh fetch确认peer四交付均已在origin/main、当前main=origin/main=fedd04743，未把未验证peer待推送集合混入405；提交后还须fresh fetch/merge与完整集合复核、正常hook push。
+
+## 范围提交与正常推送完成
+
+原commit exec27474实际join0，477个本任务路径提交ba5f55cb3647385db64bc77a93260619e2ef3fb5，父fedd04743；primary index精确reconcile，CHANGELOG仅补回本提交两个空行对齐HEAD，三混合README原peer排序/条目保留。原push exec37802实际join0；fresh fetch/merge up-to-date、完整pending仅ba5f55cb3，正常全部type/SDK/runtime/migration/routes/docs/owner/architecture/package/release/module/secret检查0，secret-scan0hits。原日志fedd04743..ba5f55cb3 main→main，随后fresh fetch与merge-base祖先检查0。没有本批生产未提交修改、遗留服务或模型，继续406；他人FileExplorer/directory/work-ledger/SDK与README变化不混入。提交和原push日志在artifact独立delivery保留，不回写不可变delivery01。

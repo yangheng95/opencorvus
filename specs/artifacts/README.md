@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [406 原执行者恢复与选项呈现](2026-10-14-execution-owner-recovery-406/README.md)：实施前原分析/源/全caller，P/U精确授权与未跑矩阵；不替405真实原证据。
+
 - [本地Provider自动标识](2026-10-14-provider-local-identity/README.md)：Root独立修前/修后、正向业务与真实桌面证据。
 
 - [SQLite 周期回写](2026-10-14-sqlite-checkpoint/README.md)：真实持久重读、并发读者、全回执和回写后健康观测。

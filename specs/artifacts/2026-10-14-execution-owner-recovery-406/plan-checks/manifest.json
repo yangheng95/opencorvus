@@ -1,0 +1,72 @@
+{
+  "capturedAt": "2026-10-14T01:04:54.901Z",
+  "results": [
+    {
+      "name": "plan-docs",
+      "exit": 1,
+      "chunk": "d53f22",
+      "cause": "Peer file.list declared UnknownError before its API document regeneration"
+    },
+    {
+      "name": "api-doc-sync",
+      "exit": 0,
+      "chunk": "08198a",
+      "scope": "Existing official generator; two generated rows match current peer route; no Route/SDK edit by Root"
+    },
+    {
+      "name": "plan-docs02",
+      "exit": 0,
+      "chunk": "08198a",
+      "operations": 345,
+      "groups": 26
+    }
+  ],
+  "files": [
+    {
+      "source": "plan-docs.stdout.log",
+      "target": "plan-docs.stdout.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": "plan-docs.stderr.log",
+      "target": "plan-docs.stderr.log.gz",
+      "originalBytes": 826
+    },
+    {
+      "source": "plan-docs.exit",
+      "target": "plan-docs.exit.gz",
+      "originalBytes": 3
+    },
+    {
+      "source": "api-doc-sync.stdout.log",
+      "target": "api-doc-sync.stdout.log.gz",
+      "originalBytes": 164
+    },
+    {
+      "source": "api-doc-sync.stderr.log",
+      "target": "api-doc-sync.stderr.log.gz",
+      "originalBytes": 62
+    },
+    {
+      "source": "api-doc-sync.exit",
+      "target": "api-doc-sync.exit.gz",
+      "originalBytes": 3
+    },
+    {
+      "source": "plan-docs02.stdout.log",
+      "target": "plan-docs02.stdout.log.gz",
+      "originalBytes": 35
+    },
+    {
+      "source": "plan-docs02.stderr.log",
+      "target": "plan-docs02.stderr.log.gz",
+      "originalBytes": 70
+    },
+    {
+      "source": "plan-docs02.exit",
+      "target": "plan-docs02.exit.gz",
+      "originalBytes": 3
+    }
+  ],
+  "integrity": "Exact original outputs, not source hash validation"
+}

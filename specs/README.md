@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [406 原执行者恢复与选项呈现](records/2026-10/2026-10-14-execution-owner-recovery-406.md)：Permission物理effect owner/CAS与Project隔离、Question后续权威、原选项语义布局，405正常交付后继续。
+
 - [本地Provider自动标识](records/2026-10/2026-10-14-provider-local-identity.md)：IP/localhost与端口派生、单一表单身份及真实保存调查。
 
 - [SQLite 周期回写](records/2026-10/2026-10-14-sqlite-checkpoint.md)：共享连接生命周期、真实回写页数与长历史复制全时段响应。

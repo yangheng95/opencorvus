@@ -1,0 +1,68 @@
+{
+  "capturedAt": "2026-10-14T00:54:04.316Z",
+  "phase": "Pre-implementation analysis and source/callers only; P/U implementation now separately approved",
+  "sourceBoundary": "Frozen reports at HEAD fedd04743, current authority ownership/option-source excerpts; no runtime DB/auth/models",
+  "files": [
+    {
+      "source": "scratch406-analysis.md",
+      "target": "scratch406-analysis.md.gz",
+      "originalBytes": 36206
+    },
+    {
+      "source": "source-excerpts.json",
+      "target": "source-excerpts.json.gz",
+      "originalBytes": 151487
+    },
+    {
+      "source": "callers-permission.txt",
+      "target": "callers-permission.txt.gz",
+      "originalBytes": 3014
+    },
+    {
+      "source": "callers-question.txt",
+      "target": "callers-question.txt.gz",
+      "originalBytes": 3723
+    },
+    {
+      "source": "history.txt",
+      "target": "history.txt.gz",
+      "originalBytes": 648
+    },
+    {
+      "source": "history-excerpts.jsonl",
+      "target": "history-excerpts.jsonl.gz",
+      "originalBytes": 9219
+    },
+    {
+      "source": "live01-causal-facts.json",
+      "target": "live01-causal-facts.json.gz",
+      "originalBytes": 41915
+    },
+    {
+      "source": "tests-current.txt",
+      "target": "tests-current.txt.gz",
+      "originalBytes": 1886
+    },
+    {
+      "source": "scratch406-ui-analysis.md",
+      "target": "scratch406-ui-analysis.md.gz",
+      "originalBytes": 19309
+    },
+    {
+      "source": "scratch406-ui-source-excerpts.json",
+      "target": "scratch406-ui-source-excerpts.json.gz",
+      "originalBytes": 124078
+    },
+    {
+      "source": "scratch406-ui-callers.json",
+      "target": "scratch406-ui-callers.json.gz",
+      "originalBytes": 14372
+    },
+    {
+      "source": "analyzed-source-working-diff.patch",
+      "target": "analyzed-source-working-diff.patch.gz",
+      "originalBytes": 0
+    }
+  ],
+  "integrity": "Immutable capture gzip read-back; no mutable source hash or functional gate"
+}

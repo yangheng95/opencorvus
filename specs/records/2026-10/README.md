@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [406 原执行者恢复与选项呈现](2026-10-14-execution-owner-recovery-406.md)：共享Permission死活owner与结果结算，Question恢复边界及三源UI语义布局。
+
 - [本地Provider自动标识](2026-10-14-provider-local-identity.md)：新表单的地址标识与端口碰撞根因/影响。
 
 - [SQLite 周期回写](2026-10-14-sqlite-checkpoint.md)：统一回写策略、关闭/重启/多进程合同与真实页面验收。
