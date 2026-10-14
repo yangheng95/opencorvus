@@ -1,0 +1,48 @@
+# Sources特殊空白路径辨识
+
+## Recall
+
+用户持续要求单agent自主迭代，优先Sources显示与成员Rendering体验，真实页面验证后范围提交推送；旧goal多agent文字已由人工要求覆盖。上一goal turn为progress：57735b87c和36dc0ec39已正常推送并fresh fetch确认，原取消生命周期及待机回执合同、23项/59断言和真实Sol Stop已交付。当前HEAD为36dc0ec39bd5b19e1aa9e2b00e1adbfc4b1da10d，仅原有.bun、packages/opencorvus/bun未跟踪，保留。只用当前开发agent，不创建产品成员、Task或新业务消息；复用自有412/423真实历史。已授权完整auth/models和gpt-6.1-sol流式预检，不记录凭据。本批不清库、不改schema、不发布、不建分支/worktree。
+
+## 已读资料、搜索与修改前分析
+
+已读427 Recall及原首NBSP/普通同名/尾NBSP文件保真证据、当前07-panel/07-panel-reactivity文件与Source身份合同、SourceParts全部标题/范围/详情/caption/Tooltip/复制/打开路径、相关messages.css、i18n目录与正式build/check脚本、file-workbench真实引用入口和shortRelativePath。全仓搜索Source路径展示、invisible/特殊空白/现有字符展示实现及调用，没有找到可复用的特殊空白提示primitive。renderer public-surface checker检查真实公开全局安全合同，i18n checker检查目录与占位符结构，不是UI文案/DOM断言；不新增或运行UI自动化测试。当前涉及的workspace-source-resolution测试属于Vite模块解析合同，不是组件渲染验收，本批无需运行。
+
+可观察历史：427实际分别打开首NBSP文件与无NBSP同名文件，编辑器内容不同；Source条目中两个filename视觉上几乎相同，复制和资源导航已经保留原身份。当前SourceParts原文件名未trim，CSS明确pre/pre-wrap，所以不是文件名丢失或打开错文件；普通空格式字形本身不足以帮助选择。这一可用性问题先在当前真实页面复验，不能只用旧图宣称当前缺陷。现有Tooltip有原路径与原excerpt，可辅助核对，但特殊空白仍不可直观看出；是否需要额外提示及密度以实际截图决定。
+
+此前疑问的列范围已核对Message.SourceFileRange定义：startColumn只允许单行，协议没有endColumn；当前badge单行列提示符合公开合同，排除所谓多行列丢失，不改schema或凭空扩展range字段。URL显示已有非ASCII解码及控制/分隔/默认忽略字符保护，保持独立语义，不把文件路径处理套到URL。
+
+根因与影响：原始Source数据、sourceIdentity和file-workbench资源键正确；缺少的是原文件名包含不易辨识空白时的展示说明。唯一SourceParts共用于主对话、Side Chat及成员dock，局部私有presentation即可覆盖同一组件，不另建Source渲染器。原source.path/title/filename/range、点击、复制、key、阅读位置和Disclosure状态均不得改写；尤其不能再把文件身份当自然语言trim。附件display name与其内部blob path有不同权威，任何提示都只能描述实际呈现的名字/路径，不泄露或冒充存储路径。用户/模型原文与技术标识保持。
+
+本批是纯UI展示。不存在当前调度/队列/唤醒/终态异常证据，不改执行机制、Provider、权限或数据持久化。风险是错误识别普通文件名、提示挤压行号/长filename、翻译缺失、附件显示名与path混淆，或为了展示重用格式化后的字符串开文件。需通过真实正常/特殊文件Source点击、精确编辑器内容、两语言与当前桌面布局逐项核对。若无法取得实际特殊Source页面或原数据，应保留未知，不能注入假Source/消息或以静态检查冒充。
+
+## 实施前方案
+
+1. 复用成熟413 NativeService wrapper，18583/ui为新独立before scope，600秒硬期限/180秒无活动/最多12条累计流式预检；完整auth/models预检，复读原423两条真实Source并截图人工确认。只读原Source/路径/行号/原字节以建立真实选择对象；不新增模型业务或成员。自有页面关闭后公开shutdown、原句柄join与物理/配对退休。
+2. 视觉证实后补齐明确决定，再仅修改唯一SourceParts展示及必要样式、两语言目录。优先紧凑中性提示与原Tooltip说明，指出特殊空白的实际字符身份/位置；普通ASCII文件名及内部普通空格保持原密度，原名字仍显示。提示只能是presentation，不作为文件目标、复制载荷、Source key或新的状态源。不用关键字匹配路径、改名、删除文件或双源validator。
+3. 正式前端build（Node Vite，构建运行目录隔离）及类型、当前目录/安全surface检查；新18585/ui加载该实际新bundle，复读同一Source，点击特殊与普通文件核对不同原正文、原L1高亮，切换中文/英文、Tooltip及普通README多行Source。默认桌面viewport；根据原图调整，再重新截图确认。无UI自动化、fixture消息或截图断言。
+4. 物理/output/request与配对退休各自有回执；同步07-panel公开展示合同与三索引、当前docs/architecture检查，必要日志/前后原图归档，不提交凭据/数据库。审查完整待提交范围，commit后fresh fetch/merge、完整pending审查和正常push。持续goal保持active，不宣称全部成员流中Rendering场景已完成。
+
+## 当前真实复现与实施决定
+
+before原69832的18583服务完成完整配对与真实Sol预检。人工打开原423主会话，01含侧栏hover遮挡，不能单独当完整比较；02实际点击第一条Source后编辑器显示IDENTITY_LEADING_NBSP_423；关闭dock再实际回底，03清楚显示两条几乎相同的identity-423.md/L1标签，当前缺陷已复现且不是打开错文件。三图均人工查看。自有页关闭，原6db176公开shutdown200、原69832 joind2a184 exit0，原物理与复制配对退休回执保留，未操作非自有页2。
+
+原只读材料工具先有多余括号解析错误，再误把part当作拥有session_id字段，均在日志保留并修正工具；初次沿用了412的旧Session线索，实际查询Sources为空，保留material-wrong-session.json，不据此得出不存在Source。重读423原始事实后使用实际ses_-zURzTlJFzzacrP6FufN，经message表join得到原Source。原eccedf exit0，首NBSP和普通文件的原完整内容分别与423材料一致，实际Source title/path/range各自独立；也确认现有长路径单行列引用及尾NBSP引用可供复验。
+
+决定只增加原文件Source的紧凑中性“特殊空白”标记，在现有Tooltip及打开/复制的无障碍名称中提供带Unicode码点标记的可辨识路径，例如⟦U+00A0⟧identity-423.md。普通ASCII空格不改变密度；非普通空白以逐字符的既有语言空白分类识别，分类不向原数据写回任何trim结果。普通Source使用实际显示的项目相对路径；附件只使用原显示名，不暴露内部blob路径。原filename/path仍原样显示，特殊说明另有明确本地化前缀，不把注记冒充资源名。
+
+标记与L1等范围共用当前紧凑metadata样式；长filename仍按当前ellipsis保留行号。只有私有presentation helper、唯一SourceParts和两语言目录/现有CSS小幅改动，不增加库或公共协议。after真实点击须分别打开两份原内容，核对首尾标记、普通/长路径行号、两语言和原复制载荷，不能用源码字符串或DOM断言作为视觉验收。
+
+## 实际验收与边界
+
+正式前端build原88802 join312939 exit0，实际Node Vite构建1分13秒并通过renderer公开全局surface检查。两语言目录结构检查为2488个顶级key，CSS token检查为8801引用/268 token，根typecheck原59399 join8ebea4覆盖8包exit0。保留依赖的use-client及大chunk提示，不将其称为构建失败；未新增或运行UI自动化。build-ui复用唯一公共构建环境，运行根为repo/.scratch/package-runtime。
+
+after原94590的新18585/ui使用该构建后的独立bundle，完整auth/models预检实际gpt-6.1-sol流式请求成功。04是编辑器加载中首图，05才确认首NBSP源实际打开IDENTITY_LEADING_NBSP_423且L1高亮；06普通源打开IDENTITY_PLAIN_423，两个Source的真实文件仍独立。07的宽主栏显示紧凑Whitespace与普通条目的差异；08经复制按钮Shift+Tab实际键盘聚焦，Tooltip清楚显示⟦U+00A0⟧identity-423.md，文件名和L1仍可读。09通过实际设置页切换简体中文，显示“特殊空白”与“1行”；10尾NBSP源打开原IDENTITY_LITERAL_NBSP_422并保留1行3列；11长路径省略与2行11列并存，编辑器真实第2行高亮；12普通README的第2行内容正确，两独立Source分别保留2行/3行。所有图均按默认1280×720桌面实际呈现并人工查看，无viewport override。
+
+实际点击Copy后有Copied反馈，但浏览器会话clipboard.readText返回空串。本轮不具备原系统剪贴板载荷的独立读回证据，不能将该反馈称为完整复制验收；源码差异仅修改复制label，原text:location载荷仍由原路径/range生成。未执行虚拟粘贴或伪造剪贴板。reload实际进入项目首页，随后手动重选原会话可读原Sources；13被侧栏hover提示局部覆盖，不能单独作为完整Sources视觉证据，也不宣称自动恢复了选中会话。附件分支只经代码、类型和构建审查，本轮未生成真实附件做视觉验收。成员dock共用同一SourceParts，但本批没有新成员流，不能扩大为全部Rendering场景完成。
+
+自有after页面已关闭，仅保留非自有18543页2；公开shutdown原e7e678返回200，原94590 joinb7c45a退出0。Native回执physicalCompletion/outputDrainComplete/requestCleanupComplete均true，配对auth/models在原host/target的exact occurrence退场后分别retired。before/after完整预检实际请求数和终端均以归档provider-summary与physical回执为准，不把多次审计快照文件数当请求数。原Source事实复读通过：7个Source的原id/path/title/range与两个原文件完整内容与before相同；自有验收库保持v2。
+
+用户再次追问schema为何超过首个可迁移版本，已重读唯一registry与原提交：fdf86894e在10月14日03:32建立v1，720702139在16:55追加v2历史权限决定审计补齐。两个DDL文件实际逐字相同，v2迁移是grant_decision_indexed数据语义变更，空历史也登记完成v2。10月15日02:04的原始SQLite只读复核显示默认用户库仍user_version=1，大小1970176、mtime=2026-10-13T19:11:57.627Z，未加载产品开库/迁移代码；当前Source改动没有新增迁移。构建边界修复41d92f61f已交付，完整调查见既有build-database-boundary记录。不能由target version 2或schema applied推断真实用户库升级。
+
+最终文档检查原0ec3f0为345 operations/26 groups通过，架构索引原879e33为20份当前文档全部链接有效；git diff --check通过。归档原4570c2通过两个原文件完整内容与7个Source原身份前后比较，before/after分别2条真实流式预检，均gpt-6.1-sol/HTTP200/reader settled；两个服务均exit0并有物理/output/request收尾与配对退休回执。原件、准备错误、正式检查、必要事实和13张实际截图归档；不归档凭据、完整用户数据库或私有配置。未满足项保留为上述剪贴板独立读回与附件视觉范围，不包装为全部验收。当前补充只涉及Source展示和相关文档，没有schema、权限、Provider、调度或发布变化。

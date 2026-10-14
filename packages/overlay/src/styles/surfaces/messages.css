@@ -1158,7 +1158,8 @@ button.msg-source-chip .msg-source-chip__filename {
   white-space: pre;
 }
 
-.msg-source-chip__range {
+.msg-source-chip__range,
+.msg-source-chip__whitespace {
   flex: none;
   padding: var(--ui-gap-3xs);
   border-radius: var(--oc-radius-soft);

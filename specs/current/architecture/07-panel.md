@@ -1092,6 +1092,13 @@ validate filesystem names and write permissions. This filename contract does not
 change global project-directory selection or natural-language reference parsing.
 The file-source producer preserves nonblank authored title characters, including
 filename whitespace; an untitled source uses its exact filesystem basename.
+The shared Source presentation marks nonordinary filename/path whitespace with a
+compact localized metadata badge. Its existing tooltip and open/copy accessible
+names show each such character as an explicit Unicode code point and position;
+ordinary ASCII spaces retain their original presentation. The annotation uses
+the displayed project-relative path, or only the original attachment display
+name for attachments. Raw labels, resource keys, open targets, clipboard payloads
+and line/column ranges continue to use the original Source values.
 Host path delivery and external-editor commands preserve the same literal
 resource characters. Empty-input validation never supplies a trimmed replacement
 path. A located editor action launches its declared command-line program with

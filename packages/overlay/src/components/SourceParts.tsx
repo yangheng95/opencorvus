@@ -118,6 +118,24 @@ function sourceDetail(source: ConversationSourcePart): string {
   return source.filename || source.mediaType || ""
 }
 
+/** A display annotation; the original path remains the open/copy resource. */
+function sourceWhitespacePath(source: ConversationSourcePart): string {
+  if (source.type !== "source-file") return ""
+  const value =
+    source.origin === "attachment"
+      ? sourceFileTitle(source) || ""
+      : pathWithForwardSeparators(shortRelativePath(source.path || "", sourceDirectory()), source.path || sourceDirectory())
+  let annotated = false
+  const readable = [...value]
+    .map((character) => {
+      if (character === " " || character.trim() !== "") return character
+      annotated = true
+      return `⟦U+${character.codePointAt(0)!.toString(16).toUpperCase().padStart(4, "0")}⟧`
+    })
+    .join("")
+  return annotated ? readable : ""
+}
+
 function sourceFileCaption(source: ConversationSourcePart): { kind: "attachment" | "location" | "directory"; text: string } {
   if (source.origin === "attachment") return { kind: "attachment", text: t("chat.source_attachment") }
   const relative = shortRelativePath(source.path || "", sourceDirectory())
@@ -191,6 +209,9 @@ function SourceTooltipContent(props: { source: ConversationSourcePart }) {
       <Show when={sourceDetail(props.source) !== sourceLabel(props.source)}>
         <span>{sourceDetail(props.source)}</span>
       </Show>
+      <Show when={sourceWhitespacePath(props.source)}>
+        {(path) => <span>{t("chat.source_whitespace_details", { path: path() })}</span>}
+      </Show>
       <Show when={props.source.type === "source-file" && props.source.snippet}>
         {(snippet) => (
           <div class="msg-source-tooltip__preview">
@@ -220,6 +241,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
       : t("chat.source_lines", { start: range.startLine, end: range.endLine })
   }
   const detail = () => sourceDetail(props.source)
+  const whitespacePath = () => sourceWhitespacePath(props.source)
   const fileCaption = () => props.omitDirectoryCaption ? "" : sourceFileCaption(props.source).text
   const icon = () => sourceIcon(props.source)
   const location = () => {
@@ -265,7 +287,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
               pauseAutoScrollForReading(event.currentTarget)
               void openSourceFile(props.source)
             }}
-            aria-label={`${t("chat.source_open_file")}: ${detail()}`}
+            aria-label={`${t("chat.source_open_file")}: ${[detail(), whitespacePath() && t("chat.source_whitespace_details", { path: whitespacePath() })].filter(Boolean).join(" · ")}`}
           >
             <Show when={props.showIndex}>
               <span class="msg-source-chip__index">{props.index + 1}</span>
@@ -275,6 +297,9 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
               <span class="msg-source-chip__file-title">
                 <span class="msg-source-chip__label msg-source-chip__filename">{fileTitle()}</span>
                 <Show when={fileRange()}>{(range) => <span class="msg-source-chip__range">{range()}</span>}</Show>
+                <Show when={whitespacePath()}>
+                  <span class="msg-source-chip__whitespace" aria-hidden="true">{t("chat.source_whitespace_badge")}</span>
+                </Show>
               </span>
               <Show when={fileCaption()}>
                 <span class="msg-source-chip__detail">{fileCaption()}</span>
@@ -381,9 +406,12 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
   const clipboard = createClipboardCopy({
     text: location,
     label: () => t("chat.source_copy_location", {
-      source: props.source.type === "source-file" && props.source.origin !== "attachment"
-        ? sourceDetail(props.source)
-        : sourceLabel(props.source),
+      source: [
+        props.source.type === "source-file" && props.source.origin !== "attachment"
+          ? sourceDetail(props.source)
+          : sourceLabel(props.source),
+        sourceWhitespacePath(props.source) && t("chat.source_whitespace_details", { path: sourceWhitespacePath(props.source) }),
+      ].filter(Boolean).join(" · "),
     }),
     diagnosticID: "source-location",
   })

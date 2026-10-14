@@ -3439,3 +3439,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [Unicode空白文件身份](records/2026-10/2026-10-15-unicode-workspace-path.md)：修复真实Task源树对合法文件名的误拒绝。
 
 - [独立Prompt取消执行终态](records/2026-10/2026-10-15-orchestrator-cancellation-lifecycle.md)：原typed取消、执行事实一致性及待机回执保留。
+
+- [Sources路径辨识](records/2026-10/2026-10-15-source-path-readability.md)：原文件身份、特殊空白与真实阅读体验。
