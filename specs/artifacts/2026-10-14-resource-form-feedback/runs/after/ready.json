@@ -1,0 +1,62 @@
+{
+  "pid": 69828,
+  "started": 1791936351078,
+  "port": 18640,
+  "participantPort": 18641,
+  "occurrence": {
+    "pid": 69828,
+    "processInstanceID": "win32:639275331510172342",
+    "occurrenceID": "08662276-e39c-4cc7-91a1-da4dfa71bb10"
+  },
+  "uiDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-form-feedback-01a133\\ui-after",
+  "localSkillDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-form-feedback-01a133\\after\\resource-fixtures\\owned-feedback",
+  "missingSkillDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-form-feedback-01a133\\after\\resource-fixtures\\missing-owned-skill",
+  "projects": [
+    {
+      "label": "A",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-form-feedback-01a133\\after\\project-A"
+    },
+    {
+      "label": "B",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-form-feedback-01a133\\after\\project-B"
+    }
+  ],
+  "sessions": [
+    {
+      "label": "A",
+      "sessionID": "ses_-zUS1JdGDzz1NmdaRryI",
+      "projectID": "prj_hhorJ74NS5rPfnNqUMYG",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-form-feedback-01a133\\after\\project-A"
+    },
+    {
+      "label": "B",
+      "sessionID": "ses_-zUS1Jcv2zz7abOx5qGJ",
+      "projectID": "prj_htelzTDdNvVWfA0AHtKE",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-form-feedback-01a133\\after\\project-B"
+    }
+  ],
+  "catalogProviderCount": 91,
+  "scope": "Own generated fictional Auth only; complete public repository bootstrap catalog plus three owned entries; no real Provider credential copied",
+  "providers": [
+    {
+      "id": "owned-resource-a",
+      "models": [
+        "owned-resource-a-model"
+      ],
+      "apiKeyConfigured": true
+    },
+    {
+      "id": "owned-resource-b",
+      "models": [
+        "owned-resource-b-model",
+        "owned-resource-b-inherited"
+      ],
+      "apiKeyConfigured": true
+    },
+    {
+      "id": "owned-resource-zero",
+      "models": [],
+      "apiKeyConfigured": true
+    }
+  ]
+}

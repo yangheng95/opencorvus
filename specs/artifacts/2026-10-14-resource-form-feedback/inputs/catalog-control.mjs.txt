@@ -1,0 +1,11 @@
+import fs from 'node:fs'
+import assert from 'node:assert/strict'
+const root='.tmp-codex-resource-form-feedback-01a133/after',action=process.argv[2]
+assert.equal(['hold','release'].includes(action),true)
+const {participantPort}=JSON.parse(fs.readFileSync(root+'/ready.json','utf8'))
+const startedAt=Date.now(),response=await fetch(`http://127.0.0.1:${participantPort}/owned-catalog/${action}`,{method:'POST'}),body=await response.json()
+assert.equal(response.status,200);assert.equal(body.state,action==='hold'?'held':'released')
+const result={action,startedAt,receivedAt:Date.now(),status:response.status,body}
+let attempt=1;while(fs.existsSync(root+`/control-${action}-${attempt}.json`))attempt++
+fs.writeFileSync(root+`/control-${action}-${attempt}.json`,JSON.stringify(result,null,2)+'\n')
+console.log(JSON.stringify(result))

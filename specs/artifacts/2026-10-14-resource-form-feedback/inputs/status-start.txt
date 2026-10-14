@@ -1,0 +1,31 @@
+ M packages/opencorvus/src/bus/index.ts
+ M packages/opencorvus/src/file/index.ts
+ M packages/opencorvus/src/plugin/openai/codex.ts
+ M packages/opencorvus/src/storage/db.ts
+ M packages/opencorvus/src/util/file-entry.ts
+ M packages/opencorvus/test/bus-durable-outbox.test.ts
+ M packages/opencorvus/test/file-link-entry-contract.test.ts
+ M packages/opencorvus/test/storage/schema-contract.test.ts
+ M packages/overlay/src/components/CardParts.tsx
+ M packages/overlay/src/components/SideChatPanel.tsx
+ M packages/overlay/src/i18n/en-US.json
+ M packages/overlay/src/i18n/zh-CN.json
+ M packages/overlay/src/services/side-chat.ts
+ M packages/overlay/src/utils/interaction.ts
+ M packages/overlay/src/utils/transcript.ts
+ M packages/overlay/test/side-chat-transport.test.ts
+ M specs/README.md
+ M specs/artifacts/README.md
+ M specs/current/architecture/02-data.md
+ M specs/current/architecture/06-provider.md
+ M specs/records/2026-10/2026-10-13-compaction-stress.md
+ M specs/records/2026-10/2026-10-14-link-relocation-authority.md
+ M specs/records/2026-10/2026-10-14-task-question-recovery-405.md
+ M specs/records/2026-10/README.md
+?? .bun/
+?? packages/opencorvus/bun/
+?? packages/opencorvus/src/storage/checkpoint-worker.ts
+?? packages/opencorvus/src/util/file-access.ts
+?? packages/opencorvus/src/util/file-relocation.ts
+?? packages/opencorvus/test/openai-codex-model-projection.test.ts
+?? packages/opencorvus/test/storage/database-checkpoint.test.ts

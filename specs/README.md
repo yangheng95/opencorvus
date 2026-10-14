@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [资源表单反馈位置](records/2026-10/2026-10-14-resource-form-feedback.md)：唯一反馈、16张原图、真实在途收起/换项目与成功安装。
+
 - [本地Skill来源校验](records/2026-10/2026-10-14-skill-source-validation.md)：本地结构输入400合同、10项正向测试与6张真实原图。
 
 - [405 Question恢复与终态反馈](records/2026-10/2026-10-14-task-question-recovery-405.md)：普通Tool/A2A执行权威、真实入口红态及Side/超时展示调查。

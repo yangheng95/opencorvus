@@ -226,6 +226,8 @@ interface ResourceNotice {
   vars?: () => Record<string, string>
   tone: "success" | "error" | "warning"
   details?: string
+  origin: "panel" | "skill-install" | "mcp-add"
+  directory?: string
 }
 const MCP_STATUS_REFRESH_INTERVAL_MS = 1_000
 
@@ -292,15 +294,26 @@ function SharedResourceManagementPanel(props: {
   const [skillLoadIssues, setSkillLoadIssues] = createSignal<SkillLoadIssue[]>([])
 
   function setPanelNotice(key: string, options: Partial<Omit<ResourceNotice, "key">> = {}) {
-    setNotice({ key, vars: options.vars, tone: options.tone ?? "error", details: options.details })
+    setNotice({
+      key,
+      vars: options.vars,
+      tone: options.tone ?? "error",
+      details: options.details,
+      origin: options.origin ?? "panel",
+      directory: options.directory,
+    })
   }
 
-  function setPanelError(error: unknown, key = props.mode === "skill" ? "skill.action_failed" : "mcp.action_failed") {
+  function setPanelError(
+    error: unknown,
+    key = props.mode === "skill" ? "skill.action_failed" : "mcp.action_failed",
+    source: Pick<ResourceNotice, "origin" | "directory"> = { origin: "panel" },
+  ) {
     const requestID = error instanceof ApiError ? error.requestID : undefined
     const details = [errorDetail(error), requestID ? `x-opencorvus-request-id: ${requestID}` : ""]
       .filter(Boolean)
       .join("\n")
-    setPanelNotice(key, { details })
+    setPanelNotice(key, { ...source, details })
   }
 
   function currentDirectory(): string {
@@ -548,7 +561,7 @@ function SharedResourceManagementPanel(props: {
       await reloadCurrentPanel({ directory })
       notifyResourceChange()
     } catch (e) {
-      if (sourceMatchesDirectory(directory)) setPanelError(e)
+      if (sourceMatchesDirectory(directory)) setPanelError(e, undefined, { origin: "skill-install", directory })
     }
   }
 
@@ -696,8 +709,64 @@ function SharedResourceManagementPanel(props: {
       await reloadCurrentPanel({ directory })
       notifyResourceChange()
     } catch (e) {
-      if (sourceMatchesDirectory(directory)) setPanelError(e)
+      if (sourceMatchesDirectory(directory)) setPanelError(e, undefined, { origin: "mcp-add", directory })
     }
+  }
+
+  function noticeLocation(): ResourceNotice["origin"] {
+    const origin = notice()?.origin
+    if (origin === "skill-install" && showAddSkill()) return origin
+    if (origin === "mcp-add" && showAddMcp()) return origin
+    return "panel"
+  }
+
+  function renderNotice(location: ResourceNotice["origin"]) {
+    return (
+      <Show when={noticeLocation() === location ? notice() : undefined}>
+        {(current) => {
+          let element: HTMLDivElement | undefined
+          createEffect(() => {
+            const value = current()
+            const directory = value.directory
+            if (location === "panel" || !panelActive() || directory === undefined) return
+            queueMicrotask(() => {
+              if (
+                element?.isConnected &&
+                notice() === value &&
+                noticeLocation() === location &&
+                panelActive() &&
+                sourceMatchesDirectory(directory)
+              ) {
+                element.scrollIntoView({ block: "nearest" })
+              }
+            })
+          })
+          return (
+            <Feedback
+              ref={(value) => (element = value)}
+              tone={current().tone}
+              details={current().details}
+              data-ui={`${props.mode}-capability-notice`}
+              actions={
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="md"
+                  tone="neutral"
+                  title={t("common.dismiss")}
+                  aria-label={t("common.dismiss")}
+                  onClick={() => setNotice(undefined)}
+                >
+                  {t("common.dismiss")}
+                </Button>
+              }
+            >
+              {t(current().key, current().vars?.())}
+            </Feedback>
+          )
+        }}
+      </Show>
+    )
   }
 
   return (
@@ -706,30 +775,7 @@ function SharedResourceManagementPanel(props: {
         <div class="loading-hint">{t("common.loading")}</div>
       </Show>
 
-      <Show when={notice()}>
-        {(current) => (
-          <Feedback
-            tone={current().tone}
-            details={current().details}
-            data-ui={`${props.mode}-capability-notice`}
-            actions={
-              <Button
-                type="button"
-                variant="ghost"
-                size="md"
-                tone="neutral"
-                title={t("common.dismiss")}
-                aria-label={t("common.dismiss")}
-                onClick={() => setNotice(undefined)}
-              >
-                {t("common.dismiss")}
-              </Button>
-            }
-          >
-            {t(current().key, current().vars?.())}
-          </Feedback>
-        )}
-      </Show>
+      {renderNotice("panel")}
 
       <For each={skillLoadIssues()}>
         {(issue) => (
@@ -990,6 +1036,7 @@ function SharedResourceManagementPanel(props: {
                     optionData={(option) => ({ "data-value": option.value })}
                   />
                 </TextField.Root>
+                {renderNotice("skill-install")}
                 <div class="dialog-actions compact">
                   <Button
                     type="button"
@@ -1263,6 +1310,7 @@ function SharedResourceManagementPanel(props: {
                     />
                   </TextField.Root>
                 </Show>
+                {renderNotice("mcp-add")}
                 <div class="dialog-actions compact">
                   <Button type="button" variant="ghost" size="md" tone="neutral" onClick={() => setShowAddMcp(false)}>
                     {t("common.cancel")}

@@ -67,6 +67,14 @@ ApiError, its request ID in the existing disclosure. Dismissal clears only that
 notice. Source ownership checks and form values retain their existing contracts.
 This presentation does not reclassify backend errors or add resource operations.
 
+The same resource notice records its explicit form origin and actual request
+directory. Skill installation and MCP addition render that notice near the open
+form's submit controls; closing the form retains it in the panel slot. Only an
+inline notice can request a nearest-block reveal. Its one microtask rechecks the
+connected element, exact notice object, current slot, active panel and directory
+owner before scrolling. It never moves keyboard focus. Background refresh and
+ordinary panel notices retain panel placement without requesting a reveal.
+
 Child transcript keys include the same captured API authority beside the actual
 source, child Session and directory. The existing resource and refresh generation
 retire queued reads/live frames on key change; loader and ordered snapshot parser

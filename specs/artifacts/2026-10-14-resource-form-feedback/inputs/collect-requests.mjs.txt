@@ -1,0 +1,12 @@
+import fs from 'node:fs'
+import path from 'node:path'
+const root='.tmp-codex-resource-form-feedback-01a133/after'
+const rows=fs.readdirSync(root+'/runtime/log').filter(name=>name.endsWith('.log')).flatMap(name=>fs.readFileSync(path.join(root,'runtime/log',name),'utf8').split(/\r?\n/).filter(Boolean).map(line=>JSON.parse(line)))
+const requests=rows.filter(row=>row.data?.path==='/skill/install'&&row.data?.status==='completed').map(row=>{
+ const id=row.data.requestID,started=rows.find(candidate=>candidate.data?.requestID===id&&candidate.data?.status==='started'),failed=rows.find(candidate=>candidate.data?.requestID===id&&candidate.message==='request failed')
+ return {requestID:id,inputPath:failed?.data?.error?.data?.path,status:row.data.statusCode,duration:row.data.duration,startedAt:Date.parse(started.time),completedAt:Date.parse(row.time),reason:failed?.data?.error?.data?.reason}
+})
+const read=name=>JSON.parse(fs.readFileSync(root+'/'+name,'utf8'))
+const result={observedAt:new Date().toISOString(),requests,closedEvents:read('ui-close-second-events.json'),projectEvents:read('ui-project-switch-events.json'),holds:{firstDeadline:read('catalog-hold-first-deadline.json'),closeQualified:read('catalog-hold-second-qualified.json'),project:read('catalog-hold.json')}}
+fs.writeFileSync(root+'/request-timelines.json',JSON.stringify(result,null,2)+'\n')
+console.log(JSON.stringify(result))

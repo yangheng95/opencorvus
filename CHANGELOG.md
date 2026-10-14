@@ -13,6 +13,8 @@
 
 #### 修复
 
+- Skill 安装与 MCP 新增失败时，提示和原诊断显示在当前表单的提交区域，保留输入与原提交焦点；收起表单后仍可查看诊断，迟到响应遵循原项目归属。
+
 - 本地 Skill 来源的目录缺失、路径为文件或目录为空时返回明确的 400 错误，包含路径与原因；有效目录及目录链接继续按原配置与目录发现流程安装。
 
 - Skill 与 MCP 资源操作使用当前语言的简短摘要，原始诊断和可用的真实请求 ID 可展开查看；关闭反馈保留表单输入，目录警告沿同一反馈状态呈现。
@@ -105,6 +107,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Failed Skill installations and MCP additions show feedback and original diagnostics beside the current form controls, retaining input and submit focus. Closing the form retains its diagnostic, and late responses keep their original project ownership.
 
 - Local Skill sources report a typed 400 error with their path and reason for missing, non-directory or empty directories. Valid directories and directory links retain the existing installation and discovery flow.
 

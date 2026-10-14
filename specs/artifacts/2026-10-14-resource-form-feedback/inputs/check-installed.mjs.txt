@@ -1,0 +1,17 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+const root=path.resolve('.tmp-codex-resource-form-feedback-01a133/after'),ready=JSON.parse(fs.readFileSync(root+'/ready.json','utf8'))
+const get=async route=>{const response=await fetch('http://127.0.0.1:18640/'+route);assert.equal(response.status,200,'Actual public '+route+' response');return response.json()}
+const installed=await get('skill/installed?directory='+encodeURIComponent(path.join(root,'project')))
+assert.ok(Array.isArray(installed),'Installed Skill collection')
+const matches=installed.filter(item=>item.name==='owned-feedback')
+assert.equal(matches.length,1,'Exact accepted own Skill identity')
+const skill=matches[0]
+assert.equal(skill.source_type,'config_path','Actual source contract')
+assert.equal(path.resolve(skill.dir),path.resolve(ready.localSkillDirectory),'Actual installed directory identity')
+const config=await get('global/config'),paths=config.skills.paths
+assert.equal(path.resolve(paths.find(value=>path.resolve(value)===path.resolve(ready.localSkillDirectory))),path.resolve(ready.localSkillDirectory),'Accepted global path source identity')
+const receipt={at:new Date().toISOString(),accepted:{name:skill.name,source_type:skill.source_type,dir:skill.dir,source:skill.source,version:skill.version},globalPathSource:ready.localSkillDirectory,boundary:'Actual public read after Root UI install; no UI test or Provider inference'}
+fs.writeFileSync(root+'/installed-qualified.json',JSON.stringify(receipt,null,2)+'\n')
+console.log(JSON.stringify(receipt))

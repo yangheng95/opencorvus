@@ -1,0 +1,105 @@
+{
+  "observedAt": "2026-10-14T00:16:04.575Z",
+  "requests": [
+    {
+      "requestID": "cac521c9-fd74-425a-a343-37be38932fdd",
+      "inputPath": "D:/myhexin-local/opencorvus/.tmp-codex-resource-form-feedback-01a133/after/resource-fixtures/missing-owned-skill",
+      "status": 400,
+      "duration": 9,
+      "startedAt": 1791936405487,
+      "completedAt": 1791936405496,
+      "reason": "missing_directory"
+    },
+    {
+      "requestID": "effc1d74-85a7-414a-bdca-72e482cac03e",
+      "inputPath": "D:/myhexin-local/opencorvus/.tmp-codex-resource-form-feedback-01a133/after/resource-fixtures/missing-after-close",
+      "status": 400,
+      "duration": 6389,
+      "startedAt": 1791936462384,
+      "completedAt": 1791936468773,
+      "reason": "missing_directory"
+    },
+    {
+      "requestID": "71d25cbf-4050-47f7-bf84-d70caa96d2db",
+      "inputPath": "D:/myhexin-local/opencorvus/.tmp-codex-resource-form-feedback-01a133/after/resource-fixtures/missing-after-close-second",
+      "status": 400,
+      "duration": 4330,
+      "startedAt": 1791936551902,
+      "completedAt": 1791936556231,
+      "reason": "missing_directory"
+    },
+    {
+      "requestID": "fe7f9c41-fb70-4df9-91b9-896fc1c36c9e",
+      "inputPath": "D:/myhexin-local/opencorvus/.tmp-codex-resource-form-feedback-01a133/after/resource-fixtures/missing-owned-skill",
+      "status": 400,
+      "duration": 3,
+      "startedAt": 1791936711169,
+      "completedAt": 1791936711172,
+      "reason": "missing_directory"
+    },
+    {
+      "requestID": "9fb4da9a-157a-419e-9c16-4a6f9f994994",
+      "status": 200,
+      "duration": 1044,
+      "startedAt": 1791936735899,
+      "completedAt": 1791936736943
+    },
+    {
+      "requestID": "9a6c82bf-4054-4066-be37-4356cfc14d4d",
+      "inputPath": "D:/myhexin-local/opencorvus/.tmp-codex-resource-form-feedback-01a133/after/resource-fixtures/missing-after-project-switch",
+      "status": 400,
+      "duration": 2617,
+      "startedAt": 1791936907500,
+      "completedAt": 1791936910117,
+      "reason": "missing_directory"
+    }
+  ],
+  "closedEvents": [
+    {
+      "phase": "submit-start",
+      "at": 1791936551846
+    },
+    {
+      "phase": "cancel-start",
+      "at": 1791936552204
+    },
+    {
+      "phase": "form-closed",
+      "at": 1791936552478
+    }
+  ],
+  "projectEvents": [
+    {
+      "phase": "submit-start",
+      "at": 1791936907434
+    },
+    {
+      "phase": "settings-left",
+      "at": 1791936908080
+    },
+    {
+      "phase": "project-B-selected",
+      "at": 1791936908749
+    }
+  ],
+  "holds": {
+    "firstDeadline": {
+      "heldAt": 1791936458768,
+      "releasedAt": 1791936468768,
+      "reason": "deadline",
+      "limitMs": 10000
+    },
+    "closeQualified": {
+      "heldAt": 1791936546181,
+      "releasedAt": 1791936556182,
+      "reason": "deadline",
+      "limitMs": 10000
+    },
+    "project": {
+      "heldAt": 1791936899883,
+      "releasedAt": 1791936909886,
+      "reason": "deadline",
+      "limitMs": 10000
+    }
+  }
+}

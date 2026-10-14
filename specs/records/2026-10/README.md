@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [资源表单反馈位置](2026-10-14-resource-form-feedback.md)：Skill安装与MCP新增的当前viewport反馈调查。
+
 - [本地Skill来源校验](2026-10-14-skill-source-validation.md)：目录结构错误的400合同、有效来源与共享恢复隔离。
 
 - [405 Question恢复与终态反馈](2026-10-14-task-question-recovery-405.md)：原Asked发现、physical owner与真实中断，先调查实证再实施。

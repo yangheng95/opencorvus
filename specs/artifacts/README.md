@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [资源表单反馈位置](2026-10-14-resource-form-feedback/README.md)：原始提交区域、位置修复与人工视觉复核。
+
 - [本地Skill来源校验](2026-10-14-skill-source-validation/README.md)：Root独立生产入口、真实目录输入与桌面原图记录。
 
 - [405 恢复权威与终态反馈](2026-10-14-task-question-recovery-405/README.md)：实施前只读源证据及404原图边界，尚未405验收。
