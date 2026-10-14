@@ -1,18 +1,24 @@
 import { batch, createSignal } from "solid-js"
-import type { FileContent as SdkFileContent, SourceFileRange } from "@opencorvus-ai/sdk"
+import type {
+  FileContent as SdkFileContent,
+  FileNode as SdkFileNode,
+  FileListingNode as SdkFileListingNode,
+  SourceFileRange,
+} from "@opencorvus-ai/sdk"
 import { uint8ToBase64 } from "@opencorvus-ai/transport-protocol"
-import { apiJson, assertApiAuthorityCurrent, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "./api"
+import {
+  apiJson,
+  assertApiAuthorityCurrent,
+  captureApiAuthority,
+  isApiAuthorityCurrent,
+  type ApiAuthority,
+} from "./api"
 import { projectScopedPath } from "./project-directory"
 import { isAbsoluteServerPath, normalizeProjectFilePath, pathWithForwardSeparators } from "../utils/server-path"
 import { relativePathFrom } from "../utils/tool"
 
-export interface FileNode {
-  name: string
-  path: string
-  absolute: string
-  type: "file" | "directory"
-  ignored: boolean
-}
+export type FileNode = SdkFileNode
+export type FileListingNode = SdkFileListingNode
 
 export type FileContent = SdkFileContent
 
@@ -163,9 +169,10 @@ function normalizeFileEditorRange(range?: SourceFileRange): SourceFileRange | un
   ) {
     throw new Error("openFileEditor: range must be a positive inclusive line range")
   }
-  if (range.startColumn !== undefined && (
-    !Number.isSafeInteger(range.startColumn) || range.startColumn < 1 || range.startLine !== range.endLine
-  )) {
+  if (
+    range.startColumn !== undefined &&
+    (!Number.isSafeInteger(range.startColumn) || range.startColumn < 1 || range.startLine !== range.endLine)
+  ) {
     throw new Error("openFileEditor: startColumn must be a positive safe integer within a single-line range")
   }
   return {
@@ -175,11 +182,7 @@ function normalizeFileEditorRange(range?: SourceFileRange): SourceFileRange | un
   }
 }
 
-function normalizeFileEditorTarget(
-  path: string,
-  scope: FileOperationScope,
-  range?: SourceFileRange,
-): FileEditorTarget {
+function normalizeFileEditorTarget(path: string, scope: FileOperationScope, range?: SourceFileRange): FileEditorTarget {
   const next = String(path || "")
   const directory = scope.directory.trim()
   if (!next || !directory) throw new Error("openFileEditor: path and directory are required")
@@ -259,7 +262,8 @@ async function prepareFileEditorTarget(
     !sameFileEditorResource(current, selectedFileTarget()) ||
     (owner && revision !== owner.getRevision()) ||
     (boundary && !boundary.isCurrent())
-  ) return { status: "superseded" }
+  )
+    return { status: "superseded" }
   if (owner?.isBusy()) return { status: "busy" }
   let held = true
   setFileEditorReserved(true)
@@ -271,10 +275,14 @@ async function prepareFileEditorTarget(
   return {
     status: "ready",
     handle: {
-      isCurrent: () => held && generation === fileEditorNavigationGeneration &&
+      isCurrent: () =>
+        held &&
+        generation === fileEditorNavigationGeneration &&
         sameFileEditorResource(current, selectedFileTarget()) &&
-        fileEditorOwner() === owner && (!owner || owner.getRevision() === revision) &&
-        isApiAuthorityCurrent(authority) && (!boundary || boundary.isCurrent()),
+        fileEditorOwner() === owner &&
+        (!owner || owner.getRevision() === revision) &&
+        isApiAuthorityCurrent(authority) &&
+        (!boundary || boundary.isCurrent()),
       commit: () => {
         if (!held) return
         batch(() => {
@@ -282,7 +290,11 @@ async function prepareFileEditorTarget(
           if (sameFileEditorTarget(current, next)) {
             if (next) setFileEditorRevealRevision((value) => value + 1)
           } else commitFileEditorTarget(next)
-          try { boundary?.commit() } finally { release() }
+          try {
+            boundary?.commit()
+          } finally {
+            release()
+          }
         })
       },
       release,
@@ -300,7 +312,10 @@ async function requestFileEditorTarget(
   boundary?: FileEditorCommitBoundary,
 ): Promise<boolean> {
   const result = await prepareFileEditorTarget(
-    () => target, !sameFileEditorResource(selectedFileTarget(), target), authority, boundary,
+    () => target,
+    !sameFileEditorResource(selectedFileTarget(), target),
+    authority,
+    boundary,
   )
   if (result.status !== "ready") return false
   try {
@@ -366,9 +381,7 @@ async function admitFileMutation(
 }
 
 export function shortWorkbenchPath(path: string, directory: string): string {
-  const parts = pathWithForwardSeparators(path, directory)
-    .split("/")
-    .filter(Boolean)
+  const parts = pathWithForwardSeparators(path, directory).split("/").filter(Boolean)
   if (parts.length <= 2) return path
   return parts.slice(-2).join("/")
 }
@@ -388,9 +401,9 @@ function fileQueryPath(path: string, params: Record<string, string>, scope: File
   return `${path}?${query.toString()}`
 }
 
-export async function loadFileDirectory(path: string, scope: FileOperationScope): Promise<FileNode[]> {
+export async function loadFileDirectory(path: string, scope: FileOperationScope): Promise<FileListingNode[]> {
   const authority = scope.authority ?? captureApiAuthority()
-  return (await apiJson(fileQueryPath("file", { path }, scope), { authority })) as FileNode[]
+  return (await apiJson(fileQueryPath("file", { path }, scope), { authority })) as FileListingNode[]
 }
 
 export async function uploadDroppedFiles(
@@ -432,10 +445,20 @@ export async function moveFileItem(path: string, newPath: string, scope: FileOpe
   assertApiAuthorityCurrent(authority)
   const target = selectedFileTarget()
   let result: FileMoveResult
-  const admission = await admitFileMutation(path, scope, () => {
-    const suffix = descendantSuffix(target!.path, result.previousPath, scope.directory)
-    return { ...target!, path: suffix ? joinWorkbenchPath(result.path, suffix, scope.directory) : normalizeProjectFilePath(result.path, scope.directory) }
-  }, authority)
+  const admission = await admitFileMutation(
+    path,
+    scope,
+    () => {
+      const suffix = descendantSuffix(target!.path, result.previousPath, scope.directory)
+      return {
+        ...target!,
+        path: suffix
+          ? joinWorkbenchPath(result.path, suffix, scope.directory)
+          : normalizeProjectFilePath(result.path, scope.directory),
+      }
+    },
+    authority,
+  )
   try {
     if (!admission) assertFileEditorAvailable()
     result = (await apiJson(projectScopedPath("file/item", scope.directory), {
@@ -447,7 +470,9 @@ export async function moveFileItem(path: string, newPath: string, scope: FileOpe
     admission?.commit()
     bumpFileWorkbenchRevision()
     return result
-  } finally { admission?.release() }
+  } finally {
+    admission?.release()
+  }
 }
 
 export async function copyFileItem(path: string, newPath: string, scope: FileOperationScope): Promise<FileCopyResult> {
@@ -477,5 +502,7 @@ export async function deleteFileItem(path: string, scope: FileOperationScope): P
     admission?.commit()
     bumpFileWorkbenchRevision()
     return result
-  } finally { admission?.release() }
+  } finally {
+    admission?.release()
+  }
 }

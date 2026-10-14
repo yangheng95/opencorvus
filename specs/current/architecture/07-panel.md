@@ -510,11 +510,27 @@ move/delete semantics; an ancestor link does not make an entity root mutable.
 File Node type describes the entry: an actual directory entry is `directory`,
 and other entries, including terminal symbolic links and junctions, are `file`.
 Listing and mutation receipts use the same entry projection and ignore-directory
-hint. A successful entry receipt does not prove that its target content is
-readable. The existing editor owner commits a successful move's new path, then
-the content API determines its actual bytes, revision or original read error.
-This contract does not introduce directory-link navigation or physical alias
-tracking into the file workbench.
+hint. Listings extend this with the required `directoryTarget` boolean, observed
+from the current target under the same project/worktree path authority. Ordinary
+directories and admitted healthy directory links are expandable; files, known
+missing targets and out-of-scope links are not directory targets. Unknown target
+observation errors fail the listing. Listings sort directory targets before
+other entries. Mutation receipts retain only the five entry fields and do not
+perform another target query after publication.
+
+Explorer's current successful listing owns this target fact. Expansion, folder
+menus and destination actions use the link's original logical path. Selection
+retains entry identity and its listing/file origin rather than copying a target
+flag. File search remains a file-path result. A successful parent listing retires
+unavailable child directory namespaces across expanded paths, cached children,
+errors, loading and existing read tokens; it does not cover `..` siblings of an
+empty project-root key. Failed parent reads preserve the last successful facts.
+Completed read receipts keep their actual result when later parent observations
+retire a branch. Moves map every expanded path and collect its required reads
+alongside the source/destination parents, without deriving target facts from the
+mutation receipt. The existing editor owner commits a successful move's new
+logical path, then the content API determines bytes, revision or original error.
+This does not add physical alias tracking or promise atomic target stability.
 
 Move verifies that the destination parent's actual access chain remains
 independent of the source entry being retired before native publication. A

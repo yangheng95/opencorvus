@@ -14,9 +14,9 @@
 
 ## 已知现象、直接触发和历史边界
 
-### 本批当前实现与Root独立验收
+### Move guard阶段实现与Root独立验收（历史）
 
-当前已实施下文冻结的Move源entry退休依赖检查及目的entry冲突优先级；共享相对声明/future tree（未来树）、完整目录链接浏览、两条旧meta等待与Host代理探测超时仍未修复。下文“尚无产品修改”等记录描述各历史检查点，不能代替本段当前事实。本批只交付已取得真实证据的Move合同，不更新版本或发布。
+该历史阶段已实施下文冻结的Move源entry退休依赖检查及目的entry冲突优先级；当时共享相对声明/future tree（未来树）、完整目录链接浏览、两条旧meta等待与Host代理探测超时仍未修复。下文各检查点保留其当时事实；当前完整浏览资格见“继续轮次”，完整迁移资格见link-relocation-authority记录。不更新版本或发布。
 
 Root独立全文解析首轮和最终原日志，报告与逐请求清单见[guard/README.md](../../artifacts/2026-10-14-directory-target-navigation/guard/README.md)。首轮link30/root18共48 pass、628 expect、188个真实TCP请求，200×98/400×61/404×25/409×4；最终诊断修正后直接受影响link checker重新运行，30 pass、334 expect、130个真实请求，200×91/400×13/404×22/409×4，原退出均0。两轮分别94条原entry身份/readlink及42条完整正文记录；未打印的身份/通知断言不补造日志。小Hono（HTTP路由库）checker成功响应的requestID为null，是原输入事实；新完整服务的脚本请求保有真实requestID。最终source类型检查原0，第一轮root准入语义没有再变更，不借其0覆盖后续link修正。
 
@@ -65,6 +65,46 @@ Windows entry地址候选必须先完成同NOFOLLOW handle GetFinalPathNameByHan
 SDK正常build生成OpenAPI/客户端，GET file200声明ListingNode.array；触及route应准确声明已有500错误合同，不能顺手将generic list/read500改成mutation400。UI rows/chevron/aria-expanded/contextOpen/目录目标/选择后代退休消费目标事实，entry identity/recursive self-copy/root guards仍用entry kind；link移动后的required reads根据真实expanded意图收齐，不从缺target的mutation回执猜false。search仅string路径的行保其当前文件结果，不增加每行metadata请求、rg --follow或另一个index。
 
 如果真实alias mutation缺陷成立，先修现唯一File生产准入/relocation和可寻址回执根因，再兑现浏览能力；该修复必须完整覆盖move/copy、相对/绝对、源/目的alias、normal/broken/retarget、实体目录整树和两Project。Node原entry/ignore/readlink语义保持；不可通过host路由旁路、失败后猜磁盘成功、第二回执或关闭错误检查解决。没有模型工具选择/gate、LLM（Large Language Model，大语言模型）交互、调度、队列或Task/Mission/Session生命周期改动；已知Capsule/Native未验共享分支继续其原规格，不由本Files调查排除。
+
+## 继续轮次：迁移根因交付后的完整目录浏览
+
+### Recall 与当前权威状态
+
+用户原始持续迭代目标与“停止所有子agent，你自己验收”保持；Root单独实施与真实页面复核，不再委托。上一轮是实际进展：完整迁移权限修复318e80577已在fresh origin/main=fedd04743，2026-10-14T00:32:30.013Z精确远端读回、ancestor0、own scope clean、real index空；Root本轮正常push0、8包类型检查及当前文档/路由/架构/拓扑/密钥检查通过。80项841正向断言及六原JPEG属于该版本；首次错误测试注册、路径期望、错误ignore入口和漏必填shutdown参数的原失败均保留。原件、201个不可变捕获直接字节核验和完整交付回执在link-relocation-authority/implementation与Root scratch，后者本轮承接归档。Copy创建类型与完整未来树已有真实资格，本批仍须独立兑现浏览能力，不能拿迁移四次UI动作冒浏览通过。
+
+重新读取AGENTS、两个原Recall、现File Node/projector/list/canonicalPath权限、FileRoutes及SDK唯一生成事务、Explorer全部list入口/成功发布/token退休/row/context/selection/drop/create/copy/move刷新、file-workbench和07-panel。全仓搜索再次确认Node只有五字段，File.list生产入口仍为FileRoutes及Debug；GET file只声明Node数组，SDK同源，workbench手写了重复Node。目标组件无UI自动化测试；检索到的workbench transport/revision/refresh测试是纯服务合同，不运行渲染、DOM、文案或快照测试。旧Bun1.4 Windows原Dirent八link的directory/file=false、symbolicLink=true，以及修前两次健康目录链接点击GET content404/原图已经保全，本轮不重新制造修前服务。
+
+### 完成的根因与影响分析
+
+可观察现象、直接触发与数据流根因仍是本记录的原图/HTTP：正确entry.type=file被Explorer复用为目标目录事实；row、aria展开、目录菜单、upload/default create/drop目的地、后代selection退休和Move required读取共用该误解。旧entry修复只建立操作身份，迁移修复只建立发布权限，均不能自动提供可浏览目标事实。File read仍跟随真实target且按两个已有权限root检查；新目标事实不得改entry kind、ignored目录hint、Node mutation回执或原成功后的错误合同。
+
+受影响定义/调用：新增唯一File.ListingNode=Node.extend({directoryTarget:boolean})且字段required；list和GET file改ListingNode，Debug自然消费；SDK通过现build生成，workbench只用SDK Node/ListingNode类型，Explorer唯一children Map储存完整ListingNode。Node/create/move/copy回执继续五字段，search仍string文件行，不新增索引或跟随扫描。列表普通目录/file从真实Dirent得目标值；link先走唯一现isPathAllowed再实际stat，合法目录true，域外/普通文件/ENOENT或ENOTDIR false，unknown原throw。GET list准确声明原500 UnknownError；ELOOP保持当前真实错误，不把未知IO伪成false。目标仅是当前读取观察，不保证ACL可写或外部retarget原子性，不提供第二权限root。
+
+### 实施前冻结方案与验收
+
+Explorer rows与context只消费ListingNode.directoryTarget；selection保entry identity，不再复制target旗标。toolbar/default目标从当前成功父listing按原逻辑path查事实，search row显式继续文件操作。普通目录的self-copy/move约束仍用entry type；目录链接可以作为alias目的地，但Move退休源依赖和完整未来树仍由后端唯一规则验证。Move先记录并映射真实expanded意图（含子枝），清cache后把所有mapped expanded paths纳入同次required reads，不由缺target的mutation Node猜false，不靠poll补验收。
+
+成功父list同时退休它的真实直系child命名空间内missing/false目录枝：expanded/children/errors/loading与两个现token Map一致收束，子pending结果按原superseded/retired合同完成而不能重新发布；selection保还在的entry，退休不可达子选择与drag/drop。空root父的覆盖须排除first component=..的合法worktree兄弟键。失败父读取保last-successful事实。该共享读取生命周期改变覆盖初始/toggle/editor祖先/poll/Retry/Refresh/create/copy/move/delete、同scope及Project切换；不新增epoch、队列、影子target缓存或消息。真实自然late时序未取得则明确未资格，不用UI自动化模拟代替。
+
+聚焦正向checker继续正式run-tests.ts入口和现真实FileRoutes TCP helper：当前link49及root/ignore，新增healthy junction/absolute-relative dir link的ListingNode true及alias子全文、file/broken/outside false、同entry目标由dir变file/恢复的当前观察、真实loop的500错误、alias目录New/Upload/Copy/Move明确回执及磁盘/HTTP正文；所有mutation Node仍五字段。修正触及的旧listing精确期望至新required字段，不保旧协议fallback。仅这些受影响非UI功能，不全量bun test。
+
+真实desktop（桌面）只用Root自有18459 source CLI `/ui`、新directory-target-browse-after-01a133 namespace及成熟Native工具，UI资产必须从本批源码构建到独立bundle再绑定，不覆盖原QQQUstIX immutable pair，不单开Vite。准备总literal<=4096B、有限A/B Git roots和健康/broken/outside links；无Provider/Auth/models或LLM需求。Root亲自英文/中文展开收起、alias子Editor、context新建/文件上传、Copy/Move alias目的地、expanded link rename/move后子树和原编辑owner、两Project切换，至少目标绑定六原JPEG逐张查看及实际fullbytes/tag/身份读回。unknown IO、极限link深度和所有非Windows实机仍未资格。输入原900000ms execution cap/120000ms Target真实输出无活动，prepare60s/20s、register/before/after120s/30s；构建与分析在启动前完成，交互及读回后普通shutdown+原Native/parent/drains/request收齐，再归档/文档/Git。所有工具适配原件/完整diff先保存和全文审阅、纯syntax后首次执行；首错保全，观测过期只续原句柄。
+
+SDK生成、backend/overlay类型、独立UI build、当前docs:check和architecture同步不可替真实视觉。本记录/07-panel与artifact README同步，范围提交和fresh upstream merge/完整待推送审阅/正常push，不tag/Release/PR。当前尚无本批产品修改或新页面通过；这是实施前方案，不宣称浏览或跨平台已达成。
+
+### 当前实施与Root独立验收
+
+唯一ListingNode/current目录目标事实已经实现；Node mutation、entry ignore hint、原路径权限与完整迁移解释器均保留。Explorer所有目录行/菜单/默认目的地/后代选择按成功listing消费目标事实；search保文件来源。成功父列表退休枝的原expanded/cache/error/loading/token，Move收集全部映射展开路径required reads，Root已真实验证；没有target影子缓存、旧协议fallback、UI自动化或新模型调用。
+
+最终link56/523、root18/294、ignore13/79，共87项896正向断言通过。正式首三组runner1分别44/12、18/0、1/12，修后两组runner1为54/2及13/0，最后直接受影响link56/0。全部原失败保留：11项旧arrayContaining对五字段Node做精确匹配，新必需listing字段使断言过期；Windows目录标志的link指向file后真实content404，补明确404及直接target200合同；第二轮另两项整树旧列表映射也改当前正向字段合同。没有修改产品迎合旧期望。首overlay type2来自其它owner并行CommandPalette两个Button缺size/tone；其当前已修，最终overlay0，Root未修改/提交该文件。backend type0、SDK正规生成0、独立UI build0（原chunk提示保留）；API中英文文档同步。实际最终功能HTTP为link209+root58+ignore43=310，请求和完整响应逐条保留，不把首失败运行纳入通过计数。
+
+实际service18459 fixture=bb946765-afe9-4348-a6e6-bc770b78f28b、occurrence directory-target-browse-after-6f2cb34a-acf7-4754-8874-2094ce8e8566，Host8372/Target47876与原birth/900000ms deadline/120000ms无活动预算保存。UI由本批source独立构建main-7lThmX9V.js，正式后台/ui直接提供，旧immutable Bun/UI pair保持，没有独立Vite。Root自有IAB Tab5亲自展开junction→alias-j/marker Editor完整BROWSE DATA A；新建alias-j/new-folder与空new-note；真实picker上传alias-s/browser-upload.txt；Copy root-marker到alias-s/copied-root；Move source-tree/note到alias-j/moved-note；已展开source-s并打开其marker后rename为renamed-s，真实Editor路径和完整正文自然收敛；data→retired-data→data通过真实菜单往返，确认false枝退休及恢复后再次展开/手动收起重开。临时退休产生三个真实required read失败，原操作回执仍显示这些失败，成功父list只退休当前树而不重写已完成错误。中文菜单、提示、完整B正文与独立B文件树已查看；9张1280×720原JPEG逐张人工复核。
+
+Prepare/Register/Before/After四原Native client均0，注册4+只读4/13共21脚本HTTP（其余UI自然请求另计）。最终Native读回10原links在明确位置（source-s→renamed-s）的同entry/text、新发布五文件的完整bytes、原note同identity在data/moved-note、其余registered原正文/身份及B正文保持。Root关闭自有Tab5后一次精确参数普通shutdown，launcher/native均真实0，三joins/四writes及physical/output/request settled、原birth退休/port释放收齐。浏览器原warn/error空数组，完整service stderr诊断行0；不排除旧meta/proxy共享未知。没有用户窗口/进程或凭据/catalog操作。
+
+工具原件保留：首baseline复制将SDK OpenAPI写错为js/openapi而ENOENT；六已复制原件保，剩余两个从明确Git HEAD读取并标记来源，不伪造未捕获before diff。首工具构造器准确seam有两个匹配而失败，七prepared脚本已写、Native wrapper未改/无进程；更正唯一wrapper后再syntax和首次Prepare。第一个派生review错误按猜测payload keys筛root/ignore，accepted子集为空而完整原请求仍在；原review0保留，更正后按实际原log prefix分类，Root58/ignore43原请求收齐，final review0。所有纠错均不覆盖原输出或使用可变源码摘要验收。
+
+非Windows宿主、unknown target IO、所有并发迟到时序与external drag/drop仍未资格，最后外部retarget不承诺原子性；完整目标持续active。当前正常文档/架构、归档、范围提交与latest upstream/normal push收尾尚待回执，不声明整个持续目标完成。
 
 ## 第一阶段有限真实调查输入
 

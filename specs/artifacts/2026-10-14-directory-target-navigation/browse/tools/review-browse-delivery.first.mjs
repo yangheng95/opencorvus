@@ -1,0 +1,31 @@
+import fs from 'node:fs'
+import path from 'node:path'
+const scratch=path.resolve('.tmp-codex-directory-target-01a133'),tools=path.join(scratch,'directory-target-browse-after-tools'),evidence=path.join(tools,'directory-target-browse-after'),run='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/directory-target-browse-after-01a133'
+const json=file=>JSON.parse(fs.readFileSync(file,'utf8'))
+const report={reviewer:'Root only, no delegation',atUtc:new Date().toISOString(),checks:[],clients:[]}
+for(const name of ['browse-focused','browse-repaired-focused','browse-final-link']){
+ const log=fs.readFileSync(path.join(scratch,name+'-original.log'),'utf8'),exit=json(path.join(scratch,name+'.exit.json')),requests=[]
+ for(const line of log.split('\n'))for(const prefix of ['[link entry HTTP] ','[root mutation HTTP] ','[ignore coordinate HTTP] '])if(line.startsWith(prefix))requests.push(JSON.parse(line.slice(prefix.length)))
+ const counts=[...log.matchAll(/^ (\d+) (pass|fail|expect\(\) calls)/gm)].map(match=>({count:Number(match[1]),kind:match[2]}))
+ report.checks.push({name,exit,counts,requests,failures:log.split('\n').filter(line=>line.startsWith('(fail)')),httpCounts:Object.fromEntries([...new Set(requests.map(row=>row.result.status))].map(status=>[status,requests.filter(row=>row.result.status===status).length]))})
+}
+for(const name of ['browse-sdk-build','browse-format','browse-backend-typecheck','browse-overlay-typecheck','browse-overlay-typecheck-final','browse-ui-build','browse-docs-render'])report.checks.push({name,exit:json(path.join(scratch,name+'.exit.json')),completeOriginalLog:fs.readFileSync(path.join(scratch,name+'-original.log'),'utf8')})
+const final=report.checks.find(row=>row.name==='browse-final-link')
+if(final.exit.exitCode!==0||final.counts[0].count!==56||final.counts[1].count!==0||final.counts[2].count!==523)throw Error('Actual final link qualification differs')
+report.acceptedFunctional={link:final,root:{origin:'browse-focused original root group exit0; product source unchanged',pass:18,assertions:294,requests:report.checks[0].requests.filter(row=>row.method&&row.route&&row.scope&&!row.scope.projectID)},ignore:{origin:'browse-repaired-focused original ignore group exit0; product source unchanged',pass:13,assertions:79,requests:report.checks[1].requests.filter(row=>row.scope===undefined)}}
+for(const phase of ['prepare','register','before','after']){
+ const root=path.join(scratch,'browse-ui-native-'+phase+'-node'),joined=json(path.join(root,'parent-joined.json')),settled=json(path.join(root,'evidence/native-host-settled.json'))
+ if(joined.terminal.code!==0||settled.terminal.exitCode!==0||settled.originalJoins.some(row=>row.status!=='fulfilled')||settled.outputFacts.some(row=>row.status!=='fulfilled')||!settled.physicalCompletion||!settled.outputDrainComplete||!settled.requestCleanupComplete)throw Error('Native client incomplete: '+phase)
+ report.clients.push({phase,joined,settled})
+}
+report.before=json(path.join(evidence,'browse-before-complete.json'));report.after=json(path.join(evidence,'browse-after-complete.json'))
+if(report.before.requests.length!==4||report.after.requests.length!==13||report.after.links.length!==10||report.after.published.length!==5)throw Error('Actual readonly browse matrix incomplete')
+report.runtime={joined:json(path.join(evidence,'directory-target-browse-after-launcher-joined.json')),physical:json(path.join(evidence,'directory-target-browse-after-physical-terminal-and-credential-free.json')),native:json(path.join(run,'evidence/native-host-settled.json'))}
+const settled=report.runtime.native
+if(report.runtime.joined.exitCode!==0||settled.terminal.exitCode!==0||settled.originalJoins.some(row=>row.status!=='fulfilled')||settled.outputFacts.some(row=>row.status!=='fulfilled')||!settled.physicalCompletion||!settled.outputDrainComplete||!settled.requestCleanupComplete)throw Error('UI service settlement incomplete')
+const stderr=fs.readFileSync(path.join(run,'stderr.log'),'utf8');report.runtime.originalStderrBytes=Buffer.byteLength(stderr);report.runtime.diagnosticRows=stderr.split('\n').filter(row=>/\b(ERROR|WARN|timeout|Timeout)\b/.test(row))
+report.browserLogs=json(path.join(tools,'screenshots/browser-original-warning-errors.json'))
+report.manualVisualReview={reviewer:'Root personally performed the actual page actions and viewed every native JPEG',files:fs.readdirSync(path.join(tools,'screenshots')).filter(file=>file.endsWith('.jpg')),mutations:['create alias-j/new-folder','create alias-j/new-note.txt','picker upload alias-s/browser-upload.txt','copy root-marker.txt to alias-s/copied-root.txt','move source-tree/note.txt to alias-j/moved-note.txt','rename expanded source-s to renamed-s with actual editor path reconciliation','rename data to retired-data with original failed required reads retained and child branches retired','restore same retired-data to data'],scope:'English and Chinese; own IAB Tab5; Project B independent tree/editor; explicit collapse/re-expand; no UI automated tests'}
+report.boundaries=['First entire focused runner1, repaired runner1 and initial overlay type2 stay original failures; accepted component runs are individually qualified','Unknown target I/O, non-Windows hosts, all read-race interleavings and external drag/drop were not qualified','Temporary target retirement produced three real directory read failures in operation receipts; original failed receipts remain visible, not replaced by success','No Provider/model/credential use or user-window/process manipulation','87 contracts and 896 assertions are focused product scope, not whole goal completion']
+fs.writeFileSync(path.join(scratch,'browse-delivery-root-review.json'),JSON.stringify(report,null,2)+'\n',{flag:'wx'})
+console.log(JSON.stringify({checks:report.checks.map(row=>({name:row.name,exit:row.exit.exitCode,counts:row.counts,http:row.httpCounts})),clients:report.clients.map(row=>({phase:row.phase,exit:row.joined.terminal.code})),beforeHTTP:4,afterHTTP:13,sourceLinks:10,published:5,serviceExit:settled.terminal.exitCode,screenshots:report.manualVisualReview.files.length,browserLogs:report.browserLogs,serviceDiagnosticCount:report.runtime.diagnosticRows.length},null,2))

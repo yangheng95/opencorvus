@@ -454,7 +454,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 
 | Method | Path | Summary | operationId |
 |---|---|---|---|
-| GET | `/file` | List files | `file.list` |
+| GET | `/file` | List files Errors: `UnknownError`. | `file.list` |
 | GET | `/file/content` | Read file Errors: `FileNotFoundError`, `UnknownError`. | `file.read` |
 | PATCH | `/file/content` | Write file Body: `content`, `expectedRevision`, `path`; Errors: `BadRequestError`, `FileWriteConflictError`, `LogFileNotFoundError`, `NotFoundError`, `UnknownError`. | `file.write` |
 | DELETE | `/file/item` | Delete file item Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `file.delete` |

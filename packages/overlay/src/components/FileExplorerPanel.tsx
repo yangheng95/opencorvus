@@ -31,6 +31,7 @@ import {
   type FileDeleteResult,
   type FileMoveResult,
   type FileNode,
+  type FileListingNode,
   type FileOperationScope,
   type FileRefreshReceipt,
   type FileRefreshState,
@@ -62,13 +63,22 @@ const ACTIVE_DIRECTORY_REFRESH_INTERVAL_MS = 15_000
 const EXPLORER_SELECTION_MIME = "application/x-opencorvus-explorer-selection"
 
 type ExplorerRow =
-  | { kind: "node"; key: string; node: FileNode; depth: number; expanded: boolean; loading: boolean; error: ExplorerFailure | null }
+  | {
+      kind: "node"
+      key: string
+      node: FileListingNode
+      depth: number
+      expanded: boolean
+      loading: boolean
+      error: ExplorerFailure | null
+    }
   | { kind: "search"; key: string; path: string; depth: number }
 
 type ExplorerSelection = {
   path: string
   name: string
   type: "file" | "directory"
+  source: "listing" | "file"
 }
 
 type FileMutationKind = "create-file" | "create-directory" | "rename" | "copy" | "move" | "delete" | "refresh" | ""
@@ -204,9 +214,10 @@ function explorerDirectoryDisplayPath(path: string | undefined): string | undefi
 function fileErrorSummary(error: unknown, operation: ExplorerFailureOperation): string {
   if (error instanceof ApiError && error.body && typeof error.body === "object" && !Array.isArray(error.body)) {
     const body = error.body as { name?: unknown; data?: unknown }
-    const data = body.data && typeof body.data === "object" && !Array.isArray(body.data)
-      ? body.data as Record<string, unknown>
-      : undefined
+    const data =
+      body.data && typeof body.data === "object" && !Array.isArray(body.data)
+        ? (body.data as Record<string, unknown>)
+        : undefined
     const summary = (key: string, field: string) => {
       const value = data?.[field]
       return typeof value === "string"
@@ -234,8 +245,18 @@ function fileErrorSummary(error: unknown, operation: ExplorerFailureOperation): 
 
 function feedbackTone(feedback: ExplorerFeedback): "error" | "warning" | "success" {
   if (feedback.kind !== "outcome") return "error"
-  if (feedback.failures.some((failure) => !isStoppedFailure(failure)) || feedback.refresh.some((read) => read.state.status === "failed") || (feedback.postOpen?.status === "failed" && !isStoppedFailure(feedback.postOpen))) return "error"
-  if (feedback.failures.length > 0 || feedback.refresh.some((read) => read.state.status === "retired") || (feedback.postOpen && feedback.postOpen.status !== "opened")) return "warning"
+  if (
+    feedback.failures.some((failure) => !isStoppedFailure(failure)) ||
+    feedback.refresh.some((read) => read.state.status === "failed") ||
+    (feedback.postOpen?.status === "failed" && !isStoppedFailure(feedback.postOpen))
+  )
+    return "error"
+  if (
+    feedback.failures.length > 0 ||
+    feedback.refresh.some((read) => read.state.status === "retired") ||
+    (feedback.postOpen && feedback.postOpen.status !== "opened")
+  )
+    return "warning"
   return "success"
 }
 
@@ -251,9 +272,10 @@ function outcomeFailureMessage(outcome: ExplorerOutcome, failure: ExplorerOutcom
 }
 
 function postOpenMessage(result: NonNullable<ExplorerOutcome["postOpen"]>): string {
-  const message = result.status === "failed" && !isStoppedFailure(result)
-    ? fileErrorSummary(result.error, "open")
-    : t("explorer.open_stopped")
+  const message =
+    result.status === "failed" && !isStoppedFailure(result)
+      ? fileErrorSummary(result.error, "open")
+      : t("explorer.open_stopped")
   return t("explorer.member_failure", { path: result.path, message })
 }
 
@@ -262,13 +284,18 @@ function postOpenDetails(result: NonNullable<ExplorerOutcome["postOpen"]>): stri
 }
 
 function refreshFailure(read: FileRefreshReceipt): ExplorerFailure | undefined {
-  return read.state.status === "failed" ? read.state : read.state.status === "retired" ? read.state.observedFailure : undefined
+  return read.state.status === "failed"
+    ? read.state
+    : read.state.status === "retired"
+      ? read.state.observedFailure
+      : undefined
 }
 
 function refreshReceiptMessage(read: FileRefreshReceipt): string {
-  const message = read.state.status === "failed"
-    ? fileErrorSummary(read.state.error, read.target.kind === "directory" ? "load" : "search")
-    : t("explorer.refresh_unconfirmed")
+  const message =
+    read.state.status === "failed"
+      ? fileErrorSummary(read.state.error, read.target.kind === "directory" ? "load" : "search")
+      : t("explorer.refresh_unconfirmed")
   return read.target.kind === "directory"
     ? t("explorer.directory_refresh_result", { path: explorerDirectoryDisplayPath(read.target.path), message })
     : t("explorer.search_refresh_result", { query: read.target.query, message })
@@ -280,7 +307,11 @@ function feedbackMessage(feedback: ExplorerFeedback): string {
     case "outcome": {
       const completed = feedback.completed.length
       if (feedback.operation === "refresh") {
-        if (feedback.failures.some((failure) => !isStoppedFailure(failure)) || feedback.refresh.some((read) => read.state.status === "failed")) return t("explorer.refresh_failed")
+        if (
+          feedback.failures.some((failure) => !isStoppedFailure(failure)) ||
+          feedback.refresh.some((read) => read.state.status === "failed")
+        )
+          return t("explorer.refresh_failed")
         if (feedback.failures.length > 0) return t("explorer.operation_stopped")
         if (feedback.refresh.some((read) => read.state.status === "retired")) return t("explorer.refresh_unconfirmed")
         return t("explorer.refresh_success")
@@ -289,15 +320,37 @@ function feedbackMessage(feedback: ExplorerFeedback): string {
       const path = feedback.completed[0]!.path
       switch (feedback.operation) {
         case "create-file":
-        case "create-directory": return t("explorer.create_success", { path })
-        case "rename": return t("explorer.rename_success", { path })
-        case "copy": return completed === 1 ? t("explorer.copy_success", { path }) : t("explorer.copy_many_success", { count: count(completed), target: explorerDirectoryDisplayPath(feedback.target) })
-        case "move": return completed === 1 ? t("explorer.move_success", { path }) : t("explorer.move_many_success", { count: count(completed), target: explorerDirectoryDisplayPath(feedback.target) })
-        case "delete": return completed === 1 ? t("explorer.delete_success", { path }) : t("explorer.delete_many_success", { count: count(completed) })
-        case "upload": return tc("explorer.upload_success", completed, { count: count(completed), target: explorerDirectoryDisplayPath(feedback.target) })
+        case "create-directory":
+          return t("explorer.create_success", { path })
+        case "rename":
+          return t("explorer.rename_success", { path })
+        case "copy":
+          return completed === 1
+            ? t("explorer.copy_success", { path })
+            : t("explorer.copy_many_success", {
+                count: count(completed),
+                target: explorerDirectoryDisplayPath(feedback.target),
+              })
+        case "move":
+          return completed === 1
+            ? t("explorer.move_success", { path })
+            : t("explorer.move_many_success", {
+                count: count(completed),
+                target: explorerDirectoryDisplayPath(feedback.target),
+              })
+        case "delete":
+          return completed === 1
+            ? t("explorer.delete_success", { path })
+            : t("explorer.delete_many_success", { count: count(completed) })
+        case "upload":
+          return tc("explorer.upload_success", completed, {
+            count: count(completed),
+            target: explorerDirectoryDisplayPath(feedback.target),
+          })
       }
     }
-    case "failure": return fileErrorSummary(feedback.error, feedback.operation)
+    case "failure":
+      return fileErrorSummary(feedback.error, feedback.operation)
     case "validation": {
       const keys: Record<ExplorerValidation, string> = {
         selection: "explorer.select_required",
@@ -320,28 +373,64 @@ function ExplorerActionFeedback(props: { feedback: ExplorerFeedback; dataUI?: st
         details={props.feedback.kind === "failure" ? formatErrorDetails(props.feedback.error) || undefined : undefined}
       >
         {feedbackMessage(props.feedback)}
-        <Show when={props.feedback.kind === "outcome" && props.feedback.completed.length > 0 && feedbackTone(props.feedback) !== "success" ? props.feedback : undefined}>
-          {(outcome) => <div>{tc("explorer.confirmed_items", outcome().completed.length, { count: new Intl.NumberFormat(localeTag()).format(outcome().completed.length) })}</div>}
+        <Show
+          when={
+            props.feedback.kind === "outcome" &&
+            props.feedback.completed.length > 0 &&
+            feedbackTone(props.feedback) !== "success"
+              ? props.feedback
+              : undefined
+          }
+        >
+          {(outcome) => (
+            <div>
+              {tc("explorer.confirmed_items", outcome().completed.length, {
+                count: new Intl.NumberFormat(localeTag()).format(outcome().completed.length),
+              })}
+            </div>
+          )}
         </Show>
       </Feedback>
       <Show when={props.feedback.kind === "outcome" ? props.feedback : undefined}>
-        {(outcome) => <>
-          <For each={outcome().failures}>{(failure) => (
-            <Feedback class="file-explorer-feedback" tone={isStoppedFailure(failure) ? "warning" : "error"} details={formatErrorDetails(failure.error) || undefined}>
-              {outcomeFailureMessage(outcome(), failure)}
-            </Feedback>
-          )}</For>
-          <For each={outcome().refresh.filter((read) => read.state.status !== "loaded")}>{(read) => (
-            <Feedback class="file-explorer-feedback" tone={read.state.status === "failed" ? "error" : "warning"} details={refreshFailure(read) ? formatErrorDetails(refreshFailure(read)!.error) || undefined : undefined}>
-              {refreshReceiptMessage(read)}
-            </Feedback>
-          )}</For>
-          <Show when={outcome().postOpen?.status !== "opened" ? outcome().postOpen : undefined}>
-            {(result) => <Feedback class="file-explorer-feedback" tone={result().status === "failed" ? "error" : "warning"} details={postOpenDetails(result())}>
-              {postOpenMessage(result())}
-            </Feedback>}
-          </Show>
-        </>}
+        {(outcome) => (
+          <>
+            <For each={outcome().failures}>
+              {(failure) => (
+                <Feedback
+                  class="file-explorer-feedback"
+                  tone={isStoppedFailure(failure) ? "warning" : "error"}
+                  details={formatErrorDetails(failure.error) || undefined}
+                >
+                  {outcomeFailureMessage(outcome(), failure)}
+                </Feedback>
+              )}
+            </For>
+            <For each={outcome().refresh.filter((read) => read.state.status !== "loaded")}>
+              {(read) => (
+                <Feedback
+                  class="file-explorer-feedback"
+                  tone={read.state.status === "failed" ? "error" : "warning"}
+                  details={
+                    refreshFailure(read) ? formatErrorDetails(refreshFailure(read)!.error) || undefined : undefined
+                  }
+                >
+                  {refreshReceiptMessage(read)}
+                </Feedback>
+              )}
+            </For>
+            <Show when={outcome().postOpen?.status !== "opened" ? outcome().postOpen : undefined}>
+              {(result) => (
+                <Feedback
+                  class="file-explorer-feedback"
+                  tone={result().status === "failed" ? "error" : "warning"}
+                  details={postOpenDetails(result())}
+                >
+                  {postOpenMessage(result())}
+                </Feedback>
+              )}
+            </Show>
+          </>
+        )}
       </Show>
     </div>
   )
@@ -351,7 +440,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   const [query, setQuery] = createSignal("")
   const deferredQuery = createDeferred(() => query().trim())
   const [expandedPaths, setExpandedPaths] = createSignal(new Set<string>([""]))
-  const [childrenByPath, setChildrenByPath] = createSignal(new Map<string, FileNode[]>())
+  const [childrenByPath, setChildrenByPath] = createSignal(new Map<string, FileListingNode[]>())
   const [loadingPaths, setLoadingPaths] = createSignal(new Set<string>())
   const [directoryErrors, setDirectoryErrors] = createSignal(new Map<string, ExplorerFailure>())
   const [uploadOperation, setUploadOperation] = createSignal<{ token: number; directory: string } | null>(null)
@@ -422,6 +511,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       path: normalizeExplorerPath(node.path),
       name: node.name,
       type: node.type,
+      source: "listing",
     }
   }
 
@@ -430,6 +520,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       path: normalizeExplorerPath(path),
       name: fileName(path),
       type: "file",
+      source: "file",
     }
   }
 
@@ -494,7 +585,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     const scope = opts?.scope ?? currentOperationScope()
     if (!scope || !ownsExplorerOperation(scope)) return { status: "retired", reason: "scope" }
     const normalizedPath = normalizeExplorerPath(path)
-    if (!opts?.required && !opts?.force && (childrenByPath().has(normalizedPath) || loadingPaths().has(normalizedPath))) return
+    if (!opts?.required && !opts?.force && (childrenByPath().has(normalizedPath) || loadingPaths().has(normalizedPath)))
+      return
     if (!opts?.required && requiredDirectoryLoadTokens.has(normalizedPath)) return
     const token = ++directoryLoadSequence
     const tokenMap = opts?.required ? requiredDirectoryLoadTokens : directoryLoadTokens
@@ -514,6 +606,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       const normalizedNodes = nodes.map((node) => ({ ...node, path: normalizeExplorerPath(node.path) }))
       batch(() => {
         setChildrenByPath((prev) => new Map(prev).set(normalizedPath, normalizedNodes))
+        reconcileDirectoryBranches(normalizedPath, normalizedNodes)
         reconcileDirectorySelection(normalizedPath, normalizedNodes)
       })
       return { status: "loaded" }
@@ -613,7 +706,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     }
   })
   const [searchResults, { refetch: refetchSearch }] = createResource(searchSource, async (source) => {
-    if (!source.query) return { source, query: source.query, paths: [] as string[], error: null as ExplorerFailure | null }
+    if (!source.query)
+      return { source, query: source.query, paths: [] as string[], error: null as ExplorerFailure | null }
     try {
       const paths = await searchFiles(source.query, source)
       return { source, query: source.query, paths, error: null as ExplorerFailure | null }
@@ -655,7 +749,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     const output: ExplorerRow[] = []
     const pushChildren = (path: string, depth: number) => {
       for (const node of children.get(path) ?? []) {
-        const nodeExpanded = node.type === "directory" && expanded.has(node.path)
+        const nodeExpanded = node.directoryTarget && expanded.has(node.path)
         output.push({
           kind: "node",
           key: JSON.stringify([scopeKey, "node", node.type, node.path]),
@@ -695,7 +789,9 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   const searchError = createMemo(() => (deferredQuery() ? currentSearchFailure() : null))
   const expandedDirectoryFailures = createMemo(() => {
     if (deferredQuery()) return []
-    const visibleDirectories = new Set(rows().flatMap((row) => row.kind === "node" && row.expanded ? [row.node.path] : []))
+    const visibleDirectories = new Set(
+      rows().flatMap((row) => (row.kind === "node" && row.expanded ? [row.node.path] : [])),
+    )
     return [...directoryErrors()].filter(([path]) => path !== "" && visibleDirectories.has(path))
   })
   const explorerPanelStyle = () => ({
@@ -733,18 +829,47 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     setSelectionAnchorPath("")
   }
 
-  function reconcileDirectorySelection(parent: string, nodes: readonly FileNode[]): void {
+  function directoryTarget(path: string): boolean {
+    return (
+      childrenByPath()
+        .get(parentPath(path))
+        ?.find((node) => node.path === path)?.directoryTarget === true
+    )
+  }
+
+  function directChildPath(parent: string, path: string): string | undefined {
+    if (path === parent || !isPathOrDescendant(path, parent)) return
+    const name = path.slice(parent ? parent.length + 1 : 0).split("/")[0]
+    if (!name || name === "..") return
+    return joinExplorerPath(parent, name)
+  }
+
+  function reconcileDirectoryBranches(parent: string, nodes: readonly FileListingNode[]): void {
     const children = new Map(nodes.map((node) => [node.path, node]))
-    const covered = (path: string) => path !== parent && isPathOrDescendant(path, parent)
-    const listedChild = (path: string) =>
-      children.get(joinExplorerPath(parent, path.slice(parent ? parent.length + 1 : 0).split("/")[0] ?? ""))
+    const retired = (path: string) => {
+      const child = directChildPath(parent, path)
+      return child !== undefined && children.get(child)?.directoryTarget !== true
+    }
+    setExpandedPaths((prev) => new Set([...prev].filter((path) => !retired(path))))
+    setChildrenByPath((prev) => new Map([...prev].filter(([path]) => !retired(path))))
+    setDirectoryErrors((prev) => new Map([...prev].filter(([path]) => !retired(path))))
+    setLoadingPaths((prev) => new Set([...prev].filter((path) => !retired(path))))
+    for (const tokens of [directoryLoadTokens, requiredDirectoryLoadTokens]) {
+      for (const path of tokens.keys()) if (retired(path)) tokens.delete(path)
+    }
+  }
+
+  function reconcileDirectorySelection(parent: string, nodes: readonly FileListingNode[]): void {
+    const children = new Map(nodes.map((node) => [node.path, node]))
+    const covered = (path: string) => directChildPath(parent, path) !== undefined
+    const listedChild = (path: string) => children.get(directChildPath(parent, path) ?? "")
     const currentItem = (item: ExplorerSelection): ExplorerSelection | undefined => {
       if (!covered(item.path)) return item
       const child = listedChild(item.path)
-      if (!child || (child.path !== item.path && child.type !== "directory")) return undefined
+      if (!child || (child.path !== item.path && !child.directoryTarget)) return undefined
       if (child.path !== item.path) return item
       if (child.type !== item.type) return undefined
-      return child.name === item.name ? item : selectionFromNode(child)
+      return child.name === item.name ? item : { ...item, name: child.name }
     }
     const anchor = selectionAnchorPath()
     const anchorItem = selectedItems().get(anchor)
@@ -760,14 +885,14 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     })
     if (anchor && covered(anchor)) {
       const child = listedChild(anchor)
-      if (!child || (child.path !== anchor && child.type !== "directory") || (anchorItem && !currentItem(anchorItem)))
+      if (!child || (child.path !== anchor && !child.directoryTarget) || (anchorItem && !currentItem(anchorItem)))
         setSelectionAnchorPath("")
     }
     const dropDirectory = dropTargetPath()
     const dropChild = dropDirectory && covered(dropDirectory) ? listedChild(dropDirectory) : undefined
     if (
       draggedItems().some((item) => !currentItem(item)) ||
-      (dropDirectory && covered(dropDirectory) && (!dropChild || dropChild.type !== "directory"))
+      (dropDirectory && covered(dropDirectory) && (!dropChild || !dropChild.directoryTarget))
     )
       clearExplorerDrag()
   }
@@ -841,8 +966,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   }
 
   function contextTargetDirectory(item: ExplorerSelection | null): string {
-    if (item?.type === "directory") return item.path
-    if (item?.type === "file") return parentPath(item.path)
+    if (item?.source === "listing" && directoryTarget(item.path)) return item.path
+    if (item) return parentPath(item.path)
     return ""
   }
 
@@ -1020,19 +1145,19 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     })
   }
 
-  async function refreshFileViews(
-    paths: string[],
-    scope: ExplorerOperationScope,
-  ): Promise<FileRefreshReceipt[]> {
-    const reads: { target: FileRefreshTarget; result: Promise<FileRefreshState> }[] = uniquePaths(paths).map((path) => ({
-      target: { kind: "directory", path },
-      result: loadDirectory(path, { required: true, scope }),
-    }))
+  async function refreshFileViews(paths: string[], scope: ExplorerOperationScope): Promise<FileRefreshReceipt[]> {
+    const reads: { target: FileRefreshTarget; result: Promise<FileRefreshState> }[] = uniquePaths(paths).map(
+      (path) => ({
+        target: { kind: "directory", path },
+        result: loadDirectory(path, { required: true, scope }),
+      }),
+    )
     const source = searchSource()
-    if (source?.query) reads.push({
-      target: { kind: "search", query: source.query },
-      result: refreshActiveSearchResults(scope, source),
-    })
+    if (source?.query)
+      reads.push({
+        target: { kind: "search", query: source.query },
+        result: refreshActiveSearchResults(scope, source),
+      })
     return collectFileRefreshReceipts(reads)
   }
 
@@ -1108,7 +1233,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       const previousParent = parentPath(normalizedPrevious)
       const nextParent = parentPath(normalizedNext)
       updateExpandedPathsAfterMove(normalizedPrevious, normalizedNext)
-      refreshTargets.push(previousParent, nextParent, result.node.type === "directory" ? normalizedNext : "")
+      refreshTargets.push(previousParent, nextParent)
       cacheTargets.push(previousParent, nextParent, normalizedPrevious, normalizedNext)
       subtreeTargets.push(normalizedPrevious)
       const selection = selectionFromNode(result.node)
@@ -1117,6 +1242,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     clearDirectoryCaches(cacheTargets, subtreeTargets)
     setSelectedItems(nextSelection)
     setSelectionAnchorPath(results.at(-1)?.path ?? "")
+    refreshTargets.push(...expandedPaths())
     return refreshFileViews(refreshTargets, scope)
   }
 
@@ -1470,7 +1596,12 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           break
         }
       }
-      if (deleted.length > 0) outcome.refresh = await applyDeleteResults(deleted.map((result) => normalizeExplorerPath(result.path)), scope, ownsOperation)
+      if (deleted.length > 0)
+        outcome.refresh = await applyDeleteResults(
+          deleted.map((result) => normalizeExplorerPath(result.path)),
+          scope,
+          ownsOperation,
+        )
     })
   }
 
@@ -1561,7 +1692,14 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     const ownsUploadOperation = () => uploadOperation()?.token === uploadToken && ownsExplorerOperation(scope)
     setUploadOperation({ token: uploadToken, directory: scope.directory.trim() })
     setUploadFeedback(null)
-    const outcome: ExplorerOutcome = { kind: "outcome", operation: "upload", completed: [], target: targetDir, failures: [], refresh: [] }
+    const outcome: ExplorerOutcome = {
+      kind: "outcome",
+      operation: "upload",
+      completed: [],
+      target: targetDir,
+      failures: [],
+      refresh: [],
+    }
     try {
       const uploaded = await uploadDroppedFiles(targetDir, files, scope)
       outcome.completed = uploaded
@@ -1621,7 +1759,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
             label={t("explorer.upload_files")}
             detail={targetDetail()}
             disabled={hasMultipleTargets() || commandBusy() || uploading()}
-            onSelect={() => openUploadPicker(contextTargetDirectory(item()))}
+            onSelect={() => openUploadPicker(options().isDirectory ? item().path : parentPath(item().path))}
           />
           <Show when={options().isDirectory && !hasMultipleTargets()}>
             <FileExplorerContextMenuItem
@@ -1770,7 +1908,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
 
     const row = () => current() as Extract<ExplorerRow, { kind: "node" }>
     const node = () => row().node
-    const isDirectory = () => node().type === "directory"
+    const isDirectory = () => node().directoryTarget
     const item = () => selectionFromNode(node())
     const isNodeSelected = () => isSelected(item())
     const isNodeCurrent = () => currentFilePath() === item().path
@@ -1883,7 +2021,9 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       <Show when={uploading() || uploadFeedback() || mutationFeedback() || expandedDirectoryFailures().length > 0}>
         <div class="file-explorer-feedback-stack">
           <Show when={uploading()}>
-            <Feedback class="file-explorer-feedback" tone="info">{t("explorer.uploading")}</Feedback>
+            <Feedback class="file-explorer-feedback" tone="info">
+              {t("explorer.uploading")}
+            </Feedback>
           </Show>
           <Show when={!uploading() && uploadFeedback()}>
             {(feedback) => <ExplorerActionFeedback feedback={feedback()} dataUI="file-explorer-upload-message" />}

@@ -168,6 +168,169 @@ async function textContent(http: Awaited<ReturnType<typeof api>>, file: string, 
   })
 }
 
+test.each(["dir", "junction", "relative"] as const)(
+  "listing a healthy %s directory link publishes its target fact and original alias identity",
+  async (kind) => {
+    await using fixture = await project(`listing-directory-${kind}`)
+    const target = path.join(fixture.path, "target-dir")
+    await fs.mkdir(target)
+    await fs.writeFile(path.join(target, "marker.md"), marker)
+    const full = path.join(fixture.path, "alias")
+    await link(kind === "relative" ? "target-dir" : target, full, kind === "junction" ? "junction" : "dir")
+    const original = await linkIdentity(full)
+    await using http = await api(fixture.path)
+    expect(await http.list()).toMatchObject({
+      status: 200,
+      body: expect.arrayContaining(
+        [
+          { ...node(fixture.path, full), directoryTarget: true },
+          { ...node(fixture.path, target, false, "directory"), directoryTarget: true },
+        ].map((item) => expect.objectContaining(item)),
+      ),
+    })
+    expect(await http.list("alias")).toMatchObject({
+      status: 200,
+      body: expect.arrayContaining(
+        [{ ...node(fixture.path, path.join(full, "marker.md")), directoryTarget: false }].map((item) =>
+          expect.objectContaining(item),
+        ),
+      ),
+    })
+    await textContent(http, "alias/marker.md")
+    expect(await linkIdentity(full)).toEqual(original)
+    await exactBytes(path.join(target, "marker.md"))
+  },
+  60_000,
+)
+
+test("listing separates ordinary files, broken targets and another Project from allowed directory aliases", async () => {
+  await using first = await project("listing-target-first")
+  await using second = await project("listing-target-second")
+  await link(path.join(first.path, "root-marker.md"), path.join(first.path, "file-alias"), "file")
+  await link("missing-dir", path.join(first.path, "broken-alias"), "dir")
+  await link(second.path, path.join(first.path, "foreign-alias"), "junction")
+  await link(first.path, path.join(first.path, "root-alias"), "junction")
+  await using a = await api(first.path)
+  await using b = await api(second.path)
+  expect(await a.list()).toMatchObject({
+    status: 200,
+    body: expect.arrayContaining(
+      [
+        { ...node(first.path, path.join(first.path, "file-alias")), directoryTarget: false },
+        { ...node(first.path, path.join(first.path, "broken-alias")), directoryTarget: false },
+        { ...node(first.path, path.join(first.path, "foreign-alias")), directoryTarget: false },
+        { ...node(first.path, path.join(first.path, "root-alias")), directoryTarget: true },
+        { ...node(first.path, path.join(first.path, "root-marker.md")), directoryTarget: false },
+      ].map((item) => expect.objectContaining(item)),
+    ),
+  })
+  await textContent(a, "root-alias/root-marker.md")
+  await textContent(a, "file-alias")
+  await textContent(b, "root-marker.md")
+  await exactBytes(path.join(second.path, "root-marker.md"))
+}, 60_000)
+
+test("each successful listing observes the current directory target of the same retained link entry", async () => {
+  await using fixture = await project("listing-target-transitions")
+  const target = path.join(fixture.path, "target")
+  const full = path.join(fixture.path, "alias")
+  await link("target", full, "dir")
+  const original = await linkIdentity(full)
+  await using http = await api(fixture.path)
+  const current = async (directoryTarget: boolean) => {
+    expect(await http.list()).toMatchObject({
+      status: 200,
+      body: expect.arrayContaining(
+        [{ ...node(fixture.path, full), directoryTarget }].map((item) => expect.objectContaining(item)),
+      ),
+    })
+    expect(await linkIdentity(full)).toEqual(original)
+  }
+  await current(false)
+  await fs.mkdir(target)
+  await fs.writeFile(path.join(target, "marker.md"), marker)
+  await current(true)
+  await textContent(http, "alias/marker.md")
+  await fs.rename(target, path.join(fixture.path, "retained-target"))
+  await fs.writeFile(target, replacement)
+  await current(false)
+  await textContent(http, "target", replacement)
+  if (process.platform === "win32") missing(await http.content("alias"), "alias")
+  else await textContent(http, "alias", replacement)
+  await exactBytes(path.join(fixture.path, "retained-target", "marker.md"))
+}, 60_000)
+
+test("alias destinations preserve create, upload, copy and move receipts and exact published contents", async () => {
+  await using fixture = await project("listing-alias-destinations")
+  const target = path.join(fixture.path, "data")
+  await fs.mkdir(target)
+  await link(target, path.join(fixture.path, "alias"), "junction")
+  await fs.writeFile(path.join(fixture.path, "copy-source.md"), marker)
+  await fs.writeFile(path.join(fixture.path, "move-source.md"), replacement)
+  const moved = await identity(path.join(fixture.path, "move-source.md"))
+  await using http = await api(fixture.path)
+  expect(await http.request("POST", "/file/item", { path: "alias/new.md", type: "file", content: marker })).toEqual({
+    status: 200,
+    body: node(fixture.path, path.join(fixture.path, "alias", "new.md")),
+  })
+  expect(await http.request("POST", "/file/item", { path: "alias/new-folder", type: "directory" })).toEqual({
+    status: 200,
+    body: node(fixture.path, path.join(fixture.path, "alias", "new-folder"), false, "directory"),
+  })
+  expect(
+    await http.request("POST", "/file/upload", {
+      targetDir: "alias",
+      files: [{ name: "uploaded.md", contentBase64: Buffer.from(marker).toString("base64") }],
+    }),
+  ).toEqual({
+    status: 200,
+    body: [{ name: "uploaded.md", path: path.join("alias", "uploaded.md"), bytes: Buffer.byteLength(marker) }],
+  })
+  published(
+    await http.mutate("copy", "copy-source.md", "alias/copied.md"),
+    "copy",
+    "copy-source.md",
+    "alias/copied.md",
+    node(fixture.path, path.join(fixture.path, "alias", "copied.md")),
+  )
+  published(
+    await http.mutate("move", "move-source.md", "alias/moved.md"),
+    "move",
+    "move-source.md",
+    "alias/moved.md",
+    node(fixture.path, path.join(fixture.path, "alias", "moved.md")),
+  )
+  expect(await identity(path.join(target, "moved.md"))).toEqual(moved)
+  expect(await http.list("alias")).toMatchObject({
+    status: 200,
+    body: expect.arrayContaining(
+      [
+        {
+          ...node(fixture.path, path.join(fixture.path, "alias", "new-folder"), false, "directory"),
+          directoryTarget: true,
+        },
+        { ...node(fixture.path, path.join(fixture.path, "alias", "uploaded.md")), directoryTarget: false },
+      ].map((item) => expect.objectContaining(item)),
+    ),
+  })
+  for (const name of ["new.md", "uploaded.md", "copied.md", "moved.md"]) {
+    const content = name === "moved.md" ? replacement : marker
+    await textContent(http, `alias/${name}`, content)
+    await exactBytes(path.join(target, name), content)
+  }
+}, 60_000)
+
+test("a real recursive link returns the existing typed listing failure", async () => {
+  await using fixture = await project("listing-loop-error")
+  await link("cycle", path.join(fixture.path, "cycle"), "dir")
+  await using http = await api(fixture.path)
+  expect(await http.list()).toMatchObject({
+    status: 500,
+    body: { name: "UnknownError", data: { message: expect.any(String) } },
+  })
+  await exactBytes(path.join(fixture.path, "root-marker.md"))
+}, 60_000)
+
 test.each(["file", "dir", "junction"] as const)(
   "absolute %s links retain one entry contract through copy, move, listing and notifications",
   async (kind) => {
@@ -205,16 +368,22 @@ test.each(["file", "dir", "junction"] as const)(
     expect(await linkIdentity(path.join(fixture.path, "moved"))).toEqual(original)
     expect(await http.list()).toMatchObject({
       status: 200,
-      body: expect.arrayContaining([
-        node(fixture.path, path.join(fixture.path, "copied")),
-        node(fixture.path, path.join(fixture.path, "moved")),
-      ]),
+      body: expect.arrayContaining(
+        [
+          node(fixture.path, path.join(fixture.path, "copied")),
+          node(fixture.path, path.join(fixture.path, "moved")),
+        ].map((item) => expect.objectContaining(item)),
+      ),
     })
     for (const name of ["copied", "moved"]) {
       if (kind !== "file")
         expect(await http.list(name)).toMatchObject({
           status: 200,
-          body: expect.arrayContaining([node(fixture.path, path.join(fixture.path, name, "marker.md"), true)]),
+          body: expect.arrayContaining(
+            [node(fixture.path, path.join(fixture.path, name, "marker.md"), true)].map((item) =>
+              expect.objectContaining(item),
+            ),
+          ),
         })
       await textContent(http, kind === "file" ? name : `${name}/marker.md`)
     }
@@ -256,7 +425,9 @@ test.each(["file", "dir"] as const)(
     expect(await linkIdentity(path.join(fixture.path, "moved"))).toEqual(original)
     expect(await http.list()).toMatchObject({
       status: 200,
-      body: expect.arrayContaining([node(fixture.path, path.join(fixture.path, "moved"))]),
+      body: expect.arrayContaining(
+        [node(fixture.path, path.join(fixture.path, "moved"))].map((item) => expect.objectContaining(item)),
+      ),
     })
     const contentPath = kind === "file" ? "moved" : "moved/marker.md"
     missing(await http.content(contentPath), contentPath)
@@ -327,7 +498,9 @@ test.each(["move", "copy", "delete"] as const)(
         missing(await http.content(target), target)
         expect(await http.list()).toMatchObject({
           status: 200,
-          body: expect.arrayContaining([node(fixture.path, path.join(fixture.path, target))]),
+          body: expect.arrayContaining(
+            [node(fixture.path, path.join(fixture.path, target))].map((item) => expect.objectContaining(item)),
+          ),
         })
       }
     }
@@ -384,7 +557,9 @@ test.each(["copy", "move"] as const)(
     missing(await http.content("result/broken-dir/marker.md"), "result/broken-dir/marker.md")
     expect(await http.list("result")).toMatchObject({
       status: 200,
-      body: expect.arrayContaining(links.map((entry) => node(fixture.path, path.join(target, entry.name)))),
+      body: expect.arrayContaining(
+        links.map((entry) => expect.objectContaining(node(fixture.path, path.join(target, entry.name)))),
+      ),
     })
     if (action === "copy") await exactBytes(path.join(source, "note.md"))
     if (action === "move") missing(await http.mutate("move", "source", "retry"), "source")
@@ -965,10 +1140,12 @@ test("parallel project mutations retain independent entry metadata, notification
       }
       expect(await client.list()).toMatchObject({
         status: 200,
-        body: expect.arrayContaining([
-          node(owned.path, path.join(owned.path, "copied"), ignored),
-          node(owned.path, path.join(owned.path, "moved"), ignored),
-        ]),
+        body: expect.arrayContaining(
+          [
+            node(owned.path, path.join(owned.path, "copied"), ignored),
+            node(owned.path, path.join(owned.path, "moved"), ignored),
+          ].map((item) => expect.objectContaining(item)),
+        ),
       })
       expect(await client.waitForEdits(["source", "copied", "moved"])).toEqual(
         expect.arrayContaining(
@@ -1006,10 +1183,12 @@ test("child-scope copies and moves publish parent entry identities using the wor
   }
   expect(await http.list("..")).toMatchObject({
     status: 200,
-    body: expect.arrayContaining([
-      node(directory, path.join(fixture.path, "copied"), true),
-      node(directory, path.join(fixture.path, "moved"), true),
-    ]),
+    body: expect.arrayContaining(
+      [
+        node(directory, path.join(fixture.path, "copied"), true),
+        node(directory, path.join(fixture.path, "moved"), true),
+      ].map((item) => expect.objectContaining(item)),
+    ),
   })
   await exactBytes(path.join(fixture.path, "root-marker.md"))
 }, 60_000)

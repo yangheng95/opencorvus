@@ -1,0 +1,12 @@
+{
+  "atUtc": "2026-10-14T00:32:30.013Z",
+  "head": "fedd04743bd2b936c9cbec18a1db399f1983efbc",
+  "upstream": "fedd04743bd2b936c9cbec18a1db399f1983efbc",
+  "remote": "fedd04743bd2b936c9cbec18a1db399f1983efbc\trefs/heads/main",
+  "ownedCommit": "318e80577a3d32426ac31ebd6d1759e5bc60ef20",
+  "ownAncestorExitCode": 0,
+  "ownScopeStatus": "",
+  "staged": "",
+  "status": " M CHANGELOG.md\n M packages/overlay/src/components/CardParts.tsx\n M packages/overlay/src/components/SideChatPanel.tsx\n M packages/overlay/src/i18n/en-US.json\n M packages/overlay/src/i18n/zh-CN.json\n M packages/overlay/src/services/side-chat.ts\n M packages/overlay/src/utils/interaction.ts\n M packages/overlay/src/utils/transcript.ts\n M packages/overlay/test/side-chat-transport.test.ts\n M specs/README.md\n M specs/artifacts/README.md\n M specs/current/architecture/07-panel-reactivity.md\n M specs/records/2026-10/2026-10-14-task-question-recovery-405.md\n M specs/records/2026-10/README.md\n?? .bun/\n?? packages/opencorvus/bun/\n",
+  "qualification": "Fresh remote read and actual own commit ancestry; unrelated working changes preserved. Continuous goal remains active."
+}

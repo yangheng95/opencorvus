@@ -1,0 +1,117 @@
+Browser tab: 5, Title: "OpenCorvus", URL: "http://localhost:18459/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18459/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: 收起侧边栏, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: 文件, ID: menubar-cl-1-menubar-menu-cl-897-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: 编辑, ID: menubar-cl-1-menubar-menu-cl-899-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-901-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: 帮助, ID: menubar-cl-1-menubar-menu-cl-903-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: 对话快捷入口, ID: workspaceNavigation
+				11 container 对话快捷入口
+					12 button 对话
+					13 button Mission 看板
+					14 button 定时
+					15 button 专家团
+					16 pop up button (collapsed) Description: 更多, ID: dropdownmenu-cl-123-trigger, Secondary Actions: Expand
+					17 button 设置
+				18 button 关于
+				19 pop up button (collapsed) Description: OpenCorvus 菜单, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus 官网, Value: opencorvus.com/zh-cn/
+						24 button 搜索任务或运行命令
+						25 button (collapsed) Description: 收件箱, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container 对话导航
+								29 button 新对话
+							30 container workLedgerProjectsScroll
+								31 text 项目
+								32 pop up button (collapsed) Description: 整理侧边栏, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: 创建项目, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								34 container
+									35 button (expanded) Description: 收起 project-b, Secondary Actions: Collapse
+									36 container
+										37 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+										38 button Chat
+										39 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-190-trigger, Secondary Actions: Expand
+									40 button (expanded) Description: 收起 project, Secondary Actions: Collapse
+									41 container
+										42 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+										43 button Chat
+										44 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-203-trigger, Secondary Actions: Expand
+								45 container 最近
+									46 text 最近
+									47 container
+										48 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+										49 button Chat
+										50 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-209-trigger, Secondary Actions: Expand
+									51 container
+										52 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+										53 button Chat
+										54 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-215-trigger, Secondary Actions: Expand
+						55 container 连接诊断
+							56 container Description: 连接诊断 · 在线 · 端口 18459, ID: connBadge
+								57 text 在线
+				58 splitter Description: 调整左侧面板大小, Value: 280, ID: leftPaneResizer
+				59 container workspaceMain
+					60 container chatSection
+						61 container Description: 正在加载 Task, ID: taskSwitchProgress
+						62 container
+							63 text Chat
+							64 pop up button (collapsed) Description: 项目操作, ID: dropdownmenu-cl-221-trigger, Secondary Actions: Expand
+							65 container Description: 非进行中, ID: taskStatus
+								66 text 非进行中
+							67 button 侧聊
+							68 container solidChatHeaderRuntimeActions
+								69 pop up button (collapsed) Description: 环境信息, Secondary Actions: Expand
+								70 checkbox Description: 关闭右侧面板, Value: 1
+						71 container 持续目标
+							72 text 持续目标
+							73 text 设定一个目标，让工作在多轮中持续推进。
+							74 button 创建目标
+						75 container
+							76 container Description: 对话, ID: chatScroll
+							77 container chatHomeComposition
+								78 container chatForm
+									79 splitter Description: 拖拽调整消息输入框大小, Value: 42
+									80 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, ID: chatTextarea
+									81 pop up button (collapsed) Description: 添加支持的文件, ID: dropdownmenu-cl-36-trigger, Secondary Actions: Expand
+									82 text Code
+									83 text Chat
+									84 pop up button (collapsed) Description: Dynamic, Secondary Actions: Expand
+									85 pop up button (collapsed) Description: 授权模式，当前为 完全访问, Help: 授权模式：完全访问, ID: dropdownmenu-cl-49-trigger, Secondary Actions: Expand
+									86 pop up button (collapsed) Description: OpenCorvus 模型 选择模型，点击切换, Help: OpenCorvus 模型：选择模型, Secondary Actions: Expand
+										87 text 选择模型
+									88 button (disabled) Description: 发送, Help: 请先选择模型，再发送消息。, ID: chatSend
+					89 splitter Description: 调整右侧面板大小, Value: 380, ID: rightDockResizer
+					90 container Description: 工具面板, ID: rightDock
+						91 container tabs-cl-67
+							92 tab group 已打开的工具
+								95 container
+									96 tab (selectable, settable, boolean) Description: 文件, Value: 0, ID: tabs-cl-67-trigger-explorer
+									97 button Description: 关闭标签页, Help: 关闭标签页 (Delete)
+								98 container
+									99 tab (selected, settable, boolean) Description: 文件, Value: 1, ID: tabs-cl-67-trigger-file
+									100 button Description: 关闭标签页, Help: 关闭标签页 (Delete)
+							93 pop up button (collapsed) Description: 添加工具, ID: dropdownmenu-cl-91-trigger, Secondary Actions: Expand
+							94 button 关闭面板
+							101 container Description: 文件, ID: centerWorkbenchFile
+								102 container 编辑器
+									103 container
+										104 text root-marker.txt
+										105 button (disabled) 保存, Help: 保存 (Ctrl/Cmd+S)
+										106 button 从磁盘重新加载
+										107 button 关闭工作区
+									108 container
+										109 text entry area (settable) Description: 编辑器, Value: BROWSE ROOT B 01a133
+
+
+											110 text BROWSE ROOT B 01a133
+									111 text 纯文本
+
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18459/ui/

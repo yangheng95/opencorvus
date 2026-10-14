@@ -454,7 +454,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 
 | Method | 路径 | 说明 | operationId |
 |---|---|---|---|
-| GET | `/file` | List files | `file.list` |
+| GET | `/file` | List files 错误: `UnknownError`. | `file.list` |
 | GET | `/file/content` | Read file 错误: `FileNotFoundError`, `UnknownError`. | `file.read` |
 | PATCH | `/file/content` | Write file 请求体: `content`, `expectedRevision`, `path`; 错误: `BadRequestError`, `FileWriteConflictError`, `LogFileNotFoundError`, `NotFoundError`, `UnknownError`. | `file.write` |
 | DELETE | `/file/item` | Delete file item 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `file.delete` |

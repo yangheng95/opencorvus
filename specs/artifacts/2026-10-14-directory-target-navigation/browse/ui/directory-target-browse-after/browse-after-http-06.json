@@ -1,0 +1,71 @@
+{
+  "role": "root",
+  "method": "GET",
+  "url": "http://127.0.0.1:18459/file?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cdirectory-target-browse-after-01a133%5Cproject&path=alias-s",
+  "status": 200,
+  "requestID": "76784f2c-0fe9-45b6-98f2-0db3e28a8f9a",
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+    "content-length": "1580",
+    "content-type": "application/json",
+    "date": "Wed, 14 Oct 2026 00:57:33 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "76784f2c-0fe9-45b6-98f2-0db3e28a8f9a"
+  },
+  "rawBodyBase64": "W3sibmFtZSI6Im5ldy1mb2xkZXIiLCJwYXRoIjoiYWxpYXMtc1xcbmV3LWZvbGRlciIsImFic29sdXRlIjoiQzpcXFVzZXJzXFxoZW5ndVxcLmNvZGV4XFxvcGVuY29ydnVzLXByb2R1Y3QtaXRlcmF0aW9uXFwyMDI2LTEwLTE0XFxkaXJlY3RvcnktdGFyZ2V0LWJyb3dzZS1hZnRlci0wMWExMzNcXHByb2plY3RcXGFsaWFzLXNcXG5ldy1mb2xkZXIiLCJ0eXBlIjoiZGlyZWN0b3J5IiwiaWdub3JlZCI6ZmFsc2UsImRpcmVjdG9yeVRhcmdldCI6dHJ1ZX0seyJuYW1lIjoiYnJvd3Nlci11cGxvYWQudHh0IiwicGF0aCI6ImFsaWFzLXNcXGJyb3dzZXItdXBsb2FkLnR4dCIsImFic29sdXRlIjoiQzpcXFVzZXJzXFxoZW5ndVxcLmNvZGV4XFxvcGVuY29ydnVzLXByb2R1Y3QtaXRlcmF0aW9uXFwyMDI2LTEwLTE0XFxkaXJlY3RvcnktdGFyZ2V0LWJyb3dzZS1hZnRlci0wMWExMzNcXHByb2plY3RcXGFsaWFzLXNcXGJyb3dzZXItdXBsb2FkLnR4dCIsInR5cGUiOiJmaWxlIiwiaWdub3JlZCI6ZmFsc2UsImRpcmVjdG9yeVRhcmdldCI6ZmFsc2V9LHsibmFtZSI6ImNvcGllZC1yb290LnR4dCIsInBhdGgiOiJhbGlhcy1zXFxjb3BpZWQtcm9vdC50eHQiLCJhYnNvbHV0ZSI6IkM6XFxVc2Vyc1xcaGVuZ3VcXC5jb2RleFxcb3BlbmNvcnZ1cy1wcm9kdWN0LWl0ZXJhdGlvblxcMjAyNi0xMC0xNFxcZGlyZWN0b3J5LXRhcmdldC1icm93c2UtYWZ0ZXItMDFhMTMzXFxwcm9qZWN0XFxhbGlhcy1zXFxjb3BpZWQtcm9vdC50eHQiLCJ0eXBlIjoiZmlsZSIsImlnbm9yZWQiOmZhbHNlLCJkaXJlY3RvcnlUYXJnZXQiOmZhbHNlfSx7Im5hbWUiOiJtYXJrZXIudHh0IiwicGF0aCI6ImFsaWFzLXNcXG1hcmtlci50eHQiLCJhYnNvbHV0ZSI6IkM6XFxVc2Vyc1xcaGVuZ3VcXC5jb2RleFxcb3BlbmNvcnZ1cy1wcm9kdWN0LWl0ZXJhdGlvblxcMjAyNi0xMC0xNFxcZGlyZWN0b3J5LXRhcmdldC1icm93c2UtYWZ0ZXItMDFhMTMzXFxwcm9qZWN0XFxhbGlhcy1zXFxtYXJrZXIudHh0IiwidHlwZSI6ImZpbGUiLCJpZ25vcmVkIjpmYWxzZSwiZGlyZWN0b3J5VGFyZ2V0IjpmYWxzZX0seyJuYW1lIjoibW92ZWQtbm90ZS50eHQiLCJwYXRoIjoiYWxpYXMtc1xcbW92ZWQtbm90ZS50eHQiLCJhYnNvbHV0ZSI6IkM6XFxVc2Vyc1xcaGVuZ3VcXC5jb2RleFxcb3BlbmNvcnZ1cy1wcm9kdWN0LWl0ZXJhdGlvblxcMjAyNi0xMC0xNFxcZGlyZWN0b3J5LXRhcmdldC1icm93c2UtYWZ0ZXItMDFhMTMzXFxwcm9qZWN0XFxhbGlhcy1zXFxtb3ZlZC1ub3RlLnR4dCIsInR5cGUiOiJmaWxlIiwiaWdub3JlZCI6ZmFsc2UsImRpcmVjdG9yeVRhcmdldCI6ZmFsc2V9LHsibmFtZSI6Im5ldy1ub3RlLnR4dCIsInBhdGgiOiJhbGlhcy1zXFxuZXctbm90ZS50eHQiLCJhYnNvbHV0ZSI6IkM6XFxVc2Vyc1xcaGVuZ3VcXC5jb2RleFxcb3BlbmNvcnZ1cy1wcm9kdWN0LWl0ZXJhdGlvblxcMjAyNi0xMC0xNFxcZGlyZWN0b3J5LXRhcmdldC1icm93c2UtYWZ0ZXItMDFhMTMzXFxwcm9qZWN0XFxhbGlhcy1zXFxuZXctbm90ZS50eHQiLCJ0eXBlIjoiZmlsZSIsImlnbm9yZWQiOmZhbHNlLCJkaXJlY3RvcnlUYXJnZXQiOmZhbHNlfV0=",
+  "body": [
+    {
+      "name": "new-folder",
+      "path": "alias-s\\new-folder",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project\\alias-s\\new-folder",
+      "type": "directory",
+      "ignored": false,
+      "directoryTarget": true
+    },
+    {
+      "name": "browser-upload.txt",
+      "path": "alias-s\\browser-upload.txt",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project\\alias-s\\browser-upload.txt",
+      "type": "file",
+      "ignored": false,
+      "directoryTarget": false
+    },
+    {
+      "name": "copied-root.txt",
+      "path": "alias-s\\copied-root.txt",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project\\alias-s\\copied-root.txt",
+      "type": "file",
+      "ignored": false,
+      "directoryTarget": false
+    },
+    {
+      "name": "marker.txt",
+      "path": "alias-s\\marker.txt",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project\\alias-s\\marker.txt",
+      "type": "file",
+      "ignored": false,
+      "directoryTarget": false
+    },
+    {
+      "name": "moved-note.txt",
+      "path": "alias-s\\moved-note.txt",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project\\alias-s\\moved-note.txt",
+      "type": "file",
+      "ignored": false,
+      "directoryTarget": false
+    },
+    {
+      "name": "new-note.txt",
+      "path": "alias-s\\new-note.txt",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project\\alias-s\\new-note.txt",
+      "type": "file",
+      "ignored": false,
+      "directoryTarget": false
+    }
+  ],
+  "at": {
+    "utc": "2026-10-14T00:57:33.544Z",
+    "wallMs": 1791939453544,
+    "monotonicNs": "2757343742516100"
+  }
+}

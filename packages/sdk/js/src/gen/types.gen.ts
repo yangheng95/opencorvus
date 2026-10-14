@@ -2261,6 +2261,15 @@ export type FileDiff = {
   status?: "added" | "deleted" | "modified"
 }
 
+export type FileListingNode = {
+  absolute: string
+  directoryTarget: boolean
+  ignored: boolean
+  name: string
+  path: string
+  type: "file" | "directory"
+}
+
 export type FileNode = {
   absolute: string
   ignored: boolean
@@ -18416,11 +18425,25 @@ export type FileListData = {
   url: "/file"
 }
 
+export type FileListErrors = {
+  /**
+   * Directory listing failed
+   */
+  500: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "UnknownError"
+  }
+}
+
+export type FileListError = FileListErrors[keyof FileListErrors]
+
 export type FileListResponses = {
   /**
-   * Files and directories
+   * Directory entries with current in-scope directory targets
    */
-  200: Array<FileNode>
+  200: Array<FileListingNode>
 }
 
 export type FileListResponse = FileListResponses[keyof FileListResponses]

@@ -1,0 +1,32 @@
+{
+  "occurrence": "directory-target-dot-browse-ui-register-node-3920df7c-096c-4e4a-be90-9ea840de66b4",
+  "outcome": "ready",
+  "host": {
+    "pid": 74180,
+    "processInstanceID": "win32:639275357659739258",
+    "occurrenceID": "bef6aa3f-5add-4a7f-9b59-e52ecb596985"
+  },
+  "parent": {
+    "pid": 65672,
+    "processInstanceID": "win32:639275357657143421",
+    "occurrenceID": "899b974a-dba9-41a7-97d0-cfa7d80792fd"
+  },
+  "target": {
+    "pid": 80160,
+    "processInstanceID": "win32:639275357680981639",
+    "occurrenceID": "3777e9b9-3415-4e49-8dcf-07a0caf7c502"
+  },
+  "targetBirthAtMs": 1791938968098,
+  "deadlineAt": 1791939085966,
+  "inactivityTimeoutMs": 30000,
+  "printLogs": false,
+  "hostExecutable": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\ui-bundle\\bin\\bun.exe",
+  "hostBunVersion": "1.4.0",
+  "observedAtUtc": "2026-10-14T00:49:28.122Z",
+  "executable": "C:/Program Files/nodejs/node.exe",
+  "args": [
+    "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-browse-after-tools\\fixture-tool.mjs",
+    "register"
+  ],
+  "authority": "Original production foreground run/onSpawned handle; run alone consumes child streams; no detached transfer"
+}

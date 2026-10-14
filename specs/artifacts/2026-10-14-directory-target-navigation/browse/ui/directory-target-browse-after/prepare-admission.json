@@ -1,0 +1,194 @@
+{
+  "schema": "directory-target-browse.fixture/v1",
+  "qualification": "real-desktop-directory-target-browse",
+  "fixtureID": "bb946765-afe9-4348-a6e6-bc770b78f28b",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133",
+  "prefix": "directory-target-browse-after",
+  "port": 18459,
+  "originalInputs": {
+    "files": [
+      {
+        "role": "root",
+        "path": "root-marker.txt",
+        "size": 22,
+        "bytesBase64": "QlJPV1NFIFJPT1QgQSAwMWExMzMNCg==",
+        "literal": "BROWSE ROOT A 01a133\r\n"
+      },
+      {
+        "role": "root",
+        "path": "data/marker.txt",
+        "size": 22,
+        "bytesBase64": "QlJPV1NFIERBVEEgQSAwMWExMzMNCg==",
+        "literal": "BROWSE DATA A 01a133\r\n"
+      },
+      {
+        "role": "root",
+        "path": "source-tree/note.txt",
+        "size": 22,
+        "bytesBase64": "QlJPV1NFIFRSRUUgQSAwMWExMzMNCg==",
+        "literal": "BROWSE TREE A 01a133\r\n"
+      },
+      {
+        "role": "root",
+        "path": ".gitignore",
+        "size": 11,
+        "bytesBase64": "L3NvdXJjZS1qLwo=",
+        "literal": "/source-j/\n"
+      },
+      {
+        "role": "b",
+        "path": "root-marker.txt",
+        "size": 22,
+        "bytesBase64": "QlJPV1NFIFJPT1QgQiAwMWExMzMNCg==",
+        "literal": "BROWSE ROOT B 01a133\r\n"
+      },
+      {
+        "role": "b",
+        "path": ".gitignore",
+        "size": 0,
+        "bytesBase64": "",
+        "literal": ""
+      },
+      {
+        "role": "root",
+        "path": "project-b/root-marker.txt",
+        "size": 23,
+        "bytesBase64": "QlJPV1NFIElOTkVSIEEgMDFhMTMzDQo=",
+        "literal": "BROWSE INNER A 01a133\r\n"
+      }
+    ],
+    "directories": {
+      "root": [
+        "data",
+        "context",
+        "source-tree",
+        "project-b",
+        "aliases"
+      ],
+      "b": []
+    },
+    "links": [
+      {
+        "role": "root",
+        "path": "source-j",
+        "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project\\data",
+        "kind": "junction",
+        "targetDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project\\data"
+      },
+      {
+        "role": "root",
+        "path": "source-s",
+        "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project\\data",
+        "kind": "dir",
+        "targetDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project\\data"
+      },
+      {
+        "role": "root",
+        "path": "alias-j",
+        "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project\\data",
+        "kind": "junction",
+        "targetDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project\\data"
+      },
+      {
+        "role": "root",
+        "path": "alias-s",
+        "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project\\data",
+        "kind": "dir",
+        "targetDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project\\data"
+      },
+      {
+        "role": "root",
+        "path": "context/indirect-relative",
+        "text": "../source-j",
+        "kind": "dir",
+        "targetDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project\\data"
+      },
+      {
+        "role": "root",
+        "path": "aliases/root-back",
+        "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project",
+        "kind": "junction",
+        "targetDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project"
+      },
+      {
+        "role": "root",
+        "path": "context/relative",
+        "text": "../project-b",
+        "kind": "dir",
+        "targetDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project\\project-b"
+      },
+      {
+        "role": "root",
+        "path": "outside-alias",
+        "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project-b",
+        "kind": "junction",
+        "targetDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-browse-after-01a133\\project-b"
+      }
+    ],
+    "extraLinks": [
+      {
+        "role": "root",
+        "path": "file-alias",
+        "text": "root-marker.txt",
+        "kind": "file"
+      },
+      {
+        "role": "root",
+        "path": "broken-alias",
+        "text": "missing-dir",
+        "kind": "dir"
+      }
+    ],
+    "picker": {
+      "name": "browser-upload.txt",
+      "bytesBase64": "QlJPV1NFIFVQTE9BRCAwMWExMzMNCg=="
+    },
+    "registrationPlan": {
+      "firstSequence": 1,
+      "steps": [
+        {
+          "label": "register-root-project",
+          "role": "root",
+          "method": "GET",
+          "route": "/project/current",
+          "query": {}
+        },
+        {
+          "label": "register-root-chat",
+          "role": "root",
+          "method": "POST",
+          "route": "/coding/chat/session",
+          "query": {},
+          "body": {}
+        },
+        {
+          "label": "register-b-project",
+          "role": "b",
+          "method": "GET",
+          "route": "/project/current",
+          "query": {}
+        },
+        {
+          "label": "register-b-chat",
+          "role": "b",
+          "method": "POST",
+          "route": "/coding/chat/session",
+          "query": {},
+          "body": {}
+        }
+      ]
+    },
+    "maximumHTTP": 4,
+    "maximumLiteralBytes": 512,
+    "actualLiteralBytes": 144,
+    "modelCallsRequested": "none",
+    "credentialCatalogStaging": "none",
+    "boundary": "Prepare only creates these inputs; Register only performs four ordinary public Project/empty-Chat requests. Root separately owns all UI and mutation/readback actions."
+  },
+  "at": {
+    "utc": "2026-10-14T00:48:33.534Z",
+    "wallMs": 1791938913534,
+    "monotonicNs": "2756803747031100"
+  },
+  "boundary": "Exclusive new namespace; first failure retained, no deletion/reuse/retry"
+}

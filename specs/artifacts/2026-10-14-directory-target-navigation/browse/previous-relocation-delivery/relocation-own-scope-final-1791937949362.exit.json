@@ -1,0 +1,21 @@
+{
+  "command": [
+    "git",
+    "status",
+    "--short",
+    "--",
+    "packages/opencorvus/src/file/index.ts",
+    "packages/opencorvus/src/util/file-access.ts",
+    "packages/opencorvus/src/util/file-entry.ts",
+    "packages/opencorvus/src/util/file-relocation.ts",
+    "packages/opencorvus/test/file-link-entry-contract.test.ts",
+    "specs/records/2026-10/2026-10-14-link-relocation-authority.md",
+    "specs/artifacts/2026-10-14-link-relocation-authority"
+  ],
+  "atUtc": "2026-10-14T00:32:29.362Z",
+  "completedAtUtc": "2026-10-14T00:32:29.516Z",
+  "exitCode": 0,
+  "signal": null,
+  "stdoutFile": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\relocation-own-scope-final-1791937949362.stdout.log",
+  "stderrFile": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\relocation-own-scope-final-1791937949362.stderr.log"
+}

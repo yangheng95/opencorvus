@@ -1,0 +1,26 @@
+{
+  "role": "root",
+  "method": "GET",
+  "url": "http://127.0.0.1:18459/file/content?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cdirectory-target-browse-after-01a133%5Cproject&path=alias-j%2Fnew-note.txt",
+  "status": 200,
+  "requestID": "58c8d693-ea59-41e6-a000-fd7b30e3fd84",
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+    "content-length": "106",
+    "content-type": "application/json",
+    "date": "Wed, 14 Oct 2026 00:57:33 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "58c8d693-ea59-41e6-a000-fd7b30e3fd84"
+  },
+  "rawBodyBase64": "eyJ0eXBlIjoidGV4dCIsImNvbnRlbnQiOiIiLCJyZXZpc2lvbiI6ImIzYWI2ZTAxMWM0YmYwOWFhMWExNDk1ZmZhZWY2OTlhOWJiNjg0NmY1ZTgxMTZiMzVmYTM4ZGUwZDI2ZGM2YmIifQ==",
+  "body": {
+    "type": "text",
+    "content": "",
+    "revision": "b3ab6e011c4bf09aa1a1495ffaef699a9bb6846f5e8116b35fa38de0d26dc6bb"
+  },
+  "at": {
+    "utc": "2026-10-14T00:57:33.778Z",
+    "wallMs": 1791939453778,
+    "monotonicNs": "2757343976833700"
+  }
+}

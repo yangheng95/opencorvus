@@ -7943,6 +7943,41 @@
         ],
         "type": "object"
       },
+      "FileListingNode": {
+        "properties": {
+          "absolute": {
+            "type": "string"
+          },
+          "directoryTarget": {
+            "type": "boolean"
+          },
+          "ignored": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "file",
+              "directory"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "path",
+          "absolute",
+          "type",
+          "ignored",
+          "directoryTarget"
+        ],
+        "type": "object"
+      },
       "FileNode": {
         "properties": {
           "absolute": {
@@ -70823,13 +70858,40 @@
               "application/json": {
                 "schema": {
                   "items": {
-                    "$ref": "#/components/schemas/FileNode"
+                    "$ref": "#/components/schemas/FileListingNode"
                   },
                   "type": "array"
                 }
               }
             },
-            "description": "Files and directories"
+            "description": "Directory entries with current in-scope directory targets"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "UnknownError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Directory listing failed"
           }
         },
         "summary": "List files",

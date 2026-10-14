@@ -93,13 +93,14 @@ export const FileRoutes = lazy(() =>
         operationId: "file.list",
         responses: {
           200: {
-            description: "Files and directories",
+            description: "Directory entries with current in-scope directory targets",
             content: {
               "application/json": {
-                schema: resolver(File.Node.array()),
+                schema: resolver(File.ListingNode.array()),
               },
             },
           },
+          500: namedErrorResponse("Directory listing failed", "UnknownError"),
         },
       }),
       validator(

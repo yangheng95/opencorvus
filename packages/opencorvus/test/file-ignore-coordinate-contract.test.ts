@@ -74,7 +74,10 @@ function node(directory: string, full: string, ignored: boolean, type = "file") 
   return { name: path.basename(full), path: path.relative(directory, full), absolute: full, type, ignored }
 }
 function listed(result: { status: number; body: any }, nodes: ReturnType<typeof node>[]) {
-  expect(result).toMatchObject({ status: 200, body: expect.arrayContaining(nodes) })
+  expect(result).toMatchObject({
+    status: 200,
+    body: expect.arrayContaining(nodes.map((item) => expect.objectContaining(item))),
+  })
 }
 async function alias(target: string, location: string) {
   await fs.symlink(target, location, process.platform === "win32" ? "junction" : "dir")

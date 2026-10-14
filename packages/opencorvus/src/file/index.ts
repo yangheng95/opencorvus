@@ -55,6 +55,9 @@ export namespace File {
     })
   export type Node = z.infer<typeof Node>
 
+  export const ListingNode = Node.extend({ directoryTarget: z.boolean() }).meta({ ref: "FileListingNode" })
+  export type ListingNode = z.infer<typeof ListingNode>
+
   export const ContentRevision = z
     .string()
     .regex(/^[a-f0-9]{64}$/)
@@ -1712,15 +1715,23 @@ export namespace File {
       withFileTypes: true,
     })
     const ignored = await createIgnoreMatcher(resolved)
-    const nodes: Node[] = []
+    const nodes: ListingNode[] = []
     for (const entry of entries) {
       if (exclude.includes(entry.name)) continue
       const fullPath = path.join(resolved, entry.name)
-      nodes.push(nodeForEntry(fullPath, entry.isDirectory(), ignored))
+      let directoryTarget = entry.isDirectory()
+      if (entry.isSymbolicLink() && (await isPathAllowed(fullPath))) {
+        try {
+          directoryTarget = (await fs.promises.stat(fullPath)).isDirectory()
+        } catch (error) {
+          if (!isMissingPathError(error)) throw error
+        }
+      }
+      nodes.push({ ...nodeForEntry(fullPath, entry.isDirectory(), ignored), directoryTarget })
     }
     return nodes.sort((a, b) => {
-      if (a.type !== b.type) {
-        return a.type === "directory" ? -1 : 1
+      if (a.directoryTarget !== b.directoryTarget) {
+        return a.directoryTarget ? -1 : 1
       }
       return a.name.localeCompare(b.name)
     })

@@ -188,6 +188,7 @@ import type {
   FileCreateResponses,
   FileDeleteErrors,
   FileDeleteResponses,
+  FileListErrors,
   FileListResponses,
   FileMoveErrors,
   FileMoveResponses,
@@ -4263,7 +4264,7 @@ export class File_ extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).get<FileListResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).get<FileListResponses, FileListErrors, ThrowOnError>({
       url: "/file",
       ...options,
       ...params,

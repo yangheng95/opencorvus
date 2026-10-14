@@ -1,0 +1,15 @@
+{
+  "command": [
+    "git",
+    "merge-base",
+    "--is-ancestor",
+    "318e80577a3d32426ac31ebd6d1759e5bc60ef20",
+    "fedd04743bd2b936c9cbec18a1db399f1983efbc"
+  ],
+  "atUtc": "2026-10-14T00:32:29.253Z",
+  "completedAtUtc": "2026-10-14T00:32:29.361Z",
+  "exitCode": 0,
+  "signal": null,
+  "stdoutFile": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\relocation-owned-ancestor-final-1791937949253.stdout.log",
+  "stderrFile": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\relocation-owned-ancestor-final-1791937949253.stderr.log"
+}

@@ -1,0 +1,23 @@
+{
+  "occurrence": "directory-target-dot-browse-ui-after-node-8da1e7e1-e598-4d18-83bd-70f75df50c0e",
+  "hostPID": 49488,
+  "parentPID": 81944,
+  "terminal": {
+    "code": 0,
+    "signal": null,
+    "errors": []
+  },
+  "outputJoins": [
+    {
+      "stream": "stdout",
+      "status": "fulfilled",
+      "bytes": 35918
+    },
+    {
+      "stream": "stderr",
+      "status": "fulfilled",
+      "bytes": 0
+    }
+  ],
+  "joinedAtUtc": "2026-10-14T00:57:34.824Z"
+}
