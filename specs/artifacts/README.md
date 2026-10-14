@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Task持久受理回执](2026-10-14-task-acceptance-receipt/README.md)：协调指导及交互回答在持久受理后返回，后台扫描沿原权威继续。
+
 - [网络反馈的当前语言](2026-10-14-network-feedback-locale/README.md)：第26批真实当前错误、配置读回和桌面原件。
 
 - [Git 源条目读取验收](2026-10-14-project-metadata-latency/source-entry-read/README.md)：2100原capture、24项测试、最终HTTP/原图与保留的原生写入失败。

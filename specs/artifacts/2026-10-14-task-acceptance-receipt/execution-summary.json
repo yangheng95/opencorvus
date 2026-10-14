@@ -1,0 +1,61 @@
+{
+  "requests": 19,
+  "native": {
+    "occurrenceID": "task-acceptance-receipt-415-f497a4dd-8012-4572-89c9-ae56bcae24dd",
+    "pid": 85648,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "pairedCleanupComplete": true,
+  "launchJoin": {
+    "handle": 22954,
+    "chunk": "25b22d",
+    "exitCode": 0
+  },
+  "taskCreate": {
+    "handle": 91626,
+    "chunk": "2bf7aa",
+    "exitCode": 0
+  },
+  "business": [
+    {
+      "handle": 15038,
+      "chunk": "cc0608",
+      "exitCode": 0,
+      "tests": 8,
+      "assertions": 75
+    },
+    {
+      "handle": 39145,
+      "chunk": "b2c876",
+      "exitCode": 0,
+      "tests": 8,
+      "assertions": 75
+    }
+  ],
+  "types": [
+    {
+      "handle": 5158,
+      "chunk": "7895e9",
+      "exitCode": 2,
+      "reason": "Temporary config missed package-local Bun types"
+    },
+    {
+      "handle": 51567,
+      "chunk": "fb3943",
+      "exitCode": 2,
+      "reason": "Existing test fixture Part union and never-transaction types"
+    },
+    {
+      "handle": 79009,
+      "chunk": "b3b1a1",
+      "exitCode": 0
+    }
+  ],
+  "screenshots": 6,
+  "closedTab": "35",
+  "firstHTTPMilliseconds": 100,
+  "previousFirstHTTPMilliseconds": 118925,
+  "uiBundle": "Reused active-task-dock-414-after-bundle; this batch changes backend acceptance only."
+}

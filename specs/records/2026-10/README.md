@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Task持久受理回执](2026-10-14-task-acceptance-receipt.md)：协调指导及交互回答在持久受理后返回，后台扫描沿原权威继续。
+
 - [网络反馈的当前语言](2026-10-14-network-feedback-locale.md)：原反馈事实的渲染语言与保存/删除资格方案。
 
 - [项目元数据共享条目修复](2026-10-14-project-metadata-latency.md)：唯一枚举、真实桌面/checkpoint/ZIP验收与未解决的原生写入范围。

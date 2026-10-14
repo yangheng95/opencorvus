@@ -413,6 +413,7 @@ describe("recovered pending interaction ownership", () => {
           type: "text",
           text: "Ask the operator for the exact recovery choice",
         })
+        if (workerInputPart.type !== "text") throw new Error("Expected the persisted worker text Part")
         const dispatchID = Identifier.ascending("artifact")
         const workflowBinding = selectedWorkflowBinding({
           projection: { packageRevision, virtualWorkflows: {} },
@@ -524,7 +525,6 @@ describe("recovered pending interaction ownership", () => {
             time: { start: now + 1 },
           },
         })
-        const dispatch = async () => "accepted" as const
         const steerInput = {
           request_id: requestID,
           message: "Ask the operator for the exact recovery choice",
@@ -582,12 +582,17 @@ describe("recovered pending interaction ownership", () => {
             }),
           )
           expect(raced[0]).toEqual(raced[1])
-          expect((await fs.readdir(barrier)).filter((entry) => entry.endsWith(".dispatch"))).toHaveLength(1)
+          expect(raced[0]).toEqual({
+            task_id: taskID,
+            session_id: worker.id,
+            request_id: requestID,
+            wake_status: "accepted",
+          })
         } finally {
           await removeManagedDirectoryTree(barrier)
         }
-        const accepted = await EngineService.operatorSteerAgentSession(taskID, worker.id, steerInput, dispatch)
-        expect(await EngineService.operatorSteerAgentSession(taskID, worker.id, steerInput, dispatch)).toEqual(accepted)
+        const accepted = await EngineService.operatorSteerAgentSession(taskID, worker.id, steerInput)
+        expect(await EngineService.operatorSteerAgentSession(taskID, worker.id, steerInput)).toEqual(accepted)
         expect(
           Database.use((db) => ({
             requests: db
@@ -623,7 +628,6 @@ describe("recovered pending interaction ownership", () => {
             taskID,
             worker.id,
             { ...steerInput, message: "Changed caller request must conflict" },
-            dispatch,
           ),
         ).rejects.toMatchObject({ name: "OperatorSteerRequestConflictError" })
         let releaseTarget!: () => void
@@ -639,7 +643,6 @@ describe("recovered pending interaction ownership", () => {
           taskID,
           worker.id,
           { request_id: coherentRequestID, message: "Freeze the newest coherent dispatch snapshot" },
-          dispatch,
         )
         await targetBarrier
         const nextDispatchID = Identifier.ascending("artifact")
@@ -711,7 +714,7 @@ describe("recovered pending interaction ownership", () => {
           "invalid immutable agent coordination request fact",
         )
         expect(() =>
-          Database.transaction((db) => {
+          Database.transaction<void>((db) => {
             const boundaryID = Identifier.ascending("artifact")
             insertEngineArtifact(db, {
               id: boundaryID,
@@ -804,6 +807,7 @@ describe("recovered pending interaction ownership", () => {
             time: { start: mixedNow },
           },
         })
+        if (rawActionPart.type !== "tool") throw new Error("Expected the persisted coordination Tool Part")
         const insertRawActionPair = (
           actionOverrides: Record<string, unknown>,
           timing: {
@@ -927,6 +931,7 @@ describe("recovered pending interaction ownership", () => {
               time: { start: toolStartedAt },
             },
           })
+          if (part.type !== "tool") throw new Error("Expected the persisted retry Tool Part")
           const now = Math.max(Date.now(), lastFailedOutcomeTime + 1)
           Database.transaction((db) => {
             insertEngineArtifact(db, {
@@ -1074,7 +1079,6 @@ describe("recovered pending interaction ownership", () => {
               request_id: Identifier.ascending("artifact"),
               message: `Bounded pending coordination page ${index}`,
             },
-            dispatch,
           )
         }
         expect({
@@ -1161,6 +1165,8 @@ describe("recovered pending interaction ownership", () => {
           tool: "respond_agent_coordination",
           state: { status: "running", input: rollbackInput, time: { start: Date.now() } },
         })
+        if (rollbackPart.type !== "tool" || rollbackPart.state.status !== "running")
+          throw new Error("Expected the persisted running rollback Tool Part")
         expect(() =>
           Database.transaction((db) => {
             const responseID = Identifier.ascending("artifact")
@@ -1581,7 +1587,7 @@ describe("recovered pending interaction ownership", () => {
     })
   }, 90_000)
 
-  test("opens a project holding an activity-reconciliation gate and answers it after recovery", async () => {
+  test.each(["replyInteraction", "replyUserInteraction"] as const)("%s answers a recovered activity-reconciliation gate", async (replyMethod) => {
     await using project = await memoryProject()
     const created = await Instance.provide({
       directory: project.path,
@@ -1648,14 +1654,15 @@ describe("recovered pending interaction ownership", () => {
           retainedControlPlaneGates: [{ interactionID: created.interactionID, externalID: created.externalID }],
           unreconciled: [],
         })
-        expect(await Question.list()).toEqual([])
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
-        expect(
-          await EngineService.replyInteraction(created.interactionID, {
-            answers: [["acknowledge_unknown"]],
-            autoReply: false,
-          }),
-        ).toMatchObject({
+        const reply = { answers: [["acknowledge_unknown"]] }
+        const response = replyMethod === "replyInteraction"
+          ? await EngineService.replyInteraction(created.interactionID, { ...reply, autoReply: false })
+          : await EngineService.replyUserInteraction(created.interactionID, {
+              ...reply,
+              userInput: { surface: "api", text: "确认外部操作结果未知。" },
+            })
+        expect(response).toMatchObject({
           id: created.interactionID,
           externalID: created.externalID,
           type: "question",

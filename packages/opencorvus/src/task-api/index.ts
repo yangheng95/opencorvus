@@ -148,22 +148,18 @@ import { budgetRow, deriveTitle, progressStatus } from "@/engine/helpers"
 import { orchestratorState } from "@/engine/orchestrator-state"
 import { writeTaskChecks } from "@/engine/checks"
 import {
-  deliverTaskRootIngress,
   dispatchPersistedTaskLoop,
   requestTaskControlScanInBackground,
-  dispatchTaskLoop,
   persistTaskRootMessageIngressInTransaction,
   persistMissionAcceptanceResumeIngressInTransaction,
   requireTaskCreationIngressID,
   taskRootIngressDebugProjection,
-  taskRootIngressStats,
   type DispatchTaskLoopResult,
   taskCwd,
 } from "@/engine/task-root-ingress-delivery"
 import { openTaskForContinuationInTransaction } from "@/engine/task-intent-open"
 import {
   applyGoalGraphMutationInTransaction,
-  recordTaskInfrastructureError,
   type ApplyGoalGraphMutationInput,
 } from "@/engine/persist"
 import { EngineInteraction } from "@/engine/interaction"
@@ -1006,8 +1002,6 @@ function physicalTaskCancellationOrigin(input: {
     ...(origin.toolPartID ? { toolPartID: origin.toolPartID } : {}),
   })
 }
-
-type OperatorSteerDispatch = typeof dispatchTaskLoop
 
 type OperatorSteerAfterTargetHook = (input: { taskID: string; sessionID: string }) => void | Promise<void>
 let operatorSteerAfterTargetHookForTest: OperatorSteerAfterTargetHook | undefined
@@ -2621,7 +2615,6 @@ export namespace EngineService {
     taskID: string,
     sessionID: string,
     raw: z.input<typeof AgentSessionOperatorSteerInput>,
-    dispatch: OperatorSteerDispatch = dispatchTaskLoop,
   ) {
     const input = AgentSessionOperatorSteerInput.parse(raw)
     const task = requireTaskInCurrentProject(taskID)
@@ -2650,14 +2643,7 @@ export namespace EngineService {
         requestID: input.request_id,
         operatorMessage: input.message,
       })
-      await deliverTaskRootIngress(task.id).catch((error) => {
-        log.warn("operator steer exact replay left durable ingress for the existing recovery owner", {
-          taskID: task.id,
-          sessionID,
-          requestID: replay.payload.request_id,
-          error: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
-        })
-      })
+      requestTaskControlScanInBackground(task.id, "operator-steer-exact-replay")
       return {
         task_id: task.id,
         session_id: replay.payload.session_id,
@@ -2688,81 +2674,15 @@ export namespace EngineService {
     }
 
     if (!request.createdNow) {
-      await deliverTaskRootIngress(task.id).catch((error) => {
-        log.warn("operator steer concurrent replay left durable ingress for the existing recovery owner", {
-          taskID: task.id,
-          sessionID,
-          requestID: request.payload.request_id,
-          error: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
-        })
-      })
-      return {
-        task_id: task.id,
-        session_id: request.payload.session_id,
-        request_id: request.payload.request_id,
-        wake_status: "accepted" as const,
-      }
+      requestTaskControlScanInBackground(task.id, "operator-steer-concurrent-replay")
     }
-
-    let dispatchResult: "accepted"
-    try {
-      const result = await dispatch({
-        taskID: task.id,
-        event: {
-          coordinationRequest: { requestID: request.payload.request_id },
-        },
-      })
-      if (result === "ignored") {
-        throw new Error(`Operator steer request ${request.payload.request_id} was rejected by Task ingress delivery`)
-      }
-      dispatchResult = "accepted"
-    } catch (error) {
-      const reason = error instanceof Error ? `${error.name}: ${error.message}` : String(error)
-      log.error("operator steer wake attempt failed after durable request persistence", {
-        taskID: task.id,
-        sessionID: target.session.id,
-        requestID: request.payload.request_id,
-        error: reason,
-      })
-      recordTaskInfrastructureError({
-        taskID: task.id,
-        component: "operator-steer",
-        operation: "dispatch-wake",
-        reason,
-        errorName: error instanceof Error ? error.name : undefined,
-        now: Date.now(),
-      })
-      let directActivations = 0
-      try {
-        directActivations = await deliverTaskRootIngress(task.id)
-      } catch (drainError) {
-        const drainReason =
-          drainError instanceof Error ? `${drainError.name}: ${drainError.message}` : String(drainError)
-        recordTaskInfrastructureError({
-          taskID: task.id,
-          component: "operator-steer",
-          operation: "drain-durable-wake",
-          reason: drainReason,
-          errorName: drainError instanceof Error ? drainError.name : undefined,
-          now: Date.now(),
-        })
-      }
-      // The durable record is the authority: a scan owned elsewhere activates
-      // nothing here yet still guarantees the wake is queued.
-      if (taskRootIngressStats(task.id).events > 0 || directActivations > 0) {
-        dispatchResult = "accepted"
-      } else {
-        throw new Error(
-          `Operator steer request ${request.payload.request_id} has neither an active Turn nor a durable pending wake`,
-        )
-      }
-    }
-
+    // A new request's transaction already signalled the project-owned scan.
+    // This receipt acknowledges durable acceptance, independent of its Turn.
     return {
       task_id: task.id,
-      session_id: target.session.id,
+      session_id: request.payload.session_id,
       request_id: request.payload.request_id,
-      wake_status: dispatchResult,
+      wake_status: "accepted" as const,
     }
   }
 
@@ -2793,7 +2713,7 @@ export namespace EngineService {
             eventSource: "task-control.activity-reconciliation",
           }),
         )
-        await deliverTaskRootIngress(row.task_id)
+        requestTaskControlScanInBackground(row.task_id, "activity-reconciliation-reply")
       } else {
         await Question.reply({ requestID: row.external_id, answers })
       }
@@ -2866,7 +2786,7 @@ export namespace EngineService {
             eventSource: "task-control.activity-reconciliation",
           }),
         )
-        await deliverTaskRootIngress(row.task_id)
+        requestTaskControlScanInBackground(row.task_id, "activity-reconciliation-user-reply")
       } else {
         await Question.reply({ requestID: row.external_id, answers, userInput: input.userInput })
       }

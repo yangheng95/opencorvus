@@ -26,6 +26,14 @@ Queue       = Hint(unresolved projection)
 
 A hint may be lost or duplicated. Reconciliation always rereads facts before execution or commit.
 
+Public Task input and Interaction receipts acknowledge their persisted facts.
+Operator steering uses its request-and-ingress transaction's existing post-commit
+scan; exact and concurrent replays return the original receipt after signalling
+that same project-owned scanner. Activity-reconciliation answers likewise return
+the persisted answered view. These acceptance paths never await the Orchestrator
+Turn, repeat ingress persistence, or infer acceptance from an activation count.
+The detached scanner owns its fresh Instance lease, completion, and recovery.
+
 A global Task create carrying `requestID` first freezes the complete canonical caller request in
 `global_creation_allocation` before anonymous Project filesystem work. That occurrence owns one directory, one initial
 configuration snapshot, one append-once Task-resolution snapshot (profile, package revision, checks and process policy),

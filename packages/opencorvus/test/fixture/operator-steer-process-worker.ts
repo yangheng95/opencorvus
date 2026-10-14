@@ -22,10 +22,6 @@ try {
         taskID,
         sessionID,
         { request_id: requestID, message },
-        async () => {
-          await fs.writeFile(path.join(barrierDirectory, `${label}.dispatch`), "dispatched")
-          return "accepted" as const
-        },
       )
     },
   })

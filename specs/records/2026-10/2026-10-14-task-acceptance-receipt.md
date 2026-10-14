@@ -1,0 +1,51 @@
+# Task 持久受理回执与后台执行解耦
+
+## Recall
+
+用户要求持续自主体验并修复当前产品，单开发agent，重点成员侧栏、Sources与功能完成度。旧goal的Astra并行文字已被人工后续要求覆盖，不委托。允许原OpenAI凭据及完整models目录配对使用真实gpt-6.1-sol；全部推理流式。旧数据已清理/current schema v1已建立，本轮复用隔离v1历史，不清库。
+
+414为progress：8d37d4f071039035c6b56bc6561bb27911983380已正常推送（9045 joinc20f41 exit0，远端精确8d37），ChatBubble合法Task成员生成中可以添加指导；41真实流、11原图、流中Dock重开与同成员真实continuation已核验。新发现：首次operator-steer请求持久成功并完成原成员追加摘要，UI却显示signal timed out。原server日志request9b6a454b在04:57:01.091开始，04:59:00.016返回202，duration118925ms；相同业务request art_1c71e9b10c80478ebf95重试202/13ms。前端默认15秒；不能拿重试通过冒充首次成功。两个原scope均已正常join、物理/output/request收尾及配对退休。
+
+当前HEAD c6c2bcafb；其他Git/compaction源码、测试、spec索引改动全部保留。task-api及本轮目标测试起始干净。只当前分支、范围提交、fresh fetch/merge、完整pending审阅及正常push；不新branch/worktree/rebase/force/no-verify或发布。整体goal active。
+
+## 代码、公共合同与共享审计
+
+已读414完整Recall/真实事实与原HTTP（Hypertext Transfer Protocol，超文本传输协议）日志；当前task-control-plane和03-control协调合同；全仓operatorSteerAgentSession/OperatorSteerDispatch/dispatchTaskLoop/deliverTaskRootIngress/dispatchPersistedTaskLoop/requestTaskControlScanInBackground定义与调用；TaskControlDriver requestWithAdmission/startRequest、数据库post-commit effects、现有Instance lease脱离与completionHooks；engine-interaction-recovery及原进程并发fixture。
+
+直接链路：operatorSteerAgentSession新建不可变request和root ingress后再次await dispatchTaskLoop。该函数持久同一wake再await reconcileTaskControlPlane。driver首次拥有扫描时等待runOwnedScan；同Task已有扫描才coalesce即时返回。于是回执延迟取决于谁先拥有扫描、模型与成员执行时长，414真实首次近119秒，重试无工作时13ms。原request创建事务本身已经persistCoordinationIngressInTransaction→Database.effect→requestTaskControlScanInBackground；其lease脱离/owned completion和重启事实扫描是唯一恢复机制。接口附加同步派发、失败后再drain及events-count判断是重复的受理路径，不能用增大前端timeout修补。
+
+横向范围：Task创建已requestAcceptedTaskReconciliation后台提示；operator新Message、scheduler materialize、Mission acceptance extension/resume及continuous-goal message都在原事实事务后使用dispatchPersistedTaskLoop，不等待模型。普通Question/Permission终态由EngineInteraction projectTerminalFact触发现有后台scan。仅Task API两个activity-reconciliation回答分支（replyInteraction/replyUserInteraction）仍在不可变answered outcome后await deliverTaskRootIngress，同样需修。所有生产直接dispatchTaskLoop其余调用属于worker lifecycle/collection/recovery或后台pipeline失败投递，需要其内部恢复返回值，不属于用户HTTP受理，保持原调度完成合同。直接Session流式prompt/Tool continuation具有明确执行流合同，不统一删await。
+
+正常/终态：协调接受依赖持久Task/Project/worker descriptor和冻结epoch，Task终态的acknowledge_terminal与活动redispatch仍由真实编排器选择。精确replay先校验原request语义，目标可变状态不影响原回执；跨Task全局identity冲突仍原typed error。并发create由同一个immediate事务唯一决定winner/原request+ingress；不新增wake identity。重启时既有持久ingress/reducer/bootstrap按Task/Project/epoch恢复，提示允许丢失或合并；detach helper重新取得当前Project lease并登记实际completion，不在请求上下文裸float Promise。串行/并行受现有driver容量、Task coalescing、root FIFO和lease管理，不把receipt当已执行。删除接口重复等待不会改变这些事实或放宽重开权限。
+
+已有engine-interaction-recovery使用私有dispatch参数/进程.dispatch文件计数跳过真实受理路径。该注入不是公共路由契约，只有同文件与process fixture使用；替换落地时删类型、参数、旧marker计数及重复失败drain。测试保留并增强真实receipt、单request/事件/ingress、同义重试/冲突、冻结descriptor、进程并发及重启Question/Permission恢复的正向合同。activity-reconciliation用现有两种public helper分别验证answered原结果；移除被触及的Question空列表负向断言。无UI测试。
+
+## 实施与验收方案（修改前）
+
+1. 新建请求接受以已经提交的唯一request/ingress为准，使用其原事务后后台scan；精确replay及并发replay只提示现有后台scan后返回原receipt。删除同步dispatch注入、重复持久wake及catch fallback/drain/count逻辑。两个activity-reconciliation回答改为同一后台scan提示，返回真实answered view。不改变schema、路由、响应字段、身份约束、前端超时或模型提示。
+2. 执行官方后端runner的engine-interaction-recovery聚焦文件，校验显式accepted receipt与原唯一身份/并发/恢复；补两种activity reply正向覆盖。运行包含被改测试/fixture的扩展类型检查和正常core types；若检查器故障先修原问题重跑，不扩大为全量bun test。
+3. 真实修后scope task-acceptance-receipt-415-live/18539：复用414已构建的独立UI bundle（界面文件本轮不改），当前backend源码正式serve /ui；同一v1 QA项目，新Task receipt。既有Native包装器、40累计请求/600秒/180秒无活动，完整auth/models预检后CLI创建同样2400字读取任务。实际成员活动时只发送一次三句话摘要要求；截图验证第一次accepted反馈发生于原成员仍活动，后台request/response/action/原child continuation/终态及server原HTTP duration共同核验。该慢成员真实请求不能用本地stub代替。
+4. 同一任务完成后精确replay作为原identity恢复合同可读/必要时操作，不制造第二请求。保留414原118925ms和超时原图；本轮比较首次受理与业务完成的不同时间点，不以单一耗时分数覆盖事实。关闭自有页、public shutdown、join原句柄后核对物理/output/request并退休复制配对，保留数据。
+5. 所有UI观察仅CUA真实交互/原截图人工复核，纯后端修复没有UI自动化。归档脚本、请求、checker、原日志、退出和截图，更新本规格/架构/索引，docs:check及架构检查、范围commit和正常push。未覆盖的失败/取消/多Project真实模型组合明确保留，不把源码审计或局部测试冒充全矩阵实测。
+
+## 实施与本地验证
+
+Task API已删除私有dispatch参数/类型、重复同步wake及失败后的drain/count后备判断；新请求沿原transaction effect，两个replay分支只向既有后台scanner提示；两个activity reconciliation回答使用同一后台入口。无字段/schema/前端timeout更改。进程并发fixture使用真实服务方法，旧.dispatch计数删除，以明确accepted receipt和唯一不可变request/事件/ingress证明当前合同；回答测试覆盖两种调用。
+
+官方runner15038 joincc0608 exit0，8 pass/75 expect；含同Task跨进程并发、相同请求恢复/冲突、冻结descriptor、恢复Question/Permission和两种activity回答。新扩展类型配置首轮5158 join7895e9 exit2：配置在临时目录，未指定package内@types目录，找不到bun类型。保留首配置/错误日志，修正typeRoots指向已安装的package依赖，不改依赖或绕过test文件，然后原检查重跑。
+
+第二轮扩展类型51567 joinfb3943 exit2进一步暴露同一被触及旧测试中的Part联合类型未收窄，以及一个必定throw的事务被推断never。没有生产源码错误；增加实际返回Part的text/tool/running识别、显式void回滚事务，保留原输入与正向合同。最终79009 joinb3b1a1 exit0；官方原测试再次39145 joinb2c876 exit0、8 pass/75 expect，86.97秒。失败配置/日志完整保留，不用core原配置排除测试的结果替代扩展检查。
+
+## 首次真实回执与完整业务链
+
+Native scope task-acceptance-receipt-415-f497a4dd-8012-4572-89c9-ae56bcae24dd，Target85648/18539。原auth/models整对预检证明可用、Sol投影及实际stream一致；CLI91626 join2bf7aa exit0，Task tsk_g00VXzxrgf006IiPmdKz，原request fa85bf64-32dd-4bd2-9f5c-23b48d6d0c5c，05:21:44发送/05:21:52接受。唯一base-tester为ses_hRyNqpInp8rc2OBLnh5H，真实读取README2—3行并生成约2500字12节长文。
+
+首次页面发送业务request art_3e9833bfd33b4bf5a43d，真实HTTP request c0ec7f4c在05:23:22.525开始、05:23:22.625返回202，duration100ms；整个scope该路径仅一次POST，没有重试。request在1791955402532持久化；HTTP完成早于原长文完成1791955417035，也早于编排器协调响应。02截图为立即发送中的瞬时帧，03已收到accepted但回执在视口下方，04点击空输入定位后完整可见“Guidance accepted”与同一编号，Task仍Running。不能把02命名或AX文本代替04实际视觉证据，也不把单次100ms当全局性能保证。
+
+真实编排器response art_hYVGpjGRc2shGDrATnNI决定redispatch，action art_hplQfoSvtg64SA7FaKR4沿原binding；后续dispatch_agent引用该action，在原child写真实输入msg_g0VXzyNFL00by2dlLUtd。最终成员msg_g0VXzyOpF00Z3ovIg1Un/Part prt_g0VXzyPkp006YIvtT8Hx给出三句话摘要，原价格、交付、限定及行号完整。action outcome art_hVkXHdecwLfmPi4QdMeg为completed；原Task epoch1正常completed，Task monitor的physical prompt owners已空。05实际显示摘要与同一回执，06打开原README并定位2—3行；源码与草稿无伪造/复制双源。
+
+35页面关闭后公开shutdown049d99 HTTP200，原22954 join25b22d exit0。19条真实Sol请求均200/reader settled/eof；Native正常exited0、physical/output/request与复制auth/models退休齐全，现存v1数据保留。414原Task的20条Message及全部Part/Tool/outcome和既有Artifact payload保持。只读真实事实checker25c539 exit0，原HTTP、持久关系、完成时刻与模型/物理边界见[persisted-check](../../artifacts/2026-10-14-task-acceptance-receipt/persisted-check.json)及运行摘要。
+
+## 交付边界
+
+本轮修复三处公共受理路径的同步执行等待，删除旧注入与后备drain；正向后端8项、真实活动Task首次100ms回执和同成员续跑完成。终态协调实际证据承接414，重启/并发及两种activity回答是聚焦后端合同，不宣称所有失败/取消/多Project组合都新跑了真实Sol。不同成员切换等持续体验目标仍开放，整体goal active。六张原截图人工查看，未新增或运行UI自动化测试；复用414后端无关UI bundle，无本轮前端代码改动。后续按实际文档检查与范围提交/同步/正常push记录，不预写交付成功。
