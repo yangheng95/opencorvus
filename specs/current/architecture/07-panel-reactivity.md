@@ -55,7 +55,8 @@ service, shared by preview, discovery and save. Editing retains its actual exist
 ID; explicit IDs and display names retain their prior priority and normalization.
 New IPv4, localhost and .localhost entries use the normalized full host with its
 non-default port. IPv6 entries retain their normalized address and non-default
-port under the ipv6 prefix. Ordinary DNS entries retain the existing brand-label
+port under the ipv6 prefix. Each IPv6 colon maps to one underscore, preserving
+compressed zero-segment positions. Ordinary DNS entries retain the existing brand-label
 derivation. Existing declarations are not renamed. Conflicting derived or explicit
 IDs use the existing configuration conflict contract; paths, query strings and
 protocols are not a general uniqueness guarantee.

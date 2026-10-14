@@ -13,10 +13,18 @@ describe("provider declaration identity", () => {
     ["http://127.0.0.1:18647/v1", "127-0-0-1-18647"],
     ["http://10.0.0.2:8080/v1", "10-0-0-2-8080"],
     ["http://127.1:18645/v1", "127-0-0-1-18645"],
-    ["http://[::1]:18645/v1", "ipv6-1-18645"],
-    ["http://[0:0:0:0:0:0:0:1]:18645/v1", "ipv6-1-18645"],
-    ["http://[::2]:18645/v1", "ipv6-2-18645"],
-    ["http://[2001:db8::1]:8080/v1", "ipv6-2001-db8-1-8080"],
+    ["http://[::1]:18645/v1", "ipv6-__1-18645"],
+    ["http://[0:0:0:0:0:0:0:1]:18645/v1", "ipv6-__1-18645"],
+    ["http://[::2]:18645/v1", "ipv6-__2-18645"],
+    ["http://[2001:db8::1]:8080/v1", "ipv6-2001_db8__1-8080"],
+    ["http://[2001:db8:1::1]:18651/v1", "ipv6-2001_db8_1__1-18651"],
+    ["http://[2001:db8::1:1]:18651/v1", "ipv6-2001_db8__1_1-18651"],
+    ["http://[2001:0db8:0001:0:0:0:0:0001]:18651/v1", "ipv6-2001_db8_1__1-18651"],
+    ["http://[2001:DB8:0:0:0:0:1:1]:18651/v1", "ipv6-2001_db8__1_1-18651"],
+    ["http://[1:2:3:4:5:6:7:8]:18651/v1", "ipv6-1_2_3_4_5_6_7_8-18651"],
+    ["http://[2001:db8:1::]:18651/v1", "ipv6-2001_db8_1__-18651"],
+    ["http://[::]:18651/v1", "ipv6-__-18651"],
+    ["https://[::1]:443/v1", "ipv6-__1"],
     ["http://localhost:18645/v1", "localhost-18645"],
     ["http://localhost:18647/v1", "localhost-18647"],
     ["http://models.localhost:18645/v1", "models-localhost-18645"],
@@ -51,6 +59,32 @@ describe("provider declaration identity", () => {
     expect(declarations).toEqual({
       "127-0-0-1-18645": { name: "127-0-0-1-18645", api: "http://127.0.0.1:18645/v1", env: [], models: {} },
       "127-0-0-1-18647": { name: "127-0-0-1-18647", api: "http://127.0.0.1:18647/v1", env: [], models: {} },
+    })
+  })
+
+  test("creates complete IPv6 declarations with distinct zero segment positions", () => {
+    const declarations = Object.fromEntries(
+      ["http://[2001:db8:1::1]:18651/v1", "http://[2001:db8::1:1]:18651/v1"].map((api) => {
+        const id = providerFormID({ id: "", name: "", api })
+        return [
+          id,
+          applyProviderForm({ id, current: undefined, initial: null, values: { name: "", api, env: "", models: "" } }),
+        ]
+      }),
+    )
+    expect(declarations).toEqual({
+      "ipv6-2001_db8_1__1-18651": {
+        name: "ipv6-2001_db8_1__1-18651",
+        api: "http://[2001:db8:1::1]:18651/v1",
+        env: [],
+        models: {},
+      },
+      "ipv6-2001_db8__1_1-18651": {
+        name: "ipv6-2001_db8__1_1-18651",
+        api: "http://[2001:db8::1:1]:18651/v1",
+        env: [],
+        models: {},
+      },
     })
   })
 })

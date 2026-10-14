@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [IPv6 Provider零段位置](2026-10-14-provider-ipv6-segments/README.md)：修前冲突、修后声明和独立运行原件。
+
 - [406 原执行者恢复与选项呈现](2026-10-14-execution-owner-recovery-406/README.md)：实施前原分析/源/全caller，P/U精确授权与未跑矩阵；不替405真实原证据。
 
 - [本地Provider自动标识](2026-10-14-provider-local-identity/README.md)：Root独立修前/修后、正向业务与真实桌面证据。

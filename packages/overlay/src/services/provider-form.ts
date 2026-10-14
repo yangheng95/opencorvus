@@ -23,7 +23,8 @@ export function providerFormID(input: { existing?: string | null; id: string; na
     const url = new URL(input.api.trim())
     const host = url.hostname
     if (host.startsWith("[") && host.endsWith("]")) {
-      return sanitizeProviderId(`ipv6-${host.slice(1, -1)}${url.port ? `-${url.port}` : ""}`)
+      const address = host.slice(1, -1).replaceAll(":", "_")
+      return sanitizeProviderId(`ipv6-${address}${url.port ? `-${url.port}` : ""}`)
     }
     if (/^\d+(?:\.\d+){3}$/.test(host) || host === "localhost" || host.endsWith(".localhost")) {
       return sanitizeProviderId(url.host)

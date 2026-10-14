@@ -13,6 +13,8 @@
 
 #### 修复
 
+- IPv6 模型服务商的自动标识保留压缩零段的位置，两个非零段相同但零段位置不同的地址可分别保存。已保存的服务商标识保持不变。
+
 - 新增本地模型服务商时，自动标识保留完整 IP、localhost 或 IPv6 地址及非默认端口，同一地址的不同端口可分别保存；编辑已有服务商时保持原标识。
 
 - 侧聊自动重连时使用当前连接状态显示提示，原断流诊断保留在日志；真正的会话与操作失败继续显示。重连后的同一问题保留可编辑草稿和原回答归属。
@@ -113,6 +115,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- IPv6 provider IDs preserve the position of compressed zero segments, so addresses with the same nonzero groups in different positions can be saved separately. Existing provider IDs remain unchanged.
 
 - New local model providers derive their IDs from the complete IP, localhost or IPv6 address and non-default port, allowing services on different ports to be saved separately. Editing retains the existing provider ID.
 

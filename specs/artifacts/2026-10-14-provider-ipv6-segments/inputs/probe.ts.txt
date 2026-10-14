@@ -1,0 +1,2 @@
+import {providerFormID} from '../packages/overlay/src/services/provider-form'
+for(const api of ['http://[2001:db8:1::1]:18651/v1','http://[2001:db8::1:1]:18651/v1'])console.log(JSON.stringify({api,hostname:new URL(api).hostname,id:providerFormID({id:'',name:'',api})}))

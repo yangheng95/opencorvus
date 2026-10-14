@@ -1,0 +1,27 @@
+import fs from "node:fs/promises"
+import path from "node:path"
+import assert from "node:assert/strict"
+const root=path.resolve(process.argv[2]!)
+const {CredentialRedactor}=await import("../packages/opencorvus/script/real-provider-audit")
+const redactor=new CredentialRedactor()
+redactor.collect(JSON.parse(await fs.readFile(path.join(root,"runtime/data/auth.json"),"utf8")))
+await fs.writeFile(path.join(root,"privacy-ready.json"),JSON.stringify({knownCredentials:"Own generated fictional credential values collected only in memory",pid:process.pid})+"\n")
+const deadline=Date.now()+120000
+while(true){
+ if(await fs.stat(path.join(root,"physical-pair-cleanup.json")).then(()=>true,()=>false))break
+ if(Date.now()>deadline)throw Error("Own runtime parent did not confirm actual exit and pair cleanup")
+ await Bun.sleep(250)
+}
+const cleanup=JSON.parse(await fs.readFile(path.join(root,"physical-pair-cleanup.json"),"utf8"))
+assert.equal(cleanup.actualExit,0);assert.equal(cleanup.listeners,0)
+await fs.mkdir(path.join(root,"redacted-logs"),{recursive:true})
+const files=[]
+for(const file of ["stdout.log","stderr.log",...(await fs.readdir(path.join(root,"runtime/log"))).filter(name=>name.endsWith(".log")).map(name=>"runtime/log/"+name)]){
+ const raw=await fs.readFile(path.join(root,file),"utf8"),safe=redactor.redact(raw)
+ const qualified={file,bytes:Buffer.byteLength(raw),rawContainsKnownCredential:redactor.containsCredential(raw),archivedContainsKnownCredential:redactor.containsCredential(safe)}
+ assert.equal(qualified.rawContainsKnownCredential,false);assert.equal(qualified.archivedContainsKnownCredential,false)
+ await fs.writeFile(path.join(root,"redacted-logs",path.basename(file)),safe)
+ files.push(qualified)
+}
+await fs.writeFile(path.join(root,"privacy-qualified.json"),JSON.stringify({boundary:"Only own generated credential values held in memory; full completed original logs checked after actual physical exit and pair cleanup",files},null,2)+"\n")
+console.log(JSON.stringify({normalExit:cleanup.actualExit,listeners:cleanup.listeners,files:files.map(({file,bytes})=>({file,bytes}))}))

@@ -1,0 +1,23 @@
+{
+  "boundary": "Only own generated credential values held in memory; full completed original logs checked after actual physical exit and pair cleanup",
+  "files": [
+    {
+      "file": "stdout.log",
+      "bytes": 0,
+      "rawContainsKnownCredential": false,
+      "archivedContainsKnownCredential": false
+    },
+    {
+      "file": "stderr.log",
+      "bytes": 0,
+      "rawContainsKnownCredential": false,
+      "archivedContainsKnownCredential": false
+    },
+    {
+      "file": "runtime/log/2026-10-14T011259-88128-1.log",
+      "bytes": 109425,
+      "rawContainsKnownCredential": false,
+      "archivedContainsKnownCredential": false
+    }
+  ]
+}

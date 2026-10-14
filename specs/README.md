@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [IPv6 Provider零段位置](records/2026-10/2026-10-14-provider-ipv6-segments.md)：完整地址编码与真实表单冲突调查，Root独立验收。
+
 - [406 原执行者恢复与选项呈现](records/2026-10/2026-10-14-execution-owner-recovery-406.md)：Permission物理effect owner/CAS与Project隔离、Question后续权威、原选项语义布局，405正常交付后继续。
 
 - [本地Provider自动标识](records/2026-10/2026-10-14-provider-local-identity.md)：IP/localhost与端口派生、单一表单身份及真实保存调查。
