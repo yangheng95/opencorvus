@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [侧栏Rendering根因](2026-10-14-sidebar-render-root/README.md)：单agent真实流式生命周期、历史修复复核与OpenAPI闭合。
+
 - [Git 源条目写入原件](2026-10-14-project-metadata-latency/source-entry-write/README.md)：3532 captures、真实Git/HTTP/SSE、英文中文截图、手工提交和原结算。
 
 - [Sources与Rendering复查](2026-10-14-source-render-review/README.md)：单agent实际体验、根因修复与截图复验。

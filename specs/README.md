@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [侧栏Rendering根因](records/2026-10/2026-10-14-sidebar-render-root.md)：单agent真实流式生命周期、历史修复复核与OpenAPI闭合。
+
 - [Git 源条目写入与单人验收](records/2026-10/2026-10-14-project-metadata-latency.md)：有限暂存、真实链接/文件类型、原子索引、可操作模型提示；47项正向测试及真实桌面闭环。
 
 - [Sources与Rendering复查](records/2026-10/2026-10-14-source-render-review.md)：单agent实际体验、根因修复与截图复验。

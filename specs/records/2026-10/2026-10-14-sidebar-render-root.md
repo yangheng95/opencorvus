@@ -1,0 +1,49 @@
+# 侧栏Rendering根因复核、真实流式验收与OpenAPI闭合
+
+## Recall
+
+最新用户明确要求只由一个agent查清并修复侧栏Rendering闪烁，真实体验后提交，并安全解决OpenAPI/push阻塞，不能只记录问题。无开发委派，无其他任务消息。419仅完成Sources完成态复验，未修复闪烁；418的cb21f21c与419的18e14da63等4提交尚未推送。开始HEAD18e14da63，现有56余其他工作区改动原样保留，初始状态和本轮可能涉及文件原差异已保存。当前数据库已声明基线与新增自动迁移，禁止再清库。
+
+## 修改前读取与影响分析
+
+已重读419 Recall及388/389历史生命周期诊断，TextPart/text-part-model、markdown-render worker/service、CardParts、ChatBubble、ConversationCard、SubagentConversationPanel完整live projection/resource/target链，main固定forceMount dock、Solid实际Show/Switch非keyed真值分支实现、07-panel/07-panel-reactivity。首次Rendering只能在新的文本owner尚无HTML或其text被清空时出现；当前同target保留资源、完成HTML缓存和ConversationCard分支修复已存在。候选仍为消息/Part展示按Index槽复用时的插入、渲染分组变化或上层effect非预期订阅，需真实生命周期记录锁定；不靠隐藏提示、扩大缓存或猜测重写。消息ID/PartID、Source所属和阅读位置均须保持。
+
+OpenAPI阻塞的完整定义/调用已定位：未提交的VcsCommitMessageStreamEvent error新增code枚举，server/vcs-stream-error发送同一新合同，meta/TaskDirBar消费；SDK尚旧。最新用户已经明确授权闭合该阻塞，因此可以完成这一精确接口合同的生成与验证，不再将其笼统称为不可触及的外部工作。保留更广泛Git事务/权限/compaction工作不动：只采用已存在且审阅的流式错误schema、发送器与对应正向安全测试，使用唯一SDK生成器，并复核生成diff是否仅属于该合同。UI消费者现存改动不混入；当前HEAD消费者已解析同一canonical schema，新增code不改变原message显示调用。不得只提交孤立SDK或回退他人source，不绕hook。数据schema与调度本轮不改。
+
+## 实施与验收
+
+先运行SDK正式生成器和聚焦错误合同checker，差异范围准确才交付；生成器/route-check故障修复后重跑原hook。UI使用Node私有诊断构建，仅增加组件create/dispose、身份/长度/HTML块数只读日志，不加UI断言、自动点击或假消息。正式开发服务/ui、自有页面人工操作和截图；必要流数据使用隔离已有会话，不委派开发工作或新增并行成员。凭据与models完整配对、gpt-6.1-sol实际流请求审计沿既有包装器；每scope资源600秒、无活动180秒、12调用，所有准备/构建在启动前完成。真实诊断锁定后追加精确根因/旧路径/实现/风险再修改。修后原场景截图与生命周期对照，正式构建/类型/文档检查不能替代视觉。
+
+每个自有scope公开shutdown、原句柄join、精确OS身份及physical/output/request收尾后退休复制配对。所有本任务文件范围提交；fresh fetch/merge、完整pending审查、正常push直到安全交付，不发布版本。
+
+## 根因链与当前实现
+
+已用真实源码历史核对，原现象有两条独立机制，不能只依据最后一次Rendering文案判断。2e9d39ee5b7ca1e9d55b045d98fcf70d600ac526中的旧TextPart只按pending显示占位；新增量每次异步Markdown解析都会进入pending，即使已有HTML也反复插入状态行，改变正文高度。同时text-part-model的reactive effect曾因输入包装对象更新重复提交相同正文；修复按text、streaming、locale与locale revision确认实际输入变化，已有正文继续呈现。当前TextPart只在pending且HTML为空时显示Rendering，模型只在真实text为空时清空HTML，保留已接受的块直到新结果到达。
+
+另一条是侧栏生命周期。b93fe9a824e2dd0a9db109b406c8e15132d6370b把稳定targetKey与只在可见时有效的requestKey分开，隐藏/列表往返不再抹掉同一成员已接受的transcript；固定dock的TabPanel forceMount维持内容所有者。更早72bacb0cbe已将ConversationCard的视图分支改成非keyed真值，避免把更新中的投影对象当作组件生命周期。388/389对按消息身份保存历史与失败读取保留已接受数据的修复属于同一链的其他入口。只修改Markdown占位无法根治上层销毁；只保持dock也不能消除每次解析重复出现的占位。
+
+上述生产修复均已在本轮开始的代码历史中。本轮没有伪造新根因、添加新UI补丁或扩大缓存。先前419仅有完成态截图，不能证明流中生命周期，本轮补齐了真实新流、只读生命周期记录、正式构建中的切换与关闭重开。before目录表示当前实现加被动诊断的构建，after表示相同实现的正式构建，**不是旧bug版/新修复版的对照**。历史补丁原件见证据facts/historical-fixes.patch.gz。
+
+## 真实侧栏与Sources验收
+
+一个开发agent全程操作。复用412已有普通父会话ses_-zUS0X33CzzWEKMgCk98及唯一已有成员ses_-zUS0WzzQzzDOGrIbYwN；没有创建新产品子成员，也没有委派开发工作。向这个已有会话各发送一次真实用户输入，让其自身read README第2–3行并流式输出16小节中文正文。预检使用自己的普通独立会话，不属于产品委派树。所有消息、工具结果与Sources来自实际生产链；没有注入页面状态或合成消息。
+
+诊断构建仅以Vite转换插件加入create/dispose/state观察，不修改生产源码、控制流或输出内容。Node构建成功；重叠console批次按timestamp/message去重，共608条观察。08:26:24创建的侧栏已有正文owner5–8始终各创建一次；新输入owner9与流式正文owner10各创建一次。owner10从首次非空HTML持续到finish=stop，实际pending随增量正常切换，已接受HTML持续呈现。08:27:50实际Running时All agents往返后这些侧栏所有者保持。初始主会话owner1在08:25:48重新选择时销毁，owner4随后创建；这不是侧栏owner，不能把结果夸成所有组件均永不销毁。
+
+诊断01–05原图逐张人工查看。02/03处于新回复流中，旧段落仍可读；04重开是08:28:50，晚于08:28:14.359自然完成，严格只算完成态。一次checkbox语义定位未命中，随后读取新的AX状态并使用实际控件打开；没有伪称首次操作成功。console每次最多500条，重叠批次覆盖本次记录；它们是被动观察，不是UI自动化测试或DOM断言。
+
+正式构建最初从错误cwd调用Vite导致无法解析/main.tsx，原失败日志保留；改用packages/overlay的正式配置与cwd，Node构建成功（59.97秒），仍有正常bundler/chunk警告。正式构建不含诊断插件，仍由项目开发服务18557的/ui提供。06是已有历史，07在08:39:27实际Running时列表往返；08在08:39:44实际Running时关闭并立即重开dock，正文持续呈现。最终assistant msg_g0VY0lQFS00Ck23sRgNC在08:39:59.495自然finish=stop；因此07/08是流中证据。自动跟随当时已启用，不能据截图宣称暂停阅读的精确像素位置保持。09在08:40:17点击实际Source复制并查看来源/正文，属于完成态。Sources保留README.md:2–3、实际toolPartID与messageID，首来源直接显示，可与原始read独立核对；419已完成的实际文件行号跳转证据继续有效。
+
+10条实际Provider流（每scope5条，含预检及普通memory处理）均为gpt-6.1-sol、streaming=true、HTTP200、reader settled/eof。两个业务输入的read分别为prt_g0VY0iTgv00wsQ8QqP2W和prt_g0VY0lPyj005kGCqD5y2，均offset2/limit2，各绑定真实Source范围2–3。新业务响应自然完成，没有再调用delegate_agent。截图不是连续视频；本轮没有重现当前版本反复Rendering的新触发点，也不能外推为所有上下文或其他正在变化的子系统已经全面验收。
+
+## 持久数据与资源收尾
+
+只读SQLite事务确认当前数据库自动升级至user_version=2，未清库。对412已归档原事实逐字段比对：原3个session身份（包含当时预检）、8条消息、19个part、2个tool request及2个outcome全部保留原字段值。本轮归档只选这3个既有身份，排除全局数据库其他历史；实际父/成员树仍为原2个会话。比较的是持久事实与真实内容，不用可变源码摘要代替验收。
+
+before公开POST/shutdown HTTP200；原启动71873 join686424 exit0，原sender67730 joinc11436 exit0。after业务sender13877 joind07703 exit0；由于整理证据超过服务资源上限，原启动11097最终join7ee31b exit1，其native终态为deadline_exceeded（08:46:30.287），不是公开shutdown成功，不能隐去。两scope均已验证physicalCompletion/outputDrainComplete/requestCleanupComplete，精确host/target实例dead_or_reused、端口释放，并随后退休复制的auth.json与models.json。没有关闭用户进程；自有页面45/46均关闭。资源上限退出不是Provider业务失败，两条自然完成消息及reader时间分别保留。
+
+## OpenAPI阻塞闭合与验证
+
+本轮采用唯一SDK生成器成功生成，运行security-p0-runtime.test.ts真实checker，6项正向测试/11断言通过，包括缺少模型配置的准确公开错误code与内部诊断合同。原归属任务同期以c777d8ce0fed6e558d187e13c6478549bf72c662完整提交了VCS（Version Control System，版本控制系统）的生产定义、发送器、消费者与SDK，故本轮没有另提交孤立生成文件。当前生成器重跑后的SDK差异为空，api:routes-check通过6条规则和35个文件路由清单，原generated-openapi-differs-tracked-openapi阻塞已消除。不是绕hook或撤回新的错误合同。
+
+fresh fetch/merge首次观察时418、419及相关已授权通道/VCS提交已由共享交付正常到达upstream，本轮不冒称自己刚上传这些提交。本轮独立提交生命周期调查、9张原图、真实Provider/数据/资源原件与检查记录；随后仍按当前完整待推送集合、正常hook和远端结果完成交付。最终提交/推送身份以Git回执为准。
