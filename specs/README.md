@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [项目元数据慢读取](records/2026-10/2026-10-14-project-metadata-latency.md)：原163秒读取的共享入口、Git/Native阶段资格与根因调查。
+
 - [归档工作搜索](records/2026-10/2026-10-14-archive-search.md)：既有服务器查询接入、跨分页查找与真实页面验收。
 
 - [首次复制的浏览器观测顺序](records/2026-10/2026-10-14-clipboard-first-observation.md)：区分首次工具交接、页面复制与后续观察的真实顺序。

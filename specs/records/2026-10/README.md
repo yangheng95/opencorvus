@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [项目元数据慢读取](2026-10-14-project-metadata-latency.md)：共享入口横审、有限Git根与原Native阶段调查。
+
 - [归档工作搜索](2026-10-14-archive-search.md)：Root独立调查及现有归档搜索能力接入方案。
 
 - [首次复制的浏览器观测顺序](2026-10-14-clipboard-first-observation.md)：区分首次工具交接、页面复制与后续观察的真实顺序。

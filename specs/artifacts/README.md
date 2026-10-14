@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [项目元数据慢读取](2026-10-14-project-metadata-latency/README.md)：上一浏览正常交付与新有限阶段原件。
+
 - [归档工作搜索](2026-10-14-archive-search/README.md)：真实归档查询、分页、恢复与原始页面证据。
 
 - [首次复制的浏览器观测顺序](2026-10-14-clipboard-first-observation/README.md)：区分首次工具交接、页面复制与后续观察的真实顺序。

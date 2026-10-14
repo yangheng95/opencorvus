@@ -1,0 +1,204 @@
+{
+  "capturedAtUtc": "2026-10-14T02:28:52.197Z",
+  "originalNormalPush": {
+    "command": [
+      "git",
+      "push"
+    ],
+    "atUtc": "2026-10-14T02:14:52.584Z",
+    "completedAtUtc": "2026-10-14T02:17:41.731Z",
+    "exitCode": 0,
+    "signal": null,
+    "stdoutFile": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-push-normal-1791944092584.stdout.log",
+    "stderrFile": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-push-normal-1791944092584.stderr.log"
+  },
+  "remoteProof": {
+    "atUtc": "2026-10-14T02:18:44.955Z",
+    "head": "73664470621ff6b76b84c40c554afadd6ecc8759",
+    "upstream": "73664470621ff6b76b84c40c554afadd6ecc8759",
+    "remote": "73664470621ff6b76b84c40c554afadd6ecc8759\trefs/heads/main",
+    "ownedCommit": "b767b93259c9c4766d91b70c1a0bd168df4b5971",
+    "ownAncestorExitCode": 0,
+    "ownScopeStatus": "",
+    "staged": "",
+    "status": " M packages/opencorvus/script/check/control-lease-owners.ts\n M packages/opencorvus/script/compaction-policy-case.ts\n M packages/opencorvus/script/compaction-stress.ts\n M packages/opencorvus/src/agent/prompt/compaction.txt\n M packages/opencorvus/src/permission/authority.ts\n M packages/opencorvus/src/session/compaction.ts\n M packages/opencorvus/test/compaction-policy-action.test.ts\n M packages/opencorvus/test/compaction-transcript-budget.test.ts\n M packages/opencorvus/test/permission-two-mode.test.ts\n M packages/overlay/src/components/InteractionCard.tsx\n M packages/overlay/src/components/ui/Checkbox.tsx\n M packages/overlay/src/styles/surfaces/card.css\n M specs/README.md\n M specs/artifacts/2026-10-13-compaction-stress/final-request-ledger.json\n M specs/artifacts/README.md\n M specs/current/architecture/07-panel-reactivity.md\n M specs/current/architecture/project-memory.md\n M specs/current/architecture/security-permission.md\n M specs/records/2026-10/2026-10-13-compaction-stress.md\n M specs/records/2026-10/2026-10-14-execution-owner-recovery-406.md\n M specs/records/2026-10/README.md\n?? .bun/\n?? packages/opencorvus/bun/\n?? packages/opencorvus/test/fixture/permission-execution-owner-process-worker.ts\n?? packages/opencorvus/test/permission-execution-owner-process.test.ts\n",
+    "qualification": "Fresh remote read and actual own commit ancestry; unrelated working changes preserved. Continuous goal remains active."
+  },
+  "files": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-push-normal-1791944092584.stdout.log",
+      "file": "browse-push-normal-1791944092584.stdout.log.gz",
+      "originalBytes": 2322,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-push-normal-1791944092584.stderr.log",
+      "file": "browse-push-normal-1791944092584.stderr.log.gz",
+      "originalBytes": 1270,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-push-normal-1791944092584.exit.json",
+      "file": "browse-push-normal-1791944092584.exit.json.gz",
+      "originalBytes": 427,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-fetch-final-1791944321376.stdout.log",
+      "file": "browse-fetch-final-1791944321376.stdout.log.gz",
+      "originalBytes": 0,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-fetch-final-1791944321376.stderr.log",
+      "file": "browse-fetch-final-1791944321376.stderr.log.gz",
+      "originalBytes": 97,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-fetch-final-1791944321376.exit.json",
+      "file": "browse-fetch-final-1791944321376.exit.json.gz",
+      "originalBytes": 442,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-head-final-1791944322625.stdout.log",
+      "file": "browse-head-final-1791944322625.stdout.log.gz",
+      "originalBytes": 41,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-head-final-1791944322625.stderr.log",
+      "file": "browse-head-final-1791944322625.stderr.log.gz",
+      "originalBytes": 0,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-head-final-1791944322625.exit.json",
+      "file": "browse-head-final-1791944322625.exit.json.gz",
+      "originalBytes": 442,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-upstream-final-1791944322688.stdout.log",
+      "file": "browse-upstream-final-1791944322688.stdout.log.gz",
+      "originalBytes": 41,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-upstream-final-1791944322688.stderr.log",
+      "file": "browse-upstream-final-1791944322688.stderr.log.gz",
+      "originalBytes": 0,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-upstream-final-1791944322688.exit.json",
+      "file": "browse-upstream-final-1791944322688.exit.json.gz",
+      "originalBytes": 457,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-remote-final-1791944322750.stdout.log",
+      "file": "browse-remote-final-1791944322750.stdout.log.gz",
+      "originalBytes": 57,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-remote-final-1791944322750.stderr.log",
+      "file": "browse-remote-final-1791944322750.stderr.log.gz",
+      "originalBytes": 0,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-remote-final-1791944322750.exit.json",
+      "file": "browse-remote-final-1791944322750.exit.json.gz",
+      "originalBytes": 471,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-owned-ancestor-final-1791944324152.stdout.log",
+      "file": "browse-owned-ancestor-final-1791944324152.stdout.log.gz",
+      "originalBytes": 0,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-owned-ancestor-final-1791944324152.stderr.log",
+      "file": "browse-owned-ancestor-final-1791944324152.stderr.log.gz",
+      "originalBytes": 0,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-owned-ancestor-final-1791944324152.exit.json",
+      "file": "browse-owned-ancestor-final-1791944324152.exit.json.gz",
+      "originalBytes": 568,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-own-scope-final-1791944324233.stdout.log",
+      "file": "browse-own-scope-final-1791944324233.stdout.log.gz",
+      "originalBytes": 0,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-own-scope-final-1791944324233.stderr.log",
+      "file": "browse-own-scope-final-1791944324233.stderr.log.gz",
+      "originalBytes": 0,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-own-scope-final-1791944324233.exit.json",
+      "file": "browse-own-scope-final-1791944324233.exit.json.gz",
+      "originalBytes": 1181,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-staged-final-1791944324398.stdout.log",
+      "file": "browse-staged-final-1791944324398.stdout.log.gz",
+      "originalBytes": 0,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-staged-final-1791944324398.stderr.log",
+      "file": "browse-staged-final-1791944324398.stderr.log.gz",
+      "originalBytes": 0,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-staged-final-1791944324398.exit.json",
+      "file": "browse-staged-final-1791944324398.exit.json.gz",
+      "originalBytes": 464,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-status-final-1791944324596.stdout.log",
+      "file": "browse-status-final-1791944324596.stdout.log.gz",
+      "originalBytes": 1284,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-status-final-1791944324596.stderr.log",
+      "file": "browse-status-final-1791944324596.stderr.log.gz",
+      "originalBytes": 0,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-status-final-1791944324596.exit.json",
+      "file": "browse-status-final-1791944324596.exit.json.gz",
+      "originalBytes": 446,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-final-proof-1791944324955.json",
+      "file": "browse-final-proof-1791944324955.json.gz",
+      "originalBytes": 1822,
+      "decodedEqualsOriginalCapture": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\browse-outgoing-review-1791944040620.json",
+      "file": "browse-outgoing-review-1791944040620.json.gz",
+      "originalBytes": 3416013,
+      "decodedEqualsOriginalCapture": true
+    }
+  ],
+  "qualification": "Own normal push published ba5f55cb3..f971e92b6. Later independent source-focus commit736644706 is included in the exact final HEAD/upstream/remote observation, not counted as a new Root push. All captures are original complete bytes; no credentials or mutable-source checksum gate."
+}
