@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Sources与Rendering复查](2026-10-14-source-render-review/README.md)：单agent实际体验、根因修复与截图复验。
+
 - [通道反馈的当前语言](2026-10-14-channel-feedback-locale/README.md)：第30批真实反馈与独立数据故障原件。
 
 - [生产集合委派](2026-10-14-scheduler-frontier-grants/README.md)：统一平台/生产包/模板的并发能力及真实重叠验收。

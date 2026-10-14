@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Sources与Rendering复查](2026-10-14-source-render-review.md)：单agent实际体验、根因修复与截图复验。
+
 - [通道反馈的当前语言](2026-10-14-channel-feedback-locale.md)：反馈事实、计时与自有真实409故障恢复。
 
 - [生产集合委派](2026-10-14-scheduler-frontier-grants.md)：统一平台/生产包/模板的并发能力及真实重叠验收。
