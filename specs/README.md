@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [408 保存批准决定与安全升级](records/2026-10/2026-10-14-grant-decision-recovery-408.md)：唯一授权决定、历史保真、WAL文件独占候选与原客户端消费边界；当前调查/实验准备。
+
 - [代理测试的编辑草稿](records/2026-10/2026-10-14-network-test-draft.md)：在途代理测试、草稿编辑与真实回调所有权调查。
 
 - [活动Task指导与侧栏流式恢复](records/2026-10/2026-10-14-active-task-dock.md)：真实活动协调、成员增量及流中关闭重开验收。

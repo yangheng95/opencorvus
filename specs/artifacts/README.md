@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [408 保存批准决定与安全升级](2026-10-14-grant-decision-recovery-408/README.md)：407实际提交与push承接，408只读投影/客户端/升级协调资料。
+
 - [代理测试的编辑草稿](2026-10-14-network-test-draft/README.md)：第25批真实代理入口、页面与独立生命周期证据。
 
 - [活动Task指导与侧栏流式恢复](2026-10-14-active-task-dock/README.md)：真实活动协调、成员增量及流中关闭重开验收。
