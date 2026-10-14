@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [首次复制的浏览器观测顺序](2026-10-14-clipboard-first-observation/README.md)：区分首次工具交接、页面复制与后续观察的真实顺序。
+
 - [407 消息完成与续行退休](2026-10-14-message-continuation-retirement-407/README.md)：实施前真实源码/caller/history与406提交、锁竞争和正常push回执承接。
 
 - [Sources网页导航与浅色阅读](2026-10-14-source-navigation/README.md)：实际网页目标、返回后的阅读所有权与主题资格。

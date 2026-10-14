@@ -1,0 +1,19 @@
+{
+  "databaseVersion": [
+    {
+      "user_version": 1
+    }
+  ],
+  "sourceSessions": 2,
+  "messages": 18,
+  "sources": 14,
+  "tools": 10,
+  "comparison": "Exact original IDs, source payload fields, message state and tool bindings from the read-only production database match original 405 facts.",
+  "fields": [
+    "databaseVersion",
+    "sessions",
+    "sources",
+    "messages",
+    "tools"
+  ]
+}

@@ -1,0 +1,110 @@
+[
+  {
+    "phase": "control-A",
+    "value": "OpenCorvus 411 control A"
+  },
+  {
+    "phase": "A-first-read-after-page-copy",
+    "value": "OpenCorvus 411 control A"
+  },
+  {
+    "phase": "A-read-after-screenshot",
+    "value": "OpenCorvus 411 control A"
+  },
+  {
+    "phase": "control-B",
+    "value": "OpenCorvus 411 control B"
+  },
+  {
+    "phase": "B-first-read-before-page-copy",
+    "value": "OpenCorvus 411 control B"
+  },
+  {
+    "phase": "B-read-after-first-page-copy",
+    "value": "writeText(newClipText)"
+  },
+  {
+    "phase": "B-read-after-screenshot",
+    "value": "writeText(newClipText)"
+  },
+  {
+    "phase": "control-read-after-B-page-copy",
+    "value": "writeText(newClipText)"
+  },
+  {
+    "phase": "control-C",
+    "value": "OpenCorvus 411 control C"
+  },
+  {
+    "phase": "C-control-read-after-cold-page-copy",
+    "value": "OpenCorvus 411 control C"
+  },
+  {
+    "phase": "C-first-own-read-after-page-copy",
+    "value": "OpenCorvus 411 control C"
+  },
+  {
+    "phase": "C-control-read-after-C-first-read",
+    "value": "OpenCorvus 411 control C"
+  },
+  {
+    "phase": "control-before-product",
+    "value": "OpenCorvus 411 Sources baseline"
+  },
+  {
+    "phase": "product-first-tool-read-before-any-copy",
+    "value": "OpenCorvus 411 Sources baseline"
+  },
+  {
+    "phase": "product-first-page-copy-web",
+    "value": "OpenCorvus 411 Sources baseline"
+  },
+  {
+    "phase": "product-different-file-first-click",
+    "value": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\source-reading-405-live\\project\\README.md"
+  },
+  {
+    "phase": "product-distinct-web-keyboard-once",
+    "value": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment"
+  },
+  {
+    "phase": "control-before-ready-product",
+    "value": "OpenCorvus 411 ready-page baseline"
+  },
+  {
+    "phase": "ready-product-first-tool-read",
+    "value": "OpenCorvus 411 ready-page baseline"
+  },
+  {
+    "phase": "ready-product-first-page-copy-keyboard",
+    "value": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams"
+  },
+  {
+    "phase": "replay-control-pointer",
+    "value": "OpenCorvus 411 replay pointer baseline"
+  },
+  {
+    "phase": "replay-pointer-tool-baseline-before-copy",
+    "value": "OpenCorvus 411 replay pointer baseline"
+  },
+  {
+    "phase": "replay-first-native-pointer-copy",
+    "value": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams"
+  },
+  {
+    "phase": "replay-distinct-file-copy",
+    "value": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\source-reading-405-live\\project\\README.md"
+  },
+  {
+    "phase": "replay-control-keyboard",
+    "value": "OpenCorvus 411 replay keyboard baseline"
+  },
+  {
+    "phase": "replay-keyboard-tool-baseline-before-copy",
+    "value": "OpenCorvus 411 replay keyboard baseline"
+  },
+  {
+    "phase": "replay-first-keyboard-copy",
+    "value": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams"
+  }
+]

@@ -1,0 +1,61 @@
+{
+  "scopes": [
+    {
+      "scope": "live",
+      "occurrence": "clipboard-first-observation-411-0a17f11b-1362-4d6d-9e8f-e8ff2f62df8f",
+      "requests": 2,
+      "requestModel": "gpt-6.1-sol",
+      "streaming": true,
+      "readerTerminal": "eof",
+      "nativeTerminal": {
+        "occurrenceID": "clipboard-first-observation-411-0a17f11b-1362-4d6d-9e8f-e8ff2f62df8f",
+        "pid": 48796,
+        "reason": "deadline_exceeded",
+        "exitCode": 1,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCleanupComplete": true
+    },
+    {
+      "scope": "replay",
+      "occurrence": "clipboard-first-observation-411-7bb944b0-f8a3-46b5-b963-76de8528f860",
+      "requests": 2,
+      "requestModel": "gpt-6.1-sol",
+      "streaming": true,
+      "readerTerminal": "eof",
+      "nativeTerminal": {
+        "occurrenceID": "clipboard-first-observation-411-7bb944b0-f8a3-46b5-b963-76de8528f860",
+        "pid": 89424,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCleanupComplete": true
+    }
+  ],
+  "toolHandleBoundary": {
+    "live": {
+      "handle": 14978,
+      "exitCode": 1
+    },
+    "replay": {
+      "handle": 13147,
+      "state": "Original join was called before context compression; its exit field is unavailable in retained model-visible tool output. A subsequent poll returns Unknown process id. Physical production settlement exitCode 0 is separately preserved, without inventing the wrapper tool receipt."
+    }
+  },
+  "uiBuild": {
+    "handle": 91895,
+    "exitCode": 0
+  },
+  "checks": {
+    "docs": "345 ops, 26 groups",
+    "architectureIndex": "19 current documents indexed, every link live"
+  },
+  "screenshots": 14
+}
