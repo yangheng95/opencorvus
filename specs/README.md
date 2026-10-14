@@ -3431,3 +3431,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [正文文件链接原始路径](records/2026-10/2026-10-14-literal-reference-click.md)：已解析资源身份的点击传递与真实页面验收。
 
 - [构建数据库边界](records/2026-10/2026-10-14-build-database-boundary.md)：完整Overlay构建链与用户运行数据隔离审计。
+
+- [Sources与成员侧栏继续体验](records/2026-10/2026-10-15-source-member-review.md)：当前真实历史的来源与成员阅读。

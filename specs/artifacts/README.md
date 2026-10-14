@@ -460,3 +460,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [正文文件链接原始路径](2026-10-14-literal-reference-click/README.md)：真实点击、文件身份和验收原件。
 
 - [构建数据库边界](2026-10-14-build-database-boundary/README.md)：隔离复现、完整构建与实际用户库只读观察。
+
+- [Sources与成员侧栏继续体验](2026-10-15-source-member-review/README.md)：原图、Provider与物理退出事实。
