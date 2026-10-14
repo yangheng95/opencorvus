@@ -6,25 +6,25 @@
 
 - [Sources与Rendering复查](2026-10-14-source-render-review.md)：单agent实际体验、根因修复与截图复验。
 
-- [通道反馈的当前语言](2026-10-14-channel-feedback-locale.md)：反馈事实、计时与自有真实409故障恢复。
-
 - [生产集合委派](2026-10-14-scheduler-frontier-grants.md)：统一平台/生产包/模板的并发能力及真实重叠验收。
+
+- [通道反馈的当前语言](2026-10-14-channel-feedback-locale.md)：反馈事实、计时与自有真实409故障恢复。
 
 - [通道目录与表单当前语言](2026-10-14-channel-catalog-locale.md)：唯一语言来源和当前公共字段描述合同。
 
 - [流中成员切换](2026-10-14-live-member-switching.md)：19条Sol真实失败基线：共享并发入口缺口与取消fence错误；17项契约通过，修复待完成。
 
+- [原生 Git 写入根因](2026-10-14-project-metadata-latency.md)：保留修复前活动性取证、raw-link实际Git协议与全部写入口影响。
+
 - [完整配置快照替换](2026-10-14-config-snapshot-replacement.md)：完整响应的单一接收、原归属与删除投影。
 
 - [双成员来源与切换](2026-10-14-dual-member-sources.md)：修复同名成员辨识；15条真实Sol流、21张原图、独立来源与双向阅读恢复。
 
-- [原生 Git 写入根因](2026-10-14-project-metadata-latency.md)：保留修复前活动性取证、raw-link实际Git协议与全部写入口影响。
-
 - [公共URL编辑器保存校验](2026-10-14-channel-url-validation.md)：原生字段ValidityState与公共URL实际配置读回。
 
-- [Task持久受理回执](2026-10-14-task-acceptance-receipt.md)：协调指导及交互回答在持久受理后返回，后台扫描沿原权威继续。
-
 - [网络反馈的当前语言](2026-10-14-network-feedback-locale.md)：原反馈事实的渲染语言与保存/删除资格方案。
+
+- [Task持久受理回执](2026-10-14-task-acceptance-receipt.md)：协调指导及交互回答在持久受理后返回，后台扫描沿原权威继续。
 
 - [项目元数据共享条目修复](2026-10-14-project-metadata-latency.md)：唯一枚举、真实桌面/checkpoint/ZIP验收与未解决的原生写入范围。
 
@@ -42,17 +42,15 @@
 
 - [成员侧栏实时呈现](2026-10-14-member-live-rendering.md)：真实已有成员增量、正文与Sources挂载身份调查。
 
-- [项目元数据慢读取](2026-10-14-project-metadata-latency.md)：共享入口横审、有限Git根与原Native阶段调查。
-
 - [归档工作搜索](2026-10-14-archive-search.md)：Root独立调查及现有归档搜索能力接入方案。
-
-- [首次复制的浏览器观测顺序](2026-10-14-clipboard-first-observation.md)：区分首次工具交接、页面复制与后续观察的真实顺序。
 
 - [407 消息完成与续行退休](2026-10-14-message-continuation-retirement-407.md)：正常完成同事务退休、真实跨进程与公开错误验收、Sol桌面原图及下一批grant/Question共享边界。
 
-- [Sources网页导航与浅色阅读](2026-10-14-source-navigation.md)：实际网页目标、返回后的阅读所有权与主题资格。
+- [首次复制的浏览器观测顺序](2026-10-14-clipboard-first-observation.md)：区分首次工具交接、页面复制与后续观察的真实顺序。
 
-- [命令面板全历史搜索](2026-10-14-command-search.md)：完整查询、分页、当前可见快捷键与真实Sources入口验收。
+- [项目元数据慢读取](2026-10-14-project-metadata-latency.md)：共享入口横审、有限Git根与原Native阶段调查。
+
+- [Sources网页导航与浅色阅读](2026-10-14-source-navigation.md)：实际网页目标、返回后的阅读所有权与主题资格。
 
 - [定时任务时间语言](2026-10-14-automation-timestamp-locale.md)：宿主locale断开根因、真实未来定义、中英呈现及正常commit/push原件。
 
@@ -62,7 +60,7 @@
 
 - [本地Provider自动标识](2026-10-14-provider-local-identity.md)：新表单的地址标识与端口碰撞根因/影响。
 
-- [SQLite 周期回写](2026-10-14-sqlite-checkpoint.md)：统一回写策略、关闭/重启/多进程合同与真实页面验收。
+- [命令面板全历史搜索](2026-10-14-command-search.md)：完整查询、分页、当前可见快捷键与真实Sources入口验收。
 
 - [资源表单反馈位置](2026-10-14-resource-form-feedback.md)：Skill安装与MCP新增的当前viewport反馈调查。
 
@@ -74,13 +72,15 @@
 
 - [Provider 模型摘要](2026-10-14-provider-model-summary.md)：空/部分覆盖继承、10模型完整搜索与中英未知状态的真实修后资格。
 
-- [相对链接迁移范围与未来树](2026-10-14-link-relocation-authority.md)：Root独立调查Copy实际链接类型、current/future统一权限与完整整树迁移。
+- [SQLite 周期回写](2026-10-14-sqlite-checkpoint.md)：统一回写策略、关闭/重启/多进程合同与真实页面验收。
 
 - [持续目标 UI/UX](2026-10-14-continuous-goal-ui-ux.md)：目标控制、状态反馈、双语与真实页面复核。
 
-- [长历史分叉耗时](2026-10-14-fork-latency.md)：实际卡顿、共享调用栈与完整数据合同。
+- [相对链接迁移范围与未来树](2026-10-14-link-relocation-authority.md)：Root独立调查Copy实际链接类型、current/future统一权限与完整整树迁移。
 
 - [Provider Test 在途生命周期](2026-10-14-provider-test-lifecycle.md)：真实12秒窗口前后对照、全局Auth接受传播修复及未资格范围。
+
+- [长历史分叉耗时](2026-10-14-fork-latency.md)：实际卡顿、共享调用栈与完整数据合同。
 
 - [404 Task Git 与 Question 重连](2026-10-14-task-git-question-reconnect-404.md)：Git基线/read/取消、Question同页草稿与Sol自然问答；24原图和正式回执，保留Task崩溃恢复未满足。
 
@@ -104,9 +104,11 @@
 
 - [401 Dialog关闭名称语言](2026-10-14-design-dialog-close-locale-401.md)：完整19语言分发、同一已打开Dialog语言更新与两个自有scope正常收尾。
 
+- [Provider 空模型声明保存](2026-10-13-provider-empty-declarations.md)：旧数量限制、空集合合同及前后态验收。
+
 - [393 ACP提示结果](2026-10-14-acp-prompt-terminal-393.md)：真实错误、取消收尾、结束原因和协议集成验收。
 
-- [Provider 空模型声明保存](2026-10-13-provider-empty-declarations.md)：旧数量限制、空集合合同及前后态验收。
+- [392 委派失败与终态](2026-10-14-delegate-terminal-392.md)：原错误保留、准确执行轮次、Sources与真实终态验收。
 
 - [403 Native关闭收敛](2026-10-13-native-shutdown-pending-permission-403.md)：真实待权限关闭、13项重启/25owner和自然5s失败退出，保留旧失败与未验收边界。
 
@@ -114,57 +116,55 @@
 
 - [398 表格权限卡片悬停](2026-10-13-spreadsheet-permission-hover-398.md)：真实深色卡片/操作悬停、同实例语言/主题与19张人工复核截图。
 
-- [392 委派失败与终态](2026-10-14-delegate-terminal-392.md)：原错误保留、准确执行轮次、Sources与真实终态验收。
-
-- [395 稀疏配置层](2026-10-13-sparse-config-layer-defaults-395.md)：跨层默认值、读取/写候选与当前配置契约。
-
-- [文件发布与搜索顺序](2026-10-13-file-search-publication-order.md)：旧scan复用候选与有限真实验证。
-
-- [进程结算与Handle合同](2026-10-13-process-settlement-barrier.md)：完整root/影响、原cause与分阶段验收。
-
-- [397 表格按钮键盘焦点](2026-10-13-spreadsheet-button-focus-397.md)：原生按钮焦点、键盘快捷键与动作后编辑回焦。
+- [Config JSONC 诊断与 Provider 反馈](2026-10-13-config-jsonc-diagnostics.md)：两解析入口、原输入边界和实页资格。
 
 - [391 历史活动与交接输入](2026-10-13-activity-input-projection-391.md)：两历史读取、真实刷新/Sources及原委派错误事实。
 
-- [Config JSONC 诊断与 Provider 反馈](2026-10-13-config-jsonc-diagnostics.md)：两解析入口、原输入边界和实页资格。
-
-- [396 表格焦点与读位](2026-10-13-spreadsheet-focus-scroll-396.md)：共享隐藏输入focus与内部导航的分工。
-
-- [394 表格权限面板语言](2026-10-13-spreadsheet-permission-panel-locale-394.md)：权限标题与范围错误的同实例语言合同。
+- [397 表格按钮键盘焦点](2026-10-13-spreadsheet-button-focus-397.md)：原生按钮焦点、键盘快捷键与动作后编辑回焦。
 
 - [390 执行轮次身份](2026-10-13-execution-actor-identity-390.md)：真实输入身份、成员最终正文与Sources、协议回放和单agent验收。
 
+- [进程结算与Handle合同](2026-10-13-process-settlement-barrier.md)：完整root/影响、原cause与分阶段验收。
+
 - [持续目标重复崩溃与子 Task](2026-10-13-continuous-goal-repeated-recovery.md)：连续中断、恢复身份和真实子任务验收。
 
-- [393 用户资源与附件归属](2026-10-13-mcp-user-resource-input-393.md)：空MCP资源与公开Session附件项目绑定的真实输入合同。
+- [文件发布与搜索顺序](2026-10-13-file-search-publication-order.md)：旧scan复用候选与有限真实验证。
+
+- [396 表格焦点与读位](2026-10-13-spreadsheet-focus-scroll-396.md)：共享隐藏输入focus与内部导航的分工。
 
 - [Provider API Key 配置事实](2026-10-13-provider-credential-presence.md)：同源投影、读取失败与真实恢复验收。
 
+- [395 稀疏配置层](2026-10-13-sparse-config-layer-defaults-395.md)：跨层默认值、读取/写候选与当前配置契约。
+
 - [389 成员刷新失败可读性](2026-10-13-child-refresh-retention-389.md)：错误、已有来源、键盘详情及真实恢复。
 
-- [Native外输出调查](2026-10-13-native-output-sink-audit.md)：原未知错误、同句柄观测和完整横审计划。
+- [394 表格权限面板语言](2026-10-13-spreadsheet-permission-panel-locale-394.md)：权限标题与范围错误的同实例语言合同。
 
 - [Explorer标签所有者与搜索](2026-10-13-explorer-tab-owner-search.md)：共享生命周期根因、真实批次与上传查询。
+
+- [Native外输出调查](2026-10-13-native-output-sink-audit.md)：原未知错误、同句柄观测和完整横审计划。
 
 - [无模型时的 Provider 发现入口](2026-10-13-provider-discovery-bootstrap.md)：共享根因与真实作用域验证。
 
 - [388 参考历史重连身份](2026-10-13-history-render-identity-388.md)：真实重连的消息组件身份、来源焦点与文件定位。
 
+- [393 用户资源与附件归属](2026-10-13-mcp-user-resource-input-393.md)：空MCP资源与公开Session附件项目绑定的真实输入合同。
+
 - [392 表格无障碍语言](2026-10-13-spreadsheet-accessibility-locale-392.md)：工作表、侧栏和通知名称的同实例语言订阅与桌面验收。
 
 - [文件链接条目与回执](2026-10-13-file-link-entry-contract.md)：entry与target边界、根因及验收。
-
-- [391 表格本地编辑说明](2026-10-13-spreadsheet-local-edit-guidance-391.md)：现有数据合同、可见提示和真实桌面交付。
-
-- [模型数量与服务商搜索计数](2026-10-13-provider-count-projection.md)：根因、作用域与双语验收。
 
 - [387 尺寸通知真实归因](2026-10-13-resize-delivery-387.md)：Virtua同步测量的实际回调证据与未复现的原Rendering闪烁边界。
 
 - [Explorer操作结果与刷新回执](2026-10-13-file-operation-outcomes.md)：双失败、部分完成与当前读owner合同。
 
-- [390 MCP 文件与资源引用](2026-10-13-mcp-content-boundaries-390.md)：共享物化补齐、35项正向测试及真实Sol结果交付。
+- [391 表格本地编辑说明](2026-10-13-spreadsheet-local-edit-guidance-391.md)：现有数据合同、可见提示和真实桌面交付。
+
+- [模型数量与服务商搜索计数](2026-10-13-provider-count-projection.md)：根因、作用域与双语验收。
 
 - [386 Sources多文件与刷新实页](2026-10-13-source-reopen-386.md)：真实读取、刷新定位通过；原Provider请求失败与尺寸通知问题保留。
+
+- [390 MCP 文件与资源引用](2026-10-13-mcp-content-boundaries-390.md)：共享物化补齐、35项正向测试及真实Sol结果交付。
 
 - [385 权限续行消息结算](2026-10-13-permission-message-settlement-385.md)：所有权交接、请求身份与Task/Mission恢复。
 
@@ -188,11 +188,11 @@
 
 - [Explorer批量文件操作](2026-10-13-explorer-copy-convergence.md)：部分成功收敛与真实桌面/API根保护。
 
-- [383 完整工具结果与来源恢复](2026-10-13-source-result-commit-383.md)：完整事务、共享恢复入口与实际页面边界。
-
 - [持续目标独立测试与修复](2026-10-13-continuous-goal-review.md)：独立审计反馈、运行验证与修复。
 - [持续目标独立存储审计](2026-10-13-continuous-goal-independent-audit.md)：归档重叠与保留历史删除的两个真实缺陷。
 - [持续目标独立复核证据](../../artifacts/2026-10-13-continuous-goal-review/README.md)：修前、修后与实际 Prompt 重启恢复日志。
+
+- [383 完整工具结果与来源恢复](2026-10-13-source-result-commit-383.md)：完整事务、共享恢复入口与实际页面边界。
 
 - [385 能力搜索请求元数据](2026-10-13-capability-request-metadata-385.md)：共享搜索事务保留不可变请求，覆盖重放、跨进程及多项目。
 
@@ -206,8 +206,8 @@
 
 - [Chat、Task、Mission 持续目标模式](2026-10-13-continuous-goal-mode.md)：现状调查、统一持久化策略与三模式验收。
 - [持续目标验收证据](../../artifacts/2026-10-13-continuous-goal-mode/README.md)：流式模型事实、Task 重开和桌面视觉复核。
-- [用量时间桶键盘详情](2026-10-13-usage-keyboard-details.md)：热力图的单Tab入口与真实桶详情。
 
+- [用量时间桶键盘详情](2026-10-13-usage-keyboard-details.md)：热力图的单Tab入口与真实桶详情。
 
 - [382 网页读取的语义空白保真](2026-10-13-webfetch-text-fidelity-382.md)：硬换行、代码缩进与原始文本输出边界。
 

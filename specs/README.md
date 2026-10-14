@@ -6,25 +6,25 @@
 
 - [Sources与Rendering复查](records/2026-10/2026-10-14-source-render-review.md)：单agent实际体验、根因修复与截图复验。
 
-- [通道反馈的当前语言](records/2026-10/2026-10-14-channel-feedback-locale.md)：原错误详情、成功语言冻结与真实配置冲突调查。
-
 - [生产集合委派](records/2026-10/2026-10-14-scheduler-frontier-grants.md)：统一平台/生产包/模板的并发能力及真实重叠验收。
+
+- [通道反馈的当前语言](records/2026-10/2026-10-14-channel-feedback-locale.md)：原错误详情、成功语言冻结与真实配置冲突调查。
 
 - [通道目录与表单当前语言](records/2026-10/2026-10-14-channel-catalog-locale.md)：目录描述协议、真实四状态及编辑器本地化调查。
 
 - [流中成员切换](records/2026-10/2026-10-14-live-member-switching.md)：19条Sol真实失败基线：共享并发入口缺口与取消fence错误；17项契约通过，修复待完成。
 
+- [原生 Git 写入根因](records/2026-10/2026-10-14-project-metadata-latency.md)：修复前真实字节活动、共享期限排查及junction index/dirty语义原证据。
+
 - [完整配置快照替换](records/2026-10/2026-10-14-config-snapshot-replacement.md)：清空已持久化但当前界面旧值残留的共享配置调查。
 
 - [双成员来源与切换](records/2026-10/2026-10-14-dual-member-sources.md)：修复同名成员辨识；15条真实Sol流、21张原图、独立来源与双向阅读恢复。
 
-- [原生 Git 写入根因](records/2026-10/2026-10-14-project-metadata-latency.md)：修复前真实字节活动、共享期限排查及junction index/dirty语义原证据。
-
 - [公共URL编辑器保存校验](records/2026-10/2026-10-14-channel-url-validation.md)：原字段约束、真实保存和保留原值的验收调查。
 
-- [Task持久受理回执](records/2026-10/2026-10-14-task-acceptance-receipt.md)：协调指导及交互回答在持久受理后返回，后台扫描沿原权威继续。
-
 - [网络反馈的当前语言](records/2026-10/2026-10-14-network-feedback-locale.md)：同页切语言、错误摘要和真实保存/删除回填调查。
+
+- [Task持久受理回执](records/2026-10/2026-10-14-task-acceptance-receipt.md)：协调指导及交互回答在持久受理后返回，后台扫描沿原权威继续。
 
 - [Git 源条目读取合同](current/architecture/git-source-entry-enumeration.md)：Git index/ignore与物理entry的唯一枚举，Runtime及Task源数据共享合同。
 
@@ -42,17 +42,15 @@
 
 - [成员侧栏实时呈现](records/2026-10/2026-10-14-member-live-rendering.md)：真实已有成员增量、正文与Sources挂载身份调查。
 
-- [项目元数据慢读取](records/2026-10/2026-10-14-project-metadata-latency.md)：原163秒读取的共享入口、Git/Native阶段资格与根因调查。
-
 - [归档工作搜索](records/2026-10/2026-10-14-archive-search.md)：既有服务器查询接入、跨分页查找与真实页面验收。
-
-- [首次复制的浏览器观测顺序](records/2026-10/2026-10-14-clipboard-first-observation.md)：区分首次工具交接、页面复制与后续观察的真实顺序。
 
 - [407 消息完成与续行退休](records/2026-10/2026-10-14-message-continuation-retirement-407.md)：正常完成同事务退休、真实跨进程与公开错误验收、Sol桌面原图及下一批grant/Question共享边界。
 
-- [Sources网页导航与浅色阅读](records/2026-10/2026-10-14-source-navigation.md)：实际网页目标、返回后的阅读所有权与主题资格。
+- [首次复制的浏览器观测顺序](records/2026-10/2026-10-14-clipboard-first-observation.md)：区分首次工具交接、页面复制与后续观察的真实顺序。
 
-- [命令面板全历史搜索](records/2026-10/2026-10-14-command-search.md)：完整查询、分页、当前可见快捷键与真实Sources入口验收。
+- [项目元数据慢读取](records/2026-10/2026-10-14-project-metadata-latency.md)：原163秒读取的共享入口、Git/Native阶段资格与根因调查。
+
+- [Sources网页导航与浅色阅读](records/2026-10/2026-10-14-source-navigation.md)：实际网页目标、返回后的阅读所有权与主题资格。
 
 - [定时任务时间语言](records/2026-10/2026-10-14-automation-timestamp-locale.md)：日期/频率的当前语言投影、真实页面及三批正常推送阻塞原件。
 
@@ -62,7 +60,7 @@
 
 - [本地Provider自动标识](records/2026-10/2026-10-14-provider-local-identity.md)：IP/localhost与端口派生、单一表单身份及真实保存调查。
 
-- [SQLite 周期回写](records/2026-10/2026-10-14-sqlite-checkpoint.md)：共享连接生命周期、真实回写页数与长历史复制全时段响应。
+- [命令面板全历史搜索](records/2026-10/2026-10-14-command-search.md)：完整查询、分页、当前可见快捷键与真实Sources入口验收。
 
 - [资源表单反馈位置](records/2026-10/2026-10-14-resource-form-feedback.md)：唯一反馈、16张原图、真实在途收起/换项目与成功安装。
 
@@ -72,17 +70,19 @@
 
 - [资源管理反馈](records/2026-10/2026-10-14-resource-feedback.md)：中英短摘要、原诊断/真实请求ID和14张原图；Skill目录500问题单列。
 
-- [404 原始 Git 与 Question 证据](artifacts/2026-10-14-task-git-question-reconnect-404/README.md)：Git基线/read/取消、Question同页草稿与Sol自然问答；24原图和正式回执，保留Task崩溃恢复未满足。
-
 - [Provider 模型摘要](records/2026-10/2026-10-14-provider-model-summary.md)：统一目录数量、摘要和完整模型ID搜索；17张原图及真实读取失败恢复。
 
-- [相对链接迁移范围与未来树](records/2026-10/2026-10-14-link-relocation-authority.md)：Root独立调查Copy实际链接类型、current/future统一权限与完整整树迁移。
+- [SQLite 周期回写](records/2026-10/2026-10-14-sqlite-checkpoint.md)：共享连接生命周期、真实回写页数与长历史复制全时段响应。
 
 - [持续目标 UI/UX](records/2026-10/2026-10-14-continuous-goal-ui-ux.md)：三模式统一入口、状态、预算控制和真实桌面验收。
 
-- [长历史分叉耗时](records/2026-10/2026-10-14-fork-latency.md)：真实长引用、运行时采样与原子消息/事件共享机制。
+- [404 原始 Git 与 Question 证据](artifacts/2026-10-14-task-git-question-reconnect-404/README.md)：Git基线/read/取消、Question同页草稿与Sol自然问答；24原图和正式回执，保留Task崩溃恢复未满足。
+
+- [相对链接迁移范围与未来树](records/2026-10/2026-10-14-link-relocation-authority.md)：Root独立调查Copy实际链接类型、current/future统一权限与完整整树迁移。
 
 - [Provider Test 在途生命周期](records/2026-10/2026-10-14-provider-test-lifecycle.md)：有效响应跨项目退休修复、并行逐项收敛与22张原图；保留超时窗口局限。
+
+- [长历史分叉耗时](records/2026-10/2026-10-14-fork-latency.md)：真实长引用、运行时采样与原子消息/事件共享机制。
 
 - [404 Task Git 与 Question 重连](records/2026-10/2026-10-14-task-git-question-reconnect-404.md)：Git基线/read/取消、Question同页草稿与Sol自然问答；24原图和正式回执，保留Task崩溃恢复未满足。
 
@@ -108,9 +108,9 @@
 
 - [401 Dialog关闭名称语言](records/2026-10/2026-10-14-design-dialog-close-locale-401.md)：19语言单源、真实中英普通/全屏关闭与同实例草稿，16张原始截图。
 
-- [393 ACP提示结果](artifacts/2026-10-05-connection-workspace-authority/acp-prompt-terminal-plan-393.md)：普通提示、命令、模型错误与结束原因。
-
 - [Provider 空模型声明保存](records/2026-10/2026-10-13-provider-empty-declarations.md)：字段意图、目录继承与真实保存资格。
+
+- [393 ACP提示结果](artifacts/2026-10-05-connection-workspace-authority/acp-prompt-terminal-plan-393.md)：普通提示、命令、模型错误与结束原因。
 
 - [403 Native关闭收敛](records/2026-10/2026-10-13-native-shutdown-pending-permission-403.md)：统一取消/监听器握手、真实Native正常关闭/重启与5s失败边界，58项正向后台检查。
 
@@ -120,51 +120,51 @@
 
 - [392 委派失败与终态](artifacts/2026-10-05-connection-workspace-authority/delegate-terminal-plan-392.md)：返回消息错误、交接校验及首次终态发布。
 
-- [395 稀疏配置层](records/2026-10/2026-10-13-sparse-config-layer-defaults-395.md)：实际文件层默认注入与有效配置继承的根因、影响和单源方案。
-
-- [文件发布后的搜索采集](records/2026-10/2026-10-13-file-search-publication-order.md)：真实并发采集边界、原身份与正向验收。
-
-- [进程结算错误屏障](records/2026-10/2026-10-13-process-settlement-barrier.md)：原完整Handle合同、真实原错误与Capsule共享缺口。
-
-- [397 表格按钮键盘焦点](records/2026-10/2026-10-13-spreadsheet-button-focus-397.md)：原生按钮激活前被夺焦的共性机制与完整消费者审查。
+- [Config JSONC 诊断与 Provider 反馈](records/2026-10/2026-10-13-config-jsonc-diagnostics.md)：安全producer、真实错误与当前语言反馈。
 
 - [391 历史活动与交接输入](artifacts/2026-10-05-connection-workspace-authority/activity-input-projection-plan-391.md)：真实消息角色、进展与交接上下文的读取合同。
 
-- [Config JSONC 诊断与 Provider 反馈](records/2026-10/2026-10-13-config-jsonc-diagnostics.md)：安全producer、真实错误与当前语言反馈。
+- [397 表格按钮键盘焦点](records/2026-10/2026-10-13-spreadsheet-button-focus-397.md)：原生按钮激活前被夺焦的共性机制与完整消费者审查。
 
-- [396 表格焦点与读位](records/2026-10/2026-10-13-spreadsheet-focus-scroll-396.md)：隐藏输入焦点的外层滚动根因、完整调用面与真实桌面复核。
-
-- [394 表格权限面板语言](records/2026-10/2026-10-13-spreadsheet-permission-panel-locale-394.md)：标题producer与范围错误派生的当前语言调查和桌面验收。
-
-- [390 执行轮次身份](artifacts/2026-10-05-connection-workspace-authority/execution-actor-identity-plan-390.md)：真实输入、生命周期与成员流式归属。
+- [进程结算错误屏障](records/2026-10/2026-10-13-process-settlement-barrier.md)：原完整Handle合同、真实原错误与Capsule共享缺口。
 
 - [持续目标重复崩溃与子 Task](records/2026-10/2026-10-13-continuous-goal-repeated-recovery.md)：连续两次真实中断、正式启动恢复和 Mission 子任务计量验收。
 
-- [393 用户资源与附件归属](records/2026-10/2026-10-13-mcp-user-resource-input-393.md)：空MCP资源与公开Session附件项目绑定的真实输入合同。
+- [文件发布后的搜索采集](records/2026-10/2026-10-13-file-search-publication-order.md)：真实并发采集边界、原身份与正向验收。
+
+- [396 表格焦点与读位](records/2026-10/2026-10-13-spreadsheet-focus-scroll-396.md)：隐藏输入焦点的外层滚动根因、完整调用面与真实桌面复核。
 
 - [Provider API Key 配置事实](records/2026-10/2026-10-13-provider-credential-presence.md)：非敏感三态、当前观察与零模型显示。
 
-- [389 成员刷新失败可读性](artifacts/2026-10-05-connection-workspace-authority/child-refresh-retention-plan-389.md)：已有Sources、真实读取错误和重试。
+- [390 执行轮次身份](artifacts/2026-10-05-connection-workspace-authority/execution-actor-identity-plan-390.md)：真实输入、生命周期与成员流式归属。
 
-- [Native外输出接收端调查](records/2026-10/2026-10-13-native-output-sink-audit.md)：真实管道、逐分支结算和共享生产矩阵。
+- [395 稀疏配置层](records/2026-10/2026-10-13-sparse-config-layer-defaults-395.md)：实际文件层默认注入与有效配置继承的根因、影响和单源方案。
+
+- [394 表格权限面板语言](records/2026-10/2026-10-13-spreadsheet-permission-panel-locale-394.md)：标题producer与范围错误派生的当前语言调查和桌面验收。
 
 - [Explorer标签所有者与上传搜索](records/2026-10/2026-10-13-explorer-tab-owner-search.md)：批次完成、跨工具状态和唯一搜索收敛。
 
+- [Native外输出接收端调查](records/2026-10/2026-10-13-native-output-sink-audit.md)：真实管道、逐分支结算和共享生产矩阵。
+
 - [无模型时的 Provider 发现入口](records/2026-10/2026-10-13-provider-discovery-bootstrap.md)：凭据事实、可推理投影与发现恢复。
 
-- [388 参考历史重连身份](artifacts/2026-10-05-connection-workspace-authority/history-render-identity-plan-388.md)：真实完整快照、正文生命周期与侧聊历史稳定性。
+- [389 成员刷新失败可读性](artifacts/2026-10-05-connection-workspace-authority/child-refresh-retention-plan-389.md)：已有Sources、真实读取错误和重试。
+
+- [393 用户资源与附件归属](records/2026-10/2026-10-13-mcp-user-resource-input-393.md)：空MCP资源与公开Session附件项目绑定的真实输入合同。
 
 - [392 表格无障碍语言](records/2026-10/2026-10-13-spreadsheet-accessibility-locale-392.md)：工作表、侧栏和通知名称的同实例语言订阅与桌面验收。
+
+- [388 参考历史重连身份](artifacts/2026-10-05-connection-workspace-authority/history-render-identity-plan-388.md)：真实完整快照、正文生命周期与侧聊历史稳定性。
 
 - [文件链接条目与回执](records/2026-10/2026-10-13-file-link-entry-contract.md)：终端链接事实、权限与真实移动复制删除。
 
 - [391 表格本地编辑说明](records/2026-10/2026-10-13-spreadsheet-local-edit-guidance-391.md)：编辑寿命、CSV下载提示与同实例布局验收。
 
-- [模型数量与服务商搜索计数](records/2026-10/2026-10-13-provider-count-projection.md)：可见集合、复数目录与真实桌面。
-
 - [387 尺寸通知与页面布局](artifacts/2026-10-05-connection-workspace-authority/resize-delivery-plan-387.md)：真实回调归因、共享尺寸实现与实页修复。
 
 - [Explorer操作结果与刷新回执](records/2026-10/2026-10-13-file-operation-outcomes.md)：成员与刷新错误、真实完成事实和并发读取资格。
+
+- [模型数量与服务商搜索计数](records/2026-10/2026-10-13-provider-count-projection.md)：可见集合、复数目录与真实桌面。
 
 - [390 MCP 文件与资源引用](records/2026-10/2026-10-13-mcp-content-boundaries-390.md)：合法空文件、音频附件与资源链接的真实结果和下载验收。
 
@@ -192,11 +192,11 @@
 
 - [Explorer批量文件操作](records/2026-10/2026-10-13-explorer-copy-convergence.md)：成功回执、根目标准入与真实API根保护。
 
-- [383 完整工具结果与来源恢复](records/2026-10/2026-10-13-source-result-commit-383.md)：原子结果提交、成功回执恢复、真实OS断点与实页未完成边界。
-
 - [持续目标独立测试与修复](records/2026-10/2026-10-13-continuous-goal-review.md)：独立 agent 审计、恢复路径与正向回归。
 - [持续目标独立存储审计](records/2026-10/2026-10-13-continuous-goal-independent-audit.md)：归档范围冲突与保留历史删除的修前复现和修后合同。
 - [持续目标独立复核证据](artifacts/2026-10-13-continuous-goal-review/README.md)：独立及主 agent 日志、受控流式跨进程恢复。
+
+- [383 完整工具结果与来源恢复](records/2026-10/2026-10-13-source-result-commit-383.md)：原子结果提交、成功回执恢复、真实OS断点与实页未完成边界。
 
 - [385 能力搜索请求元数据](records/2026-10/2026-10-13-capability-request-metadata-385.md)：共享搜索事务保留不可变请求，覆盖重放、跨进程及多项目。
 
@@ -210,8 +210,8 @@
 
 - [Chat、Task、Mission 持续目标模式](records/2026-10/2026-10-13-continuous-goal-mode.md)：现状、授权与轮次、预算合同、实施和验收。
 - [持续目标验收证据](artifacts/2026-10-13-continuous-goal-mode/README.md)：真实多轮、终态重开、用量与桌面截图。
-- [用量时间桶键盘详情](records/2026-10/2026-10-13-usage-keyboard-details.md)：真实不可达基线、成熟集合与双语详情交互。
 
+- [用量时间桶键盘详情](records/2026-10/2026-10-13-usage-keyboard-details.md)：真实不可达基线、成熟集合与双语详情交互。
 
 - [382 网页读取的语义空白保真](records/2026-10/2026-10-13-webfetch-text-fidelity-382.md)：真实HTTP合同、Sol流式读取和桌面工具正文验证。
 
