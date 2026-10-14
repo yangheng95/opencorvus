@@ -72,3 +72,11 @@ CommandPalette只在打开或API authority变化时请求loadWorkLedger(limit12)
 四次Native最终provider audit逐一读取，实际共8条gpt-6.1-sol streaming，均HTTP200且provider-source-reader terminal.kind=eof；四个physicalCompletion/outputDrainComplete/requestCleanupComplete与配对退休事实均完整。17张原始截图、直接API调查、失败和通过日志及原最终Native审计已归档到[验收证据](../../artifacts/2026-10-14-command-search/README.md)。截图11/16再次人工查看，确认相同长中文标题、原Sources正文以及重试后的候选。所有自有页面与进程均已关闭，未再清空数据。
 
 当前共享工作区还有权限、InteractionCard/Checkbox、定时表单和相应文档等他人改动。提交只包含本批搜索/共享组合框、后端字面搜索及正向测试、语言七个相关键、自己的07-panel末节和三处索引条目；使用临时index从最新HEAD构造，外部新增文案与其他架构段落不混入。提交后仍须fresh fetch/merge并检查完整待推送集合与正常hook，推送状态待实际结果补录。持续目标保持active。
+
+## 提交与实际推送结果
+
+范围提交为`2d800e4a92a1508f1386be8e01a4d309d08f11d6`，实际父提交与准备器声明一致，均为`8c42e5d39806cd844a7f072439580e8e32b1402f`，共75个本批路径。原92998工具整体返回1来自提交后的普通index同步阶段：并发Git持有index.lock，Git commit本身已成功。未删除他人锁；在后续锁已正常释放后，对同一审阅patch重新check并apply --cached，实际0，普通暂存区恢复为空，本批工作区无未提交源码，未覆盖他人修改。
+
+fresh fetch/merge实际up to date。审核完整九个待推送提交：本批搜索；8c42e5d39定时语言（10项57断言、12张实际图）；e3c3d1aa7与0fe812062 Provider身份（真实双配置保存、IPv6 51项91断言及截图）；b767b9325目录浏览（正式真实两Project和链接工作流、独立Native/截图/正向合同）；d6fc0a555压缩（95项合同、最终72条真实Luna流及双方向20动作100字段）；其余79ee53039、3c5f8d2a0、ce798bfc4是各自授权交付和失败回执文档。依据是各自已提交Recall/原证据，非提交标题；原有限验收边界保持。
+
+正常push原34161实际exit1。迁移v1检查、SDK/AI运行时检查、八个工作区类型任务、路由和docs检查已通过；随后共享control-lease-owners检查明确失败：工作区`permission/authority.ts`声明1个acquire入口，实际2个。该文件及权限测试仍是其他独立任务的未完成修改，当前已提交版本与本批搜索没有该新增入口。没有为绕过检查修改注册表、还原他人文件或no-verify。原失败日志与退出事实归档；本批已提交但尚未推送，后续等待该真实权限实现与其验证声明收敛，再重新fetch/merge、复核整个pending集合并正常push。持续goal仍active，可继续其他调查，未将此单次共享检查阻塞标为全局blocked。
