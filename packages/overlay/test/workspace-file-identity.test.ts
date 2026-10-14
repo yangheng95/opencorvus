@@ -1,11 +1,26 @@
 import { afterEach, expect, test } from "bun:test"
 import { setBoardStore } from "../src/store/board"
-import { editorTargetPath, openProjectFile } from "../src/services/workspace"
+import { editorTargetPath, openProjectFile, openProjectPathInEditor } from "../src/services/workspace"
 import { closeFileEditor, selectedFileTarget } from "../src/services/file-workbench"
+import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
+import type { HostTransport, NativeCommand } from "../src/services/host-transport"
 
 afterEach(async () => {
   await closeFileEditor()
   setBoardStore({ selectedSource: null, board: null })
+  __setHostTransportForTest(undefined)
+})
+
+test.each(["C:/repo/ source.md\u00a0", "/repo/ source.md "])("the native editor receives the literal target %j and cited location", async (path) => {
+  const commands: NativeCommand[] = []
+  __setHostTransportForTest({
+    native: async (command: NativeCommand) => {
+      commands.push(command)
+      return true
+    },
+  } as unknown as HostTransport)
+  await openProjectPathInEditor("vscode", path, { line: 2, column: 3 })
+  expect(commands).toEqual([{ kind: "workspace.openProjectEditor", editor: "vscode", path, line: 2, column: 3 }])
 })
 
 test.each([

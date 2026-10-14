@@ -1156,8 +1156,8 @@ export type PathRevealOutcome = "opened" | "copied"
  * `manualWorkspacePathEntry` and `projectEditors: []` already work.
  */
 export async function revealPath(target: string): Promise<PathRevealOutcome> {
-  const path = typeof target === "string" ? target.trim() : ""
-  if (!path) throw new Error("revealPath requires a non-empty path")
+  const path = typeof target === "string" ? target : ""
+  if (!path.trim()) throw new Error("revealPath requires a non-empty path")
   if (getHostTransport().capabilities.nativeCommands["open-path"]) {
     const opened = await nativeOpen(path)
     if (!opened) throw new Error("native open returned false")
@@ -1233,7 +1233,7 @@ export async function openProjectPathInEditor(
   target?: string,
   location?: Partial<FileReferenceLocation>,
 ): Promise<void> {
-  const rawTarget = typeof target === "string" ? target.trim() : ""
+  const rawTarget = typeof target === "string" ? target : ""
   if (!rawTarget) return
   const baseDirectory = activeDirectory()
   const resolvedTarget = absolutePath(rawTarget) ? rawTarget : baseDirectory ? joinPath(baseDirectory, rawTarget) : ""

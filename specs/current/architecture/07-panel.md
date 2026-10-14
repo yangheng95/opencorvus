@@ -1089,6 +1089,17 @@ validate filesystem names and write permissions. This filename contract does not
 change global project-directory selection or natural-language reference parsing.
 The file-source producer preserves nonblank authored title characters, including
 filename whitespace; an untitled source uses its exact filesystem basename.
+Host path delivery and external-editor commands preserve the same literal
+resource characters. Empty-input validation never supplies a trimmed replacement
+path. A located editor action launches its declared command-line program with
+the original path/line/column; application identifiers used for native file
+association are distinct from Unix command-line launcher names. Windows batch
+launchers go directly through the standard process command API's batch escaping,
+without an additional manually assembled command-interpreter invocation.
+A failed located launch surfaces its actual error and launcher identity through
+the current localized operation feedback. It does not turn into an unlocated
+file open. Successful process launch is an application handoff receipt, not
+confirmation that an external editor has finished loading the file.
 Source-file payload and persisted-part validation retain path/title characters
 while enforcing nonempty strings. Validation does not rewrite a resource name.
 Child conversation message dividers retain the shared transcript margin and use

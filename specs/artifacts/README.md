@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [原始文件目标传递](2026-10-14-literal-file-targets/README.md)：主机路径保真、原生编辑器参数与真实进程/界面验收。
+
 - [Sources阅读迭代](2026-10-14-sources-reading-iteration/README.md)：多来源展开、长文件身份与准确跳转的单agent真实体验。
 
 - [0.1.26 整合与发布证据](2026-10-14-release-0.1.26/README.md)：原始失败、59/83项复验、正式29资源/18下载入口、公开原图及联合超时/官网补部署。

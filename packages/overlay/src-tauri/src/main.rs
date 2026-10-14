@@ -1973,6 +1973,17 @@ impl ProjectEditor {
         }
         #[cfg(all(unix, not(target_os = "macos")))]
         {
+            self.line_program()
+        }
+    }
+
+    fn line_program(self) -> &'static str {
+        #[cfg(windows)]
+        {
+            self.opener_application()
+        }
+        #[cfg(unix)]
+        {
             match self {
                 Self::Vscode => "code",
                 Self::Pycharm => "pycharm",
@@ -1982,40 +1993,20 @@ impl ProjectEditor {
             }
         }
     }
-}
 
-/// Launch the editor's own CLI so a cited location survives the hop.
-///
-/// Returns `Err` when the launcher could not be started at all, which is the
-/// signal for the caller to fall back to the plain path open — a missing `code`
-/// on PATH must degrade to "file opens at the top", never to "nothing happens".
-fn spawn_project_editor_at_line(
-    editor: ProjectEditor,
-    path: &str,
-    line: u32,
-    column: Option<u32>,
-) -> Result<(), String> {
-    let program = editor.opener_application();
-    // Windows resolves `.cmd` launchers (`code.cmd`, `cursor.cmd`) through the
-    // shell; CreateProcess cannot execute a batch file directly.
-    #[cfg(windows)]
-    let mut command = {
-        let mut command = Command::new("cmd");
-        command.arg("/C").arg(program);
+    fn line_command(self, path: &str, line: u32, column: Option<u32>) -> Command {
+        // Direct batch targets receive Rust's batch-file escaping on Windows.
+        // An explicit cmd /C wrapper uses a different argument grammar.
+        let mut command = Command::new(self.line_program());
         command
-    };
-    #[cfg(not(windows))]
-    let mut command = Command::new(program);
-
-    command
-        .args(editor.line_arguments(path, line, column))
-        .stdin(Stdio::null())
-        .stdout(Stdio::null())
-        .stderr(Stdio::null());
-    #[cfg(windows)]
-    command.creation_flags(CREATE_NO_WINDOW);
-
-    command.spawn().map(|_| ()).map_err(|err| err.to_string())
+            .args(self.line_arguments(path, line, column))
+            .stdin(Stdio::null())
+            .stdout(Stdio::null())
+            .stderr(Stdio::null());
+        #[cfg(windows)]
+        command.creation_flags(CREATE_NO_WINDOW);
+        command
+    }
 }
 
 #[tauri::command]
@@ -2026,29 +2017,20 @@ fn overlay_open_project_editor<R: Runtime>(
     line: Option<u32>,
     column: Option<u32>,
 ) -> Result<bool, String> {
-    let path = path.trim();
-    if path.is_empty() {
+    if path.trim().is_empty() {
         return Ok(false);
     }
 
     if let Some(line) = line.filter(|line| *line >= 1) {
-        match spawn_project_editor_at_line(editor, path, line, column.filter(|column| *column >= 1))
-        {
-            Ok(()) => return Ok(true),
-            Err(err) => {
-                eprintln!(
-                    "[overlay] {} could not be launched at {}:{} ({}); opening the file instead",
-                    editor.label(),
-                    path,
-                    line,
-                    err
-                );
-            }
-        }
+        return editor
+            .line_command(&path, line, column.filter(|column| *column >= 1))
+            .spawn()
+            .map(|_| true)
+            .map_err(|err| format!("{} ({}): {}", editor.label(), editor.line_program(), err));
     }
 
     app.opener()
-        .open_path(path, Some(editor.opener_application()))
+        .open_path(&path, Some(editor.opener_application()))
         .map(|_| true)
         .map_err(|err| format!("{}: {}", editor.label(), err))
 }
@@ -6567,6 +6549,170 @@ mod tests {
 
         for (editor, application) in expected {
             assert_eq!(editor.opener_application(), application);
+        }
+    }
+
+    #[test]
+    fn project_editor_arguments_preserve_literal_paths_and_locations() {
+        let path = "C:/repo/ 资料 & reference.md\u{00a0}";
+        for editor in [ProjectEditor::Vscode, ProjectEditor::Cursor] {
+            assert_eq!(
+                editor.line_arguments(path, 3, Some(15)),
+                vec!["--goto", &format!("{path}:3:15")]
+            );
+        }
+        for editor in [
+            ProjectEditor::Pycharm,
+            ProjectEditor::Webstorm,
+            ProjectEditor::Intellij,
+        ] {
+            assert_eq!(
+                editor.line_arguments(path, 3, Some(15)),
+                vec!["--line", "3", "--column", "15", path]
+            );
+        }
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn project_editor_missing_launcher_reports_start_error() {
+        const SCOPE: &str = "OPENCORVUS_MISSING_EDITOR_TEST_SCOPE";
+        if std::env::var(SCOPE).as_deref() == Ok("isolated") {
+            let error = match ProjectEditor::Vscode
+                .line_command("C:/repo/source.md", 3, Some(15))
+                .spawn()
+            {
+                Err(error) => error,
+                Ok(mut child) => {
+                    let status = child.wait().expect("join unexpected controlled launcher");
+                    panic!("empty launcher directory produced {status}");
+                }
+            };
+            assert_eq!(error.kind(), std::io::ErrorKind::NotFound);
+            eprintln!("missing editor launcher: {:?}", error.kind());
+            return;
+        }
+        let root = tempfile::tempdir().expect("empty isolated launcher directory");
+        let output = Command::new(std::env::current_exe().expect("current contract checker"))
+            .args([
+                "--exact",
+                "tests::project_editor_missing_launcher_reports_start_error",
+                "--nocapture",
+            ])
+            .env(SCOPE, "isolated")
+            .env("PATH", root.path())
+            .current_dir(root.path())
+            .creation_flags(CREATE_NO_WINDOW)
+            .output()
+            .expect("join isolated missing-launcher checker");
+        assert!(
+            output.status.success(),
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn project_editor_launcher_delivers_literal_windows_arguments() {
+        let root = tempfile::tempdir().expect("controlled editor directory");
+        let source = root.path().join("argument-recorder.rs");
+        let program = root.path().join("argument-recorder.exe");
+        fs::write(&source, r#"fn main() {
+            let output = std::env::var_os("OPENCORVUS_EDITOR_ARGUMENT_RECEIPT").unwrap();
+            std::fs::write(output, std::env::args().skip(1).collect::<Vec<_>>().join("\0")).unwrap();
+        }"#).expect("write real argv receiver");
+        let compiled = Command::new("rustc")
+            .arg(&source)
+            .arg("-o")
+            .arg(&program)
+            .creation_flags(CREATE_NO_WINDOW)
+            .output()
+            .expect("compile argv receiver");
+        assert!(
+            compiled.status.success(),
+            "{}",
+            String::from_utf8_lossy(&compiled.stderr)
+        );
+        for name in ["code.cmd", "cursor.cmd"] {
+            fs::write(
+                root.path().join(name),
+                "@echo off\r\n\"%~dp0argument-recorder.exe\" %*\r\n",
+            )
+            .expect("write controlled launcher");
+        }
+        for name in ["pycharm64.exe", "webstorm64.exe", "idea64.exe"] {
+            fs::copy(&program, root.path().join(name)).expect("copy controlled native launcher");
+        }
+        let search = std::env::join_paths(std::iter::once(root.path().to_path_buf()).chain(
+            std::env::split_paths(&std::env::var_os("PATH").expect("toolchain PATH")),
+        ))
+        .expect("controlled PATH");
+        struct RestorePath(Option<std::ffi::OsString>);
+        impl Drop for RestorePath {
+            fn drop(&mut self) {
+                if let Some(value) = &self.0 {
+                    std::env::set_var("PATH", value);
+                } else {
+                    std::env::remove_var("PATH");
+                }
+            }
+        }
+        let _restore = RestorePath(std::env::var_os("PATH"));
+        // Both parent resolution and the child receive only our editor aliases
+        // before the original toolchain PATH. No user's editor can be selected.
+        std::env::set_var("PATH", &search);
+        for editor in [
+            ProjectEditor::Vscode,
+            ProjectEditor::Cursor,
+            ProjectEditor::Pycharm,
+            ProjectEditor::Webstorm,
+            ProjectEditor::Intellij,
+        ] {
+            for (index, path) in [
+                "C:/repo/A&B/reference.md",
+                "C:/repo/资料.md\u{00a0}",
+                "C:/repo/quoted directory/(reference).md",
+                "C:/repo/literal%OPENCORVUS_EDITOR_LITERAL%/reference.md",
+                "C:/repo/literal!value!/reference.md",
+                "C:/repo/literal^value/reference.md",
+            ]
+            .iter()
+            .enumerate()
+            {
+                let receipt = root
+                    .path()
+                    .join(format!("{}-receipt-{index}.txt", editor.label()));
+                let mut command = editor.line_command(path, 3, Some(15));
+                command
+                    .current_dir(root.path())
+                    .env("PATH", &search)
+                    .env("OPENCORVUS_EDITOR_ARGUMENT_RECEIPT", &receipt)
+                    .env("OPENCORVUS_EDITOR_LITERAL", "expanded-test-value")
+                    .stdout(Stdio::piped())
+                    .stderr(Stdio::piped());
+                let output = command
+                    .spawn()
+                    .expect("start controlled editor")
+                    .wait_with_output()
+                    .expect("join controlled editor and output");
+                let actual = fs::read_to_string(receipt).expect("read actual argv");
+                eprintln!(
+                    "editor={} status={:?} argv={:?}",
+                    editor.label(),
+                    output.status.code(),
+                    actual.split('\0').collect::<Vec<_>>()
+                );
+                assert!(
+                    output.status.success(),
+                    "{}",
+                    String::from_utf8_lossy(&output.stderr)
+                );
+                assert_eq!(
+                    actual.split('\0').collect::<Vec<_>>(),
+                    editor.line_arguments(path, 3, Some(15))
+                );
+            }
         }
     }
 

@@ -58,12 +58,16 @@ describe("revealPath", () => {
     expect(issued).toEqual([{ kind: "clipboard.writeText", text: PATH }])
   })
 
-  test("the target is trimmed before it reaches the host", async () => {
+  test.each(
+    ["  D:/opencorvus/projects/demo  ", "D:/opencorvus/资料\u00a0", "/repo/ source.md "].flatMap(
+      (path) => (["browser", "tauri"] as const).map((kind) => ({ kind, path })),
+    ),
+  )("the $kind host receives the literal resource path $path", async ({ kind, path }) => {
     const issued: NativeCommand[] = []
-    __setHostTransportForTest(transportFor("browser", issued))
+    __setHostTransportForTest(transportFor(kind, issued))
 
-    expect(await revealPath(`  ${PATH}  `)).toBe("copied")
-    expect(issued).toEqual([{ kind: "clipboard.writeText", text: PATH }])
+    expect(await revealPath(path)).toBe(kind === "browser" ? "copied" : "opened")
+    expect(issued).toEqual([kind === "browser" ? { kind: "clipboard.writeText", text: path } : { kind: "open-path", path }])
   })
 
   test("a blank target raises an explicit error", async () => {
