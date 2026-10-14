@@ -431,7 +431,7 @@
   "network.proxy.url_invalid": "Proxy URL must start with http:// or https:// and must not include credentials.",
   "network.proxy.username_required": "Username is required when password is set.",
   "network.proxy.delete_button_title": "Delete the saved proxy settings.",
-  "network.proxy.delete_failed": "Proxy settings could not be deleted: {{reason}}",
+  "network.proxy.delete_failed": "Proxy settings could not be deleted.",
   "network.proxy.deleted": "Proxy settings deleted.",
   "network.proxy.deleting": "Deleting...",
   "network.proxy.save_failed": "Proxy settings could not be saved.",

@@ -10,6 +10,7 @@ import {
   type NetworkProxyTestResult,
 } from "../../services/config"
 import { t } from "../../utils/i18n"
+import { formatErrorDetails } from "../../utils/error-details"
 import { activeProjectDirectory } from "../../services/project-directory"
 import { Icon } from "../ui/Icon"
 import { Button } from "../ui/Button"
@@ -62,6 +63,11 @@ interface NetworkOperationOwner {
   draftGeneration: number
 }
 
+interface NetworkFeedback {
+  key: string
+  details?: string
+}
+
 function describeFailure(error: unknown): string {
   if (error instanceof Error && error.message) return error.message
   return String(error)
@@ -77,8 +83,8 @@ export default function NetworkPanel() {
   const [deleting, setDeleting] = createSignal(false)
   const [testing, setTesting] = createSignal(false)
   const [saved, setSaved] = createSignal(false)
-  const [error, setError] = createSignal<string | null>(null)
-  const [statusMessage, setStatusMessage] = createSignal<string | null>(null)
+  const [error, setError] = createSignal<NetworkFeedback | null>(null)
+  const [deleted, setDeleted] = createSignal(false)
   const [testResult, setTestResult] = createSignal<NetworkProxyTestResult | null>(null)
   const proxyConfigured = createMemo(() => !!(appStore.config as any)?.network?.proxy)
   let operationGeneration = 0
@@ -99,7 +105,7 @@ export default function NetworkPanel() {
       setTesting(false)
       setError(null)
       setSaved(false)
-      setStatusMessage(null)
+      setDeleted(false)
       if (feedbackTimer) clearTimeout(feedbackTimer)
       feedbackTimer = undefined
     }
@@ -156,7 +162,7 @@ export default function NetworkPanel() {
     draftGeneration += 1
     setError(null)
     setSaved(false)
-    setStatusMessage(null)
+    setDeleted(false)
     setTestResult(null)
   }
 
@@ -170,19 +176,19 @@ export default function NetworkPanel() {
 
   function validateProxyInput(input: ProxyInput, requireUrl: boolean): boolean {
     if (requireUrl && !input.proxyUrl) {
-      setError(t("network.proxy.test_url_required"))
+      setError({ key: "network.proxy.test_url_required" })
       return false
     }
     if (input.proxyEnabled && !input.proxyUrl) {
-      setError(t("network.proxy.url_required"))
+      setError({ key: "network.proxy.url_required" })
       return false
     }
     if (input.proxyUrl && !validProxyUrl(input.proxyUrl)) {
-      setError(t("network.proxy.url_invalid"))
+      setError({ key: "network.proxy.url_invalid" })
       return false
     }
     if (input.proxyPassword && !input.proxyUsername) {
-      setError(t("network.proxy.username_required"))
+      setError({ key: "network.proxy.username_required" })
       return false
     }
     return true
@@ -231,7 +237,7 @@ export default function NetworkPanel() {
         : null
       const savedConfig = await patchConfig({ network: { proxy: nextProxy } }, { ...currentProjectConfigRequestOptions(), authority: owner.authority })
       if (!savedConfig) {
-        if (ownsScope(owner)) setError(t("network.proxy.save_failed"))
+        if (ownsScope(owner)) setError({ key: "network.proxy.save_failed" })
         return
       }
       if (!ownsScope(owner)) return
@@ -239,7 +245,7 @@ export default function NetworkPanel() {
       setSaved(true)
       scheduleOwnedFeedbackClear(completionOwner, () => setSaved(false))
     } catch (err) {
-      if (ownsScope(owner)) setError(`${t("network.proxy.save_failed")} ${describeFailure(err)}`)
+      if (ownsScope(owner)) setError({ key: "network.proxy.save_failed", details: formatErrorDetails(err) })
     } finally {
       if (ownsScope(owner)) setSaving(false)
     }
@@ -254,15 +260,15 @@ export default function NetworkPanel() {
     try {
       const savedConfig = await patchConfig({ network: { proxy: null } }, { ...currentProjectConfigRequestOptions(), authority: owner.authority })
       if (!savedConfig) {
-        if (ownsScope(owner)) setError(t("network.proxy.delete_failed", { reason: t("network.proxy.save_failed") }))
+        if (ownsScope(owner)) setError({ key: "network.proxy.delete_failed" })
         return
       }
       if (!ownsScope(owner)) return
       const completionOwner = { ...owner, draftGeneration }
-      setStatusMessage(t("network.proxy.deleted"))
-      scheduleOwnedFeedbackClear(completionOwner, () => setStatusMessage(null))
+      setDeleted(true)
+      scheduleOwnedFeedbackClear(completionOwner, () => setDeleted(false))
     } catch (err) {
-      if (ownsScope(owner)) setError(t("network.proxy.delete_failed", { reason: describeFailure(err) }))
+      if (ownsScope(owner)) setError({ key: "network.proxy.delete_failed", details: formatErrorDetails(err) })
     } finally {
       if (ownsScope(owner)) setDeleting(false)
     }
@@ -377,9 +383,9 @@ export default function NetworkPanel() {
           </TextField.Root>
         </SettingsRow>
 
-        {error() ? <Feedback tone="error">{error()}</Feedback> : null}
+        {error() ? <Feedback tone="error" details={error()?.details}>{t(error()!.key)}</Feedback> : null}
 
-        {statusMessage() ? <Feedback tone="success">{statusMessage()}</Feedback> : null}
+        {deleted() ? <Feedback tone="success">{t("network.proxy.deleted")}</Feedback> : null}
 
         {testResult() ? (
           <Feedback tone={testResult()!.ok ? "success" : "error"} details={testResult()!.targetUrl}>

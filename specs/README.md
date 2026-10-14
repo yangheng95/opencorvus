@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [网络反馈的当前语言](records/2026-10/2026-10-14-network-feedback-locale.md)：同页切语言、错误摘要和真实保存/删除回填调查。
+
 - [Git 源条目读取合同](current/architecture/git-source-entry-enumeration.md)：Git index/ignore与物理entry的唯一枚举，Runtime及Task源数据共享合同。
 
 - [408 保存批准决定与安全升级](records/2026-10/2026-10-14-grant-decision-recovery-408.md)：唯一授权决定、历史保真、WAL文件独占候选与原客户端消费边界；当前调查/实验准备。

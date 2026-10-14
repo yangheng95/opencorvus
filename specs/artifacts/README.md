@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [网络反馈的当前语言](2026-10-14-network-feedback-locale/README.md)：第26批真实当前错误、配置读回和桌面原件。
+
 - [Git 源条目读取验收](2026-10-14-project-metadata-latency/source-entry-read/README.md)：2100原capture、24项测试、最终HTTP/原图与保留的原生写入失败。
 
 - [408 保存批准决定与安全升级](2026-10-14-grant-decision-recovery-408/README.md)：407实际提交与push承接，408只读投影/客户端/升级协调资料。

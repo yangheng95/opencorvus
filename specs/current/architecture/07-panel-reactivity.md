@@ -47,6 +47,13 @@ projection. The original HTTP operation keeps its lifetime and clears its busy
 state only on its actual settlement. A new test of the current draft uses the
 same public endpoint and physical transport; editing adds no cancellation or retry.
 
+Network validation and save/delete failures retain message keys and original
+diagnostic details, and deletion success retains its accepted boolean fact.
+Feedback summaries translate at render time in the current UI locale. Native
+Details keeps original HTTP, path, request ID and error evidence through the
+shared error formatter. Changing locale preserves the original draft and feedback
+fact, with the existing scope, draft, busy and feedback-timer owners unchanged.
+
 Provider settings retain separate form, catalog-refresh and model-refresh feedback
 owners. Each stores message keys, variables and original diagnostic details;
 summaries translate at render time and details use the existing native disclosure.

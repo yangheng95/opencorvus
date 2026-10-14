@@ -431,7 +431,7 @@
   "network.proxy.url_invalid": "代理 URL 必须以 http:// 或 https:// 开头，且不能内嵌用户名或密码。",
   "network.proxy.username_required": "填写密码时必须填写用户名。",
   "network.proxy.delete_button_title": "删除已保存的代理设置。",
-  "network.proxy.delete_failed": "代理设置删除失败：{{reason}}",
+  "network.proxy.delete_failed": "代理设置删除失败。",
   "network.proxy.deleted": "代理设置已删除。",
   "network.proxy.deleting": "删除中...",
   "network.proxy.save_failed": "代理设置保存失败。",

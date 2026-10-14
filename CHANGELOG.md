@@ -15,6 +15,8 @@
 
 #### 修复
 
+- 网络设置中的校验、保存与删除反馈跟随当前界面语言；切换语言时保留原草稿和错误，原始失败详情可展开查看。
+
 - 代理测试期间编辑连接草稿后，迟到的结果按原草稿退休；测试按钮仍等待真实请求结束再恢复，可继续测试当前输入。
 
 - 命令面板使用 Chat/Work 的统一体验图标，并在工作项提示中显示类型与项目；同项目同名记录可清楚区分，原始标题和选择目标保持。
@@ -133,6 +135,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Network validation, save and delete feedback follows the current interface language. Switching languages preserves the original draft and error, with original failure details available in the existing disclosure.
 
 - Editing a proxy draft retires an in-flight test's result for the previous draft. The test button still recovers after the actual request settles, allowing the current input to be tested again.
 

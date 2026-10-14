@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [网络反馈的当前语言](2026-10-14-network-feedback-locale.md)：原反馈事实的渲染语言与保存/删除资格方案。
+
 - [项目元数据共享条目修复](2026-10-14-project-metadata-latency.md)：唯一枚举、真实桌面/checkpoint/ZIP验收与未解决的原生写入范围。
 
 - [408 保存批准决定与安全升级](2026-10-14-grant-decision-recovery-408.md)：唯一授权决定、历史保真、WAL文件独占候选与原客户端消费边界；当前调查/实验准备。
