@@ -1,9 +1,4 @@
 import path from "path"
-import { generateExpertSquadPayloadModule } from "./generate-expert-squad-payload"
-import { generateExpertSquadSearchLocalizationModule } from "./generate-expert-squad-search-localization"
-import { generateBuiltinSkillPayloadModule } from "./generate-builtin-skill-payload"
-import { generateBuiltinMissionSkillPayloadModule } from "./generate-builtin-mission-skill-payload"
-import { generateWorkArtifactQualificationMatrix } from "./generate-work-artifact-qualification-matrix"
 
 export async function generateOpencorvusGeneratedBuildArtifacts(
   input: {
@@ -15,6 +10,14 @@ export async function generateOpencorvusGeneratedBuildArtifacts(
   const packageRoot = input.packageRoot ?? path.resolve(import.meta.dir, "..")
   const repoRoot = input.repoRoot ?? path.resolve(packageRoot, "../..")
   const log = input.log ?? (() => {})
+
+  // The build entry binds its validation environment before runtime-backed
+  // generators evaluate Global and initialize application directories.
+  const { generateExpertSquadPayloadModule } = await import("./generate-expert-squad-payload")
+  const { generateExpertSquadSearchLocalizationModule } = await import("./generate-expert-squad-search-localization")
+  const { generateBuiltinSkillPayloadModule } = await import("./generate-builtin-skill-payload")
+  const { generateBuiltinMissionSkillPayloadModule } = await import("./generate-builtin-mission-skill-payload")
+  const { generateWorkArtifactQualificationMatrix } = await import("./generate-work-artifact-qualification-matrix")
 
   await generateExpertSquadPayloadModule(repoRoot)
   log("Generated expert-squad payload module")

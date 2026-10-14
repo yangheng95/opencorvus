@@ -75,6 +75,12 @@ payload 语义变更必须追加连续版本。`PRAGMA user_version` 是唯一�
 在 typecheck 和正式构建中实例化两份内存 SQLite，比较当前对象与最后迁移目标的实际结构。
 它不依赖可变源码摘要。
 
+构建入口必须在求值运行模块前绑定唯一仓库专用
+`.scratch/package-runtime`，不能继承应用的 `OPENCORVUS_HOME` 作为构建数据目录。
+运行时相关生成器在该绑定完成后才加载。构建迁移检查仅使用内存 SQLite；编译产物的
+首次运行验收另外拥有自建临时运行目录，不以用户数据库验证初始化或升级。
+正常应用启动的版本化迁移合同保持独立。
+
 所有 CLI、服务及子执行进程经 `Database.Client` 在业务访问/恢复前进入同一个迁移器。
 旧版文件升级要求实际 Write-Ahead Logging（WAL，预写日志）模式，在原连接上取得
 EXCLUSIVE 物理锁后进入 `BEGIN IMMEDIATE`，排除持旧语义的空闲只读连接；仅 writer 锁

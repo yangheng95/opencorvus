@@ -978,3 +978,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [2026-10-13 正文冒号行范围引用373](2026-10-13-source-colon-range-373.md)。
 
 - [正文文件链接原始路径](2026-10-14-literal-reference-click.md)：正文点击的原始路径保真。
+
+- [构建数据库边界](2026-10-14-build-database-boundary.md)：真实调用链、内存迁移检查与独立构建运行目录。

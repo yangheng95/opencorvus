@@ -3429,3 +3429,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [正文冒号行范围引用373](records/2026-10/2026-10-13-source-colon-range-373.md)：Sources范围格式与正文解析的一致性。
 
 - [正文文件链接原始路径](records/2026-10/2026-10-14-literal-reference-click.md)：已解析资源身份的点击传递与真实页面验收。
+
+- [构建数据库边界](records/2026-10/2026-10-14-build-database-boundary.md)：完整Overlay构建链与用户运行数据隔离审计。

@@ -35,6 +35,7 @@ import { generateOpencorvusGeneratedBuildArtifacts } from "../../opencorvus/scri
 import { writeOverlayPayloadStamp } from "../../opencorvus/script/build-overlay-payload-stamp"
 import { findLockedBuildBinaries } from "./build-binary-lock"
 import { finalizeWorkArtifactPackage } from "../../opencorvus/script/finalize-work-artifact-package"
+import { preparePackageBuildEnvironment } from "../../../script/package-build-environment"
 
 import {
   overlayArchFromTriple,
@@ -51,6 +52,8 @@ const repo = path.resolve(dir, "../..")
 const opencorvus = path.resolve(repo, "packages/opencorvus")
 const sdk = path.resolve(repo, "packages/sdk/js")
 const tauri = path.resolve(dir, "src-tauri")
+
+Object.assign(process.env, await preparePackageBuildEnvironment(repo, process.env))
 
 // ── Args ──
 const argv = process.argv.slice(2)

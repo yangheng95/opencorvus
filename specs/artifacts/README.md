@@ -458,3 +458,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [Shared logger namespace95](2026-10-05-connection-workspace-authority/logger-reserved-fields-investigation-95.md): actual Session subject-time collisions and Pino reserved envelope ownership audited; raw unknown chronology preserved, product repair held.
 
 - [正文文件链接原始路径](2026-10-14-literal-reference-click/README.md)：真实点击、文件身份和验收原件。
+
+- [构建数据库边界](2026-10-14-build-database-boundary/README.md)：隔离复现、完整构建与实际用户库只读观察。

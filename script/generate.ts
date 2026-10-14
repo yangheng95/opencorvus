@@ -4,8 +4,11 @@ import { $ } from "bun"
 import path from "node:path"
 import { GENERATED_ARTIFACT_PATHS } from "./generated-artifacts"
 import { generateOpencorvusGeneratedBuildArtifacts } from "../packages/opencorvus/script/generate-build-artifacts"
-import { generatePortableExpertSquadTemplate } from "../packages/opencorvus/script/generate-portable-expert-squad-template"
-import { generateExpertSquadRevisions } from "../packages/opencorvus/script/generate-expert-squad-revisions"
+import { preparePackageBuildEnvironment } from "./package-build-environment"
+
+Object.assign(process.env, await preparePackageBuildEnvironment(path.resolve(import.meta.dir, ".."), process.env))
+const { generatePortableExpertSquadTemplate } = await import("../packages/opencorvus/script/generate-portable-expert-squad-template")
+const { generateExpertSquadRevisions } = await import("../packages/opencorvus/script/generate-expert-squad-revisions")
 
 // MDX means Markdown with JSX. API MDX files are byte-checked against the docs renderer output.
 const API_MDX_ARTIFACT_PATHS = new Set([

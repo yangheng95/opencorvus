@@ -1,0 +1,72 @@
+# 构建期数据库边界审计
+
+## Recall
+
+用户原始要求：自行检查日志和完整build:overlay调用链，确认有没有碰用户数据库；构建只能校验迁移，不能升级真实用户数据；查清根因，有问题就修复，验证后提交推送。只使用一个开发agent，禁止子agent。此前持续迭代423已交付9267b5341并推送；本轮开始HEAD相同，仅原有.bun与packages/opencorvus/bun未跟踪，保留。当前数据库结构版本2，自动迁移与用户数据保留合同不变，不清库、不关闭用户进程、不发布。
+
+## 已读资料与全仓搜索
+
+已读根AGENTS、02-data版本化迁移合同、当前构建与发布架构、423 Recall、SQLite自动迁移方案、package.json三级脚本、overlay build-overlay/Vite/Tauri build.rs、后端build、SDK build/generate-openapi、公共package-build-environment及其两项测试、runtime-paths/test-runtime-environment、generate-build-artifacts及五个生成器、Database.Client/migrateSchema/validateMigrationRegistry及版本2registry。全仓检索preparePackageBuildEnvironment所有调用、generateOpencorvusGeneratedBuildArtifacts全部调用、opening database/schema applied/database migration completed以及数据库访问定义与生成器依赖。
+
+## 修改前分析
+
+可观察现象是用户称build:overlay触发schema升级，尚未取得能关联这次构建的迁移回执，不能先宣称实际升级或仅为误读。当前用户默认数据目录的数据库修改时间为2026-10-13T19:11:57Z，与上轮明确授权重建基线一致；现有默认运行日志最新为2026-10-11，检索到的开库/schema applied来自10月4/7历史运行。没有从现有记录证明本次构建升级用户库。应用终端工具确认本thread没有附加终端；不要求用户补日志后才行动。将继续读取文件元数据、只读数据库版本和有明确对象的可用构建记录，历史不可证明处保留未知。
+
+直接迁移checker调用validateMigrationRegistry，只执行两份内存SQLite结构比较；build.ts第47行在正式编译前调用该检查。registry含版本1和2。真实升级只在Database.Client首次打开实际文件并进入migrateSchema，成功日志含backupPath/from/to；单独schema applied也用于当前版本校验，不能当升级证据。
+
+已确认构建隔离存在两个结构性缺口，实际数据库影响仍待运行追踪：overlay入口静态导入generate-build-artifacts，后者静态导入Skill/ExpertSquad等运行模块，Global模块导入时会初始化目录并维护cache，发生在公共构建环境设置之前；后端build也在body里设置环境，而运行生成器已由静态依赖先求值。公共preparePackageBuildEnvironment还明确沿用调用者OPENCORVUS_HOME，现有测试固定了该不安全行为。此处可能使构建访问真实用户目录，不能靠最后一次内存checker结果排除整链副作用。
+
+完整链为root build:overlay → overlay脚本 → Node Vite → 生成器 → SDK build → 隔离generate-openapi → 后端build --overlay-server → 构建迁移checker/生成器/配置schema生成/Bun编译与运行资源打包 → Tauri beforeBuild Node Vite/Rust build.rs → 本地dist复制。SDK的OpenAPI生成已先建立自有隔离运行目录，再动态导入运行服务器；保留该实现。Tauri build.rs只读取/打包sidecar资源，尚未发现启动用户业务服务。不能为了验收停止用户正在运行的Overlay或覆盖其映射文件。
+
+影响面为构建入口、公共构建环境与进程继承；必须横查原生包/GUI安装包/SDK/配置schema生成和后端独立构建入口，防止单入口绕行。调用方签名/版本/编译器环境仍应保留；构建数据目录不接受运行时用户数据权威。Task/Mission/Session执行调度没有当前异常证据；本轮不改这些机制、迁移版本、数据语义、Provider或界面。若运行追踪显示恢复/调度被触发，立即横审其全部生产入口与终态。无UI改动，不新增或运行UI自动化测试。
+
+## 方案和真实验收
+
+1. 先保存本轮相关源码原件与用户默认库只读元数据，建立自有独立目录和有真实标记的版本1样本库。使用只读、被动运行记录追踪构建运行模块、实际SQLite文件与调用栈；默认/显式OPENCORVUS_HOME均只指向自有样本，不能以真实用户库复现。禁止将模型凭据带入构建，无Provider请求。
+2. 在证据锁定后先补齐实际根因与改动决定，再修改。优先复用唯一公共构建环境，在所有运行模块求值前完成绑定，去掉沿用用户运行目录的旧分支与过期测试；必要时把公开构建入口收成仅bootstrap后动态加载唯一实现。保留内存迁移checker及正式运行时自动迁移，不引入跳过迁移开关/双源/兼容路径。
+3. 聚焦非UI正向测试验证明确构建目录、完整环境输出和样本版本/行数据保留，并运行真实构建调用链。至少完成原用户命令正式完整host构建，记录每个阶段、实际DB访问、退出码与资源结算；若用户进程锁定目标只报告精确锁定，不终止用户进程，并使用已有CARGO_TARGET_DIR等正规隔离能力完成等价原链验证。不把mock命令或静态文本检查称为完整构建。
+4. 当前文档/迁移/类型及相关构建合同检查，人工复核待提交完整差异，索引同步；所有本轮文件范围提交，fresh fetch/merge、完整pending审查及正常push。最终明确历史上是否有足够证据、复现实际副作用、修复与未达成边界，持续goal不标完成。
+
+运行资源：原有run-with-inactivity/正式checker，实际命令按输出活动180秒无活动超时，长构建定时核对当前句柄；不得只凭锁文件重启或反复启动。只归档本轮必要日志/路径/版本/标记，凭据、用户消息正文及私有配置不进入spec或提交。
+
+## 运行证据与实施决定
+
+修改前被动诊断原57173 join90467c exit0：动态导入生产generate-build-artifacts就触发Global初始化；sample-user缓存版本从0改为21、已有标记被清除，实际root仍是样本用户目录。之后preparePackageBuildEnvironment继续返回同一用户root，五个真实生成器全部执行完成；该阶段没有观察到Database.Client开库。此证据证明构建会碰用户运行目录，不能将内存checker正确当作全链隔离正确；尚未证明本次历史真实用户数据库被升级。正向环境合同修改前原8e8551实际失败，输出仍为operator-runtime，另一个默认根合同通过。首次命令缺少./前缀，Bun同时命中tmp/gallery-project内的同名两个纯环境测试；已识别且后续用精确./路径，仅验证本任务合同，不将这两项计入本任务验收。
+
+补充完整链发现build.ts在host编译结束后直接执行check-packaged-first-run.ts，该checker保留少量宿主环境并使用新建自有临时目录/runtime启动产物、验证真实会话与缺少模型配置错误，属于实际数据库初始化的合法隔离运行，不是迁移checker，也不能删除它来制造构建不出现schema日志。当前非真实Provider模式保留，无凭据复制/模型调用。
+
+确定实施：公共preparePackageBuildEnvironment只绑定repo/.scratch/package-runtime，删除继承OPENCORVUS_HOME分支；generate-build-artifacts取消会导入Global的顶层生成器依赖，改为执行时导入；overlay入口与现有独立build.local在调用生成器前复用同一公共环境，后端正式build已有同一绑定。既有SDK OpenAPI动态隔离保持。正式构建路径通过被动观察核实第一次运行模块初始化的实际root，若仍有静态依赖提前求值继续修复，不靠猜测宣称关闭。迁移checker日志明确in-memory和target版本，保留实际SQLite检查。版本/签名/编译器环境保留，数据库迁移定义与运行入口不改。
+
+同语义入口横查进一步发现root script/generate.ts独立生成命令静态导入revisions，其ExpertSquadRegistry也会先求值Global。该入口虽不是build:overlay子命令，属于同一当前构建生成面，按相同根因一起改为公共环境绑定后动态加载；不改修订算法或生成内容。其他package-native/GUI caller已在子命令前调用唯一prepare函数，环境输出按新合同自动收敛；SDK OpenAPI与first-run各自自有临时root保留。
+
+## 额外用户问题与验收工具修正
+
+用户追问当前schema为何不是第一个版本。实际git show确认版本1基线提交fdf86894e于10月14日03:32建立；版本2由权限修复720702139于16:55追加，0001与0002的SQL实际逐字相同（git diff --no-index为空）。版本2是数据语义迁移：对历史grant_used补grant_decision_indexed审计行，原授权/执行结果保持，空历史也登记已完成版本2。它不是新增物理表/列/索引。真实默认用户库只读仍user_version=1，基础文件mtime仍10月13日19:11:57Z，没有当前真实库升级到2的证据；构建目标2、隔离验收库2不能冒充用户库2。未修改已交付迁移或基线。
+
+准备工具两项错误保留：样本首次写入使用非UUID generation，被真实数据库trigger拒绝，随后对同一自有未完成样本修正合法UUID并建立版本1；首次BUN_OPTIONS采用带空格值导致Bun只输出run帮助并exit0，没有实际构建，不能把该0当验收，已保留help-only回执并改用--preload=PATH，真实完整命令随后成功进入所有阶段。
+
+真实完整构建原29102 joinca99fa exit1：两次Node前端、五类生成器、SDK、内存迁移检查、后端原生编译与4真实会话/重启保留2会话的first-run均通过，Rust阶段被自有180秒stdout/stderr无输出超时取消。23:29:13启动的原rustc68396实际CPU已42.12秒，证明该窗口把仍活跃的编译误判为静默超时；ProcessFacade回执settlementConfirmed=true，原进程树已全退场。没有共享产品队列/唤醒/终态异常，本次为测试编译窗口配置错误。改构建无输出窗口为600秒、总资源仍1800秒；完整命令重跑前保留失败日志，不改产品行为来绕过验收。
+
+独立root generate正式调用原29235 join3ae641 exit0，ProcessFacade settlementConfirmed=true，实际Global首加载root为repo/.scratch/package-runtime；全部当前生成产物tracked diff为空。运行时正常迁移控制原e80936 exit0：只复制自有版本1样本到另一独立migration-runtime，生产Database.Client真实1→2、生成实际v1备份并保留原项目内容/时间/generation；没有打开真实用户库进行迁移。
+
+诊断工具使用Bun runtime onLoad hook只加入被动路径/调用栈观察，不改控制流或业务值；依据Bun官方插件文档https://bun.com/docs/runtime/plugins。首次完整构建日志已有运行根/内存checker/first-run路径。为覆盖SDK生成器捕获并丢弃stderr的边界，重跑诊断另把同一被动事实直接写入自有trace文件；原preloader版本保留，不把缺失内层stderr当成未执行。产物二进制原件检查未包含诊断标记，实际package编译仍使用正式源码与原Bun.build插件参数。
+
+第二次完整诊断构建原10890 join48e14e exit1：后端已成功编译，但增强的自有preloader把观察header插到带shebang的first-run脚本之前，造成Syntax Error；不是生产脚本故障。已保存原preloader及失败日志，修正保留首行shebang，并先单独重跑同一真实first-run checker原22166 join524c5a exit0（4会话、重启2会话、realProvider=false）。完整正常命令随后才再次重跑，不把诊断解析失败包装成产品失败或通过。当前根typecheck原1200 join9581a9 exit0，8包全部通过。
+
+## 构建产出后的物理收尾审计
+
+第三次正式build:overlay在15:46:52Z产出release二进制并打印Full overlay build complete，目标root 86464已退出，但外层87288与其原生helper 90380仍等待Job清空。被动观察新出现的vctip 77136（15:46:51Z创建，parent 66460已退出）不能仅按名字判断归属。先按共享机制横查：ProcessFacade同时等待terminal、outputSettled、native settled；Windows native在root退出后按请求terminate_children_on_root_exit决定主动清理或保留全树，并仅在Job ActiveProcesses=0后写回执。普通host、插件后台与Task默认保留全树；foreground shell、session shell-exec、bash前台明确true；Task按taskID/cwd身份绑定，Mission/Session通过同一Task/supervisor路径收敛，不存在本轮新增旁路。恢复以request/runtime occurrence、owner PID+creation instance、target instance和exact marker匹配，不能按当前同名进程清理；并行owner按独立Job、请求路径与身份隔离。当前实际request d28c5a44-3857-46d6-b539-73538aba0fbe、runtime a8d9f878-920a-4d03-94fe-9ea9b30251c0明确未要求root退出清理，属于自有验证runner选择了后台全树生命期。生产保留全树机制正在正确阻止虚假settlement，不能删等待或伪造回执修复。将只复核本次自有owner/helper/target实例和request后，通过该request既有cancel_file协议收尾，不按PID/名称杀进程；真实构建root exit与主动验证清理分别记录。后续有限命令runner改用已有supervisedHostProcessFacade(owner,true)，不修改产品Task/后台契约。补跑已有真实foreground facade正向验收，检查并行peer独立收尾及超时正常错误契约。若精确取消后发现共享恢复或跨owner异常，再按全机制扩大审计；不将推测的vctip直接断言为根因。
+
+精确收尾结果：首次PowerShell校验使用FileTime而非产品定义的.NET epoch identity导致保护性拒绝，没有写cancel；随后复用生产observeRuntimeProcessOccurrence，owner87288/helper90380均exact_live、target86464为dead_or_reused，才向已核实request目录的cancel文件写入自有清理。原56207 join75433f实际exit0，full-build-result记录settlementConfirmed=true、exitCode=0，时间15:54:43Z。取消后原owner/helper及vctip77136均已退场，符合编译后代占住自有全树的解释；产品Job等待机制没有被绕过。实际执行runner保留为full-build-actual-owned-tree.ts，后续有限命令runner改用现有foreground facade true；未重复运行后者，不混淆两次事实。已有正式foreground-process-facade真实正向测试2项/6断言通过，根退出7保留、子树物理收尾、deadline错误及并行peer正常退出均符合当前合同。
+
+横审补充已读spawnTaskShell、gated shell、spawnTaskCommand的Task read lease与late admission清理、Windows recoverOrphanedWindowsRequests exact owner/ready/settlement codec，及engine/host-recovery按项目发现和mission/process-recovery按opened事件与dead owner generation恢复。它们复用物理回执，当前实际构建没有Task/Mission/Session持久化事件或生产owner；默认用户业务表实际计数保持。当前范围可排除产品共享调度异常，不能把自有runner的生命期选择扩展成产品Task取消行为变更。先前查询不存在的src/task路径已纠正为src/engine，无代码改动因此产生。
+
+## 最终验收
+
+第三次真实完整构建（原56207、join75433f）完成Node Vite两次、全部五类生成器、SDK/OpenAPI、后端产物编译、隔离first-run（4次聊天创建，重启保留2条，realProvider=false）、Tauri release与dist复制，exit0/settlementConfirmed=true。trace显示overlay与后端首次Global初始化均为repo/.scratch/package-runtime，OpenAPI为该root下独立test-runtime，first-run为另一个独立runtime；正式迁移checker只有:memory:。构建输出完成后自有编译子树主动收尾单独记录，不包装成自然退出。
+
+最终inventory/review原3fadb5 exit0：真实默认用户库与自有样本均保持user_version=1，sqlite_schema实际对象、所有表行数、文件device/inode/大小/mtime相同；样本完整项目行及cache/version=0与标记保持。默认库大小1970176、mtime1791918717627.2153毫秒。独立运行时控制副本通过生产Database.Client真实迁移1→2，备份库实际user_version=1且完整原项目行保留。版本1与2在两份内存SQLite中实际517项对象相同，变化是历史权限审计数据补齐，不是DDL变化。现有默认日志无法把用户之前所见构建输出关联到真实库升级；当前可确认没有默认库从1变2，历史任意自定义OPENCORVUS_HOME的具体路径是否被写仍未知。已修复可复现的构建提前初始化cache及继承用户root的结构性缺口。
+
+聚焦正向测试：根精确./script/package-build-environment.test.ts为3项/17断言；正式后端permission-ledger-migration为10项/39断言；foreground facade为2项/6断言。根typecheck原9581a9覆盖8包通过。root generate原3ae641退出0/settled，所有当前tracked生成内容保持。文档与架构索引按最终文档再检查，结果归档。尚无UI改动，未新增/运行UI自动化。没有复制或使用Provider凭据，没有模型调用；未新增schema版本、未清库、未发布。
+
+原review在构建物理回执生成前过早启动，ENOENT错误来自诊断读时机；原临时review.log已被成功结果覆盖，没有独立保存的失败日志，此处保留错误事实。其余验收脚本、失败/成功日志和必要前后事实归档到specs/artifacts/2026-10-14-build-database-boundary，不归档实际SQLite文件、用户消息正文或私有配置。最终提交范围仅上述构建边界、正向环境测试和对应spec，不混入原有.bun及packages/opencorvus/bun。

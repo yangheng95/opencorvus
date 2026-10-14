@@ -4,6 +4,7 @@ import { $ } from "bun"
 import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
+import { preparePackageBuildEnvironment } from "../../../script/package-build-environment"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -39,6 +40,7 @@ import { prepareEmbeddedOverlayUiPlugin } from "./embedded-overlay-ui-plugin"
 
 const repoRoot = path.resolve(dir, "../..")
 
+Object.assign(process.env, await preparePackageBuildEnvironment(repoRoot, process.env))
 await generateOpencorvusGeneratedBuildArtifacts({ packageRoot: dir, repoRoot, log: console.log })
 
 const singleFlag = process.argv.includes("--single")

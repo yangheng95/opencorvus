@@ -34,10 +34,9 @@ export async function preparePackageBuildEnvironment(
   repoRoot: string,
   baseEnv: NodeJS.ProcessEnv,
 ): Promise<NodeJS.ProcessEnv> {
-  const root =
-    baseEnv.OPENCORVUS_HOME === undefined
-      ? path.join(path.resolve(repoRoot), PACKAGE_RUNTIME_RELATIVE_PATH)
-      : baseEnv.OPENCORVUS_HOME
+  // Runtime overrides belong to the application. Build-time module evaluation
+  // and child processes always own this repository-local validation root.
+  const root = path.join(path.resolve(repoRoot), PACKAGE_RUNTIME_RELATIVE_PATH)
   const paths = resolveOpenCorvusRuntimePaths({
     env: baseEnv,
     platform: process.platform,
