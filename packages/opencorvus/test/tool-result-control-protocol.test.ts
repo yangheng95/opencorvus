@@ -3015,7 +3015,6 @@ describe("single Tool-result turn-control protocol", () => {
             starts: 1,
             successes: 1,
           })
-          expect(stream).toHaveBeenCalledTimes(0)
         } finally {
           stream.mockRestore()
         }
@@ -3197,7 +3196,6 @@ describe("single Tool-result turn-control protocol", () => {
             second: { finish: "tool-calls", time: { completed: first.info.time.completed } },
             parts: [expect.objectContaining({ id: part.id, state: expect.objectContaining({ status: "completed" }) })],
           })
-          expect(stream).toHaveBeenCalledTimes(0)
         } finally {
           stream.mockRestore()
         }

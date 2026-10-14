@@ -6,7 +6,7 @@ import {
   resolvePanelArtifactReadReferencesBeforeAction,
 } from "@/agent/artifact-read-facts"
 import { Identifier } from "@/id/id"
-import { PermissionExecutionResultTable, PermissionLedgerTable } from "@/permission/permission.sql"
+import { PermissionAuthority } from "@/permission/authority"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { Database } from "@/storage/db"
@@ -197,6 +197,14 @@ describe("Artifact read facts from provider Tool input", () => {
           text: "x",
           attachment: false,
         })
+        const deferredInput = {
+          taskID,
+          artifact_transport_version: 2,
+          artifact_locator_ref: locatorRef,
+          byte_offset: 0,
+          max_bytes: 65_536,
+          delivery: "inline",
+        }
         await Session.updatePart({
           id: deferredPartID,
           sessionID: session.id,
@@ -206,58 +214,37 @@ describe("Artifact read facts from provider Tool input", () => {
           tool: "panel_read_task_artifact",
           state: {
             status: "running",
-            input: {
-              taskID,
-              artifact_transport_version: 2,
-              artifact_locator_ref: locatorRef,
-              byte_offset: 0,
-              max_bytes: 65_536,
-              delivery: "inline",
-            },
+            input: deferredInput,
             time: { start: now + 2 },
           },
         })
-        const permissionRequestID = Identifier.ascending("permission")
-        const permissionAttemptID = Identifier.deterministic("permission", `attempt\0${permissionRequestID}`)
-        Database.use((db) => {
-          db.insert(PermissionLedgerTable)
-            .values({
-              id: Identifier.ascending("permission"),
-              request_id: permissionRequestID,
-              project_id: Instance.project.id,
-              session_id: session.id,
-              message_id: readMessage.id,
-              tool_call_id: deferredCallID,
-              event_type: "requested",
-              mode: "ask",
-              policy_revision: "provider-read-facts",
-              provider_kind: "builtin",
-              provider_id: "test",
-              provider_digest: "provider-read-facts",
-              tool_name: "panel_read_task_artifact",
-              effect_class: "read",
-              scope_version: "1",
-              scope: {},
-              fingerprint: "provider-deferred-read",
-              summary: "Read one exact Task Artifact",
-              time_created: now + 2,
-            })
-            .run()
-          db.insert(PermissionExecutionResultTable)
-            .values({
-              attempt_id: permissionAttemptID,
-              result: {
-                kind: "json",
-                value: {
-                  title: "Deferred Task Artifact",
-                  output: deferredOutput,
-                  metadata: { truncated: false },
-                },
-              },
-              time_created: now + 2,
-            })
-            .run()
-        })
+        const deferredResult = {
+          title: "Deferred Task Artifact",
+          output: deferredOutput,
+          metadata: { truncated: false },
+        }
+        expect(await PermissionAuthority.authorizeAndExecute({
+          projectID: Instance.project.id,
+          sessionID: session.id,
+          messageID: readMessage.id,
+          toolCallID: deferredCallID,
+          toolPartID: deferredPartID,
+          providerKind: "projected",
+          providerID: "provider-read-facts",
+          providerDigest: "provider-read-facts",
+          toolName: "panel_read_task_artifact",
+          args: deferredInput,
+        }, async () => deferredResult)).toEqual(deferredResult)
+        const permissionHistory = await PermissionAuthority.history()
+        const permissionRequestID = permissionHistory.find((event) => event.tool_call_id === deferredCallID)!.request_id
+        const execution = permissionHistory.find((event) =>
+          event.request_id === permissionRequestID && event.event_type === "execution_succeeded")!
+        const permissionAttemptID = execution.attempt_id
+        expect(execution.outcome_slot).toBe(permissionAttemptID)
+        expect(permissionHistory.filter((event) => event.request_id === permissionRequestID)
+          .map((event) => event.event_type)).toEqual([
+          "stale", "execution_succeeded", "execution_started", "allowed_once", "requested",
+        ])
         await Session.updatePart({
           id: deferredPartID,
           sessionID: session.id,
@@ -267,17 +254,8 @@ describe("Artifact read facts from provider Tool input", () => {
           tool: "panel_read_task_artifact",
           state: {
             status: "completed",
-            input: {
-              taskID,
-              artifact_transport_version: 2,
-              artifact_locator_ref: locatorRef,
-              byte_offset: 0,
-              max_bytes: 65_536,
-              delivery: "inline",
-            },
-            output: deferredOutput,
-            title: "Deferred Task Artifact",
-            metadata: { truncated: false },
+            input: deferredInput,
+            ...deferredResult,
             time: { start: now + 2, end: now + 3 },
           },
         })
