@@ -1,7 +1,7 @@
-const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const fs=require('node:fs'),path=require('node:path'),zlib=require('node:zlib'),assert=require('node:assert/strict');
 const root='specs/artifacts/2026-10-13-compaction-stress',name=process.argv[2];
 assert(['user-selection-crash-smoke','user-selection-crash-matrix','user-excerpt-crash-matrix'].includes(name));
-const report=JSON.parse(fs.readFileSync(path.join(root,name+'.json')));
+const report=JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(root,name+'.json.gz'))));
 assert.equal(report.status,'passed');assert.equal(report.remoteModelRequests,0);
 const expected=name.endsWith('smoke')?[['streaming','automatic'],['checkpoint_saved','automatic']]:['streaming','summary_saved','checkpoint_transaction','checkpoint_saved'].flatMap(cut=>['manual','automatic'].map(kind=>[cut,kind]));
 assert.deepEqual(report.cases.map(c=>`${c.cut}/${c.kind}`).sort(),expected.map(([cut,kind])=>`${cut}/${kind}`).sort());
@@ -25,6 +25,10 @@ const cases=report.cases.map(c=>{
  assert.deepEqual(recovered.after.projection,[source.initialID,summaryID,original.info.id,source.sourceID,...(c.kind==='automatic'?[recovered.resultID]:[])]);
  const published=recovered.after.summaries.find(s=>s.info.id===summaryID);assert.equal(published.info.summary,true);assert.equal(published.info.finish,'stop');assert.equal(published.checkpoints[0].messageID,summaryID);
  const receipt=recovered.after.selection;assert.deepEqual(receipt,published.selected);
+ if(name==='user-excerpt-crash-matrix'){
+  const qualification=JSON.parse(fs.readFileSync(path.join(root,'user-excerpt-crash-qualification.json')));
+  assert.deepEqual(qualification.finalMatrix.selectionRange,{offset:receipt.sources[0].offset,end:receipt.sources[0].end,unit:'utf16_code_units'});
+ }
  assert.equal(receipt.selection_call_id,`retain_${c.cut}-${c.kind}_${c.cut==='checkpoint_saved'?'cut':'recover'}`);
  assert.deepEqual(receipt.sources.map(s=>({sessionID:s.sessionID,messageID:s.messageID,partID:s.partID,role:s.originalRole,author:s.originalAuthor,offset:s.offset,end:s.end})),[{sessionID:source.sessionID,messageID:original.info.id,partID:part.id,role:'user',author:'user',offset:excerpt.offset,end:excerpt.offset+excerpt.text.length}]);
  const interrupted=recovered.before.summaries.find(s=>s.info.id===source.interruptedMessageID);assert.equal(interrupted.selected.status,'retained');
