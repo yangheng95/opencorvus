@@ -1,0 +1,38 @@
+{
+  "occurrence": "active-task-dock-414-3bceaa2b-b4c2-4846-bdf5-60298e4f08a3",
+  "outcome": "ready",
+  "host": {
+    "pid": 37956,
+    "processInstanceID": "win32:639275501100069026",
+    "occurrenceID": "7cd911b6-9e39-4d8f-a58e-9d7026dea289"
+  },
+  "parent": {
+    "pid": 75340,
+    "processInstanceID": "win32:639275501064275745",
+    "occurrenceID": "fc9ba6a5-d2eb-4561-8d80-5e8b01b163e8"
+  },
+  "target": {
+    "pid": 83240,
+    "processInstanceID": "win32:639275501108748793",
+    "occurrenceID": "9ad4c6d5-adc0-42c2-b267-3515b23df865"
+  },
+  "targetBirthAtMs": 1791953310874,
+  "deadlineAt": 1791953909939,
+  "observedAtUtc": "2026-10-14T04:48:30.896Z",
+  "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/active-task-dock-414-live-bundle/bin/bun.exe",
+  "args": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-task-guidance-413.ts",
+    "C:/Users/hengu/AppData/Local/opencorvus/data/auth.json",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/project",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/active-task-dock-414-live/evidence",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/active-task-dock-414-live/startup.json",
+    "18535",
+    "active-task-dock-414-3bceaa2b-b4c2-4846-bdf5-60298e4f08a3",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/active-task-dock-414-selection.json",
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/long-source-reading-406/builtin.json",
+    "40",
+    "Task"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

@@ -354,10 +354,10 @@ export function ChatBubble(props: { node: CardNode; depth: number; collapsible?:
             </div>
           </Show>
         </div>
-        <Show when={hasFinalTurnOutput()}>
+        <Show when={hasFinalTurnOutput() || steerTargetSessionID()}>
           <ConversationTurnControl
             node={props.node}
-            copyText={answerText()}
+            copyText={hasFinalTurnOutput() ? answerText() : undefined}
             agentSteerOpen={steerController.open()}
             onAgentSteerToggle={steerTargetSessionID() ? onAgentSteerToggle : undefined}
           />

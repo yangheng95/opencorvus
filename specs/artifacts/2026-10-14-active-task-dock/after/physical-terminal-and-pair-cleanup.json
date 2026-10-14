@@ -1,0 +1,61 @@
+{
+  "pairedCleanupComplete": true,
+  "chain": [
+    {
+      "identity": {
+        "pid": 82860,
+        "processInstanceID": "win32:639275505177854865",
+        "occurrenceID": "c952a665-a277-4256-950d-3996cffdc356"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "identity": {
+        "pid": 63536,
+        "processInstanceID": "win32:639275505183990229",
+        "occurrenceID": "10297a4d-2708-4ee6-b516-d9c59b5262f9"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "copiedPair": [
+    {
+      "outcome": "retired",
+      "name": "auth.json"
+    },
+    {
+      "outcome": "retired",
+      "name": "models.json"
+    }
+  ],
+  "native": {
+    "occurrence": "active-task-dock-414-97c92523-fa8b-43eb-973f-2b2c4246960b",
+    "outcome": "settled",
+    "host": {
+      "pid": 82860,
+      "processInstanceID": "win32:639275505177854865",
+      "occurrenceID": "c952a665-a277-4256-950d-3996cffdc356"
+    },
+    "target": {
+      "pid": 63536,
+      "processInstanceID": "win32:639275505183990229",
+      "occurrenceID": "10297a4d-2708-4ee6-b516-d9c59b5262f9"
+    },
+    "observedAtUtc": "2026-10-14T04:59:48.095Z",
+    "deadlineAt": 1791954317739,
+    "terminal": {
+      "occurrenceID": "active-task-dock-414-97c92523-fa8b-43eb-973f-2b2c4246960b",
+      "pid": 63536,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "observedAtUtc": "2026-10-14T04:59:51.0288617Z",
+  "physicalCompletion": true,
+  "occurrence": "active-task-dock-414-97c92523-fa8b-43eb-973f-2b2c4246960b"
+}

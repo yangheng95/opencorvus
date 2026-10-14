@@ -664,6 +664,10 @@ Task and points to its main message input for further work. Its localized help
 describes the textarea, and the send button is positioned against the input
 field rather than the full form, so help, errors and receipts cannot shift it.
 Acceptance feedback states durable receipt only, not execution completion.
+The single Conversation turn control remains available for a resolved Task
+worker while it is pending or running, so guidance can arrive during execution.
+Its answer-copy action still receives text only after the turn has settled;
+guidance applicability does not depend on a final answer being present.
 
 - Missing or drifted `agentID`, `sessionID`, `messageID`, Slice revision, parent,
   channel, or order ownership fails explicitly.

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [活动Task指导与侧栏流式恢复](2026-10-14-active-task-dock/README.md)：真实活动协调、成员增量及流中关闭重开验收。
+
 - [命令面板工作项身份](2026-10-14-palette-item-identity/README.md)：第24批原页面、正式输入与独立生命周期证据。
 
 - [Task成员指导与侧栏流中恢复](2026-10-14-task-member-guidance/README.md)：真实Task协调提交、消费与原成员阅读验收。
