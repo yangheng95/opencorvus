@@ -1187,7 +1187,7 @@ export namespace SessionCompaction {
       system: [],
       messages: transcript.render({ system: [], tools: {}, promptText, maxTokens: 0 }),
       prepareMessages: working.prepare,
-      prepareStep: (step) => ({ messages: working.project(step.messages) }),
+      prepareStep: (step) => ({ messages: working.project(step.responseMessages) }),
       model,
       stopWhen: [({ steps }) => compactionStepDisposition(steps.at(-1)) === "summary_ready", isStepCount(agent.steps)],
     })

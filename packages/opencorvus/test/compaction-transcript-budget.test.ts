@@ -434,9 +434,13 @@ test("catalog requests bind the exact helper identity and return exact page rang
   })
 })
 
-test.each([256, 1024])(
-  "the persisted %i-source catalog completes or reports its exact step boundary",
-  async (count) => {
+test.each([
+  { count: 256, steps: 20, status: "completed" },
+  { count: 1024, steps: 20, status: "step_limit" },
+  { count: 1024, steps: 80, status: "completed" },
+])(
+  "the persisted $count-source catalog with $steps steps reports $status",
+  async ({ count, steps, status }) => {
     const target = { providerID: "catalog-local", modelID: "catalog-window" }
     const requests: any[] = []
     const pages: any[] = []
@@ -444,6 +448,7 @@ test.each([256, 1024])(
       cursor = 0,
       complete = false
     let sourceReference: any, sourcePage: any
+    let catalogMessageIDs: string[] = []
     const server = Bun.serve({
       hostname: "127.0.0.1",
       port: 0,
@@ -482,7 +487,11 @@ test.each([256, 1024])(
             typeof m.content === "string" ? m.content : m.content.map((p: any) => p.text ?? "").join("\n"),
           )
           .join("\n")
-        const catalog = JSON.parse(userText.match(/\{"kind":"compaction_catalog_reference"[^\n}]*\}/)![0])
+        const catalogNotices = [...userText.matchAll(/\{"kind":"compaction_catalog_reference"[^\n}]*\}/g)]
+        expect(catalogNotices.length).toBe(1)
+        const catalog = JSON.parse(catalogNotices[0]![0])
+        const inlineIDs = [...userText.matchAll(/<message id="([^"]+)"/g)].map((match) => match[1])
+        expect(inlineIDs).toEqual(catalogMessageIDs.slice(0, catalog.inlineMessages))
         const outputs = body.messages.filter((m: any) => m.role === "tool")
         const last = outputs.length ? JSON.parse(outputs.at(-1).content) : undefined
         if (last?.status === "saved") {
@@ -563,6 +572,7 @@ test.each([256, 1024])(
           await Config.updateProjectPatch({
             model: `${target.providerID}/${target.modelID}`,
             compaction: { tail_turns: 0, max_context_tokens: 19_000 },
+            ...(steps === 20 ? {} : { agent: { compaction: { steps } } }),
             provider: {
               [target.providerID]: {
                 name: "Local catalog transport",
@@ -584,6 +594,7 @@ test.each([256, 1024])(
             )
           const source = await authored.user(session.id, "Continue the unfinished investigation.")
           const original = await Session.messages({ sessionID: session.id })
+          catalogMessageIDs = original.slice(1).map((message) => message.info.id)
           const control = await SessionCompaction.create({ sessionID: session.id, source, auto: true, model: target })
           let outcome: unknown, controlError: unknown
           try {
@@ -610,7 +621,7 @@ test.each([256, 1024])(
           expect(requests[0]).toMatchObject({ model: target.modelID, stream: true })
           const replay = await Message.filterCompacted(MessageStore.stream(session.id))
           const helper = reopened.at(-1)!
-          if (count === 256) {
+          if (status === "completed") {
             expect(outcome).toMatchObject({ status: "completed" })
             expect(SessionControl.get(control.id)?.status).toBe("consumed")
             expect(replay.find((message) => message.info.id === sourcePage.messageID)).toMatchObject({
@@ -628,7 +639,7 @@ test.each([256, 1024])(
               error: { name: "CompactionContinuationMissingError" },
             })
             expect(SessionControl.get(control.id)?.status).toBe("failed")
-            expect(requests.length).toBe(20)
+            expect(requests.length).toBe(steps)
             expect(replay.filter((message) => original.some((item) => item.info.id === message.info.id))).toEqual(
               original,
             )
@@ -636,7 +647,8 @@ test.each([256, 1024])(
           const report = {
             scenario: "streamed-large-catalog",
             sources: count,
-            status: count === 256 ? "completed" : "step_limit",
+            steps,
+            status,
             requests: requests.length,
             pages: pages.length,
             catalogChars: pages[0].totalChars,
@@ -646,14 +658,14 @@ test.each([256, 1024])(
           if (process.env.OPENCORVUS_CATALOG_EVIDENCE_DIR) {
             await fs.mkdir(process.env.OPENCORVUS_CATALOG_EVIDENCE_DIR, { recursive: true })
             await fs.writeFile(
-              path.join(process.env.OPENCORVUS_CATALOG_EVIDENCE_DIR, `catalog-${count}.json`),
+              path.join(process.env.OPENCORVUS_CATALOG_EVIDENCE_DIR, `catalog-${count}-steps-${steps}.json`),
               JSON.stringify({
                 ...report,
                 remoteModelRequests: 0,
                 target,
                 capacity: 19_000,
                 original,
-              reopened,
+                reopened,
                 helper,
                 control: SessionControl.get(control.id),
                 replay,

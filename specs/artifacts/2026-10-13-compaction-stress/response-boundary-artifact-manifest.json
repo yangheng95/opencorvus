@@ -1,0 +1,17 @@
+{
+  "reviewer": "catalog-scale-review.cjs --response-boundary",
+  "artifacts": [
+    "response-boundary-256-20.json.gz",
+    "response-boundary-1024-20.json.gz",
+    "response-boundary-1024-80.json.gz",
+    "response-boundary-baseline.json",
+    "response-boundary-summary.json",
+    "response-boundary-before.log.gz",
+    "response-boundary-core.log.gz",
+    "response-boundary-typecheck.log.gz",
+    "response-boundary-regression.log.gz",
+    "response-boundary-diagnostics.log.gz",
+    "response-boundary-qualification.json",
+    "response-boundary-docs.log.gz"
+  ]
+}

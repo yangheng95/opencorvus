@@ -102,9 +102,22 @@ Project memory has three explicitly scoped authorities:
    authority. The ordinary Part readers recover the complete original fields.
    Catalogs are compiled once per attempt, not a new persistent content store;
    actual read and note Tool Parts retain their normal durable evidence.
+   Each helper step rebuilds its view from the bound source renderer and the
+   Software Development Kit (SDK)'s accumulated `responseMessages`. The previous
+   prepared message view is not a reliable positional boundary: its inline
+   source prefix can grow or shrink between reads and notes. Only genuine
+   assistant/Tool responses enter the disposable working history; source
+   projections and earlier helper prompts are rendered through the one source
+   path. Successful notes and user selections retain their actual call/result
+   frames, while original response traces remain durable.
    Paging bounds request size, not total work: existing helper step limits can
    still end a large scan with `CompactionContinuationMissingError`. Original
    history remains authoritative after such a failed attempt.
+   The existing `agent.compaction.steps` override controls this resource budget
+   through the native-agent configuration surface (default 20). It is independent
+   of `compaction.max_context_tokens`, which bounds each request. Increasing a
+   configured work allowance permits more reads but does not prove semantic
+   retention, make the loop unlimited or change the production default.
    Initial packing runs after the shared LLM entry has composed request language,
    plugin transformations, parameters and actual Tool declarations. This final
    envelope supplies the same input ceiling used by the ordinary request checks.

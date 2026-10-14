@@ -1,0 +1,56 @@
+{
+  "source": "catalog-scale-256.json.gz",
+  "defect": "source prefix and response history use different boundaries",
+  "requests": [
+    {
+      "request": 1,
+      "references": [
+        {
+          "kind": "compaction_catalog_reference",
+          "messageID": "msg_g0VXzxNtz00OGsGuWZlm",
+          "field": "catalog",
+          "messageCount": 257,
+          "inlineMessages": 0,
+          "totalChars": 122871,
+          "nextOffset": 1,
+          "offsetUnit": "utf16_code_units"
+        },
+        {
+          "kind": "compaction_catalog_reference",
+          "messageID": "msg_g0VXzxNtz00OGsGuWZlm",
+          "field": "catalog",
+          "messageCount": 257,
+          "inlineMessages": 43,
+          "totalChars": 122871,
+          "nextOffset": 20598,
+          "offsetUnit": "utf16_code_units"
+        }
+      ]
+    },
+    {
+      "request": 2,
+      "references": [
+        {
+          "kind": "compaction_catalog_reference",
+          "messageID": "msg_g0VXzxNtz00OGsGuWZlm",
+          "field": "catalog",
+          "messageCount": 257,
+          "inlineMessages": 0,
+          "totalChars": 122871,
+          "nextOffset": 1,
+          "offsetUnit": "utf16_code_units"
+        },
+        {
+          "kind": "compaction_catalog_reference",
+          "messageID": "msg_g0VXzxNtz00OGsGuWZlm",
+          "field": "catalog",
+          "messageCount": 257,
+          "inlineMessages": 43,
+          "totalChars": 122871,
+          "nextOffset": 20598,
+          "offsetUnit": "utf16_code_units"
+        }
+      ]
+    }
+  ]
+}

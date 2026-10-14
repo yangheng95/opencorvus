@@ -1,0 +1,92 @@
+{
+  "status": "mechanical_scope_passed",
+  "goalStatus": "incomplete",
+  "date": "2026-10-14",
+  "paidRequestsAdded": 0,
+  "cumulativePaidRequests": 999,
+  "coreContracts": 37,
+  "relatedContracts": 46,
+  "diagnosticContracts": 10,
+  "totalContracts": 93,
+  "files": 8,
+  "sourceBoundary": "SDK accumulated responseMessages; source prefix rendered separately per step",
+  "configuredStepLimit": {
+    "default": 20,
+    "isolatedOverride": 80,
+    "defaultChanged": false
+  },
+  "actualMatrix": {
+    "mechanicalReview": "passed",
+    "responseBoundary": "passed",
+    "largeCatalogCompletion": "configured_80_passed_default_20_failed",
+    "paidRequests": 0,
+    "results": [
+      {
+        "sources": 256,
+        "steps": 20,
+        "observedStatus": "completed",
+        "requests": 19,
+        "pages": 8,
+        "catalogChars": 122871,
+        "deliveredChars": 122871,
+        "originalMessages": 258
+      },
+      {
+        "sources": 1024,
+        "steps": 20,
+        "observedStatus": "step_limit",
+        "requests": 20,
+        "pages": 10,
+        "catalogChars": 490743,
+        "deliveredChars": 166836,
+        "originalMessages": 1026
+      },
+      {
+        "sources": 1024,
+        "steps": 80,
+        "observedStatus": "completed",
+        "requests": 63,
+        "pages": 30,
+        "catalogChars": 490743,
+        "deliveredChars": 490743,
+        "originalMessages": 1026
+      }
+    ]
+  },
+  "joins": [
+    {
+      "session": 3469,
+      "exitCode": 0
+    },
+    {
+      "session": 35776,
+      "exitCode": 0
+    },
+    {
+      "session": 32430,
+      "exitCode": 0
+    },
+    {
+      "session": 41518,
+      "exitCode": 0
+    }
+  ],
+  "references": [
+    "https://github.com/vercel/ai/blob/main/content/docs/03-ai-sdk-core/15-tools-and-tool-calling.mdx",
+    "installed ai@7.0.138 src/generate-text/stream-text.ts"
+  ],
+  "remaining": [
+    "Default20 still fails the full 1024-source scan at19000 tokens.",
+    "Configured80 success is scripted local persistence/request mechanics, not real-model source comprehension.",
+    "Luna alternating authorization remains failed.",
+    "Broader providers, native product state and whole-OS power-loss qualification remain open."
+  ],
+  "review": "Actual archived request source prefixes and catalog notices, canonical Tool calls/results, cumulative note receipts, original/reopened Messages, source-role selection, checkpoint/control settlement and replay; historical raw reports preserved.",
+  "documentChecks": {
+    "exitCode": 0,
+    "commands": [
+      "docs:check",
+      "check:architecture-index"
+    ]
+  }
+}

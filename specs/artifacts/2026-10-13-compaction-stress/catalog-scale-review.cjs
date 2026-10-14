@@ -4,8 +4,13 @@ const path = require("node:path")
 const zlib = require("node:zlib")
 
 const root = __dirname
-const results = [256, 1024].map((count) => {
-  const run = JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(root, `catalog-scale-${count}.json.gz`))))
+const responseBoundary = process.argv.includes("--response-boundary")
+const cases = responseBoundary
+  ? [{ count: 256, steps: 20, completed: true }, { count: 1024, steps: 20, completed: false }, { count: 1024, steps: 80, completed: true }]
+  : [{ count: 256, steps: 20, completed: true }, { count: 1024, steps: 20, completed: false }]
+const results = cases.map(({ count, steps, completed }) => {
+  const name = responseBoundary ? `response-boundary-${count}-${steps}` : `catalog-scale-${count}`
+  const run = JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(root, `${name}.json.gz`))))
   assert.equal(run.remoteModelRequests, 0)
   assert.equal(run.sources, count)
   assert.equal(run.capacity, 19000)
@@ -19,12 +24,31 @@ const results = [256, 1024].map((count) => {
   assert.deepEqual(catalogReads.map((part) => JSON.parse(part.state.output)), run.pages)
   const wireCalls = new Map()
   const wireResults = new Map()
+  const sourcePrefix = run.original.slice(1).map(message => message.info.id)
+  const toolFacts = new Map(tools.map(part => [part.callID, part]))
   for (const request of run.requests) {
     assert.equal(request.model, run.target.modelID)
     assert.equal(request.stream, true)
+    if (responseBoundary) {
+      assert.equal(run.steps, steps)
+      const input = request.messages.filter(message => message.role === "user")
+        .map(message => typeof message.content === "string" ? message.content : message.content.map(part => part.text ?? "").join("\n")).join("\n")
+      const notices = [...input.matchAll(/\{"kind":"compaction_catalog_reference"[^\n}]*\}/g)].map(match => JSON.parse(match[0]))
+      assert.equal(notices.length, 1)
+      assert.equal(notices[0].messageID, run.helper.info.id)
+      assert.deepEqual([...input.matchAll(/<message id="([^"]+)"/g)].map(match => match[1]), sourcePrefix.slice(0, notices[0].inlineMessages))
+    }
     for (const message of request.messages) {
-      for (const call of message.tool_calls ?? []) wireCalls.set(call.id, call)
-      if (message.role === "tool") wireResults.set(message.tool_call_id, message.content)
+      for (const call of message.tool_calls ?? []) {
+        const fact = toolFacts.get(call.id)
+        assert.equal(call.function.name, fact.tool)
+        assert.deepEqual(JSON.parse(call.function.arguments), fact.state.input)
+        wireCalls.set(call.id, call)
+      }
+      if (message.role === "tool") {
+        assert.equal(message.content, toolFacts.get(message.tool_call_id).state.output)
+        wireResults.set(message.tool_call_id, message.content)
+      }
     }
   }
   let delivered = ""
@@ -62,13 +86,13 @@ const results = [256, 1024].map((count) => {
     assert.deepEqual(read.ranges, [[0, run.pages[index].end]])
     assert.deepEqual(read.readerCalls, catalogReads.slice(0, index + 1).map((part) => part.callID))
   }
-  if (count === 256) {
+  if (completed) {
     assert.equal(run.status, "completed")
     assert.equal(run.control.status, "consumed")
     assert.equal(run.control.payload.result_summary_message_id, run.helper.info.id)
     assert.equal(run.helper.info.summary, true)
     assert.equal(run.helper.info.finish, "stop")
-    assert.equal(run.requests.length, 19)
+    assert(run.requests.length <= steps)
     const entries = JSON.parse(delivered)
     assert.equal(entries.length, count + 1)
     for (const [index, original] of run.original.slice(1).entries()) {
@@ -89,7 +113,7 @@ const results = [256, 1024].map((count) => {
     assert.equal(run.replay.find((message) => message.info.id === source.info.id).parts[0].text, source.parts[0].text)
   } else {
     assert.equal(run.status, "step_limit")
-    assert.equal(run.requests.length, 20)
+    assert.equal(run.requests.length, steps)
     assert.equal(run.control.status, "failed")
     assert.equal(run.helper.info.summary, false)
     assert.equal(run.helper.info.finish, "error")
@@ -97,7 +121,7 @@ const results = [256, 1024].map((count) => {
     assert(run.pages.at(-1).nextOffset < run.catalogChars)
     assert.deepEqual(run.replay.filter((message) => sourceIDs.has(message.info.id)), run.original)
   }
-  return { sources: count, observedStatus: run.status, requests: run.requests.length, pages: run.pages.length,
+  return { sources: count, steps, observedStatus: run.status, requests: run.requests.length, pages: run.pages.length,
     catalogChars: run.catalogChars, deliveredChars: delivered.length, originalMessages: run.original.length }
 })
-console.log(JSON.stringify({ mechanicalReview: "passed", largeCatalogCompletion: "failed_at_1024_sources", paidRequests: 0, results }, null, 2))
+console.log(JSON.stringify({ mechanicalReview: "passed", responseBoundary: responseBoundary ? "passed" : "not_assessed", largeCatalogCompletion: responseBoundary ? "configured_80_passed_default_20_failed" : "failed_at_1024_sources", paidRequests: 0, results }, null, 2))

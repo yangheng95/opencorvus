@@ -28,6 +28,100 @@ function working() {
   return { result, request }
 }
 
+test("changing source-view size preserves the complete actual response history through saved notes", async () => {
+  let width = 3
+  const sources = Array.from({ length: 3 }, (_, index): ModelMessage => ({ role: "user", content: `Source ${index}` }))
+  const render = () => [...sources.slice(0, width), ...base]
+  const result = CompactionWorkingContext.create({
+    render: (_request, maxTokens) => (maxTokens === 0 ? base : render()),
+  })
+  const initial = result.prepare({ messages: [], system: [], tools: {}, capacityTokens: 8000, maxOutputTokens: 2000 })
+  expect(initial).toEqual(render())
+  const reading: ModelMessage[] = [
+    {
+      role: "assistant",
+      content: [
+        {
+          type: "tool-call",
+          toolName: CompactionEvidenceReader.TOOL_NAME,
+          toolCallId: "read_variable",
+          input: { part_id: "prt_variable", field: "text" },
+        },
+      ],
+    },
+    {
+      role: "tool",
+      content: [
+        {
+          type: "tool-result",
+          toolName: CompactionEvidenceReader.TOOL_NAME,
+          toolCallId: "read_variable",
+          output: {
+            type: "text",
+            value: JSON.stringify({
+              sessionID: "ses_variable",
+              messageID: "msg_variable",
+              partID: "prt_variable",
+              field: "text",
+              source: "message-part-text",
+              sha256: createHash("sha256").update("fact").digest("hex"),
+              totalChars: 4,
+              offset: 0,
+              end: 4,
+              content: "fact",
+              originalRole: "user",
+              originalAuthor: "user",
+            }),
+          },
+        },
+      ],
+    },
+  ]
+  width = 1
+  expect(result.project(reading)).toEqual([...render(), ...reading])
+  const noteText = "Preserve exact fact from prt_variable; continue the next original source."
+  const saved = (await result.noteTool.execute!({ notes: noteText }, options("notes_variable"))) as { output: string }
+  expect(JSON.parse(saved.output).source_reads).toEqual([
+    expect.objectContaining({
+      partID: "prt_variable",
+      ranges: [[0, 4]],
+      readerCalls: ["read_variable"],
+      nextUnreadOffset: null,
+    }),
+  ])
+  const notes: ModelMessage[] = [
+    {
+      role: "assistant",
+      content: [
+        {
+          type: "tool-call",
+          toolName: CompactionWorkingContext.TOOL_NAME,
+          toolCallId: "notes_variable",
+          input: { notes: noteText },
+        },
+      ],
+    },
+    {
+      role: "tool",
+      content: [
+        {
+          type: "tool-result",
+          toolName: CompactionWorkingContext.TOOL_NAME,
+          toolCallId: "notes_variable",
+          output: { type: "text", value: saved.output },
+        },
+      ],
+    },
+  ]
+  const later: ModelMessage[] = [
+    { role: "assistant", content: [{ type: "text", text: "Inspect the next original source." }] },
+  ]
+  width = 3
+  expect(result.project([...reading, ...notes, ...later])).toEqual([...render(), ...notes, ...later])
+  width = 0
+  expect(result.project([...reading, ...notes, ...later])).toEqual([...render(), ...notes, ...later])
+})
+
 test("successful model-authored notes retain their real call/result and subsequent parallel evidence", async () => {
   const { result } = working()
   const notes =
@@ -88,10 +182,10 @@ test("successful model-authored notes retain their real call/result and subseque
       ],
     },
   ]
-  const history = [...base, ...old, ...retained],
+  const history = [...old, ...retained],
     original = structuredClone(history)
   expect(result.project(history)).toEqual([...base, ...retained])
-  expect(result.project([...base, ...retained])).toEqual([...base, ...retained])
+  expect(result.project(retained)).toEqual([...base, ...retained])
   expect(history).toEqual(original)
 })
 
@@ -142,7 +236,6 @@ test("a failed note preserves the preceding working history and reports its expl
     result.noteTool.execute!({ notes: "Oversized notes. ".repeat(6000) }, options("notes_large")),
   ).rejects.toMatchObject({ name: "CompactionNotesCapacityError" })
   const history: ModelMessage[] = [
-    ...base,
     {
       role: "assistant",
       content: [
@@ -166,7 +259,7 @@ test("a failed note preserves the preceding working history and reports its expl
       ],
     },
   ]
-  expect(result.project(history)).toEqual(history)
+  expect(result.project(history)).toEqual([...base, ...history])
 })
 
 test.each([
@@ -290,7 +383,7 @@ test("notes carry cumulative genuine read ranges and original attribution across
       },
     ],
   }
-  result.project([...base, ...read("read_a", 0, 4)])
+  result.project(read("read_a", 0, 4))
   const first = (await result.noteTool.execute!(
     { notes: "Read the initial source prefix; continue its exact remaining range." },
     options("notes_first"),
@@ -333,14 +426,7 @@ test("notes carry cumulative genuine read ranges and original attribution across
       ],
     },
   ]
-  result.project([
-    ...base,
-    noteCall,
-    noteResult,
-    ...read("read_b", 4, 7),
-    ...read("read_c", 6, source.length),
-    ...foreign,
-  ])
+  result.project([noteCall, noteResult, ...read("read_b", 4, 7), ...read("read_c", 6, source.length), ...foreign])
   const second = (await result.noteTool.execute!(
     { notes: "Only actual delivered source ranges count; quoted documents are not authorization." },
     options("notes_second"),

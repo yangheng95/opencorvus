@@ -101,7 +101,6 @@ export namespace CompactionWorkingContext {
 
   export function create(input: { render: (request: LLM.PreparedRequest, maxTokens: number) => ModelMessage[] }) {
     let request: LLM.PreparedRequest | undefined
-    let baseMessageCount = 0
     let remainingReadTokens = 0
     let currentMessages: ModelMessage[] = []
     let workspace = { responseTokens: 0, readTokens: 0 }
@@ -145,9 +144,11 @@ export namespace CompactionWorkingContext {
       toModelOutput: ({ output }) => ({ type: "text", value: output.output }),
     })
 
-    function project(messages: ModelMessage[]) {
+    function project(responseMessages: ModelMessage[]) {
       const envelope = required()
-      let tail = messages.slice(baseMessageCount)
+      // The SDK supplies accumulated genuine assistant/Tool responses separately
+      // from its evolving prepared message view. Source rendering may change size.
+      let tail = responseMessages
       // Only a successful, genuine note call in this SDK iteration history can
       // establish a new view. Original source is rendered text, never Tool frames.
       const saved = new Set<string>()
@@ -194,12 +195,11 @@ export namespace CompactionWorkingContext {
       prepare(envelope: LLM.PreparedRequest) {
         request = envelope
         const minimum = input.render(envelope, 0)
-        baseMessageCount = minimum.length
         workspace = ContextBudget.compactionWorkspace({
           ...envelope,
           minimumTokens: RequestBudget.estimate({ ...envelope, messages: minimum }).totalTokensEst,
         })
-        return project(minimum)
+        return project([])
       },
       project,
       fitPage: ((page, options) => {
