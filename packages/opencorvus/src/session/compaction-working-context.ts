@@ -99,11 +99,14 @@ export namespace CompactionWorkingContext {
     return [...receipts.values()]
   }
 
-  export function create(input: { render: (request: LLM.PreparedRequest, maxTokens: number) => ModelMessage[] }) {
+  export function create(input: {
+    render: (request: LLM.PreparedRequest, maxTokens: number, expandFields: boolean) => ModelMessage[]
+  }) {
     let request: LLM.PreparedRequest | undefined
     let remainingReadTokens = 0
     let currentMessages: ModelMessage[] = []
     let workspace = { responseTokens: 0, readTokens: 0 }
+    let sourceFloorTokens = 0
     const required = () => {
       if (!request) throw new Error("Compaction working context requires the final request envelope")
       return request
@@ -176,7 +179,8 @@ export namespace CompactionWorkingContext {
       const tailTokens = RequestBudget.estimate({ messages: tail }).totalTokensEst
       const base = input.render(
         envelope,
-        Math.max(0, envelope.capacityTokens - tailTokens - workspace.responseTokens - workspace.readTokens),
+        Math.max(sourceFloorTokens, envelope.capacityTokens - tailTokens - workspace.responseTokens - workspace.readTokens),
+        true,
       )
       const projected = [...base, ...tail]
       currentMessages = projected
@@ -194,11 +198,19 @@ export namespace CompactionWorkingContext {
       fitExchange,
       prepare(envelope: LLM.PreparedRequest) {
         request = envelope
-        const minimum = input.render(envelope, 0)
+        const minimum = input.render(envelope, 0, false)
         workspace = ContextBudget.compactionWorkspace({
           ...envelope,
           minimumTokens: RequestBudget.estimate({ ...envelope, messages: minimum }).totalTokensEst,
         })
+        // Keep the initially affordable source identities and field locators
+        // visible as evidence accumulates; optional field detail may still shrink.
+        const inventory = input.render(
+          envelope,
+          Math.max(0, envelope.capacityTokens - workspace.responseTokens - workspace.readTokens),
+          false,
+        )
+        sourceFloorTokens = RequestBudget.estimate({ ...envelope, messages: inventory }).totalTokensEst
         return project([])
       },
       project,

@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-14",
+  "status": "semantic_acceptance_failed",
+  "mechanicalContracts": "passed",
+  "independentArchiveReview": "passed",
+  "localContracts": 72,
+  "localTestFiles": 6,
+  "tests": {
+    "session": 56464,
+    "exitCode": 0
+  },
+  "expandedTypecheck": {
+    "session": 69566,
+    "exitCode": 0
+  },
+  "runs": [
+    {
+      "name": "hierarchy-policy-revisions-luna",
+      "session": 97849,
+      "exitCode": 1,
+      "requests": 36
+    },
+    {
+      "name": "hierarchy-policy-revisions-luna-retry1",
+      "session": 77512,
+      "exitCode": 1,
+      "requests": 20
+    },
+    {
+      "name": "hierarchy-policy-revisions-luna-retry2",
+      "session": 37031,
+      "exitCode": 1,
+      "requests": 40
+    }
+  ],
+  "paidAdded": 96,
+  "cumulativePaid": 1260,
+  "operatingCeiling": 1400,
+  "activeRun": null,
+  "credentialsRemoved": true,
+  "scope": "Complete inline source presentation and minimum source-inventory budget through real evidence reads. Default20 steps and model unchanged.",
+  "limits": [
+    "The first two attempts stop before all planned rounds.",
+    "The final full five-round run has0/5 correct compacted actions and4/5 correct full-history actions.",
+    "Source inventory preservation is a verified mechanical fix, not semantic recovery.",
+    "Old failed/pass artifacts remain intact; no model or default step allowance change.",
+    "No native product parity, cross-vendor or whole-OS power-loss qualification."
+  ],
+  "documentChecks": {
+    "exitCode": 0,
+    "commands": [
+      "docs:check",
+      "check:architecture-index"
+    ]
+  }
+}

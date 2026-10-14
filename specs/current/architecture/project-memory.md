@@ -93,8 +93,14 @@ Project memory has three explicitly scoped authorities:
    still apply, including on later evidence-read steps. Required context that
    cannot fit produces a durable ContextOverflowError rather than a checkpoint.
    Token estimates do not guarantee fit under every model's exact tokenizer.
-   The helper prompt carries `compaction_catalog_reference` with its real helper
-   Message identity and one exact root-node offset/limit/end. The single catalog
+   When any selected Message is omitted inline, the helper prompt carries
+   `compaction_catalog_reference` with its real helper
+   Message identity and one exact root-node offset/limit/end. A complete inline
+   Message inventory uses its existing source/field locators directly; its final
+   helper prompt contains only the continuation instructions. Packing first checks
+   whether that complete minimum inventory fits, then considers prefixes requiring
+   a directory. The complete final prompt Message shares the same token accounting.
+   The single catalog
    is a post-order JSON array of source leaves and binary directory nodes. Child
    references describe half-open source-record ranges in selected transcript
    order and additive original user/assistant, Tool/error and diagnostic counts.
@@ -106,7 +112,7 @@ Project memory has three explicitly scoped authorities:
    need several fitted pages; its stated end finishes that node even when the
    outer field has a later nextOffset. Readers preserve unfinished fragments and
    exact child/source references across notes. Catalog read-receipt gaps describe
-   byte delivery, not obligations to scan unrelated directory ranges.
+   character-range delivery, not obligations to scan unrelated directory ranges.
    Catalog ownership is assistant/compaction; the indexed original source role
    and author remain distinct. Catalog pages are projection data, not user
    authority. The ordinary Part readers recover the complete original fields.
@@ -136,6 +142,14 @@ Project memory has three explicitly scoped authorities:
    Discretionary compactor space reserves a model-response allowance and a read
    exchange before expanding source fields. Each read is fitted to the remaining
    shared window, including parallel results and JSON projection overhead. The
+   same renderer prices the minimum field detail for the source inventory that
+   fits the initial source allowance. That numeric request-budget floor remains
+   reserved as read responses accumulate, preserving the original inline source
+   identities and field locators. Optional field detail can shrink; large source
+   inventories still use a bounded chronological prefix and the same directory.
+   The floor is attempt-local budget state, not another source store or a semantic
+   relevance rule. Page fitting uses the complete projected request and retains
+   the existing response reserve and explicit exhausted-window error. The
    reader derives original contents and identities itself; fitting selects only
    a valid Unicode endpoint. Exhausted windows return
    `COMPACTION_EVIDENCE_WINDOW_FULL`; invalid endpoints return

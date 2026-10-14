@@ -1,0 +1,41 @@
+{
+  "artifacts": [
+    "policy-run-capture.cjs",
+    "policy-run-review.cjs",
+    "cross-model-policy-revisions-range-facts.json.gz",
+    "cross-model-policy-revisions-sol-facts.json.gz",
+    "policy-original-archive-review.json",
+    "hierarchy-policy-revisions-luna.json.gz",
+    "hierarchy-policy-revisions-luna.json.requests.json.gz",
+    "hierarchy-policy-revisions-luna-facts.json.gz",
+    "hierarchy-policy-revisions-luna-summary.json",
+    "hierarchy-policy-revisions-luna.log.gz",
+    "hierarchy-policy-revisions-luna-retry1.json.gz",
+    "hierarchy-policy-revisions-luna-retry1.json.requests.json.gz",
+    "hierarchy-policy-revisions-luna-retry1-facts.json.gz",
+    "hierarchy-policy-revisions-luna-retry1-summary.json",
+    "hierarchy-policy-revisions-luna-retry1.log.gz",
+    "hierarchy-policy-revisions-luna-retry2.json.gz",
+    "hierarchy-policy-revisions-luna-retry2.json.requests.json.gz",
+    "hierarchy-policy-revisions-luna-retry2-facts.json.gz",
+    "hierarchy-policy-revisions-luna-retry2-summary.json",
+    "hierarchy-policy-revisions-luna-retry2.log.gz",
+    "source-inventory-policy-matrix-summary.json",
+    "source-inventory-qualification.json",
+    "hierarchy-policy-local.log.gz",
+    "inline-inventory-before.log.gz",
+    "inline-inventory-final.log.gz",
+    "inline-inventory-typecheck.log.gz",
+    "source-inventory-before.log.gz",
+    "source-inventory-before-fixed-checker.log.gz",
+    "source-inventory-final.log.gz",
+    "source-inventory-typecheck.log.gz",
+    "source-inventory-docs.log.gz"
+  ],
+  "existingDependencies": [
+    "cross-model-policy-revisions-range.json.gz",
+    "cross-model-policy-revisions-range.json.requests.json.gz",
+    "cross-model-policy-revisions-sol.json.gz",
+    "cross-model-policy-revisions-sol.json.requests.json.gz"
+  ]
+}

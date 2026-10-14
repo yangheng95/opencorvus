@@ -858,22 +858,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
               },
               {
                 role: "user",
-                content: [
-                  { type: "text", text: "Summarize the checkpoint." },
-                  {
-                    type: "text",
-                    text: JSON.stringify({
-                      kind: "compaction_catalog_reference",
-                      messageID: "msg_compactor_memory",
-                      field: "catalog",
-                      messageCount: 1,
-                      inlineMessages: 1,
-                      totalChars: transcript.catalog.content.length,
-                      root: transcript.catalog.root,
-                      offsetUnit: "utf16_code_units",
-                    }),
-                  },
-                ],
+                content: [{ type: "text", text: "Summarize the checkpoint." }],
               },
             ],
             compactedEvents: [session.id],

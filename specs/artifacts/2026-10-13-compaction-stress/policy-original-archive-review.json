@@ -1,0 +1,65 @@
+{
+  "review": "passed",
+  "runs": [
+    {
+      "name": "cross-model-policy-revisions-range",
+      "status": "failed",
+      "review": "passed",
+      "model": "openai/gpt-6-luna",
+      "requests": 73,
+      "canonicalUsageRows": 73,
+      "plannedRounds": 5,
+      "completedCheckpoints": 5,
+      "actualActions": 10,
+      "passedActions": 8,
+      "passedFields": 42,
+      "sourceRolePreserved": 4,
+      "matchedAuthoredPrefixMessages": 32,
+      "credentialCleanup": [
+        {
+          "name": "auth.json",
+          "present": false
+        },
+        {
+          "name": "models.json",
+          "present": false
+        }
+      ],
+      "limits": [
+        "Full-history action failure is distinguished from compaction loss.",
+        "A valid checkpoint is not proof of semantic preservation.",
+        "This archive records captured original effects and facts; it does not execute new model actions."
+      ]
+    },
+    {
+      "name": "cross-model-policy-revisions-sol",
+      "status": "passed",
+      "review": "passed",
+      "model": "openai/gpt-6.1-sol",
+      "requests": 90,
+      "canonicalUsageRows": 90,
+      "plannedRounds": 5,
+      "completedCheckpoints": 5,
+      "actualActions": 10,
+      "passedActions": 10,
+      "passedFields": 50,
+      "sourceRolePreserved": 5,
+      "matchedAuthoredPrefixMessages": 32,
+      "credentialCleanup": [
+        {
+          "name": "auth.json",
+          "present": false
+        },
+        {
+          "name": "models.json",
+          "present": false
+        }
+      ],
+      "limits": [
+        "Full-history action failure is distinguished from compaction loss.",
+        "A valid checkpoint is not proof of semantic preservation.",
+        "This archive records captured original effects and facts; it does not execute new model actions."
+      ]
+    }
+  ]
+}

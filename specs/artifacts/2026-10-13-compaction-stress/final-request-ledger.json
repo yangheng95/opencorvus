@@ -1,7 +1,7 @@
 {
   "priorRequests": 99,
-  "total": 1164,
-  "authorizedTotal": 1300,
+  "total": 1260,
+  "authorizedTotal": 1400,
   "runs": [
     {
       "name": "text-three-rounds",
@@ -575,6 +575,43 @@
       "fields": 11,
       "sourceRolePreserved": 1,
       "summary": "hierarchy-catalog-sol-retry-summary.json"
+    },
+    {
+      "name": "hierarchy-policy-revisions-luna",
+      "status": "failed",
+      "requests": 36,
+      "model": "openai/gpt-6-luna",
+      "credentialsRemoved": true,
+      "completedCheckpoints": 1,
+      "passedActions": 1,
+      "actualActions": 2,
+      "reason": "Round1 compacted action followed initial scope; round2 exhausted20 helper steps with CompactionContinuationMissingError",
+      "summary": "hierarchy-policy-revisions-luna-summary.json"
+    },
+    {
+      "name": "hierarchy-policy-revisions-luna-retry1",
+      "status": "failed",
+      "requests": 20,
+      "model": "openai/gpt-6-luna",
+      "credentialsRemoved": true,
+      "completedCheckpoints": 0,
+      "actualActions": 0,
+      "reason": "First helper exhausted20 steps without a final continuation after repeated source reads and notes",
+      "summary": "hierarchy-policy-revisions-luna-retry1-summary.json"
+    },
+    {
+      "name": "hierarchy-policy-revisions-luna-retry2",
+      "status": "failed",
+      "requests": 40,
+      "model": "openai/gpt-6-luna",
+      "credentialsRemoved": true,
+      "completedCheckpoints": 5,
+      "actualActions": 10,
+      "passedActions": 4,
+      "passedFields": 28,
+      "sourceRolePreserved": 0,
+      "reason": "All five compacted actions failed; full-history round5 also followed prior scope",
+      "summary": "hierarchy-policy-revisions-luna-retry2-summary.json"
     }
   ],
   "authorizationPolicy": "User explicitly allows increasing request limits as needed; retain bounded per-run budgets and exact accounting.",
@@ -620,14 +657,10 @@
   },
   "latestAlternatingPolicyMatrix": {
     "status": "failed",
-    "reason": "Luna incomplete-read and action failures remain",
-    "runs": [
-      "cross-model-policy-revisions",
-      "cross-model-policy-revisions-range",
-      "cross-model-policy-revisions-sol"
-    ],
-    "requests": 230,
-    "summary": "policy-revisions-matrix-summary.json"
+    "latestRun": "hierarchy-policy-revisions-luna-retry2",
+    "compactedPassed": 0,
+    "fullPassed": 4,
+    "summary": "source-inventory-policy-matrix-summary.json"
   },
   "latestCatalogMatrix": {
     "status": "failed",

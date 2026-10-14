@@ -7,6 +7,7 @@ import { SessionCompaction } from "@/session/compaction"
 import { CompactionEvidenceReader } from "@/session/compaction-evidence-reader"
 import { CompactionCatalog } from "@/session/compaction-catalog"
 import { CompactionUserText } from "@/session/compaction-user-text"
+import { CompactionWorkingContext } from "@/session/compaction-working-context"
 import { AssistantDiagnostics } from "@/session/assistant-diagnostics"
 import { RequestBudget } from "@/session/request-budget"
 import { Message } from "@/session/message"
@@ -238,14 +239,49 @@ test("request space preserves complete long user and Tool fields with their sour
   expect(RequestBudget.estimate({ ...result.request, messages: result.messages }).totalTokensEst).toBeLessThanOrEqual(
     200_000,
   )
-  expect(result.messages.at(-1)).toMatchObject({
+  expect(result.messages.at(-1)).toEqual({
     role: "user",
-    content: [
-      { type: "text", text: result.request.promptText },
-      { type: "text", text: expect.stringContaining("compaction_catalog_reference") },
-    ],
+    content: [{ type: "text", text: result.request.promptText }],
   })
   expect(source.messages).toEqual(original)
+})
+
+test("a complete source inventory fits its exact request budget", () => {
+  const source = corpus().messages.slice(0, 1)
+  source[0]!.parts = [{ ...(source[0]!.parts[0] as Message.TextPart), text: "Exact current instruction." }]
+  const generous = projected(source, 10_000)
+  const required = RequestBudget.estimate({ ...generous.request, messages: generous.messages }).totalTokensEst
+  const exact = projected(source, required)
+  expect(exact.messages).toEqual(generous.messages)
+  expect(RequestBudget.estimate({ ...exact.request, messages: exact.messages }).totalTokensEst).toBe(required)
+})
+
+test("fitted evidence preserves the initially visible original source inventory", async () => {
+  const source = corpus()
+  const transcript = projected(source.messages, 19_000).transcript
+  const working = CompactionWorkingContext.create({
+    render: (request, maxTokens, expandFields) =>
+      transcript.render({ ...request, maxTokens, expandFields, promptText: context(19_000).promptText }),
+  })
+  const reader = CompactionEvidenceReader.create(source.messages, working.fitPage, transcript.catalog)
+  const request = {
+    ...context(19_000), messages: [], capacityTokens: 19_000, maxOutputTokens: 8_000,
+    tools: { [CompactionEvidenceReader.TOOL_NAME]: reader, [CompactionWorkingContext.TOOL_NAME]: working.noteTool },
+  }
+  const ids = (messages: ModelMessage[]) => [...text(messages).matchAll(/<message id="([^"]+)"/g)].map(match => match[1])
+  const initial = working.prepare(request)
+  expect(ids(initial)).toEqual(source.messages.map(message => message.info.id))
+  const input = { part_id: "prt_input", field: "text" as const, offset: 0, limit: 30_000 }
+  const options = { toolCallId: "read_inventory", messages: initial, context: {}, abortSignal: new AbortController().signal }
+  const output = (await reader.execute!(input, options)) as { output: string }
+  const page = JSON.parse(output.output)
+  expect(page.content).toBe(source.exactText.slice(page.offset, page.end))
+  const afterRead = working.project([
+    { role: "assistant", content: [{ type: "tool-call", toolCallId: options.toolCallId, toolName: CompactionEvidenceReader.TOOL_NAME, input }] },
+    { role: "tool", content: [{ type: "tool-result", toolCallId: options.toolCallId, toolName: CompactionEvidenceReader.TOOL_NAME, output: { type: "text", value: output.output } }] },
+  ])
+  expect(ids(afterRead)).toEqual(ids(initial))
+  expect(RequestBudget.estimate({ ...request, messages: afterRead }).totalTokensEst).toBeLessThanOrEqual(19_000)
 })
 
 test("a constrained whole request retains exact readable locators and source pagination", async () => {
@@ -255,6 +291,11 @@ test("a constrained whole request retains exact readable locators and source pag
     12_000,
   )
   const reference = JSON.parse(field(text(result.messages), "text"))
+  expect(result.messages.slice(0, -1).length).toBe(source.messages.length)
+  expect(result.messages.at(-1)).toEqual({
+    role: "user",
+    content: [{ type: "text", text: result.request.promptText }],
+  })
   expect(reference).toMatchObject({
     kind: "compaction_evidence_reference",
     partID: "prt_input",
