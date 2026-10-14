@@ -1,0 +1,52 @@
+# 当前会话刷新定位
+
+## Recall
+
+用户要求持续单agent自主排查当前版本，优先Sources与成员Rendering，真实桌面交互/截图后范围提交推送；不使用子agent。上一轮为progress：9f376610e已提交并正常推送，fresh fetch的HEAD/upstream一致。其实际18585页面reload回项目首页，手动重选后原Sources仍在，未将该行为包装为自动恢复。当前仅原有.bun与packages/opencorvus/bun未跟踪，保留。不重启用户服务/窗口，不清库、不改schema、不发布、不建branch/worktree。
+
+## 已读资料、搜索与修改前分析
+
+已读429 Recall、AGENTS、05-config偏好与运行态边界、07-panel/07-panel-reactivity、init/loadInitialData/restoreInitialWorkspace、task-deep-link、selectTask、selectConversationSession、main的Task/Chat/Mission导航与handoff、board selection、workspace离开/项目切换、settings唯一保存队列与host持久化合同、Session真实GET及conversation项目校验。全仓搜索workspaceTaskID/workspaceDirectory、Task深链接所有定义/调用、选择/清空入口；Browser与Tauri共用同一UI入口。没有当前Task/Mission/Session执行轮次、调度、唤醒或并发终态异常证据，所见是客户端导航输入缺失；不改执行恢复机制。
+
+现象：原真实Work会话刷新后Sources消失但原持久消息完整，重选即可读。直接触发点是reload清空Solid运行态。数据流根因：当前偏好只持久化Task指针，启动只restoreInitialTaskSelection/restoreInitialWorkspace；Chat/Work和Mission选择都不提供刷新可读的地址输入。地址始终/ui/，已有Task深链接只接受taskID；因而页面无法知道刷新前正在读哪个Session。不是数据库丢数据或Sources回放失败。之前Sources修复只保护文件身份/显示与渲染，不触及导航输入，因此没有解决这个问题。
+
+影响面是浏览器同一页reload、显式Task/Session地址、当前选择成功/失败/取消、New Chat/关闭Project/连接切换的清空，以及Task、Chat/Work、Mission入口。现有workspaceTaskID冷启动偏好保留其已声明Task职责；本批不把Session伪装成Task ID，不新增平行localStorage选择缓存，也不修改偏好文档格式或SQLite版本。使用现有URL显式定位面覆盖同页刷新：唯一parser/formatter扩展当前Task定位，Session携带明确kind/experience或product pillar与directory，仍由现有项目/Session接口校验真实对象。网址只承载定位数据，不承载凭据、消息或执行命令。
+
+当前task-selection-guard.test.ts和workspace-directory-persistence.test.ts均伪造动画帧/host并自动断言客户端选择投影，属于本次检索到的UI自动化，禁止运行；随本次删除及其独占材料（尚未发现独占fixture）。locale-runtime-selection是locale输入映射、expert-squad-selection的物理键解析/请求合同与本批无关，不扩大删除。所有本批UI验收只通过真实交互、截图人工复核，不新增parser/UI自动测试替代体验。
+
+权威资料：WHATWG HTML History replaceState定义（https://html.spec.whatwg.org/multipage/nav-history-apis.html#dom-history-replacestate），同源替换当前地址、不新增历史条目。只在实际选择成功时发布定位，并保留非定位query/hash；不使用History state作为另一份选择事实。startup在任何清空/目录初始化前捕获地址输入，避免启动清空覆盖所需定位；superseded异步结果沿现有authority/selection epoch退休，禁止晚到覆盖新地址。
+
+## 实施前方案
+
+1. 新独立18587/ui复验当前Work选择与reload，原Sources/Session及Task/Mission存在性来自只读实际库；不注入消息或虚构回放。复用成熟413 NativeService自有wrapper及完整auth/models流式Sol预检，600秒硬期限/180秒无活动/最多12条累计请求，自有页面关闭后公开shutdown、原句柄join与物理/output/request/配对退休。若本批另需开发模式验证，按正式dev入口启动，不单起Vite。
+2. 真实复现后以唯一workspace-location替换task-deep-link（保留当前taskID规范作为Task唯一地址形式，不留旧模块re-export）。覆盖Task与两类Session目标，重复/冲突/空必需参数进入明确诊断；主入口复用原UI导航与后端校验。Task/Session成功只在原owner仍有效时replaceState；中心清空入口同步移除定位。不能更改模型选择、执行状态或引入重试/缓存。
+3. 保存并审查目标原件，移除上述两项UI自动化。正式Node Vite构建、typecheck和当前公开surface检查；新18589/ui实际点击Chat/Work、Task、可取得的Mission与跨项目入口，刷新恢复到同一真实会话及Sources，显式New Chat后刷新仍是新建界面。Settings切换保留定位，非法/冲突地址显示实际错误。验证范围不足如实记录，不能据Task/Work通过推断Mission通过。
+4. 同步当前架构/三索引及必要截图/日志/只读事实，不归档凭据或数据库；运行当前docs与architecture checker。范围提交，fresh fetch/merge、完整待推送审查、正常push，最终保持持续goal active。
+
+## 待真实复现后补充的实施决定
+
+before原71915在18587真实打开原Work Sources，地址仍/ui/；图01为已选择Sources但文件编辑器加载中，图02在reload且连接Online后实际回项目首页，复现成功。自有页关闭，原96cd43公开shutdown200、原71915 joind38e2e exit0。只读inventory显示该自有库有Task及Chat/Work原历史，没有Mission；不据此宣称Mission体验通过。
+
+决定使用一个workspace-location parser/formatter替换旧Task-only深链接模块。Task保留taskID；Session使用sessionID/sessionKind/directory，conversation另有experience，Mission不在地址中声称product pillar，而由真实Session GET确认Mission身份及原mission ID，再以原Mission status接口取得当前product pillar/sessionID。启动捕获原地址后复用主入口现有选择生命周期，Task照原恢复；成功后由原owner发布同源地址。选择清空的唯一setSelectedSource(null)同步移除定位参数，普通选择不提前发布未完成目标。保留原Task冷启动偏好，不新增任何持久数据格式或版本。本批检索到的两项UI自动化删除，禁止运行。
+
+第一轮after原32986/18589，正式Node Vite构建59.37秒exit0，typecheck首次遗漏ApiAuthority类型导入失败，修正后原1837 joinfecb39覆盖8包通过。真实Work刷新自动恢复原Sources并点击普通文件内容正确（03/04）；已取消Task刷新保持原标题/45秒Cancelled（05）；跨到另一匿名项目的原Code Chat刷新保持同一实际OK会话（06）。真实Task→New Chat→reload再次恢复旧Task（07），暴露“地址未指定”和“明确新建”语义混淆；不能将第一轮称为全部完成。此处无需改持久化格式或覆盖Task偏好：在同一定位union中明确launcher目标及原productPillar/conversationTarget，显式新建优先于冷启动Task恢复。无新缓存/后备路径，保留原空launcher不创建Project的契约。实施前已核对openGlobalComposer→openGlobalChatLauncher→applyComposerIntent唯一入口与保存行为。
+
+该自有库原本没有Mission，第一轮通过真实Mission Board手动创建“刷新定位验收 430”草稿并打开/刷新（08），实际恢复原Saved request与Manual draft；未点Start、未运行模型业务或创建Task/成员。第一轮页已关闭，原ea2a41公开shutdown200，原32986 join1f980c exit0。后续用新不可变bundle/新18591 scope验收最终launcher与所有原目标，不复用已结算scope或修改运行中资源。
+
+第二轮18591原52175，最终typecheck原50807 joina16c0a、构建原70578 joine965a2均exit0。实际Task→New Chat→reload仍恢复旧Task（09）；差异复核确认本agent把publisher接到同名applyComposerIntent调用的handleComposerIntentChange，而不是openGlobalComposer，属于实现接线错误，不是时序推测或真实执行调度故障。该失败保留。页关闭，原94e9ee公开shutdown200、原52175 join0703e1 exit0。修正唯一全局新建入口，并将输入意图变更的launcher发布限定在本来已是global launcher的上下文，避免把项目内空输入误转为全局入口；新18593不可变publication再复验所有目标。
+
+第三轮18593原18899，typecheck原87022 joinc8cc6f与构建原38809 join7befde均exit0。10真实Task→New Chat→reload保持全局新建页，地址launcher=chat/productPillar=work；11真实Mission草稿、12原Work Sources（含Settings来回）、13原Task、14另一项目Code Chat均在最终构建重新刷新成功。15故意使用两个真实但冲突的定位ID，页面变成Offline而无可见定位诊断：本agent将parser提前到settings/i18n之前导致初始化提前中断，原reportOverlayRuntimeError在i18n未ready时仅console，浏览器日志工具返回空也不能当无错。应捕获原search字符串，等待唯一settings/locale加载后解析；明确WorkspaceLocationError进入现有本地化诊断，继续原连接/列表初始化，但不把该无效输入转为旧Task恢复。非定位意外错误仍抛出。自有两页关闭，原8457c6公开shutdown200、原18899 join088bc4 exit0。后续18595新scope验证真实错误与可继续选择，不只记录失败。
+
+第四轮18595原75889，typecheck原34766 joindaa871与构建原13915 joinac6629 exit0，i18n为2490 keys通过。16实际冲突输入下已正常Online并载入全部侧栏，未打开旧Task；但没有可见错误。重读reportError/AppLog/appendLog确认当前primitive只写可查日志，不提供Toast或inline展示，不能把日志当可见反馈。该不完整结果保留，页关闭，原2222e4公开shutdown200、原75889 joincff637 exit0。决定把原异常保存在唯一运行态workspaceLocationError，通过现有App的Feedback/Disclosure展示本地化摘要与完整原诊断；下一次已准入beginWorkspaceSelection退役同一异常。它不是持久化字段、隐藏消息或复制的选择状态，原日志仅保留真实错误审计。不引入通用通知系统、新CSS或modal阻塞。
+
+## 最终真实页面与交付范围
+
+最终Feedback置于已有column方向的chat-message-pane内；第一次Feedback构建期间调整了该层级，因此另用源文件稳定的正式build-publication重建后才发布，不以不确定的并行读时机作为产物身份。原75724 join53ae92为实际Node Vite 53.99秒exit0及renderer surface通过；此前Feedback typecheck原98207 join6a2a16覆盖8包通过，提交前对当前完整源再次检查。没有UI自动化或mutable source hash门槛。
+
+18597原59759的17实际冲突链接显示英文inline alert且保持Online/完整侧栏，18实际展开Details显示WorkspaceLocationError与真实原stack；19通过真实Appearance切换中文，摘要、操作名称及界面随语言变化，技术诊断保留原文。该图有Settings hover遮挡部分侧栏，不作为完整侧栏视觉证据。20从侧栏选择原423 Work后错误退役，再实际reload自动恢复原Sources及特殊空白标记；21先选原Task再点新对话，地址为明确launcher，reload保持全局中文新建页；22点击并reload原手动Mission草稿，保留同一Saved request与Manual draft。22张图片均实际呈现并人工查看，未设置viewport override。原Task/跨项目Code Chat刷新证据分别见13/14；其导航实现与最终发布一致，最后改动仅定位失败的反馈与本地化。
+
+最终自有页关闭，仅保留未操作的18543页2。原fbdfce公开shutdown200，原59759 join353bae exit0；六个scope原native/output/request与配对退休均有正式回执。只读最终inventory保持自有QA库user_version=2，原root=11、orchestrator=11、delegated-worker=4、explore=6均保持；assistant从33到39对应六次真实流式预检创建的Chat，新增一个真实手动Mission草稿。未启动该Mission、未提交新模型业务消息或生成fixture消息。默认用户库与迁移定义不在本批写入范围。
+
+当前唯一workspace-location模块替换了Task-only模块，root/Session开库、API、模型/执行调度、持久偏好格式及schema均未修改。现有Task冷启动偏好与新同页刷新定位职责区分；本批不宣称原生应用退出重开、完整浏览器Back/Forward路由、任意缺失资源/后端读取失败、非定位query/hash的人工交互或新成员流Rendering全部通过。后者没有新增成员流作为证据；当前可确认的是本批实际刷新与语法冲突定位恢复路径。两项检索到的UI选择自动化已删除，独占fixture未发现，旧源码只在Git历史，不归档为另一份测试。
+
+当前完整源最终typecheck原72003 join9e06f9为8包通过；原39ffb2 i18n为2 locales/2490 keys，原582067 CSS合同为8801引用/268 token，原e508f6 docs为345 operations/26 groups，原4c3549 architecture-index为20份当前文档全部链接有效。git diff --check通过。归档原0623bd核对六个scope各2条gpt-6.1-sol流式请求及正式物理/配对回执，均完成；所有压缩文本均解压做实际凭据的内存披露复核，凭据值不输出、不提交。原失败页面与检查日志保留，不把原无反馈/假Offline或接线失败称为通过。提交仅本批UI定位、反馈、两项过期UI自动化删除及相关文档/证据，原.bun与packages/opencorvus/bun保留。

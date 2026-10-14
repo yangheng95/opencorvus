@@ -470,3 +470,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [独立Prompt取消执行终态](2026-10-15-orchestrator-cancellation-lifecycle/README.md)：原事件、待机回执正向合同与人工页面复核。
 
 - [Sources路径辨识](2026-10-15-source-path-readability/README.md)：真实页面、原文件及物理收尾。
+
+- [当前会话刷新定位](2026-10-15-workspace-refresh-location/README.md)：原页面、位置与资源结算。

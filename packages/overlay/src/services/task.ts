@@ -70,6 +70,7 @@ import {
 import { wakeMission } from "./mission"
 import { workLedgerSessionExecution } from "./work-ledger"
 import { randomUUID } from "../utils/random-id"
+import { replaceWorkspaceLocation } from "./workspace-location"
 
 // ── Types ──
 
@@ -371,6 +372,7 @@ export async function selectTask(taskID: string, options: SelectTaskOptions): Pr
     setSettingsStore("workspaceTaskID", nextTaskID)
     setSettingsStore("workspaceDirectory", restoreDir)
     await saveSettings()
+    if (!stale()) replaceWorkspaceLocation({ kind: "task", taskID: nextTaskID })
   } finally {
     // Only clear the progress flag if we are still the active selection.
     // A newer selectTask() call has taken over and will manage its own flag.

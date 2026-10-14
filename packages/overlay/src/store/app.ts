@@ -89,6 +89,8 @@ export interface AppState {
   configLoadIssues: ConfigLoadIssue[]
   /** Non-fatal project bootstrap/reload failures, owned by their resource. */
   projectLoadIssues: ProjectLoadIssue[]
+  /** Current rejected document locator; retired by the next admitted navigation. */
+  workspaceLocationError: Error | null
   /** Current draft or selected root Session model projected into the Composer. */
   composerModel: string
   /** Current passive root Session config failure; owned by the Composer projection. */
@@ -154,6 +156,7 @@ const DEFAULT_APP_STATE: AppState = {
   config: null,
   configLoadIssues: [],
   projectLoadIssues: [],
+  workspaceLocationError: null,
   composerModel: "",
   composerModelIssue: null,
   providerCatalog: null,

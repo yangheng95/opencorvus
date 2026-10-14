@@ -18,7 +18,7 @@ import {
 import { refreshConnectionWorkspace } from "./connection-projection"
 import { checkConnection as checkServerConnection, startConnectionMonitor, stopConnectionMonitor } from "./connection"
 import { startWorkLedgerSSE, stopSSE, stopWorkLedgerSSE } from "./sse"
-import { loadAllLocales, setLocale } from "../utils/i18n"
+import { loadAllLocales, setLocale, t } from "../utils/i18n"
 import {
   loadSettings,
   settingsStore,
@@ -40,7 +40,8 @@ import {
 } from "./workspace"
 import { workspaceRestoreDirectory } from "../store/settings"
 import { selectTask } from "./task"
-import { currentTaskDeepLink, taskDeepLinkFromSearch } from "./task-deep-link"
+import { workspaceLocationFromSearch, WorkspaceLocationError, type ClientWorkspaceLocation, type WorkspaceLocation } from "./workspace-location"
+import { reportError, formatErrorDetails } from "./diagnostics"
 import { CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS, loadConfigInfo } from "./config-load"
 import { setAppStore, type ProjectLoadIssue } from "../store/app"
 import { AppLog } from "../utils/log"
@@ -50,6 +51,8 @@ import { restoreDraftComposerModel } from "./composer-model"
 // ── Types ──
 
 export interface InitOptions {
+  /** Restore a Session or launcher through its explicit UI navigation lifecycle. */
+  restoreClientLocation?: (location: ClientWorkspaceLocation, authority: ApiAuthority) => Promise<void>
   /**
    * Called once the initial connection check succeeds so the caller can
    * trigger any render-side updates that depend on live data.
@@ -252,6 +255,8 @@ async function loadInitialData(
 export async function initApp(options: InitOptions = {}): Promise<void> {
   const { onConnected, onSettingsLoaded, onReconnect, reconnectInterval = 10_000 } = options
   const lifecycleGeneration = ++initLifecycleGeneration
+  // Capture before directory initialization can clear a prior workspace projection.
+  const initialSearch = typeof window === "undefined" ? "" : window.location.search
   const resolveInitialDirectory = createInitialDirectoryResolver()
 
   // 1. Load settings into the Solid store
@@ -273,6 +278,22 @@ export async function initApp(options: InitOptions = {}): Promise<void> {
   await setLocale(settingsStore.locale)
   if (!isCurrentInitLifecycle(lifecycleGeneration)) return
 
+  let initialLocation: { kind: "valid"; location: WorkspaceLocation | null } | { kind: "invalid" }
+  try {
+    initialLocation = { kind: "valid", location: workspaceLocationFromSearch(initialSearch) }
+  } catch (error) {
+    if (!(error instanceof WorkspaceLocationError)) throw error
+    initialLocation = { kind: "invalid" }
+    bumpWorkspaceEpoch()
+    setAppStore("workspaceLocationError", error)
+    reportError({
+      id: "workspace-location:restore",
+      title: t("workspace.location_open_failed_title"),
+      message: t("workspace.location_open_failed_message"),
+      details: formatErrorDetails(error),
+    })
+  }
+
   // 5. Check connection
   let startupAuthority: ApiAuthority | undefined
   const connected = await checkServerConnection({
@@ -288,8 +309,13 @@ export async function initApp(options: InitOptions = {}): Promise<void> {
     // 6. Load initial data
     const initialData = await loadInitialData(lifecycleGeneration, resolveInitialDirectory)
     if (!isCurrentInitLifecycle(lifecycleGeneration)) return
-    if (initialData.loaded && isApiAuthorityCurrent(startupAuthority))
-      await restoreInitialTaskSelection({ authority: startupAuthority })
+    if (initialLocation.kind === "valid" && (initialData.loaded || initialLocation.location) && isApiAuthorityCurrent(startupAuthority)) {
+      await restoreInitialWorkspaceLocation({
+        authority: startupAuthority,
+        location: initialLocation.location,
+        restoreClientLocation: options.restoreClientLocation,
+      })
+    }
     if (!isCurrentInitLifecycle(lifecycleGeneration)) return
     if (isApiAuthorityCurrent(startupAuthority)) {
       void initialData.reconcileCapabilities?.()
@@ -390,15 +416,25 @@ export function initialRestoreTaskID(
   return taskIDFromItem(running)
 }
 
-export async function restoreInitialTaskSelection(
-  options: { search?: string; authority?: ApiAuthority } = {},
+export async function restoreInitialWorkspaceLocation(
+  options: {
+    location: WorkspaceLocation | null
+    authority: ApiAuthority
+    restoreClientLocation?: InitOptions["restoreClientLocation"]
+  },
 ): Promise<boolean> {
-  const authority = options.authority ?? captureApiAuthority()
+  const { authority, location } = options
   if (!isApiAuthorityCurrent(authority)) return false
-  const deepLink = options.search === undefined ? currentTaskDeepLink() : taskDeepLinkFromSearch(options.search)
-  if (deepLink) {
-    await selectTask(deepLink.taskID, { selectionEpoch: beginWorkspaceSelection(), authority })
+  if (location) {
+    if (location.kind === "task") await selectTask(location.taskID, { selectionEpoch: beginWorkspaceSelection(), authority })
+    else {
+      if (!options.restoreClientLocation) throw new Error("Workspace location requires its UI navigation owner")
+      await options.restoreClientLocation(location, authority)
+    }
     if (!isApiAuthorityCurrent(authority)) return false
+    if (location.kind === "task" && activeTaskID() !== location.taskID) return false
+    if ((location.kind === "conversation" || location.kind === "mission") && boardStore.selectedSource?.id !== location.sessionID) return false
+    if (location.kind === "launcher" && boardStore.selectedSource) return false
     bumpWorkspaceEpoch()
     return true
   }

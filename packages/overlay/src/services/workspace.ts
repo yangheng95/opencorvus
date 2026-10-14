@@ -875,6 +875,7 @@ export interface ApplyDirectoryOptions {
  */
 export function beginWorkspaceSelection(): number {
   const epoch = boardStore.selectEpoch + 1
+  setAppStore("workspaceLocationError", null)
   setBoardStore("selectEpoch", epoch)
   return epoch
 }

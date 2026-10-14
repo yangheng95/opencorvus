@@ -6,6 +6,29 @@ Rebuilding an input directory does not switch a running page's module version;
 new server processes capture the new publication. Project and conversation data
 continue through their existing dynamic readers and subscriptions.
 
+The shared workspace-location parser owns the current document's refresh input.
+Task locations use `taskID`; Session locations use `sessionID`, `sessionKind` and
+`directory`, with `experience` for Chat/Work. Mission restore reads the original
+Session identity and Mission status before using the same explicit navigation
+lifecycle. A global Composer launcher records its product pillar and conversation
+target, so a refresh preserves explicit creation intent over an older saved Task.
+Startup captures the location before workspace initialization can clear it.
+Successful current selection owners replace the same-origin URL; departure
+clears the locator, and only explicit launcher navigation publishes its launcher
+target. Other query/fragment data and History state retain their existing values.
+The address carries no credentials or message bodies and creates no execution.
+Existing Task cold-start preferences retain their separate host-settings role;
+there is no additional localStorage selection cache or persisted-format revision.
+Invalid or conflicting location parameters produce the existing localized
+diagnostic after settings and locale hydration. Connection and sidebar loading
+continue, while that rejected navigation consumes the existing workspace epoch
+and does not restore an unrelated saved Task on startup or reconnect. A later
+explicit sidebar selection uses its ordinary admission and replaces the locator.
+The original rejected-location exception is the single volatile
+`workspaceLocationError` value. App renders its localized inline Feedback with
+the existing diagnostic Disclosure; the next admitted workspace selection retires
+that error. Logging alone is not the visible error contract.
+
 Locale catalogs resolve relative to the executing module, whose source `utils`
 and published `assets` directories both sit beside the `i18n` directory. The
 document route does not supply the locale resource base. The static startup

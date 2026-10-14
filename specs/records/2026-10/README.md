@@ -990,3 +990,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [独立Prompt取消执行终态](2026-10-15-orchestrator-cancellation-lifecycle.md)：取消catch根因、共享审计、待机回执及真实Stop。
 
 - [Sources路径辨识](2026-10-15-source-path-readability.md)：实际前后截图及原路径打开/复制语义。
+
+- [当前会话刷新定位](2026-10-15-workspace-refresh-location.md)：原刷新丢选择、导航根因与桌面验收。

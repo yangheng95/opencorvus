@@ -19,6 +19,7 @@ import { AppLog } from "../utils/log"
 import { formatErrorDetails } from "./diagnostics"
 import type { WorkLedgerStreamEvent } from "./sse"
 import { clearComposerModelProjection, projectComposerModelFromSession } from "./composer-model"
+import { replaceWorkspaceLocation } from "./workspace-location"
 
 type ConversationSessionResponse = {
   session: ConversationSessionInfo
@@ -424,6 +425,7 @@ export async function selectConversationSession(options: SelectConversationSessi
       assertNotAborted(options.signal)
       if (!stale() && isConversationSource(source)) {
         startSSE(source, 0, { directory, authority })
+        replaceWorkspaceLocation({ kind: "conversation", sessionID, directory, experience: options.experience })
         void projectComposerModelFromSession(
           { sessionID, directory, authority },
           () => !stale() && boardStore.selectedSource?.kind === "session" && boardStore.selectedSource.id === sessionID,

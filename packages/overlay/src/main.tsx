@@ -32,6 +32,8 @@ import {
   type ComposerIntent,
 } from "@opencorvus-ai/transport-protocol"
 import { WorkLedger } from "./components/WorkLedger"
+import { replaceWorkspaceLocation, type ClientWorkspaceLocation } from "./services/workspace-location"
+import type { ApiAuthority } from "./services/api"
 import { MissionBoard } from "./components/MissionBoard"
 import type { MissionCreateRequest, MissionManualCreateRequest } from "./components/MissionCreateDialog"
 import {
@@ -206,6 +208,7 @@ import {
   dispatchMission,
   editMissionDraft,
   downloadMissionProjectArchive,
+  loadMissionStatus,
   renameMission,
   setMissionArchived,
   wakeMission,
@@ -224,7 +227,7 @@ import {
   writeDebugClipboard,
 } from "./utils/debug-info"
 import { taskOwningDirectory } from "./services/task-directory"
-import { taskScopedPath } from "./services/task-path"
+import { directoryScopedPath, taskScopedPath } from "./services/task-path"
 import { loadPersistedChatDebugProjection } from "./services/session-debug"
 import { registerReviewPanelPresenter, requestReviewPanel } from "./services/review-focus"
 import { createAnimationFrameScheduler } from "./utils/animation-frame"
@@ -794,6 +797,9 @@ async function handleComposerIntentChange(intent: ComposerIntent): Promise<void>
   await closeConfigDialog()
   assertApiAuthorityCurrent(authority)
   await applyComposerIntent(intent, admission.epoch, authority)
+  assertApiAuthorityCurrent(authority)
+  assertUserNavigationCurrent(admission.epoch)
+  if (!activeDirectory()) replaceWorkspaceLocation({ kind: "launcher", ...intent })
 }
 
 async function selectWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
@@ -813,6 +819,9 @@ async function openGlobalComposer(intent: ComposerIntent): Promise<void> {
   await openGlobalChatLauncher(admission.epoch)
   assertApiAuthorityCurrent(authority)
   await applyComposerIntent(intent, admission.epoch, authority)
+  assertApiAuthorityCurrent(authority)
+  assertUserNavigationCurrent(admission.epoch)
+  replaceWorkspaceLocation({ kind: "launcher", ...intent })
 }
 
 async function startWorkLedgerMulticaImport(directory: string): Promise<void> {
@@ -1578,6 +1587,7 @@ async function openMissionSession(
         owns() && boardStore.selectedSource?.kind === "session" && boardStore.selectedSource.id === result.sessionID,
     )
     setPrimaryCenterPanel("mission")
+    replaceWorkspaceLocation({ kind: "mission", sessionID: result.sessionID, directory: missionDirectory })
     return true
   } catch (error) {
     if (!owns()) return false
@@ -1597,6 +1607,35 @@ async function openMissionSession(
 function focusInitialRestoredTaskWorkspace(): void {
   if (!activeTaskID() || boardStore.selectedSource?.kind !== "task") return
   setPrimaryCenterPanel("task")
+}
+
+async function restoreClientLocation(location: ClientWorkspaceLocation, authority: ApiAuthority): Promise<void> {
+  assertApiAuthorityCurrent(authority)
+  if (location.kind === "launcher") {
+    await openGlobalComposer({ productPillar: location.productPillar, conversationTarget: location.conversationTarget })
+    return
+  }
+  if (location.kind === "conversation") {
+    await selectConversationWithUILifecycle(location.sessionID, location.directory, location.experience)
+    return
+  }
+  const selectionEpoch = boardStore.selectEpoch
+  const workspaceEpoch = settingsStore.workspaceEpoch
+  const owns = () =>
+    isApiAuthorityCurrent(authority) &&
+    boardStore.selectEpoch === selectionEpoch &&
+    settingsStore.workspaceEpoch === workspaceEpoch
+  const session = await apiJson<{ kind: string; metadata?: { mission?: { id?: string } } }>(
+    directoryScopedPath(`session/${encodeURIComponent(location.sessionID)}`, location.directory),
+    { authority },
+  )
+  if (!owns()) return
+  const missionID = session.metadata?.mission?.id
+  if (session.kind !== "mission" || !missionID) throw new Error("Mission workspace location requires a persisted Mission session")
+  const mission = await loadMissionStatus({ missionID, directory: location.directory, authority })
+  if (!owns()) return
+  if (mission.sessionID !== location.sessionID) throw new Error("Mission workspace location differs from its persisted Mission")
+  await openMissionWithUILifecycle(mission, mission.directory)
 }
 
 function openCenterWorkbenchPanel(panel: CenterWorkbenchPanel): void {
@@ -3188,6 +3227,7 @@ runMainAsync("initApp", async () => {
   disposers.push(stopDesktopUpdateMonitor)
   try {
     await initApp({
+      restoreClientLocation,
       onSettingsLoaded: () => {
         setSettingsHydrated(true)
       },

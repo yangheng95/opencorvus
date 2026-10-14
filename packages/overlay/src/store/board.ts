@@ -11,6 +11,7 @@ import { formatErrorDetails } from "../utils/error-details"
 import { t } from "../utils/i18n"
 import { AppLog } from "../utils/log"
 import { requireTimelineOrderKeyDomain } from "../utils/timeline-order"
+import { replaceWorkspaceLocation } from "../services/workspace-location"
 
 // ── Store ──
 
@@ -99,6 +100,7 @@ export const [boardStore, setBoardStore] = createStore({
 /** A selection is a complete union value; fields from the previous kind retire. */
 export function setSelectedSource(source: BoardSource | null): void {
   setBoardStore("selectedSource", reconcile(source, { merge: false }))
+  if (!source) replaceWorkspaceLocation(null)
 }
 
 // ── Loaders ──

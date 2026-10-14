@@ -24,6 +24,8 @@ import { WindowControls } from "./WindowControls"
 import { WorkspaceEditorLaunchers, workspaceEditorLaunchersAvailable } from "./WorkspaceEditorLaunchers"
 import { ProjectRuntimeToolbarActions } from "./TaskDirBar"
 import { Button } from "./ui/Button"
+import { Feedback } from "./ui/Feedback"
+import { formatErrorDetails } from "../services/diagnostics"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { Tooltip } from "./ui/Tooltip"
 import { t } from "../utils/i18n"
@@ -529,6 +531,17 @@ export function App(props: AppProps) {
                             />
                             <div class="chat-content-frame" id="chatContentFrame">
                               <div class="chat-message-pane" id="chatMessagePane">
+                                <Show when={appStore.workspaceLocationError}>
+                                  {(error) => (
+                                    <Feedback
+                                      tone="error"
+                                      title={t("workspace.location_open_failed_title")}
+                                      details={formatErrorDetails(error())}
+                                    >
+                                      {t("workspace.location_open_failed_message")}
+                                    </Feedback>
+                                  )}
+                                </Show>
                                 <div class="conversation-body" id="conversationBody">
                                   <div class="conversation-scroll-shell">
                                     <div
