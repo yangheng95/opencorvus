@@ -677,3 +677,12 @@ CLI预算段更正实际配置数：artifact checker为200000context，D1已有f
 交付边界：没有本批实际GPT-6.1 Sol质量验收（本批0请求，本项为权限数据/投影修复且实际effect/HTTP/OS证据明确）；自动reply自然UIarrival未制造，仅backend/protocol实际合同证明。未验外部ACP/Channel客户端视觉、所有Task/Mission/model组合、跨OS grant capture对revoke/expiry独立race、物理alias/customVFS/旧compiledBun/真实postcommitunlockfail。当前已知修复没有未提交实现例外；正式提交、freshupstreammerge/完整待推集合/normalpush将在实际完成后写独立回执，不能在此预称已push。
 范围提交准备原d61d23正常join但exit1：唯一diff-check为新0002 SQL目标快照继承生成DDL三处行尾空白（329/3080/3983），不把prepare称成功。Root准在尚未发布的新revision2文件只去三处行尾空白，保存当前完整原像；不改不可变0001/生产schema生成器/结构/持久语义。重跑实际database-migrations对象checker与精确staged diff-check，不绕check/hook。agent原运行源快照仍保真，换行/源码摘要不作为功能验收。
 新SQL格式修正原migration408-final02 9a7504实际exit1/alljoins：当前registry按SQLite实际保存的对象sql精确标识比较，行尾格式亦进入该对象标识，结果index:engine_artifact_invalid_task_process_binding_idx drift。这不是许可功能回归。Root撤回自己仅三处格式编辑，diff全文31bfe0及下一precise3hunks已审并保存：新0002仍当前生成DDL的唯一完整原目标，原实测源码及不可变基线保真。无需扩大修schema-contract或重生成配置。自有commit准备的格式检查从该明确generated `.sql` 目标排除，仍检查其余staged文本；这是删除无意义行尾格式门槛，不是--no-verify/跳过Git hook，正式migration/schema对象检查和全部行为验收保持。原失败不会改写成功，fresh原目标复验。
+## 已验证的正常实现交付
+
+主实现提交7207021392f134b602e772980498ea6d3677d09c，parent0bc24d22903e1f8b2dfda559419617c4d6d2911f，1211范围路径；原a97753/53491→996bb7正常0，alternateindex精确ordinaryindexReconciled true。精确新文件/3架构/7UI/8Root fixture+物理/agent24源与本批artifact/Recall；三公共索引只入本批一行，peer其他行保留且未混提交。旧负向UI测试未运行或新增，原源码/失败归档保留。Root的SQL格式试验已撤回到原生成目标，migration408-final03原20a11d正常0。
+
+freshfetch原4e737b0→upstreammerge原aa6db30（alreadyup-to-date），完整upstream..HEAD原47d4d1只有该本批主实现commit。正常精确SHA push原1f0d15/77618→273ba60：83776→64252/a865d484-dc1c-4e13-982b-c16913a2c84f，started1791968173866/deadline1791968773866/end1791968341757，request/physical/output全部joins。普通hook没有绕过：Bun1.4、SDK/AI检查、迁移v2、专家types、8实际workspace类型检查（7cache1fresh）、routes35files/6rules、docs345/26、control18/23、architecture20、packages10、release5authorities、exact treeish720702 module1170/5982/4cleanimports、secret scan0全部0。原4d3b13全文stdout/stderr审阅，remote更新0bc→720。此1170/5982是最终treeish实测，早前1168/5965不是回写错误。
+
+再次freshfetch原ba4ddd0及原ee62f8 ancestor0，确认origin/main含720，HEAD等于720且完整pending[]。delivery-pending-audit01是post-push snapshot，不伪装成早前prepush记录；早前Root47d4d1完整集合另原证据。Git remote的dependabot摘要保在原stderr，未扩大本批为新的依赖或安全扫描。
+
+最终Git原回执以gitdelivery01补充写入独立文档提交；不把补充自己的未来push结果写进它自己。此阶段只文档/原证据，无产品变化，按原规则仍将freshfetch/merge/fullpendingaudit/正常push，不新增批次。用户有限停止要求保持有效，所有own页面/服务/checker已闭合，onlypeer三索引其他行与.bun等未处理；当前范围没有遗留未提交产品改动。
