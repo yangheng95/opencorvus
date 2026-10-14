@@ -12,7 +12,7 @@ const project = path.join(root, "project")
 await fs.mkdir(project)
 await fs.mkdir(path.join(root, "home"), { recursive: true })
 const models = path.join(root, "models.json")
-await fs.copyFile(path.resolve(import.meta.dir, "../src/provider/models-bootstrap.json"), models)
+process.env.OPENCORVUS_MODELS_PATH = models
 const requests: Array<{ model: string; stream: boolean }> = []
 let status = 200
 const provider = Bun.serve({
@@ -26,19 +26,9 @@ const provider = Bun.serve({
     }
     requests.push({ model: body.model, stream: body.stream })
     if (status !== 200) return Response.json({ error: { message: `checker HTTP ${status}` } }, { status })
-    const memory = body.messages?.some(
-      (message) =>
-        message.role === "system" &&
-        typeof message.content === "string" &&
-        message.content.includes("dedicated Memory Organizer"),
-    )
-    const instruction = body.messages?.find((message) => message.role === "user")?.content
-    const coveredOccurrenceIDs =
-      typeof instruction === "string"
-        ? JSON.parse(instruction.match(/coveredOccurrenceIDs must be exactly (\[[^\n]+\])/u)?.[1] ?? "[]")
-        : []
+    const memory = controlledProviderRequestKind(body.messages ?? []) === "memory"
     const content = memory
-      ? JSON.stringify({ baseRevision: 0, coveredOccurrenceIDs, disposition: "organized", markdown: "" })
+      ? controlledMemoryReply(body.messages ?? [])
       : "CLI_RUN_OK"
     const chunks = [
       { choices: [{ index: 0, delta: { role: "assistant", content }, finish_reason: null }] },
@@ -75,7 +65,7 @@ const config = {
       name: "CLI checker",
       npm: "@ai-sdk/openai-compatible",
       options: { baseURL: `${provider.url.origin}/v1`, apiKey: "local-checker" },
-      models: { "check-model": { name: "Checker", limit: { context: 32768, output: 1024 } } },
+      models: { "check-model": { name: "Checker", limit: { context: 131072, output: 1024 } } },
     },
   },
 }
@@ -89,6 +79,9 @@ const env = {
   OPENCORVUS_DISABLE_AUTOUPDATE: "1",
   OPENCORVUS_RUN_STALL_TIMEOUT_MS: "15000",
 }
+const { controlledMemoryReply, controlledProviderRequestKind, writeControlledProviderCatalog } =
+  await import("../test/fixture/controlled-streaming-provider")
+await fs.writeFile(path.join(root, "catalog-input.json"), JSON.stringify(await writeControlledProviderCatalog(models)))
 const entry = path.resolve(import.meta.dir, "../src/index.ts")
 const results: unknown[] = []
 const password = "isolated-cli-checker"

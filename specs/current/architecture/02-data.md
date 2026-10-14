@@ -68,7 +68,7 @@ PASSIVE的busy/部分进度在下次周期继续；非暂态回写错误进入�
 
 ## 数据库版本化迁移
 
-当前版本从新建的版本1基线开始支持自动迁移。唯一 registry 位于
+当前版本为2，从新建的不可改写版本1基线开始支持自动迁移。唯一 registry 位于
 `src/storage/migrations/index.ts`，每版保存完整、不可改写的目标 SQL；后续结构或持久
 payload 语义变更必须追加连续版本。`PRAGMA user_version` 是唯一已完成版本，当前
 `SCHEMA_DDL` 与 typed schema 继续定义唯一业务 reader/writer。`check:database-migrations`
@@ -76,8 +76,13 @@ payload 语义变更必须追加连续版本。`PRAGMA user_version` 是唯一�
 它不依赖可变源码摘要。
 
 所有 CLI、服务及子执行进程经 `Database.Client` 在业务访问/恢复前进入同一个迁移器。
-`BEGIN IMMEDIATE` 获得 writer 后重读版本；同库并发开库加入已提交的升级，独立数据库各自
-迁移。新库直接事务创建当前 schema 和版本。支持范围内的旧版本先在锁定快照序列化完整
+旧版文件升级要求实际 Write-Ahead Logging（WAL，预写日志）模式，在原连接上取得
+EXCLUSIVE 物理锁后进入 `BEGIN IMMEDIATE`，排除持旧语义的空闲只读连接；仅 writer 锁
+不能证明这项排除。未关闭旧连接时保留原库并返回实际 SQLite busy 错误。非 WAL 旧文件
+明确返回 `SCHEMA_MIGRATION_REQUIRED` 的维护说明，不自动切换 journal mode。
+事务内重读版本；同库并发开库加入已提交的升级，独立数据库各自迁移。若未持物理保护的
+fresh/current 初判在事务内变为旧版，明确要求维护并回滚，不能无保护升级。
+新库直接事务创建当前 schema 和版本。支持范围内的旧版本先在锁定快照序列化完整
 SQLite 到同目录 `migration-backups`，包含 WAL 中的已提交行；独占临时文件 fsync 后原子
 重命名，成功后才开始迁移。这个备份只覆盖数据库，不替代项目文件/附件和配置备份。
 
@@ -85,7 +90,14 @@ SQLite 到同目录 `migration-backups`，包含 WAL 中的已提交行；独占
 表重建显式复制共同列和 rowid，新增列使用声明的默认值；字段移除、改名、类型或虚拟表
 变化需要显式语义转换，不能猜测丢弃。整条待升级链、最终 schema、外键与当前业务完整性
 校验处于同一事务，完成后提交版本。失败回滚并保留备份路径；进程中断由 SQLite 恢复
-最后已提交状态，再次开库重试。升级不会自动 reset、执行 Task 或合成历史消息。
+最后已提交状态，再次开库重试。所有保护路径恢复原 foreign_keys 和 NORMAL locking mode，
+并通过真实 finalized main 访问确认物理解锁后才暴露业务连接；提交后的解锁失败保留已提交
+版本与原备份，不伪称回滚。升级不会自动 reset、执行 Task 或合成历史消息。
+
+版本2用同一权限图校验器验证原请求、决定、源 grant、执行与结果完整性，再追加
+`grant_decision_indexed` 审计行，为历史无 slot 的 grant_used 建立唯一决定定位。
+索引行保存实际迁移时间，源指向原 grant_used；原授权时间、执行 source、rowid 与结果保留。
+任何不唯一或不完整的图返回明确完整性错误，不猜赢家、不改历史批准或产生 Bus/模型消息。
 
 非空版本0返回 `SCHEMA_BASELINE_REQUIRED`，不属于本基线的升级范围；高于当前版本返回
 `SCHEMA_VERSION_AHEAD`。当前版本出现未声明结构漂移或有损转换返回

@@ -53,10 +53,10 @@ function workPartKind(part: any): "tool" | "patch" {
   return "tool"
 }
 
-function questionHistoryText(part: any): string {
+function interactionHistoryText(part: any): string {
   if (part.phase === "request") return interactionRequestText(part.interaction)
   if (part.phase === "response") return interactionResponseText(part.interaction)
-  throw new Error(`question ${part.interaction.id} has unknown history phase ${String(part.phase)}`)
+  throw new Error(`interaction ${part.interaction.id} has unknown history phase ${String(part.phase)}`)
 }
 
 /** The card has one session lifecycle, but it can contain persisted history
@@ -111,12 +111,19 @@ function RenderableCardPart(props: {
       <Match when={part()?.type === "interactive-artifact"}>
         <InteractiveArtifactPart part={part()} />
       </Match>
-      <Match when={part()?.type === "interaction-question" && part().interaction?.status !== "pending" && part().interaction}>
-        <TextPart text={questionHistoryText(part())} />
+      <Match
+        when={
+          (part()?.type === "interaction-question" || part()?.type === "interaction-permission") &&
+          part().phase !== "pending" &&
+          part().interaction
+        }
+      >
+        <TextPart text={interactionHistoryText(part())} />
       </Match>
       <Match
         when={
-          (part()?.type === "interaction-question" || part()?.type === "interaction-permission") && part().interaction
+          (part()?.type === "interaction-question" || part()?.type === "interaction-permission") &&
+          part().phase === "pending" && part().interaction?.status === "pending" && part().interaction
         }
       >
         <InteractionCard interaction={part().interaction} />

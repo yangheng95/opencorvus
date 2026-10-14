@@ -80,7 +80,6 @@ for (const scenario of ["live-same-project", "live-two-projects", "dead-unexpire
       assertSetupAdmission()
       const startedAt = Date.now(), deadlineAt = Math.min(startedAt + 180000, closeBy)
       const args = [`--config=${path.join(packageDirectory, "test/empty-bunfig.toml")}`,
-        `--tsconfig-override=${path.join(packageDirectory, "tsconfig.json")}`,
         path.join(import.meta.dir, "fixture/permission-execution-owner-process-worker.ts"), mode, scenario, runtime, evidence,
         providerA!.apiURL, providerB!.apiURL, resourceA, resourceB, String(deadlineAt)]
       const child: any = { mode, executable: process.execPath, args, cwd: packageDirectory, startedAt, deadlineAt,

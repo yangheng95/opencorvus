@@ -1,4 +1,4 @@
-import { Identifier } from "@/id/id"
+import { permissionAttemptIdentity } from "@/permission/ledger-facts"
 import { HostProcessingFaultError } from "@/llm/host-fault"
 import { resultFromDurable } from "@/permission/execution-result"
 import { PermissionExecutionResultTable, PermissionLedgerTable } from "@/permission/permission.sql"
@@ -53,7 +53,7 @@ export function completedToolExecutionResult(db: Database.TxOrDb, part: Message.
     eq(PermissionLedgerTable.tool_call_id, part.callID), eq(PermissionLedgerTable.tool_name, part.tool),
   )).all()
   const completed = requests.flatMap((request) => {
-    const attemptID = Identifier.deterministic("permission", `attempt\0${request.id}`)
+    const attemptID = permissionAttemptIdentity(request.id)
     const outcome = db.select({ type: PermissionLedgerTable.event_type }).from(PermissionLedgerTable)
       .where(and(eq(PermissionLedgerTable.request_id, request.id), eq(PermissionLedgerTable.outcome_slot, attemptID))).get()
     const receipt = db.select().from(PermissionExecutionResultTable)

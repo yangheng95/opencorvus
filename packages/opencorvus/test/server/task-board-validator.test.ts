@@ -12,6 +12,13 @@ import { Server } from "@/server/server"
 import { Session } from "@/session"
 import { EngineService } from "@/task-api"
 import { NotFoundError } from "@/storage/db"
+import { Database } from "@/storage/db"
+import { readPermissionRequestFacts } from "@/permission/ledger-facts"
+import { withTimeout } from "@/util/await-with-timeout"
+import { timelineInteractionResponseOrderKey } from "@/timeline/order"
+import { BusPublicationOutboxTable } from "@/bus/bus.sql"
+import { eq } from "drizzle-orm"
+import { ChannelIngress } from "@/channel/ingress"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import { persistEstablishedTask } from "../fixture/engine-task"
 
@@ -20,7 +27,7 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
-async function taskFixture() {
+async function taskFixture(channelBinding?: Parameters<typeof persistEstablishedTask>[0]["channelBinding"]) {
   const revision = {
     scope: "built_in" as const,
     projectID: null,
@@ -47,6 +54,7 @@ async function taskFixture() {
     source: "test",
     priority: "normal",
     metadata: {},
+    channelBinding,
     projectID: Instance.project.id,
     packageRevision: revision,
     executionCapsuleBinding: await prepareTaskProcessBinding({
@@ -60,6 +68,84 @@ async function taskFixture() {
   })
   return { taskID, root }
 }
+
+for (const replyFirst of [true, false]) test(`Task permission projects the canonical reply when reply-first=${replyFirst}`, async () => {
+  await using project = await memoryProject()
+  await Instance.provide({ directory: project.path, fn: async () => {
+    await Config.updateProjectPatch({ permission_mode: "ask" })
+    const { taskID, root } = await taskFixture()
+    let request: PermissionAuthority.Request | undefined
+    const reply = () => Bus.subscribe(PermissionAuthority.Event.Asked, async event => {
+      request = event.properties
+      await PermissionAuthority.reply({ requestID: request.id, decision: "allow_task", actorID: "task-operator", autoReply: false })
+    })
+    let stop: () => void
+    if (replyFirst) { stop = reply(); EngineInteraction.subscribe() }
+    else { EngineInteraction.subscribe(); stop = reply() }
+    const notifications: any[] = []
+    const subscription = ProtocolStore.subscribeEvents(event => { notifications.push(event) },
+      { aggregate: "task", taskID, types: ["interaction.resolved"] })
+    try {
+      let executions = 0
+      const result = await withTimeout(PermissionAuthority.authorizeAndExecute({ projectID: Instance.project.id,
+        sessionID: root.id, messageID: Identifier.ascending("message"), toolCallID: Identifier.ascending("part"),
+        providerKind: "builtin", providerID: "builtin", toolName: "webfetch", args: { url: "https://example.test/task-report" },
+      }, async () => { executions++; return "actual task callback result" }), 10000, "Task permission decision and original execution")
+      await subscription.drain()
+      const facts = Database.use(db => readPermissionRequestFacts(db, request!.id))!
+      const response = await Server.App().request(`/task/${taskID}/board`, { headers: { "x-opencorvus-directory": project.path } })
+      const board = await response.json() as any
+      expect({ result, status: response.status, interactions: board.interactions.map((item: any) => ({
+        externalID: item.externalID, status: item.status, response: item.response, resolved: item.time.resolved,
+      })) }).toEqual({ result: "actual task callback result", status: 200, interactions: [{ externalID: request!.id,
+        status: "answered", response: { decision: "allow_task" }, resolved: facts.authority!.time_created }] })
+      expect({ executions, rows: facts.rows.map(row => row.event_type), source: facts.start?.source_event_id, result: facts.result?.result })
+        .toEqual({ executions: 1, rows: ["requested", "grant_created", "execution_started", "execution_succeeded"],
+          source: facts.authority!.id, result: { kind: "json", value: "actual task callback result" } })
+      expect(Database.use(db => db.select().from(BusPublicationOutboxTable)
+        .where(eq(BusPublicationOutboxTable.event_type, "permission.replied")).all()).map(row => row.properties))
+        .toEqual([{ sessionID: root.id, requestID: request!.id, decision: "allow_task", actorID: "task-operator", autoReply: false }])
+      const terminalProjection = { type: "interaction.resolved", taskID, sessionID: root.id,
+        orderKey: timelineInteractionResponseOrderKey({ id: board.interactions[0].id, timeResolved: facts.authority!.time_created }),
+        payload: { taskID, interactionID: board.interactions[0].id, requestType: "permission", requestID: request!.id,
+          status: "answered", ledgerEventID: facts.authority!.id, summary: "Permission allow_task" } }
+      expect(notifications.map(event => ({ type: event.type, taskID: event.taskID, sessionID: event.sessionID,
+        orderKey: event.orderKey, payload: event.payload }))).toEqual(replyFirst ? [terminalProjection, terminalProjection] : [terminalProjection])
+    } finally { stop!(); subscription() }
+  } })
+})
+
+test("Channel Permission confirmation describes the actual winner of its real Task decision race", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({ directory: project.path, fn: async () => {
+    await Config.updateProjectPatch({ permission_mode: "ask" })
+    EngineInteraction.subscribe()
+    const channel = { platform: "slack", channel: "public-channel", thread: "public-thread" }
+    const { taskID, root } = await taskFixture(channel)
+    const asked = Promise.withResolvers<PermissionAuthority.Request>()
+    const stop = Bus.subscribe(PermissionAuthority.Event.Asked, event => { asked.resolve(event.properties) })
+    const execution = PermissionAuthority.authorizeAndExecute({ projectID: Instance.project.id, sessionID: root.id,
+      messageID: Identifier.ascending("message"), toolCallID: Identifier.ascending("part"), providerKind: "builtin", providerID: "builtin",
+      toolName: "webfetch", args: { url: "https://example.test/channel-report" },
+    }, async () => "channel callback result")
+    void execution.catch(() => undefined)
+    try {
+      const request = await withTimeout(asked.promise, 10000, "Task channel Permission Asked")
+      // listTaskInteractions materializes its pending snapshot synchronously;
+      // its awaited return leaves the actual competing operator a commit turn.
+      const ingress = ChannelIngress.message({ ...channel, platform: "slack", text: "always",
+        request_id: "channel-permission-race", allow_create: false })
+      const winner = await PermissionAuthority.reply({ requestID: request.id, decision: "deny", actorID: "original-operator", autoReply: false })
+      const result = await withTimeout(ingress, 10000, "actual channel interaction result")
+      await expect(execution).rejects.toBeInstanceOf(PermissionAuthority.RejectedError)
+      const interactions = await EngineService.listTaskInteractions(taskID)
+      expect({ result, winner: winner.decision, interactions: interactions.map(item => ({ status: item.status, response: item.response })) })
+        .toEqual({ result: { kind: "interaction", message: "Permission rejected.", task_id: taskID, interaction_id: interactions[0]!.id },
+          winner: "deny", interactions: [{ status: "rejected", response: { decision: "deny" } }] })
+      expect(Database.use(db => readPermissionRequestFacts(db, request.id))!.rows.map(row => row.event_type)).toEqual(["requested", "denied"])
+    } finally { stop(); await PermissionAuthority.cancelPendingForSession(root.id, "Channel contract cleanup"); await Promise.allSettled([execution]) }
+  } })
+}, 30000)
 
 test("real HTTP Board uses its complete weak entity tag for GET lists, wildcard, weak comparison and HEAD", async () => {
   await using project = await memoryProject()

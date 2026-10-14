@@ -1,4 +1,6 @@
 import { Bus } from "@/bus"
+import { readPermissionRequestFacts } from "@/permission/ledger-facts"
+import { isDeepStrictEqual } from "node:util"
 import { Identifier } from "@/id/id"
 import {
   agentCoordinationQuestionID,
@@ -312,12 +314,13 @@ async function recoverableAgentCoordinationQuestion(
 async function upsertPermission(request: PermissionAuthority.Request, _sourceOccurrenceID: string) {
   const owner = resolveOwner(request.sessionID)
   if (!owner) return
-  if (findInteractionByExternal(request.id)) return
-  const source = Database.use((db) => db.select({ id: PermissionLedgerTable.id }).from(PermissionLedgerTable).where(and(
-    eq(PermissionLedgerTable.request_id, request.id),
-    eq(PermissionLedgerTable.event_type, "requested"),
-  )).get())
-  if (!source) throw new Error(`Permission ${request.id} has no immutable requested ledger fact`)
+  const facts = Database.use(db => readPermissionRequestFacts(db, request.id))
+  if (!facts || !isDeepStrictEqual(facts.request, request) || facts.request.taskID !== owner.taskID)
+    throw new Error(`Permission ${request.id} has inconsistent immutable requested ledger facts`)
+  if (findInteractionByExternal(request.id)) {
+    if (facts.decision) await resolvePermission({ sessionID: request.sessionID, requestID: request.id, decision: facts.decision })
+    return
+  }
   Database.transaction((db) => {
     insertEngineInteractionRequest(db, {
       taskID: owner.taskID,
@@ -343,18 +346,17 @@ async function upsertPermission(request: PermissionAuthority.Request, _sourceOcc
       eventSource: "interaction.permission",
       eventSummary: `Permission requested: ${request.toolName}`,
       timeCreated: request.timeCreated,
-      source: { kind: "permission_request", id: source.id },
+      source: { kind: "permission_request", id: facts.requested.id },
     })
   })
+  if (facts.decision) await resolvePermission({ sessionID: request.sessionID, requestID: request.id, decision: facts.decision })
 }
 
 async function projectPermissionTermination(input: z.infer<typeof PermissionAuthority.Event.Terminated.properties>) {
   const fact = Database.use((db) => {
-    const terminal = db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.id, input.ledgerEventID)).get()
-    const requested = db.select().from(PermissionLedgerTable).where(and(
-      eq(PermissionLedgerTable.request_id, input.requestID), eq(PermissionLedgerTable.event_type, "requested"),
-    )).get()
-    if (!terminal || !requested || terminal.request_id !== input.requestID || terminal.decision_slot !== input.requestID
+    const facts = readPermissionRequestFacts(db, input.requestID)
+    const terminal = facts?.authority, requested = facts?.requested
+    if (!terminal || !requested || terminal.id !== input.ledgerEventID || terminal.request_id !== input.requestID || terminal.decision_slot !== input.requestID
       || terminal.event_type !== input.status || requested.project_id !== input.projectID || requested.session_id !== input.sessionID) {
       throw new Error("Permission " + input.requestID + " terminal notification differs from its immutable ledger authority")
     }
@@ -383,12 +385,27 @@ async function resolvePermission(input: {
   autoReply?: boolean
   userInput?: InteractionUserInput
 }) {
+  const facts = Database.use(db => readPermissionRequestFacts(db, input.requestID))
+  if (!facts?.authority || facts.request.sessionID !== input.sessionID || facts.decision !== input.decision)
+    throw new Error(`Permission ${input.requestID} reply differs from its immutable ledger decision`)
   const interaction = findInteractionByExternal(input.requestID)
   if (!interaction) return
   // The Permission ledger decision is already the one terminal authority.
   // This subscriber only projects/captures optional authored user evidence.
   if (interaction.status === "pending") throw new Error(`Permission ${input.requestID} reply has no authoritative ledger decision`)
   assertResolvedReplay(interaction, input.userInput)
+  const task = Database.use(db => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, interaction.task_id)).get())
+  if (interaction.request_type !== "permission" || interaction.session_id !== input.sessionID ||
+    interaction.task_id !== facts.request.taskID || task?.project_id !== facts.request.projectID ||
+    interaction.time_resolved !== facts.authority.time_created)
+    throw new Error(`Permission ${input.requestID} reply differs from its Task interaction owner`)
+  ProtocolStore.dispatchEphemeral({
+    type: "interaction.resolved", aggregate: "task", taskID: interaction.task_id, sessionID: input.sessionID,
+    source: "interaction.permission.replied",
+    orderKey: timelineInteractionResponseOrderKey({ id: interaction.id, timeResolved: facts.authority.time_created }),
+    payload: { taskID: interaction.task_id, interactionID: interaction.id, requestType: "permission", status: interaction.status,
+      requestID: input.requestID, ledgerEventID: facts.authority.id, summary: "Permission " + facts.decision },
+  })
 }
 
 function resolveOwner(sessionID: string) {

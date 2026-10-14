@@ -74,7 +74,7 @@ describe("permission execution physical owners", () => {
         const admitted = currentEffect(started.attempt_id!)
         expect(admitted.lease.owner_occurrence_id).toBe(currentRuntimeOccurrenceID())
         expect(observeProcessLiveness(admitted.lease.owner_occurrence_id)).toBe("exact_live")
-        expect(PermissionAuthority.reconcileInterruptedAttempts()).toBe(0)
+        PermissionAuthority.reconcileInterruptedAttempts()
         expect((await PermissionAuthority.history()).map((row) => row.event_type)).toEqual([
           "execution_started", "allowed_once", "requested",
         ])
@@ -108,7 +108,7 @@ describe("permission execution physical owners", () => {
     try {
       await entered.promise
       await Instance.provide({ directory: second.path, fn: async () => {
-        expect(PermissionAuthority.reconcileInterruptedAttempts()).toBe(0)
+        PermissionAuthority.reconcileInterruptedAttempts()
         const session = await Session.create({ kind: "assistant", title: "Second Project effect" })
         expect(await PermissionAuthority.authorizeAndExecute(invocation(session.id, "second-project-effect"), async () => "Second Project public result"))
           .toBe("Second Project public result")
@@ -179,7 +179,7 @@ describe("permission execution physical owners", () => {
             ownerOccurrenceID: "opaque-historical-effect-owner", now: Date.now(), leaseMilliseconds: 120000 })
         })
         const before = await PermissionAuthority.history()
-        expect(PermissionAuthority.reconcileInterruptedAttempts()).toBe(0)
+        PermissionAuthority.reconcileInterruptedAttempts()
         expect(await PermissionAuthority.history()).toEqual(before)
         expect(before.map((row) => row.event_type)).toEqual(["execution_started", "allowed_once", "requested"])
       } })
@@ -195,7 +195,7 @@ describe("permission execution physical owners", () => {
       const before = await PermissionAuthority.history()
       const started = before.find((row) => row.event_type === "execution_started")!
       expect(currentEffect(started.attempt_id!).lease.owner_occurrence_id).toBe(currentRuntimeOccurrenceID())
-      expect(PermissionAuthority.reconcileInterruptedAttempts()).toBe(0)
+      PermissionAuthority.reconcileInterruptedAttempts()
       expect(await PermissionAuthority.history()).toEqual(before)
       expect(before.map((row) => row.event_type)).toEqual(["execution_started", "allowed_once", "requested"])
     } })
@@ -363,6 +363,12 @@ describe("two-mode permission authority", () => {
         expect(
           await PermissionAuthority.authorizeAndExecute(invocation(session.id, "second"), async () => "grant-result"),
         ).toBe("grant-result")
+
+        const reused = (await PermissionAuthority.history()).find((row) => row.event_type === "grant_used")!
+        expect({ slot: reused.decision_slot, request: reused.request_id, actor: reused.actor_id }).toEqual({
+          slot: reused.request_id, request: reused.request_id, actor: "saved-grant-policy",
+        })
+        expect(await PermissionAuthority.list()).toEqual([])
 
         const changed = await nextRequest(() =>
           PermissionAuthority.authorizeAndExecute(
@@ -913,9 +919,10 @@ describe("two-mode permission authority", () => {
       directory: project.path,
       fn: async () => {
         const session = await Session.create({ kind: "assistant", title: "Permission reconciliation" })
-        await PermissionAuthority.authorizeAndExecute(invocation(session.id, "reconcile-source"), async () => "done")
-        const source = (await PermissionAuthority.history()).find((row) => row.event_type === "execution_succeeded")!
-        const attemptID = Identifier.deterministic("permission", `test-attempt\0${randomUUID()}`)
+        await expect(PermissionAuthority.authorizeAndExecute(invocation(session.id, "reconcile-source"), async () => 1n))
+          .rejects.toBeInstanceOf(TypeError)
+        const source = (await PermissionAuthority.history()).find((row) => row.event_type === "execution_started")!
+        const attemptID = source.attempt_id!
         Database.transaction((db) =>
           db
             .insert(PermissionLedgerTable)

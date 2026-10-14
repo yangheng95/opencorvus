@@ -1,5 +1,6 @@
 import { Bus } from "@/bus"
 import { PermissionAuthority } from "@/permission/authority"
+import { readPermissionRequestFacts } from "@/permission/ledger-facts"
 import { ProtocolStore } from "@/protocol/store"
 import { Question } from "@/question"
 import { Message, Session } from "@/session"
@@ -32,6 +33,10 @@ export function permissionRequestOrderKey(request: Pick<PermissionAuthority.Requ
 
 export function standalonePendingPermission(request: PermissionAuthority.Request, projectID: string) {
   if (request.projectID !== projectID) return
+  const facts = Database.use(db => readPermissionRequestFacts(db, request.id))
+  if (!facts || !isDeepStrictEqual(facts.request, request))
+    throw new Error(`Permission ${request.id} Asked differs from its immutable request authority`)
+  if (facts.authority) return
   const owner = taskIDForSession(request.sessionID)
   if (owner !== request.taskID)
     throw new Error("Permission " + request.id + " Task ownership differs from durable Session lineage")
@@ -224,7 +229,13 @@ export function mapSessionBusEvent(
     }
   }
   if (event.type === PermissionAuthority.Event.Replied.type) {
-    const payload = stampSessionEventPayload(sessionID, props)
+    const input = PermissionAuthority.Event.Replied.properties.parse(props)
+    const facts = Database.use(db => readPermissionRequestFacts(db, input.requestID))
+    if (!facts?.authority || facts.request.sessionID !== sessionID || facts.decision !== input.decision)
+      throw new Error(`Permission ${input.requestID} reply differs from its immutable decision authority`)
+    const payload = stampSessionEventPayload(sessionID, props, timelineInteractionResponseOrderKey({
+      id: input.requestID, timeResolved: facts.authority.time_created,
+    }))
     return {
       type: "permission.replied",
       summary: `Permission decision: ${String(props.decision ?? "")}`.trim(),

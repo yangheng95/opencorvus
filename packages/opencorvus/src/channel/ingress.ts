@@ -11,6 +11,7 @@ import z from "zod"
 import { ChannelId } from "./catalog"
 import { isModelReference } from "@/provider/model-ref"
 import { ChannelIngressAcceptedTable, ChannelIngressOutcomeTable } from "./channel.sql"
+import { PermissionDecision } from "@/permission/decision"
 
 export const MessageAttachmentInput = z.object({
   filename: z.string().trim().min(1),
@@ -282,6 +283,19 @@ export class ChannelIngressOutcomeUnknownError extends Error {
   }
 }
 
+function permissionResolutionMessage(result: Awaited<ReturnType<typeof EngineService.replyUserInteraction>>): string {
+  const decision = PermissionDecision.safeParse(result.response?.decision)
+  if (!decision.success || result.type !== "permission" ||
+    result.status !== (decision.data === "deny" ? "rejected" : "answered"))
+    throw new Error(`Permission interaction ${result.id} has no exact canonical decision response`)
+  switch (decision.data) {
+    case "allow_once": return "Permission granted (once)."
+    case "allow_task": return "Permission granted for this task."
+    case "allow_project": return "Permission granted for this exact scope in this project."
+    case "deny": return "Permission rejected."
+  }
+}
+
 async function tryReplyInteraction(
   taskID: string,
   text: string,
@@ -298,7 +312,7 @@ async function tryReplyInteraction(
         message: text,
         userInput: { surface: "channel.permission", text, structured: { decision: "allow_once" } },
       })
-      return { kind: "interaction", message: "Permission granted.", task_id: taskID, interaction_id: result.id }
+      return { kind: "interaction", message: permissionResolutionMessage(result), task_id: taskID, interaction_id: result.id }
     }
     if (["always", "allow always", "approve always"].includes(value)) {
       const result = await EngineService.replyUserInteraction(pending.id, {
@@ -308,7 +322,7 @@ async function tryReplyInteraction(
       })
       return {
         kind: "interaction",
-        message: "Permission granted (always).",
+        message: permissionResolutionMessage(result),
         task_id: taskID,
         interaction_id: result.id,
       }
@@ -318,7 +332,7 @@ async function tryReplyInteraction(
         message: text,
         userInput: { surface: "channel.permission", text, structured: { decision: "deny" } },
       })
-      return { kind: "interaction", message: "Permission rejected.", task_id: taskID, interaction_id: result.id }
+      return { kind: "interaction", message: permissionResolutionMessage(result), task_id: taskID, interaction_id: result.id }
     }
     return {
       kind: "panel_response",

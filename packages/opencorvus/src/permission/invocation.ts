@@ -1,3 +1,4 @@
+import { permissionProjectGrantEligible } from "./ledger-facts"
 import { GLOBAL_TOOL_IDS } from "@/tool/tool-id-catalog"
 import { Instance } from "@/project/instance"
 import { Filesystem } from "@/util/filesystem"
@@ -291,26 +292,6 @@ async function canonicalResourceScope(
     arguments: stable(redact(args)),
     arguments_sha256: sha256(args),
   }
-}
-
-export function permissionProjectGrantEligible(input: {
-  providerKind: PermissionProviderKind
-  toolName: string
-  effectClass: PermissionEffectClass
-  resource: Record<string, unknown>
-}): boolean {
-  if (input.providerKind !== "builtin") return false
-  if (input.effectClass === "read_local") {
-    return (
-      input.resource.scope_type === "filesystem" &&
-      Array.isArray(input.resource.paths) &&
-      input.resource.paths.length > 0
-    )
-  }
-  if (input.effectClass === "network_read" && input.toolName === "webfetch") {
-    return input.resource.scope_type === "network" && input.resource.endpoint !== undefined
-  }
-  return false
 }
 
 function redact(value: unknown): unknown {

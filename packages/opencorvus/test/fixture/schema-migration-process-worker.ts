@@ -28,7 +28,10 @@ if (mode === "production" || mode === "upgrade") {
         ],
         validate() {},
       })
-      console.log(JSON.stringify({ ...receipt, version: schemaVersion(sqlite) }))
+      console.log(JSON.stringify({ outcome: receipt.from === 1 ? "upgraded" : "current", ...receipt, version: schemaVersion(sqlite) }))
+    } catch (error) {
+      if ((error as { code?: string })?.code !== "SQLITE_BUSY") throw error
+      console.log(JSON.stringify({ outcome: "busy", code: "SQLITE_BUSY" }))
     } finally {
       sqlite.close(true)
     }

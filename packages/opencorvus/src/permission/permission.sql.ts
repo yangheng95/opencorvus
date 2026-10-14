@@ -8,6 +8,7 @@ export type PermissionEventType =
   | "allowed_once"
   | "grant_created"
   | "grant_used"
+  | "grant_decision_indexed"
   | "denied"
   | "expired"
   | "revoked"

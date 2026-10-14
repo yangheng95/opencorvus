@@ -171,18 +171,18 @@ export function validateMigrationRegistry(migrations: readonly SchemaMigration[]
   return version
 }
 
-/** Upgrade before exposing the connection to any reader, writer, or recovery entry. */
-export function migrateSchema(input: {
+type MigrationInput = {
   sqlite: SQLite
   databasePath: string
   migrations: readonly SchemaMigration[]
   currentDDL: string
   validate: () => void
-}): { from: number; to: number; backupPath?: string } {
+}
+
+type MigrationReceipt = { from: number; to: number; backupPath?: string }
+
+function migrateSchemaTransaction(input: MigrationInput, version: number, guarded: boolean): MigrationReceipt {
   const { sqlite, migrations } = input
-  const version = validateMigrationRegistry(migrations, input.currentDDL)
-  const foreignKeys = queryAllFinalized<{ foreign_keys: number }>(sqlite, "PRAGMA foreign_keys")[0].foreign_keys
-  sqlite.exec("PRAGMA foreign_keys = OFF")
   let transaction = false
   let backupPath: string | undefined
   let from = schemaVersion(sqlite)
@@ -208,6 +208,8 @@ export function migrateSchema(input: {
       sqlite.exec(input.currentDDL)
       sqlite.exec(`PRAGMA user_version = ${version}`)
     } else if (from < version) {
+      if (!guarded)
+        required("The database became an older version during admission. Reopen it to acquire the migration file lock before upgrading.")
       backupPath = saveBackup(sqlite, input.databasePath, from, version)
       for (const migration of migrations) {
         if (migration.version <= from) continue
@@ -280,7 +282,68 @@ export function migrateSchema(input: {
       backupPath,
       { cause },
     )
-  } finally {
-    if (!transaction) sqlite.exec(`PRAGMA foreign_keys = ${foreignKeys ? "ON" : "OFF"}`)
   }
+}
+
+/** Upgrade before exposing the connection to any reader, writer, or recovery entry.
+ * A normal WAL attachment keeps the file lock shared with every old reader.
+ * Its upgrade to EXCLUSIVE excludes even idle cached old decoders, unlike a
+ * writer transaction alone. Restore NORMAL with a finalized main-file access. */
+export function migrateSchema(input: MigrationInput): MigrationReceipt {
+  const { sqlite } = input
+  const version = validateMigrationRegistry(input.migrations, input.currentDDL)
+  if (sqlite.inTransaction) throw new Error("Schema migration requires its owned connection outside a transaction.")
+  sqlite.exec("PRAGMA main.locking_mode = NORMAL")
+  const from = schemaVersion(sqlite)
+  const fresh = from === 0 && readSchemaObjects(sqlite).length === 0
+  const foreignKeys = queryAllFinalized<{ foreign_keys: number }>(sqlite, "PRAGMA foreign_keys")[0].foreign_keys
+  let guardAttempted = false
+  let primary: { error: unknown } | undefined
+  let receipt: MigrationReceipt | undefined
+  const cleanupErrors: unknown[] = []
+  try {
+    const privateMemory = input.databasePath === ":memory:"
+    if (!fresh && from < version && !privateMemory) {
+      const journal = queryAllFinalized<{ journal_mode: string }>(sqlite, "PRAGMA main.journal_mode")[0]?.journal_mode
+      if (journal !== "wal")
+        required(`Upgrading an existing database requires WAL file locking (current journal mode: ${journal ?? "unknown"}). Close every older application and establish WAL through authorized database maintenance before reopening.`)
+      guardAttempted = true
+      sqlite.exec("PRAGMA main.locking_mode = EXCLUSIVE")
+    }
+    sqlite.exec("PRAGMA foreign_keys = OFF")
+    receipt = migrateSchemaTransaction(input, version, guardAttempted || privateMemory)
+  } catch (error) {
+    primary = { error }
+  }
+  if (guardAttempted) {
+    try {
+      sqlite.exec("PRAGMA main.locking_mode = NORMAL")
+      if (sqlite.inTransaction) throw new Error("Migration rollback left an active transaction; its file lock has not been released.")
+      schemaVersion(sqlite)
+      const mode = queryAllFinalized<{ locking_mode: string }>(sqlite, "PRAGMA main.locking_mode")[0]?.locking_mode
+      if (mode !== "normal") throw new Error(`Migration file lock remains in ${mode ?? "unknown"} mode.`)
+    } catch (error) {
+      cleanupErrors.push(error)
+    }
+  }
+  try {
+    if (sqlite.inTransaction) throw new Error("Migration rollback left an active transaction; foreign-key settings were not restored.")
+    sqlite.exec(`PRAGMA foreign_keys = ${foreignKeys ? "ON" : "OFF"}`)
+  } catch (error) {
+    cleanupErrors.push(error)
+  }
+  if (cleanupErrors.length) {
+    const errors = [...(primary ? [primary.error] : []), ...cleanupErrors]
+    throw new SchemaMigrationError(
+      "SCHEMA_MIGRATION_FAILED",
+      receipt
+        ? `Database version ${receipt.to} committed, but the migration connection could not be safely released. Retain the database and backup for recovery.`
+        : "Database migration or connection release failed. Retain the database and backup for recovery.",
+      receipt?.backupPath ?? (primary?.error instanceof SchemaMigrationError ? primary.error.backupPath : undefined),
+      { cause: new AggregateError(errors, "Migration and original connection settlement errors", primary ? { cause: primary.error } : undefined) },
+    )
+  }
+  if (primary) throw primary.error
+  if (!receipt) throw new Error("Schema migration completed without its original receipt.")
+  return receipt
 }

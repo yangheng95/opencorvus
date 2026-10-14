@@ -26,6 +26,22 @@ Destructive, credential-release, and general external-effect operations cannot r
 
 `permission_policy` freezes the Session mode and revision. `permission_ledger` is the append-only single source of truth for requests, decisions, grant creation/use/revocation, Full-access admission, execution starts, terminal outcomes, and unknown outcomes. Unique decision, execution-start, and outcome slots enforce compare-and-set settlement and at-most-once execution admission.
 
+The single `permission/ledger-facts` reader qualifies the complete requested owner, explicit
+source-grant request graph, decision and deterministic attempt/result contract in one read
+transaction or nested savepoint. Startup validates the whole retained graph in its physical
+transaction. Missing owners, conflicting slots, unsupported scope material and inconsistent
+execution/result pairs are typed integrity errors, including retained deleted-Project history.
+An explicitly present `metadata.choices` is validated as recorded; only an absent field derives
+the current choices from the immutable scope and owner.
+
+Saved-grant capture, eligibility, decision-slot compare-and-set and winning Replied outbox share
+one immediate transaction. New `grant_used` owns its request's decision slot and
+`saved-grant-policy` actor. Only the targeted slot conflict reads the real winner; unrelated
+SQL errors propagate. Version2 appends private `grant_decision_indexed` facts for qualified
+historical slotless captures. The locator uses actual migration time and points at the original
+grant_used; the original capture supplies authorization, response time and execution source.
+Its automatic-reply provenance comes from that capture, not an inferred actor or UI title.
+
 The canonical `requested` row is the only owner of the complete Project, Session, Message, Tool-call, provider, scope, and fingerprint identity; later rows are deltas keyed by `request_id`. The entire ledger chain outlives mutable Project and Session retention, so `permission_ledger.project_id` is not a cascading foreign key. Project-scoped history and grant readers select through the canonical owner in Structured Query Language (SQL) before reconstructing a request. Startup follows the shared versioned migration contract in [Data architecture](02-data.md). The current version-1 baseline includes this retention shape; later revisions must preserve the complete ledger graph through declared migrations before business access. Missing request owners cannot be fabricated. Failed upgrades roll back and retain a pre-upgrade backup; only current-format readers run after successful validation. Unversioned pre-baseline databases require separately authorized baseline maintenance.
 
 The ledger stores redacted scope plus hashes; it must not store tokens, cookies, passwords, authorization headers, OAuth secrets, secret environment values, or complete sensitive content.
@@ -84,6 +100,12 @@ Standalone Session hydration and ordered connection snapshots carry mandatory
 `pendingPermissions` arrays from that ledger. Exact durable Project and Session lineage admit
 non-Task children; Task requests retain their existing Board interaction owner. Asked payloads
 keep the original Request fields, including its summary, before entering the same adapter.
+Live and queued pending projections re-read the exact canonical request at emission. This
+includes Session late Asked, ACP queue head, command-line notices and Channel SDK lookups.
+Settled disappearance does not imply an approval. Channel reply confirmation uses the actual
+returned Task interaction decision and status rather than the attempted command. Task Asked
+materialization and Replied delivery may each invalidate a projection; both reference one
+canonical result, and the transport invalidation does not admit another execution.
 A real cancelled or stale decision winner publishes `permission.terminated` with its Project,
 Session, request and ledger-event identity in the same transaction and owned outbox. It is
 not an operator reply. Task invalidation validates that fact and its Interaction projection

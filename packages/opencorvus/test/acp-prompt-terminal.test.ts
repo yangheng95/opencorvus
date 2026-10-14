@@ -18,6 +18,10 @@ import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
 import { Provider } from "@/provider/provider"
 import { Server } from "@/server/server"
 import { SessionControl } from "@/session/control"
+import { PermissionAuthority } from "@/permission/authority"
+import { Instance } from "@/project/instance"
+import { withTimeout } from "@/util/await-with-timeout"
+import { Bus } from "@/bus"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(async () => {
@@ -27,7 +31,7 @@ afterEach(async () => {
 
 // Actual ACP JSON-RPC, product HTTP routes and Session/Provider processing.
 // The local streamed participant controls finish/error facts; this is not external-model or UI acceptance.
-async function environment() {
+async function environment(options: { requestPermission?: Client["requestPermission"]; permissionMode?: "ask" } = {}) {
   const project = await memoryProject()
   const requests: Array<{ model: string; stream: boolean }> = []
   const updates: SessionNotification[] = []
@@ -89,6 +93,7 @@ async function environment() {
   await fs.writeFile(
     ConfigPaths.projectFile(project.path),
     JSON.stringify({
+      ...(options.permissionMode ? { permission_mode: options.permissionMode, prompt_profile: { active: "base" } } : {}),
       mcp: {
         computer: { ...ComputerMCPBuiltin.localConfig(), enabled: false },
         browser: { ...BrowserMCPBuiltin.localConfig(), enabled: false },
@@ -140,9 +145,7 @@ async function environment() {
         async sessionUpdate(update) {
           updates.push(update)
         },
-        async requestPermission() {
-          return { outcome: { outcome: "cancelled" } }
-        },
+        requestPermission: options.requestPermission ?? (async () => ({ outcome: { outcome: "cancelled" } })),
       }) as Client,
     ndJsonStream(new WritableStream<Uint8Array>({ write: (chunk) => agentInput.enqueue(chunk) }), clientReadable),
   )
@@ -177,6 +180,57 @@ async function environment() {
     },
   }
 }
+
+test("ACP Permission queue presents the current complete pending set through official JSON-RPC and product HTTP", async () => {
+  const presented: Array<Parameters<Client["requestPermission"]>[0]> = []
+  const firstShown = Promise.withResolvers<void>()
+  const releaseFirst = Promise.withResolvers<Awaited<ReturnType<Client["requestPermission"]>>>()
+  await using env = await environment({ permissionMode: "ask", async requestPermission(request) {
+    presented.push(request)
+    if (presented.length === 1) { firstShown.resolve(); return releaseFirst.promise }
+    return { outcome: { outcome: "selected", optionId: "allow_once" } }
+  } })
+  const sessionID = await env.create("normal")
+  const operations: Promise<unknown>[] = []
+  try {
+    await Instance.provide({ directory: env.project.path, fn: async () => {
+      const requests = new Map<string, PermissionAuthority.Request>()
+      const allAsked = Promise.withResolvers<void>()
+      const stop = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => {
+        requests.set(properties.toolCallID, properties)
+        if (requests.size === 3) allAsked.resolve()
+      })
+      const run = (name: string) => {
+        const operation = PermissionAuthority.authorizeAndExecute({ projectID: Instance.project.id, sessionID,
+          messageID: Identifier.ascending("message"), toolCallID: name, providerKind: "builtin", providerID: "builtin",
+          toolName: "write", args: { filePath: path.join(env.project.path, `${name}.txt`), content: name },
+        }, async () => `${name} actual callback result`)
+        void operation.catch(() => undefined)
+        operations.push(operation)
+        return operation
+      }
+      try {
+        const first = run("queue-first")
+        await withTimeout(firstShown.promise, 10000, "official ACP first Permission request")
+        const second = run("queue-settled"), third = run("queue-current")
+        await withTimeout(allAsked.promise, 10000, "three original Asked facts")
+        const settled = requests.get("queue-settled")!
+        const resolution = await PermissionAuthority.reply({ requestID: settled.id, decision: "deny", actorID: "another-operator", autoReply: false })
+        releaseFirst.resolve({ outcome: { outcome: "selected", optionId: "allow_once" } })
+        const completed = await withTimeout(Promise.all([first, second.catch(error => error), third]), 15000, "original queued Permission executions")
+        expect(completed).toEqual(["queue-first actual callback result", expect.any(PermissionAuthority.RejectedError), "queue-current actual callback result"])
+        expect(presented.map(request => ({ sessionID: request.sessionId, callID: request.toolCall.toolCallId, rawInput: request.toolCall.rawInput })))
+          .toEqual(["queue-first", "queue-current"].map(name => ({ sessionID, callID: name, rawInput: requests.get(name)!.scope })))
+        expect(resolution).toMatchObject({ decision: "deny", request: settled })
+        expect((await env.sdk.permission.list({ directory: env.project.path }, { throwOnError: true })).data).toEqual([])
+      } finally { stop() }
+    } })
+  } finally {
+    releaseFirst.resolve({ outcome: { outcome: "cancelled" } })
+    await Instance.provide({ directory: env.project.path, fn: () => PermissionAuthority.cancelPendingForSession(sessionID, "ACP queue contract cleanup") })
+    await withTimeout(Promise.allSettled(operations), 10000, "original ACP execution settlement")
+  }
+}, 60000)
 
 for (const entry of ["prompt", "command"] as const) {
   for (const [model, stopReason, finish] of [

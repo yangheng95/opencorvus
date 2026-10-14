@@ -1,3 +1,5 @@
+import { permissionRequestIdentity as requestIdentity, permissionAttemptIdentity as attemptID,
+  permissionChoices as choices, readPermissionRequestFacts, PermissionLedgerIntegrityError } from "./ledger-facts"
 import { Bus } from "@/bus"
 import { BusEvent } from "@/bus/bus-event"
 import { Config } from "@/config/config"
@@ -16,9 +18,7 @@ import { InteractionUserInput } from "@/memory/interaction-user-input"
 import { Identifier } from "@/id/id"
 import {
   permissionDescriptor,
-  permissionProjectGrantEligible,
   type InvocationPermissionDescriptor,
-  PermissionProviderKind,
   ToolInvocationProviderKind,
 } from "./invocation"
 import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicyTable } from "./permission.sql"
@@ -183,32 +183,13 @@ export namespace PermissionAuthority {
     return createHash("sha256").update(JSON.stringify(value)).digest("hex")
   }
 
-  function requestIdentity(input: {
-    projectID: string
-    sessionID: string
-    messageID: string
-    toolCallID: string
-    fingerprint: string
-  }): string {
-    return Identifier.deterministic(
-      "permission",
-      `request\0${JSON.stringify({
-        projectID: input.projectID,
-        sessionID: input.sessionID,
-        messageID: input.messageID,
-        toolCallID: input.toolCallID,
-        fingerprint: input.fingerprint,
-      })}`,
-    )
-  }
+
 
   function requestID(input: InvocationIdentity, descriptor: InvocationPermissionDescriptor): string {
     return requestIdentity({ ...input, fingerprint: descriptor.fingerprint })
   }
 
-  function attemptID(requestIDValue: string): string {
-    return Identifier.deterministic("permission", `attempt\0${requestIDValue}`)
-  }
+
 
   function ledgerEventID(): string {
     return Identifier.ascending("permission")
@@ -509,74 +490,13 @@ export namespace PermissionAuthority {
   }
 
   function requestFromRow(row: LedgerRow): Request {
-    const authority =
-      row.event_type === "requested"
-        ? row
-        : Database.use((db) =>
-            db
-              .select()
-              .from(PermissionLedgerTable)
-              .where(
-                and(
-                  eq(PermissionLedgerTable.request_id, row.request_id),
-                  eq(PermissionLedgerTable.event_type, "requested"),
-                ),
-              )
-              .get(),
-          )
-    if (!authority) throw new Error(`Permission event ${row.id} references missing request ${row.request_id}`)
-    const resource =
-      authority.scope && typeof authority.scope === "object" && !Array.isArray(authority.scope)
-        ? (authority.scope.resource as Record<string, unknown> | undefined)
-        : undefined
-    const projectGrantEligible =
-      authority.scope_version === "2" && resource
-        ? permissionProjectGrantEligible({
-            providerKind: PermissionProviderKind.parse(authority.provider_kind),
-            toolName: authority.tool_name!,
-            effectClass: authority.effect_class as InvocationPermissionDescriptor["effectClass"],
-            resource,
-          })
-        : false
-    return Request.parse({
-      id: authority.request_id,
-      projectID: authority.project_id,
-      taskID: authority.task_id ?? undefined,
-      sessionID: authority.session_id,
-      messageID: authority.message_id,
-      toolCallID: authority.tool_call_id,
-      mode: authority.mode,
-      policyRevision: authority.policy_revision,
-      providerKind: authority.provider_kind,
-      providerID: authority.provider_id,
-      providerDigest: authority.provider_digest,
-      toolName: authority.tool_name,
-      effectClass: authority.effect_class,
-      scopeVersion: authority.scope_version,
-      scope: authority.scope,
-      fingerprint: authority.fingerprint,
-      summary: authority.summary,
-      projectGrantEligible,
-      choices: Array.isArray(authority.metadata?.choices)
-        ? authority.metadata.choices
-        : choices(projectGrantEligible, Boolean(authority.task_id)),
-      timeCreated: authority.time_created,
-    })
-  }
-
-  function choices(projectGrantEligible: boolean, hasTask: boolean): Decision[] {
-    return [
-      "allow_once",
-      ...(hasTask ? (["allow_task"] as const) : []),
-      ...(projectGrantEligible ? (["allow_project"] as const) : []),
-      "deny",
-    ]
+    const facts = Database.use(db => readPermissionRequestFacts(db, row.request_id))
+    if (!facts) throw new PermissionLedgerIntegrityError("request_owner_missing", row.request_id, [row.id])
+    return facts.request
   }
 
   function decisionFor(requestIDValue: string): LedgerRow | undefined {
-    return Database.use((db) =>
-      db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.decision_slot, requestIDValue)).get(),
-    )
+    return Database.use(db => readPermissionRequestFacts(db, requestIDValue)?.authority)
   }
 
   function assertRequestIdentity(request: Request): void {
@@ -639,58 +559,26 @@ export namespace PermissionAuthority {
   }
 
   function decisionFromRow(row: LedgerRow): Decision {
-    if (row.event_type === "denied" || row.event_type === "cancelled" || row.event_type === "stale") return "deny"
-    if (row.decision_scope === "task") return "allow_task"
-    if (row.decision_scope === "project") return "allow_project"
-    return "allow_once"
-  }
-
-  function settleDecision(
-    request: Request,
-    eventType: "allowed_once" | "grant_created" | "denied" | "cancelled" | "stale",
-    extra: Partial<typeof PermissionLedgerTable.$inferInsert>,
-  ): { settled: LedgerRow; won: boolean } {
-    try {
-      return {
-        settled: appendEvent(request, eventType, {
-          ...extra,
-          decision_slot: request.id,
-        }),
-        won: true,
-      }
-    } catch (error) {
-      const winner = decisionFor(request.id)
-      if (!winner) throw error
-      return { settled: winner, won: false }
-    }
+    const facts = Database.use(db => readPermissionRequestFacts(db, row.request_id))
+    if (!facts?.authority || facts.authority.id !== row.id)
+      throw new PermissionLedgerIntegrityError("decision_kind_invalid", row.request_id, [row.id])
+    return facts.decision
   }
 
   function settleDecisionInTransaction(
-    db: Database.TxOrDb,
-    request: Request,
-    eventType: "allowed_once" | "grant_created" | "denied" | "cancelled" | "stale",
+    db: Database.TxOrDb, request: Request,
+    eventType: "allowed_once" | "grant_created" | "grant_used" | "denied" | "cancelled" | "stale",
     extra: Partial<typeof PermissionLedgerTable.$inferInsert>,
   ): { settled: LedgerRow; won: boolean } {
-    const row = {
-      id: ledgerEventID(),
-      request_id: request.id,
-      event_type: eventType,
-      time_created: Date.now(),
-      ...extra,
-      decision_slot: request.id,
-    } satisfies typeof PermissionLedgerTable.$inferInsert
-    try {
-      db.insert(PermissionLedgerTable).values(row).run()
-      return { settled: row as LedgerRow, won: true }
-    } catch (error) {
-      const winner = db
-        .select()
-        .from(PermissionLedgerTable)
-        .where(eq(PermissionLedgerTable.decision_slot, request.id))
-        .get()
-      if (!winner) throw error
-      return { settled: winner, won: false }
-    }
+    const inserted = db.insert(PermissionLedgerTable).values({
+      id: ledgerEventID(), request_id: request.id, event_type: eventType, time_created: Date.now(),
+      ...extra, decision_slot: request.id,
+    }).onConflictDoNothing({ target: PermissionLedgerTable.decision_slot }).returning().get()
+    const facts = readPermissionRequestFacts(db, request.id)
+    if (!facts?.authority) throw new PermissionLedgerIntegrityError("decision_slot_conflict", request.id)
+    if (inserted && facts.authority.id !== inserted.id)
+      throw new PermissionLedgerIntegrityError("decision_slot_conflict", request.id, [inserted.id, facts.authority.id])
+    return { settled: facts.authority, won: Boolean(inserted) }
   }
 
   async function settlePendingTermination(
@@ -699,7 +587,7 @@ export namespace PermissionAuthority {
     extra: Partial<typeof PermissionLedgerTable.$inferInsert>,
   ): Promise<{ settled: LedgerRow; won: boolean }> {
     let publication: Bus.Publication | undefined
-    const result = Database.transaction((db) => {
+    const result = Database.immediateTransaction((db) => {
       const decision = settleDecisionInTransaction(db, request, status, extra)
       if (decision.won) {
         publication = Bus.publishOwnedInTransaction(Event.Terminated, {
@@ -770,54 +658,26 @@ export namespace PermissionAuthority {
   }
 
   function pendingRequest(requestIDValue: string): LedgerRow | undefined {
-    const requested = Database.use((db) =>
-      db
-        .select()
-        .from(PermissionLedgerTable)
-        .where(
-          and(eq(PermissionLedgerTable.request_id, requestIDValue), eq(PermissionLedgerTable.event_type, "requested")),
-        )
-        .get(),
-    )
-    return requested && !decisionFor(requestIDValue) ? requested : undefined
+    const facts = Database.use(db => readPermissionRequestFacts(db, requestIDValue))
+    return facts && !facts.authority ? facts.requested : undefined
   }
 
-  function activeGrant(request: Request): LedgerRow | undefined {
-    const grants = Database.use((db) =>
-      db
-        .select()
-        .from(PermissionLedgerTable)
-        .where(
-          and(
-            eq(PermissionLedgerTable.event_type, "grant_created"),
-            permissionRequestOwnerBelongsToProject(request.projectID),
-          ),
-        )
-        .orderBy(desc(sql`rowid`))
-        .all(),
-    )
-    if (grants.length === 0) return undefined
-    const terminal = Database.use((db) =>
-      db
-        .select({ source: PermissionLedgerTable.source_event_id })
-        .from(PermissionLedgerTable)
-        .where(
-          and(
-            inArray(PermissionLedgerTable.event_type, ["revoked", "expired"]),
-            isNotNull(PermissionLedgerTable.source_event_id),
-          ),
-        )
-        .all(),
-    )
-    const inactive = new Set(terminal.map((row) => row.source).filter((value): value is string => Boolean(value)))
-    return grants.find((grant) => {
+  function activeGrant(db: Database.TxOrDb, request: Request): LedgerRow | undefined {
+    const grants = db.select().from(PermissionLedgerTable).where(and(
+      eq(PermissionLedgerTable.event_type, "grant_created"), permissionRequestOwnerBelongsToProject(request.projectID),
+    )).orderBy(desc(sql`rowid`)).all()
+    const terminal = db.select({ source: PermissionLedgerTable.source_event_id }).from(PermissionLedgerTable).where(and(
+      inArray(PermissionLedgerTable.event_type, ["revoked", "expired"]), isNotNull(PermissionLedgerTable.source_event_id),
+    )).all()
+    const inactive = new Set(terminal.map(row => row.source))
+    return grants.find(grant => {
+      const facts = readPermissionRequestFacts(db, grant.request_id)
+      if (!facts?.authority || facts.authority.id !== grant.id)
+        throw new PermissionLedgerIntegrityError("grant_source_invalid", grant.request_id, [grant.id])
       if (inactive.has(grant.id)) return false
-      const owner = requestFromRow(grant)
-      if (owner.projectID !== request.projectID || owner.fingerprint !== request.fingerprint) return false
-      return (
-        grant.decision_scope === "project" ||
-        (grant.decision_scope === "task" && Boolean(request.taskID) && owner.taskID === request.taskID)
-      )
+      const owner = facts.request
+      return owner.projectID === request.projectID && owner.fingerprint === request.fingerprint &&
+        (grant.decision_scope === "project" || (grant.decision_scope === "task" && Boolean(request.taskID) && owner.taskID === request.taskID))
     })
   }
 
@@ -847,22 +707,31 @@ export namespace PermissionAuthority {
   }
 
   async function authorize(request: Request): Promise<LedgerRow> {
-    if (request.mode === "full_access") {
-      const existing = decisionFor(request.id)
-      if (existing) return existing
-      return settleDecision(request, "allowed_once", { actor_id: "full-access-policy" }).settled
-    }
-    const stale = staleFor(request.id)
-    if (stale) throw new StaleContinuationError(request.id, stale.reason ?? undefined)
-    const exactDecision = decisionFor(request.id)
-    if (exactDecision) {
-      if (["denied", "cancelled", "stale"].includes(exactDecision.event_type))
-        throw new RejectedError(request.id, exactDecision.reason ?? undefined)
-      return exactDecision
-    }
-    const grant = activeGrant(request)
-    if (grant)
-      return appendEvent(request, "grant_used", { source_event_id: grant.id, decision_scope: grant.decision_scope })
+    let publication: Bus.Publication | undefined
+    const immediate = Database.immediateTransaction(db => {
+      const facts = readPermissionRequestFacts(db, request.id)
+      if (!facts) throw new PermissionLedgerIntegrityError("request_owner_missing", request.id)
+      if (request.mode === "ask" && facts.retirement)
+        throw new StaleContinuationError(request.id, facts.retirement.reason ?? undefined)
+      if (facts.authority) {
+        if (facts.decision === "deny") throw new RejectedError(request.id, facts.authority.reason ?? undefined)
+        return facts.authority
+      }
+      if (request.mode === "full_access")
+        return settleDecisionInTransaction(db, request, "allowed_once", { actor_id: "full-access-policy" }).settled
+      const grant = activeGrant(db, request)
+      if (!grant) return undefined
+      const captured = settleDecisionInTransaction(db, request, "grant_used", {
+        source_event_id: grant.id, decision_scope: grant.decision_scope, actor_id: "saved-grant-policy",
+      })
+      if (captured.won) publication = Bus.publishOwnedInTransaction(Event.Replied, {
+        sessionID: request.sessionID, requestID: request.id, decision: decisionFromRow(captured.settled),
+        actorID: "saved-grant-policy", autoReply: true,
+      })
+      return captured.settled
+    })
+    if (publication) await publication.retry()
+    if (immediate) return immediate
     await waitForDecision(request)
     const settled = decisionFor(request.id)
     if (!settled) throw new Error(`Permission request ${request.id} resumed without a durable decision`)
@@ -1173,57 +1042,21 @@ export namespace PermissionAuthority {
     }
     const eventType =
       input.decision === "deny" ? "denied" : input.decision === "allow_once" ? "allowed_once" : "grant_created"
-    const timeResolved = Date.now()
-    let settled: LedgerRow
-    let wonDecision: boolean
-    let userPublication: Bus.Publication | undefined
-    if (input.userInput) {
-      const result = Database.transaction((db) => {
-        const decision = settleDecisionInTransaction(db, request, eventType, {
-          decision_scope:
-            input.decision === "allow_task" ? "task" : input.decision === "allow_project" ? "project" : "invocation",
-          actor_id: input.actorID,
-          reason: input.message,
-          time_created: timeResolved,
-        })
-        if (decision.won) {
-          const winnerDecision = decisionFromRow(decision.settled)
-          userPublication = Bus.publishOwnedInTransaction(Event.Replied, {
-            sessionID: request.sessionID,
-            requestID: request.id,
-            decision: winnerDecision,
-            actorID: decision.settled.actor_id ?? input.actorID,
-            autoReply: false,
-            userInput: input.userInput,
-          })
-        }
-        return decision
+    let publication: Bus.Publication | undefined
+    const { settled, won: wonDecision } = Database.immediateTransaction(db => {
+      const decision = settleDecisionInTransaction(db, request, eventType, {
+        decision_scope: input.decision === "allow_task" ? "task" : input.decision === "allow_project" ? "project" : "invocation",
+        actor_id: input.actorID, reason: input.message,
       })
-      settled = result.settled
-      wonDecision = result.won
-    } else {
-      const result = settleDecision(request, eventType, {
-        decision_scope:
-          input.decision === "allow_task" ? "task" : input.decision === "allow_project" ? "project" : "invocation",
-        actor_id: input.actorID,
-        reason: input.message,
+      if (decision.won) publication = Bus.publishOwnedInTransaction(Event.Replied, {
+        sessionID: request.sessionID, requestID: request.id, decision: decisionFromRow(decision.settled),
+        actorID: input.actorID, autoReply: input.userInput ? false : input.autoReply,
+        ...(input.userInput ? { userInput: input.userInput } : {}),
       })
-      settled = result.settled
-      wonDecision = result.won
-    }
-    if (input.userInput) {
-      // Only the transaction that won the authoritative decision owns the
-      // terminal user occurrence. A concurrent loser returns that decision
-      // without publishing its different text or a second terminal event.
-      if (userPublication) await userPublication.retry()
-    } else
-      await Bus.publish(Event.Replied, {
-        sessionID: request.sessionID,
-        requestID: request.id,
-        decision: decisionFromRow(settled),
-        actorID: settled.actor_id ?? input.actorID,
-        autoReply: input.autoReply,
-      })
+      return decision
+    })
+    if (publication) await publication.retry()
+
     const waiterCount = await releaseDecisionWaiters(request, settled)
     if (wonDecision && !["denied", "cancelled", "stale"].includes(settled.event_type) && waiterCount === 0) {
       await resumeRequest(request)
@@ -1261,16 +1094,7 @@ export namespace PermissionAuthority {
   }
 
   function pendingOrRequestedRequest(requestIDValue: string): Request | undefined {
-    const requested = Database.use((db) =>
-      db
-        .select()
-        .from(PermissionLedgerTable)
-        .where(
-          and(eq(PermissionLedgerTable.request_id, requestIDValue), eq(PermissionLedgerTable.event_type, "requested")),
-        )
-        .get(),
-    )
-    return requested ? requestFromRow(requested) : undefined
+    return Database.use(db => readPermissionRequestFacts(db, requestIDValue)?.request)
   }
 
   async function resumeRequest(request: Request): Promise<SessionLoopContinuationOutcome> {
@@ -1470,31 +1294,24 @@ export namespace PermissionAuthority {
   }
 
   export async function revoke(grantID: string, actorID = "local-operator"): Promise<void> {
-    const grant = Database.use((db) =>
-      db
-        .select()
-        .from(PermissionLedgerTable)
-        .where(and(eq(PermissionLedgerTable.id, grantID), eq(PermissionLedgerTable.event_type, "grant_created")))
-        .get(),
-    )
-    if (!grant) throw new Error(`Permission grant not found: ${grantID}`)
-    const request = requestFromRow(grant)
-    appendEvent(request, "revoked", { source_event_id: grant.id, actor_id: actorID })
+    Database.immediateTransaction(db => {
+      const grant = db.select().from(PermissionLedgerTable)
+        .where(and(eq(PermissionLedgerTable.id, grantID), eq(PermissionLedgerTable.event_type, "grant_created"))).get()
+      if (!grant) throw new Error(`Permission grant not found: ${grantID}`)
+      const facts = readPermissionRequestFacts(db, grant.request_id)
+      if (facts?.authority?.id !== grant.id) throw new PermissionLedgerIntegrityError("grant_source_invalid", grant.request_id, [grant.id])
+      appendEvent(facts.request, "revoked", { source_event_id: grant.id, actor_id: actorID })
+    })
   }
 
   export async function expire(grantID: string, reason: string, actorID = "system"): Promise<void> {
-    const grant = Database.use((db) =>
-      db
-        .select()
-        .from(PermissionLedgerTable)
-        .where(and(eq(PermissionLedgerTable.id, grantID), eq(PermissionLedgerTable.event_type, "grant_created")))
-        .get(),
-    )
-    if (!grant) throw new Error(`Permission grant not found: ${grantID}`)
-    appendEvent(requestFromRow(grant), "expired", {
-      source_event_id: grant.id,
-      actor_id: actorID,
-      reason,
+    Database.immediateTransaction(db => {
+      const grant = db.select().from(PermissionLedgerTable)
+        .where(and(eq(PermissionLedgerTable.id, grantID), eq(PermissionLedgerTable.event_type, "grant_created"))).get()
+      if (!grant) throw new Error(`Permission grant not found: ${grantID}`)
+      const facts = readPermissionRequestFacts(db, grant.request_id)
+      if (facts?.authority?.id !== grant.id) throw new PermissionLedgerIntegrityError("grant_source_invalid", grant.request_id, [grant.id])
+      appendEvent(facts.request, "expired", { source_event_id: grant.id, actor_id: actorID, reason })
     })
   }
 

@@ -44,6 +44,7 @@ const eventLabels: Record<string, string> = {
   allowed_once: "permissions.event.allowed_once",
   grant_created: "permissions.event.grant_created",
   grant_used: "permissions.event.grant_used",
+  grant_decision_indexed: "permissions.event.grant_decision_indexed",
   denied: "permissions.event.denied",
   expired: "permissions.event.expired",
   revoked: "permissions.event.revoked",
@@ -145,7 +146,10 @@ function operationStatus(events: PermissionLedgerEvent[]): { label: string; tone
     if (outcome === "execution_failed") return { label: t("permissions.event.execution_failed"), tone: "bad" }
     return { label: eventLabel(execution), tone: outcome === "outcome_unknown" ? "warn" : "accent" }
   }
-  const event = events.find((entry) => entry.event_type !== "requested") ?? events[0]
+  const event =
+    events.find((entry) => entry.event_type !== "requested" && entry.event_type !== "grant_decision_indexed") ??
+    events.find((entry) => entry.event_type === "requested")
+  if (!event) throw new Error("Permission operation has no business or requested history")
   return { label: eventLabel(event), tone: event.event_type === "denied" ? "bad" : "muted" }
 }
 
@@ -357,9 +361,6 @@ export function PermissionsSettingsGroup() {
                                   <Show when={event.decision_scope}>
                                     <small>{scopeLabel(event.decision_scope)}</small>
                                   </Show>
-                                  <Show when={event.reason}>
-                                    <p>{event.reason}</p>
-                                  </Show>
                                 </li>
                               )}
                             </For>
@@ -374,6 +375,14 @@ export function PermissionsSettingsGroup() {
                                 <dd>{operation.owner?.provider_id}</dd>
                                 <dt>{t("permissions.session")}</dt>
                                 <dd>{operation.owner?.task_id || operation.owner?.session_id}</dd>
+                                <For each={[...operation.events].reverse()}>
+                                  {(event) => (
+                                    <Show when={event.reason}>
+                                      <dt>{t("permissions.recorded_reason")} · {eventLabel(event)}</dt>
+                                      <dd title={event.id}>{event.reason}</dd>
+                                    </Show>
+                                  )}
+                                </For>
                               </dl>
                               <pre class="permission-scope">{JSON.stringify(operation.owner?.scope, null, 2)}</pre>
                             </Disclosure.Content>

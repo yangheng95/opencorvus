@@ -1,0 +1,511 @@
+{
+  "capturedAt": 1791959032097,
+  "files": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\actual-0001-baseline.sql",
+      "destination": "original-failed-run/actual-0001-baseline.sql.gz",
+      "bytes": 326159
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\actual-checkpoint-worker.ts",
+      "destination": "original-failed-run/actual-checkpoint-worker.ts.gz",
+      "bytes": 4097
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\actual-db.ts",
+      "destination": "original-failed-run/actual-db.ts.gz",
+      "bytes": 70811
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\actual-ddl.ts",
+      "destination": "original-failed-run/actual-ddl.ts.gz",
+      "bytes": 244262
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\actual-index.ts",
+      "destination": "original-failed-run/actual-index.ts.gz",
+      "bytes": 356
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\actual-launch-lock-probe.ts",
+      "destination": "original-failed-run/actual-launch-lock-probe.ts.gz",
+      "bytes": 8784
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\actual-lock-worker.ts",
+      "destination": "original-failed-run/actual-lock-worker.ts.gz",
+      "bytes": 22882
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\actual-run-lock-probe.ts",
+      "destination": "original-failed-run/actual-run-lock-probe.ts.gz",
+      "bytes": 21629
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\actual-schema-contract.ts",
+      "destination": "original-failed-run/actual-schema-contract.ts.gz",
+      "bytes": 2069
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\actual-schema-migration.ts",
+      "destination": "original-failed-run/actual-schema-migration.ts.gz",
+      "bytes": 12162
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\actual-sqlite-statement.ts",
+      "destination": "original-failed-run/actual-sqlite-statement.ts.gz",
+      "bytes": 963
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\driver-owner-start.json",
+      "destination": "original-failed-run/driver-owner-start.json.gz",
+      "bytes": 1110
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\driver-owner.json",
+      "destination": "original-failed-run/driver-owner.json.gz",
+      "bytes": 30722
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\case-owner.json",
+      "destination": "original-failed-run/normal-candidate-race/case-owner.json.gz",
+      "bytes": 14508
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\race-a-attempt.json",
+      "destination": "original-failed-run/normal-candidate-race/race-a-attempt.json.gz",
+      "bytes": 433
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\race-a-owner.json",
+      "destination": "original-failed-run/normal-candidate-race/race-a-owner.json.gz",
+      "bytes": 1738
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\race-a-ready.json",
+      "destination": "original-failed-run/normal-candidate-race/race-a-ready.json.gz",
+      "bytes": 415001
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\race-a-spawn.json",
+      "destination": "original-failed-run/normal-candidate-race/race-a-spawn.json.gz",
+      "bytes": 1269
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\race-a-started.json",
+      "destination": "original-failed-run/normal-candidate-race/race-a-started.json.gz",
+      "bytes": 904
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\race-a-stderr.log",
+      "destination": "original-failed-run/normal-candidate-race/race-a-stderr.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\race-a-stdout.log",
+      "destination": "original-failed-run/normal-candidate-race/race-a-stdout.log.gz",
+      "bytes": 136
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\race-a-terminal.json",
+      "destination": "original-failed-run/normal-candidate-race/race-a-terminal.json.gz",
+      "bytes": 1665194
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\race-b-attempt.json",
+      "destination": "original-failed-run/normal-candidate-race/race-b-attempt.json.gz",
+      "bytes": 169
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\race-b-owner.json",
+      "destination": "original-failed-run/normal-candidate-race/race-b-owner.json.gz",
+      "bytes": 2875
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\race-b-ready.json",
+      "destination": "original-failed-run/normal-candidate-race/race-b-ready.json.gz",
+      "bytes": 415001
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\race-b-spawn.json",
+      "destination": "original-failed-run/normal-candidate-race/race-b-spawn.json.gz",
+      "bytes": 1269
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\race-b-started.json",
+      "destination": "original-failed-run/normal-candidate-race/race-b-started.json.gz",
+      "bytes": 904
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\race-b-stderr.log",
+      "destination": "original-failed-run/normal-candidate-race/race-b-stderr.log.gz",
+      "bytes": 914
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\race-b-stdout.log",
+      "destination": "original-failed-run/normal-candidate-race/race-b-stdout.log.gz",
+      "bytes": 326
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\race-b-terminal.json",
+      "destination": "original-failed-run/normal-candidate-race/race-b-terminal.json.gz",
+      "bytes": 1250628
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\race-start",
+      "destination": "original-failed-run/normal-candidate-race/race-start.gz",
+      "bytes": 497
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\seed-owner.json",
+      "destination": "original-failed-run/normal-candidate-race/seed-owner.json.gz",
+      "bytes": 1734
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\seed-ready.json",
+      "destination": "original-failed-run/normal-candidate-race/seed-ready.json.gz",
+      "bytes": 415207
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\seed-spawn.json",
+      "destination": "original-failed-run/normal-candidate-race/seed-spawn.json.gz",
+      "bytes": 1265
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\seed-started.json",
+      "destination": "original-failed-run/normal-candidate-race/seed-started.json.gz",
+      "bytes": 902
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\seed-stderr.log",
+      "destination": "original-failed-run/normal-candidate-race/seed-stderr.log.gz",
+      "bytes": 415
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\seed-stdout.log",
+      "destination": "original-failed-run/normal-candidate-race/seed-stdout.log.gz",
+      "bytes": 134
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\seed-terminal.json",
+      "destination": "original-failed-run/normal-candidate-race/seed-terminal.json.gz",
+      "bytes": 415393
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\normal-candidate-race\\stop",
+      "destination": "original-failed-run/normal-candidate-race/stop.gz",
+      "bytes": 49
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\owner-start.json",
+      "destination": "original-failed-run/owner-start.json.gz",
+      "bytes": 1239
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\owner.json",
+      "destination": "original-failed-run/owner.json.gz",
+      "bytes": 2791
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\stderr.log",
+      "destination": "original-failed-run/stderr.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-followup-01\\stdout.log",
+      "destination": "original-failed-run/stdout.log.gz",
+      "bytes": 25241
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\followup02-before\\launch-lock-probe.ts",
+      "destination": "prepared-input/preimages/launch-lock-probe.ts.gz",
+      "bytes": 8706
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\followup02-before\\lock-worker.ts",
+      "destination": "prepared-input/preimages/lock-worker.ts.gz",
+      "bytes": 14856
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\followup02-before\\preparation-manifest.json",
+      "destination": "prepared-input/preimages/preparation-manifest.json.gz",
+      "bytes": 2888
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\followup02-before\\README.md",
+      "destination": "prepared-input/preimages/README.md.gz",
+      "bytes": 12278
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\followup02-before\\run-lock-probe.ts",
+      "destination": "prepared-input/preimages/run-lock-probe.ts.gz",
+      "bytes": 17423
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\followup-plan.md",
+      "destination": "prepared-input/followup-plan.md.gz",
+      "bytes": 10870
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\followup-handoff.json",
+      "destination": "prepared-input/followup-handoff.json.gz",
+      "bytes": 1885
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\followup-preparation-manifest.json",
+      "destination": "prepared-input/followup-preparation-manifest.json.gz",
+      "bytes": 2251
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\followup-preservation.json",
+      "destination": "prepared-input/followup-preservation.json.gz",
+      "bytes": 793
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\followup-status.txt",
+      "destination": "prepared-input/followup-status.txt.gz",
+      "bytes": 576
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\followup-syntax-read.json",
+      "destination": "prepared-input/followup-syntax-read.json.gz",
+      "bytes": 461
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\followup02-launch-lock-probe.ts.patch",
+      "destination": "prepared-input/followup02-launch-lock-probe.ts.patch.gz",
+      "bytes": 1510
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\followup02-run-lock-probe.ts.patch",
+      "destination": "prepared-input/followup02-run-lock-probe.ts.patch.gz",
+      "bytes": 8470
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\followup02-lock-worker.ts.patch",
+      "destination": "prepared-input/followup02-lock-worker.ts.patch.gz",
+      "bytes": 12417
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\shared-deadline-boundary.md",
+      "destination": "prepared-input/shared-deadline-boundary.md.gz",
+      "bytes": 9760
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\shared-deadline-callers.txt",
+      "destination": "prepared-input/shared-deadline-callers.txt.gz",
+      "bytes": 14643
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\shared-deadline-direct-supervisor-callers.txt",
+      "destination": "prepared-input/shared-deadline-direct-supervisor-callers.txt.gz",
+      "bytes": 3060
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\shared-deadline-source-excerpts.json",
+      "destination": "prepared-input/shared-deadline-source-excerpts.json.gz",
+      "bytes": 84049
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\followup01-race-analysis.md",
+      "destination": "prepared-input/followup01-race-analysis.md.gz",
+      "bytes": 17207
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\qualification-commit.json",
+      "destination": "lock02-delivery/qualification-commit.json.gz",
+      "bytes": 37032
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\qualification-scoped.patch",
+      "destination": "lock02-delivery/qualification-scoped.patch.gz",
+      "bytes": 6804510
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\archive408-lock02\\owner-start.json",
+      "destination": "lock02-delivery/archive408-lock02/owner-start.json.gz",
+      "bytes": 295
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\archive408-lock02\\owner.json",
+      "destination": "lock02-delivery/archive408-lock02/owner.json.gz",
+      "bytes": 632
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\archive408-lock02\\stderr.log",
+      "destination": "lock02-delivery/archive408-lock02/stderr.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\archive408-lock02\\stdout.log",
+      "destination": "lock02-delivery/archive408-lock02/stdout.log.gz",
+      "bytes": 138
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\docs408-qualification01\\owner-start.json",
+      "destination": "lock02-delivery/docs408-qualification01/owner-start.json.gz",
+      "bytes": 327
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\docs408-qualification01\\owner.json",
+      "destination": "lock02-delivery/docs408-qualification01/owner.json.gz",
+      "bytes": 664
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\docs408-qualification01\\stderr.log",
+      "destination": "lock02-delivery/docs408-qualification01/stderr.log.gz",
+      "bytes": 69
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\docs408-qualification01\\stdout.log",
+      "destination": "lock02-delivery/docs408-qualification01/stdout.log.gz",
+      "bytes": 35
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\architecture408-qualification01\\owner-start.json",
+      "destination": "lock02-delivery/architecture408-qualification01/owner-start.json.gz",
+      "bytes": 341
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\architecture408-qualification01\\owner.json",
+      "destination": "lock02-delivery/architecture408-qualification01/owner.json.gz",
+      "bytes": 678
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\architecture408-qualification01\\stderr.log",
+      "destination": "lock02-delivery/architecture408-qualification01/stderr.log.gz",
+      "bytes": 67
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\architecture408-qualification01\\stdout.log",
+      "destination": "lock02-delivery/architecture408-qualification01/stdout.log.gz",
+      "bytes": 72
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\prepare408-qualification01\\owner-start.json",
+      "destination": "lock02-delivery/prepare408-qualification01/owner-start.json.gz",
+      "bytes": 314
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\prepare408-qualification01\\owner.json",
+      "destination": "lock02-delivery/prepare408-qualification01/owner.json.gz",
+      "bytes": 651
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\prepare408-qualification01\\stderr.log",
+      "destination": "lock02-delivery/prepare408-qualification01/stderr.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\prepare408-qualification01\\stdout.log",
+      "destination": "lock02-delivery/prepare408-qualification01/stdout.log.gz",
+      "bytes": 81
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\commit408-qualification01\\owner-start.json",
+      "destination": "lock02-delivery/commit408-qualification01/owner-start.json.gz",
+      "bytes": 315
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\commit408-qualification01\\owner.json",
+      "destination": "lock02-delivery/commit408-qualification01/owner.json.gz",
+      "bytes": 652
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\commit408-qualification01\\stderr.log",
+      "destination": "lock02-delivery/commit408-qualification01/stderr.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\commit408-qualification01\\stdout.log",
+      "destination": "lock02-delivery/commit408-qualification01/stdout.log.gz",
+      "bytes": 171
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\fetch408-qualification01\\owner-start.json",
+      "destination": "lock02-delivery/fetch408-qualification01/owner-start.json.gz",
+      "bytes": 206
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\fetch408-qualification01\\owner.json",
+      "destination": "lock02-delivery/fetch408-qualification01/owner.json.gz",
+      "bytes": 543
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\fetch408-qualification01\\stderr.log",
+      "destination": "lock02-delivery/fetch408-qualification01/stderr.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\fetch408-qualification01\\stdout.log",
+      "destination": "lock02-delivery/fetch408-qualification01/stdout.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\merge408-qualification01\\owner-start.json",
+      "destination": "lock02-delivery/merge408-qualification01/owner-start.json.gz",
+      "bytes": 225
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\merge408-qualification01\\owner.json",
+      "destination": "lock02-delivery/merge408-qualification01/owner.json.gz",
+      "bytes": 562
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\merge408-qualification01\\stderr.log",
+      "destination": "lock02-delivery/merge408-qualification01/stderr.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\merge408-qualification01\\stdout.log",
+      "destination": "lock02-delivery/merge408-qualification01/stdout.log.gz",
+      "bytes": 20
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\push408-qualification01\\owner-start.json",
+      "destination": "lock02-delivery/push408-qualification01/owner-start.json.gz",
+      "bytes": 283
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\push408-qualification01\\owner.json",
+      "destination": "lock02-delivery/push408-qualification01/owner.json.gz",
+      "bytes": 620
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\push408-qualification01\\stderr.log",
+      "destination": "lock02-delivery/push408-qualification01/stderr.log.gz",
+      "bytes": 1306
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\push408-qualification01\\stdout.log",
+      "destination": "lock02-delivery/push408-qualification01/stdout.log.gz",
+      "bytes": 2322
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\verify408-qualification-fetch01\\owner-start.json",
+      "destination": "lock02-delivery/verify408-qualification-fetch01/owner-start.json.gz",
+      "bytes": 206
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\verify408-qualification-fetch01\\owner.json",
+      "destination": "lock02-delivery/verify408-qualification-fetch01/owner.json.gz",
+      "bytes": 543
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\verify408-qualification-fetch01\\stderr.log",
+      "destination": "lock02-delivery/verify408-qualification-fetch01/stderr.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\verify408-qualification-fetch01\\stdout.log",
+      "destination": "lock02-delivery/verify408-qualification-fetch01/stdout.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\capture-followup01.mjs",
+      "destination": "capture-followup01.mjs.gz",
+      "bytes": 4047
+    }
+  ],
+  "boundary": "Original first followup failed at the race checker after genuine from1/to2 and from2/to2 returns. One case and three workers ran; all original request/physical/output receipts joined. Later fault/reopen cases were never started. Preserves the failed original result and its complete input, analysis and preceding normal Git delivery. No production patch, semantic migration, credentials, raw DB/runtime, UI or model acceptance. Gzip roundtrip proves capture storage identity only."
+}

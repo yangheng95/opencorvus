@@ -26,7 +26,7 @@
 
 - [Git 源条目读取验收](2026-10-14-project-metadata-latency/source-entry-read/README.md)：2100原capture、24项测试、最终HTTP/原图与保留的原生写入失败。
 
-- [408 保存批准决定与安全升级](2026-10-14-grant-decision-recovery-408/README.md)：407实际提交与push承接，408只读投影/客户端/升级协调资料。
+- [408 保存批准决定与安全升级](2026-10-14-grant-decision-recovery-408/README.md)：当前实现、旧真实数据升级、新请求与Task桌面截图、原失败及正常收束证据。
 
 - [代理测试的编辑草稿](2026-10-14-network-test-draft/README.md)：第25批真实代理入口、页面与独立生命周期证据。
 

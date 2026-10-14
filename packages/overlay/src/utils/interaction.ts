@@ -1,6 +1,6 @@
 // ── Interaction → CardNode seed pipeline ──
 //
-// An interaction (permission / question / clarification) is a prompt the
+// An interaction (permission / question) is a prompt the
 // backend raised from inside a specific session. The overlay renders it as
 // part of the conversation timeline by producing one or more "card seeds"
 // that tree-writer.upsertInteractionCard turns into CardNodes — direct,
@@ -11,7 +11,6 @@
 // is "claimed" by that card; interactions without sessionID (or whose
 // session has no card yet) are "unclaimed" and surfaced separately.
 
-import { interactionRequestText, interactionResponseText, hashText } from "./transcript"
 import { requireTimelineOrderKeyDomain } from "./timeline-order"
 
 export interface InteractionCardSeed {
@@ -24,18 +23,18 @@ export interface InteractionCardSeed {
   parts: any[]
 }
 
-type QuestionHistoryPhase = "request" | "response"
+type InteractionHistoryPhase = "request" | "response"
 
-function questionHistorySeed(
+function interactionHistorySeed(
   interaction: any,
-  phase: QuestionHistoryPhase,
+  phase: InteractionHistoryPhase,
   orderKey: string,
   time: number,
 ): InteractionCardSeed {
   if (typeof interaction.id !== "string" || !interaction.id.trim()) {
-    throw new Error("question history missing interaction identity")
+    throw new Error("interaction history missing interaction identity")
   }
-  if (!(time > 0)) throw new Error(`question ${interaction.id} ${phase} history missing time`)
+  if (!Number.isFinite(time) || !(time > 0)) throw new Error(`interaction ${interaction.id} ${phase} history missing time`)
   return {
     info: {
       id: `ctx:interaction:${interaction.id}:${phase}`,
@@ -43,23 +42,7 @@ function questionHistorySeed(
       role: "system",
       time: { created: time },
     },
-    parts: [{ type: "interaction-question", interaction, phase, orderKey }],
-  }
-}
-
-function textSeed(role: string, orderKey: string, time: number, text: string): InteractionCardSeed | null {
-  if (typeof text !== "string" || !text.trim()) return null
-  const created = Number(time)
-  if (!(created > 0)) throw new Error(`interaction text seed missing created time`)
-  if (!orderKey) throw new Error("interaction text seed missing orderKey")
-  return {
-    info: {
-      id: `interaction-text:${role}:${created}:${hashText(text)}`,
-      orderKey,
-      role,
-      time: { created },
-    },
-    parts: [{ type: "text", orderKey, text }],
+    parts: [{ type: `interaction-${interaction.type}`, interaction, phase, orderKey }],
   }
 }
 
@@ -67,13 +50,9 @@ function textSeed(role: string, orderKey: string, time: number, text: string): I
  *
  *  - Pending permission/question → one seed carrying an `interaction-*`
  *    part so <CardParts> dispatches to <InteractionCard>.
- *  - Resolved Questions → canonical request/response parts, formatted by the
- *    mounted renderer so locale changes retain their original identities.
- *  - Other answered/rejected interactions → request and response text bubbles.
- *  - Pending interactions of other types (no `interaction-*` part) fall
- *    through to the transcript path with just a request bubble.
- *
- *  Returns [] when the interaction produces no visible seed. */
+ *  - Resolved permission/question → canonical request/response parts, formatted
+ *    by the mounted renderer so locale changes retain their original identities.
+ *  Unsupported history contracts are explicit errors. */
 export function interactionToCardSeeds(interaction: any): InteractionCardSeed[] {
   const role = "system"
   const requestTime = Number(interaction?.time?.created)
@@ -100,41 +79,28 @@ export function interactionToCardSeeds(interaction: any): InteractionCardSeed[] 
             role,
             time: { created: requestTime },
           },
-          parts: [{ type: partType, interaction }],
+          parts: [{ type: partType, interaction, phase: "pending" }],
         },
       ]
     }
   }
 
-  if (interaction?.type === "question") {
-    if (!["answered", "rejected", "expired"].includes(interaction.status)) {
-      throw new Error(`question ${interactionID} has unsupported history status ${interaction.status}`)
-    }
-    const responseOrderKey = requireTimelineOrderKeyDomain(
-      interaction.responseOrderKey,
-      `interaction ${interactionID} responseOrderKey`,
-      "interaction",
-    )
-    return [
-      questionHistorySeed(interaction, "request", orderKey, requestTime),
-      questionHistorySeed(interaction, "response", responseOrderKey, Number(interaction.time?.resolved)),
-    ]
+  if (interaction?.type !== "question" && interaction?.type !== "permission") {
+    throw new Error(`interaction ${interactionID} has unsupported history type ${String(interaction?.type)}`)
   }
-
-  const seeds: InteractionCardSeed[] = []
-  const request = textSeed(role, orderKey, requestTime, interactionRequestText(interaction))
-  if (request) seeds.push(request)
-  if (interaction?.status === "answered" || interaction?.status === "rejected") {
-    const resolvedTime = Number(interaction.time?.resolved)
-    const responseOrderKey = requireTimelineOrderKeyDomain(
-      interaction?.responseOrderKey,
-      `interaction ${interactionID} responseOrderKey`,
-      "interaction",
-    )
-    const response = textSeed(role, responseOrderKey, resolvedTime, interactionResponseText(interaction))
-    if (response) seeds.push(response)
+  const statuses = interaction.type === "question" ? ["answered", "rejected", "expired"] : ["answered", "rejected"]
+  if (!statuses.includes(interaction.status)) {
+    throw new Error(`${interaction.type} ${interactionID} has unsupported history status ${interaction.status}`)
   }
-  return seeds
+  const responseOrderKey = requireTimelineOrderKeyDomain(
+    interaction.responseOrderKey,
+    `interaction ${interactionID} responseOrderKey`,
+    "interaction",
+  )
+  return [
+    interactionHistorySeed(interaction, "request", orderKey, requestTime),
+    interactionHistorySeed(interaction, "response", responseOrderKey, Number(interaction.time?.resolved)),
+  ]
 }
 
 /** Split a list of interactions into per-session buckets (for interactions

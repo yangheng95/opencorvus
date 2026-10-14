@@ -447,20 +447,23 @@ export const RunCommand = cmd({
           )
           const toggles = new Map<string, boolean>()
           const projectedPermissions = new Set<string>()
-          const permissionRequested = (permission: {
+          const permissionRequested = async (permission: {
             id: string
             sessionID: string
             toolName: string
             summary: string
           }) => {
             if (permission.sessionID !== sessionID || projectedPermissions.has(permission.id)) return
+            const current = (await durablePendingPermissionsForSession({ sdk, sessionID: sessionID!, directory,
+              signal: eventAbort.signal })).find(request => request.id === permission.id)
+            if (!current) return
             projectedPermissions.add(permission.id)
             if (
               emit("permission_requested", {
                 permission: {
                   requestID: permission.id,
-                  toolName: permission.toolName,
-                  summary: permission.summary,
+                  toolName: current.toolName,
+                  summary: current.summary,
                 },
               })
             ) {
@@ -469,7 +472,7 @@ export const RunCommand = cmd({
             UI.println(
               UI.Style.TEXT_WARNING_BOLD + "!",
               UI.Style.TEXT_NORMAL +
-                `permission requested: ${permission.toolName} — ${permission.summary}; waiting for operator reply`,
+                `permission requested: ${current.toolName} — ${current.summary}; waiting for operator reply`,
             )
           }
           for (const permission of await durablePendingPermissionsForSession({
@@ -478,7 +481,7 @@ export const RunCommand = cmd({
             directory,
             signal: eventAbort.signal,
           })) {
-            permissionRequested(permission)
+            await permissionRequested(permission)
           }
           // Track reasoning part IDs so their deltas are not emitted as text_delta.
           const reasoningPartIDs = new Set<string>()
@@ -595,7 +598,7 @@ export const RunCommand = cmd({
             }
 
             if (event.type === "permission.asked") {
-              permissionRequested(event.properties)
+              await permissionRequested(event.properties)
             }
           }
           if (!eventAbort.signal.aborted) throw new Error("Event stream ended before the run settled")

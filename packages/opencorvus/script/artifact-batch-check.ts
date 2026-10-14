@@ -27,7 +27,6 @@ process.env.OPENCORVUS_TASK_PROCESS_MODE = "native"
 process.env.OPENCORVUS_TEST_HOME = path.join(runtime.processRoot, "home")
 await fs.mkdir(process.env.OPENCORVUS_TEST_HOME, { recursive: true })
 const models = path.join(runtime.processRoot, "models.json")
-await fs.copyFile(path.resolve(import.meta.dir, "../src/provider/models-bootstrap.json"), models)
 process.env.OPENCORVUS_MODELS_PATH = models
 let taskID = ""
 let phase = 0
@@ -39,21 +38,11 @@ const provider = Bun.serve({
     const body = (await request.json()) as any
     assert.equal(body.stream, true)
     const names = (body.tools ?? []).map((item: any) => item.function?.name)
-    const memory = body.messages?.some(
-      (item: any) =>
-        item.role === "system" &&
-        typeof item.content === "string" &&
-        item.content.includes("dedicated Memory Organizer"),
-    )
+    const memory = controlledProviderRequestKind(body.messages ?? []) === "memory"
     let content = "ARTIFACT_BATCH_OK"
     let call: { name: string; args: unknown } | undefined
     if (memory) {
-      const prompt = body.messages.find((item: any) => item.role === "user")?.content
-      const coveredOccurrenceIDs =
-        typeof prompt === "string"
-          ? JSON.parse(prompt.match(/coveredOccurrenceIDs must be exactly (\[[^\n]+\])/u)?.[1] ?? "[]")
-          : []
-      content = JSON.stringify({ baseRevision: 0, coveredOccurrenceIDs, disposition: "organized", markdown: "" })
+      content = controlledMemoryReply(body.messages ?? [])
     } else if (names.includes("panel_query_task")) {
       providerRequests.push({ phase, names, messages: body.messages })
       await fs.writeFile(
@@ -138,11 +127,9 @@ process.env.OPENCORVUS_CONFIG_CONTENT = JSON.stringify({
 })
 
 console.log(`Evidence: ${runtime.processRoot}`)
-const { ModelsDev } = await import("../src/provider/models")
-await fs.writeFile(
-  models,
-  JSON.stringify(ModelsDev.validateExplicitCatalog(ModelsDev.withLocalProviders(await Bun.file(models).json()))),
-)
+const { controlledMemoryReply, controlledProviderRequestKind, writeControlledProviderCatalog } =
+  await import("../test/fixture/controlled-streaming-provider")
+await fs.writeFile(path.join(runtime.processRoot, "catalog-input.json"), JSON.stringify(await writeControlledProviderCatalog(models)))
 const { Log } = await import("../src/util/log")
 await Log.init({ print: false, dev: false, level: "WARN" })
 try {

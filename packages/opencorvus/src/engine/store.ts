@@ -2,6 +2,7 @@ import { ProjectTable } from "@/project/project.sql"
 import { sessionDirectoryFilterCondition } from "@/session/directory-filter"
 import { BusPublicationOutboxTable } from "@/bus/bus.sql"
 import { PermissionLedgerTable } from "@/permission/permission.sql"
+import { readPermissionRequestFacts } from "@/permission/ledger-facts"
 import { isDeepStrictEqual } from "node:util"
 import { SessionTable } from "@/session/session.sql"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
@@ -676,30 +677,31 @@ export function projectInteractionRowInTransaction(db: Database.TxOrDb, row: Per
         eq(PermissionLedgerTable.event_type, "requested"),
       )).get()
     : undefined
-  if (permission) {
+  const permissionFacts = permission ? readPermissionRequestFacts(db, permission.request_id) : undefined
+  if (permission && !permissionFacts) throw new Error(`Interaction ${row.id} has no canonical Permission request`)
+  if (permissionFacts) {
+    const original = permissionFacts.request
     request = {
-      sessionID: permission.session_id,
-      externalID: permission.request_id,
+      sessionID: original.sessionID,
+      externalID: original.id,
       requestType: "permission",
-      title: `Permission: ${permission.tool_name}`,
-      body: `${permission.summary}\n\n${JSON.stringify(permission.scope, null, 2)}`,
+      title: `Permission: ${original.toolName}`,
+      body: `${original.summary}\n\n${JSON.stringify(original.scope, null, 2)}`,
       payload: {
-        mode: permission.mode,
-        policyRevision: permission.policy_revision,
-        providerKind: permission.provider_kind,
-        providerID: permission.provider_id,
-        providerDigest: permission.provider_digest,
-        toolName: permission.tool_name,
-        effectClass: permission.effect_class,
-        scopeVersion: permission.scope_version,
-        scope: permission.scope,
-        fingerprint: permission.fingerprint,
-        choices: Array.isArray(permission.metadata?.choices)
-          ? permission.metadata.choices
-          : ["allow_once", "allow_task", "allow_project", "deny"],
-        tool: { messageID: permission.message_id, callID: permission.tool_call_id },
+        mode: original.mode,
+        policyRevision: original.policyRevision,
+        providerKind: original.providerKind,
+        providerID: original.providerID,
+        providerDigest: original.providerDigest,
+        toolName: original.toolName,
+        effectClass: original.effectClass,
+        scopeVersion: original.scopeVersion,
+        scope: original.scope,
+        fingerprint: original.fingerprint,
+        choices: original.choices,
+        tool: { messageID: original.messageID, callID: original.toolCallID },
       },
-      timeCreated: permission.time_created,
+      timeCreated: original.timeCreated,
     }
   }
   if (!request?.sessionID || !request.externalID || !request.requestType || !request.title || request.body === null || !request.payload || !request.timeCreated) {
@@ -755,20 +757,9 @@ export function projectInteractionRowInTransaction(db: Database.TxOrDb, row: Per
     }
     throw new Error(`Interaction ${row.id} references non-terminal Question occurrence ${outcomeSource.event_type}`)
   })() : undefined
-  const permissionDecision = permission
-    ? db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.decision_slot, permission.request_id)).get()
-    : undefined
+  const permissionDecision = permissionFacts?.authority
   if (permissionDecision && outcome) throw new Error(`Permission Interaction ${row.id} has duplicate terminal authorities`)
   const permissionRejected = permissionDecision && ["denied", "cancelled", "stale"].includes(permissionDecision.event_type)
-  const permissionDecisionValue = permissionDecision
-    ? permissionRejected
-      ? "deny"
-      : permissionDecision.decision_scope === "task"
-        ? "allow_task"
-        : permissionDecision.decision_scope === "project"
-          ? "allow_project"
-          : "allow_once"
-    : undefined
   return {
     ...row,
     task_id: exactTaskID,
@@ -780,7 +771,8 @@ export function projectInteractionRowInTransaction(db: Database.TxOrDb, row: Per
     payload: request.payload,
     time_created: request.timeCreated,
     status: permissionDecision ? (permissionRejected ? "rejected" : "answered") : (sourcedOutcome?.status ?? outcome?.outcome ?? "pending"),
-    response: permissionDecision ? { decision: permissionDecisionValue } : (sourcedOutcome?.response ?? outcome?.response ?? null),
+    response: permissionDecision ? { decision: permissionFacts!.decision,
+      ...(permissionFacts!.autoReply ? { auto_reply: true } : {}) } : (sourcedOutcome?.response ?? outcome?.response ?? null),
     time_resolved: permissionDecision?.time_created ?? sourcedOutcome?.timeResolved ?? outcome?.time_created ?? null,
     time_updated: permissionDecision?.time_created ?? sourcedOutcome?.timeResolved ?? outcome?.time_created ?? request.timeCreated,
   }

@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { createManagedTemporaryDirectory, removeManagedDirectoryTree } from "@opencorvus-ai/util/runtime-directories"
-import { controlledProviderRequestKind } from "./fixture/controlled-streaming-provider"
+import { controlledMemoryReply, controlledProviderRequestKind } from "./fixture/controlled-streaming-provider"
 
 function startStreamingProvider() {
   const requests: Array<{ kind: "memory" | "prompt"; body: unknown }> = []
@@ -16,19 +16,9 @@ function startStreamingProvider() {
       const messages = Array.isArray((body as any)?.messages) ? (body as any).messages : []
       const kind = controlledProviderRequestKind(messages)
       requests.push({ kind, body })
-      const memoryInstruction = messages.find((message: any) => message?.role === "user")?.content
-      const coveredOccurrenceIDs =
-        kind === "memory" && typeof memoryInstruction === "string"
-          ? JSON.parse(memoryInstruction.match(/coveredOccurrenceIDs must be exactly (\[[^\n]+\])/u)?.[1] ?? "[]")
-          : []
       const content =
         kind === "memory"
-          ? JSON.stringify({
-              baseRevision: 0,
-              coveredOccurrenceIDs,
-              disposition: "organized",
-              markdown: "No durable memory.",
-            })
+          ? controlledMemoryReply(messages)
           : "cross-process assistant reply"
       if (kind === "prompt") await promptGate.promise
       const id = `chatcmpl-global-chat-${requests.length}`

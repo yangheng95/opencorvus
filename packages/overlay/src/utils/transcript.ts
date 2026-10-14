@@ -2,11 +2,11 @@
 // Exported surface:
 // boardArtifact – find a named artifact in board.artifacts
 // goalContextText – goals[] → plain text
+// permissionRequestTitle – original Tool identity → current-locale heading
 // interactionRequestText – interaction request → plain text
 // interactionReplyLabel – permission reply enum → label
 // interactionAnswerLines – interaction answers → string[]
 // interactionResponseText – full interaction response → plain text
-// hashText – FNV-1a 32-bit hash (used by message identity helpers)
 
 import { t } from "./i18n"
 
@@ -14,17 +14,6 @@ import { t } from "./i18n"
 
 function record(value: any): boolean {
   return !!value && typeof value === "object" && !Array.isArray(value)
-}
-
-/** FNV-1a 32-bit hash (mirrors app.js hashText). */
-export function hashText(value: string): string {
-  const text = String(value || "")
-  let hash = 2166136261
-  for (let i = 0; i < text.length; i += 1) {
-    hash ^= text.charCodeAt(i)
-    hash = Math.imul(hash, 16777619)
-  }
-  return (hash >>> 0).toString(36)
 }
 
 // ── Public exports ──
@@ -65,21 +54,30 @@ export function goalContextText(goals: any[]): string {
 /** Build interaction request prompt text (mirrors app.js interactionRequestText). */
 export function interactionRequestText(interaction: any): string {
   const title =
-    typeof interaction?.title === "string" && interaction.title.trim()
-      ? interaction.title.trim()
-      : interaction?.type === "question"
-        ? t("interaction.icon.question")
-        : t("detail.pending_interactions")
+    interaction?.type === "permission"
+      ? permissionRequestTitle(interaction.payload?.toolName)
+      : typeof interaction?.title === "string" && interaction.title.trim()
+        ? interaction.title.trim()
+        : interaction?.type === "question"
+          ? t("interaction.icon.question")
+          : t("detail.pending_interactions")
   const body = typeof interaction?.body === "string" ? interaction.body.trim() : ""
   return [title, body].filter(Boolean).join("\n\n")
 }
 
+/** Localize the product label while retaining the original technical Tool name. */
+export function permissionRequestTitle(toolName: unknown): string {
+  const label = t("interaction.icon.permission")
+  return typeof toolName === "string" && toolName.trim() ? `${label} · ${toolName}` : label
+}
+
 /** Label for a durable permission decision. */
-export function interactionReplyLabel(decision: string): string {
+export function interactionReplyLabel(decision: unknown): string {
+  if (decision === "allow_once") return t("interaction.allow_once")
   if (decision === "allow_project") return t("interaction.allow_project")
   if (decision === "allow_task") return t("interaction.allow_task")
   if (decision === "deny") return t("interaction.reject")
-  return t("interaction.allow_once")
+  throw new Error(`permission response has unknown decision ${String(decision)}`)
 }
 
 /** Build answer lines for an interaction (mirrors app.js interactionAnswerLines). */
@@ -124,7 +122,7 @@ export function interactionAnswerLines(interaction: any): string[] {
   return message ? [message] : []
 }
 
-/** Check if an interaction was auto-replied by the assistant. */
+/** Check whether the canonical response identifies an automatic reply. */
 export function isAutoReplied(interaction: any): boolean {
   const response = record(interaction?.response) ? interaction.response : null
   return response?.auto_reply === true
@@ -141,9 +139,16 @@ export function interactionResponseText(interaction: any): string {
   const auto = isAutoReplied(interaction)
   const prefix = auto ? `[${t("interaction.auto_reply")}] ` : ""
   if (interaction?.type === "permission") {
-    if (interaction.status === "rejected") return prefix + t("interaction.reject")
     const response = record(interaction?.response) ? interaction.response : null
-    return prefix + interactionReplyLabel(typeof response?.decision === "string" ? response.decision : "allow_once")
+    const decision = response?.decision
+    const label = interactionReplyLabel(decision)
+    if (
+      (interaction.status === "answered" && decision !== "deny") ||
+      (interaction.status === "rejected" && decision === "deny")
+    ) {
+      return prefix + label
+    }
+    throw new Error(`permission ${interaction.id} status ${interaction.status} conflicts with decision ${String(decision)}`)
   }
   if (interaction?.status === "rejected") return prefix + t("interaction.skip")
   const answers = interactionAnswerLines(interaction)

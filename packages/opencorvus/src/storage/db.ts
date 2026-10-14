@@ -1,4 +1,5 @@
 import { queryAllFinalized } from "./sqlite-statement"
+import { validateCurrentPermissionLedger } from "@/permission/ledger-facts"
 import { startCheckpoint, type CheckpointResult } from "./checkpoint-worker"
 import {
   RuntimeExecutionAdmissionClosedError,
@@ -272,6 +273,14 @@ function assertCurrentDataIntegrity(
   db: SQLiteBunDatabase<typeof ApplicationSchema>,
   dbPath: string,
 ): void {
+  try {
+    validateCurrentPermissionLedger(db)
+  } catch (cause) {
+    throw new DatabaseUnavailableError({
+      message: `OpenCorvus database contains invalid Permission ledger facts at ${dbPath}.`,
+      path: dbPath, operation: "Database.Client.dataIntegrity.permissionLedger", code: "DATA_INTEGRITY_ERROR",
+    }, { cause })
+  }
   const invalidTaskProcessBinding = queryAllFinalized<{
     id: string
     protocol: string | null

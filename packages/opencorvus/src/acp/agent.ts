@@ -609,18 +609,21 @@ export namespace ACP {
       const next = prev
         .then(async () => {
           const directory = session.cwd
+          const current = (await durablePendingPermissionsForSession({ sdk: this.sdk, sessionID: permission.sessionID, directory }))
+            .find(request => request.id === permission.id)
+          if (!current) return
           const res = await this.connection
             .requestPermission({
-              sessionId: permission.sessionID,
+              sessionId: current.sessionID,
               toolCall: {
-                toolCallId: permission.toolCallID,
+                toolCallId: current.toolCallID,
                 status: "pending",
-                title: permission.summary,
-                rawInput: permission.scope,
-                kind: toToolKind(permission.toolName),
-                locations: toLocations(permission.toolName, permission.scope),
+                title: current.summary,
+                rawInput: current.scope,
+                kind: toToolKind(current.toolName),
+                locations: toLocations(current.toolName, current.scope),
               },
-              options: permission.choices.map((decision) => {
+              options: current.choices.map((decision) => {
                 if (decision === "allow_once") {
                   return { optionId: decision, kind: "allow_once", name: "Allow once" } satisfies PermissionOption
                 }
@@ -657,9 +660,10 @@ export namespace ACP {
             decision: res.outcome.optionId as "allow_once" | "allow_task" | "allow_project" | "deny",
             actorID: "acp-operator",
             directory,
-          })
+          }, { throwOnError: true })
         })
         .catch((error) => {
+          this.projectedPermissionRequests.delete(permission.id)
           log.error("failed to handle permission", { error, permissionID: permission.id })
         })
         .finally(() => {

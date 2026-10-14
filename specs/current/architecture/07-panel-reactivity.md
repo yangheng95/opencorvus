@@ -824,6 +824,21 @@ invalidate Browser Preview target discovery.
 
 ## Verification
 
+Permission and Question history parts retain original interaction identity,
+request/response order keys and times. The sole seed pipeline marks the stable
+part phase as pending, request or response; the renderer dispatches by that
+phase. A mutable interaction status cannot turn an old pending part into a
+history response during Board replacement. Pending controls require current
+pending status, while resolved request/response text uses the existing reactive
+formatter in the current locale. Permission replies validate the exact canonical
+decision/status and derive automatic provenance from the real response.
+
+Permission Settings groups use the original requested time and execution outcome.
+Historical decision-index facts appear with their actual indexing time and a
+neutral localized label. Unclassified original audit reasons remain recorded
+data in Operation details under localized labels; the main timeline uses the
+current language without rewriting participants' original content or the ledger.
+
 Documentation and non-UI contract checks may validate Board transport shape.
 Overlay presentation and interaction are accepted only through a real isolated
 page, direct interaction, screenshots bound to the changed region, and manual

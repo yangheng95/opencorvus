@@ -11,10 +11,13 @@ for (const scenario of [
   "tool-progress",
   "old-occurrence",
   "human-error",
+  "permission-current",
 ] as const) {
   test(`run transport: ${scenario}`, async () => {
     let controller: ReadableStreamDefaultController<Uint8Array> | undefined
     const sessionID = "ses_check"
+    let currentPermission: Record<string, unknown> | undefined
+    const permissionReads: string[] = []
     const emit = (type: string, properties: unknown) =>
       controller?.enqueue(new TextEncoder().encode(`data: ${JSON.stringify({ type, properties })}\n\n`))
     const server = Bun.serve({
@@ -27,8 +30,9 @@ for (const scenario of [
           return Response.json({ id: sessionID })
         }
         if (url.pathname === "/permission") {
+          permissionReads.push(url.searchParams.get("directory") ?? request.headers.get("x-opencorvus-directory") ?? "")
           if (scenario === "permission-stall") await Bun.sleep(2500)
-          return Response.json([])
+          return Response.json(currentPermission ? [currentPermission] : [])
         }
         if (url.pathname === "/event")
           return new Response(
@@ -45,6 +49,16 @@ for (const scenario of [
           )
         if (url.pathname === `/session/${sessionID}/message`) {
           const body = (await request.json()) as { messageID: string }
+          if (scenario === "permission-current") {
+            currentPermission = { id: "per_current", projectID: "project-contract", sessionID, messageID: body.messageID,
+              toolCallID: "call-current", mode: "ask", policyRevision: "captured-policy", providerKind: "builtin",
+              providerID: "builtin", providerDigest: "fixture-digest", toolName: "write", effectClass: "write_local",
+              scopeVersion: "2", scope: { resource: { scope_type: "filesystem", paths: ["public.txt"] } },
+              fingerprint: "captured-fingerprint", projectGrantEligible: false, choices: ["allow_once", "deny"],
+              timeCreated: 1, summary: "Canonical pending scope" }
+            emit("permission.asked", { id: "per_settled", sessionID, toolName: "write", summary: "Earlier pending observation" })
+            emit("permission.asked", { ...currentPermission, summary: "Superseded display observation" })
+          }
           if (scenario === "stream-closed") {
             controller?.close()
             controller = undefined
@@ -92,6 +106,7 @@ for (const scenario of [
         "hello",
         "--attach",
         server.url.origin,
+        ...(scenario === "permission-current" ? ["--dir", process.cwd()] : []),
         "--agent",
         "chat",
         "--format",
@@ -134,6 +149,14 @@ for (const scenario of [
         else if (scenario === "permission-stall" || scenario === "reply-stall")
           expect(errors[0].error.name).toBe("event_stream_stalled")
         else expect(errors[0].error.data.message).toBe("Event stream ended before the run settled")
+      } else if (scenario === "permission-current") {
+        expect(exit, stderr).toBe(0)
+        expect(events.map(event => event.type === "permission_requested" ? { type: event.type, permission: event.permission }
+          : { type: event.type, text: event.part.text })).toEqual([
+          { type: "permission_requested", permission: { requestID: "per_current", toolName: "write", summary: "Canonical pending scope" } },
+          { type: "text", text: "current reply" },
+        ])
+        expect(permissionReads).toEqual([process.cwd(), process.cwd(), process.cwd()])
       } else {
         expect(exit, stderr).toBe(0)
         expect(events.map((event) => ({ type: event.type, text: event.part.text }))).toEqual([

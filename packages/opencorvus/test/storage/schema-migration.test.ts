@@ -35,6 +35,7 @@ function fixture(ddl = first, version = 1) {
   const directory = fs.mkdtempSync(path.join(root, "sqlite-migration-"))
   const databasePath = path.join(directory, "history.db")
   const sqlite = new SQLite(databasePath)
+  sqlite.exec("PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000")
   sqlite.exec(ddl)
   sqlite.exec(`PRAGMA user_version = ${version}`)
   return {
@@ -42,7 +43,7 @@ function fixture(ddl = first, version = 1) {
     databasePath,
     directory,
     [Symbol.dispose]() {
-      sqlite.close(true)
+      this.sqlite.close(true)
       fs.rmSync(directory, { recursive: true, force: true })
     },
   }
@@ -71,6 +72,52 @@ test("the production opener creates and reopens the current database version and
   expect(Database.Identity()).toBe(identity)
 })
 
+test("a cached WAL reader keeps the original version until its real close permits the upgrade", () => {
+  using value = fixture()
+  value.sqlite.exec("INSERT INTO note(id,body) VALUES('owner','original')")
+  const reader = new SQLite(value.databasePath, { readonly: true })
+  try {
+    expect({ version: schemaVersion(reader), rows: read(reader, "SELECT id,body FROM note") }).toEqual({
+      version: 1, rows: [{ id: "owner", body: "original" }],
+    })
+    value.sqlite.exec("PRAGMA busy_timeout=20")
+    expect(() => run(value, [
+      { version: 1, name: "baseline", ddl: first }, { version: 2, name: "priority", ddl: second },
+    ])).toThrow(expect.objectContaining({ code: "SQLITE_BUSY" }))
+    expect({ version: schemaVersion(value.sqlite), mode: read(value.sqlite, "PRAGMA main.locking_mode"),
+      rows: read(reader, "SELECT id,body FROM note") }).toEqual({
+      version: 1, mode: [{ locking_mode: "normal" }], rows: [{ id: "owner", body: "original" }],
+    })
+  } finally {
+    reader.close(true)
+  }
+  const result = run(value, [
+    { version: 1, name: "baseline", ddl: first }, { version: 2, name: "priority", ddl: second },
+  ])
+  const reopened = new SQLite(value.databasePath, { readonly: true })
+  try {
+    expect({ from: result.from, to: result.to, version: schemaVersion(reopened),
+      rows: read(reopened, "SELECT id,body,priority FROM note") }).toEqual({
+      from: 1, to: 2, version: 2, rows: [{ id: "owner", body: "original", priority: 3 }],
+    })
+    expect(read(value.sqlite, "PRAGMA main.locking_mode")).toEqual([{ locking_mode: "normal" }])
+  } finally {
+    reopened.close(true)
+  }
+})
+
+test("a file in rollback journal mode returns the precise migration maintenance contract", () => {
+  using value = fixture()
+  value.sqlite.exec("PRAGMA journal_mode=DELETE; INSERT INTO note(id,body) VALUES('rollback','retained')")
+  expect(() => run(value, [
+    { version: 1, name: "baseline", ddl: first }, { version: 2, name: "priority", ddl: second },
+  ])).toThrow(expect.objectContaining({ code: "SCHEMA_MIGRATION_REQUIRED" }))
+  expect({ version: schemaVersion(value.sqlite), journal: read(value.sqlite, "PRAGMA journal_mode"),
+    rows: read(value.sqlite, "SELECT id,body FROM note") }).toEqual({
+    version: 1, journal: [{ journal_mode: "delete" }], rows: [{ id: "rollback", body: "retained" }],
+  })
+})
+
 test("the production opener diagnoses a pre-baseline database and retains its physical identity", async () => {
   await createTestDatabase()
   const identity = Database.Identity()
@@ -87,7 +134,7 @@ test("the production opener diagnoses a pre-baseline database and retains its ph
   })
   editTestDatabase((sqlite) => {
     expect(schemaVersion(sqlite)).toBe(0)
-    sqlite.exec("PRAGMA user_version=1")
+    sqlite.exec(`PRAGMA user_version=${DATABASE_MIGRATIONS.at(-1)!.version}`)
   })
   expect(Database.Identity()).toBe(identity)
 })
@@ -129,7 +176,6 @@ test("sequential revisions retain rowid, Unicode text and binary values while ad
       { version: 2, name: "priority", ddl: second },
     ]),
   ).toEqual({ from: 2, to: 2 })
-  expect(fs.readdirSync(path.join(value.directory, "migration-backups"))).toEqual([path.basename(receipt.backupPath!)])
 })
 
 test("an explicit version migration renames the original field before reaching the new canonical table", () => {
@@ -159,6 +205,8 @@ test("the complete current baseline advances to a declared revision with its rea
   const sqlite = new SQLite(databasePath)
   const addition = 'CREATE TABLE "migration_receipt" ("id" TEXT PRIMARY KEY, "body" TEXT NOT NULL);'
   const target = SCHEMA_DDL + addition
+  const fromVersion = DATABASE_MIGRATIONS.at(-1)!.version
+  const nextVersion = fromVersion + 1
   try {
     const result = migrateSchema({
       sqlite,
@@ -167,7 +215,7 @@ test("the complete current baseline advances to a declared revision with its rea
       migrations: [
         ...DATABASE_MIGRATIONS,
         {
-          version: 2,
+          version: nextVersion,
           name: "future-receipt",
           ddl: target,
           migrate(db) {
@@ -182,7 +230,7 @@ test("the complete current baseline advances to a declared revision with its rea
         ])
       },
     })
-    expect({ from: result.from, to: result.to, version: schemaVersion(sqlite) }).toEqual({ from: 1, to: 2, version: 2 })
+    expect({ from: result.from, to: result.to, version: schemaVersion(sqlite) }).toEqual({ from: fromVersion, to: nextVersion, version: nextVersion })
     const backup = new SQLite(result.backupPath!, { readonly: true })
     try {
       expect(read(sqlite, "SELECT * FROM database_authority")).toEqual(read(backup, "SELECT * FROM database_authority"))
@@ -424,7 +472,7 @@ test("two production processes reopen the same current baseline and the original
   for (const [stdout, stderr, code] of results) {
     expect(code, stderr).toBe(0)
     const row = stdout.split(/\r?\n/).findLast((line) => line.startsWith("{"))!
-    expect(JSON.parse(row)).toEqual({ identity, version: 1 })
+    expect(JSON.parse(row)).toEqual({ identity, version: DATABASE_MIGRATIONS.at(-1)!.version })
   }
   expect(Database.Identity()).toBe(identity)
 }, 60_000)
@@ -433,10 +481,12 @@ test("a killed migration writer recovers its original committed rows and upgrade
   using value = fixture()
   value.sqlite.exec(`INSERT INTO note(id,body) VALUES('recover','committed')`)
   const ready = path.join(value.directory, "crash.ready")
+  value.sqlite.close(true)
   await using owner = worker("crash", value.databasePath, ready, path.join(value.directory, "unused-start"))
   await readyFile(ready, owner.child)
   owner.child.kill()
   await owner.output
+  value.sqlite = new SQLite(value.databasePath)
   expect({ version: schemaVersion(value.sqlite), rows: read(value.sqlite, "SELECT id,body FROM note") }).toEqual({
     version: 1,
     rows: [{ id: "recover", body: "committed" }],
@@ -526,8 +576,8 @@ test("two first-start processes create one current database and converge on its 
     identities.push(JSON.parse(stdout.split(/\r?\n/).findLast((line) => line.startsWith("{"))!))
   }
   expect(identities).toEqual([
-    { identity: Database.Identity(), version: 1 },
-    { identity: Database.Identity(), version: 1 },
+    { identity: Database.Identity(), version: DATABASE_MIGRATIONS.at(-1)!.version },
+    { identity: Database.Identity(), version: DATABASE_MIGRATIONS.at(-1)!.version },
   ])
 }, 60_000)
 
@@ -537,6 +587,7 @@ test("two independent writer processes upgrade a versioned database once and pre
   const start = path.join(value.directory, "upgrade.start")
   const readyA = path.join(value.directory, "upgrade.a")
   const readyB = path.join(value.directory, "upgrade.b")
+  value.sqlite.close(true)
   await using a = worker("upgrade", value.databasePath, readyA, start)
   await using b = worker("upgrade", value.databasePath, readyB, start)
   await Promise.all([readyFile(readyA, a.child), readyFile(readyB, b.child)])
@@ -546,12 +597,25 @@ test("two independent writer processes upgrade a versioned database once and pre
     expect(code, stderr).toBe(0)
     receipts.push(JSON.parse(stdout.trim()))
   }
-  expect(receipts.map(({ from, to, version }) => ({ from, to, version })).sort((a, b) => a.from - b.from)).toEqual([
-    { from: 1, to: 2, version: 2 },
-    { from: 2, to: 2, version: 2 },
+  const signature = receipts.map(({ outcome }) => outcome).sort().join("+")
+  expect(["busy+busy", "busy+upgraded", "current+upgraded"]).toContain(signature)
+  value.sqlite = new SQLite(value.databasePath)
+  const reopened = run(value, [
+    { version: 1, name: "baseline", ddl: first },
+    { version: 2, name: "priority", ddl: second },
   ])
-  const applied = receipts.find((receipt) => receipt.from === 1)!
-  expect(fs.readdirSync(path.join(value.directory, "migration-backups"))).toEqual([path.basename(applied.backupPath)])
+  expect({ from: reopened.from, to: reopened.to, version: schemaVersion(value.sqlite) }).toEqual({
+    from: signature === "busy+busy" ? 1 : 2, to: 2, version: 2,
+  })
+  const applied = signature === "busy+busy" ? reopened : receipts.find((receipt) => receipt.outcome === "upgraded")!
+  const backup = new SQLite(applied.backupPath!, { readonly: true })
+  try {
+    expect({ version: schemaVersion(backup), rows: read(backup, "SELECT rowid,id,body FROM note") }).toEqual({
+      version: 1, rows: [{ rowid: 29, id: "concurrent", body: "retained" }],
+    })
+  } finally {
+    backup.close(true)
+  }
   expect(read(value.sqlite, "SELECT rowid,id,body,priority FROM note")).toEqual([
     { rowid: 29, id: "concurrent", body: "retained", priority: 3 },
   ])

@@ -1069,9 +1069,13 @@ export class ChannelRuntime {
     if (event.type === "permission.asked") {
       const asked = (event as EventPermissionAsked).properties as PermissionAsked
       const sessions = this.findSessions(asked.sessionID)
+      if (sessions.length === 0) return
+      const pending = await this.client.permission.list({ directory: this.directory }, { throwOnError: true })
+      const current = pending.data?.find(request => request.id === asked.id && request.sessionID === asked.sessionID)
+      if (!current) return
       this.mirrorSessions(
         "system",
-        `Permission requested: ${asked.toolName} — ${asked.summary}`,
+        `Permission requested: ${current.toolName} — ${current.summary}`,
         asked.sessionID,
         sessions,
       )
@@ -1080,7 +1084,7 @@ export class ChannelRuntime {
           session.adapter,
           session.channel,
           session.thread,
-          `Permission requested: ${asked.toolName} — ${asked.summary}. Waiting for operator reply.`,
+          `Permission requested: ${current.toolName} — ${current.summary}. Waiting for operator reply.`,
         )
       }
       console.log(`[ChannelRuntime] Permission request ${asked.id} is waiting for operator reply`)
