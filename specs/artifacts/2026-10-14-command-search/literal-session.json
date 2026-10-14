@@ -1,0 +1,52 @@
+[
+  {
+    "method": "POST",
+    "path": "/coding/chat/session",
+    "status": 201,
+    "body": {
+      "session": {
+        "id": "ses_-zUS13uVxzzlSBCKZmJ4",
+        "slug": "tidy-nebula",
+        "version": "local",
+        "projectID": "prj_hgzD0UvE0KaucpYh7k6L",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\project",
+        "title": "Chat",
+        "kind": "assistant",
+        "metadata": {
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1791940110826,
+          "updated": 1791940110826
+        }
+      }
+    }
+  },
+  {
+    "method": "PATCH",
+    "path": "/session/ses_-zUS13uVxzzlSBCKZmJ4",
+    "status": 200,
+    "body": {
+      "id": "ses_-zUS13uVxzzlSBCKZmJ4",
+      "slug": "tidy-nebula",
+      "projectID": "prj_hgzD0UvE0KaucpYh7k6L",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\project",
+      "title": "409 搜索_50%\\中文",
+      "version": "local",
+      "kind": "assistant",
+      "metadata": {
+        "conversation": {
+          "experience": "chat",
+          "surface": "right-sidebar"
+        }
+      },
+      "time": {
+        "created": 1791940110826,
+        "updated": 1791940110910
+      }
+    }
+  }
+]

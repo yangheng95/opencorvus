@@ -1,0 +1,212 @@
+{
+  "runs": [
+    {
+      "name": "before",
+      "occurrence": "command-search-409-ad9c5dba-cdcb-438b-a39c-82962b4aeac8",
+      "pid": 79676,
+      "preflight": {
+        "sessionID": "ses_h8hTId9EiwV7nnx2qY9h",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalHandle": 76184,
+      "originalHandleExitCode": 0,
+      "handleEvidence": "Original execution handles joined during the actual UI session; retained in the contemporaneous Recall record.",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled"
+        }
+      ],
+      "settlement": {
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "terminal": {
+          "occurrenceID": "command-search-409-ad9c5dba-cdcb-438b-a39c-82962b4aeac8",
+          "pid": 79676,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        }
+      },
+      "pairedCleanupComplete": true,
+      "copiedPair": [
+        {
+          "outcome": "retired",
+          "name": "auth.json"
+        },
+        {
+          "outcome": "retired",
+          "name": "models.json"
+        }
+      ]
+    },
+    {
+      "name": "after",
+      "occurrence": "command-search-409-0a058e72-45ef-4baa-83de-ace8ec2903d2",
+      "pid": 77688,
+      "preflight": {
+        "sessionID": "ses_hRKt5c3W57Bsf5cM2TpC",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalHandle": 59447,
+      "originalHandleExitCode": 0,
+      "handleEvidence": "Original execution handles joined during the actual UI session; retained in the contemporaneous Recall record.",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled"
+        }
+      ],
+      "settlement": {
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "terminal": {
+          "occurrenceID": "command-search-409-0a058e72-45ef-4baa-83de-ace8ec2903d2",
+          "pid": 77688,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        }
+      },
+      "pairedCleanupComplete": true,
+      "copiedPair": [
+        {
+          "name": "auth.json",
+          "outcome": "retired"
+        },
+        {
+          "name": "models.json",
+          "outcome": "retired"
+        }
+      ]
+    },
+    {
+      "name": "final",
+      "occurrence": "command-search-409-d3b97b5b-9d6e-427a-9e5d-f69eab751ac2",
+      "pid": 84172,
+      "preflight": {
+        "sessionID": "ses_hh0nec7ocelt9V3NXRck",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalHandle": 28421,
+      "originalHandleExitCode": 0,
+      "handleEvidence": "Original execution handles joined during the actual UI session; retained in the contemporaneous Recall record.",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled"
+        }
+      ],
+      "settlement": {
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "terminal": {
+          "occurrenceID": "command-search-409-d3b97b5b-9d6e-427a-9e5d-f69eab751ac2",
+          "pid": 84172,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        }
+      },
+      "pairedCleanupComplete": true,
+      "copiedPair": [
+        {
+          "name": "auth.json",
+          "outcome": "retired"
+        },
+        {
+          "name": "models.json",
+          "outcome": "retired"
+        }
+      ]
+    },
+    {
+      "name": "recovery",
+      "occurrence": "command-search-409-780cd138-ae97-4669-b2fb-c2dedad2bd17",
+      "pid": 88044,
+      "preflight": {
+        "sessionID": "ses_hx84TTa2LKyufhLkFoio",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalHandle": 41175,
+      "originalHandleExitCode": 0,
+      "handleEvidence": "Original execution handles joined during the actual UI session; retained in the contemporaneous Recall record.",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled"
+        }
+      ],
+      "settlement": {
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "terminal": {
+          "occurrenceID": "command-search-409-780cd138-ae97-4669-b2fb-c2dedad2bd17",
+          "pid": 88044,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        }
+      },
+      "pairedCleanupComplete": true,
+      "copiedPair": [
+        {
+          "name": "auth.json",
+          "outcome": "retired"
+        },
+        {
+          "name": "models.json",
+          "outcome": "retired"
+        }
+      ]
+    }
+  ]
+}

@@ -68,6 +68,23 @@
   flex-direction: column;
 }
 
+.cmdk-combobox {
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+.cmdk-control {
+  flex-shrink: 0;
+}
+
+.cmdk-footer {
+  flex-shrink: 0;
+  padding: var(--ui-gap-md) var(--ui-gap-2xl);
+  border-top: var(--ui-focused-popup-border);
+  color: var(--text-muted);
+  font-size: var(--ui-font-body);
+}
+
 .cmdk-input {
   appearance: none;
   width: 100%;
@@ -100,6 +117,7 @@
 }
 
 .cmdk-list {
+  min-height: 0;
   overflow-y: auto;
   margin: 0;
   list-style: none;

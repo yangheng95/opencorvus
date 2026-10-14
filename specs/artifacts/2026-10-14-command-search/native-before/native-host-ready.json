@@ -1,0 +1,38 @@
+{
+  "occurrence": "command-search-409-ad9c5dba-cdcb-438b-a39c-82962b4aeac8",
+  "outcome": "ready",
+  "host": {
+    "pid": 81072,
+    "processInstanceID": "win32:639275350327945457",
+    "occurrenceID": "e81fa37e-b34f-4862-8c7e-c50dfdf0dfc7"
+  },
+  "parent": {
+    "pid": 84020,
+    "processInstanceID": "win32:639275350308040070",
+    "occurrenceID": "997fc74f-ab9a-4c0f-8067-8ae5b19e1245"
+  },
+  "target": {
+    "pid": 79676,
+    "processInstanceID": "win32:639275350335619715",
+    "occurrenceID": "b16ffab9-6888-4835-85c6-ee797630105d"
+  },
+  "targetBirthAtMs": 1791938233561,
+  "deadlineAt": 1791938832741,
+  "observedAtUtc": "2026-10-14T00:37:13.597Z",
+  "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/sqlite-checkpoint-408-bundle/bin/bun.exe",
+  "args": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-long-source-reader-406.ts",
+    "C:/Users/hengu/AppData/Local/opencorvus/data/auth.json",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/runtime",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/project",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/command-search-409-before/evidence",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/command-search-409-before/startup.json",
+    "18521",
+    "command-search-409-ad9c5dba-cdcb-438b-a39c-82962b4aeac8",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/reader-selection.json",
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/long-source-reading-406/builtin.json",
+    "8",
+    "NativeService"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

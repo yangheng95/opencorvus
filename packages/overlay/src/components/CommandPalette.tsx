@@ -6,14 +6,14 @@
 // by an internal signal flipped by the global keyboard hotkey.
 //
 // Command sources:
-//   * Recent chats and tasks (work ledger → session/task selection)
+//   * Recent items or paginated search (work ledger → session/task selection)
 //   * Settings sections (CONFIG_SECTIONS -> openConfigDialog)
 //   * Theme switcher (settingsStore.theme + applyTheme)
 //   * Locale switcher
 //   * New Task (focus composer)
 //
-// Filtering: case-insensitive substring on command label + description +
-// keywords. The shared Combobox primitive owns active descendant,
+// Search uses the existing Work Ledger query and cursor. Local commands use
+// case-insensitive substrings. The shared Combobox owns active descendant,
 // listbox option semantics, and keyboard navigation.
 
 import { Show, createEffect, createMemo, createSignal, on, onCleanup, onMount } from "solid-js"
@@ -21,9 +21,11 @@ import { applyLocalePreference } from "../services/locale-preference"
 import { applyThemePreference } from "../services/theme-preference"
 import { themeOptionsForCurrentHost } from "../services/theme-registry"
 import { browseDirectory } from "../services/workspace"
+import { matchesSearchParts } from "../services/text-search"
 import {
   loadWorkLedger,
   type WorkLedgerChatRow,
+  type WorkLedgerCursor,
   type WorkLedgerMissionRow,
   type WorkLedgerRow,
   type WorkLedgerTaskRow,
@@ -32,12 +34,14 @@ import { openConfigDialog } from "../services/config-dialog-control"
 import { CONFIG_SECTIONS } from "../store/dialog"
 import { t } from "../utils/i18n"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
-import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
+import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import { useDisclosure } from "../solid/disclosure"
 import { useHotkey } from "../solid/hotkey"
 import { Dialog } from "./ui/Dialog"
 import { ComboboxControl } from "./ui/ComboboxControl"
 import { Icon, type IconName } from "./ui/Icon"
+import { Button } from "./ui/Button"
+import { Feedback } from "./ui/Feedback"
 
 interface Command {
   id: string
@@ -54,6 +58,9 @@ interface Command {
 
 const COMMAND_PALETTE_INPUT_ID = "commandPaletteInput"
 const COMMAND_PALETTE_LISTBOX_ID = "commandPaletteListbox"
+const RECENT_COMMAND_LIMIT = 9
+const LEDGER_PAGE_SIZE = 12
+const SEARCH_DELAY_MS = 150
 
 // `id` is the canonical theme value (matches `data-theme` and
 // settings.theme); `slug` is the underscore-safe suffix used by the
@@ -64,6 +71,7 @@ const LOCALES: Array<{ id: string; label: string }> = [
 ]
 
 type PaletteLedgerRow = WorkLedgerChatRow | WorkLedgerTaskRow | WorkLedgerMissionRow
+type LedgerSearch = { query: string; authority: ApiAuthority; controller: AbortController }
 
 function paletteLedgerRows(rows: readonly WorkLedgerRow[]): PaletteLedgerRow[] {
   const entries: PaletteLedgerRow[] = []
@@ -89,6 +97,10 @@ function rowCommandHint(row: PaletteLedgerRow): string {
   return directory || row.kind
 }
 
+function rowMatches(row: PaletteLedgerRow, query: string): boolean {
+  return matchesSearchParts(query, [row.title, row.id, row.directory, row.kind])
+}
+
 export function CommandPalette(props: {
   onNewChat: () => Promise<void>
   onSelectMission: (row: WorkLedgerMissionRow) => Promise<void>
@@ -98,8 +110,11 @@ export function CommandPalette(props: {
   const palette = useDisclosure()
   const [ledgerRows, setLedgerRows] = createSignal<PaletteLedgerRow[]>([])
   const [paletteQuery, setPaletteQuery] = createSignal("")
+  const [ledgerCursor, setLedgerCursor] = createSignal<WorkLedgerCursor | null>(null)
+  const [ledgerLoading, setLedgerLoading] = createSignal(false)
+  const [ledgerError, setLedgerError] = createSignal<string>()
   let inputRef: HTMLInputElement | undefined
-  let ledgerController: AbortController | undefined
+  let ledgerSearch: LedgerSearch | undefined
   // Element that had focus right before the palette opened — restored on
   // close so keyboard users land back where they triggered Cmd+K from
   // (textarea, button, etc.) instead of leaking to <body>.
@@ -108,14 +123,11 @@ export function CommandPalette(props: {
   const commands = createMemo<Command[]>(() => {
     const cmds: Command[] = []
 
-    let shortcutIndex = 0
     for (const row of ledgerRows()) {
-      shortcutIndex += 1
       cmds.push({
         id: `ledger:${row.kind}:${row.id}`,
         label: row.title || row.id,
         hint: rowCommandHint(row),
-        shortcut: shortcutIndex <= 9 ? `Ctrl+${shortcutIndex}` : undefined,
         group: t("cmdk.group.tasks"),
         keywords: `${row.id} ${row.directory} ${row.kind}`,
         icon: rowCommandIcon(row),
@@ -218,60 +230,101 @@ export function CommandPalette(props: {
       },
     })
 
-    let previousGroup = ""
-    return cmds.map((command) => {
-      const groupStart = command.group !== previousGroup
-      previousGroup = command.group
-      return { ...command, groupStart }
-    })
+    return cmds
   })
 
   const visibleCommands = createMemo(() => {
-    const all = commands()
-    if (paletteQuery().trim()) return all
-    return all.filter((command) => command.id.startsWith("ledger:") || command.visibleWhenEmpty)
+    const query = paletteQuery().trim()
+    const visible = commands().filter((command) => query
+      ? commandMatches(command, query)
+      : command.id.startsWith("ledger:") || command.visibleWhenEmpty)
+    let previousGroup = ""
+    let shortcutIndex = 0
+    return visible.map((command) => {
+      const groupStart = command.group !== previousGroup
+      previousGroup = command.group
+      const shortcut = command.id.startsWith("ledger:")
+        ? (++shortcutIndex <= RECENT_COMMAND_LIMIT ? `Ctrl+${shortcutIndex}` : undefined)
+        : command.shortcut
+      return { ...command, groupStart, shortcut }
+    })
   })
+
+  function ownsSearch(search: LedgerSearch): boolean {
+    return ledgerSearch === search && palette.open() && paletteQuery().trim() === search.query &&
+      isApiAuthorityCurrent(search.authority)
+  }
+
+  async function loadLedger(search: LedgerSearch, append = false): Promise<void> {
+    if (!ownsSearch(search)) return
+    setLedgerLoading(true)
+    setLedgerError(undefined)
+    const rows = new Map((append ? ledgerRows() : []).map((row) => [`${row.kind}:${row.id}`, row]))
+    let cursor = append ? ledgerCursor() : null
+    const priorCount = rows.size
+    try {
+      do {
+        const result = await loadWorkLedger({
+          search: search.query,
+          limit: LEDGER_PAGE_SIZE,
+          cursor,
+          signal: search.controller.signal,
+          authority: search.authority,
+        })
+        if (!ownsSearch(search)) return
+        for (const row of paletteLedgerRows(result.rows)) {
+          if (rowMatches(row, search.query)) rows.set(`${row.kind}:${row.id}`, row)
+        }
+        cursor = result.nextCursor
+      } while (cursor && (search.query ? rows.size === priorCount : rows.size < RECENT_COMMAND_LIMIT))
+      setLedgerRows(search.query ? [...rows.values()] : [...rows.values()].slice(0, RECENT_COMMAND_LIMIT))
+      setLedgerCursor(search.query ? cursor : null)
+    } catch (error) {
+      if (!ownsSearch(search) || error instanceof ApiAuthorityChangedError) return
+      if (error instanceof DOMException && error.name === "AbortError") return
+      setLedgerError(formatErrorDetails(error))
+    } finally {
+      if (ownsSearch(search)) setLedgerLoading(false)
+    }
+  }
+
+  async function loadMore(event: MouseEvent & { currentTarget: HTMLButtonElement }) {
+    if (!ledgerSearch || ledgerLoading()) return
+    const search = ledgerSearch
+    const hadFocus = document.activeElement === event.currentTarget
+    await loadLedger(search, ledgerRows().length > 0 && ledgerCursor() !== null)
+    if (hadFocus && ownsSearch(search) && document.activeElement === document.body) {
+      inputRef?.focus({ preventScroll: true })
+    }
+  }
 
   createEffect(
     on(
-      () => ({ open: palette.open(), authority: captureApiAuthority() }),
-      ({ open, authority }) => {
+      () => ({ open: palette.open(), query: paletteQuery().trim(), authority: captureApiAuthority() }),
+      ({ open, query, authority }) => {
+        ledgerSearch?.controller.abort()
+        ledgerSearch = undefined
         setLedgerRows([])
+        setLedgerCursor(null)
+        setLedgerError(undefined)
+        setLedgerLoading(open)
         if (!open) {
           setPaletteQuery("")
-          ledgerController?.abort()
-          ledgerController = undefined
           return
         }
-        setPaletteQuery("")
-        const controller = new AbortController()
-        ledgerController?.abort()
-        ledgerController = controller
-        void loadWorkLedger({ limit: 12, signal: controller.signal, authority })
-          .then((result) => {
-            if (ledgerController !== controller || !isApiAuthorityCurrent(authority)) return
-            setLedgerRows(paletteLedgerRows(result.rows).slice(0, 9))
-          })
-          .catch((err) => {
-            if (
-              ledgerController !== controller ||
-              !isApiAuthorityCurrent(authority) ||
-              err instanceof ApiAuthorityChangedError
-            )
-              return
-            if (err instanceof DOMException && err.name === "AbortError") return
-            reportError({
-              title: t("common.error"),
-              message: t("command_palette.label"),
-              details: formatErrorDetails(err),
-            })
-          })
+        const search = { query, authority, controller: new AbortController() }
+        ledgerSearch = search
+        const timer = setTimeout(() => void loadLedger(search), query ? SEARCH_DELAY_MS : 0)
+        onCleanup(() => {
+          clearTimeout(timer)
+          search.controller.abort()
+        })
       },
       { defer: true },
     ),
   )
 
-  onCleanup(() => ledgerController?.abort())
+  onCleanup(() => ledgerSearch?.controller.abort())
 
   onMount(() => {
     const openFromChrome = () => {
@@ -284,10 +337,7 @@ export function CommandPalette(props: {
   })
 
   function commandMatches(command: Command, inputValue: string): boolean {
-    const q = inputValue.trim().toLowerCase()
-    if (!q) return true
-    const haystack = `${command.label} ${command.hint || ""} ${command.keywords || ""}`.toLowerCase()
-    return haystack.includes(q)
+    return matchesSearchParts(inputValue, [`${command.label} ${command.hint || ""} ${command.keywords || ""}`])
   }
 
   function close() {
@@ -362,7 +412,7 @@ export function CommandPalette(props: {
       capture: true,
       when: () => palette.open(),
       run: (event: KeyboardEvent) => {
-        const command = commands().filter((item) => item.id.startsWith("ledger:"))[index]
+        const command = visibleCommands().filter((item) => item.id.startsWith("ledger:"))[index]
         if (!command) return
         event.preventDefault()
         event.stopPropagation()
@@ -416,7 +466,7 @@ export function CommandPalette(props: {
           if (!open && palette.open()) close()
         }}
         onInputChange={setPaletteQuery}
-        defaultFilter={commandMatches}
+        defaultFilter={() => true}
         allowsEmptyCollection
         closeOnSelection
         onChange={runCommand}
@@ -446,8 +496,25 @@ export function CommandPalette(props: {
           "data-group": command.group,
           "data-group-start": command.groupStart ? "" : undefined,
         })}
-        emptyContent={<div class="cmdk-empty">{t("cmdk.empty")}</div>}
+        emptyContent={<Show when={!ledgerLoading() && !ledgerError()}><div class="cmdk-empty">{t("cmdk.empty")}</div></Show>}
       />
+      <Show when={ledgerLoading() || ledgerError() || ledgerCursor()}>
+        <div class="cmdk-footer">
+          <Show when={ledgerLoading()}>
+            <div role="status" aria-live="polite">{t("common.loading")}</div>
+          </Show>
+          <Show when={ledgerError()}>
+            {(details) => <Feedback tone="error" details={details()} actions={
+              <Button type="button" variant="ghost" size="md" tone="neutral" onClick={loadMore}>{t("common.retry")}</Button>
+            }>{t("cmdk.search_failed")}</Feedback>}
+          </Show>
+          <Show when={ledgerCursor() && !ledgerError()}>
+            <Button type="button" variant="ghost" size="md" tone="neutral" disabled={ledgerLoading()} onClick={loadMore}>
+              {t("work_ledger.load_more")}
+            </Button>
+          </Show>
+        </div>
+      </Show>
     </Dialog>
   )
 }

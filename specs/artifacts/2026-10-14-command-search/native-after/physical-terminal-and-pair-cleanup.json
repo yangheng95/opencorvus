@@ -1,0 +1,61 @@
+{
+  "observedAtUtc": "2026-10-14T01:03:21.2013486Z",
+  "occurrence": "command-search-409-0a058e72-45ef-4baa-83de-ace8ec2903d2",
+  "physicalCompletion": true,
+  "native": {
+    "occurrence": "command-search-409-0a058e72-45ef-4baa-83de-ace8ec2903d2",
+    "outcome": "settled",
+    "host": {
+      "pid": 87184,
+      "processInstanceID": "win32:639275360085836046",
+      "occurrenceID": "62a8a806-fa9c-4fd4-8b1e-99000c2bb4e3"
+    },
+    "target": {
+      "pid": 77688,
+      "processInstanceID": "win32:639275360093632745",
+      "occurrenceID": "d895be76-b993-4d18-84d2-d212c6c2fc53"
+    },
+    "observedAtUtc": "2026-10-14T01:03:18.748Z",
+    "deadlineAt": 1791939808534,
+    "terminal": {
+      "occurrenceID": "command-search-409-0a058e72-45ef-4baa-83de-ace8ec2903d2",
+      "pid": 77688,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "pairedCleanupComplete": true,
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 87184,
+        "processInstanceID": "win32:639275360085836046",
+        "occurrenceID": "62a8a806-fa9c-4fd4-8b1e-99000c2bb4e3"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 77688,
+        "processInstanceID": "win32:639275360093632745",
+        "occurrenceID": "d895be76-b993-4d18-84d2-d212c6c2fc53"
+      }
+    }
+  ],
+  "copiedPair": [
+    {
+      "name": "auth.json",
+      "outcome": "retired"
+    },
+    {
+      "name": "models.json",
+      "outcome": "retired"
+    }
+  ]
+}

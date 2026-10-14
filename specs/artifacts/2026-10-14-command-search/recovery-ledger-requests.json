@@ -1,0 +1,101 @@
+{
+  "boundary": "Actual server endpoint records. Query strings are not logged; this includes the main Work Ledger and cannot attribute every record exclusively to the palette.",
+  "records": [
+    {
+      "time": "2026-10-14T01:17:08.243Z",
+      "requestID": "c760ae2d-4819-4975-a323-58206502dd75",
+      "method": "GET",
+      "path": "/work-ledger",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-14T01:17:08.259Z",
+      "requestID": "c760ae2d-4819-4975-a323-58206502dd75",
+      "method": "GET",
+      "path": "/work-ledger",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 16
+    },
+    {
+      "time": "2026-10-14T01:17:08.486Z",
+      "requestID": "44c31523-7193-49d3-92d4-7a8e4abc14f2",
+      "method": "GET",
+      "path": "/work-ledger",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-14T01:17:08.504Z",
+      "requestID": "44c31523-7193-49d3-92d4-7a8e4abc14f2",
+      "method": "GET",
+      "path": "/work-ledger",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 18
+    },
+    {
+      "time": "2026-10-14T01:17:09.361Z",
+      "requestID": "e7021e47-25f9-49a3-85a1-5cf512d8fefd",
+      "method": "GET",
+      "path": "/work-ledger",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-14T01:17:09.376Z",
+      "requestID": "e7021e47-25f9-49a3-85a1-5cf512d8fefd",
+      "method": "GET",
+      "path": "/work-ledger",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 15
+    },
+    {
+      "time": "2026-10-14T01:17:12.127Z",
+      "requestID": "74565bff-12f6-4d97-8d63-4cc9d2c39c61",
+      "method": "GET",
+      "path": "/work-ledger",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-14T01:17:12.142Z",
+      "requestID": "74565bff-12f6-4d97-8d63-4cc9d2c39c61",
+      "method": "GET",
+      "path": "/work-ledger",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 16
+    },
+    {
+      "time": "2026-10-14T01:18:04.078Z",
+      "requestID": "9c555f0b-f443-4b5a-bf9d-50f570a41877",
+      "method": "GET",
+      "path": "/work-ledger",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-14T01:18:04.081Z",
+      "requestID": "9c555f0b-f443-4b5a-bf9d-50f570a41877",
+      "method": "GET",
+      "path": "/work-ledger",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 3
+    },
+    {
+      "time": "2026-10-14T01:22:17.922Z",
+      "requestID": "0b258d2e-492e-4ded-a402-8013d2417ac1",
+      "method": "GET",
+      "path": "/work-ledger",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-14T01:22:17.927Z",
+      "requestID": "0b258d2e-492e-4ded-a402-8013d2417ac1",
+      "method": "GET",
+      "path": "/work-ledger",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 5
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 import * as Combobox from "@kobalte/core/combobox"
 import { createEffect, Show, type JSX } from "solid-js"
+import { localeTag, t } from "../../utils/i18n"
 
 type ComboboxDataAttributes = Record<string, string | undefined>
 type ComboboxFilter<T> = "startsWith" | "endsWith" | "contains" | ((option: T, inputValue: string) => boolean)
@@ -80,6 +81,10 @@ export function ComboboxControl<T extends object>(props: ComboboxControlProps<T>
     if (props.optionLabel) return String(option[props.optionLabel])
     return String(option)
   }
+  const countAnnouncement = (count: number): string =>
+    t(count === 1 ? "combobox.option_available" : "combobox.options_available", {
+      count: count.toLocaleString(localeTag()),
+    })
 
   function ComboboxContextBridge(): null {
     comboboxContext = Combobox.useComboboxContext()
@@ -110,6 +115,15 @@ export function ComboboxControl<T extends object>(props: ComboboxControlProps<T>
 
   return (
     <Combobox.Root<T>
+      translations={{
+        focusAnnouncement: (option, selected) => selected ? t("combobox.selected", { option }) : option,
+        selectedAnnouncement: (option) => t("combobox.selected", { option }),
+        // Kobalte 0.13.11 incorrectly infers this public translator's result
+        // as its English literal; the implementation announces arbitrary text.
+        countAnnouncement: countAnnouncement as NonNullable<Combobox.ComboboxRootOptions<T>["translations"]>["countAnnouncement"],
+        triggerLabel: t("combobox.show_suggestions"),
+        listboxLabel: t("combobox.suggestions"),
+      }}
       class={props.class}
       options={props.options}
       optionValue={props.optionValue}

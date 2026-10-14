@@ -2990,3 +2990,33 @@ LogViewer reads the current backend event envelope and preserves nested subject 
 Loaded logs have one local literal, case-insensitive query through the shared search primitive. The existing level-qualified aggregation depends only on original sources/level; query filters those records without re-parsing them, and empty/whitespace query returns that base result. The same matching result supplies list, Copy and no-match feedback, so Copy includes all loaded matches. Query covers header/message/structured fields/raw, is retired on close and is not persisted or sent to a backend. Search explicitly covers loaded logs; server tail remains bounded to the current fetch, not full-file history. Clear search and Clear logs keep distinct semantics; source read failures remain visible.
 
 Support ZIP exports exact retained raw files, canonical-time formatted records and original subject details. Historical timestamp/ts fields are diagnostic content rather than alternate clocks. Logging is diagnostic presentation; these records do not synthesize conversation participants or replace durable activity/occurrence timestamps.
+
+## Command palette queries
+
+The command palette reads current, unarchived Chat/Task/Mission records through the
+existing Work Ledger search and public cursor. An empty query shows up to nine
+recent selectable items; Project rows do not consume that allowance. Nonempty
+queries use bounded pages, with explicit continuation, and flatten only the
+canonical Mission child Tasks. Search covers original titles, IDs, directories
+and technical kinds. The shared active/archive projection treats percent,
+underscore and backslash literally using one escaped SQL LIKE parameter;
+archive visibility and directory boundaries remain unchanged.
+
+Each query owns its existing AbortController and captured API authority. Query
+replacement, closing, reopening and authority changes retire prior responses,
+errors and completion callbacks. Pagination retains accepted rows by kind:id.
+Local commands remain usable while work records load or fail. Loading, empty
+results and failed reads have distinct UI states; failures expose the original
+diagnostic and a current-query retry beside the results.
+
+Filtering precedes group headings and numeric shortcuts. Ctrl+1 through Ctrl+9
+select those same currently listed work items. When a completed continuation or
+retry removes its focused button, only that still-current operation may restore
+the search input, and only if focus has fallen to the document body. It preserves
+scroll position and does not override a new user focus target.
+
+The shared ComboboxControl supplies Kobalte's public translation callbacks from
+the existing UI locale, including candidate counts, localized numbers, selection
+announcements and suggestion labels. Original option text is preserved. This
+applies to the command palette and scheduled-automation timezone control without
+a separate locale provider or custom announcement channel.

@@ -72,7 +72,7 @@ function rowKey(row: { kind: string; id: string }): string {
 
 function searchPattern(search: string | undefined): string | undefined {
   const term = search?.trim()
-  return term ? `%${term}%` : undefined
+  return term ? `%${term.replace(/[\\%_]/g, "\\$&")}%` : undefined
 }
 
 function chatStatus(sessionID: string): z.infer<typeof WorkLedgerChatStatus> {
@@ -303,9 +303,9 @@ function topRowCandidates(input: Required<Pick<WorkLedgerListInput, "limit">> & 
           AND (${directory ?? null} IS NULL OR ${ProjectTable.worktree} = ${directory ?? null})
           AND (
             ${search ?? null} IS NULL
-            OR ${ProjectTable.name} LIKE ${search ?? null}
-            OR ${ProjectTable.id} LIKE ${search ?? null}
-            OR ${ProjectTable.worktree} LIKE ${search ?? null}
+            OR ${ProjectTable.name} LIKE ${search ?? null} ESCAPE '\\'
+            OR ${ProjectTable.id} LIKE ${search ?? null} ESCAPE '\\'
+            OR ${ProjectTable.worktree} LIKE ${search ?? null} ESCAPE '\\'
           )
         UNION ALL
         SELECT
@@ -324,9 +324,10 @@ function topRowCandidates(input: Required<Pick<WorkLedgerListInput, "limit">> & 
           AND (${directory ?? null} IS NULL OR ${SessionTable.directory} = ${directory ?? null})
           AND (
             ${search ?? null} IS NULL
-            OR ${SessionTable.title} LIKE ${search ?? null}
-            OR ${SessionTable.directory} LIKE ${search ?? null}
-            OR json_extract(${SessionTable.metadata}, '$.mission.id') LIKE ${search ?? null}
+            OR 'mission' LIKE ${search ?? null} ESCAPE '\\'
+            OR ${SessionTable.title} LIKE ${search ?? null} ESCAPE '\\'
+            OR ${SessionTable.directory} LIKE ${search ?? null} ESCAPE '\\'
+            OR json_extract(${SessionTable.metadata}, '$.mission.id') LIKE ${search ?? null} ESCAPE '\\'
             OR EXISTS (
               SELECT 1
               FROM ${EngineTaskTable} AS mission_task
@@ -344,8 +345,9 @@ function topRowCandidates(input: Required<Pick<WorkLedgerListInput, "limit">> & 
                 AND json_extract(mission_task.metadata, '$.mission.id') = json_extract(${SessionTable.metadata}, '$.mission.id')
                 AND json_extract(mission_task.metadata, '$.mission.session_id') = ${SessionTable.id}
                 AND (
-                  mission_task.title LIKE ${search ?? null}
-                  OR mission_task.id LIKE ${search ?? null}
+                  'task' LIKE ${search ?? null} ESCAPE '\\'
+                  OR mission_task.title LIKE ${search ?? null} ESCAPE '\\'
+                  OR mission_task.id LIKE ${search ?? null} ESCAPE '\\'
                 )
             )
           )
@@ -367,9 +369,10 @@ function topRowCandidates(input: Required<Pick<WorkLedgerListInput, "limit">> & 
           AND (${directory ?? null} IS NULL OR ${SessionTable.directory} = ${directory ?? null})
           AND (
             ${search ?? null} IS NULL
-            OR ${SessionTable.title} LIKE ${search ?? null}
-            OR ${SessionTable.id} LIKE ${search ?? null}
-            OR ${SessionTable.directory} LIKE ${search ?? null}
+            OR 'chat' LIKE ${search ?? null} ESCAPE '\\'
+            OR ${SessionTable.title} LIKE ${search ?? null} ESCAPE '\\'
+            OR ${SessionTable.id} LIKE ${search ?? null} ESCAPE '\\'
+            OR ${SessionTable.directory} LIKE ${search ?? null} ESCAPE '\\'
           )
         UNION ALL
         SELECT
@@ -388,9 +391,10 @@ function topRowCandidates(input: Required<Pick<WorkLedgerListInput, "limit">> & 
           AND (${directory ?? null} IS NULL OR COALESCE(task_session.directory, ${ProjectTable.worktree}, '') = ${directory ?? null})
           AND (
             ${search ?? null} IS NULL
-            OR ${EngineTaskTable.title} LIKE ${search ?? null}
-            OR ${EngineTaskTable.id} LIKE ${search ?? null}
-            OR COALESCE(task_session.directory, ${ProjectTable.worktree}, '') LIKE ${search ?? null}
+            OR 'task' LIKE ${search ?? null} ESCAPE '\\'
+            OR ${EngineTaskTable.title} LIKE ${search ?? null} ESCAPE '\\'
+            OR ${EngineTaskTable.id} LIKE ${search ?? null} ESCAPE '\\'
+            OR COALESCE(task_session.directory, ${ProjectTable.worktree}, '') LIKE ${search ?? null} ESCAPE '\\'
           )
       )
       SELECT
