@@ -23,6 +23,8 @@ import { withKeyedLock } from "../util/lock"
 import { CROSS_PROCESS_LOCK_RETRY, SHARED_JSON_FACT_QUEUE_TIMEOUT_MS, withProcessLock } from "../util/process-lock"
 import { hostGit } from "../util/git"
 import { gitSourcePaths } from "../util/git-source-paths"
+import { gitSourceLinkDiffs } from "../util/git-source-links"
+import { checkedSourceGit, gitSourceRunner, gitSourceEntryArgs } from "../util/git-source-stage"
 import { AttachmentStore } from "../storage/attachment-store"
 
 export namespace File {
@@ -807,19 +809,33 @@ export namespace File {
   export async function status() {
     if (!Project.isGitRepo(Instance.directory)) return []
 
+    const options = {
+      cwd: Instance.directory,
+      timeoutProfile: "default" as const,
+      prefix: ["-c", "core.fsmonitor=false", "-c", "core.quotepath=false"],
+    }
+    const run = gitSourceRunner(options)
+    const head = await run(["rev-parse", "--verify", "--quiet", "HEAD"])
+    if (head.exitCode !== 0 && head.exitCode !== 1)
+      throw new Error(`File status HEAD failed: ${head.stderr.toString()}`)
+    const ref = head.exitCode === 0 ? "HEAD" : (await checkedSourceGit(run, ["mktree"])).text().trim()
+    const links = await gitSourceLinkDiffs(options, ref)
+
     const diffOutput = (
-      await hostGit(["-c", "core.fsmonitor=false", "-c", "core.quotepath=false", "diff", "--numstat", "HEAD"], {
-        cwd: Instance.directory,
-        timeoutProfile: "default",
-      })
+      await checkedSourceGit(run, gitSourceEntryArgs(["diff", "--no-renames", "--numstat", "-z", ref]))
     ).text()
 
     const changedFiles: Info[] = []
 
     if (diffOutput.trim()) {
-      const lines = diffOutput.trim().split("\n")
+      const lines = diffOutput.slice(0, -1).split("\0")
       for (const line of lines) {
-        const [added, removed, filepath] = line.split("\t")
+        const first = line.indexOf("\t"),
+          second = line.indexOf("\t", first + 1)
+        const added = line.slice(0, first),
+          removed = line.slice(first + 1, second),
+          filepath = line.slice(second + 1)
+        if (links.has(filepath)) continue
         changedFiles.push({
           path: filepath,
           added: added === "-" ? 0 : parseInt(added, 10),
@@ -838,6 +854,7 @@ export namespace File {
         }),
       )
     ).untracked) {
+      if (links.has(filepath)) continue
       const absolute = path.join(Instance.directory, filepath)
       const entry = await fs.promises.lstat(absolute)
       const content = entry.isSymbolicLink()
@@ -854,16 +871,17 @@ export namespace File {
     }
 
     // Get deleted files
-    const deletedOutput = (
-      await hostGit(
-        ["-c", "core.fsmonitor=false", "-c", "core.quotepath=false", "diff", "--name-only", "--diff-filter=D", "HEAD"],
-        { cwd: Instance.directory, timeoutProfile: "default" },
-      )
-    ).text()
+    const deletedOutput = (await checkedSourceGit(run, gitSourceEntryArgs(["diff", "--name-only", "-z", "--diff-filter=D", ref]))).text()
 
     if (deletedOutput.trim()) {
-      const deletedFiles = deletedOutput.trim().split("\n")
+      const deletedFiles = deletedOutput.slice(0, -1).split("\0")
       for (const filepath of deletedFiles) {
+        if (links.has(filepath)) continue
+        const existing = changedFiles.find((item) => item.path === filepath)
+        if (existing) {
+          existing.status = "deleted"
+          continue
+        }
         changedFiles.push({
           path: filepath,
           added: 0,
@@ -873,13 +891,24 @@ export namespace File {
       }
     }
 
-    return changedFiles.map((x) => {
-      const full = path.isAbsolute(x.path) ? x.path : path.join(Instance.directory, x.path)
-      return {
-        ...x,
-        path: path.relative(Instance.directory, full),
-      }
-    })
+    for (const [filepath, link] of links)
+      if (link.changed)
+        changedFiles.push({
+          path: filepath,
+          added: link.stat.additions,
+          removed: link.stat.deletions,
+          status: link.status,
+        })
+
+    return changedFiles
+      .toSorted((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0))
+      .map((x) => {
+        const full = path.isAbsolute(x.path) ? x.path : path.join(Instance.directory, x.path)
+        return {
+          ...x,
+          path: path.relative(Instance.directory, full),
+        }
+      })
   }
 
   function contentRevision(identity: string, bytes: Uint8Array): string {

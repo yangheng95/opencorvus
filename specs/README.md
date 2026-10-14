@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Git 源条目写入与单人验收](records/2026-10/2026-10-14-project-metadata-latency.md)：有限暂存、真实链接/文件类型、原子索引、可操作模型提示；47项正向测试及真实桌面闭环。
+
 - [Sources与Rendering复查](records/2026-10/2026-10-14-source-render-review.md)：单agent实际体验、根因修复与截图复验。
 
 - [通道反馈的当前语言](records/2026-10/2026-10-14-channel-feedback-locale.md)：原错误详情、成功语言冻结与真实配置冲突调查。
@@ -14,7 +16,7 @@
 
 - [双成员来源与切换](records/2026-10/2026-10-14-dual-member-sources.md)：修复同名成员辨识；15条真实Sol流、21张原图、独立来源与双向阅读恢复。
 
-- [原生 Git 写入根因](records/2026-10/2026-10-14-project-metadata-latency.md)：真实字节活动、共享期限排查及junction index/dirty语义；完整修复继续进行。
+- [原生 Git 写入根因](records/2026-10/2026-10-14-project-metadata-latency.md)：修复前真实字节活动、共享期限排查及junction index/dirty语义原证据。
 
 - [公共URL编辑器保存校验](records/2026-10/2026-10-14-channel-url-validation.md)：原字段约束、真实保存和保留原值的验收调查。
 

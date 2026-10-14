@@ -54,13 +54,18 @@ const readWindowFields = {
 }
 
 /** Producer-owned read facts within Tool metadata. Directory counts refer to entries. */
-export const ReadToolResultFacts = z.discriminatedUnion("readType", [
-  z.object({ readType: z.literal("text"), ...readWindowFields }),
-  z.object({ readType: z.literal("directory"), ...readWindowFields }),
-  z.object({ readType: z.literal("binary"), lines: z.literal(0), totalLines: z.literal(0) }),
-]).refine((value) => value.readType === "binary" || (
-  value.lines <= value.totalLines && (value.lines === 0 || value.offset + value.lines - 1 <= value.totalLines)
-), "Read window must fit the actual total")
+export const ReadToolResultFacts = z
+  .discriminatedUnion("readType", [
+    z.object({ readType: z.literal("text"), ...readWindowFields }),
+    z.object({ readType: z.literal("directory"), ...readWindowFields }),
+    z.object({ readType: z.literal("binary"), lines: z.literal(0), totalLines: z.literal(0) }),
+  ])
+  .refine(
+    (value) =>
+      value.readType === "binary" ||
+      (value.lines <= value.totalLines && (value.lines === 0 || value.offset + value.lines - 1 <= value.totalLines)),
+    "Read window must fit the actual total",
+  )
 export type ReadToolResultFacts = z.infer<typeof ReadToolResultFacts>
 
 export const DEFAULT_COMPOSER_INTENT: ComposerIntent = {
@@ -272,7 +277,13 @@ export type UnknownPanelMessageStreamEvent = z.infer<typeof UnknownPanelMessageS
 export const VcsCommitMessageStreamEvent = z.discriminatedUnion("type", [
   z.object({ type: z.literal("delta"), delta: z.string() }).strict(),
   z.object({ type: z.literal("done"), message: z.string() }).strict(),
-  z.object({ type: z.literal("error"), message: z.string() }).strict(),
+  z
+    .object({
+      type: z.literal("error"),
+      code: z.enum(["model_not_configured", "generation_failed"]),
+      message: z.string(),
+    })
+    .strict(),
 ])
 export type VcsCommitMessageStreamEvent = z.infer<typeof VcsCommitMessageStreamEvent>
 

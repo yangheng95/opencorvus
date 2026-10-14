@@ -1,3 +1,4 @@
+import { gitSourceStatus } from "../util/git-source-links"
 import fs from "fs/promises"
 import path from "path"
 import { Database } from "../storage/db"
@@ -133,7 +134,7 @@ export namespace WorktreeGC {
   }
 
   async function gitClean(directory: string, signal?: AbortSignal): Promise<boolean> {
-    const status = await runGit(["status", "--porcelain"], {
+    const status = await gitSourceStatus({
       cwd: directory,
       timeoutProfile: "default",
       abort: signal,

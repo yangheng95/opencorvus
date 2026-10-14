@@ -1,5 +1,45 @@
 # 项目元数据慢读取阶段与入口资格
 
+## 当前单人写入实施方案 Recall（2026-10-14）
+
+用户最新收尾要求：完成已知问题即可结束，不进入下一调查批次。已知目录替换选择遗漏现已原案例真实通过；仍须最终共享资格和当前源码桌面收敛。已知提交自动文案错误现在有精确根因：原请求771d5d38-387a-4f2c-95a9-85658392728f 日志为 MissingModelConfigError(summary)，resolveAgentModelRef 的严格单一配置解析返回合法配置前提错误；当前唯一 VCS SSE 错误 writer 无条件转换为 UnknownError 公共摘要，前端又把事件转成普通 Error，丢失可操作原因。全仓读取 error-handler 现有400归类、vcs-stream-error、commit-message resolver/stream、transport事件定义、meta decoder、TaskDirBar与两语言字典；没有真实 Provider 调用，不能称模型成功。
+
+文案错误方案在实施前冻结：VCS error事件增加必填、有限的 code（model_not_configured/generation_failed）；writer只对既有 MissingModelConfigError 公开稳定模型配置前提码与安全操作摘要，其余生成错误保留当前安全公共摘要与真实日志/requestID。前端service保留code为领域Error，TaskDirBar按现有i18n为配置缺失显示可操作的当前语言提示，手工输入和流式模型生成原路径保持。同步更新协议所有调用点与正向公共事件/实际无模型SSE测试；禁止默认模型、隐藏错误或非流式调用。此UI改动必须重新构建当前前端并用新隔离开发服务完成英文/中文真实截图人工复核及手工提交。不扩大到未授权真实Provider凭据或新发布。
+
+目录变化诊断原证据进一步指出选择层遗漏：实际提交只保留3个原条目，目录下的新 note/back 仍以 untracked2 返回。当前 Git others directory 查询不报告已在 index 中作为文件跟踪、但工作区已变成目录的边界；旧枚举仅展开 others 边界，因此暂存无法收到这些子条目。根治位于唯一选择层：共享读取实际 stage index 条目，以其 tracked path 验证祖先；真实非链接普通目录替换 tracked file/link 时也进入同一物理 walker 与 Git ignore 裁决。indexed160000 gitlink 保留 terminal 语义，包括尚未初始化的子模块目录；不把它降级成普通目录。暂存目录替换只移除旧 terminal，再处理该枚举器完整选出的有限孩子。须重跑原失败案例及共享读取、Engine 嵌套 gitlink 与规模验收。
+
+追加类型变化原证据：transitions 原实例中 rename 和 unmerged link 正向案例通过，但 junction 替换为普通文件后，实际提交仍为120000。根因不是 lstat 或链接字节，而是当前 Windows 仓库 core.symlinks=false 的 placeholder 语义；Git2.45官方文档明确说明 add/update-index 不会把这种条目改为普通文件（[官方配置契约](https://git-scm.com/docs/git-config/2.45.0#Documentation/git-config.txt-coresymlinks)）。因此源条目抽象集中声明仅用于有限暂存与工作条目比较的 per-process core.symlinks=true，表示按真实条目类型处理；不写仓库配置，不改变 checkout、restore 或 Windows 创建链接权限。普通文件 attributes/clean 仍由 Git 处理。若旧 tracked terminal entry 实际变为非仓库普通目录，先从准备索引精确移除该 terminal，再暂存枚举器选出的子条目；绝不把普通目录作为递归 add pathspec。需补真实同字节类型变化、目录中含循环链接、rename 和冲突收敛资格后才能交付。
+
+首轮真实写入测试保留两项失败：Git 子目录 others directory 的合法 ./ 边界需要作为内部遍历前缀展开，不能作为返回条目；合并链接比较后 File 状态需按原 canonical 路径排序。修复后第二原 Native 发生实例实际8 pass/56断言。原 Engine 事务整文件在父层120000ms静默窗口中未结算，只能记为未资格；原三 joins 的 inactivity_timeout 完整保存。计划补齐 checker 的明确单案例选择（现 runner 把全部参数当文件，无 test-name-pattern 支持），使用原文件和原每案例60000ms预算按案例重跑，不提高产品 Git 期限、不伪造进展消息。已检索到原 Engine 事务 fixture commit 的4处 --no-verify，按仓库硬约束移除，使用正常 fixture commit；原测试没有负向断言，索引完整性依据实际索引字节身份，不用可变源码摘要作功能门槛。
+
+用户原始要求持续分批调查、先落盘分析、真实桌面截图复核、聚焦正向功能测试、范围提交与正常同步推送；最新明确要求停止全部子 agent，由 Root 自行验收。此轮不委托。读取并复核本记录前述全部 Recall、原生写入六次发生实例、当前 Git 源枚举架构、Vcs/File/Snapshot/Build/Worktree/GitHub CLI 全部生产暂存入口、Engine Git 的 canonical index 准备/安装/清理/恢复和相关真实 Git 测试。全仓搜索 add、status、OwnedIndexLock、fingerprint、dirtyStatusPaths 与各入口调用点。已有其它任务的压缩策略、权限恢复记录与共享索引修改保留，不创建分支或工作树。仅修改本轮文件；不运行或新增 UI 自动化测试。
+
+可观察现象和直接触发：原生 add 在有限循环 junction 图中持续产生真实输出；聚合外层静默监控误判内层仍活跃。原字节与三 joins 已证明共享静默计时器正确响应静默子进程及输出上限。数据流根因是 Git for Windows 把 junction 作为目录遍历和 gitlink 比较，而项目已有 raw readlink/120000 身份契约。旧只读枚举修复未覆盖暂存与索引比较；仅把链接写为120000仍有真实原生 T 状态，不能视为闭环。
+
+冻结方案：源写入沿唯一 gitSourcePaths 完整选择，普通文件和删除路径以 literal/NUL 有限 pathspec 交给原 Git add，保留 caller 的配置、attributes/clean 处理、exclude、external git-dir/work-tree、index 和监督期限；链接按 lstat/readlink 的条目字节通过 hash-object 与120000 index-info 写入，绝不进入目标目录。每次操作在当前索引副本上准备，复用从 Engine Git 提取的 canonical index lock 准备/安装/所有权清理，实现 predecessor 字节比较与原子安装；Engine 恢复语义保持。所有应用拥有的整体源暂存入口同步迁移，不保留另一套 add-all 实现。普通嵌套仓库维持 Git gitlink 语义，索引已有链接后代维持明确 linked_ancestor 错误。
+
+状态与差异以当前索引/指定 ref 中真实链接 blob、当前非跟随条目字节比较，保留真实 staged/conflict/type-change/delete；相同链接报告明确 clean 状态，目标改变报告修改及真实 patch。普通文件仍使用 Git 比较和属性语义。Vcs 与 File 使用同一链接比较 primitive，页面数据契约不变。Worktree/GC 等原生 dirty 检查横向审计并记录安全边界，禁止凭一个页面通过推断恢复全链路通过。
+
+影响面：公共 GitOptions 输入、源条目选择和错误可见性不变；索引锁 primitive 原先 Engine 私有，抽取后删除原重复实现并保留 Engine 恢复调用；Vcs commit、Snapshot、Build pin、Worktree 保留主目录修改及 GitHub CLI 暂存为生产写入口。凭据、模型目录、LLM（Large Language Model，大语言模型）消息和调度无本轮改动，无真实 Provider 请求授权扩展。没有版本或发布修改。文件/索引在准备期间改变、外部 Git 锁竞争、unmerged index、特殊字符、嵌套仓库、过滤器和子目录作用域是必须验证的风险；NTFS 时间复用推测仍未知。涉及原始 junction 的外部原生 Git 状态仍是宿主限制，不通过改造用户链接规避。
+
+验收：真实 Git 正向测试覆盖逐项模式/blob/index、提交后 clean、目标变化/删除/真实类型变化、literal 特殊路径、普通文件 clean filter、删除、并行项目、索引竞争错误及 Engine 原事务回归；原有限五根中的独立写入副本实际生产路径；真实开发服务 /ui 手工交互及当前截图复核；运行相关类型与文档/架构/路由检查，再单一范围提交、fresh fetch/merge、完整待推送提交审查、正常 push 和远端证明。未完成环节明确记录，不把单元测试或旧截图称为新的桌面/模型验收。
+
+## 单人最终实现与验收收尾
+
+最终路由交付检查捕获新增SSE code尚未同步到tracked OpenAPI，属于本轮协议影响面。使用当前SDK正常生成/编译链在独立Native发生实例执行，原Host/parent0及三joins完整；生成差异仅packages/sdk/openapi.json的code enum/required和SDK types.gen.ts的一行同字段。随后真实api:routes-check、docs:check、architecture-index、opencorvus typecheck及overlay typecheck全部0，原命令、cwd、stdout/stderr和退出值已补入同一原件manifest。没有手写生成文件或绕过检查。
+
+Root 完成已知问题，不再开始新批次。所有应用整体源暂存入口现共享有限选择与准备索引：Vcs.commit、Snapshot、Build pin、Worktree primary recovery、GitHub CLI；Engine 原 raw checkpoint 保持其语义并共享提取后的原子索引锁。源枚举同时处理 tracked terminal 变普通目录、合法 ./ aggregate、initialized/uninitialized160000边界；普通文件仍用真实 Git attributes/clean，链接为真实readlink字节120000，真实普通文件按100644/100755处理。raw链接状态/patch与VCS、File、Worktree、GC共用比较事实。删除因替换而失去调用的旧路径解析/chunk helper，范围限于原暂存调用链。锁使用精确BigInt identity及close后的时间事实；predecessor index字节比较、原子安装和原恢复CAS不分叉。
+
+最终原 Native 正向资格：stage-final-base6 pass/43断言、stage-final-physical5 pass/37断言；read-breadth30 pass/94断言、1项POSIX平台skip；六个Engine最终单案例共6 pass/69断言。合计47 pass、1 skip、243断言；没有UI自动化测试。最后另对Git前缀中前导空格保真重跑原native filters案例：1 pass/7断言；原先新增前导空格后，仅期望Git排序未同步造成的断言失败也完整保留，随后按真实canonical排序修正。源路径和索引路径只移除协议末尾LF，不trim路径身份。未用源码摘要作为正确性门槛。
+
+真实开发模式与桌面：Node构建当前UI，分别在18465/18466/18467的独立新服务通过/ui操作；Root逐张查看1280×720截图。第一服务实际HTTP22次（4次API commit及其它顺序/并行读取）全部200，combined另由桌面手工提交782a128，五个有限项目的VCS clean与File status[]通过。第二服务中same-byte junction→regular file被桌面识别为1 modified；MissingModelConfigError(summary)的实际HTTP200 SSE返回model_not_configured，英文和中文正文、按钮及无障碍名称由真实页面复核。中文桌面提交4d7cf685256df718a535cad411aace59908c8a4a已真实存储root-link为100644且保持原字节。第一、第二服务均到达原声明900000ms固定总期限，保留deadline_exceeded与完整原结算，不冒称正常退出；第二服务截图04实际为离线画面，明确不作成功回执。
+
+最终独立收尾服务在18467完成手工提交fbeaaa394a9643b520a82abe174d82ccb1c88048，Root保存并人工查看绿色成功回执05；实际VCS clean、staged/modified/untracked0及File status[]再次通过，Git HEAD与截图短ID一致，root-link真实100644 blob等于原目标字节。关闭Root自己创建的tab11后，按原PID84848/精确birth/listener身份验证，核对123个真实内部request/settled匹配且active_processes0，再POST/shutdown实际200。原Host/parent均0，terminal/settled/outputSettled三joins与完整字节均保存。未操作用户应用或进程。
+
+提交文案失败已按既有MissingModelConfigError类型恢复有限公开原因码，保留实际日志和requestID，其余生成错误保持安全摘要；当前语言显示操作提示，手工输入/提交正向路径通过。LLM提示词、请求模型选择、流式参数和正常delta/done流程没有修改；本轮是配置前提与Git数据流修复，无凭据/模型目录复制、无真实Provider请求，不能声称GPT-6.1 Sol模型运行成功，也不需要把未配置模型误报成缺凭据。GitHub网络工作流、外部原生Git及Windows checkout/restore不属于本轮已发现问题的交付范围。
+
+完整3532原captures/6035297B、所有原失败、help-only检查器误调用、当前工具与实际请求/截图在[单人源条目写入原件](../../artifacts/2026-10-14-project-metadata-latency/source-entry-write/README.md)。当前opencorvus与overlay类型检查均0；docs:check实际345 ops/26 groups。后续只做必要交付检查、当前分支范围提交、fresh upstream合并和正常push；其它任务的工作区改动保留，不发布版本、tag或Release。
+
 ## Recall
 
 用户要求持续迭代当前版本：调查UI（User Interface，用户界面）/UX（User Experience，用户体验）、功能和缺陷，先根因/影响分析与spec（规格），后实现、聚焦正向测试、真实桌面交互/原截图人工复核、必要的授权GPT-6.1 Sol流式验收、范围提交、上游合并和正常推送。最新明确要求“停止所有子agent，你自己验收”；Root独立工作，不委托、不跨聊天发消息。上一goal轮为实质进展：本浏览b767b9325与独立交付记录f971e92b6正常push实际0，2026-10-14T02:14:52.584Z–02:17:41.731Z全部hooks通过；02:18:44Z fresh HEAD=upstream=remote73664470621ff6b76b84c40c554afadd6ecc8759，own ancestor0、own scope clean、index空。原02:06推送1与先前1不改写；成功原回执由本记录承接。持续目标保持active，没有完成/暂停/停止授权。

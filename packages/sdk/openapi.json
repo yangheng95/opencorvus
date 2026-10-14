@@ -136619,6 +136619,13 @@
                     {
                       "additionalProperties": false,
                       "properties": {
+                        "code": {
+                          "enum": [
+                            "model_not_configured",
+                            "generation_failed"
+                          ],
+                          "type": "string"
+                        },
                         "message": {
                           "type": "string"
                         },
@@ -136629,6 +136636,7 @@
                       },
                       "required": [
                         "type",
+                        "code",
                         "message"
                       ],
                       "type": "object"

@@ -127,7 +127,7 @@ describe("Engine Git batched repository transaction", () => {
           )
           await fs.writeFile(path.join(child, "child.txt"), "child predecessor\n")
           await requireSuccess(await hostGit(["add", "child.txt"], { cwd: child }))
-          await requireSuccess(await hostGit(["commit", "--no-verify", "-m", "child predecessor"], { cwd: child }))
+          await requireSuccess(await hostGit(["commit", "-m", "child predecessor"], { cwd: child }))
           const uninitializedCommit = await head(child)
           await fs.mkdir(path.join(project.path, "uninitialized"))
           await fs.mkdir(path.join(project.path, "uninitialized-deleted"))
@@ -145,7 +145,7 @@ describe("Engine Git batched repository transaction", () => {
             ),
           )
           await requireSuccess(
-            await hostGit(["commit", "--no-verify", "-m", "root predecessor"], { cwd: project.path }),
+            await hostGit(["commit", "-m", "root predecessor"], { cwd: project.path }),
           )
 
           const taskID = await createEngineGitCheckpointTask({
@@ -373,7 +373,7 @@ describe("Engine Git batched repository transaction", () => {
         fn: async () => {
           await fs.writeFile(path.join(project.path, "root.txt"), "predecessor\n")
           await requireSuccess(await hostGit(["add", "root.txt"], { cwd: project.path }))
-          await requireSuccess(await hostGit(["commit", "--no-verify", "-m", "predecessor"], { cwd: project.path }))
+          await requireSuccess(await hostGit(["commit", "-m", "predecessor"], { cwd: project.path }))
           const taskID = await createEngineGitCheckpointTask({
             projectPath: project.path,
             title: "Engine Git external rollback winner",
@@ -520,7 +520,7 @@ describe("Engine Git batched repository transaction", () => {
         fn: async () => {
           await fs.writeFile(path.join(project.path, "root.txt"), "predecessor\n")
           await requireSuccess(await hostGit(["add", "root.txt"], { cwd: project.path }))
-          await requireSuccess(await hostGit(["commit", "--no-verify", "-m", "predecessor"], { cwd: project.path }))
+          await requireSuccess(await hostGit(["commit", "-m", "predecessor"], { cwd: project.path }))
           const taskID = await createEngineGitCheckpointTask({
             projectPath: project.path,
             title: "Engine Git external index winner",

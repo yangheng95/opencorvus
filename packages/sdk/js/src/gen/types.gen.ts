@@ -39061,6 +39061,7 @@ export type VcsCommitMessageStreamResponses = {
         type: "done"
       }
     | {
+        code: "model_not_configured" | "generation_failed"
         message: string
         type: "error"
       }

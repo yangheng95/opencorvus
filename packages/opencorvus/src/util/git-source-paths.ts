@@ -98,17 +98,44 @@ async function included(run: Runner, candidates: string[], root: string) {
 }
 
 /** One physical entry enumeration, with the caller's index and Git ignore rules. */
+export async function gitSourceIndexEntries(run: Runner) {
+  const result = await checked(run, ["ls-files", "--stage", "-z", "--", "."])
+  return records(result, "Git index entries").map((record) => {
+    const separator = record.indexOf("\t")
+    const [mode, object, stage] = record.slice(0, separator).split(" ")
+    if (
+      separator < 0 ||
+      !/^[0-7]{6}$/.test(mode ?? "") ||
+      !/^[a-f0-9]{40,64}$/.test(object ?? "") ||
+      !/^[0-3]$/.test(stage ?? "")
+    )
+      fail("protocol_error", record, "Git index returned an invalid stage entry")
+    return { mode: mode!, object: object!, stage: Number(stage), pathname: relativePath(record.slice(separator + 1)) }
+  })
+}
+
 export async function gitSourcePaths(
   root: string,
   run: Runner = (args, input) => hostGit(args, { cwd: root, input, timeoutProfile: "default" }),
 ) {
-  const cached = await checked(run, ["ls-files", "--cached", "-z", "--", "."])
-  const tracked = [...new Set(records(cached, "Git cached paths").map(relativePath))].sort()
+  const indexed = await gitSourceIndexEntries(run)
+  const tracked = [...new Set(indexed.map((entry) => entry.pathname))].sort()
   const inspected = new Set<string>()
   for (const pathname of tracked) await assertAncestors(root, pathname, inspected)
   const other = await checked(run, ["ls-files", "--others", "--exclude-standard", "--directory", "-z", "--", "."])
   const trackedSet = new Set(tracked)
   const untracked = new Set<string>()
+  const gitlinks = new Set(indexed.filter((entry) => entry.mode === "160000").map((entry) => entry.pathname))
+  const replacedDirectories: string[] = []
+  for (const pathname of tracked) {
+    if (gitlinks.has(pathname)) continue
+    const entry = await fs.lstat(path.join(root, pathname)).catch((error: NodeJS.ErrnoException) => {
+      if (["ENOENT", "ENOTDIR"].includes(error.code ?? "")) return undefined
+      throw error
+    })
+    if (entry?.isDirectory() && !entry.isSymbolicLink() && !Filesystem.isGitRepo(path.join(root, pathname)))
+      replacedDirectories.push(pathname)
+  }
 
   async function visit(pathname: string, candidates: string[]) {
     await assertAncestors(root, pathname, inspected)
@@ -120,7 +147,8 @@ export async function gitSourcePaths(
     }
     if (!before.isDirectory())
       fail("unsupported_entry", pathname, `Git source entry ${pathname} is not a file, link or directory`)
-    if (Filesystem.isGitRepo(absolute)) {
+    if (gitlinks.has(pathname)) return
+    if (pathname && Filesystem.isGitRepo(absolute)) {
       if (!trackedSet.has(pathname)) untracked.add(pathname)
       return
     }
@@ -132,11 +160,21 @@ export async function gitSourcePaths(
     candidates.push(
       ...children
         .filter((entry) => entry.name !== ".git")
-        .map((entry) => `${pathname}/${entry.name}${entry.isDirectory() && !entry.isSymbolicLink() ? "/" : ""}`),
+        .map(
+          (entry) =>
+            `${pathname ? pathname + "/" : ""}${entry.name}${entry.isDirectory() && !entry.isSymbolicLink() ? "/" : ""}`,
+        ),
     )
   }
 
-  let pending = [...new Set(records(other, "Git other paths").map(relativePath))]
+  // In a subdirectory Git can aggregate all new entries as the current ./ boundary.
+  // The empty traversal prefix is internal; returned source paths remain canonical.
+  let pending = [
+    ...new Set([
+      ...records(other, "Git other paths").map((value) => (value === "./" ? "" : relativePath(value))),
+      ...replacedDirectories,
+    ]),
+  ]
   while (pending.length > 0) {
     const candidates: string[] = []
     for (const pathname of pending) await visit(pathname, candidates)

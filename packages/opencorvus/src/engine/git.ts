@@ -21,6 +21,16 @@ import { createHash } from "node:crypto"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { readTaskProcessBinding, TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL } from "./task-execution-capsule-binding"
 import { Filesystem } from "@/util/filesystem"
+import {
+  prepareGitIndexLock,
+  installGitIndexLock,
+  removeOwnedGitIndexLock as removeOwnedIndexLock,
+  readOptionalGitIndex as readOptionalFile,
+  writeSyncedGitIndex as writeSyncedFileHandle,
+  gitIndexFingerprint,
+  sameGitIndexFingerprint,
+  type OwnedGitIndexLock as OwnedIndexLock,
+} from "@/util/git-index-lock"
 import { taskRootDirectory } from "./task-directory"
 import { executionCapsuleSourceTreeDigest } from "@/execution-capsule/tree-digest"
 import type { Stats } from "node:fs"
@@ -451,11 +461,6 @@ type FinalizedGitTransaction = {
   cleanup(): Promise<void>
 }
 
-type OwnedIndexLock = Readonly<{
-  path: string
-  fingerprint: EngineGitFileFingerprint
-}>
-
 type RegisterFinalizedGitTransaction = (transaction: FinalizedGitTransaction) => void
 
 async function withRepositoryTreeLock<T>(
@@ -690,70 +695,17 @@ function sameFingerprint(left: EngineGitFileFingerprint, right: EngineGitFileFin
   )
 }
 
-async function readOptionalFile(file: string) {
-  return fs.readFile(file).catch((error: NodeJS.ErrnoException) => {
-    if (error.code === "ENOENT") return undefined
-    throw error
-  })
-}
-
-async function writeSyncedFileHandle(handle: Awaited<ReturnType<typeof fs.open>>, bytes: Uint8Array) {
-  await handle.truncate(0)
-  await handle.writeFile(bytes)
-  await handle.sync()
-}
-
 async function prepareCanonicalIndexLock(transaction: RepositoryTransaction, temporaryIndex: string) {
-  const lockPath = `${transaction.indexPath}.lock`
-  const handle = await fs.open(lockPath, "wx", 0o600)
-  let failure: unknown
-  try {
-    const [current, predecessor, next] = await Promise.all([
-      readOptionalFile(transaction.indexPath),
-      transaction.indexExisted ? fs.readFile(transaction.indexBackup) : Promise.resolve(undefined),
-      fs.readFile(temporaryIndex),
-    ])
-    if (
-      (current === undefined) !== (predecessor === undefined) ||
-      (current && predecessor && !current.equals(predecessor))
-    ) {
-      throw new Error(`Canonical Git index changed during checkpoint preparation: ${transaction.repository.path}`)
-    }
-    await writeSyncedFileHandle(handle, next)
-  } catch (error) {
-    failure = error
-  }
-  try {
-    await handle.close()
-  } catch (closeError) {
-    failure = failure
-      ? new AggregateError(
-          [failure, closeError],
-          `Git index lock write and close failed for ${transaction.repository.path}`,
-        )
-      : closeError
-  }
-  if (failure) {
-    await fs.rm(lockPath, { force: true }).catch(() => undefined)
-    throw failure
-  }
-  return { path: lockPath, fingerprint: fingerprint(await fs.lstat(lockPath)) }
+  return prepareGitIndexLock({
+    indexPath: transaction.indexPath,
+    predecessor: transaction.indexExisted ? await fs.readFile(transaction.indexBackup) : undefined,
+    preparedIndex: temporaryIndex,
+    label: transaction.repository.path,
+  })
 }
 
 async function installCanonicalIndexLock(lock: OwnedIndexLock, transaction: RepositoryTransaction) {
-  await Filesystem.renameAfterTransientContention(lock.path, transaction.indexPath)
-}
-
-async function removeOwnedIndexLock(lock: OwnedIndexLock) {
-  const observed = await fs.lstat(lock.path).catch((error: NodeJS.ErrnoException) => {
-    if (error.code === "ENOENT") return undefined
-    throw error
-  })
-  if (!observed) return
-  if (!sameFingerprint(lock.fingerprint, fingerprint(observed))) {
-    throw new Error(`Git index lock ownership changed before cleanup: ${lock.path}`)
-  }
-  await fs.rm(lock.path)
+  await installGitIndexLock(lock, transaction.indexPath)
 }
 
 async function restoreRepositoryTransaction(
@@ -777,8 +729,8 @@ async function restoreRepositoryTransaction(
         }
         throw error
       })
-      const observed = fingerprint(await handle.stat())
-      if (!recreated && !sameFingerprint(ownedLock.fingerprint, observed)) {
+      const observed = gitIndexFingerprint(await handle.stat({ bigint: true }))
+      if (!recreated && !sameGitIndexFingerprint(ownedLock.fingerprint, observed)) {
         throw new Error(`recovery conflict: Git index lock ownership changed for ${transaction.repository.path}`)
       }
     } else {

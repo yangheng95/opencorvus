@@ -18,8 +18,12 @@ try {
   const { runHostCommandWithInactivity } = await import("../src/shell/command-inactivity")
   const cwd = path.resolve(import.meta.dir, "..")
   const requested = process.argv.slice(2).filter((value) => value.trim().length > 0)
-  const files = requested.length
-    ? requested.map((file) => path.resolve(cwd, file))
+  const patterns = requested.filter((value) => value.startsWith("--test-name-pattern="))
+  if (patterns.length > 1 || patterns.some((value) => value === "--test-name-pattern="))
+    throw new Error("Select one non-empty --test-name-pattern=<pattern>")
+  const selected = requested.filter((value) => !value.startsWith("--test-name-pattern="))
+  const files = selected.length
+    ? selected.map((file) => path.resolve(cwd, file))
     : [...new Bun.Glob("test/**/*.test.ts").scanSync({ cwd, absolute: true })].filter(
         (file) => path.basename(file) !== "isolated-test-entry.test.ts",
       )
@@ -40,7 +44,7 @@ try {
       // Bun 1.3.14 still applies its expired-entry subprocess auto-killer when
       // the zero timeout sentinel is used. Keep a finite per-test ownership
       // window; cases that legitimately need longer declare their own budget.
-      args: ["test", "--timeout=60000", "--parallel=1", isolatedEntry],
+      args: ["test", "--timeout=60000", "--parallel=1", ...patterns, isolatedEntry],
       cwd,
       env: { ...childEnvironment, OPENCORVUS_TEST_FILES: JSON.stringify([file]) },
       deadlineAt: testCommandDeadlineAt(),

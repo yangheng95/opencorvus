@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Git 源条目写入原件](2026-10-14-project-metadata-latency/source-entry-write/README.md)：3532 captures、真实Git/HTTP/SSE、英文中文截图、手工提交和原结算。
+
 - [Sources与Rendering复查](2026-10-14-source-render-review/README.md)：单agent实际体验、根因修复与截图复验。
 
 - [通道反馈的当前语言](2026-10-14-channel-feedback-locale/README.md)：第30批真实反馈与独立数据故障原件。

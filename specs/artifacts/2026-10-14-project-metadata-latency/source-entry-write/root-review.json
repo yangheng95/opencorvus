@@ -1,0 +1,1428 @@
+{
+  "atUtc": "2026-10-14T07:49:55.916Z",
+  "captures": 3532,
+  "bytes": 6035297,
+  "outcomes": [
+    {
+      "name": "native-engine-final-case-2",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-82cf854c-7ce7-40b9-a1b3-871893d65219",
+        "pid": 83544,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-82cf854c-7ce7-40b9-a1b3-871893d65219",
+            "pid": 83544,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-82cf854c-7ce7-40b9-a1b3-871893d65219",
+            "pid": 83544,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-engine-final-case-3",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-c0ec1c80-134b-4f0e-8692-a06f4262f6df",
+        "pid": 23524,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-c0ec1c80-134b-4f0e-8692-a06f4262f6df",
+            "pid": 23524,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-c0ec1c80-134b-4f0e-8692-a06f4262f6df",
+            "pid": 23524,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-engine-final-case-4",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-b79e7d63-4aec-4212-91c7-b5829ef83127",
+        "pid": 90864,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-b79e7d63-4aec-4212-91c7-b5829ef83127",
+            "pid": 90864,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-b79e7d63-4aec-4212-91c7-b5829ef83127",
+            "pid": 90864,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-engine-final-case-5",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-95c3bc34-acd1-41d4-9f95-24a430636fa2",
+        "pid": 71472,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-95c3bc34-acd1-41d4-9f95-24a430636fa2",
+            "pid": 71472,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-95c3bc34-acd1-41d4-9f95-24a430636fa2",
+            "pid": 71472,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-engine-final-case-6",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-47149d56-c00c-4119-83ac-503cf6313585",
+        "pid": 74336,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-47149d56-c00c-4119-83ac-503cf6313585",
+            "pid": 74336,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-47149d56-c00c-4119-83ac-503cf6313585",
+            "pid": 74336,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-engine-final-first",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-268e6897-7053-4f4d-aabd-85b54e2d6f61",
+        "pid": 70320,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-268e6897-7053-4f4d-aabd-85b54e2d6f61",
+            "pid": 70320,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-268e6897-7053-4f4d-aabd-85b54e2d6f61",
+            "pid": 70320,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-engine-recovery-case-2",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-52921eca-8985-416a-af22-a9803cc04a81",
+        "pid": 79516,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-52921eca-8985-416a-af22-a9803cc04a81",
+            "pid": 79516,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-52921eca-8985-416a-af22-a9803cc04a81",
+            "pid": 79516,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-engine-recovery-case-3",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-cb6701d3-0e3a-4ddb-8a42-d99e8e39ea9c",
+        "pid": 91012,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-cb6701d3-0e3a-4ddb-8a42-d99e8e39ea9c",
+            "pid": 91012,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-cb6701d3-0e3a-4ddb-8a42-d99e8e39ea9c",
+            "pid": 91012,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-engine-recovery-case-4",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-b2bba6e1-d3fe-4564-87fa-8f34cb64ab8e",
+        "pid": 91084,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-b2bba6e1-d3fe-4564-87fa-8f34cb64ab8e",
+            "pid": 91084,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-b2bba6e1-d3fe-4564-87fa-8f34cb64ab8e",
+            "pid": 91084,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-engine-recovery-case-5",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-0ddd4647-7db0-463e-ad7f-4c9a0ef5116f",
+        "pid": 79332,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-0ddd4647-7db0-463e-ad7f-4c9a0ef5116f",
+            "pid": 79332,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-0ddd4647-7db0-463e-ad7f-4c9a0ef5116f",
+            "pid": 79332,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-engine-recovery-case-6",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-6e17dd33-467b-442b-873e-53ac5837f22d",
+        "pid": 40144,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-6e17dd33-467b-442b-873e-53ac5837f22d",
+            "pid": 40144,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-6e17dd33-467b-442b-873e-53ac5837f22d",
+            "pid": 40144,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-engine-recovery-first-r2",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-d58cd527-268f-4966-aabd-bda4717d6707",
+        "pid": 88276,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-d58cd527-268f-4966-aabd-bda4717d6707",
+            "pid": 88276,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-d58cd527-268f-4966-aabd-bda4717d6707",
+            "pid": 88276,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Bun help only; no test qualification"
+    },
+    {
+      "name": "native-engine-recovery-first-r3",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-c92009bb-9d47-410b-b019-17747b0c08e7",
+        "pid": 90448,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-c92009bb-9d47-410b-b019-17747b0c08e7",
+            "pid": 90448,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-c92009bb-9d47-410b-b019-17747b0c08e7",
+            "pid": 90448,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-engine-recovery-r1",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-8da19310-144e-47f9-b422-5eef05737c3b",
+        "pid": 77604,
+        "reason": "exited",
+        "exitCode": 1,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-8da19310-144e-47f9-b422-5eef05737c3b",
+            "pid": 77604,
+            "reason": "exited",
+            "exitCode": 1,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-8da19310-144e-47f9-b422-5eef05737c3b",
+            "pid": 77604,
+            "reason": "exited",
+            "exitCode": 1,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 1,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Original failure/timeout, retained as investigation evidence"
+    },
+    {
+      "name": "native-stage-contract-r1",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-f1342d83-6a7f-42bf-be95-ece41d89c74f",
+        "pid": 24492,
+        "reason": "inactivity_timeout",
+        "exitCode": 1,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-f1342d83-6a7f-42bf-be95-ece41d89c74f",
+            "pid": 24492,
+            "reason": "inactivity_timeout",
+            "exitCode": 1,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-f1342d83-6a7f-42bf-be95-ece41d89c74f",
+            "pid": 24492,
+            "reason": "inactivity_timeout",
+            "exitCode": 1,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 1,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Original failure/timeout, retained as investigation evidence"
+    },
+    {
+      "name": "native-stage-contract-r2",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-d8ebaf40-a385-47e1-a97f-162db863eaab",
+        "pid": 86304,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-d8ebaf40-a385-47e1-a97f-162db863eaab",
+            "pid": 86304,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-d8ebaf40-a385-47e1-a97f-162db863eaab",
+            "pid": 86304,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-stage-directory-diagnostic",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-19bf7e34-96d1-403d-8575-d86bff792a2c",
+        "pid": 91004,
+        "reason": "exited",
+        "exitCode": 1,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-19bf7e34-96d1-403d-8575-d86bff792a2c",
+            "pid": 91004,
+            "reason": "exited",
+            "exitCode": 1,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-19bf7e34-96d1-403d-8575-d86bff792a2c",
+            "pid": 91004,
+            "reason": "exited",
+            "exitCode": 1,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 1,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Original failure/timeout, retained as investigation evidence"
+    },
+    {
+      "name": "native-stage-directory-r2",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-3ced4670-c3ab-46af-a08d-761c82d146cc",
+        "pid": 89496,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-3ced4670-c3ab-46af-a08d-761c82d146cc",
+            "pid": 89496,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-3ced4670-c3ab-46af-a08d-761c82d146cc",
+            "pid": 89496,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-stage-final-base",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-382fdedb-fc07-4d44-adc1-5701a22c4c5e",
+        "pid": 69396,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-382fdedb-fc07-4d44-adc1-5701a22c4c5e",
+            "pid": 69396,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-382fdedb-fc07-4d44-adc1-5701a22c4c5e",
+            "pid": 69396,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-stage-final-contract",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-5d84e28b-286b-4123-ab4c-7b46808a281b",
+        "pid": 81464,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-5d84e28b-286b-4123-ab4c-7b46808a281b",
+            "pid": 81464,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-5d84e28b-286b-4123-ab4c-7b46808a281b",
+            "pid": 81464,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-stage-final-physical",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-b5a8ecdb-0241-45c8-9c23-f70c6602f840",
+        "pid": 79236,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-b5a8ecdb-0241-45c8-9c23-f70c6602f840",
+            "pid": 79236,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-b5a8ecdb-0241-45c8-9c23-f70c6602f840",
+            "pid": 79236,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-stage-final-read-breadth",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-6270936e-3bef-4e9e-afa5-0372a2518537",
+        "pid": 90416,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-6270936e-3bef-4e9e-afa5-0372a2518537",
+            "pid": 90416,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-6270936e-3bef-4e9e-afa5-0372a2518537",
+            "pid": 90416,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-stage-leading-prefix",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-61df4e4e-0f34-47fe-a041-c7f88b9be381",
+        "pid": 82244,
+        "reason": "exited",
+        "exitCode": 1,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-61df4e4e-0f34-47fe-a041-c7f88b9be381",
+            "pid": 82244,
+            "reason": "exited",
+            "exitCode": 1,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-61df4e4e-0f34-47fe-a041-c7f88b9be381",
+            "pid": 82244,
+            "reason": "exited",
+            "exitCode": 1,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 1,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Original failure/timeout, retained as investigation evidence"
+    },
+    {
+      "name": "native-stage-leading-prefix-r2",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-14340c37-996c-4c34-824c-17261a4d164e",
+        "pid": 67976,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-14340c37-996c-4c34-824c-17261a4d164e",
+            "pid": 67976,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-14340c37-996c-4c34-824c-17261a4d164e",
+            "pid": 67976,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-stage-prepare",
+      "terminal": {
+        "occurrenceID": "metadata-prepare-five-roots-96143cf5-ffcd-4845-a007-44111be0ab70",
+        "pid": 38288,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-prepare-five-roots-96143cf5-ffcd-4845-a007-44111be0ab70",
+            "pid": 38288,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-prepare-five-roots-96143cf5-ffcd-4845-a007-44111be0ab70",
+            "pid": 38288,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-stage-serve",
+      "terminal": {
+        "occurrenceID": "metadata-serve-five-roots-cc2d39ac-f0cd-4548-a790-031518054e66",
+        "pid": 50616,
+        "reason": "deadline_exceeded",
+        "exitCode": 1,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-serve-five-roots-cc2d39ac-f0cd-4548-a790-031518054e66",
+            "pid": 50616,
+            "reason": "deadline_exceeded",
+            "exitCode": 1,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-serve-five-roots-cc2d39ac-f0cd-4548-a790-031518054e66",
+            "pid": 50616,
+            "reason": "deadline_exceeded",
+            "exitCode": 1,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 1,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Original failure/timeout, retained as investigation evidence"
+    },
+    {
+      "name": "native-stage-serve-closure",
+      "terminal": {
+        "occurrenceID": "metadata-serve-five-roots-4706c8e5-bbbc-4035-b143-7246ec6badf6",
+        "pid": 84848,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-serve-five-roots-4706c8e5-bbbc-4035-b143-7246ec6badf6",
+            "pid": 84848,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-serve-five-roots-4706c8e5-bbbc-4035-b143-7246ec6badf6",
+            "pid": 84848,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 0,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Inspect actual output and assertions; owner exit is not itself feature acceptance"
+    },
+    {
+      "name": "native-stage-serve-types",
+      "terminal": {
+        "occurrenceID": "metadata-serve-five-roots-dbeb93c4-096a-48ec-be8f-05af5f789bc4",
+        "pid": 86712,
+        "reason": "deadline_exceeded",
+        "exitCode": 1,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-serve-five-roots-dbeb93c4-096a-48ec-be8f-05af5f789bc4",
+            "pid": 86712,
+            "reason": "deadline_exceeded",
+            "exitCode": 1,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-serve-five-roots-dbeb93c4-096a-48ec-be8f-05af5f789bc4",
+            "pid": 86712,
+            "reason": "deadline_exceeded",
+            "exitCode": 1,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 1,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Original failure/timeout, retained as investigation evidence"
+    },
+    {
+      "name": "native-stage-transitions",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-87bffbb2-f1e5-46f6-94b4-d125bb963296",
+        "pid": 90328,
+        "reason": "exited",
+        "exitCode": 1,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-87bffbb2-f1e5-46f6-94b4-d125bb963296",
+            "pid": 90328,
+            "reason": "exited",
+            "exitCode": 1,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-87bffbb2-f1e5-46f6-94b4-d125bb963296",
+            "pid": 90328,
+            "reason": "exited",
+            "exitCode": 1,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 1,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Original failure/timeout, retained as investigation evidence"
+    },
+    {
+      "name": "native-stage-transitions-r2",
+      "terminal": {
+        "occurrenceID": "metadata-source-remaining-five-roots-5bb69581-d161-4906-8973-b97c02e8beca",
+        "pid": 87908,
+        "reason": "exited",
+        "exitCode": 1,
+        "signal": null
+      },
+      "joins": [
+        {
+          "kind": "terminal",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-5bb69581-d161-4906-8973-b97c02e8beca",
+            "pid": 87908,
+            "reason": "exited",
+            "exitCode": 1,
+            "signal": null
+          }
+        },
+        {
+          "kind": "settled",
+          "status": "fulfilled",
+          "value": {
+            "occurrenceID": "metadata-source-remaining-five-roots-5bb69581-d161-4906-8973-b97c02e8beca",
+            "pid": 87908,
+            "reason": "exited",
+            "exitCode": 1,
+            "signal": null
+          }
+        },
+        {
+          "kind": "outputSettled",
+          "status": "fulfilled"
+        }
+      ],
+      "parent": {
+        "code": 1,
+        "signal": null,
+        "errors": []
+      },
+      "qualification": "Original failure/timeout, retained as investigation evidence"
+    }
+  ],
+  "finalTests": {
+    "sourceStage": 11,
+    "sharedReadAndPublicStream": 30,
+    "engineTransactions": 6,
+    "platformSkip": 1,
+    "assertions": 243
+  },
+  "desktop": {
+    "originalCyclicCommit": "782a128",
+    "physicalTypeCommit": "4d7cf685256df718a535cad411aace59908c8a4a",
+    "finalCommit": "fbeaaa394a9643b520a82abe174d82ccb1c88048",
+    "manualReview": "Root manually viewed every JPEG. stage-final-ui/04-type-change-committed-zh.jpg is actually an offline deadline image, not a success receipt. Final success is stage-final-ui/05-final-committed-en.jpg.",
+    "shutdown": "HTTP200, exact PID/birth/listener, 123 original request markers active0, original three joins and parent exit0"
+  },
+  "model": "Actual HTTP200 SSE model_not_configured; no credential/catalog staging or Provider success claim",
+  "sdk": {
+    "terminal": {
+      "occurrenceID": "metadata-source-remaining-five-roots-dbb11ff1-7de3-4850-aea7-8c0367cdcd7d",
+      "pid": 26436,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "parent": {
+      "code": 0,
+      "signal": null,
+      "errors": []
+    },
+    "changedArtifacts": [
+      "packages/sdk/openapi.json",
+      "packages/sdk/js/src/gen/types.gen.ts"
+    ],
+    "field": "required VCS commit-message error code"
+  },
+  "checks": [
+    {
+      "command": [
+        "D:\\myhexin-local\\opencorvus\\.tmp-codex-project-meta-01a133\\source-ui-bundle\\bin\\bun.exe",
+        "run",
+        "check:architecture-index"
+      ],
+      "cwd": "D:\\myhexin-local\\opencorvus",
+      "startAtUtc": "2026-10-14T07:54:52.031Z",
+      "endAtUtc": "2026-10-14T07:54:52.131Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "command": [
+        "D:\\myhexin-local\\opencorvus\\.tmp-codex-project-meta-01a133\\source-ui-bundle\\bin\\bun.exe",
+        "run",
+        "docs:check"
+      ],
+      "cwd": "D:\\myhexin-local\\opencorvus",
+      "startAtUtc": "2026-10-14T07:54:49.312Z",
+      "endAtUtc": "2026-10-14T07:54:52.028Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "command": [
+        "D:\\myhexin-local\\opencorvus\\.tmp-codex-project-meta-01a133\\source-ui-bundle\\bin\\bun.exe",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus",
+      "startAtUtc": "2026-10-14T07:54:54.788Z",
+      "endAtUtc": "2026-10-14T07:55:28.149Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "command": [
+        "D:\\myhexin-local\\opencorvus\\.tmp-codex-project-meta-01a133\\source-ui-bundle\\bin\\bun.exe",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "D:\\myhexin-local\\opencorvus\\packages\\overlay",
+      "startAtUtc": "2026-10-14T07:55:28.149Z",
+      "endAtUtc": "2026-10-14T07:55:49.416Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "command": [
+        "D:\\myhexin-local\\opencorvus\\.tmp-codex-project-meta-01a133\\source-ui-bundle\\bin\\bun.exe",
+        "run",
+        "api:routes-check"
+      ],
+      "cwd": "D:\\myhexin-local\\opencorvus",
+      "startAtUtc": "2026-10-14T07:54:52.132Z",
+      "endAtUtc": "2026-10-14T07:54:54.787Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null
+    }
+  ]
+}

@@ -8,6 +8,7 @@ import { ProjectInstanceContext } from "../project/instance-context"
 import { Project } from "../project/project"
 import { ProjectRuntimePaths } from "../project/runtime-paths"
 import { hostGit as runGit, gitProcessArgs, type GitOptions, type GitResult } from "../util/git"
+import { stageGitSourceEntries } from "../util/git-source-stage"
 import { Process } from "../util/process"
 import {
   EMPTY_TREE_HASH as _EMPTY_TREE_HASH,
@@ -678,26 +679,21 @@ export namespace Snapshot {
       timeoutProfile: "default",
     }
     if (indexFile) opts.env = { GIT_INDEX_FILE: indexFile }
-    await gitText(
-      runGit(
-        [
-          "-c",
-          `core.autocrlf=${coreAutocrlf}`,
-          "-c",
-          `core.safecrlf=${coreSafecrlf}`,
-          "-c",
-          `core.symlinks=${coreSymlinks}`,
-          "--git-dir",
-          git,
-          "--work-tree",
-          currentProject().worktree,
-          "add",
-          ".",
-        ],
-        opts,
-      ),
-      "snapshot add",
-    )
+    await stageGitSourceEntries({
+      ...opts,
+      prefix: [
+        "-c",
+        `core.autocrlf=${coreAutocrlf}`,
+        "-c",
+        `core.safecrlf=${coreSafecrlf}`,
+        "-c",
+        `core.symlinks=${coreSymlinks}`,
+        "--git-dir",
+        git,
+        "--work-tree",
+        currentProject().worktree,
+      ],
+    })
   }
 
   // Baseline exclude rules layered on top of the user project's own

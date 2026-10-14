@@ -23,6 +23,7 @@ import {
   loadVcsBranches,
   pushVcsBranch,
   streamVcsCommitMessage,
+  VcsCommitMessageError,
   switchVcsBranch,
   type VcsBranch,
 } from "../services/meta"
@@ -155,7 +156,9 @@ function vcsArrowsFor(value: ProjectVcsInfo | null): string {
 export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps) {
   const dir = createMemo(directoryMemo)
   let disposed = false
-  onCleanup(() => { disposed = true })
+  onCleanup(() => {
+    disposed = true
+  })
   const ownsAuthority = (authority: ApiAuthority) => !disposed && isApiAuthorityCurrent(authority)
   const ownsProject = (authority: ApiAuthority, directory: string, selectionEpoch: number) =>
     ownsAuthority(authority) && boardStore.selectEpoch === selectionEpoch && dir().trim() === directory
@@ -248,7 +251,9 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const changeGroupsRequestKey = createMemo(() => {
     const taskID = activeTaskID()
     const groups = changeGroups()
-    return taskID && groups.length > 0 ? `${captureApiAuthority().revision}:${taskID}:${changeGroupsRevisionKey(groups)}` : false
+    return taskID && groups.length > 0
+      ? `${captureApiAuthority().revision}:${taskID}:${changeGroupsRevisionKey(groups)}`
+      : false
   })
   const [resolvedChangeGroups] = createResource(changeGroupsRequestKey, async (key) => ({
     key,
@@ -316,14 +321,25 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     const taskID = activeTaskID().trim()
     const directory = dir().trim()
     if (!appStore.connected || !runtimePanelOpen() || !taskID || !directory) return undefined
-    return { taskID, directory, refreshKey: browserPreviewRevision(), authority: captureApiAuthority(), selectionEpoch: boardStore.selectEpoch }
+    return {
+      taskID,
+      directory,
+      refreshKey: browserPreviewRevision(),
+      authority: captureApiAuthority(),
+      selectionEpoch: boardStore.selectEpoch,
+    }
   })
   const [browserInformation] = createResource(
     browserInformationScope,
     async (scope): Promise<ProjectRuntimeBrowserInformation | undefined> => {
       try {
-        const target = await loadTaskBrowserPreviewTarget({ taskID: scope.taskID, directory: scope.directory, authority: scope.authority })
-        if (!ownsProject(scope.authority, scope.directory, scope.selectionEpoch) || scope !== browserInformationScope()) return undefined
+        const target = await loadTaskBrowserPreviewTarget({
+          taskID: scope.taskID,
+          directory: scope.directory,
+          authority: scope.authority,
+        })
+        if (!ownsProject(scope.authority, scope.directory, scope.selectionEpoch) || scope !== browserInformationScope())
+          return undefined
         return {
           status: "loaded",
           taskID: scope.taskID,
@@ -331,7 +347,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
           url: target.url?.trim() ?? "",
         }
       } catch (error) {
-        if (!ownsProject(scope.authority, scope.directory, scope.selectionEpoch) || scope !== browserInformationScope()) return undefined
+        if (!ownsProject(scope.authority, scope.directory, scope.selectionEpoch) || scope !== browserInformationScope())
+          return undefined
         const message = errorMessage(error)
         AppLog.warn("ui", "Failed to load project Browser information", {
           taskID: scope.taskID,
@@ -346,7 +363,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     const scope = browserInformationScope()
     const information = browserInformation()
     return Boolean(
-      scope && ownsAuthority(scope.authority) &&
+      scope &&
+        ownsAuthority(scope.authority) &&
         !browserInformation.loading &&
         information?.status === "loaded" &&
         information?.taskID === scope.taskID &&
@@ -357,17 +375,24 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const fileInformationScope = createMemo(() => {
     const directory = dir().trim()
     if (!appStore.connected || !runtimePanelOpen() || !directory) return undefined
-    return { directory, refreshKey: fileWorkbenchRevision(), authority: captureApiAuthority(), selectionEpoch: boardStore.selectEpoch }
+    return {
+      directory,
+      refreshKey: fileWorkbenchRevision(),
+      authority: captureApiAuthority(),
+      selectionEpoch: boardStore.selectEpoch,
+    }
   })
   const [fileInformation] = createResource(
     fileInformationScope,
     async (scope): Promise<ProjectRuntimeFileInformation | undefined> => {
       try {
         const items = await loadFileDirectory("", { directory: scope.directory, authority: scope.authority })
-        if (!ownsProject(scope.authority, scope.directory, scope.selectionEpoch) || scope !== fileInformationScope()) return undefined
+        if (!ownsProject(scope.authority, scope.directory, scope.selectionEpoch) || scope !== fileInformationScope())
+          return undefined
         return { status: "loaded", directory: scope.directory, count: items.length }
       } catch (error) {
-        if (!ownsProject(scope.authority, scope.directory, scope.selectionEpoch) || scope !== fileInformationScope()) return undefined
+        if (!ownsProject(scope.authority, scope.directory, scope.selectionEpoch) || scope !== fileInformationScope())
+          return undefined
         const message = errorMessage(error)
         AppLog.warn("ui", "Failed to load project Files information", {
           directory: scope.directory,
@@ -381,7 +406,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     const scope = fileInformationScope()
     const information = fileInformation()
     return Boolean(
-      scope && ownsAuthority(scope.authority) &&
+      scope &&
+        ownsAuthority(scope.authority) &&
         !fileInformation.loading &&
         information?.status === "loaded" &&
         information.directory === scope.directory &&
@@ -566,7 +592,9 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       authority,
       taskID: activeTaskID().trim() || undefined,
       sessionID: activeSessionID().trim() || undefined,
-      onDelta: (delta) => { if (ownsStream()) setCommitMessage((current) => current + delta) },
+      onDelta: (delta) => {
+        if (ownsStream()) setCommitMessage((current) => current + delta)
+      },
       onDone: (message) => {
         if (!ownsStream()) return
         commitMessageStream = undefined
@@ -577,7 +605,15 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         if (!ownsStream()) return
         commitMessageStream = undefined
         setCommitMessageGenerating(false)
-        setGitActionError(t("project_runtime.commit_message_failed", { error: error.message }))
+        setGitActionError(
+          error instanceof VcsCommitMessageError
+            ? t(
+                error.code === "model_not_configured"
+                  ? "project_runtime.commit_message_model_required"
+                  : "project_runtime.commit_message_generation_failed",
+              )
+            : t("project_runtime.commit_message_failed", { error: error.message }),
+        )
       },
     })
     commitMessageStream = stream
@@ -704,9 +740,18 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     void closeCommandMenuSurface(branchMenuOwner)
   })
 
-  async function syncBranches(authority = captureApiAuthority(), selectionEpoch = boardStore.selectEpoch): Promise<void> {
+  async function syncBranches(
+    authority = captureApiAuthority(),
+    selectionEpoch = boardStore.selectEpoch,
+  ): Promise<void> {
     const projectDirectory = dir().trim()
-    if (!ownsProject(authority, projectDirectory, selectionEpoch) || !appStore.connected || !projectDirectory || branchLoadDirectory() === projectDirectory) return
+    if (
+      !ownsProject(authority, projectDirectory, selectionEpoch) ||
+      !appStore.connected ||
+      !projectDirectory ||
+      branchLoadDirectory() === projectDirectory
+    )
+      return
     setBranchLoadDirectory(projectDirectory)
     setBranchError("")
     try {
@@ -720,7 +765,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       setBranchError(message)
       AppLog.warn("ui", "Failed to load project branches", { directory: projectDirectory, error: message })
     } finally {
-      if (ownsProject(authority, projectDirectory, selectionEpoch) && branchLoadDirectory() === projectDirectory) setBranchLoadDirectory("")
+      if (ownsProject(authority, projectDirectory, selectionEpoch) && branchLoadDirectory() === projectDirectory)
+        setBranchLoadDirectory("")
     }
   }
 
@@ -763,7 +809,9 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
             ],
           },
         ],
-        onDismiss: () => { if (ownsMenu()) setLocalMenuOpen(false) },
+        onDismiss: () => {
+          if (ownsMenu()) setLocalMenuOpen(false)
+        },
         onError: (error) => {
           if (!ownsMenu()) return
           reportError({
@@ -853,7 +901,9 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         variant: "compact-list",
         maxHeight: document.documentElement.clientHeight * 0.5,
         groups: [{ items }],
-        onDismiss: () => { if (ownsMenu()) setBranchMenuOpen(false) },
+        onDismiss: () => {
+          if (ownsMenu()) setBranchMenuOpen(false)
+        },
         onError: (error) => {
           if (!ownsMenu()) return
           setBranchError(errorMessage(error))
@@ -919,7 +969,9 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     })
   }
 
-  async function syncWorktrees(options: { requireFresh?: boolean; authority?: ApiAuthority; selectionEpoch?: number } = {}): Promise<void> {
+  async function syncWorktrees(
+    options: { requireFresh?: boolean; authority?: ApiAuthority; selectionEpoch?: number } = {},
+  ): Promise<void> {
     const authority = options.authority ?? captureApiAuthority()
     const selectionEpoch = options.selectionEpoch ?? boardStore.selectEpoch
     if (!ownsAuthority(authority) || boardStore.selectEpoch !== selectionEpoch) return
@@ -969,11 +1021,25 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     clearWorktreeProjectionRetry()
   }
 
-  function ownsWorktreeProjection(generation: number, projectDirectory: string, authority: ApiAuthority, selectionEpoch: number): boolean {
-    return generation === worktreeProjectionGeneration && appStore.connected && ownsProject(authority, projectDirectory, selectionEpoch)
+  function ownsWorktreeProjection(
+    generation: number,
+    projectDirectory: string,
+    authority: ApiAuthority,
+    selectionEpoch: number,
+  ): boolean {
+    return (
+      generation === worktreeProjectionGeneration &&
+      appStore.connected &&
+      ownsProject(authority, projectDirectory, selectionEpoch)
+    )
   }
 
-  function scheduleWorktreeProjectionRetry(generation: number, projectDirectory: string, authority: ApiAuthority, selectionEpoch: number): void {
+  function scheduleWorktreeProjectionRetry(
+    generation: number,
+    projectDirectory: string,
+    authority: ApiAuthority,
+    selectionEpoch: number,
+  ): void {
     if (!ownsWorktreeProjection(generation, projectDirectory, authority, selectionEpoch)) return
     if (worktreeProjectionRetryTimer !== undefined) return
     worktreeProjectionRetryTimer = setTimeout(() => {
@@ -1006,7 +1072,11 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       if (ownsProject(authority, projectDirectory, selectionEpoch))
         setOperationError(t("worktree.refresh_failed", { error: errorMessage(err) }))
     } finally {
-      if (ownsProject(authority, projectDirectory, selectionEpoch) && refreshingWorktreeDirectory() === projectDirectory) setRefreshingWorktreeDirectory("")
+      if (
+        ownsProject(authority, projectDirectory, selectionEpoch) &&
+        refreshingWorktreeDirectory() === projectDirectory
+      )
+        setRefreshingWorktreeDirectory("")
     }
   }
 
@@ -1141,7 +1211,11 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       }
     } finally {
       if (ownsProject(authority, projectDirectory, selectionEpoch)) setDeleting(directories, false)
-      if (ownsProject(authority, projectDirectory, selectionEpoch) && bulkDeleteOperationDirectory() === projectDirectory) setBulkDeleteOperationDirectory("")
+      if (
+        ownsProject(authority, projectDirectory, selectionEpoch) &&
+        bulkDeleteOperationDirectory() === projectDirectory
+      )
+        setBulkDeleteOperationDirectory("")
     }
   }
 
@@ -1244,9 +1318,11 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         setLocalMenuOpen(false)
         setBranchMenuOpen(false)
         await occludeNativeSurfaces(owner)
-        if (generation === current && ownsAuthority(authority) && boardStore.selectEpoch === selectionEpoch) setOpen(true)
+        if (generation === current && ownsAuthority(authority) && boardStore.selectEpoch === selectionEpoch)
+          setOpen(true)
       } catch (error) {
-        if (generation === current && ownsAuthority(authority) && boardStore.selectEpoch === selectionEpoch) handleError(error)
+        if (generation === current && ownsAuthority(authority) && boardStore.selectEpoch === selectionEpoch)
+          handleError(error)
       }
     }
     onCleanup(() => {

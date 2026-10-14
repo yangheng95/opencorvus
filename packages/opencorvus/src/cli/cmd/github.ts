@@ -29,6 +29,8 @@ import { Bus } from "../../bus"
 import { Message } from "../../session/message"
 import { SessionPrompt } from "@/session/prompt"
 import { $ } from "bun"
+import { stageGitSourceEntries } from "@/util/git-source-stage"
+import { gitSourceStatus } from "@/util/git-source-links"
 
 type GitHubAuthor = {
   login: string
@@ -419,11 +421,10 @@ export const GithubRunCommand = cmd({
   command: "run",
   describe: "run the GitHub agent",
   builder: (yargs) =>
-    yargs
-      .option("event", {
-        type: "string",
-        describe: "GitHub mock event to run the agent for",
-      }),
+    yargs.option("event", {
+      type: "string",
+      describe: "GitHub mock event to run the agent for",
+    }),
   async handler(args) {
     await bootstrap(process.cwd(), async () => {
       const isMock = Boolean(args.event)
@@ -1058,7 +1059,7 @@ export const GithubRunCommand = cmd({
       async function pushToNewBranch(summary: string, branch: string, commit: boolean, isSchedule: boolean) {
         console.log("Pushing to new branch...")
         if (commit) {
-          await $`git add .`
+          await stageGitSourceEntries({ cwd: process.cwd(), timeoutProfile: "default" })
           if (isSchedule) {
             // No co-author for scheduled events - the schedule is operating as the repo
             await $`git commit -m "${summary}"`
@@ -1074,7 +1075,7 @@ Co-authored-by: ${actor} <${actor}@users.noreply.github.com>"`
       async function pushToLocalBranch(summary: string, commit: boolean) {
         console.log("Pushing to local branch...")
         if (commit) {
-          await $`git add .`
+          await stageGitSourceEntries({ cwd: process.cwd(), timeoutProfile: "default" })
           await $`git commit -m "${summary}
 
 Co-authored-by: ${actor} <${actor}@users.noreply.github.com>"`
@@ -1088,7 +1089,7 @@ Co-authored-by: ${actor} <${actor}@users.noreply.github.com>"`
         const remoteBranch = pr.headRefName
 
         if (commit) {
-          await $`git add .`
+          await stageGitSourceEntries({ cwd: process.cwd(), timeoutProfile: "default" })
           await $`git commit -m "${summary}
 
 Co-authored-by: ${actor} <${actor}@users.noreply.github.com>"`
@@ -1106,7 +1107,7 @@ Co-authored-by: ${actor} <${actor}@users.noreply.github.com>"`
           return { dirty: true, uncommittedChanges: false, switched: true }
         }
 
-        const ret = await $`git status --porcelain`
+        const ret = await gitSourceStatus({ cwd: process.cwd(), timeoutProfile: "default" })
         const status = ret.stdout.toString().trim()
         if (status.length > 0) {
           return { dirty: true, uncommittedChanges: true, switched: false }

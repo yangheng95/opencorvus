@@ -16,6 +16,8 @@ import { Database, eq, NotFoundError } from "../storage/db"
 import { ProjectTable } from "../project/project.sql"
 import { fn } from "../util/fn"
 import { hostGit as runGit } from "../util/git"
+import { stageGitSourceEntries } from "../util/git-source-stage"
+import { gitSourceStatus } from "../util/git-source-links"
 import { Log } from "../util/log"
 import { BusEvent } from "@/bus/bus-event"
 import { GlobalBus } from "@/bus/global"
@@ -311,10 +313,13 @@ export namespace Worktree {
             branch: input.branch,
           })
         }
-        const status = await runGit(["-c", "core.quotepath=false", "status", "--porcelain"], {
-          cwd: input.worktreeDir,
-          timeoutProfile: "default",
-        })
+        const status = await gitSourceStatus(
+          {
+            cwd: input.worktreeDir,
+            timeoutProfile: "default",
+          },
+          "lines",
+        )
         requireStatusProbe(status, input.worktreeDir)
         const dirty = statusLinesBlockingMerge(outputText(status.stdout))
         if (dirty.length > 0) {
@@ -744,10 +749,13 @@ export namespace Worktree {
     })
     requireMergeHeadProbe(mergeHeadResult, directory)
     const mergeHead = mergeHeadResult.exitCode === 0
-    const dirtyResult = await runGit(["-c", "core.quotepath=false", "status", "--porcelain"], {
-      cwd: directory,
-      timeoutProfile: "default",
-    })
+    const dirtyResult = await gitSourceStatus(
+      {
+        cwd: directory,
+        timeoutProfile: "default",
+      },
+      "lines",
+    )
     requireStatusProbe(dirtyResult, directory)
     const dirtyPaths = statusLinesBlockingMerge(outputText(dirtyResult.stdout))
     return { mergeHead, dirtyPaths }
@@ -774,19 +782,13 @@ export namespace Worktree {
   }
 
   async function commitPrimaryDirtyWorktree(input: { branch: string; primaryDir: string; dirtyPaths: string[] }) {
-    const changedPaths = dirtyStatusPaths(input.dirtyPaths)
-    for (const chunk of chunks(changedPaths, 50)) {
-      const add = await runGit(["add", "--", ...chunk], { cwd: input.primaryDir, timeoutProfile: "default" })
-      if (add.exitCode !== 0) {
-        throw new MergeFailedError({
-          message:
-            `mergeWithMerge(${input.branch}): primary worktree is dirty but could not be staged ` +
-            `for merge_back recovery: ${errorText(add)}`,
-          branch: input.branch,
-          stderr: errorText(add),
-        })
-      }
-    }
+    await stageGitSourceEntries({ cwd: input.primaryDir, timeoutProfile: "default" }).catch((error) => {
+      throw new MergeFailedError({
+        message: `mergeWithMerge(${input.branch}): primary worktree could not be staged for merge_back recovery: ${String(error)}`,
+        branch: input.branch,
+        stderr: String(error),
+      })
+    })
     const commit = await runGit(
       [
         "-c",
@@ -824,38 +826,8 @@ export namespace Worktree {
     return outputText(head.stdout)
   }
 
-  function dirtyStatusPaths(lines: string[]): string[] {
-    return uniqueStrings(lines.flatMap((line) => statusLinePaths(line)))
-  }
-
-  function statusLinePaths(line: string): string[] {
-    const file = statusLinePathPayload(line).trim()
-    if (!file) return []
-    const renameArrow = " -> "
-    if (!file.includes(renameArrow)) return [file]
-    return file
-      .split(renameArrow)
-      .map((part) => part.trim())
-      .filter(Boolean)
-  }
-
-  function statusLinePathPayload(line: string): string {
-    if (line.startsWith("?? ")) return line.slice(3)
-    if (line.length >= 3 && line[2] === " ") return line.slice(3)
-    if (line.length >= 2 && line[1] === " ") return line.slice(2)
-    return line.slice(3)
-  }
-
   function uniqueStrings(input: string[]): string[] {
     return [...new Set(input)]
-  }
-
-  function chunks<T>(input: T[], size: number): T[][] {
-    const out: T[][] = []
-    for (let index = 0; index < input.length; index += size) {
-      out.push(input.slice(index, index + size))
-    }
-    return out
   }
 
   function failed(result: { stdout?: Uint8Array; stderr?: Uint8Array }) {
@@ -3027,10 +2999,13 @@ export namespace Worktree {
               throw new ResetFailedError({ message: error instanceof Error ? error.message : String(error) })
             })
 
-            const status = await runGit(["status", "--porcelain=v1"], {
-              cwd: resetPlan.worktreePath,
-              timeoutProfile: "default",
-            })
+            const status = await gitSourceStatus(
+              {
+                cwd: resetPlan.worktreePath,
+                timeoutProfile: "default",
+              },
+              "lines",
+            )
             if (status.exitCode !== 0) {
               throw new ResetFailedError({ message: errorText(status) || "Failed to read git status" })
             }

@@ -6,6 +6,7 @@ import { OAUTH_CALLBACK_PATH } from "../src/mcp/oauth-provider"
 import { Instance } from "../src/project/instance"
 import { publicUnknownErrorMessage } from "../src/server/error-handler"
 import { writeVcsCommitMessageStreamError } from "../src/server/vcs-stream-error"
+import { MissingModelConfigError } from "../src/config/model-resolution-error"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(async () => {
@@ -72,13 +73,38 @@ describe("P0 security runtime paths", () => {
       logError: (message, fields) => logs.push({ message, fields }),
     })
 
-    expect(event).toEqual({ type: "error", message: publicUnknownErrorMessage() })
+    expect(event).toEqual({ type: "error", code: "generation_failed", message: publicUnknownErrorMessage() })
     expect(writes).toEqual([{ data: JSON.stringify(event) }])
     expect(logs).toEqual([
       {
         message: "commit message stream failed",
         fields: { requestID: "request-1", error: privateError },
       },
+    ])
+  })
+
+  test("VCS missing-model errors expose the configuration contract and keep actual diagnostics", async () => {
+    const writes: Array<{ data: string }> = []
+    const logs: unknown[] = []
+    const error = new MissingModelConfigError({ agent: "summary", message: "Project model is required" })
+    const event = await writeVcsCommitMessageStreamError({
+      stream: {
+        async writeSSE(payload) {
+          writes.push(payload)
+        },
+      },
+      error,
+      requestID: "model-prerequisite-1",
+      logError: (message, fields) => logs.push({ message, fields }),
+    })
+    expect(event).toEqual({
+      type: "error",
+      code: "model_not_configured",
+      message: "Configure a model for this project, or enter the commit message manually.",
+    })
+    expect(writes).toEqual([{ data: JSON.stringify(event) }])
+    expect(logs).toEqual([
+      { message: "commit message stream failed", fields: { requestID: "model-prerequisite-1", error } },
     ])
   })
 

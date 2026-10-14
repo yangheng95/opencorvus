@@ -5,7 +5,14 @@ import { boardStore, setBoardStore, setPath, setVcs } from "../store/board"
 import { settingsStore } from "../store/settings"
 import { AppLog } from "../utils/log"
 import { formatErrorDetails } from "../utils/error-details"
-import { apiJson, ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
+import {
+  apiJson,
+  ApiAuthorityChangedError,
+  captureApiAuthority,
+  isApiAuthorityCurrent,
+  assertApiAuthorityCurrent,
+  type ApiAuthority,
+} from "./api"
 import { getHostTransport } from "./host-transport-runtime"
 import type { StreamHandle } from "./host-transport"
 import {
@@ -76,7 +83,11 @@ export async function loadMeta(directory = activeProjectDirectory(), authority =
     return
   }
   const isCurrent = () =>
-    isApiAuthorityCurrent(authority) && request === metaRequest && selectionEpoch === boardStore.selectEpoch && epoch === settingsStore.directoryEpoch && directory === activeProjectDirectory()
+    isApiAuthorityCurrent(authority) &&
+    request === metaRequest &&
+    selectionEpoch === boardStore.selectEpoch &&
+    epoch === settingsStore.directoryEpoch &&
+    directory === activeProjectDirectory()
   setBoardStore({
     vcsDirectory: directory,
     vcsLoading: true,
@@ -112,7 +123,10 @@ async function refreshMetaAfterAcceptedMutation(
   authority: ApiAuthority,
   selectionEpoch: number,
 ): Promise<void> {
-  const owns = () => isApiAuthorityCurrent(authority) && selectionEpoch === boardStore.selectEpoch && directory === activeProjectDirectory()
+  const owns = () =>
+    isApiAuthorityCurrent(authority) &&
+    selectionEpoch === boardStore.selectEpoch &&
+    directory === activeProjectDirectory()
   if (!owns()) return
   try {
     await loadMeta(directory, authority)
@@ -132,7 +146,10 @@ async function refreshMetaAfterAcceptedMutation(
 // ── Diff helpers ──
 
 // VCS means Version Control System; these functions own its project-scoped branch request boundary.
-export async function loadVcsBranches(directory = activeProjectDirectory(), authority = captureApiAuthority()): Promise<VcsBranch[]> {
+export async function loadVcsBranches(
+  directory = activeProjectDirectory(),
+  authority = captureApiAuthority(),
+): Promise<VcsBranch[]> {
   const result = await apiJson(projectScopedPath("vcs/branches", directory), { authority })
   if (!Array.isArray(result)) throw new Error("vcs/branches returned a non-array payload")
   return result.map((item, index) => {
@@ -150,7 +167,11 @@ export async function loadVcsBranches(directory = activeProjectDirectory(), auth
   })
 }
 
-export async function switchVcsBranch(branch: string, directory = activeProjectDirectory(), authority = captureApiAuthority()): Promise<void> {
+export async function switchVcsBranch(
+  branch: string,
+  directory = activeProjectDirectory(),
+  authority = captureApiAuthority(),
+): Promise<void> {
   const selectionEpoch = boardStore.selectEpoch
   const requested = branch.trim()
   if (!requested) throw new Error("switchVcsBranch requires a branch")
@@ -161,6 +182,16 @@ export async function switchVcsBranch(branch: string, directory = activeProjectD
     body: JSON.stringify({ branch: requested }),
   })
   await refreshMetaAfterAcceptedMutation("switch-branch", directory, authority, selectionEpoch)
+}
+
+export class VcsCommitMessageError extends Error {
+  constructor(
+    readonly code: Extract<VcsCommitMessageEvent, { type: "error" }>["code"],
+    message: string,
+  ) {
+    super(message)
+    this.name = "VcsCommitMessageError"
+  }
 }
 
 export function streamVcsCommitMessage(options: VcsCommitMessageStreamOptions): StreamHandle {
@@ -215,7 +246,7 @@ export function streamVcsCommitMessage(options: VcsCommitMessageStreamOptions): 
         }
         if (payload.type === "error" && typeof payload.message === "string") {
           terminal = true
-          options.onError(new Error(payload.message))
+          options.onError(new VcsCommitMessageError(payload.code, payload.message))
           return
         }
         terminal = true
@@ -230,9 +261,11 @@ export function streamVcsCommitMessage(options: VcsCommitMessageStreamOptions): 
         if (terminal || options.signal?.aborted) return
         terminal = true
         if (info?.current === false || !isApiAuthorityCurrent(authority)) {
-          options.onError(info
-            ? new ApiAuthorityChangedError(authority, { phase: "stream_closed", reason, info })
-            : new Error("Retired VCS stream closed without its transport authority receipt"))
+          options.onError(
+            info
+              ? new ApiAuthorityChangedError(authority, { phase: "stream_closed", reason, info })
+              : new Error("Retired VCS stream closed without its transport authority receipt"),
+          )
           return
         }
         options.onError(new Error(`VCS commit-message stream closed before completion: ${reason}`))
@@ -241,7 +274,11 @@ export function streamVcsCommitMessage(options: VcsCommitMessageStreamOptions): 
   )
 }
 
-export async function commitVcsChanges(message: string, directory: string, authority = captureApiAuthority()): Promise<VcsCommitResult> {
+export async function commitVcsChanges(
+  message: string,
+  directory: string,
+  authority = captureApiAuthority(),
+): Promise<VcsCommitResult> {
   const selectionEpoch = boardStore.selectEpoch
   const requested = message.trim()
   if (!requested) throw new Error("commitVcsChanges requires a message")

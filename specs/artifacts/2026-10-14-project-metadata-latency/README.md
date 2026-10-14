@@ -6,4 +6,6 @@
 
 [共享源条目读取](source-entry-read/README.md)保留后续2100原capture：完整失败/修正、24项最终正向测试、两服务的34原HTTP及8张人工复核原图；native add dry-run超时与未资格写入范围明确保留。
 
-[原生写入调查](native-write-investigation/README.md)保留138原capture/4842523B：真实leaf活动与53ms终止结算、静默进程期限、原锁及raw link提交后的错误T；写入和比较修复仍未实施。
+[原生写入调查](native-write-investigation/README.md)保留138原capture/4842523B：真实leaf活动与53ms终止结算、静默进程期限、原锁及raw link提交后的错误T。这是修复前原件；当前修复与验收见下节。
+
+[源条目写入与单人验收](source-entry-write/README.md)保存真实 Git 正向验收、原失败与修复、开发服务 HTTP 和流式配置错误、英文/中文桌面截图、手工提交及原进程结算。没有凭据或模型成功调用声明。

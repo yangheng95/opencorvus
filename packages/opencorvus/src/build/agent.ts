@@ -30,6 +30,7 @@ import { fileURLToPath } from "node:url"
 import { isDeepStrictEqual } from "node:util"
 import { $ } from "bun"
 import { hostGit as runGit, gitProcessArgs } from "@/util/git"
+import { stageGitSourceEntries } from "@/util/git-source-stage"
 import { Process } from "@/util/process"
 import { tool, type Tool as AITool, type ToolExecutionOptions, type ToolSet } from "ai"
 import { Log } from "@/util/log"
@@ -551,10 +552,7 @@ export namespace BuildAgent {
   }
 
   export type RunInput = RunInputBase &
-    (
-      | { existingSessionID: string; newSessionID?: never }
-      | { existingSessionID?: never; newSessionID: string }
-    )
+    ({ existingSessionID: string; newSessionID?: never } | { existingSessionID?: never; newSessionID: string })
 
   export interface RunOutput {
     /** The child build session and its visible final assistant message. */
@@ -752,7 +750,9 @@ export namespace BuildAgent {
       const buildCollector: BuildCollector = {}
       const buildToolKit: {
         stageOwnedToolIDs: readonly string[]
-        stageMaterializers?: Readonly<Record<string, import("@/agent/stage-tool-materializer").StageToolMaterializerBinding>>
+        stageMaterializers?: Readonly<
+          Record<string, import("@/agent/stage-tool-materializer").StageToolMaterializerBinding>
+        >
         materializeExact: (toolID: string) => AITool | undefined
         getCollector: () => BuildCollector
       } =
@@ -768,11 +768,11 @@ export namespace BuildAgent {
               materializeExact: (toolID) =>
                 toolID === "merge_back"
                   ? materializeBuildMergeBackTool(
-                    { taskID: task.id, branch: worktreeBranch, worktreeDir },
-                    (primaryHead) => {
-                      mergedHead = primaryHead
-                    },
-                  )
+                      { taskID: task.id, branch: worktreeBranch, worktreeDir },
+                      (primaryHead) => {
+                        mergedHead = primaryHead
+                      },
+                    )
                   : undefined,
               getCollector: () => buildCollector,
             }
@@ -810,7 +810,11 @@ export namespace BuildAgent {
         }
       }, 40_000)
       cleanupRenewal.unref()
-      using _cleanupActivation = { [Symbol.dispose]() { clearInterval(cleanupRenewal) } }
+      using _cleanupActivation = {
+        [Symbol.dispose]() {
+          clearInterval(cleanupRenewal)
+        },
+      }
       let out:
         | {
             session: { id: string }
@@ -931,11 +935,7 @@ export namespace BuildAgent {
       if (ownsWorktree && worktreeDir && baseRef && callerOwnedTerminalSnapshot) {
         try {
           contributionRefs = await resolveExecutionContributionRefs(worktreeDir, baseRef)
-          diffs = await collectExecutionDiffs(
-            worktreeDir,
-            contributionRefs.diffBaseRef,
-            callerOwnedTerminalSnapshot,
-          )
+          diffs = await collectExecutionDiffs(worktreeDir, contributionRefs.diffBaseRef, callerOwnedTerminalSnapshot)
           observationDiffBaseRef = contributionRefs.diffBaseRef
           observationDiffHeadRef = callerOwnedTerminalSnapshot
         } catch (err) {
@@ -948,11 +948,7 @@ export namespace BuildAgent {
         }
       } else if (callerOwnedBaselineSnapshot && callerOwnedTerminalSnapshot) {
         try {
-          diffs = await collectExecutionDiffs(
-            worktreeDir!,
-            callerOwnedBaselineSnapshot,
-            callerOwnedTerminalSnapshot,
-          )
+          diffs = await collectExecutionDiffs(worktreeDir!, callerOwnedBaselineSnapshot, callerOwnedTerminalSnapshot)
           observationDiffBaseRef = callerOwnedBaselineSnapshot
           observationDiffHeadRef = callerOwnedTerminalSnapshot
         } catch (err) {
@@ -988,9 +984,7 @@ export namespace BuildAgent {
       const sessionID = out?.session.id ?? buildSessionID
       const finalMessageID = out?.finalMessage.info.id
       if (runError) {
-        observationErrors.push(
-          `Build Turn failed: ${runError instanceof Error ? runError.message : String(runError)}`,
-        )
+        observationErrors.push(`Build Turn failed: ${runError instanceof Error ? runError.message : String(runError)}`)
       }
       const coordinationHandoff = out ? agentCoordinationHandoffResult(out) : undefined
       if (coordinationHandoff) {
@@ -1197,9 +1191,14 @@ export async function pinBuildObservationTree(input: { worktreeDir: string; refN
     GIT_INDEX_FILE: indexFile,
   }
   try {
+    const seed = ["read-tree", "HEAD"]
+    requireExecutionContributionGitSuccess(
+      await runGit(seed, { cwd: input.worktreeDir, env, timeoutProfile: "default" }),
+      seed,
+      input.worktreeDir,
+    )
+    await stageGitSourceEntries({ cwd: input.worktreeDir, env, timeoutProfile: "default" })
     for (const args of [
-      ["read-tree", "HEAD"],
-      ["add", "-A", "--", "."],
       [
         "rm",
         "-r",
@@ -1363,15 +1362,17 @@ async function collectExecutionDiffs(
     if (!Number.isInteger(added) || added < 0 || !Number.isInteger(removed) || removed < 0) {
       throw new Error(`git diff --numstat returned invalid counts for ${file}: ${row.additions}\t${row.deletions}`)
     }
-    result.push(BuildFileObservation.parse({
-      file,
-      additions: Number.isFinite(added) ? added : 0,
-      deletions: Number.isFinite(removed) ? removed : 0,
-      status: identity.status,
-      is_binary: row.isBinary,
-      before: identity.beforeOID ? { oid: identity.beforeOID, bytes: sizes.get(identity.beforeOID) } : null,
-      after: identity.afterOID ? { oid: identity.afterOID, bytes: sizes.get(identity.afterOID) } : null,
-    }))
+    result.push(
+      BuildFileObservation.parse({
+        file,
+        additions: Number.isFinite(added) ? added : 0,
+        deletions: Number.isFinite(removed) ? removed : 0,
+        status: identity.status,
+        is_binary: row.isBinary,
+        before: identity.beforeOID ? { oid: identity.beforeOID, bytes: sizes.get(identity.beforeOID) } : null,
+        after: identity.afterOID ? { oid: identity.afterOID, bytes: sizes.get(identity.afterOID) } : null,
+      }),
+    )
   }
   return result
 }
