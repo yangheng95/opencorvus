@@ -456,3 +456,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [Manager target scope93](2026-10-05-connection-workspace-authority/manager-cross-scope-installation-investigation-93.md): real reverse-order Project import rejected by broken global same-ID issue; original dynamic facts limited; independent repair not yet admitted.
 - [Builtin runtime/mount collision94](2026-10-05-connection-workspace-authority/builtin-collision-authority-investigation-94.md): two filtered-item dead checks audited across current/pinned/runtime/config scopes; fixed revisions remain distinct; repair held.
 - [Shared logger namespace95](2026-10-05-connection-workspace-authority/logger-reserved-fields-investigation-95.md): actual Session subject-time collisions and Pino reserved envelope ownership audited; raw unknown chronology preserved, product repair held.
+
+- [正文文件链接原始路径](2026-10-14-literal-reference-click/README.md)：真实点击、文件身份和验收原件。

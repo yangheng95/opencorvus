@@ -1,0 +1,38 @@
+# 正文文件链接的原始路径点击
+
+## Recall
+
+用户要求持续自主迭代，单开发agent，优先Sources与侧栏Rendering，真实体验后提交推送。不得使用子agent。422已提交2d00e71a7；正常push仍在原60982执行，不能把待完成推送写为成功。当前仅原有.bun和packages/opencorvus/bun未跟踪，保留。当前schema版本2，已有历史及迁移保留，不清库、不发布。
+
+## 修改前分析与全仓搜索
+
+已读422 Recall及workspace/file-workbench/server-path、file-reference、markdown提取/链接渲染、main委托点击、SourceParts及07-panel路径合同；全仓搜索parseFileReference、elementFileReference、fileReferenceHtmlAttributes及两种路径attribute全部定义/调用与file-reference纯解析测试。Sources直接点击走openFileReference，正文代码引用走openPathInSelectedEditor，显式Markdown链接走openProjectFile，两种正文委托共同调用elementFileReference。文件workbench和host已保留原始目标；elementFileReference却对已解析并写入attribute的路径再次trim，可将以空白开头的相对文件名变成另一个文件。自然语言parseFileReference的文本边缘解析属于独立合同，不能据此改变已接受资源身份。
+
+显式链接markdownProjectFileReference先分离行列再decodeURI，当前允许百分号编码的文件名前置空白且保留其身份；扩展名仍按现有列表判断。预期触发：项目根下NBSP（No-Break Space，不间断空格）开头的identity-423.md，与普通identity-423.md具有不同内容，真实模型输出[带空白文件](%C2%A0identity-423.md:1)，点击后旧attribute reader裁掉NBSP，可能打开普通文件。该触发尚待真实页面确认，不能先宣称已复现。422只修主机传递，没有覆盖正文attribute读取，420的Markdown生命周期与此路径身份错误独立。
+
+影响为两种正文文件链接的最终路径，现有行号/行范围及错误检查保留。普通Sources和Explorer不变，文案/公共类型/接口/Provider/schema不变。尚无调度、队列、恢复或并发异常证据；若真实运行出现则按共享机制立即横审。现存file-reference测试是纯解析与range映射，不渲染组件、不操作DOM（Document Object Model，文档对象模型）；不新增或运行任何UI（User Interface，用户界面）自动化测试，也不为本UI点击改动引入fake Element断言。
+
+## 实施及验收方案
+
+1. 在412既有隔离项目创建两个不同的实际文件，保留内容与转义后的文件身份；复用422已构建正式bundle作为修改前版本。项目开发服务/ui、一个既有主Session内真实gpt-6.1-sol读取并自然输出两条显式链接，不生成子成员，不注入消息/DOM/Source数据。auth和models配对，credential/catalog/actualModel/streaming预检，12调用/180秒无活动/NativeService600秒。真实点击、原图人工查看与只读请求/数据库事实证明当前错误；随后公开shutdown、join原句柄、physical/output/request收尾和配对退休。
+2. 实证成立后只删除elementFileReference对实际path的裁剪，空输入校验只检验而不改写目标。保持唯一reader及所有既有location校验；无需新配置/fallback/兼容层。先保存原文件及差异，按本方案实施。
+3. 正式Node构建后新隔离服务/ui重开同一真实历史，点击同一带空白链接，截图确认文件内容与第1行准确，再点普通链接和普通Source复验；界面错误或运行器故障必须修根因重跑。未做到的厂商原生编辑器窗口及完整复制粘贴不冒称通过。
+4. 更新唯一07-panel与三索引，当前文档/类型检查、人工差异复核；归档原件与精确资源终态。范围提交，fresh fetch/merge、完整pending集合审查后正常push。无新branch/worktree、无no-verify、无发布。
+
+## 修前真实证据与确定根因
+
+18567原生开发服务预检credential usable、catalog projected、actualModel gpt-6.1-sol、streaming true。页面4发送真实用户请求，两次read分别读取原始带前置NBSP文件和普通文件，最终自然输出两条链接。01原图实际显示两个来源及链接；真实点击assistant末尾带空白链接后02编辑器显示IDENTITY_PLAIN_423，而该链接的已解析data-project-file-path仍是NBSP开头的identity-423.md、line=1。实际原图与只读观察已保存，明确证明第二次trim改变了文件身份；不是Source生产、模型原文或文件加载器读错。修改前生产文件已保存。
+
+公开shutdown e3bda0 HTTP200、原53328 joinfe0feb exit0，页面4已关闭，physical/output/request与auth/models配对退休完成。422原60982 join89007e exit0，freshfetch确认origin/main=2d00e71a7、pending为空。本轮现按既定方案仅修改唯一attribute读取保真与架构合同。
+
+## 修后真实验收与证据边界
+
+唯一生产修改是elementFileReference先取得原attribute，仅用trim判空，交给现有workbench/编辑器的path仍为原字符串；其余location校验及自然语言语法保持当前定义。没有新增组件、解析器、双源或UI自动化测试。现存纯parseFileReference/fileReferenceRange checker的21项29断言通过（673a4e exit0），它们只验证纯语法/数据映射，不宣称覆盖DOM点击。正式Node构建原22403 join0a7c96 exit0（66秒），有现有chunk体积提示；docs:check 345ops/26groups、architecture-index 20文档通过。
+
+18569开发服务加载正式修后bundle，页面5只选择同一已有主会话，不再次发送业务输入、不创建成员。实际点击同一个assistant带空白链接后，编辑器加载IDENTITY_LEADING_NBSP_423并高亮第1行；普通对照链接实际加载IDENTITY_PLAIN_423，随后原真实Source按钮再次打开带空白文件及第1行。03原图捕捉到刚打开后的加载中间帧，不能单独作为内容已显示的证据；后续04明确显示带空白文件内容和行号，05/06分别为普通对照与Source回归。六张原图均已人工查看，保留03原件而非覆盖中间帧。没有取得真实厂商原生编辑器窗口或完整复制粘贴的新证据，原边界继续保留；本轮也没有新的长回复侧栏流式验收。
+
+只读SQLite使用同一真实主Session ses_-zURzTlJFzzacrP6FufN，实际用户输入msg_db0f37a4-1fc2-4864-b642-cfe4dbdf16a2、三个自然assistant消息及对应part/tool/outcome在前后逐字段/内容相等，schema=2；末条msg_g0VY1mNas00bXcjYQ7q6自然finish=stop。两次read的实际工具输出分别含IDENTITY_LEADING_NBSP_423和IDENTITY_PLAIN_423，真实Source分别为prt_g0VY1mMKx00WA2kvsbVN和prt_g0VY1mNZo00RztRLRP41，均range1–1，前者原始path/title保留前置NBSP。此处比较完整实际身份和内容，不使用可变源码摘要。
+
+最新原Provider审计共9条均gpt-6.1-sol、streaming=true、HTTP200、reader settled：7条eof，2条memory reader被公开shutdown取消并正常settled，不能把aborted改写成eof。三个实际work业务流全部eof；after只有预检及既有主会话memory恢复流，没有重复业务请求。公开关闭是当前scope所拥有的正常资源收尾，不是业务自然完成的替代证明。
+
+after公开shutdown fa17b4 HTTP200、原40694 joine4ecb0 exit0，physicalCompletion/outputDrainComplete/requestCleanupComplete和精确OS实例dead_or_reused成立，复制auth/models配对退休，页面5关闭。before同样已公开关闭与join。未关闭用户窗口或进程，未新建开发agent、产品子成员、branch/worktree或发布版本。当前5个已跟踪文件差异全部属于本轮；原有两个未跟踪目录继续保留。正常提交/推送及最终远端身份以Git回执为准，持续goal保持active。

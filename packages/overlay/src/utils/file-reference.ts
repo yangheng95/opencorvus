@@ -96,8 +96,8 @@ export function fileReferenceHtmlAttributes(
 
 /** Read back a reference the renderer serialised onto an element. */
 export function elementFileReference(element: Element, pathAttribute: string): FileReference | null {
-  const path = element.getAttribute(pathAttribute)?.trim()
-  if (!path) return null
+  const path = element.getAttribute(pathAttribute)
+  if (!path?.trim()) return null
   const line = positiveLineNumber(element.getAttribute(FILE_REFERENCE_LINE_ATTRIBUTE) ?? undefined)
   const rawEndLine = element.getAttribute(FILE_REFERENCE_END_LINE_ATTRIBUTE)
   const endLine = positiveLineNumber(rawEndLine ?? undefined)

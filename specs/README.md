@@ -3427,3 +3427,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [CR文件来源坐标372](records/2026-10/2026-10-13-source-cr-location-372.md)：修复CR、混合换行、BOM行列及跨行匹配来源。
 
 - [正文冒号行范围引用373](records/2026-10/2026-10-13-source-colon-range-373.md)：Sources范围格式与正文解析的一致性。
+
+- [正文文件链接原始路径](records/2026-10/2026-10-14-literal-reference-click.md)：已解析资源身份的点击传递与真实页面验收。

@@ -112,6 +112,9 @@ open one project target, preserving drafts across repeated citations. External
 absolute paths retain the source reader. Explicit attachment sources retain their
 original display names and source targets. Existing persisted source snapshots
 are not rewritten.
+Body-reference click delegation also retains the exact already parsed path
+attribute, including whitespace decoded from an authored Markdown destination.
+Empty-attribute validation does not supply a trimmed replacement resource.
 
 Ordinary project-file keys and absolute containment share the server-path lexical
 normalizer with project-directory identity. Dot segments reduce against the
