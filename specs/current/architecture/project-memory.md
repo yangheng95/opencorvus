@@ -80,9 +80,11 @@ Project memory has three explicitly scoped authorities:
    The compaction transcript includes original authors and exact text/Tool Part
    and call identities. Text, Tool fields and redacted Message diagnostics use
    one request-budget-aware projection. A compiled minimum catalog records the
-   complete selected history with original roles, Message/Part/call identities
-   and exact omitted-field references. Only a chronological prefix of complete
-   catalog Messages is inline when that index exceeds the request window;
+   selected history with original roles, Message/Part/call identities and exact
+   omitted-field references. Catalog leaves reuse rendered Part fragments,
+   Message diagnostics, or an identity fragment for a Message with no rendered
+   Part. Each leaf marks its partial `catalog-record` Message scope. Only a
+   chronological prefix of complete Messages is inline within the request window;
    complete fields in that prefix expand in stable ascending additional estimated size,
    then optional bounded previews consume remaining space. System instructions,
    prepared Tool schemas and the final summarizer prompt share that same budget.
@@ -92,16 +94,26 @@ Project memory has three explicitly scoped authorities:
    cannot fit produces a durable ContextOverflowError rather than a checkpoint.
    Token estimates do not guarantee fit under every model's exact tokenizer.
    The helper prompt carries `compaction_catalog_reference` with its real helper
-   Message identity and the exact UTF-16 offset of the next unlisted Message.
-   `ReadCompactionEvidence(message_id=helper, field=catalog)` pages that same bound
-   catalog through the existing read-window fitting. Its content is one JSON
-   array of minimal transcript projections; pages may split serialized records.
-   Readers preserve unfinished fragments and exact IDs across pages/notes.
+   Message identity and one exact root-node offset/limit/end. The single catalog
+   is a post-order JSON array of source leaves and binary directory nodes. Child
+   references describe half-open source-record ranges in selected transcript
+   order and additive original user/assistant, Tool/error and diagnostic counts.
+   These counts describe types, not semantic relevance or authorization. Nodes
+   address rendered fragments, so a Message with many Parts is also navigable.
+   `ReadCompactionEvidence(message_id=helper, field=catalog)` reads the same bound
+   catalog through existing window fitting. Child spans are computed when their
+   exact JSON is appended, before their parents, and use UTF-16 units. A node may
+   need several fitted pages; its stated end finishes that node even when the
+   outer field has a later nextOffset. Readers preserve unfinished fragments and
+   exact child/source references across notes. Catalog read-receipt gaps describe
+   byte delivery, not obligations to scan unrelated directory ranges.
    Catalog ownership is assistant/compaction; the indexed original source role
    and author remain distinct. Catalog pages are projection data, not user
    authority. The ordinary Part readers recover the complete original fields.
    Catalogs are compiled once per attempt, not a new persistent content store;
-   actual read and note Tool Parts retain their normal durable evidence.
+   actual read and note Tool Parts retain their normal durable evidence. Host
+   memory and serialized directory size remain linear in the source record count;
+   hierarchy improves navigation rather than guaranteeing model comprehension.
    Each helper step rebuilds its view from the bound source renderer and the
    Software Development Kit (SDK)'s accumulated `responseMessages`. The previous
    prepared message view is not a reliable positional boundary: its inline

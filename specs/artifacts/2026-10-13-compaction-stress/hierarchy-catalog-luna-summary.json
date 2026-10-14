@@ -1,0 +1,135 @@
+{
+  "name": "hierarchy-catalog-luna",
+  "model": "openai/gpt-6-luna",
+  "status": "passed",
+  "requests": 27,
+  "canonicalUsageRows": 27,
+  "originalMessages": 1029,
+  "catalogReads": 16,
+  "catalogChars": 710693,
+  "nodes": 16,
+  "leaves": 3,
+  "deliveredChars": 6141,
+  "uniqueChars": 6141,
+  "sourceInActualUserRole": true,
+  "metrics": {
+    "region": {
+      "expected": "REGION-7be39fa820d4-catalog-evidence",
+      "actual": "REGION-7be39fa820d4-catalog-evidence",
+      "pass": true
+    },
+    "evidence": {
+      "expected": "EVIDENCE-312a79f046c8",
+      "actual": "EVIDENCE-312a79f046c8",
+      "pass": true
+    },
+    "input_reference": {
+      "expected": "INPUT-2090259e7c8c",
+      "actual": "INPUT-2090259e7c8c",
+      "pass": true
+    },
+    "trace_id": {
+      "expected": "TRACE-2a902f3e4b57",
+      "actual": "TRACE-2a902f3e4b57",
+      "pass": true
+    },
+    "call_id": {
+      "expected": "call_9cfba5c3b539",
+      "actual": "call_9cfba5c3b539",
+      "pass": true
+    },
+    "part_id": {
+      "expected": "prt_g0VY0QuQj00YgDPfSgK8",
+      "actual": "prt_g0VY0QuQj00YgDPfSgK8",
+      "pass": true
+    },
+    "next_offset": {
+      "expected": 17031,
+      "actual": 17031,
+      "pass": true
+    },
+    "permission": {
+      "expected": "denied",
+      "actual": "denied",
+      "pass": true
+    },
+    "validation": {
+      "expected": "pending",
+      "actual": "pending",
+      "pass": true
+    },
+    "rollback_owner": {
+      "expected": "unknown",
+      "actual": "unknown",
+      "pass": true
+    },
+    "failure_name": {
+      "expected": "EvidenceReadFailure",
+      "actual": "EvidenceReadFailure",
+      "pass": true
+    }
+  },
+  "toolFailures": [
+    {
+      "tool": "ReadCompactionEvidence",
+      "input": {
+        "part_id": "prt_g0VY0QuQf00vzq15Kz0X",
+        "message_id": "msg_g0VY0QuQd003eFtJRidr",
+        "field": "text",
+        "offset": 0,
+        "limit": 10000
+      },
+      "failure": {
+        "kind": "tool-execution",
+        "name": "CompactionEvidenceReadError",
+        "message": "Part fields require exactly one part_id locator.",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_3104d5c1090a47209d2d6ad01032f21f",
+          "toolName": "ReadCompactionEvidence"
+        }
+      }
+    },
+    {
+      "tool": "ReadCompactionEvidence",
+      "input": {
+        "part_id": "prt_g0VY0QuQj00YgDPfSgK8",
+        "field": "input",
+        "offset": 0,
+        "limit": 10000
+      },
+      "failure": {
+        "kind": "tool-execution",
+        "name": "CompactionEvidenceReadError",
+        "message": "The evidence read window is full. Preserve the facts and exact next cursor already learned with SaveCompactionNotes, then continue reading.",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_541a20496de944c1ba0ad2d34f2c43ec",
+          "toolName": "ReadCompactionEvidence"
+        }
+      }
+    },
+    {
+      "tool": "ReadCompactionEvidence",
+      "input": {
+        "part_id": "prt_g0VY0QuQj00YgDPfSgK8",
+        "field": "output",
+        "offset": 0,
+        "limit": 30000
+      },
+      "failure": {
+        "kind": "tool-execution",
+        "name": "CompactionEvidenceReadError",
+        "message": "Part prt_g0VY0QuQj00YgDPfSgK8 has no readable output field.",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_044a8adaaf174f05a67d48923145e4f7",
+          "toolName": "ReadCompactionEvidence"
+        }
+      }
+    }
+  ]
+}

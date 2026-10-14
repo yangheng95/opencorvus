@@ -1,7 +1,7 @@
 {
   "priorRequests": 99,
-  "total": 1085,
-  "authorizedTotal": 1200,
+  "total": 1164,
+  "authorizedTotal": 1300,
   "runs": [
     {
       "name": "text-three-rounds",
@@ -543,6 +543,38 @@
       "fields": 11,
       "sourceRolePreserved": 0,
       "summary": "catalog-evidence-luna-summary.json"
+    },
+    {
+      "name": "hierarchy-catalog-luna",
+      "status": "passed",
+      "requests": 27,
+      "model": "openai/gpt-6-luna",
+      "credentialsRemoved": true,
+      "completedCheckpoints": 1,
+      "passedFields": 11,
+      "fields": 11,
+      "sourceRolePreserved": 1,
+      "summary": "hierarchy-catalog-luna-summary.json"
+    },
+    {
+      "name": "hierarchy-catalog-sol",
+      "status": "failed",
+      "requests": 9,
+      "model": "openai/gpt-6.1-sol",
+      "credentialsRemoved": true,
+      "reason": "Provider-reported streaming server overload before checkpoint publication"
+    },
+    {
+      "name": "hierarchy-catalog-sol-retry",
+      "status": "passed",
+      "requests": 43,
+      "model": "openai/gpt-6.1-sol",
+      "credentialsRemoved": true,
+      "completedCheckpoints": 1,
+      "passedFields": 11,
+      "fields": 11,
+      "sourceRolePreserved": 1,
+      "summary": "hierarchy-catalog-sol-retry-summary.json"
     }
   ],
   "authorizationPolicy": "User explicitly allows increasing request limits as needed; retain bounded per-run budgets and exact accounting.",
@@ -605,5 +637,11 @@
     "contextTokens": 19000,
     "helperSteps": 80,
     "summary": "catalog-model-matrix-summary.json"
+  },
+  "latestHierarchicalCatalogMatrix": {
+    "status": "passed",
+    "luna": "passed",
+    "sol": "passed",
+    "summary": "hierarchy-model-matrix-summary.json"
   }
 }

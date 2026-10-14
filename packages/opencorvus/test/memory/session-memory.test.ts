@@ -869,7 +869,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
                       messageCount: 1,
                       inlineMessages: 1,
                       totalChars: transcript.catalog.content.length,
-                      nextOffset: null,
+                      root: transcript.catalog.root,
                       offsetUnit: "utf16_code_units",
                     }),
                   },

@@ -1,0 +1,73 @@
+{
+  "name": "hierarchy-catalog-sol-retry",
+  "model": "openai/gpt-6.1-sol",
+  "status": "passed",
+  "requests": 43,
+  "canonicalUsageRows": 43,
+  "originalMessages": 1029,
+  "catalogReads": 30,
+  "catalogChars": 710693,
+  "nodes": 28,
+  "leaves": 7,
+  "deliveredChars": 10446,
+  "uniqueChars": 10130,
+  "sourceInActualUserRole": true,
+  "metrics": {
+    "region": {
+      "expected": "REGION-7be39fa820d4-catalog-evidence",
+      "actual": "REGION-7be39fa820d4-catalog-evidence",
+      "pass": true
+    },
+    "evidence": {
+      "expected": "EVIDENCE-312a79f046c8",
+      "actual": "EVIDENCE-312a79f046c8",
+      "pass": true
+    },
+    "input_reference": {
+      "expected": "INPUT-2090259e7c8c",
+      "actual": "INPUT-2090259e7c8c",
+      "pass": true
+    },
+    "trace_id": {
+      "expected": "TRACE-2a902f3e4b57",
+      "actual": "TRACE-2a902f3e4b57",
+      "pass": true
+    },
+    "call_id": {
+      "expected": "call_9cfba5c3b539",
+      "actual": "call_9cfba5c3b539",
+      "pass": true
+    },
+    "part_id": {
+      "expected": "prt_g0VY0VAIj00yYjmdTHpd",
+      "actual": "prt_g0VY0VAIj00yYjmdTHpd",
+      "pass": true
+    },
+    "next_offset": {
+      "expected": 17031,
+      "actual": 17031,
+      "pass": true
+    },
+    "permission": {
+      "expected": "denied",
+      "actual": "denied",
+      "pass": true
+    },
+    "validation": {
+      "expected": "pending",
+      "actual": "pending",
+      "pass": true
+    },
+    "rollback_owner": {
+      "expected": "unknown",
+      "actual": "unknown",
+      "pass": true
+    },
+    "failure_name": {
+      "expected": "EvidenceReadFailure",
+      "actual": "EvidenceReadFailure",
+      "pass": true
+    }
+  },
+  "toolFailures": []
+}

@@ -5,6 +5,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import { SessionCompaction } from "@/session/compaction"
 import { CompactionEvidenceReader } from "@/session/compaction-evidence-reader"
+import { CompactionCatalog } from "@/session/compaction-catalog"
 import { CompactionUserText } from "@/session/compaction-user-text"
 import { AssistantDiagnostics } from "@/session/assistant-diagnostics"
 import { RequestBudget } from "@/session/request-budget"
@@ -115,6 +116,12 @@ function text(messages: ModelMessage[]) {
     .join("\n")
 }
 
+function catalogMessages(content: string): ModelMessage[] {
+  return (JSON.parse(content) as CompactionCatalog.Node[]).flatMap((node) =>
+    node.kind === "source" ? [{ role: node.role, content: [{ type: "text", text: node.text }] }] : [],
+  )
+}
+
 function decode(value: string) {
   return value.replaceAll("&quot;", '"').replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&")
 }
@@ -210,6 +217,14 @@ test("request space preserves complete long user and Tool fields with their sour
   const source = corpus(),
     original = structuredClone(source.messages)
   const result = projected(source.messages, 200_000)
+  expect(result.transcript.catalog.root.counts).toEqual({ users: 1, assistants: 3, tools: 2, toolErrors: 1, diagnostics: 1 })
+  const records = (JSON.parse(result.transcript.catalog.content) as CompactionCatalog.Node[])
+    .filter((node): node is Extract<CompactionCatalog.Node, { kind: "source" }> => node.kind === "source")
+  expect(records.map(record => record.messageIndex)).toEqual([0, 1, 1, 2])
+  expect(records.map(record => [record.role, record.toolState, record.diagnostics])).toEqual([
+    ["user", undefined, undefined], ["assistant", "completed", undefined],
+    ["assistant", "error", undefined], ["assistant", undefined, true],
+  ])
   const transcript = text(result.messages)
   const userText = field(transcript, "text").slice(1, -1)
   expect(userText.length).toBe(source.exactText.length)
@@ -335,7 +350,7 @@ test.each([64, 256, 1024])("a %i-source catalog fits its configured helper reque
     if (page.nextOffset === null) break
     offset = page.nextOffset
   }
-  const decoded = JSON.parse(complete) as ModelMessage[]
+  const decoded = catalogMessages(complete)
   expect(text(decoded).match(/<message id=/g)?.length).toBe(count)
   expect(decoded.map((entry) => entry.role)).toEqual(Array(count).fill("user"))
   for (let index = 0; index < count; index++)
@@ -364,7 +379,7 @@ test("a single Message with 1024 Parts remains readable across narrow and wide r
   )
   expect(JSON.parse(text(narrow.messages).split("\n").at(-1)!)).toMatchObject({
     inlineMessages: 0,
-    nextOffset: 1,
+    root: narrow.transcript.catalog.root,
     messageCount: 1,
   })
   const wide = narrow.transcript.render(context(1_000_000))
@@ -385,7 +400,7 @@ test("a single Message with 1024 Parts remains readable across narrow and wide r
     if (page.nextOffset === null) break
     offset = page.nextOffset
   }
-  const contents = text(JSON.parse(decoded))
+  const contents = text(catalogMessages(decoded))
   for (const part of original.parts) expect(contents).toContain(`part_id="${part.id}"`)
   const last = (await reader.execute!(
     { part_id: original.parts[1023]!.id, field: "text", offset: 0, limit: 2000 },
@@ -436,10 +451,10 @@ test("catalog requests bind the exact helper identity and return exact page rang
 
 test.each([
   { count: 256, steps: 20, status: "completed" },
-  { count: 1024, steps: 20, status: "step_limit" },
-  { count: 1024, steps: 80, status: "completed" },
+  { count: 1024, steps: 20, status: "completed" },
+  { count: 1024, steps: 2, status: "step_limit" },
 ])(
-  "the persisted $count-source catalog with $steps steps reports $status",
+  "navigation to the penultimate original source in a $count-source catalog with $steps steps reports $status",
   async ({ count, steps, status }) => {
     const target = { providerID: "catalog-local", modelID: "catalog-window" }
     const requests: any[] = []
@@ -447,6 +462,9 @@ test.each([
     let catalogText = "",
       cursor = 0,
       complete = false
+    let current: CompactionCatalog.Reference | undefined,
+      nodeText = "",
+      nodes = 0
     let sourceReference: any, sourcePage: any
     let catalogMessageIDs: string[] = []
     const server = Bun.serve({
@@ -487,9 +505,15 @@ test.each([
             typeof m.content === "string" ? m.content : m.content.map((p: any) => p.text ?? "").join("\n"),
           )
           .join("\n")
-        const catalogNotices = [...userText.matchAll(/\{"kind":"compaction_catalog_reference"[^\n}]*\}/g)]
+        const catalogNotices = userText
+          .split("\n")
+          .filter((line) => line.startsWith('{"kind":"compaction_catalog_reference"'))
         expect(catalogNotices.length).toBe(1)
-        const catalog = JSON.parse(catalogNotices[0]![0])
+        const catalog = JSON.parse(catalogNotices[0]!)
+        if (!current) {
+          current = catalog.root
+          cursor = current!.offset
+        }
         const inlineIDs = [...userText.matchAll(/<message id="([^"]+)"/g)].map((match) => match[1])
         expect(inlineIDs).toEqual(catalogMessageIDs.slice(0, catalog.inlineMessages))
         const outputs = body.messages.filter((m: any) => m.role === "tool")
@@ -502,38 +526,50 @@ test.each([
               source: "compaction-catalog",
               originalRole: "assistant",
               originalAuthor: "compaction",
-              ranges: [[0, cursor]],
-              nextUnreadOffset: complete ? null : cursor,
+              ranges: expect.any(Array),
               offsetUnit: "utf16_code_units",
               readerCalls: expect.any(Array),
             }),
           ])
           expect(last.source_reads[0].readerCalls.length).toBe(pages.length)
+          const ranges: number[][] = []
+          for (const page of [...pages].sort((a, b) => a.offset - b.offset)) {
+            const prior = ranges.at(-1)
+            if (prior && page.offset <= prior[1]!) prior[1] = Math.max(prior[1]!, page.end)
+            else ranges.push([page.offset, page.end])
+          }
+          expect(last.source_reads[0].ranges).toEqual(ranges)
         }
         if (last?.field === "catalog") {
           expect(last.offset).toBe(cursor)
           pages.push(last)
           catalogText += last.content
+          nodeText += last.content
           cursor = last.end
-          complete = last.nextOffset === null
-          if (complete) {
-            const entries = JSON.parse(catalogText) as ModelMessage[]
-            sourceReference = entries
-              .filter((m) => m.role === "user")
-              .flatMap((m) => {
-                const value = field(text([m]), "text").trim()
-                if (!value.startsWith("{")) return []
-                const parsed = JSON.parse(value)
-                return parsed.kind === "compaction_evidence_reference" ? [parsed] : []
+          expect(cursor).toBeLessThanOrEqual(current!.end)
+          if (cursor === current!.end) {
+            const node = JSON.parse(nodeText) as CompactionCatalog.Node
+            nodeText = ""
+            nodes++
+            if (node.kind === "source") {
+              expect(node.role).toBe("user")
+              sourceReference = JSON.parse(field(node.text, "text").trim())
+              expect(sourceReference.kind).toBe("compaction_evidence_reference")
+              expect(JSON.stringify(body.messages)).toContain(sourceReference.partID)
+              complete = true
+            } else {
+              const target = catalog.root.records[1] - 2
+              current = node.children.find((child) => child.records[0] <= target && child.records[1] > target)!
+              expect(current).toBeDefined()
+              cursor = current.offset
+            }
+            if (complete || nodes % 3 === 0)
+              return call("SaveCompactionNotes", {
+                notes: complete
+                  ? `The selected original user record identifies Part ${sourceReference.partID}. Read and retain its exact source text before summarizing.`
+                  : `Read the exact next source-directory node ${JSON.stringify(current)} using catalog Message ${catalog.messageID}. Target the record immediately preceding the neutral last record.`,
               })
-              .at(-1)
-            expect(JSON.stringify(body.messages)).toContain(sourceReference.partID)
           }
-          return call("SaveCompactionNotes", {
-            notes: complete
-              ? `The complete source catalog is read. Last original user text is Part ${sourceReference.partID}; read that exact source and retain it before the final summary.`
-              : `Source catalog delivered through UTF-16 ${cursor}. Continue its exact next offset. Original sources remain unchanged.`,
-          })
         }
         if (last?.field === "text") {
           sourcePage = last
@@ -560,7 +596,7 @@ test.each([
               message_id: catalog.messageID,
               field: "catalog",
               offset: cursor,
-              limit: 30_000,
+              limit: Math.min(current!.limit, current!.end - cursor),
             })
       },
     })
@@ -629,7 +665,7 @@ test.each([
               parts: [{ id: sourcePage.partID, text: sourcePage.content }],
             })
             expect(sourcePage.content).toContain(`END-${count - 1}`)
-            expect(pages.at(-1).nextOffset).toBe(null)
+            expect(pages.at(-1).end).toBe(current!.end)
           } else {
             expect(outcome).toMatchObject({ status: "failed" })
             expect(controlError).toMatchObject({ name: "CompactionContinuationMissingError" })
@@ -651,6 +687,7 @@ test.each([
             status,
             requests: requests.length,
             pages: pages.length,
+            nodes,
             catalogChars: pages[0].totalChars,
             deliveredCatalogChars: catalogText.length,
             retainedMessageID: sourcePage?.messageID,
@@ -698,7 +735,7 @@ test("bounded retained-user references recover their exact selected range throug
     options,
   )) as { output: string }
   const retained = CompactionUserText.project(CompactionUserText.Receipt.parse(JSON.parse(result.output)), [original])
-  const rendered = field(text(JSON.parse(projected(retained, 0).transcript.catalog.content)), "text")
+  const rendered = field(text(catalogMessages(projected(retained, 0).transcript.catalog.content)), "text")
     .trim()
     .split("\n")
     .map((line) => JSON.parse(line))

@@ -1,0 +1,112 @@
+{
+  "date": "2026-10-14",
+  "status": "passed_for_matched_catalog_cases",
+  "independentArchiveReview": "passed",
+  "localContracts": 94,
+  "localTestFiles": 9,
+  "localStreamedRequests": 38,
+  "expandedTypecheck": {
+    "session": 83425,
+    "exitCode": 0
+  },
+  "runs": [
+    {
+      "name": "hierarchy-catalog-luna",
+      "session": 48611,
+      "exitCode": 0,
+      "requests": 27
+    },
+    {
+      "name": "hierarchy-catalog-sol",
+      "session": 69430,
+      "exitCode": 1,
+      "requests": 9,
+      "cause": "Provider stream reported server overload before checkpoint publication"
+    },
+    {
+      "name": "hierarchy-catalog-sol-retry",
+      "session": 89528,
+      "exitCode": 0,
+      "requests": 43
+    }
+  ],
+  "credentialCleanup": [
+    {
+      "name": "hierarchy-catalog-luna",
+      "credentialFiles": [
+        {
+          "name": "auth.json",
+          "present": false
+        },
+        {
+          "name": "models.json",
+          "present": false
+        }
+      ]
+    },
+    {
+      "name": "hierarchy-catalog-sol",
+      "credentialFiles": [
+        {
+          "name": "auth.json",
+          "present": false
+        },
+        {
+          "name": "models.json",
+          "present": false
+        }
+      ]
+    },
+    {
+      "name": "hierarchy-catalog-sol-retry",
+      "credentialFiles": [
+        {
+          "name": "auth.json",
+          "present": false
+        },
+        {
+          "name": "models.json",
+          "present": false
+        }
+      ]
+    }
+  ],
+  "paidAdded": 79,
+  "cumulativePaid": 1164,
+  "operatingCeiling": 1300,
+  "activeRun": null,
+  "authoredTextAndToolFactsMatched": true,
+  "comparison": {
+    "flatSol": {
+      "requests": 73,
+      "passedFields": 11
+    },
+    "hierarchicalSol": {
+      "requests": 43,
+      "passedFields": 11
+    },
+    "flatLuna": {
+      "requests": 13,
+      "passedFields": 3
+    },
+    "hierarchicalLuna": {
+      "requests": 27,
+      "passedFields": 11
+    }
+  },
+  "limits": [
+    "One authored case per model, not repeated statistical reliability.",
+    "No full-history answer lane in this catalog experiment.",
+    "Tree lookup reduces navigation; full catalog storage remains linear and larger than flat representation.",
+    "The directory records original types, not semantic importance; assistant-only relevant evidence still needs model discovery.",
+    "Previous Luna alternating-policy failures remain failed.",
+    "Native state, broader providers and whole-OS power loss remain open."
+  ],
+  "documentChecks": {
+    "exitCode": 0,
+    "commands": [
+      "docs:check",
+      "check:architecture-index"
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "review": "passed",
+  "paidRequests": 0,
+  "results": [
+    {
+      "count": 256,
+      "steps": 20,
+      "status": "completed",
+      "requests": 17,
+      "executedCatalogReads": 10,
+      "deliveredCatalogReads": 10,
+      "catalogChars": 211713,
+      "nodes": 10,
+      "leaves": 1,
+      "deliveredChars": 3340,
+      "uniqueChars": 3340
+    },
+    {
+      "count": 1024,
+      "steps": 20,
+      "status": "completed",
+      "requests": 19,
+      "executedCatalogReads": 12,
+      "deliveredCatalogReads": 12,
+      "catalogChars": 849388,
+      "nodes": 12,
+      "leaves": 1,
+      "deliveredChars": 4003,
+      "uniqueChars": 4003
+    },
+    {
+      "count": 1024,
+      "steps": 2,
+      "status": "step_limit",
+      "requests": 2,
+      "executedCatalogReads": 2,
+      "deliveredCatalogReads": 1,
+      "catalogChars": 849388,
+      "nodes": 1,
+      "leaves": 0,
+      "deliveredChars": 316,
+      "uniqueChars": 316
+    }
+  ]
+}

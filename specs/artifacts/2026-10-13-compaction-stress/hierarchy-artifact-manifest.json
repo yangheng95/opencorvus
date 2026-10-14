@@ -1,0 +1,33 @@
+{
+  "artifacts": [
+    "catalog-model-capture.cjs",
+    "hierarchy-review.cjs",
+    "hierarchy-model-matrix-summary.json",
+    "hierarchy-local-summary.json",
+    "hierarchy-qualification.json",
+    "hierarchy-catalog-luna.json.gz",
+    "hierarchy-catalog-luna.json.requests.json.gz",
+    "hierarchy-catalog-luna-facts.json.gz",
+    "hierarchy-catalog-luna-summary.json",
+    "hierarchy-catalog-sol.json.gz",
+    "hierarchy-catalog-sol.json.requests.json.gz",
+    "hierarchy-catalog-sol-facts.json.gz",
+    "hierarchy-catalog-sol-summary.json",
+    "hierarchy-catalog-sol-retry.json.gz",
+    "hierarchy-catalog-sol-retry.json.requests.json.gz",
+    "hierarchy-catalog-sol-retry-facts.json.gz",
+    "hierarchy-catalog-sol-retry-summary.json",
+    "hierarchy-local-256-20.json.gz",
+    "hierarchy-local-1024-20.json.gz",
+    "hierarchy-local-1024-2.json.gz",
+    "hierarchy-core.log.gz",
+    "hierarchy-regression.log.gz",
+    "hierarchy-transcript-final.log.gz",
+    "hierarchy-typecheck.log.gz",
+    "hierarchy-typecheck-final.log.gz",
+    "hierarchy-catalog-luna.log.gz",
+    "hierarchy-catalog-sol.log.gz",
+    "hierarchy-catalog-sol-retry.log.gz",
+    "hierarchy-docs.log.gz"
+  ]
+}
