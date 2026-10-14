@@ -14,7 +14,7 @@ fresh fetch e1950e/merge729190各0、完整pending唯一8354ac331；原正常pus
 
 约束：唯一append-only权限账本/唯一current reader-writer/真实Project-Session-Message-call-attempt-activation-occurrence；无新Permission queue/timer/tombstone/平行配置/fallback/历史回写/假批准或时间。全部LLM流式，通用预授权工具实际提供，不以host gate教工具流程。所有非UI改动正向明确输出/错误契约，真实checker；UI不新改跑自动化，只真桌面截图人工看。任何自有验证600s parent/180s child/30s HTTP/60s收尾，原期限不续；Provider需已授权auth+完整models配对、可用/投影/精确请求分别证明、全物理/输出/请求闭合后清理，不能写凭据。当前阶段不访问用户数据库、Provider或用户应用，不改0001基线，不延测试或绕hook。
 
-压缩恢复先读本Recall，再核精确已做/未做/原owner/deadline/命令与最新授权。当前只有调查和实验准备，**无408生产、测试、schema revision、数据库实验或服务/page/model启动**。
+压缩恢复先读本Recall，再核精确已做/未做/原owner/deadline/命令与最新授权。当前已完成初始文档143路径正常提交9469/push及第一真实WAL机制实验lock-process-01（原80885 join38ca9d exit0/两case/11worker全闭合）；该实验原Bun tsconfig内部诊断保留，正在修工具调用并准备新scope重跑。**无408生产、正式测试、schema revision、业务迁移或服务/page/model启动**。双upgrader与失败释放尚未验，历史graph/consumer合同仍并行只读审计；不能从机制实验推进未经完整分析的业务修改。
 
 ## 已证共享问题与数据/控制流
 
@@ -45,3 +45,35 @@ Root负责407提交/push原回执安全archive、当前资料与全仓历史复�
 当前准备进一步收窄：最多两个同时active owned children，总child可随原阶段正常close/join后新occurrence；每个原child180s/阶段请求30s，整个parent600s/60s收尾。v1旧owner必须真正production Client完成WAL初始化而非仅raw夹具；readonly另freshcase由真实Client先建库。候选v2同当前DDL、无semantic callback，只证明锁/版本生命周期，不造业务grant index。当前生产checkpoint实际1s，保持原worker并记录close，不以旧报告间隔假设禁用。prepared source/argv/closure仍需Root亲读后才准实验，没有数据库操作通过声明。
 
 初始安全档案archive408-initial01/fc628b exit0：parent88584→90332/a6609e88-bfc8-440a-8f09-c10360034f85、started1791954072941/deadline1791954672941/end1791954073494，physical/output/request完整，136原件/637854bytes。三README已精确补408行，保留peer排序与资料。下一步先正常docs/index、范围文档commit/上游merge/push，再继续实验准备；不将初始文档提交算本批功能完成。
+
+## Root全文复核与第一真实锁实验输入
+
+Root已全文读`.tmp-grant-decision-recovery-408/functionality/README.md`及launch-lock-probe.ts、run-lock-probe.ts、lock-worker.ts；也全文读UI production-scope-and-desktop-plan及其中D1–D4/原到达顺序、当前语言和外部interop边界。初始文档143路径正常提交9469d4ace470ba5ee3aadcefb3708f139fe68bd7，base c6c2bcafb12d00e90a65481f7abf02389dcf1521；原25826 join e7dd78 exit0、ordinary index精确同步true。fetch f5c25b、merge2127c5各0；后续fresh fetch2b32bb/mergefc8bb7各0。完整pending当时为9469和peer8da864d5共享Git源条目交付；Root已读其要求/实施/验收记录及实际breadth24pass/83assert和5项final-checks原exit0、parent原0与双输出joined。正常push408-plan01原32126仍运行，不能预写已推送。
+
+首版driver在case finally中只保存Promise.allSettled、不检查rejected或真实非正常exit；收尾写入/删除异常可能替换主错误。Root已限定backend agent只修准备工具：主错误和所有cleanup错误分别保留，检查真实receipt.reason/exitCode和physical/output/request，任何失败为failed；仅全闭合后删除精确managed root。launcher也要求真实exited/0，不能由null或其它reason推成功。此项是本地验收工具修复，无生产或正式测试修改；修后Root复核完整diff才启动。
+
+冻结首实验为独立fresh目录`.tmp-grant-decision-recovery-408/functionality/lock-process-01`，只上述三source和成熟NodeProcess/managed directory原语。精确命令：Bun1.4.0完整绝对executable先进入PATH，`bun run .tmp-grant-decision-recovery-408/functionality/launch-lock-probe.ts D:\myhexin-local\opencorvus\.tmp-grant-decision-recovery-408\functionality\lock-process-01`。最外原600000ms，driver继承同deadline/60000ms收尾；worker180000ms且受original closeBy限制、phase30000ms、child15000ms收尾；最多两个同时scenario worker，监督/driver为归属层。失败保原scope，不重写原结果或重置预算；正常关闭精确自有handle，不触用户进程。
+
+两个独立顺序case：actual生产Database.Client/Identity建v1并保持cached idle（真实1s checkpoint不关闭）和actual生产seed闭合后readonly idle。B同handle NORMAL实际WAL attach/完整schema与rowid正文snapshot→EXCLUSIVE→原migrateSchema的真实BEGIN，应得到原SQLITE_BUSY且恢复NORMAL后完整v1事实一致；A normal close/physical-output-request join0后B同handle明确第二次进入，原backup/完整validation/COMMIT到scratch v2（相同当前DDL，无semantic callback）。B持真实exclusive时一个新reader应得到明确SQLITE_BUSY并闭合；NORMAL+finalized read真正释放后新reader原migrator应读from2/to2及原完整事实；旧生产v1 reopen应返回DatabaseUnavailableError的SCHEMA_VERSION_AHEAD与原operation。每个角色原异常/typed cause/cleanup/真实receipt独立保存，同handlebackup另owned文件全v1读取后strict close。逻辑正文/bytes/schema/rowid逐项比较，不以hash当功能验收，不归档整个DB或凭据。
+
+此实验只资格本机Bun1.4/SQLite WAL文件锁与version生命周期，不能资格历史grant semantic migration、rollback-journal、custom/immutable/no-lock VFS（Virtual File System，虚拟文件系统）、compiled Bun1.3、physical alias、两个新upgrader升级竞争、backup/validation/unlock注入或UI/模型。未知仍需下一独立输入；即使本实验成功，也不批准历史index生产。当前尚未启动lock-process-01，准备修正及最终Root复核是下一步。
+
+初始正常push408-plan01现已原32126 join444e5a exit0：parent87416→82940/2d0be023-dabb-47d2-8b1c-2392a255f5df、started1791955108498/deadline1791955708498/end1791955382466，physical/output/request全closed。完整pending两项9469与已核peer8da864d5由main c6c2bcafb→8da864d50正常推送；8 actual typechecks（7cache/1fresh）、SDK/AI runtime/迁移v1/专家类型、routes6/35、docs345/26、leases18/23、architecture20、package10、release5、exact treeish8da module1164/5943/4clean imports/no SCC、secret-scan0hits均0。fresh验证fetch92a82e/ancestor705db8各0、pending空，upstream包含9469。未发Release/tag/PR；原push全日志将进下一安全archive，不把初始文档当功能完成。
+
+Root已全文复核有限cleanup三份精确patch、修后三source和更新README。original cleanup-before三原像保留；child/driver/outer只从实际exited/0及三joins判资格，异常聚合保留，atomic owner文件与真正NodeProcess receipt一致；worker terminal证据失败在原stderr保AggregateError。TypeScript5.8.2只parse source为0，不是运行资格。Root现在批准并亲自启动唯一上述lock-process-01命令；agent不再改这三source，原预算及scope不变。批准仅此fresh机制实验，不含业务index/生产/schema新revision/UI/Provider。
+
+## 第一真实WAL机制结果与工具链诊断
+
+lock-process-01原80885 join38ca9d exit0：outer parent74028→driver50920/af93d144-ef5e-49df-b49d-c1a0d2096959、started1791955599763/deadline1791956199763/end1791955628572，28.8s；两case、11 original workers真实reason exited/exit0、physical/output/request全joined，primary/cleanup正常，两个精确managed roots已删。Root原7c6e30读取driver和各original phase JSON：本机Bun1.4.0/SQLite3.53.2（source ID保原件）、517对象/90表及真实database_authority。生产cached idle和readonly idle分别令B得到SQLITE_BUSY/errno5（5663/5578ms），恢复NORMAL后的完整原v1内容由actual checker比较；A正常close/三joins后B同handlebackup和validation/commitfrom1/to2。Backup实际readonly full v1内容一致并strict close；保exclusive时独立reader确BUSY；NORMAL+真实finalized访问后新reader原from2/to2及原内容一致；old生产v1 Client重开确DatabaseUnavailableError/SCHEMA_VERSION_AHEAD/Database.Client.schemaMigration。无business semantic callback。
+
+补读stderr发现driver及11workers均含Bun `Internal error: directory mismatch` 指向实际packages/opencorvus/tsconfig.json，虽然原receipt全部0。不能称工具链clean，也不据该文字否定已保存真实SQL/closure。Root亲查[Bun原issue25730](https://github.com/oven-sh/bun/issues/25730)、[原issue28605](https://github.com/oven-sh/bun/issues/28605)及[官方runtime](https://bun.sh/docs/runtime)：override已报道类似诊断，不能代本机直接因果。一次猜测官方runtime/tsconfig链接404已改查真实文档，不作实现依据。repo当前packageManager为bun1.4.0。
+
+先修本地工具调用并重跑同原验收：agent已暂停followup扩大，仅保首source于followup-before；考虑driver cwd改现packageDirectory、去两处tsconfig-override，由现唯一package tsconfig自然解析，worker cwd保持package。不复制平行tsconfig、不过滤stderr、不延预算、不改SQL/role或试探用户DB。先准备只import现模块且不调用SQLite构造/Database.Client/migrator的资格入口/原owner，Root全文审后运行；再新lock-process-02完整重跑同两case，第一次scope不覆盖。之后才审两个upgrader的真实竞争/backup文件故障/validation失败/NORMAL释放/commit后unlock失败，rollback-journal/crossalias/compiled旧Bun边界继续未知。历史index语义、canonical reader和生产allowlist尚未选择，UI服务/截图/model未启动。
+
+第一安全原件archive408-lock01/3995a3 exit0：parent86704→48796/46d713c0-8666-4aea-bc7a-810d0d017585，started1791955876245/deadline1791956476245/end1791955877223，三joins全closed。内容为原锁scope/actual source/所有内部诊断、cleanup原像与patch、初始正常提交push原回执和完整UI只读plan；排除任何DB/runtime/auth/models/Provider正文。存储gzip逐bytes还原只验capture身份，未当功能门槛；[本次原件](../../artifacts/2026-10-14-grant-decision-recovery-408/lock01/README.md)承接准确范围与未知。
+
+Root已全文读UI历史single-hop报告（first95+remainder，36807chars/39 source captures），现落具体历史选择：已有任意真实slot与另一slotless grant_used并存均报明确authority conflict，含未started；不按time/rowid消歧。无slot的单合法capture可确认为已捕获而非已执行；多个capture只按合法deterministic execution_started.source准确锚定，否则报ambiguity。合法已捕获U不因当前grant已revoked/expired而删除；旧read/capture交错没有持久eligibility-read时间，不声称证明历史串行化。重复requested保原first occurrence身份/time/summary/metadata，只核全部owner材料（Project/Session/Task/Message/call/provider/fingerprint/scope/mode/policy）；不以所有文案/metadata必须相等排掉合法观察。迁移callback会先drop unique index/trigger，必须全图核slot/attempt/reference再append，不靠.get临时仲裁；canonical reader需接受原TxOrDb、无runtime Database/Authority循环。此处仍未选event literal/revision/最终source allowlist，未授权生产实现。
+
+后续UI agent只准备当前开发/ui的D1 before真实手工流程输入源码/原owner：独立外部非秘密CSV、真实AllowProject、第二exact-scope read、cold hydration和Settings/语言；控制流式Provider资格与真实Sol分开标，不造批准/userInput/终态。不启动DB/服务/页面/模型、无需凭据，工具全文Root审后才准运行；保存闭合的原旧producer data供后续合法迁移。backend先复用唯一physical launcher准备import mode/natural package tsconfig资格，原SQLsuite02仍待Root批准。
+
+本阶段docs408-lock01/b452bb与architecture408-lock01/f8e18e原均0/三joinsclosed；还未提交本阶段新spec/197captures，不预写交付完成。初始自身Git回执保在lock01，下次提交的回执仍由后续记录承接。

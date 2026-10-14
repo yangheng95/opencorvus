@@ -1,0 +1,991 @@
+{
+  "capturedAt": 1791955877187,
+  "files": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\actual-0001-baseline.sql",
+      "destination": "original-run/actual-0001-baseline.sql.gz",
+      "bytes": 326159
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\actual-checkpoint-worker.ts",
+      "destination": "original-run/actual-checkpoint-worker.ts.gz",
+      "bytes": 4097
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\actual-db.ts",
+      "destination": "original-run/actual-db.ts.gz",
+      "bytes": 70811
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\actual-ddl.ts",
+      "destination": "original-run/actual-ddl.ts.gz",
+      "bytes": 244262
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\actual-index.ts",
+      "destination": "original-run/actual-index.ts.gz",
+      "bytes": 356
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\actual-launch-lock-probe.ts",
+      "destination": "original-run/actual-launch-lock-probe.ts.gz",
+      "bytes": 6255
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\actual-lock-worker.ts",
+      "destination": "original-run/actual-lock-worker.ts.gz",
+      "bytes": 14856
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\actual-run-lock-probe.ts",
+      "destination": "original-run/actual-run-lock-probe.ts.gz",
+      "bytes": 17494
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\actual-schema-contract.ts",
+      "destination": "original-run/actual-schema-contract.ts.gz",
+      "bytes": 2069
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\actual-schema-migration.ts",
+      "destination": "original-run/actual-schema-migration.ts.gz",
+      "bytes": 12162
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\actual-sqlite-statement.ts",
+      "destination": "original-run/actual-sqlite-statement.ts.gz",
+      "bytes": 963
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\driver-owner-start.json",
+      "destination": "original-run/driver-owner-start.json.gz",
+      "bytes": 985
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\driver-owner.json",
+      "destination": "original-run/driver-owner.json.gz",
+      "bytes": 49370
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\owner-start.json",
+      "destination": "original-run/owner-start.json.gz",
+      "bytes": 1207
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\owner.json",
+      "destination": "original-run/owner.json.gz",
+      "bytes": 1676
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\a-close",
+      "destination": "original-run/production-idle/a-close.gz",
+      "bytes": 110
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\a-ready.json",
+      "destination": "original-run/production-idle/a-ready.json.gz",
+      "bytes": 415197
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\b-blocked.json",
+      "destination": "original-run/production-idle/b-blocked.json.gz",
+      "bytes": 184
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\b-close",
+      "destination": "original-run/production-idle/b-close.gz",
+      "bytes": 120
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\b-exclusive-committed.json",
+      "destination": "original-run/production-idle/b-exclusive-committed.json.gz",
+      "bytes": 2086080
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\b-normal-attached.json",
+      "destination": "original-run/production-idle/b-normal-attached.json.gz",
+      "bytes": 415007
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\b-normal-released.json",
+      "destination": "original-run/production-idle/b-normal-released.json.gz",
+      "bytes": 192
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\b-waiting-owner-close.json",
+      "destination": "original-run/production-idle/b-waiting-owner-close.json.gz",
+      "bytes": 421455
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\candidate-owner.json",
+      "destination": "original-run/production-idle/candidate-owner.json.gz",
+      "bytes": 1810
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\candidate-spawn.json",
+      "destination": "original-run/production-idle/candidate-spawn.json.gz",
+      "bytes": 1341
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\candidate-started.json",
+      "destination": "original-run/production-idle/candidate-started.json.gz",
+      "bytes": 886
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\candidate-stderr.log",
+      "destination": "original-run/production-idle/candidate-stderr.log.gz",
+      "bytes": 187
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\candidate-stdout.log",
+      "destination": "original-run/production-idle/candidate-stdout.log.gz",
+      "bytes": 139
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\candidate-terminal.json",
+      "destination": "original-run/production-idle/candidate-terminal.json.gz",
+      "bytes": 2500384
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\case-owner.json",
+      "destination": "original-run/production-idle/case-owner.json.gz",
+      "bytes": 11016
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\hold-production-owner.json",
+      "destination": "original-run/production-idle/hold-production-owner.json.gz",
+      "bytes": 1822
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\hold-production-spawn.json",
+      "destination": "original-run/production-idle/hold-production-spawn.json.gz",
+      "bytes": 1353
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\hold-production-started.json",
+      "destination": "original-run/production-idle/hold-production-started.json.gz",
+      "bytes": 892
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\hold-production-stderr.log",
+      "destination": "original-run/production-idle/hold-production-stderr.log.gz",
+      "bytes": 595
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\hold-production-stdout.log",
+      "destination": "original-run/production-idle/hold-production-stdout.log.gz",
+      "bytes": 145
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\hold-production-terminal.json",
+      "destination": "original-run/production-idle/hold-production-terminal.json.gz",
+      "bytes": 829366
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\locked-reader-owner.json",
+      "destination": "original-run/production-idle/locked-reader-owner.json.gz",
+      "bytes": 1818
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\locked-reader-result.json",
+      "destination": "original-run/production-idle/locked-reader-result.json.gz",
+      "bytes": 1009
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\locked-reader-spawn.json",
+      "destination": "original-run/production-idle/locked-reader-spawn.json.gz",
+      "bytes": 1349
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\locked-reader-started.json",
+      "destination": "original-run/production-idle/locked-reader-started.json.gz",
+      "bytes": 890
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\locked-reader-stderr.log",
+      "destination": "original-run/production-idle/locked-reader-stderr.log.gz",
+      "bytes": 187
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\locked-reader-stdout.log",
+      "destination": "original-run/production-idle/locked-reader-stdout.log.gz",
+      "bytes": 143
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\locked-reader-terminal.json",
+      "destination": "original-run/production-idle/locked-reader-terminal.json.gz",
+      "bytes": 1091
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\new-reader-owner.json",
+      "destination": "original-run/production-idle/new-reader-owner.json.gz",
+      "bytes": 1812
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\new-reader-result.json",
+      "destination": "original-run/production-idle/new-reader-result.json.gz",
+      "bytes": 1249969
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\new-reader-spawn.json",
+      "destination": "original-run/production-idle/new-reader-spawn.json.gz",
+      "bytes": 1343
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\new-reader-started.json",
+      "destination": "original-run/production-idle/new-reader-started.json.gz",
+      "bytes": 887
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\new-reader-stderr.log",
+      "destination": "original-run/production-idle/new-reader-stderr.log.gz",
+      "bytes": 187
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\new-reader-stdout.log",
+      "destination": "original-run/production-idle/new-reader-stdout.log.gz",
+      "bytes": 140
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\new-reader-terminal.json",
+      "destination": "original-run/production-idle/new-reader-terminal.json.gz",
+      "bytes": 1250051
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\old-owner-joined",
+      "destination": "original-run/production-idle/old-owner-joined.gz",
+      "bytes": 197
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\old-reopen-owner.json",
+      "destination": "original-run/production-idle/old-reopen-owner.json.gz",
+      "bytes": 1812
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\old-reopen-result.json",
+      "destination": "original-run/production-idle/old-reopen-result.json.gz",
+      "bytes": 2460
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\old-reopen-spawn.json",
+      "destination": "original-run/production-idle/old-reopen-spawn.json.gz",
+      "bytes": 1343
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\old-reopen-started.json",
+      "destination": "original-run/production-idle/old-reopen-started.json.gz",
+      "bytes": 887
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\old-reopen-stderr.log",
+      "destination": "original-run/production-idle/old-reopen-stderr.log.gz",
+      "bytes": 476
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\old-reopen-stdout.log",
+      "destination": "original-run/production-idle/old-reopen-stdout.log.gz",
+      "bytes": 149
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\old-reopen-terminal.json",
+      "destination": "original-run/production-idle/old-reopen-terminal.json.gz",
+      "bytes": 2648
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\stop",
+      "destination": "original-run/production-idle/stop.gz",
+      "bytes": 49
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\production-idle\\unlock",
+      "destination": "original-run/production-idle/unlock.gz",
+      "bytes": 91
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\a-close",
+      "destination": "original-run/readonly-idle/a-close.gz",
+      "bytes": 110
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\a-ready.json",
+      "destination": "original-run/readonly-idle/a-ready.json.gz",
+      "bytes": 414915
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\b-blocked.json",
+      "destination": "original-run/readonly-idle/b-blocked.json.gz",
+      "bytes": 184
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\b-close",
+      "destination": "original-run/readonly-idle/b-close.gz",
+      "bytes": 120
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\b-exclusive-committed.json",
+      "destination": "original-run/readonly-idle/b-exclusive-committed.json.gz",
+      "bytes": 2086072
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\b-normal-attached.json",
+      "destination": "original-run/readonly-idle/b-normal-attached.json.gz",
+      "bytes": 415001
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\b-normal-released.json",
+      "destination": "original-run/readonly-idle/b-normal-released.json.gz",
+      "bytes": 192
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\b-waiting-owner-close.json",
+      "destination": "original-run/readonly-idle/b-waiting-owner-close.json.gz",
+      "bytes": 421455
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\candidate-owner.json",
+      "destination": "original-run/readonly-idle/candidate-owner.json.gz",
+      "bytes": 1802
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\candidate-spawn.json",
+      "destination": "original-run/readonly-idle/candidate-spawn.json.gz",
+      "bytes": 1333
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\candidate-started.json",
+      "destination": "original-run/readonly-idle/candidate-started.json.gz",
+      "bytes": 880
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\candidate-stderr.log",
+      "destination": "original-run/readonly-idle/candidate-stderr.log.gz",
+      "bytes": 187
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\candidate-stdout.log",
+      "destination": "original-run/readonly-idle/candidate-stdout.log.gz",
+      "bytes": 139
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\candidate-terminal.json",
+      "destination": "original-run/readonly-idle/candidate-terminal.json.gz",
+      "bytes": 2500376
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\case-owner.json",
+      "destination": "original-run/readonly-idle/case-owner.json.gz",
+      "bytes": 12993
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\hold-readonly-owner.json",
+      "destination": "original-run/readonly-idle/hold-readonly-owner.json.gz",
+      "bytes": 1810
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\hold-readonly-spawn.json",
+      "destination": "original-run/readonly-idle/hold-readonly-spawn.json.gz",
+      "bytes": 1341
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\hold-readonly-started.json",
+      "destination": "original-run/readonly-idle/hold-readonly-started.json.gz",
+      "bytes": 884
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\hold-readonly-stderr.log",
+      "destination": "original-run/readonly-idle/hold-readonly-stderr.log.gz",
+      "bytes": 187
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\hold-readonly-stdout.log",
+      "destination": "original-run/readonly-idle/hold-readonly-stdout.log.gz",
+      "bytes": 143
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\hold-readonly-terminal.json",
+      "destination": "original-run/readonly-idle/hold-readonly-terminal.json.gz",
+      "bytes": 828980
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\locked-reader-owner.json",
+      "destination": "original-run/readonly-idle/locked-reader-owner.json.gz",
+      "bytes": 1810
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\locked-reader-result.json",
+      "destination": "original-run/readonly-idle/locked-reader-result.json.gz",
+      "bytes": 1003
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\locked-reader-spawn.json",
+      "destination": "original-run/readonly-idle/locked-reader-spawn.json.gz",
+      "bytes": 1341
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\locked-reader-started.json",
+      "destination": "original-run/readonly-idle/locked-reader-started.json.gz",
+      "bytes": 884
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\locked-reader-stderr.log",
+      "destination": "original-run/readonly-idle/locked-reader-stderr.log.gz",
+      "bytes": 187
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\locked-reader-stdout.log",
+      "destination": "original-run/readonly-idle/locked-reader-stdout.log.gz",
+      "bytes": 143
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\locked-reader-terminal.json",
+      "destination": "original-run/readonly-idle/locked-reader-terminal.json.gz",
+      "bytes": 1085
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\new-reader-owner.json",
+      "destination": "original-run/readonly-idle/new-reader-owner.json.gz",
+      "bytes": 1804
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\new-reader-result.json",
+      "destination": "original-run/readonly-idle/new-reader-result.json.gz",
+      "bytes": 1249963
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\new-reader-spawn.json",
+      "destination": "original-run/readonly-idle/new-reader-spawn.json.gz",
+      "bytes": 1335
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\new-reader-started.json",
+      "destination": "original-run/readonly-idle/new-reader-started.json.gz",
+      "bytes": 881
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\new-reader-stderr.log",
+      "destination": "original-run/readonly-idle/new-reader-stderr.log.gz",
+      "bytes": 187
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\new-reader-stdout.log",
+      "destination": "original-run/readonly-idle/new-reader-stdout.log.gz",
+      "bytes": 140
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\new-reader-terminal.json",
+      "destination": "original-run/readonly-idle/new-reader-terminal.json.gz",
+      "bytes": 1250045
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\old-owner-joined",
+      "destination": "original-run/readonly-idle/old-owner-joined.gz",
+      "bytes": 197
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\old-reopen-owner.json",
+      "destination": "original-run/readonly-idle/old-reopen-owner.json.gz",
+      "bytes": 1804
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\old-reopen-result.json",
+      "destination": "original-run/readonly-idle/old-reopen-result.json.gz",
+      "bytes": 2450
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\old-reopen-spawn.json",
+      "destination": "original-run/readonly-idle/old-reopen-spawn.json.gz",
+      "bytes": 1335
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\old-reopen-started.json",
+      "destination": "original-run/readonly-idle/old-reopen-started.json.gz",
+      "bytes": 881
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\old-reopen-stderr.log",
+      "destination": "original-run/readonly-idle/old-reopen-stderr.log.gz",
+      "bytes": 474
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\old-reopen-stdout.log",
+      "destination": "original-run/readonly-idle/old-reopen-stdout.log.gz",
+      "bytes": 149
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\old-reopen-terminal.json",
+      "destination": "original-run/readonly-idle/old-reopen-terminal.json.gz",
+      "bytes": 2638
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\seed-owner.json",
+      "destination": "original-run/readonly-idle/seed-owner.json.gz",
+      "bytes": 1792
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\seed-ready.json",
+      "destination": "original-run/readonly-idle/seed-ready.json.gz",
+      "bytes": 415180
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\seed-spawn.json",
+      "destination": "original-run/readonly-idle/seed-spawn.json.gz",
+      "bytes": 1323
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\seed-started.json",
+      "destination": "original-run/readonly-idle/seed-started.json.gz",
+      "bytes": 875
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\seed-stderr.log",
+      "destination": "original-run/readonly-idle/seed-stderr.log.gz",
+      "bytes": 593
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\seed-stdout.log",
+      "destination": "original-run/readonly-idle/seed-stdout.log.gz",
+      "bytes": 134
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\seed-terminal.json",
+      "destination": "original-run/readonly-idle/seed-terminal.json.gz",
+      "bytes": 415366
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\stop",
+      "destination": "original-run/readonly-idle/stop.gz",
+      "bytes": 49
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\readonly-idle\\unlock",
+      "destination": "original-run/readonly-idle/unlock.gz",
+      "bytes": 91
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\stderr.log",
+      "destination": "original-run/stderr.log.gz",
+      "bytes": 187
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\lock-process-01\\stdout.log",
+      "destination": "original-run/stdout.log.gz",
+      "bytes": 38339
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\cleanup-before\\launch-lock-probe.ts",
+      "destination": "preparation/cleanup-before/launch-lock-probe.ts.gz",
+      "bytes": 3379
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\cleanup-before\\lock-worker.ts",
+      "destination": "preparation/cleanup-before/lock-worker.ts.gz",
+      "bytes": 14239
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\cleanup-before\\preparation-manifest.json",
+      "destination": "preparation/cleanup-before/preparation-manifest.json.gz",
+      "bytes": 1755
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\cleanup-before\\README.md",
+      "destination": "preparation/cleanup-before/README.md.gz",
+      "bytes": 10254
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\cleanup-before\\run-lock-probe.ts",
+      "destination": "preparation/cleanup-before/run-lock-probe.ts.gz",
+      "bytes": 10834
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\cleanup-run-lock-probe.ts.patch",
+      "destination": "preparation/cleanup-run-lock-probe.ts.patch.gz",
+      "bytes": 17895
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\cleanup-launch-lock-probe.ts.patch",
+      "destination": "preparation/cleanup-launch-lock-probe.ts.patch.gz",
+      "bytes": 7263
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\cleanup-lock-worker.ts.patch",
+      "destination": "preparation/cleanup-lock-worker.ts.patch.gz",
+      "bytes": 2667
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\cleanup-syntax-read.json",
+      "destination": "preparation/cleanup-syntax-read.json.gz",
+      "bytes": 301
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\migration-callers.txt",
+      "destination": "preparation/migration-callers.txt.gz",
+      "bytes": 3101
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\migration-history.txt",
+      "destination": "preparation/migration-history.txt.gz",
+      "bytes": 799
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\preparation-head.txt",
+      "destination": "preparation/preparation-head.txt.gz",
+      "bytes": 42
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\functionality\\preparation-status.txt",
+      "destination": "preparation/preparation-status.txt.gz",
+      "bytes": 1534
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\docs408-initial01\\owner-start.json",
+      "destination": "initial-delivery/docs408-initial01/owner-start.json.gz",
+      "bytes": 327
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\docs408-initial01\\owner.json",
+      "destination": "initial-delivery/docs408-initial01/owner.json.gz",
+      "bytes": 664
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\docs408-initial01\\stderr.log",
+      "destination": "initial-delivery/docs408-initial01/stderr.log.gz",
+      "bytes": 69
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\docs408-initial01\\stdout.log",
+      "destination": "initial-delivery/docs408-initial01/stdout.log.gz",
+      "bytes": 35
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\architecture408-initial01\\owner-start.json",
+      "destination": "initial-delivery/architecture408-initial01/owner-start.json.gz",
+      "bytes": 341
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\architecture408-initial01\\owner.json",
+      "destination": "initial-delivery/architecture408-initial01/owner.json.gz",
+      "bytes": 678
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\architecture408-initial01\\stderr.log",
+      "destination": "initial-delivery/architecture408-initial01/stderr.log.gz",
+      "bytes": 67
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\architecture408-initial01\\stdout.log",
+      "destination": "initial-delivery/architecture408-initial01/stdout.log.gz",
+      "bytes": 72
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\archive408-initial01\\owner-start.json",
+      "destination": "initial-delivery/archive408-initial01/owner-start.json.gz",
+      "bytes": 282
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\archive408-initial01\\owner.json",
+      "destination": "initial-delivery/archive408-initial01/owner.json.gz",
+      "bytes": 619
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\archive408-initial01\\stderr.log",
+      "destination": "initial-delivery/archive408-initial01/stderr.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\archive408-initial01\\stdout.log",
+      "destination": "initial-delivery/archive408-initial01/stdout.log.gz",
+      "bytes": 139
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\prepare408-plan01\\owner-start.json",
+      "destination": "initial-delivery/prepare408-plan01/owner-start.json.gz",
+      "bytes": 278
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\prepare408-plan01\\owner.json",
+      "destination": "initial-delivery/prepare408-plan01/owner.json.gz",
+      "bytes": 615
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\prepare408-plan01\\stderr.log",
+      "destination": "initial-delivery/prepare408-plan01/stderr.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\prepare408-plan01\\stdout.log",
+      "destination": "initial-delivery/prepare408-plan01/stdout.log.gz",
+      "bytes": 81
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\commit408-plan01\\owner-start.json",
+      "destination": "initial-delivery/commit408-plan01/owner-start.json.gz",
+      "bytes": 294
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\commit408-plan01\\owner.json",
+      "destination": "initial-delivery/commit408-plan01/owner.json.gz",
+      "bytes": 631
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\commit408-plan01\\stderr.log",
+      "destination": "initial-delivery/commit408-plan01/stderr.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\commit408-plan01\\stdout.log",
+      "destination": "initial-delivery/commit408-plan01/stdout.log.gz",
+      "bytes": 171
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\fetch408-plan01\\owner-start.json",
+      "destination": "initial-delivery/fetch408-plan01/owner-start.json.gz",
+      "bytes": 206
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\fetch408-plan01\\owner.json",
+      "destination": "initial-delivery/fetch408-plan01/owner.json.gz",
+      "bytes": 543
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\fetch408-plan01\\stderr.log",
+      "destination": "initial-delivery/fetch408-plan01/stderr.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\fetch408-plan01\\stdout.log",
+      "destination": "initial-delivery/fetch408-plan01/stdout.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\merge408-plan01\\owner-start.json",
+      "destination": "initial-delivery/merge408-plan01/owner-start.json.gz",
+      "bytes": 225
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\merge408-plan01\\owner.json",
+      "destination": "initial-delivery/merge408-plan01/owner.json.gz",
+      "bytes": 562
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\merge408-plan01\\stderr.log",
+      "destination": "initial-delivery/merge408-plan01/stderr.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\merge408-plan01\\stdout.log",
+      "destination": "initial-delivery/merge408-plan01/stdout.log.gz",
+      "bytes": 20
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\fetch408-plan02\\owner-start.json",
+      "destination": "initial-delivery/fetch408-plan02/owner-start.json.gz",
+      "bytes": 206
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\fetch408-plan02\\owner.json",
+      "destination": "initial-delivery/fetch408-plan02/owner.json.gz",
+      "bytes": 543
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\fetch408-plan02\\stderr.log",
+      "destination": "initial-delivery/fetch408-plan02/stderr.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\fetch408-plan02\\stdout.log",
+      "destination": "initial-delivery/fetch408-plan02/stdout.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\merge408-plan02\\owner-start.json",
+      "destination": "initial-delivery/merge408-plan02/owner-start.json.gz",
+      "bytes": 225
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\merge408-plan02\\owner.json",
+      "destination": "initial-delivery/merge408-plan02/owner.json.gz",
+      "bytes": 562
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\merge408-plan02\\stderr.log",
+      "destination": "initial-delivery/merge408-plan02/stderr.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\merge408-plan02\\stdout.log",
+      "destination": "initial-delivery/merge408-plan02/stdout.log.gz",
+      "bytes": 20
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\push408-plan01\\owner-start.json",
+      "destination": "initial-delivery/push408-plan01/owner-start.json.gz",
+      "bytes": 205
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\push408-plan01\\owner.json",
+      "destination": "initial-delivery/push408-plan01/owner.json.gz",
+      "bytes": 542
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\push408-plan01\\stderr.log",
+      "destination": "initial-delivery/push408-plan01/stderr.log.gz",
+      "bytes": 1270
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\push408-plan01\\stdout.log",
+      "destination": "initial-delivery/push408-plan01/stdout.log.gz",
+      "bytes": 2326
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\verify408-plan-fetch01\\owner-start.json",
+      "destination": "initial-delivery/verify408-plan-fetch01/owner-start.json.gz",
+      "bytes": 206
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\verify408-plan-fetch01\\owner.json",
+      "destination": "initial-delivery/verify408-plan-fetch01/owner.json.gz",
+      "bytes": 543
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\verify408-plan-fetch01\\stderr.log",
+      "destination": "initial-delivery/verify408-plan-fetch01/stderr.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-task-question-recovery-406\\delivery-commands\\verify408-plan-fetch01\\stdout.log",
+      "destination": "initial-delivery/verify408-plan-fetch01/stdout.log.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\plan-commit.json",
+      "destination": "initial-delivery/plan-commit.json.gz",
+      "bytes": 18910
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\commit-plan.mjs",
+      "destination": "initial-delivery/commit-plan.mjs.gz",
+      "bytes": 3235
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\plan-scoped.patch",
+      "destination": "initial-delivery/plan-scoped.patch.gz",
+      "bytes": 335612
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\production-scope-and-desktop-plan.md",
+      "destination": "ui-preparation/production-scope-and-desktop-plan.md.gz",
+      "bytes": 26144
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\source\\caller-query.txt",
+      "destination": "ui-preparation/source/caller-query.txt.gz",
+      "bytes": 4769
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\source\\head.txt",
+      "destination": "ui-preparation/source/head.txt.gz",
+      "bytes": 40
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\source\\manifest.json",
+      "destination": "ui-preparation/source/manifest.json.gz",
+      "bytes": 3286
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\source\\packages__opencorvus__src__engine__interaction.ts.txt",
+      "destination": "ui-preparation/source/packages__opencorvus__src__engine__interaction.ts.txt.gz",
+      "bytes": 5687
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\source\\packages__opencorvus__src__engine__store.ts.txt",
+      "destination": "ui-preparation/source/packages__opencorvus__src__engine__store.ts.txt.gz",
+      "bytes": 3436
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\source\\packages__opencorvus__src__permission__authority.ts.txt",
+      "destination": "ui-preparation/source/packages__opencorvus__src__permission__authority.ts.txt.gz",
+      "bytes": 9233
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\source\\packages__opencorvus__src__permission__decision.ts.txt",
+      "destination": "ui-preparation/source/packages__opencorvus__src__permission__decision.ts.txt.gz",
+      "bytes": 295
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\source\\packages__opencorvus__src__permission__invocation.ts.txt",
+      "destination": "ui-preparation/source/packages__opencorvus__src__permission__invocation.ts.txt.gz",
+      "bytes": 1480
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\source\\packages__opencorvus__src__permission__types.ts.txt",
+      "destination": "ui-preparation/source/packages__opencorvus__src__permission__types.ts.txt.gz",
+      "bytes": 1876
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\source\\packages__opencorvus__src__protocol__session-mirror.ts.txt",
+      "destination": "ui-preparation/source/packages__opencorvus__src__protocol__session-mirror.ts.txt.gz",
+      "bytes": 2717
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\source\\packages__overlay__src__components__CardParts.tsx.txt",
+      "destination": "ui-preparation/source/packages__overlay__src__components__CardParts.tsx.txt.gz",
+      "bytes": 572
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\source\\packages__overlay__src__components__InteractionCard.tsx.txt",
+      "destination": "ui-preparation/source/packages__overlay__src__components__InteractionCard.tsx.txt.gz",
+      "bytes": 1259
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\source\\packages__overlay__src__components__settings__PermissionsPanel.tsx.txt",
+      "destination": "ui-preparation/source/packages__overlay__src__components__settings__PermissionsPanel.tsx.txt.gz",
+      "bytes": 10651
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\source\\packages__overlay__src__services__side-chat.ts.txt",
+      "destination": "ui-preparation/source/packages__overlay__src__services__side-chat.ts.txt.gz",
+      "bytes": 4898
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\source\\packages__overlay__src__services__tree-writer.ts.txt",
+      "destination": "ui-preparation/source/packages__overlay__src__services__tree-writer.ts.txt.gz",
+      "bytes": 3521
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\source\\packages__overlay__src__utils__interaction.ts.txt",
+      "destination": "ui-preparation/source/packages__overlay__src__utils__interaction.ts.txt.gz",
+      "bytes": 3043
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\source\\packages__overlay__src__utils__transcript.ts.txt",
+      "destination": "ui-preparation/source/packages__overlay__src__utils__transcript.ts.txt.gz",
+      "bytes": 2575
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\source\\scope-current-diff.patch",
+      "destination": "ui-preparation/source/scope-current-diff.patch.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\ui\\source\\status.txt",
+      "destination": "ui-preparation/source/status.txt.gz",
+      "bytes": 1556
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\tsconfig.json",
+      "destination": "tooling-input/opencorvus-tsconfig.json.gz",
+      "bytes": 635
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\test\\empty-bunfig.toml",
+      "destination": "tooling-input/empty-bunfig.toml.gz",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-grant-decision-recovery-408\\capture-lock01.mjs",
+      "destination": "capture-lock01.mjs.gz",
+      "bytes": 3761
+    }
+  ],
+  "boundary": "Original first WAL file-exclusive mechanism run, initial normal delivery receipts and read-only UI plan. Both cases and 11 workers joined; Bun tsconfig internal diagnostics are retained, tooling remains under investigation. No production patch, business migration, Provider or UI acceptance. Gzip roundtrip proves capture storage identity only."
+}
