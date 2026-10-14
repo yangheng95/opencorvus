@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [命令面板工作项身份](2026-10-14-palette-item-identity.md)：canonical体验呈现、跨项目同名候选与Root实际桌面验收。
+
 - [Task成员指导与侧栏流中恢复](2026-10-14-task-member-guidance.md)：真实Task协调提交、消费与原成员阅读验收。
 
 - [Work体验搜索与归档恢复](2026-10-14-archive-experience-search.md)：共享字段根因、正向合同与真实页面矩阵。

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [命令面板工作项身份](records/2026-10/2026-10-14-palette-item-identity.md)：同名Chat/Work辨识、当前语言类型与真实选择调查。
+
 - [Task成员指导与侧栏流中恢复](records/2026-10/2026-10-14-task-member-guidance.md)：真实Task协调提交、消费与原成员阅读验收。
 
 - [Work体验搜索与归档恢复](records/2026-10/2026-10-14-archive-experience-search.md)：共享experience字段搜索及Mission/Work真实恢复入口调查。

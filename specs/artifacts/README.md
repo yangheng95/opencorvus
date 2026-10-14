@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [命令面板工作项身份](2026-10-14-palette-item-identity/README.md)：第24批原页面、正式输入与独立生命周期证据。
+
 - [Task成员指导与侧栏流中恢复](2026-10-14-task-member-guidance/README.md)：真实Task协调提交、消费与原成员阅读验收。
 
 - [Work体验搜索与归档恢复](2026-10-14-archive-experience-search/README.md)：第23批真实输入、原页面与共享查询证据。

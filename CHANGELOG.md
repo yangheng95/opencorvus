@@ -15,6 +15,8 @@
 
 #### 修复
 
+- 命令面板使用 Chat/Work 的统一体验图标，并在工作项提示中显示类型与项目；同项目同名记录可清楚区分，原始标题和选择目标保持。
+
 - 正常助手消息完成时同步关闭已成功工具的权限续行；静默写入、导入与相同完成重放共用原事务。退休写入失败保留真实错误并回滚本次消息发布，已提交的工具结果继续可恢复。
 
 - 工作记录和归档搜索支持真实的 Work 会话类型，改名后的会话仍可按类型查找；命令面板使用服务器接受的工作项，保留 Mission 子项和本地命令的原筛选规则。
@@ -129,6 +131,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- The command palette uses the shared Chat/Work experience icons and shows each work item's type beside its project, making equal titles within one project distinguishable while preserving original titles and selection targets.
 
 - Completed assistant messages now retire successful permission continuations in the same transaction, including silent writes, imports and identical completion replay. Retirement failures propagate and roll back that Message publication while preserving previously committed Tool results for recovery.
 

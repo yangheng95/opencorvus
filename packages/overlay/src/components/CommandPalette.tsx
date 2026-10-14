@@ -22,6 +22,7 @@ import { applyThemePreference } from "../services/theme-preference"
 import { themeOptionsForCurrentHost } from "../services/theme-registry"
 import { browseDirectory } from "../services/workspace"
 import { matchesSearchParts } from "../services/text-search"
+import { conversationExperienceIcon, conversationExperienceLabel } from "../services/conversation-experience"
 import {
   loadWorkLedger,
   type WorkLedgerChatRow,
@@ -91,7 +92,7 @@ function paletteLedgerRows(rows: readonly WorkLedgerRow[], query: string): Palet
 function rowCommandIcon(row: PaletteLedgerRow): IconName {
   if (row.kind === "mission") return "mission"
   if (row.kind === "task") return "workflow"
-  return "avatar-assistant"
+  return conversationExperienceIcon(row.experience)
 }
 
 function rowCommandHint(row: PaletteLedgerRow): string {
@@ -99,7 +100,8 @@ function rowCommandHint(row: PaletteLedgerRow): string {
     .split(/[\\/]/)
     .filter(Boolean)
     .at(-1)
-  return directory || row.kind
+  const kind = row.kind === "chat" ? conversationExperienceLabel(row.experience) : t(`work_ledger.kind.${row.kind}`)
+  return directory ? `${kind} · ${directory}` : kind
 }
 
 function rowMatches(row: WorkLedgerMissionRow | WorkLedgerTaskRow, query: string): boolean {

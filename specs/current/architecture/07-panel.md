@@ -3021,6 +3021,12 @@ to the visible command list; local action commands retain their text filter.
 Conversation experience is read from the same canonical metadata used to
 classify that conversation and to produce its public row.
 
+Selectable ledger commands retain the original title and show the current UI
+language's kind label beside the original Project directory basename. Chat and
+Work icons and labels use the same canonical conversation-experience helpers as
+the Work Ledger and Archive, so equal titles within one Project remain
+distinguishable through the existing visible and accessible option description.
+
 Each query owns its existing AbortController and captured API authority. Query
 replacement, closing, reopening and authority changes retire prior responses,
 errors and completion callbacks. Pagination retains accepted rows by kind:id.
