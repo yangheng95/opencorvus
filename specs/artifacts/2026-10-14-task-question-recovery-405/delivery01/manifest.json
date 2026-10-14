@@ -1,0 +1,4386 @@
+{
+  "capturedAt": "2026-10-14T00:32:45.289Z",
+  "target": "specs/artifacts/2026-10-14-task-question-recovery-405/delivery01",
+  "files": [
+    {
+      "source": "analysis.md",
+      "destination": "backend/analysis.md.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 22019,
+      "group": "backend",
+      "capturedBytes": 10852,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "callers.txt",
+      "destination": "backend/callers.txt.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 2750,
+      "group": "backend",
+      "capturedBytes": 805,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "helper-syntax-review.json",
+      "destination": "backend/helper-syntax-review.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 234,
+      "group": "backend",
+      "capturedBytes": 112,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "history-restore.txt",
+      "destination": "backend/history-restore.txt.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 25179,
+      "group": "backend",
+      "capturedBytes": 5106,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "live-helper-syntax.json",
+      "destination": "backend/live-helper-syntax.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 234,
+      "group": "backend",
+      "capturedBytes": 112,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "live-preparation/handoff.json",
+      "destination": "backend/live-preparation/handoff.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1200,
+      "group": "backend",
+      "capturedBytes": 496,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "live-preparation/README.md",
+      "destination": "backend/live-preparation/README.md.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4962,
+      "group": "backend",
+      "capturedBytes": 2849,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "live-preparation/task-question-process-runner.ts",
+      "destination": "backend/live-preparation/task-question-process-runner.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3766,
+      "group": "backend",
+      "capturedBytes": 1477,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "live-preparation/task-question-process-runner.ts.patch",
+      "destination": "backend/live-preparation/task-question-process-runner.ts.patch.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 2346,
+      "group": "backend",
+      "capturedBytes": 919,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "live-preparation/task-question-process-worker.ts",
+      "destination": "backend/live-preparation/task-question-process-worker.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 20514,
+      "group": "backend",
+      "capturedBytes": 5977,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "live-preparation/task-question-process-worker.ts.patch",
+      "destination": "backend/live-preparation/task-question-process-worker.ts.patch.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 11464,
+      "group": "backend",
+      "capturedBytes": 3735,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "live-preparation/task-question-process.test.ts",
+      "destination": "backend/live-preparation/task-question-process.test.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 12459,
+      "group": "backend",
+      "capturedBytes": 3819,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "live-preparation/task-question-process.test.ts.patch",
+      "destination": "backend/live-preparation/task-question-process.test.ts.patch.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 13387,
+      "group": "backend",
+      "capturedBytes": 3837,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "live01-summary.md",
+      "destination": "backend/live01-summary.md.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 5510,
+      "group": "backend",
+      "capturedBytes": 3311,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "process-red-plan.md",
+      "destination": "backend/process-red-plan.md.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4761,
+      "group": "backend",
+      "capturedBytes": 2994,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "red01-prerequisite-review.json",
+      "destination": "backend/red01-prerequisite-review.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 558,
+      "group": "backend",
+      "capturedBytes": 367,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "red01-red02-prerequisite.md",
+      "destination": "backend/red01-red02-prerequisite.md.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 5123,
+      "group": "backend",
+      "capturedBytes": 3289,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "red04-and-live-control-plan.md",
+      "destination": "backend/red04-and-live-control-plan.md.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 5046,
+      "group": "backend",
+      "capturedBytes": 3219,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "red04-facts.json",
+      "destination": "backend/red04-facts.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 34823,
+      "group": "backend",
+      "capturedBytes": 5560,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "runner-before-live-control.ts",
+      "destination": "backend/runner-before-live-control.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3657,
+      "group": "backend",
+      "capturedBytes": 1440,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "summarize-red04.cjs",
+      "destination": "backend/summarize-red04.cjs.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3123,
+      "group": "backend",
+      "capturedBytes": 1294,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/actual-phase-b-input.ts",
+      "destination": "backend/task-process-live-01/actual-phase-b-input.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1292,
+      "group": "backend",
+      "capturedBytes": 635,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/actual-task-question-process-runner.ts",
+      "destination": "backend/task-process-live-01/actual-task-question-process-runner.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3766,
+      "group": "backend",
+      "capturedBytes": 1477,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/actual-task-question-process-worker.ts",
+      "destination": "backend/task-process-live-01/actual-task-question-process-worker.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 20514,
+      "group": "backend",
+      "capturedBytes": 5977,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/actual-task-question-process.test.ts",
+      "destination": "backend/task-process-live-01/actual-task-question-process.test.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 12459,
+      "group": "backend",
+      "capturedBytes": 3819,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/checkpoint.json",
+      "destination": "backend/task-process-live-01/checkpoint.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 169187,
+      "group": "backend",
+      "capturedBytes": 30508,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/cleanup.json",
+      "destination": "backend/task-process-live-01/cleanup.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 9943,
+      "group": "backend",
+      "capturedBytes": 1849,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-a-baseline.json",
+      "destination": "backend/task-process-live-01/live-a-baseline.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 6043,
+      "group": "backend",
+      "capturedBytes": 1679,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-a-closed.json",
+      "destination": "backend/task-process-live-01/live-a-closed.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 128,
+      "group": "backend",
+      "capturedBytes": 115,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-a-config.json",
+      "destination": "backend/task-process-live-01/live-a-config.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 2144,
+      "group": "backend",
+      "capturedBytes": 569,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-a-failed-task-observation.json",
+      "destination": "backend/task-process-live-01/live-a-failed-task-observation.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 41002,
+      "group": "backend",
+      "capturedBytes": 7558,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-a-failure.json",
+      "destination": "backend/task-process-live-01/live-a-failure.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 347,
+      "group": "backend",
+      "capturedBytes": 220,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-a-http.json",
+      "destination": "backend/task-process-live-01/live-a-http.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3535593,
+      "group": "backend",
+      "capturedBytes": 70130,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-a-listener.json",
+      "destination": "backend/task-process-live-01/live-a-listener.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 222,
+      "group": "backend",
+      "capturedBytes": 185,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-a-owner.json",
+      "destination": "backend/task-process-live-01/live-a-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 532,
+      "group": "backend",
+      "capturedBytes": 305,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-a-permission.json",
+      "destination": "backend/task-process-live-01/live-a-permission.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 6017,
+      "group": "backend",
+      "capturedBytes": 1434,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-a-preflight.json",
+      "destination": "backend/task-process-live-01/live-a-preflight.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 136811,
+      "group": "backend",
+      "capturedBytes": 24923,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-a-process-owner.json",
+      "destination": "backend/task-process-live-01/live-a-process-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4261,
+      "group": "backend",
+      "capturedBytes": 1609,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-a-ready.json",
+      "destination": "backend/task-process-live-01/live-a-ready.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 169187,
+      "group": "backend",
+      "capturedBytes": 30508,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-a-spawn.json",
+      "destination": "backend/task-process-live-01/live-a-spawn.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3923,
+      "group": "backend",
+      "capturedBytes": 1458,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-a-stderr.log",
+      "destination": "backend/task-process-live-01/live-a-stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 250305,
+      "group": "backend",
+      "capturedBytes": 20629,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-a-stdout.log",
+      "destination": "backend/task-process-live-01/live-a-stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 0,
+      "group": "backend",
+      "capturedBytes": 20,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-a-task-accepted.json",
+      "destination": "backend/task-process-live-01/live-a-task-accepted.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 799,
+      "group": "backend",
+      "capturedBytes": 525,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-answer-questions",
+      "destination": "backend/task-process-live-01/live-answer-questions.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 79,
+      "group": "backend",
+      "capturedBytes": 92,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-b-answered.json",
+      "destination": "backend/task-process-live-01/live-b-answered.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4300,
+      "group": "backend",
+      "capturedBytes": 1183,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-b-closed.json",
+      "destination": "backend/task-process-live-01/live-b-closed.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 128,
+      "group": "backend",
+      "capturedBytes": 114,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-b-failed-task-observation.json",
+      "destination": "backend/task-process-live-01/live-b-failed-task-observation.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 57533,
+      "group": "backend",
+      "capturedBytes": 9261,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-b-failure.json",
+      "destination": "backend/task-process-live-01/live-b-failure.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 377,
+      "group": "backend",
+      "capturedBytes": 235,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-b-http.json",
+      "destination": "backend/task-process-live-01/live-b-http.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 92239,
+      "group": "backend",
+      "capturedBytes": 9965,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-b-listener.json",
+      "destination": "backend/task-process-live-01/live-b-listener.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 222,
+      "group": "backend",
+      "capturedBytes": 185,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-b-owner.json",
+      "destination": "backend/task-process-live-01/live-b-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 532,
+      "group": "backend",
+      "capturedBytes": 307,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-b-process-owner.json",
+      "destination": "backend/task-process-live-01/live-b-process-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4261,
+      "group": "backend",
+      "capturedBytes": 1609,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-b-ready.json",
+      "destination": "backend/task-process-live-01/live-b-ready.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 52389,
+      "group": "backend",
+      "capturedBytes": 5392,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-b-spawn.json",
+      "destination": "backend/task-process-live-01/live-b-spawn.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3923,
+      "group": "backend",
+      "capturedBytes": 1458,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-b-stderr.log",
+      "destination": "backend/task-process-live-01/live-b-stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 61998,
+      "group": "backend",
+      "capturedBytes": 6098,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-b-stdout.log",
+      "destination": "backend/task-process-live-01/live-b-stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 0,
+      "group": "backend",
+      "capturedBytes": 20,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/live-stop-requested",
+      "destination": "backend/task-process-live-01/live-stop-requested.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 50,
+      "group": "backend",
+      "capturedBytes": 69,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/owner-start.json",
+      "destination": "backend/task-process-live-01/owner-start.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 431,
+      "group": "backend",
+      "capturedBytes": 280,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/owner.json",
+      "destination": "backend/task-process-live-01/owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 769,
+      "group": "backend",
+      "capturedBytes": 417,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/permission-ledger-readonly.json",
+      "destination": "backend/task-process-live-01/permission-ledger-readonly.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 5029,
+      "group": "backend",
+      "capturedBytes": 1435,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/provider-release-observation.json",
+      "destination": "backend/task-process-live-01/provider-release-observation.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 2479,
+      "group": "backend",
+      "capturedBytes": 382,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/release-first-question",
+      "destination": "backend/task-process-live-01/release-first-question.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 70,
+      "group": "backend",
+      "capturedBytes": 85,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/source-observation.json",
+      "destination": "backend/task-process-live-01/source-observation.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 704,
+      "group": "backend",
+      "capturedBytes": 339,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/stderr.log",
+      "destination": "backend/task-process-live-01/stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1328,
+      "group": "backend",
+      "capturedBytes": 618,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-live-01/stdout.log",
+      "destination": "backend/task-process-live-01/stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 223,
+      "group": "backend",
+      "capturedBytes": 155,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/actual-phase-b-input.ts",
+      "destination": "backend/task-process-red-01/actual-phase-b-input.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1292,
+      "group": "backend",
+      "capturedBytes": 635,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/actual-task-question-process-runner.ts",
+      "destination": "backend/task-process-red-01/actual-task-question-process-runner.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3657,
+      "group": "backend",
+      "capturedBytes": 1440,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/actual-task-question-process-worker.ts",
+      "destination": "backend/task-process-red-01/actual-task-question-process-worker.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 12359,
+      "group": "backend",
+      "capturedBytes": 4120,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/actual-task-question-process.test.ts",
+      "destination": "backend/task-process-red-01/actual-task-question-process.test.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 6850,
+      "group": "backend",
+      "capturedBytes": 2463,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/cleanup.json",
+      "destination": "backend/task-process-red-01/cleanup.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4964,
+      "group": "backend",
+      "capturedBytes": 1683,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/crash-closed.json",
+      "destination": "backend/task-process-red-01/crash-closed.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 128,
+      "group": "backend",
+      "capturedBytes": 117,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/crash-config.json",
+      "destination": "backend/task-process-red-01/crash-config.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1352,
+      "group": "backend",
+      "capturedBytes": 521,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/crash-failure.json",
+      "destination": "backend/task-process-red-01/crash-failure.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 359,
+      "group": "backend",
+      "capturedBytes": 224,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/crash-http.json",
+      "destination": "backend/task-process-red-01/crash-http.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 178564,
+      "group": "backend",
+      "capturedBytes": 27202,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/crash-listener.json",
+      "destination": "backend/task-process-red-01/crash-listener.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 222,
+      "group": "backend",
+      "capturedBytes": 184,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/crash-owner.json",
+      "destination": "backend/task-process-red-01/crash-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 531,
+      "group": "backend",
+      "capturedBytes": 301,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/crash-preflight.json",
+      "destination": "backend/task-process-red-01/crash-preflight.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 136811,
+      "group": "backend",
+      "capturedBytes": 24921,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/crash-process-owner.json",
+      "destination": "backend/task-process-red-01/crash-process-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4173,
+      "group": "backend",
+      "capturedBytes": 1596,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/crash-spawn.json",
+      "destination": "backend/task-process-red-01/crash-spawn.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3835,
+      "group": "backend",
+      "capturedBytes": 1444,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/crash-stderr.log",
+      "destination": "backend/task-process-red-01/crash-stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 207158,
+      "group": "backend",
+      "capturedBytes": 17696,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/crash-stdout.log",
+      "destination": "backend/task-process-red-01/crash-stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 0,
+      "group": "backend",
+      "capturedBytes": 20,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/crash-task-accepted.json",
+      "destination": "backend/task-process-red-01/crash-task-accepted.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 799,
+      "group": "backend",
+      "capturedBytes": 523,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/owner-start.json",
+      "destination": "backend/task-process-red-01/owner-start.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 432,
+      "group": "backend",
+      "capturedBytes": 282,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/owner.json",
+      "destination": "backend/task-process-red-01/owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 770,
+      "group": "backend",
+      "capturedBytes": 416,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/release-first-question",
+      "destination": "backend/task-process-red-01/release-first-question.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 70,
+      "group": "backend",
+      "capturedBytes": 85,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/source-observation.json",
+      "destination": "backend/task-process-red-01/source-observation.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 704,
+      "group": "backend",
+      "capturedBytes": 339,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/stderr.log",
+      "destination": "backend/task-process-red-01/stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1057,
+      "group": "backend",
+      "capturedBytes": 528,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-01/stdout.log",
+      "destination": "backend/task-process-red-01/stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 222,
+      "group": "backend",
+      "capturedBytes": 154,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/actual-phase-b-input.ts",
+      "destination": "backend/task-process-red-02/actual-phase-b-input.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1292,
+      "group": "backend",
+      "capturedBytes": 635,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/actual-task-question-process-runner.ts",
+      "destination": "backend/task-process-red-02/actual-task-question-process-runner.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3657,
+      "group": "backend",
+      "capturedBytes": 1440,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/actual-task-question-process-worker.ts",
+      "destination": "backend/task-process-red-02/actual-task-question-process-worker.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 12820,
+      "group": "backend",
+      "capturedBytes": 4231,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/actual-task-question-process.test.ts",
+      "destination": "backend/task-process-red-02/actual-task-question-process.test.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 7903,
+      "group": "backend",
+      "capturedBytes": 2718,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/cleanup.json",
+      "destination": "backend/task-process-red-02/cleanup.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4964,
+      "group": "backend",
+      "capturedBytes": 1683,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/crash-baseline.json",
+      "destination": "backend/task-process-red-02/crash-baseline.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 6061,
+      "group": "backend",
+      "capturedBytes": 1681,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/crash-closed.json",
+      "destination": "backend/task-process-red-02/crash-closed.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 128,
+      "group": "backend",
+      "capturedBytes": 115,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/crash-config.json",
+      "destination": "backend/task-process-red-02/crash-config.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1352,
+      "group": "backend",
+      "capturedBytes": 522,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/crash-failed-task-observation.json",
+      "destination": "backend/task-process-red-02/crash-failed-task-observation.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 28099,
+      "group": "backend",
+      "capturedBytes": 5761,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/crash-failure.json",
+      "destination": "backend/task-process-red-02/crash-failure.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 359,
+      "group": "backend",
+      "capturedBytes": 224,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/crash-http.json",
+      "destination": "backend/task-process-red-02/crash-http.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 203301,
+      "group": "backend",
+      "capturedBytes": 32034,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/crash-listener.json",
+      "destination": "backend/task-process-red-02/crash-listener.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 222,
+      "group": "backend",
+      "capturedBytes": 186,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/crash-owner.json",
+      "destination": "backend/task-process-red-02/crash-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 531,
+      "group": "backend",
+      "capturedBytes": 303,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/crash-preflight.json",
+      "destination": "backend/task-process-red-02/crash-preflight.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 136811,
+      "group": "backend",
+      "capturedBytes": 24923,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/crash-process-owner.json",
+      "destination": "backend/task-process-red-02/crash-process-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4173,
+      "group": "backend",
+      "capturedBytes": 1593,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/crash-spawn.json",
+      "destination": "backend/task-process-red-02/crash-spawn.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3835,
+      "group": "backend",
+      "capturedBytes": 1443,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/crash-stderr.log",
+      "destination": "backend/task-process-red-02/crash-stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 224629,
+      "group": "backend",
+      "capturedBytes": 19553,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/crash-stdout.log",
+      "destination": "backend/task-process-red-02/crash-stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 0,
+      "group": "backend",
+      "capturedBytes": 20,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/crash-task-accepted.json",
+      "destination": "backend/task-process-red-02/crash-task-accepted.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 799,
+      "group": "backend",
+      "capturedBytes": 523,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/owner-start.json",
+      "destination": "backend/task-process-red-02/owner-start.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 432,
+      "group": "backend",
+      "capturedBytes": 281,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/owner.json",
+      "destination": "backend/task-process-red-02/owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 770,
+      "group": "backend",
+      "capturedBytes": 417,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/provider-release-observation.json",
+      "destination": "backend/task-process-red-02/provider-release-observation.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 359,
+      "group": "backend",
+      "capturedBytes": 170,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/release-first-question",
+      "destination": "backend/task-process-red-02/release-first-question.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 70,
+      "group": "backend",
+      "capturedBytes": 85,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/source-observation.json",
+      "destination": "backend/task-process-red-02/source-observation.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 704,
+      "group": "backend",
+      "capturedBytes": 338,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/stderr.log",
+      "destination": "backend/task-process-red-02/stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1057,
+      "group": "backend",
+      "capturedBytes": 528,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-02/stdout.log",
+      "destination": "backend/task-process-red-02/stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 222,
+      "group": "backend",
+      "capturedBytes": 155,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/actual-phase-b-input.ts",
+      "destination": "backend/task-process-red-03/actual-phase-b-input.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1292,
+      "group": "backend",
+      "capturedBytes": 635,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/actual-task-question-process-runner.ts",
+      "destination": "backend/task-process-red-03/actual-task-question-process-runner.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3657,
+      "group": "backend",
+      "capturedBytes": 1440,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/actual-task-question-process-worker.ts",
+      "destination": "backend/task-process-red-03/actual-task-question-process-worker.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 13155,
+      "group": "backend",
+      "capturedBytes": 4308,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/actual-task-question-process.test.ts",
+      "destination": "backend/task-process-red-03/actual-task-question-process.test.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 7903,
+      "group": "backend",
+      "capturedBytes": 2718,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/cleanup.json",
+      "destination": "backend/task-process-red-03/cleanup.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4963,
+      "group": "backend",
+      "capturedBytes": 1680,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/crash-baseline.json",
+      "destination": "backend/task-process-red-03/crash-baseline.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 6049,
+      "group": "backend",
+      "capturedBytes": 1683,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/crash-closed.json",
+      "destination": "backend/task-process-red-03/crash-closed.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 128,
+      "group": "backend",
+      "capturedBytes": 116,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/crash-config.json",
+      "destination": "backend/task-process-red-03/crash-config.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1352,
+      "group": "backend",
+      "capturedBytes": 522,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/crash-failed-task-observation.json",
+      "destination": "backend/task-process-red-03/crash-failed-task-observation.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 28081,
+      "group": "backend",
+      "capturedBytes": 5766,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/crash-failure.json",
+      "destination": "backend/task-process-red-03/crash-failure.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 359,
+      "group": "backend",
+      "capturedBytes": 224,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/crash-http.json",
+      "destination": "backend/task-process-red-03/crash-http.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 201145,
+      "group": "backend",
+      "capturedBytes": 31983,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/crash-listener.json",
+      "destination": "backend/task-process-red-03/crash-listener.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 222,
+      "group": "backend",
+      "capturedBytes": 187,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/crash-owner.json",
+      "destination": "backend/task-process-red-03/crash-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 529,
+      "group": "backend",
+      "capturedBytes": 305,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/crash-preflight.json",
+      "destination": "backend/task-process-red-03/crash-preflight.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 136810,
+      "group": "backend",
+      "capturedBytes": 24923,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/crash-process-owner.json",
+      "destination": "backend/task-process-red-03/crash-process-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4172,
+      "group": "backend",
+      "capturedBytes": 1594,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/crash-spawn.json",
+      "destination": "backend/task-process-red-03/crash-spawn.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3834,
+      "group": "backend",
+      "capturedBytes": 1442,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/crash-stderr.log",
+      "destination": "backend/task-process-red-03/crash-stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 217291,
+      "group": "backend",
+      "capturedBytes": 18428,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/crash-stdout.log",
+      "destination": "backend/task-process-red-03/crash-stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 0,
+      "group": "backend",
+      "capturedBytes": 20,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/crash-task-accepted.json",
+      "destination": "backend/task-process-red-03/crash-task-accepted.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 798,
+      "group": "backend",
+      "capturedBytes": 522,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/owner-start.json",
+      "destination": "backend/task-process-red-03/owner-start.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 432,
+      "group": "backend",
+      "capturedBytes": 281,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/owner.json",
+      "destination": "backend/task-process-red-03/owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 770,
+      "group": "backend",
+      "capturedBytes": 417,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/provider-release-observation.json",
+      "destination": "backend/task-process-red-03/provider-release-observation.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 359,
+      "group": "backend",
+      "capturedBytes": 170,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/release-first-question",
+      "destination": "backend/task-process-red-03/release-first-question.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 70,
+      "group": "backend",
+      "capturedBytes": 85,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/source-observation.json",
+      "destination": "backend/task-process-red-03/source-observation.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 704,
+      "group": "backend",
+      "capturedBytes": 339,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/stderr.log",
+      "destination": "backend/task-process-red-03/stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1057,
+      "group": "backend",
+      "capturedBytes": 528,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-03/stdout.log",
+      "destination": "backend/task-process-red-03/stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 222,
+      "group": "backend",
+      "capturedBytes": 155,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/actual-phase-b-input.ts",
+      "destination": "backend/task-process-red-04/actual-phase-b-input.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1292,
+      "group": "backend",
+      "capturedBytes": 635,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/actual-task-question-process-runner.ts",
+      "destination": "backend/task-process-red-04/actual-task-question-process-runner.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3657,
+      "group": "backend",
+      "capturedBytes": 1440,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/actual-task-question-process-worker.ts",
+      "destination": "backend/task-process-red-04/actual-task-question-process-worker.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 14955,
+      "group": "backend",
+      "capturedBytes": 4739,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/actual-task-question-process.test.ts",
+      "destination": "backend/task-process-red-04/actual-task-question-process.test.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 8066,
+      "group": "backend",
+      "capturedBytes": 2767,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/checkpoint.json",
+      "destination": "backend/task-process-red-04/checkpoint.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 169199,
+      "group": "backend",
+      "capturedBytes": 30520,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/cleanup.json",
+      "destination": "backend/task-process-red-04/cleanup.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 9756,
+      "group": "backend",
+      "capturedBytes": 1853,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/crash-baseline.json",
+      "destination": "backend/task-process-red-04/crash-baseline.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 6055,
+      "group": "backend",
+      "capturedBytes": 1689,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/crash-config.json",
+      "destination": "backend/task-process-red-04/crash-config.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1352,
+      "group": "backend",
+      "capturedBytes": 521,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/crash-http.json",
+      "destination": "backend/task-process-red-04/crash-http.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 169741,
+      "group": "backend",
+      "capturedBytes": 28652,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/crash-listener.json",
+      "destination": "backend/task-process-red-04/crash-listener.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 222,
+      "group": "backend",
+      "capturedBytes": 186,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/crash-owner.json",
+      "destination": "backend/task-process-red-04/crash-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 531,
+      "group": "backend",
+      "capturedBytes": 307,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/crash-permission.json",
+      "destination": "backend/task-process-red-04/crash-permission.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 6017,
+      "group": "backend",
+      "capturedBytes": 1434,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/crash-preflight.json",
+      "destination": "backend/task-process-red-04/crash-preflight.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 136811,
+      "group": "backend",
+      "capturedBytes": 24922,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/crash-process-owner.json",
+      "destination": "backend/task-process-red-04/crash-process-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4174,
+      "group": "backend",
+      "capturedBytes": 1595,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/crash-spawn.json",
+      "destination": "backend/task-process-red-04/crash-spawn.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3835,
+      "group": "backend",
+      "capturedBytes": 1442,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/crash-stderr.log",
+      "destination": "backend/task-process-red-04/crash-stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 85977,
+      "group": "backend",
+      "capturedBytes": 8309,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/crash-stdout.log",
+      "destination": "backend/task-process-red-04/crash-stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 185,
+      "group": "backend",
+      "capturedBytes": 173,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/crash-task-accepted.json",
+      "destination": "backend/task-process-red-04/crash-task-accepted.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 799,
+      "group": "backend",
+      "capturedBytes": 526,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/owner-start.json",
+      "destination": "backend/task-process-red-04/owner-start.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 432,
+      "group": "backend",
+      "capturedBytes": 282,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/owner.json",
+      "destination": "backend/task-process-red-04/owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 770,
+      "group": "backend",
+      "capturedBytes": 416,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/provider-release-observation.json",
+      "destination": "backend/task-process-red-04/provider-release-observation.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 655,
+      "group": "backend",
+      "capturedBytes": 203,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/recover-closed.json",
+      "destination": "backend/task-process-red-04/recover-closed.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 128,
+      "group": "backend",
+      "capturedBytes": 116,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/recover-http.json",
+      "destination": "backend/task-process-red-04/recover-http.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1454062,
+      "group": "backend",
+      "capturedBytes": 18767,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/recover-listener.json",
+      "destination": "backend/task-process-red-04/recover-listener.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 222,
+      "group": "backend",
+      "capturedBytes": 187,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/recover-observation.json",
+      "destination": "backend/task-process-red-04/recover-observation.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 356248,
+      "group": "backend",
+      "capturedBytes": 10947,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/recover-owner.json",
+      "destination": "backend/task-process-red-04/recover-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 533,
+      "group": "backend",
+      "capturedBytes": 307,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/recover-process-owner.json",
+      "destination": "backend/task-process-red-04/recover-process-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4177,
+      "group": "backend",
+      "capturedBytes": 1590,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/recover-spawn.json",
+      "destination": "backend/task-process-red-04/recover-spawn.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3839,
+      "group": "backend",
+      "capturedBytes": 1440,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/recover-stderr.log",
+      "destination": "backend/task-process-red-04/recover-stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 139613,
+      "group": "backend",
+      "capturedBytes": 11149,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/recover-stdout.log",
+      "destination": "backend/task-process-red-04/recover-stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 0,
+      "group": "backend",
+      "capturedBytes": 20,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/release-first-question",
+      "destination": "backend/task-process-red-04/release-first-question.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 70,
+      "group": "backend",
+      "capturedBytes": 85,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/source-observation.json",
+      "destination": "backend/task-process-red-04/source-observation.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 704,
+      "group": "backend",
+      "capturedBytes": 339,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/stderr.log",
+      "destination": "backend/task-process-red-04/stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1774,
+      "group": "backend",
+      "capturedBytes": 746,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-process-red-04/stdout.log",
+      "destination": "backend/task-process-red-04/stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 223,
+      "group": "backend",
+      "capturedBytes": 155,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-question-process-runner.ts",
+      "destination": "backend/task-question-process-runner.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3766,
+      "group": "backend",
+      "capturedBytes": 1477,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-question-process-worker.ts",
+      "destination": "backend/task-question-process-worker.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 20514,
+      "group": "backend",
+      "capturedBytes": 5977,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "task-question-process.test.ts",
+      "destination": "backend/task-question-process.test.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 12459,
+      "group": "backend",
+      "capturedBytes": 3819,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "test-before-live-control.ts",
+      "destination": "backend/test-before-live-control.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 8066,
+      "group": "backend",
+      "capturedBytes": 2767,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "worker-before-asked-only-hold.ts",
+      "destination": "backend/worker-before-asked-only-hold.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 12820,
+      "group": "backend",
+      "capturedBytes": 4231,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "worker-before-live-control.ts",
+      "destination": "backend/worker-before-live-control.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 14955,
+      "group": "backend",
+      "capturedBytes": 4739,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "worker-before-public-permission-input.ts",
+      "destination": "backend/worker-before-public-permission-input.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 13155,
+      "group": "backend",
+      "capturedBytes": 4308,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/after/packages/overlay/src/components/SideChatPanel.tsx",
+      "destination": "frontend-a/after/packages/overlay/src/components/SideChatPanel.tsx.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 24584,
+      "group": "frontend-a",
+      "capturedBytes": 5882,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/after/packages/overlay/src/services/side-chat.ts",
+      "destination": "frontend-a/after/packages/overlay/src/services/side-chat.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 9240,
+      "group": "frontend-a",
+      "capturedBytes": 2370,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/after/packages/overlay/test/side-chat-transport.test.ts",
+      "destination": "frontend-a/after/packages/overlay/test/side-chat-transport.test.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 15658,
+      "group": "frontend-a",
+      "capturedBytes": 3756,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/before/packages/overlay/src/components/SideChatPanel.tsx",
+      "destination": "frontend-a/before/packages/overlay/src/components/SideChatPanel.tsx.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 24583,
+      "group": "frontend-a",
+      "capturedBytes": 5886,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/before/packages/overlay/src/services/side-chat.ts",
+      "destination": "frontend-a/before/packages/overlay/src/services/side-chat.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 8883,
+      "group": "frontend-a",
+      "capturedBytes": 2277,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/before/packages/overlay/test/side-chat-transport.test.ts",
+      "destination": "frontend-a/before/packages/overlay/test/side-chat-transport.test.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 11371,
+      "group": "frontend-a",
+      "capturedBytes": 2890,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/handoff.json",
+      "destination": "frontend-a/handoff.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1831,
+      "group": "frontend-a",
+      "capturedBytes": 868,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/implementation.patch",
+      "destination": "frontend-a/implementation.patch.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 8458,
+      "group": "frontend-a",
+      "capturedBytes": 2521,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/index-before.patch",
+      "destination": "frontend-a/index-before.patch.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 0,
+      "group": "frontend-a",
+      "capturedBytes": 20,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/review.md",
+      "destination": "frontend-a/review.md.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4352,
+      "group": "frontend-a",
+      "capturedBytes": 2128,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/run-validation.ts",
+      "destination": "frontend-a/run-validation.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 5370,
+      "group": "frontend-a",
+      "capturedBytes": 2024,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/source-allowlist.json",
+      "destination": "frontend-a/source-allowlist.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 490,
+      "group": "frontend-a",
+      "capturedBytes": 229,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/source-before.patch",
+      "destination": "frontend-a/source-before.patch.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 0,
+      "group": "frontend-a",
+      "capturedBytes": 20,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/status-after.txt",
+      "destination": "frontend-a/status-after.txt.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1376,
+      "group": "frontend-a",
+      "capturedBytes": 432,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/status-before.txt",
+      "destination": "frontend-a/status-before.txt.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1072,
+      "group": "frontend-a",
+      "capturedBytes": 359,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/validation-01/build-owner.json",
+      "destination": "frontend-a/validation-01/build-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 777,
+      "group": "frontend-a",
+      "capturedBytes": 431,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/validation-01/build.exit",
+      "destination": "frontend-a/validation-01/build.exit.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1,
+      "group": "frontend-a",
+      "capturedBytes": 21,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/validation-01/build.stderr.log",
+      "destination": "frontend-a/validation-01/build.stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 6763,
+      "group": "frontend-a",
+      "capturedBytes": 949,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/validation-01/build.stdout.log",
+      "destination": "frontend-a/validation-01/build.stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 84352,
+      "group": "frontend-a",
+      "capturedBytes": 10550,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/validation-01/scope-final.json",
+      "destination": "frontend-a/validation-01/scope-final.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4458,
+      "group": "frontend-a",
+      "capturedBytes": 1251,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/validation-01/scope-start.json",
+      "destination": "frontend-a/validation-01/scope-start.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1611,
+      "group": "frontend-a",
+      "capturedBytes": 665,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/validation-01/transport-owner.json",
+      "destination": "frontend-a/validation-01/transport-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 750,
+      "group": "frontend-a",
+      "capturedBytes": 408,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/validation-01/transport.exit",
+      "destination": "frontend-a/validation-01/transport.exit.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1,
+      "group": "frontend-a",
+      "capturedBytes": 21,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/validation-01/transport.stderr.log",
+      "destination": "frontend-a/validation-01/transport.stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4134,
+      "group": "frontend-a",
+      "capturedBytes": 1529,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/validation-01/transport.stdout.log",
+      "destination": "frontend-a/validation-01/transport.stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 202,
+      "group": "frontend-a",
+      "capturedBytes": 148,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/validation-01/typecheck-owner.json",
+      "destination": "frontend-a/validation-01/typecheck-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 660,
+      "group": "frontend-a",
+      "capturedBytes": 365,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/validation-01/typecheck.exit",
+      "destination": "frontend-a/validation-01/typecheck.exit.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1,
+      "group": "frontend-a",
+      "capturedBytes": 21,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/validation-01/typecheck.stderr.log",
+      "destination": "frontend-a/validation-01/typecheck.stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 15,
+      "group": "frontend-a",
+      "capturedBytes": 35,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-a/validation-01/typecheck.stdout.log",
+      "destination": "frontend-a/validation-01/typecheck.stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 0,
+      "group": "frontend-a",
+      "capturedBytes": 20,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/after/packages/overlay/src/components/CardParts.tsx",
+      "destination": "frontend-c/after/packages/overlay/src/components/CardParts.tsx.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 16054,
+      "group": "frontend-c",
+      "capturedBytes": 4186,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/after/packages/overlay/src/i18n/en-US.json",
+      "destination": "frontend-c/after/packages/overlay/src/i18n/en-US.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 146011,
+      "group": "frontend-c",
+      "capturedBytes": 36564,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/after/packages/overlay/src/i18n/zh-CN.json",
+      "destination": "frontend-c/after/packages/overlay/src/i18n/zh-CN.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 143189,
+      "group": "frontend-c",
+      "capturedBytes": 40160,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/after/packages/overlay/src/utils/interaction.ts",
+      "destination": "frontend-c/after/packages/overlay/src/utils/interaction.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 5935,
+      "group": "frontend-c",
+      "capturedBytes": 1975,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/after/packages/overlay/src/utils/transcript.ts",
+      "destination": "frontend-c/after/packages/overlay/src/utils/transcript.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 6647,
+      "group": "frontend-c",
+      "capturedBytes": 1940,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/before/packages/overlay/src/components/CardParts.tsx",
+      "destination": "frontend-c/before/packages/overlay/src/components/CardParts.tsx.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 15454,
+      "group": "frontend-c",
+      "capturedBytes": 4063,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/before/packages/overlay/src/i18n/en-US.json",
+      "destination": "frontend-c/before/packages/overlay/src/i18n/en-US.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 145907,
+      "group": "frontend-c",
+      "capturedBytes": 36539,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/before/packages/overlay/src/i18n/zh-CN.json",
+      "destination": "frontend-c/before/packages/overlay/src/i18n/zh-CN.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 143102,
+      "group": "frontend-c",
+      "capturedBytes": 40137,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/before/packages/overlay/src/utils/interaction.ts",
+      "destination": "frontend-c/before/packages/overlay/src/utils/interaction.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4495,
+      "group": "frontend-c",
+      "capturedBytes": 1643,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/before/packages/overlay/src/utils/transcript.ts",
+      "destination": "frontend-c/before/packages/overlay/src/utils/transcript.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 6208,
+      "group": "frontend-c",
+      "capturedBytes": 1812,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/handoff.json",
+      "destination": "frontend-c/handoff.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1504,
+      "group": "frontend-c",
+      "capturedBytes": 709,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/implementation.patch",
+      "destination": "frontend-c/implementation.patch.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 7521,
+      "group": "frontend-c",
+      "capturedBytes": 2588,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/index-before.patch",
+      "destination": "frontend-c/index-before.patch.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 0,
+      "group": "frontend-c",
+      "capturedBytes": 20,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/review.md",
+      "destination": "frontend-c/review.md.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4105,
+      "group": "frontend-c",
+      "capturedBytes": 2037,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/run-validation.ts",
+      "destination": "frontend-c/run-validation.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 5199,
+      "group": "frontend-c",
+      "capturedBytes": 1972,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/source-allowlist.json",
+      "destination": "frontend-c/source-allowlist.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 368,
+      "group": "frontend-c",
+      "capturedBytes": 222,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/source-before.patch",
+      "destination": "frontend-c/source-before.patch.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 0,
+      "group": "frontend-c",
+      "capturedBytes": 20,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/status-before.txt",
+      "destination": "frontend-c/status-before.txt.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 907,
+      "group": "frontend-c",
+      "capturedBytes": 320,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/validation-01/build-owner.json",
+      "destination": "frontend-c/validation-01/build-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 771,
+      "group": "frontend-c",
+      "capturedBytes": 427,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/validation-01/build.exit",
+      "destination": "frontend-c/validation-01/build.exit.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1,
+      "group": "frontend-c",
+      "capturedBytes": 21,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/validation-01/build.stderr.log",
+      "destination": "frontend-c/validation-01/build.stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 6763,
+      "group": "frontend-c",
+      "capturedBytes": 947,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/validation-01/build.stdout.log",
+      "destination": "frontend-c/validation-01/build.stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 81736,
+      "group": "frontend-c",
+      "capturedBytes": 10560,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/validation-01/scope-final.json",
+      "destination": "frontend-c/validation-01/scope-final.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3522,
+      "group": "frontend-c",
+      "capturedBytes": 1127,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/validation-01/scope-start.json",
+      "destination": "frontend-c/validation-01/scope-start.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1605,
+      "group": "frontend-c",
+      "capturedBytes": 662,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/validation-01/typecheck-owner.json",
+      "destination": "frontend-c/validation-01/typecheck-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 660,
+      "group": "frontend-c",
+      "capturedBytes": 363,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/validation-01/typecheck.exit",
+      "destination": "frontend-c/validation-01/typecheck.exit.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1,
+      "group": "frontend-c",
+      "capturedBytes": 21,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/validation-01/typecheck.stderr.log",
+      "destination": "frontend-c/validation-01/typecheck.stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 15,
+      "group": "frontend-c",
+      "capturedBytes": 35,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "frontend-c/validation-01/typecheck.stdout.log",
+      "destination": "frontend-c/validation-01/typecheck.stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 0,
+      "group": "frontend-c",
+      "capturedBytes": 20,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "check-empty-expiry.ts",
+      "destination": "helpers/check-empty-expiry.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3710,
+      "group": "helpers",
+      "capturedBytes": 1470,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "helper-syntax-review.json",
+      "destination": "helpers/helper-syntax-review.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 234,
+      "group": "helpers",
+      "capturedBytes": 112,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-facts.mjs",
+      "destination": "helpers/main-history-facts.mjs.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 6111,
+      "group": "helpers",
+      "capturedBytes": 2100,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-handoff.md",
+      "destination": "helpers/main-history-handoff.md.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 8332,
+      "group": "helpers",
+      "capturedBytes": 3132,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-helper-changes.patch",
+      "destination": "helpers/main-history-helper-changes.patch.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 2181,
+      "group": "helpers",
+      "capturedBytes": 789,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-helper-scope.json",
+      "destination": "helpers/main-history-helper-scope.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1341,
+      "group": "helpers",
+      "capturedBytes": 515,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-helper-source/manual-empty-expiry-driver.ts",
+      "destination": "helpers/main-history-helper-source/manual-empty-expiry-driver.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4953,
+      "group": "helpers",
+      "capturedBytes": 1820,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-helper-source/manual-empty-expiry-server.ts",
+      "destination": "helpers/main-history-helper-source/manual-empty-expiry-server.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 8295,
+      "group": "helpers",
+      "capturedBytes": 2983,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-helper-source/prepare-main-history.failed01.mjs",
+      "destination": "helpers/main-history-helper-source/prepare-main-history.failed01.mjs.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 2266,
+      "group": "helpers",
+      "capturedBytes": 974,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-prepare-failed01.json",
+      "destination": "helpers/main-history-prepare-failed01.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 869,
+      "group": "helpers",
+      "capturedBytes": 507,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-syntax-review.json",
+      "destination": "helpers/main-history-syntax-review.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 334,
+      "group": "helpers",
+      "capturedBytes": 216,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "manual-empty-expiry-driver.ts",
+      "destination": "helpers/manual-empty-expiry-driver.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4953,
+      "group": "helpers",
+      "capturedBytes": 1820,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "manual-empty-expiry-server.ts",
+      "destination": "helpers/manual-empty-expiry-server.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 8295,
+      "group": "helpers",
+      "capturedBytes": 2983,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "manual-main-history-driver.ts",
+      "destination": "helpers/manual-main-history-driver.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4940,
+      "group": "helpers",
+      "capturedBytes": 1816,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "manual-main-history-server.ts",
+      "destination": "helpers/manual-main-history-server.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 8295,
+      "group": "helpers",
+      "capturedBytes": 2983,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "manual-side-question-driver.ts",
+      "destination": "helpers/manual-side-question-driver.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4939,
+      "group": "helpers",
+      "capturedBytes": 1809,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "manual-side-question-server.ts",
+      "destination": "helpers/manual-side-question-server.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 8224,
+      "group": "helpers",
+      "capturedBytes": 2944,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "prepare-api-adapters.mjs",
+      "destination": "helpers/prepare-api-adapters.mjs.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1135,
+      "group": "helpers",
+      "capturedBytes": 544,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "prepare-main-history.mjs",
+      "destination": "helpers/prepare-main-history.mjs.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 2437,
+      "group": "helpers",
+      "capturedBytes": 1030,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "question-facts.mjs",
+      "destination": "helpers/question-facts.mjs.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3020,
+      "group": "helpers",
+      "capturedBytes": 1202,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "relay-driver.mjs",
+      "destination": "helpers/relay-driver.mjs.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4895,
+      "group": "helpers",
+      "capturedBytes": 1795,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-entry.mjs",
+      "destination": "helpers/side-question-entry.mjs.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3628,
+      "group": "helpers",
+      "capturedBytes": 1437,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "ui-helper-changes.patch",
+      "destination": "helpers/ui-helper-changes.patch.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 13488,
+      "group": "helpers",
+      "capturedBytes": 2158,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "ui-helper-handoff.md",
+      "destination": "helpers/ui-helper-handoff.md.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 9660,
+      "group": "helpers",
+      "capturedBytes": 3883,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "ui-helper-scope.json",
+      "destination": "helpers/ui-helper-scope.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 2307,
+      "group": "helpers",
+      "capturedBytes": 602,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "ui-helper-scope.pre-relay.json",
+      "destination": "helpers/ui-helper-scope.pre-relay.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1660,
+      "group": "helpers",
+      "capturedBytes": 451,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "ui-helper-source/check-empty-expiry.ts",
+      "destination": "helpers/ui-helper-source/check-empty-expiry.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3550,
+      "group": "helpers",
+      "capturedBytes": 1437,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "ui-helper-source/manual-empty-expiry-driver.ts",
+      "destination": "helpers/ui-helper-source/manual-empty-expiry-driver.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4955,
+      "group": "helpers",
+      "capturedBytes": 1820,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "ui-helper-source/manual-empty-expiry-server.ts",
+      "destination": "helpers/ui-helper-source/manual-empty-expiry-server.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 8300,
+      "group": "helpers",
+      "capturedBytes": 2986,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "ui-helper-source/manual-permission-driver.ts",
+      "destination": "helpers/ui-helper-source/manual-permission-driver.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4953,
+      "group": "helpers",
+      "capturedBytes": 1813,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "ui-helper-source/manual-permission-server.ts",
+      "destination": "helpers/ui-helper-source/manual-permission-server.ts.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 8229,
+      "group": "helpers",
+      "capturedBytes": 2944,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "ui-helper-source/question-facts.mjs",
+      "destination": "helpers/ui-helper-source/question-facts.mjs.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3020,
+      "group": "helpers",
+      "capturedBytes": 1202,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "ui-helper-source/relay-driver.mjs",
+      "destination": "helpers/ui-helper-source/relay-driver.mjs.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4857,
+      "group": "helpers",
+      "capturedBytes": 1767,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "ui-helper-source/side-question-entry.mjs",
+      "destination": "helpers/ui-helper-source/side-question-entry.mjs.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3628,
+      "group": "helpers",
+      "capturedBytes": 1437,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "ui-helper-static-review.json",
+      "destination": "helpers/ui-helper-static-review.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 644,
+      "group": "helpers",
+      "capturedBytes": 276,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01-relay/control-receipts/29c4f58c-0d2a-4858-bcf5-21ce7ec2a0a3.json",
+      "destination": "manual/empty-expiry-after01-relay/control-receipts/29c4f58c-0d2a-4858-bcf5-21ce7ec2a0a3.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 195,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 163,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01-relay/events.jsonl",
+      "destination": "manual/empty-expiry-after01-relay/events.jsonl.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 536,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 282,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01-relay/owner.json",
+      "destination": "manual/empty-expiry-after01-relay/owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 408,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 284,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01-relay/ready.json",
+      "destination": "manual/empty-expiry-after01-relay/ready.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 666,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 418,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01-relay/terminal.json",
+      "destination": "manual/empty-expiry-after01-relay/terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 830,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 478,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01.launch.json",
+      "destination": "manual/empty-expiry-after01.launch.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 275,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 215,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01.physical-terminal.json",
+      "destination": "manual/empty-expiry-after01.physical-terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 133,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 132,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01.relay-config.json",
+      "destination": "manual/empty-expiry-after01.relay-config.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 284,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 231,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01.relay-launch.json",
+      "destination": "manual/empty-expiry-after01.relay-launch.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 219,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 174,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01.relay-physical-terminal.json",
+      "destination": "manual/empty-expiry-after01.relay-physical-terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 133,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 133,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01.relay-stdout.log",
+      "destination": "manual/empty-expiry-after01.relay-stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 326,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 233,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01.runtime-owner.json",
+      "destination": "manual/empty-expiry-after01.runtime-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 471,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 178,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01.stderr.log",
+      "destination": "manual/empty-expiry-after01.stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 223728,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 18934,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01.stdout.log",
+      "destination": "manual/empty-expiry-after01.stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 139,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 142,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01/expired-first-original-zh.jpg",
+      "destination": "manual/empty-expiry-after01/expired-first-original-zh.jpg",
+      "encoding": "original-jpeg",
+      "bytes": 56345,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 56345,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01/expired-history-back-zh.jpg",
+      "destination": "manual/empty-expiry-after01/expired-history-back-zh.jpg",
+      "encoding": "original-jpeg",
+      "bytes": 52758,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 52758,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01/expired-history-clear-zh.jpg",
+      "destination": "manual/empty-expiry-after01/expired-history-clear-zh.jpg",
+      "encoding": "original-jpeg",
+      "bytes": 51903,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 51903,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01/expired-history-en.jpg",
+      "destination": "manual/empty-expiry-after01/expired-history-en.jpg",
+      "encoding": "original-jpeg",
+      "bytes": 54555,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 54555,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01/expiry-check.json",
+      "destination": "manual/empty-expiry-after01/expiry-check.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 11529,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 2166,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01/global-chat-start.json",
+      "destination": "manual/empty-expiry-after01/global-chat-start.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4397,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 954,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01/page-closed.json",
+      "destination": "manual/empty-expiry-after01/page-closed.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 350,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 266,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01/pending-dialog-zh.jpg",
+      "destination": "manual/empty-expiry-after01/pending-dialog-zh.jpg",
+      "encoding": "original-jpeg",
+      "bytes": 49874,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 49874,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01/public-external.csv",
+      "destination": "manual/empty-expiry-after01/public-external.csv.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 35,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 52,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01/public-global-config.json",
+      "destination": "manual/empty-expiry-after01/public-global-config.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1323,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 487,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01/question-facts-1791935569404.json",
+      "destination": "manual/empty-expiry-after01/question-facts-1791935569404.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 25729,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 3725,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01/ready.json",
+      "destination": "manual/empty-expiry-after01/ready.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4651,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 1244,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01/release-public-prompt",
+      "destination": "manual/empty-expiry-after01/release-public-prompt.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 0,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 20,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01/stop-requested",
+      "destination": "manual/empty-expiry-after01/stop-requested.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 0,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 20,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-after01/terminal.json",
+      "destination": "manual/empty-expiry-after01/terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 826,
+      "group": "empty-expiry-after01",
+      "capturedBytes": 364,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01-relay/control-receipts/c5399e7f-1673-4113-9669-30f90db34699.json",
+      "destination": "manual/empty-expiry-before01-relay/control-receipts/c5399e7f-1673-4113-9669-30f90db34699.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 195,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 164,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01-relay/events.jsonl",
+      "destination": "manual/empty-expiry-before01-relay/events.jsonl.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 534,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 284,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01-relay/owner.json",
+      "destination": "manual/empty-expiry-before01-relay/owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 408,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 285,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01-relay/ready.json",
+      "destination": "manual/empty-expiry-before01-relay/ready.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 666,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 421,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01-relay/terminal.json",
+      "destination": "manual/empty-expiry-before01-relay/terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 828,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 478,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01.launch.json",
+      "destination": "manual/empty-expiry-before01.launch.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 275,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 217,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01.physical-terminal.json",
+      "destination": "manual/empty-expiry-before01.physical-terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 133,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 133,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01.relay-config.json",
+      "destination": "manual/empty-expiry-before01.relay-config.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 285,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 233,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01.relay-launch.json",
+      "destination": "manual/empty-expiry-before01.relay-launch.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 219,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 175,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01.relay-physical-terminal.json",
+      "destination": "manual/empty-expiry-before01.relay-physical-terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 133,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 132,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01.relay-stdout.log",
+      "destination": "manual/empty-expiry-before01.relay-stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 327,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 235,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01.runtime-owner.json",
+      "destination": "manual/empty-expiry-before01.runtime-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 471,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 179,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01.stderr.log",
+      "destination": "manual/empty-expiry-before01.stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 153446,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 13333,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01.stdout.log",
+      "destination": "manual/empty-expiry-before01.stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 139,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 142,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01/expired-history-clear-zh.jpg",
+      "destination": "manual/empty-expiry-before01/expired-history-clear-zh.jpg",
+      "encoding": "original-jpeg",
+      "bytes": 47225,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 47225,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01/expired-tooltip-covered-original-zh.jpg",
+      "destination": "manual/empty-expiry-before01/expired-tooltip-covered-original-zh.jpg",
+      "encoding": "original-jpeg",
+      "bytes": 51177,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 51177,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01/expiry-check.json",
+      "destination": "manual/empty-expiry-before01/expiry-check.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 11529,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 2167,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01/global-chat-start.json",
+      "destination": "manual/empty-expiry-before01/global-chat-start.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4395,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 951,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01/page-closed.json",
+      "destination": "manual/empty-expiry-before01/page-closed.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 202,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 171,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01/pending-dialog-zh.jpg",
+      "destination": "manual/empty-expiry-before01/pending-dialog-zh.jpg",
+      "encoding": "original-jpeg",
+      "bytes": 47415,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 47415,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01/public-external.csv",
+      "destination": "manual/empty-expiry-before01/public-external.csv.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 35,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 52,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01/public-global-config.json",
+      "destination": "manual/empty-expiry-before01/public-global-config.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1323,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 486,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01/question-facts-1791934748151.json",
+      "destination": "manual/empty-expiry-before01/question-facts-1791934748151.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 25733,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 3733,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01/ready.json",
+      "destination": "manual/empty-expiry-before01/ready.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4655,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 1251,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01/release-public-prompt",
+      "destination": "manual/empty-expiry-before01/release-public-prompt.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 0,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 20,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01/stop-requested",
+      "destination": "manual/empty-expiry-before01/stop-requested.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 0,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 20,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "empty-expiry-before01/terminal.json",
+      "destination": "manual/empty-expiry-before01/terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 826,
+      "group": "empty-expiry-before01",
+      "capturedBytes": 364,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01-relay/control-receipts/1386fafe-5da8-43cf-bf65-cbba75bee4bb.json",
+      "destination": "manual/main-history-answer01-relay/control-receipts/1386fafe-5da8-43cf-bf65-cbba75bee4bb.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 195,
+      "group": "main-history-answer01",
+      "capturedBytes": 163,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01-relay/events.jsonl",
+      "destination": "manual/main-history-answer01-relay/events.jsonl.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 534,
+      "group": "main-history-answer01",
+      "capturedBytes": 280,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01-relay/owner.json",
+      "destination": "manual/main-history-answer01-relay/owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 408,
+      "group": "main-history-answer01",
+      "capturedBytes": 284,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01-relay/ready.json",
+      "destination": "manual/main-history-answer01-relay/ready.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 666,
+      "group": "main-history-answer01",
+      "capturedBytes": 417,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01-relay/terminal.json",
+      "destination": "manual/main-history-answer01-relay/terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 828,
+      "group": "main-history-answer01",
+      "capturedBytes": 475,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01.launch.json",
+      "destination": "manual/main-history-answer01.launch.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 262,
+      "group": "main-history-answer01",
+      "capturedBytes": 210,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01.physical-terminal.json",
+      "destination": "manual/main-history-answer01.physical-terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 133,
+      "group": "main-history-answer01",
+      "capturedBytes": 133,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01.relay-config.json",
+      "destination": "manual/main-history-answer01.relay-config.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 285,
+      "group": "main-history-answer01",
+      "capturedBytes": 232,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01.relay-launch.json",
+      "destination": "manual/main-history-answer01.relay-launch.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 219,
+      "group": "main-history-answer01",
+      "capturedBytes": 173,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01.relay-physical-terminal.json",
+      "destination": "manual/main-history-answer01.relay-physical-terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 133,
+      "group": "main-history-answer01",
+      "capturedBytes": 133,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01.relay-stdout.log",
+      "destination": "manual/main-history-answer01.relay-stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 327,
+      "group": "main-history-answer01",
+      "capturedBytes": 235,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01.runtime-owner.json",
+      "destination": "manual/main-history-answer01.runtime-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 471,
+      "group": "main-history-answer01",
+      "capturedBytes": 180,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01.stderr.log",
+      "destination": "manual/main-history-answer01.stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 156118,
+      "group": "main-history-answer01",
+      "capturedBytes": 13253,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01.stdout.log",
+      "destination": "manual/main-history-answer01.stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 139,
+      "group": "main-history-answer01",
+      "capturedBytes": 142,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01/global-chat-start.json",
+      "destination": "manual/main-history-answer01/global-chat-start.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4397,
+      "group": "main-history-answer01",
+      "capturedBytes": 955,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01/main-answer-pending-dialog-zh.jpg",
+      "destination": "manual/main-history-answer01/main-answer-pending-dialog-zh.jpg",
+      "encoding": "original-jpeg",
+      "bytes": 49203,
+      "group": "main-history-answer01",
+      "capturedBytes": 49203,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01/main-answered-history-zh.jpg",
+      "destination": "manual/main-history-answer01/main-answered-history-zh.jpg",
+      "encoding": "original-jpeg",
+      "bytes": 57553,
+      "group": "main-history-answer01",
+      "capturedBytes": 57553,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01/main-history-answered-1791937449372.check.json",
+      "destination": "manual/main-history-answer01/main-history-answered-1791937449372.check.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1778,
+      "group": "main-history-answer01",
+      "capturedBytes": 785,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01/main-history-answered-1791937449372.json",
+      "destination": "manual/main-history-answer01/main-history-answered-1791937449372.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 37618,
+      "group": "main-history-answer01",
+      "capturedBytes": 4310,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01/main-history-pending-1791937425925.check.json",
+      "destination": "manual/main-history-answer01/main-history-pending-1791937425925.check.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1377,
+      "group": "main-history-answer01",
+      "capturedBytes": 665,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01/main-history-pending-1791937425925.json",
+      "destination": "manual/main-history-answer01/main-history-pending-1791937425925.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 28297,
+      "group": "main-history-answer01",
+      "capturedBytes": 3864,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01/page-closed.json",
+      "destination": "manual/main-history-answer01/page-closed.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 145,
+      "group": "main-history-answer01",
+      "capturedBytes": 138,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01/public-external.csv",
+      "destination": "manual/main-history-answer01/public-external.csv.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 35,
+      "group": "main-history-answer01",
+      "capturedBytes": 52,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01/public-global-config.json",
+      "destination": "manual/main-history-answer01/public-global-config.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1323,
+      "group": "main-history-answer01",
+      "capturedBytes": 487,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01/ready.json",
+      "destination": "manual/main-history-answer01/ready.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4658,
+      "group": "main-history-answer01",
+      "capturedBytes": 1246,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01/release-public-prompt",
+      "destination": "manual/main-history-answer01/release-public-prompt.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 13,
+      "group": "main-history-answer01",
+      "capturedBytes": 33,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01/stop-requested",
+      "destination": "manual/main-history-answer01/stop-requested.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 13,
+      "group": "main-history-answer01",
+      "capturedBytes": 33,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-answer01/terminal.json",
+      "destination": "manual/main-history-answer01/terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 826,
+      "group": "main-history-answer01",
+      "capturedBytes": 365,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01-relay/control-receipts/d89cf57a-613f-416e-a694-12b2911514d9.json",
+      "destination": "manual/main-history-skip01-relay/control-receipts/d89cf57a-613f-416e-a694-12b2911514d9.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 195,
+      "group": "main-history-skip01",
+      "capturedBytes": 164,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01-relay/events.jsonl",
+      "destination": "manual/main-history-skip01-relay/events.jsonl.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 534,
+      "group": "main-history-skip01",
+      "capturedBytes": 282,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01-relay/owner.json",
+      "destination": "manual/main-history-skip01-relay/owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 405,
+      "group": "main-history-skip01",
+      "capturedBytes": 282,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01-relay/ready.json",
+      "destination": "manual/main-history-skip01-relay/ready.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 663,
+      "group": "main-history-skip01",
+      "capturedBytes": 419,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01-relay/terminal.json",
+      "destination": "manual/main-history-skip01-relay/terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 825,
+      "group": "main-history-skip01",
+      "capturedBytes": 475,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01.launch.json",
+      "destination": "manual/main-history-skip01.launch.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 262,
+      "group": "main-history-skip01",
+      "capturedBytes": 210,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01.physical-terminal.json",
+      "destination": "manual/main-history-skip01.physical-terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 133,
+      "group": "main-history-skip01",
+      "capturedBytes": 132,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01.relay-config.json",
+      "destination": "manual/main-history-skip01.relay-config.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 283,
+      "group": "main-history-skip01",
+      "capturedBytes": 231,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01.relay-launch.json",
+      "destination": "manual/main-history-skip01.relay-launch.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 218,
+      "group": "main-history-skip01",
+      "capturedBytes": 173,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01.relay-physical-terminal.json",
+      "destination": "manual/main-history-skip01.relay-physical-terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 132,
+      "group": "main-history-skip01",
+      "capturedBytes": 132,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01.relay-stdout.log",
+      "destination": "manual/main-history-skip01.relay-stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 325,
+      "group": "main-history-skip01",
+      "capturedBytes": 233,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01.runtime-owner.json",
+      "destination": "manual/main-history-skip01.runtime-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 471,
+      "group": "main-history-skip01",
+      "capturedBytes": 178,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01.stderr.log",
+      "destination": "manual/main-history-skip01.stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 155451,
+      "group": "main-history-skip01",
+      "capturedBytes": 13021,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01.stdout.log",
+      "destination": "manual/main-history-skip01.stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 139,
+      "group": "main-history-skip01",
+      "capturedBytes": 141,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01/global-chat-start.json",
+      "destination": "manual/main-history-skip01/global-chat-start.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4397,
+      "group": "main-history-skip01",
+      "capturedBytes": 948,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01/main-history-pending-1791937530026.check.json",
+      "destination": "manual/main-history-skip01/main-history-pending-1791937530026.check.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1375,
+      "group": "main-history-skip01",
+      "capturedBytes": 663,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01/main-history-pending-1791937530026.json",
+      "destination": "manual/main-history-skip01/main-history-pending-1791937530026.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 28295,
+      "group": "main-history-skip01",
+      "capturedBytes": 3855,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01/main-history-rejected-1791937544383.check.json",
+      "destination": "manual/main-history-skip01/main-history-rejected-1791937544383.check.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1702,
+      "group": "main-history-skip01",
+      "capturedBytes": 797,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01/main-history-rejected-1791937544383.json",
+      "destination": "manual/main-history-skip01/main-history-rejected-1791937544383.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 37286,
+      "group": "main-history-skip01",
+      "capturedBytes": 4280,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01/main-skipped-history-en.jpg",
+      "destination": "manual/main-history-skip01/main-skipped-history-en.jpg",
+      "encoding": "original-jpeg",
+      "bytes": 54329,
+      "group": "main-history-skip01",
+      "capturedBytes": 54329,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01/main-skipped-history-zh.jpg",
+      "destination": "manual/main-history-skip01/main-skipped-history-zh.jpg",
+      "encoding": "original-jpeg",
+      "bytes": 52277,
+      "group": "main-history-skip01",
+      "capturedBytes": 52277,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01/page-closed.json",
+      "destination": "manual/main-history-skip01/page-closed.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 171,
+      "group": "main-history-skip01",
+      "capturedBytes": 159,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01/public-external.csv",
+      "destination": "manual/main-history-skip01/public-external.csv.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 35,
+      "group": "main-history-skip01",
+      "capturedBytes": 52,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01/public-global-config.json",
+      "destination": "manual/main-history-skip01/public-global-config.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1323,
+      "group": "main-history-skip01",
+      "capturedBytes": 487,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01/ready.json",
+      "destination": "manual/main-history-skip01/ready.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4656,
+      "group": "main-history-skip01",
+      "capturedBytes": 1239,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01/release-public-prompt",
+      "destination": "manual/main-history-skip01/release-public-prompt.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 13,
+      "group": "main-history-skip01",
+      "capturedBytes": 33,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01/stop-requested",
+      "destination": "manual/main-history-skip01/stop-requested.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 13,
+      "group": "main-history-skip01",
+      "capturedBytes": 33,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "main-history-skip01/terminal.json",
+      "destination": "manual/main-history-skip01/terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 826,
+      "group": "main-history-skip01",
+      "capturedBytes": 363,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01-relay/control-receipts/1d22cbe0-2062-40d4-998c-bdea738e82fc.json",
+      "destination": "manual/side-question-after01-relay/control-receipts/1d22cbe0-2062-40d4-998c-bdea738e82fc.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 625,
+      "group": "side-question-after01",
+      "capturedBytes": 380,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01-relay/control-receipts/5a4fa7db-8957-4a93-a01b-8f225694e563.json",
+      "destination": "manual/side-question-after01-relay/control-receipts/5a4fa7db-8957-4a93-a01b-8f225694e563.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 299,
+      "group": "side-question-after01",
+      "capturedBytes": 236,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01-relay/control-receipts/bc243a5d-4852-4904-b346-4067947d98b3.json",
+      "destination": "manual/side-question-after01-relay/control-receipts/bc243a5d-4852-4904-b346-4067947d98b3.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 195,
+      "group": "side-question-after01",
+      "capturedBytes": 162,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01-relay/events.jsonl",
+      "destination": "manual/side-question-after01-relay/events.jsonl.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1238,
+      "group": "side-question-after01",
+      "capturedBytes": 413,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01-relay/owner.json",
+      "destination": "manual/side-question-after01-relay/owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 407,
+      "group": "side-question-after01",
+      "capturedBytes": 284,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01-relay/ready.json",
+      "destination": "manual/side-question-after01-relay/ready.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 665,
+      "group": "side-question-after01",
+      "capturedBytes": 417,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01-relay/terminal.json",
+      "destination": "manual/side-question-after01-relay/terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 829,
+      "group": "side-question-after01",
+      "capturedBytes": 476,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01.launch.json",
+      "destination": "manual/side-question-after01.launch.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 260,
+      "group": "side-question-after01",
+      "capturedBytes": 206,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01.physical-terminal.json",
+      "destination": "manual/side-question-after01.physical-terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 133,
+      "group": "side-question-after01",
+      "capturedBytes": 130,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01.relay-config.json",
+      "destination": "manual/side-question-after01.relay-config.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 285,
+      "group": "side-question-after01",
+      "capturedBytes": 225,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01.relay-launch.json",
+      "destination": "manual/side-question-after01.relay-launch.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 218,
+      "group": "side-question-after01",
+      "capturedBytes": 174,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01.relay-physical-terminal.json",
+      "destination": "manual/side-question-after01.relay-physical-terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 132,
+      "group": "side-question-after01",
+      "capturedBytes": 130,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01.relay-stdout.log",
+      "destination": "manual/side-question-after01.relay-stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 327,
+      "group": "side-question-after01",
+      "capturedBytes": 231,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01.runtime-owner.json",
+      "destination": "manual/side-question-after01.runtime-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 471,
+      "group": "side-question-after01",
+      "capturedBytes": 178,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01.stderr.log",
+      "destination": "manual/side-question-after01.stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 192927,
+      "group": "side-question-after01",
+      "capturedBytes": 16865,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01.stdout.log",
+      "destination": "manual/side-question-after01.stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 139,
+      "group": "side-question-after01",
+      "capturedBytes": 143,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01/global-chat-start.json",
+      "destination": "manual/side-question-after01/global-chat-start.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4426,
+      "group": "side-question-after01",
+      "capturedBytes": 953,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01/page-closed.json",
+      "destination": "manual/side-question-after01/page-closed.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 153,
+      "group": "side-question-after01",
+      "capturedBytes": 142,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01/public-external.csv",
+      "destination": "manual/side-question-after01/public-external.csv.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 35,
+      "group": "side-question-after01",
+      "capturedBytes": 52,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01/public-global-config.json",
+      "destination": "manual/side-question-after01/public-global-config.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 2032,
+      "group": "side-question-after01",
+      "capturedBytes": 496,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01/question-facts-1791936782653.json",
+      "destination": "manual/side-question-after01/question-facts-1791936782653.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 23418,
+      "group": "side-question-after01",
+      "capturedBytes": 3326,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01/ready.json",
+      "destination": "manual/side-question-after01/ready.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4672,
+      "group": "side-question-after01",
+      "capturedBytes": 1238,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01/release-public-prompt",
+      "destination": "manual/side-question-after01/release-public-prompt.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 13,
+      "group": "side-question-after01",
+      "capturedBytes": 33,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01/side-cut-original.jpg",
+      "destination": "manual/side-question-after01/side-cut-original.jpg",
+      "encoding": "original-jpeg",
+      "bytes": 69096,
+      "group": "side-question-after01",
+      "capturedBytes": 69096,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01/side-draft-before-cut.jpg",
+      "destination": "manual/side-question-after01/side-draft-before-cut.jpg",
+      "encoding": "original-jpeg",
+      "bytes": 69057,
+      "group": "side-question-after01",
+      "capturedBytes": 69057,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01/side-natural-final-current-connection.jpg",
+      "destination": "manual/side-question-after01/side-natural-final-current-connection.jpg",
+      "encoding": "original-jpeg",
+      "bytes": 64984,
+      "group": "side-question-after01",
+      "capturedBytes": 64984,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01/side-question-facts-1791937054134.json",
+      "destination": "manual/side-question-after01/side-question-facts-1791937054134.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 45089,
+      "group": "side-question-after01",
+      "capturedBytes": 5421,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01/side-question-facts-1791937074372.answered-check.json",
+      "destination": "manual/side-question-after01/side-question-facts-1791937074372.answered-check.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 383,
+      "group": "side-question-after01",
+      "capturedBytes": 288,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01/side-question-facts-1791937074372.json",
+      "destination": "manual/side-question-after01/side-question-facts-1791937074372.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 53651,
+      "group": "side-question-after01",
+      "capturedBytes": 5701,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01/side-question-prompt-response.json",
+      "destination": "manual/side-question-after01/side-question-prompt-response.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 2752,
+      "group": "side-question-after01",
+      "capturedBytes": 829,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01/side-question-prompt.json",
+      "destination": "manual/side-question-after01/side-question-prompt.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3993,
+      "group": "side-question-after01",
+      "capturedBytes": 1004,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01/side-recovered-draft-edit.jpg",
+      "destination": "manual/side-question-after01/side-recovered-draft-edit.jpg",
+      "encoding": "original-jpeg",
+      "bytes": 69723,
+      "group": "side-question-after01",
+      "capturedBytes": 69723,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01/stop-requested",
+      "destination": "manual/side-question-after01/stop-requested.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 13,
+      "group": "side-question-after01",
+      "capturedBytes": 33,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-after01/terminal.json",
+      "destination": "manual/side-question-after01/terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1267,
+      "group": "side-question-after01",
+      "capturedBytes": 385,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01-relay/control-receipts/159eeda9-1902-4e66-b459-6a95153e07e9.json",
+      "destination": "manual/side-question-before01-relay/control-receipts/159eeda9-1902-4e66-b459-6a95153e07e9.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 299,
+      "group": "side-question-before01",
+      "capturedBytes": 236,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01-relay/control-receipts/21eca9b4-d448-45e1-8c62-247ebeb21520.json",
+      "destination": "manual/side-question-before01-relay/control-receipts/21eca9b4-d448-45e1-8c62-247ebeb21520.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 195,
+      "group": "side-question-before01",
+      "capturedBytes": 164,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01-relay/control-receipts/7b63a35d-dc13-4430-ae2b-c1b1064c6a95.json",
+      "destination": "manual/side-question-before01-relay/control-receipts/7b63a35d-dc13-4430-ae2b-c1b1064c6a95.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 623,
+      "group": "side-question-before01",
+      "capturedBytes": 383,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01-relay/control-receipts/f016af65-c7d4-40b4-badf-aa26f24df8e3.json",
+      "destination": "manual/side-question-before01-relay/control-receipts/f016af65-c7d4-40b4-badf-aa26f24df8e3.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 623,
+      "group": "side-question-before01",
+      "capturedBytes": 384,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01-relay/events.jsonl",
+      "destination": "manual/side-question-before01-relay/events.jsonl.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1236,
+      "group": "side-question-before01",
+      "capturedBytes": 416,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01-relay/owner.json",
+      "destination": "manual/side-question-before01-relay/owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 407,
+      "group": "side-question-before01",
+      "capturedBytes": 285,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01-relay/ready.json",
+      "destination": "manual/side-question-before01-relay/ready.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 665,
+      "group": "side-question-before01",
+      "capturedBytes": 421,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01-relay/terminal.json",
+      "destination": "manual/side-question-before01-relay/terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 827,
+      "group": "side-question-before01",
+      "capturedBytes": 478,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01.launch.json",
+      "destination": "manual/side-question-before01.launch.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 259,
+      "group": "side-question-before01",
+      "capturedBytes": 206,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01.physical-terminal.json",
+      "destination": "manual/side-question-before01.physical-terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 132,
+      "group": "side-question-before01",
+      "capturedBytes": 131,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01.relay-config.json",
+      "destination": "manual/side-question-before01.relay-config.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 285,
+      "group": "side-question-before01",
+      "capturedBytes": 226,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01.relay-launch.json",
+      "destination": "manual/side-question-before01.relay-launch.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 218,
+      "group": "side-question-before01",
+      "capturedBytes": 173,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01.relay-physical-terminal.json",
+      "destination": "manual/side-question-before01.relay-physical-terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 133,
+      "group": "side-question-before01",
+      "capturedBytes": 133,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01.relay-stdout.log",
+      "destination": "manual/side-question-before01.relay-stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 328,
+      "group": "side-question-before01",
+      "capturedBytes": 230,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01.runtime-owner.json",
+      "destination": "manual/side-question-before01.runtime-owner.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 471,
+      "group": "side-question-before01",
+      "capturedBytes": 179,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01.stderr.log",
+      "destination": "manual/side-question-before01.stderr.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 164325,
+      "group": "side-question-before01",
+      "capturedBytes": 13878,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01.stdout.log",
+      "destination": "manual/side-question-before01.stdout.log.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 139,
+      "group": "side-question-before01",
+      "capturedBytes": 142,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01/global-chat-start.json",
+      "destination": "manual/side-question-before01/global-chat-start.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4426,
+      "group": "side-question-before01",
+      "capturedBytes": 954,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01/page-closed.json",
+      "destination": "manual/side-question-before01/page-closed.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 232,
+      "group": "side-question-before01",
+      "capturedBytes": 191,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01/public-external.csv",
+      "destination": "manual/side-question-before01/public-external.csv.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 35,
+      "group": "side-question-before01",
+      "capturedBytes": 52,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01/public-global-config.json",
+      "destination": "manual/side-question-before01/public-global-config.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 2032,
+      "group": "side-question-before01",
+      "capturedBytes": 496,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01/question-facts-1791935005187.json",
+      "destination": "manual/side-question-before01/question-facts-1791935005187.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 23410,
+      "group": "side-question-before01",
+      "capturedBytes": 3334,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01/ready.json",
+      "destination": "manual/side-question-before01/ready.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 4669,
+      "group": "side-question-before01",
+      "capturedBytes": 1243,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01/release-public-prompt",
+      "destination": "manual/side-question-before01/release-public-prompt.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 0,
+      "group": "side-question-before01",
+      "capturedBytes": 20,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01/side-draft-before-cut.jpg",
+      "destination": "manual/side-question-before01/side-draft-before-cut.jpg",
+      "encoding": "original-jpeg",
+      "bytes": 61893,
+      "group": "side-question-before01",
+      "capturedBytes": 61893,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01/side-natural-final-sticky-notice.jpg",
+      "destination": "manual/side-question-before01/side-natural-final-sticky-notice.jpg",
+      "encoding": "original-jpeg",
+      "bytes": 55161,
+      "group": "side-question-before01",
+      "capturedBytes": 55161,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01/side-question-facts-1791935120224.json",
+      "destination": "manual/side-question-before01/side-question-facts-1791935120224.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 45076,
+      "group": "side-question-before01",
+      "capturedBytes": 5431,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01/side-question-facts-1791935187028.answered-check.json",
+      "destination": "manual/side-question-before01/side-question-facts-1791935187028.answered-check.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 394,
+      "group": "side-question-before01",
+      "capturedBytes": 297,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01/side-question-facts-1791935187028.json",
+      "destination": "manual/side-question-before01/side-question-facts-1791935187028.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 53684,
+      "group": "side-question-before01",
+      "capturedBytes": 5716,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01/side-question-prompt-response.json",
+      "destination": "manual/side-question-before01/side-question-prompt-response.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 2750,
+      "group": "side-question-before01",
+      "capturedBytes": 839,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01/side-question-prompt.json",
+      "destination": "manual/side-question-before01/side-question-prompt.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 3992,
+      "group": "side-question-before01",
+      "capturedBytes": 1006,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01/side-recovered-sticky-transport-details.jpg",
+      "destination": "manual/side-question-before01/side-recovered-sticky-transport-details.jpg",
+      "encoding": "original-jpeg",
+      "bytes": 64678,
+      "group": "side-question-before01",
+      "capturedBytes": 64678,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01/stop-requested",
+      "destination": "manual/side-question-before01/stop-requested.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 0,
+      "group": "side-question-before01",
+      "capturedBytes": 20,
+      "originalBytesRestored": true
+    },
+    {
+      "source": "side-question-before01/terminal.json",
+      "destination": "manual/side-question-before01/terminal.json.gz",
+      "encoding": "gzip-original-bytes",
+      "bytes": 1265,
+      "group": "side-question-before01",
+      "capturedBytes": 380,
+      "originalBytesRestored": true
+    }
+  ],
+  "counts": {
+    "backend": {
+      "files": 181,
+      "originalBytes": 9364676
+    },
+    "frontend-a": {
+      "files": 29,
+      "originalBytes": 220993
+    },
+    "frontend-c": {
+      "files": 28,
+      "originalBytes": 747680
+    },
+    "helpers": {
+      "files": 35,
+      "originalBytes": 162638
+    },
+    "empty-expiry-after01": {
+      "files": 29,
+      "originalBytes": 542618
+    },
+    "empty-expiry-before01": {
+      "files": 27,
+      "originalBytes": 352574
+    },
+    "main-history-answer01": {
+      "files": 28,
+      "originalBytes": 347954
+    },
+    "main-history-skip01": {
+      "files": 28,
+      "originalBytes": 346734
+    },
+    "side-question-after01": {
+      "files": 34,
+      "originalBytes": 613907
+    },
+    "side-question-before01": {
+      "files": 34,
+      "originalBytes": 494862
+    }
+  },
+  "capturedFiles": 453,
+  "jpegFiles": 19,
+  "originalBytes": 13194636,
+  "closure": [
+    {
+      "scope": "empty-expiry-before01",
+      "pageClosedAt": 1791934827091,
+      "closeBy": 1791935195353,
+      "originalDeadlineAt": 1791935255353,
+      "productReceipt": {
+        "occurrenceID": "271a69f4-32d7-4780-8466-b66d1fd97f64",
+        "pid": 28408,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "relayReceipt": {
+        "occurrenceID": "cfcffb2c-a0b6-46c1-a133-e3ae05e232bd",
+        "pid": 90676,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "parent": {
+        "scope": "empty-expiry-before01",
+        "originalExec": 17290,
+        "originalExecExitCode": 0,
+        "originalExecJoined": true,
+        "outputJoined": true,
+        "runtimeRemovedAfterPhysicalJoin": true
+      }
+    },
+    {
+      "scope": "empty-expiry-after01",
+      "pageClosedAt": 1791936000994,
+      "closeBy": 1791936010192,
+      "originalDeadlineAt": 1791936070192,
+      "productReceipt": {
+        "occurrenceID": "d12edfc7-8284-4403-8c55-76786b3bc78d",
+        "pid": 82100,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "relayReceipt": {
+        "occurrenceID": "73ce8469-9cd0-448c-af7c-2157b0056a91",
+        "pid": 51748,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "parent": {
+        "scope": "empty-expiry-after01",
+        "originalExec": 27511,
+        "originalExecExitCode": 0,
+        "originalExecJoined": true,
+        "outputJoined": true,
+        "runtimeRemovedAfterPhysicalJoin": true
+      }
+    },
+    {
+      "scope": "side-question-before01",
+      "pageClosedAt": 1791935206249,
+      "closeBy": 1791935503075,
+      "originalDeadlineAt": 1791935563075,
+      "productReceipt": {
+        "occurrenceID": "984aaf44-0fa1-481a-b05f-e076cb25a9fb",
+        "pid": 5900,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "relayReceipt": {
+        "occurrenceID": "9cdbcfcf-58ed-4b39-b6a9-b30af0f35043",
+        "pid": 69972,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "parent": {
+        "scope": "side-question-before01",
+        "originalExec": 71502,
+        "originalExecExitCode": 0,
+        "originalExecJoined": true,
+        "outputJoined": true,
+        "runtimeRemovedAfterPhysicalJoin": true
+      }
+    },
+    {
+      "scope": "side-question-after01",
+      "pageClosedAt": 1791937087409,
+      "closeBy": 1791937257665,
+      "originalDeadlineAt": 1791937317665,
+      "productReceipt": {
+        "occurrenceID": "ddae2b2b-ea40-4eba-a006-7260e17ae76a",
+        "pid": 84984,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "relayReceipt": {
+        "occurrenceID": "8b8ffd34-e570-40fe-a053-a22e3e8c89fe",
+        "pid": 4584,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "parent": {
+        "scope": "side-question-after01",
+        "originalExec": 23146,
+        "originalExecExitCode": 0,
+        "originalExecJoined": true,
+        "outputJoined": true,
+        "runtimeRemovedAfterPhysicalJoin": true
+      }
+    },
+    {
+      "scope": "main-history-answer01",
+      "pageClosedAt": 1791937467765,
+      "closeBy": 1791937905871,
+      "originalDeadlineAt": 1791937965871,
+      "productReceipt": {
+        "occurrenceID": "7fbd38d4-561d-4bd6-81c1-1e73098e247a",
+        "pid": 29476,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "relayReceipt": {
+        "occurrenceID": "a5617c41-7882-4d6c-a224-1358779bea51",
+        "pid": 83516,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "parent": {
+        "scope": "main-history-answer01",
+        "originalExec": 14678,
+        "originalExecExitCode": 0,
+        "originalExecJoined": true,
+        "outputJoined": true,
+        "runtimeRemovedAfterPhysicalJoin": true
+      }
+    },
+    {
+      "scope": "main-history-skip01",
+      "pageClosedAt": 1791937587074,
+      "closeBy": 1791938020631,
+      "originalDeadlineAt": 1791938080631,
+      "productReceipt": {
+        "occurrenceID": "57bf83d4-3a13-4ed0-941e-f53700170bd6",
+        "pid": 30704,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "relayReceipt": {
+        "occurrenceID": "b2963758-5577-480b-b38b-318b5f3402eb",
+        "pid": 7800,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "parent": {
+        "scope": "main-history-skip01",
+        "originalExec": 36583,
+        "originalExecExitCode": 0,
+        "originalExecJoined": true,
+        "outputJoined": true,
+        "runtimeRemovedAfterPhysicalJoin": true
+      }
+    },
+    {
+      "scope": "task-process-red-01",
+      "originalReceipt": {
+        "occurrenceID": "dfa65e7c-01cb-429d-a789-76dcca35c584",
+        "pid": 70036,
+        "reason": "exited",
+        "exitCode": 1,
+        "signal": null
+      },
+      "endedAt": 1791934967465,
+      "deadlineAt": 1791935516323,
+      "allJoined": true,
+      "providerClosed": true,
+      "runtimeRemovedAfterPhysicalExit": true
+    },
+    {
+      "scope": "task-process-red-02",
+      "originalReceipt": {
+        "occurrenceID": "6deb3ce9-0998-44a6-b520-fa85bd19c216",
+        "pid": 60600,
+        "reason": "exited",
+        "exitCode": 1,
+        "signal": null
+      },
+      "endedAt": 1791935200904,
+      "deadlineAt": 1791935735314,
+      "allJoined": true,
+      "providerClosed": true,
+      "runtimeRemovedAfterPhysicalExit": true
+    },
+    {
+      "scope": "task-process-red-03",
+      "originalReceipt": {
+        "occurrenceID": "d815661a-07a1-4988-901b-5aa84a8cd9bd",
+        "pid": 30964,
+        "reason": "exited",
+        "exitCode": 1,
+        "signal": null
+      },
+      "endedAt": 1791935506730,
+      "deadlineAt": 1791936054493,
+      "allJoined": true,
+      "providerClosed": true,
+      "runtimeRemovedAfterPhysicalExit": true
+    },
+    {
+      "scope": "task-process-red-04",
+      "originalReceipt": {
+        "occurrenceID": "be435d7f-0a48-4a3d-a3c7-99887dd08bcc",
+        "pid": 86856,
+        "reason": "exited",
+        "exitCode": 1,
+        "signal": null
+      },
+      "endedAt": 1791935847618,
+      "deadlineAt": 1791936298629,
+      "allJoined": true,
+      "providerClosed": true,
+      "runtimeRemovedAfterPhysicalExit": true
+    },
+    {
+      "scope": "task-process-live-01",
+      "originalReceipt": {
+        "occurrenceID": "f85eb965-222d-435e-810f-1fbec20ef8a5",
+        "pid": 78760,
+        "reason": "exited",
+        "exitCode": 1,
+        "signal": null
+      },
+      "endedAt": 1791937441475,
+      "deadlineAt": 1791937857437,
+      "allJoined": true,
+      "providerClosed": true,
+      "runtimeRemovedAfterPhysicalExit": true
+    }
+  ],
+  "finitePatternScan": {
+    "patterns": [
+      "private-key",
+      "openai-secret",
+      "github-secret",
+      "authorization-bearer",
+      "json-api-key"
+    ],
+    "textFiles": 434,
+    "matches": 0,
+    "boundary": "Bounded pattern scan, not a universal secret audit; public literal local-controlled-provider is the controlled fixture marker. No credentials read."
+  },
+  "integrity": "Gzip decode or raw JPEG copy compared byte-for-byte to exact captured inputs; no mutable-source hash gate or image re-encoding."
+}

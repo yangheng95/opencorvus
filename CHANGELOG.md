@@ -13,6 +13,10 @@
 
 #### 修复
 
+- 侧聊自动重连时使用当前连接状态显示提示，原断流诊断保留在日志；真正的会话与操作失败继续显示。重连后的同一问题保留可编辑草稿和原回答归属。
+
+- 问题历史按当前语言显示空标题和真实终态，区分到期与基础设施关闭；原问题正文、答案和时间保持，切换语言后历史提示同步更新。
+
 - Skill 安装与 MCP 新增失败时，提示和原诊断显示在当前表单的提交区域，保留输入与原提交焦点；收起表单后仍可查看诊断，迟到响应遵循原项目归属。
 
 - 本地 Skill 来源的目录缺失、路径为文件或目录为空时返回明确的 400 错误，包含路径与原因；有效目录及目录链接继续按原配置与目录发现流程安装。
@@ -107,6 +111,10 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Side Chat reconnect feedback follows the current connection while preserving the original interruption diagnostic in logs. Session and action failures remain visible, and the same Question retains its editable draft and answer owner after recovery.
+
+- Question history localizes empty titles and actual terminal outcomes, distinguishing deadlines from infrastructure closure. Original questions, answers and times are preserved, and history labels update with the current language.
 
 - Failed Skill installations and MCP additions show feedback and original diagnostics beside the current form controls, retaining input and submit focus. Closing the form retains its diagnostic, and late responses keep their original project ownership.
 

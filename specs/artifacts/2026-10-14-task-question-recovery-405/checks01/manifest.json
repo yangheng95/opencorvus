@@ -1,0 +1,48 @@
+{
+  "capturedAt": "2026-10-14T00:34:08.613Z",
+  "checks": [
+    {
+      "name": "docs",
+      "originalChunk": "1e30b8",
+      "exitCode": 0
+    },
+    {
+      "name": "architecture",
+      "originalChunk": "a02af5",
+      "exitCode": 0
+    }
+  ],
+  "files": [
+    {
+      "source": "delivery-docs.stdout.log",
+      "target": "delivery-docs.stdout.log.gz",
+      "originalBytes": 35
+    },
+    {
+      "source": "delivery-docs.stderr.log",
+      "target": "delivery-docs.stderr.log.gz",
+      "originalBytes": 70
+    },
+    {
+      "source": "delivery-docs.exit",
+      "target": "delivery-docs.exit.gz",
+      "originalBytes": 3
+    },
+    {
+      "source": "delivery-architecture.stdout.log",
+      "target": "delivery-architecture.stdout.log.gz",
+      "originalBytes": 72
+    },
+    {
+      "source": "delivery-architecture.stderr.log",
+      "target": "delivery-architecture.stderr.log.gz",
+      "originalBytes": 68
+    },
+    {
+      "source": "delivery-architecture.exit",
+      "target": "delivery-architecture.exit.gz",
+      "originalBytes": 3
+    }
+  ],
+  "integrity": "Exact original checker output preservation; no functional source hash gate"
+}

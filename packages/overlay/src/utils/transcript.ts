@@ -67,7 +67,9 @@ export function interactionRequestText(interaction: any): string {
   const title =
     typeof interaction?.title === "string" && interaction.title.trim()
       ? interaction.title.trim()
-      : t("detail.pending_interactions")
+      : interaction?.type === "question"
+        ? t("interaction.icon.question")
+        : t("detail.pending_interactions")
   const body = typeof interaction?.body === "string" ? interaction.body.trim() : ""
   return [title, body].filter(Boolean).join("\n\n")
 }
@@ -130,6 +132,12 @@ export function isAutoReplied(interaction: any): boolean {
 
 /** Build full interaction response text (mirrors app.js interactionResponseText). */
 export function interactionResponseText(interaction: any): string {
+  if (interaction?.type === "question" && interaction.status === "expired") {
+    const origin = interaction.response?.origin
+    if (origin === "deadline") return t("interaction.expired")
+    if (origin === "infrastructure") return t("interaction.closed")
+    throw new Error(`question ${interaction.id} has unknown expiry origin ${String(origin)}`)
+  }
   const auto = isAutoReplied(interaction)
   const prefix = auto ? `[${t("interaction.auto_reply")}] ` : ""
   if (interaction?.type === "permission") {

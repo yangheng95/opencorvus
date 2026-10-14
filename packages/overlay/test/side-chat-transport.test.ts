@@ -1,10 +1,11 @@
 import { afterEach, expect, test } from "bun:test"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
-import type { HostTransport, StreamHandlers, TransportRequest } from "../src/services/host-transport"
+import type { HostTransport, StreamHandlers, StreamOpenRequest, TransportRequest, TransportResponse } from "../src/services/host-transport"
 import { replyInteraction, rejectInteraction } from "../src/services/interaction-reply"
 import { connectSideChat } from "../src/services/side-chat"
 import type { InteractionData } from "../src/components/InteractionCard"
 import { questionInteraction, resolveQuestionInteraction, reuseQuestionInteraction } from "../src/utils/question-interaction"
+import { AppLog } from "../src/utils/log"
 
 afterEach(() => __setHostTransportForTest(undefined))
 
@@ -155,6 +156,91 @@ function sideStream() {
   })
   return { updates, errors, close, send(event: unknown) { stream.onEvent(JSON.stringify(event)) } }
 }
+
+test("side transport recovery preserves its exact Question owner and reports current business outcomes", async () => {
+  const streams: StreamHandlers[] = []
+  const opened: StreamOpenRequest[] = []
+  const reconnected = Promise.withResolvers<void>()
+  const activityObserved = Promise.withResolvers<void>()
+  const oldStatus = Promise.withResolvers<TransportResponse>()
+  const currentStatus = Promise.withResolvers<TransportResponse>()
+  const connections: boolean[] = []
+  const activity: boolean[] = []
+  const errors: unknown[] = []
+  const updates: InteractionData[][] = []
+  let statusReads = 0
+  __setHostTransportForTest({
+    request: async (request: TransportRequest) => request.path === "session/status"
+      ? await (++statusReads === 1 ? oldStatus.promise : currentStatus.promise)
+      : { status: 200, ok: true, headers: {}, body: {} },
+    openStream(request: StreamOpenRequest, handlers: StreamHandlers) {
+      opened.push(request)
+      streams.push(handlers)
+      if (streams.length === 2) reconnected.resolve()
+      return { close(reason: string) { handlers.onClose?.(reason) } }
+    },
+  } as unknown as HostTransport)
+  const close = connectSideChat({ sessionID: "ses_side", directory: "D:/project-side" }, {
+    transcript() {},
+    connection(value) { connections.push(value) },
+    activity(value) { activity.push(value); activityObserved.resolve() },
+    error(error) { errors.push(error) },
+    interactions(value) { updates.push(value) },
+  })
+  const question = publicQuestion()
+  const interrupted = new Error("Owned stream interrupted")
+  const businessError = { name: "PublicSessionError", data: { message: "Current provider request failed" } }
+  try {
+    streams[0]!.onEvent(JSON.stringify(connectionSnapshot([question])))
+    const original = updates[0]![0]
+    streams[0]!.onError?.(interrupted)
+    await reconnected.promise
+    streams[1]!.onEvent(JSON.stringify(connectionSnapshot([JSON.parse(JSON.stringify(question))])))
+    oldStatus.reject(new Error("Retired status observation failed"))
+    await new Promise(resolve => setTimeout(resolve, 0))
+    currentStatus.resolve({ status: 200, ok: true, headers: {}, body: { ses_side: { type: "streaming" } } })
+    await activityObserved.promise
+    streams[1]!.onEvent(JSON.stringify({
+      type: "session.error", event_id: "evt_current_error", session_id: "ses_side", emittedAt: 2, timestamp: 2,
+      sequence: 1, orderKey: "v1:0000000000002:0:0:session:ses_side",
+      payload: { sessionID: "ses_side", error: businessError },
+    }))
+    expect(connections).toEqual([true, false, true])
+    expect(opened.map(({ path, query }) => ({ path, directory: query?.directory }))).toEqual([
+      { path: "session/ses_side/events", directory: "D:/project-side" },
+      { path: "session/ses_side/events", directory: "D:/project-side" },
+    ])
+    expect(updates[1]![0]).toBe(original)
+    expect(activity).toEqual([true])
+    expect(errors).toEqual([businessError])
+    expect(AppLog.entries.at(-1)).toMatchObject({
+      level: "warn", service: "side-chat",
+      extra: { sessionID: "ses_side", directory: "D:/project-side", connectionGeneration: 1, error: interrupted.stack },
+    })
+  } finally {
+    oldStatus.resolve({ status: 200, ok: true, headers: {}, body: {} })
+    currentStatus.resolve({ status: 200, ok: true, headers: {}, body: {} })
+    close()
+  }
+}, 10000)
+
+test("a current Side activity observation delivers its original failure contract", async () => {
+  let stream!: StreamHandlers
+  const failure = new Error("Current status observation failed")
+  const reported = Promise.withResolvers<unknown>()
+  __setHostTransportForTest({
+    request: async () => { throw failure },
+    openStream(_request: StreamOpenRequest, handlers: StreamHandlers) { stream = handlers; return { close() {} } },
+  } as unknown as HostTransport)
+  const close = connectSideChat({ sessionID: "ses_side", directory: "D:/project-side" }, {
+    transcript() {}, connection() {}, activity() {}, interactions() {},
+    error(error) { reported.resolve(error) },
+  })
+  try {
+    stream.onEvent(JSON.stringify(connectionSnapshot([publicQuestion()])))
+    expect(await reported.promise).toBe(failure)
+  } finally { close() }
+})
 
 test("a side connection snapshot retains the same full Question owner and converges the canonical pending set", () => {
   const connection = sideStream()

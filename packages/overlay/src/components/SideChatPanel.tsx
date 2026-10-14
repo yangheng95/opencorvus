@@ -567,7 +567,7 @@ export function SideChatPanel(props: {
           <div class="side-chat-composer__actions">
             <span role="status" class="side-chat-status" data-connected={connected()} data-running={running()}>
               <span class="side-chat-status__dot" />
-              {running() ? t("side_chat.running") : connected() ? t("side_chat.private") : t("side_chat.connecting")}
+              {!connected() ? t("side_chat.connecting") : running() ? t("side_chat.running") : t("side_chat.private")}
             </span>
             <Show
               when={running()}

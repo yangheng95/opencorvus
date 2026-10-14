@@ -249,6 +249,19 @@ Task cards continue to come from Board interactions. Side Chat uses the same
 Question adapter, admits only its exact independent Session and replaces its
 pending set without an intermediate empty callback.
 
+Resolved Question history derives request/response presentation phases from the
+same original interaction, order keys and terminal times. Stable interaction and
+phase identities retain the history owners; the mounted renderer formats them
+with the current locale. Empty authored titles use the localized Question label.
+Deadline expiry and infrastructure closure have separate localized outcomes;
+authored question text and answers retain their original contents.
+
+Side Chat transport interruption retains its original target/generation diagnostic
+in AppLog and follows the existing reconnect lifecycle. Its status first presents
+the actual connection, then the current running activity. Session, protocol,
+action and current activity-read errors retain their business feedback; an older
+activity read cannot update a newer connection lifecycle.
+
 Interaction actions capture the request target, directory, endpoint, API
 authority and main selection epoch before awaiting transport. A default Task
 refresh runs only while that original source and authority remain current.

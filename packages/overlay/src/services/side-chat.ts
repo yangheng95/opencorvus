@@ -1,6 +1,8 @@
 import { apiJson, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { getHostTransport } from "./host-transport-runtime"
 import { STREAM_RECONNECT_DELAY_MS, type StreamHandle } from "./host-transport"
+import { AppLog } from "../utils/log"
+import { formatErrorDetails } from "../utils/error-details"
 import type { InteractionData } from "../components/InteractionCard"
 import { permissionInteraction, preparePermissionInteractions } from "../utils/permission-interaction"
 import { prepareQuestionInteractions, questionInteraction, resolveQuestionInteraction, reuseQuestionInteraction } from "../utils/question-interaction"
@@ -65,7 +67,7 @@ export function connectSideChat(
       if (owns() && version === lifecycleVersion)
         handlers.activity(["streaming", "retry"].includes(statuses[target.sessionID]?.type))
     } catch (error) {
-      if (owns()) handlers.error(error)
+      if (owns() && version === lifecycleVersion) handlers.error(error)
     }
   }
   function connect() {
@@ -151,7 +153,12 @@ export function connectSideChat(
         },
         onError(error) {
           if (!owns() || generation !== connectionGeneration) return
-          handlers.error(error)
+          AppLog.warn("side-chat", "Conversation stream interrupted", {
+            sessionID: target.sessionID,
+            directory: target.directory,
+            connectionGeneration: generation,
+            error: formatErrorDetails(error),
+          })
           handle?.close("transport-error")
         },
         onClose(_reason, info) {

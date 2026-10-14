@@ -8,6 +8,7 @@ import { describeToolPart, shortRelativePath, type ToolDisplayModel } from "../u
 import { boardStore, selectedTaskDirectory } from "../store/board"
 import { toolToCardNode } from "../utils/tool-card-node"
 import { t } from "../utils/i18n"
+import { interactionRequestText, interactionResponseText } from "../utils/transcript"
 import {
   isCardRenderableMessagePartType,
   isNoActionDecisionToolPart,
@@ -50,6 +51,12 @@ function partErrorMeta(part: any): string {
 function workPartKind(part: any): "tool" | "patch" {
   if (part?.type === "patch") return "patch"
   return "tool"
+}
+
+function questionHistoryText(part: any): string {
+  if (part.phase === "request") return interactionRequestText(part.interaction)
+  if (part.phase === "response") return interactionResponseText(part.interaction)
+  throw new Error(`question ${part.interaction.id} has unknown history phase ${String(part.phase)}`)
 }
 
 /** The card has one session lifecycle, but it can contain persisted history
@@ -103,6 +110,9 @@ function RenderableCardPart(props: {
       </Match>
       <Match when={part()?.type === "interactive-artifact"}>
         <InteractiveArtifactPart part={part()} />
+      </Match>
+      <Match when={part()?.type === "interaction-question" && part().interaction?.status !== "pending" && part().interaction}>
+        <TextPart text={questionHistoryText(part())} />
       </Match>
       <Match
         when={

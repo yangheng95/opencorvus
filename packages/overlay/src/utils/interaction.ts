@@ -24,6 +24,29 @@ export interface InteractionCardSeed {
   parts: any[]
 }
 
+type QuestionHistoryPhase = "request" | "response"
+
+function questionHistorySeed(
+  interaction: any,
+  phase: QuestionHistoryPhase,
+  orderKey: string,
+  time: number,
+): InteractionCardSeed {
+  if (typeof interaction.id !== "string" || !interaction.id.trim()) {
+    throw new Error("question history missing interaction identity")
+  }
+  if (!(time > 0)) throw new Error(`question ${interaction.id} ${phase} history missing time`)
+  return {
+    info: {
+      id: `ctx:interaction:${interaction.id}:${phase}`,
+      orderKey,
+      role: "system",
+      time: { created: time },
+    },
+    parts: [{ type: "interaction-question", interaction, phase, orderKey }],
+  }
+}
+
 function textSeed(role: string, orderKey: string, time: number, text: string): InteractionCardSeed | null {
   if (typeof text !== "string" || !text.trim()) return null
   const created = Number(time)
@@ -44,7 +67,9 @@ function textSeed(role: string, orderKey: string, time: number, text: string): I
  *
  *  - Pending permission/question → one seed carrying an `interaction-*`
  *    part so <CardParts> dispatches to <InteractionCard>.
- *  - Answered/rejected → a request-text bubble plus a response-text bubble.
+ *  - Resolved Questions → canonical request/response parts, formatted by the
+ *    mounted renderer so locale changes retain their original identities.
+ *  - Other answered/rejected interactions → request and response text bubbles.
  *  - Pending interactions of other types (no `interaction-*` part) fall
  *    through to the transcript path with just a request bubble.
  *
@@ -79,6 +104,21 @@ export function interactionToCardSeeds(interaction: any): InteractionCardSeed[] 
         },
       ]
     }
+  }
+
+  if (interaction?.type === "question") {
+    if (!["answered", "rejected", "expired"].includes(interaction.status)) {
+      throw new Error(`question ${interactionID} has unsupported history status ${interaction.status}`)
+    }
+    const responseOrderKey = requireTimelineOrderKeyDomain(
+      interaction.responseOrderKey,
+      `interaction ${interactionID} responseOrderKey`,
+      "interaction",
+    )
+    return [
+      questionHistorySeed(interaction, "request", orderKey, requestTime),
+      questionHistorySeed(interaction, "response", responseOrderKey, Number(interaction.time?.resolved)),
+    ]
   }
 
   const seeds: InteractionCardSeed[] = []

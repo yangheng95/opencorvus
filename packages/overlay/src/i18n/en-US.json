@@ -998,6 +998,8 @@
   "interaction.automatic_answer_countdown": "{{label}} will be selected automatically in {{seconds}}s.",
   "interaction.custom_placeholder": "Or type a custom answer…",
   "interaction.error": "Error: {{message}}",
+  "interaction.expired": "Question expired",
+  "interaction.closed": "Question is no longer available",
   "interaction.icon.permission": "Permission request",
   "interaction.icon.question": "Question",
   "interaction.reject": "Reject",
