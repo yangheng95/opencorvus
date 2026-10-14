@@ -50,7 +50,7 @@ Copy仍只有一个成熟fs.promises.cp调用。其正式filter扩展点观察�
 
 最终真实FileRoutes正向合同覆盖两动作、source/future外域、独立合法alias、terminal/missing/retarget、nested普通树/内部link/dot、绝对旧namespace、cycles与两Project，并复用原root/link/ignore checker。实际开发模式 `/ui` 用新18457自有A/B fixture；Root亲自查看typed拒绝/原entry保持、合法复制/移动及中英文反馈、内容读回原图，普通shutdown/Native/父drains/实体身份收齐。没有UI自动化，静态类型/build不替视觉。同步07-panel当前合同、三个spec索引与artifact README，当前docs:check/architecture、范围提交、fresh upstream合并/完整待推送集合核验/正常push。尚未取得的宿主/产品/页面/错误资格明确为未达成。
 
-## 当前状态
+## Copy类型保留阶段（历史）
 
 当前已完成Copy类型保留根修与Root最终验收。最终link35 pass/375断言、143真实HTTP（200×102/400×13/404×24/409×4），原0；首版三组66 pass/748断言、244HTTP中唯一500是原ignore rule-read明确错误合同，非复制失败。修前137HTTP唯一500来自同深度普通tree复制后外域内容读取拒绝；完整原输入/body/请求身份与失败都保留。source类型原0，FileRoutes实际路径与私有production reader已运行；没有UI自动化或模型请求。
 
@@ -85,6 +85,44 @@ Root全文复核固定新工具、原23处精确变化与preflight纠错后，�
 两host完全一致：u原完整正文SHORT INNER A\r\n（15B）；stable Copy、stable Move和collision Move后均为SHORT OUTER B\r\n（15B），原NOFOLLOW同短名指JUNCTION且长entry地址精确落到result下原链接名。collision Copy后u为SHORT ORDINARY\r\n（16B）：JUNCTI~1实际目录项tag=0、ordinary directory，长地址是junction-altar-folder；alpha/alpine两个链接仍tag=0xA0000003，但实际短名变为JUNCTI~2/~3。collision Move保两子项的JUNCTI~1/~2及原身份，随后相对namespace变浅导致u读B。原text/创建类型并未变化；复制新目录项的实际别名分配随普通目录先创建、链接后创建的真实协议变化。完整stat/readlink/native原buffer/关闭/realpath/正文与错误保全，不由正文推断entry身份。
 
 这不是新的FileRoutes回执或网页通过，A/B是隔离实体目录而非注册Git Project；也不是“Copy改变type”的旧根。它明确排除了源树长名map，以及源树短名map不加区分地直接用于Copy future的方案。下一实施合同须将Copy future检查放在原staging完整生产/strict检查之后、noReplace发布之前，使用该实际树的长名/实际别名与创建类型，按最终实体位置解释；Current与Move仍使用原source实际目录项，Move显式退休旧namespace。只保持一个解释器，不双读择成功，不制造未来stat、不先发布再撤销，不以~关键词拒绝。顶层长名字rename后的新short alias、short-name政策/关闭卷、非Windows、UNC与retarget原子性仍没有本轮资格；原source/future权限/循环/完整整树实现与目录浏览均未达成。由本新证据继续完整实现，不能将本调查检查点称该批功能已完成。
+
+## 顶层发布名称资格与统一解析器
+
+上一轮是实质进展：9fe59dcacbdfef230e9cf69b06095df17629a19a的60个spec/证据文件已普通提交。首次push所有hooks0但curl35/连接中断而原1；fresh fetch证实未送达，重新merge/完整集合核验及普通重试原0。2026-10-13T23:23:46.718Z fresh HEAD=upstream=7897d1bd、own commit ancestor0、own scope clean/index空，完整原1与重试0分别保留。625c7c5c2的三项产品/测试文件与当时HEAD净差异为空。本轮Root单独继续，保留他人compaction、恢复、Provider/SkillMarket、问题投影和持久格式改动。
+
+顶层发布名称还不能借子项Move保身份来预测。[Windows FileRenameInformation合同](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fsa/87f86c9b-6c2a-4803-84b7-131a74a434fa)描述新目录项和short-name/tunnel处理，生成名称由文件系统实现决定且须唯一；此前实际子项事实不能填补顶层rename。当前Windows生产noReplace使用MoveFileExW flags0；本新观测的fs.rename只资格库/OS命名，不冒生产noReplace和网页通过。必要先行观测不缩小完整current/future权限与目录浏览目标。
+
+新owned root为C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/future-top-name-01a133，Node25.7/Bun1.4各4独立普通树rename：同父同前缀长名、同父不同前缀长名、跨父stage长名到final长名、目标父已有两个同前缀普通目录的跨父rename。固定目录/正文总预算512B；source/root与r/marker全文、独立B marker、现有同前缀目录身份均保存。Prepare唯一UUID，u原text为../加原GetShortPathNameW返回的source basename加/r，不猜新短名。Read每case仅一次原rename，before/after原NOFOLLOW tag/name/buffer/关闭、lstat/readlink/realpath/stat/完整正文/原错误、原短名入口以及新API返回的目标短名入口均保存。无别名返回则明确未覆盖；unknown/native/close失败保全停phase，不把只读ENOENT观测当phase失败。仍同一成熟NativeFacade、60s原cap/15s真正输出无活动、三joins/四writes；先原工具/精确差异落盘及全文审查，syntax后首次Prepare/两Read。无Provider/凭据、数据库、UI或用户窗口操作。
+
+观测后冻结实现：现shared遍历只一条，Current和Future必须共享namespace与实体lookup转换，不再用提前fold的逻辑目标加当前realpath冒未来声明。真实source或Copy staging目录项、真实创建类型/文本/实际短名和两个现权限root是唯一输入；有限位置投影不生成stat或public Node，不建立另一个权限root，不把未知择成功。完整错误/成功合同、原顺序/通知、Source保持与Move退休、普通/nested tree、链接链/dot/循环、外域与合法missing/retarget、两Project和Root真实页面验收均仍必要。顶层新别名的未知必须依据原OS合同与实证解决，不能凭固定~规则预测或静默当missing。当前仍没有产品解析器改动或本新页面通过。
+
+### 已观察结果与实施前冻结合同
+
+唯一fixture=f456dba2-87b5-4329-9663-8a25585fdead；Prepare178184B/Node2029212B/Bun2063986B、stderr均0，三phase原0与三joins/四writes完整settled。各Read153个完整record、65个NOFOLLOW目录项观察；8个原rename每项目录dev/ino/birth保持、新r/marker完整15B。两host同父同前缀PUBLIC~1保留且u仍完整读note；其它SOURCE~1/STAGIN~1变DESTIN~1，collision变DESTIN~3，u text保持而stat/realpath为ENOENT。新短名入口由实际API结果读取并保存，不从算法、名称或字节结果推身份。这证明顶层short alias既不能一律保持也不能一律退休，不新增“遇~就拒”的规则。
+
+实施范围为FileEntry私有实际短名观察、一个通用访问walker及一个有限树投影；替换现shared的两次逻辑path.resolve检查，Move destination independence复用同一个walker，不保第二份namespace解释。walker只持访问namespace和实际lookup位置，普通目录按实际entry地址推进，SYMLINK按raw声明展开并返回状态；Windows JUNCTION检查实际target但保外层namespace，Windows在展开stage词法fold，POSIX保分量顺序及dot。现平台原生链接上限Win63/Linux40/Darwin32集中在此FS抽象，Darwin依据[Apple原sys/param.h](https://raw.githubusercontent.com/apple-oss-distributions/xnu/main/bsd/sys/param.h)，不是任意产品次数策略；未知平台明确ENOTSUP。knownmissing/ENOTDIR保明确缺失位置，unknown I/O原throw，循环用访问状态和原生上限，不用裸inode拒有限多namespace访问。
+
+所有未来事实都来自真实source（Move）或实际staging（Copy）的NOFOLLOW metadata、原text、完整成员名和实际short basename；同一snapshot提供child name/short-name查找，位置只投影到目的真实parent和原suffix。Root长名及内部别名不新增stat/权限root。Move退休旧source namespace，Copy保原。Copy Current先检查真实source，普通copy/type保留/strict完成后检查实际staging的Future，再noReplace发布，原strict/cleanup/通知/五字段Node保留；源及stage身份/文本/成员集合与访问witness在发布前重读验证，外部retarget最后竞态不宣称原子消除。
+
+顶层额外short alias未分配前不能生成某个“真实名字”。采用完整不确定性证明：当Future目的父中某分量将缺失、且新root名可能产生额外short name时，同时计算缺失解释及该分量可能成为新root别名的投影解释；只有每个解释均在两个现权限root内且可有限解析才准入，不双读择成功。候选资格按[MS-FSCC 8.3语法](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/18e63b13-ba43-4f5f-a5b7-11e871b71f14)的ASCII/长度/点规则，不猜~前缀或数字。真实存在且不会退休的名字占用不能成为新别名；额外别名确定不可能时只保实际缺失解释。投影解释标记为可能，绝不称其为已生成或真实observed entry。合法missing和旧绝对namespace退休在所有解释均在域内时继续200；有外域解释用既有source/future400错误，可能的递归解释明确400“Cannot verify … recursive future access”，不冒实际Native ELOOP。现已有明确循环同样归准确400解析合同；unknown I/O仍原错误。
+
+聚焦正向验收必须走现FileRoutes真实TCP helper：终端实际parent浅alias造成外域的Move/Copy400、同两Project B原正文保持；普通整树内部SYM/JUNCTION链，Current外域与Future外域、合法depth相同/绝对固定链200、Copy原short alias重新分配的实际staging200/400、Move源旧绝对名称/short namespace退休后合法broken200+content404、nested self-cycle的准确400、有限重复链200及原link/root/ignore。新short语法只是必要的不确定性范围，不拿静态字符串单测替功能。随后Root新开发/UI实例亲自中英文拒绝与合法Copy/Move，原截图人工复核及身份/完整正文/实际原NoReplace和完整收尾。没有新增UI自动化/SDK/路由/config/model请求；07-panel及本spec/证据必须同步，范围提交、fresh upstream/全部待推送集合检查/普通push后继续目录浏览。
+
+Root独立桌面输入冻结为18458、owned relocation-permission-after-01a133新root及relocation-permission-after-tools独立工具；沿已关闭copy-kind成熟launcher/fixture/BigInt serializer/Native reader精确适配，原六脚本全文及差异保留。A/B两普通注册Git Project、7条健康链接及预声明正文最多512B；五原Data aliases保留，增加aliases/root-back→A及context/relative text ../project-b→A内project-b控制目录，真实B为run/project-b。实际目的根Root后同text会指B，不由标题猜。Prepare/四Register请求沿原60s/20s与120s/30s，service900s/120s、before/after120s/30s原预算；不重启/延长或复用已消费namespace。
+
+Root手动四个mutation：英语Copy relative→aliases/root-back/rejected-copy400，中文Move relative→aliases/root-back/rejected-move400；合法Copy source-j→copied-j200、Move source-s→alias-s/allowed-move200。拒绝后relative身份/text/Inner A正文保，合法copy类型JUNCTION/text及A marker保、Move原source-s身份/text在原raw/实体目标保持；原source-s内容读取准确404。Read-only before8/after11个普通HTTP和native身份/原tag/name/buffer/关闭；所有普通registered完整bytes（含运行时忽略规则）及A/B正文保持；只能由Root手动实际页面做mutation。至少四张绑定目标/反馈与一次原A Editor的原JPEG人工查看，不新增UI自动化。缺截图/真实页面或原收尾不能宣称本批已完成。当前49 link/468正向断言原0，root/ignore还在同一次聚焦runner中；最初test内注册错误的原34/1及随后四个子path separator期望错误的原43/4均保留，原API正确200/400不借测试失败错误归产品。
+
+### 最终实现与Root验收
+
+已实现一个file-access walker及file-relocation有限树视图，删除旧shared逻辑fold/当前FS推future路径及Move guard的第二份解释器。私有FileEntry.shortName来自实际GetShortPathNameW，不进入SDK/Node；Current/Move树和Copy实际staging树分别供同一解释器，根额外别名只做所有可能解释的权限证明，不冒真实名字。Current普通成员也核真实位置，snapshot/访问witness/目的parent发布前复核；创建类型/原text/strict bytes/noReplace/cleanup/原通知/五字段Node保留。没有目录target导航字段、LLM路由gate、fallback或并行权限root；没有模型/凭据请求。
+
+最终当前产品链link49/468、root18/294及正确入口ignore-coordinate13/79均0，共80项841正向断言；237+43=280实际HTTP（200×179/400×68/404×28/409×4/500×1），唯一500为原ignore规则read-error明确合同。原三文件runner1因Root写错第三个文件名file-ignore-contract而module missing；改用实际file-ignore-coordinate-contract，原单组13/0保全，不伪称原runner0。最早34/1是新增test误置于已有test回调，真实root-link Copy200；43/4是新增子path期望用了/而原契约path.join在Windows用\，产品实际400；两次原失败都完整保留，未改产品迎合错误期望。两次source类型0，格式与diff检查0，最终源码运行前完整内容/HEAD/差异已捕获。
+
+新服务18458 fixture=d64d0488-10ee-4f20-a524-c3130085defd、occurrence=relocation-permission-after-b44a2875-fb78-4774-b63d-807332924d97，Host73968/Target79888及原birth已保存。Root自有IAB tab4亲自四mutation完成：英语Copy相对声明400、中文Move400；中文合法Copy200及合法Move200；页面原A Editor全文RELOCATION DATA A 01a133可见。六张1280×720原JPEG逐张人工查看，原中文/英语错误摘要与成功反馈保留；UI源码及公共Node未改，资产沿已资格私有Bun/UI对，无Vite、UI自动测试或新模型请求。四Register、before8、after11共23脚本HTTP；其中旧source-s内容明确404，其余200/201。Native读回7原链接在明确位置的同身份/text（source-s在alias-s/allowed-move）、新JUNCTION和SYMLINK+目录属性、所有registered完整字节及A/B正文保持，复制别名及移动别名都读同原完整A正文。
+
+Root关闭自有tab4后普通shutdown。第一次调用漏必填三个参数，shell非终止binding错误后继续写了outcome=returned文件；该文件仅是外层shell继续的原件，不是关闭成功或native0，Root准确纠错单独保存。服务handle当时仍live；用精确RunRoot/EvidenceRoot/EvidencePrefix/PageClosed参数正常shutdown返回，原launcher0及Native terminal0/三joins/四writes/physical-output-request settled、原owner退休及port释放均收齐，没有重启/扩预算/杀用户进程。browser原warn/error数组为空，服务诊断完整stderr未检出WARN/ERROR/timeout；不排除旧meta/proxy共享未知。
+
+07-panel已同步单一实际/未来树及额外别名证明合同。完整非Windows实机、Windows大小写敏感目录/关闭短名卷、原生极限边界与最后的外部retarget原子性仍未资格；目录链接浏览仍未实现，持续目标active。文档检查、原件归档、范围提交和fresh upstream/普通push尚待原结果，不把当前功能通过扩称全平台或持续目标已完成。
 
 第一原FileRoutes checker运行实际30 pass/5 fail、352断言；同深度tree Copy回执200后content实际500/UnknownError，原readScope禁止B访问，故不是A API已读取外域。四创建类型正向合同中健康dir的红态也包含旧私有字段只有symbolic的合同差异；真实tag/属性变化仍由前述Native原件证明。Root调用时误将Bun test的筛选参数传给本仓只接受文件的run-tests.ts，原运行另把两个参数当文件并各报module missing，整runner原1保全；不把额外故障归产品。后续采用正确文件入口，不扩改成熟runner。
 

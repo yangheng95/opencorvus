@@ -8,6 +8,7 @@ export type FileEntry = {
   stat: BigIntStats
   // The creation type preserves the entry; it does not describe its target.
   link: "file" | "dir" | "junction" | undefined
+  shortName?: string
 }
 
 function sameIdentity(left: BigIntStats, right: BigIntStats) {
@@ -31,10 +32,12 @@ export async function readFileEntry(full: string, expected?: BigIntStats): Promi
   const stat = expected ?? (await fs.lstat(full, { bigint: true }))
   let address: string
   let link: FileEntry["link"]
+  let shortName: string | undefined
   if (process.platform === "win32") {
     const info = readWindowsEntry(full)
     address = info.address
     link = info.link
+    shortName = info.shortName
     if (Boolean(link) !== stat.isSymbolicLink()) throw changedEntry(full)
   } else {
     address = path.join(await fs.realpath(path.dirname(full)), path.basename(full))
@@ -49,7 +52,7 @@ export async function readFileEntry(full: string, expected?: BigIntStats): Promi
   for (const observation of observations) {
     if (observation.status === "fulfilled" && !sameIdentity(stat, observation.value)) throw changedEntry(full)
   }
-  return { address, stat, link }
+  return { address, stat, link, shortName }
 }
 
 export function sameFileEntry(left: FileEntry, right: FileEntry) {
@@ -76,13 +79,16 @@ function loadWindowsBindings() {
     name: kernel.func(
       "uint32_t __stdcall GetFinalPathNameByHandleW(OPENCORVUS_FILE_ENTRY_HANDLE handle, _Out_ char16_t *name, uint32_t count, uint32_t flags)",
     ),
+    shortName: kernel.func(
+      "uint32_t __stdcall GetShortPathNameW(const char16_t *name, _Out_ char16_t *shortName, uint32_t count)",
+    ),
     close: kernel.func("int __stdcall CloseHandle(OPENCORVUS_FILE_ENTRY_HANDLE handle)"),
     lastError: kernel.func("uint32_t __stdcall GetLastError()"),
     tagSize: koffi.sizeof(TAG),
   }
 }
 
-function readWindowsEntry(full: string): Pick<FileEntry, "address" | "link"> {
+function readWindowsEntry(full: string): Pick<FileEntry, "address" | "link" | "shortName"> {
   const api = (windowsBindings ??= loadWindowsBindings())
   const failure = (operation: string) => {
     const errno = api.lastError()
@@ -103,7 +109,7 @@ function readWindowsEntry(full: string): Pick<FileEntry, "address" | "link"> {
   const handle = api.open(full, 0, 7, null, 3, 0x02200000, null)
   if (handle === null || handle === undefined || handle === api.invalid || handle === -1n) throw failure("CreateFileW")
   const failures: unknown[] = []
-  let result: Pick<FileEntry, "address" | "link"> | undefined
+  let result: Pick<FileEntry, "address" | "link" | "shortName"> | undefined
   try {
     const info = {} as { FileAttributes: number; ReparseTag: number }
     if (!api.tag(handle, 9, info, api.tagSize)) throw failure("GetFileInformationByHandleEx")
@@ -125,7 +131,16 @@ function readWindowsEntry(full: string): Pick<FileEntry, "address" | "link"> {
     if (written >= capacity || buffer.readUInt16LE(written * 2) !== 0) throw changedEntry(full)
     const address = buffer.toString("utf16le", 0, written * 2)
     if (address.includes("\0")) throw changedEntry(full)
-    result = { address, link }
+    const shortCapacity = api.shortName(address, null, 0)
+    if (!shortCapacity) throw failure("GetShortPathNameW")
+    if (shortCapacity > 32768) throw changedEntry(full)
+    const shortBuffer = Buffer.alloc(shortCapacity * 2)
+    const shortWritten = api.shortName(address, shortBuffer, shortCapacity)
+    if (!shortWritten) throw failure("GetShortPathNameW")
+    if (shortWritten >= shortCapacity || shortBuffer.readUInt16LE(shortWritten * 2) !== 0) throw changedEntry(full)
+    const shortPath = shortBuffer.toString("utf16le", 0, shortWritten * 2)
+    if (shortPath.includes("\0")) throw changedEntry(full)
+    result = { address, link, shortName: path.basename(shortPath) || undefined }
   } catch (error) {
     failures.push(error)
   } finally {

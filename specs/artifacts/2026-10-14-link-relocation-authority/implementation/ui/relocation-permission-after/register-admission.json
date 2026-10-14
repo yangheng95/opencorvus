@@ -1,0 +1,82 @@
+{
+  "fixtureID": "d64d0488-10ee-4f20-a524-c3130085defd",
+  "occurrence": "relocation-permission-after-b44a2875-fb78-4774-b63d-807332924d97",
+  "owner": {
+    "port": 18458,
+    "occurrence": "relocation-permission-after-b44a2875-fb78-4774-b63d-807332924d97",
+    "sourceCLI": "D:/myhexin-local/opencorvus/packages/opencorvus/src/index.ts",
+    "inactivityTimeoutMs": 120000,
+    "owner": {
+      "ProcessId": 79888,
+      "processInstanceID": "win32:639275332877946727"
+    },
+    "evidencePrefix": "relocation-permission-after",
+    "projectB": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project-b",
+    "ui": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\ui-bundle\\bin\\ui",
+    "ripgrepExecutable": "C:\\Users\\hengu\\.local\\bin\\rg.exe",
+    "printLogs": true,
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\runtime",
+    "qualification": "real-desktop-relocation-permission",
+    "fixtureID": "d64d0488-10ee-4f20-a524-c3130085defd",
+    "host": {
+      "pid": 73968,
+      "processInstanceID": "win32:639275332870123124",
+      "occurrenceID": "b5853e3c-a257-4172-a822-917201cbea27"
+    },
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\evidence",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\relocation-permission-after-tools\\relocation-permission-after",
+    "targetBirthAtMs": 1791936487794,
+    "nativeTarget": {
+      "pid": 79888,
+      "processInstanceID": "win32:639275332877946727",
+      "occurrenceID": "094858c0-56c8-4546-aaad-3c747fd7320a"
+    },
+    "nativeDeadline": 1791937386957
+  },
+  "at": {
+    "utc": "2026-10-14T00:08:22.667Z",
+    "wallMs": 1791936502667,
+    "monotonicNs": "2754392946025400"
+  },
+  "originalPlan": {
+    "firstSequence": 1,
+    "steps": [
+      {
+        "label": "register-root-project",
+        "role": "root",
+        "method": "GET",
+        "route": "/project/current",
+        "query": {}
+      },
+      {
+        "label": "register-root-chat",
+        "role": "root",
+        "method": "POST",
+        "route": "/coding/chat/session",
+        "query": {},
+        "body": {}
+      },
+      {
+        "label": "register-b-project",
+        "role": "b",
+        "method": "GET",
+        "route": "/project/current",
+        "query": {}
+      },
+      {
+        "label": "register-b-chat",
+        "role": "b",
+        "method": "POST",
+        "route": "/coding/chat/session",
+        "query": {},
+        "body": {}
+      }
+    ]
+  },
+  "maximumHTTP": 4,
+  "mutationRequests": 0,
+  "declaredRuntimeRuleBase64": "Lm9wZW5jb3J2dXMvLnIvCg==",
+  "boundary": "Normal four requests only; no retry, mutation, source readback, UI or model request"
+}

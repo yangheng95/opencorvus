@@ -1,0 +1,5 @@
+{
+  "command": "bun run --cwd packages/opencorvus test test/file-link-entry-contract.test.ts test/file-mutation-root-contract.test.ts test/file-ignore-contract.test.ts",
+  "exitCode": 1,
+  "atUtc": "2026-10-14T00:02:04.4311713Z"
+}

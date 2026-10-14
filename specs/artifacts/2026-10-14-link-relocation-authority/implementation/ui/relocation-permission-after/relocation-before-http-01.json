@@ -1,0 +1,114 @@
+{
+  "role": "root",
+  "method": "GET",
+  "url": "http://127.0.0.1:18458/file?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Crelocation-permission-after-01a133%5Cproject&path=",
+  "status": 200,
+  "requestID": "5b03339d-420b-468e-aeb5-81a3addb114e",
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+    "content-length": "2712",
+    "content-type": "application/json",
+    "date": "Wed, 14 Oct 2026 00:08:29 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "5b03339d-420b-468e-aeb5-81a3addb114e"
+  },
+  "rawBodyBase64": "W3sibmFtZSI6Ii5vcGVuY29ydnVzIiwicGF0aCI6Ii5vcGVuY29ydnVzIiwiYWJzb2x1dGUiOiJDOlxcVXNlcnNcXGhlbmd1XFwuY29kZXhcXG9wZW5jb3J2dXMtcHJvZHVjdC1pdGVyYXRpb25cXDIwMjYtMTAtMTRcXHJlbG9jYXRpb24tcGVybWlzc2lvbi1hZnRlci0wMWExMzNcXHByb2plY3RcXC5vcGVuY29ydnVzIiwidHlwZSI6ImRpcmVjdG9yeSIsImlnbm9yZWQiOmZhbHNlfSx7Im5hbWUiOiJhbGlhc2VzIiwicGF0aCI6ImFsaWFzZXMiLCJhYnNvbHV0ZSI6IkM6XFxVc2Vyc1xcaGVuZ3VcXC5jb2RleFxcb3BlbmNvcnZ1cy1wcm9kdWN0LWl0ZXJhdGlvblxcMjAyNi0xMC0xNFxccmVsb2NhdGlvbi1wZXJtaXNzaW9uLWFmdGVyLTAxYTEzM1xccHJvamVjdFxcYWxpYXNlcyIsInR5cGUiOiJkaXJlY3RvcnkiLCJpZ25vcmVkIjpmYWxzZX0seyJuYW1lIjoiY29udGV4dCIsInBhdGgiOiJjb250ZXh0IiwiYWJzb2x1dGUiOiJDOlxcVXNlcnNcXGhlbmd1XFwuY29kZXhcXG9wZW5jb3J2dXMtcHJvZHVjdC1pdGVyYXRpb25cXDIwMjYtMTAtMTRcXHJlbG9jYXRpb24tcGVybWlzc2lvbi1hZnRlci0wMWExMzNcXHByb2plY3RcXGNvbnRleHQiLCJ0eXBlIjoiZGlyZWN0b3J5IiwiaWdub3JlZCI6ZmFsc2V9LHsibmFtZSI6ImRhdGEiLCJwYXRoIjoiZGF0YSIsImFic29sdXRlIjoiQzpcXFVzZXJzXFxoZW5ndVxcLmNvZGV4XFxvcGVuY29ydnVzLXByb2R1Y3QtaXRlcmF0aW9uXFwyMDI2LTEwLTE0XFxyZWxvY2F0aW9uLXBlcm1pc3Npb24tYWZ0ZXItMDFhMTMzXFxwcm9qZWN0XFxkYXRhIiwidHlwZSI6ImRpcmVjdG9yeSIsImlnbm9yZWQiOmZhbHNlfSx7Im5hbWUiOiJwcm9qZWN0LWIiLCJwYXRoIjoicHJvamVjdC1iIiwiYWJzb2x1dGUiOiJDOlxcVXNlcnNcXGhlbmd1XFwuY29kZXhcXG9wZW5jb3J2dXMtcHJvZHVjdC1pdGVyYXRpb25cXDIwMjYtMTAtMTRcXHJlbG9jYXRpb24tcGVybWlzc2lvbi1hZnRlci0wMWExMzNcXHByb2plY3RcXHByb2plY3QtYiIsInR5cGUiOiJkaXJlY3RvcnkiLCJpZ25vcmVkIjpmYWxzZX0seyJuYW1lIjoic291cmNlLXRyZWUiLCJwYXRoIjoic291cmNlLXRyZWUiLCJhYnNvbHV0ZSI6IkM6XFxVc2Vyc1xcaGVuZ3VcXC5jb2RleFxcb3BlbmNvcnZ1cy1wcm9kdWN0LWl0ZXJhdGlvblxcMjAyNi0xMC0xNFxccmVsb2NhdGlvbi1wZXJtaXNzaW9uLWFmdGVyLTAxYTEzM1xccHJvamVjdFxcc291cmNlLXRyZWUiLCJ0eXBlIjoiZGlyZWN0b3J5IiwiaWdub3JlZCI6ZmFsc2V9LHsibmFtZSI6Ii5naXRhdHRyaWJ1dGVzIiwicGF0aCI6Ii5naXRhdHRyaWJ1dGVzIiwiYWJzb2x1dGUiOiJDOlxcVXNlcnNcXGhlbmd1XFwuY29kZXhcXG9wZW5jb3J2dXMtcHJvZHVjdC1pdGVyYXRpb25cXDIwMjYtMTAtMTRcXHJlbG9jYXRpb24tcGVybWlzc2lvbi1hZnRlci0wMWExMzNcXHByb2plY3RcXC5naXRhdHRyaWJ1dGVzIiwidHlwZSI6ImZpbGUiLCJpZ25vcmVkIjpmYWxzZX0seyJuYW1lIjoiLmdpdGlnbm9yZSIsInBhdGgiOiIuZ2l0aWdub3JlIiwiYWJzb2x1dGUiOiJDOlxcVXNlcnNcXGhlbmd1XFwuY29kZXhcXG9wZW5jb3J2dXMtcHJvZHVjdC1pdGVyYXRpb25cXDIwMjYtMTAtMTRcXHJlbG9jYXRpb24tcGVybWlzc2lvbi1hZnRlci0wMWExMzNcXHByb2plY3RcXC5naXRpZ25vcmUiLCJ0eXBlIjoiZmlsZSIsImlnbm9yZWQiOmZhbHNlfSx7Im5hbWUiOiJhbGlhcy1qIiwicGF0aCI6ImFsaWFzLWoiLCJhYnNvbHV0ZSI6IkM6XFxVc2Vyc1xcaGVuZ3VcXC5jb2RleFxcb3BlbmNvcnZ1cy1wcm9kdWN0LWl0ZXJhdGlvblxcMjAyNi0xMC0xNFxccmVsb2NhdGlvbi1wZXJtaXNzaW9uLWFmdGVyLTAxYTEzM1xccHJvamVjdFxcYWxpYXMtaiIsInR5cGUiOiJmaWxlIiwiaWdub3JlZCI6ZmFsc2V9LHsibmFtZSI6ImFsaWFzLXMiLCJwYXRoIjoiYWxpYXMtcyIsImFic29sdXRlIjoiQzpcXFVzZXJzXFxoZW5ndVxcLmNvZGV4XFxvcGVuY29ydnVzLXByb2R1Y3QtaXRlcmF0aW9uXFwyMDI2LTEwLTE0XFxyZWxvY2F0aW9uLXBlcm1pc3Npb24tYWZ0ZXItMDFhMTMzXFxwcm9qZWN0XFxhbGlhcy1zIiwidHlwZSI6ImZpbGUiLCJpZ25vcmVkIjpmYWxzZX0seyJuYW1lIjoicm9vdC1tYXJrZXIudHh0IiwicGF0aCI6InJvb3QtbWFya2VyLnR4dCIsImFic29sdXRlIjoiQzpcXFVzZXJzXFxoZW5ndVxcLmNvZGV4XFxvcGVuY29ydnVzLXByb2R1Y3QtaXRlcmF0aW9uXFwyMDI2LTEwLTE0XFxyZWxvY2F0aW9uLXBlcm1pc3Npb24tYWZ0ZXItMDFhMTMzXFxwcm9qZWN0XFxyb290LW1hcmtlci50eHQiLCJ0eXBlIjoiZmlsZSIsImlnbm9yZWQiOmZhbHNlfSx7Im5hbWUiOiJzb3VyY2UtaiIsInBhdGgiOiJzb3VyY2UtaiIsImFic29sdXRlIjoiQzpcXFVzZXJzXFxoZW5ndVxcLmNvZGV4XFxvcGVuY29ydnVzLXByb2R1Y3QtaXRlcmF0aW9uXFwyMDI2LTEwLTE0XFxyZWxvY2F0aW9uLXBlcm1pc3Npb24tYWZ0ZXItMDFhMTMzXFxwcm9qZWN0XFxzb3VyY2UtaiIsInR5cGUiOiJmaWxlIiwiaWdub3JlZCI6ZmFsc2V9LHsibmFtZSI6InNvdXJjZS1zIiwicGF0aCI6InNvdXJjZS1zIiwiYWJzb2x1dGUiOiJDOlxcVXNlcnNcXGhlbmd1XFwuY29kZXhcXG9wZW5jb3J2dXMtcHJvZHVjdC1pdGVyYXRpb25cXDIwMjYtMTAtMTRcXHJlbG9jYXRpb24tcGVybWlzc2lvbi1hZnRlci0wMWExMzNcXHByb2plY3RcXHNvdXJjZS1zIiwidHlwZSI6ImZpbGUiLCJpZ25vcmVkIjpmYWxzZX1d",
+  "body": [
+    {
+      "name": ".opencorvus",
+      "path": ".opencorvus",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\.opencorvus",
+      "type": "directory",
+      "ignored": false
+    },
+    {
+      "name": "aliases",
+      "path": "aliases",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\aliases",
+      "type": "directory",
+      "ignored": false
+    },
+    {
+      "name": "context",
+      "path": "context",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\context",
+      "type": "directory",
+      "ignored": false
+    },
+    {
+      "name": "data",
+      "path": "data",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\data",
+      "type": "directory",
+      "ignored": false
+    },
+    {
+      "name": "project-b",
+      "path": "project-b",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\project-b",
+      "type": "directory",
+      "ignored": false
+    },
+    {
+      "name": "source-tree",
+      "path": "source-tree",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\source-tree",
+      "type": "directory",
+      "ignored": false
+    },
+    {
+      "name": ".gitattributes",
+      "path": ".gitattributes",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\.gitattributes",
+      "type": "file",
+      "ignored": false
+    },
+    {
+      "name": ".gitignore",
+      "path": ".gitignore",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\.gitignore",
+      "type": "file",
+      "ignored": false
+    },
+    {
+      "name": "alias-j",
+      "path": "alias-j",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\alias-j",
+      "type": "file",
+      "ignored": false
+    },
+    {
+      "name": "alias-s",
+      "path": "alias-s",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\alias-s",
+      "type": "file",
+      "ignored": false
+    },
+    {
+      "name": "root-marker.txt",
+      "path": "root-marker.txt",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\root-marker.txt",
+      "type": "file",
+      "ignored": false
+    },
+    {
+      "name": "source-j",
+      "path": "source-j",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\source-j",
+      "type": "file",
+      "ignored": false
+    },
+    {
+      "name": "source-s",
+      "path": "source-s",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\source-s",
+      "type": "file",
+      "ignored": false
+    }
+  ],
+  "at": {
+    "utc": "2026-10-14T00:08:29.529Z",
+    "wallMs": 1791936509529,
+    "monotonicNs": "2754399808497900"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "atUtc": "2026-10-13T23:23:46.718Z",
+  "head": "7897d1bd1c535446b1f8dbedd22fb8f49c3884bf",
+  "upstream": "7897d1bd1c535446b1f8dbedd22fb8f49c3884bf",
+  "ownCommit": "9fe59dcacbdfef230e9cf69b06095df17629a19a",
+  "ancestor": {
+    "args": [
+      "merge-base",
+      "--is-ancestor",
+      "9fe59dcacbdfef230e9cf69b06095df17629a19a",
+      "@{upstream}"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "ownScopeStatus": "",
+  "remainingStaged": "",
+  "fullWorkspaceStatus": "M CHANGELOG.md\n D packages/opencorvus/script/compaction-task-crash-check.ts\n M packages/opencorvus/src/engine/git-process.ts\n M packages/opencorvus/src/engine/host-recovery.ts\n M packages/opencorvus/src/engine/interaction.ts\n M packages/opencorvus/src/engine/model.ts\n M packages/opencorvus/src/engine/task-session-lineage.ts\n M packages/opencorvus/src/project/bootstrap.ts\n M packages/opencorvus/src/protocol/session-mirror.ts\n M packages/opencorvus/src/question/index.ts\n M packages/opencorvus/src/server/routes/session.ts\n M packages/opencorvus/src/storage/db.ts\n M packages/opencorvus/test/engine-git-batched-transaction.test.ts\n M packages/opencorvus/test/engine-git-fact-reconciliation.test.ts\n M packages/opencorvus/test/engine-interaction-recovery.test.ts\n M packages/opencorvus/test/mission-process-recovery.test.ts\n M packages/opencorvus/test/server/session-event-connection-snapshot.test.ts\n M packages/opencorvus/test/storage/schema-contract.test.ts\n M packages/overlay/src/components/settings/SkillMarketPanel.tsx\n M packages/overlay/src/i18n/en-US.json\n M packages/overlay/src/i18n/zh-CN.json\n M packages/overlay/src/services/conversation.ts\n M packages/overlay/src/services/event-policy.ts\n M packages/overlay/src/services/side-chat.ts\n M packages/overlay/src/services/tree-writer.ts\n M packages/overlay/test/side-chat-transport.test.ts\n M packages/overlay/test/subagent-conversation-service.test.ts\n M packages/sdk/js/src/gen/types.gen.ts\n M packages/sdk/openapi.json\n M specs/README.md\n M specs/artifacts/README.md\n M specs/current/architecture/02-data.md\n M specs/current/architecture/07-panel-reactivity.md\n M specs/current/architecture/project-memory.md\n M specs/current/architecture/task-control-plane.md\n M specs/current/architecture/task-runtime-directory.md\n M specs/records/2026-10/2026-10-13-compaction-stress.md\n M specs/records/2026-10/2026-10-14-task-git-question-reconnect-404.md\n M specs/records/2026-10/README.md\n?? .bun/\n?? packages/opencorvus/bun/\n?? packages/opencorvus/script/compaction-runtime-crash-check.ts\n?? packages/opencorvus/test/engine-git-frozen-directory.test.ts\n?? packages/opencorvus/test/fixture/question-process-projection-worker.ts\n?? packages/opencorvus/test/question-process-projection.test.ts\n?? packages/opencorvus/test/question-publication-projection.test.ts\n?? packages/opencorvus/test/storage/database-checkpoint.test.ts\n?? packages/overlay/src/utils/question-interaction.ts",
+  "originalPush": {
+    "exitCode": 1,
+    "command": "git push",
+    "atUtc": "2026-10-13T23:17:35.9165980Z"
+  },
+  "retryPush": {
+    "command": "git push",
+    "exitCode": 0,
+    "atUtc": "2026-10-13T23:23:07.9830290Z"
+  },
+  "qualification": "Original first transport failure retained; fresh fetch/merge/outgoing audit and ordinary retry succeeded; original evidence documentation only, not a new product or UI acceptance claim",
+  "goalStatus": "active",
+  "noDelegation": true
+}

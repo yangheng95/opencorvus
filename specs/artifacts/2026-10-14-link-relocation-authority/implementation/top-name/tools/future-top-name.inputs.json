@@ -1,0 +1,213 @@
+{
+  "schema": "future-top-name-input/v1",
+  "qualification": "Fixed original input; no model or UI automation",
+  "runRoot": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/future-top-name-01a133",
+  "maximumCasesPerHost": 4,
+  "maximumDeclaredBytes": 512,
+  "maximumFileBytes": 128,
+  "platform": "win32",
+  "architecture": "x64",
+  "packageAnchor": "D:/myhexin-local/opencorvus/packages/opencorvus/package.json",
+  "koffiVersion": "3.3.2",
+  "runtimes": {
+    "node": {
+      "executable": "C:/Program Files/nodejs/node.exe",
+      "nodeVersion": "25.7.0"
+    },
+    "bun": {
+      "executable": "D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/ui-bundle/bin/bun.exe",
+      "bunVersion": "1.4.0"
+    }
+  },
+  "nativeInput": {
+    "library": "kernel32.dll",
+    "desiredAccess": 0,
+    "shareMode": 7,
+    "securityAttributes": null,
+    "creationDisposition": 3,
+    "flagsAndAttributes": 35651584,
+    "flagsHex": "0x02200000",
+    "templateFile": null,
+    "fileInformationClass": 9,
+    "struct": {
+      "FileAttributes": "uint32_t",
+      "ReparseTag": "uint32_t"
+    },
+    "bufferSize": 8
+  },
+  "modelCallsRequested": "none",
+  "credentialCatalogStaging": "none",
+  "copyOptions": {
+    "errorOnExist": true,
+    "force": false,
+    "dereference": false,
+    "verbatimSymlinks": true
+  },
+  "cases": [
+    {
+      "id": "same-parent-same-stem",
+      "directories": [
+        "A/publication-source-folder",
+        "A/publication-source-folder/r",
+        "B"
+      ],
+      "lateDirectories": [],
+      "files": [
+        {
+          "path": "A/publication-source-folder/r/marker.txt",
+          "literal": "TOP ROOT NOTE\r\n"
+        },
+        {
+          "path": "B/marker.txt",
+          "literal": "TOP INDEPENDENT B\r\n"
+        }
+      ],
+      "links": [],
+      "shortOf": "A/publication-source-folder",
+      "generatedLink": "A/publication-source-folder/u",
+      "operations": [
+        {
+          "method": "rename",
+          "source": "A/publication-source-folder",
+          "target": "A/publication-target-folder"
+        }
+      ],
+      "observations": [
+        "A/publication-source-folder",
+        "A/publication-source-folder/r/marker.txt",
+        "A/publication-source-folder/u",
+        "A/publication-source-folder/u/marker.txt",
+        "A/publication-target-folder",
+        "A/publication-target-folder/r/marker.txt",
+        "A/publication-target-folder/u",
+        "A/publication-target-folder/u/marker.txt",
+        "B/marker.txt"
+      ]
+    },
+    {
+      "id": "same-parent-different-stem",
+      "directories": [
+        "A/source-description-folder",
+        "A/source-description-folder/r",
+        "B"
+      ],
+      "lateDirectories": [],
+      "files": [
+        {
+          "path": "A/source-description-folder/r/marker.txt",
+          "literal": "TOP ROOT NOTE\r\n"
+        },
+        {
+          "path": "B/marker.txt",
+          "literal": "TOP INDEPENDENT B\r\n"
+        }
+      ],
+      "links": [],
+      "shortOf": "A/source-description-folder",
+      "generatedLink": "A/source-description-folder/u",
+      "operations": [
+        {
+          "method": "rename",
+          "source": "A/source-description-folder",
+          "target": "A/destination-description-folder"
+        }
+      ],
+      "observations": [
+        "A/source-description-folder",
+        "A/source-description-folder/r/marker.txt",
+        "A/source-description-folder/u",
+        "A/source-description-folder/u/marker.txt",
+        "A/destination-description-folder",
+        "A/destination-description-folder/r/marker.txt",
+        "A/destination-description-folder/u",
+        "A/destination-description-folder/u/marker.txt",
+        "B/marker.txt"
+      ]
+    },
+    {
+      "id": "cross-parent-stage-final",
+      "directories": [
+        "A/deep/staging-description-folder",
+        "A/deep/staging-description-folder/r",
+        "B"
+      ],
+      "lateDirectories": [],
+      "files": [
+        {
+          "path": "A/deep/staging-description-folder/r/marker.txt",
+          "literal": "TOP ROOT NOTE\r\n"
+        },
+        {
+          "path": "B/marker.txt",
+          "literal": "TOP INDEPENDENT B\r\n"
+        }
+      ],
+      "links": [],
+      "shortOf": "A/deep/staging-description-folder",
+      "generatedLink": "A/deep/staging-description-folder/u",
+      "operations": [
+        {
+          "method": "rename",
+          "source": "A/deep/staging-description-folder",
+          "target": "A/destination-description-folder"
+        }
+      ],
+      "observations": [
+        "A/deep/staging-description-folder",
+        "A/deep/staging-description-folder/r/marker.txt",
+        "A/deep/staging-description-folder/u",
+        "A/deep/staging-description-folder/u/marker.txt",
+        "A/destination-description-folder",
+        "A/destination-description-folder/r/marker.txt",
+        "A/destination-description-folder/u",
+        "A/destination-description-folder/u/marker.txt",
+        "B/marker.txt"
+      ]
+    },
+    {
+      "id": "cross-parent-colliding-final",
+      "directories": [
+        "A/deep/staging-description-folder",
+        "A/deep/staging-description-folder/r",
+        "B",
+        "A/destination-alpha-folder",
+        "A/destination-alpine-folder"
+      ],
+      "lateDirectories": [],
+      "files": [
+        {
+          "path": "A/deep/staging-description-folder/r/marker.txt",
+          "literal": "TOP ROOT NOTE\r\n"
+        },
+        {
+          "path": "B/marker.txt",
+          "literal": "TOP INDEPENDENT B\r\n"
+        }
+      ],
+      "links": [],
+      "shortOf": "A/deep/staging-description-folder",
+      "generatedLink": "A/deep/staging-description-folder/u",
+      "operations": [
+        {
+          "method": "rename",
+          "source": "A/deep/staging-description-folder",
+          "target": "A/destination-description-folder"
+        }
+      ],
+      "observations": [
+        "A/deep/staging-description-folder",
+        "A/deep/staging-description-folder/r/marker.txt",
+        "A/deep/staging-description-folder/u",
+        "A/deep/staging-description-folder/u/marker.txt",
+        "A/destination-description-folder",
+        "A/destination-description-folder/r/marker.txt",
+        "A/destination-description-folder/u",
+        "A/destination-description-folder/u/marker.txt",
+        "B/marker.txt",
+        "A/destination-alpha-folder",
+        "A/destination-alpine-folder"
+      ]
+    }
+  ],
+  "totalDeclaredLiteralBytes": 272
+}

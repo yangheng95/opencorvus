@@ -1,0 +1,10 @@
+{
+  "toolShellExit": 0,
+  "qualification": "Root observation of the original failed call; not manufactured script stderr",
+  "originalCall": "shutdown.ps1 without mandatory parameters",
+  "observedAtUtc": "2026-10-14T00:13:02.9041175Z",
+  "originalMessage": "Cannot process command because of one or more missing mandatory parameters: RunRoot EvidenceRoot EvidencePrefix.",
+  "confirmedLiveSession": 9868,
+  "bindingOutcome": "failed before script invocation",
+  "priorReceipt": "shutdown-root-invocation.json records only the surrounding PowerShell shell continuing after its non-terminating binding error; it is not a shutdown success or native exit"
+}

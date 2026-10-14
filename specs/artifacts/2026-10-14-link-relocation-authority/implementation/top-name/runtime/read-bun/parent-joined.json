@@ -1,0 +1,23 @@
+{
+  "occurrence": "directory-target-dot-future-top-read-bun-c6e2ae7a-aae9-4527-85ad-048cda430eac",
+  "hostPID": 84292,
+  "parentPID": 90104,
+  "terminal": {
+    "code": 0,
+    "signal": null,
+    "errors": []
+  },
+  "outputJoins": [
+    {
+      "stream": "stdout",
+      "status": "fulfilled",
+      "bytes": 2063986
+    },
+    {
+      "stream": "stderr",
+      "status": "fulfilled",
+      "bytes": 0
+    }
+  ],
+  "joinedAtUtc": "2026-10-13T23:28:23.917Z"
+}

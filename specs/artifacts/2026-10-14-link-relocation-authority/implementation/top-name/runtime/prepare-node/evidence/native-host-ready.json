@@ -1,0 +1,33 @@
+{
+  "occurrence": "directory-target-dot-future-top-prepare-node-1671a461-7c5b-4a30-bb81-0c88f7e3a849",
+  "outcome": "ready",
+  "host": {
+    "pid": 90948,
+    "processInstanceID": "win32:639275308841189061",
+    "occurrenceID": "11dfc9aa-db44-4d47-90a5-f9f355217644"
+  },
+  "parent": {
+    "pid": 90892,
+    "processInstanceID": "win32:639275308839767424",
+    "occurrenceID": "44ad7a4d-3c86-4e28-81a2-c0f4bcc36b77"
+  },
+  "target": {
+    "pid": 67260,
+    "processInstanceID": "win32:639275308860258752",
+    "occurrenceID": "fc8d2ef6-441e-4154-bd05-4a9de02f4cb6"
+  },
+  "targetBirthAtMs": 1791934086025,
+  "deadlineAt": 1791934144044,
+  "inactivityTimeoutMs": 15000,
+  "printLogs": false,
+  "hostExecutable": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\ui-bundle\\bin\\bun.exe",
+  "hostBunVersion": "1.4.0",
+  "observedAtUtc": "2026-10-13T23:28:06.050Z",
+  "executable": "C:/Program Files/nodejs/node.exe",
+  "args": [
+    "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\future-top-name-qualifier.mjs",
+    "prepare",
+    "node"
+  ],
+  "authority": "Original production foreground run/onSpawned handle; run alone consumes child streams; no detached transfer"
+}

@@ -1,0 +1,28 @@
+{
+  "role": "root",
+  "method": "GET",
+  "url": "http://127.0.0.1:18458/file/content?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Crelocation-permission-after-01a133%5Cproject&path=source-s%2Fmarker.txt",
+  "status": 404,
+  "requestID": "2333a189-e19a-44ca-9d6f-aeda2fb7f470",
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+    "content-length": "120",
+    "content-type": "application/json",
+    "date": "Wed, 14 Oct 2026 00:12:06 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "2333a189-e19a-44ca-9d6f-aeda2fb7f470"
+  },
+  "rawBodyBase64": "eyJuYW1lIjoiRmlsZU5vdEZvdW5kRXJyb3IiLCJkYXRhIjp7InBhdGgiOiJzb3VyY2Utcy9tYXJrZXIudHh0IiwibWVzc2FnZSI6IkZpbGUgZW50cnkgbm90IGZvdW5kOiBzb3VyY2Utcy9tYXJrZXIudHh0In19",
+  "body": {
+    "name": "FileNotFoundError",
+    "data": {
+      "path": "source-s/marker.txt",
+      "message": "File entry not found: source-s/marker.txt"
+    }
+  },
+  "at": {
+    "utc": "2026-10-14T00:12:07.015Z",
+    "wallMs": 1791936727015,
+    "monotonicNs": "2754617288211200"
+  }
+}

@@ -527,17 +527,24 @@ non-following handle and preserves junction versus symbolic access namespaces.
 This integrity check does not apply to Copy or claim atomic external-retarget
 protection. It does not add directory-link navigation or a second receipt.
 
-Move/copy validate each link's declared source and relocated destination targets
-through the current project path authority; an in-scope missing target remains
-a valid link entry. Native rename retains the link text. Copy retains it with
-verbatim symlink copying and the existing strict staged tree validation.
-The private entry observation supplies the symlink creation type from that same
-entry metadata. Copy records each link's original text and creation type while
-the mature copier handles ordinary entries, then creates the staged links with
-that explicit type. Windows junctions and broken directory symbolic links retain
-their original reparse semantics. Strict staging and publication checks compare
-creation types as well as link text and file bytes. This does not publish a
-followed-directory navigation fact or a complete unpublished-tree resolver.
+Move/copy use one access resolver for source declarations and the complete final
+tree. Access namespace and actual lookup position remain distinct; Windows
+junctions retain the outer namespace while symbolic links replace it. Current
+source facts and actual Copy staging facts supply entry identities, original
+link text, creation types, member names and native short names. A finite position
+projection interprets these facts at the destination's real parent. Move retires
+the old source namespace; Copy retains it. The current directory and worktree
+remain the only path authorities. Known in-scope missing targets stay valid.
+An unallocated Windows root short name is not guessed: both missing and possible
+root-alias interpretations must remain in scope and resolve finitely. Outside,
+recursive or unverifiable recursive access returns HTTP 400/FileInvalidPathError
+with the original source member path. Unknown filesystem failures remain errors.
+Source/stage members and access witnesses are reobserved before publication;
+external retarget races are not claimed atomic. Copy's mature ordinary-entry
+copier and explicit typed symlink creation precede final-tree permission checks
+and no-replace publication. Strict checks retain creation types, link text and
+file bytes. None of these private facts add directory-link navigation, a public
+target receipt or another permission root.
 Recursion and self-directory protection apply to actual directory entries.
 Delete retains the existing source authority and unlinks admitted terminal
 entries without requiring their targets to exist. Unknown filesystem errors

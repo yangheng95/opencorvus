@@ -1,0 +1,70 @@
+{
+  "sequence": 1,
+  "input": {
+    "label": "register-root-project",
+    "role": "root",
+    "method": "GET",
+    "route": "/project/current",
+    "query": {}
+  },
+  "occurrence": "relocation-permission-after-b44a2875-fb78-4774-b63d-807332924d97",
+  "host": {
+    "pid": 73968,
+    "processInstanceID": "win32:639275332870123124",
+    "occurrenceID": "b5853e3c-a257-4172-a822-917201cbea27"
+  },
+  "nativeTarget": {
+    "pid": 79888,
+    "processInstanceID": "win32:639275332877946727",
+    "occurrenceID": "094858c0-56c8-4546-aaad-3c747fd7320a"
+  },
+  "url": "http://127.0.0.1:18458/project/current?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Crelocation-permission-after-01a133%5Cproject",
+  "method": "GET",
+  "dispatchedAt": {
+    "utc": "2026-10-14T00:08:22.669Z",
+    "wallMs": 1791936502669,
+    "monotonicNs": "2754392948057500"
+  },
+  "chunks": [
+    {
+      "at": {
+        "utc": "2026-10-14T00:08:24.764Z",
+        "wallMs": 1791936504764,
+        "monotonicNs": "2754395043317800"
+      },
+      "bytes": 230,
+      "bytesBase64": "eyJpZCI6InByal9oSGd1dmJYNDlRaVpRb3FRcGVJTyIsIndvcmt0cmVlIjoiQzpcXFVzZXJzXFxoZW5ndVxcLmNvZGV4XFxvcGVuY29ydnVzLXByb2R1Y3QtaXRlcmF0aW9uXFwyMDI2LTEwLTE0XFxyZWxvY2F0aW9uLXBlcm1pc3Npb24tYWZ0ZXItMDFhMTMzXFxwcm9qZWN0Iiwic2FuZGJveGVzIjpbXSwidGltZSI6eyJjcmVhdGVkIjoxNzkxOTM2NTAzNjUxLCJ1cGRhdGVkIjoxNzkxOTM2NTAzNjUxfX0="
+    }
+  ],
+  "status": 200,
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+    "content-length": "230",
+    "content-type": "application/json",
+    "date": "Wed, 14 Oct 2026 00:08:23 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "d61b6500-20b7-43e3-8cd4-0219fa5d6006"
+  },
+  "requestID": "d61b6500-20b7-43e3-8cd4-0219fa5d6006",
+  "headersAt": {
+    "utc": "2026-10-14T00:08:24.762Z",
+    "wallMs": 1791936504762,
+    "monotonicNs": "2754395041710300"
+  },
+  "rawBodyBase64": "eyJpZCI6InByal9oSGd1dmJYNDlRaVpRb3FRcGVJTyIsIndvcmt0cmVlIjoiQzpcXFVzZXJzXFxoZW5ndVxcLmNvZGV4XFxvcGVuY29ydnVzLXByb2R1Y3QtaXRlcmF0aW9uXFwyMDI2LTEwLTE0XFxyZWxvY2F0aW9uLXBlcm1pc3Npb24tYWZ0ZXItMDFhMTMzXFxwcm9qZWN0Iiwic2FuZGJveGVzIjpbXSwidGltZSI6eyJjcmVhdGVkIjoxNzkxOTM2NTAzNjUxLCJ1cGRhdGVkIjoxNzkxOTM2NTAzNjUxfX0=",
+  "rawBody": "{\"id\":\"prj_hHguvbX49QiZQoqQpeIO\",\"worktree\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-14\\\\relocation-permission-after-01a133\\\\project\",\"sandboxes\":[],\"time\":{\"created\":1791936503651,\"updated\":1791936503651}}",
+  "bodyCompleteAt": {
+    "utc": "2026-10-14T00:08:24.766Z",
+    "wallMs": 1791936504766,
+    "monotonicNs": "2754395045897900"
+  },
+  "body": {
+    "id": "prj_hHguvbX49QiZQoqQpeIO",
+    "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project",
+    "sandboxes": [],
+    "time": {
+      "created": 1791936503651,
+      "updated": 1791936503651
+    }
+  }
+}

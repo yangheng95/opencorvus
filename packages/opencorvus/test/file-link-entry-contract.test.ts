@@ -413,9 +413,155 @@ test("copying an independent terminal root link publishes a link and retains the
     directory: false,
     file: false,
   })
+
   await exactBytes(path.join(fixture.path, "root-marker.md"))
   await textContent(http, "copied-root-link/root-marker.md")
 }, 60_000)
+
+test.each(["move", "copy"] as const)(
+  "%s rejects a terminal link's physical shallow destination outside scope",
+  async (action) => {
+    await using fixture = await project(`relocation-physical-${action}`)
+    await using external = await project(`relocation-physical-external-${action}`)
+    const externalName = path.basename(external.path)
+    await fs.mkdir(path.join(fixture.path, "deep"))
+    await fs.mkdir(path.join(fixture.path, externalName))
+    await fs.mkdir(path.join(fixture.path, "aliases", externalName), { recursive: true })
+    await fs.writeFile(path.join(fixture.path, externalName, "marker.md"), marker)
+    await fs.writeFile(path.join(fixture.path, "aliases", externalName, "marker.md"), replacement)
+    await fs.writeFile(path.join(external.path, "marker.md"), replacement)
+    await link(`../${externalName}`, path.join(fixture.path, "deep/link"), "dir")
+    await link(fixture.path, path.join(fixture.path, "aliases/root-back"), "junction")
+    const original = await linkIdentity(path.join(fixture.path, "deep/link"))
+    await using http = await api(fixture.path)
+    await using externalHTTP = await api(external.path)
+    await textContent(http, "deep/link/marker.md")
+    invalid(await http.mutate(action, "deep/link", "aliases/root-back/result"), "deep/link")
+    expect(await linkIdentity(path.join(fixture.path, "deep/link"))).toEqual(original)
+    await textContent(http, "deep/link/marker.md")
+    await textContent(externalHTTP, "marker.md", replacement)
+    await exactBytes(path.join(fixture.path, "aliases", externalName, "marker.md"), replacement)
+  },
+  90_000,
+)
+
+test.each(process.platform === "win32" ? (["move", "copy"] as const) : [])(
+  "%s checks an unpublished internal junction chain in its final namespace",
+  async (action) => {
+    await using fixture = await project(`relocation-junction-tree-${action}`)
+    await using external = await project(`relocation-junction-external-${action}`)
+    const externalName = path.basename(external.path)
+    for (const directory of ["deep/tree", "data/nested", externalName])
+      await fs.mkdir(path.join(fixture.path, directory), { recursive: true })
+    await fs.writeFile(path.join(fixture.path, externalName, "marker.md"), marker)
+    await fs.writeFile(path.join(external.path, "marker.md"), replacement)
+    await link(`../../../${externalName}`, path.join(fixture.path, "data/nested/r"), "dir")
+    await link(path.join(fixture.path, "data/nested"), path.join(fixture.path, "deep/tree/p"), "junction")
+    await link("p/r", path.join(fixture.path, "deep/tree/u"), "dir")
+    const original = await linkIdentity(path.join(fixture.path, "deep/tree/u"))
+    const sourceIdentity = await identity(path.join(fixture.path, "deep/tree"))
+    await using http = await api(fixture.path)
+    await textContent(http, "deep/tree/u/marker.md")
+    invalid(await http.mutate(action, "deep/tree", "result"), path.join("deep/tree", "u"))
+    expect(await identity(path.join(fixture.path, "deep/tree"))).toEqual(sourceIdentity)
+    expect(await linkIdentity(path.join(fixture.path, "deep/tree/u"))).toEqual(original)
+    await textContent(http, "deep/tree/u/marker.md")
+    await exactBytes(path.join(external.path, "marker.md"), replacement)
+  },
+  90_000,
+)
+
+test.each(process.platform === "win32" ? (["move", "copy"] as const) : [])(
+  "%s retains a fixed absolute symbolic namespace over an independent junction",
+  async (action) => {
+    await using fixture = await project(`relocation-fixed-namespace-${action}`)
+    for (const directory of ["deep/tree", "data/nested", "goal"])
+      await fs.mkdir(path.join(fixture.path, directory), { recursive: true })
+    await fs.writeFile(path.join(fixture.path, "goal/marker.md"), marker)
+    await link("../../goal", path.join(fixture.path, "data/nested/r"), "dir")
+    await link(path.join(fixture.path, "data/nested"), path.join(fixture.path, "deep/pivot"), "junction")
+    await link(path.join(fixture.path, "deep/pivot"), path.join(fixture.path, "deep/tree/p"), "dir")
+    await link("p/r", path.join(fixture.path, "deep/tree/u"), "dir")
+    const original = await linkIdentity(path.join(fixture.path, "deep/tree/u"))
+    await using http = await api(fixture.path)
+    await textContent(http, "deep/tree/u/marker.md")
+    published(
+      await http.mutate(action, "deep/tree", "result"),
+      action,
+      "deep/tree",
+      "result",
+      node(fixture.path, path.join(fixture.path, "result"), false, "directory"),
+    )
+    await textContent(http, "result/u/marker.md")
+    expect(await fs.readlink(path.join(fixture.path, "result/u"))).toBe(original.text)
+    await exactBytes(path.join(fixture.path, "goal/marker.md"))
+  },
+  90_000,
+)
+
+test.each(["move", "copy"] as const)(
+  "%s observes the retained or retired old absolute tree",
+  async (action) => {
+    await using fixture = await project(`relocation-old-tree-${action}`)
+    await fs.mkdir(path.join(fixture.path, "source-tree"))
+    await fs.writeFile(path.join(fixture.path, "source-tree/note.md"), marker)
+    await link(path.join(fixture.path, "source-tree/note.md"), path.join(fixture.path, "source-tree/old"), "file")
+    const original = await linkIdentity(path.join(fixture.path, "source-tree/old"))
+    await using http = await api(fixture.path)
+    published(
+      await http.mutate(action, "source-tree", "renamed-tree"),
+      action,
+      "source-tree",
+      "renamed-tree",
+      node(fixture.path, path.join(fixture.path, "renamed-tree"), false, "directory"),
+    )
+    expect(await fs.readlink(path.join(fixture.path, "renamed-tree/old"))).toBe(original.text)
+    await exactBytes(path.join(fixture.path, "renamed-tree/note.md"))
+    if (action === "move") missing(await http.content("renamed-tree/old"), "renamed-tree/old")
+    else await textContent(http, "renamed-tree/old")
+  },
+  90_000,
+)
+
+test.each(["move", "copy"] as const)(
+  "%s returns the precise contract for a future internal cycle",
+  async (action) => {
+    await using fixture = await project(`relocation-future-cycle-${action}`)
+    await fs.mkdir(path.join(fixture.path, "source"))
+    await fs.writeFile(path.join(fixture.path, "source/note.md"), marker)
+    await link("../result/link", path.join(fixture.path, "source/link"), "dir")
+    const original = await linkIdentity(path.join(fixture.path, "source/link"))
+    await using http = await api(fixture.path)
+    const result = await http.mutate(action, "source", "result")
+    invalid(result, path.join("source", "link"))
+    expect(result.body.data.message).toBe(`Cannot relocate recursive symlink target: ${path.join("source", "link")}`)
+    expect(await linkIdentity(path.join(fixture.path, "source/link"))).toEqual(original)
+    await exactBytes(path.join(fixture.path, "source/note.md"))
+  },
+  90_000,
+)
+
+test.each(["move", "copy"] as const)(
+  "%s admits finite repeated directory access states",
+  async (action) => {
+    await using fixture = await project(`relocation-finite-access-${action}`)
+    await fs.mkdir(path.join(fixture.path, "source"))
+    await fs.writeFile(path.join(fixture.path, "source/marker.md"), marker)
+    await link(".", path.join(fixture.path, "source/p"), "dir")
+    await link("p/p", path.join(fixture.path, "source/u"), "dir")
+    await using http = await api(fixture.path)
+    published(
+      await http.mutate(action, "source", "result"),
+      action,
+      "source",
+      "result",
+      node(fixture.path, path.join(fixture.path, "result"), false, "directory"),
+    )
+    await textContent(http, "result/u/marker.md")
+    await exactBytes(path.join(fixture.path, "result/marker.md"))
+  },
+  90_000,
+)
 
 function dependentDestination(result: { status: number; body: any }, target: string) {
   expect(result).toEqual({
@@ -427,6 +573,54 @@ function dependentDestination(result: { status: number; body: any }, target: str
   })
 }
 
+test.each(process.platform === "win32" ? (["move", "copy"] as const) : [])(
+  "%s uses actual short entry spellings in the complete future tree",
+  async (action) => {
+    await using fixture = await project(`relocation-short-tree-${action}`)
+    await using external = await project(`relocation-short-external-${action}`)
+    const externalName = path.basename(external.path)
+    for (const directory of ["deep/tree", "data/nested", externalName])
+      await fs.mkdir(path.join(fixture.path, directory), { recursive: true })
+    await fs.writeFile(path.join(fixture.path, externalName, "marker.md"), marker)
+    await fs.writeFile(path.join(external.path, "marker.md"), replacement)
+    await link(`../../../${externalName}`, path.join(fixture.path, "data/nested/r"), "dir")
+    for (const name of ["junction-alpha-link", "junction-alpine-link"])
+      await link(path.join(fixture.path, "data/nested"), path.join(fixture.path, "deep/tree", name), "junction")
+    await fs.mkdir(path.join(fixture.path, "deep/tree/junction-altar-folder/r"), { recursive: true })
+    await fs.writeFile(path.join(fixture.path, "deep/tree/junction-altar-folder/r/marker.md"), replacement)
+    const entry = await readFileEntry(path.join(fixture.path, "deep/tree/junction-alpha-link"))
+    expect(typeof entry.shortName).toBe("string")
+    expect((await readFileEntry(path.join(fixture.path, "deep/tree", entry.shortName!))).address).toBe(entry.address)
+    console.log("[link entry actual spelling]", JSON.stringify({ path: entry.address, shortName: entry.shortName }))
+    await link(`${entry.shortName}/r`, path.join(fixture.path, "deep/tree/u"), "dir")
+    const original = await linkIdentity(path.join(fixture.path, "deep/tree/u"))
+    await using http = await api(fixture.path)
+    await textContent(http, "deep/tree/u/marker.md")
+    const result = await http.mutate(action, "deep/tree", "result")
+    if (action === "move") {
+      invalid(result, path.join("deep/tree", "u"))
+      expect(await linkIdentity(path.join(fixture.path, "deep/tree/u"))).toEqual(original)
+      await textContent(http, "deep/tree/u/marker.md")
+    } else {
+      published(
+        result,
+        "copy",
+        "deep/tree",
+        "result",
+        node(fixture.path, path.join(fixture.path, "result"), false, "directory"),
+      )
+      await textContent(http, "result/u/marker.md", replacement)
+      expect(await fs.readlink(path.join(fixture.path, "result/u"))).toBe(original.text)
+      const alias = await readFileEntry(path.join(fixture.path, "result", entry.shortName!))
+      expect(alias.stat.isDirectory()).toBe(true)
+      expect(alias.address).toBe((await readFileEntry(path.join(fixture.path, "result/junction-altar-folder"))).address)
+      await exactBytes(path.join(fixture.path, "result/junction-altar-folder/r/marker.md"), replacement)
+    }
+    await exactBytes(path.join(external.path, "marker.md"), replacement)
+  },
+  90_000,
+)
+
 test.each(
   process.platform === "win32"
     ? ([
@@ -436,34 +630,38 @@ test.each(
         { kind: "dir", broken: true },
       ] as const)
     : [],
-)("Windows Copy retains $kind creation type with broken=$broken", async ({ kind, broken }) => {
-  await using fixture = await project(`link-copy-creation-${kind}-${broken}`)
-  const target = path.join(fixture.path, "target")
-  if (!broken) {
-    await fs.mkdir(target)
-    await fs.writeFile(path.join(target, "marker.md"), marker)
-  }
-  await link(kind === "junction" ? target : "target", path.join(fixture.path, "source"), kind)
-  const original = await linkIdentity(path.join(fixture.path, "source"))
-  await using http = await api(fixture.path)
-  published(
-    await http.mutate("copy", "source", "copied"),
-    "copy",
-    "source",
-    "copied",
-    node(fixture.path, path.join(fixture.path, "copied")),
-  )
-  expect((await readFileEntry(path.join(fixture.path, "copied"))).link).toBe(kind)
-  expect(await fs.readlink(path.join(fixture.path, "copied"))).toBe(original.text)
-  expect(await linkIdentity(path.join(fixture.path, "source"))).toEqual(original)
-  if (broken) {
-    missing(await http.content("copied/marker.md"), "copied/marker.md")
-    await fs.mkdir(target)
-    await fs.writeFile(path.join(target, "marker.md"), marker)
-  }
-  await textContent(http, "copied/marker.md")
-  await exactBytes(path.join(target, "marker.md"))
-}, 60_000)
+)(
+  "Windows Copy retains $kind creation type with broken=$broken",
+  async ({ kind, broken }) => {
+    await using fixture = await project(`link-copy-creation-${kind}-${broken}`)
+    const target = path.join(fixture.path, "target")
+    if (!broken) {
+      await fs.mkdir(target)
+      await fs.writeFile(path.join(target, "marker.md"), marker)
+    }
+    await link(kind === "junction" ? target : "target", path.join(fixture.path, "source"), kind)
+    const original = await linkIdentity(path.join(fixture.path, "source"))
+    await using http = await api(fixture.path)
+    published(
+      await http.mutate("copy", "source", "copied"),
+      "copy",
+      "source",
+      "copied",
+      node(fixture.path, path.join(fixture.path, "copied")),
+    )
+    expect((await readFileEntry(path.join(fixture.path, "copied"))).link).toBe(kind)
+    expect(await fs.readlink(path.join(fixture.path, "copied"))).toBe(original.text)
+    expect(await linkIdentity(path.join(fixture.path, "source"))).toEqual(original)
+    if (broken) {
+      missing(await http.content("copied/marker.md"), "copied/marker.md")
+      await fs.mkdir(target)
+      await fs.writeFile(path.join(target, "marker.md"), marker)
+    }
+    await textContent(http, "copied/marker.md")
+    await exactBytes(path.join(target, "marker.md"))
+  },
+  60_000,
+)
 
 test.skipIf(process.platform !== "win32")(
   "Copy retains an internal junction's relative context at the same tree depth",

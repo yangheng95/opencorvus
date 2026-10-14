@@ -8,6 +8,8 @@ import ignore from "ignore"
 import { Log } from "../util/log"
 import { Filesystem } from "../util/filesystem"
 import { readFileEntry, sameFileEntry, type FileEntry } from "../util/file-entry"
+import { filePositionKey, walkFileAccess } from "../util/file-access"
+import { observeRelocationTree, verifyRelocationTargets, type RelocationTree } from "../util/file-relocation"
 import { Instance } from "../project/instance"
 import { createInstanceState } from "../project/instance-state"
 import { Project } from "../project/project"
@@ -1203,57 +1205,18 @@ export namespace File {
       if (isMissingPathError(error)) throw fileNotFound({ path: input.sourceFile })
       throw error
     })
-    const active = new Set<string>()
-    async function inspect(raw: string): Promise<string> {
-      const operand = process.platform === "win32" ? path.resolve(raw) : raw
-      if (active.has(operand)) {
-        throw Object.assign(new Error(`File move destination access has a recursive link state: ${operand}`), {
-          code: "ELOOP",
-          path: operand,
-        })
-      }
-      active.add(operand)
-      try {
-        const root = path.parse(operand).root
-        let namespace = root
-        const components = operand.slice(root.length).split(process.platform === "win32" ? /[\\/]/ : /\//)
-        for (const component of components) {
-          if (!component) continue
-          if (component === "." || component === "..") {
-            namespace = await fs.promises.realpath(`${namespace}${path.sep}${component}`)
-            continue
-          }
-          const candidate = path.join(namespace, component)
-          const entry = await readFileEntry(candidate)
-          if (sameFileEntry(source, entry)) {
+    try {
+      const results = await walkFileAccess(path.dirname(input.targetFull), {
+        observe(entry) {
+          if (sameFileEntry(source, entry))
             throw fileInvalidPath({
               path: input.targetFile,
               message: `Destination parent depends on the source entry being moved: ${input.targetFile}`,
             })
-          }
-          if (!entry.link) {
-            namespace = candidate
-            continue
-          }
-          const text = await fs.promises.readlink(candidate)
-          const expanded =
-            process.platform === "win32"
-              ? path.resolve(namespace, text)
-              : path.isAbsolute(text)
-                ? text
-                : `${namespace}${path.sep}${text}`
-          const resolved = await inspect(expanded)
-          // Windows junctions retain the outer access namespace for later
-          // relative links. True symbolic links replace it with their target.
-          namespace = entry.link === "junction" ? candidate : resolved
-        }
-        return namespace
-      } finally {
-        active.delete(operand)
-      }
-    }
-    try {
-      await inspect(path.dirname(input.targetFull))
+        },
+      })
+      if (results.some((result) => !result.entry?.stat.isDirectory()))
+        throw Object.assign(new Error("Missing move destination parent"), { code: "ENOENT" })
     } catch (error) {
       if (isMissingPathError(error)) {
         throw fileInvalidPath({
@@ -1290,46 +1253,30 @@ export namespace File {
 
   async function assertRelocatedSymlinkTargetsAllowed(input: {
     file: string
-    sourceRoot: string
-    targetRoot: string
+    tree: RelocationTree
+    phase: "source" | "future"
+    targetRoot?: string
+    retire?: RelocationTree
   }): Promise<void> {
-    const pending = [{ file: input.file, fullPath: input.sourceRoot }]
-    for (let index = 0; index < pending.length; index++) {
-      const current = pending[index]!
-      const stat = await fs.promises.lstat(current.fullPath).catch((error) => {
-        if (isMissingPathError(error)) throw fileNotFound({ path: current.file })
-        throw error
-      })
-      if (stat.isSymbolicLink()) {
-        const linkText = await fs.promises.readlink(current.fullPath)
-        const sourceTarget = path.isAbsolute(linkText)
-          ? linkText
-          : path.resolve(path.dirname(current.fullPath), linkText)
-        if (!(await isPathAllowed(sourceTarget))) {
-          throw fileInvalidPath({
-            path: current.file,
-            message: `Cannot relocate symlink target outside the project directory: ${current.file}`,
-          })
-        }
-        const targetLocation = path.join(input.targetRoot, path.relative(input.sourceRoot, current.fullPath))
-        const relocatedTarget = path.isAbsolute(linkText)
-          ? linkText
-          : path.resolve(path.dirname(targetLocation), linkText)
-        if (!(await isPathAllowed(relocatedTarget))) {
-          throw fileInvalidPath({
-            path: current.file,
-            message: `Relocated symlink would escape the project directory: ${current.file}`,
-          })
-        }
-        continue
-      }
-      if (!stat.isDirectory()) continue
-      const entries = await fs.promises.readdir(current.fullPath, { withFileTypes: true })
-      for (const entry of entries) {
-        const childFile = path.join(current.file, entry.name)
-        pending.push({ file: childFile, fullPath: path.join(current.fullPath, entry.name) })
-      }
-    }
+    const roots = await Promise.all([canonicalPath(Instance.directory), canonicalPath(Instance.worktree)])
+    await verifyRelocationTargets({
+      ...input,
+      allowed: (position) => roots.some((root) => isWithin(root, filePositionKey(position))),
+      fail: (error) =>
+        fileInvalidPath({
+          path: error.file,
+          message:
+            error.reason === "outside"
+              ? error.phase === "source"
+                ? `Cannot relocate symlink target outside the project directory: ${error.file}`
+                : `Relocated symlink would escape the project directory: ${error.file}`
+              : error.reason === "changed"
+                ? `File entry changed while verifying relocation: ${error.file}`
+                : error.possible
+                  ? `Cannot verify recursive future file access: ${error.file}`
+                  : `Cannot relocate recursive symlink target: ${error.file}`,
+        }),
+    })
   }
 
   async function validateCopiedTree(source: string, target: string): Promise<void> {
@@ -1482,10 +1429,14 @@ export namespace File {
       targetFull,
       targetFile: target,
     })
+    const relocation = await observeRelocationTree(sourceFull, sourceEntry)
+    await assertRelocatedSymlinkTargetsAllowed({ file: source, tree: relocation, phase: "source" })
     await assertRelocatedSymlinkTargetsAllowed({
       file: source,
-      sourceRoot: sourceFull,
+      tree: relocation,
+      phase: "future",
       targetRoot: targetFull,
+      retire: relocation,
     })
 
     try {
@@ -1531,11 +1482,8 @@ export namespace File {
     if (await Filesystem.exists(targetFull)) {
       throw fileConflict({ path: target })
     }
-    await assertRelocatedSymlinkTargetsAllowed({
-      file: source,
-      sourceRoot: sourceFull,
-      targetRoot: targetFull,
-    })
+    const relocation = await observeRelocationTree(sourceFull, sourceEntry)
+    await assertRelocatedSymlinkTargetsAllowed({ file: source, tree: relocation, phase: "source" })
 
     const stagingPath = path.join(path.dirname(targetFull), `.opencorvus-copy-${randomUUID()}.staging`)
     const symlinks = new Map<string, { text: string; kind: NonNullable<FileEntry["link"]> }>()
@@ -1561,6 +1509,14 @@ export namespace File {
         await fs.promises.symlink(link.text, destination, link.kind)
       }
       await validateCopiedTree(sourceFull, stagingPath)
+      const stagedTree = await observeRelocationTree(stagingPath)
+      await assertRelocatedSymlinkTargetsAllowed({
+        file: source,
+        tree: stagedTree,
+        phase: "future",
+        targetRoot: targetFull,
+      })
+      await relocation.verify()
       await Filesystem.renameNoReplace(stagingPath, targetFull)
       published = true
       await validateCopiedTree(sourceFull, targetFull)

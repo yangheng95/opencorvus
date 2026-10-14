@@ -1,0 +1,26 @@
+{
+  "role": "root",
+  "method": "GET",
+  "url": "http://127.0.0.1:18458/file/content?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Crelocation-permission-after-01a133%5Cproject&path=copied-j%2Fmarker.txt",
+  "status": 200,
+  "requestID": "2207e95f-1b72-4895-a8e4-d1e793ec1d54",
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+    "content-length": "134",
+    "content-type": "application/json",
+    "date": "Wed, 14 Oct 2026 00:12:06 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "2207e95f-1b72-4895-a8e4-d1e793ec1d54"
+  },
+  "rawBodyBase64": "eyJ0eXBlIjoidGV4dCIsImNvbnRlbnQiOiJSRUxPQ0FUSU9OIERBVEEgQSAwMWExMzNcclxuIiwicmV2aXNpb24iOiI1ZWYwMTM3MDJlNzM1Y2VkZmE2ODA5YmQwY2Y1YWExMmY5YmFjNGJkNjQ3MjU0OGUwOWFjMjBiMTEyMTY2OGFjIn0=",
+  "body": {
+    "type": "text",
+    "content": "RELOCATION DATA A 01a133\r\n",
+    "revision": "5ef013702e735cedfa6809bd0cf5aa12f9bac4bd6472548e09ac20b1121668ac"
+  },
+  "at": {
+    "utc": "2026-10-14T00:12:06.661Z",
+    "wallMs": 1791936726661,
+    "monotonicNs": "2754616933947600"
+  }
+}

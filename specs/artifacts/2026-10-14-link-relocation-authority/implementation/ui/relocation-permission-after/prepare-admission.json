@@ -1,0 +1,169 @@
+{
+  "schema": "relocation-permission.fixture/v1",
+  "qualification": "real-desktop-relocation-permission",
+  "fixtureID": "d64d0488-10ee-4f20-a524-c3130085defd",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133",
+  "prefix": "relocation-permission-after",
+  "port": 18458,
+  "originalInputs": {
+    "files": [
+      {
+        "role": "root",
+        "path": "root-marker.txt",
+        "size": 26,
+        "bytesBase64": "UkVMT0NBVElPTiBST09UIEEgMDFhMTMzDQo=",
+        "literal": "RELOCATION ROOT A 01a133\r\n"
+      },
+      {
+        "role": "root",
+        "path": "data/marker.txt",
+        "size": 26,
+        "bytesBase64": "UkVMT0NBVElPTiBEQVRBIEEgMDFhMTMzDQo=",
+        "literal": "RELOCATION DATA A 01a133\r\n"
+      },
+      {
+        "role": "root",
+        "path": "source-tree/note.txt",
+        "size": 26,
+        "bytesBase64": "UkVMT0NBVElPTiBUUkVFIEEgMDFhMTMzDQo=",
+        "literal": "RELOCATION TREE A 01a133\r\n"
+      },
+      {
+        "role": "root",
+        "path": ".gitignore",
+        "size": 11,
+        "bytesBase64": "L3NvdXJjZS1qLwo=",
+        "literal": "/source-j/\n"
+      },
+      {
+        "role": "b",
+        "path": "root-marker.txt",
+        "size": 26,
+        "bytesBase64": "UkVMT0NBVElPTiBST09UIEIgMDFhMTMzDQo=",
+        "literal": "RELOCATION ROOT B 01a133\r\n"
+      },
+      {
+        "role": "b",
+        "path": ".gitignore",
+        "size": 0,
+        "bytesBase64": "",
+        "literal": ""
+      },
+      {
+        "role": "root",
+        "path": "project-b/root-marker.txt",
+        "size": 27,
+        "bytesBase64": "UkVMT0NBVElPTiBJTk5FUiBBIDAxYTEzMw0K",
+        "literal": "RELOCATION INNER A 01a133\r\n"
+      }
+    ],
+    "directories": {
+      "root": [
+        "data",
+        "context",
+        "source-tree",
+        "project-b",
+        "aliases"
+      ],
+      "b": []
+    },
+    "links": [
+      {
+        "role": "root",
+        "path": "source-j",
+        "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\data",
+        "kind": "junction",
+        "targetDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\data"
+      },
+      {
+        "role": "root",
+        "path": "source-s",
+        "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\data",
+        "kind": "dir",
+        "targetDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\data"
+      },
+      {
+        "role": "root",
+        "path": "alias-j",
+        "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\data",
+        "kind": "junction",
+        "targetDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\data"
+      },
+      {
+        "role": "root",
+        "path": "alias-s",
+        "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\data",
+        "kind": "dir",
+        "targetDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\data"
+      },
+      {
+        "role": "root",
+        "path": "context/indirect-relative",
+        "text": "../source-j",
+        "kind": "dir",
+        "targetDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\data"
+      },
+      {
+        "role": "root",
+        "path": "aliases/root-back",
+        "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project",
+        "kind": "junction",
+        "targetDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project"
+      },
+      {
+        "role": "root",
+        "path": "context/relative",
+        "text": "../project-b",
+        "kind": "dir",
+        "targetDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\relocation-permission-after-01a133\\project\\project-b"
+      }
+    ],
+    "registrationPlan": {
+      "firstSequence": 1,
+      "steps": [
+        {
+          "label": "register-root-project",
+          "role": "root",
+          "method": "GET",
+          "route": "/project/current",
+          "query": {}
+        },
+        {
+          "label": "register-root-chat",
+          "role": "root",
+          "method": "POST",
+          "route": "/coding/chat/session",
+          "query": {},
+          "body": {}
+        },
+        {
+          "label": "register-b-project",
+          "role": "b",
+          "method": "GET",
+          "route": "/project/current",
+          "query": {}
+        },
+        {
+          "label": "register-b-chat",
+          "role": "b",
+          "method": "POST",
+          "route": "/coding/chat/session",
+          "query": {},
+          "body": {}
+        }
+      ]
+    },
+    "maximumHTTP": 4,
+    "maximumLiteralBytes": 512,
+    "actualLiteralBytes": 142,
+    "modelCallsRequested": "none",
+    "credentialCatalogStaging": "none",
+    "boundary": "Prepare only creates these inputs; Register only performs four ordinary public Project/empty-Chat requests. Root separately owns all UI and mutation/readback actions."
+  },
+  "at": {
+    "utc": "2026-10-14T00:07:20.401Z",
+    "wallMs": 1791936440401,
+    "monotonicNs": "2754330681568200"
+  },
+  "boundary": "Exclusive new namespace; first failure retained, no deletion/reuse/retry"
+}

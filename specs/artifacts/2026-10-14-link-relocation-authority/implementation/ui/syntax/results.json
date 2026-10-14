@@ -1,0 +1,42 @@
+[
+  {
+    "exitCode": 0,
+    "checker": "Node syntax only",
+    "file": "fixture-support.mjs"
+  },
+  {
+    "exitCode": 0,
+    "checker": "Node syntax only",
+    "file": "fixture-tool.mjs"
+  },
+  {
+    "exitCode": 0,
+    "checker": "Node syntax only",
+    "file": "verify-state.mjs"
+  },
+  {
+    "exitCode": 0,
+    "checker": "Bun 1.4 Transpiler syntax only",
+    "file": "native-host.ts"
+  },
+  {
+    "exitCode": 0,
+    "checker": "PowerShell ParseFile only",
+    "file": "launch.ps1"
+  },
+  {
+    "exitCode": 0,
+    "checker": "PowerShell ParseFile only",
+    "file": "shutdown.ps1"
+  },
+  {
+    "exitCode": 0,
+    "checker": "PowerShell ParseFile only",
+    "file": "owned-launch-functions.ps1"
+  },
+  {
+    "exitCode": 0,
+    "checker": "PowerShell ParseFile only",
+    "file": "check-syntax.ps1"
+  }
+]
