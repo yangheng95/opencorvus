@@ -442,7 +442,7 @@
   "network.proxy.test_success": "代理测试成功，状态码 {{code}}，耗时 {{ms}} ms。",
   "network.proxy.test_testing": "测试中...",
   "network.proxy.test_url_required": "测试前请先填写代理 URL。",
-  "channel.public_url_invalid": "公共 URL 必须以 http:// 或 https:// 开头",
+  "channel.public_url_invalid": "请输入有效的公共 URL，须以 http:// 或 https:// 开头。",
   "common.retrying": "重试中…",
   "workspace.no_directory": "选择工作区文件夹",
   "cmdk.placeholder": "搜索任务或运行命令",

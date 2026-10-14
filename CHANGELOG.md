@@ -15,6 +15,8 @@
 
 #### 修复
 
+- 通道公共 URL 在保存前执行字段校验，非法输入保留草稿并显示当前语言的行内错误；修正地址及大小写 HTTP(S) 可正常保存。
+
 - 网络设置中的校验、保存与删除反馈跟随当前界面语言；切换语言时保留原草稿和错误，原始失败详情可展开查看。
 
 - 代理测试期间编辑连接草稿后，迟到的结果按原草稿退休；测试按钮仍等待真实请求结束再恢复，可继续测试当前输入。
@@ -135,6 +137,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Channel public URLs are validated before saving, retaining invalid drafts with a localized inline error. Corrected addresses and case-insensitive HTTP(S) schemes remain supported.
 
 - Network validation, save and delete feedback follows the current interface language. Switching languages preserves the original draft and error, with original failure details available in the existing disclosure.
 

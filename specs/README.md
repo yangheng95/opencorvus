@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [公共URL编辑器保存校验](records/2026-10/2026-10-14-channel-url-validation.md)：原字段约束、真实保存和保留原值的验收调查。
+
 - [Task持久受理回执](records/2026-10/2026-10-14-task-acceptance-receipt.md)：协调指导及交互回答在持久受理后返回，后台扫描沿原权威继续。
 
 - [网络反馈的当前语言](records/2026-10/2026-10-14-network-feedback-locale.md)：同页切语言、错误摘要和真实保存/删除回填调查。

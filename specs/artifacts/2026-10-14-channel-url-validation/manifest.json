@@ -1,0 +1,833 @@
+{
+  "capturedAt": "2026-10-14T06:02:54.932Z",
+  "purpose": "Lossless original evidence and resource identity; no source checksum used for functional acceptance.",
+  "runs": [
+    {
+      "stage": "before",
+      "pid": 10824,
+      "occurrence": {
+        "pid": 10824,
+        "processInstanceID": "win32:639275533211206222",
+        "occurrenceID": "3515e1f9-265f-4f7e-912d-4dd4d52d7341"
+      },
+      "port": 18682,
+      "participantPort": 18683,
+      "uiDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-network-feedback-01a133\\ui-after",
+      "physicalExit": 0,
+      "inferenceRequests": 0,
+      "privacy": [
+        {
+          "file": "stdout.log",
+          "bytes": 0,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        },
+        {
+          "file": "stderr.log",
+          "bytes": 0,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        },
+        {
+          "file": "runtime/log/2026-10-14T054201-10824-1.log",
+          "bytes": 90722,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        }
+      ]
+    },
+    {
+      "stage": "after",
+      "pid": 86832,
+      "occurrence": {
+        "pid": 86832,
+        "processInstanceID": "win32:639275536078741038",
+        "occurrenceID": "43821b09-3e2c-4ef7-b794-31f35f65b3ac"
+      },
+      "port": 18684,
+      "participantPort": 18685,
+      "uiDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-channel-url-01a133\\ui-after",
+      "physicalExit": 0,
+      "inferenceRequests": 0,
+      "privacy": [
+        {
+          "file": "stdout.log",
+          "bytes": 0,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        },
+        {
+          "file": "stderr.log",
+          "bytes": 0,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        },
+        {
+          "file": "runtime/log/2026-10-14T054648-86832-1.log",
+          "bytes": 99834,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        }
+      ]
+    },
+    {
+      "stage": "after02",
+      "pid": 8136,
+      "occurrence": {
+        "pid": 8136,
+        "processInstanceID": "win32:639275539435590269",
+        "occurrenceID": "32668161-c272-4a07-9bbc-4196e5248c31"
+      },
+      "port": 18684,
+      "participantPort": 18685,
+      "uiDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-channel-url-01a133\\ui-after02",
+      "physicalExit": 0,
+      "inferenceRequests": 0,
+      "privacy": [
+        {
+          "file": "stdout.log",
+          "bytes": 0,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        },
+        {
+          "file": "stderr.log",
+          "bytes": 0,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        },
+        {
+          "file": "runtime/log/2026-10-14T055224-8136-1.log",
+          "bytes": 129206,
+          "rawContainsKnownCredential": false,
+          "archivedContainsKnownCredential": false
+        }
+      ]
+    }
+  ],
+  "retainedHTTPSelections": [
+    {
+      "stage": "before",
+      "name": "read-baseline.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-url-01a133%5Cbefore%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 1225,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": null
+    },
+    {
+      "stage": "before",
+      "name": "read-invalid.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-url-01a133%5Cbefore%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2122,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": "socks5://127.0.0.1:18683"
+    },
+    {
+      "stage": "after",
+      "name": "read-baseline.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-url-01a133%5Cafter%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 1225,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": null
+    },
+    {
+      "stage": "after",
+      "name": "read-invalid.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-url-01a133%5Cafter%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2129,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": "http://127.0.0.1:18685/original"
+    },
+    {
+      "stage": "after",
+      "name": "read-original.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-url-01a133%5Cafter%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2129,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": "http://127.0.0.1:18685/original"
+    },
+    {
+      "stage": "after02",
+      "name": "read-baseline.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-url-01a133%5Cafter02%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 1225,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": null
+    },
+    {
+      "stage": "after02",
+      "name": "read-cleared.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-url-01a133%5Cafter02%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2072,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": null
+    },
+    {
+      "stage": "after02",
+      "name": "read-corrected.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-url-01a133%5Cafter02%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2127,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": "HTTP://127.0.0.1:18685/review"
+    },
+    {
+      "stage": "after02",
+      "name": "read-host.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-url-01a133%5Cafter02%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2129,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": "http://127.0.0.1:18685/original"
+    },
+    {
+      "stage": "after02",
+      "name": "read-invalid.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-url-01a133%5Cafter02%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2129,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": "http://127.0.0.1:18685/original"
+    },
+    {
+      "stage": "after02",
+      "name": "read-original.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-url-01a133%5Cafter02%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2129,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": "http://127.0.0.1:18685/original"
+    },
+    {
+      "stage": "after02",
+      "name": "read-reopened.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-url-01a133%5Cafter02%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2128,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": "hTtPs://127.0.0.1:18685/secure"
+    },
+    {
+      "stage": "after02",
+      "name": "read-secure.json",
+      "method": "GET",
+      "route": "/config?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-channel-url-01a133%5Cafter02%5Cproject",
+      "status": 200,
+      "originalResponseBytes": 2128,
+      "selection": "Only actual server.publicUrl, status and original response byte length. Full configuration/credentials not retained.",
+      "publicUrl": "hTtPs://127.0.0.1:18685/secure"
+    }
+  ],
+  "screenshots": [
+    "01-before-invalid-saved.png",
+    "02-before-reopened-invalid.png",
+    "03-after-original-saved.png",
+    "04-after-en-invalid-inline.png",
+    "05-final-en-original-saved.png",
+    "06-final-en-invalid.png",
+    "07-final-en-missing-host.png",
+    "08-final-zh-existing-error.png",
+    "09-final-zh-corrected-saved.png",
+    "10-final-zh-secure-saved.png",
+    "11-final-zh-reopened.png",
+    "12-final-zh-cleared.png",
+    "13-final-zh-cleared-settled.png"
+  ],
+  "limits": [
+    "13 partial GET selections, not full config or UI PATCH bodies.",
+    "Screenshots12/13 prove the unresolved shared-store clear projection despite successful persistent clearing.",
+    "Intermediate locator no_matches preserved as diagnosis; final accessible label has a fresh UI occurrence.",
+    "No channel credentials, sends, external URL connectivity or real Provider/Sol qualification."
+  ],
+  "files": [
+    {
+      "source": ".tmp-codex-channel-url-01a133/before/exit.json",
+      "saved": "runs/before/exit.json.gz",
+      "originalBytes": 88
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/before/owner.json",
+      "saved": "runs/before/owner.json.gz",
+      "originalBytes": 215
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/before/physical-pair-cleanup.json",
+      "saved": "runs/before/physical-pair-cleanup.json.gz",
+      "originalBytes": 211
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/before/privacy-qualified.json",
+      "saved": "runs/before/privacy-qualified.json.gz",
+      "originalBytes": 653
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/before/project-authorities.json",
+      "saved": "runs/before/project-authorities.json.gz",
+      "originalBytes": 623
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/before/read-baseline.json",
+      "saved": "runs/before/read-baseline.json.gz",
+      "originalBytes": 345
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/before/read-invalid.json",
+      "saved": "runs/before/read-invalid.json.gz",
+      "originalBytes": 367
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/before/ready.json",
+      "saved": "runs/before/ready.json.gz",
+      "originalBytes": 1719
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/before/terminal.json",
+      "saved": "runs/before/terminal.json.gz",
+      "originalBytes": 232
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/before/redacted-logs/2026-10-14T054201-10824-1.log",
+      "saved": "runs/before/logs/2026-10-14T054201-10824-1.log.gz",
+      "originalBytes": 90722
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/before/redacted-logs/stderr.log",
+      "saved": "runs/before/logs/stderr.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/before/redacted-logs/stdout.log",
+      "saved": "runs/before/logs/stdout.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after/exit.json",
+      "saved": "runs/after/exit.json.gz",
+      "originalBytes": 88
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after/locator-observation.json",
+      "saved": "runs/after/locator-observation.json.gz",
+      "originalBytes": 1019
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after/owner.json",
+      "saved": "runs/after/owner.json.gz",
+      "originalBytes": 215
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after/physical-pair-cleanup.json",
+      "saved": "runs/after/physical-pair-cleanup.json.gz",
+      "originalBytes": 211
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after/privacy-qualified.json",
+      "saved": "runs/after/privacy-qualified.json.gz",
+      "originalBytes": 653
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after/project-authorities.json",
+      "saved": "runs/after/project-authorities.json.gz",
+      "originalBytes": 618
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after/read-baseline.json",
+      "saved": "runs/after/read-baseline.json.gz",
+      "originalBytes": 344
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after/read-invalid.json",
+      "saved": "runs/after/read-invalid.json.gz",
+      "originalBytes": 373
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after/read-original.json",
+      "saved": "runs/after/read-original.json.gz",
+      "originalBytes": 373
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after/ready.json",
+      "saved": "runs/after/ready.json.gz",
+      "originalBytes": 1710
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after/terminal.json",
+      "saved": "runs/after/terminal.json.gz",
+      "originalBytes": 232
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after/redacted-logs/2026-10-14T054648-86832-1.log",
+      "saved": "runs/after/logs/2026-10-14T054648-86832-1.log.gz",
+      "originalBytes": 99834
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after/redacted-logs/stderr.log",
+      "saved": "runs/after/logs/stderr.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after/redacted-logs/stdout.log",
+      "saved": "runs/after/logs/stdout.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after02/exit.json",
+      "saved": "runs/after02/exit.json.gz",
+      "originalBytes": 87
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after02/owner.json",
+      "saved": "runs/after02/owner.json.gz",
+      "originalBytes": 214
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after02/physical-pair-cleanup.json",
+      "saved": "runs/after02/physical-pair-cleanup.json.gz",
+      "originalBytes": 210
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after02/privacy-qualified.json",
+      "saved": "runs/after02/privacy-qualified.json.gz",
+      "originalBytes": 653
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after02/project-authorities.json",
+      "saved": "runs/after02/project-authorities.json.gz",
+      "originalBytes": 628
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after02/read-baseline.json",
+      "saved": "runs/after02/read-baseline.json.gz",
+      "originalBytes": 346
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after02/read-cleared.json",
+      "saved": "runs/after02/read-cleared.json.gz",
+      "originalBytes": 346
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after02/read-corrected.json",
+      "saved": "runs/after02/read-corrected.json.gz",
+      "originalBytes": 373
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after02/read-host.json",
+      "saved": "runs/after02/read-host.json.gz",
+      "originalBytes": 375
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after02/read-invalid.json",
+      "saved": "runs/after02/read-invalid.json.gz",
+      "originalBytes": 375
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after02/read-original.json",
+      "saved": "runs/after02/read-original.json.gz",
+      "originalBytes": 375
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after02/read-reopened.json",
+      "saved": "runs/after02/read-reopened.json.gz",
+      "originalBytes": 374
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after02/read-secure.json",
+      "saved": "runs/after02/read-secure.json.gz",
+      "originalBytes": 374
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after02/ready.json",
+      "saved": "runs/after02/ready.json.gz",
+      "originalBytes": 1718
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after02/terminal.json",
+      "saved": "runs/after02/terminal.json.gz",
+      "originalBytes": 231
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after02/redacted-logs/2026-10-14T055224-8136-1.log",
+      "saved": "runs/after02/logs/2026-10-14T055224-8136-1.log.gz",
+      "originalBytes": 129206
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after02/redacted-logs/stderr.log",
+      "saved": "runs/after02/logs/stderr.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after02/redacted-logs/stdout.log",
+      "saved": "runs/after02/logs/stdout.log.gz",
+      "originalBytes": 0
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/before-parent.log",
+      "saved": "checks/before-parent.log.gz",
+      "originalBytes": 49
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/before-parent.exit",
+      "saved": "checks/before-parent.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after-parent.log",
+      "saved": "checks/after-parent.log.gz",
+      "originalBytes": 49
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/after-parent.exit",
+      "saved": "checks/after-parent.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/privacy-before.log",
+      "saved": "checks/privacy-before.log.gz",
+      "originalBytes": 172
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/privacy-before.exit",
+      "saved": "checks/privacy-before.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/privacy-after.log",
+      "saved": "checks/privacy-after.log.gz",
+      "originalBytes": 172
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/privacy-after.exit",
+      "saved": "checks/privacy-after.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/privacy-after02.log",
+      "saved": "checks/privacy-after02.log.gz",
+      "originalBytes": 172
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/privacy-after02.exit",
+      "saved": "checks/privacy-after02.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/overlay-typecheck.log",
+      "saved": "checks/overlay-typecheck.log.gz",
+      "originalBytes": 15
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/overlay-typecheck.exit",
+      "saved": "checks/overlay-typecheck.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/overlay-typecheck-final.log",
+      "saved": "checks/overlay-typecheck-final.log.gz",
+      "originalBytes": 15
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/overlay-typecheck-final.exit",
+      "saved": "checks/overlay-typecheck-final.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/ui-build.log",
+      "saved": "checks/ui-build.log.gz",
+      "originalBytes": 66647
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/ui-build.exit",
+      "saved": "checks/ui-build.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/ui-build-final.log",
+      "saved": "checks/ui-build-final.log.gz",
+      "originalBytes": 67519
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/ui-build-final.exit",
+      "saved": "checks/ui-build-final.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/i18n-current.log",
+      "saved": "checks/i18n-current.log.gz",
+      "originalBytes": 78
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/i18n-current.exit",
+      "saved": "checks/i18n-current.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/docs-current.log",
+      "saved": "checks/docs-current.log.gz",
+      "originalBytes": 104
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/docs-current.exit",
+      "saved": "checks/docs-current.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/architecture-current.log",
+      "saved": "checks/architecture-current.log.gz",
+      "originalBytes": 139
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/architecture-current.exit",
+      "saved": "checks/architecture-current.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-after-baseline.log",
+      "saved": "checks/read-after-baseline.log.gz",
+      "originalBytes": 198
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-after-baseline.exit",
+      "saved": "checks/read-after-baseline.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-after-invalid.log",
+      "saved": "checks/read-after-invalid.log.gz",
+      "originalBytes": 226
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-after-invalid.exit",
+      "saved": "checks/read-after-invalid.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-after-original.log",
+      "saved": "checks/read-after-original.log.gz",
+      "originalBytes": 227
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-after-original.exit",
+      "saved": "checks/read-after-original.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-before-baseline.log",
+      "saved": "checks/read-before-baseline.log.gz",
+      "originalBytes": 199
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-before-baseline.exit",
+      "saved": "checks/read-before-baseline.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-before-invalid.log",
+      "saved": "checks/read-before-invalid.log.gz",
+      "originalBytes": 220
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-before-invalid.exit",
+      "saved": "checks/read-before-invalid.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-final-baseline.log",
+      "saved": "checks/read-final-baseline.log.gz",
+      "originalBytes": 200
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-final-baseline.exit",
+      "saved": "checks/read-final-baseline.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-final-cleared.log",
+      "saved": "checks/read-final-cleared.log.gz",
+      "originalBytes": 199
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-final-cleared.exit",
+      "saved": "checks/read-final-cleared.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-final-corrected.log",
+      "saved": "checks/read-final-corrected.log.gz",
+      "originalBytes": 228
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-final-corrected.exit",
+      "saved": "checks/read-final-corrected.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-final-host.log",
+      "saved": "checks/read-final-host.log.gz",
+      "originalBytes": 225
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-final-host.exit",
+      "saved": "checks/read-final-host.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-final-invalid.log",
+      "saved": "checks/read-final-invalid.log.gz",
+      "originalBytes": 228
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-final-invalid.exit",
+      "saved": "checks/read-final-invalid.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-final-original.log",
+      "saved": "checks/read-final-original.log.gz",
+      "originalBytes": 229
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-final-original.exit",
+      "saved": "checks/read-final-original.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-final-reopened.log",
+      "saved": "checks/read-final-reopened.log.gz",
+      "originalBytes": 228
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-final-reopened.exit",
+      "saved": "checks/read-final-reopened.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-final-secure.log",
+      "saved": "checks/read-final-secure.log.gz",
+      "originalBytes": 226
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read-final-secure.exit",
+      "saved": "checks/read-final-secure.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/docs-final.log",
+      "saved": "checks/docs-final.log.gz",
+      "originalBytes": 104
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/docs-final.exit",
+      "saved": "checks/docs-final.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/architecture-final.log",
+      "saved": "checks/architecture-final.log.gz",
+      "originalBytes": 139
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/architecture-final.exit",
+      "saved": "checks/architecture-final.exit.gz",
+      "originalBytes": 2
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/setup.mjs",
+      "saved": "inputs/setup.mjs.gz",
+      "originalBytes": 2165
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/runtime.ts",
+      "saved": "inputs/runtime.ts.gz",
+      "originalBytes": 8480
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/launch.ps1",
+      "saved": "inputs/launch.ps1.gz",
+      "originalBytes": 4860
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/privacy.ts",
+      "saved": "inputs/privacy.ts.gz",
+      "originalBytes": 2104
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/run.mjs",
+      "saved": "inputs/run.mjs.gz",
+      "originalBytes": 879
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/read.mjs",
+      "saved": "inputs/read.mjs.gz",
+      "originalBytes": 1874
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/ChannelsPanel.tsx.before",
+      "saved": "inputs/ChannelsPanel.tsx.before.gz",
+      "originalBytes": 20420
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/en-US.json.before",
+      "saved": "inputs/en-US.json.before.gz",
+      "originalBytes": 146628
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/zh-CN.json.before",
+      "saved": "inputs/zh-CN.json.before.gz",
+      "originalBytes": 143730
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/baseline.json",
+      "saved": "inputs/baseline.json.gz",
+      "originalBytes": 93
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/prepare-git.mjs",
+      "saved": "inputs/prepare-git.mjs.gz",
+      "originalBytes": 2672
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/stage-final.mjs",
+      "saved": "inputs/stage-final.mjs.gz",
+      "originalBytes": 3400
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/commit-final.mjs",
+      "saved": "inputs/commit-final.mjs.gz",
+      "originalBytes": 3425
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/shared-final.json",
+      "saved": "inputs/shared-final.json.gz",
+      "originalBytes": 1839
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/finalize-docs.mjs",
+      "saved": "inputs/finalize-docs.mjs.gz",
+      "originalBytes": 3256
+    },
+    {
+      "source": ".tmp-codex-channel-url-01a133/archive.mjs",
+      "saved": "inputs/archive.mjs.gz",
+      "originalBytes": 6220
+    }
+  ]
+}

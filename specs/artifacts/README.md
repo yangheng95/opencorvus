@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [公共URL编辑器保存校验](2026-10-14-channel-url-validation/README.md)：第27批真实原页面、配置选择和独立运行原件。
+
 - [Task持久受理回执](2026-10-14-task-acceptance-receipt/README.md)：协调指导及交互回答在持久受理后返回，后台扫描沿原权威继续。
 
 - [网络反馈的当前语言](2026-10-14-network-feedback-locale/README.md)：第26批真实当前错误、配置读回和桌面原件。

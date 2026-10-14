@@ -442,7 +442,7 @@
   "network.proxy.test_success": "Proxy test succeeded with status {{code}} in {{ms}} ms.",
   "network.proxy.test_testing": "Testing...",
   "network.proxy.test_url_required": "Enter a proxy URL before testing.",
-  "channel.public_url_invalid": "Public URL must start with http:// or https://",
+  "channel.public_url_invalid": "Enter a valid public URL starting with http:// or https://.",
   "common.retrying": "Retrying…",
   "workspace.no_directory": "Choose a workspace folder",
   "cmdk.placeholder": "Search chats or run a command",

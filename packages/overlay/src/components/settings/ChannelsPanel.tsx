@@ -87,10 +87,15 @@ export default function ChannelsPanel(props: { directory: string }) {
   })
 
   const [localPublicUrl, setLocalPublicUrl] = createSignal("")
+  const [publicUrlInvalid, setPublicUrlInvalid] = createSignal(false)
+  let publicUrlInput: HTMLInputElement | undefined
   // Sync local input from store when it changes
   createEffect(() => {
     const storeUrl = publicUrl()
-    if (savingOwner()?.formKind !== "public-url") setLocalPublicUrl(storeUrl)
+    if (savingOwner()?.formKind !== "public-url") {
+      setLocalPublicUrl(storeUrl)
+      setPublicUrlInvalid(false)
+    }
   })
 
   const editingEntry = createMemo(() => channels().find((c) => c.id === editingID()) ?? null)
@@ -228,7 +233,20 @@ export default function ChannelsPanel(props: { directory: string }) {
     }
   }
 
+  function validatePublicUrl(input: HTMLInputElement): boolean {
+    const valid = input.checkValidity()
+    setPublicUrlInvalid(!valid)
+    return valid
+  }
+
   async function handleSavePublicUrl() {
+    const input = publicUrlInput
+    if (!input) return
+    if (!validatePublicUrl(input)) {
+      if (noticeFormIdentity() === "catalog") clearNotice()
+      input.focus({ preventScroll: true })
+      return
+    }
     const configOwner = currentProjectConfigRequestOptions()
     const publicUrlSnapshot = localPublicUrl().trim()
     const owner = beginSave("public-url", configOwner.directory, "", configOwner.authority)
@@ -340,22 +358,26 @@ export default function ChannelsPanel(props: { directory: string }) {
         <Show when={props.directory.trim()} fallback={<SettingsEmpty>{t("workspace.no_directory")}</SettingsEmpty>}>
           <SettingsGroup title={t("channel.external_access")} description={t("channel.public_url_hint")} contentInset>
             <div class="extension-head">
-              <TextField.Root as="label" class="channel-public-url-field">
+              <TextField.Root as="label" class="channel-public-url-field" invalid={publicUrlInvalid()}>
                 <TextField.Label>{t("channel.public_url")}</TextField.Label>
                 {/* Fixed example URL; the locale-sensitive field label/hint already carries the instruction. */}
                 <TextField.Input
+                  ref={(input) => { publicUrlInput = input }}
                   type="url"
-                  pattern="https?://.+"
+                  pattern="[Hh][Tt][Tt][Pp][Ss]?://.+"
+                  aria-label={t("channel.public_url")}
                   placeholder="https://opencorvus.example.com"
                   value={localPublicUrl()}
-                  onInput={(e) => setLocalPublicUrl(e.currentTarget.value)}
-                  onBlur={(e) => {
-                    const v = e.currentTarget.value.trim()
-                    e.currentTarget.setCustomValidity(
-                      v && !/^https?:\/\/.+/i.test(v) ? t("channel.public_url_invalid") : "",
-                    )
+                  onInput={(e) => {
+                    setPublicUrlInvalid(false)
+                    if (noticeFormIdentity() === "catalog") clearNotice()
+                    setLocalPublicUrl(e.currentTarget.value)
                   }}
+                  onBlur={(e) => validatePublicUrl(e.currentTarget)}
                 />
+                <Show when={publicUrlInvalid()}>
+                  <TextField.ErrorMessage role="alert">{t("channel.public_url_invalid")}</TextField.ErrorMessage>
+                </Show>
               </TextField.Root>
               <div class="dialog-actions compact">
                 <Button

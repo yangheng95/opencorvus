@@ -2906,6 +2906,15 @@ Skill issue projection checks its owning directory before committing the result.
 Channel rows use generated ChannelListResponse and display configuration status
 and runtime status separately; missing configuration is not runtime availability.
 
+The Channel public-URL editor validates its native URL input and HTTP(S) pattern
+before acquiring a save owner or calling the configuration writer. Blur and save
+share that same field validity, including case-insensitive schemes and empty-value
+clearing. The existing TextField renders a localized inline error and accessible
+field state; edits and accepted config hydration retire that field error. Catalog
+feedback retires on public-URL edits without clearing a channel editor's own slot.
+The lower-level configuration string and explicit environment contracts remain
+unchanged; this editor does not introduce a second URL parser or migrate old data.
+
 The desktop updater checks the compiled signed release channel at app startup,
 on visibility return, and hourly while visible, independently of backend
 health. The native updater owns signature verification and the prepared package;
