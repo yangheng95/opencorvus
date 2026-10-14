@@ -386,6 +386,8 @@ Project `MEMORY.MD` Organizer 是固定身份中的显式例外：配置 schema 
 - 打开 Providers 配置页时只按当前 project/global scope 读取稳定的 Provider catalog、Auth method 和 config owner；不得隐式执行网络刷新。Provider 目录刷新和实时模型刷新只由两个显式按钮分别触发，各自完成后重读 Provider owner，各自拥有独立错误面。
 - 没有活动项目目录的桌面首次启动使用 `/global/providers`、`/global/providers/refresh`、`/global/providers/models/refresh`、`/global/providers/discover-models` 和 `/global/providers/:providerID/test`；这些路由把 `Config.getGlobal()` 显式传入与项目路由共用的 Provider 实现。`/auth/:providerID` 仍是唯一 API credential 写入面，项目目录不是新增 Provider、保存 API key、发现模型、测试连接或使用内置 Provider OAuth 的前置条件。`Plugin.listGlobalProviderHooks()` 是唯一 project-independent built-in hook catalog，同时投影 auth method、OAuth loader 和 Provider model projection；installed project plugins 仍只由真实 Project `Instance` 的 `Plugin.list()` 拥有。
 
+OpenAI Codex OAuth 的目录投影由同一个内置插件拥有。模型家族版本按整数 major 与可选整数 minor 比较，支持 `gpt-6-luna` 这类整数主版本，也正确排序多位 minor；不得用浮点数比较版本或为新型号逐一添加例外。现有接纳边界和历史例外保持，目录身份、能力与限制仍来自原声明。全局、项目和 helper 使用同一投影；目录可见性不等于远端账户已获准调用，实际请求结果单独记录。
+
 ### Provider 连接测试回执
 
 项目 `/provider/:providerID/test` 与全局 `/global/providers/:providerID/test` 共用 `testProviderConnection` 和唯一 `ProviderConnectionTestResult`。`modelID` 可省略，默认选择从当前配置的有效模型目录按原排序派生；空声明不阻止测试。当前配置不可用与零有效模型分别返回 HTTP400 `provider_unavailable`、`no_models`，不从这两个条件推断凭据缺失。原 validator BadRequest400 与 AuthReadError503 保持其明确合同；识别出的嵌套 AuthReadError 使用原 cause，而不是 SDK 初始化包装。

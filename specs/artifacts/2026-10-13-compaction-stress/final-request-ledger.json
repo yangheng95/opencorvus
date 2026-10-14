@@ -1,7 +1,7 @@
 {
   "priorRequests": 99,
-  "total": 530,
-  "authorizedTotal": 660,
+  "total": 618,
+  "authorizedTotal": 740,
   "runs": [
     {
       "name": "text-three-rounds",
@@ -376,6 +376,56 @@
       "passedActions": 10,
       "passedFields": 50,
       "summary": "policy-pressure-grant-real-summary.json"
+    },
+    {
+      "name": "cross-model-luna-revoke",
+      "status": "model_projection_error",
+      "requests": 0,
+      "model": "openai/gpt-6-luna",
+      "credentialsRemoved": true,
+      "cleanupObservation": {
+        "runtimePresent": true,
+        "dataPresent": true,
+        "authPresent": false,
+        "catalogPresent": false
+      }
+    },
+    {
+      "name": "cross-model-luna-revoke-projected",
+      "status": "passed",
+      "requests": 53,
+      "model": "openai/gpt-6-luna",
+      "credentialsRemoved": true,
+      "cleanupObservation": {
+        "runtimePresent": true,
+        "dataPresent": true,
+        "authPresent": false,
+        "catalogPresent": false
+      },
+      "completedRounds": 5,
+      "passedActions": 10,
+      "passedFields": 50,
+      "summary": "cross-model-luna-revoke-projected-summary.json"
+    },
+    {
+      "name": "cross-model-luna-grant",
+      "status": "failed",
+      "requests": 35,
+      "model": "openai/gpt-6-luna",
+      "credentialsRemoved": true,
+      "cleanupObservation": {
+        "runtimePresent": true,
+        "dataPresent": true,
+        "authPresent": false,
+        "catalogPresent": false
+      },
+      "completedCheckpoints": 5,
+      "passedRounds": 4,
+      "actualActions": 10,
+      "passedActions": 9,
+      "passedFields": 46,
+      "summary": "cross-model-luna-grant-summary.json",
+      "failureEvidence": "cross-model-luna-authority-loss.json"
     }
   ],
   "authorizationPolicy": "User explicitly allows increasing request limits as needed; retain bounded per-run budgets and exact accounting.",
@@ -396,5 +446,15 @@
     "passedFields": 100,
     "requests": 116,
     "summary": "policy-pressure-matrix-summary.json"
+  },
+  "latestCrossModelMatrix": {
+    "status": "failed",
+    "model": "openai/gpt-6-luna",
+    "completedCheckpoints": 10,
+    "actualActions": 20,
+    "passedActions": 19,
+    "passedFields": 96,
+    "requests": 88,
+    "summary": "cross-model-luna-matrix-summary.json"
   }
 }

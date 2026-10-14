@@ -1,0 +1,28 @@
+{
+  "scope": "Exact raw cross-model reports, request receipts and local verification; unresolved authority failure preserved",
+  "archives": [
+    "cross-model-docs-delivery.log.gz",
+    "cross-model-luna-grant.json.gz",
+    "cross-model-luna-grant.json.requests.json.gz",
+    "cross-model-luna-grant.log.gz",
+    "cross-model-luna-revoke-projected.json.gz",
+    "cross-model-luna-revoke-projected.json.requests.json.gz",
+    "cross-model-luna-revoke-projected.log.gz",
+    "cross-model-luna-revoke.json.gz",
+    "cross-model-luna-revoke.log.gz",
+    "cross-model-projection-baseline.log.gz",
+    "cross-model-projection-catalog-baseline.log.gz",
+    "cross-model-projection-final.log.gz",
+    "cross-model-projection-repair.log.gz",
+    "cross-model-projection-typecheck.log.gz"
+  ],
+  "reports": [
+    "cross-model-luna-authority-loss.json",
+    "cross-model-luna-grant-summary.json",
+    "cross-model-luna-matrix-summary.json",
+    "cross-model-luna-preflight.json",
+    "cross-model-luna-revoke-projected-summary.json"
+  ],
+  "sourceBytes": 701210,
+  "archiveBytes": 51559
+}

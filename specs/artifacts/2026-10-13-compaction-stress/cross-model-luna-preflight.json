@@ -1,0 +1,24 @@
+{
+  "provider": "openai",
+  "model": "gpt-6-luna",
+  "credentialType": "oauth",
+  "credentialPresent": true,
+  "oauthAccessUnexpired": true,
+  "catalogModelPresent": true,
+  "toolCalling": true,
+  "catalogLimits": {
+    "context": 1050000,
+    "input": 922000,
+    "output": 128000
+  },
+  "priorRequests": 530,
+  "batchRequestCap": 80,
+  "operatingCeiling": 660,
+  "plannedCases": [
+    "policy-revoke"
+  ],
+  "rounds": 5,
+  "contextTokens": 19000,
+  "fullContextTokens": 256000,
+  "scope": "Read-only source inventory; remote model acceptance still requires the actual audited run"
+}

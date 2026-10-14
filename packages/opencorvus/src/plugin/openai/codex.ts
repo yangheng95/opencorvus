@@ -1,5 +1,5 @@
 // Upstream source: anomalyco/opencode packages/opencode/src/plugin/openai/codex.ts @ 8e2d422ffe56f3b2eb52e3f7195a2f9722a9fc46.
-// OpenCorvus adaptation: package names and product headers only; the optional HTTP/WebSocket dual transport is omitted.
+// OpenCorvus adaptation: product headers, managed OAuth and model-family projection; HTTP transport only.
 import type { Hooks, PluginInput } from "@opencorvus-ai/plugin"
 import type { PhysicalProviderHooks } from "@/plugin"
 import { Installation } from "../../installation"
@@ -415,8 +415,11 @@ export async function CodexAuthPlugin(
             .filter(([, model]) => {
               if (ALLOWED_MODELS.has(model.api.id)) return true
               if (DISALLOWED_MODELS.has(model.api.id)) return false
-              const match = model.api.id.match(/^gpt-(\d+\.\d+)/)
-              return match ? parseFloat(match[1]) > 5.4 : false
+              const match = model.api.id.match(/^gpt-(\d+)(?:\.(\d+))?(?:-|$)/)
+              if (!match) return false
+              const major = Number(match[1])
+              const minor = Number(match[2] ?? 0)
+              return major > 5 || (major === 5 && minor > 4)
             })
             .map(([modelID, model]) => [
               modelID,
