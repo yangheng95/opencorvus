@@ -9,3 +9,5 @@
 - [previous-delivery](previous-delivery/README.md)：B29正常提交推送与全部原hook/fresh远端确认。
 
 两个自有tab42/44关闭，正常父实际exit0/双口0后整对移除生成auth/models；完整backend172250/246203字节、stdoutstderr0、隐私检查0、inference/Sol0。教程宿主故障与已提交整理错误没有自然诱发的独立UI资格；只复用原真实合同与14项局部正向检查，未当端到端通过。范围提交和正常上游推送以随后独立交付回执为准。见[原清单](manifest.json)。
+
+本批[实际提交和正常推送受阻原回执](delivery/README.md)已补齐：代码已提交，普通索引调和初1/修后0，正常push因另一任务尚未同步OpenAPI的公共合同被hook拦下1。尚未完成远端交付，不隐藏失败。
