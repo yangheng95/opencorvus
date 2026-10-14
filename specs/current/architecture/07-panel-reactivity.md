@@ -659,6 +659,11 @@ The shared target helper then selects a non-root, non-orchestrator agent for
 the existing Task coordination route. Card, ChatBubble and nested worker cards
 use this same applicability rule. Ordinary Session members retain transcript,
 copy and Source actions; they do not expose the Task-only guidance form.
+The shared guidance form explains that coordination does not reopen a finished
+Task and points to its main message input for further work. Its localized help
+describes the textarea, and the send button is positioned against the input
+field rather than the full form, so help, errors and receipts cannot shift it.
+Acceptance feedback states durable receipt only, not execution completion.
 
 - Missing or drifted `agentID`, `sessionID`, `messageID`, Slice revision, parent,
   channel, or order ownership fails explicitly.

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Task成员指导与侧栏流中恢复](2026-10-14-task-member-guidance/README.md)：真实Task协调提交、消费与原成员阅读验收。
+
 - [Work体验搜索与归档恢复](2026-10-14-archive-experience-search/README.md)：第23批真实输入、原页面与共享查询证据。
 
 - [成员侧栏实时呈现](2026-10-14-member-live-rendering/README.md)：真实已有成员增量、正文与Sources挂载身份调查。

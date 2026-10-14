@@ -1,0 +1,27 @@
+{
+  "occurrence": "task-member-guidance-413-dd48dd58-c90c-4ef5-891a-d3e220174424",
+  "outcome": "settled",
+  "host": {
+    "pid": 87136,
+    "processInstanceID": "win32:639275478077522111",
+    "occurrenceID": "e44af85c-fd50-4159-9d83-5c188caaa3e9"
+  },
+  "target": {
+    "pid": 80296,
+    "processInstanceID": "win32:639275478084565975",
+    "occurrenceID": "da92f69d-1fd3-44d4-be69-49608e4c787d"
+  },
+  "observedAtUtc": "2026-10-14T04:13:08.774Z",
+  "deadlineAt": 1791951607700,
+  "terminal": {
+    "occurrenceID": "task-member-guidance-413-dd48dd58-c90c-4ef5-891a-d3e220174424",
+    "pid": 80296,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "physicalCompletion": true,
+  "outputDrainComplete": true,
+  "requestCleanupComplete": true,
+  "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+}

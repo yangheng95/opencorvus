@@ -10,7 +10,7 @@
 // operator steer route must not rewrite failed steer into task-root input or a
 // direct child-session reply.
 
-import { createSignal, onCleanup, Show, type Accessor } from "solid-js"
+import { createSignal, createUniqueId, onCleanup, Show, type Accessor } from "solid-js"
 import { t } from "../utils/i18n"
 import { Icon } from "./ui/Icon"
 import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
@@ -236,6 +236,7 @@ export function OperatorSteerTrigger(props: { controller: OperatorSteerControlle
 }
 
 export function OperatorSteerForm(props: { controller: OperatorSteerController }) {
+  const helpID = createUniqueId()
   return (
     <Show when={props.controller.open()}>
       <form
@@ -244,6 +245,7 @@ export function OperatorSteerForm(props: { controller: OperatorSteerController }
           onClick={(event) => event.stopPropagation()}
           onKeyDown={(event) => event.stopPropagation()}
         >
+          <p id={helpID} class="card__agent-reply-help">{t("card.agent_reply_help")}</p>
           <div class="card__agent-reply-field">
             <AutoGrowTextarea
               class="card__agent-reply-input"
@@ -251,6 +253,8 @@ export function OperatorSteerForm(props: { controller: OperatorSteerController }
               rows={2}
               maxLines={2}
               placeholder={t("card.agent_reply_placeholder")}
+              aria-label={t("card.agent_reply_toggle")}
+              aria-describedby={helpID}
               disabled={props.controller.sending()}
               onInput={(event) => props.controller.setText(event.currentTarget.value)}
               onKeyDown={(event) => {

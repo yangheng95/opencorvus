@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Task成员指导与侧栏流中恢复](records/2026-10/2026-10-14-task-member-guidance.md)：真实Task协调提交、消费与原成员阅读验收。
+
 - [Work体验搜索与归档恢复](records/2026-10/2026-10-14-archive-experience-search.md)：共享experience字段搜索及Mission/Work真实恢复入口调查。
 
 - [成员侧栏实时呈现](records/2026-10/2026-10-14-member-live-rendering.md)：真实已有成员增量、正文与Sources挂载身份调查。

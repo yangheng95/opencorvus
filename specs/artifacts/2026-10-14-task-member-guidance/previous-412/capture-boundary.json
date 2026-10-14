@@ -1,0 +1,35 @@
+{
+  "files": [
+    {
+      "name": "push.log",
+      "capturedAsFile": true
+    },
+    {
+      "name": "push-exit.json",
+      "capturedAsFile": true
+    },
+    {
+      "name": "fetch.log",
+      "capturedAsFile": false
+    },
+    {
+      "name": "merge.log",
+      "capturedAsFile": true
+    },
+    {
+      "name": "remote-after-push.txt",
+      "capturedAsFile": true
+    }
+  ],
+  "push": {
+    "handle": 24250,
+    "chunk": "ac0b17",
+    "exitCode": 0
+  },
+  "fetchMerge": {
+    "chunk": "c68d91",
+    "exitCode": 0
+  },
+  "commit": "50cf35a83baa9467e59aa91f541fc0d53dd8756b",
+  "boundary": "Empty fetch output can produce no Tee file; no original log is invented."
+}

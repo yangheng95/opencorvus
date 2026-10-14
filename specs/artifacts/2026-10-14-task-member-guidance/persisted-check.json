@@ -1,0 +1,54 @@
+{
+  "taskID": "tsk_g00VXzaV3900TZX3V9DQ",
+  "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+  "rootSessionID": "ses_-zUS0PUoUzzFg2gkNt5M",
+  "databaseVersion": [
+    {
+      "user_version": 1
+    }
+  ],
+  "initialTaskCompletion": {
+    "taskID": "tsk_g00VXzaV3900TZX3V9DQ",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXzaVCE00Uv4xmSWid",
+    "openedAt": 1791949742223,
+    "status": "completed",
+    "terminalEventID": "pev_g0VXzazUg00IDCal0wfN",
+    "terminalAt": 1791949857641
+  },
+  "retainedMessages": 15,
+  "source": {
+    "id": "prt_g0VXzaoZv003pH693RXx",
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project\\README.md",
+    "range": {
+      "startLine": 2,
+      "endLine": 3
+    },
+    "toolPartID": "prt_g0VXzaoOu00CiqMqbz1h"
+  },
+  "coordination": [
+    {
+      "requestID": "art_d8a7b88ce41c4c8fa127",
+      "sessionID": "ses_hE2vLKo2M333MIa0Vuq1",
+      "input": "请让这位已有成员在同一个会话继续：保持README.md第2—3行的准确事实和测试限定，补充约1800字中文说明，分成12个编号小节，解释材料事实、待确认事项与合理推断的区别，末尾附简短Markdown核对表。只读原材料，不修改文件，不增加其他成员。请处理这条补充指导后再完成任务。",
+      "responseID": "art_hS0ORpM71KkGCcEZjEog",
+      "decision": "acknowledge_terminal",
+      "message": "已收到对同一位成员的补充指导：保留 README.md 第2—3行准确事实和“仅用于界面测试”限定，扩展为约1800字、12个编号小节，并附简短 Markdown 核对表；仍只读原材料，不改文件，不增加成员。目前只能确认收到指导，尚未执行补充说明，不能把原先约200字结论视为满足新要求。",
+      "actionID": "art_h5tbFl0keo4oYg4ea0zR",
+      "outcomeID": "art_hsxVvDYtTaDXa1c6Lmlt",
+      "terminalEventID": "pev_g0VXzazUg00IDCal0wfN"
+    },
+    {
+      "requestID": "art_fcba9ba90aca406cad3f",
+      "sessionID": "ses_hE2vLKo2M333MIa0Vuq1",
+      "input": "请仅确认收到这条说明，不需要追加任何工作。原任务和成员保持已完成状态。",
+      "responseID": "art_hCFUuUE1s4tiebrYsOmM",
+      "decision": "acknowledge_terminal",
+      "message": "已收到。不会追加任何工作，原任务和成员均保持已完成状态。",
+      "actionID": "art_h1gbneYqofs9KZ4X6MJO",
+      "outcomeID": "art_hhmkPubwmgJh6lG4JXl6",
+      "terminalEventID": "pev_g0VXzazUg00IDCal0wfN"
+    }
+  ],
+  "boundary": "Actual production SQLite, completed Task monitor and real Tool/response/action/outcome bindings. First requested additional work was acknowledged only under the terminal contract; this does not prove worker redispatch or streaming dock reopen."
+}
