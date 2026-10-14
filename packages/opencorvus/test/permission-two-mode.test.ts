@@ -17,7 +17,11 @@ import { EngineService } from "@/task-api"
 import { SessionPromptState } from "@/session/prompt/state"
 import { SessionDeletionCleanupTestHooks } from "@/session/deletion-cleanup"
 import { ToolPartOutcomeTable } from "@/session/session.sql"
-import { Database, and, eq } from "@/storage/db"
+import { Database, and, desc, eq } from "@/storage/db"
+import { EngineControlActivationLeaseGrantTable } from "@/engine/engine.sql"
+import { acquireControlLease, currentControlLease } from "@/engine/control-lease"
+import { observeProcessLiveness } from "@/engine/process-liveness"
+import { currentRuntimeOccurrenceID } from "@/runtime/process-occurrence"
 import { randomUUID } from "node:crypto"
 import { mkdtemp, realpath, rm, symlink, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
@@ -41,6 +45,162 @@ function invocation(sessionID: string, call: string, args: unknown = { url: "htt
     args,
   }
 }
+
+function currentEffect(attemptID: string) {
+  const lease = currentControlLease("effect", attemptID)
+  if (!lease) throw new Error(`Execution ${attemptID} has no effect lease`)
+  const grant = Database.use((db) => db.select().from(EngineControlActivationLeaseGrantTable)
+    .where(eq(EngineControlActivationLeaseGrantTable.lease_id, lease.id))
+    .orderBy(desc(EngineControlActivationLeaseGrantTable.ordinal)).get())
+  if (!grant) throw new Error(`Execution ${attemptID} has no lease grant`)
+  return { lease, grant }
+}
+
+describe("permission execution physical owners", () => {
+  test("retains a live exact effect owner through bootstrap reconciliation and result commit", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const session = await Session.create({ kind: "assistant", title: "Physical permission owner" })
+      const entered = Promise.withResolvers<void>(), release = Promise.withResolvers<void>()
+      const execution = PermissionAuthority.authorizeAndExecute(invocation(session.id, "live-effect"), async () => {
+        entered.resolve()
+        await release.promise
+        return { output: "Exact live effect result" }
+      })
+      void execution.catch(() => undefined)
+      try {
+        await entered.promise
+        const started = (await PermissionAuthority.history()).find((row) => row.event_type === "execution_started")!
+        const admitted = currentEffect(started.attempt_id!)
+        expect(admitted.lease.owner_occurrence_id).toBe(currentRuntimeOccurrenceID())
+        expect(observeProcessLiveness(admitted.lease.owner_occurrence_id)).toBe("exact_live")
+        expect(PermissionAuthority.reconcileInterruptedAttempts()).toBe(0)
+        expect((await PermissionAuthority.history()).map((row) => row.event_type)).toEqual([
+          "execution_started", "allowed_once", "requested",
+        ])
+        release.resolve()
+        expect(await execution).toEqual({ output: "Exact live effect result" })
+        const settled = currentEffect(started.attempt_id!)
+        expect({ id: settled.lease.id, owner: settled.lease.owner_occurrence_id, grant: settled.grant }).toEqual({
+          id: admitted.lease.id, owner: admitted.lease.owner_occurrence_id, grant: admitted.grant,
+        })
+        expect(settled.lease.expires_at).toBeLessThan(settled.grant.expires_at)
+        expect((await PermissionAuthority.history()).map((row) => row.event_type)).toEqual([
+          "stale", "execution_succeeded", "execution_started", "allowed_once", "requested",
+        ])
+      } finally { release.resolve(); await execution.catch(() => undefined) }
+    } })
+  })
+
+  test("reconciles each Project's own execution facts while a different Project has a live effect", async () => {
+    await using first = await memoryProject("permission-owner-first")
+    await using second = await memoryProject("permission-owner-second")
+    const entered = Promise.withResolvers<void>(), release = Promise.withResolvers<void>()
+    let firstProjectID = ""
+    const execution = Instance.provide({ directory: first.path, fn: async () => {
+      firstProjectID = Instance.project.id
+      const session = await Session.create({ kind: "assistant", title: "First Project effect" })
+      return PermissionAuthority.authorizeAndExecute(invocation(session.id, "first-project-effect"), async () => {
+        entered.resolve(); await release.promise; return "First Project public result"
+      })
+    } })
+    void execution.catch(() => undefined)
+    try {
+      await entered.promise
+      await Instance.provide({ directory: second.path, fn: async () => {
+        expect(PermissionAuthority.reconcileInterruptedAttempts()).toBe(0)
+        const session = await Session.create({ kind: "assistant", title: "Second Project effect" })
+        expect(await PermissionAuthority.authorizeAndExecute(invocation(session.id, "second-project-effect"), async () => "Second Project public result"))
+          .toBe("Second Project public result")
+        const history = await PermissionAuthority.history()
+        expect(history.map((row) => row.event_type)).toEqual([
+          "stale", "execution_succeeded", "execution_started", "allowed_once", "requested",
+        ])
+        expect(history.find((row) => row.event_type === "requested")?.project_id).toBe(Instance.project.id)
+      } })
+      release.resolve()
+      expect(await execution).toBe("First Project public result")
+      await Instance.provide({ directory: first.path, fn: async () => {
+        const history = await PermissionAuthority.history()
+        expect(history.find((row) => row.event_type === "requested")?.project_id).toBe(firstProjectID)
+        expect(history.map((row) => row.event_type)).toEqual([
+          "stale", "execution_succeeded", "execution_started", "allowed_once", "requested",
+        ])
+      } })
+    } finally { release.resolve(); await execution.catch(() => undefined) }
+  })
+
+  test("resumes the same MCP protocol task after an exact live owner's explicit lease handback", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const session = await Session.create({ kind: "assistant", title: "MCP explicit handback" })
+      const input = { ...invocation(session.id, "mcp-handback"), providerKind: "mcp" as const,
+        providerID: "public-mcp-fixture", providerDigest: "public-mcp-fixture-v1" }
+      const remote = { taskId: "public-task-406", status: "working" as const, ttl: null,
+        createdAt: new Date().toISOString(), lastUpdatedAt: new Date().toISOString() }
+      await expect(PermissionAuthority.authorizeAndExecute(input, async () => {
+        expect(PermissionAuthority.requireMcpExecutionContext()).toEqual({ recovering: false, task: undefined })
+        PermissionAuthority.recordMcpTask(remote)
+        throw new Error("Public MCP transport released its original task")
+      })).rejects.toThrow("Public MCP transport released its original task")
+      const started = (await PermissionAuthority.history()).find((row) => row.event_type === "execution_started")!
+      const handedBack = currentEffect(started.attempt_id!)
+      expect(handedBack.lease.owner_occurrence_id).toBe(currentRuntimeOccurrenceID())
+      expect(observeProcessLiveness(handedBack.lease.owner_occurrence_id)).toBe("exact_live")
+      expect(handedBack.lease.expires_at).toBeLessThan(handedBack.grant.expires_at)
+      expect(await PermissionAuthority.authorizeAndExecute(input, async () => {
+        expect(PermissionAuthority.requireMcpExecutionContext()).toEqual({ recovering: true, task: remote })
+        return { taskId: remote.taskId, output: "Original remote task result" }
+      })).toEqual({ taskId: remote.taskId, output: "Original remote task result" })
+      expect((await PermissionAuthority.history()).map((row) => row.event_type)).toEqual([
+        "stale", "execution_succeeded", "mcp_task_created", "execution_started", "allowed_once", "requested",
+      ])
+    } })
+  })
+
+  for (const owner of ["missing", "opaque"] as const) {
+    test(`preserves the complete ${owner}-owner started ledger as unproven recovery evidence`, async () => {
+      await using project = await memoryProject()
+      await Instance.provide({ directory: project.path, fn: async () => {
+        const session = await Session.create({ kind: "assistant", title: `${owner} execution evidence` })
+        let request: PermissionAuthority.Request | undefined
+        using hook = PermissionAuthority.TestHooks.installAfterAuthorizationBeforeExecutionStart((value) => {
+          request = value
+          throw new Error("Controlled pre-execution admission boundary")
+        })
+        await expect(PermissionAuthority.authorizeAndExecute(invocation(session.id, `${owner}-evidence`), async () => "unused"))
+          .rejects.toThrow("Controlled pre-execution admission boundary")
+        const attempt = Identifier.deterministic("permission", `attempt\0${request!.id}`)
+        const authorized = (await PermissionAuthority.history()).find((row) => row.event_type === "allowed_once")!
+        Database.immediateTransaction((db) => {
+          db.insert(PermissionLedgerTable).values({ id: Identifier.ascending("permission"), request_id: request!.id,
+            event_type: "execution_started", attempt_id: attempt, source_event_id: authorized.id, time_created: Date.now() }).run()
+          if (owner === "opaque") acquireControlLease({ target: "effect", targetID: attempt,
+            ownerOccurrenceID: "opaque-historical-effect-owner", now: Date.now(), leaseMilliseconds: 120000 })
+        })
+        const before = await PermissionAuthority.history()
+        expect(PermissionAuthority.reconcileInterruptedAttempts()).toBe(0)
+        expect(await PermissionAuthority.history()).toEqual(before)
+        expect(before.map((row) => row.event_type)).toEqual(["execution_started", "allowed_once", "requested"])
+      } })
+    })
+  }
+
+  test("retains an actual result serialization failure and the original started evidence", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const session = await Session.create({ kind: "assistant", title: "Unrepresentable effect result" })
+      await expect(PermissionAuthority.authorizeAndExecute(invocation(session.id, "serialization-boundary"), async () => 1n))
+        .rejects.toBeInstanceOf(TypeError)
+      const before = await PermissionAuthority.history()
+      const started = before.find((row) => row.event_type === "execution_started")!
+      expect(currentEffect(started.attempt_id!).lease.owner_occurrence_id).toBe(currentRuntimeOccurrenceID())
+      expect(PermissionAuthority.reconcileInterruptedAttempts()).toBe(0)
+      expect(await PermissionAuthority.history()).toEqual(before)
+      expect(before.map((row) => row.event_type)).toEqual(["execution_started", "allowed_once", "requested"])
+    } })
+  })
+})
 
 async function nextRequest(run: () => Promise<unknown>) {
   let resolveRequest!: (request: PermissionAuthority.Request) => void

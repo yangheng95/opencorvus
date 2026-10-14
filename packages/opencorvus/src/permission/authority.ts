@@ -25,12 +25,21 @@ import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicy
 import { durableExecutionResult, resultFromDurable } from "./execution-result"
 import { MessageTable, ToolPartRequestTable, ToolPartOutcomeTable } from "@/session/session.sql"
 import {
-  acquireControlLease,
+  acquireControlLeaseInTransaction,
   assertControlLeaseInTransaction,
+  currentControlLeaseInTransaction,
   releaseControlLeaseInTransaction,
   releaseControlLeaseOnErrorPath,
   renewControlLease,
 } from "@/engine/control-lease"
+import { EngineControlActivationLeaseGrantTable } from "@/engine/engine.sql"
+import {
+  joinProcessLiveness,
+  observeProcessLiveness,
+  ProcessLivenessOwnerUnavailableError,
+  type ProcessLivenessReference,
+} from "@/engine/process-liveness"
+import { currentRuntimeOccurrenceID } from "@/runtime/process-occurrence"
 import { PermissionDecision } from "./decision"
 import { PermissionIdentity, PermissionMode, PermissionRequest } from "./types"
 import { permissionRequestOwnerBelongsToProject } from "./project-authority"
@@ -293,16 +302,55 @@ export namespace PermissionAuthority {
     targetID: string
   }
 
-  function acquireEffectLease(attempt: string): EffectLease | undefined {
-    const ownerOccurrenceID = Identifier.ascending("call")
-    const acquired = acquireControlLease({
-      target: "effect",
-      targetID: attempt,
-      ownerOccurrenceID,
-      now: Date.now(),
-      leaseMilliseconds: 120_000,
-    })
-    return acquired.acquired ? { id: acquired.lease.id, ownerOccurrenceID, targetID: attempt } : undefined
+  function readEffectLease(db: Database.TxOrDb, attempt: string) {
+    const lease = currentControlLeaseInTransaction(db, "effect", attempt)
+    if (!lease)
+      throw new ProcessLivenessOwnerUnavailableError(`Permission execution ${attempt} has no physical effect lease`)
+    const grant = db.select().from(EngineControlActivationLeaseGrantTable)
+      .where(eq(EngineControlActivationLeaseGrantTable.lease_id, lease.id))
+      .orderBy(desc(EngineControlActivationLeaseGrantTable.ordinal)).get()
+    if (!grant || lease.expires_at > grant.expires_at)
+      throw new ProcessLivenessOwnerUnavailableError(`Permission execution ${attempt} has inconsistent effect lease grants`)
+    return { lease, grant, released: lease.expires_at < grant.expires_at }
+  }
+
+  function sameEffectLease(current: ReturnType<typeof readEffectLease>, observed: ReturnType<typeof readEffectLease>) {
+    return current.lease.id === observed.lease.id &&
+      current.lease.owner_occurrence_id === observed.lease.owner_occurrence_id &&
+      current.lease.expires_at === observed.lease.expires_at &&
+      current.grant.ordinal === observed.grant.ordinal && current.grant.expires_at === observed.grant.expires_at
+  }
+
+  /** Recover only the exact MCP task after physical death or a proven handback.
+   * Natural expiry never establishes that a live executor released its effect. */
+  function acquireEffectLease(attempt: string, owner: ProcessLivenessReference, task: McpTask): EffectLease | undefined {
+    for (;;) {
+      const observed = Database.use((db) => readEffectLease(db, attempt))
+      const liveness = observeProcessLiveness(observed.lease.owner_occurrence_id)
+      if (!observed.released && liveness !== "dead_or_reused") return
+      const result = Database.immediateTransaction((db) => {
+        const current = readEffectLease(db, attempt)
+        if (!sameEffectLease(current, observed)) return { retry: true as const }
+        const outcome = db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.outcome_slot, attempt)).get()
+        if (outcome) return { retry: false as const }
+        const currentTask = currentTaskForAttempt(attempt)
+        if (currentTask?.taskId !== task.taskId)
+          throw new Error(`Permission execution ${attempt} changed its MCP task during effect admission`)
+        owner.assertOwnedInTransaction(db, owner.occurrenceID)
+        const now = Date.now()
+        if (current.lease.expires_at > now) releaseControlLeaseInTransaction(db, {
+          target: "effect", targetID: attempt, leaseID: current.lease.id,
+          ownerOccurrenceID: current.lease.owner_occurrence_id, now,
+        })
+        const acquired = acquireControlLeaseInTransaction(db, {
+          target: "effect", targetID: attempt, ownerOccurrenceID: owner.occurrenceID, now, leaseMilliseconds: 120_000,
+        })
+        if (!acquired.acquired) return { retry: false as const }
+        return { retry: false as const, lease: { id: acquired.lease.id, ownerOccurrenceID: owner.occurrenceID, targetID: attempt } }
+      })
+      if (result.retry) continue
+      return result.lease
+    }
   }
 
   async function executeUnderEffectLease<T>(lease: EffectLease, execute: () => Promise<T>): Promise<T> {
@@ -969,146 +1017,139 @@ export namespace PermissionAuthority {
     })
     const authority = await authorize(request)
     await afterAuthorizationBeforeExecutionStartForTest?.(request)
-    const existingStart = Database.use((db) =>
-      db
-        .select()
-        .from(PermissionLedgerTable)
-        .where(
-          and(eq(PermissionLedgerTable.attempt_id, attempt), eq(PermissionLedgerTable.event_type, "execution_started")),
-        )
-        .get(),
-    )
-    const resolveExistingAttempt = async (start: LedgerRow): Promise<T> => {
-      const outcome = Database.use((db) =>
-        db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.outcome_slot, attempt)).get(),
-      )
-      if (!outcome) {
-        const task = taskFromEvent(mcpTaskEvent(attempt))
-        if (task) {
-          const lease = acquireEffectLease(attempt)
-          if (!lease) {
-            await awaitExecutionSettlement(request)
-            return resolveExistingAttempt(start)
-          }
-          let result: T
-          try {
-            result = await executeUnderEffectLease(lease, () =>
-              executionContext.run({ request, attemptID: attempt, recovering: true }, execute),
-            )
-          } catch (error) {
-            const latest = currentTaskForAttempt(attempt)
-            if (latest && ["working", "input_required"].includes(latest.status)) {
-              abandonEffectLease(lease)
-              throw error
-            }
-            appendEffectOutcome(
-              request,
-              "execution_failed",
-              {
-                attempt_id: attempt,
-                outcome_slot: attempt,
-                reason: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
-              },
-              lease,
-            )
-            throw error
-          }
-          return completeExecution({
-            request,
-            attempt,
-            toolPartID: input.toolPartID,
-            result,
-            lease,
-          })
-        }
-        throw new OutcomeUnknownError(attempt)
-      }
-      if (outcome.event_type === "outcome_unknown") throw new OutcomeUnknownError(attempt)
-      if (outcome.event_type === "execution_succeeded") {
-        const stored = Database.use((db) =>
-          db
-            .select()
-            .from(PermissionExecutionResultTable)
-            .where(eq(PermissionExecutionResultTable.attempt_id, attempt))
-            .get(),
-        )
-        if (!stored) throw new ExecutionAlreadySucceededError(request.id, attempt, input.toolPartID)
-        return resultFromDurable<T>(stored.result)
-      }
-      if (outcome.event_type === "execution_reconciled" && outcome.metadata?.outcome === "execution_succeeded") {
-        throw new OutcomeUnknownError(attempt)
-      }
-      throw new Error(`Permission execution ${attempt} already ended as ${outcome.event_type} and cannot be duplicated`)
-    }
-    if (existingStart) return resolveExistingAttempt(existingStart)
+    const processOwner = joinProcessLiveness(currentRuntimeOccurrenceID())
     try {
-      appendEvent(request, "execution_started", { attempt_id: attempt, source_event_id: authority.id })
-    } catch (error) {
-      const winner = Database.use((db) =>
+      const existingStart = Database.use((db) =>
         db
           .select()
           .from(PermissionLedgerTable)
           .where(
-            and(
-              eq(PermissionLedgerTable.attempt_id, attempt),
-              eq(PermissionLedgerTable.event_type, "execution_started"),
-            ),
+            and(eq(PermissionLedgerTable.attempt_id, attempt), eq(PermissionLedgerTable.event_type, "execution_started")),
           )
           .get(),
       )
-      if (winner) return resolveExistingAttempt(winner)
-      throw error
-    }
-    const lease = acquireEffectLease(attempt)
-    if (!lease) {
-      await awaitExecutionSettlement(request)
-      return resolveExistingAttempt(
-        existingStart ??
-          Database.use((db) =>
+      const resolveExistingAttempt = async (start: LedgerRow): Promise<T> => {
+        const outcome = Database.use((db) =>
+          db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.outcome_slot, attempt)).get(),
+        )
+        if (!outcome) {
+          const task = taskFromEvent(mcpTaskEvent(attempt))
+          if (task) {
+            const lease = acquireEffectLease(attempt, processOwner, task)
+            if (!lease) {
+              await awaitExecutionSettlement(request)
+              return resolveExistingAttempt(start)
+            }
+            let result: T
+            try {
+              result = await executeUnderEffectLease(lease, () =>
+                executionContext.run({ request, attemptID: attempt, recovering: true }, execute),
+              )
+            } catch (error) {
+              const latest = currentTaskForAttempt(attempt)
+              if (latest && ["working", "input_required"].includes(latest.status)) {
+                abandonEffectLease(lease)
+                throw error
+              }
+              appendEffectOutcome(
+                request,
+                "execution_failed",
+                {
+                  attempt_id: attempt,
+                  outcome_slot: attempt,
+                  reason: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+                },
+                lease,
+              )
+              throw error
+            }
+            return completeExecution({
+              request,
+              attempt,
+              toolPartID: input.toolPartID,
+              result,
+              lease,
+            })
+          }
+          throw new OutcomeUnknownError(attempt)
+        }
+        if (outcome.event_type === "outcome_unknown") throw new OutcomeUnknownError(attempt)
+        if (outcome.event_type === "execution_succeeded") {
+          const stored = Database.use((db) =>
             db
               .select()
-              .from(PermissionLedgerTable)
-              .where(
-                and(
-                  eq(PermissionLedgerTable.attempt_id, attempt),
-                  eq(PermissionLedgerTable.event_type, "execution_started"),
-                ),
-              )
+              .from(PermissionExecutionResultTable)
+              .where(eq(PermissionExecutionResultTable.attempt_id, attempt))
               .get(),
-          )!,
-      )
-    }
-    let result: T
-    try {
-      result = await executeUnderEffectLease(lease, () =>
-        executionContext.run({ request, attemptID: attempt, recovering: false }, execute),
-      )
-    } catch (error) {
-      const task = currentTaskForAttempt(attempt)
-      // Once the server has returned a protocol task identity, transport loss
-      // or process shutdown is not a failed external effect. Leave the attempt
-      // open so recovery reconnects and queries this exact task — but release
-      // the effect owner, because this process is not the one that will.
-      if (task && !["completed", "failed", "cancelled"].includes(task.status)) {
-        abandonEffectLease(lease)
+          )
+          if (!stored) throw new ExecutionAlreadySucceededError(request.id, attempt, input.toolPartID)
+          return resultFromDurable<T>(stored.result)
+        }
+        if (outcome.event_type === "execution_reconciled" && outcome.metadata?.outcome === "execution_succeeded") {
+          throw new OutcomeUnknownError(attempt)
+        }
+        throw new Error(`Permission execution ${attempt} already ended as ${outcome.event_type} and cannot be duplicated`)
+      }
+      if (existingStart) return await resolveExistingAttempt(existingStart)
+      const admission = Database.immediateTransaction((db) => {
+        assertRequestIdentity(request)
+        assertAttemptIdentity(request, attempt)
+        const decision = db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.id, authority.id)).get()
+        if (!decision || decision.request_id !== request.id)
+          throw new Error(`Permission execution ${attempt} lost its canonical authorization`)
+        const started = db.select().from(PermissionLedgerTable).where(and(
+          eq(PermissionLedgerTable.attempt_id, attempt), eq(PermissionLedgerTable.event_type, "execution_started"),
+        )).get()
+        if (started) return { started }
+        if (currentControlLeaseInTransaction(db, "effect", attempt))
+          throw new ProcessLivenessOwnerUnavailableError(`Permission execution ${attempt} has an effect lease without its canonical start`)
+        processOwner.assertOwnedInTransaction(db, processOwner.occurrenceID)
+        const acquired = acquireControlLeaseInTransaction(db, {
+          target: "effect", targetID: attempt, ownerOccurrenceID: processOwner.occurrenceID,
+          now: Date.now(), leaseMilliseconds: 120_000,
+        })
+        if (!acquired.acquired) throw new Error(`Permission execution ${attempt} effect admission changed inside its transaction`)
+        return {
+          started: appendEvent(request, "execution_started", { attempt_id: attempt, source_event_id: authority.id }),
+          lease: { id: acquired.lease.id, ownerOccurrenceID: processOwner.occurrenceID, targetID: attempt },
+        }
+      })
+      const lease = admission.lease
+      if (!lease) return await resolveExistingAttempt(admission.started)
+      let result: T
+      try {
+        result = await executeUnderEffectLease(lease, () =>
+          executionContext.run({ request, attemptID: attempt, recovering: false }, execute),
+        )
+      } catch (error) {
+        const task = currentTaskForAttempt(attempt)
+        // Once the server has returned a protocol task identity, transport loss
+        // or process shutdown is not a failed external effect. Leave the attempt
+        // open so recovery reconnects and queries this exact task — but release
+        // the effect owner, because this process is not the one that will.
+        if (task && !["completed", "failed", "cancelled"].includes(task.status)) {
+          abandonEffectLease(lease)
+          throw error
+        }
+        appendEffectOutcome(
+          request,
+          "execution_failed",
+          {
+            attempt_id: attempt,
+            outcome_slot: attempt,
+            reason: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+          },
+          lease,
+        )
         throw error
       }
-      appendEffectOutcome(
-        request,
-        "execution_failed",
-        {
-          attempt_id: attempt,
-          outcome_slot: attempt,
-          reason: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
-        },
-        lease,
-      )
-      throw error
+      // A persistence failure here leaves a start without an outcome. Recovery
+      // records outcome_unknown; it must not rewrite an effect that already ran
+      // as execution_failed.
+      return completeExecution({ request, attempt, toolPartID: input.toolPartID, result, lease })
+    } finally {
+      processOwner.release()
     }
-    // A persistence failure here leaves a start without an outcome. Recovery
-    // records outcome_unknown; it must not rewrite an effect that already ran
-    // as execution_failed.
-    return completeExecution({ request, attempt, toolPartID: input.toolPartID, result, lease })
   }
 
   function currentTaskForAttempt(attempt: string): McpTask | undefined {
@@ -1675,7 +1716,10 @@ export namespace PermissionAuthority {
 
   export function reconcileInterruptedAttempts(): number {
     const starts = Database.use((db) =>
-      db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.event_type, "execution_started")).all(),
+      db.select().from(PermissionLedgerTable).where(and(
+        eq(PermissionLedgerTable.event_type, "execution_started"),
+        permissionRequestOwnerBelongsToProject(Instance.project.id),
+      )).all(),
     )
     let reconciled = 0
     // One malformed or unreadable ledger row degrades its own attempt only.
@@ -1693,12 +1737,36 @@ export namespace PermissionAuthority {
         )
         if (outcome) continue
         if (currentTaskForAttempt(start.attempt_id)) continue
-        appendEvent(requestFromRow(start), "outcome_unknown", {
-          attempt_id: start.attempt_id,
-          outcome_slot: start.attempt_id,
-          source_event_id: start.id,
-          reason: "Runtime restarted before a terminal Tool outcome was recorded",
+        const attempt = start.attempt_id
+        const observed = Database.use((db) => readEffectLease(db, attempt))
+        if (observeProcessLiveness(observed.lease.owner_occurrence_id) !== "dead_or_reused") continue
+        const settled = Database.immediateTransaction((db) => {
+          const currentStart = db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.id, start.id)).get()
+          if (!currentStart || currentStart.event_type !== "execution_started" ||
+            currentStart.attempt_id !== attempt || currentStart.request_id !== start.request_id)
+            throw new Error(`Permission execution ${attempt} changed its canonical start during recovery`)
+          const request = requestFromRow(currentStart)
+          if (request.projectID !== Instance.project.id)
+            throw new Error(`Permission execution ${attempt} changed its Project owner during recovery`)
+          const winner = db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.outcome_slot, attempt)).get()
+          if (winner || currentTaskForAttempt(attempt)) return false
+          const current = readEffectLease(db, attempt)
+          if (!sameEffectLease(current, observed)) return false
+          const now = Date.now()
+          appendEvent(request, "outcome_unknown", {
+            attempt_id: attempt, outcome_slot: attempt, source_event_id: start.id,
+            reason: "The exact execution process ended before a terminal Tool outcome was recorded",
+            time_created: now,
+          })
+          // Recovery compares the original dead owner, not a still-valid
+          // execution fence. Natural expiry remains its original stored fact.
+          if (current.lease.expires_at > now) releaseControlLeaseInTransaction(db, {
+            target: "effect", targetID: attempt, leaseID: current.lease.id,
+            ownerOccurrenceID: current.lease.owner_occurrence_id, now,
+          })
+          return true
         })
+        if (!settled) continue
         log.warn("permission execution outcome unknown after recovery", { attemptID: start.attempt_id })
         reconciled += 1
       } catch (error) {

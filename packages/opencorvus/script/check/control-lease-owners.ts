@@ -105,9 +105,9 @@ const DECLARED_OWNERS: Record<string, Declaration> = {
   },
   "permission/authority.ts": {
     targets: ["effect"],
-    sites: 1,
+    sites: 2,
     release:
-      "completeExecution and appendEffectOutcome release with their terminal receipt; abandonEffectLease hands ownership back when a durable task stays open.",
+      "Fresh admission and exact MCP continuation acquire the same effect namespace. completeExecution and appendEffectOutcome release with their terminal receipt; abandonEffectLease explicitly hands ownership back when a durable task stays open. Physical-death recovery releases a still-valid original lease with outcome_unknown in one transaction; an already expired dead lease retains its original expiry.",
   },
   "protocol/delivery.ts": {
     targets: ["protocol_delivery"],

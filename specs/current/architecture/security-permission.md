@@ -30,7 +30,11 @@ The canonical `requested` row is the only owner of the complete Project, Session
 
 The ledger stores redacted scope plus hashes; it must not store tokens, cookies, passwords, authorization headers, OAuth secrets, secret environment values, or complete sensitive content.
 
-Pending requests survive process release and project restart. A later client can settle the same durable request. A started attempt without a terminal result becomes `outcome_unknown`; the same attempt is not blindly replayed. Engine interaction rows are presentation projections that reference the ledger request rather than a second approval authority.
+Pending requests survive process release and project restart. A later client can settle the same durable request. New execution admission commits the exact attempt's `execution_started` and effect lease in one immediate writer transaction. The lease owner is the original runtime process occurrence, whose physical liveness reference remains held through execution, serialization, result settlement or explicit MCP handback.
+
+Recovery selects starts through their canonical requested Project owner. It observes the original physical receipt outside the writer, then rechecks the same start, lease, owner, latest immutable lease grant, MCP task and terminal winner in one immediate transaction. Only proven physical death admits `outcome_unknown` for an ordinary unfinished attempt. A live or unproven owner retains its original facts; natural lease expiry is not proof of process death. Dead expired leases retain their original expiry, while a still-valid dead lease is released with its unknown outcome. Missing or opaque physical evidence remains explicitly unproven. The same attempt is not blindly replayed.
+
+MCP continuation retains its exact attempt and server task identity. A lease expiry earlier than that same lease's latest immutable grant proves an explicit handback; equal expiry only proves the original deadline. A confirmed handback or physical death admits the existing remote-task continuation, with the normal result writer retaining its unexpired execution fence. Engine interaction rows remain presentation projections that reference the ledger request rather than a second approval authority.
 
 A paired `execution_succeeded` and durable execution result remain authoritative after the
 continuation is retired, including Full access. Tool completion and interruption recovery use

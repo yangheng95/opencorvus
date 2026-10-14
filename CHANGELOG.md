@@ -13,6 +13,10 @@
 
 #### 修复
 
+- 权限执行开始与原进程租约同时提交；另一个后端恢复时确认原执行者确已退出，避免活跃工具的真实结果被抢写为未知。恢复按原项目、尝试和租约收敛，租约自然到期不被当作进程死亡。
+
+- 问题选项的短标题与说明分行显示，并为实际选择控件提供独立名称和描述；说明可原生点击选择。键盘选择保留侧聊标题、目标和输入区的位置，现有技能与连接复选框使用当前语言名称。
+
 - 定时任务的日期、基础重复频率和星期跟随当前界面语言；列表、详情与搜索共用摘要，高级日历规则保留完整原表达式。
 
 - IPv6 模型服务商的自动标识保留压缩零段的位置，两个非零段相同但零段位置不同的地址可分别保存。已保存的服务商标识保持不变。
@@ -117,6 +121,10 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Permission execution starts and its original process lease commit together. Recovery verifies that the original executor has exited before settling an unfinished attempt, preserving live tools' real results. Recovery retains the exact project, attempt and lease; natural lease expiry is not treated as process death.
+
+- Question options show separate short labels and descriptions with distinct input names and supplemental descriptions. Descriptions support native click selection. Keyboard selection preserves the Side Chat header, goal and composer positions, and existing skill and connection checkboxes use names in the current language.
 
 - Scheduled task dates, basic recurrence descriptions and weekday names follow the current interface language. Lists, details and search share the same summary, while advanced calendar rules retain their complete original expression.
 

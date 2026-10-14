@@ -8,7 +8,7 @@
 
 - [IPv6 Provider零段位置](2026-10-14-provider-ipv6-segments.md)：冒号清洗丢失结构的根因、正向输出与真实页面资格。
 
-- [406 原执行者恢复与选项呈现](2026-10-14-execution-owner-recovery-406.md)：共享Permission死活owner与结果结算，Question恢复边界及三源UI语义布局。
+- [406 原执行者恢复与选项呈现](2026-10-14-execution-owner-recovery-406.md)：物理执行者与结果权威、三源选项语义/原生焦点、55项检查及四最终页面；普通Ask退休与Question恢复待下一批。
 
 - [本地Provider自动标识](2026-10-14-provider-local-identity.md)：新表单的地址标识与端口碰撞根因/影响。
 

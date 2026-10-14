@@ -266,6 +266,7 @@ export function InteractionCard(props: InteractionCardProps) {
                           <RadioGroup class="interaction-card__options" aria-labelledby={questionID()}>
                             <For each={opts}>
                               {(opt, optIdx) => {
+                                const optionLabelID = () => `${questionID()}-option-${optIdx()}-label`
                                 const optionDescID = () => `${questionID()}-option-${optIdx()}-desc`
                                 return (
                                   <Radio
@@ -275,10 +276,11 @@ export function InteractionCard(props: InteractionCardProps) {
                                     checked={getSelected(qIdx()).includes(opt.value)}
                                     disabled={busy() || opt.disabled === true}
                                     selected={getSelected(qIdx()).includes(opt.value)}
+                                    aria-labelledby={optionLabelID()}
                                     aria-describedby={opt.description ? optionDescID() : undefined}
                                     onChange={() => toggleOption(qIdx(), opt.value, false)}
                                   >
-                                    <span class="interaction-card__option-label">{opt.label}</span>
+                                    <span id={optionLabelID()} class="interaction-card__option-label">{opt.label}</span>
                                     <Show when={opt.description}>
                                       <span id={optionDescID()} class="interaction-card__option-desc">
                                         {opt.description}
@@ -293,8 +295,7 @@ export function InteractionCard(props: InteractionCardProps) {
                       >
                         <div class="interaction-card__options">
                           <For each={opts}>
-                            {(opt, optIdx) => {
-                              const optionDescID = () => `${questionID()}-option-${optIdx()}-desc`
+                            {(opt) => {
                               return (
                                 <Checkbox
                                   class="interaction-card__option"
@@ -302,15 +303,10 @@ export function InteractionCard(props: InteractionCardProps) {
                                   checked={getSelected(qIdx()).includes(opt.value)}
                                   disabled={busy() || opt.disabled === true}
                                   data-selected={getSelected(qIdx()).includes(opt.value) ? "true" : undefined}
-                                  inputAriaDescribedBy={opt.description ? optionDescID() : undefined}
+                                  description={opt.description}
                                   onChange={() => toggleOption(qIdx(), opt.value, true)}
                                 >
                                   <span class="interaction-card__option-label">{opt.label}</span>
-                                  <Show when={opt.description}>
-                                    <span id={optionDescID()} class="interaction-card__option-desc">
-                                      {opt.description}
-                                    </span>
-                                  </Show>
                                 </Checkbox>
                               )
                             }}

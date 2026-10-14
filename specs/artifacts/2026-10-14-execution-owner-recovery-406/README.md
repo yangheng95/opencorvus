@@ -1,6 +1,6 @@
 # 406 原执行者恢复与选项呈现证据
 
-当前组仅保留实施前分析、原来源与全仓调用定位；没有406运行或视觉通过声明。生产Phase P/U授权和精确边界见[406 Recall与方案](../../records/2026-10/2026-10-14-execution-owner-recovery-406.md)。405原失败及闭合证据保持在[405独立交付](../2026-10-14-task-question-recovery-405/delivery01/README.md)。
+本组保留实施前分析及[406有限交付原证据](delivery01/README.md)：P去重55项/247断言、两个真实进程入口各4项/58断言、最终四桌面页23原JPEG；含旧页与根因观察共49原JPEG。所有原失败、未完成观察与实际闭合保持。生产Phase P/U授权和未满足矩阵见[406 Recall与方案](../../records/2026-10/2026-10-14-execution-owner-recovery-406.md)。405原失败及闭合证据保持在[405独立交付](../2026-10-14-task-question-recovery-405/delivery01/README.md)。
 
 - [恢复完整分析及P设计](scratch406-analysis.md.gz)
 - [原恢复源摘录](source-excerpts.json.gz)

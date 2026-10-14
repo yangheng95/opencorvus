@@ -1,0 +1,156 @@
+{
+  "capturedAt": 1791945375921,
+  "files": [
+    {
+      "source": "delivery-commands/docs01/owner-start.json",
+      "destination": "docs01/owner-start.json.gz",
+      "originalBytes": 327,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/docs01/owner.json",
+      "destination": "docs01/owner.json.gz",
+      "originalBytes": 664,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/docs01/stdout.log",
+      "destination": "docs01/stdout.log.gz",
+      "originalBytes": 35,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/docs01/stderr.log",
+      "destination": "docs01/stderr.log.gz",
+      "originalBytes": 69,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/architecture01/owner-start.json",
+      "destination": "architecture01/owner-start.json.gz",
+      "originalBytes": 341,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/architecture01/owner.json",
+      "destination": "architecture01/owner.json.gz",
+      "originalBytes": 678,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/architecture01/stdout.log",
+      "destination": "architecture01/stdout.log.gz",
+      "originalBytes": 72,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/architecture01/stderr.log",
+      "destination": "architecture01/stderr.log.gz",
+      "originalBytes": 67,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/owners01/owner-start.json",
+      "destination": "owners01/owner-start.json.gz",
+      "originalBytes": 343,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/owners01/owner.json",
+      "destination": "owners01/owner.json.gz",
+      "originalBytes": 680,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/owners01/stdout.log",
+      "destination": "owners01/stdout.log.gz",
+      "originalBytes": 77,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/owners01/stderr.log",
+      "destination": "owners01/stderr.log.gz",
+      "originalBytes": 110,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/fetch-before01/owner-start.json",
+      "destination": "fetch-before01/owner-start.json.gz",
+      "originalBytes": 205,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/fetch-before01/owner.json",
+      "destination": "fetch-before01/owner.json.gz",
+      "originalBytes": 542,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/fetch-before01/stdout.log",
+      "destination": "fetch-before01/stdout.log.gz",
+      "originalBytes": 0,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/fetch-before01/stderr.log",
+      "destination": "fetch-before01/stderr.log.gz",
+      "originalBytes": 0,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/merge-before01/owner-start.json",
+      "destination": "merge-before01/owner-start.json.gz",
+      "originalBytes": 225,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/merge-before01/owner.json",
+      "destination": "merge-before01/owner.json.gz",
+      "originalBytes": 562,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/merge-before01/stdout.log",
+      "destination": "merge-before01/stdout.log.gz",
+      "originalBytes": 20,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "delivery-commands/merge-before01/stderr.log",
+      "destination": "merge-before01/stderr.log.gz",
+      "originalBytes": 0,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "run-delivery-command.ts",
+      "destination": "run-delivery-command.ts.gz",
+      "originalBytes": 2287,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "commit-scope.mjs",
+      "destination": "commit-scope.mjs.gz",
+      "originalBytes": 5298,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "capture-checks.mjs",
+      "destination": "capture-checks.mjs.gz",
+      "originalBytes": 1363,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "final-scoped.stat",
+      "destination": "final-scoped.stat.gz",
+      "originalBytes": 82631,
+      "directBytesIdentical": true
+    },
+    {
+      "source": "final-scope-review.json",
+      "destination": "final-scope-review.json.gz",
+      "originalBytes": 159508,
+      "directBytesIdentical": true
+    }
+  ],
+  "boundary": "Original command/physical/output/request receipts; identity preservation only, no source-hash gate"
+}

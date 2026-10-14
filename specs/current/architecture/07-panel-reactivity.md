@@ -267,6 +267,17 @@ with the current locale. Empty authored titles use the localized Question label.
 Deadline expiry and infrastructure closure have separate localized outcomes;
 authored question text and answers retain their original contents.
 
+Question options share one compact grid across inline, Side Chat and Dialog renderers;
+the Dialog retains its existing larger spacing and interaction area. The authored
+short label names the native selection input, while the separately registered
+description supplies supplemental information and native label activation. An
+empty description adds no row. The shared Checkbox forwards an explicit caller
+accessibility name to its actual Input; consumers with visible labels retain the
+library's existing Label registration. Selection, authored values and reply
+authority remain in the original interaction owner.
+Each shared option establishes the positioning context for its clipped native
+input, so native focus follows that option inside the same transcript scroller.
+
 Side Chat transport interruption retains its original target/generation diagnostic
 in AppLog and follows the existing reconnect lifecycle. Its status first presents
 the actual connection, then the current running activity. Session, protocol,

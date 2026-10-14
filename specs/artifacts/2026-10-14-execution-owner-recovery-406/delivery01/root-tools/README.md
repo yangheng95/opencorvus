@@ -1,0 +1,5 @@
+# Root 人工场景来源
+
+原五场景helper、公开精确输入、API事实checker、透明relay、准备失败/preimages及原readonly几何函数完整保存。工具只操作自己明确的隔离scope；UI输入/原图/人工判断由Root完成，checker不查DOM或回答问题。新Question合法120s声明不延旧Request，product原600/Side180/普通HTTP30/父60收尾保持。
+
+control-lease登记原像与Root两架构原像保持。新fresh admission与原MCP continuation的两个effect入口及真实释放合同在唯一原登记同步，原checker18 owners/23 sites通过；没有降低扫描或绕过hook。

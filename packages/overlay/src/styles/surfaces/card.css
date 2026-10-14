@@ -1193,19 +1193,38 @@ body {
   padding: var(--ui-gap-xs) 0;
 }
 .interaction-card__option {
-  align-items: baseline;
+  position: relative;
+  display: grid;
+  grid-template-columns: calc(16px * var(--ui-scale)) minmax(0, 1fr);
+  align-items: start;
   min-inline-size: 0;
-  gap: var(--ui-gap-sm);
+  column-gap: var(--ui-gap-sm);
+  row-gap: var(--ui-gap-xs);
   font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-normal);
   color: var(--text);
   cursor: pointer;
 }
+.interaction-card__option > :is(.oc-checkbox-label, .oc-radio-label) {
+  display: contents;
+}
+.interaction-card__option > :is(.oc-checkbox-control, .oc-radio-control) {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: start;
+  margin: var(--ui-gap-3xs) 0 0;
+}
 .interaction-card__option-label {
+  grid-column: 2;
+  grid-row: 1;
   min-inline-size: 0;
   font-weight: var(--ui-font-weight-medium);
   overflow-wrap: anywhere;
 }
-.interaction-card__option-desc {
+.interaction-card__option-desc,
+.interaction-card__option > .oc-checkbox-description {
+  grid-column: 2;
+  grid-row: 2;
   min-inline-size: 0;
   color: var(--text-muted);
   font-size: var(--ui-font-body);
@@ -1356,12 +1375,8 @@ body {
 }
 
 .interaction-dialog-form .interaction-card__option {
-  display: grid;
   grid-template-columns: calc(18px * var(--ui-scale)) minmax(0, 1fr);
-  grid-template-rows: auto auto;
-  align-items: start;
   column-gap: var(--ui-gap-lg);
-  row-gap: var(--ui-gap-xs);
   min-width: 0;
   min-height: calc(48px * var(--ui-scale));
   box-sizing: border-box;
@@ -1372,10 +1387,6 @@ body {
   transition:
     background-color var(--ui-duration-fast) var(--ui-timing-standard),
     box-shadow var(--ui-duration-fast) var(--ui-timing-standard);
-}
-
-.interaction-dialog-form .interaction-card__option > :is(.oc-checkbox-label, .oc-radio-label) {
-  display: contents;
 }
 
 .interaction-dialog-form .interaction-card__option:not([data-disabled]):hover,
@@ -1394,28 +1405,6 @@ body {
 .interaction-dialog-form .interaction-card__option:focus-within {
   outline: calc(2px * var(--ui-scale)) solid color-mix(in srgb, var(--accent) 60%, transparent);
   outline-offset: calc(-2px * var(--ui-scale));
-}
-
-.interaction-dialog-form .interaction-card__option > :is(.oc-checkbox-control, .oc-radio-control) {
-  grid-column: 1;
-  grid-row: 1 / span 2;
-  align-self: start;
-  margin: var(--ui-gap-3xs) 0 0;
-}
-
-.interaction-dialog-form .interaction-card__option-label {
-  grid-column: 2;
-  grid-row: 1;
-  font-weight: var(--ui-font-weight-medium);
-  line-height: var(--ui-line-height-normal);
-}
-
-.interaction-dialog-form .interaction-card__option-desc {
-  grid-column: 2;
-  grid-row: 2;
-  color: var(--text-muted);
-  font-size: var(--ui-font-body);
-  line-height: var(--ui-line-height-normal);
 }
 
 .interaction-dialog-form .interaction-card__actions {
