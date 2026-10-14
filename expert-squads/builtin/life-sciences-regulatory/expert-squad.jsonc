@@ -5,7 +5,7 @@
   "name": "Life Sciences Regulatory Readiness",
   "label": "Life Sciences Regulatory Readiness",
   "description": "Product, evidence, pathway, market, quality, and risk inputs joined into a draft regulatory readiness register for qualified review.",
-  "version": "2026.10.12.1",
+  "version": "2026.10.14.1",
   "product_pillars": [
     "work"
   ],
@@ -29,7 +29,7 @@
         "capability:capability_set:platform:tool-registry:orchestrator-base",
         "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:life-sciences-regulatory:life-sciences-regulatory%2Fshared%2Fmethod",
-        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:dispatch_agents",
         "capability:tool:platform:tool-registry:manage_task",
         "capability:tool:platform:tool-registry:read"
       ],

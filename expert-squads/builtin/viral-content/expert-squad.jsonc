@@ -5,7 +5,7 @@
   "name": "Viral Content",
   "label": "Viral Content",
   "description": "Evidence-backed audience and trend research, testable concepts, complete text-led campaign copy, independent review, and canonical delivery without promised engagement.",
-  "version": "2026.10.12.1",
+  "version": "2026.10.14.1",
   "product_pillars": [
     "work"
   ],
@@ -34,7 +34,7 @@
         "capability:skill:package:viral-content:viral-content%2Fshared%2Facceptance",
         "capability:skill:package:viral-content:viral-content%2Fshared%2Fmethod",
         "capability:skill:package:viral-content:viral-content%2Fshared%2Fworkflow",
-        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:dispatch_agents",
         "capability:tool:platform:tool-registry:manage_task",
         "capability:tool:platform:tool-registry:read"
       ],

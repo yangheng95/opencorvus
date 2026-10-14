@@ -5,7 +5,7 @@
   "name": "Frontend Replica",
   "label": "Frontend Replica",
   "description": "Source URL and reference-screenshot replica with a desktop surface ledger, rendered proof, durable catalog facts, and visible narrative Turn summaries.",
-  "version": "2026.10.12.1",
+  "version": "2026.10.14.1",
   "product_pillars": [
     "code"
   ],
@@ -31,7 +31,7 @@
         "capability:skill:package:frontend-replica:frontend-replica%2Fshared%2Facceptance",
         "capability:tool:platform:tool-registry:bash",
         "capability:tool:platform:tool-registry:browser_preview",
-        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:dispatch_agents",
         "capability:tool:platform:tool-registry:manage_task"
       ],
       "base_role": "orchestrator",

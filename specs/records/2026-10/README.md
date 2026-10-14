@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [生产集合委派](2026-10-14-scheduler-frontier-grants.md)：统一平台/生产包/模板的并发能力及真实重叠验收。
+
 - [通道目录与表单当前语言](2026-10-14-channel-catalog-locale.md)：唯一语言来源和当前公共字段描述合同。
 
 - [流中成员切换](2026-10-14-live-member-switching.md)：19条Sol真实失败基线：共享并发入口缺口与取消fence错误；17项契约通过，修复待完成。

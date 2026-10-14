@@ -5,7 +5,7 @@
   "name": "Product Video Production",
   "label": "Product Video Production",
   "description": "Source-grounded product-video briefs, narrative and visual planning in parallel, and an independently reviewed production handoff without pretending unavailable media generation occurred.",
-  "version": "2026.10.12.1",
+  "version": "2026.10.14.1",
   "product_pillars": [
     "work"
   ],
@@ -29,7 +29,7 @@
         "capability:capability_set:platform:tool-registry:orchestrator-base",
         "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:product-video:product-video%2Fshared%2Fmethod",
-        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:dispatch_agents",
         "capability:tool:platform:tool-registry:manage_task",
         "capability:tool:platform:tool-registry:read"
       ],

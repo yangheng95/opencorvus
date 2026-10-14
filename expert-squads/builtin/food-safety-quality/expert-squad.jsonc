@@ -5,7 +5,7 @@
   "name": "Food Safety Quality",
   "label": "Food Safety Quality",
   "description": "Evidence-bounded food hazard, control-monitoring, traceability, and recall-readiness review joined without safety, release, recall, or regulatory authority.",
-  "version": "2026.10.12.1",
+  "version": "2026.10.14.1",
   "product_pillars": [
     "work"
   ],
@@ -29,7 +29,7 @@
         "capability:capability_set:platform:tool-registry:orchestrator-base",
         "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:food-safety-quality:food-safety-quality%2Fshared%2Fmethod",
-        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:dispatch_agents",
         "capability:tool:platform:tool-registry:manage_task",
         "capability:tool:platform:tool-registry:read"
       ],

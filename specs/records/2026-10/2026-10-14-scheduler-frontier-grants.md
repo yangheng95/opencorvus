@@ -1,0 +1,63 @@
+# 生产专家团集合委派能力统一
+
+## Recall
+
+用户要求持续自主体验和修复UI（User Interface，用户界面）/UX（User Experience，用户体验）及功能，单开发agent，使用已授权完整auth/models配对和真实流式gpt-6.1-sol。旧goal的多Astra要求已被最新人工指令覆盖。旧数据清理/当前v1数据库迁移已经交付，本轮保留当前历史。当前开始HEAD294b6d7d57790576669a830d238709c064b3da41；其他Git源码枚举、channel本地化/配置、compaction与测试运行器等改动保留，不借新branch/worktree回避。
+
+417为progress：294b6d7d5正常推送22560/76607e exit0，76a1fe确认远端精确HEAD。真实Task tsk_g00VY0Dhzi00R4lvcuZT明确要求并发，第二位仍在第一位完成13.417秒后启动，两个初始与两个续跑委派逐轮串行。19条真实Sol流、14张原图、17项共享正向契约/34断言；Stop后Task cancelled但assistant是UnknownError/activation fence。原Native80656/81176已join13bb98 exit0、配对退休、页面39关闭。共享并发与取消错误都未修复，不缩为Base局部问题。
+
+## 读取与全仓影响分析（产品修改前）
+
+已重读417 Recall/失败事实/审计矩阵和416成员身份修复、task-control-plane、06-provider、当前SessionLLM→optionsForToolRequest→providerOptions链、session/loop的retainAssistantForNextProviderStep与processor终结、ToolTurnExecutionCoordinator、dispatch_agent/dispatch_agents执行/声明/恢复、task-package-projection、task-api解析creator/冻结包、CLI/HTTP/global/panel及Mission创建入口。Task身份/epoch、Project和父Session归属仍由现有不可变lineage与fence维护；普通Session没有Task-root首decision结束条件。
+
+现象和触发：原生OpenAI/Azure携带工具时parallelToolCalls=false；120个生产包只授予dispatch_agent。当前root在首个真实decision receipt后把finish设stop并结束，因此既不能同step发两个单成员调用，也不能在后续Provider step补齐同轮成员。先前单call恢复/幂等/去重解决了持久事实，却未改变该能力与执行合同组合。模型自然续跑只重复一个成员，无法达到明示并发。Dynamic/Light已经使用dispatch_agents：一个真实调用内表达整个准备好的成员数组，Promise.all复用同一单dispatch物理实现，成员检查点、失败/取消和重启恢复已有17项聚焦契约通过。保留Provider策略和真实数据完整性，不能增加模型调用gate或host调度旁路。
+
+全仓搜索发现120个生产manifest需替换能力引用（3个嵌入源及117个payload源），Dynamic/Light已有集合授权。Dynamic prompt仍提到不可用的单dispatch备选，应同步移除这句矛盾；Light说明已正确，无需改动。generate-portable-expert-squad-template.ts的schedulerToolIDs及作者身份说明仍使用单dispatch，tracked templates/portable-expert-squad-template是它的生成结果。Registry/Manager从generated/expert-squad-payload加载payload；嵌入Base/Advanced/Research Studio使用builtin/index的文本导入。生成源与产物必须一起更新。没有扫描或运行UI自动化测试。
+
+公共契约：本次替换当前预置包的公开委派授予，保留现有集合的{team,dispatches}与target-discriminated成员schema；单成员通过一成员集合。单dispatch物理执行器、已公开的单操作接口和真实历史Tool/lineage不另建实现或兼容映射。外部项目安装/升级仍按既有Manager明确授权流程接受实际能力变更，不在loader中偷偷扩大grant。旧Task冻结的package snapshot继续作为原授权和历史事实，新任务/升级后的包使用新修订；不改写旧Task、历史消息或数据库schema。
+
+## 实施方案
+
+1. 将120个当前生产manifest的scheduler单dispatch引用替换为dispatch_agents，修订号统一为2026.10.14.1；Dynamic因prompt修正也升至该修订，Light不变。只修改已读清单对应字段，脚本逐包验证原引用/原版本和JSONC（JSON with Comments，带注释JSON）结构，保留其余能力/角色/依赖。
+2. 模板生成器同步集合授权、作者目标路径说明与2026.10.14.1修订，重新生成唯一tracked模板；确认生成目录绝对路径位于当前workspace、无reparse point、无用户改动/未跟踪文件后才调用现有精确目录生成器。生成payload模块，保留构建产物现有管理方式。
+3. 增加聚焦正向后端契约：通过真实Registry加载全部生产包，materialize scheduler能力得到当前集合委派；模板生成结果同样通过真实schema/能力投影并与tracked生成产物一致。覆盖既有Dynamic/Light，不依靠文案或不存在断言。再执行集合/恢复/跨进程相关验收；已有417通过的未变物理实现不无目标重复全部测试。
+4. 当前架构expert-squad-scheduling补充统一入口与冻结旧任务边界；根CHANGELOG未发布中文/英文记录2026.10.14.1包修订、功能影响与升级约束。应用版本/tag/Release不变，不发布。
+5. 真实验收使用原412-fresh项目/v1库，新的Native Task scope、18547端口、48条累计请求、Provider无活动180秒和Native600秒资源收尾界限。复用417经Node构建的/UI bundle（本轮不改前端），完整配对资格通过后再启动同一1500字两位独立读取用例。预检与实际root请求必须显示dispatch_agents；实际成员Provider/body时间有重叠，两次read/source各归属第2/3行；实际页面同时Running、两边Sources/正文/阅读位置复核并留原图。
+
+取消fence普通错误另有完整消费者/终态链调查，未分析完不在本阶段放宽fence或遮蔽界面。若同轮完成相关修复，先补精确错误合同、调用点和正向测试方案，再修改；若未完成，必须在本批结果明确列为未完成而保留整体goal。
+
+## 风险与验收边界
+
+120包影响广，不能只用Base一条成功证明全部角色/工作流：全部包真实Registry/能力投影验证当前授予与schema，现有跨进程/恢复契约验证共享物理实现，真实Sol验证首个受影响入口确实重叠；多Project/Mission的真实矩阵若未运行要明确记录。一个集合最多8成员，由现有schema负责；独立准备成员由模型自然选择，真实写权限与工作树隔离保持原契约。不新增状态机、双读写或工具白名单。
+
+所有任务文件结束前范围commit，fresh fetch/merge、完整pending复核及正常push，不混入其他改动。自有页面/服务公开shutdown、原handle join、精确PID/出生身份/physical/output/request收尾后退休复制配对。更新三索引并执行docs:check/architecture-index，所有失败日志保留，未满足并发或终态合同不写成通过。整体goal active。
+
+## 首轮投影检查发现的继承入口（继续修改前）
+
+正式checker e89613 exit1：Advanced实际投影同时得到dispatch_agent和dispatch_agents，模板检查已通过。直接manifest替换没有消除平台orchestrator-base的单成员继承。全仓追踪到agent/tool-pool-data.ts的ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS，经AgentToolPool与PlatformCapabilitySetRegistry形成共享capability set；HostAgentRegistry的公共prompt也明确要求dispatch_agent。这是同一共享根因的继承/提示入口，必须一起修，不能过滤测试结果或在投影阶段按关键字隐藏旧工具。
+
+追加实施：平台scheduler base将dispatch_agent替换为dispatch_agents；projectable集合仍明确包含单操作接口dispatch_agent，供显式授予它的外部调用者使用同一个物理实现，当前预置包不走该入口。Host prompt改为遵循每轮实际提供的委派工具说明，避免与精确投影矛盾。平台set是显式授予的公共平台能力合同，升级修改其成员，不另设loader兼容映射。冻结旧Task保留的是原包字节与显式refs；引用平台set的包仍依赖当前平台set定义，不能把包字节冻结误写成平台实现永远冻结。此影响将在架构/更新日志说明，并由真实materialization验收，原始单调用历史保持。首轮失败日志保留，原checker重跑另存日志。
+
+## 首轮真实Provider故障与独立重试
+
+修后122包投影全过（122断言），模板34断言通过；Research Studio与scheduler Skill策略5项通过。首次Native scope scheduler-frontier-grants-418-fa374868-63d6-4f59-8d53-92dccc68c216/79460，预检credential usable/catalog projected/actualModel精确Sol，Base版本2026.10.14.1并有dispatch_agents。正式CLI创建tsk_g00VY0OP8S00DdSlsAOf后，在任何成员出现前收到AI_StreamProviderError: Our servers are currently overloaded。01原图、真实facts-failed-first.json和monitor failed.json完整保留，不以该失败推断并发成功或凭据错误。
+
+自有页面41关闭，公开shutdown e50a12 HTTP200，原36824 join c46802 exit0、物理收尾/配对退休。下一独立retry scope使用18549、同一未经改写的原任务请求、新requestID/Task和新的配对预检，预算仍48累计真实调用、180秒无活动、600秒Native上限；不延长旧scope、不改写失败Task。独立重试用于继续原验收，不回避原失败证据。
+
+## 最新约束与真实复验结果
+
+用户再次明确“不要用子agent了”，开发仅由/root执行；当前agent清单也只有/root。停止正在运行的自有产品验收Task，不再创建任何成员或启动多成员复验。新版仓库规范替换旧规范，新增数据库当前基线之后必须保留数据自动迁移；本轮没有数据库格式变化或数据清理。
+
+复验Task tsk_g00VY0PYrU003nBkp2A9/Project prj_hSQinOa1MIVoNEeARpn5使用2026.10.14.1 Base包，实际root请求公开dispatch_agents。同一tool_part prt_g0VY0Pdcy00NvZ5kgEW9产生collection_member_index 0/1两条真实lineage；两个初始assistant创建相差2毫秒，替代417中第二位晚于第一位完成13.417秒的串行事实。其中交付成员初始与第一次恢复都收到Provider服务过载。运行中的root按原验收请求自行恢复原Session，随后自行再次集合续跑原两位成员。最后两位正文的Provider source-reader区间重叠34.355秒；这些是原任务自然续跑的持久事实，不是开发agent追加成员或修改验收请求。
+
+点击真实composer Stop后，取消请求pev_g0VY0R0Al00aEhY7Ucu6于2026-10-14T07:17:34.915Z落盘，345毫秒后task.cancelled，交付成员最后assistant为MessageAbortedError且完整保留同一取消来源。实际截图02显示Cancelled。截图01只有root正在提交集合，截图02已终止，因此本轮没有两位成员都在流中切换的人工截图证据，不能把重叠的持久事实冒充完整UI验收；Sources留下4条真实read来源，完整视觉切换验收未达成。417的root取消fence错误并未被本轮代码修改，也不能以本次worker正常取消宣称已根治。
+
+首轮5条、复验23条真实gpt-6.1-sol流，完整资格/声明/reader及失败证据已归档。复验Native31020/host50960随后由原600秒资源上限退出，reason=deadline_exceeded、exit1；本次未在截止前完成公开shutdown，不能记为正常shutdown成功。原18034已join5110d1 exit1，实际physicalCompletion/outputDrainComplete/requestCleanupComplete均为true、复制auth/models配对已退休，自有页面42关闭。没有再启动任何新scope。
+
+## 已完成与验收范围
+
+实现120个原单委派生产manifest、Dynamic prompt及其版本、平台orchestrator-base、Host公共提示、唯一可移植模板生成器/生成目录、tracked payload模块的统一修复。当前122个生产包实际Registry加载和能力投影全部为集合委派；已有单操作公共接口继续复用唯一物理执行器。旧Task包字节与显式refs保持，引用平台能力集的冻结包仍使用当前平台实现，这一边界已同步架构和双语CHANGELOG。
+
+正式检查器通过12项聚焦正向测试、188断言：122包投影、模板生成/投影、Research Studio完整包与Skill、scheduler Skill策略。共享集合执行、重启恢复、跨进程、admission fence和Provider调用策略沿用417中未变化的17项/34断言结果；本轮没有改动物理运行器。多Project/Mission真实运行矩阵仍未执行，完整双成员视觉验收按最新约束停止；后续只由单agent继续处理Sources/UI与尚未修复的root取消错误。
+
+真实scheduler工具工厂额外5项13断言通过（26067正式handle已join exit0），覆盖精确工具构建、全部projectable定义、decision声明及发送器；docs:check与architecture-index 76b633 exit0。全工作区diff检查发现其他任务408记录末尾空行，保留该无关文件；本次提交使用独立索引仅检查本任务差异。

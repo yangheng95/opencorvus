@@ -81,7 +81,7 @@ export const ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS = [
   "no_action",
   "scheduler_message",
   "read_context",
-  "dispatch_agent",
+  "dispatch_agents",
   "manage_task",
   "wait",
   "read_task_message",
@@ -108,7 +108,7 @@ export const TASK_OWNER_REGISTRY_TOOL_IDS: readonly string[] = [
 
 export const ORCHESTRATOR_SCHEDULER_PROJECTABLE_TOOL_IDS = [
   ...ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS,
-  "dispatch_agents",
+  "dispatch_agent",
   ...TASK_OWNER_REGISTRY_TOOL_IDS,
   "multica_catalog",
   "multica_preview",

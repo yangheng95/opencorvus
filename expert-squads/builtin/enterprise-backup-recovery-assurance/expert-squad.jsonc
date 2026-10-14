@@ -5,7 +5,7 @@
   "name": "Enterprise Backup Recovery Assurance",
   "label": "Enterprise Backup Recovery Assurance",
   "description": "Workload scope, backup-copy, integrity and isolated-restore evidence joined for qualified recovery assurance.",
-  "version": "2026.10.12.1",
+  "version": "2026.10.14.1",
   "product_pillars": [
     "code",
     "work"
@@ -30,7 +30,7 @@
         "capability:capability_set:platform:tool-registry:orchestrator-base",
         "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:enterprise-backup-recovery-assurance:enterprise-backup-recovery-assurance%2Fshared%2Fmethod",
-        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:dispatch_agents",
         "capability:tool:platform:tool-registry:manage_task",
         "capability:tool:platform:tool-registry:read"
       ],

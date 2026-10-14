@@ -42,7 +42,7 @@ The sample squad collects ledger evidence, defines deterministic matching rules,
 
 ## Identity And Directory Rules
 
-- Each key under `capability_projection.agents.<agentID>` is the runtime agent identity and the exact `dispatch_agent.dispatch.target` value.
+- Each key under `capability_projection.agents.<agentID>` is the runtime agent identity and the exact `dispatch_agents.dispatches[].dispatch.target` value. Submit the complete independent ready set in one collection, including a one-member collection for a single responsibility.
 - `base_role` selects only the platform core prompt, tool set, Session kind, and adapter template. It never becomes the runtime identity or dispatch target, and it does not add a terminal submit/finalizer protocol.
 - Every worker prompt is declared on its projection and stored at `agents/<agentID>/system.md`.
 - Scheduler configuration stays under `capability_projection.scheduler` with the fixed `orchestrator` template and optional `agents/orchestrator/system.md` prompt.

@@ -5,7 +5,7 @@
   "name": "Omnichannel Distribution",
   "label": "Omnichannel Distribution",
   "description": "Current channel research, rights-aware adaptation, measurement planning, readiness review, and canonical prepared-not-posted delivery bundles.",
-  "version": "2026.10.12.1",
+  "version": "2026.10.14.1",
   "product_pillars": [
     "work"
   ],
@@ -34,7 +34,7 @@
         "capability:skill:package:omnichannel-distribution:omnichannel-distribution%2Fshared%2Facceptance",
         "capability:skill:package:omnichannel-distribution:omnichannel-distribution%2Fshared%2Fmethod",
         "capability:skill:package:omnichannel-distribution:omnichannel-distribution%2Fshared%2Fworkflow",
-        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:dispatch_agents",
         "capability:tool:platform:tool-registry:manage_task",
         "capability:tool:platform:tool-registry:read"
       ],

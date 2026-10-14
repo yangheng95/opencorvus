@@ -5,7 +5,7 @@
   "name": "Ecommerce Merchandising",
   "label": "Ecommerce Merchandising",
   "description": "Catalog, demand and pricing, and experience and operations evidence joined into a reversible merchandising test plan.",
-  "version": "2026.10.12.1",
+  "version": "2026.10.14.1",
   "product_pillars": [
     "work"
   ],
@@ -29,7 +29,7 @@
         "capability:capability_set:platform:tool-registry:orchestrator-base",
         "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:ecommerce-merchandising:ecommerce-merchandising%2Fshared%2Fmethod",
-        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:dispatch_agents",
         "capability:tool:platform:tool-registry:manage_task",
         "capability:tool:platform:tool-registry:read"
       ],

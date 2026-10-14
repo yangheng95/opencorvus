@@ -1,0 +1,26 @@
+{
+  "pid": 31020,
+  "occurrence": "scheduler-frontier-grants-418-retry-f7e454d5-d1a8-43e5-8772-b38f6582567d",
+  "selected": {
+    "productPillar": "work",
+    "requestSentAt": "2026-10-14T07:11:46.9876226Z",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+    "requestID": "333c2ce6-acb6-4022-ad3c-bd5d9e65d0e4",
+    "acceptedObservedAt": "2026-10-14T07:11:53.7189542Z",
+    "taskID": "tsk_g00VY0PYrU003nBkp2A9",
+    "occurrence": "scheduler-frontier-grants-418-retry-f7e454d5-d1a8-43e5-8772-b38f6582567d",
+    "projectID": "prj_hSQinOa1MIVoNEeARpn5"
+  },
+  "pinned": {
+    "taskID": "tsk_g00VY0PYrU003nBkp2A9",
+    "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+    "rootSessionID": "ses_-zURzaQjIzz58X29gl4s",
+    "epoch": 1,
+    "openedEventID": "pev_g0VY0PZI800bR5oPxzP4",
+    "openedAt": 1791961911604
+  },
+  "totalDeadlineMs": 1791962811604,
+  "maximumMilliseconds": 900000,
+  "inactivityMilliseconds": 180000,
+  "boundary": "Fixed actual Task opening boundary survives monitor failure; parent supervision owns settlement"
+}

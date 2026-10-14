@@ -5,7 +5,7 @@
   "name": "Frontend Innovate",
   "label": "Frontend Innovate",
   "description": "Evidence-backed product redesign, visual direction, implementation, and rendered proof through durable catalog facts and visible narrative Turn summaries.",
-  "version": "2026.10.12.1",
+  "version": "2026.10.14.1",
   "product_pillars": [
     "code"
   ],
@@ -43,7 +43,7 @@
         "capability:tool:package:frontend-innovate:frontend-innovate%2Fshared%2Fmaterialize-figma-resources",
         "capability:tool:platform:tool-registry:bash",
         "capability:tool:platform:tool-registry:browser_preview",
-        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:dispatch_agents",
         "capability:tool:platform:tool-registry:manage_task"
       ],
       "base_role": "orchestrator",

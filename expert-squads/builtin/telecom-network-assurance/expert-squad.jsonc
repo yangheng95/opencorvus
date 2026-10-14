@@ -5,7 +5,7 @@
   "name": "Telecom Network Assurance",
   "label": "Telecom Network Assurance",
   "description": "Demand, topology, service-level, capacity, and change-risk evidence joined into a non-operational network assurance plan.",
-  "version": "2026.10.12.1",
+  "version": "2026.10.14.1",
   "product_pillars": [
     "work"
   ],
@@ -29,7 +29,7 @@
         "capability:capability_set:platform:tool-registry:orchestrator-base",
         "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:telecom-network-assurance:telecom-network-assurance%2Fshared%2Fmethod",
-        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:dispatch_agents",
         "capability:tool:platform:tool-registry:manage_task",
         "capability:tool:platform:tool-registry:read"
       ],

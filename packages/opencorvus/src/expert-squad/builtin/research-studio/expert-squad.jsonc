@@ -5,7 +5,7 @@
   "name": "Research Studio",
   "label": "Research Studio",
   "description": "A research planning, durable evidence collection, reproducible analysis, post-computation fact-checking, and template-driven report-delivery squad.",
-  "version": "2026.10.12.1",
+  "version": "2026.10.14.1",
   "product_pillars": [
     "code",
     "work"
@@ -30,7 +30,7 @@
         "capability:capability_set:platform:tool-registry:orchestrator-base",
         "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:tool:platform:tool-registry:browser_preview_capture",
-        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:dispatch_agents",
         "capability:tool:platform:tool-registry:read"
       ],
       "base_role": "orchestrator",

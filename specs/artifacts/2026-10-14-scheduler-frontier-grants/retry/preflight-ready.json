@@ -1,0 +1,22 @@
+{
+  "pid": 31020,
+  "owner": {
+    "pid": 31020,
+    "processInstanceID": "win32:639275586643218742",
+    "occurrenceID": "8c86b7a0-419a-48c8-9850-74adb74a08d2"
+  },
+  "occurrence": "scheduler-frontier-grants-418-retry-f7e454d5-d1a8-43e5-8772-b38f6582567d",
+  "port": 18549,
+  "preflight": {
+    "sessionID": "ses_hFECqCxuQbI411hPGkSt",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "maxRequests": 48,
+  "qualificationKind": "Task",
+  "budgetScope": "preflight-and-selected-qualification-surface-cumulative-same-process",
+  "nextAction": "root-owned-genuine-cli-task-create",
+  "credentialCleanup": "parent-owned-after-physical-exit"
+}

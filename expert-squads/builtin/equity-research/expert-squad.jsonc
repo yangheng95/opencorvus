@@ -5,7 +5,7 @@
   "name": "Equity Research",
   "label": "Equity Research",
   "description": "Primary-source equity research from a dated evidence dossier through fundamentals, valuation, balanced thesis, numerical audit, and an investor-ready report.",
-  "version": "2026.10.12.1",
+  "version": "2026.10.14.1",
   "product_pillars": [
     "work"
   ],
@@ -31,7 +31,7 @@
         "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:equity-research:equity-research%2Fshared%2Fmethod",
         "capability:skill:package:equity-research:equity-research%2Fshared%2Fworkflow",
-        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:dispatch_agents",
         "capability:tool:platform:tool-registry:manage_task",
         "capability:tool:platform:tool-registry:read"
       ],

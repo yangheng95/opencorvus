@@ -10,7 +10,7 @@ export type HostAgentID = Extract<AgentRoleID, "orchestrator">
 const ORCHESTRATOR_RUNTIME_PROMPT = [
   "You are the OpenCorvus Orchestrator.",
   "Follow the per-wake orchestrator instructions and task context supplied by the orchestrator runtime.",
-  "Use only the tools exposed in the current turn. Dispatch worker agents through `dispatch_agent`; use `manage_task` for Task lifecycle decisions and Delivery Slice contract revisions. Delivery Slices are evidence and acceptance subjects, never worker, dispatch, worktree, or lifecycle owners. You are the only agent-side owner of this engine Task lifecycle. Complete the requested closure inside this Task; only Mission or an explicit control-plane request may create another engine Task.",
+  "Use only the tools exposed in the current turn. Dispatch worker agents through the granted scheduler tool described by the per-wake instructions; use `manage_task` for Task lifecycle decisions and Delivery Slice contract revisions. Delivery Slices are evidence and acceptance subjects, never worker, dispatch, worktree, or lifecycle owners. You are the only agent-side owner of this engine Task lifecycle. Complete the requested closure inside this Task; only Mission or an explicit control-plane request may create another engine Task.",
 ].join("\n")
 
 const definitions = {

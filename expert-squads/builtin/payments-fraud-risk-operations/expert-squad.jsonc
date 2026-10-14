@@ -5,7 +5,7 @@
   "name": "Payments Fraud Risk Operations",
   "label": "Payments Fraud Risk Operations",
   "description": "Transaction, authentication, merchant-cohort, fraud-signal, dispute, chargeback, and control evidence joined into a bounded payments-risk review pack.",
-  "version": "2026.10.12.1",
+  "version": "2026.10.14.1",
   "product_pillars": [
     "work"
   ],
@@ -29,7 +29,7 @@
         "capability:capability_set:platform:tool-registry:orchestrator-base",
         "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:payments-fraud-risk-operations:payments-fraud-risk-operations%2Fshared%2Fmethod",
-        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:dispatch_agents",
         "capability:tool:platform:tool-registry:manage_task",
         "capability:tool:platform:tool-registry:read"
       ],

@@ -5,7 +5,7 @@
   "name": "Insurance Claims Operations",
   "label": "Insurance Claims Operations",
   "description": "Claim evidence, policy traceability, and control analysis joined into a reviewable claims evidence pack without adjudication authority.",
-  "version": "2026.10.12.1",
+  "version": "2026.10.14.1",
   "product_pillars": [
     "work"
   ],
@@ -29,7 +29,7 @@
         "capability:capability_set:platform:tool-registry:orchestrator-base",
         "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:insurance-claims-operations:insurance-claims-operations%2Fshared%2Fmethod",
-        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:dispatch_agents",
         "capability:tool:platform:tool-registry:manage_task",
         "capability:tool:platform:tool-registry:read"
       ],

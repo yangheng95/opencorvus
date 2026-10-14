@@ -2,6 +2,8 @@ import { describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { renderPortableExpertSquadTemplateFiles } from "../script/generate-portable-expert-squad-template"
+import { ExpertSquadManifestV2Schema } from "@opencorvus-ai/sdk/expert-squad-authoring"
+import { schedulerCapabilityGrants } from "./expert-squad/capability-grant-fixture"
 
 describe("portable Expert Squad scheduler template", () => {
   test("hands capability-matched criteria and tools to acceptance identities", async () => {
@@ -20,7 +22,11 @@ describe("portable Expert Squad scheduler template", () => {
     expect(scheduler).toContain("source-derived action matrix with one row per in-scope entity")
     expect(scheduler).toContain("independently rebuild the same finite candidate ledger and action matrix")
     expect(scheduler).toContain("omitted, extra, surrogate, or rule-precedence failures")
-    expect(rendered["package/expert-squad.jsonc"]).toContain('"version": "2026.08.21.3"')
+    const manifest = ExpertSquadManifestV2Schema.parse(Bun.JSONC.parse(rendered["package/expert-squad.jsonc"]!))
+    expect({
+      version: manifest.version,
+      dispatch: schedulerCapabilityGrants(manifest).builtInToolIDs.filter((id) => id.startsWith("dispatch_")),
+    }).toEqual({ version: "2026.10.14.1", dispatch: ["dispatch_agents"] })
 
     const trackedScheduler = await fs.readFile(
       path.resolve(import.meta.dir, "../../../templates/portable-expert-squad-template/package/agents/orchestrator/system.md"),

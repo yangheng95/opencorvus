@@ -1,0 +1,61 @@
+{
+  "copiedPair": [
+    {
+      "outcome": "retired",
+      "name": "auth.json"
+    },
+    {
+      "outcome": "retired",
+      "name": "models.json"
+    }
+  ],
+  "observedAtUtc": "2026-10-14T07:21:04.9550490Z",
+  "chain": [
+    {
+      "identity": {
+        "pid": 50960,
+        "processInstanceID": "win32:639275586634121567",
+        "occurrenceID": "172c5f00-b220-48ca-beb5-4ded3dcfd6c9"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "identity": {
+        "pid": 31020,
+        "processInstanceID": "win32:639275586643218742",
+        "occurrenceID": "74707aef-d346-4929-a5e2-e08e9588d149"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "pairedCleanupComplete": true,
+  "physicalCompletion": true,
+  "native": {
+    "occurrence": "scheduler-frontier-grants-418-retry-f7e454d5-d1a8-43e5-8772-b38f6582567d",
+    "outcome": "settled",
+    "host": {
+      "pid": 50960,
+      "processInstanceID": "win32:639275586634121567",
+      "occurrenceID": "172c5f00-b220-48ca-beb5-4ded3dcfd6c9"
+    },
+    "target": {
+      "pid": 31020,
+      "processInstanceID": "win32:639275586643218742",
+      "occurrenceID": "74707aef-d346-4929-a5e2-e08e9588d149"
+    },
+    "observedAtUtc": "2026-10-14T07:21:03.487Z",
+    "deadlineAt": 1791962463350,
+    "terminal": {
+      "occurrenceID": "scheduler-frontier-grants-418-retry-f7e454d5-d1a8-43e5-8772-b38f6582567d",
+      "pid": 31020,
+      "reason": "deadline_exceeded",
+      "exitCode": 1,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "occurrence": "scheduler-frontier-grants-418-retry-f7e454d5-d1a8-43e5-8772-b38f6582567d"
+}

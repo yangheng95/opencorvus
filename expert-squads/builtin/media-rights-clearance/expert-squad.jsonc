@@ -5,7 +5,7 @@
   "name": "Media Rights Clearance",
   "label": "Media Rights Clearance",
   "description": "Component provenance, chain-of-title, license and release terms, and intended-use constraints joined into a counsel-ready media-clearance register.",
-  "version": "2026.10.12.1",
+  "version": "2026.10.14.1",
   "product_pillars": [
     "work"
   ],
@@ -29,7 +29,7 @@
         "capability:capability_set:platform:tool-registry:orchestrator-base",
         "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:media-rights-clearance:media-rights-clearance%2Fshared%2Fmethod",
-        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:dispatch_agents",
         "capability:tool:platform:tool-registry:manage_task",
         "capability:tool:platform:tool-registry:read"
       ],

@@ -1,0 +1,10 @@
+{
+  "pid": 31020,
+  "occurrence": "scheduler-frontier-grants-418-retry-f7e454d5-d1a8-43e5-8772-b38f6582567d",
+  "error": {
+    "name": "Error",
+    "message": "TASK_TERMINAL_CANCELLED: task cancelled"
+  },
+  "actionRequired": "parent-owner-public-shutdown-then-physical-exit-and-paired-cleanup",
+  "credentialCleanup": "unverified-parent-owned"
+}

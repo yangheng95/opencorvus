@@ -5,7 +5,7 @@
   "name": "Base",
   "label": "Base",
   "description": "Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.",
-  "version": "2026.10.12.1",
+  "version": "2026.10.14.1",
   "product_pillars": [
     "code",
     "work"
@@ -51,7 +51,7 @@
         "capability:tool:platform:tool-registry:bash",
         "capability:tool:platform:tool-registry:browser_preview",
         "capability:tool:platform:tool-registry:browser_preview_capture",
-        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:dispatch_agents",
         "capability:tool:platform:tool-registry:edit",
         "capability:tool:platform:tool-registry:external_code_search",
         "capability:tool:platform:tool-registry:glob",

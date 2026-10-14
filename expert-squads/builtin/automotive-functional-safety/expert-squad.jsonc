@@ -5,7 +5,7 @@
   "name": "Automotive Functional Safety",
   "label": "Automotive Functional Safety",
   "description": "Item, HARA, safety-requirement, failure-analysis, verification and lifecycle evidence joined into a qualified functional-safety-case review pack.",
-  "version": "2026.10.12.1",
+  "version": "2026.10.14.1",
   "product_pillars": [
     "work"
   ],
@@ -29,7 +29,7 @@
         "capability:capability_set:platform:tool-registry:orchestrator-base",
         "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:automotive-functional-safety:automotive-functional-safety%2Fshared%2Fmethod",
-        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:dispatch_agents",
         "capability:tool:platform:tool-registry:manage_task",
         "capability:tool:platform:tool-registry:read"
       ],

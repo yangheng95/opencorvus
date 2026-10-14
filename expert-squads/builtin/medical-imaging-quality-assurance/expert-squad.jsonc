@@ -5,7 +5,7 @@
   "name": "Medical Imaging Quality Assurance",
   "label": "Medical Imaging Quality Assurance",
   "description": "Evidence-bounded imaging equipment, protocol, phantom QC, DICOM workflow, display, dose-index, and nonconformance review without clinical or system-operation authority.",
-  "version": "2026.10.12.1",
+  "version": "2026.10.14.1",
   "product_pillars": [
     "work"
   ],
@@ -29,7 +29,7 @@
         "capability:capability_set:platform:tool-registry:orchestrator-base",
         "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:medical-imaging-quality-assurance:medical-imaging-quality-assurance%2Fshared%2Fmethod",
-        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:dispatch_agents",
         "capability:tool:platform:tool-registry:manage_task",
         "capability:tool:platform:tool-registry:read"
       ],

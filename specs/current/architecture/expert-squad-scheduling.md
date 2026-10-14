@@ -12,6 +12,22 @@ The low-level SDK/HTTP `task.create` and model-facing `panel_create_task` requir
 
 The Orchestrator chooses useful responsibilities and actual input dependencies from the original request, current evidence, permissions, capacity and workspace ownership. It may use a Directed Acyclic Graph (DAG), parallel branches and joins, conditional alternatives, local investigation/repair loops, or a mixture. New evidence may change the partition and order. A local continuation reuses the exact responsible dispatch/Session; a new independent responsibility gets a new initial dispatch, even when it uses the same projected Agent or suggested node.
 
+Current shipped packages and the portable authoring template grant `dispatch_agents`
+as their scheduler dispatch surface. One visible streamed call carries the complete
+independent ready set in aligned `team` and `dispatches` rows; a single responsibility
+uses a one-member collection. This preserves concurrent worker Sessions even when
+the Provider serializes function calls and the first decision closes the current
+Orchestrator Turn. The existing collection executor owns member checkpoints and
+recovery through the canonical dispatch runtime; it introduces no Host-selected
+workflow, model-step exception, grant alias or additional state. Installed packages
+acquire this revision through their ordinary authorized update, and already-bound
+Tasks retain their immutable package bytes, explicit capability references and
+participant history. The shared platform `orchestrator-base` capability set also
+grants collection dispatch: a frozen package that references that set resolves its
+current platform definition. Package freezing does not freeze platform capability
+set implementations. An external package may explicitly grant the public single
+dispatch operation; both tools use the same canonical physical executor.
+
 `capability_projection.virtual_workflows` is optional reference guidance. Omission normalizes to an empty collection through the canonical SDK schema. A reference never requires selection, all nodes, a fixed order, one initial occurrence per node, or exclusive use for the Task. Its `depends_on`, `when` and `repeat_until` fields describe possible input, choice and stopping considerations for the model. The Host does not evaluate conditions, execute graphs, infer the next tool, run all alternatives, count semantic iterations or persist workflow state.
 
 An optional dispatch `turn.workflow_subject` records reference provenance. Omission uses direct dispatch. Different references, repeated referenced nodes and direct dispatch may coexist in one Task. Immutable snapshots remain attached to their actual dispatch; they are not a Task-wide binding. The optional completion `workflow_id` has the same reference meaning. Actual acceptance depends on user obligations, relevant capability evidence contracts, independent review and usable delivery resources.
@@ -36,7 +52,7 @@ The Software Development Kit (SDK) exports the canonical manifest, authoring val
 const capability_projection = {
   scheduler: {
     base_role: "orchestrator",
-    capability_refs: ["capability:tool:platform:tool-registry:dispatch_agent"],
+    capability_refs: ["capability:tool:platform:tool-registry:dispatch_agents"],
     prompt: "agents/orchestrator/system.md",
   },
   agents: {
