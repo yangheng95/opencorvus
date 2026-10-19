@@ -1,0 +1,7 @@
+{
+  "prior": "http-checker-scope-error.json was the initial interpretation, not a root-cause conclusion",
+  "root": "Git skips a damaged local .git and discovers the valid parent. The first D scratch HTTP registered that parent in the isolated QA store before canonical source rejection.",
+  "proof": "New actual valid-parent/damaged-child contract failed on the intermediate implementation; final bounded Git discovery returns the child-specific typed error",
+  "userWorkspace": "Original .git/opencorvus marker predates this task; no rollback or deletion of marker or QA history",
+  "delivery": "Preserve original failing receipt and add this correction; final reviewed HTTP repeats the original D target"
+}

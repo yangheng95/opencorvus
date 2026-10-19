@@ -1,0 +1,48 @@
+$ bun script/run-tests.ts test/project-git-discovery.test.ts test/project-registration-batch.test.ts test/project-identity-retention.test.ts
+[1/3] START test/project-git-discovery.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) an existing damaged Git directory returns its explicit discovery error [455.24ms]
+(pass) Git discovery resolves an unborn worktree with a separate metadata directory [1335.40ms]
+(pass) POSIX Git discovery preserves newline and trailing whitespace in repository paths [0.70ms]
+(pass) Git discovery preserves the exact main, linked and aliased Project occurrence [1926.37ms]
+
+ 4 pass
+ 0 fail
+ 11 expect() calls
+Ran 4 tests across 1 file. [6.45s]
+[1/3] DONE test/project-git-discovery.test.ts exit=0 duration=7.04s
+[2/3] START test/project-registration-batch.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a cancelled batch settles its accepted registration and returns the original abort reason [265.76ms]
+(pass) an exclusive operation inside a registration batch returns its typed error and settles the queue [8.22ms]
+(pass) a fresh physical comparison observes a junction's current target after retargeting [6.35ms]
+(pass) a registration batch orders the same physical namespace through aliases and ancestor paths [310.73ms]
+(pass) a failed registration settles its peer and preserves the original error before a later batch [238.45ms]
+(pass) a retired registration context acquires the original queue after an independent current owner [30.52ms]
+(pass) a batch drains an accepted registration before releasing the original cross-process queue [8.26ms]
+(pass) a nested registration batch shares its original queue and returns its own ordered results [248.63ms]
+(pass) registration batches retain independent runtime-root queue ownership [9.86ms]
+
+ 9 pass
+ 0 fail
+ 9 expect() calls
+Ran 9 tests across 1 file. [2.32s]
+[2/3] DONE test/project-registration-batch.test.ts exit=0 duration=2.44s
+[3/3] START test/project-identity-retention.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) one retained identity scope preserves nested owners and State through idle convergence and explicit refresh [505.79ms]
+(pass) a failed identity scope preserves its original error and releases every physical lease [320.08ms]
+(pass) outside work settles its own identity while the original scope retains its Project [345.48ms]
+(pass) declared cached identities belong to the scope before its first Project callback [330.93ms]
+
+ 4 pass
+ 0 fail
+ 14 expect() calls
+Ran 4 tests across 1 file. [2.78s]
+[3/3] DONE test/project-identity-retention.test.ts exit=0 duration=2.90s

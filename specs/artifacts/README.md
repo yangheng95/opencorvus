@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Git身份与原生启动压力](2026-10-20-native-spawn-pressure/README.md)：损坏/缺失Git根因、38例合同、公开HTTP及全页面性能未达标证据。
+
 - [Windows同步启动观测](2026-10-20-windows-spawn-observation/README.md)：排除FFI绑定、真实spawn主线程成本与完整性能失败事实。
 
 - [Windows直接父查询与owner结算](2026-10-20-native-parent-query/README.md)：真实系统诊断、失败→通过、35个合同和发布helper全量验收。

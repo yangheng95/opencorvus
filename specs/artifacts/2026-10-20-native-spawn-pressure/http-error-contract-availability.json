@@ -1,0 +1,34 @@
+{
+  "rows": [
+    {
+      "name": "valid-parent",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\native-spawn-pressure-448\\damaged-http-repo",
+      "status": 400,
+      "requestID": "deee4109-5da3-43f9-ad6a-b12a09dcdc05",
+      "body": {
+        "name": "ProjectGitDiscoveryError",
+        "data": {
+          "directory": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\native-spawn-pressure-448\\damaged-http-repo",
+          "reason": "command-failed",
+          "message": "Cannot discover Git repository D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\native-spawn-pressure-448\\damaged-http-repo: fatal: not a git repository (or any of the parent directories): .git"
+        }
+      }
+    },
+    {
+      "name": "independent",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-20\\native-spawn-pressure-448-availability\\damaged-http-repo",
+      "status": 400,
+      "requestID": "7cc20c6d-56ed-4767-bf80-52623774e538",
+      "body": {
+        "name": "ProjectGitDiscoveryError",
+        "data": {
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-20\\native-spawn-pressure-448-availability\\damaged-http-repo",
+          "reason": "command-failed",
+          "message": "Cannot discover Git repository C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-20\\native-spawn-pressure-448-availability\\damaged-http-repo: fatal: not a git repository (or any of the parent directories): .git"
+        }
+      }
+    }
+  ],
+  "boundary": "Actual public production HTTP, both original damaged-child conditions, original native Git/Project/Instance/error middleware; no route or response stub",
+  "observedAt": "2026-10-19T23:03:59.264Z"
+}

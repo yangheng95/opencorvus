@@ -1,0 +1,37 @@
+$ bun script/run-tests.ts test/project-filesystem-identity.test.ts test/project-identity-convergence.test.ts
+[1/2] START test/project-filesystem-identity.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) discovers the exact independent Project while a wide-inode peer is closed for deletion [3183.89ms]
+(pass) recognizes two real hard-link paths as the same filesystem identity [760.72ms]
+(pass) a later physical comparison observes the current replacement and its new hard link [7.11ms]
+
+ 3 pass
+ 0 fail
+ 5 expect() calls
+Ran 3 tests across 1 file. [6.48s]
+[1/2] DONE test/project-filesystem-identity.test.ts exit=0 duration=7.06s
+[2/2] START test/project-identity-convergence.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) explicit Project identity convergence > lookup reports duplicate identity without mutation, then explicit repair converges owned references [1703.35ms]
+(pass) explicit Project identity convergence > a compound identity collision returns a typed conflict and rolls back every migrated row [895.05ms]
+(pass) explicit Project identity convergence > an admitted Workspace creation preserves its exact duplicate Project occurrence [668.73ms]
+(pass) explicit Project identity convergence > physical aliases resolve to the same duplicate worktree occurrence before marker writes [905.13ms]
+(pass) explicit Project identity convergence > a registered sandbox cannot bypass duplicate primary-worktree detection [766.45ms]
+(pass) explicit Project identity convergence > explicit convergence commits the canonical Project transaction [709.80ms]
+(pass) explicit Project identity convergence > an immutable Task process binding preserves the duplicate Project occurrence [697.80ms]
+(pass) explicit Project identity convergence > an embedded attachment identity is reported as a typed preservation conflict [783.45ms]
+(pass) explicit Project identity convergence > append-only permission evidence is preserved as an explicit repair conflict [804.23ms]
+(pass) explicit Project identity convergence > a durable pending publication keeps its original Project occurrence [867.20ms]
+(pass) explicit Project identity convergence > a durable Session prompt owner preserves its exact Project occurrence [789.90ms]
+(pass) explicit Project identity convergence > a canonical Session prompt owner remains authoritative while its duplicate Project converges [774.44ms]
+(pass) explicit Project identity convergence > the reviewed repair mapping exactly covers the application tables with Project identity columns [1.39ms]
+
+ 13 pass
+ 0 fail
+ 14 expect() calls
+Ran 13 tests across 1 file. [11.24s]
+[2/2] DONE test/project-identity-convergence.test.ts exit=0 duration=11.36s

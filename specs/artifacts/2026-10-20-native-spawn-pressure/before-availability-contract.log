@@ -1,0 +1,39 @@
+$ bun script/run-tests.ts test/project-git-discovery.test.ts "--test-name-pattern=Git availability selects"
+[1/1] START test/project-git-discovery.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+15 |   const priorPath = process.env.PATH
+16 |   process.env.PATH = path.join(directory.path, "missing-bin")
+17 |   try {
+18 |     const error = await Project.fromDirectory(repository.path).then(() => undefined, (error) => error)
+19 |     expect({ name: error?.name, reason: error?.data?.reason, status: error ? namedErrorStatus(error) : undefined })
+20 |       .toEqual({ name: "ProjectGitDiscoveryError", reason: "command-unavailable", status: 400 })
+            ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "name": "ProjectGitDiscoveryError",
+-   "reason": "command-unavailable",
+-   "status": 400,
++   "name": undefined,
++   "reason": undefined,
++   "status": undefined,
+  }
+
+- Expected  - 3
++ Received  + 3
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\project-git-discovery.test.ts:20:8)
+(fail) Git availability selects the explicit repository error and the ordinary directory identity [596.08ms]
+
+ 0 pass
+ 5 filtered out
+ 1 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [3.34s]
+[1/1] DONE test/project-git-discovery.test.ts exit=1 duration=3.93s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\project-git-discovery.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\project-git-discovery.test.ts
+error: script "test" exited with code 1

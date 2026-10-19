@@ -1,0 +1,7 @@
+{
+  "status": 409,
+  "name": "NonCanonicalConfigFileError",
+  "cause": "Initial owned damaged directory was nested under the development repo canonical .opencorvus source. HTTP rejected that ancestor before Git discovery; this was a checker scope error.",
+  "repair": "Use the fresh private final diagnostic directory outside any development config ancestor; preserve actual response before assertions",
+  "source": "Original two real GET responses, no production source adjustment"
+}

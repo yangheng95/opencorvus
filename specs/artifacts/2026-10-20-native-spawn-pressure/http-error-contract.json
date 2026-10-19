@@ -1,0 +1,16 @@
+{
+  "method": "GET",
+  "route": "/project/current",
+  "requestID": "133cec05-cad2-4b88-9eeb-af86a3a8fee0",
+  "status": 400,
+  "body": {
+    "name": "ProjectGitDiscoveryError",
+    "data": {
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-20\\native-spawn-pressure-448-final\\damaged-http-repo",
+      "reason": "command-failed",
+      "message": "Cannot discover Git repository C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-20\\native-spawn-pressure-448-final\\damaged-http-repo: fatal: not a git repository (or any of the parent directories): .git"
+    }
+  },
+  "boundary": "Actual production HTTP route, directory/Instance admission, native Git command and original server error serialization; input is an owned deliberately damaged repository",
+  "observedAt": "2026-10-19T22:49:42.945Z"
+}

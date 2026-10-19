@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [原生监管命令的并发压力](records/2026-10/2026-10-20-native-spawn-pressure.md)：真实Process完整结算与主线程启动成本的并发对比。
+
 - [Windows外部函数绑定成本](records/2026-10/2026-10-20-windows-ffi-binding.md)：真实身份/原子文件操作的阶段测量与进程寿命绑定调查。
 
 - [Windows监管直接父查询](records/2026-10/2026-10-20-native-parent-query.md)：原生启动测量、真实父进程合同与完整配置验收。

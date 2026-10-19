@@ -1,0 +1,58 @@
+$ bun script/run-tests.ts test/project-git-discovery.test.ts test/project-registration-batch.test.ts test/project-identity-convergence.test.ts
+[1/3] START test/project-git-discovery.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) an existing damaged Git directory returns its explicit discovery error [692.94ms]
+(pass) a damaged local Git directory inside a valid parent repository returns its own discovery error [731.52ms]
+(pass) Git discovery resolves an unborn worktree with a separate metadata directory [2063.70ms]
+(pass) POSIX Git discovery preserves newline and trailing whitespace in repository paths [0.89ms]
+(pass) Git discovery preserves the exact main, linked and aliased Project occurrence [2115.67ms]
+
+ 5 pass
+ 0 fail
+ 12 expect() calls
+Ran 5 tests across 1 file. [8.67s]
+[1/3] DONE test/project-git-discovery.test.ts exit=0 duration=9.23s
+[2/3] START test/project-registration-batch.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a cancelled batch settles its accepted registration and returns the original abort reason [277.53ms]
+(pass) an exclusive operation inside a registration batch returns its typed error and settles the queue [8.73ms]
+(pass) a fresh physical comparison observes a junction's current target after retargeting [6.01ms]
+(pass) a registration batch orders the same physical namespace through aliases and ancestor paths [309.23ms]
+(pass) a failed registration settles its peer and preserves the original error before a later batch [241.36ms]
+(pass) a retired registration context acquires the original queue after an independent current owner [30.71ms]
+(pass) a batch drains an accepted registration before releasing the original cross-process queue [9.60ms]
+(pass) a nested registration batch shares its original queue and returns its own ordered results [256.36ms]
+(pass) registration batches retain independent runtime-root queue ownership [13.26ms]
+
+ 9 pass
+ 0 fail
+ 9 expect() calls
+Ran 9 tests across 1 file. [2.44s]
+[2/3] DONE test/project-registration-batch.test.ts exit=0 duration=2.57s
+[3/3] START test/project-identity-convergence.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) explicit Project identity convergence > lookup reports duplicate identity without mutation, then explicit repair converges owned references [1650.16ms]
+(pass) explicit Project identity convergence > a compound identity collision returns a typed conflict and rolls back every migrated row [1002.29ms]
+(pass) explicit Project identity convergence > an admitted Workspace creation preserves its exact duplicate Project occurrence [1152.63ms]
+(pass) explicit Project identity convergence > physical aliases resolve to the same duplicate worktree occurrence before marker writes [1179.24ms]
+(pass) explicit Project identity convergence > a registered sandbox cannot bypass duplicate primary-worktree detection [736.45ms]
+(pass) explicit Project identity convergence > explicit convergence commits the canonical Project transaction [797.89ms]
+(pass) explicit Project identity convergence > an immutable Task process binding preserves the duplicate Project occurrence [707.25ms]
+(pass) explicit Project identity convergence > an embedded attachment identity is reported as a typed preservation conflict [791.37ms]
+(pass) explicit Project identity convergence > append-only permission evidence is preserved as an explicit repair conflict [860.21ms]
+(pass) explicit Project identity convergence > a durable pending publication keeps its original Project occurrence [840.43ms]
+(pass) explicit Project identity convergence > a durable Session prompt owner preserves its exact Project occurrence [821.40ms]
+(pass) explicit Project identity convergence > a canonical Session prompt owner remains authoritative while its duplicate Project converges [696.25ms]
+(pass) explicit Project identity convergence > the reviewed repair mapping exactly covers the application tables with Project identity columns [2.17ms]
+
+ 13 pass
+ 0 fail
+ 14 expect() calls
+Ran 13 tests across 1 file. [12.07s]
+[3/3] DONE test/project-identity-convergence.test.ts exit=0 duration=12.21s

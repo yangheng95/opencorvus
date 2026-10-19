@@ -1,0 +1,41 @@
+$ bun script/run-tests.ts test/project-git-discovery.test.ts "--test-name-pattern=damaged local Git directory inside"
+[1/1] START test/project-git-discovery.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+33 |   await using root = await tmpdir({ git: true })
+34 |   const directory = path.join(root.path, "damaged child")
+35 |   await fs.mkdir(path.join(directory, ".git"), { recursive: true })
+36 |   const error = await Project.fromDirectory(directory).then(() => undefined, (error) => error)
+37 |   expect({ name: error?.name, reason: error?.data?.reason, directory: error?.data?.directory,
+38 |     status: error ? namedErrorStatus(error) : undefined }).toEqual({
+                                                                ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-cuy6L7\test-79088-hvMvzN\fixtures\fixture-vAnVyz\damaged child",
+-   "name": "ProjectGitDiscoveryError",
+-   "reason": "command-failed",
+-   "status": 400,
++   "directory": undefined,
++   "name": undefined,
++   "reason": undefined,
++   "status": undefined,
+  }
+
+- Expected  - 4
++ Received  + 4
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\project-git-discovery.test.ts:38:60)
+(fail) a damaged local Git directory inside a valid parent repository returns its own discovery error [761.74ms]
+
+ 0 pass
+ 4 filtered out
+ 1 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [3.65s]
+[1/1] DONE test/project-git-discovery.test.ts exit=1 duration=4.41s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\project-git-discovery.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\project-git-discovery.test.ts
+error: script "test" exited with code 1

@@ -1,0 +1,430 @@
+{
+  "batch": 448,
+  "baselineCommit": "9c1cfab98a1ddef1f214f0e920e86c06a6f1652e",
+  "scope": "One Windows Git command per Project discovery with strict absolute paths and bounded parent search. Original initial/admitted observations, native ownership and source/candidate contracts retained. Full QA history retained, including the parent row created by the reproduced ancestor bug.",
+  "scopes": [
+    {
+      "scope": "after",
+      "evidence": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/native-spawn-pressure-448-after/evidence/",
+      "preflight": {
+        "sessionID": "ses_hlVzCslo6qqxl4q4id6F",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "canonical": {
+        "at": "2026-10-19T22:46:17.921Z",
+        "endedAt": "2026-10-19T22:46:47.851Z",
+        "phase": "after",
+        "port": 18689,
+        "occurrence": "native-spawn-pressure-448-after-43abc199-85b3-4b5a-8bed-61f05ca8cd32",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 15254.3351,
+        "restoreMs": 14666.224499999997,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "physical": {
+        "occurrence": "native-spawn-pressure-448-after-43abc199-85b3-4b5a-8bed-61f05ca8cd32",
+        "native": {
+          "occurrence": "native-spawn-pressure-448-after-43abc199-85b3-4b5a-8bed-61f05ca8cd32",
+          "outcome": "settled",
+          "host": {
+            "pid": 74768,
+            "processInstanceID": "win32:639280467407208016",
+            "occurrenceID": "704adf0d-980e-4073-94d6-a10450a61471"
+          },
+          "target": {
+            "pid": 82264,
+            "processInstanceID": "win32:639280467417409145",
+            "occurrenceID": "5111a4e6-cdee-4c0c-b3d9-973d52a90183"
+          },
+          "observedAtUtc": "2026-10-19T22:47:45.046Z",
+          "deadlineAt": 1792451140555,
+          "terminal": {
+            "occurrenceID": "native-spawn-pressure-448-after-43abc199-85b3-4b5a-8bed-61f05ca8cd32",
+            "pid": 82264,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "pairedCleanupComplete": true,
+        "chain": [
+          {
+            "identity": {
+              "pid": 74768,
+              "processInstanceID": "win32:639280467407208016",
+              "occurrenceID": "704adf0d-980e-4073-94d6-a10450a61471"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 82264,
+              "processInstanceID": "win32:639280467417409145",
+              "occurrenceID": "5111a4e6-cdee-4c0c-b3d9-973d52a90183"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "copiedPair": [
+          {
+            "name": "auth.json",
+            "outcome": "retired"
+          },
+          {
+            "name": "models.json",
+            "outcome": "retired"
+          }
+        ],
+        "observedAtUtc": "2026-10-19T22:47:46.3309552Z",
+        "physicalCompletion": true
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-19T22:47:46.3562956Z",
+        "childExitCode": 0
+      }
+    },
+    {
+      "scope": "final",
+      "evidence": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/native-spawn-pressure-448-final/evidence/",
+      "preflight": {
+        "sessionID": "ses_hThabwmGBZ6bqmLfRBJb",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "canonical": {
+        "at": "2026-10-19T22:51:42.255Z",
+        "endedAt": "2026-10-19T22:52:13.321Z",
+        "phase": "after",
+        "port": 18689,
+        "occurrence": "native-spawn-pressure-448-final-0b94a75c-1f06-47f1-a4ed-6ff124bf7134",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 15461.772100000002,
+        "restoreMs": 15588.139200000005,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "physical": {
+        "pairedCleanupComplete": true,
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 85596,
+              "processInstanceID": "win32:639280469282514218",
+              "occurrenceID": "9a42cb33-3208-4239-ab7e-8cf8b62805ad"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 72692,
+              "processInstanceID": "win32:639280469288687546",
+              "occurrenceID": "f029008e-e66a-42aa-beb6-c8f735834f49"
+            }
+          }
+        ],
+        "native": {
+          "occurrence": "native-spawn-pressure-448-final-0b94a75c-1f06-47f1-a4ed-6ff124bf7134",
+          "outcome": "settled",
+          "host": {
+            "pid": 85596,
+            "processInstanceID": "win32:639280469282514218",
+            "occurrenceID": "9a42cb33-3208-4239-ab7e-8cf8b62805ad"
+          },
+          "target": {
+            "pid": 72692,
+            "processInstanceID": "win32:639280469288687546",
+            "occurrenceID": "f029008e-e66a-42aa-beb6-c8f735834f49"
+          },
+          "observedAtUtc": "2026-10-19T22:53:12.89Z",
+          "deadlineAt": 1792451328205,
+          "terminal": {
+            "occurrenceID": "native-spawn-pressure-448-final-0b94a75c-1f06-47f1-a4ed-6ff124bf7134",
+            "pid": 72692,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-19T22:53:14.1639858Z",
+        "copiedPair": [
+          {
+            "outcome": "retired",
+            "name": "auth.json"
+          },
+          {
+            "outcome": "retired",
+            "name": "models.json"
+          }
+        ],
+        "physicalCompletion": true,
+        "occurrence": "native-spawn-pressure-448-final-0b94a75c-1f06-47f1-a4ed-6ff124bf7134"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-19T22:53:14.1894908Z",
+        "childExitCode": 0
+      }
+    },
+    {
+      "scope": "reviewed",
+      "evidence": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/native-spawn-pressure-448-reviewed/evidence/",
+      "preflight": {
+        "sessionID": "ses_hNiS5lD08r4GvMxXSBdC",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "canonical": {
+        "at": "2026-10-19T22:56:54.033Z",
+        "endedAt": "2026-10-19T22:57:26.333Z",
+        "phase": "after",
+        "port": 18691,
+        "occurrence": "native-spawn-pressure-448-reviewed-955b7a2d-e03d-4d1a-998a-ca2c7322a924",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 15746.4516,
+        "restoreMs": 16535.856100000005,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "physical": {
+        "copiedPair": [
+          {
+            "outcome": "retired",
+            "name": "auth.json"
+          },
+          {
+            "outcome": "retired",
+            "name": "models.json"
+          }
+        ],
+        "native": {
+          "occurrence": "native-spawn-pressure-448-reviewed-955b7a2d-e03d-4d1a-998a-ca2c7322a924",
+          "outcome": "settled",
+          "host": {
+            "pid": 73124,
+            "processInstanceID": "win32:639280473569538972",
+            "occurrenceID": "3c565a60-a2df-4b42-9616-5f3741b12fd5"
+          },
+          "target": {
+            "pid": 75644,
+            "processInstanceID": "win32:639280473577177709",
+            "occurrenceID": "e1884de9-e00e-4bde-8305-11030fb1ac45"
+          },
+          "observedAtUtc": "2026-10-19T22:58:06.044Z",
+          "deadlineAt": 1792451756893,
+          "terminal": {
+            "occurrenceID": "native-spawn-pressure-448-reviewed-955b7a2d-e03d-4d1a-998a-ca2c7322a924",
+            "pid": 75644,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "occurrence": "native-spawn-pressure-448-reviewed-955b7a2d-e03d-4d1a-998a-ca2c7322a924",
+        "physicalCompletion": true,
+        "chain": [
+          {
+            "identity": {
+              "pid": 73124,
+              "processInstanceID": "win32:639280473569538972",
+              "occurrenceID": "3c565a60-a2df-4b42-9616-5f3741b12fd5"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 75644,
+              "processInstanceID": "win32:639280473577177709",
+              "occurrenceID": "e1884de9-e00e-4bde-8305-11030fb1ac45"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "pairedCleanupComplete": true,
+        "observedAtUtc": "2026-10-19T22:58:07.3471616Z"
+      },
+      "launcher": {
+        "childExitCode": 0,
+        "observedAtUtc": "2026-10-19T22:58:07.3721528Z"
+      }
+    }
+  ],
+  "helper": {
+    "target": {
+      "pid": 75644,
+      "processInstanceID": "win32:639280473577177709",
+      "occurrenceID": "e1884de9-e00e-4bde-8305-11030fb1ac45"
+    },
+    "helperParentPID": 73124,
+    "observedAtUtc": "2026-10-19T22:56:45.9673476Z",
+    "helperPID": 11852,
+    "helperExecutable": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\native-parent-query-446\\release-target\\release\\opencorvus-process-supervisor.exe"
+  },
+  "data": {
+    "schema": {
+      "user_version": 2
+    },
+    "projects": {
+      "count": 84
+    },
+    "mode": "Direct SQLite read-only after original native launcher joined exit0; no production initializer"
+  },
+  "inventory": [
+    [
+      {
+        "projects": 84,
+        "loaded": 2
+      }
+    ],
+    [
+      {
+        "projects": 84,
+        "loaded": 4
+      }
+    ]
+  ],
+  "validation": [
+    {
+      "file": "test/project-git-discovery.test.ts",
+      "cases": 4,
+      "assertions": 12,
+      "skips": 1,
+      "log": "reviewed-contracts.log"
+    },
+    {
+      "file": "test/project-registration-batch.test.ts",
+      "cases": 9,
+      "assertions": 9,
+      "skips": 0,
+      "log": "ancestor-contracts.log"
+    },
+    {
+      "file": "test/project-identity-retention.test.ts",
+      "cases": 4,
+      "assertions": 14,
+      "skips": 0,
+      "log": "reviewed-contracts.log"
+    },
+    {
+      "file": "test/project-filesystem-identity.test.ts",
+      "cases": 3,
+      "assertions": 5,
+      "skips": 0,
+      "log": "identity-contracts.log"
+    },
+    {
+      "file": "test/project-identity-convergence.test.ts",
+      "cases": 13,
+      "assertions": 14,
+      "skips": 0,
+      "log": "ancestor-contracts.log"
+    },
+    {
+      "file": "test/config-global-project-validation.test.ts",
+      "cases": 4,
+      "assertions": 28,
+      "skips": 0,
+      "log": "reviewed-contracts.log"
+    }
+  ],
+  "backendCases": 37,
+  "backendAssertions": 82,
+  "platformSkips": 1,
+  "http": {
+    "rows": [
+      {
+        "name": "valid-parent",
+        "directory": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\native-spawn-pressure-448\\damaged-http-repo",
+        "status": 400,
+        "requestID": "571e2186-53c2-4ced-b345-064e1ef4d325",
+        "body": {
+          "name": "ProjectGitDiscoveryError",
+          "data": {
+            "directory": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\native-spawn-pressure-448\\damaged-http-repo",
+            "reason": "command-failed",
+            "message": "Cannot discover Git repository D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\native-spawn-pressure-448\\damaged-http-repo: fatal: not a git repository (or any of the parent directories): .git"
+          }
+        }
+      },
+      {
+        "name": "independent",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-20\\native-spawn-pressure-448-reviewed\\damaged-http-repo",
+        "status": 400,
+        "requestID": "a6a4ce8f-1843-411a-b502-c32fb82d860d",
+        "body": {
+          "name": "ProjectGitDiscoveryError",
+          "data": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-20\\native-spawn-pressure-448-reviewed\\damaged-http-repo",
+            "reason": "command-failed",
+            "message": "Cannot discover Git repository C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-20\\native-spawn-pressure-448-reviewed\\damaged-http-repo: fatal: not a git repository (or any of the parent directories): .git"
+          }
+        }
+      }
+    ],
+    "boundary": "Actual public production HTTP, both original damaged-child conditions, original native Git/Project/Instance/error middleware; no route or response stub",
+    "observedAt": "2026-10-19T22:56:21.337Z"
+  },
+  "concurrentReads": [
+    {
+      "requestID": "bc20247a-ad77-4d08-acf0-5af03e2904f1",
+      "writeRequestID": "62b110c8-3f74-4168-adc7-b0cbb5f5edbc",
+      "start": "2026-10-19T22:56:57.787Z",
+      "end": "2026-10-19T22:57:09.757Z",
+      "path": "/config",
+      "duration": 11970,
+      "status": 200
+    },
+    {
+      "requestID": "e0705e34-1079-4330-a914-b5135e0664cd",
+      "writeRequestID": "3c30cc9b-6fb0-47c7-837b-f59a49200bd9",
+      "start": "2026-10-19T22:57:15.236Z",
+      "end": "2026-10-19T22:57:26.329Z",
+      "path": "/config",
+      "duration": 11093,
+      "status": 200
+    }
+  ],
+  "qualification": {
+    "functional": "passed: actual Git identity and typed error contracts, streaming provider preflight, full canonical restoration and original physical settlement",
+    "cold": false,
+    "restore": false,
+    "pageReads": true
+  },
+  "sourceAuthorityMetadataUnchanged": true,
+  "developmentMarkerMetadataUnchangedSinceObservation": true,
+  "knownLimitations": "Original cold10s/restore5s thresholds remain unmet. Final observed full-history saves are15.746s/16.536s with actual UI activity and normal default4 runtime convergence. No valid warm-cache equivalence claim. POSIX newline path case explicitly skipped on Windows; run on POSIX before claiming platform verification. Windows framing applies to valid directory paths only; invalid output is a typed error."
+}

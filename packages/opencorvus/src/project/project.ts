@@ -223,6 +223,15 @@ export namespace Project {
     }),
   )
 
+  export const GitDiscoveryError = NamedError.create(
+    "ProjectGitDiscoveryError",
+    z.object({
+      directory: z.string(),
+      reason: z.enum(["command-unavailable", "command-failed", "invalid-output"]),
+      message: z.string(),
+    }),
+  )
+
   export const RegisteredDirectoryConflictError = NamedError.create(
     "ProjectRegisteredDirectoryConflictError",
     z.object({
@@ -242,11 +251,6 @@ export namespace Project {
   )
 
   function gitpath(cwd: string, name: string) {
-    if (!name) return cwd
-    // git output includes trailing newlines; keep path whitespace intact.
-    name = name.replace(/[\r\n]+$/, "")
-    if (!name) return cwd
-
     name = Filesystem.windowsPath(name)
     return Filesystem.resolve(path.isAbsolute(name) ? name : path.join(cwd, name))
   }
@@ -269,12 +273,55 @@ export namespace Project {
     return generated(path.join(directory, ".git"))
   }
 
-  async function text(args: string[], cwd: string) {
-    const result = await git(args, { cwd }).catch(() => undefined)
-    if (!result || result.exitCode !== 0) return
-    const value = result.text().trim()
-    if (!value) return
-    return value
+  async function gitRepositoryPaths(directory: string) {
+    // Windows directory names exclude line-control characters. POSIX names
+    // can contain them, so those hosts read each scalar path independently.
+    const commands =
+      process.platform === "win32"
+        ? [["rev-parse", "--path-format=absolute", "--show-toplevel", "--git-common-dir"]]
+        : [
+            ["rev-parse", "--show-toplevel"],
+            ["rev-parse", "--path-format=absolute", "--git-common-dir"],
+          ]
+    // A damaged local .git must report its own failure, rather than silently
+    // discovering a parent repository. Keep Git's ordinary ownership checks.
+    const env = { GIT_CEILING_DIRECTORIES: path.dirname(directory) }
+    const outcomes = await Promise.allSettled(commands.map((args) => git(args, { cwd: directory, env })))
+    const errors = outcomes.flatMap((outcome) => (outcome.status === "rejected" ? [outcome.reason] : []))
+    if (errors.length === 1) throw errors[0]
+    if (errors.length > 1) throw new AggregateError(errors, `Git discovery execution failed: ${directory}`)
+    const results = outcomes.flatMap((outcome) => (outcome.status === "fulfilled" ? [outcome.value] : []))
+    const failed = results.filter((result) => result.exitCode !== 0)
+    if (failed.length) {
+      throw new GitDiscoveryError({
+        directory,
+        reason: "command-failed",
+        message: `Cannot discover Git repository ${directory}: ${failed.map((result) => result.stderr.toString().trim()).join("; ")}`,
+      })
+    }
+    const paths =
+      process.platform === "win32"
+        ? results[0]!
+            .text()
+            .replace(/\r?\n$/, "")
+            .split(/\r?\n/)
+        : results.map((result) => result.text().replace(/\n$/, ""))
+    if (
+      paths.length !== 2 ||
+      paths.some(
+        (value) =>
+          !path.isAbsolute(Filesystem.windowsPath(value)) ||
+          value.includes("\0") ||
+          (process.platform === "win32" && /[\x01-\x1f]/.test(value)),
+      )
+    ) {
+      throw new GitDiscoveryError({
+        directory,
+        reason: "invalid-output",
+        message: `Git discovery did not return two valid repository paths: ${directory}`,
+      })
+    }
+    return { top: paths[0]!, common: paths[1]! }
   }
 
   function comparePath(value: string) {
@@ -447,7 +494,6 @@ export namespace Project {
   async function resolveNonGitDirectoryIdentity(input: {
     directory: string
     dotgit: string
-    local: boolean
   }): Promise<{ id: string; sandbox: string; worktree: string }> {
     const localID = generated(input.dotgit)
     const markerPath = marker(input.dotgit)
@@ -457,7 +503,6 @@ export namespace Project {
     const cached = currentMarkerIdentity(cachedValue)
     const selectedRow = await findExactWorktreeRow(input.directory)
     const id = selectedRow?.id ?? cached ?? localID
-    if (input.local && id !== cachedValue) await Filesystem.write(markerPath, id).catch(() => undefined)
     return {
       id,
       sandbox: input.directory,
@@ -599,8 +644,12 @@ export namespace Project {
         const dotgit = path.join(directory, ".git")
         const local = await Filesystem.exists(dotgit)
 
-        if (!gitBinary) {
-          return resolveNonGitDirectoryIdentity({ directory, dotgit, local })
+        if (local && !gitBinary) {
+          throw new GitDiscoveryError({
+            directory,
+            reason: "command-unavailable",
+            message: `Git is required to discover the existing repository: ${directory}`,
+          })
         }
 
         // Note (W2-V32): a previous version auto-ran `git init` here when the
@@ -617,20 +666,10 @@ export namespace Project {
         if (hasLocalGit) {
           // Both facts belong to this repository. Resolve the common directory
           // absolutely so its meaning is independent of the displayed top path.
-          const [top, commonText] = await SkillReadDiagnostics.phase("project.identity.git", () =>
-            Promise.all([
-              text(["rev-parse", "--show-toplevel"], directory),
-              text(["rev-parse", "--path-format=absolute", "--git-common-dir"], directory),
-            ]),
-          )
-          let sandbox = directory
-          if (top) {
-            sandbox = await displayGitTop(directory, gitpath(sandbox, top))
-          }
-
-          const common = commonText ? gitpath(directory, commonText) : undefined
-          const resolvedCommon = common || path.join(sandbox, ".git")
-          const rawWorktree = !common || common === sandbox ? sandbox : path.dirname(common)
+          const paths = await SkillReadDiagnostics.phase("project.identity.git", () => gitRepositoryPaths(directory))
+          const sandbox = await displayGitTop(directory, gitpath(directory, paths.top))
+          const resolvedCommon = gitpath(directory, paths.common)
+          const rawWorktree = resolvedCommon === sandbox ? sandbox : path.dirname(resolvedCommon)
           const worktree = await displayGitTop(directory, rawWorktree)
           const id = await SkillReadDiagnostics.phase("project.identity.resolve", () =>
             identify(resolvedCommon, worktree),
@@ -643,7 +682,7 @@ export namespace Project {
           }
         }
 
-        return resolveNonGitDirectoryIdentity({ directory, dotgit, local: false })
+        return resolveNonGitDirectoryIdentity({ directory, dotgit })
       })
     const data = await SkillReadDiagnostics.phase("project.identity.initial", discoverIdentity)
     const proposedSandbox =

@@ -1,0 +1,501 @@
+{
+  "phase": "after",
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/log/dev.log",
+  "occurrence": "native-spawn-pressure-448-final-0b94a75c-1f06-47f1-a4ed-6ff124bf7134",
+  "requests": [
+    {
+      "request": {
+        "time": "2026-10-19T22:51:57.716Z",
+        "requestID": "e736281c-ab5d-402f-910d-8548b6bf63f9",
+        "method": "PATCH",
+        "path": "/global/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 15454
+      },
+      "inventory": [
+        {
+          "projects": 83,
+          "loaded": 3
+        }
+      ],
+      "summary": [
+        {
+          "phase": "project.identity.git",
+          "count": 160,
+          "totalMs": 70992,
+          "maxMs": 1033
+        },
+        {
+          "phase": "directory.total",
+          "count": 81,
+          "totalMs": 70461,
+          "maxMs": 14946
+        },
+        {
+          "phase": "directory.held",
+          "count": 81,
+          "totalMs": 70255,
+          "maxMs": 14943
+        },
+        {
+          "phase": "project.identity.initial",
+          "count": 80,
+          "totalMs": 60833,
+          "maxMs": 1378
+        },
+        {
+          "phase": "project.identity.admitted",
+          "count": 80,
+          "totalMs": 53921,
+          "maxMs": 1158
+        },
+        {
+          "phase": "config.load",
+          "count": 410,
+          "totalMs": 35609,
+          "maxMs": 303
+        },
+        {
+          "phase": "config.snapshot.worktree",
+          "count": 83,
+          "totalMs": 32921,
+          "maxMs": 866
+        },
+        {
+          "phase": "catalog.total",
+          "count": 85,
+          "totalMs": 32140,
+          "maxMs": 15452
+        },
+        {
+          "phase": "catalog.held",
+          "count": 85,
+          "totalMs": 31761,
+          "maxMs": 15418
+        },
+        {
+          "phase": "project.identity.resolve",
+          "count": 160,
+          "totalMs": 25044,
+          "maxMs": 495
+        },
+        {
+          "phase": "project.identity.lookup",
+          "count": 160,
+          "totalMs": 24636,
+          "maxMs": 492
+        },
+        {
+          "phase": "state.read",
+          "count": 247,
+          "totalMs": 17947,
+          "maxMs": 303
+        },
+        {
+          "phase": "state.initialize",
+          "count": 163,
+          "totalMs": 17922,
+          "maxMs": 303
+        },
+        {
+          "phase": "catalog.reentrant",
+          "count": 84,
+          "totalMs": 16340,
+          "maxMs": 15406
+        },
+        {
+          "phase": "request",
+          "count": 1,
+          "totalMs": 15454,
+          "maxMs": 15454
+        },
+        {
+          "phase": "config.global.write",
+          "count": 1,
+          "totalMs": 15453,
+          "maxMs": 15453
+        },
+        {
+          "phase": "config.validate.models",
+          "count": 84,
+          "totalMs": 11049,
+          "maxMs": 350
+        },
+        {
+          "phase": "config.global.after",
+          "count": 83,
+          "totalMs": 4785,
+          "maxMs": 208
+        },
+        {
+          "phase": "config.global.before",
+          "count": 83,
+          "totalMs": 4411,
+          "maxMs": 186
+        },
+        {
+          "phase": "config.verify",
+          "count": 410,
+          "totalMs": 2876,
+          "maxMs": 85
+        },
+        {
+          "phase": "config.validate.capabilities",
+          "count": 83,
+          "totalMs": 1286,
+          "maxMs": 95
+        },
+        {
+          "phase": "project.registry.capture",
+          "count": 80,
+          "totalMs": 762,
+          "maxMs": 21
+        },
+        {
+          "phase": "project.registry.revalidate",
+          "count": 80,
+          "totalMs": 707,
+          "maxMs": 23
+        },
+        {
+          "phase": "skill.explicit-scan",
+          "count": 166,
+          "totalMs": 614,
+          "maxMs": 66
+        },
+        {
+          "phase": "project.registry.acquire",
+          "count": 80,
+          "totalMs": 434,
+          "maxMs": 153
+        },
+        {
+          "phase": "config.global.reconcile",
+          "count": 1,
+          "totalMs": 402,
+          "maxMs": 402
+        },
+        {
+          "phase": "config.validate.profile",
+          "count": 84,
+          "totalMs": 365,
+          "maxMs": 63
+        },
+        {
+          "phase": "catalog.admission",
+          "count": 85,
+          "totalMs": 323,
+          "maxMs": 57
+        },
+        {
+          "phase": "catalog.revision",
+          "count": 83,
+          "totalMs": 193,
+          "maxMs": 55
+        },
+        {
+          "phase": "directory.admission",
+          "count": 81,
+          "totalMs": 182,
+          "maxMs": 14
+        },
+        {
+          "phase": "skill.builtins",
+          "count": 83,
+          "totalMs": 89,
+          "maxMs": 7
+        },
+        {
+          "phase": "catalog.release",
+          "count": 85,
+          "totalMs": 47,
+          "maxMs": 33
+        },
+        {
+          "phase": "config.global.projects",
+          "count": 1,
+          "totalMs": 13,
+          "maxMs": 13
+        },
+        {
+          "phase": "skill.config-directories",
+          "count": 83,
+          "totalMs": 12,
+          "maxMs": 1
+        },
+        {
+          "phase": "config.global.reset",
+          "count": 1,
+          "totalMs": 3,
+          "maxMs": 3
+        },
+        {
+          "phase": "config.global.persist",
+          "count": 1,
+          "totalMs": 2,
+          "maxMs": 2
+        },
+        {
+          "phase": "catalog.recovery",
+          "count": 1,
+          "totalMs": 1,
+          "maxMs": 1
+        },
+        {
+          "phase": "directory.release",
+          "count": 81,
+          "totalMs": 1,
+          "maxMs": 1
+        }
+      ]
+    },
+    {
+      "request": {
+        "time": "2026-10-19T22:52:13.319Z",
+        "requestID": "a51bdaa0-a318-45a9-bfef-f6f5e8ea928d",
+        "method": "PATCH",
+        "path": "/global/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 15587
+      },
+      "inventory": [
+        {
+          "projects": 83,
+          "loaded": 4
+        }
+      ],
+      "summary": [
+        {
+          "phase": "directory.total",
+          "count": 80,
+          "totalMs": 68387,
+          "maxMs": 14981
+        },
+        {
+          "phase": "directory.held",
+          "count": 80,
+          "totalMs": 68003,
+          "maxMs": 14872
+        },
+        {
+          "phase": "project.identity.git",
+          "count": 158,
+          "totalMs": 62180,
+          "maxMs": 1011
+        },
+        {
+          "phase": "project.identity.initial",
+          "count": 79,
+          "totalMs": 55365,
+          "maxMs": 1140
+        },
+        {
+          "phase": "project.identity.admitted",
+          "count": 79,
+          "totalMs": 51578,
+          "maxMs": 1428
+        },
+        {
+          "phase": "config.snapshot.worktree",
+          "count": 83,
+          "totalMs": 38725,
+          "maxMs": 1094
+        },
+        {
+          "phase": "catalog.total",
+          "count": 85,
+          "totalMs": 32418,
+          "maxMs": 15576
+        },
+        {
+          "phase": "catalog.held",
+          "count": 85,
+          "totalMs": 31854,
+          "maxMs": 15381
+        },
+        {
+          "phase": "config.load",
+          "count": 405,
+          "totalMs": 28489,
+          "maxMs": 232
+        },
+        {
+          "phase": "project.identity.resolve",
+          "count": 158,
+          "totalMs": 26618,
+          "maxMs": 888
+        },
+        {
+          "phase": "project.identity.lookup",
+          "count": 158,
+          "totalMs": 26315,
+          "maxMs": 886
+        },
+        {
+          "phase": "catalog.reentrant",
+          "count": 84,
+          "totalMs": 16469,
+          "maxMs": 15376
+        },
+        {
+          "phase": "request",
+          "count": 1,
+          "totalMs": 15587,
+          "maxMs": 15587
+        },
+        {
+          "phase": "config.global.write",
+          "count": 1,
+          "totalMs": 15576,
+          "maxMs": 15576
+        },
+        {
+          "phase": "state.read",
+          "count": 243,
+          "totalMs": 12638,
+          "maxMs": 139
+        },
+        {
+          "phase": "state.initialize",
+          "count": 160,
+          "totalMs": 12617,
+          "maxMs": 139
+        },
+        {
+          "phase": "config.validate.models",
+          "count": 84,
+          "totalMs": 9597,
+          "maxMs": 304
+        },
+        {
+          "phase": "config.global.before",
+          "count": 83,
+          "totalMs": 4819,
+          "maxMs": 233
+        },
+        {
+          "phase": "config.global.after",
+          "count": 83,
+          "totalMs": 4252,
+          "maxMs": 231
+        },
+        {
+          "phase": "config.verify",
+          "count": 405,
+          "totalMs": 2772,
+          "maxMs": 102
+        },
+        {
+          "phase": "config.validate.capabilities",
+          "count": 83,
+          "totalMs": 1469,
+          "maxMs": 97
+        },
+        {
+          "phase": "project.registry.capture",
+          "count": 79,
+          "totalMs": 904,
+          "maxMs": 99
+        },
+        {
+          "phase": "project.registry.revalidate",
+          "count": 79,
+          "totalMs": 854,
+          "maxMs": 191
+        },
+        {
+          "phase": "skill.explicit-scan",
+          "count": 166,
+          "totalMs": 801,
+          "maxMs": 82
+        },
+        {
+          "phase": "catalog.admission",
+          "count": 85,
+          "totalMs": 530,
+          "maxMs": 173
+        },
+        {
+          "phase": "config.validate.profile",
+          "count": 84,
+          "totalMs": 529,
+          "maxMs": 88
+        },
+        {
+          "phase": "project.registry.acquire",
+          "count": 79,
+          "totalMs": 398,
+          "maxMs": 59
+        },
+        {
+          "phase": "directory.admission",
+          "count": 80,
+          "totalMs": 364,
+          "maxMs": 109
+        },
+        {
+          "phase": "config.global.reconcile",
+          "count": 1,
+          "totalMs": 326,
+          "maxMs": 326
+        },
+        {
+          "phase": "catalog.revision",
+          "count": 83,
+          "totalMs": 193,
+          "maxMs": 54
+        },
+        {
+          "phase": "skill.builtins",
+          "count": 83,
+          "totalMs": 78,
+          "maxMs": 2
+        },
+        {
+          "phase": "catalog.release",
+          "count": 85,
+          "totalMs": 23,
+          "maxMs": 21
+        },
+        {
+          "phase": "config.global.projects",
+          "count": 1,
+          "totalMs": 15,
+          "maxMs": 15
+        },
+        {
+          "phase": "skill.config-directories",
+          "count": 83,
+          "totalMs": 11,
+          "maxMs": 1
+        },
+        {
+          "phase": "directory.release",
+          "count": 80,
+          "totalMs": 5,
+          "maxMs": 1
+        },
+        {
+          "phase": "config.global.reset",
+          "count": 1,
+          "totalMs": 3,
+          "maxMs": 3
+        },
+        {
+          "phase": "config.global.persist",
+          "count": 1,
+          "totalMs": 2,
+          "maxMs": 2
+        },
+        {
+          "phase": "catalog.recovery",
+          "count": 1,
+          "totalMs": 0,
+          "maxMs": 0
+        }
+      ]
+    }
+  ]
+}

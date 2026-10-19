@@ -1,0 +1,32 @@
+$ bun script/run-tests.ts test/project-git-discovery.test.ts test/config-global-project-validation.test.ts
+[1/2] START test/project-git-discovery.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Git availability selects the explicit repository error and the ordinary directory identity [349.01ms]
+(pass) an existing damaged Git directory returns its explicit discovery error [480.57ms]
+(pass) a damaged local Git directory inside a valid parent repository returns its own discovery error [469.37ms]
+(pass) Git discovery resolves an unborn worktree with a separate metadata directory [1183.96ms]
+(skip) POSIX Git discovery preserves newline and trailing whitespace in repository paths
+(pass) Git discovery preserves the exact main, linked and aliased Project occurrence [2003.35ms]
+
+ 5 pass
+ 1 skip
+ 0 fail
+ 14 expect() calls
+Ran 6 tests across 1 file. [7.09s]
+[1/2] DONE test/project-git-discovery.test.ts exit=0 duration=7.66s
+[2/2] START test/config-global-project-validation.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a retained global writer settles its original transition after repeated projection failures [2520.86ms]
+(pass) one global generation projects every registered project's own configuration [3086.97ms]
+(pass) one global mutation retains its exact candidate identities through persistence and runtime convergence [2634.98ms]
+(pass) an invalid Project returns the candidate error and a corrected source accepts a full retry [2835.11ms]
+
+ 4 pass
+ 0 fail
+ 28 expect() calls
+Ran 4 tests across 1 file. [13.27s]
+[2/2] DONE test/config-global-project-validation.test.ts exit=0 duration=13.42s

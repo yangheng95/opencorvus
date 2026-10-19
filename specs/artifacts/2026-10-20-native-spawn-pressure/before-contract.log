@@ -1,0 +1,41 @@
+$ bun script/run-tests.ts test/project-git-discovery.test.ts "--test-name-pattern=existing damaged Git"
+[1/1] START test/project-git-discovery.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+12 | test("an existing damaged Git directory returns its explicit discovery error", async () => {
+13 |   await using root = await tmpdir()
+14 |   await fs.mkdir(path.join(root.path, ".git"))
+15 |   const error = await Project.fromDirectory(root.path).then(() => undefined, (error) => error)
+16 |   expect({ name: error?.name, reason: error?.data?.reason, directory: error?.data?.directory,
+17 |     status: error ? namedErrorStatus(error) : undefined }).toEqual({
+                                                                ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-EkB2ly\test-76180-XSC72Z\fixtures\fixture-qlVCRK",
+-   "name": "ProjectGitDiscoveryError",
+-   "reason": "command-failed",
+-   "status": 400,
++   "directory": undefined,
++   "name": undefined,
++   "reason": undefined,
++   "status": undefined,
+  }
+
+- Expected  - 4
++ Received  + 4
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\project-git-discovery.test.ts:17:60)
+(fail) an existing damaged Git directory returns its explicit discovery error [778.66ms]
+
+ 0 pass
+ 1 filtered out
+ 1 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [3.77s]
+[1/1] DONE test/project-git-discovery.test.ts exit=1 duration=4.41s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\project-git-discovery.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\project-git-discovery.test.ts
+error: script "test" exited with code 1

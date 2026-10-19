@@ -43,6 +43,19 @@ Ordinary directory resolution is observational. If more than one durable
 returns `ProjectDuplicateWorktreeIdentityError` before writing a marker or a
 domain row. Lookup never chooses a winner and never migrates data.
 
+For an existing local `.git`, discovery obtains the actual Git top-level and
+absolute common directory before proposing identity, then repeats that observation
+under the original durable registration admission. Windows reads both paths in one
+`rev-parse` invocation and validates its two-line result; its directory names
+exclude line-control characters. POSIX reads each scalar independently and removes
+only Git's own final LF so path whitespace and embedded newlines remain intact.
+All admitted reads settle before an error returns. Unavailable or failed Git commands or invalid
+path output return `ProjectGitDiscoveryError` (HTTP 400), rather than guessed
+directory metadata. Process execution failures retain their original cause.
+Discovery with a local `.git` bounds Git's automatic search at the parent
+directory through `GIT_CEILING_DIRECTORIES`. A damaged child repository therefore
+reports its own error while retaining Git's ordinary ownership checks.
+
 `Instance.withRetainedProjectIdentities` gives a multi-stage operation one
 explicit resource lifetime over its declared directories. Existing cache entries
 are synchronously reserved with the original non-serving leases; identity-only

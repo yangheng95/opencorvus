@@ -1,0 +1,730 @@
+{
+  "batch": 448,
+  "baselineCommit": "9c1cfab98a1ddef1f214f0e920e86c06a6f1652e",
+  "scope": "One Windows Git command per Project discovery with strict absolute paths and bounded parent search. Original initial/admitted observations, native ownership and source/candidate contracts retained. Full QA history retained, including the parent row created by the reproduced ancestor bug. Final availability guard returns command-unavailable for existing .git without Git; ordinary non-Git identity remains supported. Superseded reviewed results are preserved separately.",
+  "scopes": [
+    {
+      "scope": "after",
+      "evidence": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/native-spawn-pressure-448-after/evidence/",
+      "preflight": {
+        "sessionID": "ses_hlVzCslo6qqxl4q4id6F",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "canonical": {
+        "at": "2026-10-19T22:46:17.921Z",
+        "endedAt": "2026-10-19T22:46:47.851Z",
+        "phase": "after",
+        "port": 18689,
+        "occurrence": "native-spawn-pressure-448-after-43abc199-85b3-4b5a-8bed-61f05ca8cd32",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 15254.3351,
+        "restoreMs": 14666.224499999997,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "physical": {
+        "occurrence": "native-spawn-pressure-448-after-43abc199-85b3-4b5a-8bed-61f05ca8cd32",
+        "native": {
+          "occurrence": "native-spawn-pressure-448-after-43abc199-85b3-4b5a-8bed-61f05ca8cd32",
+          "outcome": "settled",
+          "host": {
+            "pid": 74768,
+            "processInstanceID": "win32:639280467407208016",
+            "occurrenceID": "704adf0d-980e-4073-94d6-a10450a61471"
+          },
+          "target": {
+            "pid": 82264,
+            "processInstanceID": "win32:639280467417409145",
+            "occurrenceID": "5111a4e6-cdee-4c0c-b3d9-973d52a90183"
+          },
+          "observedAtUtc": "2026-10-19T22:47:45.046Z",
+          "deadlineAt": 1792451140555,
+          "terminal": {
+            "occurrenceID": "native-spawn-pressure-448-after-43abc199-85b3-4b5a-8bed-61f05ca8cd32",
+            "pid": 82264,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "pairedCleanupComplete": true,
+        "chain": [
+          {
+            "identity": {
+              "pid": 74768,
+              "processInstanceID": "win32:639280467407208016",
+              "occurrenceID": "704adf0d-980e-4073-94d6-a10450a61471"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 82264,
+              "processInstanceID": "win32:639280467417409145",
+              "occurrenceID": "5111a4e6-cdee-4c0c-b3d9-973d52a90183"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "copiedPair": [
+          {
+            "name": "auth.json",
+            "outcome": "retired"
+          },
+          {
+            "name": "models.json",
+            "outcome": "retired"
+          }
+        ],
+        "observedAtUtc": "2026-10-19T22:47:46.3309552Z",
+        "physicalCompletion": true
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-19T22:47:46.3562956Z",
+        "childExitCode": 0
+      }
+    },
+    {
+      "scope": "final",
+      "evidence": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/native-spawn-pressure-448-final/evidence/",
+      "preflight": {
+        "sessionID": "ses_hThabwmGBZ6bqmLfRBJb",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "canonical": {
+        "at": "2026-10-19T22:51:42.255Z",
+        "endedAt": "2026-10-19T22:52:13.321Z",
+        "phase": "after",
+        "port": 18689,
+        "occurrence": "native-spawn-pressure-448-final-0b94a75c-1f06-47f1-a4ed-6ff124bf7134",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 15461.772100000002,
+        "restoreMs": 15588.139200000005,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "physical": {
+        "pairedCleanupComplete": true,
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 85596,
+              "processInstanceID": "win32:639280469282514218",
+              "occurrenceID": "9a42cb33-3208-4239-ab7e-8cf8b62805ad"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 72692,
+              "processInstanceID": "win32:639280469288687546",
+              "occurrenceID": "f029008e-e66a-42aa-beb6-c8f735834f49"
+            }
+          }
+        ],
+        "native": {
+          "occurrence": "native-spawn-pressure-448-final-0b94a75c-1f06-47f1-a4ed-6ff124bf7134",
+          "outcome": "settled",
+          "host": {
+            "pid": 85596,
+            "processInstanceID": "win32:639280469282514218",
+            "occurrenceID": "9a42cb33-3208-4239-ab7e-8cf8b62805ad"
+          },
+          "target": {
+            "pid": 72692,
+            "processInstanceID": "win32:639280469288687546",
+            "occurrenceID": "f029008e-e66a-42aa-beb6-c8f735834f49"
+          },
+          "observedAtUtc": "2026-10-19T22:53:12.89Z",
+          "deadlineAt": 1792451328205,
+          "terminal": {
+            "occurrenceID": "native-spawn-pressure-448-final-0b94a75c-1f06-47f1-a4ed-6ff124bf7134",
+            "pid": 72692,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-19T22:53:14.1639858Z",
+        "copiedPair": [
+          {
+            "outcome": "retired",
+            "name": "auth.json"
+          },
+          {
+            "outcome": "retired",
+            "name": "models.json"
+          }
+        ],
+        "physicalCompletion": true,
+        "occurrence": "native-spawn-pressure-448-final-0b94a75c-1f06-47f1-a4ed-6ff124bf7134"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-19T22:53:14.1894908Z",
+        "childExitCode": 0
+      }
+    },
+    {
+      "scope": "reviewed",
+      "evidence": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/native-spawn-pressure-448-reviewed/evidence/",
+      "preflight": {
+        "sessionID": "ses_hNiS5lD08r4GvMxXSBdC",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "canonical": {
+        "at": "2026-10-19T22:56:54.033Z",
+        "endedAt": "2026-10-19T22:57:26.333Z",
+        "phase": "after",
+        "port": 18691,
+        "occurrence": "native-spawn-pressure-448-reviewed-955b7a2d-e03d-4d1a-998a-ca2c7322a924",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 15746.4516,
+        "restoreMs": 16535.856100000005,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "physical": {
+        "copiedPair": [
+          {
+            "outcome": "retired",
+            "name": "auth.json"
+          },
+          {
+            "outcome": "retired",
+            "name": "models.json"
+          }
+        ],
+        "native": {
+          "occurrence": "native-spawn-pressure-448-reviewed-955b7a2d-e03d-4d1a-998a-ca2c7322a924",
+          "outcome": "settled",
+          "host": {
+            "pid": 73124,
+            "processInstanceID": "win32:639280473569538972",
+            "occurrenceID": "3c565a60-a2df-4b42-9616-5f3741b12fd5"
+          },
+          "target": {
+            "pid": 75644,
+            "processInstanceID": "win32:639280473577177709",
+            "occurrenceID": "e1884de9-e00e-4bde-8305-11030fb1ac45"
+          },
+          "observedAtUtc": "2026-10-19T22:58:06.044Z",
+          "deadlineAt": 1792451756893,
+          "terminal": {
+            "occurrenceID": "native-spawn-pressure-448-reviewed-955b7a2d-e03d-4d1a-998a-ca2c7322a924",
+            "pid": 75644,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "occurrence": "native-spawn-pressure-448-reviewed-955b7a2d-e03d-4d1a-998a-ca2c7322a924",
+        "physicalCompletion": true,
+        "chain": [
+          {
+            "identity": {
+              "pid": 73124,
+              "processInstanceID": "win32:639280473569538972",
+              "occurrenceID": "3c565a60-a2df-4b42-9616-5f3741b12fd5"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 75644,
+              "processInstanceID": "win32:639280473577177709",
+              "occurrenceID": "e1884de9-e00e-4bde-8305-11030fb1ac45"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "pairedCleanupComplete": true,
+        "observedAtUtc": "2026-10-19T22:58:07.3471616Z"
+      },
+      "launcher": {
+        "childExitCode": 0,
+        "observedAtUtc": "2026-10-19T22:58:07.3721528Z"
+      }
+    },
+    {
+      "scope": "availability",
+      "evidence": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/native-spawn-pressure-448-availability/evidence/",
+      "preflight": {
+        "sessionID": "ses_hgYqprzQdnlc79MB6hoi",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "canonical": {
+        "at": "2026-10-19T23:04:35.728Z",
+        "endedAt": "2026-10-19T23:05:07.902Z",
+        "phase": "after",
+        "port": 18693,
+        "occurrence": "native-spawn-pressure-448-availability-9fb97cea-44f7-4914-a136-916b85846bdb",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 15800.271500000003,
+        "restoreMs": 16365.755100000002,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "physical": {
+        "occurrence": "native-spawn-pressure-448-availability-9fb97cea-44f7-4914-a136-916b85846bdb",
+        "physicalCompletion": true,
+        "pairedCleanupComplete": true,
+        "native": {
+          "occurrence": "native-spawn-pressure-448-availability-9fb97cea-44f7-4914-a136-916b85846bdb",
+          "outcome": "settled",
+          "host": {
+            "pid": 63936,
+            "processInstanceID": "win32:639280478236850848",
+            "occurrenceID": "a302d4fc-299b-47e8-83f9-b7624aea02bd"
+          },
+          "target": {
+            "pid": 66172,
+            "processInstanceID": "win32:639280478243377099",
+            "occurrenceID": "afd23f09-b5d3-408c-b621-23fa22deb335"
+          },
+          "observedAtUtc": "2026-10-19T23:05:44.622Z",
+          "deadlineAt": 1792452223628,
+          "terminal": {
+            "occurrenceID": "native-spawn-pressure-448-availability-9fb97cea-44f7-4914-a136-916b85846bdb",
+            "pid": 66172,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "copiedPair": [
+          {
+            "name": "auth.json",
+            "outcome": "retired"
+          },
+          {
+            "name": "models.json",
+            "outcome": "retired"
+          }
+        ],
+        "chain": [
+          {
+            "identity": {
+              "pid": 63936,
+              "processInstanceID": "win32:639280478236850848",
+              "occurrenceID": "a302d4fc-299b-47e8-83f9-b7624aea02bd"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 66172,
+              "processInstanceID": "win32:639280478243377099",
+              "occurrenceID": "afd23f09-b5d3-408c-b621-23fa22deb335"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "observedAtUtc": "2026-10-19T23:05:45.8317648Z"
+      },
+      "launcher": {
+        "childExitCode": 0,
+        "observedAtUtc": "2026-10-19T23:05:45.8564131Z"
+      }
+    }
+  ],
+  "helper": {
+    "target": {
+      "pid": 66172,
+      "processInstanceID": "win32:639280478243377099",
+      "occurrenceID": "afd23f09-b5d3-408c-b621-23fa22deb335"
+    },
+    "helperPID": 91024,
+    "observedAtUtc": "2026-10-19T23:04:24.6187840Z",
+    "helperExecutable": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\native-parent-query-446\\release-target\\release\\opencorvus-process-supervisor.exe",
+    "helperParentPID": 63936
+  },
+  "data": {
+    "schema": {
+      "user_version": 2
+    },
+    "projects": {
+      "count": 85
+    },
+    "mode": "Direct SQLite read-only after original native launcher joined exit0; no production initializer"
+  },
+  "inventory": [
+    [
+      {
+        "projects": 85,
+        "loaded": 2
+      }
+    ],
+    [
+      {
+        "projects": 85,
+        "loaded": 4
+      }
+    ]
+  ],
+  "validation": [
+    {
+      "file": "test/project-git-discovery.test.ts",
+      "cases": 5,
+      "assertions": 14,
+      "skips": 1,
+      "log": "availability-contracts.log"
+    },
+    {
+      "file": "test/project-registration-batch.test.ts",
+      "cases": 9,
+      "assertions": 9,
+      "skips": 0,
+      "log": "ancestor-contracts.log"
+    },
+    {
+      "file": "test/project-identity-retention.test.ts",
+      "cases": 4,
+      "assertions": 14,
+      "skips": 0,
+      "log": "reviewed-contracts.log"
+    },
+    {
+      "file": "test/project-filesystem-identity.test.ts",
+      "cases": 3,
+      "assertions": 5,
+      "skips": 0,
+      "log": "identity-contracts.log"
+    },
+    {
+      "file": "test/project-identity-convergence.test.ts",
+      "cases": 13,
+      "assertions": 14,
+      "skips": 0,
+      "log": "ancestor-contracts.log"
+    },
+    {
+      "file": "test/config-global-project-validation.test.ts",
+      "cases": 4,
+      "assertions": 28,
+      "skips": 0,
+      "log": "availability-contracts.log"
+    }
+  ],
+  "backendCases": 38,
+  "backendAssertions": 84,
+  "platformSkips": 1,
+  "http": {
+    "rows": [
+      {
+        "name": "valid-parent",
+        "directory": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\native-spawn-pressure-448\\damaged-http-repo",
+        "status": 400,
+        "requestID": "deee4109-5da3-43f9-ad6a-b12a09dcdc05",
+        "body": {
+          "name": "ProjectGitDiscoveryError",
+          "data": {
+            "directory": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\native-spawn-pressure-448\\damaged-http-repo",
+            "reason": "command-failed",
+            "message": "Cannot discover Git repository D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\native-spawn-pressure-448\\damaged-http-repo: fatal: not a git repository (or any of the parent directories): .git"
+          }
+        }
+      },
+      {
+        "name": "independent",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-20\\native-spawn-pressure-448-availability\\damaged-http-repo",
+        "status": 400,
+        "requestID": "7cc20c6d-56ed-4767-bf80-52623774e538",
+        "body": {
+          "name": "ProjectGitDiscoveryError",
+          "data": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-20\\native-spawn-pressure-448-availability\\damaged-http-repo",
+            "reason": "command-failed",
+            "message": "Cannot discover Git repository C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-20\\native-spawn-pressure-448-availability\\damaged-http-repo: fatal: not a git repository (or any of the parent directories): .git"
+          }
+        }
+      }
+    ],
+    "boundary": "Actual public production HTTP, both original damaged-child conditions, original native Git/Project/Instance/error middleware; no route or response stub",
+    "observedAt": "2026-10-19T23:03:59.264Z"
+  },
+  "concurrentReads": [
+    {
+      "requestID": "a7f3a8db-9925-4ec7-b3a5-fbc87b065725",
+      "writeRequestID": "44f666d2-b687-4201-b00d-94d40b5b82c3",
+      "start": "2026-10-19T23:04:37.615Z",
+      "end": "2026-10-19T23:04:37.615Z",
+      "path": "/global/health",
+      "duration": 0,
+      "status": 200
+    },
+    {
+      "requestID": "47520edc-f4ed-42a9-876b-ffc522eb40cf",
+      "writeRequestID": "44f666d2-b687-4201-b00d-94d40b5b82c3",
+      "start": "2026-10-19T23:04:39.006Z",
+      "end": "2026-10-19T23:04:39.013Z",
+      "path": "/continuous-goal/chat/ses_hgYqprzQdnlc79MB6hoi",
+      "duration": 6,
+      "status": 200
+    },
+    {
+      "requestID": "cf24878c-9ac5-4e93-a61d-682a2c059faa",
+      "writeRequestID": "44f666d2-b687-4201-b00d-94d40b5b82c3",
+      "start": "2026-10-19T23:04:39.031Z",
+      "end": "2026-10-19T23:04:39.043Z",
+      "path": "/mailbox",
+      "duration": 12,
+      "status": 200
+    },
+    {
+      "requestID": "e1e9f794-1f73-4c4e-8088-1884b8db9443",
+      "writeRequestID": "44f666d2-b687-4201-b00d-94d40b5b82c3",
+      "start": "2026-10-19T23:04:39.043Z",
+      "end": "2026-10-19T23:04:39.045Z",
+      "path": "/expert-squad/search",
+      "duration": 2,
+      "status": 200
+    },
+    {
+      "requestID": "675f21f6-9efd-42e7-8c6d-a37b8f18360d",
+      "writeRequestID": "44f666d2-b687-4201-b00d-94d40b5b82c3",
+      "start": "2026-10-19T23:04:39.046Z",
+      "end": "2026-10-19T23:04:39.052Z",
+      "path": "/mission-skill/catalog",
+      "duration": 6,
+      "status": 200
+    },
+    {
+      "requestID": "9e1e42e6-1a09-4bba-be75-dd01b4f3c084",
+      "writeRequestID": "44f666d2-b687-4201-b00d-94d40b5b82c3",
+      "start": "2026-10-19T23:04:39.056Z",
+      "end": "2026-10-19T23:04:39.058Z",
+      "path": "/coding/chat/session/ses_hgYqprzQdnlc79MB6hoi",
+      "duration": 2,
+      "status": 200
+    },
+    {
+      "requestID": "5bedcade-257c-42a5-9391-047907bb53d9",
+      "writeRequestID": "44f666d2-b687-4201-b00d-94d40b5b82c3",
+      "start": "2026-10-19T23:04:39.244Z",
+      "end": "2026-10-19T23:04:39.244Z",
+      "path": "/global/health",
+      "duration": 0,
+      "status": 200
+    },
+    {
+      "requestID": "0c5b14e3-b968-4c3d-b865-98defb65b0cb",
+      "writeRequestID": "44f666d2-b687-4201-b00d-94d40b5b82c3",
+      "start": "2026-10-19T23:04:39.289Z",
+      "end": "2026-10-19T23:04:51.504Z",
+      "path": "/config",
+      "duration": 12215,
+      "status": 200
+    },
+    {
+      "requestID": "a5cc39ab-c920-481e-b331-332d3cec6b15",
+      "writeRequestID": "44f666d2-b687-4201-b00d-94d40b5b82c3",
+      "start": "2026-10-19T23:04:39.289Z",
+      "end": "2026-10-19T23:04:51.526Z",
+      "path": "/channel",
+      "duration": 12237,
+      "status": 200
+    },
+    {
+      "requestID": "e324d5f6-d253-4a42-b63b-dffe2588fc12",
+      "writeRequestID": "18db6a99-d8b2-467f-a1cf-c6250178b2ed",
+      "start": "2026-10-19T23:04:51.549Z",
+      "end": "2026-10-19T23:04:51.551Z",
+      "path": "/continuous-goal/chat/ses_hgYqprzQdnlc79MB6hoi",
+      "duration": 2,
+      "status": 200
+    },
+    {
+      "requestID": "1d296423-7161-48e0-8902-02345c874393",
+      "writeRequestID": "18db6a99-d8b2-467f-a1cf-c6250178b2ed",
+      "start": "2026-10-19T23:04:51.552Z",
+      "end": "2026-10-19T23:04:51.552Z",
+      "path": "/global/health",
+      "duration": 0,
+      "status": 200
+    },
+    {
+      "requestID": "13286a94-b583-47f7-9167-a86ef4756be7",
+      "writeRequestID": "18db6a99-d8b2-467f-a1cf-c6250178b2ed",
+      "start": "2026-10-19T23:04:51.555Z",
+      "end": "2026-10-19T23:04:51.556Z",
+      "path": "/continuous-goal/chat/ses_hgYqprzQdnlc79MB6hoi",
+      "duration": 1,
+      "status": 200
+    },
+    {
+      "requestID": "99ea5efe-bb41-4aed-9b3e-75abedd3f255",
+      "writeRequestID": "44f666d2-b687-4201-b00d-94d40b5b82c3",
+      "start": "2026-10-19T23:04:39.290Z",
+      "end": "2026-10-19T23:04:51.668Z",
+      "path": "/skill/mounts",
+      "duration": 12378,
+      "status": 200
+    },
+    {
+      "requestID": "40b83a96-b6ee-4258-a52d-f111be845174",
+      "writeRequestID": "18db6a99-d8b2-467f-a1cf-c6250178b2ed",
+      "start": "2026-10-19T23:04:54.079Z",
+      "end": "2026-10-19T23:04:54.081Z",
+      "path": "/continuous-goal/chat/ses_hgYqprzQdnlc79MB6hoi",
+      "duration": 2,
+      "status": 200
+    },
+    {
+      "requestID": "81f1368d-95f7-43b2-96d9-af8b42425802",
+      "writeRequestID": "18db6a99-d8b2-467f-a1cf-c6250178b2ed",
+      "start": "2026-10-19T23:04:54.094Z",
+      "end": "2026-10-19T23:04:54.095Z",
+      "path": "/experimental/project-memory",
+      "duration": 1,
+      "status": 200
+    },
+    {
+      "requestID": "0db9270b-91cb-4297-b86d-d093e2aaded3",
+      "writeRequestID": "18db6a99-d8b2-467f-a1cf-c6250178b2ed",
+      "start": "2026-10-19T23:04:54.106Z",
+      "end": "2026-10-19T23:04:54.164Z",
+      "path": "/session/ses_hgYqprzQdnlc79MB6hoi/conversation",
+      "duration": 58,
+      "status": 200
+    },
+    {
+      "requestID": "672499a4-850d-432e-84c2-7afd4dfd894a",
+      "writeRequestID": "18db6a99-d8b2-467f-a1cf-c6250178b2ed",
+      "start": "2026-10-19T23:04:54.269Z",
+      "end": "2026-10-19T23:04:54.327Z",
+      "path": "/session/ses_hgYqprzQdnlc79MB6hoi/events",
+      "duration": 58,
+      "status": 200
+    },
+    {
+      "requestID": "bf398fe0-c6f7-4e8e-b86a-eeb82f6dfb24",
+      "writeRequestID": "18db6a99-d8b2-467f-a1cf-c6250178b2ed",
+      "start": "2026-10-19T23:04:54.328Z",
+      "end": "2026-10-19T23:04:54.328Z",
+      "path": "/ui/assets/markdown-render.worker-DXg_fqFo.js",
+      "duration": 0,
+      "status": 200
+    },
+    {
+      "requestID": "2f221d0c-dc50-4e61-b974-2bb6ffb0c8ef",
+      "writeRequestID": "18db6a99-d8b2-467f-a1cf-c6250178b2ed",
+      "start": "2026-10-19T23:04:57.643Z",
+      "end": "2026-10-19T23:04:57.644Z",
+      "path": "/global/health",
+      "duration": 1,
+      "status": 200
+    },
+    {
+      "requestID": "6f5c64e7-a7ab-4772-9460-5e905b5ddd57",
+      "writeRequestID": "18db6a99-d8b2-467f-a1cf-c6250178b2ed",
+      "start": "2026-10-19T23:04:59.020Z",
+      "end": "2026-10-19T23:04:59.021Z",
+      "path": "/continuous-goal/chat/ses_hgYqprzQdnlc79MB6hoi",
+      "duration": 2,
+      "status": 200
+    },
+    {
+      "requestID": "f857f09d-e203-473b-9f5d-681beda74d4a",
+      "writeRequestID": "18db6a99-d8b2-467f-a1cf-c6250178b2ed",
+      "start": "2026-10-19T23:05:04.018Z",
+      "end": "2026-10-19T23:05:04.021Z",
+      "path": "/continuous-goal/chat/ses_hgYqprzQdnlc79MB6hoi",
+      "duration": 3,
+      "status": 200
+    },
+    {
+      "requestID": "92af2802-2026-490a-b2ef-80957b01da5a",
+      "writeRequestID": "18db6a99-d8b2-467f-a1cf-c6250178b2ed",
+      "start": "2026-10-19T23:05:07.647Z",
+      "end": "2026-10-19T23:05:07.647Z",
+      "path": "/global/health",
+      "duration": 0,
+      "status": 200
+    },
+    {
+      "requestID": "db569b45-fd2d-49b9-865c-8676b8665354",
+      "writeRequestID": "18db6a99-d8b2-467f-a1cf-c6250178b2ed",
+      "start": "2026-10-19T23:04:54.216Z",
+      "end": "2026-10-19T23:05:07.885Z",
+      "path": "/session/ses_hgYqprzQdnlc79MB6hoi/config",
+      "duration": 13669,
+      "status": 200
+    },
+    {
+      "requestID": "8acf38f8-ddc5-4cb8-a333-8cd9d09279c0",
+      "writeRequestID": "44f666d2-b687-4201-b00d-94d40b5b82c3",
+      "start": "2026-10-19T23:04:39.020Z",
+      "end": "2026-10-19T23:05:07.935Z",
+      "path": "/chat/capability",
+      "duration": 28915,
+      "status": 200
+    },
+    {
+      "requestID": "9b6aaf87-8a06-4753-a74c-b24d8af82ca5",
+      "writeRequestID": "44f666d2-b687-4201-b00d-94d40b5b82c3",
+      "start": "2026-10-19T23:04:39.021Z",
+      "end": "2026-10-19T23:05:07.998Z",
+      "path": "/expert-squad/catalog",
+      "duration": 28977,
+      "status": 200
+    }
+  ],
+  "qualification": {
+    "functional": "passed: real Git identity/availability errors, two actual public HTTP errors, model preflight and full canonical/physical settlement",
+    "cold": false,
+    "restore": false,
+    "pageReads": false
+  },
+  "sourceAuthorityMetadataUnchanged": true,
+  "developmentMarkerMetadataUnchangedSinceObservation": true,
+  "knownLimitations": "Original10s cold/5s restore remain unmet:15.800s/16.366s with real page activity and default4 runtime convergence. Complete85 Projects retained. POSIX path case explicitly skipped on Windows; no cross-platform claim. Windows two-path framing accepts valid absolute directory paths only."
+}
