@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [冷保存CPU与异步命令查找](2026-10-20-config-cold-cpu/README.md)：真实采样根因、全量历史保存与人工页面证据。
+
 - [原生Git监管与目录批处理](2026-10-20-native-git-cost/README.md)：真实阶段测量、注册并行/顺序合同及完整历史保存。
 
 - [候选配置的真实Skill目录](2026-10-20-candidate-skill-catalog/README.md)：失败→通过合同、真实HTTP候选来源、保存恢复与人工截图。

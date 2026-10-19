@@ -1,0 +1,1270 @@
+{
+  "profileStart": 1792443984598308,
+  "profileEnd": 1792444171000597.5,
+  "sumDeltas": 186400511,
+  "deltaSpanEnd": 1792444170998819,
+  "sampleCount": 4732,
+  "alignment": "Profile timestamps are epoch microseconds and each sample is selected inside the original HTTP started/completed interval. Counts are observed samples, not accumulated inclusive wall time.",
+  "requests": [
+    {
+      "request": {
+        "requestID": "13939c42-fbfb-4db0-a0ca-ef00f5e6576f",
+        "method": "PATCH",
+        "path": "/global/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 20935,
+        "start": "2026-10-19T21:08:48.699Z",
+        "end": "2026-10-19T21:09:09.634Z",
+        "from": 1792444128699000,
+        "to": 1792444149634000
+      },
+      "samples": 2494,
+      "self": [
+        {
+          "id": 582,
+          "samples": 891,
+          "functionName": "spawn",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 572,
+          "samples": 406,
+          "functionName": "statSync",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 1243,
+          "samples": 105,
+          "functionName": "statSync",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 1227,
+          "samples": 96,
+          "functionName": "statSync",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 911,
+          "samples": 75,
+          "functionName": "fromModelsDevModel",
+          "scriptId": "103",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/provider.ts",
+          "lineNumber": 172,
+          "columnNumber": 29
+        },
+        {
+          "id": 912,
+          "samples": 42,
+          "functionName": "variants",
+          "scriptId": "170",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/transform.ts",
+          "lineNumber": 611,
+          "columnNumber": 26
+        },
+        {
+          "id": 3677,
+          "samples": 39,
+          "functionName": "o",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/remeda@2.26.0/node_modules/remeda/dist/chunk-3ZJAREUD.js",
+          "lineNumber": 0,
+          "columnNumber": 81
+        },
+        {
+          "id": 574,
+          "samples": 38,
+          "functionName": "MoveFileExW",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 570,
+          "samples": 24,
+          "functionName": "sync",
+          "scriptId": "138",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/isexe@2.0.0/node_modules/isexe/index.js",
+          "lineNumber": 45,
+          "columnNumber": 14
+        },
+        {
+          "id": 1192,
+          "samples": 23,
+          "functionName": "includes",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 3678,
+          "samples": 21,
+          "functionName": "entries",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 1298,
+          "samples": 16,
+          "functionName": "fromEntries",
+          "scriptId": "80",
+          "url": "",
+          "lineNumber": 0,
+          "columnNumber": 10
+        },
+        {
+          "id": 125,
+          "samples": 15,
+          "functionName": "",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 914,
+          "samples": 14,
+          "functionName": "some",
+          "scriptId": "80",
+          "url": "",
+          "lineNumber": 0,
+          "columnNumber": 10
+        },
+        {
+          "id": 1297,
+          "samples": 13,
+          "functionName": "entries",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 1193,
+          "samples": 9,
+          "functionName": "",
+          "scriptId": "170",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/transform.ts",
+          "lineNumber": 615,
+          "columnNumber": 90
+        },
+        {
+          "id": 2598,
+          "samples": 9,
+          "functionName": "Buffer",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 3717,
+          "samples": 8,
+          "functionName": "",
+          "scriptId": "103",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/provider.ts",
+          "lineNumber": 470,
+          "columnNumber": 62
+        },
+        {
+          "id": 907,
+          "samples": 7,
+          "functionName": "buildState",
+          "scriptId": "103",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/provider.ts",
+          "lineNumber": 275,
+          "columnNumber": 28
+        },
+        {
+          "id": 4022,
+          "samples": 7,
+          "functionName": "fromEntries",
+          "scriptId": "80",
+          "url": "",
+          "lineNumber": 0,
+          "columnNumber": 10
+        },
+        {
+          "id": 3618,
+          "samples": 6,
+          "functionName": "values",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 3676,
+          "samples": 6,
+          "functionName": "u",
+          "scriptId": "410",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/remeda@2.26.0/node_modules/remeda/dist/chunk-WIMGWYZL.js",
+          "lineNumber": 0,
+          "columnNumber": 50
+        },
+        {
+          "id": 2512,
+          "samples": 5,
+          "functionName": "values",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 2550,
+          "samples": 5,
+          "functionName": "dlopen",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 1233,
+          "samples": 5,
+          "functionName": "windowsPath",
+          "scriptId": "146",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/util/filesystem.ts",
+          "lineNumber": 429,
+          "columnNumber": 29
+        },
+        {
+          "id": 4109,
+          "samples": 5,
+          "functionName": "Map",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 4302,
+          "samples": 5,
+          "functionName": "stat",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 2685,
+          "samples": 4,
+          "functionName": "prepare",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 1234,
+          "samples": 4,
+          "functionName": "collectWindowsDriveMounts",
+          "scriptId": "146",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/util/filesystem.ts",
+          "lineNumber": 380,
+          "columnNumber": 36
+        },
+        {
+          "id": 3579,
+          "samples": 4,
+          "functionName": "prepare",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        }
+      ],
+      "inclusive": [
+        {
+          "id": 1,
+          "samples": 2494,
+          "functionName": "(root)",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 124,
+          "samples": 2446,
+          "functionName": "processTicksAndRejections",
+          "scriptId": "10",
+          "url": "",
+          "lineNumber": 6,
+          "columnNumber": 38
+        },
+        {
+          "id": 125,
+          "samples": 2442,
+          "functionName": "",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 575,
+          "samples": 919,
+          "functionName": "spawnWindowsRequest",
+          "scriptId": "141",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/shell/process-supervisor.ts",
+          "lineNumber": 1595,
+          "columnNumber": 22
+        },
+        {
+          "id": 576,
+          "samples": 909,
+          "functionName": "spawn",
+          "scriptId": "16",
+          "url": "node:child_process",
+          "lineNumber": 10,
+          "columnNumber": 14
+        },
+        {
+          "id": 581,
+          "samples": 902,
+          "functionName": "spawn",
+          "scriptId": "16",
+          "url": "node:child_process",
+          "lineNumber": 706,
+          "columnNumber": 7
+        },
+        {
+          "id": 582,
+          "samples": 891,
+          "functionName": "spawn",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 569,
+          "samples": 435,
+          "functionName": "whichSync",
+          "scriptId": "137",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/which@2.0.2/node_modules/which/which.js",
+          "lineNumber": 86,
+          "columnNumber": 18
+        },
+        {
+          "id": 568,
+          "samples": 435,
+          "functionName": "which",
+          "scriptId": "136",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/util/which.ts",
+          "lineNumber": 2,
+          "columnNumber": 21
+        },
+        {
+          "id": 567,
+          "samples": 435,
+          "functionName": "resolveWindowsCommandExecutable",
+          "scriptId": "141",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/shell/process-supervisor.ts",
+          "lineNumber": 1581,
+          "columnNumber": 42
+        },
+        {
+          "id": 566,
+          "samples": 435,
+          "functionName": "spawnWindowsCommand",
+          "scriptId": "141",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/shell/process-supervisor.ts",
+          "lineNumber": 1559,
+          "columnNumber": 81
+        },
+        {
+          "id": 565,
+          "samples": 435,
+          "functionName": "spawnWindowsCommand",
+          "scriptId": "141",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/shell/process-supervisor.ts",
+          "lineNumber": 1559,
+          "columnNumber": 36
+        },
+        {
+          "id": 564,
+          "samples": 435,
+          "functionName": "defaultSpawnCommand",
+          "scriptId": "141",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/shell/process-supervisor.ts",
+          "lineNumber": 1124,
+          "columnNumber": 81
+        },
+        {
+          "id": 563,
+          "samples": 435,
+          "functionName": "defaultSpawnCommand",
+          "scriptId": "141",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/shell/process-supervisor.ts",
+          "lineNumber": 1124,
+          "columnNumber": 36
+        },
+        {
+          "id": 562,
+          "samples": 435,
+          "functionName": "spawnHostCommand",
+          "scriptId": "141",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/shell/process-supervisor.ts",
+          "lineNumber": 462,
+          "columnNumber": 85
+        },
+        {
+          "id": 561,
+          "samples": 435,
+          "functionName": "spawnHostCommand",
+          "scriptId": "141",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/shell/process-supervisor.ts",
+          "lineNumber": 462,
+          "columnNumber": 40
+        },
+        {
+          "id": 560,
+          "samples": 435,
+          "functionName": "",
+          "scriptId": "140",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/util/process-facade.ts",
+          "lineNumber": 34,
+          "columnNumber": 84
+        },
+        {
+          "id": 570,
+          "samples": 431,
+          "functionName": "sync",
+          "scriptId": "138",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/isexe@2.0.0/node_modules/isexe/index.js",
+          "lineNumber": 45,
+          "columnNumber": 14
+        },
+        {
+          "id": 571,
+          "samples": 407,
+          "functionName": "sync",
+          "scriptId": "139",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/isexe@2.0.0/node_modules/isexe/windows.js",
+          "lineNumber": 39,
+          "columnNumber": 14
+        },
+        {
+          "id": 572,
+          "samples": 406,
+          "functionName": "statSync",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 907,
+          "samples": 331,
+          "functionName": "buildState",
+          "scriptId": "103",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/provider.ts",
+          "lineNumber": 275,
+          "columnNumber": 28
+        },
+        {
+          "id": 908,
+          "samples": 296,
+          "functionName": "fromModelsDevProvider",
+          "scriptId": "103",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/provider.ts",
+          "lineNumber": 240,
+          "columnNumber": 39
+        },
+        {
+          "id": 909,
+          "samples": 263,
+          "functionName": "map",
+          "scriptId": "80",
+          "url": "",
+          "lineNumber": 0,
+          "columnNumber": 10
+        },
+        {
+          "id": 910,
+          "samples": 259,
+          "functionName": "",
+          "scriptId": "103",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/provider.ts",
+          "lineNumber": 250,
+          "columnNumber": 15
+        },
+        {
+          "id": 911,
+          "samples": 258,
+          "functionName": "fromModelsDevModel",
+          "scriptId": "103",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/provider.ts",
+          "lineNumber": 172,
+          "columnNumber": 29
+        },
+        {
+          "id": 591,
+          "samples": 133,
+          "functionName": "",
+          "scriptId": "91",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/project/project.ts",
+          "lineNumber": 716,
+          "columnNumber": 90
+        },
+        {
+          "id": 1236,
+          "samples": 119,
+          "functionName": "run",
+          "scriptId": "130",
+          "url": "node:async_hooks",
+          "lineNumber": 78,
+          "columnNumber": 5
+        },
+        {
+          "id": 1235,
+          "samples": 119,
+          "functionName": "phase",
+          "scriptId": "232",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/skill/read-diagnostics.ts",
+          "lineNumber": 179,
+          "columnNumber": 26
+        },
+        {
+          "id": 1238,
+          "samples": 118,
+          "functionName": "",
+          "scriptId": "91",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/project/project.ts",
+          "lineNumber": 587,
+          "columnNumber": 23
+        },
+        {
+          "id": 1237,
+          "samples": 118,
+          "functionName": "",
+          "scriptId": "91",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/project/project.ts",
+          "lineNumber": 587,
+          "columnNumber": 11
+        }
+      ],
+      "sampleGapSummary": {
+        "countOver10ms": 1244,
+        "first": [
+          {
+            "end": 1792444128709505,
+            "deltaUs": 852590
+          },
+          {
+            "end": 1792444128724954,
+            "deltaUs": 14473
+          },
+          {
+            "end": 1792444128739725,
+            "deltaUs": 12863
+          },
+          {
+            "end": 1792444128755812,
+            "deltaUs": 15093
+          },
+          {
+            "end": 1792444128770992,
+            "deltaUs": 15180
+          },
+          {
+            "end": 1792444128801482,
+            "deltaUs": 12060
+          },
+          {
+            "end": 1792444128817077,
+            "deltaUs": 13778
+          },
+          {
+            "end": 1792444128833099,
+            "deltaUs": 16022
+          }
+        ],
+        "largest": [
+          {
+            "end": 1792444128709505,
+            "deltaUs": 852590
+          },
+          {
+            "end": 1792444149168310,
+            "deltaUs": 152774
+          },
+          {
+            "end": 1792444149013552,
+            "deltaUs": 62694
+          },
+          {
+            "end": 1792444148495821,
+            "deltaUs": 62448
+          },
+          {
+            "end": 1792444135578314,
+            "deltaUs": 46614
+          },
+          {
+            "end": 1792444137885480,
+            "deltaUs": 46612
+          },
+          {
+            "end": 1792444133500232,
+            "deltaUs": 46394
+          },
+          {
+            "end": 1792444133097103,
+            "deltaUs": 46241
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "requestID": "d3430638-b815-47de-8863-0b7586e4f397",
+        "method": "PATCH",
+        "path": "/global/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 5375,
+        "start": "2026-10-19T21:09:09.638Z",
+        "end": "2026-10-19T21:09:15.013Z",
+        "from": 1792444149638000,
+        "to": 1792444155013000
+      },
+      "samples": 604,
+      "self": [
+        {
+          "id": 582,
+          "samples": 127,
+          "functionName": "spawn",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 572,
+          "samples": 73,
+          "functionName": "statSync",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 911,
+          "samples": 68,
+          "functionName": "fromModelsDevModel",
+          "scriptId": "103",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/provider.ts",
+          "lineNumber": 172,
+          "columnNumber": 29
+        },
+        {
+          "id": 3677,
+          "samples": 37,
+          "functionName": "o",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/remeda@2.26.0/node_modules/remeda/dist/chunk-3ZJAREUD.js",
+          "lineNumber": 0,
+          "columnNumber": 81
+        },
+        {
+          "id": 1192,
+          "samples": 30,
+          "functionName": "includes",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 912,
+          "samples": 20,
+          "functionName": "variants",
+          "scriptId": "170",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/transform.ts",
+          "lineNumber": 611,
+          "columnNumber": 26
+        },
+        {
+          "id": 1298,
+          "samples": 16,
+          "functionName": "fromEntries",
+          "scriptId": "80",
+          "url": "",
+          "lineNumber": 0,
+          "columnNumber": 10
+        },
+        {
+          "id": 4376,
+          "samples": 11,
+          "functionName": "fromEntries",
+          "scriptId": "80",
+          "url": "",
+          "lineNumber": 0,
+          "columnNumber": 10
+        },
+        {
+          "id": 574,
+          "samples": 9,
+          "functionName": "MoveFileExW",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 914,
+          "samples": 9,
+          "functionName": "some",
+          "scriptId": "80",
+          "url": "",
+          "lineNumber": 0,
+          "columnNumber": 10
+        },
+        {
+          "id": 907,
+          "samples": 9,
+          "functionName": "buildState",
+          "scriptId": "103",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/provider.ts",
+          "lineNumber": 275,
+          "columnNumber": 28
+        },
+        {
+          "id": 2921,
+          "samples": 7,
+          "functionName": "realpathNativeSync",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 3678,
+          "samples": 7,
+          "functionName": "entries",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 1193,
+          "samples": 7,
+          "functionName": "",
+          "scriptId": "170",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/transform.ts",
+          "lineNumber": 615,
+          "columnNumber": 90
+        },
+        {
+          "id": 4508,
+          "samples": 6,
+          "functionName": "values",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 3676,
+          "samples": 5,
+          "functionName": "u",
+          "scriptId": "410",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/remeda@2.26.0/node_modules/remeda/dist/chunk-WIMGWYZL.js",
+          "lineNumber": 0,
+          "columnNumber": 50
+        },
+        {
+          "id": 1297,
+          "samples": 5,
+          "functionName": "entries",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 913,
+          "samples": 5,
+          "functionName": "map",
+          "scriptId": "80",
+          "url": "",
+          "lineNumber": 0,
+          "columnNumber": 10
+        },
+        {
+          "id": 909,
+          "samples": 5,
+          "functionName": "map",
+          "scriptId": "80",
+          "url": "",
+          "lineNumber": 0,
+          "columnNumber": 10
+        },
+        {
+          "id": 910,
+          "samples": 5,
+          "functionName": "",
+          "scriptId": "103",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/provider.ts",
+          "lineNumber": 250,
+          "columnNumber": 15
+        },
+        {
+          "id": 4147,
+          "samples": 4,
+          "functionName": "filter",
+          "scriptId": "80",
+          "url": "",
+          "lineNumber": 0,
+          "columnNumber": 10
+        },
+        {
+          "id": 3717,
+          "samples": 4,
+          "functionName": "",
+          "scriptId": "103",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/provider.ts",
+          "lineNumber": 470,
+          "columnNumber": 62
+        },
+        {
+          "id": 2598,
+          "samples": 3,
+          "functionName": "Buffer",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 4129,
+          "samples": 3,
+          "functionName": "",
+          "scriptId": "170",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/transform.ts",
+          "lineNumber": 745,
+          "columnNumber": 35
+        },
+        {
+          "id": 4887,
+          "samples": 3,
+          "functionName": "structuredClone",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 3751,
+          "samples": 3,
+          "functionName": "",
+          "scriptId": "170",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/transform.ts",
+          "lineNumber": 723,
+          "columnNumber": 63
+        },
+        {
+          "id": 3736,
+          "samples": 2,
+          "functionName": "coreBuiltInToolIDs",
+          "scriptId": "167",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/agent/tool-pool-data.ts",
+          "lineNumber": 336,
+          "columnNumber": 34
+        },
+        {
+          "id": 4829,
+          "samples": 2,
+          "functionName": "Set",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 125,
+          "samples": 2,
+          "functionName": "",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 3585,
+          "samples": 2,
+          "functionName": "copyDataProperties",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        }
+      ],
+      "inclusive": [
+        {
+          "id": 1,
+          "samples": 604,
+          "functionName": "(root)",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 124,
+          "samples": 600,
+          "functionName": "processTicksAndRejections",
+          "scriptId": "10",
+          "url": "",
+          "lineNumber": 6,
+          "columnNumber": 38
+        },
+        {
+          "id": 125,
+          "samples": 597,
+          "functionName": "",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 907,
+          "samples": 272,
+          "functionName": "buildState",
+          "scriptId": "103",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/provider.ts",
+          "lineNumber": 275,
+          "columnNumber": 28
+        },
+        {
+          "id": 908,
+          "samples": 244,
+          "functionName": "fromModelsDevProvider",
+          "scriptId": "103",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/provider.ts",
+          "lineNumber": 240,
+          "columnNumber": 39
+        },
+        {
+          "id": 909,
+          "samples": 218,
+          "functionName": "map",
+          "scriptId": "80",
+          "url": "",
+          "lineNumber": 0,
+          "columnNumber": 10
+        },
+        {
+          "id": 910,
+          "samples": 213,
+          "functionName": "",
+          "scriptId": "103",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/provider.ts",
+          "lineNumber": 250,
+          "columnNumber": 15
+        },
+        {
+          "id": 911,
+          "samples": 208,
+          "functionName": "fromModelsDevModel",
+          "scriptId": "103",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/provider.ts",
+          "lineNumber": 172,
+          "columnNumber": 29
+        },
+        {
+          "id": 576,
+          "samples": 134,
+          "functionName": "spawn",
+          "scriptId": "16",
+          "url": "node:child_process",
+          "lineNumber": 10,
+          "columnNumber": 14
+        },
+        {
+          "id": 575,
+          "samples": 134,
+          "functionName": "spawnWindowsRequest",
+          "scriptId": "141",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/shell/process-supervisor.ts",
+          "lineNumber": 1595,
+          "columnNumber": 22
+        },
+        {
+          "id": 581,
+          "samples": 130,
+          "functionName": "spawn",
+          "scriptId": "16",
+          "url": "node:child_process",
+          "lineNumber": 706,
+          "columnNumber": 7
+        },
+        {
+          "id": 582,
+          "samples": 127,
+          "functionName": "spawn",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 569,
+          "samples": 78,
+          "functionName": "whichSync",
+          "scriptId": "137",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/which@2.0.2/node_modules/which/which.js",
+          "lineNumber": 86,
+          "columnNumber": 18
+        },
+        {
+          "id": 568,
+          "samples": 78,
+          "functionName": "which",
+          "scriptId": "136",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/util/which.ts",
+          "lineNumber": 2,
+          "columnNumber": 21
+        },
+        {
+          "id": 567,
+          "samples": 78,
+          "functionName": "resolveWindowsCommandExecutable",
+          "scriptId": "141",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/shell/process-supervisor.ts",
+          "lineNumber": 1581,
+          "columnNumber": 42
+        },
+        {
+          "id": 566,
+          "samples": 78,
+          "functionName": "spawnWindowsCommand",
+          "scriptId": "141",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/shell/process-supervisor.ts",
+          "lineNumber": 1559,
+          "columnNumber": 81
+        },
+        {
+          "id": 565,
+          "samples": 78,
+          "functionName": "spawnWindowsCommand",
+          "scriptId": "141",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/shell/process-supervisor.ts",
+          "lineNumber": 1559,
+          "columnNumber": 36
+        },
+        {
+          "id": 564,
+          "samples": 78,
+          "functionName": "defaultSpawnCommand",
+          "scriptId": "141",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/shell/process-supervisor.ts",
+          "lineNumber": 1124,
+          "columnNumber": 81
+        },
+        {
+          "id": 563,
+          "samples": 78,
+          "functionName": "defaultSpawnCommand",
+          "scriptId": "141",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/shell/process-supervisor.ts",
+          "lineNumber": 1124,
+          "columnNumber": 36
+        },
+        {
+          "id": 562,
+          "samples": 78,
+          "functionName": "spawnHostCommand",
+          "scriptId": "141",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/shell/process-supervisor.ts",
+          "lineNumber": 462,
+          "columnNumber": 85
+        },
+        {
+          "id": 561,
+          "samples": 78,
+          "functionName": "spawnHostCommand",
+          "scriptId": "141",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/shell/process-supervisor.ts",
+          "lineNumber": 462,
+          "columnNumber": 40
+        },
+        {
+          "id": 560,
+          "samples": 78,
+          "functionName": "",
+          "scriptId": "140",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/util/process-facade.ts",
+          "lineNumber": 34,
+          "columnNumber": 84
+        },
+        {
+          "id": 570,
+          "samples": 75,
+          "functionName": "sync",
+          "scriptId": "138",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/isexe@2.0.0/node_modules/isexe/index.js",
+          "lineNumber": 45,
+          "columnNumber": 14
+        },
+        {
+          "id": 572,
+          "samples": 73,
+          "functionName": "statSync",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "id": 571,
+          "samples": 73,
+          "functionName": "sync",
+          "scriptId": "139",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/isexe@2.0.0/node_modules/isexe/windows.js",
+          "lineNumber": 39,
+          "columnNumber": 14
+        },
+        {
+          "id": 912,
+          "samples": 60,
+          "functionName": "variants",
+          "scriptId": "170",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/provider/transform.ts",
+          "lineNumber": 611,
+          "columnNumber": 26
+        },
+        {
+          "id": 3675,
+          "samples": 50,
+          "functionName": "i",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/remeda@2.26.0/node_modules/remeda/dist/chunk-3ZJAREUD.js",
+          "lineNumber": 0,
+          "columnNumber": 50
+        },
+        {
+          "id": 3676,
+          "samples": 49,
+          "functionName": "u",
+          "scriptId": "410",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/remeda@2.26.0/node_modules/remeda/dist/chunk-WIMGWYZL.js",
+          "lineNumber": 0,
+          "columnNumber": 50
+        },
+        {
+          "id": 3677,
+          "samples": 44,
+          "functionName": "o",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/remeda@2.26.0/node_modules/remeda/dist/chunk-3ZJAREUD.js",
+          "lineNumber": 0,
+          "columnNumber": 81
+        },
+        {
+          "id": 1192,
+          "samples": 30,
+          "functionName": "includes",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        }
+      ],
+      "sampleGapSummary": {
+        "countOver10ms": 325,
+        "first": [
+          {
+            "end": 1792444149650726,
+            "deltaUs": 12493
+          },
+          {
+            "end": 1792444149666032,
+            "deltaUs": 15306
+          },
+          {
+            "end": 1792444149681310,
+            "deltaUs": 14257
+          },
+          {
+            "end": 1792444149696845,
+            "deltaUs": 15535
+          },
+          {
+            "end": 1792444149712041,
+            "deltaUs": 12338
+          },
+          {
+            "end": 1792444149727199,
+            "deltaUs": 12212
+          },
+          {
+            "end": 1792444149742411,
+            "deltaUs": 14215
+          },
+          {
+            "end": 1792444149757818,
+            "deltaUs": 15407
+          }
+        ],
+        "largest": [
+          {
+            "end": 1792444151851543,
+            "deltaUs": 64006
+          },
+          {
+            "end": 1792444152768002,
+            "deltaUs": 32106
+          },
+          {
+            "end": 1792444150131923,
+            "deltaUs": 31573
+          },
+          {
+            "end": 1792444150583371,
+            "deltaUs": 31254
+          },
+          {
+            "end": 1792444153047266,
+            "deltaUs": 31230
+          },
+          {
+            "end": 1792444150459355,
+            "deltaUs": 30788
+          },
+          {
+            "end": 1792444150319171,
+            "deltaUs": 30717
+          },
+          {
+            "end": 1792444153577753,
+            "deltaUs": 30667
+          }
+        ]
+      }
+    }
+  ]
+}

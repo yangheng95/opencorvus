@@ -13,7 +13,7 @@ import { GlobalBus } from "@/bus/global"
 import { readFile, realpath, readdir, stat } from "fs/promises"
 import { hostGit as git } from "../util/git"
 import { Glob } from "../util/glob"
-import { which } from "@/util/which"
+import { whichAsync } from "@/util/which"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { assertProjectDurableAdmissionOpen, ProjectDurableAdmissionClosedError } from "./deletion-registry"
 import { Identifier } from "@/id/id"
@@ -595,7 +595,7 @@ export namespace Project {
             worktree: registered.project.worktree,
           }
         }
-        const gitBinary = which("git")
+        const gitBinary = await whichAsync("git")
         const dotgit = path.join(directory, ".git")
         const local = await Filesystem.exists(dotgit)
 
@@ -1246,7 +1246,7 @@ export namespace Project {
         project: current.project,
       })
     }
-    if (!which("git")) {
+    if (!(await whichAsync("git"))) {
       throw new Error("git is not installed")
     }
     const result = await git(["init"], { cwd: directory })

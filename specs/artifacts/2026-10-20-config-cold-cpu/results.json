@@ -1,0 +1,307 @@
+{
+  "batch": 444,
+  "baselineCommit": "db5545b450ab73078acbaa9e4305d721a91cc38e",
+  "criteria": {
+    "coldMs": 10000,
+    "restoreMs": 5000,
+    "pageReadMs": 20000
+  },
+  "scopes": [
+    {
+      "phase": "before",
+      "profiled": true,
+      "occurrence": "config-cold-cpu-444-before-a914360f-13d7-4363-9afa-b4192e8a5201",
+      "preflight": {
+        "sessionID": "ses_hKdXcEphJ16rBD16IQbH",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "canonical": {
+        "at": "2026-10-19T21:08:48.692Z",
+        "endedAt": "2026-10-19T21:09:15.014Z",
+        "phase": "before",
+        "port": 18679,
+        "occurrence": "config-cold-cpu-444-before-a914360f-13d7-4363-9afa-b4192e8a5201",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 20943.0677,
+        "restoreMs": 5375.234599999996,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "inventory": [
+        {
+          "projects": 75,
+          "loaded": 2
+        }
+      ],
+      "concurrentReads": [
+        {
+          "requestID": "41ea435d-52bf-49e3-95fc-5c3f0ea95886",
+          "start": "2026-10-19T21:08:52.339Z",
+          "end": "2026-10-19T21:09:09.634Z",
+          "path": "/global/config",
+          "duration": 17295,
+          "statusCode": 200,
+          "writeRequestID": "13939c42-fbfb-4db0-a0ca-ef00f5e6576f"
+        }
+      ],
+      "physical": {
+        "occurrence": "config-cold-cpu-444-before-a914360f-13d7-4363-9afa-b4192e8a5201",
+        "copiedPair": [
+          {
+            "name": "auth.json",
+            "outcome": "retired"
+          },
+          {
+            "name": "models.json",
+            "outcome": "retired"
+          }
+        ],
+        "chain": [
+          {
+            "identity": {
+              "pid": 89384,
+              "processInstanceID": "win32:639280407838695275",
+              "occurrenceID": "372a6678-12d3-43e0-859d-0b6ad324c6b7"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 93784,
+              "processInstanceID": "win32:639280407845578110",
+              "occurrenceID": "d263afd1-01db-48d8-a00a-ce531fc6af68"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "pairedCleanupComplete": true,
+        "physicalCompletion": true,
+        "native": {
+          "occurrence": "config-cold-cpu-444-before-a914360f-13d7-4363-9afa-b4192e8a5201",
+          "outcome": "settled",
+          "host": {
+            "pid": 89384,
+            "processInstanceID": "win32:639280407838695275",
+            "occurrenceID": "372a6678-12d3-43e0-859d-0b6ad324c6b7"
+          },
+          "target": {
+            "pid": 93784,
+            "processInstanceID": "win32:639280407845578110",
+            "occurrenceID": "d263afd1-01db-48d8-a00a-ce531fc6af68"
+          },
+          "observedAtUtc": "2026-10-19T21:09:31.267Z",
+          "deadlineAt": 1792445183243,
+          "terminal": {
+            "occurrenceID": "config-cold-cpu-444-before-a914360f-13d7-4363-9afa-b4192e8a5201",
+            "pid": 93784,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-19T21:09:32.4982336Z"
+      },
+      "launcher": {
+        "childExitCode": 0,
+        "observedAtUtc": "2026-10-19T21:09:32.5192881Z"
+      }
+    },
+    {
+      "phase": "after",
+      "profiled": false,
+      "occurrence": "config-cold-cpu-444-after-fc2036fb-19dc-4d6a-bf1d-c91e88e2dcb6",
+      "preflight": {
+        "sessionID": "ses_h3WSqJ8ZF8TQc6nhgDWG",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "canonical": {
+        "at": "2026-10-19T21:19:54.811Z",
+        "endedAt": "2026-10-19T21:20:18.226Z",
+        "phase": "after",
+        "port": 18681,
+        "occurrence": "config-cold-cpu-444-after-fc2036fb-19dc-4d6a-bf1d-c91e88e2dcb6",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 18065.6297,
+        "restoreMs": 5345.6541,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "inventory": [
+        {
+          "projects": 76,
+          "loaded": 2
+        }
+      ],
+      "concurrentReads": [
+        {
+          "requestID": "9c7e67ac-9e1d-4273-b7b2-903467814359",
+          "start": "2026-10-19T21:19:58.226Z",
+          "end": "2026-10-19T21:20:12.875Z",
+          "path": "/global/config",
+          "duration": 14649,
+          "statusCode": 200,
+          "writeRequestID": "e50ecef2-9365-4ade-9a22-03d3706ecdff"
+        }
+      ],
+      "physical": {
+        "copiedPair": [
+          {
+            "name": "auth.json",
+            "outcome": "retired"
+          },
+          {
+            "name": "models.json",
+            "outcome": "retired"
+          }
+        ],
+        "native": {
+          "occurrence": "config-cold-cpu-444-after-fc2036fb-19dc-4d6a-bf1d-c91e88e2dcb6",
+          "outcome": "settled",
+          "host": {
+            "pid": 89996,
+            "processInstanceID": "win32:639280415405191634",
+            "occurrenceID": "0686d318-0b65-4e77-b082-e15d0667aec5"
+          },
+          "target": {
+            "pid": 93452,
+            "processInstanceID": "win32:639280415413373113",
+            "occurrenceID": "2cdf7bc0-b25f-411b-8ba2-26c970a8d323"
+          },
+          "observedAtUtc": "2026-10-19T21:20:30.953Z",
+          "deadlineAt": 1792445940464,
+          "terminal": {
+            "occurrenceID": "config-cold-cpu-444-after-fc2036fb-19dc-4d6a-bf1d-c91e88e2dcb6",
+            "pid": 93452,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "pairedCleanupComplete": true,
+        "chain": [
+          {
+            "identity": {
+              "pid": 89996,
+              "processInstanceID": "win32:639280415405191634",
+              "occurrenceID": "0686d318-0b65-4e77-b082-e15d0667aec5"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 93452,
+              "processInstanceID": "win32:639280415413373113",
+              "occurrenceID": "2cdf7bc0-b25f-411b-8ba2-26c970a8d323"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "occurrence": "config-cold-cpu-444-after-fc2036fb-19dc-4d6a-bf1d-c91e88e2dcb6",
+        "physicalCompletion": true,
+        "observedAtUtc": "2026-10-19T21:20:32.2540824Z"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-19T21:20:32.2786116Z",
+        "childExitCode": 0
+      }
+    }
+  ],
+  "validation": [
+    {
+      "file": "test/which-async.test.ts",
+      "cases": 4,
+      "assertions": 5,
+      "log": "focused-tests.log"
+    },
+    {
+      "file": "test/project-git-discovery.test.ts",
+      "cases": 1,
+      "assertions": 8,
+      "log": "focused-tests.log"
+    },
+    {
+      "file": "test/project-filesystem-identity.test.ts",
+      "cases": 3,
+      "assertions": 5,
+      "log": "focused-tests.log"
+    },
+    {
+      "file": "test/project-registration-batch.test.ts",
+      "cases": 9,
+      "assertions": 9,
+      "log": "focused-tests.log"
+    },
+    {
+      "file": "test/config-registration-batch.test.ts",
+      "cases": 1,
+      "assertions": 1,
+      "log": "focused-tests.log"
+    },
+    {
+      "file": "test/config-candidate-skill-catalog.test.ts",
+      "cases": 7,
+      "assertions": 7,
+      "log": "focused-tests.log"
+    },
+    {
+      "file": "test/process-streaming-input.test.ts",
+      "cases": 3,
+      "assertions": 5,
+      "log": "focused-tests.log"
+    },
+    {
+      "file": "test/process-facade-settlement-barrier.test.ts",
+      "cases": 5,
+      "assertions": 18,
+      "log": "focused-tests.log"
+    },
+    {
+      "file": "test/server/project-git-initialization.test.ts",
+      "cases": 1,
+      "assertions": 3,
+      "log": "git-init-contract.log"
+    },
+    {
+      "file": "test/process-supervisor-control-plane.test.ts",
+      "cases": 2,
+      "assertions": 2,
+      "log": "native-control-contract.log"
+    }
+  ],
+  "positiveCases": 36,
+  "positiveAssertions": 63,
+  "qualification": {
+    "cold": false,
+    "restore": false,
+    "pageRead": true,
+    "canonicalRestoration": true
+  },
+  "sourceAuthorityMetadataUnchanged": true,
+  "scope": "Complete original QA412 history: 75 profiled -> 76 unprofiled Projects, no reset or narrowed validation. Formal441 UI and actual gpt-6.1-sol streaming; no UI/schema source change.",
+  "status": "failed",
+  "limitation": "Cold and restore criteria remain unmet. Profiled before is diagnostic, not a strict performance comparison. CPU sampling proves synchronous PATH lookup on the async path; native spawn and Provider projection remain hotspots."
+}

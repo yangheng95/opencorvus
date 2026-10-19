@@ -7,7 +7,7 @@ import path from "path"
 import { PassThrough } from "node:stream"
 import { Filesystem } from "@/util/filesystem"
 import { Global } from "@/global"
-import { which } from "@/util/which"
+import { which, whichAsync } from "@/util/which"
 import {
   disposeTaskExecutionCapsule,
   wrapTaskCapsuleCommand,
@@ -1559,7 +1559,7 @@ process.stdin.resume()
 
   async function spawnWindowsCommand(opts: CommandSpawnOptions): Promise<Handle> {
     const env = opts.env ?? process.env
-    const executable = resolveWindowsCommandExecutable(opts.executable, env)
+    const executable = await resolveWindowsCommandExecutable(opts.executable, env)
     return await spawnWindowsRequest({
       label: executable,
       stdin: opts.stdin,
@@ -1579,9 +1579,9 @@ process.stdin.resume()
     })
   }
 
-  function resolveWindowsCommandExecutable(executable: string, env: NodeJS.ProcessEnv): string {
+  async function resolveWindowsCommandExecutable(executable: string, env: NodeJS.ProcessEnv): Promise<string> {
     if (path.isAbsolute(executable) || executable.includes("/") || executable.includes("\\")) return executable
-    const resolved = which(executable, env)
+    const resolved = await whichAsync(executable, env)
     if (!resolved) throw new Error(`Windows command executable "${executable}" was not found in PATH`)
     return resolved
   }

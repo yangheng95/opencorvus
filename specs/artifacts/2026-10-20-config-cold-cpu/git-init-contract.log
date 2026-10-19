@@ -1,0 +1,13 @@
+$ bun script/run-tests.ts test/server/project-git-initialization.test.ts "--test-name-pattern=explicit Git initialization creates and returns the exact idle project"
+[1/1] START test/server/project-git-initialization.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) explicit Git initialization creates and returns the exact idle project [1285.37ms]
+
+ 1 pass
+ 4 filtered out
+ 0 fail
+ 3 expect() calls
+Ran 1 test across 1 file. [6.72s]
+[1/1] DONE test/server/project-git-initialization.test.ts exit=0 duration=7.61s

@@ -1,5 +1,6 @@
 declare module "which" {
   const whichPkg: {
+    (cmd: string, options?: { path?: string; pathExt?: string }): Promise<string>
     sync(
       cmd: string,
       options?: {

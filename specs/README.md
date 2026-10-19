@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [全量配置冷保存CPU剖析](records/2026-10/2026-10-20-config-cold-cpu.md)：区分脚本计算、文件系统与原生进程等待。
+
 - [原生Git监管与目录批处理](records/2026-10/2026-10-20-native-git-cost.md)：真实进程分段、物理命名空间顺序及完整配置保存。
 
 - [候选配置的真实Skill目录](records/2026-10/2026-10-20-candidate-skill-catalog.md)：项目来源误判、同次新增来源/引用及完整保存基准。

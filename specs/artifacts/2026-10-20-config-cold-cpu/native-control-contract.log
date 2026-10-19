@@ -1,0 +1,14 @@
+$ bun script/run-tests.ts test/process-supervisor-control-plane.test.ts "--test-name-pattern=returns a fast command|executes a control-plane process"
+[1/1] START test/process-supervisor-control-plane.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) ProcessSupervisor control-plane authority > returns a fast command's real nonzero exit after the native readiness handshake [377.84ms]
+(pass) ProcessSupervisor control-plane authority > executes a control-plane process while the Task Capsule runtime is configured [609.91ms]
+
+ 2 pass
+ 15 filtered out
+ 0 fail
+ 2 expect() calls
+Ran 2 tests across 1 file. [3.90s]
+[1/1] DONE test/process-supervisor-control-plane.test.ts exit=0 duration=4.80s

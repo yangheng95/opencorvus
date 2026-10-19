@@ -1,0 +1,114 @@
+$ bun script/run-tests.ts test/which-async.test.ts test/project-git-discovery.test.ts test/project-filesystem-identity.test.ts test/project-registration-batch.test.ts test/config-registration-batch.test.ts test/config-candidate-skill-catalog.test.ts test/process-streaming-input.test.ts test/process-facade-settlement-barrier.test.ts
+[1/8] START test/which-async.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) asynchronous executable discovery preserves PATH and extension order while yielding to queued work [15.40ms]
+(pass) executable discovery observes each current PATH and file location [6.63ms]
+(pass) the Windows command resolver returns its declared missing-executable error [2.55ms]
+(pass) native Git resolves the current PATH and returns its fully settled output [199.43ms]
+
+ 4 pass
+ 0 fail
+ 5 expect() calls
+Ran 4 tests across 1 file. [3.07s]
+[1/8] DONE test/which-async.test.ts exit=0 duration=3.88s
+[2/8] START test/project-git-discovery.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Git discovery preserves the exact main, linked and aliased Project occurrence [2771.64ms]
+
+ 1 pass
+ 0 fail
+ 8 expect() calls
+Ran 1 test across 1 file. [3.95s]
+[2/8] DONE test/project-git-discovery.test.ts exit=0 duration=4.09s
+[3/8] START test/project-filesystem-identity.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) discovers the exact independent Project while a wide-inode peer is closed for deletion [3303.08ms]
+(pass) recognizes two real hard-link paths as the same filesystem identity [794.90ms]
+(pass) a later physical comparison observes the current replacement and its new hard link [6.25ms]
+
+ 3 pass
+ 0 fail
+ 5 expect() calls
+Ran 3 tests across 1 file. [5.30s]
+[3/8] DONE test/project-filesystem-identity.test.ts exit=0 duration=5.44s
+[4/8] START test/project-registration-batch.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a cancelled batch settles its accepted registration and returns the original abort reason [264.44ms]
+(pass) an exclusive operation inside a registration batch returns its typed error and settles the queue [9.48ms]
+(pass) a fresh physical comparison observes a junction's current target after retargeting [5.70ms]
+(pass) a registration batch orders the same physical namespace through aliases and ancestor paths [299.38ms]
+(pass) a failed registration settles its peer and preserves the original error before a later batch [232.81ms]
+(pass) a retired registration context acquires the original queue after an independent current owner [31.67ms]
+(pass) a batch drains an accepted registration before releasing the original cross-process queue [7.53ms]
+(pass) a nested registration batch shares its original queue and returns its own ordered results [231.97ms]
+(pass) registration batches retain independent runtime-root queue ownership [12.14ms]
+
+ 9 pass
+ 0 fail
+ 9 expect() calls
+Ran 9 tests across 1 file. [2.35s]
+[4/8] DONE test/project-registration-batch.test.ts exit=0 duration=2.50s
+[5/8] START test/config-registration-batch.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a global cold candidate completes both independent admitted Project identities together [6706.32ms]
+
+ 1 pass
+ 0 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [7.63s]
+[5/8] DONE test/config-registration-batch.test.ts exit=0 duration=7.81s
+[6/8] START test/config-candidate-skill-catalog.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a global username save retains each project's own configured Skill assignment [3949.81ms]
+(pass) a global source removal retains a Skill still configured by its Project [2082.31ms]
+(pass) an implicit Project Skill remains assigned when an unrelated global field changes [2314.54ms]
+(pass) a removed sole Skill source returns the assignment error and retains its complete canonical source [2236.44ms]
+(pass) a Project candidate adds its Skill source and assignment in one canonical mutation [1743.72ms]
+(pass) a global candidate repairs a Project assignment by adding its actual Skill source [2085.59ms]
+(pass) a candidate catalog resolves its own source while the runtime retains its current definition [1787.27ms]
+
+ 7 pass
+ 0 fail
+ 7 expect() calls
+Ran 7 tests across 1 file. [17.55s]
+[6/8] DONE test/config-candidate-skill-catalog.test.ts exit=0 duration=17.74s
+[7/8] START test/process-streaming-input.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) supervised Process binary input > streams exact binary chunks through the owned stdin pipe [168.63ms]
+(pass) supervised Process binary input > returns the inactivity-timeout contract when the input iterator stops producing bytes [215.11ms]
+(pass) supervised Process binary input > disposes the supervised child before returning a spawn-observer error [122.86ms]
+
+ 3 pass
+ 0 fail
+ 5 expect() calls
+Ran 3 tests across 1 file. [1422.00ms]
+[7/8] DONE test/process-streaming-input.test.ts exit=0 duration=1.59s
+[8/8] START test/process-facade-settlement-barrier.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Host settlement retains original output failures after the raw barrier [5.52ms]
+(pass) Host settlement retains original output and late cleanup failures after the raw barrier [0.58ms]
+(pass) Host settlement preserves the sole original cleanup error after delivered output [0.97ms]
+(pass) Host settlement projects the exact original signal fact after complete raw closure [0.56ms]
+(pass) Task adapter joins the original settlement under the current persisted native binding [2935.47ms]
+
+ 5 pass
+ 0 fail
+ 18 expect() calls
+Ran 5 tests across 1 file. [4.29s]
+[8/8] DONE test/process-facade-settlement-barrier.test.ts exit=0 duration=4.46s
