@@ -1,0 +1,18 @@
+$ bun script/run-tests.ts test/config-candidate-skill-catalog.test.ts
+[1/1] START test/config-candidate-skill-catalog.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a global username save retains each project's own configured Skill assignment [3705.38ms]
+(pass) a global source removal retains a Skill still configured by its Project [1785.82ms]
+(pass) an implicit Project Skill remains assigned when an unrelated global field changes [2062.41ms]
+(pass) a removed sole Skill source returns the assignment error and retains its complete canonical source [1930.46ms]
+(pass) a Project candidate adds its Skill source and assignment in one canonical mutation [1441.29ms]
+(pass) a global candidate repairs a Project assignment by adding its actual Skill source [1719.15ms]
+(pass) a candidate catalog resolves its own source while the runtime retains its current definition [1482.74ms]
+
+ 7 pass
+ 0 fail
+ 7 expect() calls
+Ran 7 tests across 1 file. [17.59s]
+[1/1] DONE test/config-candidate-skill-catalog.test.ts exit=0 duration=18.19s

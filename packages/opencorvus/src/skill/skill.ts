@@ -449,7 +449,7 @@ export namespace Skill {
     worktree: string
   }
 
-  async function loadCatalogState(projectScope?: CatalogProjectScope) {
+  async function loadCatalogState(config: Config.Info, projectScope?: CatalogProjectScope) {
     const skills: Record<string, Info> = {}
     const dirs = new Set<string>()
     const warnings: Warning[] = []
@@ -718,9 +718,6 @@ export namespace Skill {
     }
 
     // Scan additional skill paths from config
-    const config = await SkillReadDiagnostics.phase("skill.config", () =>
-      projectScope ? Config.get() : Config.getGlobal(),
-    )
     for (const skillPath of config.skills?.paths ?? []) {
       const expanded = skillPath.startsWith("~/") ? path.join(os.homedir(), skillPath.slice(2)) : skillPath
       const resolved = path.isAbsolute(expanded)
@@ -833,7 +830,7 @@ export namespace Skill {
       SkillReadDiagnostics.initialize("skill", async () => {
         const revision = await publicationRevision()
         return {
-          ...(await loadCatalogState({
+          ...(await loadCatalogState(await SkillReadDiagnostics.phase("skill.config", () => Config.get()), {
             directory: Instance.directory,
             worktree: Instance.worktree,
           })),
@@ -861,9 +858,19 @@ export namespace Skill {
     return catalogState().then((x) => Object.values(x.skills))
   }
 
+  /** Resolve a candidate with the same discovery rules, without publishing it
+   * into the current runtime catalog or retaining another configuration state. */
+  export async function snapshotForConfig(config: Config.Info) {
+    return withPublicationProjection(() =>
+      loadCatalogState(config, { directory: Instance.directory, worktree: Instance.worktree }),
+    )
+  }
+
   export async function globalSummaries(): Promise<{ skills: Summary[]; issues: Warning[] }> {
     return withPublicationProjection(async () => {
-      const snapshot = await loadCatalogState()
+      const snapshot = await loadCatalogState(
+        await SkillReadDiagnostics.phase("skill.config", () => Config.getGlobal()),
+      )
       return {
         skills: Object.values(snapshot.skills)
           .sort((left, right) => left.name.localeCompare(right.name))

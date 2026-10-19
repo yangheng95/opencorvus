@@ -1,0 +1,87 @@
+$ bun script/run-tests.ts test/config-candidate-skill-catalog.test.ts
+[1/1] START test/config-candidate-skill-catalog.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+2876 |               ConversationCapability.assignment(after, agentID)
+2877 |                 .skill_refs.filter((name) => removedProjectSkills.has(name))
+2878 |                 .map((name) => `${agentID}:${name}`),
+2879 |             )
+2880 |             if (assignedRemovedSkills.length > 0) {
+2881 |               throw new ConversationCapability.InvalidAssignmentError({
+                           ^
+ConversationCapabilityInvalidAssignmentError: ConversationCapabilityInvalidAssignmentError: Conversation skill_refs references Skills removed from global configuration: chat:candidate-first (project C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-PSUxWd\test-63708-un9Ewp\fixtures\memory-CAo8jW)
+ data: {
+  message: "Conversation skill_refs references Skills removed from global configuration: chat:candidate-first (project C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-PSUxWd\\test-63708-un9Ewp\\fixtures\\memory-CAo8jW)",
+},
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2881:21)
+(fail) a global username save retains each project's own configured Skill assignment [3305.17ms]
+2876 |               ConversationCapability.assignment(after, agentID)
+2877 |                 .skill_refs.filter((name) => removedProjectSkills.has(name))
+2878 |                 .map((name) => `${agentID}:${name}`),
+2879 |             )
+2880 |             if (assignedRemovedSkills.length > 0) {
+2881 |               throw new ConversationCapability.InvalidAssignmentError({
+                           ^
+ConversationCapabilityInvalidAssignmentError: ConversationCapabilityInvalidAssignmentError: Conversation skill_refs references Skills removed from global configuration: chat:candidate-retained (project C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-PSUxWd\test-63708-un9Ewp\fixtures\memory-xgjOHk)
+ data: {
+  message: "Conversation skill_refs references Skills removed from global configuration: chat:candidate-retained (project C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-PSUxWd\\test-63708-un9Ewp\\fixtures\\memory-xgjOHk)",
+},
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2881:21)
+(fail) a global source removal retains a Skill still configured by its Project [1692.28ms]
+2876 |               ConversationCapability.assignment(after, agentID)
+2877 |                 .skill_refs.filter((name) => removedProjectSkills.has(name))
+2878 |                 .map((name) => `${agentID}:${name}`),
+2879 |             )
+2880 |             if (assignedRemovedSkills.length > 0) {
+2881 |               throw new ConversationCapability.InvalidAssignmentError({
+                           ^
+ConversationCapabilityInvalidAssignmentError: ConversationCapabilityInvalidAssignmentError: Conversation skill_refs references Skills removed from global configuration: chat:candidate-implicit (project C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-PSUxWd\test-63708-un9Ewp\fixtures\memory-vGaYEl)
+ data: {
+  message: "Conversation skill_refs references Skills removed from global configuration: chat:candidate-implicit (project C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-PSUxWd\\test-63708-un9Ewp\\fixtures\\memory-vGaYEl)",
+},
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2881:21)
+(fail) an implicit Project Skill remains assigned when an unrelated global field changes [1669.66ms]
+84 |   await fs.writeFile(globalFile, JSON.stringify(original))
+85 |   Config.global.reset()
+86 |   await projectSource(project.path, { primary_assistant_capabilities: assignment("candidate-sole") })
+87 |   const failure = await Config.updateGlobalPatch({ skills: { paths: [] } }).catch(error => error)
+88 |   expect({ typed: ConversationCapability.InvalidAssignmentError.isInstance(failure), canonical: JSON.parse(await fs.readFile(globalFile, "utf8")) })
+89 |     .toEqual({ typed: true, canonical: original })
+          ^
+error: expect(received).toEqual(expected)
+
+  {
+    "canonical": {
++     "$schema": "https://opencorvus.ai/config.json",
+      "permission_mode": "ask",
+      "prompt_profile": {
+        "active": "base",
+      },
+      "skills": {
+        "paths": [
+          "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-PSUxWd\test-63708-un9Ewp\fixtures\memory-OlU6lv\candidate-sole",
+        ],
+      },
+    },
+    "typed": true,
+  }
+
+- Expected  - 0
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-skill-catalog.test.ts:89:6)
+(fail) a removed sole Skill source returns the assignment error and retains its complete canonical source [1879.41ms]
+
+ 0 pass
+ 4 fail
+ 1 expect() calls
+Ran 4 tests across 1 file. [12.52s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-skill-catalog.test.ts
+[1/1] DONE test/config-candidate-skill-catalog.test.ts exit=1 duration=13.18s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-skill-catalog.test.ts
+error: script "test" exited with code 1

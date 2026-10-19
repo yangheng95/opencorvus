@@ -1,0 +1,138 @@
+$ bun script/run-tests.ts test/skill-local-source-validation.test.ts test/server/conversation-capability-route.test.ts test/config-global-project-validation.test.ts test/config-catalog-lock-order.test.ts test/mcp-config-generation.test.ts test/config-peer-convergence.test.ts test/config-skill-recovery-lock-order.test.ts test/instance-config-lifecycle-order.test.ts test/remote-skill-cache-publication.test.ts
+[1/9] START test/skill-local-source-validation.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Local Skill source validation > missing publishes its exact input error [912.21ms]
+(pass) Local Skill source validation > file publishes its exact input error [4.02ms]
+(pass) Local Skill source validation > file/child publishes its exact input error [3.64ms]
+(pass) Local Skill source validation > empty publishes its exact input error [4.25ms]
+(pass) Local Skill source validation > directory installs and projects its real Skill [343.66ms]
+(pass) Local Skill source validation > directory-link installs and projects its real Skill [231.93ms]
+
+ 6 pass
+ 0 fail
+ 18 expect() calls
+Ran 6 tests across 1 file. [5.96s]
+[1/9] DONE test/skill-local-source-validation.test.ts exit=0 duration=6.55s
+[2/9] START test/server/conversation-capability-route.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) native conversation capability routes > separates configured MCP inventory from default native Chat and Work assignments [3184.19ms]
+(pass) native conversation capability routes > persists explicit project-owned Work MCP assignments [1866.32ms]
+(pass) native conversation capability routes > projects explicitly assigned Browser and Computer tool catalogs into Work [3062.07ms]
+(pass) native conversation capability routes > updates the project-owned Work Skill assignment through the production route [1715.05ms]
+
+ 4 pass
+ 0 fail
+ 21 expect() calls
+Ran 4 tests across 1 file. [12.14s]
+[2/9] DONE test/server/conversation-capability-route.test.ts exit=0 duration=12.31s
+[3/9] START test/config-global-project-validation.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a retained global writer settles its original transition after repeated projection failures [2395.42ms]
+(pass) one global generation projects every registered project's own configuration [3003.64ms]
+(pass) one global mutation retains its exact candidate identities through persistence and runtime convergence [3531.45ms]
+(pass) an invalid Project returns the candidate error and a corrected source accepts a full retry [3128.54ms]
+
+ 4 pass
+ 0 fail
+ 28 expect() calls
+Ran 4 tests across 1 file. [13.32s]
+[3/9] DONE test/config-global-project-validation.test.ts exit=0 duration=13.49s
+[4/9] START test/config-catalog-lock-order.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) project Config mutation settles after a catalog reader observes Config [2278.93ms]
+(pass) project Config mutation settles after a reference reader observes Config [1623.70ms]
+(pass) global Config mutation settles after a catalog reader observes Config [1850.09ms]
+(pass) global Config mutation settles after a reference reader observes Config [1987.71ms]
+
+ 4 pass
+ 0 fail
+ 8 expect() calls
+Ran 4 tests across 1 file. [8.67s]
+[4/9] DONE test/config-catalog-lock-order.test.ts exit=0 duration=8.84s
+[5/9] START test/mcp-config-generation.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) project writer and a first concurrent MCP status read settle with the committed generation [2779.95ms]
+(pass) global writer and a first concurrent MCP status read settle with the committed generation [1964.05ms]
+
+ 2 pass
+ 0 fail
+ 6 expect() calls
+Ran 2 tests across 1 file. [5.52s]
+[5/9] DONE test/mcp-config-generation.test.ts exit=0 duration=5.76s
+[6/9] START test/config-peer-convergence.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) cross-process Config convergence > a stable generation parses the exact source snapshot that owns its revision [2669.10ms]
+(pass) cross-process Config convergence > a committed writer transition retains its exact generation until event settlement succeeds [1497.27ms]
+(pass) cross-process Config convergence > a detached reader admitted by a writer settles before the next generation owner [2005.48ms]
+(pass) cross-process Config convergence > a loaded backend settles a peer Project write and publishes its current projection [11484.89ms]
+(pass) cross-process Config convergence > a peer global write refreshes every loaded Project from the same canonical generation [12684.91ms]
+(pass) cross-process Config convergence > a global-only backend publishes the canonical settlement event after a peer write [4337.35ms]
+(pass) cross-process Config convergence > a Project activated inside a global commit reads the committed generation [1761.54ms]
+
+ 7 pass
+ 0 fail
+ 8 expect() calls
+Ran 7 tests across 1 file. [37.94s]
+[6/9] DONE test/config-peer-convergence.test.ts exit=0 duration=38.12s
+[7/9] START test/config-skill-recovery-lock-order.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) published Skill recovery and a concurrent Config writer settle one catalog revision [18685.67ms]
+
+ 1 pass
+ 0 fail
+ 3 expect() calls
+Ran 1 test across 1 file. [19.48s]
+[7/9] DONE test/config-skill-recovery-lock-order.test.ts exit=0 duration=19.63s
+[8/9] START test/instance-config-lifecycle-order.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a global writer and a Config-reading initializer return the committed generation [2506.37ms]
+(pass) a Git-shape refresh and its catalog owner both serve the current Project [947.64ms]
+(pass) a refresh drain settles serving work and the catalog owner's identity read [2038.29ms]
+(pass) a refresh drain settles serving work and the catalog owner's active read [2136.33ms]
+(pass) a refresh drain settles serving work and the catalog owner's iteration read [2319.98ms]
+(pass) a refresh drain settles serving work and the catalog owner's descendant read [1958.57ms]
+(pass) a dispose drain settles serving work and the catalog owner's identity read [1472.61ms]
+(pass) a dispose drain settles serving work and the catalog owner's active read [1532.27ms]
+(pass) a dispose drain settles serving work and the catalog owner's iteration read [1553.20ms]
+(pass) a dispose drain settles serving work and the catalog owner's descendant read [1584.56ms]
+(pass) a catalog owner's identity read observes the state created after an entered teardown settles [2309.89ms]
+(pass) late catalog work reads the value committed by the next actual owner [356.22ms]
+(pass) an accepted child projection reads its owner's generation before the next catalog writer [343.50ms]
+(pass) a descendant callback reuses the catalog lease while its ancestor still owns it [245.69ms]
+(pass) preparation retains its lifecycle turn until an accepted child reads the prepared context [1503.47ms]
+(pass) a catalog owner receives the current project admission error from every identity reader [1558.09ms]
+(pass) a catalog owner receives the current process admission error from every identity reader [1482.73ms]
+
+ 17 pass
+ 0 fail
+ 22 expect() calls
+Ran 17 tests across 1 file. [27.21s]
+[8/9] DONE test/instance-config-lifecycle-order.test.ts exit=0 duration=27.38s
+[9/9] START test/remote-skill-cache-publication.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Remote Skill cache publication > a failed stream retries every file and installs one verified production snapshot [2470.75ms]
+(pass) Remote Skill cache publication > same-named Skills from different URLs publish source-separated verified snapshots [50.94ms]
+
+ 2 pass
+ 0 fail
+ 6 expect() calls
+Ran 2 tests across 1 file. [3.32s]
+[9/9] DONE test/remote-skill-cache-publication.test.ts exit=0 duration=3.49s

@@ -1,0 +1,37 @@
+$ bun script/run-tests.ts test/config-candidate-skill-catalog.test.ts "--test-name-pattern=removed sole Skill source|Project candidate adds"
+[1/1] START test/config-candidate-skill-catalog.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a removed sole Skill source returns the assignment error and retains its complete canonical source [2164.68ms]
+111 |     if (skillAssignments.length) {
+112 |       await withSkillCatalogReferenceRead(async () => {
+113 |         const installed = new Set((await SkillManager.installed()).map((skill) => skill.name))
+114 |         for (const { agentID, ref } of skillAssignments) {
+115 |           if (!installed.has(ref)) {
+116 |             throw new InvalidAssignmentError({
+                        ^
+ConversationCapabilityInvalidAssignmentError: ConversationCapabilityInvalidAssignmentError: chat skill_refs references an uninstalled Skill: candidate-added
+ data: {
+  message: "chat skill_refs references an uninstalled Skill: candidate-added",
+},
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\conversation\capability.ts:116:19)
+      at async assertConfig (D:\myhexin-local\opencorvus\packages\opencorvus\src\conversation\capability.ts:112:13)
+      at async validateConfigCandidate (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\candidate-validation.ts:44:32)
+      at async commit (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2530:17)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2750:40)
+      at async withProcessLock (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\process-lock.ts:86:26)
+      at async withKeyedLock (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\lock.ts:49:18)
+(fail) a Project candidate adds its Skill source and assignment in one canonical mutation [2095.38ms]
+
+ 1 pass
+ 3 filtered out
+ 1 fail
+ 1 expect() calls
+Ran 2 tests across 1 file. [8.00s]
+[1/1] DONE test/config-candidate-skill-catalog.test.ts exit=1 duration=8.62s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-skill-catalog.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-skill-catalog.test.ts
+error: script "test" exited with code 1

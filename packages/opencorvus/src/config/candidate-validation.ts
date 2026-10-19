@@ -42,7 +42,10 @@ export async function validateConfigCandidate(input: {
       )
     }
     await SkillReadDiagnostics.phase("config.validate.capabilities", () =>
-      ConversationCapability.assertConfig(input.config),
+      ConversationCapability.assertConfig(input.config, async () => {
+        const { Skill } = await import("@/skill/skill")
+        return Object.values((await Skill.snapshotForConfig(input.config)).skills)
+      }),
     )
   } catch (error) {
     if (ConversationCapability.InvalidAssignmentError.isInstance(error)) throw error

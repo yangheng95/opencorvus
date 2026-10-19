@@ -100,7 +100,7 @@ export namespace ConversationCapability {
     })
   }
 
-  export async function assertConfig(config: Config.Info) {
+  export async function assertConfig(config: Config.Info, loadSkills: () => Promise<readonly { name: string }[]>) {
     const assignments = CONVERSATION_AGENT_IDS.map((agentID) => ({
       agentID,
       selected: assignment(config, agentID),
@@ -110,7 +110,7 @@ export namespace ConversationCapability {
     )
     if (skillAssignments.length) {
       await withSkillCatalogReferenceRead(async () => {
-        const installed = new Set((await SkillManager.installed()).map((skill) => skill.name))
+        const installed = new Set((await loadSkills()).map((skill) => skill.name))
         for (const { agentID, ref } of skillAssignments) {
           if (!installed.has(ref)) {
             throw new InvalidAssignmentError({
@@ -202,7 +202,7 @@ export namespace ConversationCapability {
   export async function settings(agentID: ConversationAgentID, inputConfig?: Config.Info) {
     return withSkillCatalogReferenceRead(async () => {
       const config = inputConfig ?? (await Config.get())
-      await assertConfig(config)
+      await assertConfig(config, () => SkillManager.installed())
       const agent = await PrimaryAssistantRegistry.get(agentID, { config })
       const selected = assignment(config, agentID)
       const installed = await SkillManager.installed()

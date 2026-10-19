@@ -2788,28 +2788,6 @@ export namespace Config {
     return [...new Set(directories.map((directory) => Filesystem.resolve(directory)))]
   }
 
-  async function removedGlobalSkillNames(candidate: Info, directory: string): Promise<Set<string>> {
-    const [{ SkillManager }, { Instance }] = await Promise.all([
-      import("@/skill/manager"),
-      import("@/project/instance"),
-    ])
-    const candidatePaths = (candidate.skills?.paths ?? []).map((source) => Filesystem.resolve(source))
-    const candidateUrls = new Set(candidate.skills?.urls ?? [])
-    const removed = new Set<string>()
-    const installed = await Instance.provideProjectIdentity({
-      directory,
-      fn: () => SkillManager.installed(),
-    })
-    for (const skill of installed) {
-      if (skill.builtin) continue
-      const stillConfigured =
-        (skill.source_type === "config_url" && !!skill.source && candidateUrls.has(skill.source)) ||
-        (!!skill.dir && candidatePaths.some((source) => Filesystem.contains(source, skill.dir!)))
-      if (!stillConfigured) removed.add(skill.name)
-    }
-    return removed
-  }
-
   async function commitGlobalCandidate(merged: Source, persist: () => Promise<void>) {
     const effectiveGlobal = await resolveGlobalCandidate(merged)
     const { SkillManager } = await import("@/skill/manager")
@@ -2850,7 +2828,6 @@ export namespace Config {
     directories: readonly string[],
   ) {
     const { validateConfigCandidate } = await import("@/config/candidate-validation")
-    const { ConversationCapability } = await import("@/conversation/capability")
     const { Instance } = await import("@/project/instance")
     const loadedDirectories = new Set(stateSource.inspectAll().map((entry) => Filesystem.resolve(entry.key)))
     const outcomes = await settledWork({
@@ -2860,9 +2837,6 @@ export namespace Config {
         await Instance.provideProjectIdentity({
           directory,
           fn: async (): Promise<GlobalProjectTransition> => {
-            const removedProjectSkills = await SkillReadDiagnostics.phase("config.global.removed-skills", () =>
-              removedGlobalSkillNames(effectiveGlobal, directory),
-            )
             const worktree = await SkillReadDiagnostics.phase("config.snapshot.worktree", () =>
               readOnlyWorktreeBoundary(directory),
             )
@@ -2872,18 +2846,6 @@ export namespace Config {
             const after = await SkillReadDiagnostics.phase("config.global.after", () =>
               readOnlyProjectSnapshot(directory, worktree, merged),
             )
-            const assignedRemovedSkills = (["chat", "work"] as const).flatMap((agentID) =>
-              ConversationCapability.assignment(after, agentID)
-                .skill_refs.filter((name) => removedProjectSkills.has(name))
-                .map((name) => `${agentID}:${name}`),
-            )
-            if (assignedRemovedSkills.length > 0) {
-              throw new ConversationCapability.InvalidAssignmentError({
-                message:
-                  `Conversation skill_refs references Skills removed from global configuration: ` +
-                  `${assignedRemovedSkills.join(", ")} (project ${directory})`,
-              })
-            }
             await validateConfigCandidate({
               config: after,
               root: "global config",

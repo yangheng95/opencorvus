@@ -43,7 +43,6 @@ type Phase =
   | "config.dependencies"
   | "config.global.write"
   | "config.global.projects"
-  | "config.global.removed-skills"
   | "config.global.before"
   | "config.global.after"
   | "config.global.persist"

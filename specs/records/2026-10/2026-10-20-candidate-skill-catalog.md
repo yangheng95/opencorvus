@@ -1,0 +1,47 @@
+# 配置候选的真实 Skill 目录与保存成本
+
+## Recall
+
+持续单agent，原goal的三Astra文案已被用户后续单agent指令覆盖，不委托。上一轮440/441为progress：350849dba及bdf1b79f6已正常push，fresh fetch确认HEAD=origin/main；94个服务端正向用例/306断言与真实Goal首页→创建→gpt-6.1-sol回复→一轮预算→人工完成通过。完整配置性能仍failed，65项目cold22930.3669ms、restore5698.4876ms，保存中真实页面读取9953ms通过；原cold10s、restore5s、page read20s不变。现有自有QA412完整history70项目，schema2，所有前scope均joined0且运行/私有auth+models均退休。不清库/改schema/建branch或worktree，不操作用户18571或窗口进程，不跑UI自动化；原.bun/与packages/opencorvus/bun/保留。
+
+沿用已读benchmark-debug-template的真实路径、原检查器与物理结算合同，不把局部时间和新小用例冒充全目标完成。新真实验收继续使用完整QA历史、正式441 UI和原Config service/HostTransport/HTTP，先持久私有完整canonical快照，finally独立记录完整恢复，Ask不变；如需Provider，凭据与完整models配对、验证gpt-6.1-sol真实流，关闭原服务并join后再成对退休。
+
+## 修改前分析与搜索
+
+已读05-config、task-runtime-directory、440/439调查和440原始span，搜索Config全部writer/snapshot、全局项目列表、removedGlobalSkillNames、candidate-validation、ConversationCapability.assertConfig全部生产调用（candidate及runtime resolve）、Skill唯一loadCatalogState/current/global catalog、Manager安装库存来源与风险元数据投影，以及相关Config/Skill/Conversation测试。Task/Mission/Session正常与恢复都经相同Instance、Config与catalog authority；440锁序与终态结算不改动。
+
+440原始数据：63次directory held累计21170ms，其中admitted identity20277ms、其内部Git16118ms、lookup3382ms。不能把并发累计与墙钟相加。Git独立两查询已并发；已查权威[rev-parse文档](https://git-scm.com/docs/git-rev-parse)，本机2.45.1.windows.1实际运行--sq加两个路径选项仍输出未引用的两行路径，未提供任意路径需要的可靠边界。拒绝按换行拼接替代两个查询，也不按平台留下另一实现；没有省略Git、身份复核、共享准入或新增缓存。ProcessFacade/Windows supervisor现有helper已按binding缓存，真实请求、ready、settlement及输出清理不能为缩短时长省略；更深进程耗时尚未知，本轮没有证据改监管协议。
+
+另一个当前真实风险：removedGlobalSkillNames遍历每个Project完整安装库存，却只拿candidate global.paths/urls判断保留；Project自身配置或隐式目录的Skill也被加入removed。随后对Project实际after的chat/work引用抛“removed from global”，因此纯username更改也可能失败。此处还无条件建立所有Project库存和风险/来源元数据，440该阶段累计6824ms。当前ConversationCapability.assertConfig(config)实际读取原配置的SkillManager.installed，不能正确验证新增/删除来源的candidate；额外removed集合是对旧目录校验的补丁，仍有来源归属误判。需要先真实正向复现，未复现不宣称已确认。
+
+## 实施前方案与验收
+
+1. 官方隔离runner先覆盖：有项目自有Skill引用时普通全局用户名保存；移除另一全局Skill时项目来源仍有效；真正移除唯一已引用来源返回原InvalidAssignmentError且canonical保持原完整事实；Project候选加入新Skill来源和引用一次成功。另覆盖隐式.opencorvus目录、重叠显式来源和多个Project隔离。以实际catalog及Config读取输出证明，不新增负向或UI测试。
+2. 若复现证实，以Skill唯一loadCatalogState同时服务当前状态与明确传入的候选Config，目录、builtins、自动发现、来源优先级、重复定义/警告、remote发现均复用原实现；候选在原publication/reference owner内完整结算，不发布到运行Skill state或新增缓存。Conversation assignment校验显式消费相应真实catalog输入：candidate从after Config构建，runtime保持当前安装事实。删除removedGlobalSkillNames及仅为它服务的推测路径/诊断phase，不保留旧校验旁路或配置双源。所有Project仍完整验证models/profile/mounts/capabilities。
+3. 先全仓核对loadCatalogState所有读取依赖及assertConfig全部调用，确认输入只影响来源而不改变权限策略或调度。新增聚焦正向合同；复核Config跨项目、catalog/Config锁序、peer失败重试和Skill跨进程替换，保留原错误类型及结算事实。若事实要求更改方案，先更新本记录。
+4. 最终源码原生隔离服务复用完整70项目以上数据；保存/恢复与并发页面读使用原门槛，人工看真实页面与截图。Provider调用限于原预检，不创建新业务Goal或委托agent。阶段与墙钟分别报告，不宣称仅减少库存代码就提升整体性能。自有scope公开shutdown、原句柄join、physical/output/request确认，再退休auth/models与核对原授权源metadata。
+5. 同步架构、三索引、docs/API与architecture-index；人工review所有差异，范围提交，fetch/merge upstream后审查完整待推送集合并正常push，不绕hook、tag或Release。完整goal保持active，性能与未覆盖项如实保留。
+
+## 结果
+
+官方before runner4820 joined1，前三种当前有效项目均实际被removedGlobalSkillNames拒绝（project-configured、另一global来源删除后仍有Project路径、implicit.opencorvus Skill），误判已确认。第四个sole-removal用例原typed错误正确，但夹具在第一次正常Config加载前捕获原始文件，实际合法初始化增加$schema，因此完整source比较失败；改为先完成原Config加载，再捕获完整当前canonical，不改变生产行为。新增一次Project候选同时加source/ref的正向合同，需在旧源码重跑以确认原catalog验证问题。
+
+实施明确化：Skill唯一loadCatalogState改为必传Config数据，当前state/global summaries各自传入原读取的真实Config；新candidate snapshot明确传入after Config，仍在原publication/reference owner内完成。ConversationCapability.assertConfig的catalog参数也必传：candidate使用上述snapshot，runtime settings使用原installed projection。没有optional旧协议fallback或第二catalog实现；删除全局removed-name推断。源码修改前，先完成真实before原生完整保存与恢复。
+
+补充before正向合同：原sole-removal typed error与完整已加载canonical通过；Project同时新增source/ref实际被旧installed目录判为uninstalled，before-candidate runner joined1。因此确认四个有效输入失败及一个保留的真实错误合同。
+
+before原生18671、bdf1b79f6生产源码，完整71项目，gpt-6.1-sol实际流式预检与全catalog配对通过；原frontend Config service/browser HostTransport两次完整保存/恢复分别23357.3333ms、5512.0407ms，均200，完整parsed canonical恢复、Ask不变，原门槛仍failed。已实际加载完成chat并在首写中点击New chat，前态截图/阶段原件保留；并发GET时间须在归档时按server日志核对。公开shutdown200、原native73190 joined0、写入54511 joined0后才修改生产源码，runtime auth/models已成对退休；私有442授权对保留给after，不改用户授权源。
+
+最终实现初版仅5个生产文件：共享catalog loader必传Config、candidate显式快照、assignment校验必传目录读取函数；删除removedGlobalSkillNames、旧校验分支及仅服务它的diagnostic phase。初5个正向合同全部通过，backend typecheck成功；增加相对Project来源、global新增来源修复引用以及candidate/current正向身份隔离合同，继续验证最终7例及公共调用面。
+
+## 最终验收与限制
+
+最终7例/7断言通过；9个直接相关文件47例/120断言通过；现有真实多Skill跨进程kill/recovery合同1例/45断言通过（原22822已join，记录exit0）。合计55例/172断言，backend typecheck成功。覆盖项目相对来源、隐式目录、来源重叠、多项目隔离、同次新增来源/引用、global候选修复引用、typed移除错误、candidate与当前运行catalog正向身份、Config/Skill锁序、peer convergence、MCP generation和恢复。没有运行或新增UI自动化测试，也没有运行全量bun test。
+
+after原生18673使用最终源码与原完整QA历史72项目；实际gpt-6.1-sol流式预检、Provider与完整模型目录投影通过。原frontend Config service/browser HostTransport/HTTP保存26534.5084ms、恢复5201.5997ms，均200，完整global parsed canonical恢复、Ask不变。保存中人工点击New chat，真实/global/config GET为12935ms、200，满足原20s页面读门槛。cold10s和restore5s仍失败；库存路径减少不能证明整体性能改善，下一批继续调查共享身份准入/进程耗时。阶段累计并发跨度不能相加冒充墙钟。
+
+另以真实HTTP完成Project新增Skill source与chat引用→global用户名保存→GET确认引用→global/Project完整恢复；实际assignment为qa-candidate-live-442。全部正向成功，私有完整原件不提交。公开shutdown200后原native28183 joined0，写入1804与52573 joined0；两个scope均已验证原生physical/output/request结算及原launcher exit0。其后才恢复Project原始完整字节，并成对退休私有442 auth/models；用户授权源metadata未变。归档器初次因jsonc-parser ESM相对模块在Node下不可解析失败，改用该包现有CommonJS入口后重跑原归档器成功；未在失败前执行清理，也未重新生成凭据或替换验收结果。
+
+真实页面人工复核见after-home.png与after-chat.png：沿用441首页精简布局、显式Create goal及How it works，已完成chat显示真实OK及gpt-6.1-sol，442无UI源码改动。before页面实际导航已观察，但dev.log被下一scope替换前未归档GET时间，所以before并发读时长仍unknown，不能补推为通过。after并发读的原日志与请求ID已归档到results.json。只读bun:sqlite直接打开自有QA库，user_version仍2、Project count72；没有导入生产DB初始化器，未更改schema或清空数据。
+
+最终复核全仓assertConfig生产调用仅candidate与runtime settings，均显式传入正确catalog读取函数；Skill只有一个loadCatalogState实现。独立MissionSkill同名私有函数无关且不改。原调度、身份复核、settlement、Publication owner与schema公共契约不变。完整goal维持active，原性能未达标项和before证据缺口如实保留；文档/API、架构索引及Git hook验证在提交推送时结算。

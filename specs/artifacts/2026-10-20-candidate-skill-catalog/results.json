@@ -1,0 +1,247 @@
+{
+  "batch": 442,
+  "positiveTests": 55,
+  "positiveAssertions": 172,
+  "scopes": [
+    {
+      "phase": "before",
+      "occurrence": "candidate-skill-catalog-442-before-f0df2134-a281-49a8-9c77-e7c3c81aebeb",
+      "preflight": {
+        "sessionID": "ses_heikFEdCXddyf32Il0py",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "canonical": {
+        "at": "2026-10-19T20:05:01.735Z",
+        "endedAt": "2026-10-19T20:05:30.640Z",
+        "phase": "before",
+        "port": 18671,
+        "occurrence": "candidate-skill-catalog-442-before-f0df2134-a281-49a8-9c77-e7c3c81aebeb",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 23357.3333,
+        "restoreMs": 5512.040700000001,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "inventory": [
+        {
+          "projects": 71,
+          "loaded": 2
+        }
+      ],
+      "physical": {
+        "copiedPair": [
+          {
+            "outcome": "retired",
+            "name": "auth.json"
+          },
+          {
+            "outcome": "retired",
+            "name": "models.json"
+          }
+        ],
+        "observedAtUtc": "2026-10-19T20:06:28.6814010Z",
+        "physicalCompletion": true,
+        "pairedCleanupComplete": true,
+        "occurrence": "candidate-skill-catalog-442-before-f0df2134-a281-49a8-9c77-e7c3c81aebeb",
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 75644,
+              "processInstanceID": "win32:639280370549446583",
+              "occurrenceID": "2e4d9286-f950-4866-86da-b16922ca461b"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 91512,
+              "processInstanceID": "win32:639280370556526856",
+              "occurrenceID": "ba796cc5-3bdf-4b3c-8de8-2d5ac6e891a0"
+            }
+          }
+        ],
+        "native": {
+          "occurrence": "candidate-skill-catalog-442-before-f0df2134-a281-49a8-9c77-e7c3c81aebeb",
+          "outcome": "settled",
+          "host": {
+            "pid": 75644,
+            "processInstanceID": "win32:639280370549446583",
+            "occurrenceID": "2e4d9286-f950-4866-86da-b16922ca461b"
+          },
+          "target": {
+            "pid": 91512,
+            "processInstanceID": "win32:639280370556526856",
+            "occurrenceID": "ba796cc5-3bdf-4b3c-8de8-2d5ac6e891a0"
+          },
+          "observedAtUtc": "2026-10-19T20:06:27.473Z",
+          "deadlineAt": 1792441454281,
+          "terminal": {
+            "occurrenceID": "candidate-skill-catalog-442-before-f0df2134-a281-49a8-9c77-e7c3c81aebeb",
+            "pid": 91512,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        }
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-19T20:06:28.7020071Z",
+        "childExitCode": 0
+      }
+    },
+    {
+      "phase": "after",
+      "occurrence": "candidate-skill-catalog-442-after-2fb95e62-a643-4188-b03c-38769b750a77",
+      "preflight": {
+        "sessionID": "ses_hB1Pk2bTtffhK4VmD5lG",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "canonical": {
+        "at": "2026-10-19T20:13:19.098Z",
+        "endedAt": "2026-10-19T20:13:50.838Z",
+        "phase": "after",
+        "port": 18673,
+        "occurrence": "candidate-skill-catalog-442-after-2fb95e62-a643-4188-b03c-38769b750a77",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 26534.508400000002,
+        "restoreMs": 5201.599699999999,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "inventory": [
+        {
+          "projects": 72,
+          "loaded": 2
+        }
+      ],
+      "physical": {
+        "native": {
+          "occurrence": "candidate-skill-catalog-442-after-2fb95e62-a643-4188-b03c-38769b750a77",
+          "outcome": "settled",
+          "host": {
+            "pid": 88784,
+            "processInstanceID": "win32:639280374085423151",
+            "occurrenceID": "60684e49-f767-4cff-b9a1-e348b364e019"
+          },
+          "target": {
+            "pid": 62744,
+            "processInstanceID": "win32:639280374093072542",
+            "occurrenceID": "ce2691b4-9466-4dec-8ece-f19ebef8c3b7"
+          },
+          "observedAtUtc": "2026-10-19T20:16:37.814Z",
+          "deadlineAt": 1792441807810,
+          "terminal": {
+            "occurrenceID": "candidate-skill-catalog-442-after-2fb95e62-a643-4188-b03c-38769b750a77",
+            "pid": 62744,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-19T20:16:39.0319630Z",
+        "physicalCompletion": true,
+        "copiedPair": [
+          {
+            "outcome": "retired",
+            "name": "auth.json"
+          },
+          {
+            "outcome": "retired",
+            "name": "models.json"
+          }
+        ],
+        "occurrence": "candidate-skill-catalog-442-after-2fb95e62-a643-4188-b03c-38769b750a77",
+        "chain": [
+          {
+            "identity": {
+              "pid": 88784,
+              "processInstanceID": "win32:639280374085423151",
+              "occurrenceID": "60684e49-f767-4cff-b9a1-e348b364e019"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 62744,
+              "processInstanceID": "win32:639280374093072542",
+              "occurrenceID": "ce2691b4-9466-4dec-8ece-f19ebef8c3b7"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "pairedCleanupComplete": true
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-19T20:16:39.0565163Z",
+        "childExitCode": 0
+      }
+    }
+  ],
+  "live": {
+    "occurrence": "candidate-skill-catalog-442-after-2fb95e62-a643-4188-b03c-38769b750a77",
+    "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/project",
+    "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/candidate-skill-catalog-442-after/evidence/qa-skill-442",
+    "skill": "qa-candidate-live-442",
+    "at": "2026-10-19T20:14:16.771Z",
+    "transport": "Production project/global config services -> browser HostTransport -> original HTTP server",
+    "accepted": true,
+    "projectRestored": true,
+    "globalRestored": true,
+    "actualAssignment": [
+      "qa-candidate-live-442"
+    ],
+    "projectPhysicalRestoration": "original complete bytes restored after native physical exit",
+    "failures": [],
+    "endedAt": "2026-10-19T20:15:07.619Z"
+  },
+  "criteria": {
+    "coldMs": 10000,
+    "restoreMs": 5000,
+    "pageReadMs": 20000
+  },
+  "afterQualification": {
+    "cold": false,
+    "restore": false,
+    "pageRead": true
+  },
+  "concurrentReads": [
+    {
+      "start": "2026-10-19T20:13:32.696Z",
+      "end": "2026-10-19T20:13:45.631Z",
+      "requestID": "70122740-a223-451d-92fb-1c23beedd5aa",
+      "path": "/global/config",
+      "duration": 12935,
+      "statusCode": 200,
+      "writeRequestID": "3073fef7-453d-4cc7-9005-19291768e20a"
+    }
+  ],
+  "beforeReadEvidence": "Manual navigation during first write observed. Before server GET timestamps were not archived before dev.log replacement, so read timing remains unqualified.",
+  "sourceAuthorityMetadataUnchanged": true,
+  "privatePair": "both members retired after both original launchers joined",
+  "limitation": "Overall configuration performance remains failed; cold and restore thresholds unchanged. No database/schema or UI source change."
+}

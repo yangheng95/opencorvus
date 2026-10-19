@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [候选配置的真实Skill目录](2026-10-20-candidate-skill-catalog.md)：项目来源误判、同次新增来源/引用及完整保存基准。
+
 - [Goal首页入口与布局](2026-10-20-goal-home-entry.md)：直接创建真实Chat目标、紧凑首页与人工视觉验收。
 
 - [生命周期与目录租约](2026-10-20-instance-lifecycle-authority.md)：初始化、refresh/dispose排空与真实subject lease的统一锁序。

@@ -1,0 +1,13 @@
+$ bun script/run-tests.ts test/skill-replacement-publication.test.ts "--test-name-pattern=a multi-Skill catalog converges one complete revision across killed backend occurrences"
+[1/1] START test/skill-replacement-publication.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a multi-Skill catalog converges one complete revision across killed backend occurrences [129046.57ms]
+
+ 1 pass
+ 2 filtered out
+ 0 fail
+ 45 expect() calls
+Ran 1 test across 1 file. [131.18s]
+[1/1] DONE test/skill-replacement-publication.test.ts exit=0 duration=131.76s

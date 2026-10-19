@@ -223,8 +223,8 @@ global config、尚无 Project state 的 backend 也会比较 global revision，
 
 Global candidate validation captures the previously loaded Project owners before
 its inspection reads. Each registered/active directory retains one existing
-Project identity lease through Skill-removal inspection, both configuration
-snapshots and complete model/profile/capability validation. Independent Projects
+Project identity lease through both configuration snapshots and complete
+model/profile/capability validation. Independent Projects
 use the shared settled-work queue with the host's available parallelism; every
 admitted operation settles before a candidate error can release the write
 generation. Results and original errors retain directory enumeration order.
@@ -234,6 +234,18 @@ one actual physical Git worktree boundary and each load their own stable source
 generation through the same snapshot reader. Public standalone snapshots keep
 their independent boundary discovery. No Project is omitted and no cross-write
 source cache or alternate identity authority is introduced.
+
+Skill assignment validation consumes the candidate Project's effective Config.
+The same Skill catalog loader accepts explicit Config data for current runtime,
+global summaries and a candidate snapshot; the candidate uses the original
+publication/reference owners and does not publish into runtime state. Its source
+paths, URLs, implicit directories, builtins and duplicate-source rules therefore
+match actual discovery. Assignment validation receives its catalog reader explicitly:
+candidate reads use that snapshot, while runtime settings use current installed facts.
+There is no separate removed-global-Skill inference or inventory/risk projection
+performed solely to guess which names a candidate removed. A Project-owned or
+implicit source remains valid, adding a source and assignment can commit together,
+and removing the sole source returns the existing assignment error before persistence.
 
 MCP's shared state accessor enters the same Config generation read callback
 before creating or joining its initialization promise. Initialization reads both
