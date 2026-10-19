@@ -1,0 +1,53 @@
+# 配置保存与首次能力初始化锁序
+
+## Recall
+
+持续单agent自主迭代，不委托；旧goal中的Astra文案由后续单agent指令覆盖。438为progress，cd364367e已正常推送且fresh fetch确认HEAD=upstream。60项目真实冷保存19.719s、恢复4.438s，保存中真实页面读取5.745s；完整benchmark仍failed，cold<=10s未达到。保留cold10s/restore5s/read20s、完整项目与数据目标，不以更容易的指标替代。不操作用户18571、清库、改schema、创建branch/worktree或UI自动化；原.bun/及packages/opencorvus/bun/保留。benchmark-debug-template既有真实测量流程继续适用。
+
+## 修改前分析、已读资料及搜索
+
+重读438 Recall/结果与当前05-config、task-runtime-directory物理身份及删除合同、Project.fromDirectory完整发现与重新准入、sameFilesystemLocation/findExactWorktreeRow、Instance identity retention、全局候选批处理和原settledWork。搜索公共物理谓词全部调用点：Project发现、Git展示/标记、注册重校验与显式identity-convergence，以及相应硬链接、wide inode、alias/duplicate/sandbox、真实Git与目录竞争测试。438最终58次admitted identity累计17,170ms，Git116次累计33,308ms、lookup9,499ms（包含并发重叠），剩余冷成本仍是共享身份发现。436只改扫描并行、没有整体收益证据的实验曾撤回，本轮不把源码复杂度当实测改善。
+
+已排除的路径：已注册主目录仍可能改接Git common目录，不能凭数据库映射跳过Git；共享目录队列与durable generation涉及全部注册/回收/恢复入口，不能仅为Config绕行；Windows helper已按binding缓存，Rust原生helper及durable控制文件有现有物理结算合同，本轮不改监管或持久化。Task/Mission/Session轮次、重试/重启/终态与跨项目隔离继续使用原目录事实；没有证据允许改全局queue、provider或schema。
+
+公共谓词现在按正规路径→真实路径→bigint设备/inode比较，只有ENOENT/ENOTDIR为缺失，其他错误必须保留。一次scan逐行调用时重复观察同一target；每个Project初次与admitted又分别完整扫描。准备只在一次scan内保存target的惰性realpath/stat Promise；所有row仍检查，所有已接受工作完整结算，按原注册顺序抛出第一个原错误，重复物理owner仍为typed duplicate。不得添加跨调用缓存、预存物理索引或按同路径提前选winner。惰性读取保持真实路径已相等时的原早返回与错误契约；public调用仍各自新建观察。后续admitted扫描必须新建完整target观察，不能复用初次发现。
+
+## 实施前方案及验收
+
+1. 新before18657 publication复用成熟438/413 native harness、600秒物理安全期限与原活动监测，auth+完整models成对准备并确认实际gpt-6.1-sol流；显式OPENCORVUS_HOME只指向现有自有QA412，保留所有Project。先测未改源码的冷/恢复写，生产config service/HostTransport/HTTP完整恢复原canonical与Ask，采集原阶段及项目数。
+2. 复用一个私有物理观察/比较实现供public谓词与scan使用，扫描目标观察寿命只到该调用结束；使用原settledWork与host availableParallelism，完整结算并保持row顺序错误。原Project/目录准入、标记与注册、实体行及迁移不变。根据真实lookup与总保存结果决定保留；没有收益则精确撤回本轮实验，不保留双源。
+3. 正向验收覆盖真实硬链接及替换后新硬链接的当前身份、注册目标与typed duplicate/alias/sandbox、wide inode隔离及读取错误原对象/顺序和已接受工作结算。真实Git发现、已有目录注册/回收compromise保护复核。故障注入只作局部错误合同，不冒充真实端到端；不新增负向或UI自动化测试。
+4. 新after18659、需要时final18661，用最终源码与原正式UI重复真实保存/恢复；手动页面在保存中导航、截图并人工查看。保留cold10s/restore5s/read20s原门槛和完整项目枚举，不能用warm cache、空console或类型检查替代功能/视觉资格。
+5. 自有页关闭、公开shutdown、原句柄join、native physical/output/request完整结算后退休运行及私有凭据对；选定证据脱敏归档、当前架构与三索引同步、docs及架构检查、范围提交、fetch/merge、完整pending审查及正常push。主goal保持active，未达项如实保留。
+
+## 结果
+
+### 保存等待环：调查与调整后的实施方案
+
+after18659 的扫描累计由11,581ms降为3,036ms，但目录held仍19,250ms（before19,681ms）；完整保存未完成，canonical在18:03:57.713Z已提交，reconcile自18:03:57.722Z等待。真实页面随后配置读取超时。公开shutdown返回200后listener quiesce超时，原87218和写入46115均joined1；native receipt证明18:10:26.692Z物理、输出与请求结算完成，运行auth/models随后成对退休。未操作用户服务，62个QA项目及数据库保留。保全after-runtime.log及after-unsettled.json后才允许再次启动。
+
+按原方案删除本轮尚无总收益的Project扫描实验和仅为该批比较语义新增的测试；保留当前文件身份定义，避免与保存死锁修复混合。真实硬链接替换测试仍验证当前物理身份。
+
+共享审计覆盖Project/global四个Config writer、MCP所有state入口和credential恢复/重连、peer monitor与原runtime settlement、Provider/native registry reset、Channel、capability cache及Instance state释放。MCP state目前先发布一个异步初始化Promise，再在初始化中读取Config.getProject/get；另一个请求可在writer持有generation时发布该Promise，writer的reconcile随后等待它，构成generation→state→generation循环。Provider/native holder初始化是同步容器，构建使用已读snapshot，reset不等待其异步build；Channel/capability容器纯同步，排除同一初始化循环。原catalog锁序测试只覆盖先有catalog reader再启动writer，未覆盖writer中途首次创建MCP state。peer runtime owner倒序为另一待验证假设，不能仅凭最后一个open span宣称根因；保留现有跨进程、失败重试和事件顺序合同继续复核。
+
+先用真实MCP.status与Project/global writer并发的正向合同复现。局部Config.getProject故障期限只使旧循环可结算并输出原错误，不能冒充真实E2E；修复必须使实际读取和writer均返回当前正确值。若证实，向现有Config generation reader开放一个callback边界，让MCP唯一state accessor先取得并保留原generation read，再创建/加入初始化；writer内使用原reentrant token，不能新增锁、缓存、影子状态或省略credential恢复。测试需覆盖两个writer、禁用MCP状态、之后再次正常读取、既有catalog reader、peer顺序和global失败重试；再用最终源码真实服务与页面重跑原完整checker。
+
+QA恢复限制：崩溃前checker只把原配置保存在已退出进程内，原username未落盘；不能把owned-config-hierarchy的三个字段误称完整备份。当前仅有本轮qa-physical-439标记，其他字段保留。可核对412创建源声明username缺席，但不能宣称已证明崩溃前完整快照。后续checker必须在修改前将自有QA配置完整快照写入私有自有证据，finally恢复结果独立落盘，精确记录恢复依据。
+
+聚焦复现已进入官方隔离runner：mcp-config-generation两例均返回真实Project/GlobalConfigCommittedReconcileError，原source read的2秒故障期限使循环退出，runner77168 joined1。源码MCP.status先state后Config.get；其state初始化又先Config.getProject，证明共享Promise先发布形成反向依赖。实施只导出现有withConfigGenerationRead并将MCP唯一state accessor放入该callback，保留原stateSource与两处只读inspectAll，不增加替代配置或状态。
+
+最终18661已完成首次真实保存24,354ms/200，说明MCP循环已结算；但恢复请求629226ff-c186-489f-ae9b-e407a19671cd在config.global.projects等待。页面启动的能力preflight当前在prepareCapabilityPreflight里先acquireEntryTurn再runCapabilityPreflight，后者取得catalog/reference owner；Config writer先持catalog再forEachActive等待同一entry turn，形成第二个确定的反序。完整日志保全final-unsettled-runtime.log，随后公开shutdown200；该轮原canonical快照已按新方案落入私有证据，可精确恢复。不得将首写200宣称全链路完成。
+
+第二处修复先以真实catalog owner、marked initializer、identity reader复现；只调整既有capability preflight authority在生命周期turn之前取得，保留同一三层锁、entry复核、lease与成功后capabilityPreflights事实。共享入口含普通与继承provide，二者都经prepareCapabilityPreflight；另一路refreshContextInTurn会在refresh清空preflight集合后重新调用runCapabilityPreflight，需要继续单独验证其锁序，不能宣称由本修复自动覆盖。普通bootstrap中Plugin/Config与Terminal默认写入也需横向复核；不把未经证明的全局catalog包裹引入serving drain，以免形成新的反序。本批先证明并交付已确认循环的修复，持续goal仍保留完整保存性能和其余生命周期审计。
+
+before18657未改生产源码，61项目、loaded2：保存21,421.8ms、恢复5,066.0ms，完整原canonical与Ask恢复。59次held累计19,681ms、admitted identity18,883ms，lookup118次累计11,581ms/max444ms。原冷请求9375e99d-12d9-49ba-a2a4-23771c3f7ec3及全部span已捕获；累计包含重叠，不能与墙钟直接相加。真实首页最终Ask截图01，自有tab关闭、公开shutdown200、原59651 joined0，运行对随物理结算退休。准备按原方案优化一次scan的观察复用与有界完整比较，未触碰Git/目录queue/持久数据契约。
+
+### 已验证交付与未满足项
+
+两项原循环均在修复前进入官方runner复现失败：MCP Project/global初读得到真实committed reconcile错误；catalog owner/marked preflight并发使原Project identity读取返回AwaitTimeoutError。修复后原正向读取、保存输出和已准备状态全部通过。最终唯一实现为原Config generation reader围住MCP state创建/加入，以及同一capability authority先于普通/继承preflight的entry turn；未保留物理扫描实验、跨调用缓存或跳过项目校验。第一轮真实hang未记录MCP内部栈，不能仅凭后一次首写200断言已证明它的全部内部持有者；两处根因分别由实际调用流与独立失败→通过合同证明。
+
+verified18663为最终源码，64项目（从61随四轮原生preflight正常新增QA记录，旧数据全部保留），loaded2→4。真实browser HostTransport首写23,460.4ms，恢复21,447.1ms，均200；完整parsed canonical与已持久私有快照一致，Ask保持。两个server request为a281d57b-780e-4f08-bda8-9809e22cfd0d和26f5905b-d4ff-4f10-a79c-e18e176cdbd3。页面在首写中打开并切New chat，随后实际Ask与首页三步Goal指引可见；About goals弹窗也实际打开并截图。UI未改源码，复用现有正式UI。读取GET日志准入发生在首写结算之后，本轮不能用handler的1–2ms声称独立concurrent page read<=20s合格。
+
+cold<=10s与restore<=5s均failed，完整benchmark仍failed；未将阈值变松或将局部扫描收益冒充整体收益。refresh/普通initializer与其他生命周期锁序的全面排除尚未完成，下一批继续审计；本批已确认的两个循环已实际修复，不把这些未知项标成已覆盖。聚焦正向合同36例/88断言（MCP generation2、catalog锁序4、global validation4、peer7、filesystem3、MCP credential恢复5、preflight1、Instance并发9、capability refresh1）；官方runner完整结算。Backend typecheck通过。选定命令输出、请求、阶段与物理事实见artifact results.json和validation.txt。
+
+四轮原native句柄均已join：before59651/verified17795 exit0，after87218/final50603 exit1；两次异常均通过公开shutdown，输出明确listener quiesce timeout，不伪称正常关闭。verified公开shutdown200后原生physical/output/request完整结算，auth/models运行副本均退休。raw readonly SQLite PRAGMA user_version=2、project count64；未导入数据库初始化模块、改schema、清库或碰用户真实数据库。final失败配置用落盘私有快照完整恢复；after仅退休本轮明确QA marker，缺失的原username不得追认已知。所有原页面已关闭，用户服务与凭据源未写入。

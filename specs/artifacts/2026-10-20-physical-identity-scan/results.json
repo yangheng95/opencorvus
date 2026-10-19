@@ -1,0 +1,787 @@
+{
+  "at": "2026-10-19T18:30:54.374Z",
+  "scope": "Two confirmed configuration/initialization ownership cycles; discarded physical-scan experiment",
+  "result": "progress",
+  "performanceQualification": "failed",
+  "thresholds": {
+    "coldMs": 10000,
+    "restoreMs": 5000,
+    "concurrentPageReadMs": 20000
+  },
+  "before": {
+    "phase": "before",
+    "occurrence": "physical-identity-scan-439-before-28a8ef73-57bf-4481-b921-a74fae7495b7",
+    "requests": [
+      {
+        "request": {
+          "time": "2026-10-19T17:59:43.390Z",
+          "requestID": "9375e99d-12d9-49ba-a2a4-23771c3f7ec3",
+          "method": "PATCH",
+          "path": "/global/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 21413
+        },
+        "inventory": [
+          {
+            "projects": 61,
+            "loaded": 2
+          }
+        ],
+        "phases": [
+          {
+            "phase": "config.global.write",
+            "count": 1,
+            "totalMs": 21411,
+            "maxMs": 21411
+          },
+          {
+            "phase": "config.load",
+            "count": 302,
+            "totalMs": 20952,
+            "maxMs": 235
+          },
+          {
+            "phase": "directory.held",
+            "count": 59,
+            "totalMs": 19681,
+            "maxMs": 549
+          },
+          {
+            "phase": "config.snapshot.worktree",
+            "count": 61,
+            "totalMs": 13713,
+            "maxMs": 851
+          },
+          {
+            "phase": "project.identity.lookup",
+            "count": 118,
+            "totalMs": 11581,
+            "maxMs": 444
+          },
+          {
+            "phase": "config.global.removed-skills",
+            "count": 61,
+            "totalMs": 6070,
+            "maxMs": 261
+          },
+          {
+            "phase": "config.validate.models",
+            "count": 62,
+            "totalMs": 3311,
+            "maxMs": 152
+          },
+          {
+            "phase": "config.global.before",
+            "count": 61,
+            "totalMs": 1572,
+            "maxMs": 116
+          },
+          {
+            "phase": "config.verify",
+            "count": 302,
+            "totalMs": 1445,
+            "maxMs": 84
+          },
+          {
+            "phase": "config.global.after",
+            "count": 61,
+            "totalMs": 1101,
+            "maxMs": 94
+          },
+          {
+            "phase": "config.global.reconcile",
+            "count": 1,
+            "totalMs": 348,
+            "maxMs": 348
+          },
+          {
+            "phase": "config.validate.capabilities",
+            "count": 61,
+            "totalMs": 315,
+            "maxMs": 67
+          },
+          {
+            "phase": "config.validate.profile",
+            "count": 62,
+            "totalMs": 165,
+            "maxMs": 17
+          },
+          {
+            "phase": "config.global.projects",
+            "count": 1,
+            "totalMs": 8,
+            "maxMs": 8
+          },
+          {
+            "phase": "config.global.reset",
+            "count": 1,
+            "totalMs": 2,
+            "maxMs": 2
+          },
+          {
+            "phase": "config.global.persist",
+            "count": 1,
+            "totalMs": 1,
+            "maxMs": 1
+          }
+        ]
+      },
+      {
+        "request": {
+          "time": "2026-10-19T17:59:48.460Z",
+          "requestID": "4833a8ff-e044-4b19-9ea7-6790c50aaf9f",
+          "method": "PATCH",
+          "path": "/global/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 5065
+        },
+        "inventory": [
+          {
+            "projects": 61,
+            "loaded": 61
+          }
+        ],
+        "phases": [
+          {
+            "phase": "config.snapshot.worktree",
+            "count": 61,
+            "totalMs": 24965,
+            "maxMs": 608
+          },
+          {
+            "phase": "config.load",
+            "count": 124,
+            "totalMs": 16303,
+            "maxMs": 270
+          },
+          {
+            "phase": "config.validate.models",
+            "count": 62,
+            "totalMs": 10139,
+            "maxMs": 311
+          },
+          {
+            "phase": "config.global.before",
+            "count": 61,
+            "totalMs": 9175,
+            "maxMs": 309
+          },
+          {
+            "phase": "config.global.after",
+            "count": 61,
+            "totalMs": 8928,
+            "maxMs": 311
+          },
+          {
+            "phase": "config.global.write",
+            "count": 1,
+            "totalMs": 5064,
+            "maxMs": 5064
+          },
+          {
+            "phase": "config.verify",
+            "count": 124,
+            "totalMs": 1845,
+            "maxMs": 119
+          },
+          {
+            "phase": "config.global.removed-skills",
+            "count": 61,
+            "totalMs": 1544,
+            "maxMs": 97
+          },
+          {
+            "phase": "config.validate.profile",
+            "count": 62,
+            "totalMs": 813,
+            "maxMs": 93
+          },
+          {
+            "phase": "config.validate.capabilities",
+            "count": 61,
+            "totalMs": 640,
+            "maxMs": 38
+          },
+          {
+            "phase": "config.global.reconcile",
+            "count": 1,
+            "totalMs": 64,
+            "maxMs": 64
+          },
+          {
+            "phase": "config.global.projects",
+            "count": 1,
+            "totalMs": 7,
+            "maxMs": 7
+          },
+          {
+            "phase": "config.global.persist",
+            "count": 1,
+            "totalMs": 4,
+            "maxMs": 4
+          },
+          {
+            "phase": "config.global.reset",
+            "count": 1,
+            "totalMs": 2,
+            "maxMs": 2
+          }
+        ]
+      }
+    ]
+  },
+  "verified": {
+    "phase": "verified",
+    "occurrence": "physical-identity-scan-439-verified-9a262678-7c5d-4c94-91fa-4e3058559d96",
+    "requests": [
+      {
+        "request": {
+          "time": "2026-10-19T18:26:04.354Z",
+          "requestID": "a281d57b-780e-4f08-bda8-9809e22cfd0d",
+          "method": "PATCH",
+          "path": "/global/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 23454
+        },
+        "inventory": [
+          {
+            "projects": 64,
+            "loaded": 2
+          }
+        ],
+        "phases": [
+          {
+            "phase": "config.global.write",
+            "count": 1,
+            "totalMs": 23452,
+            "maxMs": 23452
+          },
+          {
+            "phase": "config.load",
+            "count": 317,
+            "totalMs": 22083,
+            "maxMs": 174
+          },
+          {
+            "phase": "directory.held",
+            "count": 62,
+            "totalMs": 21825,
+            "maxMs": 744
+          },
+          {
+            "phase": "config.snapshot.worktree",
+            "count": 64,
+            "totalMs": 15307,
+            "maxMs": 551
+          },
+          {
+            "phase": "project.identity.lookup",
+            "count": 124,
+            "totalMs": 12457,
+            "maxMs": 429
+          },
+          {
+            "phase": "config.global.removed-skills",
+            "count": 64,
+            "totalMs": 5972,
+            "maxMs": 262
+          },
+          {
+            "phase": "config.validate.models",
+            "count": 65,
+            "totalMs": 3879,
+            "maxMs": 173
+          },
+          {
+            "phase": "config.global.before",
+            "count": 64,
+            "totalMs": 2526,
+            "maxMs": 177
+          },
+          {
+            "phase": "config.verify",
+            "count": 317,
+            "totalMs": 1645,
+            "maxMs": 110
+          },
+          {
+            "phase": "config.global.after",
+            "count": 64,
+            "totalMs": 1476,
+            "maxMs": 110
+          },
+          {
+            "phase": "config.global.reconcile",
+            "count": 1,
+            "totalMs": 333,
+            "maxMs": 333
+          },
+          {
+            "phase": "config.validate.capabilities",
+            "count": 64,
+            "totalMs": 279,
+            "maxMs": 92
+          },
+          {
+            "phase": "config.validate.profile",
+            "count": 65,
+            "totalMs": 176,
+            "maxMs": 29
+          },
+          {
+            "phase": "config.global.projects",
+            "count": 1,
+            "totalMs": 8,
+            "maxMs": 8
+          },
+          {
+            "phase": "config.global.reset",
+            "count": 1,
+            "totalMs": 3,
+            "maxMs": 3
+          },
+          {
+            "phase": "config.global.persist",
+            "count": 1,
+            "totalMs": 2,
+            "maxMs": 2
+          }
+        ]
+      },
+      {
+        "request": {
+          "time": "2026-10-19T18:26:25.824Z",
+          "requestID": "26f5905b-d4ff-4f10-a79c-e18e176cdbd3",
+          "method": "PATCH",
+          "path": "/global/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 21447
+        },
+        "inventory": [
+          {
+            "projects": 64,
+            "loaded": 4
+          }
+        ],
+        "phases": [
+          {
+            "phase": "config.global.write",
+            "count": 1,
+            "totalMs": 21444,
+            "maxMs": 21444
+          },
+          {
+            "phase": "directory.held",
+            "count": 60,
+            "totalMs": 19479,
+            "maxMs": 764
+          },
+          {
+            "phase": "config.load",
+            "count": 310,
+            "totalMs": 17733,
+            "maxMs": 190
+          },
+          {
+            "phase": "config.snapshot.worktree",
+            "count": 64,
+            "totalMs": 14548,
+            "maxMs": 882
+          },
+          {
+            "phase": "project.identity.lookup",
+            "count": 120,
+            "totalMs": 11710,
+            "maxMs": 519
+          },
+          {
+            "phase": "config.global.removed-skills",
+            "count": 64,
+            "totalMs": 4934,
+            "maxMs": 203
+          },
+          {
+            "phase": "config.validate.models",
+            "count": 65,
+            "totalMs": 3396,
+            "maxMs": 139
+          },
+          {
+            "phase": "config.global.before",
+            "count": 64,
+            "totalMs": 2101,
+            "maxMs": 297
+          },
+          {
+            "phase": "config.verify",
+            "count": 310,
+            "totalMs": 1341,
+            "maxMs": 107
+          },
+          {
+            "phase": "config.global.after",
+            "count": 64,
+            "totalMs": 1233,
+            "maxMs": 127
+          },
+          {
+            "phase": "config.global.reconcile",
+            "count": 1,
+            "totalMs": 279,
+            "maxMs": 279
+          },
+          {
+            "phase": "config.validate.capabilities",
+            "count": 64,
+            "totalMs": 136,
+            "maxMs": 14
+          },
+          {
+            "phase": "config.validate.profile",
+            "count": 65,
+            "totalMs": 105,
+            "maxMs": 25
+          },
+          {
+            "phase": "config.global.projects",
+            "count": 1,
+            "totalMs": 8,
+            "maxMs": 8
+          },
+          {
+            "phase": "config.global.reset",
+            "count": 1,
+            "totalMs": 3,
+            "maxMs": 3
+          },
+          {
+            "phase": "config.global.persist",
+            "count": 1,
+            "totalMs": 2,
+            "maxMs": 2
+          }
+        ]
+      }
+    ]
+  },
+  "canonicalWrite": {
+    "at": "2026-10-19T18:25:40.894Z",
+    "endedAt": "2026-10-19T18:26:25.825Z",
+    "phase": "verified",
+    "port": 18663,
+    "occurrence": "physical-identity-scan-439-verified-9a262678-7c5d-4c94-91fa-4e3058559d96",
+    "transport": "browser",
+    "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+    "accepted": true,
+    "restored": true,
+    "writeMs": 23460.4456,
+    "restoreMs": 21447.071,
+    "permissionMode": "ask",
+    "changedField": "username",
+    "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+  },
+  "reads": [
+    {
+      "time": "2026-10-19T18:26:04.375Z",
+      "requestID": "2dba0c4a-1a3a-4c3f-80c4-b87ea94451d9",
+      "path": "/global/config",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-19T18:26:04.375Z",
+      "requestID": "5bbe72c8-f877-46ad-8ac6-05ced16e85c1",
+      "path": "/config",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-19T18:26:04.376Z",
+      "requestID": "2dba0c4a-1a3a-4c3f-80c4-b87ea94451d9",
+      "path": "/global/config",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-19T18:26:04.376Z",
+      "requestID": "5bbe72c8-f877-46ad-8ac6-05ced16e85c1",
+      "path": "/config",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-19T18:26:04.395Z",
+      "requestID": "52a91b9b-e238-4cd0-9010-065fbd0913da",
+      "path": "/global/config",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-19T18:26:04.396Z",
+      "requestID": "52a91b9b-e238-4cd0-9010-065fbd0913da",
+      "path": "/global/config",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 1
+    }
+  ],
+  "readQualification": "Unqualified this round: browser navigation overlapped writes, but logged Config GET admissions followed the first completed PATCH. Handler duration alone is not full browser latency.",
+  "failure": {
+    "after": [
+      {
+        "time": "2026-10-19T18:03:36.959Z",
+        "phase": "request",
+        "spanID": "69840:259",
+        "requestID": "ecc0b160-1f99-4970-a6a8-9d701a51ce94"
+      },
+      {
+        "time": "2026-10-19T18:03:36.960Z",
+        "phase": "config.global.write",
+        "spanID": "69840:260",
+        "requestID": "ecc0b160-1f99-4970-a6a8-9d701a51ce94"
+      },
+      {
+        "time": "2026-10-19T18:03:36.960Z",
+        "phase": "catalog.total",
+        "spanID": "69840:261",
+        "requestID": "ecc0b160-1f99-4970-a6a8-9d701a51ce94"
+      },
+      {
+        "time": "2026-10-19T18:03:36.962Z",
+        "phase": "catalog.held",
+        "spanID": "69840:263",
+        "requestID": "ecc0b160-1f99-4970-a6a8-9d701a51ce94"
+      },
+      {
+        "time": "2026-10-19T18:03:36.962Z",
+        "phase": "catalog.reentrant",
+        "spanID": "69840:265",
+        "requestID": "ecc0b160-1f99-4970-a6a8-9d701a51ce94"
+      },
+      {
+        "time": "2026-10-19T18:03:52.071Z",
+        "phase": "catalog.total",
+        "spanID": "69840:2516",
+        "requestID": null
+      },
+      {
+        "time": "2026-10-19T18:03:52.071Z",
+        "phase": "catalog.admission",
+        "spanID": "69840:2517",
+        "requestID": null
+      },
+      {
+        "time": "2026-10-19T18:03:52.122Z",
+        "phase": "catalog.total",
+        "spanID": "69840:2521",
+        "requestID": null
+      },
+      {
+        "time": "2026-10-19T18:03:52.122Z",
+        "phase": "catalog.admission",
+        "spanID": "69840:2522",
+        "requestID": null
+      },
+      {
+        "time": "2026-10-19T18:03:54.218Z",
+        "phase": "request",
+        "spanID": "69840:2735",
+        "requestID": "8b80dd14-331e-4ba3-a6f4-c0e80aa0e771"
+      },
+      {
+        "time": "2026-10-19T18:03:54.221Z",
+        "phase": "matrix.config",
+        "spanID": "69840:2736",
+        "requestID": "8b80dd14-331e-4ba3-a6f4-c0e80aa0e771"
+      },
+      {
+        "time": "2026-10-19T18:03:57.722Z",
+        "phase": "config.global.reconcile",
+        "spanID": "69840:3498",
+        "requestID": "ecc0b160-1f99-4970-a6a8-9d701a51ce94"
+      },
+      {
+        "time": "2026-10-19T18:04:07.103Z",
+        "phase": "catalog.total",
+        "spanID": "69840:3863",
+        "requestID": null
+      },
+      {
+        "time": "2026-10-19T18:04:07.103Z",
+        "phase": "catalog.admission",
+        "spanID": "69840:3864",
+        "requestID": null
+      },
+      {
+        "time": "2026-10-19T18:08:36.986Z",
+        "phase": "request",
+        "spanID": "69840:3865",
+        "requestID": "21846301-2f30-4fe5-a9bd-58408d2fa4dc"
+      },
+      {
+        "time": "2026-10-19T18:08:36.986Z",
+        "phase": "config.global.write",
+        "spanID": "69840:3866",
+        "requestID": "21846301-2f30-4fe5-a9bd-58408d2fa4dc"
+      },
+      {
+        "time": "2026-10-19T18:08:36.987Z",
+        "phase": "catalog.total",
+        "spanID": "69840:3867",
+        "requestID": "21846301-2f30-4fe5-a9bd-58408d2fa4dc"
+      },
+      {
+        "time": "2026-10-19T18:08:36.987Z",
+        "phase": "catalog.admission",
+        "spanID": "69840:3868",
+        "requestID": "21846301-2f30-4fe5-a9bd-58408d2fa4dc"
+      }
+    ],
+    "finalFirstWrite": {
+      "requestID": "8df0e143-b54f-48a7-bdaa-3fed833ceee2",
+      "statusCode": 200,
+      "durationMs": 24354
+    },
+    "finalRestore": {
+      "requestID": "629226ff-c186-489f-ae9b-e407a19671cd",
+      "phase": "config.global.projects",
+      "outcome": "unsettled before public shutdown"
+    }
+  },
+  "data": {
+    "userVersion": {
+      "user_version": 2
+    },
+    "projects": {
+      "count": 64
+    }
+  },
+  "lifecycles": [
+    {
+      "phase": "before",
+      "occurrence": "physical-identity-scan-439-before-28a8ef73-57bf-4481-b921-a74fae7495b7",
+      "target": {
+        "pid": 94024,
+        "processInstanceID": "win32:639280295435970080",
+        "occurrenceID": "f5340a00-16d9-49d5-8a68-08b1474fa9e5"
+      },
+      "terminal": {
+        "occurrenceID": "physical-identity-scan-439-before-28a8ef73-57bf-4481-b921-a74fae7495b7",
+        "pid": 94024,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "settledAt": "2026-10-19T18:00:47.064Z",
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCleanupComplete": true,
+      "preflight": {
+        "sessionID": "ses_hOhLk2qv2jthukmKeacK",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      }
+    },
+    {
+      "phase": "after",
+      "occurrence": "physical-identity-scan-439-after-b587d4d4-bf3f-4707-90f7-5b538e2efe59",
+      "target": {
+        "pid": 69840,
+        "processInstanceID": "win32:639280297993934377",
+        "occurrenceID": "6e64e192-6b0a-4a8c-979e-0766eda39e4b"
+      },
+      "terminal": {
+        "occurrenceID": "physical-identity-scan-439-after-b587d4d4-bf3f-4707-90f7-5b538e2efe59",
+        "pid": 69840,
+        "reason": "exited",
+        "exitCode": 1,
+        "signal": null
+      },
+      "settledAt": "2026-10-19T18:10:26.692Z",
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCleanupComplete": true,
+      "preflight": {
+        "sessionID": "ses_htL81pnaiUb0v9batHaJ",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      }
+    },
+    {
+      "phase": "final",
+      "occurrence": "physical-identity-scan-439-final-4862a624-2b04-4b0b-9bf8-7d870d8ba3c4",
+      "target": {
+        "pid": 92076,
+        "processInstanceID": "win32:639280307685019610",
+        "occurrenceID": "05fc2f60-9893-41e0-845b-1cd137f1ab95"
+      },
+      "terminal": {
+        "occurrenceID": "physical-identity-scan-439-final-4862a624-2b04-4b0b-9bf8-7d870d8ba3c4",
+        "pid": 92076,
+        "reason": "exited",
+        "exitCode": 1,
+        "signal": null
+      },
+      "settledAt": "2026-10-19T18:22:25.433Z",
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCleanupComplete": true,
+      "preflight": {
+        "sessionID": "ses_hlY6AjL9VwWPgSOo5VIw",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      }
+    },
+    {
+      "phase": "verified",
+      "occurrence": "physical-identity-scan-439-verified-9a262678-7c5d-4c94-91fa-4e3058559d96",
+      "target": {
+        "pid": 66824,
+        "processInstanceID": "win32:639280311222509390",
+        "occurrenceID": "8d893aa1-9c7f-4ed5-8286-6daaf77cbbbe"
+      },
+      "terminal": {
+        "occurrenceID": "physical-identity-scan-439-verified-9a262678-7c5d-4c94-91fa-4e3058559d96",
+        "pid": 66824,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "settledAt": "2026-10-19T18:29:12.812Z",
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCleanupComplete": true,
+      "preflight": {
+        "sessionID": "ses_hgCGAQU2frSPRO8crJhs",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      }
+    }
+  ],
+  "validation": {
+    "focusedCases": 36,
+    "expects": 88,
+    "ui": "Manual IAB navigation and screenshots, no UI automation",
+    "provider": "NativeService streaming preflight per isolated occurrence; no new Goal execution"
+  },
+  "restoration": {
+    "after": "Exact failed QA marker retired only; original pre-crash username was not persisted and remains unknown",
+    "final": "Complete parsed canonical restored from persisted private pre-check snapshot after physical termination",
+    "verified": "Production writer finally restored the complete parsed pre-check configuration"
+  }
+}

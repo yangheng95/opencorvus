@@ -970,40 +970,46 @@ async function prepareContext(
 async function prepareCapabilityPreflight(key: string, entry: CacheEntry, init: InstanceInit) {
   const preflight = conversationCapabilityInitPreflight(init)
   if (!preflight || entry.capabilityPreflights.has(init)) return
-  const release = await acquireEntryTurn(entry)
-  const lease = createLease(key, entry, false)
-  try {
-    assertEntryCurrent(key, entry)
-    const current = await entry.context
-    if (entry.rollback) throw rollbackError(entry.rollback)
-    await entryTurnContext.provide(entry, () =>
-      leaseContext.provide(lease, () =>
-        provideLeaseContext(lease, current, () =>
-          runLeaseLifecycle(lease, "instance capability preflight", () => runCapabilityPreflight(entry, init)),
-        ),
-      ),
-    )
-  } finally {
+  // Config writers retain the catalog owner while reading Project identities.
+  // Waiting for that owner must precede reserving this Project's lifecycle turn.
+  return withCapabilityPreflightAuthority(async () => {
+    const release = await acquireEntryTurn(entry)
+    const lease = createLease(key, entry, false)
     try {
-      await closeLease(lease)
+      assertEntryCurrent(key, entry)
+      const current = await entry.context
+      if (entry.rollback) throw rollbackError(entry.rollback)
+      await entryTurnContext.provide(entry, () =>
+        leaseContext.provide(lease, () =>
+          provideLeaseContext(lease, current, () =>
+            runLeaseLifecycle(lease, "instance capability preflight", () => runCapabilityPreflight(entry, init)),
+          ),
+        ),
+      )
     } finally {
-      release()
+      try {
+        await closeLease(lease)
+      } finally {
+        release()
+      }
     }
-  }
+  })
+}
+
+async function withCapabilityPreflightAuthority<T>(run: () => Promise<T>): Promise<T> {
+  const { withSkillCatalogReferenceRead } = await import("@/skill/reference-lock")
+  const { withConversationCapabilityReferenceRead } = await import("@/conversation/capability-transaction")
+  return withSkillCatalogReferenceRead(() => withConversationCapabilityReferenceRead(run))
 }
 
 async function runCapabilityPreflight(entry: CacheEntry, init: InstanceInit) {
   const preflight = conversationCapabilityInitPreflight(init)
   if (!preflight || entry.capabilityPreflights.has(init)) return
-  const { withSkillCatalogReferenceRead } = await import("@/skill/reference-lock")
-  const { withConversationCapabilityReferenceRead } = await import("@/conversation/capability-transaction")
-  await withSkillCatalogReferenceRead(() =>
-    withConversationCapabilityReferenceRead(async () => {
-      if (entry.capabilityPreflights.has(init)) return
-      await preflight()
-      entry.capabilityPreflights.add(init)
-    }),
-  )
+  await withCapabilityPreflightAuthority(async () => {
+    if (entry.capabilityPreflights.has(init)) return
+    await preflight()
+    entry.capabilityPreflights.add(init)
+  })
 }
 
 async function prepareInheritedCapabilityPreflight(key: string, entry: CacheEntry, lease: Lease, init: InstanceInit) {

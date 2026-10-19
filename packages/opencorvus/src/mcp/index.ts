@@ -2290,7 +2290,7 @@ export namespace MCP {
     }
   }
 
-  const state = createInstanceState(
+  const stateSource = createInstanceState(
     async () => {
       // A configure that died between its definition commit and its promotion
       // left a staged secret; settling it here is what makes startup — not an
@@ -2378,6 +2378,12 @@ export namespace MCP {
     },
     "mcp",
   )
+
+  function state() {
+    // A reader waiting behind a Config writer must not publish initialization
+    // that the same writer will then join during runtime reconciliation.
+    return Config.withConfigGenerationRead(() => stateSource())
+  }
 
   function startConnection(
     state: McpState,
@@ -3724,7 +3730,7 @@ export namespace MCP {
    * The full config participates only through an irreversible digest; discovery
    * never exposes credentials or owns staged credential settlement. */
   export async function observedCatalogSnapshot(configInput?: Config.Info): Promise<CatalogSnapshot> {
-    const existing = state.inspectAll().find((entry) => entry.key === Instance.directory)
+    const existing = stateSource.inspectAll().find((entry) => entry.key === Instance.directory)
     const cfg = configInput ?? (await Config.get())
     const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
     const observedState = existing ? await existing.state : undefined
@@ -3944,7 +3950,7 @@ export namespace MCP {
   }
 
   export async function connectionStats() {
-    const states = await Promise.all(state.inspectAll().map((entry) => entry.state))
+    const states = await Promise.all(stateSource.inspectAll().map((entry) => entry.state))
     const connections = new Set<McpConnection>()
     let scopedConnecting = 0
     for (const project of states) {

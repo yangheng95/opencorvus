@@ -269,7 +269,8 @@ export namespace Config {
     }
   }
 
-  async function withConfigGenerationRead<T>(fn: () => Promise<T>): Promise<T> {
+  /** Admit configuration-dependent initialization before publishing its shared promise. */
+  export async function withConfigGenerationRead<T>(fn: () => Promise<T>): Promise<T> {
     const token = configGenerationOwner.getStore()
     if (token?.active) return runWithinConfigGeneration(token, fn)
     await using _owner = await Lock.read(GLOBAL_PROJECT_GENERATION_LOCK)

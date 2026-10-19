@@ -3459,3 +3459,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [共享目录准入成本](records/2026-10/2026-10-20-directory-admission-cost.md)：冷配置保存的队列与持有阶段。
 
 - [Project 身份读取观察](records/2026-10/2026-10-20-project-identity-observation.md)：冷保存物理观察与真实阶段。
+
+- [配置保存与首次能力初始化](records/2026-10/2026-10-20-physical-identity-scan.md)：共享锁序修复与真实保存验收。

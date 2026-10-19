@@ -488,3 +488,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [共享目录准入成本](2026-10-20-directory-admission-cost/README.md)：目录 owner 的真实阶段与结算。
 
 - [Project 身份读取观察](2026-10-20-project-identity-observation/README.md)：真实身份成本与物理结算。
+
+- [配置保存与首次能力初始化](2026-10-20-physical-identity-scan/README.md)：共享锁序与真实页面证据。

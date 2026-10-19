@@ -231,6 +231,24 @@ generation through the same snapshot reader. Public standalone snapshots keep
 their independent boundary discovery. No Project is omitted and no cross-write
 source cache or alternate identity authority is introduced.
 
+MCP's shared state accessor enters the same Config generation read callback
+before creating or joining its initialization promise. Initialization reads both
+project-owned and effective configuration and settles staged credentials before
+publishing runtime status. A concurrent reader queued behind a Config writer
+therefore cannot publish an initializer that the writer then waits for during
+reconciliation. Writer-owned initialization reuses the existing generation token;
+the callback keeps its original pending-read drain and failure semantics. Pure
+state inspection keeps the original Instance state source and does not initialize
+MCP. This adds neither a second state cache nor a new configuration owner.
+
+Ordinary and inherited Instance capability preflights acquire their existing
+Skill catalog/reference and Conversation reference owners before reserving the
+Project lifecycle turn. A preflight waiting behind a Config writer therefore
+keeps the current Project identity available to that writer. The same preflight
+body, exact-entry checks, lease cleanup and successful initialization fact remain
+authoritative. This boundary does not extend reference reads into the initializer
+body or change refresh/teardown serving-drain semantics.
+
 The canonical global commit retains the enumerated Project identities through
 candidate validation, persistence, cache resets and runtime reconciliation.
 The Instance scope reserves existing entries before workers begin and retains

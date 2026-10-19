@@ -5,6 +5,7 @@ import { Project } from "@/project/project"
 import { Instance } from "@/project/instance"
 import { closeProjectDeletionRegistryAdmission } from "@/project/deletion-registry"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { tmpdir } from "./fixture/fixture"
 
 afterEach(resetMemoryDatabase)
 
@@ -54,4 +55,18 @@ test("recognizes two real hard-link paths as the same filesystem identity", asyn
   await fs.writeFile(source, "exact identity")
   await fs.link(source, alias)
   expect(await Project.sameFilesystemLocation(source, alias)).toBe(true)
+})
+
+test("a later physical comparison observes the current replacement and its new hard link", async () => {
+  await using directory = await tmpdir()
+  const source = path.join(directory.path, "source.txt")
+  const replacement = path.join(directory.path, "replacement.txt")
+  const currentAlias = path.join(directory.path, "current-alias.txt")
+  await fs.writeFile(source, "original identity")
+  await fs.link(source, replacement)
+  expect(await Project.sameFilesystemLocation(source, replacement)).toBe(true)
+  await fs.unlink(replacement)
+  await fs.writeFile(replacement, "current replacement identity")
+  await fs.link(replacement, currentAlias)
+  expect(await Project.sameFilesystemLocation(replacement, currentAlias)).toBe(true)
 })
