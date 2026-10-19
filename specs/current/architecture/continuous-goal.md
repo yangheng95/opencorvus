@@ -102,6 +102,15 @@ archives affect only goals whose exact owner is that Session.
 
 ## User controls
 
+The home page offers Create goal beside a compact explanation and How it works.
+It uses the existing project/global Conversation creation and selection authority
+to create one real Chat, then opens that exact Session's existing goal form. This
+one-time form request binds the original API authority and selection epoch, is
+consumed on handoff and cannot follow a later selection.
+No user Message is fabricated. Closing the form retains the empty Chat; submitting
+uses the same continuous-goal endpoint, budgets and visible controller Messages.
+Detailed steps live in the existing guide dialog rather than a permanent home tutorial.
+
 The common conversation surface and an opened SideChat expose one continuous-goal
 control. Task binds its Task ID; Chat and Mission bind their canonical Session ID.
 Every request also binds project directory, current API authority and selection lifetime.

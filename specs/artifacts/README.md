@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Goal首页入口与布局](2026-10-20-goal-home-entry/README.md)：真实首页、表单、Goal执行与双语截图。
+
 - [生命周期与目录租约](2026-10-20-instance-lifecycle-authority/README.md)：聚焦合同、真实配置保存与恢复、原生物理结算。
 
 - [原始文件目标传递](2026-10-14-literal-file-targets/README.md)：主机路径保真、原生编辑器参数与真实进程/界面验收。

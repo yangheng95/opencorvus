@@ -1,0 +1,186 @@
+{
+  "sessionID": "ses_-zURTKThHzz4pL99uPyR",
+  "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/3add0459-bfae-4346-ab84-83545a4fc111",
+  "goal": {
+    "id": "pev_g0VYWfm5500kAOB2RD54",
+    "revision": "pev_g0VYWgDzi00xME0snh4h",
+    "owner": {
+      "kind": "chat",
+      "id": "ses_-zURTKThHzz4pL99uPyR"
+    },
+    "objective": "仅回复 GOAL READY。完成标准：这条回复在当前会话中清晰可见。不读取或修改文件，不调用外部服务。",
+    "status": "complete",
+    "reason": "已人工在当前对话中确认 gpt-6.1-sol 流式回复 GOAL READY，1/1 自动轮次可见，目标验收通过。",
+    "turnBudget": 1,
+    "tokensUsed": 33708,
+    "turnsAccepted": 1,
+    "createdAt": 1792438618419,
+    "updatedAt": 1792438725717,
+    "sessionID": "ses_-zURTKThHzz4pL99uPyR",
+    "projectID": "prj_hb5lz5yPRJb6xcgcnsh6",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\runtime\\data\\projects\\2026\\10\\20\\3add0459-bfae-4346-ab84-83545a4fc111"
+  },
+  "preflight": {
+    "sessionID": "ses_htMooYa2J5W6Gnjbntbp",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "manual": {
+    "homeEntry": "Direct canonical empty Chat creation and goal form observed",
+    "cancel": "Form closed and empty Chat retained",
+    "reply": "GOAL READY visible from actual streaming gpt-6.1-sol",
+    "budget": "1/1 accepted automatic turn; budget_limited observed",
+    "completion": "Operator completion with actual evidence visible",
+    "locales": [
+      "en-US",
+      "zh-CN"
+    ]
+  },
+  "providers": [
+    {
+      "file": "provider-90608-6de43cb4-0b04-48cc-baa7-f9ce61043697-1.json",
+      "keys": [
+        "pid",
+        "executable",
+        "model",
+        "maxRequests",
+        "requests",
+        "exhausted",
+        "observedAt"
+      ],
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "file": "provider-90608-6de43cb4-0b04-48cc-baa7-f9ce61043697-10.json",
+      "keys": [
+        "pid",
+        "executable",
+        "model",
+        "maxRequests",
+        "requests",
+        "exhausted",
+        "observedAt"
+      ],
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "file": "provider-90608-6de43cb4-0b04-48cc-baa7-f9ce61043697-2.json",
+      "keys": [
+        "pid",
+        "executable",
+        "model",
+        "maxRequests",
+        "requests",
+        "exhausted",
+        "observedAt"
+      ],
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "file": "provider-90608-6de43cb4-0b04-48cc-baa7-f9ce61043697-3.json",
+      "keys": [
+        "pid",
+        "executable",
+        "model",
+        "maxRequests",
+        "requests",
+        "exhausted",
+        "observedAt"
+      ],
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "file": "provider-90608-6de43cb4-0b04-48cc-baa7-f9ce61043697-4.json",
+      "keys": [
+        "pid",
+        "executable",
+        "model",
+        "maxRequests",
+        "requests",
+        "exhausted",
+        "observedAt"
+      ],
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "file": "provider-90608-6de43cb4-0b04-48cc-baa7-f9ce61043697-5.json",
+      "keys": [
+        "pid",
+        "executable",
+        "model",
+        "maxRequests",
+        "requests",
+        "exhausted",
+        "observedAt"
+      ],
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "file": "provider-90608-6de43cb4-0b04-48cc-baa7-f9ce61043697-6.json",
+      "keys": [
+        "pid",
+        "executable",
+        "model",
+        "maxRequests",
+        "requests",
+        "exhausted",
+        "observedAt"
+      ],
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "file": "provider-90608-6de43cb4-0b04-48cc-baa7-f9ce61043697-7.json",
+      "keys": [
+        "pid",
+        "executable",
+        "model",
+        "maxRequests",
+        "requests",
+        "exhausted",
+        "observedAt"
+      ],
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "file": "provider-90608-6de43cb4-0b04-48cc-baa7-f9ce61043697-8.json",
+      "keys": [
+        "pid",
+        "executable",
+        "model",
+        "maxRequests",
+        "requests",
+        "exhausted",
+        "observedAt"
+      ],
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "file": "provider-90608-6de43cb4-0b04-48cc-baa7-f9ce61043697-9.json",
+      "keys": [
+        "pid",
+        "executable",
+        "model",
+        "maxRequests",
+        "requests",
+        "exhausted",
+        "observedAt"
+      ],
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "file": "provider-pair-staging.json",
+      "keys": [
+        "sourcePairBefore",
+        "sourcePairAfter",
+        "copiedPair",
+        "stagingOwner",
+        "credential",
+        "catalog",
+        "boundary"
+      ]
+    }
+  ],
+  "observedAt": "2026-10-19T19:39:14.095Z"
+}

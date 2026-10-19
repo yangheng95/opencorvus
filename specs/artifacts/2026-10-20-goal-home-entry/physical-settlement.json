@@ -1,0 +1,311 @@
+{
+  "scopes": [
+    {
+      "scope": "instance-lifecycle-authority-440-final",
+      "settlement": {
+        "pairedCleanupComplete": true,
+        "physicalCompletion": true,
+        "native": {
+          "occurrence": "instance-lifecycle-authority-440-final-3172307a-45b4-4a74-8d4d-6a7865240d54",
+          "outcome": "settled",
+          "host": {
+            "pid": 69804,
+            "processInstanceID": "win32:639280348612179979",
+            "occurrenceID": "8815e6f8-4b94-45ac-8990-ce1cf319efbe"
+          },
+          "target": {
+            "pid": 8972,
+            "processInstanceID": "win32:639280348619626420",
+            "occurrenceID": "4520b32d-2364-40a7-8370-16e76cf6baf1"
+          },
+          "observedAtUtc": "2026-10-19T19:34:22.512Z",
+          "deadlineAt": 1792439261149,
+          "terminal": {
+            "occurrenceID": "instance-lifecycle-authority-440-final-3172307a-45b4-4a74-8d4d-6a7865240d54",
+            "pid": 8972,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-19T19:34:23.8417098Z",
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 69804,
+              "processInstanceID": "win32:639280348612179979",
+              "occurrenceID": "8815e6f8-4b94-45ac-8990-ce1cf319efbe"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 8972,
+              "processInstanceID": "win32:639280348619626420",
+              "occurrenceID": "4520b32d-2364-40a7-8370-16e76cf6baf1"
+            }
+          }
+        ],
+        "copiedPair": [
+          {
+            "outcome": "retired",
+            "name": "auth.json"
+          },
+          {
+            "outcome": "retired",
+            "name": "models.json"
+          }
+        ],
+        "occurrence": "instance-lifecycle-authority-440-final-3172307a-45b4-4a74-8d4d-6a7865240d54"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-19T19:34:23.8685576Z",
+        "childExitCode": 0
+      },
+      "preflight": {
+        "sessionID": "ses_hroT9tzxRBA3qKzs8ga7",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      }
+    },
+    {
+      "scope": "goal-home-entry-441-final",
+      "settlement": {
+        "occurrence": "goal-home-entry-441-final-59393dab-5b9c-4138-8d85-61328c85e259",
+        "chain": [
+          {
+            "identity": {
+              "pid": 91852,
+              "processInstanceID": "win32:639280353035172198",
+              "occurrenceID": "d07e2ede-6bdb-4312-9497-d06694336b21"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 90608,
+              "processInstanceID": "win32:639280353043031692",
+              "occurrenceID": "32397165-a161-444c-ac01-508fdc0f9ebc"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "pairedCleanupComplete": true,
+        "copiedPair": [
+          {
+            "outcome": "retired",
+            "name": "auth.json"
+          },
+          {
+            "outcome": "retired",
+            "name": "models.json"
+          }
+        ],
+        "native": {
+          "occurrence": "goal-home-entry-441-final-59393dab-5b9c-4138-8d85-61328c85e259",
+          "outcome": "settled",
+          "host": {
+            "pid": 91852,
+            "processInstanceID": "win32:639280353035172198",
+            "occurrenceID": "d07e2ede-6bdb-4312-9497-d06694336b21"
+          },
+          "target": {
+            "pid": 90608,
+            "processInstanceID": "win32:639280353043031692",
+            "occurrenceID": "32397165-a161-444c-ac01-508fdc0f9ebc"
+          },
+          "observedAtUtc": "2026-10-19T19:39:27.271Z",
+          "deadlineAt": 1792439702802,
+          "terminal": {
+            "occurrenceID": "goal-home-entry-441-final-59393dab-5b9c-4138-8d85-61328c85e259",
+            "pid": 90608,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "physicalCompletion": true,
+        "observedAtUtc": "2026-10-19T19:39:28.6983491Z"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-19T19:39:28.7243650Z",
+        "childExitCode": 0
+      },
+      "preflight": {
+        "sessionID": "ses_htMooYa2J5W6Gnjbntbp",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      }
+    },
+    {
+      "scope": "goal-home-entry-441-verified",
+      "settlement": {
+        "native": {
+          "occurrence": "goal-home-entry-441-verified-cf5522e0-060d-463f-98f8-bafc3e9daab7",
+          "outcome": "settled",
+          "host": {
+            "pid": 82036,
+            "processInstanceID": "win32:639280355894394938",
+            "occurrenceID": "3df530f6-f76d-4ade-b7c6-d7c2cf71d451"
+          },
+          "target": {
+            "pid": 45072,
+            "processInstanceID": "win32:639280355901613193",
+            "occurrenceID": "220e5aea-b2de-460a-895f-64b1133e74d9"
+          },
+          "observedAtUtc": "2026-10-19T19:43:04.522Z",
+          "deadlineAt": 1792439988680,
+          "terminal": {
+            "occurrenceID": "goal-home-entry-441-verified-cf5522e0-060d-463f-98f8-bafc3e9daab7",
+            "pid": 45072,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "copiedPair": [
+          {
+            "outcome": "retired",
+            "name": "auth.json"
+          },
+          {
+            "outcome": "retired",
+            "name": "models.json"
+          }
+        ],
+        "pairedCleanupComplete": true,
+        "observedAtUtc": "2026-10-19T19:43:05.7146191Z",
+        "chain": [
+          {
+            "identity": {
+              "pid": 82036,
+              "processInstanceID": "win32:639280355894394938",
+              "occurrenceID": "3df530f6-f76d-4ade-b7c6-d7c2cf71d451"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 45072,
+              "processInstanceID": "win32:639280355901613193",
+              "occurrenceID": "220e5aea-b2de-460a-895f-64b1133e74d9"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "physicalCompletion": true,
+        "occurrence": "goal-home-entry-441-verified-cf5522e0-060d-463f-98f8-bafc3e9daab7"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-19T19:43:05.7382504Z",
+        "childExitCode": 0
+      },
+      "preflight": {
+        "sessionID": "ses_htkB09NHeh0W30Xs3UcJ",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      }
+    },
+    {
+      "scope": "goal-home-entry-441-reviewed",
+      "settlement": {
+        "physicalCompletion": true,
+        "occurrence": "goal-home-entry-441-reviewed-ff54eecb-d4a0-42b9-a5c6-0b00eed573c1",
+        "copiedPair": [
+          {
+            "name": "auth.json",
+            "outcome": "retired"
+          },
+          {
+            "name": "models.json",
+            "outcome": "retired"
+          }
+        ],
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 80580,
+              "processInstanceID": "win32:639280358054429261",
+              "occurrenceID": "5850f964-7164-46c8-9a69-79a7d281a8cb"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 82912,
+              "processInstanceID": "win32:639280358061635177",
+              "occurrenceID": "703472c0-1034-4f46-b134-276ebdef0730"
+            }
+          }
+        ],
+        "native": {
+          "occurrence": "goal-home-entry-441-reviewed-ff54eecb-d4a0-42b9-a5c6-0b00eed573c1",
+          "outcome": "settled",
+          "host": {
+            "pid": 80580,
+            "processInstanceID": "win32:639280358054429261",
+            "occurrenceID": "5850f964-7164-46c8-9a69-79a7d281a8cb"
+          },
+          "target": {
+            "pid": 82912,
+            "processInstanceID": "win32:639280358061635177",
+            "occurrenceID": "703472c0-1034-4f46-b134-276ebdef0730"
+          },
+          "observedAtUtc": "2026-10-19T19:44:43.247Z",
+          "deadlineAt": 1792440204747,
+          "terminal": {
+            "occurrenceID": "goal-home-entry-441-reviewed-ff54eecb-d4a0-42b9-a5c6-0b00eed573c1",
+            "pid": 82912,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-19T19:44:44.6164879Z",
+        "pairedCleanupComplete": true
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-19T19:44:44.6378665Z",
+        "childExitCode": 0
+      },
+      "preflight": {
+        "sessionID": "ses_h9ToJ3VKhASVdx9L8PQX",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      }
+    }
+  ],
+  "privateProviderPair": "retired together after every owned scope physically joined",
+  "sourceAuthorityMetadata": {
+    "bytes": 4318,
+    "modifiedAtMs": 1791990556516.2156,
+    "unchanged": true
+  },
+  "observedAt": "2026-10-19T19:45:08.096Z"
+}

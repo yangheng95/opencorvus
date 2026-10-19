@@ -84,17 +84,18 @@
 }
 
 .continuous-goal--home {
-  padding: var(--ui-gap-xl);
-  border: var(--oc-border-width) solid var(--border);
-  border-radius: var(--oc-radius-large);
-  background: var(--surface-inset);
-  display: grid;
+  padding: var(--ui-gap-xl) calc(var(--ui-composer-content-inset) + var(--oc-border-width));
+  border-block-start: var(--oc-border-width) solid var(--border);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   gap: var(--ui-gap-lg);
 }
 .continuous-goal__welcome {
   display: flex;
   align-items: flex-start;
   gap: var(--ui-gap-md);
+  flex: 1 1 calc(280px * var(--ui-scale));
 }
 .continuous-goal__welcome > div:not(.continuous-goal__welcome-icon) {
   flex: 1;
@@ -115,8 +116,11 @@
   color: var(--text-soft);
   line-height: var(--ui-line-height-normal);
 }
-.continuous-goal--home > .oc-button {
-  justify-self: start;
+.continuous-goal__home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ui-gap-sm);
 }
 .continuous-goal__steps {
   list-style: none;
@@ -160,15 +164,6 @@
 }
 .continuous-goal__steps span {
   color: var(--text-soft);
-}
-.continuous-goal--home .continuous-goal__steps {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--ui-gap-lg);
-}
-@container chat-workbench (width < 760px) {
-  .continuous-goal--home .continuous-goal__steps {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
 .continuous-goal__form p,
 .continuous-goal__intro p {

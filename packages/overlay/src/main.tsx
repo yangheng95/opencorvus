@@ -2409,6 +2409,29 @@ function OverlayRoot() {
         />
       }
       onNewChat={() => openGlobalComposer(DEFAULT_COMPOSER_INTENT)}
+      onStartGoal={async () => {
+        const authority = captureApiAuthority()
+        let request: { sessionID: string; authority: typeof authority; selectionEpoch: number } | undefined
+        await runUserNavigation("goal.start-chat", async () => {
+          const directory = activeDirectory().trim()
+          const model = appStore.composerModel || undefined
+          const experience = conversationExperienceFromProductPillar(composerIntent().productPillar)
+          const admission = await requestWorkspaceSelection()
+          if (admission.kind === "unchanged") return
+          await closeConfigDialog()
+          assertApiAuthorityCurrent(authority)
+          assertUserNavigationCurrent(admission.epoch)
+          resetCenterWorkbenchToPrimaryPanel("chat")
+          const options = { authority, selectionEpoch: admission.epoch, experience, model }
+          const created = directory
+            ? await createConversationSession({ ...options, directory })
+            : await createGlobalConversationSession(options)
+          assertApiAuthorityCurrent(authority)
+          assertUserNavigationCurrent(admission.epoch)
+          request = { sessionID: created, authority, selectionEpoch: admission.epoch }
+        })
+        return request
+      }}
       onSelectMission={openWorkLedgerMission}
       onSelectTask={selectTaskWithUILifecycle}
       onSelectChat={(sessionID, directory, experience) =>

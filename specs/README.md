@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Goal首页入口与布局](records/2026-10/2026-10-20-goal-home-entry.md)：直接创建真实Chat目标、紧凑首页与人工视觉验收。
+
 - [生命周期与目录租约](records/2026-10/2026-10-20-instance-lifecycle-authority.md)：初始化、refresh/dispose排空与真实subject lease的统一锁序。
 
 - [原始文件目标传递](records/2026-10/2026-10-14-literal-file-targets.md)：主机路径保真、原生编辑器参数与真实进程/界面验收。

@@ -10,7 +10,7 @@ import {
   Show,
 } from "solid-js"
 import { appStore } from "../store/app"
-import { ApiError, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
+import { ApiError, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import {
   createContinuousGoal,
   loadContinuousGoal,
@@ -33,6 +33,8 @@ import { TextField } from "./ui/TextField"
 
 const REFRESH_MS = 5_000
 const guideSteps = ["start", "define", "manage"] as const
+
+export type GoalFormRequest = { sessionID: string; authority: ApiAuthority; selectionEpoch: number }
 
 function GoalGuideSteps() {
   return (
@@ -84,7 +86,10 @@ export function ContinuousGoalControl(props: {
   owner?: ContinuousGoalTarget
   compact?: boolean
   home?: boolean
-  onFocusComposer?: () => void
+  onStartGoal?: () => Promise<void>
+  starting?: boolean
+  createRequest?: GoalFormRequest
+  onCreateHandled?: () => void
   selectionEpoch?: number
 }) {
   const formID = `continuous-goal-${createUniqueId()}`
@@ -189,6 +194,18 @@ export function ContinuousGoalControl(props: {
     attempt = undefined
     setMode(next)
   }
+  createEffect(() => {
+    const requested = props.createRequest
+    if (!requested) return
+    if (!isApiAuthorityCurrent(requested.authority) || requested.selectionEpoch !== props.selectionEpoch) {
+      props.onCreateHandled?.()
+      return
+    }
+    const current = source()
+    if (current?.target.kind !== "chat" || current.target.id !== requested.sessionID) return
+    open("create")
+    props.onCreateHandled?.()
+  })
   function requestID(input: unknown) {
     const key = JSON.stringify([source()?.key, input])
     if (attempt?.key !== key) attempt = { key, requestID: randomUUID() }
@@ -321,15 +338,23 @@ export function ContinuousGoalControl(props: {
             <h2>{t("continuous_goal.home.title")}</h2>
             <p>{t("continuous_goal.home.body")}</p>
           </div>
+        </div>
+        <div class="continuous-goal__home-actions">
+          <Button
+            type="button"
+            variant="solid"
+            size="sm"
+            tone="accent"
+            disabled={!appStore.connected || props.starting}
+            onClick={() => void props.onStartGoal?.()}
+          >
+            <Icon name="goals" size="compact" />
+            {t(props.starting ? "continuous_goal.home.starting" : "continuous_goal.create")}
+          </Button>
           <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => open("create")}>
-            {t("continuous_goal.learn")}
+            {t("continuous_goal.home.how")}
           </Button>
         </div>
-        <GoalGuideSteps />
-        <Button type="button" variant="outline" size="sm" tone="accent" onClick={props.onFocusComposer}>
-          {t("continuous_goal.home.begin")}
-          <Icon name="arrow-up" size="compact" />
-        </Button>
       </Show>
       <Show when={!props.home}>
         <div class="continuous-goal__row">

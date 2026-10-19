@@ -15,7 +15,7 @@ import { SidebarVersionLabel } from "./SidebarVersionLabel"
 import { SidebarUpdateButton } from "./SidebarUpdateButton"
 import { SessionDialogHost } from "./SessionDialogHost"
 import { TaskStatusHeader } from "./TaskStatusHeader"
-import { ContinuousGoalControl } from "./ContinuousGoalControl"
+import { ContinuousGoalControl, type GoalFormRequest } from "./ContinuousGoalControl"
 import { TaskOutcomeBadge } from "./TaskOutcomeBadge"
 import { TitlebarBrand } from "./titlebar/TitlebarBrand"
 import { TitlebarMenubar } from "./titlebar/TitlebarMenubar"
@@ -204,6 +204,7 @@ export interface AppProps {
   onOpenSubagentConversation: (sessionID: string) => void
   onOpenRightDockAddMenu: () => void
   onNewChat: () => Promise<void>
+  onStartGoal: () => Promise<GoalFormRequest | undefined>
   onSelectMission: (row: WorkLedgerMissionRow) => Promise<void>
   onSelectTask: (taskID: string, directory: string) => Promise<void>
   onSelectChat: (sessionID: string, directory: string, experience: "chat" | "work") => Promise<void>
@@ -218,6 +219,17 @@ export interface AppProps {
 }
 
 export function App(props: AppProps) {
+  const [goalFormRequest, setGoalFormRequest] = createSignal<GoalFormRequest>()
+  const [startingGoal, setStartingGoal] = createSignal(false)
+  async function startGoal() {
+    if (startingGoal()) return
+    setStartingGoal(true)
+    try {
+      setGoalFormRequest(await props.onStartGoal())
+    } finally {
+      setStartingGoal(false)
+    }
+  }
   const [navigationMount, setNavigationMount] = createSignal<HTMLDivElement>()
   let chatScroll!: HTMLDivElement
   let mailboxHoverOpenTimer: number | undefined
@@ -522,6 +534,8 @@ export function App(props: AppProps) {
                             </header>
                             <Show when={!props.homeActive}>
                               <ContinuousGoalControl
+                                createRequest={goalFormRequest()}
+                                onCreateHandled={() => setGoalFormRequest(undefined)}
                                 selectionEpoch={boardStore.selectEpoch}
                                 owner={(() => {
                                   const item = props.conversationItem()
@@ -567,11 +581,8 @@ export function App(props: AppProps) {
                                         <div class="chat-home-goal">
                                           <ContinuousGoalControl
                                             home
-                                            onFocusComposer={() =>
-                                              document
-                                                .querySelector<HTMLTextAreaElement>("#solidChatComposer textarea")
-                                                ?.focus()
-                                            }
+                                            starting={startingGoal()}
+                                            onStartGoal={startGoal}
                                           />
                                         </div>
                                       </Show>
