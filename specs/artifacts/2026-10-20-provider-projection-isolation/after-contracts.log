@@ -1,0 +1,53 @@
+$ bun script/run-tests.ts test/provider-projection-isolation.test.ts test/openai-codex-model-projection.test.ts test/config-registration-batch.test.ts test/config-candidate-skill-catalog.test.ts
+[1/4] START test/provider-projection-isolation.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) each Provider projection owns its mutable metadata and preserves the current source declaration [5.16ms]
+(pass) a production Project plugin customizes its own Provider while another Project and global catalog retain their declarations [3465.02ms]
+
+ 2 pass
+ 0 fail
+ 2 expect() calls
+Ran 2 tests across 1 file. [7.21s]
+[1/4] DONE test/provider-projection-isolation.test.ts exit=0 duration=7.90s
+[2/4] START test/openai-codex-model-projection.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Codex OAuth projects declared integer-major and multi-digit-minor identities with their catalog metadata [19.74ms]
+(pass) global and Project Provider resolution preserve exact gpt-6-luna under OAuth [1982.80ms]
+
+ 2 pass
+ 0 fail
+ 10 expect() calls
+Ran 2 tests across 1 file. [3.14s]
+[2/4] DONE test/openai-codex-model-projection.test.ts exit=0 duration=3.30s
+[3/4] START test/config-registration-batch.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a global cold candidate completes both independent admitted Project identities together [4509.67ms]
+
+ 1 pass
+ 0 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [5.28s]
+[3/4] DONE test/config-registration-batch.test.ts exit=0 duration=5.46s
+[4/4] START test/config-candidate-skill-catalog.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a global username save retains each project's own configured Skill assignment [3735.64ms]
+(pass) a global source removal retains a Skill still configured by its Project [1978.83ms]
+(pass) an implicit Project Skill remains assigned when an unrelated global field changes [1933.79ms]
+(pass) a removed sole Skill source returns the assignment error and retains its complete canonical source [2040.60ms]
+(pass) a Project candidate adds its Skill source and assignment in one canonical mutation [1777.47ms]
+(pass) a global candidate repairs a Project assignment by adding its actual Skill source [2343.62ms]
+(pass) a candidate catalog resolves its own source while the runtime retains its current definition [1844.29ms]
+
+ 7 pass
+ 0 fail
+ 7 expect() calls
+Ran 7 tests across 1 file. [16.80s]
+[4/4] DONE test/config-candidate-skill-catalog.test.ts exit=0 duration=16.99s

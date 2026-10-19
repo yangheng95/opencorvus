@@ -1,0 +1,8 @@
+EBUSY: resource busy or locked, open 'D:\myhexin-local\opencorvus\.tmp-product-iteration\provider-projection-isolation-445/after-write-start.json'
+    path: "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\provider-projection-isolation-445/after-write-start.json",
+ syscall: "open",
+   errno: -4082,
+    code: "EBUSY"
+
+
+Bun v1.4.0 (Windows x64)

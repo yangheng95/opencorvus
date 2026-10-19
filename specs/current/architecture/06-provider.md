@@ -15,6 +15,14 @@ MCP OAuth uses the extension credential owner, not Provider account OAuth. Its p
 
 ## 核心挑战
 
+Canonical model declarations and runtime Provider projections have separate mutable
+data ownership. `fromModelsDevProvider` creates a fresh environment list, model
+headers, nested declarative options and interleaved-capability object for every
+projection. Project plugins may customize that projection; the canonical ModelsDev
+declaration, another Project and the global projection retain their own values.
+The existing per-Project configuration/cache lifecycle remains authoritative;
+projection isolation does not introduce another catalog or shared mutable template.
+
 不同 LLM 提供商在 4 个维度上各不相同：
 
 | 维度         | 差异                                                                                          |

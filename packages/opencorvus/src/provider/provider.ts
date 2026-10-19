@@ -182,8 +182,8 @@ export namespace Provider {
         npm: model.provider?.npm ?? provider.npm ?? "@ai-sdk/openai-compatible",
       },
       status: sourceModelStatus(provider, model),
-      headers: model.headers ?? {},
-      options: model.options ?? {},
+      headers: { ...model.headers },
+      options: structuredClone(model.options ?? {}),
       cost: {
         available: model.cost !== undefined,
         input: model.cost?.input ?? 0,
@@ -227,7 +227,7 @@ export namespace Provider {
           video: model.modalities?.output?.includes("video") ?? false,
           pdf: model.modalities?.output?.includes("pdf") ?? false,
         },
-        interleaved: model.interleaved ?? false,
+        interleaved: typeof model.interleaved === "object" ? { ...model.interleaved } : (model.interleaved ?? false),
       },
       release_date: model.release_date,
       variants: {},
@@ -243,7 +243,7 @@ export namespace Provider {
       id: provider.id,
       source: "custom",
       name: provider.name,
-      env: provider.env ?? [],
+      env: [...(provider.env ?? [])],
       options: {},
       models: Object.fromEntries(
         Object.entries(provider.models)

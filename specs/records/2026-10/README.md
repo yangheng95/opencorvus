@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Provider目录可变引用隔离](2026-10-20-provider-projection-isolation.md)：模型声明与项目投影的深层数据归属。
+
 - [全量配置冷保存CPU剖析](2026-10-20-config-cold-cpu.md)：区分脚本计算、文件系统与原生进程等待。
 
 - [原生Git监管与目录批处理](2026-10-20-native-git-cost.md)：真实进程分段、物理命名空间顺序及完整配置保存。

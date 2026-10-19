@@ -1,0 +1,16 @@
+$ bun script/run-tests.ts test/provider-cache-identity.test.ts "--test-name-pattern=production Provider state|default Provider generations|production runtime capabilities|production Bedrock"
+[1/1] START test/provider-cache-identity.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Provider cache identity > production Provider state and SDK caches reuse only exact canonical inputs [1994.69ms]
+(pass) Provider cache identity > default Provider generations are Project-owned and follow current Config lifecycle [3721.67ms]
+(pass) Provider cache identity > production runtime capabilities execute without entering the declarative SDK cache [1562.65ms]
+(pass) Provider cache identity > production Bedrock credential capability initializes without cache serialization [2517.46ms]
+
+ 4 pass
+ 5 filtered out
+ 0 fail
+ 5 expect() calls
+Ran 4 tests across 1 file. [13.45s]
+[1/1] DONE test/provider-cache-identity.test.ts exit=0 duration=14.09s

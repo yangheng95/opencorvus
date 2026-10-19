@@ -1,0 +1,225 @@
+$ bun script/run-tests.ts test/provider-projection-isolation.test.ts
+[1/1] START test/provider-projection-isolation.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+58 |   customize(first)
+59 |   const second = Provider.fromModelsDevProvider(source)
+60 |   expect({ first: values(first), second: values(second), source: {
+61 |     env: source.env, headers: source.models.reasoning.headers, options: source.models.reasoning.options,
+62 |     interleaved: source.models.reasoning.interleaved,
+63 |   } }).toEqual({ first: {
+            ^
+error: expect(received).toEqual(expected)
+
+  {
+    "first": {
+      "env": [
+        "CATALOG_TOKEN",
+        "PROJECT_TOKEN",
+      ],
+      "headers": {
+        "x-scope": "project",
+      },
+      "interleaved": {
+        "field": "reasoning_details",
+      },
+      "options": {
+        "metadata": {
+          "tags": [
+            "catalog",
+            "project",
+          ],
+          "tuning": {
+            "budget": 22,
+          },
+        },
+      },
+    },
+    "second": {
+      "env": [
+        "CATALOG_TOKEN",
++       "PROJECT_TOKEN",
+      ],
+      "headers": {
+-       "x-scope": "catalog",
++       "x-scope": "project",
+      },
+      "interleaved": {
+-       "field": "reasoning_content",
++       "field": "reasoning_details",
+      },
+      "options": {
+        "metadata": {
+          "tags": [
+            "catalog",
++           "project",
+          ],
+          "tuning": {
+-           "budget": 11,
++           "budget": 22,
+          },
+        },
+      },
+    },
+    "source": {
+      "env": [
+        "CATALOG_TOKEN",
++       "PROJECT_TOKEN",
+      ],
+      "headers": {
+-       "x-scope": "catalog",
++       "x-scope": "project",
+      },
+      "interleaved": {
+-       "field": "reasoning_content",
++       "field": "reasoning_details",
+      },
+      "options": {
+        "metadata": {
+          "tags": [
+            "catalog",
++           "project",
+          ],
+          "tuning": {
+-           "budget": 11,
++           "budget": 22,
+          },
+        },
+      },
+    },
+  }
+
+- Expected  - 6
++ Received  + 10
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-projection-isolation.test.ts:63:8)
+(fail) each Provider projection owns its mutable metadata and preserves the current source declaration [6.75ms]
+ 97 |     const current = (await ModelsDev.get())[source.id]
+ 98 |     expect({ customized: values(customized.database[source.id]), isolated: values(isolated.database[source.id]),
+ 99 |       global: values(global.database[source.id]), source: {
+100 |         env: current.env, headers: current.models.reasoning.headers, options: current.models.reasoning.options,
+101 |         interleaved: current.models.reasoning.interleaved,
+102 |       } }).toEqual({ customized: {
+                 ^
+error: expect(received).toEqual(expected)
+
+  {
+    "customized": {
+      "env": [
+        "CATALOG_TOKEN",
+        "PROJECT_TOKEN",
+      ],
+      "headers": {
+        "x-scope": "project",
+      },
+      "interleaved": {
+        "field": "reasoning_details",
+      },
+      "options": {
+        "metadata": {
+          "tags": [
+            "catalog",
+            "project",
+          ],
+          "tuning": {
+            "budget": 22,
+          },
+        },
+      },
+    },
+    "global": {
+      "env": [
+        "CATALOG_TOKEN",
++       "PROJECT_TOKEN",
+      ],
+      "headers": {
+-       "x-scope": "catalog",
++       "x-scope": "project",
+      },
+      "interleaved": {
+-       "field": "reasoning_content",
++       "field": "reasoning_details",
+      },
+      "options": {
+        "metadata": {
+          "tags": [
+            "catalog",
++           "project",
+          ],
+          "tuning": {
+-           "budget": 11,
++           "budget": 22,
+          },
+        },
+      },
+    },
+    "isolated": {
+      "env": [
+        "CATALOG_TOKEN",
++       "PROJECT_TOKEN",
+      ],
+      "headers": {
+-       "x-scope": "catalog",
++       "x-scope": "project",
+      },
+      "interleaved": {
+-       "field": "reasoning_content",
++       "field": "reasoning_details",
+      },
+      "options": {
+        "metadata": {
+          "tags": [
+            "catalog",
++           "project",
+          ],
+          "tuning": {
+-           "budget": 11,
++           "budget": 22,
+          },
+        },
+      },
+    },
+    "source": {
+      "env": [
+        "CATALOG_TOKEN",
++       "PROJECT_TOKEN",
+      ],
+      "headers": {
+-       "x-scope": "catalog",
++       "x-scope": "project",
+      },
+      "interleaved": {
+-       "field": "reasoning_content",
++       "field": "reasoning_details",
+      },
+      "options": {
+        "metadata": {
+          "tags": [
+            "catalog",
++           "project",
+          ],
+          "tuning": {
+-           "budget": 11,
++           "budget": 22,
+          },
+        },
+      },
+    },
+  }
+
+- Expected  - 9
++ Received  + 15
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-projection-isolation.test.ts:102:12)
+(fail) a production Project plugin customizes its own Provider while another Project and global catalog retain their declarations [3597.99ms]
+
+ 0 pass
+ 2 fail
+ 2 expect() calls
+Ran 2 tests across 1 file. [7.27s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-projection-isolation.test.ts
+[1/1] DONE test/provider-projection-isolation.test.ts exit=1 duration=7.91s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-projection-isolation.test.ts
+error: script "test" exited with code 1
