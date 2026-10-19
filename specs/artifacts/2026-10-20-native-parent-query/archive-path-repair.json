@@ -1,0 +1,43 @@
+{
+  "cause": "Collector generator changed the occurrence tag but omitted the separate artifact directory name",
+  "baseline": "6f3a126c4e59ba294f845beaf162795158fd1c94",
+  "originalStatus": "Batch445 artifact directory was clean at task start; reviewed binary diff saved before repair; current output identifies batch446 and its real native occurrence",
+  "preserved": [
+    "after-chat.png",
+    "after-cost.json",
+    "after-home.png",
+    "backend-build-failure.log",
+    "backend-contracts.log",
+    "before-native-contract.log",
+    "cargo-cache-repair.json",
+    "control-contracts.log",
+    "data-verification.json",
+    "native-contracts.log",
+    "private-pair-retirement.json",
+    "probe-samples.json",
+    "release-build.log",
+    "results.json",
+    "typecheck.log"
+  ],
+  "restoredTrackedFiles": [
+    "specs/artifacts/2026-10-20-provider-projection-isolation/after-chat.png",
+    "specs/artifacts/2026-10-20-provider-projection-isolation/after-cost.json",
+    "specs/artifacts/2026-10-20-provider-projection-isolation/after-home.png",
+    "specs/artifacts/2026-10-20-provider-projection-isolation/data-verification.json",
+    "specs/artifacts/2026-10-20-provider-projection-isolation/private-pair-retirement.json",
+    "specs/artifacts/2026-10-20-provider-projection-isolation/results.json",
+    "specs/artifacts/2026-10-20-provider-projection-isolation/typecheck.log"
+  ],
+  "retiredOwnNewFiles": [
+    "specs/artifacts/2026-10-20-provider-projection-isolation/backend-build-failure.log",
+    "specs/artifacts/2026-10-20-provider-projection-isolation/backend-contracts.log",
+    "specs/artifacts/2026-10-20-provider-projection-isolation/before-native-contract.log",
+    "specs/artifacts/2026-10-20-provider-projection-isolation/cargo-cache-repair.json",
+    "specs/artifacts/2026-10-20-provider-projection-isolation/control-contracts.log",
+    "specs/artifacts/2026-10-20-provider-projection-isolation/native-contracts.log",
+    "specs/artifacts/2026-10-20-provider-projection-isolation/probe-samples.json",
+    "specs/artifacts/2026-10-20-provider-projection-isolation/release-build.log"
+  ],
+  "method": "Preserve actual batch446 output, then single-file restore only for the original tracked artifact files; no history rewrite",
+  "observedAt": "2026-10-19T22:07:19.763Z"
+}

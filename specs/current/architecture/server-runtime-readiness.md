@@ -30,6 +30,22 @@ between preparation phases and before launching the next physical process.
 Complete settlement alone authorizes isolated test-runtime removal; uncertainty
 retains that owned runtime and reports the actual failure.
 
+Windows native admission queries its own parent process through the system
+`ProcessBasicInformation` interface, dynamically bound with the existing Windows
+bindings. Status, returned size, current process identity and parent identifier
+are validated before the original owner PID and birth checks. Unavailable or
+invalid system observations return an admission error rather than another query
+algorithm. Toolhelp enumeration still supplies the process graph for descendant
+termination, which requires that separate observation.
+
+For a request with valid occurrence fields, one native preparation boundary owns
+helper publication, owner/containment/standard-handle checks and target creation.
+Every error before a target is created publishes the existing correlated
+`target_not_created` / `active_processes: 0` fact. Publication failure retains both
+the original error and the settlement error. A successful preparation retains the
+original owner handle, helper birth identity and target for execution and transfer;
+the existing post-target Job and output/request settlement remains authoritative.
+
 Every ProcessSupervisor Handle supplies its original `terminalFact`,
 `outputSettled` and `settled` promises. Physical exit alone cannot substitute
 for output closure or supervisor-owned request cleanup. The supervised Host/Task

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Windows监管直接父查询](records/2026-10/2026-10-20-native-parent-query.md)：原生启动测量、真实父进程合同与完整配置验收。
+
 - [Provider目录可变引用隔离](records/2026-10/2026-10-20-provider-projection-isolation.md)：模型声明与项目投影的深层数据归属。
 
 - [全量配置冷保存CPU剖析](records/2026-10/2026-10-20-config-cold-cpu.md)：区分脚本计算、文件系统与原生进程等待。

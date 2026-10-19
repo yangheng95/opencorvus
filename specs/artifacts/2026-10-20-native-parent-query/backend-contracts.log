@@ -1,0 +1,83 @@
+$ bun script/run-tests.ts test/process-owner-admission.test.ts test/which-async.test.ts test/process-streaming-input.test.ts test/process-facade-settlement-barrier.test.ts test/project-git-discovery.test.ts test/config-registration-batch.test.ts
+   Compiling serde_json v1.0.150
+   Compiling serde_derive v1.0.228
+   Compiling windows-sys v0.59.0
+   Compiling serde v1.0.228
+   Compiling opencorvus-process-supervisor v0.1.26 (D:\myhexin-local\opencorvus\packages\opencorvus\native\process-supervisor)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.09s
+[1/6] START test/process-owner-admission.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) native pid owner refusal returns its original admission error and settles before the next command [218.33ms]
+(pass) native birth owner refusal returns its original admission error and settles before the next command [250.77ms]
+
+ 2 pass
+ 0 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [3.09s]
+[1/6] DONE test/process-owner-admission.test.ts exit=0 duration=4.03s
+[2/6] START test/which-async.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) asynchronous executable discovery preserves PATH and extension order while yielding to queued work [24.58ms]
+(pass) executable discovery observes each current PATH and file location [8.64ms]
+(pass) the Windows command resolver returns its declared missing-executable error [4.81ms]
+(pass) native Git resolves the current PATH and returns its fully settled output [338.51ms]
+
+ 4 pass
+ 0 fail
+ 5 expect() calls
+Ran 4 tests across 1 file. [2.33s]
+[2/6] DONE test/which-async.test.ts exit=0 duration=2.63s
+[3/6] START test/process-streaming-input.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) supervised Process binary input > streams exact binary chunks through the owned stdin pipe [139.78ms]
+(pass) supervised Process binary input > returns the inactivity-timeout contract when the input iterator stops producing bytes [195.36ms]
+(pass) supervised Process binary input > disposes the supervised child before returning a spawn-observer error [88.49ms]
+
+ 3 pass
+ 0 fail
+ 5 expect() calls
+Ran 3 tests across 1 file. [1488.00ms]
+[3/6] DONE test/process-streaming-input.test.ts exit=0 duration=1.65s
+[4/6] START test/process-facade-settlement-barrier.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Host settlement retains original output failures after the raw barrier [3.09ms]
+(pass) Host settlement retains original output and late cleanup failures after the raw barrier [0.44ms]
+(pass) Host settlement preserves the sole original cleanup error after delivered output [1.26ms]
+(pass) Host settlement projects the exact original signal fact after complete raw closure [0.60ms]
+(pass) Task adapter joins the original settlement under the current persisted native binding [3630.10ms]
+
+ 5 pass
+ 0 fail
+ 18 expect() calls
+Ran 5 tests across 1 file. [6.13s]
+[4/6] DONE test/process-facade-settlement-barrier.test.ts exit=0 duration=6.34s
+[5/6] START test/project-git-discovery.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Git discovery preserves the exact main, linked and aliased Project occurrence [2991.72ms]
+
+ 1 pass
+ 0 fail
+ 8 expect() calls
+Ran 1 test across 1 file. [4.97s]
+[5/6] DONE test/project-git-discovery.test.ts exit=0 duration=5.20s
+[6/6] START test/config-registration-batch.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a global cold candidate completes both independent admitted Project identities together [4077.37ms]
+
+ 1 pass
+ 0 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [4.87s]
+[6/6] DONE test/config-registration-batch.test.ts exit=0 duration=5.02s

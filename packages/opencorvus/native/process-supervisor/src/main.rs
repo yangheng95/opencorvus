@@ -14,7 +14,7 @@ mod windows_helper {
     use windows_sys::Win32::{
         Foundation::{
             CloseHandle, GetLastError, ERROR_INVALID_PARAMETER, ERROR_NO_MORE_FILES, FILETIME,
-            HANDLE, INVALID_HANDLE_VALUE, WAIT_OBJECT_0, WAIT_TIMEOUT,
+            HANDLE, INVALID_HANDLE_VALUE, NTSTATUS, WAIT_OBJECT_0, WAIT_TIMEOUT,
         },
         System::{
             Console::{GetStdHandle, STD_ERROR_HANDLE, STD_INPUT_HANDLE, STD_OUTPUT_HANDLE},
@@ -29,6 +29,7 @@ mod windows_helper {
                 JOBOBJECT_BASIC_ACCOUNTING_INFORMATION, JOBOBJECT_EXTENDED_LIMIT_INFORMATION,
                 JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE,
             },
+            LibraryLoader::{GetModuleHandleW, GetProcAddress},
             Threading::{
                 CreateProcessW, DeleteProcThreadAttributeList, GetCurrentProcess,
                 GetCurrentProcessId, GetExitCodeProcess, GetProcessTimes,
@@ -38,6 +39,7 @@ mod windows_helper {
                 CREATE_UNICODE_ENVIRONMENT, EXTENDED_STARTUPINFO_PRESENT, PROCESS_INFORMATION,
                 PROCESS_QUERY_LIMITED_INFORMATION, PROCESS_SYNCHRONIZE, PROCESS_TERMINATE,
                 PROC_THREAD_ATTRIBUTE_JOB_LIST, STARTF_USESTDHANDLES, STARTUPINFOEXW,
+                PROCESS_BASIC_INFORMATION,
             },
         },
     };
@@ -655,20 +657,11 @@ mod windows_helper {
         ))
     }
 
-    fn run_request(request: Request) -> Result<u32, String> {
-        let request = launch_request(request);
-        if request.runtime_occurrence_id.is_empty() || request.owner_process_instance_id.is_empty()
-        {
-            return Err("runtime owner occurrence identity is missing".into());
-        }
+    fn prepare_target(request: &LaunchRequest) -> Result<(Handle, SuspendedTarget, String), String> {
         let helper_pid = unsafe { GetCurrentProcessId() };
         let helper_instance_id = process_instance_id(unsafe { GetCurrentProcess() })?;
-        publish_helper_marker(&request, helper_pid, &helper_instance_id)?;
-        let helper_parent_pid = snapshot_processes()?
-            .into_iter()
-            .find(|process| process.pid == helper_pid)
-            .map(|process| process.parent_pid)
-            .ok_or_else(|| "Windows supervisor helper parent process is unavailable".to_string())?;
+        publish_helper_marker(request, helper_pid, &helper_instance_id)?;
+        let helper_parent_pid = current_parent_pid()?;
         if helper_parent_pid != request.owner_pid {
             return Err(format!(
                 "Windows supervisor owner PID {} does not match helper parent {}",
@@ -700,17 +693,25 @@ mod windows_helper {
         if request.detached {
             let mut contained = 0;
             if unsafe { IsProcessInJob(GetCurrentProcess(), null_mut(), &mut contained) } == 0 {
-                publish_pre_target_settlement_marker(&request)?;
                 return Err("Detached helper inherited Job containment could not be observed".into());
             }
             if contained != 0 {
-                publish_pre_target_settlement_marker(&request)?;
                 return Err("Detached helper remains inside an inherited containing Job".into());
             }
         }
         let standard_handles = inherited_standard_handles()?;
-        let target = match create_suspended_target(&request, Some(&standard_handles)) {
-            Ok(target) => target,
+        let target = create_suspended_target(request, Some(&standard_handles))?;
+        Ok((owner, target, helper_instance_id))
+    }
+
+    fn run_request(request: Request) -> Result<u32, String> {
+        let request = launch_request(request);
+        if request.runtime_occurrence_id.is_empty() || request.owner_process_instance_id.is_empty()
+        {
+            return Err("runtime owner occurrence identity is missing".into());
+        }
+        let (owner, target, helper_instance_id) = match prepare_target(&request) {
+            Ok(prepared) => prepared,
             Err(primary) => {
                 if let Err(marker) = publish_pre_target_settlement_marker(&request) {
                     return Err(format!(
@@ -997,6 +998,60 @@ mod windows_helper {
         Ok(())
     }
 
+    fn current_parent_pid() -> Result<u32, String> {
+        type QueryInformation =
+            unsafe extern "system" fn(HANDLE, i32, *mut c_void, u32, *mut u32) -> NTSTATUS;
+        // Ntdll is loaded for this process's lifetime; this is a borrowed module.
+        let module = unsafe { GetModuleHandleW(wide_null("ntdll.dll").as_ptr()) };
+        if module.is_null() {
+            return Err(format!(
+                "GetModuleHandleW(ntdll.dll) failed (win32={})",
+                unsafe { GetLastError() }
+            ));
+        }
+        let address = unsafe { GetProcAddress(module, b"NtQueryInformationProcess\0".as_ptr()) }
+            .ok_or_else(|| {
+                format!(
+                    "NtQueryInformationProcess is unavailable (win32={})",
+                    unsafe { GetLastError() }
+                )
+            })?;
+        // The SDK supplies PROCESS_BASIC_INFORMATION; only the documented dynamic
+        // entry point needs a function-pointer signature here.
+        let query: QueryInformation = unsafe { std::mem::transmute(address) };
+        let mut information: PROCESS_BASIC_INFORMATION = unsafe { std::mem::zeroed() };
+        let expected_length = std::mem::size_of_val(&information) as u32;
+        let mut returned_length = 0;
+        let status = unsafe {
+            query(
+                GetCurrentProcess(),
+                0,
+                &mut information as *mut _ as *mut c_void,
+                expected_length,
+                &mut returned_length,
+            )
+        };
+        if status < 0 {
+            return Err(format!("NtQueryInformationProcess(ProcessBasicInformation) failed (ntstatus=0x{status:08x})"));
+        }
+        if returned_length != expected_length {
+            return Err(format!("Windows parent process query returned {returned_length} bytes; expected {expected_length}"));
+        }
+        let helper_pid = unsafe { GetCurrentProcessId() };
+        if information.UniqueProcessId != helper_pid as usize {
+            return Err(format!(
+                "Windows parent process query identity {} does not match helper {helper_pid}",
+                information.UniqueProcessId
+            ));
+        }
+        let parent_pid = u32::try_from(information.InheritedFromUniqueProcessId)
+            .map_err(|_| "Windows parent process identifier is out of range".to_string())?;
+        if parent_pid == 0 {
+            return Err("Windows supervisor helper parent process is unavailable".into());
+        }
+        Ok(parent_pid)
+    }
+
     fn snapshot_processes() -> Result<Vec<ProcessInfo>, String> {
         let snapshot = unsafe { CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0) };
         if snapshot == INVALID_HANDLE_VALUE {
@@ -1099,6 +1154,69 @@ mod windows_helper {
             thread,
             time::{Duration, Instant},
         };
+
+        #[test]
+        fn direct_parent_query_matches_the_independent_current_process_graph() {
+            let helper_pid = unsafe { GetCurrentProcessId() };
+            let observed = snapshot_processes()
+                .expect("observe independent system process graph")
+                .into_iter()
+                .find(|process| process.pid == helper_pid)
+                .expect("observe this current process");
+            assert_eq!(
+                current_parent_pid().expect("query current parent"),
+                observed.parent_pid
+            );
+        }
+
+        #[test]
+        fn owner_admission_refusals_publish_correlated_pre_target_settlement() {
+            let helper_pid = unsafe { GetCurrentProcessId() };
+            let parent_pid = snapshot_processes()
+                .expect("observe current process graph")
+                .into_iter()
+                .find(|process| process.pid == helper_pid)
+                .expect("observe this test process")
+                .parent_pid;
+            let parent_handle =
+                unsafe { OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, 0, parent_pid) };
+            assert!(!parent_handle.is_null());
+            let parent_identity =
+                process_instance_id(Handle(parent_handle).0).expect("observe parent birth");
+            let temporary =
+                fs::canonicalize(env::temp_dir()).expect("resolve owned test temporary root");
+            for (kind, owner_pid, owner_identity, expected_error) in [
+                ("pid", helper_pid, "native-test-owner".to_string(), format!("Windows supervisor owner PID {helper_pid} does not match helper parent {parent_pid}")),
+                ("birth", parent_pid, "win32:0".to_string(), format!("Windows supervisor owner process instance {parent_identity} does not match requested win32:0")),
+            ] {
+                let nonce = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).expect("current time").as_nanos();
+                let directory = temporary.join(format!("opencorvus-parent-admission-{helper_pid}-{kind}-{nonce}"));
+                fs::create_dir(&directory).expect("create exact owned test directory");
+                let request_id = format!("owner-admission-{kind}");
+                let outcome = (|| -> Result<(String, serde_json::Value), String> {
+                    let request: Request = serde_json::from_value(serde_json::json!({
+                        "kind":"command", "executable":"cmd.exe", "args":["/d","/s","/c","exit","0"],
+                        "cwd":null, "cancel_file":directory.join("cancel"), "ready_file":directory.join("ready.json"),
+                        "launch_failed_file":directory.join("launch-failed.json"), "settled_file":directory.join("settled.json"),
+                        "request_id":request_id, "owner_pid":owner_pid, "owner_process_instance_id":owner_identity,
+                        "runtime_occurrence_id":"native-parent-admission"
+                    })).map_err(|error| error.to_string())?;
+                    let error = run_request(request).err().ok_or_else(|| "Expected the declared owner admission error".to_string())?;
+                    let marker = fs::read_to_string(directory.join("launch-failed.json")).map_err(|error| error.to_string())?;
+                    let marker = serde_json::from_str(&marker).map_err(|error| error.to_string())?;
+                    Ok((error, marker))
+                })();
+                assert_eq!(directory.parent(), Some(temporary.as_path()));
+                fs::remove_dir_all(&directory).expect("remove exact owned test directory after native call returns");
+                let (error, marker) = outcome.expect("owner refusal and original correlated pre-target fact");
+                assert_eq!(error, expected_error);
+                assert_eq!(marker, serde_json::json!({
+                    "protocol":1, "request_id":request_id, "helper_pid":helper_pid,
+                    "stage":"target_not_created", "active_processes":0,
+                    "runtime_occurrence_id":"native-parent-admission"
+                }));
+            }
+        }
 
         #[test]
         fn transfer_codecs_preserve_canonical_process_occurrence_id_fields() {

@@ -1,0 +1,14 @@
+   Compiling opencorvus-process-supervisor v0.1.26 (D:\myhexin-local\opencorvus\packages\opencorvus\native\process-supervisor)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.58s
+     Running unittests src\main.rs (.tmp-product-iteration/native-parent-query-446/native-target\debug\deps\opencorvus_process_supervisor-533dd8cd69a32d70.exe)
+
+running 6 tests
+test windows_helper::tests::direct_parent_query_matches_the_independent_current_process_graph ... ok
+test windows_helper::tests::dropping_job_terminates_target_before_resume ... ok
+test windows_helper::tests::managed_job_settles_only_after_every_assigned_process_exits ... ok
+test windows_helper::tests::owner_admission_refusals_publish_correlated_pre_target_settlement ... ok
+test windows_helper::tests::terminate_tree_reclaims_owner_and_snapshotted_descendants ... ok
+test windows_helper::tests::transfer_codecs_preserve_canonical_process_occurrence_id_fields ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.59s
+

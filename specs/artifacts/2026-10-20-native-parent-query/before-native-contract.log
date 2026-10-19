@@ -1,0 +1,33 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.45
+   Compiling serde_core v1.0.228
+   Compiling windows_x86_64_msvc v0.52.6
+   Compiling zmij v1.0.21
+   Compiling serde v1.0.228
+   Compiling serde_json v1.0.150
+   Compiling itoa v1.0.18
+   Compiling memchr v2.8.0
+   Compiling windows-targets v0.52.6
+   Compiling windows-sys v0.59.0
+   Compiling syn v2.0.117
+   Compiling serde_derive v1.0.228
+   Compiling opencorvus-process-supervisor v0.1.26 (D:\myhexin-local\opencorvus\packages\opencorvus\native\process-supervisor)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 10.01s
+     Running unittests src\main.rs (.tmp-product-iteration/native-parent-query-446/native-target\debug\deps\opencorvus_process_supervisor-11ad4810c1f839cf.exe)
+
+running 1 test
+
+thread 'windows_helper::tests::owner_admission_refusals_publish_correlated_pre_target_settlement' (79140) panicked at src\main.rs:1136:47:
+owner refusal and original correlated pre-target fact: "The system cannot find the file specified. (os error 2)"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test windows_helper::tests::owner_admission_refusals_publish_correlated_pre_target_settlement ... FAILED
+
+failures:
+
+failures:
+    windows_helper::tests::owner_admission_refusals_publish_correlated_pre_target_settlement
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.05s
+
+error: test failed, to rerun pass `--bin opencorvus-process-supervisor`

@@ -1,0 +1,48 @@
+$ bun script/run-tests.ts test/process-owner-admission.test.ts test/which-async.test.ts test/process-streaming-input.test.ts test/process-facade-settlement-barrier.test.ts test/project-git-discovery.test.ts test/config-registration-batch.test.ts
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.45
+   Compiling serde_core v1.0.228
+   Compiling windows_x86_64_msvc v0.52.6
+   Compiling zmij v1.0.21
+   Compiling serde_json v1.0.150
+   Compiling serde v1.0.228
+   Compiling itoa v1.0.18
+   Compiling memchr v2.8.0
+   Compiling windows-targets v0.52.6
+   Compiling windows-sys v0.59.0
+error[E0583]: file not found for module `Kernel`
+  --> C:\Users\hengu\AppData\Local\Temp\opencorvus-native-build\cargo-home\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.59.0\src\Windows\Win32\System\mod.rs:60:1
+   |
+60 | pub mod Kernel;
+   | ^^^^^^^^^^^^^^^
+   |
+   = help: to create the module `Kernel`, create file "C:\Users\hengu\AppData\Local\Temp\opencorvus-native-build\cargo-home\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.59.0\src\Windows\Win32\System\Kernel.rs" or "C:\Users\hengu\AppData\Local\Temp\opencorvus-native-build\cargo-home\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.59.0\src\Windows\Win32\System\Kernel\mod.rs"
+   = note: if there is a `mod Kernel` elsewhere in the crate already, import it with `use crate::...` instead
+
+error[E0583]: file not found for module `LibraryLoader`
+  --> C:\Users\hengu\AppData\Local\Temp\opencorvus-native-build\cargo-home\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.59.0\src\Windows\Win32\System\mod.rs:62:1
+   |
+62 | pub mod LibraryLoader;
+   | ^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: to create the module `LibraryLoader`, create file "C:\Users\hengu\AppData\Local\Temp\opencorvus-native-build\cargo-home\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.59.0\src\Windows\Win32\System\LibraryLoader.rs" or "C:\Users\hengu\AppData\Local\Temp\opencorvus-native-build\cargo-home\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.59.0\src\Windows\Win32\System\LibraryLoader\mod.rs"
+   = note: if there is a `mod LibraryLoader` elsewhere in the crate already, import it with `use crate::...` instead
+
+   Compiling syn v2.0.117
+For more information about this error, try `rustc --explain E0583`.
+error: could not compile `windows-sys` (lib) due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...
+66 |       RUSTUP_NO_UPDATE_CHECK: "1",
+67 |       RUSTUP_SKIP_UPDATE_CHECK: "1",
+68 |     },
+69 |   })
+70 |   if (result.error) throw result.error
+71 |   if (result.status !== 0) throw new Error(`Native test process supervisor build failed with exit ${result.status}`)
+                                          ^
+error: Native test process supervisor build failed with exit 101
+      at prepareTestProcessSupervisor (D:\myhexin-local\opencorvus\packages\opencorvus\script\prepare-test-process-supervisor.ts:71:38)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\script\run-tests.ts:10:31
+
+Bun v1.4.0 (Windows x64)
+error: script "test" exited with code 1

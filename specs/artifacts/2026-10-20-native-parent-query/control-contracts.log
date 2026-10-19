@@ -1,0 +1,56 @@
+$ bun script/run-tests.ts test/process-owner-admission.test.ts test/process-supervisor-control-plane.test.ts "--test-name-pattern=native (pid|birth) owner|foreground shell|background root exit|Shell.run returns|reclaims a descendant listener|returns strict disposal|retains the exact live owner|keeps physical ownership|retains shutdown ownership|reclaims the exact durable request|settles a Windows command|accepts proven process exit|returns a fast command|executes a control-plane process"
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.45
+   Compiling windows_x86_64_msvc v0.52.6
+   Compiling serde_core v1.0.228
+   Compiling zmij v1.0.21
+   Compiling serde_json v1.0.150
+   Compiling serde v1.0.228
+   Compiling itoa v1.0.18
+   Compiling memchr v2.8.0
+   Compiling windows-targets v0.52.6
+   Compiling windows-sys v0.59.0
+   Compiling syn v2.0.117
+   Compiling serde_derive v1.0.228
+   Compiling opencorvus-process-supervisor v0.1.26 (D:\myhexin-local\opencorvus\packages\opencorvus\native\process-supervisor)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 10.97s
+[1/2] START test/process-owner-admission.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) native pid owner refusal returns its original admission error and settles before the next command [325.97ms]
+(pass) native birth owner refusal returns its original admission error and settles before the next command [234.44ms]
+
+ 2 pass
+ 0 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [3.25s]
+[1/2] DONE test/process-owner-admission.test.ts exit=0 duration=4.11s
+[2/2] START test/process-supervisor-control-plane.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) ProcessSupervisor control-plane authority > foreground shell reclaims its child tree and returns the root command exit [198.76ms]
+background-request-capture {"callbackCount":1,"captures":[{"request":{"kind":"shell","command":"sleep 30 & exit 7","shell":"C:\\Program Files\\Git\\bin\\bash.exe","ready_file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-g4m6Fm\\test-91304-zwGmFW\\runtime-root\\tmp\\supervisor-zktble\\ready.json","request_id":"f1bbd556-25a5-4902-92c5-d47f8ec08de0","launch_failed_file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-g4m6Fm\\test-91304-zwGmFW\\runtime-root\\tmp\\supervisor-zktble\\launch-failed.json","cancel_file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-g4m6Fm\\test-91304-zwGmFW\\runtime-root\\tmp\\supervisor-zktble\\cancel","settled_file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-g4m6Fm\\test-91304-zwGmFW\\runtime-root\\tmp\\supervisor-zktble\\settled.json","owner_pid":91304,"owner_process_instance_id":"win32:639280437932633682","runtime_occurrence_id":"2062f4c1-b221-45d5-b838-52b240547fe7"},"readyFileType":"string"}],"handlePID":67236,"capturedReadyFileType":"string"}
+background-request-after-validation {"request":{"kind":"shell","command":"sleep 30 & exit 7","shell":"C:\\Program Files\\Git\\bin\\bash.exe","ready_file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-g4m6Fm\\test-91304-zwGmFW\\runtime-root\\tmp\\supervisor-zktble\\ready.json","request_id":"f1bbd556-25a5-4902-92c5-d47f8ec08de0","launch_failed_file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-g4m6Fm\\test-91304-zwGmFW\\runtime-root\\tmp\\supervisor-zktble\\launch-failed.json","cancel_file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-g4m6Fm\\test-91304-zwGmFW\\runtime-root\\tmp\\supervisor-zktble\\cancel","settled_file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-g4m6Fm\\test-91304-zwGmFW\\runtime-root\\tmp\\supervisor-zktble\\settled.json","owner_pid":91304,"owner_process_instance_id":"win32:639280437932633682","runtime_occurrence_id":"2062f4c1-b221-45d5-b838-52b240547fe7"},"readyFileType":"string"}
+background-root-exit-evidence {"requestID":"f1bbd556-25a5-4902-92c5-d47f8ec08de0","readyPath":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-g4m6Fm\\test-91304-zwGmFW\\runtime-root\\tmp\\supervisor-zktble\\ready.json","ready":{"protocol":3,"detached":false,"request_id":"f1bbd556-25a5-4902-92c5-d47f8ec08de0","helper_pid":90444,"target_pid":67236,"target_process_instance_id":"win32:639280437948789416","runtime_occurrence_id":"2062f4c1-b221-45d5-b838-52b240547fe7"},"helper":{"protocol":1,"request_id":"f1bbd556-25a5-4902-92c5-d47f8ec08de0","helper_pid":90444,"helper_process_instance_id":"win32:639280437948549492","runtime_occurrence_id":"2062f4c1-b221-45d5-b838-52b240547fe7"},"occurrenceIDSource":"request-owner","rootObservation":"dead_or_reused","helperObservation":"exact_live","registeredOwner":{"count":1,"pids":[67236]}}
+(pass) ProcessSupervisor control-plane authority > background root exit preserves its original code while its owned job is disposed [191.87ms]
+(pass) ProcessSupervisor control-plane authority > Shell.run returns the foreground root exit after child cleanup [148.52ms]
+(pass) ProcessSupervisor control-plane authority > reclaims a descendant listener after the exact Windows owner process dies [1745.73ms]
+(pass) ProcessSupervisor control-plane authority > returns strict disposal only after physical exit and output settlement [31.46ms]
+(pass) ProcessSupervisor control-plane authority > retains the exact live owner until output settlement finishes [2.19ms]
+(pass) ProcessSupervisor control-plane authority > keeps physical ownership after an early output control failure [11.48ms]
+(pass) ProcessSupervisor control-plane authority > retains shutdown ownership when physical settlement proof is unavailable [4.50ms]
+(pass) ProcessSupervisor control-plane authority > reclaims the exact durable request when the dead helper's kill-on-close job proves settlement [5094.79ms]
+(pass) ProcessSupervisor control-plane authority > settles a Windows command that fails before target creation with explicit active-process-zero evidence [80.23ms]
+(pass) ProcessSupervisor control-plane authority > accepts proven process exit even when auxiliary disposal settlement is delayed [0.57ms]
+(pass) ProcessSupervisor control-plane authority > returns a fast command's real nonzero exit after the native readiness handshake [131.84ms]
+(pass) ProcessSupervisor control-plane authority > executes a control-plane process while the Task Capsule runtime is configured [574.22ms]
+
+ 13 pass
+ 4 filtered out
+ 0 fail
+ 31 expect() calls
+Ran 13 tests across 1 file. [9.47s]
+[2/2] DONE test/process-supervisor-control-plane.test.ts exit=0 duration=9.74s

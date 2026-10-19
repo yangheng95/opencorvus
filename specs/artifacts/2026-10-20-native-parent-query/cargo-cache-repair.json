@@ -1,0 +1,22 @@
+{
+  "operation": "Quarantine the exact incomplete extraction; the original Cargo checker will extract the validated official crate",
+  "archive": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-native-build\\cargo-home\\registry\\cache\\index.crates.io-1949cf8c6b5b557f\\windows-sys-0.59.0.crate",
+  "lockedPackageIdentity": "1e38bc4d79ed67fd075bcc251a1c39b32a1776bbe92e5bef1f0bf1f8c531853b",
+  "archiveVerified": true,
+  "modules": [
+    {
+      "name": "src/Windows/Win32/System/Kernel/mod.rs",
+      "archive": true,
+      "extracted": false
+    },
+    {
+      "name": "src/Windows/Win32/System/LibraryLoader/mod.rs",
+      "archive": true,
+      "extracted": false
+    }
+  ],
+  "activeRustBuilds": [],
+  "source": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-native-build\\cargo-home\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\windows-sys-0.59.0",
+  "quarantine": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-native-build\\cargo-home\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\.windows-sys-0.59.0-incomplete-446",
+  "observedAt": "2026-10-19T21:54:12.762Z"
+}
