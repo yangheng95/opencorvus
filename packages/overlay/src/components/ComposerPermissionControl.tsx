@@ -1,5 +1,5 @@
 // The toolbar controls label visibility as its available width changes.
-// The glyph and accessible name preserve the selected authorization mode.
+// The glyph and accessible name preserve the confirmed mode or its availability.
 
 import { createMemo, For } from "solid-js"
 import type { JSX } from "solid-js"
@@ -44,10 +44,15 @@ export function ComposerPermissionControl(props: ComposerPermissionControlProps)
     },
   ])
   const activeLabel = createMemo(
-    () => options().find((option) => option.value === mode())?.label ?? t("permissions.mode_full_access"),
+    () => options().find((option) => option.value === mode())?.label ?? t("permissions.mode_unavailable"),
   )
+  const activeIcon = createMemo<IconName>(() => {
+    const confirmedMode = mode()
+    return confirmedMode ? MODE_ICON[confirmedMode] : "interaction-question"
+  })
 
   function pickMode(value: string): void {
+    if (!mode()) return
     if (value !== "ask" && value !== "full_access") return
     if (value === mode()) return
     setPermissionMode(value)
@@ -79,7 +84,7 @@ export function ComposerPermissionControl(props: ComposerPermissionControlProps)
         title={t("chat.permission_mode_title", { mode: activeLabel() })}
         aria-label={t("chat.permission_mode_aria", { mode: activeLabel() })}
       >
-        <Icon name={MODE_ICON[mode()]} size="compact" />
+        <Icon name={activeIcon()} size="compact" />
         <span class="composer-permission-label">{activeLabel()}</span>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
@@ -93,6 +98,7 @@ export function ComposerPermissionControl(props: ComposerPermissionControlProps)
                   class="composer-attachment-menu-item composer-runtime-menu-item"
                   data-ui={`composer-permission-mode-${option.value}`}
                   value={option.value}
+                  disabled={!mode()}
                   textValue={option.label}
                   title={option.hint}
                 >

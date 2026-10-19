@@ -1,7 +1,11 @@
 import { createEffect, createMemo, createResource, createSignal, For, Show } from "solid-js"
 import { localeTag, t } from "../../utils/i18n"
 import { activeProjectDirectory } from "../../services/project-directory"
-import { apiJson } from "../../services/api"
+import { apiJson, captureApiAuthority, isApiAuthorityCurrent } from "../../services/api"
+import { loadConfigInfo } from "../../services/config-load"
+import { formatErrorDetails, reportError } from "../../services/diagnostics"
+import { appStore } from "../../store/app"
+import { boardStore } from "../../store/board"
 import { currentPermissionMode, setPermissionMode, type PermissionMode } from "../../services/permission-mode"
 import { directoryScopedPath } from "../../services/task-path"
 import { Badge, type BadgeTone } from "../ui/Badge"
@@ -154,6 +158,27 @@ function operationStatus(events: PermissionLedgerEvent[]): { label: string; tone
 }
 
 export function PermissionsSettingsGroup() {
+  const mode = createMemo(currentPermissionMode)
+  const [refreshingMode, setRefreshingMode] = createSignal(false)
+  async function refreshMode(): Promise<void> {
+    const authority = captureApiAuthority()
+    const epoch = boardStore.selectEpoch
+    setRefreshingMode(true)
+    try {
+      await loadConfigInfo(undefined, { authority })
+    } catch (error) {
+      if (isApiAuthorityCurrent(authority) && boardStore.selectEpoch === epoch) {
+        reportError({
+          id: "permissions:reload",
+          title: t("permissions.title"),
+          message: errorMessage(error),
+          details: formatErrorDetails(error),
+        })
+      }
+    } finally {
+      setRefreshingMode(false)
+    }
+  }
   const directory = () => activeProjectDirectory().trim()
   const [recordsOpen, setRecordsOpen] = createSignal(false)
   const [visibleCount, setVisibleCount] = createSignal(6)
@@ -206,17 +231,39 @@ export function PermissionsSettingsGroup() {
         interactive
         title={t("permissions.mode")}
         desc={
-          currentPermissionMode() === "full_access" ? t("permissions.full_access_warning") : t("permissions.ask_desc")
+          mode() === undefined
+            ? t("permissions.mode_unavailable_desc")
+            : mode() === "full_access"
+              ? t("permissions.full_access_warning")
+              : t("permissions.ask_desc")
         }
         meta={t("permissions.intro")}
         actions={
-          <SegmentedControl
-            ariaLabel={t("permissions.mode")}
-            size="md"
-            options={modeOptions()}
-            value={currentPermissionMode()}
-            onChange={setPermissionMode}
-          />
+          <Show
+            when={mode()}
+            keyed
+            fallback={
+              <Button
+                size="sm"
+                variant="outline"
+                tone="neutral"
+                disabled={!appStore.connected || refreshingMode()}
+                onClick={() => void refreshMode()}
+              >
+                {refreshingMode() ? t("common.loading") : t("permissions.mode_reload")}
+              </Button>
+            }
+          >
+            {(confirmedMode) => (
+              <SegmentedControl
+                ariaLabel={t("permissions.mode")}
+                size="md"
+                options={modeOptions()}
+                value={confirmedMode}
+                onChange={setPermissionMode}
+              />
+            )}
+          </Show>
         }
       />
       <Show when={directory()} fallback={<SettingsRow desc={t("permissions.select_project")} />}>
@@ -378,7 +425,9 @@ export function PermissionsSettingsGroup() {
                                 <For each={[...operation.events].reverse()}>
                                   {(event) => (
                                     <Show when={event.reason}>
-                                      <dt>{t("permissions.recorded_reason")} · {eventLabel(event)}</dt>
+                                      <dt>
+                                        {t("permissions.recorded_reason")} · {eventLabel(event)}
+                                      </dt>
                                       <dd title={event.id}>{event.reason}</dd>
                                     </Show>
                                   )}

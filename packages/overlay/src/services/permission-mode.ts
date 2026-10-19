@@ -13,10 +13,10 @@ import { formatErrorDetails, reportError } from "./diagnostics"
 
 export type PermissionMode = "ask" | "full_access"
 
-export function currentPermissionMode(): PermissionMode {
-  return (appStore.config as { permission_mode?: PermissionMode } | undefined)?.permission_mode === "ask"
-    ? "ask"
-    : "full_access"
+/** Only an accepted configuration can identify the current authorization mode. */
+export function currentPermissionMode(): PermissionMode | undefined {
+  const mode = (appStore.config as { permission_mode?: unknown } | null)?.permission_mode
+  return mode === "ask" || mode === "full_access" ? mode : undefined
 }
 
 function errorMessage(error: unknown): string {
@@ -31,8 +31,11 @@ export function setPermissionMode(mode: PermissionMode): void {
   const selectionEpoch = boardStore.selectEpoch
   const directory = activeProjectDirectory().trim()
   const generation = ++permissionWriteGeneration
-  const ownsResponse = () => permissionWriteGeneration === generation && isApiAuthorityCurrent(authority) &&
-    boardStore.selectEpoch === selectionEpoch && activeProjectDirectory().trim() === directory
+  const ownsResponse = () =>
+    permissionWriteGeneration === generation &&
+    isApiAuthorityCurrent(authority) &&
+    boardStore.selectEpoch === selectionEpoch &&
+    activeProjectDirectory().trim() === directory
   permissionWriteTail = permissionWriteTail.then(async () => {
     try {
       assertApiAuthorityCurrent(authority)

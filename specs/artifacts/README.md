@@ -480,3 +480,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [Goal与默认首页](2026-10-19-goal-home-discoverability/README.md)：独立页面截图及结算证据。
 
 - [首页设置配置归属](2026-10-19-home-settings-scope/README.md)：真实General页面及物理结算。
+
+- [权限配置可用性](2026-10-19-permission-config-availability/README.md)：真实首页、权限设置和运行回执。

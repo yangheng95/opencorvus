@@ -1000,3 +1000,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [Goal与默认首页](2026-10-19-goal-home-discoverability.md)：单agent真实视觉迭代。
 
 - [首页设置配置归属](2026-10-19-home-settings-scope.md)：全局/项目读归属与实际体验。
+
+- [权限配置可用性](2026-10-19-permission-config-availability.md)：已确认模式与未加载状态。
