@@ -263,7 +263,13 @@ export async function selectTask(taskID: string, options: SelectTaskOptions): Pr
 
   const taskItem = nextTaskID ? taskByID(nextTaskID) : null
   const taskDirectory =
-    explicitDirectory || (typeof taskItem?.task?.directory === "string" ? taskItem.task.directory.trim() : "")
+    nextTaskID ? explicitDirectory || taskOwningDirectory(nextTaskID) : ""
+  if (nextTaskID && explicitDirectory && (
+    taskItem || boardStore.board?.task?.id === nextTaskID ||
+    (boardStore.selectedSource?.kind === "task" && boardStore.selectedSource.id === nextTaskID)
+  ) && taskOwningDirectory(nextTaskID) !== explicitDirectory) {
+    throw new Error(`task ${nextTaskID} has inconsistent project directories`)
+  }
   const taskTitle = String(taskItem?.task?.title || taskItem?.overview?.headline || nextTaskID).trim()
   const epoch = options.selectionEpoch
 

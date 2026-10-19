@@ -3445,3 +3445,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [当前会话刷新定位](records/2026-10/2026-10-15-workspace-refresh-location.md)：单一URL定位与真实会话恢复。
 
 - [主流中成员连续性](records/2026-10/2026-10-15-member-parent-stream-continuity.md)：已有成员在主会话流中的真实阅读与生命周期。
+
+- [工作区链接读取失败](records/2026-10/2026-10-19-workspace-location-read-failure.md)：资源读取错误与启动恢复。

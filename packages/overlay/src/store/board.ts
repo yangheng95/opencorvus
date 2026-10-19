@@ -171,6 +171,8 @@ function selectionIsOrphaned(tasks: any[], pending: any[]): boolean {
   // still exists; requiring a loaded board snapshot lets an invalid task ID
   // survive forever after a failed task switch or cross-project mismatch.
   if (boardStore.taskSwitching) return false
+  // A page is a projection, not proof that an admitted Task was removed.
+  if (boardStore.tasksHasMore) return false
   const inTasks = Array.isArray(tasks) && tasks.some((item: any) => item?.task?.id === id)
   if (inTasks) return false
   const inPending = Array.isArray(pending) && pending.some((item: any) => item?.task?.id === id || item?.id === id)
@@ -596,13 +598,15 @@ async function loadTasksOnce(authority: ApiAuthority): Promise<void> {
     const tasks = sortedTasks({ tasks: page.tasks })
     const seen = new Set(tasks.map((item: any) => item?.task?.requestID).filter(Boolean))
     const nextPending = boardStore.pendingTasks.filter((item: any) => !seen.has(item?.requestID))
-    applyTasks(tasks, nextPending)
-    setBoardStore("tasksError", "")
-    setBoardStore("tasksLoaded", true)
-    setBoardStore("tasksHasMore", page.hasMore)
-    setBoardStore("tasksLoadedLimit", tasks.length)
-    setBoardStore("tasksCursorUpdated", page.cursor?.updated ?? null)
-    setBoardStore("tasksCursorTaskID", page.cursor?.taskID ?? "")
+    batch(() => {
+      setBoardStore("tasksHasMore", page.hasMore)
+      applyTasks(tasks, nextPending)
+      setBoardStore("tasksError", "")
+      setBoardStore("tasksLoaded", true)
+      setBoardStore("tasksLoadedLimit", tasks.length)
+      setBoardStore("tasksCursorUpdated", page.cursor?.updated ?? null)
+      setBoardStore("tasksCursorTaskID", page.cursor?.taskID ?? "")
+    })
   } catch (e) {
     if (!isApiAuthorityCurrent(authority) || generation !== _taskListGeneration) return
     setBoardStore("tasksError", e instanceof Error ? e.message : String(e))
@@ -643,13 +647,15 @@ export async function loadMoreTasks(authority = captureApiAuthority()): Promise<
       if (typeof id === "string" && id) currentByID.set(id, item)
     }
     const tasks = sortedTasks({ tasks: [...currentByID.values()] })
-    applyTasks(tasks)
-    setBoardStore("tasksError", "")
-    setBoardStore("tasksLoaded", true)
-    setBoardStore("tasksHasMore", page.hasMore)
-    setBoardStore("tasksLoadedLimit", tasks.length)
-    setBoardStore("tasksCursorUpdated", page.cursor?.updated ?? null)
-    setBoardStore("tasksCursorTaskID", page.cursor?.taskID ?? "")
+    batch(() => {
+      setBoardStore("tasksHasMore", page.hasMore)
+      applyTasks(tasks)
+      setBoardStore("tasksError", "")
+      setBoardStore("tasksLoaded", true)
+      setBoardStore("tasksLoadedLimit", tasks.length)
+      setBoardStore("tasksCursorUpdated", page.cursor?.updated ?? null)
+      setBoardStore("tasksCursorTaskID", page.cursor?.taskID ?? "")
+    })
   } catch (e) {
     if (!isApiAuthorityCurrent(authority) || generation !== _taskListGeneration) return
     setBoardStore("tasksError", e instanceof Error ? e.message : String(e))

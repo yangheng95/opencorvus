@@ -10,6 +10,7 @@
 
 import {
   configure as configureApi,
+  apiJson,
   onApiError,
   captureApiAuthority,
   isApiAuthorityCurrent,
@@ -37,6 +38,7 @@ import {
   isMissingProjectDirectoryError,
   leaveUnavailableProject,
   beginWorkspaceSelection,
+  ownsWorkspaceSelection,
 } from "./workspace"
 import { workspaceRestoreDirectory } from "../store/settings"
 import { selectTask } from "./task"
@@ -241,6 +243,21 @@ async function loadInitialData(
 
 // ── Public API ──
 
+function reportWorkspaceLocationFailure(error: unknown): void {
+  bumpWorkspaceEpoch()
+  // Task hydration already owns a dedicated failure surface with retry.
+  const taskFailure = boardStore.taskSelectionError
+  if (boardStore.selectedSource?.kind !== "task" || taskFailure?.taskID !== boardStore.selectedSource.id) {
+    setAppStore("workspaceLocationError", error instanceof Error ? error : new Error(String(error), { cause: error }))
+  }
+  reportError({
+    id: "workspace-location:restore",
+    title: t("workspace.location_open_failed_title"),
+    message: t("workspace.location_open_failed_message"),
+    details: formatErrorDetails(error),
+  })
+}
+
 /**
  * Initialise the Solid overlay layer.
  * Call order:
@@ -278,20 +295,23 @@ export async function initApp(options: InitOptions = {}): Promise<void> {
   await setLocale(settingsStore.locale)
   if (!isCurrentInitLifecycle(lifecycleGeneration)) return
 
+  const settleWorkspaceRestore = async (restore: () => Promise<unknown>, authority: ApiAuthority) => {
+    try {
+      await restore()
+    } catch (error) {
+      if (!isCurrentInitLifecycle(lifecycleGeneration) || !isApiAuthorityCurrent(authority)) return
+      if (error instanceof Error && error.name === "AbortError") return
+      reportWorkspaceLocationFailure(error)
+    }
+  }
+
   let initialLocation: { kind: "valid"; location: WorkspaceLocation | null } | { kind: "invalid" }
   try {
     initialLocation = { kind: "valid", location: workspaceLocationFromSearch(initialSearch) }
   } catch (error) {
     if (!(error instanceof WorkspaceLocationError)) throw error
     initialLocation = { kind: "invalid" }
-    bumpWorkspaceEpoch()
-    setAppStore("workspaceLocationError", error)
-    reportError({
-      id: "workspace-location:restore",
-      title: t("workspace.location_open_failed_title"),
-      message: t("workspace.location_open_failed_message"),
-      details: formatErrorDetails(error),
-    })
+    reportWorkspaceLocationFailure(error)
   }
 
   // 5. Check connection
@@ -310,11 +330,12 @@ export async function initApp(options: InitOptions = {}): Promise<void> {
     const initialData = await loadInitialData(lifecycleGeneration, resolveInitialDirectory)
     if (!isCurrentInitLifecycle(lifecycleGeneration)) return
     if (initialLocation.kind === "valid" && (initialData.loaded || initialLocation.location) && isApiAuthorityCurrent(startupAuthority)) {
-      await restoreInitialWorkspaceLocation({
-        authority: startupAuthority,
-        location: initialLocation.location,
-        restoreClientLocation: options.restoreClientLocation,
-      })
+      const authority = startupAuthority
+      const location = initialLocation.location
+      await settleWorkspaceRestore(
+        () => restoreInitialWorkspaceLocation({ authority, location, restoreClientLocation: options.restoreClientLocation }),
+        authority,
+      )
     }
     if (!isCurrentInitLifecycle(lifecycleGeneration)) return
     if (isApiAuthorityCurrent(startupAuthority)) {
@@ -336,7 +357,7 @@ export async function initApp(options: InitOptions = {}): Promise<void> {
     const initialData = await loadInitialData(lifecycleGeneration, resolveInitialDirectory)
     if (!isCurrentInitLifecycle(lifecycleGeneration)) return
     if (!isApiAuthorityCurrent(authority)) return
-    if (initialData.loaded) await restoreInitialWorkspace(authority)
+    if (initialData.loaded) await settleWorkspaceRestore(() => restoreInitialWorkspace(authority), authority)
     if (!isCurrentInitLifecycle(lifecycleGeneration)) return
     if (!isApiAuthorityCurrent(authority)) return
     await refreshConnectionWorkspace(authority)
@@ -391,6 +412,25 @@ export function persistAndSyncSettings(): void {
 
 const RESTORABLE_RUNNING_TASK_STATUSES = new Set(["active"])
 
+async function restoreTaskSelection(taskID: string, authority: ApiAuthority): Promise<boolean> {
+  const selectionEpoch = beginWorkspaceSelection()
+  try {
+    let directory: string | undefined
+    if (taskID) {
+      const query = new URLSearchParams({ taskID, limit: "1" })
+      const result = await apiJson<{ tasks: { task: { id: string; directory: string } }[] }>(`global/tasks?${query}`, { authority })
+      if (!isApiAuthorityCurrent(authority) || !ownsWorkspaceSelection(selectionEpoch)) return false
+      directory = result.tasks.find((item) => item.task.id === taskID)?.task.directory?.trim()
+      if (!directory) throw new WorkspaceLocationError(`Task ${taskID} is unavailable in the global task index`)
+    }
+    await selectTask(taskID, { directory, selectionEpoch, authority })
+  } catch (error) {
+    if (!isApiAuthorityCurrent(authority) || !ownsWorkspaceSelection(selectionEpoch)) return false
+    throw error
+  }
+  return isApiAuthorityCurrent(authority) && ownsWorkspaceSelection(selectionEpoch) && activeTaskID() === taskID
+}
+
 function taskIDFromItem(item: any): string {
   const id = item?.task?.id ?? item?.id
   return typeof id === "string" ? id.trim() : ""
@@ -426,7 +466,9 @@ export async function restoreInitialWorkspaceLocation(
   const { authority, location } = options
   if (!isApiAuthorityCurrent(authority)) return false
   if (location) {
-    if (location.kind === "task") await selectTask(location.taskID, { selectionEpoch: beginWorkspaceSelection(), authority })
+    if (location.kind === "task") {
+      if (!(await restoreTaskSelection(location.taskID, authority))) return false
+    }
     else {
       if (!options.restoreClientLocation) throw new Error("Workspace location requires its UI navigation owner")
       await options.restoreClientLocation(location, authority)
@@ -470,7 +512,7 @@ export async function restoreInitialWorkspace(authority = captureApiAuthority())
 
   if (taskID) {
     if (activeTaskID() !== taskID || !boardStore.board) {
-      await selectTask(taskID, { selectionEpoch: beginWorkspaceSelection(), authority })
+      if (!(await restoreTaskSelection(taskID, authority))) return false
     }
     if (!isApiAuthorityCurrent(authority)) return false
     // body.dataset.workspace/connection is updated reactively by main.tsx createEffect.
@@ -486,7 +528,7 @@ export async function restoreInitialWorkspace(authority = captureApiAuthority())
   }
 
   if ((workspaceTaskID || "").trim() || boardStore.selectedSource?.kind === "task" || boardStore.board?.task) {
-    await selectTask("", { selectionEpoch: beginWorkspaceSelection(), authority })
+    await restoreTaskSelection("", authority)
   }
   return false
 }

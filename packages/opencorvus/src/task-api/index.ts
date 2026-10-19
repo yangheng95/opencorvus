@@ -2233,6 +2233,7 @@ export namespace EngineService {
   }
 
   export async function getGlobalTaskBoard(opts?: {
+    taskID?: string
     limit?: number
     query?: string
     status?: string
@@ -2241,6 +2242,7 @@ export namespace EngineService {
     cursorTaskID?: string
   }) {
     const rows = listGlobalTasks({
+      taskID: opts?.taskID,
       directory: opts?.directory,
       cursor: opts?.cursor,
       cursorTaskID: opts?.cursorTaskID,

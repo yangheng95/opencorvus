@@ -81965,6 +81965,14 @@
         "parameters": [
           {
             "in": "query",
+            "name": "taskID",
+            "schema": {
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
             "name": "directory",
             "schema": {
               "type": "string"

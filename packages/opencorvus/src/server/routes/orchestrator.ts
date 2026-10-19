@@ -346,6 +346,7 @@ export const EngineRoutes = lazy(() =>
         "query",
         z
           .object({
+            taskID: Task.shape.id.optional(),
             directory: z.string().optional(),
             q: z.string().optional(),
             status: z.string().optional(),
@@ -362,6 +363,7 @@ export const EngineRoutes = lazy(() =>
         const query = c.req.valid("query")
         return c.json(
           await EngineService.getGlobalTaskBoard({
+            taskID: query.taskID,
             directory: query.directory,
             query: query.q,
             status: query.status,

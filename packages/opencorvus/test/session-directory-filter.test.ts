@@ -150,6 +150,28 @@ test.skipIf(process.platform !== "win32")("Windows lexical filters preserve real
   expect(listGlobalTasks({ directory: spellings[1], status: taskRows[0].lifecycle_status }).map((item) => item.task.id).sort()).toEqual([...a.tasks].sort())
 }, 90_000)
 
+test("exact global Task identity resolves its owning directory before pagination limits", async () => {
+  await using project = await memoryProject()
+  await using independent = await memoryProject()
+  const original = await records(project.path, "exact-original", 12)
+  const peer = await records(independent.path, "exact-peer", 1)
+  const targetID = original.tasks[0]
+  const expected = { id: targetID, directory: original.directory, projectID: original.projectID }
+  expect(listGlobalTasks({ limit: 20 }).map(({ task }) => task.id)).toEqual([peer.tasks[0], ...original.tasks.toReversed()])
+  expect(listGlobalTasks({ limit: 10 })).toHaveLength(10)
+  expect(listGlobalTasks({ taskID: targetID, limit: 1 }).map(({ task, directory }) => ({
+    id: task.id, directory, projectID: task.project_id,
+  }))).toEqual([expected])
+  const result = await get("/global/tasks", undefined, { taskID: targetID, limit: "1" })
+  expect({ status: result.status, tasks: result.body.tasks.map(({ task, project }: any) => ({
+    id: task.id, directory: task.directory, projectID: project.id,
+  })) }).toEqual({ status: 200, tasks: [expected] })
+  const peerResult = await get("/global/tasks", undefined, { taskID: peer.tasks[0], limit: "1" })
+  expect({ status: peerResult.status, tasks: peerResult.body.tasks.map(({ task, project }: any) => ({
+    id: task.id, directory: task.directory, projectID: project.id,
+  })) }).toEqual({ status: 200, tasks: [{ id: peer.tasks[0], directory: peer.directory, projectID: peer.projectID }] })
+}, 90_000)
+
 test("invalid cross-platform directory filters preserve the named error and actual global route response", async () => {
   const directory = process.platform === "win32" ? "/unsupported-posix/path" : "C:\\unsupported\\path"
   expect(() => [...Session.listGlobal({ directory })]).toThrow(Filesystem.InvalidDirectoryError)

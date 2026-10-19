@@ -7279,6 +7279,7 @@ export class Global2 extends HeyApiClient {
    */
   public list<ThrowOnError extends boolean = false>(
     parameters?: {
+      taskID?: string
       directory?: string
       q?: string
       status?: string
@@ -7293,6 +7294,7 @@ export class Global2 extends HeyApiClient {
       [
         {
           args: [
+            { in: "query", key: "taskID" },
             { in: "query", key: "directory" },
             { in: "query", key: "q" },
             { in: "query", key: "status" },

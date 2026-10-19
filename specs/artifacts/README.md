@@ -474,3 +474,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [当前会话刷新定位](2026-10-15-workspace-refresh-location/README.md)：原页面、位置与资源结算。
 
 - [主流中成员连续性](2026-10-15-member-parent-stream-continuity/README.md)：实际页面和精确运行回执。
+
+- [工作区链接读取失败](2026-10-19-workspace-location-read-failure/README.md)：独立页面与物理收尾。

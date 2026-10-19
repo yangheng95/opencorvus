@@ -597,7 +597,12 @@ async function selectConversationWithUILifecycle(
   setComposerIntent({ productPillar: productPillarFromConversationExperience(experience), conversationTarget: "chat" })
   bumpWorkspaceEpoch()
   resetCenterWorkbenchToPrimaryPanel("chat")
-  await selectConversationSession({ sessionID, directory, experience, selectionEpoch: admission.epoch, authority })
+  try {
+    await selectConversationSession({ sessionID, directory, experience, selectionEpoch: admission.epoch, authority })
+  } catch (error) {
+    if (!isApiAuthorityCurrent(authority) || !ownsWorkspaceSelection(admission.epoch)) return
+    throw error
+  }
   if (!isApiAuthorityCurrent(authority)) return
   assertUserNavigationCurrent(admission.epoch)
 }
@@ -814,14 +819,19 @@ async function openGlobalComposer(intent: ComposerIntent): Promise<void> {
   const authority = captureApiAuthority()
   const admission = await requestWorkspaceSelection()
   if (admission.kind === "unchanged") return
-  await closeConfigDialog()
-  assertApiAuthorityCurrent(authority)
-  await openGlobalChatLauncher(admission.epoch)
-  assertApiAuthorityCurrent(authority)
-  await applyComposerIntent(intent, admission.epoch, authority)
-  assertApiAuthorityCurrent(authority)
-  assertUserNavigationCurrent(admission.epoch)
-  replaceWorkspaceLocation({ kind: "launcher", ...intent })
+  try {
+    await closeConfigDialog()
+    assertApiAuthorityCurrent(authority)
+    await openGlobalChatLauncher(admission.epoch)
+    assertApiAuthorityCurrent(authority)
+    await applyComposerIntent(intent, admission.epoch, authority)
+    assertApiAuthorityCurrent(authority)
+    assertUserNavigationCurrent(admission.epoch)
+    replaceWorkspaceLocation({ kind: "launcher", ...intent })
+  } catch (error) {
+    if (!isApiAuthorityCurrent(authority) || !ownsWorkspaceSelection(admission.epoch)) return
+    throw error
+  }
 }
 
 async function startWorkLedgerMulticaImport(directory: string): Promise<void> {
@@ -1625,16 +1635,22 @@ async function restoreClientLocation(location: ClientWorkspaceLocation, authorit
     isApiAuthorityCurrent(authority) &&
     boardStore.selectEpoch === selectionEpoch &&
     settingsStore.workspaceEpoch === workspaceEpoch
-  const session = await apiJson<{ kind: string; metadata?: { mission?: { id?: string } } }>(
-    directoryScopedPath(`session/${encodeURIComponent(location.sessionID)}`, location.directory),
-    { authority },
-  )
-  if (!owns()) return
-  const missionID = session.metadata?.mission?.id
-  if (session.kind !== "mission" || !missionID) throw new Error("Mission workspace location requires a persisted Mission session")
-  const mission = await loadMissionStatus({ missionID, directory: location.directory, authority })
-  if (!owns()) return
-  if (mission.sessionID !== location.sessionID) throw new Error("Mission workspace location differs from its persisted Mission")
+  let mission: Awaited<ReturnType<typeof loadMissionStatus>>
+  try {
+    const session = await apiJson<{ kind: string; metadata?: { mission?: { id?: string } } }>(
+      directoryScopedPath(`session/${encodeURIComponent(location.sessionID)}`, location.directory),
+      { authority },
+    )
+    if (!owns()) return
+    const missionID = session.metadata?.mission?.id
+    if (session.kind !== "mission" || !missionID) throw new Error("Mission workspace location requires a persisted Mission session")
+    mission = await loadMissionStatus({ missionID, directory: location.directory, authority })
+    if (!owns()) return
+    if (mission.sessionID !== location.sessionID) throw new Error("Mission workspace location differs from its persisted Mission")
+  } catch (error) {
+    if (!owns()) return
+    throw error
+  }
   await openMissionWithUILifecycle(mission, mission.directory)
 }
 

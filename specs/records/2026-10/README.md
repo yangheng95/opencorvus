@@ -994,3 +994,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [当前会话刷新定位](2026-10-15-workspace-refresh-location.md)：原刷新丢选择、导航根因与桌面验收。
 
 - [主流中成员连续性](2026-10-15-member-parent-stream-continuity.md)：真实主输入、旧成员、Sources与被动诊断。
+
+- [工作区链接读取失败](2026-10-19-workspace-location-read-failure.md)：真实错误、后续选择与Sources。

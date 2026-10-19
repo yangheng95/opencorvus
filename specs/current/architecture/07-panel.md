@@ -29,6 +29,25 @@ The original rejected-location exception is the single volatile
 the existing diagnostic Disclosure; the next admitted workspace selection retires
 that error. Logging alone is not the visible error contract.
 
+A well-formed location whose actual resource read fails follows the same
+localized failure contract and leaves connection monitoring, capability
+reconciliation and later navigation active. The existing Task selection failure
+surface owns Task hydration errors rather than duplicating its summary. Startup
+and reconnect Task restoration share this settlement. Failure publication belongs
+to the real API authority and admitted selection epoch: superseded Task restores,
+Chat/launcher navigation and Mission pre-reads retire their late failures. Mission
+hydration transfers to its ordinary navigation owner after the pre-read; the
+pre-read epoch cannot suppress an error from that new owner. None of these reads
+creates a replacement conversation or changes durable execution recovery.
+
+Task refresh resolves `taskID` through the same global Task index reader's exact
+identity filter before publishing a selected source. That filter precedes the
+list limit and preserves the original Project directory; the first ten rows are
+not the resource authority. The shared selector requires a complete, consistent
+directory owner before reactive consumers can observe the Task. A paginated
+index publishes its `hasMore` alongside its rows and cannot classify an admitted
+Task as removed solely because that Task is outside the current partial page.
+
 Locale catalogs resolve relative to the executing module, whose source `utils`
 and published `assets` directories both sit beside the `i18n` directory. The
 document route does not supply the locale resource base. The static startup

@@ -1284,6 +1284,7 @@ export function searchProjectTasks(projectID: string, opts: { query?: string; st
 }
 
 export function listGlobalTasks(input?: {
+  taskID?: string
   directory?: string
   cursor?: number
   cursorTaskID?: string
@@ -1295,7 +1296,11 @@ export function listGlobalTasks(input?: {
     const persisted = db.select({ task: EngineTaskTable, directory: SessionTable.directory })
       .from(EngineTaskTable)
       .leftJoin(SessionTable, eq(EngineTaskTable.session_id, SessionTable.id))
-      .where(and(isNull(EngineTaskTable.time_archived), sessionDirectoryFilterCondition(db, input?.directory)))
+      .where(and(
+        isNull(EngineTaskTable.time_archived),
+        input?.taskID ? eq(EngineTaskTable.id, input.taskID) : undefined,
+        sessionDirectoryFilterCondition(db, input?.directory),
+      ))
       .all()
       .filter((item) => !taskDeletedInTransaction(db, item.task.id))
       .map((item) => projectTaskRowInTransaction(db, item.task))

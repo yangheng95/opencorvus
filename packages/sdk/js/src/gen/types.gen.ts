@@ -22224,6 +22224,7 @@ export type TaskGlobalListData = {
   body?: never
   path?: never
   query?: {
+    taskID?: string
     directory?: string
     q?: string
     status?: string
