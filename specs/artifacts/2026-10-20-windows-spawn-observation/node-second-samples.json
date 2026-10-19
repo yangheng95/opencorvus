@@ -1,0 +1,276 @@
+{
+  "trial": "node-second",
+  "runtime": "node",
+  "version": "25.7.0",
+  "boundary": "Owned leaf version commands only, actual node:child_process.spawn and original child exit plus stdout/stderr close. Same exact binaries, controlled environment, original windowsHide and pipe layout; not configuration or UI qualification.",
+  "environment": {
+    "keys": 8,
+    "characters": 2582
+  },
+  "samples": [
+    {
+      "name": "helper",
+      "detached": false,
+      "index": 0,
+      "spawnReturnMs": 8.781999999999996,
+      "firstOutputMs": 11.110399999999998,
+      "exitMs": 12.389499999999998,
+      "closedMs": 12.672599999999996,
+      "code": 0,
+      "output": "0.1.26"
+    },
+    {
+      "name": "helper",
+      "detached": false,
+      "index": 1,
+      "spawnReturnMs": 4.550699999999999,
+      "firstOutputMs": 7.332499999999996,
+      "exitMs": 8.113299999999995,
+      "closedMs": 8.1599,
+      "code": 0,
+      "output": "0.1.26"
+    },
+    {
+      "name": "helper",
+      "detached": false,
+      "index": 2,
+      "spawnReturnMs": 5.291499999999999,
+      "firstOutputMs": 8.356699999999996,
+      "exitMs": 9.565799999999996,
+      "closedMs": 9.623799999999996,
+      "code": 0,
+      "output": "0.1.26"
+    },
+    {
+      "name": "helper",
+      "detached": false,
+      "index": 3,
+      "spawnReturnMs": 4.729299999999995,
+      "firstOutputMs": 7.436999999999998,
+      "exitMs": 8.226500000000001,
+      "closedMs": 8.278099999999995,
+      "code": 0,
+      "output": "0.1.26"
+    },
+    {
+      "name": "helper",
+      "detached": false,
+      "index": 4,
+      "spawnReturnMs": 4.968400000000003,
+      "firstOutputMs": 7.880099999999999,
+      "exitMs": 8.634199999999993,
+      "closedMs": 8.6905,
+      "code": 0,
+      "output": "0.1.26"
+    },
+    {
+      "name": "helper",
+      "detached": false,
+      "index": 5,
+      "spawnReturnMs": 4.748599999999996,
+      "firstOutputMs": 7.489099999999993,
+      "exitMs": 8.373800000000003,
+      "closedMs": 8.422899999999998,
+      "code": 0,
+      "output": "0.1.26"
+    },
+    {
+      "name": "git",
+      "detached": false,
+      "index": 0,
+      "spawnReturnMs": 8.829699999999988,
+      "firstOutputMs": 45.84279999999998,
+      "exitMs": 50.0686,
+      "closedMs": 50.1326,
+      "code": 0,
+      "output": "git version 2.45.1.windows.1"
+    },
+    {
+      "name": "git",
+      "detached": false,
+      "index": 1,
+      "spawnReturnMs": 6.2324999999999875,
+      "firstOutputMs": 42.327499999999986,
+      "exitMs": 46.08339999999998,
+      "closedMs": 46.13819999999998,
+      "code": 0,
+      "output": "git version 2.45.1.windows.1"
+    },
+    {
+      "name": "git",
+      "detached": false,
+      "index": 2,
+      "spawnReturnMs": 4.028599999999983,
+      "firstOutputMs": 39.571799999999996,
+      "exitMs": 43.5231,
+      "closedMs": 43.5934,
+      "code": 0,
+      "output": "git version 2.45.1.windows.1"
+    },
+    {
+      "name": "git",
+      "detached": false,
+      "index": 3,
+      "spawnReturnMs": 6.134999999999991,
+      "firstOutputMs": 42.961899999999986,
+      "exitMs": 46.57809999999998,
+      "closedMs": 46.63910000000001,
+      "code": 0,
+      "output": "git version 2.45.1.windows.1"
+    },
+    {
+      "name": "git",
+      "detached": false,
+      "index": 4,
+      "spawnReturnMs": 3.810699999999997,
+      "firstOutputMs": 89.9805,
+      "exitMs": 93.75229999999999,
+      "closedMs": 93.82049999999998,
+      "code": 0,
+      "output": "git version 2.45.1.windows.1"
+    },
+    {
+      "name": "git",
+      "detached": false,
+      "index": 5,
+      "spawnReturnMs": 6.2409000000000106,
+      "firstOutputMs": 42.0256,
+      "exitMs": 45.5231,
+      "closedMs": 45.57679999999999,
+      "code": 0,
+      "output": "git version 2.45.1.windows.1"
+    },
+    {
+      "name": "helper",
+      "detached": true,
+      "index": 0,
+      "spawnReturnMs": 5.367500000000007,
+      "firstOutputMs": 8.234099999999955,
+      "exitMs": 8.993499999999983,
+      "closedMs": 9.030299999999954,
+      "code": 0,
+      "output": "0.1.26"
+    },
+    {
+      "name": "helper",
+      "detached": true,
+      "index": 1,
+      "spawnReturnMs": 4.413600000000031,
+      "firstOutputMs": 7.351400000000012,
+      "exitMs": 8.174300000000017,
+      "closedMs": 8.218200000000024,
+      "code": 0,
+      "output": "0.1.26"
+    },
+    {
+      "name": "helper",
+      "detached": true,
+      "index": 2,
+      "spawnReturnMs": 4.642899999999997,
+      "firstOutputMs": 7.560099999999977,
+      "exitMs": 8.362199999999973,
+      "closedMs": 8.405699999999968,
+      "code": 0,
+      "output": "0.1.26"
+    },
+    {
+      "name": "helper",
+      "detached": true,
+      "index": 3,
+      "spawnReturnMs": 4.382400000000018,
+      "firstOutputMs": 7.37560000000002,
+      "exitMs": 8.062299999999993,
+      "closedMs": 8.12990000000002,
+      "code": 0,
+      "output": "0.1.26"
+    },
+    {
+      "name": "helper",
+      "detached": true,
+      "index": 4,
+      "spawnReturnMs": 5.403399999999976,
+      "firstOutputMs": 8.65379999999999,
+      "exitMs": 9.544500000000028,
+      "closedMs": 9.581900000000019,
+      "code": 0,
+      "output": "0.1.26"
+    },
+    {
+      "name": "helper",
+      "detached": true,
+      "index": 5,
+      "spawnReturnMs": 5.047799999999995,
+      "firstOutputMs": 7.899400000000014,
+      "exitMs": 8.957699999999988,
+      "closedMs": 8.986400000000003,
+      "code": 0,
+      "output": "0.1.26"
+    },
+    {
+      "name": "git",
+      "detached": true,
+      "index": 0,
+      "spawnReturnMs": 6.543099999999981,
+      "firstOutputMs": 40.297199999999975,
+      "exitMs": 43.9898,
+      "closedMs": 44.02699999999999,
+      "code": 0,
+      "output": "git version 2.45.1.windows.1"
+    },
+    {
+      "name": "git",
+      "detached": true,
+      "index": 1,
+      "spawnReturnMs": 3.7720999999999663,
+      "firstOutputMs": 42.56400000000002,
+      "exitMs": 47.439799999999934,
+      "closedMs": 47.503499999999974,
+      "code": 0,
+      "output": "git version 2.45.1.windows.1"
+    },
+    {
+      "name": "git",
+      "detached": true,
+      "index": 2,
+      "spawnReturnMs": 7.218899999999962,
+      "firstOutputMs": 47.25969999999995,
+      "exitMs": 51.446000000000026,
+      "closedMs": 51.47720000000004,
+      "code": 0,
+      "output": "git version 2.45.1.windows.1"
+    },
+    {
+      "name": "git",
+      "detached": true,
+      "index": 3,
+      "spawnReturnMs": 7.651399999999967,
+      "firstOutputMs": 113.58299999999997,
+      "exitMs": 118.41880000000003,
+      "closedMs": 118.452,
+      "code": 0,
+      "output": "git version 2.45.1.windows.1"
+    },
+    {
+      "name": "git",
+      "detached": true,
+      "index": 4,
+      "spawnReturnMs": 6.84820000000002,
+      "firstOutputMs": 46.74249999999995,
+      "exitMs": 51.27279999999996,
+      "closedMs": 51.303499999999985,
+      "code": 0,
+      "output": "git version 2.45.1.windows.1"
+    },
+    {
+      "name": "git",
+      "detached": true,
+      "index": 5,
+      "spawnReturnMs": 7.758199999999988,
+      "firstOutputMs": 50.55780000000004,
+      "exitMs": 55.42420000000004,
+      "closedMs": 55.46609999999998,
+      "code": 0,
+      "output": "git version 2.45.1.windows.1"
+    }
+  ]
+}

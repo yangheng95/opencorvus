@@ -1,0 +1,61 @@
+{
+  "boundary": "Diagnostic pass-through of original child_process.spawn. Inputs, return child, output consumption, errors, ownership and settlement unchanged; listener overhead remains. Not formal uninstrumented qualification.",
+  "dropped": 0,
+  "requests": [
+    {
+      "requestID": "e8ef47e2-e22d-475c-8090-b1a881f91810",
+      "start": "2026-10-19T22:31:58.323Z",
+      "end": "2026-10-19T22:32:19.124Z",
+      "wallMs": 20801,
+      "spawnCount": 388,
+      "spawnSyncMs": 10051.103600000191,
+      "groups": [
+        {
+          "key": "opencorvus-process-supervisor.exe:95:3875",
+          "count": 388,
+          "totalSpawnMs": 10051.103600000191,
+          "maxSpawnMs": 216.09150000000227,
+          "totalCloseMs": 93926.20050000012
+        }
+      ]
+    },
+    {
+      "requestID": "abffb129-e2fe-46d0-9a24-177168ec4399",
+      "start": "2026-10-19T22:32:19.129Z",
+      "end": "2026-10-19T22:32:24.832Z",
+      "wallMs": 5703,
+      "spawnCount": 80,
+      "spawnSyncMs": 1719.5321999999724,
+      "groups": [
+        {
+          "key": "opencorvus-process-supervisor.exe:95:3875",
+          "count": 80,
+          "totalSpawnMs": 1719.5321999999724,
+          "maxSpawnMs": 193.08319999999367,
+          "totalCloseMs": 19931.599699999962
+        }
+      ]
+    }
+  ],
+  "longReads": [
+    {
+      "time": "2026-10-19T22:32:19.123Z",
+      "requestID": "c379480b-26bb-4992-8fd8-e870cb70962e",
+      "method": "GET",
+      "path": "/global/config",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 16667
+    },
+    {
+      "time": "2026-10-19T22:32:24.880Z",
+      "requestID": "62b4ad0f-e90c-418d-aad0-31b37c40b354",
+      "method": "GET",
+      "path": "/global/composer-references",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 22430
+    }
+  ],
+  "allSpawnCount": 682
+}

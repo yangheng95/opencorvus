@@ -1,0 +1,57 @@
+{
+  "runtime": "1.4.0",
+  "boundary": "Stage diagnostic only. Original production public observations versus the same actual current-process system calls. Every read opens and closes its own process handle and uses fresh buffers; the Rust SDK helper supplies an independent birth identity. Initialization-only samples do not qualify file behavior or full configuration performance.",
+  "processPID": 79732,
+  "oracle": "win32:639280451642321328",
+  "samples": [
+    {
+      "name": "original process identity",
+      "count": 128,
+      "totalMs": 4.053799999999995,
+      "meanMs": 0.031670312499999964,
+      "result": "win32:639280451642321328"
+    },
+    {
+      "name": "same system calls with one binding",
+      "count": 128,
+      "totalMs": 0.7800000000000011,
+      "meanMs": 0.006093750000000009,
+      "result": "win32:639280451642321328"
+    },
+    {
+      "name": "original Job containment",
+      "count": 128,
+      "totalMs": 1.6891999999999996,
+      "meanMs": 0.013196874999999997,
+      "result": true
+    },
+    {
+      "name": "same Job calls with one binding",
+      "count": 128,
+      "totalMs": 0.2342999999999904,
+      "meanMs": 0.001830468749999925,
+      "result": true
+    },
+    {
+      "name": "binding initialization and close: identity",
+      "count": 64,
+      "totalMs": 1.1479999999999961,
+      "meanMs": 0.01793749999999994,
+      "result": 4
+    },
+    {
+      "name": "binding initialization and close: rename",
+      "count": 64,
+      "totalMs": 0.6230999999999938,
+      "meanMs": 0.009735937499999903,
+      "result": 2
+    },
+    {
+      "name": "binding initialization and close: replace",
+      "count": 64,
+      "totalMs": 1.5823000000000036,
+      "meanMs": 0.024723437500000056,
+      "result": 5
+    }
+  ]
+}

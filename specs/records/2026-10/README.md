@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Windows外部函数绑定成本](2026-10-20-windows-ffi-binding.md)：真实身份/原子文件操作的阶段测量与进程寿命绑定调查。
+
 - [Windows监管直接父查询](2026-10-20-native-parent-query.md)：原生启动测量、真实父进程合同与完整配置验收。
 
 - [Provider目录可变引用隔离](2026-10-20-provider-projection-isolation.md)：模型声明与项目投影的深层数据归属。

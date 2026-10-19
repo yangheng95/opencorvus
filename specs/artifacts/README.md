@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Windows同步启动观测](2026-10-20-windows-spawn-observation/README.md)：排除FFI绑定、真实spawn主线程成本与完整性能失败事实。
+
 - [Windows直接父查询与owner结算](2026-10-20-native-parent-query/README.md)：真实系统诊断、失败→通过、35个合同和发布helper全量验收。
 
 - [Provider目录投影隔离](2026-10-20-provider-projection-isolation/README.md)：生产插件污染复现、跨项目明确值与真实保存恢复。

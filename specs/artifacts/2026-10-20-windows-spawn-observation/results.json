@@ -1,0 +1,278 @@
+{
+  "batch": 447,
+  "baselineCommit": "5ad0aed408bb90271751955bb740c4794373cbf2",
+  "scope": "Diagnosis only; production source unchanged. Same original full QA412 history. Actual gpt-6.1-sol streaming preflight and production Config service/HostTransport/two canonical HTTP writes. Passive spawn listeners add diagnostic overhead; not formal uninstrumented performance qualification.",
+  "preflight": {
+    "sessionID": "ses_hXOwPi7MmACjyk6fz4OX",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "canonical": {
+    "at": "2026-10-19T22:31:58.317Z",
+    "endedAt": "2026-10-19T22:32:24.834Z",
+    "phase": "after",
+    "port": 18687,
+    "occurrence": "windows-ffi-binding-447-observed-70a424e4-c7f6-43f5-b0e9-de112ce3300a",
+    "transport": "browser",
+    "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+    "accepted": true,
+    "restored": true,
+    "writeMs": 20807.880299999997,
+    "restoreMs": 5703.646500000003,
+    "failures": [],
+    "permissionMode": "ask",
+    "changedField": "username",
+    "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+  },
+  "data": {
+    "schema": {
+      "user_version": 2
+    },
+    "projects": {
+      "count": 80
+    },
+    "mode": "Direct SQLite read-only after original native launcher joined exit0; no production initializer"
+  },
+  "inventory": [
+    [
+      {
+        "projects": 80,
+        "loaded": 3
+      }
+    ],
+    [
+      {
+        "projects": 80,
+        "loaded": 80
+      }
+    ]
+  ],
+  "summary": {
+    "boundary": "Diagnostic pass-through of original child_process.spawn. Inputs, return child, output consumption, errors, ownership and settlement unchanged; listener overhead remains. Not formal uninstrumented qualification.",
+    "dropped": 0,
+    "requests": [
+      {
+        "requestID": "e8ef47e2-e22d-475c-8090-b1a881f91810",
+        "start": "2026-10-19T22:31:58.323Z",
+        "end": "2026-10-19T22:32:19.124Z",
+        "wallMs": 20801,
+        "spawnCount": 388,
+        "spawnSyncMs": 10051.103600000191,
+        "groups": [
+          {
+            "key": "opencorvus-process-supervisor.exe:95:3875",
+            "count": 388,
+            "totalSpawnMs": 10051.103600000191,
+            "maxSpawnMs": 216.09150000000227,
+            "totalCloseMs": 93926.20050000012
+          }
+        ]
+      },
+      {
+        "requestID": "abffb129-e2fe-46d0-9a24-177168ec4399",
+        "start": "2026-10-19T22:32:19.129Z",
+        "end": "2026-10-19T22:32:24.832Z",
+        "wallMs": 5703,
+        "spawnCount": 80,
+        "spawnSyncMs": 1719.5321999999724,
+        "groups": [
+          {
+            "key": "opencorvus-process-supervisor.exe:95:3875",
+            "count": 80,
+            "totalSpawnMs": 1719.5321999999724,
+            "maxSpawnMs": 193.08319999999367,
+            "totalCloseMs": 19931.599699999962
+          }
+        ]
+      }
+    ],
+    "longReads": [
+      {
+        "time": "2026-10-19T22:32:19.123Z",
+        "requestID": "c379480b-26bb-4992-8fd8-e870cb70962e",
+        "method": "GET",
+        "path": "/global/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 16667
+      },
+      {
+        "time": "2026-10-19T22:32:24.880Z",
+        "requestID": "62b4ad0f-e90c-418d-aad0-31b37c40b354",
+        "method": "GET",
+        "path": "/global/composer-references",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 22430
+      }
+    ],
+    "allSpawnCount": 682
+  },
+  "physical": {
+    "native": {
+      "occurrence": "windows-ffi-binding-447-observed-70a424e4-c7f6-43f5-b0e9-de112ce3300a",
+      "outcome": "settled",
+      "host": {
+        "pid": 69568,
+        "processInstanceID": "win32:639280458734547341",
+        "occurrenceID": "237d46a5-478f-40d5-b670-d60e154d5c71"
+      },
+      "target": {
+        "pid": 89216,
+        "processInstanceID": "win32:639280458740794350",
+        "occurrenceID": "5bb78ec2-1dbf-4917-9fd5-7ccc885857c9"
+      },
+      "observedAtUtc": "2026-10-19T22:32:36.533Z",
+      "deadlineAt": 1792450273410,
+      "terminal": {
+        "occurrenceID": "windows-ffi-binding-447-observed-70a424e4-c7f6-43f5-b0e9-de112ce3300a",
+        "pid": 89216,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "observedAtUtc": "2026-10-19T22:32:37.7832919Z",
+    "pairedCleanupComplete": true,
+    "occurrence": "windows-ffi-binding-447-observed-70a424e4-c7f6-43f5-b0e9-de112ce3300a",
+    "physicalCompletion": true,
+    "chain": [
+      {
+        "identity": {
+          "pid": 69568,
+          "processInstanceID": "win32:639280458734547341",
+          "occurrenceID": "237d46a5-478f-40d5-b670-d60e154d5c71"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "identity": {
+          "pid": 89216,
+          "processInstanceID": "win32:639280458740794350",
+          "occurrenceID": "5bb78ec2-1dbf-4917-9fd5-7ccc885857c9"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "copiedPair": [
+      {
+        "outcome": "retired",
+        "name": "auth.json"
+      },
+      {
+        "outcome": "retired",
+        "name": "models.json"
+      }
+    ]
+  },
+  "launcher": {
+    "childExitCode": 0,
+    "observedAtUtc": "2026-10-19T22:32:37.7953401Z"
+  },
+  "sourceAuthorityMetadataUnchanged": true,
+  "qualification": {
+    "canonicalRestoration": true,
+    "physicalSettlement": true,
+    "performance": "failed: original cold10s/restore5s; observed composer references22.43s also exceeds20s"
+  },
+  "failedDiagnostic": {
+    "cause": "Exit observer read CLI-mutated process.argv[5] (--port) instead of captured immutable evidence path; ENOENT, observations lost",
+    "target": {
+      "occurrenceID": "windows-ffi-binding-447-after-c5ddb88e-20a7-4f49-aed3-29712958afeb",
+      "pid": 88548,
+      "reason": "exited",
+      "exitCode": 7,
+      "signal": null
+    },
+    "launcher": {
+      "observedAtUtc": "2026-10-19T22:30:44.1116576Z",
+      "evidence": "Original exec session13835 joined1; Target exit listener used CLI-mutated argv instead of captured evidence path",
+      "childExitCode": 1
+    },
+    "physical": {
+      "chain": [
+        {
+          "identity": {
+            "pid": 66564,
+            "processInstanceID": "win32:639280457269728151",
+            "occurrenceID": "fc0d6018-1dc3-4efb-a784-73d1e8efce67"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "identity": {
+            "pid": 88548,
+            "processInstanceID": "win32:639280457276657792",
+            "occurrenceID": "8158d706-f935-49b2-b2ca-683cd2a7520c"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "physicalCompletion": true,
+      "observedAtUtc": "2026-10-19T22:30:44.1029964Z",
+      "occurrence": "windows-ffi-binding-447-after-c5ddb88e-20a7-4f49-aed3-29712958afeb",
+      "copiedPair": [
+        {
+          "name": "auth.json",
+          "outcome": "retired"
+        },
+        {
+          "name": "models.json",
+          "outcome": "retired"
+        }
+      ],
+      "native": {
+        "occurrence": "windows-ffi-binding-447-after-c5ddb88e-20a7-4f49-aed3-29712958afeb",
+        "outcome": "settled",
+        "host": {
+          "pid": 66564,
+          "processInstanceID": "win32:639280457269728151",
+          "occurrenceID": "fc0d6018-1dc3-4efb-a784-73d1e8efce67"
+        },
+        "target": {
+          "pid": 88548,
+          "processInstanceID": "win32:639280457276657792",
+          "occurrenceID": "8158d706-f935-49b2-b2ca-683cd2a7520c"
+        },
+        "observedAtUtc": "2026-10-19T22:30:19.872Z",
+        "deadlineAt": 1792450126409,
+        "terminal": {
+          "occurrenceID": "windows-ffi-binding-447-after-c5ddb88e-20a7-4f49-aed3-29712958afeb",
+          "pid": 88548,
+          "reason": "exited",
+          "exitCode": 7,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "pairedCleanupComplete": true
+    },
+    "canonical": {
+      "at": "2026-10-19T22:29:30.380Z",
+      "endedAt": "2026-10-19T22:30:09.460Z",
+      "phase": "after",
+      "port": 18687,
+      "occurrence": "windows-ffi-binding-447-after-c5ddb88e-20a7-4f49-aed3-29712958afeb",
+      "transport": "browser",
+      "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+      "accepted": true,
+      "restored": true,
+      "writeMs": 19271.7055,
+      "restoreMs": 19800.0118,
+      "failures": [],
+      "permissionMode": "ask",
+      "changedField": "username",
+      "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+    }
+  },
+  "uiObservation": "Manual CUA42: Goal home entry and compact layout visible. Model configuration unavailable transiently while opening a conversation during cold save, then real model+Ask me recovered. Screenshot preserves error; no successful-fix claim."
+}
