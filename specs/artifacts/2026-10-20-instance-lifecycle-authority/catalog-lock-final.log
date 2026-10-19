@@ -1,0 +1,15 @@
+$ bun script/run-tests.ts test/config-catalog-lock-order.test.ts
+[1/1] START test/config-catalog-lock-order.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) project Config mutation settles after a catalog reader observes Config [6689.30ms]
+(pass) project Config mutation settles after a reference reader observes Config [2143.14ms]
+(pass) global Config mutation settles after a catalog reader observes Config [1970.44ms]
+(pass) global Config mutation settles after a reference reader observes Config [1889.88ms]
+
+ 4 pass
+ 0 fail
+ 8 expect() calls
+Ran 4 tests across 1 file. [16.11s]
+[1/1] DONE test/config-catalog-lock-order.test.ts exit=0 duration=16.93s

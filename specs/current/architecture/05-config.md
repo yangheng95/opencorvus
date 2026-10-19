@@ -207,6 +207,10 @@ canonical-file owner 与 reader 的 source-cache owner 也不是同一把锁。
 Conversation capability 和 Skill catalog 的 reference mutation/read owner 覆盖 callback Promise 的成功或失败结算，
 之后才释放当前 lease；继承同一 owner 与 read-to-write 拒绝规则保持原合同。Skill 外层 durable catalog current
 owner 仍负责实际跨进程 publication/recovery，不能用内层 reference lease 替代该事实层。
+原 DurablePublicationStore subject lease 的 callback scope 覆盖已接受的嵌套 callback，父 callback 释放前
+排空它们；子 callback 保留自己的返回值和错误。只读 isCurrent 引用即时读取原 heldSubjects 与
+activeSubjectLeases，已退出子 scope 可继承仍活跃的同 lease 祖先，全部退休后的晚到调用重新排队。
+SkillManager 直接使用该引用，不维护另一份 owner 寿命、锁或状态表。
 进程内 generation read/write fence 排除对应 Config 读写并发，state-lifecycle owner 又不跨进程，
 因此不存在一条伪造的统一读写锁序契约。
 
@@ -248,6 +252,19 @@ keeps the current Project identity available to that writer. The same preflight
 body, exact-entry checks, lease cleanup and successful initialization fact remain
 authoritative. This boundary does not extend reference reads into the initializer
 body or change refresh/teardown serving-drain semantics.
+
+Config-consuming Instance preparation and refresh bodies acquire the same durable
+catalog owner before their entry turn. Their original tracked lease covers admission,
+execution and accepted child callbacks; lifecycle execution context opens only when
+the body actually enters, so catalog recovery is not a recursive initializer.
+Metadata-only first activation with no initializer retains its original independent
+path. If a queued activation now needs a Git-shape refresh, it enters the same teardown.
+Teardown drains old serving work before retaining new catalog authority, then rechecks
+serving under its entry turn. An already-current catalog owner may finish the original
+identity/active serving read while all teardown parks are still draining and no turn
+is entered. Once cleanup starts, the park seals those reads. All Project deletion,
+exact-entry, health, process and global shutdown admission checks remain authoritative;
+ordinary provide keeps its teardown barrier.
 
 The canonical global commit retains the enumerated Project identities through
 candidate validation, persistence, cache resets and runtime reconciliation.

@@ -1,0 +1,103 @@
+$ bun script/run-tests.ts test/durable-publication-store.test.ts test/project-instance-lock-liveness.test.ts test/project-instance-capability-refresh.test.ts test/instance-preflight-catalog-order.test.ts test/config-peer-convergence.test.ts test/config-skill-recovery-lock-order.test.ts test/skill-read-diagnostics.test.ts
+[1/7] START test/durable-publication-store.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) durable publication fact store > subject owner observations follow the original active lease through nested callbacks and retirement [10.24ms]
+(pass) durable publication fact store > an accepted nested subject callback settles its value before the next owner enters [98.72ms]
+(pass) durable publication fact store > an inherited subject lease queues again after its outer owner releases [9.52ms]
+(pass) durable publication fact store > subject leases remain isolated across durable publication roots [13.18ms]
+(pass) durable publication fact store > alternate spellings of one root compete on the same subject lock [7.12ms]
+(pass) durable publication fact store > reloads one immutable intent, ordered phases and terminal receipt [97.05ms]
+(pass) durable publication fact store > a killed writer leaves only a complete old or new intent, phase and terminal fact [1079.97ms]
+
+ 7 pass
+ 0 fail
+ 21 expect() calls
+Ran 7 tests across 1 file. [3.57s]
+[1/7] DONE test/durable-publication-store.test.ts exit=0 duration=4.23s
+[2/7] START test/project-instance-lock-liveness.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) admits every concurrent first admission while one of them holds a long caller function [513.45ms]
+(pass) runs a new initializer to completion while another serving lease stays busy [327.35ms]
+(pass) performs newly-required exclusive preparation from the queue without head-jumping [826.55ms]
+(pass) runs one shared initializer exactly once across concurrent first admissions [335.90ms]
+(pass) commits two disjoint Project registrations captured before either enters the shared queue [388.63ms]
+(pass) admits one physical Project owner when two aliases capture before the shared queue [291.46ms]
+(pass) prepares a nested same-key provide with a new initializer while another lease serves [259.06ms]
+(pass) settles concurrent open, dispose, and serve on one Project without deadlock [379.50ms]
+(pass) completes a pending disposal under a continuous admission stream [369.61ms]
+
+ 9 pass
+ 0 fail
+ 22 expect() calls
+Ran 9 tests across 1 file. [4.70s]
+[2/7] DONE test/project-instance-lock-liveness.test.ts exit=0 duration=4.85s
+[3/7] START test/project-instance-capability-refresh.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a non-Git to Git refresh revalidates capability authority before admitting a peer lease [1152.98ms]
+
+ 1 pass
+ 0 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [1.94s]
+[3/7] DONE test/project-instance-capability-refresh.test.ts exit=0 duration=2.09s
+[4/7] START test/instance-preflight-catalog-order.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a catalog owner reads the current project while a new capability preflight awaits that owner [2009.60ms]
+
+ 1 pass
+ 0 fail
+ 2 expect() calls
+Ran 1 test across 1 file. [2.81s]
+[4/7] DONE test/instance-preflight-catalog-order.test.ts exit=0 duration=2.96s
+[5/7] START test/config-peer-convergence.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) cross-process Config convergence > a stable generation parses the exact source snapshot that owns its revision [2004.50ms]
+(pass) cross-process Config convergence > a committed writer transition retains its exact generation until event settlement succeeds [1421.01ms]
+(pass) cross-process Config convergence > a detached reader admitted by a writer settles before the next generation owner [1400.89ms]
+(pass) cross-process Config convergence > a loaded backend settles a peer Project write and publishes its current projection [9789.38ms]
+(pass) cross-process Config convergence > a peer global write refreshes every loaded Project from the same canonical generation [11073.76ms]
+(pass) cross-process Config convergence > a global-only backend publishes the canonical settlement event after a peer write [4219.02ms]
+(pass) cross-process Config convergence > a Project activated inside a global commit reads the committed generation [1820.73ms]
+
+ 7 pass
+ 0 fail
+ 8 expect() calls
+Ran 7 tests across 1 file. [33.82s]
+[5/7] DONE test/config-peer-convergence.test.ts exit=0 duration=33.99s
+[6/7] START test/config-skill-recovery-lock-order.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) published Skill recovery and a concurrent Config writer settle one catalog revision [18222.14ms]
+
+ 1 pass
+ 0 fail
+ 3 expect() calls
+Ran 1 test across 1 file. [18.98s]
+[6/7] DONE test/config-skill-recovery-lock-order.test.ts exit=0 duration=19.14s
+[7/7] START test/skill-read-diagnostics.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) config phases retain exact operation settlement and request ownership [25.73ms]
+(pass) directory queue diagnostics preserve real callback results, errors and balanced owners [36.40ms]
+(pass) startup initialization and late causal work have their actual request lifetime [43.27ms]
+(pass) diagnostics retain actual State promise identity and one creator with distinct join and cache reads [32.83ms]
+(pass) diagnostics preserve the original State rejection and observe its successful new initializer on retry [18.31ms]
+(pass) catalog diagnostics preserve real durable owner results and balanced failure phases [52.90ms]
+
+ 6 pass
+ 0 fail
+ 43 expect() calls
+Ran 6 tests across 1 file. [967.00ms]
+[7/7] DONE test/skill-read-diagnostics.test.ts exit=0 duration=1.13s

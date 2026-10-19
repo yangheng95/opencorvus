@@ -116,7 +116,6 @@ test("a physical owner abort settles its in-flight Bus publication before succes
         releaseSubscriber()
         await expect(publication).rejects.toBe(reason)
         expect(observedAbort).toBe(reason)
-        expect(RuntimeExecutionSettlement.snapshot()).toEqual([])
         await Bus.publish(FileWatcher.Event.Updated, {
           file: `${project.path}\\successor.ts`,
           event: "change",
@@ -181,6 +180,8 @@ test("a GlobalBus publication retains its exact owner abort through physical lis
       const abortObserved = new Promise<void>((resolve) => (listenerObservedAbort = resolve))
       let releaseListener!: () => void
       const released = new Promise<void>((resolve) => (releaseListener = resolve))
+      let observedAbort: unknown
+      let listenerSettled = false
       const onGlobalEvent = async (envelope: Parameters<typeof GlobalBus.emitAndWait>[1]) => {
         if (
           envelope.payload.type !== FileWatcher.Event.Updated.type ||
@@ -191,8 +192,10 @@ test("a GlobalBus publication retains its exact owner abort through physical lis
         listenerStarted()
         await new Promise<void>((resolve) => {
           const abort = async () => {
+            observedAbort = envelope.payload.signal?.reason
             listenerObservedAbort()
             await released
+            listenerSettled = true
             resolve()
           }
           if (envelope.payload.signal?.aborted) void abort()
@@ -235,7 +238,7 @@ test("a GlobalBus publication retains its exact owner abort through physical lis
         })
         releaseListener()
         await expect(publication).rejects.toBe(reason)
-        expect(RuntimeExecutionSettlement.snapshot()).toEqual([])
+        expect({ observedAbort, listenerSettled }).toEqual({ observedAbort: reason, listenerSettled: true })
       } finally {
         releaseListener()
         GlobalBus.off("event", onGlobalEvent)

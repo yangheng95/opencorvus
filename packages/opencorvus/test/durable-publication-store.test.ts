@@ -2,7 +2,7 @@ import { afterEach, describe, expect, test } from "bun:test"
 import { mkdtemp, rm } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
-import { DurablePublicationStore } from "@opencorvus-ai/util/durable-publication"
+import { DurablePublicationStore, type DurablePublicationSubjectOwner } from "@opencorvus-ai/util/durable-publication"
 
 const roots: string[] = []
 
@@ -11,6 +11,64 @@ afterEach(async () => {
 })
 
 describe("durable publication fact store", () => {
+  test("subject owner observations follow the original active lease through nested callbacks and retirement", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-publication-owner-"))
+    roots.push(root)
+    const store = new DurablePublicationStore(root)
+    const states: string[] = []
+    let original!: DurablePublicationSubjectOwner
+    await store.withSubjectLock("test-publication", "owner:current", async (owner) => {
+      original = owner
+      states.push(owner.isCurrent() ? "outer-owned" : "outer-retired")
+      await store.withSubjectLock("test-publication", "owner:current", async (nested) => {
+        states.push(nested.isCurrent() && owner.isCurrent() ? "nested-owned" : "nested-retired")
+      })
+      states.push(owner.isCurrent() ? "ancestor-owned" : "ancestor-retired")
+    })
+    states.push(original.isCurrent() ? "outside-owned" : "outside-retired")
+    await store.withSubjectLock("test-publication", "owner:current", async (next) => {
+      states.push(original.isCurrent() ? "previous-owned" : "previous-retired")
+      states.push(next.isCurrent() ? "next-owned" : "next-retired")
+    })
+    expect(states).toEqual([
+      "outer-owned",
+      "nested-owned",
+      "ancestor-owned",
+      "outside-retired",
+      "previous-retired",
+      "next-owned",
+    ])
+  })
+
+  test("an accepted nested subject callback settles its value before the next owner enters", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-publication-child-"))
+    roots.push(root)
+    const store = new DurablePublicationStore(root)
+    const entered = Promise.withResolvers<void>()
+    const release = Promise.withResolvers<void>()
+    let generation = 1
+    let child!: Promise<{ generation: number; owner: string }>
+    const parent = store.withSubjectLock("test-publication", "child:current", async () => {
+      child = store.withSubjectLock("test-publication", "child:current", async (owner) => {
+        entered.resolve()
+        await release.promise
+        return { generation, owner: owner.isCurrent() ? "current" : "retired" }
+      })
+      await entered.promise
+      return "parent-current"
+    })
+    await entered.promise
+    const next = store.withSubjectLock("test-publication", "child:current", async () => ++generation)
+    await Bun.sleep(50)
+    release.resolve()
+    const [parentValue, childValue, nextValue] = await Promise.all([parent, child, next])
+    expect({ parent: parentValue, child: childValue, next: nextValue }).toEqual({
+      parent: "parent-current",
+      child: { generation: 1, owner: "current" },
+      next: 2,
+    })
+  })
+
   test("an inherited subject lease queues again after its outer owner releases", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-publication-lease-"))
     roots.push(root)

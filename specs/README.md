@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [生命周期与目录租约](records/2026-10/2026-10-20-instance-lifecycle-authority.md)：初始化、refresh/dispose排空与真实subject lease的统一锁序。
+
 - [原始文件目标传递](records/2026-10/2026-10-14-literal-file-targets.md)：主机路径保真、原生编辑器参数与真实进程/界面验收。
 
 - [Sources阅读迭代](records/2026-10/2026-10-14-sources-reading-iteration.md)：多来源展开、长文件身份与准确跳转的单agent真实体验。

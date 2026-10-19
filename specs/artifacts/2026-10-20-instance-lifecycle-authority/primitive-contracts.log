@@ -1,0 +1,43 @@
+$ bun script/run-tests.ts test/instance-config-lifecycle-order.test.ts test/durable-publication-store.test.ts
+[1/2] START test/instance-config-lifecycle-order.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a global writer and a Config-reading initializer return the committed generation [3498.67ms]
+(pass) a Git-shape refresh and its catalog owner both serve the current Project [1297.89ms]
+(pass) a refresh drain settles serving work and the catalog owner's identity read [2024.39ms]
+(pass) a refresh drain settles serving work and the catalog owner's active read [2142.91ms]
+(pass) a refresh drain settles serving work and the catalog owner's iteration read [1930.20ms]
+(pass) a refresh drain settles serving work and the catalog owner's descendant read [1985.36ms]
+(pass) a dispose drain settles serving work and the catalog owner's identity read [1532.85ms]
+(pass) a dispose drain settles serving work and the catalog owner's active read [1512.57ms]
+(pass) a dispose drain settles serving work and the catalog owner's iteration read [1569.83ms]
+(pass) a dispose drain settles serving work and the catalog owner's descendant read [1679.73ms]
+(pass) a catalog owner's identity read observes the state created after an entered teardown settles [1946.29ms]
+(pass) late catalog work reads the value committed by the next actual owner [332.84ms]
+(pass) an accepted child projection reads its owner's generation before the next catalog writer [351.67ms]
+(pass) a descendant callback reuses the catalog lease while its ancestor still owns it [241.99ms]
+(pass) preparation retains its lifecycle turn until an accepted child reads the prepared context [1418.45ms]
+(pass) a catalog owner receives the current project admission error from every identity reader [1472.04ms]
+(pass) a catalog owner receives the current process admission error from every identity reader [1449.94ms]
+
+ 17 pass
+ 0 fail
+ 22 expect() calls
+Ran 17 tests across 1 file. [29.34s]
+[1/2] DONE test/instance-config-lifecycle-order.test.ts exit=0 duration=30.07s
+[2/2] START test/durable-publication-store.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) durable publication fact store > an inherited subject lease queues again after its outer owner releases [8.52ms]
+(pass) durable publication fact store > subject leases remain isolated across durable publication roots [6.43ms]
+(pass) durable publication fact store > alternate spellings of one root compete on the same subject lock [4.35ms]
+(pass) durable publication fact store > reloads one immutable intent, ordered phases and terminal receipt [83.09ms]
+(pass) durable publication fact store > a killed writer leaves only a complete old or new intent, phase and terminal fact [900.32ms]
+
+ 5 pass
+ 0 fail
+ 19 expect() calls
+Ran 5 tests across 1 file. [1.79s]
+[2/2] DONE test/durable-publication-store.test.ts exit=0 duration=1.93s

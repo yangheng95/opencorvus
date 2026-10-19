@@ -72,6 +72,18 @@ Project are preservation conflicts, never rewritten in place.
 
 ## Lifecycle consequences
 
+Instance preparation and refresh retain their existing tracked lease throughout
+catalog admission and accepted child work. Their executing lifecycle context opens
+inside the actual entry turn, after catalog recovery. Teardown parks distinguish
+draining from entered cleanup. The original identity/active readers can finish a
+current catalog owner's dependency during drain with no exclusive turn; they still
+recheck exact entry, Project/process/global admission and health. Ordinary provide
+remains behind teardown. Cleanup begins only after serving drains and its entry-turn
+recheck succeeds. The catalog owner is observed from the original durable subject
+lease; nested accepted callbacks settle before release, and retired descendants do
+not introduce a second owner or resource authority. Task/Mission/Session initialization
+and restart share this same Instance mechanism.
+
 Engine Git checkpoint commands retain one frozen repository authority. Their
 single explicit argument encoding uses `-C <dirname(git_dir)>`,
 `--git-dir=<basename(git_dir)>` and `--work-tree=<workspace>`. The host process

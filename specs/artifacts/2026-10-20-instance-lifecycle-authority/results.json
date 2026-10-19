@@ -1,0 +1,112 @@
+{
+  "batch": 440,
+  "preflight": {
+    "sessionID": "ses_hroT9tzxRBA3qKzs8ga7",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "projects": 65,
+  "loadedBeforeFirstWrite": 2,
+  "canonical": {
+    "at": "2026-10-19T19:29:03.008Z",
+    "endedAt": "2026-10-19T19:29:31.641Z",
+    "phase": "final",
+    "port": 18665,
+    "occurrence": "instance-lifecycle-authority-440-final-3172307a-45b4-4a74-8d4d-6a7865240d54",
+    "transport": "browser",
+    "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+    "accepted": true,
+    "restored": true,
+    "writeMs": 22930.3669,
+    "restoreMs": 5698.4876,
+    "failures": [],
+    "permissionMode": "ask",
+    "changedField": "username",
+    "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+  },
+  "concurrentReads": [
+    {
+      "start": "2026-10-19T19:29:15.983Z",
+      "end": "2026-10-19T19:29:25.936Z",
+      "path": "/global/config",
+      "duration": 9953,
+      "statusCode": 200,
+      "requestID": "8b551771-8feb-438a-a18c-9ce772631a2b",
+      "writeRequestID": "4e4fe986-d973-4683-b546-e788b93b933e"
+    }
+  ],
+  "criteria": {
+    "coldMs": 10000,
+    "restoreMs": 5000,
+    "pageReadMs": 20000
+  },
+  "qualification": {
+    "cold": false,
+    "restore": false,
+    "pageRead": true
+  },
+  "physical": {
+    "pairedCleanupComplete": true,
+    "physicalCompletion": true,
+    "native": {
+      "occurrence": "instance-lifecycle-authority-440-final-3172307a-45b4-4a74-8d4d-6a7865240d54",
+      "outcome": "settled",
+      "host": {
+        "pid": 69804,
+        "processInstanceID": "win32:639280348612179979",
+        "occurrenceID": "8815e6f8-4b94-45ac-8990-ce1cf319efbe"
+      },
+      "target": {
+        "pid": 8972,
+        "processInstanceID": "win32:639280348619626420",
+        "occurrenceID": "4520b32d-2364-40a7-8370-16e76cf6baf1"
+      },
+      "observedAtUtc": "2026-10-19T19:34:22.512Z",
+      "deadlineAt": 1792439261149,
+      "terminal": {
+        "occurrenceID": "instance-lifecycle-authority-440-final-3172307a-45b4-4a74-8d4d-6a7865240d54",
+        "pid": 8972,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "observedAtUtc": "2026-10-19T19:34:23.8417098Z",
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 69804,
+          "processInstanceID": "win32:639280348612179979",
+          "occurrenceID": "8815e6f8-4b94-45ac-8990-ce1cf319efbe"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 8972,
+          "processInstanceID": "win32:639280348619626420",
+          "occurrenceID": "4520b32d-2364-40a7-8370-16e76cf6baf1"
+        }
+      }
+    ],
+    "copiedPair": [
+      {
+        "outcome": "retired",
+        "name": "auth.json"
+      },
+      {
+        "outcome": "retired",
+        "name": "models.json"
+      }
+    ],
+    "occurrence": "instance-lifecycle-authority-440-final-3172307a-45b4-4a74-8d4d-6a7865240d54"
+  },
+  "limitation": "Performance remains failed: cold save and restore exceed the unchanged thresholds. No user database or schema change."
+}

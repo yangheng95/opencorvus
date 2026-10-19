@@ -1,0 +1,14 @@
+$ bun script/run-tests.ts test/project-directory-and-worktree-gc.test.ts "--test-name-pattern=commits Project deletion while retaining immutable permission evidence|closes Project admission and evicts initialized"
+[1/1] START test/project-directory-and-worktree-gc.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Project directory integrity > commits Project deletion while retaining immutable permission evidence and removing its Task Session tree [3046.58ms]
+(pass) Project directory integrity > closes Project admission and evicts initialized and identity-only Instance entries [3003.60ms]
+
+ 2 pass
+ 58 filtered out
+ 0 fail
+ 3 expect() calls
+Ran 2 tests across 1 file. [11.32s]
+[1/1] DONE test/project-directory-and-worktree-gc.test.ts exit=0 duration=12.00s

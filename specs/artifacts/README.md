@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [生命周期与目录租约](2026-10-20-instance-lifecycle-authority/README.md)：聚焦合同、真实配置保存与恢复、原生物理结算。
+
 - [原始文件目标传递](2026-10-14-literal-file-targets/README.md)：主机路径保真、原生编辑器参数与真实进程/界面验收。
 
 - [Sources阅读迭代](2026-10-14-sources-reading-iteration/README.md)：多来源展开、长文件身份与准确跳转的单agent真实体验。

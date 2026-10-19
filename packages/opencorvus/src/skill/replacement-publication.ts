@@ -5,6 +5,7 @@ import {
   digestFilesystemTree,
   DurablePublicationStore,
   type DurablePublicationOccurrence,
+  type DurablePublicationSubjectOwner,
 } from "@opencorvus-ai/util/durable-publication"
 import { Global } from "@/global"
 import { SkillReadDiagnostics } from "./read-diagnostics"
@@ -96,8 +97,16 @@ export namespace SkillReplacementPublication {
     })
   }
 
-  export function withCatalogOwner<T>(run: () => Promise<T>): Promise<T> {
-    return SkillReadDiagnostics.catalogOwner((owned) => store().withSubjectLock(KIND, SUBJECT, owned), run)
+  export function withCatalogOwner<T>(run: (owner: DurablePublicationSubjectOwner) => Promise<T>): Promise<T> {
+    let owner!: DurablePublicationSubjectOwner
+    return SkillReadDiagnostics.catalogOwner(
+      (owned) =>
+        store().withSubjectLock(KIND, SUBJECT, (current) => {
+          owner = current
+          return owned()
+        }),
+      () => run(owner),
+    )
   }
 
   export async function open(): Promise<Entry | undefined> {

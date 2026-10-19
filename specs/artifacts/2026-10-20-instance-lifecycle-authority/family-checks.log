@@ -1,0 +1,91 @@
+workspace exit=0
+(pass) Workspace durable lifecycle > publishes one deterministic ready Workspace and retires its exact Git child [6078.72ms]
+
+ 2 pass
+ 16 filtered out
+ 0 fail
+ 7 expect() calls
+Ran 2 tests across 1 file. [24.80s]
+[1/1] DONE test/workspace-lifecycle.test.ts exit=0 duration=28.73s
+promotion exit=0
+(pass) anonymous Project promotion journal > startup releases the exact terminal-to-publication fence after a process death [15221.89ms]
+
+ 2 pass
+ 15 filtered out
+ 0 fail
+ 9 expect() calls
+Ran 2 tests across 1 file. [23.13s]
+[1/1] DONE test/project-promotion-journal.test.ts exit=0 duration=23.69s
+implicit-creation exit=0
+(pass) anonymous Project creation journal > a dead owner whose Project row did commit keeps its directory and settles the receipt [335.04ms]
+
+ 2 pass
+ 27 filtered out
+ 0 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [5.52s]
+[1/1] DONE test/project-implicit-creation-journal.test.ts exit=0 duration=6.15s
+install-receipt exit=0
+(pass) package installation readiness is a receipt, not a directory > the verified closure follows dependency identities recursively [1752.62ms]
+
+ 3 pass
+ 6 filtered out
+ 0 fail
+ 3 expect() calls
+Ran 3 tests across 1 file. [7.74s]
+[1/1] DONE test/package-install-receipt.test.ts exit=0 duration=8.39s
+sdk-generation exit=0
+(pass) a generation publishes all of its outputs or none > the next build converges an abandoned generation before it stages anything [34.77ms]
+
+ 4 pass
+ 2 filtered out
+ 0 fail
+ 8 expect() calls
+Ran 4 tests across 1 file. [3.71s]
+[1/1] DONE ../sdk/js/test/generation-transaction.test.ts exit=0 duration=4.33s
+project-deletion exit=1
+ 1 fail
+ 2 expect() calls
+Ran 2 tests across 1 file. [17.52s]
+[1/1] DONE test/project-directory-and-worktree-gc.test.ts exit=1 duration=18.14s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\project-directory-and-worktree-gc.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\project-directory-and-worktree-gc.test.ts
+error: script "test" exited with code 1
+background-work exit=0
+(pass) instance background work > instance disposal cancels in-flight background work instead of waiting for it [1286.70ms]
+
+ 5 pass
+ 12 filtered out
+ 0 fail
+ 8 expect() calls
+Ran 5 tests across 1 file. [11.75s]
+[1/1] DONE test/instance-background-work.test.ts exit=0 duration=12.34s
+shutdown exit=0
+(pass) listener shutdown cancels 2 serial Project owners and joins physical cleanup [3033.33ms]
+(pass) listener shutdown cancels 2 parallel Project owners and joins physical cleanup [2546.66ms]
+
+ 4 pass
+ 0 fail
+ 23 expect() calls
+Ran 4 tests across 1 file. [14.55s]
+[1/1] DONE test/instance-background-shutdown.test.ts exit=0 duration=15.16s
+global-candidate exit=0
+(pass) one global mutation retains its exact candidate identities through persistence and runtime convergence [3191.54ms]
+(pass) an invalid Project returns the candidate error and a corrected source accepts a full retry [3328.23ms]
+
+ 4 pass
+ 0 fail
+ 28 expect() calls
+Ran 4 tests across 1 file. [16.35s]
+[1/1] DONE test/config-global-project-validation.test.ts exit=0 duration=16.96s
+mcp-generation exit=0
+(pass) project writer and a first concurrent MCP status read settle with the committed generation [4519.46ms]
+(pass) global writer and a first concurrent MCP status read settle with the committed generation [3058.50ms]
+
+ 2 pass
+ 0 fail
+ 6 expect() calls
+Ran 2 tests across 1 file. [9.67s]
+[1/1] DONE test/mcp-config-generation.test.ts exit=0 duration=10.28s
+Failed families: project-deletion

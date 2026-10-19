@@ -1,0 +1,77 @@
+$ bun script/run-tests.ts test/instance-nested-provide-during-preparation.test.ts test/persistent-instance-publication.test.ts
+[1/2] START test/instance-nested-provide-during-preparation.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) instance re-entry during its own context preparation > a project-scoped read inside the initializer runs in the project's own context [1797.60ms]
+(pass) instance re-entry during its own context preparation > nested reads see the same project identity the initializer is preparing [1711.78ms]
+(pass) instance re-entry during its own context preparation > project-open terminal profile settlement returns one durable resolved default profile [1935.22ms]
+(pass) instance re-entry during its own context preparation > production bootstrap completes a typed terminal-profile degradation and serves the Project [2358.77ms]
+(pass) instance re-entry during its own context preparation > production bootstrap fails an unexpected terminal settlement and rolls its Instance back [3590.29ms]
+
+ 5 pass
+ 0 fail
+ 16 expect() calls
+Ran 5 tests across 1 file. [16.42s]
+[1/2] DONE test/instance-nested-provide-during-preparation.test.ts exit=0 duration=17.15s
+[2/2] START test/persistent-instance-publication.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a persistent watcher callback owns its complete database subscriber and GlobalBus publication [1695.44ms]
+114 |           label: `${FileWatcher.Event.Updated.type}:${publication.occurrenceID}`,
+115 |         })
+116 |         releaseSubscriber()
+117 |         await expect(publication).rejects.toBe(reason)
+118 |         expect(observedAbort).toBe(reason)
+119 |         expect(RuntimeExecutionSettlement.snapshot()).toEqual([])
+                                                            ^
+error: expect(received).toEqual(expected)
+
+- []
++ [
++   {
++     "kind": "database_checkpoint",
++     "label": "database-checkpoint:2",
++   },
++ ]
+
+- Expected  - 1
++ Received  + 6
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\persistent-instance-publication.test.ts:119:55)
+(fail) a physical owner abort settles its in-flight Bus publication before successor work [1638.37ms]
+(pass) concurrent physical retries retain distinct diagnostics for one occurrence [2633.40ms]
+233 |           kind: "protocol_publication",
+234 |           label: `${FileWatcher.Event.Updated.type}:${publication.occurrenceID}`,
+235 |         })
+236 |         releaseListener()
+237 |         await expect(publication).rejects.toBe(reason)
+238 |         expect(RuntimeExecutionSettlement.snapshot()).toEqual([])
+                                                            ^
+error: expect(received).toEqual(expected)
+
+- []
++ [
++   {
++     "kind": "database_checkpoint",
++     "label": "database-checkpoint:4",
++   },
++ ]
+
+- Expected  - 1
++ Received  + 6
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\persistent-instance-publication.test.ts:238:55)
+(fail) a GlobalBus publication retains its exact owner abort through physical listener settlement [1562.28ms]
+(pass) a cancelled queued relay preserves its physical predecessor before successor delivery [1699.61ms]
+
+ 3 pass
+ 2 fail
+ 16 expect() calls
+Ran 5 tests across 1 file. [10.49s]
+[2/2] DONE test/persistent-instance-publication.test.ts exit=1 duration=10.67s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\persistent-instance-publication.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\persistent-instance-publication.test.ts
+error: script "test" exited with code 1

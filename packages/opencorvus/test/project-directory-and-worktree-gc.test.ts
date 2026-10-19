@@ -22,6 +22,8 @@ import {
   EngineTaskTable,
 } from "@/engine/engine.sql"
 import { PermissionLedgerTable, PermissionPolicyTable } from "@/permission/permission.sql"
+import { permissionDescriptor } from "@/permission/invocation"
+import { permissionRequestIdentity } from "@/permission/ledger-facts"
 import { DecisionLogTable } from "@/decision-log/schema"
 import { BusPublicationOutboxTable } from "@/bus/bus.sql"
 import { EngineService } from "@/task-api"
@@ -983,7 +985,7 @@ describe("Project directory integrity", () => {
     const registered = await Project.fromDirectory(project.path)
     const projectID = registered.project.id
     const taskID = Identifier.ascending("task")
-    const permissionRequestID = Identifier.ascending("permission")
+    let permissionRequestID!: string
     const dispatchID = Identifier.ascending("artifact")
     let lineageArtifactID!: string
     let policySessionID!: string
@@ -1034,6 +1036,15 @@ describe("Project directory integrity", () => {
         const creatorSession = await Session.create({ kind: "assistant", title: "Task creator" })
         policySessionID = root.id
         const now = Date.now()
+        const permission = (await permissionDescriptor({
+          providerKind: "builtin", providerID: "builtin", toolName: "bash",
+          args: { command: "echo permission-evidence" },
+        }))!
+        const permissionMessageID = Identifier.ascending("message")
+        permissionRequestID = permissionRequestIdentity({
+          projectID, sessionID: root.id, messageID: permissionMessageID,
+          toolCallID: "tool-call-1", fingerprint: permission.fingerprint,
+        })
         const taskRequest = "Retain immutable permission evidence after deleting its Project."
         const userMessageID = Identifier.ascending("message")
         const assistantMessageID = Identifier.ascending("message")
@@ -1196,19 +1207,19 @@ describe("Project directory integrity", () => {
               request_id: permissionRequestID,
               project_id: projectID,
               session_id: root.id,
-              message_id: Identifier.ascending("message"),
+              message_id: permissionMessageID,
               tool_call_id: "tool-call-1",
               event_type: "requested",
               mode: "ask",
               policy_revision: "revision-1",
-              provider_kind: "builtin",
-              provider_id: "test",
-              provider_digest: "digest",
-              tool_name: "bash",
-              effect_class: "write",
-              scope_version: "1",
-              scope: {},
-              fingerprint: "fingerprint-1",
+              provider_kind: permission.providerKind,
+              provider_id: permission.providerID,
+              provider_digest: permission.providerDigest,
+              tool_name: permission.toolName,
+              effect_class: permission.effectClass,
+              scope_version: permission.scopeVersion,
+              scope: permission.scope,
+              fingerprint: permission.fingerprint,
               summary: "Permission evidence that outlives its Session",
               time_created: now,
             })

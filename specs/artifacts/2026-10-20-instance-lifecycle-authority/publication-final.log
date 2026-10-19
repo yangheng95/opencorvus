@@ -1,0 +1,16 @@
+$ bun script/run-tests.ts test/persistent-instance-publication.test.ts
+[1/1] START test/persistent-instance-publication.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a persistent watcher callback owns its complete database subscriber and GlobalBus publication [2329.61ms]
+(pass) a physical owner abort settles its in-flight Bus publication before successor work [3505.03ms]
+(pass) concurrent physical retries retain distinct diagnostics for one occurrence [5276.85ms]
+(pass) a GlobalBus publication retains its exact owner abort through physical listener settlement [2053.61ms]
+(pass) a cancelled queued relay preserves its physical predecessor before successor delivery [2206.04ms]
+
+ 5 pass
+ 0 fail
+ 16 expect() calls
+Ran 5 tests across 1 file. [20.73s]
+[1/1] DONE test/persistent-instance-publication.test.ts exit=0 duration=21.80s

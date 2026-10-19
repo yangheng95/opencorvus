@@ -51,6 +51,15 @@ export type DurablePublicationOccurrence = {
   terminal?: DurablePublicationTerminal
 }
 
+export type DurablePublicationSubjectOwner = Readonly<{ isCurrent(): boolean }>
+
+type SubjectCallbackScope = {
+  lease: string
+  parent?: SubjectCallbackScope
+  active: boolean
+  pending: Set<Promise<unknown>>
+}
+
 /** Exact deterministic digest for a file, directory or symbolic-link tree. */
 export async function digestFilesystemTree(root: string): Promise<string> {
   const hash = createHash("sha256")
@@ -189,7 +198,7 @@ async function readOptional(file: string): Promise<unknown | undefined> {
  * Physical existence is never interpreted as completion by this layer.
  */
 export class DurablePublicationStore {
-  private static readonly heldSubjects = new AsyncLocalStorage<Map<string, string>>()
+  private static readonly heldSubjects = new AsyncLocalStorage<Map<string, SubjectCallbackScope>>()
   private static readonly activeSubjectLeases = new Map<string, string>()
 
   constructor(readonly root: string) {
@@ -200,7 +209,49 @@ export class DurablePublicationStore {
     return path.join(this.root, segment(kind, "publication kind"), segment(occurrenceID, "publication occurrence"))
   }
 
-  async withSubjectLock<T>(kind: string, subject: string, run: () => Promise<T>): Promise<T> {
+  private static activeScope(scope: SubjectCallbackScope | undefined): SubjectCallbackScope | undefined {
+    while (scope && !scope.active) scope = scope.parent
+    return scope
+  }
+
+  private static async runSubjectCallback<T>(
+    key: string,
+    lease: string,
+    parent: SubjectCallbackScope | undefined,
+    run: (owner: DurablePublicationSubjectOwner) => Promise<T>,
+  ): Promise<T> {
+    const scope: SubjectCallbackScope = { lease, parent, active: true, pending: new Set() }
+    const next = new Map(DurablePublicationStore.heldSubjects.getStore() ?? [])
+    next.set(key, scope)
+    const owner: DurablePublicationSubjectOwner = Object.freeze({
+      isCurrent() {
+        const current = DurablePublicationStore.activeScope(DurablePublicationStore.heldSubjects.getStore()?.get(key))
+        return current?.lease === lease && DurablePublicationStore.activeSubjectLeases.get(key) === lease
+      },
+    })
+    const operation = Promise.resolve().then(() =>
+      DurablePublicationStore.heldSubjects.run(next, async () => {
+        try {
+          return await run(owner)
+        } finally {
+          while (scope.pending.size > 0) await Promise.allSettled([...scope.pending])
+          scope.active = false
+        }
+      }),
+    )
+    parent?.pending.add(operation)
+    try {
+      return await operation
+    } finally {
+      parent?.pending.delete(operation)
+    }
+  }
+
+  async withSubjectLock<T>(
+    kind: string,
+    subject: string,
+    run: (owner: DurablePublicationSubjectOwner) => Promise<T>,
+  ): Promise<T> {
     segment(kind, "publication kind")
     if (!subject) throw new Error("Durable publication subject must not be empty")
     const lockDirectory = path.join(this.root, ".locks")
@@ -215,9 +266,12 @@ export class DurablePublicationStore {
         : path.resolve(physicalLockDirectory)
     const subjectKey = createHash("sha256").update(`${kind}\0${subject}`).digest("hex")
     const leaseKey = `${rootKey}\0${subjectKey}`
-    const held = DurablePublicationStore.heldSubjects.getStore()
-    const inheritedLease = held?.get(leaseKey)
-    if (inheritedLease && DurablePublicationStore.activeSubjectLeases.get(leaseKey) === inheritedLease) return run()
+    const inherited = DurablePublicationStore.activeScope(
+      DurablePublicationStore.heldSubjects.getStore()?.get(leaseKey),
+    )
+    if (inherited && DurablePublicationStore.activeSubjectLeases.get(leaseKey) === inherited.lease) {
+      return DurablePublicationStore.runSubjectCallback(leaseKey, inherited.lease, inherited, run)
+    }
     const target = path.join(lockDirectory, subjectKey)
     const provision = await open(target, "a", 0o600)
     await provision.close()
@@ -231,10 +285,8 @@ export class DurablePublicationStore {
     })
     const lease = randomUUID()
     DurablePublicationStore.activeSubjectLeases.set(leaseKey, lease)
-    const next = new Map(held ?? [])
-    next.set(leaseKey, lease)
     try {
-      const result = await DurablePublicationStore.heldSubjects.run(next, run)
+      const result = await DurablePublicationStore.runSubjectCallback(leaseKey, lease, undefined, run)
       if (compromised)
         throw new Error(`Durable publication subject lock was compromised: ${subject}`, { cause: compromised })
       return result
