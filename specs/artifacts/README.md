@@ -472,3 +472,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [Sources路径辨识](2026-10-15-source-path-readability/README.md)：真实页面、原文件及物理收尾。
 
 - [当前会话刷新定位](2026-10-15-workspace-refresh-location/README.md)：原页面、位置与资源结算。
+
+- [主流中成员连续性](2026-10-15-member-parent-stream-continuity/README.md)：实际页面和精确运行回执。

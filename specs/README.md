@@ -3443,3 +3443,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [Sources路径辨识](records/2026-10/2026-10-15-source-path-readability.md)：原文件身份、特殊空白与真实阅读体验。
 
 - [当前会话刷新定位](records/2026-10/2026-10-15-workspace-refresh-location.md)：单一URL定位与真实会话恢复。
+
+- [主流中成员连续性](records/2026-10/2026-10-15-member-parent-stream-continuity.md)：已有成员在主会话流中的真实阅读与生命周期。

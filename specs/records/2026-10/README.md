@@ -992,3 +992,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [Sources路径辨识](2026-10-15-source-path-readability.md)：实际前后截图及原路径打开/复制语义。
 
 - [当前会话刷新定位](2026-10-15-workspace-refresh-location.md)：原刷新丢选择、导航根因与桌面验收。
+
+- [主流中成员连续性](2026-10-15-member-parent-stream-continuity.md)：真实主输入、旧成员、Sources与被动诊断。
