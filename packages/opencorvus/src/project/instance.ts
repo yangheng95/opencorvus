@@ -76,8 +76,8 @@ interface Lease {
   key: string
   entry: CacheEntry
   /** Serving handles run caller `fn`s under the shared context and are what
-   *  teardown drains. Lifecycle leases (serving=false) exist only for context
-   *  provision and settlement snapshots while their owner holds a tail turn. */
+   * teardown drains. Non-serving leases retain identity during lifecycle work
+   * and operations spanning several callbacks; they do not own a tail turn. */
   serving: boolean
   /** Set while this serving chain is itself parked inside a teardown drain, so
    *  two ambient teardowns waiting on each other both proceed to the tail. */
@@ -117,6 +117,8 @@ type InstanceApi = {
    * owned preparation/settlement still finish before the lease closes. */
   provide<R>(input: { directory: string; init?: InstanceInit; signal?: AbortSignal; fn: () => R }): Promise<R>
   provideProjectIdentity<R>(input: { directory: string; fn: () => R }): Promise<R>
+  /** Retain each encountered identity until this multi-stage operation settles. */
+  withRetainedProjectIdentities<R>(input: { directories: readonly string[]; fn: () => Promise<R> }): Promise<R>
   tryProvideActive<R>(input: {
     directory: string
     signal?: AbortSignal
@@ -208,6 +210,10 @@ function getOrCreateCacheEntry(directory: string, key: string): CacheEntry {
 }
 
 const leaseContext = RuntimeContext.create<Lease>("instance-lease")
+const identityRetentionContext = RuntimeContext.create<{
+  leases: Map<CacheEntry, Lease>
+  closed: boolean
+}>("instance-identity-retention")
 const lifecycleContext = RuntimeContext.create<LifecycleScope>("instance-lifecycle")
 const activityContext = RuntimeContext.create<ActivityScope>("instance-activity")
 /** The entry whose exclusive tail turn the current async chain holds. Nested
@@ -532,6 +538,14 @@ function createLease(key: string, entry: CacheEntry, serving: boolean): Lease {
   }
   entry.activeLeases.add(lease)
   return lease
+}
+
+function retainProjectIdentity(key: string, entry: CacheEntry): void {
+  const scope = identityRetentionContext.tryUse()
+  if (!scope || scope.closed || scope.leases.has(entry)) return
+  // Each callback still owns its original serving lease. This existing
+  // non-serving lease prevents idle eviction between callbacks in one scope.
+  scope.leases.set(entry, createLease(key, entry, false))
 }
 
 async function closeLease(lease: Lease) {
@@ -1092,9 +1106,11 @@ async function disposeEntry(key: string, entry: CacheEntry, ctx: Context) {
 }
 
 export function runOutsideInstanceContext<R>(fn: () => R): R {
-  return leaseContext.without(() =>
-    lifecycleContext.without(() =>
-      activityContext.without(() => entryTurnContext.without(() => withoutProjectInstanceContext(fn))),
+  return identityRetentionContext.without(() =>
+    leaseContext.without(() =>
+      lifecycleContext.without(() =>
+        activityContext.without(() => entryTurnContext.without(() => withoutProjectInstanceContext(fn))),
+      ),
     ),
   )
 }
@@ -1420,6 +1436,38 @@ export const Instance: InstanceApi = {
       }
     }
   },
+  async withRetainedProjectIdentities<R>(input: { directories: readonly string[]; fn: () => Promise<R> }): Promise<R> {
+    const run = () => {
+      for (const directory of input.directories) {
+        const key = instanceCacheKey(Filesystem.resolve(directory))
+        const entry = cache.get(key)
+        if (entry) retainProjectIdentity(key, entry)
+      }
+      return input.fn()
+    }
+    const inherited = identityRetentionContext.tryUse()
+    if (inherited && !inherited.closed) return await run()
+    const scope = { leases: new Map<CacheEntry, Lease>(), closed: false }
+    let result!: R
+    let failure: { error: unknown } | undefined
+    try {
+      result = await identityRetentionContext.provide(scope, run)
+    } catch (error) {
+      failure = { error }
+    }
+    scope.closed = true
+    const released = await Promise.allSettled([...scope.leases.values()].map(closeLease))
+    scope.leases.clear()
+    const errors = released.flatMap((outcome) => (outcome.status === "rejected" ? [outcome.reason] : []))
+    if (failure) {
+      if (errors.length)
+        throw new AggregateError([failure.error, ...errors], "Project identity scope settlement failed")
+      throw failure.error
+    }
+    if (errors.length === 1) throw errors[0]
+    if (errors.length) throw new AggregateError(errors, "Project identity scope settlement failed")
+    return result
+  },
   async provideProjectIdentity<R>(input: { directory: string; fn: () => R }): Promise<R> {
     const directory = Filesystem.resolve(input.directory)
     assertNotDisposing(directory)
@@ -1433,11 +1481,13 @@ export const Instance: InstanceApi = {
       if (entry.rollback) throw rollbackError(entry.rollback)
       const ctx = await entry.context
       assertProjectAdmissionOpen(key, entry, ctx)
+      retainProjectIdentity(key, entry)
       return await provideLeaseContext(inheritedLease, ctx, async () => input.fn())
     }
     for (;;) {
       assertNotDisposing(directory)
       const entry = getOrCreateCacheEntry(directory, key)
+      retainProjectIdentity(key, entry)
       entry.lastAccess = ++accessSequence
       const ctx = await entry.context
       if (cache.get(key) !== entry) continue

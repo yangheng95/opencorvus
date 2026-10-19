@@ -370,6 +370,10 @@ export namespace Project {
   }
 
   async function findExactWorktreeRow(worktree: string) {
+    return SkillReadDiagnostics.phase("project.identity.lookup", () => scanExactWorktreeRows(worktree))
+  }
+
+  async function scanExactWorktreeRows(worktree: string) {
     const rows = Database.use((db) => db.select().from(ProjectTable).all())
     const matches: Row[] = []
     for (const row of rows) {
@@ -595,10 +599,12 @@ export namespace Project {
         if (hasLocalGit) {
           // Both facts belong to this repository. Resolve the common directory
           // absolutely so its meaning is independent of the displayed top path.
-          const [top, commonText] = await Promise.all([
-            text(["rev-parse", "--show-toplevel"], directory),
-            text(["rev-parse", "--path-format=absolute", "--git-common-dir"], directory),
-          ])
+          const [top, commonText] = await SkillReadDiagnostics.phase("project.identity.git", () =>
+            Promise.all([
+              text(["rev-parse", "--show-toplevel"], directory),
+              text(["rev-parse", "--path-format=absolute", "--git-common-dir"], directory),
+            ]),
+          )
           let sandbox = directory
           if (top) {
             sandbox = await displayGitTop(directory, gitpath(sandbox, top))
@@ -608,7 +614,9 @@ export namespace Project {
           const resolvedCommon = common || path.join(sandbox, ".git")
           const rawWorktree = !common || common === sandbox ? sandbox : path.dirname(common)
           const worktree = await displayGitTop(directory, rawWorktree)
-          const id = await identify(resolvedCommon, worktree)
+          const id = await SkillReadDiagnostics.phase("project.identity.resolve", () =>
+            identify(resolvedCommon, worktree),
+          )
 
           return {
             id,

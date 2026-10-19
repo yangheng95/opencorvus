@@ -1,0 +1,65 @@
+# Project 身份读取的重复物理观察
+
+## Recall
+
+持续单agent自主体验、查因、修复、真实验证、范围提交与正常推送；旧goal中Astra委托已被后续单agent要求覆盖。上一轮437为progress，728ccee9a已推送且fresh fetch确认HEAD=upstream，只有原.bun/及packages/opencorvus/bun/未跟踪。当前冷全局保存19.97s（57项目）、暖4.06s，cold<=10s未达成，不能修改目标或用暖缓存冒充。Goal首页与真实创建表单已人工复核；本轮优先继续实际性能问题。benchmark-debug-template既有流程继续适用。
+
+## 修改前分析、已读资料和搜索
+
+已重读437 Recall、05-config、task-runtime-directory物理身份/删除合同、02-data迁移边界，搜索Project.fromDirectory/findExactWorktreeRow/sameFilesystemLocation及全部ProjectDirectoryAdmission run/acquire/provide/settle生产点和相关正向测试。437证据held总18.14s中identity占17.62s，registry revalidate0.28s；两次Git已并行，剩余Git与marker/registry lookup占比仍未知。原findExactWorktreeRow逐行调用公共物理谓词，重复观察同一目标的realpath/stat，且整体扫描随项目数平方增长；不能仅凭源码认定它是剩余墙钟主因。436只改比较并行的实验没有足够整体收益而撤回，本轮先补真实阶段，不重放未证实方案。
+
+公共物理谓词依次比较正规路径、真实路径、bigint设备/inode；仅ENOENT/ENOTDIR表示缺失，其他I/O错误保留。duplicate worktree必须返回typed error，不能先挑同路径行。fromDirectory在共享目录owner内再次发现身份、检查physical occurrence与durable generation；初始观察不能替代admitted观察。五个run与其他worktree/deletion/promotion token入口共用同一事实层，当前没有证据允许拆掉全局队列或改变恢复/终态协议。本轮先不改队列、DB、schema、调度、Task/Mission/Session执行轮次。
+
+候选修复是在一次物理lookup内复用同一目标的真实观察，并通过同一物理比较实现消费，所有row仍完整检查、所有已接受工作结算且错误保持原顺序。它只能是局部调用寿命的观察，不得添加跨请求缓存、持久索引、旧数据兜底或弱化身份检查。是否实施以及并发方式要由before阶段证据决定；身份在初始与admitted之间仍重新获取。公共sameFilesystemLocation的早返回/错误语义必须保留。identity-convergence也使用该公共谓词，不能复制另一份比较算法。
+
+## 实施前方案与验收
+
+1. 复用既有DEBUG observer，增加project.identity.git（两次Git完整结算）、project.identity.resolve（marker与registry决策）、project.identity.lookup（完整物理row扫描）；无新tracer，不打印路径、配置或凭据，原promise/value/error保持。读取相关正向测试并通过后测量。
+2. 新before18651独立publication，复用成熟413 NativeService与437脚本、600s物理安全期限/真实活动监测；显式OPENCORVUS_HOME仅指向自有QA412，保留所有数据。新私有auth与完整models成对准备并验证真实gpt-6.1-sol流请求。生产config service/HostTransport/HTTP真实写username，再完整恢复原canonical与Ask。捕获原requestID/span并区分重叠累计与墙钟。
+3. 按真实分段补充具体修复方案后实施；若主要成本不是lookup则明确排除并转向真实主因，不为了交付强行改比较。行为改动需聚焦正向真实物理合同、typed duplicate/读取错误与目录回收/并发/恢复的原保护；禁UI自动化、负向测试和全量bun test。
+4. 新after18653实际冷/暖保存，若进一步修改则新final18655；指标cold<=10s/warm<=5s/并发真实页面读取<=20s与原完整项目集保持，结果分别判定，不把partial通过当整体完成。UI只通过隔离真实/ui交互和截图人工复核，不操作用户18571，不另起Vite。
+5. 自有页关闭、公开shutdown、原句柄join、native physical/output/request完整结算后退休运行与私有凭据对；证据脱敏归档，当前架构及三索引同步，docs与架构检查，范围提交，fetch/merge、完整pending审查、正常push。保留active与未满足项，不创建分支/worktree，不清库或改已交付迁移。
+
+## 结果
+
+before18651真实冷保存20,471.5ms、恢复24,296.5ms，58项目原已加载2。冷identity.git112次累计33,346ms、lookup10,887ms（均含并发重叠），held18,822ms；冷主因仍Git进程与全量发现。恢复时原Config inventory已加载58，runtime reconcile却19,501ms，新增66次creating instance/fromDirectory及132次Git；原日志17:18:54.413的converged idle Project runtimes确认limit4、retained4、active3，随后17:18:54.545重新创建此前释放的目录。这不是模型、凭据或事务提交慢，而是同一全局写的校验与runtime收敛之间丢失了身份生命周期。
+
+真实页面在恢复写期间发起GET/config，原request4da03478-73d1-4634-9bcf-36fba16946d0为4,776ms/200。01拍到权限Not loaded，02后续恢复Ask；这是实际页面读取而非UI自动化。原63146公开shutdown200、joined0，运行态凭据对物理结算后退休。
+
+## 根据证据调整的实施前方案与横向审计
+
+优先修复新暴露的全局mutation身份释放/逐出/重建循环，暂不实施物理lookup复用。已读Instance全部缓存创建/identity provide/tryProvideActive/forEachActive、normal/failed lease close、refresh与显式dispose、idle converge、runOutsideInstanceContext及backgroundWork；Config commit/onWritten、全部runtime transition、pending重试与peer monitor。Server每个bounded请求finally都调度limit4的自动收敛，故真实页面读可在global校验完成后触发逐出；原一次callback身份lease覆盖不到persist/reset/onWritten。Task/Mission/Session数据轮次与终态不变，但各产品共用Instance与Config，不能按页面或专家团局部处理。
+
+修复采用Instance现有activeLeases唯一物理资源表：增加一个显式callback寿命的withRetainedProjectIdentities作用域，provideProjectIdentity成功取得的确切CacheEntry各登记一份原non-serving lease；逐项目serving lease仍按原函数管理。该non-serving lease阻止自动idle eviction，不拥有exclusive tail、不保持配置缓存值、不跳过显式refresh、状态reset或目录/删除事实。callback成功/失败均完整释放全部lease，嵌套作用域共享外层寿命；runOutsideInstanceContext同时清除此局部作用域，后台/peer/recovery不能继承全局writer的保留寿命。结束后的旧scope不再拥有资源，不重新收留后台工作。无新持久状态、配置、refcount或影子缓存。
+
+唯一使用处是writeGlobalMutation在现有Config mutation owner内覆盖canonical候选、persist、reset、runtime settlement的完整寿命；不改Project.fromDirectory及全局队列协议、不改provider流、预算或Task/Mission/Session重启与终态。显式删除/关闭仍按原entry lease结算，global mutation退出后按原规则继续。潜在风险是lease泄漏/嵌套释放过早/后台继承/显式refresh互等，必须用正向运行合同覆盖。
+
+新增正向验收：真实目录身份与State对象跨两次idle convergence保持原对象、域内显式refresh完成、域外converge真正回收并触发原State disposer；原错误对象保持且失败后资源可回收；嵌套退出保留外层；runOutside独立目录可按原规则收敛；真实global beforePersist与beforeRuntimeSettlement hook发起converge后仍保留候选身份，保存与config.changed投影正确，最终回收成功。再跑既有全局候选失败/修正重试、peer生效/运行态事件重试、提交期间激活及Instance并发/正常回收/目录注册竞争。after真实页面与冷/暖保存继续原门槛，不放宽。
+
+## 第一轮真实复测与剩余窗口
+
+第一版scope通过22项相关正向合同/66expect及backend tsc。after18653的59项目保存18.87s、恢复16.99s；runtime reconcile由before19,501ms降至164ms，原canonical恢复且Ask正确。仍有41次恢复写内Project重建；原日志17:28:20.006显示已进入恢复写却仍逐出32个尚未轮到validation的缓存条目。旧scope只在provideProjectIdentity取得完成后收留entry，对同一次mutation尚未进入worker的已知目录没有资源归属，且新entry在context discovery完成前仍有逐出窗口。页面GET/config最终2ms/200，但开始在restore结束后，不能作并发读取资格。本轮目标仍failed。
+
+进一步方案在修改前明确：withRetainedProjectIdentities改为显式输入完整directories，scope起点同步保留这些目录已经存在的确切cache entry，惰性新建entry则在await context discovery之前保留；不提前创建未知目录或绕过任何身份检查。为了沿用canonical file lock内唯一Project枚举并覆盖runtime settlement，global commit将原候选批处理提为唯一私有阶段，scope在原枚举完成后包住候选/持久化/reset及原runtime reconcile；global onWritten空中转移除，不新增第二条runtime路径。公共writeConfigFile与Project writer钩子保持，runtime错误仍为已提交错误。nested显式目录共享外层scope，outside继续清除。新增测试在进入第一个provide之前触发converge，证明已经登记的全部候选身份受原lease保护；候选发现期间原并发/失败测试继续覆盖。下一轮final18655用新源码复测，600秒物理期限不变。
+
+## 提交后重试的原失败与根因（修复前）
+
+补充的真实global event首次投影失败测试连续3次得到GlobalConfigCommittedReconcileError/committed=true、attempts=1，5秒内没有retry；原失败日志保留，不延长超时。日志没有retry报错，说明不能解释为重试执行失败。继续读schedulePendingPeerTransition/currentProjectState/settleProjectRuntimeTransition、Instance active admission和原Lock.reserveWrite合同：直接writer先把transition放入同一pending表，再apply；MCP初始化中的Config.get会提前schedule同一pending。schedule虽预留runtime write owner，却在await该owner之前先通过tryProvideActive判断是否活跃。global身份上下文未initialized，因而提前返回undefined并清掉pending；原writer之后报告真实失败时已没有原transition可供重试。这条共享路径影响Project/global writer与peer读取，不是某一专家团或模型。
+
+准备把原runtimeOwner.acquired的await与exact pending复核移到资格判断之前；原write owner结算后再按writerRetryDirectories选择原identity或active provide，且同一owner内执行原apply/advance。保留既有pending/queued target/settlement表，不增加影子状态或重试队列。队列顺序仍由原reserveWrite确定；直接writer仍依原Instance serving lease和runtime owner，后台peer通过runOutside隔离，显式teardown保留原serving/tail语义。Project/global正常完成会使旧pending不再匹配而自然退休；真实writer失败保留原transition后按原身份路径重试；inactive peer按原策略退休，判断时机改为有权处理的时刻。原queued latest target与重启后的canonical重新读取不变；此进程内重试事实不伪装成新的持久恢复协议。新增global committed-error/retry正向测试以及既有Project错误重试、cross-process global/Project/激活和Instance并发/refresh/dispose都必须重跑，再进行真实页面验收。
+
+上述第一种锁序改法使新global重试正向通过，却令既有跨进程Project/global阶段出现重复middle事件；原verified-contracts失败保留，不能通过改预期掩盖。撤回这项锁序实验，保留原active上下文→runtime owner的顺序。根因需要修的是“没有获得active上下文就提前退休pending”的权利：对原未admit结果，在同一已预留runtime owner真正取得后才再次检查exact pending；若原writer此时已失败（原writerRetry事实），保留同一transition并交给原调度器下一轮按writer身份处理；若peer确已inactive才退休。原settle成功/新target流和Project active路径不变，不增加备用执行路径、影子状态或另一调度器。局部reschedule变量改为准确语义，重跑新global重试与原peer两个完整事件序列后再验收。
+
+保留锁序后11项global/peer合同全部通过。继续将同一global正向用例扩为直接投影与第一次重试连续失败、第三次成功，原5秒仍超时；未修改时间阈值。源码确认原monitor只通过forEachActive的Config.get间接驱动重试，而identity-only writer不属于initialized active，故第一次background再失败后没有后续驱动。准备在同一个既有250ms monitor每轮扫描原writerRetryDirectories并调用原schedulePendingPeerTransition，然后等待原settlement集合；原pendingPeerSettlements去重及runtime owner仍是唯一执行归属。没有新timer、重试队列或持久状态，成功advance按原实现删除writerRetry；inactive普通peer仍不获得writer资格。连续失败→成功正向用例及旧事件序列再次验证。
+
+## 最终验证、资格与未满足项
+
+最终accepted-contracts真实runner全部exit0：identity retention4项/14expect、global候选与连续失败恢复4项/28expect、cross-process peer7项/8expect、Instance并发与目录身份/回收9项/22expect、catalog/reference锁序4项/8expect，共28项/80expect。backend tsc、docs:check（345ops/26groups）及architecture-index均通过。新global用例连续两次事件投影失败后第三次通过，原GlobalConfigCommittedReconcileError/committed=true保留，下一次真实全局写正常接受；未用修改超时或事件次数掩盖旧失败。无新增/运行UI自动化。
+
+final18655在最终源码和既有正式UI下：60个Projects、初始loaded2，冷保存19,719.3ms、恢复4,438.2ms，服务原请求分别19,713/4,438ms/200；before/after/capabilities完整各60次、models/profile各61次。runtime reconcile冷300ms、恢复34ms，恢复阶段使用原已确认身份；原canonical完整解析值恢复且保持Ask。evaluate原exit1/status=failed：cold<=10s仍不通过，restore<=5s、并发真实读取<=20s、数据接受/恢复与完整项目集均通过。不省略项目、提高超时或重新定义成功。
+
+最终真实UI先打开原有Chat，写入中点击New chat并进入General。原GET/global/config请求651d2207-2144-46e8-bdab-d42b287c2232在17:44:23.159Z开始，17:44:28.904Z结束，5,745ms/200，起点位于冷PATCH执行区间；04/05为真实设置页Ask结果。未发业务消息/创建Goal。before/after是页面进入恢复阶段的不同手动路径，不能将跨scope总耗时冒充严格相同输入A/B；真实阶段与正向强制converge合同共同证明身份寿命修复。UI本轮没有源码改动，仍复用435正式构建。
+
+剩余冷路径仍随全量冷Project增加：最终58次admitted identity累计17,170ms，Git116次累计33,308ms、lookup9,499ms（包含并发重叠）。本轮没有实施物理lookup复用，也没有改变全局目录队列或绕过身份重验证，cold10s明确未完成。后续以原数据规模和真实运行继续优化；主目标保持active。
+
+三个自有页面均关闭；before/after/final公开shutdown200，原63146/86997/25579全部joined0。归档器核对三个native physical/output/request完整结算和运行态成对退休后，再精确退休额外私有auth/models。每scope两次实际gpt-6.1-sol流预检均200、reader EOF，共6次，不作业务执行或完整Goal续跑资格。原Codex auth仍4318字节、mtime1791990556516.2156，与准备前一致。选定gzip解压内容以实际授权值做泄露检查通过，凭据、DB与完整Provider正文均未归档。本轮未修改schema/迁移或打开真实用户数据库；所有数据验收只用显式OPENCORVUS_HOME自有QA。05-config、task-runtime-directory与三索引同步；范围提交和正常hook推送继续执行。

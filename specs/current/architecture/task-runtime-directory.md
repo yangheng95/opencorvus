@@ -43,6 +43,17 @@ Ordinary directory resolution is observational. If more than one durable
 returns `ProjectDuplicateWorktreeIdentityError` before writing a marker or a
 domain row. Lookup never chooses a winner and never migrates data.
 
+`Instance.withRetainedProjectIdentities` gives a multi-stage operation one
+explicit resource lifetime over its declared directories. Existing cache entries
+are synchronously reserved with the original non-serving leases; identity-only
+provision retains a newly observed entry before awaiting discovery. The scope
+does not initialize untouched directories, own an exclusive turn or store
+configuration values. Nested scopes share the outer lifetime, while
+`runOutsideInstanceContext` clears it for independent work. On success or error,
+all acquired leases settle and their references are released. The original
+serving, explicit teardown and durable directory-authority contracts remain
+authoritative.
+
 Historical duplicate rows are repaired only by the explicit
 `opencorvus db converge-project-identities <worktree> <canonical-project-id>
 --force` authority. That operation disposes live Instances, validates one

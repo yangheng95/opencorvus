@@ -231,6 +231,17 @@ generation through the same snapshot reader. Public standalone snapshots keep
 their independent boundary discovery. No Project is omitted and no cross-write
 source cache or alternate identity authority is introduced.
 
+The canonical global commit retains the enumerated Project identities through
+candidate validation, persistence, cache resets and runtime reconciliation.
+The Instance scope reserves existing entries before workers begin and retains
+newly discovered entries before awaiting their identity. It uses the existing
+non-serving leases, so idle convergence cannot retire an identity between those
+stages. Callback serving leases, explicit refresh, canonical validation and the
+normal bounded-cache policy after settlement keep their original authority.
+Success and failure both release the retained resources; background and peer
+work enter outside this scope. This retention carries no configuration values
+or new persistent facts.
+
 The existing DEBUG phase diagnostics also observe the two configuration PATCH
 routes under their original HTTP request IDs, including Project inventory,
 paired snapshots, candidate validation, persistence, resets and reconciliation.
@@ -251,6 +262,10 @@ Protocol，模型上下文协议）、Provider、native Agent 与 Channel projec
 before/after transition 供重试；较新的 canonical generation 只更新 queued latest target，前一 transition
 成功后才构造 `previous.after → latest`。本地 direct settlement 完成后仅 rewarm 活跃 state；若 canonical
 source 已由另一生产 writer 推进，则显式结算 `direct.after → current`，不以 reset 丢失最新 generation。
+
+未取得active上下文的投影候选，必须先取得原预留runtime owner并复核exact pending，才能退休inactive peer状态。
+原writer失败后保留的transition继续由原writerRetry事实驱动；同一peer monitor也调度identity-only writer的重试，
+每次通过原pending settlement集合和runtime owner去重。连续投影失败保留同一目标，成功后按原advance规则结算。
 
 Provider 与 native Agent 的默认读取先取得当前 `Config.get()` snapshot，再以 canonical config digest
 选择各 Project 的内容寻址缓存；缓存 holder 仍由 Project Instance state 生命周期拥有。显式 config

@@ -3457,3 +3457,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [配置保存耗时](records/2026-10/2026-10-20-config-write-cost.md)：真实全链路阶段测量与优化。
 
 - [共享目录准入成本](records/2026-10/2026-10-20-directory-admission-cost.md)：冷配置保存的队列与持有阶段。
+
+- [Project 身份读取观察](records/2026-10/2026-10-20-project-identity-observation.md)：冷保存物理观察与真实阶段。

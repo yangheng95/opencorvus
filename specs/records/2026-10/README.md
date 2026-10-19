@@ -1006,3 +1006,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [配置保存耗时](2026-10-20-config-write-cost.md)：原生全局 writer 的阶段测量与修复。
 
 - [共享目录准入成本](2026-10-20-directory-admission-cost.md)：冷路径 owner 阶段与安全优化。
+
+- [Project 身份读取观察](2026-10-20-project-identity-observation.md)：冷身份读取的局部观察与验收。

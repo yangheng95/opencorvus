@@ -2190,7 +2190,7 @@ export namespace Config {
     const pending = pendingPeerTransitions.get(directory)
     if (!pending) return
     if (pendingPeerSettlements.has(directory)) return
-    let scheduleQueuedTarget = false
+    let reschedulePending = false
     const runtimeOwner = Lock.reserveWrite(projectRuntimeSettlementKey(directory))
     const settlement = Promise.all([import("@/project/instance"), import("@/storage/db")])
       .then(([{ Instance, runOutsideInstanceContext }, { Database }]) => {
@@ -2198,7 +2198,7 @@ export namespace Config {
           await using _owner = await runtimeOwner.acquired
           if (pendingPeerTransitions.get(directory) !== pending) return false
           await applyProjectRuntimeTransition(pending)
-          scheduleQueuedTarget = advancePendingPeerTransition(directory, pending)
+          reschedulePending = advancePendingPeerTransition(directory, pending)
           return true
         }
         return Database.runOutsideContext(() =>
@@ -2209,9 +2209,18 @@ export namespace Config {
           ),
         )
       })
-      .then((settled) => {
+      .then(async (settled) => {
         if (pendingPeerTransitions.get(directory) !== pending) return
         if (!settled) {
+          // An identity-only writer can still be applying this transition.
+          // Its reserved runtime turn decides whether this is inactive peer
+          // work or the same writer's exact failed projection to retry.
+          await using _owner = await runtimeOwner.acquired
+          if (pendingPeerTransitions.get(directory) !== pending) return
+          if (writerRetryDirectories.has(directory)) {
+            reschedulePending = true
+            return
+          }
           pendingPeerTransitions.delete(directory)
           queuedPeerTargets.delete(directory)
           writerRetryDirectories.delete(directory)
@@ -2226,7 +2235,7 @@ export namespace Config {
       .finally(() => {
         runtimeOwner.cancel()
         if (pendingPeerSettlements.get(directory) === settlement) pendingPeerSettlements.delete(directory)
-        if (scheduleQueuedTarget) schedulePendingPeerTransition(directory)
+        if (reschedulePending) schedulePendingPeerTransition(directory)
       })
     pendingPeerSettlements.set(directory, settlement)
   }
@@ -2298,6 +2307,7 @@ export namespace Config {
       for (const directory of [...loadedProjectConfigs]) {
         if (!activeDirectories.has(directory)) loadedProjectConfigs.delete(directory)
       }
+      for (const directory of writerRetryDirectories) schedulePendingPeerTransition(directory)
       await Promise.all([...pendingPeerSettlements.values()])
       if (
         pendingGlobalSettlementEvent &&
@@ -2820,6 +2830,24 @@ export namespace Config {
       projects: directories.length,
       loaded: stateSource.inspectAll().length,
     })
+    const { Instance } = await import("@/project/instance")
+    await Instance.withRetainedProjectIdentities({
+      directories,
+      fn: async () => {
+        const transitions = await commitGlobalProjectCandidates(effectiveGlobal, merged, persist, directories)
+        await SkillReadDiagnostics.phase("config.global.reconcile", () =>
+          reconcileGlobalProjectTransitions(transitions),
+        )
+      },
+    })
+  }
+
+  async function commitGlobalProjectCandidates(
+    effectiveGlobal: Info,
+    merged: Source,
+    persist: () => Promise<void>,
+    directories: readonly string[],
+  ) {
     const { validateConfigCandidate } = await import("@/config/candidate-validation")
     const { ConversationCapability } = await import("@/conversation/capability")
     const { Instance } = await import("@/project/instance")
@@ -2957,16 +2985,10 @@ export namespace Config {
     await ConfigPaths.assertCanonicalDirectory(Global.Path.config, ["config.json"])
     return SkillReadDiagnostics.phase("config.global.write", () =>
       withConfigMutationAuthority(async () => {
-        let transitions: GlobalProjectTransition[] = []
         const written = await writeConfigFile(globalConfigFile(), patch, {
           resolve: resolveGlobalCandidate,
           async commit(merged, _appliedPatch, persist) {
-            transitions = await commitGlobalCandidate(merged, persist)
-          },
-          async onWritten() {
-            await SkillReadDiagnostics.phase("config.global.reconcile", () =>
-              reconcileGlobalProjectTransitions(transitions),
-            )
+            await commitGlobalCandidate(merged, persist)
           },
         })
         return parseEffectiveConfig(written, globalConfigFile())
