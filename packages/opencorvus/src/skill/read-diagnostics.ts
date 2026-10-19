@@ -54,6 +54,15 @@ type Phase =
   | "config.validate.profile"
   | "config.validate.mounts"
   | "config.validate.capabilities"
+  | "directory.total"
+  | "directory.admission"
+  | "directory.held"
+  | "directory.release"
+  | "project.identity.initial"
+  | "project.registry.capture"
+  | "project.registry.acquire"
+  | "project.registry.revalidate"
+  | "project.identity.admitted"
   | "projection.package"
   | "projection.package-source-capture"
   | "projection.package-publication"
@@ -264,18 +273,46 @@ export namespace SkillReadDiagnostics {
     acquire: (run: () => Promise<T>) => Promise<T>,
     operation: () => Promise<T>,
   ): Promise<T> {
+    return owned(
+      { total: "catalog.total", admission: "catalog.admission", held: "catalog.held", release: "catalog.release" },
+      acquire,
+      operation,
+    )
+  }
+
+  export function directoryOwner<T>(
+    acquire: (run: () => Promise<T>) => Promise<T>,
+    operation: () => Promise<T>,
+  ): Promise<T> {
+    return owned(
+      {
+        total: "directory.total",
+        admission: "directory.admission",
+        held: "directory.held",
+        release: "directory.release",
+      },
+      acquire,
+      operation,
+    )
+  }
+
+  function owned<T>(
+    phases: { total: Phase; admission: Phase; held: Phase; release: Phase },
+    acquire: (run: () => Promise<T>) => Promise<T>,
+    operation: () => Promise<T>,
+  ): Promise<T> {
     if (!log.enabled("DEBUG")) return acquire(operation)
-    return phase("catalog.total", () => {
-      const admission = span("catalog.admission")
+    return phase(phases.total, () => {
+      const admission = span(phases.admission)
       let release: ReturnType<typeof span> | undefined
       const acquired = () => {
         admission.finish("fulfilled")
         try {
-          return observe(phase("catalog.held", operation), () => {
-            release = span("catalog.release")
+          return observe(phase(phases.held, operation), () => {
+            release = span(phases.release)
           })
         } catch (error) {
-          release = span("catalog.release")
+          release = span(phases.release)
           throw error
         }
       }

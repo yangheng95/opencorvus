@@ -484,3 +484,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [权限配置可用性](2026-10-19-permission-config-availability/README.md)：真实首页、权限设置和运行回执。
 
 - [配置保存耗时](2026-10-20-config-write-cost/README.md)：原始请求和阶段成本证据。
+
+- [共享目录准入成本](2026-10-20-directory-admission-cost/README.md)：目录 owner 的真实阶段与结算。

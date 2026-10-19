@@ -236,6 +236,13 @@ routes under their original HTTP request IDs, including Project inventory,
 paired snapshots, candidate validation, persistence, resets and reconciliation.
 Phase metadata carries identities, counts and timing rather than configuration
 field values; observation retains each operation's original value and error.
+The same observer distinguishes shared Project-directory admission, held work
+and release, with identity and physical-registry subphases. Queue wait sums
+across concurrent Projects are not elapsed request time. Project discovery
+reads the Git top-level and absolute common directory concurrently through the
+existing supervised Git adapter; the initial discovery and the admitted
+revalidation still use the same identity implementation and durable ownership
+boundaries.
 
 peer backend 替换 Project/global 文件后，owner 加载稳定 generation，并统一结算 MCP（Model Context
 Protocol，模型上下文协议）、Provider、native Agent 与 Channel projection；全部 projection 成功后才通过

@@ -6,6 +6,7 @@ import { Log } from "@/util/log"
 import { Global } from "@/global"
 import { SkillReadDiagnostics as Diagnostics } from "@/skill/read-diagnostics"
 import { DurablePublicationStore } from "@opencorvus-ai/util/durable-publication"
+import { ProjectDirectoryAdmission } from "@/project/directory-admission"
 
 async function rows(ids: Array<string | null>) {
   await Log.flush()
@@ -35,6 +36,37 @@ test("config phases retain exact operation settlement and request ownership", as
     expect(completed.map((row) => ({ request: row.http.requestID, outcome: row.outcome }))).toEqual([
       { request: id, outcome },
     ])
+  }
+})
+
+test("directory queue diagnostics preserve real callback results, errors and balanced owners", async () => {
+  for (const outcome of ["fulfilled", "rejected"] as const) {
+    const id = crypto.randomUUID()
+    const value = { generation: "directory-observed" }
+    const failure = new Error("declared directory callback failure")
+    const result = Diagnostics.request(id, () =>
+      ProjectDirectoryAdmission.run(async () => {
+        if (outcome === "rejected") throw failure
+        return value
+      }),
+    )
+    expect(await result.catch((error) => error)).toBe(outcome === "fulfilled" ? value : failure)
+    const events = await rows([id]),
+      completed = events.filter((row) => row.status === "completed")
+    expect(completed.map((row) => row.phase).sort()).toEqual([
+      "directory.admission",
+      "directory.held",
+      "directory.release",
+      "directory.total",
+      "request",
+    ])
+    expect(
+      events
+        .filter((row) => row.status === "started")
+        .map((row) => row.spanID)
+        .sort(),
+    ).toEqual(completed.map((row) => row.spanID).sort())
+    expect(completed.find((row) => row.phase === "directory.total")?.outcome).toBe(outcome)
   }
 })
 

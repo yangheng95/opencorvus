@@ -17,6 +17,7 @@ import { Filesystem } from "@/util/filesystem"
 import { Log } from "@/util/log"
 import { ProcessLockCompromisedError, withSharedJsonFactLock } from "@/util/process-lock"
 import { ProjectDirectoryAdmissionTable } from "./project.sql"
+import { SkillReadDiagnostics } from "@/skill/read-diagnostics"
 
 /**
  * Durable Project-directory ownership admission.
@@ -233,17 +234,21 @@ export namespace ProjectDirectoryAdmission {
     let completed = false
     let result!: T
     try {
-      return await withSharedJsonFactLock({
-        locks,
-        filepath: lockFilepath(),
-        empty: "{}",
-        mode: 0o600,
-        run: async () => {
+      return await SkillReadDiagnostics.directoryOwner(
+        (run) =>
+          withSharedJsonFactLock({
+            locks,
+            filepath: lockFilepath(),
+            empty: "{}",
+            mode: 0o600,
+            run,
+          }),
+        async () => {
           result = await operation()
           completed = true
           return result
         },
-      })
+      )
     } catch (error) {
       if (completed && error instanceof ProcessLockCompromisedError) {
         // This file lock is only a best-effort queue. Every production callback

@@ -1004,3 +1004,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [权限配置可用性](2026-10-19-permission-config-availability.md)：已确认模式与未加载状态。
 
 - [配置保存耗时](2026-10-20-config-write-cost.md)：原生全局 writer 的阶段测量与修复。
+
+- [共享目录准入成本](2026-10-20-directory-admission-cost.md)：冷路径 owner 阶段与安全优化。

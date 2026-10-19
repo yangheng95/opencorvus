@@ -3455,3 +3455,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [权限配置可用性](records/2026-10/2026-10-19-permission-config-availability.md)：首页与设置的未加载状态和真实重读。
 
 - [配置保存耗时](records/2026-10/2026-10-20-config-write-cost.md)：真实全链路阶段测量与优化。
+
+- [共享目录准入成本](records/2026-10/2026-10-20-directory-admission-cost.md)：冷配置保存的队列与持有阶段。

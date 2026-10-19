@@ -19,6 +19,7 @@ import { assertProjectDurableAdmissionOpen, ProjectDurableAdmissionClosedError }
 import { Identifier } from "@/id/id"
 import { assertProjectDeletionCleanupAdmissionOpen } from "./deletion-cleanup-admission"
 import { ProjectDirectoryAdmission } from "./directory-admission"
+import { SkillReadDiagnostics } from "@/skill/read-diagnostics"
 
 export namespace Project {
   export const DurableAdmissionClosedError = ProjectDurableAdmissionClosedError
@@ -592,14 +593,18 @@ export namespace Project {
         const hasLocalGit = local
 
         if (hasLocalGit) {
+          // Both facts belong to this repository. Resolve the common directory
+          // absolutely so its meaning is independent of the displayed top path.
+          const [top, commonText] = await Promise.all([
+            text(["rev-parse", "--show-toplevel"], directory),
+            text(["rev-parse", "--path-format=absolute", "--git-common-dir"], directory),
+          ])
           let sandbox = directory
-          const top = await text(["rev-parse", "--show-toplevel"], sandbox)
           if (top) {
             sandbox = await displayGitTop(directory, gitpath(sandbox, top))
           }
 
-          const commonText = await text(["rev-parse", "--git-common-dir"], sandbox)
-          const common = commonText ? gitpath(sandbox, commonText) : undefined
+          const common = commonText ? gitpath(directory, commonText) : undefined
           const resolvedCommon = common || path.join(sandbox, ".git")
           const rawWorktree = !common || common === sandbox ? sandbox : path.dirname(common)
           const worktree = await displayGitTop(directory, rawWorktree)
@@ -614,7 +619,7 @@ export namespace Project {
 
         return resolveNonGitDirectoryIdentity({ directory, dotgit, local: false })
       })
-    const data = await discoverIdentity()
+    const data = await SkillReadDiagnostics.phase("project.identity.initial", discoverIdentity)
     const proposedSandbox =
       data.sandbox !== data.worktree && !(await sameFilesystemLocation(data.sandbox, data.worktree))
         ? data.sandbox
@@ -623,10 +628,9 @@ export namespace Project {
     // and admission. It is deliberately outside the non-reentrant lock; the
     // lock-internal hook below exists for tests that must hold exact admission.
     await beforeDiscoveryCommit?.({ projectID: data.id, directory, proposedSandbox })
-    const physicalRegistration = await capturePhysicalRegistrationAuthority(data.id, [
-      data.worktree,
-      ...(proposedSandbox ? [proposedSandbox] : []),
-    ])
+    const physicalRegistration = await SkillReadDiagnostics.phase("project.registry.capture", () =>
+      capturePhysicalRegistrationAuthority(data.id, [data.worktree, ...(proposedSandbox ? [proposedSandbox] : [])]),
+    )
 
     const inheritedAdmission = ProjectDirectoryAdmission.current()
     if (
@@ -684,21 +688,19 @@ export namespace Project {
     }
 
     return ProjectDirectoryAdmission.run(async () => {
-      const registrations = await acquireRegistrationAdmissions([
-        directory,
-        data.worktree,
-        ...(proposedSandbox ? [proposedSandbox] : []),
-      ])
+      const registrations = await SkillReadDiagnostics.phase("project.registry.acquire", () =>
+        acquireRegistrationAdmissions([directory, data.worktree, ...(proposedSandbox ? [proposedSandbox] : [])]),
+      )
       let settled = false
       try {
-        await physicalRegistration.revalidate()
+        await SkillReadDiagnostics.phase("project.registry.revalidate", () => physicalRegistration.revalidate())
         // Identity discovery may perform git IO before admission, but every fact
         // that authorizes the durable row is revalidated after this backend owns
         // the same cross-process lock as abandoned-directory reclamation.
         await assertDirectoryIntegrity(directory)
         const [admittedOccurrence, admittedIdentity] = await Promise.all([
           ProjectDirectoryAdmission.observeDirectory(directory),
-          discoverIdentity(),
+          SkillReadDiagnostics.phase("project.identity.admitted", discoverIdentity),
         ])
         if (
           !ProjectDirectoryAdmission.sameOccurrence(discoveredOccurrence, admittedOccurrence) ||
