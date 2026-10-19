@@ -284,3 +284,10 @@ write under the same catalog owner. Project initialization, global/project confi
 updates and Task/Mission/Session capability reads share this boundary. Reference
 admission now waits for catalog recovery as well as its process-local lock; it does
 not create a second catalog or skip pending replacement settlement.
+
+Every non-log HTTP request uses the existing diagnostic request scope and its original
+request ID, so catalog admission spans can be attributed to capability and catalog
+readers as well as configuration writers. The scope wraps the original middleware
+operation and preserves its response, error and streaming lifetime; disabled debug
+diagnostics execute the same operation directly. Log ingestion retains its recursion
+exclusion. Diagnostic spans are observations, not publication or readiness authority.

@@ -1,4 +1,6 @@
 import { DurablePublicationStore, setDurablePublicationTestCutHook } from "@opencorvus-ai/util/durable-publication"
+import { writeFile } from "node:fs/promises"
+import path from "node:path"
 
 const [root, action, requestedCut] = process.argv.slice(2)
 if (!root || !action) throw new Error("usage: durable-publication-child <root> <action> [cut]")
@@ -28,8 +30,9 @@ const terminal = () =>
 if (action !== "intent") await create()
 if (action === "terminal") await phase()
 
-setDurablePublicationTestCutHook((cut) => {
+setDurablePublicationTestCutHook(async (cut) => {
   if (cut !== requestedCut) return
+  await writeFile(path.join(root, "cut-observed.json"), JSON.stringify({ action, cut }))
   process.kill(process.pid, "SIGKILL")
 })
 

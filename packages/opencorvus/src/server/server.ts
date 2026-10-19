@@ -832,14 +832,8 @@ export namespace Server {
             })
           }
           try {
-            if (
-              (c.req.method === "GET" && c.req.path === "/skill/mounts") ||
-              (c.req.method === "PATCH" && (c.req.path === "/config" || c.req.path === "/global/config"))
-            ) {
-              await SkillReadDiagnostics.request(id, next)
-            } else {
-              await next()
-            }
+            if (skipLogging) await next()
+            else await SkillReadDiagnostics.request(id, next)
             if (!skipLogging) {
               log.info("request", {
                 requestID: id,
@@ -1089,10 +1083,11 @@ export namespace Server {
         if (stopOperation) return stopOperation
         const operation = (async () => {
           const terminated = await settleRuntimeAndQuiesceListener({
-            settle: (onRuntimeCancellationRequested) => settleCurrentProcessExecution("Server.stop graceful runtime shutdown", {
-              disposeInstances: () => Instance.disposeAll(),
-              onRuntimeCancellationRequested,
-            }),
+            settle: (onRuntimeCancellationRequested) =>
+              settleCurrentProcessExecution("Server.stop graceful runtime shutdown", {
+                disposeInstances: () => Instance.disposeAll(),
+                onRuntimeCancellationRequested,
+              }),
             quiesce: () => quiesce(closeActiveConnections),
           })
           await releaseRuntimeHandoff(terminated.releaseHandoff)

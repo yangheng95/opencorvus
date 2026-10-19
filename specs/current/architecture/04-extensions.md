@@ -487,7 +487,8 @@ occurrence，并以全部 terminal receipt identity 的稳定集合摘要作为�
 revision，因此另一个 backend 不能继续投影 mixed 或 stale catalog。所有 global config writer 使用同一个 `catalog owner → config
 file owner` 锁序，并在修改配置前先收敛 open Skill replacement；replacement 的 before/configured revision
 会对真实磁盘配置和语义 effect 重新校验。每增加一个终态都必然改变 cache revision，不依赖 caller wall clock
-或 UUID 顺序。Overlay 只展示来源明确的更新按钮，调用成功后重新读取
+或 UUID 顺序。同进程 catalog 竞争遵循[数据面的 subject 准入合同](02-data.md#durable-publication-subject-准入)，
+已排队的读取应先于后来接受的配置写入取得原文件 lease。Overlay 只展示来源明确的更新按钮，调用成功后重新读取
 catalog/market 或 canonical Skill mount matrix，不维护本地 shadow 状态。
 
 Expert Squad Market 只从严格 bundled declaration 和已安装 package identity/location 投影

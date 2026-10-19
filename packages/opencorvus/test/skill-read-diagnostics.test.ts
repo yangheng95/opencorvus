@@ -8,6 +8,22 @@ import { SkillReadDiagnostics as Diagnostics } from "@/skill/read-diagnostics"
 import { DurablePublicationStore } from "@opencorvus-ai/util/durable-publication"
 import { ProjectDirectoryAdmission } from "@/project/directory-admission"
 
+test("a production control-plane response and its diagnostic share the original HTTP request identity", async () => {
+  await Log.init({ print: false, dev: true, level: "DEBUG" })
+  const { Server } = await import("@/server/server")
+  const response = await Server.App().fetch(new Request("http://localhost/global/health"))
+  expect({ status: response.status, body: await response.json() }).toMatchObject({
+    status: 200,
+    body: { healthy: true },
+  })
+  const id = response.headers.get("x-opencorvus-request-id")
+  expect(typeof id).toBe("string")
+  const completed = (await rows([id])).filter((row) => row.phase === "request" && row.status === "completed")
+  expect(completed.map((row) => ({ requestID: row.http.requestID, outcome: row.outcome }))).toEqual([
+    { requestID: id, outcome: "fulfilled" },
+  ])
+})
+
 async function rows(ids: Array<string | null>) {
   await Log.flush()
   return (await fs.readFile(Log.file(), "utf8"))

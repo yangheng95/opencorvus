@@ -1,0 +1,69 @@
+$ bun script/run-tests.ts test/skill-replacement-publication.test.ts test/project-promotion-journal.test.ts test/project-implicit-creation-journal.test.ts test/workspace-lifecycle.test.ts test/package-install-receipt.test.ts "--test-name-pattern=two backend processes publish exactly one terminal promotion|a promotion that died after publication|a promotion that died before publication|a dead owner whose Project row did commit|discovery of a registered nested execution directory|two sweeps racing the same dead owner|publishes one deterministic ready Workspace|two backends converge one caller-supplied Workspace occurrence|startup takes over one open Workspace journal|startup recovery completes the exact public delete|a multi-Skill catalog converges one complete revision|a complete tree publishes|a dependency resolved by nesting"
+[1/5] START test/skill-replacement-publication.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a multi-Skill catalog converges one complete revision across killed backend occurrences [125335.10ms]
+
+ 1 pass
+ 2 filtered out
+ 0 fail
+ 45 expect() calls
+Ran 1 test across 1 file. [127.66s]
+[1/5] DONE test/skill-replacement-publication.test.ts exit=0 duration=128.25s
+[2/5] START test/project-promotion-journal.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) anonymous Project promotion journal > two backend processes publish exactly one terminal promotion for one Project generation [4654.17ms]
+(pass) anonymous Project promotion journal > a promotion that died after publication converges forward at recovery [2710.21ms]
+(pass) anonymous Project promotion journal > a promotion that died before publication restores the source identity [1780.69ms]
+
+ 3 pass
+ 14 filtered out
+ 0 fail
+ 5 expect() calls
+Ran 3 tests across 1 file. [9.95s]
+[2/5] DONE test/project-promotion-journal.test.ts exit=0 duration=10.14s
+[3/5] START test/project-implicit-creation-journal.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) anonymous Project creation journal > a dead owner whose Project row did commit keeps its directory and settles the receipt [356.39ms]
+(pass) anonymous Project creation journal > discovery of a registered nested execution directory admits one canonical worktree owner [842.46ms]
+(pass) anonymous Project creation journal > two sweeps racing the same dead owner both succeed [351.99ms]
+
+ 3 pass
+ 26 filtered out
+ 0 fail
+ 6 expect() calls
+Ran 3 tests across 1 file. [2.43s]
+[3/5] DONE test/project-implicit-creation-journal.test.ts exit=0 duration=2.56s
+[4/5] START test/workspace-lifecycle.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Workspace durable lifecycle > publishes one deterministic ready Workspace and retires its exact Git child [6345.35ms]
+(pass) Workspace durable lifecycle > two backends converge one caller-supplied Workspace occurrence [6896.03ms]
+(pass) Workspace durable lifecycle > startup takes over one open Workspace journal after its real backend dies [14468.39ms]
+(pass) Workspace durable lifecycle > startup recovery completes the exact public delete after a post-prune crash cut [6485.34ms]
+
+ 4 pass
+ 14 filtered out
+ 0 fail
+ 8 expect() calls
+Ran 4 tests across 1 file. [37.57s]
+[4/5] DONE test/workspace-lifecycle.test.ts exit=0 duration=37.82s
+[5/5] START test/package-install-receipt.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) package installation readiness is a receipt, not a directory > a complete tree publishes its receipt under both the requested and resolved revisions [1707.79ms]
+(pass) package installation readiness is a receipt, not a directory > a dependency resolved by nesting is a complete install, not a missing one [1396.83ms]
+
+ 2 pass
+ 7 filtered out
+ 0 fail
+ 2 expect() calls
+Ran 2 tests across 1 file. [3.89s]
+[5/5] DONE test/package-install-receipt.test.ts exit=0 duration=4.03s

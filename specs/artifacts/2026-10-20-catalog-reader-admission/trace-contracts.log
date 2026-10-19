@@ -1,0 +1,32 @@
+$ bun script/run-tests.ts test/skill-read-diagnostics.test.ts test/config-catalog-lock-order.test.ts
+[1/2] START test/skill-read-diagnostics.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a production control-plane response and its diagnostic share the original HTTP request identity [2663.05ms]
+(pass) config phases retain exact operation settlement and request ownership [30.67ms]
+(pass) directory queue diagnostics preserve real callback results, errors and balanced owners [41.95ms]
+(pass) startup initialization and late causal work have their actual request lifetime [43.80ms]
+(pass) diagnostics retain actual State promise identity and one creator with distinct join and cache reads [27.55ms]
+(pass) diagnostics preserve the original State rejection and observe its successful new initializer on retry [14.16ms]
+(pass) catalog diagnostics preserve real durable owner results and balanced failure phases [31.71ms]
+
+ 7 pass
+ 0 fail
+ 46 expect() calls
+Ran 7 tests across 1 file. [4.98s]
+[1/2] DONE test/skill-read-diagnostics.test.ts exit=0 duration=5.64s
+[2/2] START test/config-catalog-lock-order.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) project Config mutation settles after a catalog reader observes Config [2218.04ms]
+(pass) project Config mutation settles after a reference reader observes Config [1699.12ms]
+(pass) global Config mutation settles after a catalog reader observes Config [1794.29ms]
+(pass) global Config mutation settles after a reference reader observes Config [1837.65ms]
+
+ 4 pass
+ 0 fail
+ 8 expect() calls
+Ran 4 tests across 1 file. [8.45s]
+[2/2] DONE test/config-catalog-lock-order.test.ts exit=0 duration=8.61s

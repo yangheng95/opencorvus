@@ -162,6 +162,17 @@ write transaction 重读并核对完整 snapshot、取得 promotion fence，首�
 仍持有 exact fence 的 settled occurrence；未知路径、pre-relocation digest、generation 或双 source/quarantine
 不允许猜测所有权或删除数据。
 
+## Durable publication subject 准入
+
+`DurablePublicationStore.withSubjectLock` 以实际解析的物理 lock root 与 kind/subject 身份
+协调 publication。持有有效祖先 lease 的调用先按原 lease 重入；其他同进程调用按该身份的
+实际接受顺序，依次尝试原跨进程文件锁。队列只管理本地准入，不提供 owner、不落盘，也
+不承诺不同后端之间的全局先进先出。原文件 lease 仍是唯一跨进程 authority。
+
+一次准入必须等原 callback、已接受的子 callback、lease 退休和文件锁 release 全部结算后
+才推进下一项。准备或 callback 失败也按原顺序结算，向调用者保留原错误；不同物理 root、
+kind 或 subject 独立推进。队列不改变 immutable phase、terminal receipt、恢复决策或数据库格式。
+
 ## engine 域
 
 ### 业务身份与完整性摘要

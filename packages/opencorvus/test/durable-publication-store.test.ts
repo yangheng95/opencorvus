@@ -1,16 +1,164 @@
 import { afterEach, describe, expect, test } from "bun:test"
-import { mkdtemp, rm } from "node:fs/promises"
+import { mkdir, mkdtemp, readFile, rm, symlink } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
-import { DurablePublicationStore, type DurablePublicationSubjectOwner } from "@opencorvus-ai/util/durable-publication"
+import { AsyncLocalStorage } from "node:async_hooks"
+import {
+  DurablePublicationStore,
+  setDurablePublicationTestCutHook,
+  type DurablePublicationSubjectOwner,
+} from "@opencorvus-ai/util/durable-publication"
 
 const roots: string[] = []
 
 afterEach(async () => {
+  setDurablePublicationTestCutHook()
   await Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true })))
 })
 
 describe("durable publication fact store", () => {
+  test("physical subject callbacks enter in their accepted admission order", async () => {
+    const parent = await mkdtemp(path.join(os.tmpdir(), "opencorvus-publication-admission-"))
+    roots.push(parent)
+    const root = path.join(parent, "store"),
+      alias = path.join(parent, "alias")
+    await mkdir(root)
+    await symlink(root, alias, process.platform === "win32" ? "junction" : "dir")
+    const stores = [
+      new DurablePublicationStore(root),
+      new DurablePublicationStore(`${root}${path.sep}`),
+      new DurablePublicationStore(alias),
+    ]
+    const context = new AsyncLocalStorage<number>()
+    const entered = Promise.withResolvers<void>(),
+      release = Promise.withResolvers<void>()
+    const queued = Array.from({ length: 12 }, () => Promise.withResolvers<void>())
+    const accepted: number[] = [],
+      callbacks: number[] = []
+    const requests: Promise<{ index: number; current: boolean }>[] = []
+    const holder = stores[0]!.withSubjectLock("test-publication", "admission:order", async () => {
+      entered.resolve()
+      await release.promise
+    })
+    await entered.promise
+    setDurablePublicationTestCutHook((point, kind) => {
+      const index = context.getStore()
+      if (point !== "subject-queued" || kind !== "test-publication" || index === undefined) return
+      accepted.push(index)
+      queued[index]!.resolve()
+    })
+    try {
+      for (let index = 0; index < queued.length; index++) {
+        requests.push(
+          context.run(index, () =>
+            stores[index % stores.length]!.withSubjectLock("test-publication", "admission:order", async (owner) => {
+              callbacks.push(index)
+              return { index, current: owner.isCurrent() }
+            }),
+          ),
+        )
+        await queued[index]!.promise
+      }
+      release.resolve()
+      const values = await Promise.all(requests)
+      expect(callbacks).toEqual(accepted)
+      expect(values).toEqual(queued.map((_, index) => ({ index, current: true })))
+    } finally {
+      release.resolve()
+      await Promise.allSettled([holder, ...requests])
+    }
+  })
+
+  for (const stage of ["preparation", "callback"] as const) {
+    test(`a ${stage} failure settles the preceding admission before its successor owns the subject`, async () => {
+      const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-publication-admission-error-"))
+      roots.push(root)
+      const store = new DurablePublicationStore(root),
+        context = new AsyncLocalStorage<string>()
+      const entered = Promise.withResolvers<void>(),
+        release = Promise.withResolvers<void>()
+      const failureQueued = Promise.withResolvers<void>(),
+        nextQueued = Promise.withResolvers<void>()
+      const failure = new Error(`declared ${stage} failure`),
+        events: string[] = []
+      const pending: Promise<unknown>[] = []
+      const holder = store.withSubjectLock("test-publication", "admission:error", async () => {
+        events.push("first-owned")
+        entered.resolve()
+        await release.promise
+        events.push("first-settled")
+      })
+      pending.push(holder)
+      await entered.promise
+      setDurablePublicationTestCutHook((point, kind) => {
+        if (point !== "subject-queued" || kind !== "test-publication") return
+        if (context.getStore() === "failed") {
+          failureQueued.resolve()
+          if (stage === "preparation") throw failure
+        }
+        if (context.getStore() === "next") nextQueued.resolve()
+      })
+      try {
+        const rejected = context
+          .run("failed", () =>
+            store.withSubjectLock("test-publication", "admission:error", async () => {
+              events.push("failed-owned")
+              throw failure
+            }),
+          )
+          .catch((error) => error)
+        pending.push(rejected)
+        await failureQueued.promise
+        const next = context.run("next", () =>
+          store.withSubjectLock("test-publication", "admission:error", async (owner) => {
+            events.push("next-owned")
+            return { generation: "next", current: owner.isCurrent() }
+          }),
+        )
+        pending.push(next)
+        await nextQueued.promise
+        release.resolve()
+        expect(await rejected).toBe(failure)
+        expect(await next).toEqual({ generation: "next", current: true })
+        expect(events).toEqual(
+          stage === "preparation"
+            ? ["first-owned", "first-settled", "next-owned"]
+            : ["first-owned", "first-settled", "failed-owned", "next-owned"],
+        )
+      } finally {
+        release.resolve()
+        await Promise.allSettled(pending)
+      }
+    })
+  }
+
+  test("different subjects finish their own owner while the original subject remains admitted", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-publication-independent-"))
+    roots.push(root)
+    const store = new DurablePublicationStore(root)
+    const entered = Promise.withResolvers<void>(),
+      release = Promise.withResolvers<void>()
+    const events: string[] = []
+    const holder = store.withSubjectLock("test-publication", "admission:first", async (owner) => {
+      events.push("first-owned")
+      entered.resolve()
+      await release.promise
+      events.push(`first-settled:${owner.isCurrent()}`)
+    })
+    await entered.promise
+    try {
+      const independent = await store.withSubjectLock("test-publication", "admission:independent", async (owner) => {
+        events.push("independent-owned")
+        return { subject: "independent", current: owner.isCurrent() }
+      })
+      expect(independent).toEqual({ subject: "independent", current: true })
+    } finally {
+      release.resolve()
+      await holder
+    }
+    expect(events).toEqual(["first-owned", "independent-owned", "first-settled:true"])
+  })
+
   test("subject owner observations follow the original active lease through nested callbacks and retirement", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-publication-owner-"))
     roots.push(root)
@@ -262,7 +410,10 @@ describe("durable publication fact store", () => {
         stderr: "pipe",
       })
       const exitCode = await child.exited
-      expect(exitCode).not.toBe(0)
+      expect(process.platform === "win32" ? { exitCode } : { signal: child.signalCode }).toEqual(
+        process.platform === "win32" ? { exitCode: 1 } : { signal: "SIGKILL" },
+      )
+      expect(JSON.parse(await readFile(path.join(root, "cut-observed.json"), "utf8"))).toEqual({ action, cut })
 
       const store = new DurablePublicationStore(root)
       const listed = await store.list("test-publication")

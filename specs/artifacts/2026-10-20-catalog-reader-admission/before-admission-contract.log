@@ -1,0 +1,52 @@
+$ bun script/run-tests.ts test/durable-publication-store.test.ts "--test-name-pattern=physical subject callbacks enter"
+[1/1] START test/durable-publication-store.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+43 |         )))
+44 |         await queued[index]!.promise
+45 |       }
+46 |       release.resolve()
+47 |       const values = await Promise.all(requests)
+48 |       expect(callbacks).toEqual(accepted)
+                             ^
+error: expect(received).toEqual(expected)
+
+  [
+-   0,
++   11,
+    1,
++   4,
+    2,
+-   3,
+-   4,
++   9,
++   8,
++   10,
+    5,
++   0,
+    6,
++   3,
+    7,
+-   8,
+-   9,
+-   10,
+-   11,
+  ]
+
+- Expected  - 7
++ Received  + 7
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\durable-publication-store.test.ts:48:25)
+(fail) durable publication fact store > physical subject callbacks enter in their accepted admission order [102.80ms]
+
+ 0 pass
+ 7 filtered out
+ 1 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [2.85s]
+[1/1] DONE test/durable-publication-store.test.ts exit=1 duration=3.61s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\durable-publication-store.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\durable-publication-store.test.ts
+error: script "test" exited with code 1

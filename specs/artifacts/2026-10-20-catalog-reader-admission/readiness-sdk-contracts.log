@@ -1,0 +1,30 @@
+$ bun script/run-tests.ts test/worktree-readiness.test.ts ../sdk/js/test/generation-transaction.test.ts
+[1/2] START test/worktree-readiness.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) worktree readiness receipts > a registered but unpopulated tree is resumed to readiness instead of being reused bare [2898.58ms]
+(pass) worktree readiness receipts > a completed create commits the ready receipt and reuse honors it [3406.91ms]
+(pass) worktree readiness receipts > a failed population converges: the retry creates a fresh ready tree [5972.90ms]
+
+ 3 pass
+ 0 fail
+ 6 expect() calls
+Ran 3 tests across 1 file. [14.30s]
+[1/2] DONE test/worktree-readiness.test.ts exit=0 duration=14.86s
+[2/2] START ../sdk/js/test/generation-transaction.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a generation publishes all of its outputs or none > equivalent package-root spellings serialize two process publishers onto one generation lock [1345.59ms]
+(pass) a generation publishes all of its outputs or none > a completed generation replaces every target and settles its occurrence [76.30ms]
+(pass) a generation publishes all of its outputs or none > a generation that fails while publishing restores the previous complete generation [118.37ms]
+(pass) a generation publishes all of its outputs or none > the next build converges an abandoned generation before it stages anything [50.53ms]
+(pass) a generation publishes all of its outputs or none > a journal naming a different tree is refused instead of rolled back from [21.01ms]
+(pass) a generation publishes all of its outputs or none > convergence leaves a target the abandoned generation never named untouched [47.91ms]
+
+ 6 pass
+ 0 fail
+ 12 expect() calls
+Ran 6 tests across 1 file. [2.49s]
+[2/2] DONE ../sdk/js/test/generation-transaction.test.ts exit=0 duration=2.62s

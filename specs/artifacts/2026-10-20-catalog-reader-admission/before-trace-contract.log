@@ -1,0 +1,38 @@
+$ bun script/run-tests.ts test/skill-read-diagnostics.test.ts "--test-name-pattern=production control-plane response"
+[1/1] START test/skill-read-diagnostics.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+14 |   const response = await Server.App().fetch(new Request("http://localhost/global/health"))
+15 |   expect({ status: response.status, body: await response.json() }).toMatchObject({ status: 200, body: { healthy: true } })
+16 |   const id = response.headers.get("x-opencorvus-request-id")
+17 |   expect(typeof id).toBe("string")
+18 |   const completed = (await rows([id])).filter((row) => row.phase === "request" && row.status === "completed")
+19 |   expect(completed.map((row) => ({ requestID: row.http.requestID, outcome: row.outcome }))).toEqual([
+                                                                                                 ^
+error: expect(received).toEqual(expected)
+
+- [
+-   {
+-     "outcome": "fulfilled",
+-     "requestID": "3c58990d-2c02-43f7-9d25-ec5b2db15d92",
+-   },
+- ]
++ []
+
+- Expected  - 6
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-read-diagnostics.test.ts:19:93)
+(fail) a production control-plane response and its diagnostic share the original HTTP request identity [3387.84ms]
+
+ 0 pass
+ 6 filtered out
+ 1 fail
+ 3 expect() calls
+Ran 1 test across 1 file. [5.62s]
+[1/1] DONE test/skill-read-diagnostics.test.ts exit=1 duration=6.31s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-read-diagnostics.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-read-diagnostics.test.ts
+error: script "test" exited with code 1

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [目录读取入场顺序](2026-10-20-catalog-reader-admission/README.md)：真实插队、44例共享合同、全部页面读取和保留历史验证。
+
 - [Git身份与原生启动压力](2026-10-20-native-spawn-pressure/README.md)：损坏/缺失Git根因、38例合同、公开HTTP及全页面性能未达标证据。
 
 - [Windows同步启动观测](2026-10-20-windows-spawn-observation/README.md)：排除FFI绑定、真实spawn主线程成本与完整性能失败事实。

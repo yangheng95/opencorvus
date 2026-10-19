@@ -1,0 +1,53 @@
+$ bun script/run-tests.ts test/durable-publication-store.test.ts test/skill-read-diagnostics.test.ts test/config-catalog-lock-order.test.ts
+[1/3] START test/durable-publication-store.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) durable publication fact store > physical subject callbacks enter in their accepted admission order [38.22ms]
+(pass) durable publication fact store > a preparation failure settles the preceding admission before its successor owns the subject [6.94ms]
+(pass) durable publication fact store > a callback failure settles the preceding admission before its successor owns the subject [6.90ms]
+(pass) durable publication fact store > different subjects finish their own owner while the original subject remains admitted [5.58ms]
+(pass) durable publication fact store > subject owner observations follow the original active lease through nested callbacks and retirement [5.64ms]
+(pass) durable publication fact store > an accepted nested subject callback settles its value before the next owner enters [56.65ms]
+(pass) durable publication fact store > an inherited subject lease queues again after its outer owner releases [6.57ms]
+(pass) durable publication fact store > subject leases remain isolated across durable publication roots [8.27ms]
+(pass) durable publication fact store > alternate spellings of one root compete on the same subject lock [5.19ms]
+(pass) durable publication fact store > reloads one immutable intent, ordered phases and terminal receipt [92.91ms]
+(pass) durable publication fact store > a killed writer leaves only a complete old or new intent, phase and terminal fact [1216.66ms]
+
+ 11 pass
+ 0 fail
+ 38 expect() calls
+Ran 11 tests across 1 file. [3.47s]
+[1/3] DONE test/durable-publication-store.test.ts exit=0 duration=4.05s
+[2/3] START test/skill-read-diagnostics.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a production control-plane response and its diagnostic share the original HTTP request identity [2864.60ms]
+(pass) config phases retain exact operation settlement and request ownership [29.24ms]
+(pass) directory queue diagnostics preserve real callback results, errors and balanced owners [39.91ms]
+(pass) startup initialization and late causal work have their actual request lifetime [43.05ms]
+(pass) diagnostics retain actual State promise identity and one creator with distinct join and cache reads [26.88ms]
+(pass) diagnostics preserve the original State rejection and observe its successful new initializer on retry [15.05ms]
+(pass) catalog diagnostics preserve real durable owner results and balanced failure phases [33.11ms]
+
+ 7 pass
+ 0 fail
+ 46 expect() calls
+Ran 7 tests across 1 file. [4.00s]
+[2/3] DONE test/skill-read-diagnostics.test.ts exit=0 duration=4.17s
+[3/3] START test/config-catalog-lock-order.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) project Config mutation settles after a catalog reader observes Config [2014.33ms]
+(pass) project Config mutation settles after a reference reader observes Config [1554.89ms]
+(pass) global Config mutation settles after a catalog reader observes Config [1529.44ms]
+(pass) global Config mutation settles after a reference reader observes Config [1595.88ms]
+
+ 4 pass
+ 0 fail
+ 8 expect() calls
+Ran 4 tests across 1 file. [7.58s]
+[3/3] DONE test/config-catalog-lock-order.test.ts exit=0 duration=7.87s

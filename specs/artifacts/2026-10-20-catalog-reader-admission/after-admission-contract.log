@@ -1,0 +1,13 @@
+$ bun script/run-tests.ts test/durable-publication-store.test.ts "--test-name-pattern=physical subject callbacks enter"
+[1/1] START test/durable-publication-store.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) durable publication fact store > physical subject callbacks enter in their accepted admission order [27.60ms]
+
+ 1 pass
+ 7 filtered out
+ 0 fail
+ 2 expect() calls
+Ran 1 test across 1 file. [2.16s]
+[1/1] DONE test/durable-publication-store.test.ts exit=0 duration=2.72s

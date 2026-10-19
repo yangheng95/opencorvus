@@ -109,6 +109,7 @@ function stable(value: unknown): string {
 }
 
 type DurablePublicationCut =
+  | "subject-queued"
   | "occurrence-staging-created"
   | "occurrence-published"
   | "intent-temp-synced"
@@ -120,7 +121,7 @@ type DurablePublicationCut =
 
 let testCutHook: ((cut: DurablePublicationCut, kind: string) => void | Promise<void>) | undefined
 
-/** Test-only crash injection used by child-process durability acceptance. */
+/** Test-only admission observation and child-process crash injection. */
 export function setDurablePublicationTestCutHook(
   hook?: (cut: DurablePublicationCut, kind: string) => void | Promise<void>,
 ): void {
@@ -200,6 +201,7 @@ async function readOptional(file: string): Promise<unknown | undefined> {
 export class DurablePublicationStore {
   private static readonly heldSubjects = new AsyncLocalStorage<Map<string, SubjectCallbackScope>>()
   private static readonly activeSubjectLeases = new Map<string, string>()
+  private static readonly subjectAdmissions = new Map<string, Promise<void>>()
 
   constructor(readonly root: string) {
     if (!path.isAbsolute(root)) throw new Error(`Durable publication root must be absolute: ${root}`)
@@ -272,31 +274,47 @@ export class DurablePublicationStore {
     if (inherited && DurablePublicationStore.activeSubjectLeases.get(leaseKey) === inherited.lease) {
       return DurablePublicationStore.runSubjectCallback(leaseKey, inherited.lease, inherited, run)
     }
-    const target = path.join(lockDirectory, subjectKey)
-    const provision = await open(target, "a", 0o600)
-    await provision.close()
-    let compromised: unknown
-    const release = await lockfile.lock(target, {
-      realpath: false,
-      retries: { forever: true, factor: 1.2, minTimeout: 25, maxTimeout: 250, randomize: true },
-      onCompromised(error) {
-        compromised ??= error
-      },
-    })
-    const lease = randomUUID()
-    DurablePublicationStore.activeSubjectLeases.set(leaseKey, lease)
+    // Order local root contenders before they attempt the shared file lease.
+    // An inherited live lease has already taken the reentrant path above.
+    const preceding = DurablePublicationStore.subjectAdmissions.get(leaseKey)
+    const admission = Promise.withResolvers<void>()
+    DurablePublicationStore.subjectAdmissions.set(leaseKey, admission.promise)
     try {
-      const result = await DurablePublicationStore.runSubjectCallback(leaseKey, lease, undefined, run)
-      if (compromised)
-        throw new Error(`Durable publication subject lock was compromised: ${subject}`, { cause: compromised })
-      return result
-    } finally {
-      if (DurablePublicationStore.activeSubjectLeases.get(leaseKey) === lease) {
-        DurablePublicationStore.activeSubjectLeases.delete(leaseKey)
-      }
-      await release().catch((error) => {
-        if (!compromised) throw error
+      if (testCutHook) await cut("subject-queued", kind)
+      await preceding
+      const target = path.join(lockDirectory, subjectKey)
+      const provision = await open(target, "a", 0o600)
+      await provision.close()
+      let compromised: unknown
+      const release = await lockfile.lock(target, {
+        realpath: false,
+        retries: { forever: true, factor: 1.2, minTimeout: 25, maxTimeout: 250, randomize: true },
+        onCompromised(error) {
+          compromised ??= error
+        },
       })
+      const lease = randomUUID()
+      DurablePublicationStore.activeSubjectLeases.set(leaseKey, lease)
+      try {
+        const result = await DurablePublicationStore.runSubjectCallback(leaseKey, lease, undefined, run)
+        if (compromised)
+          throw new Error(`Durable publication subject lock was compromised: ${subject}`, { cause: compromised })
+        return result
+      } finally {
+        if (DurablePublicationStore.activeSubjectLeases.get(leaseKey) === lease) {
+          DurablePublicationStore.activeSubjectLeases.delete(leaseKey)
+        }
+        await release().catch((error) => {
+          if (!compromised) throw error
+        })
+      }
+    } finally {
+      // An early preparation failure still settles behind its predecessor.
+      await preceding
+      admission.resolve()
+      if (DurablePublicationStore.subjectAdmissions.get(leaseKey) === admission.promise) {
+        DurablePublicationStore.subjectAdmissions.delete(leaseKey)
+      }
     }
   }
 

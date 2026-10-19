@@ -1,0 +1,1161 @@
+{
+  "batch": 449,
+  "baselineCommit": "36270590e06d3a3ca0bc41c82c815543bd0fe279",
+  "scope": "Process-local physical-subject admission before the existing cross-process file lease, preserving active ancestor reentry, original callback/child/release settlement and immutable receipts. All non-log HTTP diagnostic scopes share original request identity.",
+  "scopes": [
+    {
+      "phase": "before",
+      "preflight": {
+        "sessionID": "ses_hUT6C4HPFvvJfAUB4rqE",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "canonical": {
+        "at": "2026-10-19T23:18:26.187Z",
+        "endedAt": "2026-10-19T23:18:57.276Z",
+        "phase": "before",
+        "port": 18695,
+        "occurrence": "catalog-reader-admission-449-before-19a40ae1-2527-44b1-907a-7dd4a6e63345",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 15079.161999999997,
+        "restoreMs": 16002.1256,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "physical": {
+        "occurrence": "catalog-reader-admission-449-before-19a40ae1-2527-44b1-907a-7dd4a6e63345",
+        "pairedCleanupComplete": true,
+        "copiedPair": [
+          {
+            "name": "auth.json",
+            "outcome": "retired"
+          },
+          {
+            "name": "models.json",
+            "outcome": "retired"
+          }
+        ],
+        "observedAtUtc": "2026-10-19T23:20:25.1102965Z",
+        "native": {
+          "occurrence": "catalog-reader-admission-449-before-19a40ae1-2527-44b1-907a-7dd4a6e63345",
+          "outcome": "settled",
+          "host": {
+            "pid": 78452,
+            "processInstanceID": "win32:639280486427550922",
+            "occurrenceID": "56133699-5935-4b9f-88d3-0720e14281b1"
+          },
+          "target": {
+            "pid": 67980,
+            "processInstanceID": "win32:639280486434543134",
+            "occurrenceID": "82713e46-66d6-444f-9afc-24dec947f0ae"
+          },
+          "observedAtUtc": "2026-10-19T23:20:23.774Z",
+          "deadlineAt": 1792453042385,
+          "terminal": {
+            "occurrenceID": "catalog-reader-admission-449-before-19a40ae1-2527-44b1-907a-7dd4a6e63345",
+            "pid": 67980,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 78452,
+              "processInstanceID": "win32:639280486427550922",
+              "occurrenceID": "56133699-5935-4b9f-88d3-0720e14281b1"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 67980,
+              "processInstanceID": "win32:639280486434543134",
+              "occurrenceID": "82713e46-66d6-444f-9afc-24dec947f0ae"
+            }
+          }
+        ],
+        "physicalCompletion": true
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-19T23:20:25.1348681Z",
+        "childExitCode": 0
+      },
+      "data": {
+        "schema": {
+          "user_version": 2
+        },
+        "projects": {
+          "count": 86
+        },
+        "mode": "Direct SQLite read-only after original native launcher joined exit0; no production initializer"
+      },
+      "inventory": [
+        [
+          {
+            "projects": 86,
+            "loaded": 2
+          }
+        ],
+        [
+          {
+            "projects": 86,
+            "loaded": 4
+          }
+        ]
+      ],
+      "concurrentReads": [
+        {
+          "requestID": "e1a8cebc-cd3c-41e2-bc77-e72c1864b369",
+          "writeRequestID": "00524dab-468d-4072-9e49-f8f03fab01e7",
+          "path": "/continuous-goal/chat/ses_hUT6C4HPFvvJfAUB4rqE",
+          "start": "2026-10-19T23:18:29.870Z",
+          "end": "2026-10-19T23:18:29.876Z",
+          "ms": 6,
+          "status": 200
+        },
+        {
+          "requestID": "75332e0d-5ca2-4a50-92b5-95735ac1184f",
+          "writeRequestID": "00524dab-468d-4072-9e49-f8f03fab01e7",
+          "path": "/expert-squad/search",
+          "start": "2026-10-19T23:18:29.913Z",
+          "end": "2026-10-19T23:18:29.916Z",
+          "ms": 3,
+          "status": 200
+        },
+        {
+          "requestID": "a317c74d-c070-4111-b113-9a4e2a44a1db",
+          "writeRequestID": "00524dab-468d-4072-9e49-f8f03fab01e7",
+          "path": "/mailbox",
+          "start": "2026-10-19T23:18:29.919Z",
+          "end": "2026-10-19T23:18:29.932Z",
+          "ms": 13,
+          "status": 200
+        },
+        {
+          "requestID": "0c115b12-ae51-4617-96f0-41bbb458b0dd",
+          "writeRequestID": "00524dab-468d-4072-9e49-f8f03fab01e7",
+          "path": "/mission-skill/catalog",
+          "start": "2026-10-19T23:18:29.916Z",
+          "end": "2026-10-19T23:18:29.938Z",
+          "ms": 22,
+          "status": 200
+        },
+        {
+          "requestID": "2d9895d4-fa34-4f73-af86-37e2180e060f",
+          "writeRequestID": "00524dab-468d-4072-9e49-f8f03fab01e7",
+          "path": "/coding/chat/session/ses_hUT6C4HPFvvJfAUB4rqE",
+          "start": "2026-10-19T23:18:29.943Z",
+          "end": "2026-10-19T23:18:29.946Z",
+          "ms": 3,
+          "status": 200
+        },
+        {
+          "requestID": "57668bd3-6cdc-4891-8a15-9e437519f653",
+          "writeRequestID": "00524dab-468d-4072-9e49-f8f03fab01e7",
+          "path": "/global/health",
+          "start": "2026-10-19T23:18:30.079Z",
+          "end": "2026-10-19T23:18:30.079Z",
+          "ms": 0,
+          "status": 200
+        },
+        {
+          "requestID": "09e7b64f-835e-42c3-8ec5-78f0bf33c708",
+          "writeRequestID": "00524dab-468d-4072-9e49-f8f03fab01e7",
+          "path": "/config",
+          "start": "2026-10-19T23:18:30.089Z",
+          "end": "2026-10-19T23:18:41.245Z",
+          "ms": 11156,
+          "status": 200
+        },
+        {
+          "requestID": "10c2f7d8-307d-40ae-b120-9b5f660d5076",
+          "writeRequestID": "00524dab-468d-4072-9e49-f8f03fab01e7",
+          "path": "/channel",
+          "start": "2026-10-19T23:18:30.131Z",
+          "end": "2026-10-19T23:18:41.264Z",
+          "ms": 11133,
+          "status": 200
+        },
+        {
+          "requestID": "ddeb6934-6415-4bd9-97ca-6da5ce137771",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/continuous-goal/chat/ses_hUT6C4HPFvvJfAUB4rqE",
+          "start": "2026-10-19T23:18:41.285Z",
+          "end": "2026-10-19T23:18:41.286Z",
+          "ms": 1,
+          "status": 200
+        },
+        {
+          "requestID": "19e1dbd1-cf1c-45c1-8c96-19ceb595e470",
+          "writeRequestID": "00524dab-468d-4072-9e49-f8f03fab01e7",
+          "path": "/expert-squad/catalog",
+          "start": "2026-10-19T23:18:29.903Z",
+          "end": "2026-10-19T23:18:41.374Z",
+          "ms": 11471,
+          "status": 200
+        },
+        {
+          "requestID": "9231e029-d22a-496e-a13d-1218952a7b81",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/expert-squad/inspect",
+          "start": "2026-10-19T23:18:41.378Z",
+          "end": "2026-10-19T23:18:41.385Z",
+          "ms": 7,
+          "status": 200
+        },
+        {
+          "requestID": "468cfe58-9f93-4757-8940-eb049747be92",
+          "writeRequestID": "00524dab-468d-4072-9e49-f8f03fab01e7",
+          "path": "/skill/mounts",
+          "start": "2026-10-19T23:18:30.132Z",
+          "end": "2026-10-19T23:18:41.477Z",
+          "ms": 11345,
+          "status": 200
+        },
+        {
+          "requestID": "73f63138-c1db-4bca-a20d-fb19c4ac57c3",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/experimental/project-memory",
+          "start": "2026-10-19T23:18:42.929Z",
+          "end": "2026-10-19T23:18:42.930Z",
+          "ms": 1,
+          "status": 200
+        },
+        {
+          "requestID": "dfa5fa21-40b7-436d-b500-c37561c7cd88",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/session/ses_hUT6C4HPFvvJfAUB4rqE/conversation",
+          "start": "2026-10-19T23:18:42.931Z",
+          "end": "2026-10-19T23:18:43.004Z",
+          "ms": 73,
+          "status": 200
+        },
+        {
+          "requestID": "c373b212-5a69-444a-8834-93bc25842079",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/session/ses_hUT6C4HPFvvJfAUB4rqE/events",
+          "start": "2026-10-19T23:18:43.148Z",
+          "end": "2026-10-19T23:18:43.210Z",
+          "ms": 62,
+          "status": 200
+        },
+        {
+          "requestID": "692b935d-5526-4aad-b0ad-fea1cbacb8db",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/ui/assets/markdown-render.worker-DXg_fqFo.js",
+          "start": "2026-10-19T23:18:43.211Z",
+          "end": "2026-10-19T23:18:43.211Z",
+          "ms": 0,
+          "status": 200
+        },
+        {
+          "requestID": "62075c50-7d6b-4fb0-9cd9-b944e63d642f",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/global/health",
+          "start": "2026-10-19T23:18:44.341Z",
+          "end": "2026-10-19T23:18:44.341Z",
+          "ms": 0,
+          "status": 200
+        },
+        {
+          "requestID": "220173eb-783d-4286-8adf-659cbd6d531c",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/continuous-goal/chat/ses_hUT6C4HPFvvJfAUB4rqE",
+          "start": "2026-10-19T23:18:44.404Z",
+          "end": "2026-10-19T23:18:44.405Z",
+          "ms": 2,
+          "status": 200
+        },
+        {
+          "requestID": "764f0a25-ee93-4341-9575-71b81f4e2eb1",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/expert-squad/search",
+          "start": "2026-10-19T23:18:44.410Z",
+          "end": "2026-10-19T23:18:44.411Z",
+          "ms": 1,
+          "status": 200
+        },
+        {
+          "requestID": "3b8dd206-9252-445a-8d1a-95b20c79fbdd",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/mailbox",
+          "start": "2026-10-19T23:18:44.487Z",
+          "end": "2026-10-19T23:18:44.493Z",
+          "ms": 6,
+          "status": 200
+        },
+        {
+          "requestID": "c2c11485-2ce2-4d83-bf66-0146ee373d15",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/global/tasks",
+          "start": "2026-10-19T23:18:44.494Z",
+          "end": "2026-10-19T23:18:44.506Z",
+          "ms": 12,
+          "status": 200
+        },
+        {
+          "requestID": "f2de2167-1804-4a4e-9aed-fb2ba7f1e886",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/path",
+          "start": "2026-10-19T23:18:44.514Z",
+          "end": "2026-10-19T23:18:44.524Z",
+          "ms": 10,
+          "status": 200
+        },
+        {
+          "requestID": "4b99f15a-bda2-4173-a050-ff7ba612e47b",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/mission-skill/catalog",
+          "start": "2026-10-19T23:18:44.506Z",
+          "end": "2026-10-19T23:18:44.529Z",
+          "ms": 23,
+          "status": 200
+        },
+        {
+          "requestID": "ffaefac1-783f-464e-b769-7d5691456aa0",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/work-ledger/events",
+          "start": "2026-10-19T23:18:44.529Z",
+          "end": "2026-10-19T23:18:44.531Z",
+          "ms": 2,
+          "status": 200
+        },
+        {
+          "requestID": "ccfb88a4-7828-435e-8787-bb70bd221956",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/work-ledger",
+          "start": "2026-10-19T23:18:44.534Z",
+          "end": "2026-10-19T23:18:44.566Z",
+          "ms": 32,
+          "status": 200
+        },
+        {
+          "requestID": "014e487c-a38a-47d6-9caf-ae68eb4f0aee",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/mission",
+          "start": "2026-10-19T23:18:44.571Z",
+          "end": "2026-10-19T23:18:44.577Z",
+          "ms": 6,
+          "status": 200
+        },
+        {
+          "requestID": "8bd4f168-87e8-42d2-a8a0-44eb6f0698dc",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/work-ledger",
+          "start": "2026-10-19T23:18:44.653Z",
+          "end": "2026-10-19T23:18:44.697Z",
+          "ms": 44,
+          "status": 200
+        },
+        {
+          "requestID": "c110238b-eb62-4baa-b53e-b90b6ee3243e",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/work-ledger",
+          "start": "2026-10-19T23:18:44.704Z",
+          "end": "2026-10-19T23:18:44.723Z",
+          "ms": 19,
+          "status": 200
+        },
+        {
+          "requestID": "f662ff9b-de30-4fb2-a3cb-f94e0b964c4b",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/mailbox",
+          "start": "2026-10-19T23:18:44.763Z",
+          "end": "2026-10-19T23:18:44.768Z",
+          "ms": 5,
+          "status": 200
+        },
+        {
+          "requestID": "865c686a-f95f-413a-b9d7-f75f333cfe82",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/work-ledger",
+          "start": "2026-10-19T23:18:44.771Z",
+          "end": "2026-10-19T23:18:44.795Z",
+          "ms": 24,
+          "status": 200
+        },
+        {
+          "requestID": "b36edc99-f1e3-4b11-9d70-2b87fd8ccfd2",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/mission",
+          "start": "2026-10-19T23:18:44.798Z",
+          "end": "2026-10-19T23:18:44.801Z",
+          "ms": 3,
+          "status": 200
+        },
+        {
+          "requestID": "5efc33f9-e237-41b7-ac3c-2c92eb993a14",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/work-ledger",
+          "start": "2026-10-19T23:18:44.815Z",
+          "end": "2026-10-19T23:18:44.845Z",
+          "ms": 30,
+          "status": 200
+        },
+        {
+          "requestID": "16656914-3199-47c0-9c89-fa9664fd59e5",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/work-ledger",
+          "start": "2026-10-19T23:18:44.852Z",
+          "end": "2026-10-19T23:18:44.864Z",
+          "ms": 12,
+          "status": 200
+        },
+        {
+          "requestID": "462076a9-02f0-4d1b-91ef-67cb811b9346",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/vcs",
+          "start": "2026-10-19T23:18:44.525Z",
+          "end": "2026-10-19T23:18:47.410Z",
+          "ms": 2885,
+          "status": 200
+        },
+        {
+          "requestID": "66007fe0-261a-4a40-a681-4dd5e879ddc3",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/experimental/project-memory",
+          "start": "2026-10-19T23:18:47.415Z",
+          "end": "2026-10-19T23:18:47.417Z",
+          "ms": 2,
+          "status": 200
+        },
+        {
+          "requestID": "f0ead14a-6b76-49f2-91ac-b0b6126f1b76",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/config",
+          "start": "2026-10-19T23:18:47.429Z",
+          "end": "2026-10-19T23:18:57.257Z",
+          "ms": 9828,
+          "status": 200
+        },
+        {
+          "requestID": "11b1f0d9-4407-4ed8-a46e-5f2972729cf9",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/channel",
+          "start": "2026-10-19T23:18:47.429Z",
+          "end": "2026-10-19T23:18:57.273Z",
+          "ms": 9844,
+          "status": 200
+        },
+        {
+          "requestID": "92d7eccf-55de-479a-b9e5-e224b6db9954",
+          "writeRequestID": "00524dab-468d-4072-9e49-f8f03fab01e7",
+          "path": "/chat/capability",
+          "start": "2026-10-19T23:18:29.919Z",
+          "end": "2026-10-19T23:18:57.306Z",
+          "ms": 27387,
+          "status": 200
+        },
+        {
+          "requestID": "429a7472-dda7-4d6b-a28a-599c077502e8",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/chat/capability",
+          "start": "2026-10-19T23:18:44.902Z",
+          "end": "2026-10-19T23:18:57.349Z",
+          "ms": 12447,
+          "status": 200
+        },
+        {
+          "requestID": "20a832c4-ce12-414b-add7-7be345e524b5",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/skill/mounts",
+          "start": "2026-10-19T23:18:47.422Z",
+          "end": "2026-10-19T23:18:57.396Z",
+          "ms": 9974,
+          "status": 200
+        },
+        {
+          "requestID": "ad4c8ca7-613c-4dfb-a2e6-a6a8ae0e4d24",
+          "writeRequestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/expert-squad/catalog",
+          "start": "2026-10-19T23:18:44.406Z",
+          "end": "2026-10-19T23:18:57.466Z",
+          "ms": 13060,
+          "status": 200
+        }
+      ],
+      "admission": [
+        {
+          "requestID": "00524dab-468d-4072-9e49-f8f03fab01e7",
+          "path": "/global/config",
+          "httpStart": "2026-10-19T23:18:26.194Z",
+          "httpEnd": "2026-10-19T23:18:41.265Z",
+          "httpMs": 15071,
+          "admissionStart": "2026-10-19T23:18:26.195Z",
+          "admittedAt": "2026-10-19T23:18:26.197Z",
+          "waitMs": 2
+        },
+        {
+          "requestID": "bec4ba73-40fa-4b2e-a1f2-3e897f8cd17b",
+          "path": "/global/config",
+          "httpStart": "2026-10-19T23:18:41.284Z",
+          "httpEnd": "2026-10-19T23:18:57.274Z",
+          "httpMs": 15990,
+          "admissionStart": "2026-10-19T23:18:41.284Z",
+          "admittedAt": "2026-10-19T23:18:41.377Z",
+          "waitMs": 93
+        },
+        {
+          "requestID": "94500695-5438-4270-b62f-3202cbb2f347",
+          "path": "/chat/capability",
+          "httpStart": "2026-10-19T23:17:53.188Z",
+          "httpEnd": "2026-10-19T23:17:53.214Z",
+          "httpMs": 26,
+          "admissionStart": "2026-10-19T23:17:53.188Z",
+          "admittedAt": "2026-10-19T23:17:53.194Z",
+          "waitMs": 6
+        },
+        {
+          "requestID": "92d7eccf-55de-479a-b9e5-e224b6db9954",
+          "path": "/chat/capability",
+          "httpStart": "2026-10-19T23:18:29.919Z",
+          "httpEnd": "2026-10-19T23:18:57.306Z",
+          "httpMs": 27387,
+          "admissionStart": "2026-10-19T23:18:29.919Z",
+          "admittedAt": "2026-10-19T23:18:57.296Z",
+          "waitMs": 27377
+        },
+        {
+          "requestID": "429a7472-dda7-4d6b-a28a-599c077502e8",
+          "path": "/chat/capability",
+          "httpStart": "2026-10-19T23:18:44.902Z",
+          "httpEnd": "2026-10-19T23:18:57.349Z",
+          "httpMs": 12447,
+          "admissionStart": "2026-10-19T23:18:44.902Z",
+          "admittedAt": "2026-10-19T23:18:57.341Z",
+          "waitMs": 12439
+        }
+      ],
+      "maxReadMs": 27387,
+      "qualification": {
+        "cold": false,
+        "restore": false,
+        "pageReads": false
+      }
+    },
+    {
+      "phase": "after",
+      "preflight": {
+        "sessionID": "ses_hqBEHVgSBmrf1JMkl0Wx",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "canonical": {
+        "at": "2026-10-19T23:42:13.784Z",
+        "endedAt": "2026-10-19T23:42:47.950Z",
+        "phase": "after",
+        "port": 18697,
+        "occurrence": "catalog-reader-admission-449-after-ebcc1672-9fc2-49bd-9719-b5ac263430e6",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 16789.5263,
+        "restoreMs": 17368.494,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "physical": {
+        "copiedPair": [
+          {
+            "outcome": "retired",
+            "name": "auth.json"
+          },
+          {
+            "outcome": "retired",
+            "name": "models.json"
+          }
+        ],
+        "native": {
+          "occurrence": "catalog-reader-admission-449-after-ebcc1672-9fc2-49bd-9719-b5ac263430e6",
+          "outcome": "settled",
+          "host": {
+            "pid": 66724,
+            "processInstanceID": "win32:639280500822143439",
+            "occurrenceID": "04b5ee06-6a32-42a8-8b01-487824d8de96"
+          },
+          "target": {
+            "pid": 90896,
+            "processInstanceID": "win32:639280500829169064",
+            "occurrenceID": "951556f5-b75c-402d-ad9a-ebe1f283dc12"
+          },
+          "observedAtUtc": "2026-10-19T23:43:32.283Z",
+          "deadlineAt": 1792454482160,
+          "terminal": {
+            "occurrenceID": "catalog-reader-admission-449-after-ebcc1672-9fc2-49bd-9719-b5ac263430e6",
+            "pid": 90896,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "physicalCompletion": true,
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 66724,
+              "processInstanceID": "win32:639280500822143439",
+              "occurrenceID": "04b5ee06-6a32-42a8-8b01-487824d8de96"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 90896,
+              "processInstanceID": "win32:639280500829169064",
+              "occurrenceID": "951556f5-b75c-402d-ad9a-ebe1f283dc12"
+            }
+          }
+        ],
+        "occurrence": "catalog-reader-admission-449-after-ebcc1672-9fc2-49bd-9719-b5ac263430e6",
+        "pairedCleanupComplete": true,
+        "observedAtUtc": "2026-10-19T23:43:33.5689959Z"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-19T23:43:33.5946098Z",
+        "childExitCode": 0
+      },
+      "data": {
+        "schema": {
+          "user_version": 2
+        },
+        "projects": {
+          "count": 87
+        },
+        "mode": "Direct SQLite read-only after original native launcher joined exit0; no production initializer"
+      },
+      "inventory": [
+        [
+          {
+            "projects": 87,
+            "loaded": 2
+          }
+        ],
+        [
+          {
+            "projects": 87,
+            "loaded": 4
+          }
+        ]
+      ],
+      "concurrentReads": [
+        {
+          "requestID": "6b1de3aa-eb1c-49e0-b5a8-453d3d9b6551",
+          "writeRequestID": "d6bfd1a1-bde1-465c-81a2-4a50f0710a2f",
+          "path": "/continuous-goal/chat/ses_hqBEHVgSBmrf1JMkl0Wx",
+          "start": "2026-10-19T23:42:16.314Z",
+          "end": "2026-10-19T23:42:16.319Z",
+          "ms": 5,
+          "status": 200
+        },
+        {
+          "requestID": "180692b4-7918-481b-a153-453b92ad87e7",
+          "writeRequestID": "d6bfd1a1-bde1-465c-81a2-4a50f0710a2f",
+          "path": "/expert-squad/search",
+          "start": "2026-10-19T23:42:16.369Z",
+          "end": "2026-10-19T23:42:16.371Z",
+          "ms": 2,
+          "status": 200
+        },
+        {
+          "requestID": "a05370e9-0517-4710-8cca-109942bf4a8a",
+          "writeRequestID": "d6bfd1a1-bde1-465c-81a2-4a50f0710a2f",
+          "path": "/mailbox",
+          "start": "2026-10-19T23:42:16.371Z",
+          "end": "2026-10-19T23:42:16.381Z",
+          "ms": 10,
+          "status": 200
+        },
+        {
+          "requestID": "629921bf-70ff-4afd-84de-1270077cad46",
+          "writeRequestID": "d6bfd1a1-bde1-465c-81a2-4a50f0710a2f",
+          "path": "/mission-skill/catalog",
+          "start": "2026-10-19T23:42:16.381Z",
+          "end": "2026-10-19T23:42:16.389Z",
+          "ms": 8,
+          "status": 200
+        },
+        {
+          "requestID": "b733c835-2712-4d77-bb8d-274e71878030",
+          "writeRequestID": "d6bfd1a1-bde1-465c-81a2-4a50f0710a2f",
+          "path": "/coding/chat/session/ses_hqBEHVgSBmrf1JMkl0Wx",
+          "start": "2026-10-19T23:42:16.390Z",
+          "end": "2026-10-19T23:42:16.392Z",
+          "ms": 2,
+          "status": 200
+        },
+        {
+          "requestID": "1641f75f-92c7-4822-954e-412b8fff1f1e",
+          "writeRequestID": "d6bfd1a1-bde1-465c-81a2-4a50f0710a2f",
+          "path": "/global/health",
+          "start": "2026-10-19T23:42:16.624Z",
+          "end": "2026-10-19T23:42:16.625Z",
+          "ms": 1,
+          "status": 200
+        },
+        {
+          "requestID": "f7eb18fe-9aae-4055-ba4f-a903123e1425",
+          "writeRequestID": "d6bfd1a1-bde1-465c-81a2-4a50f0710a2f",
+          "path": "/config",
+          "start": "2026-10-19T23:42:16.677Z",
+          "end": "2026-10-19T23:42:30.549Z",
+          "ms": 13872,
+          "status": 200
+        },
+        {
+          "requestID": "0b00c857-9c92-469d-8e98-19c232a9ba5c",
+          "writeRequestID": "d6bfd1a1-bde1-465c-81a2-4a50f0710a2f",
+          "path": "/channel",
+          "start": "2026-10-19T23:42:16.678Z",
+          "end": "2026-10-19T23:42:30.571Z",
+          "ms": 13893,
+          "status": 200
+        },
+        {
+          "requestID": "d66b94e6-4b9b-42b3-ac74-9fac71df29bb",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/continuous-goal/chat/ses_hqBEHVgSBmrf1JMkl0Wx",
+          "start": "2026-10-19T23:42:30.597Z",
+          "end": "2026-10-19T23:42:30.599Z",
+          "ms": 2,
+          "status": 200
+        },
+        {
+          "requestID": "a90a024e-f3e0-43b0-915a-3ab7c732070b",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/global/health",
+          "start": "2026-10-19T23:42:30.601Z",
+          "end": "2026-10-19T23:42:30.601Z",
+          "ms": 0,
+          "status": 200
+        },
+        {
+          "requestID": "7772a609-c807-4ccd-b689-a294fcf89e58",
+          "writeRequestID": "d6bfd1a1-bde1-465c-81a2-4a50f0710a2f",
+          "path": "/chat/capability",
+          "start": "2026-10-19T23:42:16.384Z",
+          "end": "2026-10-19T23:42:30.615Z",
+          "ms": 14231,
+          "status": 200
+        },
+        {
+          "requestID": "45c2212c-d757-41b8-8885-ea050ada3a43",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/continuous-goal/chat/ses_hqBEHVgSBmrf1JMkl0Wx",
+          "start": "2026-10-19T23:42:30.621Z",
+          "end": "2026-10-19T23:42:30.624Z",
+          "ms": 3,
+          "status": 200
+        },
+        {
+          "requestID": "e1b74409-776d-4d3d-b38f-400480815db1",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/expert-squad/search",
+          "start": "2026-10-19T23:42:30.625Z",
+          "end": "2026-10-19T23:42:30.627Z",
+          "ms": 2,
+          "status": 200
+        },
+        {
+          "requestID": "7ed84711-19c7-4b59-85d4-3c2b1c979ba1",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/mission-skill/catalog",
+          "start": "2026-10-19T23:42:30.627Z",
+          "end": "2026-10-19T23:42:30.630Z",
+          "ms": 3,
+          "status": 200
+        },
+        {
+          "requestID": "d7015599-bfdf-4fee-a6cf-f8167b2cfb3d",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/mailbox",
+          "start": "2026-10-19T23:42:30.632Z",
+          "end": "2026-10-19T23:42:30.640Z",
+          "ms": 8,
+          "status": 200
+        },
+        {
+          "requestID": "42741b15-ef5a-4b38-af18-01ba2811867e",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/path",
+          "start": "2026-10-19T23:42:30.643Z",
+          "end": "2026-10-19T23:42:30.644Z",
+          "ms": 1,
+          "status": 200
+        },
+        {
+          "requestID": "5ee121f5-fb45-4fbf-a452-20a7044b4085",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/work-ledger/events",
+          "start": "2026-10-19T23:42:30.647Z",
+          "end": "2026-10-19T23:42:30.648Z",
+          "ms": 1,
+          "status": 200
+        },
+        {
+          "requestID": "b58a1bb4-f234-4413-a8df-0e20cce3c5e2",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/global/tasks",
+          "start": "2026-10-19T23:42:30.648Z",
+          "end": "2026-10-19T23:42:30.658Z",
+          "ms": 10,
+          "status": 200
+        },
+        {
+          "requestID": "48cfdb12-cc5e-4f3e-b08f-9d65a5e395da",
+          "writeRequestID": "d6bfd1a1-bde1-465c-81a2-4a50f0710a2f",
+          "path": "/expert-squad/catalog",
+          "start": "2026-10-19T23:42:16.358Z",
+          "end": "2026-10-19T23:42:30.845Z",
+          "ms": 14487,
+          "status": 200
+        },
+        {
+          "requestID": "00009874-ede6-4b79-874e-8a532fa54108",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/mailbox",
+          "start": "2026-10-19T23:42:30.847Z",
+          "end": "2026-10-19T23:42:30.854Z",
+          "ms": 7,
+          "status": 200
+        },
+        {
+          "requestID": "93d61a6d-d64b-4c2d-9f6f-024452737c74",
+          "writeRequestID": "d6bfd1a1-bde1-465c-81a2-4a50f0710a2f",
+          "path": "/skill/mounts",
+          "start": "2026-10-19T23:42:16.679Z",
+          "end": "2026-10-19T23:42:30.872Z",
+          "ms": 14193,
+          "status": 200
+        },
+        {
+          "requestID": "be3fd552-89f9-4968-b84f-93d4a073842f",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/mission",
+          "start": "2026-10-19T23:42:30.873Z",
+          "end": "2026-10-19T23:42:30.877Z",
+          "ms": 4,
+          "status": 200
+        },
+        {
+          "requestID": "0a9d7eed-1de9-452c-99b9-d2b5cdca5f21",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/work-ledger",
+          "start": "2026-10-19T23:42:30.877Z",
+          "end": "2026-10-19T23:42:30.897Z",
+          "ms": 20,
+          "status": 200
+        },
+        {
+          "requestID": "f9f0ae18-d1d0-4533-b6b0-bb71874c8e38",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/expert-squad/inspect",
+          "start": "2026-10-19T23:42:30.899Z",
+          "end": "2026-10-19T23:42:30.905Z",
+          "ms": 6,
+          "status": 200
+        },
+        {
+          "requestID": "921ea083-431d-4577-b6bd-f9b9466d2957",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/work-ledger",
+          "start": "2026-10-19T23:42:30.906Z",
+          "end": "2026-10-19T23:42:30.927Z",
+          "ms": 21,
+          "status": 200
+        },
+        {
+          "requestID": "fa3f9204-e312-47e8-a598-a233382c9309",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/work-ledger",
+          "start": "2026-10-19T23:42:30.939Z",
+          "end": "2026-10-19T23:42:30.951Z",
+          "ms": 12,
+          "status": 200
+        },
+        {
+          "requestID": "c5c7a587-6d42-4b20-b8f7-bf6306787665",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/expert-squad/inspect",
+          "start": "2026-10-19T23:42:30.951Z",
+          "end": "2026-10-19T23:42:30.957Z",
+          "ms": 6,
+          "status": 200
+        },
+        {
+          "requestID": "4d58b84b-e19c-4b9b-a289-74af4b841e38",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/experimental/project-memory",
+          "start": "2026-10-19T23:42:31.721Z",
+          "end": "2026-10-19T23:42:31.723Z",
+          "ms": 2,
+          "status": 200
+        },
+        {
+          "requestID": "bbdee5bf-7297-4ed3-a869-5a6029087292",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/session/ses_hqBEHVgSBmrf1JMkl0Wx/conversation",
+          "start": "2026-10-19T23:42:31.725Z",
+          "end": "2026-10-19T23:42:31.808Z",
+          "ms": 83,
+          "status": 200
+        },
+        {
+          "requestID": "a3bcf2ca-b81a-43d9-832d-14f3794d0857",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/session/ses_hqBEHVgSBmrf1JMkl0Wx/events",
+          "start": "2026-10-19T23:42:31.896Z",
+          "end": "2026-10-19T23:42:31.970Z",
+          "ms": 74,
+          "status": 200
+        },
+        {
+          "requestID": "99634449-fb49-4033-a022-24c09729fe2e",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/ui/assets/markdown-render.worker-DXg_fqFo.js",
+          "start": "2026-10-19T23:42:31.978Z",
+          "end": "2026-10-19T23:42:31.979Z",
+          "ms": 1,
+          "status": 200
+        },
+        {
+          "requestID": "4c462655-d30a-4a25-a080-8b6312ea69ef",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/vcs",
+          "start": "2026-10-19T23:42:31.724Z",
+          "end": "2026-10-19T23:42:34.807Z",
+          "ms": 3083,
+          "status": 200
+        },
+        {
+          "requestID": "524be16c-1d65-454d-9ffd-4890c3f8afcd",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/experimental/project-memory",
+          "start": "2026-10-19T23:42:34.814Z",
+          "end": "2026-10-19T23:42:34.817Z",
+          "ms": 3,
+          "status": 200
+        },
+        {
+          "requestID": "737b3dc6-1506-4b63-8947-639ef5a7579b",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/path",
+          "start": "2026-10-19T23:42:46.909Z",
+          "end": "2026-10-19T23:42:46.910Z",
+          "ms": 1,
+          "status": 200
+        },
+        {
+          "requestID": "4383b208-4931-492f-9c04-a4256a8e254c",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/session/ses_hqBEHVgSBmrf1JMkl0Wx/config",
+          "start": "2026-10-19T23:42:31.864Z",
+          "end": "2026-10-19T23:42:47.929Z",
+          "ms": 16065,
+          "status": 200
+        },
+        {
+          "requestID": "93fb9b25-6d97-4c2e-9c07-b13b036fc152",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/config",
+          "start": "2026-10-19T23:42:34.823Z",
+          "end": "2026-10-19T23:42:47.946Z",
+          "ms": 13123,
+          "status": 200
+        },
+        {
+          "requestID": "529b509d-9884-488d-8499-c4ad7fd4b929",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/channel",
+          "start": "2026-10-19T23:42:34.827Z",
+          "end": "2026-10-19T23:42:47.947Z",
+          "ms": 13120,
+          "status": 200
+        },
+        {
+          "requestID": "96faea77-3b34-41c5-baa8-74b85eaa4907",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/mcp",
+          "start": "2026-10-19T23:42:45.662Z",
+          "end": "2026-10-19T23:42:47.948Z",
+          "ms": 2286,
+          "status": 200
+        },
+        {
+          "requestID": "6256d2e3-b931-441a-89d2-d6a06b0d4e13",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/chat/capability",
+          "start": "2026-10-19T23:42:30.629Z",
+          "end": "2026-10-19T23:42:47.984Z",
+          "ms": 17355,
+          "status": 200
+        },
+        {
+          "requestID": "fd99a536-455f-45d7-b35a-1499d53c9b62",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/skill/mounts",
+          "start": "2026-10-19T23:42:34.822Z",
+          "end": "2026-10-19T23:42:48.068Z",
+          "ms": 13246,
+          "status": 200
+        },
+        {
+          "requestID": "d31cb2f5-84e4-4d33-8215-254210b4efc2",
+          "writeRequestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/vcs",
+          "start": "2026-10-19T23:42:46.917Z",
+          "end": "2026-10-19T23:42:48.693Z",
+          "ms": 1776,
+          "status": 200
+        }
+      ],
+      "admission": [
+        {
+          "requestID": "d6bfd1a1-bde1-465c-81a2-4a50f0710a2f",
+          "path": "/global/config",
+          "httpStart": "2026-10-19T23:42:13.791Z",
+          "httpEnd": "2026-10-19T23:42:30.573Z",
+          "httpMs": 16782,
+          "admissionStart": "2026-10-19T23:42:13.792Z",
+          "admittedAt": "2026-10-19T23:42:13.794Z",
+          "waitMs": 2
+        },
+        {
+          "requestID": "5f705430-47eb-453e-ab20-d8ce360a2b07",
+          "path": "/global/config",
+          "httpStart": "2026-10-19T23:42:30.595Z",
+          "httpEnd": "2026-10-19T23:42:47.949Z",
+          "httpMs": 17354,
+          "admissionStart": "2026-10-19T23:42:30.597Z",
+          "admittedAt": "2026-10-19T23:42:30.666Z",
+          "waitMs": 69
+        },
+        {
+          "requestID": "d762f114-56c8-4caa-a498-624f330fa6df",
+          "path": "/chat/capability",
+          "httpStart": "2026-10-19T23:42:06.856Z",
+          "httpEnd": "2026-10-19T23:42:06.891Z",
+          "httpMs": 35,
+          "admissionStart": "2026-10-19T23:42:06.857Z",
+          "admittedAt": "2026-10-19T23:42:06.878Z",
+          "waitMs": 21
+        },
+        {
+          "requestID": "7772a609-c807-4ccd-b689-a294fcf89e58",
+          "path": "/chat/capability",
+          "httpStart": "2026-10-19T23:42:16.384Z",
+          "httpEnd": "2026-10-19T23:42:30.615Z",
+          "httpMs": 14231,
+          "admissionStart": "2026-10-19T23:42:16.385Z",
+          "admittedAt": "2026-10-19T23:42:30.596Z",
+          "waitMs": 14211
+        },
+        {
+          "requestID": "6256d2e3-b931-441a-89d2-d6a06b0d4e13",
+          "path": "/chat/capability",
+          "httpStart": "2026-10-19T23:42:30.629Z",
+          "httpEnd": "2026-10-19T23:42:47.984Z",
+          "httpMs": 17355,
+          "admissionStart": "2026-10-19T23:42:30.629Z",
+          "admittedAt": "2026-10-19T23:42:47.976Z",
+          "waitMs": 17347
+        }
+      ],
+      "maxReadMs": 17355,
+      "qualification": {
+        "cold": false,
+        "restore": false,
+        "pageReads": true
+      }
+    }
+  ],
+  "validation": [
+    {
+      "file": "test/durable-publication-store.test.ts",
+      "cases": 11,
+      "assertions": 38,
+      "log": "shared-contracts.log"
+    },
+    {
+      "file": "test/skill-read-diagnostics.test.ts",
+      "cases": 7,
+      "assertions": 46,
+      "log": "shared-contracts.log"
+    },
+    {
+      "file": "test/config-catalog-lock-order.test.ts",
+      "cases": 4,
+      "assertions": 8,
+      "log": "shared-contracts.log"
+    },
+    {
+      "file": "test/worktree-readiness.test.ts",
+      "cases": 3,
+      "assertions": 6,
+      "log": "readiness-sdk-contracts.log"
+    },
+    {
+      "file": "../sdk/js/test/generation-transaction.test.ts",
+      "cases": 6,
+      "assertions": 12,
+      "log": "readiness-sdk-contracts.log"
+    },
+    {
+      "file": "test/skill-replacement-publication.test.ts",
+      "cases": 1,
+      "assertions": 45,
+      "log": "domain-contracts.log"
+    },
+    {
+      "file": "test/project-promotion-journal.test.ts",
+      "cases": 3,
+      "assertions": 5,
+      "log": "domain-contracts.log"
+    },
+    {
+      "file": "test/project-implicit-creation-journal.test.ts",
+      "cases": 3,
+      "assertions": 6,
+      "log": "domain-contracts.log"
+    },
+    {
+      "file": "test/workspace-lifecycle.test.ts",
+      "cases": 4,
+      "assertions": 8,
+      "log": "domain-contracts.log"
+    },
+    {
+      "file": "test/package-install-receipt.test.ts",
+      "cases": 2,
+      "assertions": 2,
+      "log": "domain-contracts.log"
+    }
+  ],
+  "backendCases": 44,
+  "backendAssertions": 176,
+  "sourceAuthorityMetadataUnchanged": true,
+  "knownLimitations": "Cold and restore targets remain unmet. Complete 86 then87 Project history retained; schema2 unchanged. Local acceptance order does not claim cross-process global FIFO. POSIX crash-signal branch is not qualified on Windows. No UI automation or production-user database initialization."
+}
