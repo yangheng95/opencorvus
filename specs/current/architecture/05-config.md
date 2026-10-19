@@ -217,6 +217,26 @@ global config、尚无 Project state 的 backend 也会比较 global revision，
 `global.disposed`。global writer 可以为已注册 Project 使用 identity lease 做 runtime settlement，但只对
 此前已加载且仍活跃的 Project rewarm Config state，不能让 inactive Project 泄漏新的 cache owner。
 
+Global candidate validation captures the previously loaded Project owners before
+its inspection reads. Each registered/active directory retains one existing
+Project identity lease through Skill-removal inspection, both configuration
+snapshots and complete model/profile/capability validation. Independent Projects
+use the shared settled-work queue with the host's available parallelism; every
+admitted operation settles before a candidate error can release the write
+generation. Results and original errors retain directory enumeration order.
+Only after the entire candidate succeeds may canonical persistence and the
+existing runtime transitions proceed. The paired before/after snapshots capture
+one actual physical Git worktree boundary and each load their own stable source
+generation through the same snapshot reader. Public standalone snapshots keep
+their independent boundary discovery. No Project is omitted and no cross-write
+source cache or alternate identity authority is introduced.
+
+The existing DEBUG phase diagnostics also observe the two configuration PATCH
+routes under their original HTTP request IDs, including Project inventory,
+paired snapshots, candidate validation, persistence, resets and reconciliation.
+Phase metadata carries identities, counts and timing rather than configuration
+field values; observation retains each operation's original value and error.
+
 peer backend 替换 Project/global 文件后，owner 加载稳定 generation，并统一结算 MCP（Model Context
 Protocol，模型上下文协议）、Provider、native Agent 与 Channel projection；全部 projection 成功后才通过
 该 backend 原有的 `config.changed` 事件刷新客户端。本地 writer 的 direct transition 也登记在同一个在途

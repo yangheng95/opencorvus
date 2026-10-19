@@ -17,6 +17,27 @@ async function rows(ids: Array<string | null>) {
     .map((entry) => entry.data)
 }
 
+test("config phases retain exact operation settlement and request ownership", async () => {
+  for (const outcome of ["fulfilled", "rejected"] as const) {
+    const id = crypto.randomUUID()
+    const value = { accepted: "canonical-config" }
+    const failure = new Error("declared config failure")
+    const original = outcome === "fulfilled" ? Promise.resolve(value) : Promise.reject(failure)
+    const result = Diagnostics.request(id, () => {
+      const observed = Diagnostics.phase("config.global.write", () => original)
+      expect(observed).toBe(original)
+      return observed
+    })
+    expect(await result.catch((error) => error)).toBe(outcome === "fulfilled" ? value : failure)
+    const completed = (await rows([id])).filter(
+      (row) => row.phase === "config.global.write" && row.status === "completed",
+    )
+    expect(completed.map((row) => ({ request: row.http.requestID, outcome: row.outcome }))).toEqual([
+      { request: id, outcome },
+    ])
+  }
+})
+
 test("startup initialization and late causal work have their actual request lifetime", async () => {
   const before = (await rows([null])).length
   const state = State.create(

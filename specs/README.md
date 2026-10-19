@@ -3453,3 +3453,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [首页设置配置归属](records/2026-10/2026-10-19-home-settings-scope.md)：恢复后读取与真实设置。
 
 - [权限配置可用性](records/2026-10/2026-10-19-permission-config-availability.md)：首页与设置的未加载状态和真实重读。
+
+- [配置保存耗时](records/2026-10/2026-10-20-config-write-cost.md)：真实全链路阶段测量与优化。

@@ -5,6 +5,7 @@ import { NamedError } from "@opencorvus-ai/util/error"
 import z from "zod"
 import type { Config } from "./config"
 import { validateConfigModelReferences } from "./model-reference-validation"
+import { SkillReadDiagnostics } from "@/skill/read-diagnostics"
 
 export const ConfigCandidateValidationError = NamedError.create(
   "ConfigCandidateValidationError",
@@ -18,23 +19,31 @@ export async function validateConfigCandidate(input: {
   projectOwnedCapabilities?: boolean
   providerScope?: "project" | "global"
 }) {
-  await validateConfigModelReferences(input.config, input.root, input.providerScope)
+  await SkillReadDiagnostics.phase("config.validate.models", () =>
+    validateConfigModelReferences(input.config, input.root, input.providerScope),
+  )
   try {
-    await PromptProfileResolver.assertKnownProfileID({
-      ...(input.providerScope === "global"
-        ? { scope: "global" as const }
-        : { projectDirectory: input.projectDirectory! }),
-      profileID: PromptProfile.activeID(input.config),
-      config: input.config,
-    })
+    await SkillReadDiagnostics.phase("config.validate.profile", () =>
+      PromptProfileResolver.assertKnownProfileID({
+        ...(input.providerScope === "global"
+          ? { scope: "global" as const }
+          : { projectDirectory: input.projectDirectory! }),
+        profileID: PromptProfile.activeID(input.config),
+        config: input.config,
+      }),
+    )
     if (!input.projectOwnedCapabilities) return
     if (input.config.skill_mounts) {
-      await PromptProfileResolver.assertSkillMountConfig({
-        projectDirectory: input.projectDirectory!,
-        config: input.config,
-      })
+      await SkillReadDiagnostics.phase("config.validate.mounts", () =>
+        PromptProfileResolver.assertSkillMountConfig({
+          projectDirectory: input.projectDirectory!,
+          config: input.config,
+        }),
+      )
     }
-    await ConversationCapability.assertConfig(input.config)
+    await SkillReadDiagnostics.phase("config.validate.capabilities", () =>
+      ConversationCapability.assertConfig(input.config),
+    )
   } catch (error) {
     if (ConversationCapability.InvalidAssignmentError.isInstance(error)) throw error
     throw new ConfigCandidateValidationError({

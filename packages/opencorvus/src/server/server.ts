@@ -832,7 +832,10 @@ export namespace Server {
             })
           }
           try {
-            if (c.req.method === "GET" && c.req.path === "/skill/mounts") {
+            if (
+              (c.req.method === "GET" && c.req.path === "/skill/mounts") ||
+              (c.req.method === "PATCH" && (c.req.path === "/config" || c.req.path === "/global/config"))
+            ) {
               await SkillReadDiagnostics.request(id, next)
             } else {
               await next()

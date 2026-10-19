@@ -482,3 +482,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [首页设置配置归属](2026-10-19-home-settings-scope/README.md)：真实General页面及物理结算。
 
 - [权限配置可用性](2026-10-19-permission-config-availability/README.md)：真实首页、权限设置和运行回执。
+
+- [配置保存耗时](2026-10-20-config-write-cost/README.md)：原始请求和阶段成本证据。

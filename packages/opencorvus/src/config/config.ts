@@ -37,6 +37,7 @@ import { AgentRoleContract } from "@/agent/role-contract"
 import { PromptProfileConfigSchema, PromptProfileOverlaySchema } from "@/agent/prompt-profile"
 import { isModelReference } from "@/provider/model-ref"
 import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
+import { settledWork } from "@/util/queue"
 import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
 import { McpConfigSchema } from "./mcp-schema"
 import { hostGit as git } from "@/util/git"
@@ -2357,12 +2358,18 @@ export namespace Config {
 
   export async function snapshotForProject(directory: string, globalConfigOverride?: Source) {
     const resolvedDirectory = Filesystem.resolve(directory)
-    const worktree = await readOnlyWorktreeBoundary(resolvedDirectory)
+    const worktree = await SkillReadDiagnostics.phase("config.snapshot.worktree", () =>
+      readOnlyWorktreeBoundary(resolvedDirectory),
+    )
+    return readOnlyProjectSnapshot(resolvedDirectory, worktree, globalConfigOverride)
+  }
+
+  async function readOnlyProjectSnapshot(directory: string, worktree: string, globalConfigOverride?: Source) {
     return structuredClone(
       (
         await loadState({
           readOnly: true,
-          directory: resolvedDirectory,
+          directory,
           worktree,
           ...(globalConfigOverride
             ? {
@@ -2808,48 +2815,65 @@ export namespace Config {
         })
       }
     }
-    const directories = await globalProjectDirectories()
-    const removedSkillsByDirectory = new Map<string, Set<string>>()
-    for (const directory of directories) {
-      removedSkillsByDirectory.set(directory, await removedGlobalSkillNames(effectiveGlobal, directory))
-    }
+    const directories = await SkillReadDiagnostics.phase("config.global.projects", globalProjectDirectories)
+    log.debug("global mutation project inventory", {
+      projects: directories.length,
+      loaded: stateSource.inspectAll().length,
+    })
     const { validateConfigCandidate } = await import("@/config/candidate-validation")
     const { ConversationCapability } = await import("@/conversation/capability")
     const { Instance } = await import("@/project/instance")
-    const transitions: GlobalProjectTransition[] = []
     const loadedDirectories = new Set(stateSource.inspectAll().map((entry) => Filesystem.resolve(entry.key)))
-    for (const directory of directories) {
-      const before = await snapshotForProject(directory)
-      const after = await snapshotForProject(directory, merged)
-      const removedProjectSkills = removedSkillsByDirectory.get(directory) ?? new Set<string>()
-      const assignedRemovedSkills = (["chat", "work"] as const).flatMap((agentID) =>
-        ConversationCapability.assignment(after, agentID)
-          .skill_refs.filter((name) => removedProjectSkills.has(name))
-          .map((name) => `${agentID}:${name}`),
-      )
-      if (assignedRemovedSkills.length > 0) {
-        throw new ConversationCapability.InvalidAssignmentError({
-          message:
-            `Conversation skill_refs references Skills removed from global configuration: ` +
-            `${assignedRemovedSkills.join(", ")} (project ${directory})`,
-        })
-      }
-      await Instance.provideProjectIdentity({
-        directory,
-        fn: () =>
-          validateConfigCandidate({
-            config: after,
-            root: "global config",
-            projectDirectory: directory,
-            projectOwnedCapabilities: true,
-          }),
-      })
-      transitions.push({
-        directory,
-        before,
-        after,
-        rewarm: loadedDirectories.has(Filesystem.resolve(directory)),
-      })
+    const outcomes = await settledWork({
+      concurrency: os.availableParallelism(),
+      items: directories,
+      run: async (directory) =>
+        await Instance.provideProjectIdentity({
+          directory,
+          fn: async (): Promise<GlobalProjectTransition> => {
+            const removedProjectSkills = await SkillReadDiagnostics.phase("config.global.removed-skills", () =>
+              removedGlobalSkillNames(effectiveGlobal, directory),
+            )
+            const worktree = await SkillReadDiagnostics.phase("config.snapshot.worktree", () =>
+              readOnlyWorktreeBoundary(directory),
+            )
+            const before = await SkillReadDiagnostics.phase("config.global.before", () =>
+              readOnlyProjectSnapshot(directory, worktree),
+            )
+            const after = await SkillReadDiagnostics.phase("config.global.after", () =>
+              readOnlyProjectSnapshot(directory, worktree, merged),
+            )
+            const assignedRemovedSkills = (["chat", "work"] as const).flatMap((agentID) =>
+              ConversationCapability.assignment(after, agentID)
+                .skill_refs.filter((name) => removedProjectSkills.has(name))
+                .map((name) => `${agentID}:${name}`),
+            )
+            if (assignedRemovedSkills.length > 0) {
+              throw new ConversationCapability.InvalidAssignmentError({
+                message:
+                  `Conversation skill_refs references Skills removed from global configuration: ` +
+                  `${assignedRemovedSkills.join(", ")} (project ${directory})`,
+              })
+            }
+            await validateConfigCandidate({
+              config: after,
+              root: "global config",
+              projectDirectory: directory,
+              projectOwnedCapabilities: true,
+            })
+            return {
+              directory,
+              before,
+              after,
+              rewarm: loadedDirectories.has(Filesystem.resolve(directory)),
+            }
+          },
+        }),
+    })
+    const transitions: GlobalProjectTransition[] = []
+    for (const outcome of outcomes) {
+      if (outcome.status === "rejected") throw outcome.reason
+      transitions.push(outcome.value)
     }
     await validateConfigCandidate({
       config: effectiveGlobal,
@@ -2857,15 +2881,17 @@ export namespace Config {
       providerScope: "global",
     })
     await TestHooks.beforeGlobalPersist?.()
-    await persist()
+    await SkillReadDiagnostics.phase("config.global.persist", persist)
     global.reset()
     if (globalConfigLoaded) {
       const current = await currentGlobalState()
       globalObservedRevision = current.revision
     }
-    await resetAllProjectStates()
-    const { Skill } = await import("@/skill/skill")
-    await Skill.state.resetAll()
+    await SkillReadDiagnostics.phase("config.global.reset", async () => {
+      await resetAllProjectStates()
+      const { Skill } = await import("@/skill/skill")
+      await Skill.state.resetAll()
+    })
     return transitions
   }
 
@@ -2929,19 +2955,23 @@ export namespace Config {
 
   async function writeGlobalMutation(patch: unknown | ((existing: Source) => unknown | Promise<unknown>)) {
     await ConfigPaths.assertCanonicalDirectory(Global.Path.config, ["config.json"])
-    return withConfigMutationAuthority(async () => {
-      let transitions: GlobalProjectTransition[] = []
-      const written = await writeConfigFile(globalConfigFile(), patch, {
-        resolve: resolveGlobalCandidate,
-        async commit(merged, _appliedPatch, persist) {
-          transitions = await commitGlobalCandidate(merged, persist)
-        },
-        async onWritten() {
-          await reconcileGlobalProjectTransitions(transitions)
-        },
-      })
-      return parseEffectiveConfig(written, globalConfigFile())
-    })
+    return SkillReadDiagnostics.phase("config.global.write", () =>
+      withConfigMutationAuthority(async () => {
+        let transitions: GlobalProjectTransition[] = []
+        const written = await writeConfigFile(globalConfigFile(), patch, {
+          resolve: resolveGlobalCandidate,
+          async commit(merged, _appliedPatch, persist) {
+            transitions = await commitGlobalCandidate(merged, persist)
+          },
+          async onWritten() {
+            await SkillReadDiagnostics.phase("config.global.reconcile", () =>
+              reconcileGlobalProjectTransitions(transitions),
+            )
+          },
+        })
+        return parseEffectiveConfig(written, globalConfigFile())
+      }),
+    )
   }
 
   export function assertNoProjectOwnedConfig(input: Record<string, unknown>) {
