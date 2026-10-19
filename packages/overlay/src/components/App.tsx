@@ -520,15 +520,21 @@ export function App(props: AppProps) {
                                 </div>
                               </div>
                             </header>
-                            <ContinuousGoalControl
-                              selectionEpoch={boardStore.selectEpoch}
-                              owner={(() => {
-                                const item = props.conversationItem()
-                                return item
-                                  ? { kind: item.kind, id: item.kind === "task" ? item.id : item.sessionID, directory: item.directory }
-                                  : undefined
-                              })()}
-                            />
+                            <Show when={!props.homeActive}>
+                              <ContinuousGoalControl
+                                selectionEpoch={boardStore.selectEpoch}
+                                owner={(() => {
+                                  const item = props.conversationItem()
+                                  return item
+                                    ? {
+                                        kind: item.kind,
+                                        id: item.kind === "task" ? item.id : item.sessionID,
+                                        directory: item.directory,
+                                      }
+                                    : undefined
+                                })()}
+                              />
+                            </Show>
                             <div class="chat-content-frame" id="chatContentFrame">
                               <div class="chat-message-pane" id="chatMessagePane">
                                 <Show when={appStore.workspaceLocationError}>
@@ -557,6 +563,18 @@ export function App(props: AppProps) {
                                       <div id="solidChatHomePromptMount" />
                                       <div id="solidChatComposer">{props.composer}</div>
                                       <div id="solidChatHomeAfterMount" />
+                                      <Show when={props.homeActive}>
+                                        <div class="chat-home-goal">
+                                          <ContinuousGoalControl
+                                            home
+                                            onFocusComposer={() =>
+                                              document
+                                                .querySelector<HTMLTextAreaElement>("#solidChatComposer textarea")
+                                                ?.focus()
+                                            }
+                                          />
+                                        </div>
+                                      </Show>
                                     </div>
                                   </div>
                                 </div>

@@ -392,8 +392,8 @@
   "mission.conversation.draft_hint": "请求已保存，尚未开始。可在 Mission 看板中编辑请求或开始工作。",
   "mission.conversation.empty_hint": "此 Mission 暂无对话记录。可在 Mission 看板中查看当前请求和工作状态。",
   "chat.task_load_failed": "无法加载此任务的会话",
-  "chat.home_prompt": "在 {{project}} 中构建什么？",
-  "chat.home_prompt_global": "你想构建什么？",
+  "chat.home_prompt": "你想在 {{project}} 中完成什么？",
+  "chat.home_prompt_global": "你想完成什么？",
   "chat.home_suggestions_label": "建议的聊天起点",
   "chat.home_suggestion.webpage": "做网页",
   "chat.home_suggestion.webpage_prompt": "根据我的要求制作一个精致的网页，并在浏览器中完成验证。",
@@ -2522,5 +2522,16 @@
   "continuous_goal.validation.remaining": "要恢复目标，各项上限需要高于对应的累计用量。",
   "continuous_goal.validation.reason": "标记完成前，请填写实际完成依据。",
   "continuous_goal.review_current": "载入当前状态，保留草稿",
-  "continuous_goal.controller": "持续目标控制器"
+  "continuous_goal.controller": "持续目标控制器",
+  "chat.home_subtitle": "描述你想完成的事情，从一次对话开始。",
+  "continuous_goal.home.title": "用持续目标（Goal）推进长期工作",
+  "continuous_goal.home.body": "让会话跨轮次持续推进，并保留明确的完成标准与预算。",
+  "continuous_goal.home.begin": "填写第一条需求",
+  "continuous_goal.guide.start.title": "先开始一次会话",
+  "continuous_goal.guide.start.body": "在上方发送需求，或从左侧打开已有 Chat、Task 或 Mission。",
+  "continuous_goal.guide.define.title": "创建持续目标",
+  "continuous_goal.guide.define.body": "点击会话顶部的“创建目标”，填写成果、验收标准和可选预算。",
+  "continuous_goal.guide.manage.title": "查看进度，随时暂停",
+  "continuous_goal.guide.manage.body": "创建后可自动续跑。在顶部查看用量、调整预算、暂停或标记完成。",
+  "continuous_goal.activation_hint": "点击“创建目标”即启用自动续跑；预算留空表示不设上限。"
 }

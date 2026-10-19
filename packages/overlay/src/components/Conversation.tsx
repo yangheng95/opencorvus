@@ -975,6 +975,7 @@ export function Conversation(props: {
                   ? t("chat.home_prompt", { project: homeProjectName() })
                   : t("chat.home_prompt_global")}
               </h1>
+              <p class="chat-home-prompt__subtitle">{t("chat.home_subtitle")}</p>
             </div>
           </Portal>
         )}

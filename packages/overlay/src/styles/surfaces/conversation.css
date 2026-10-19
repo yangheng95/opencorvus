@@ -135,15 +135,16 @@
     var(--conversation-message-start-inset)
     minmax(0, 1fr)
     calc(var(--conversation-message-end-inset) + var(--ui-chat-scrollbar-gutter-x));
-  grid-template-rows: auto auto auto;
-  align-content: center;
+  grid-template-rows: auto auto auto auto;
+  align-content: start;
   justify-items: stretch;
   row-gap: var(--ui-gap-lg);
   min-width: 0;
   min-height: 0;
-  padding-block: var(--ui-gap-4xl);
+  padding-block: clamp(var(--ui-gap-4xl), 12vh, calc(100px * var(--ui-scale))) var(--ui-gap-4xl);
   box-sizing: border-box;
-  overflow: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
   transition: grid-template-columns var(--ui-duration-slow) var(--ui-timing-standard);
 }
 
@@ -168,10 +169,23 @@
   margin: 0;
   padding-inline: calc(var(--ui-composer-content-inset) + var(--oc-border-width));
   text-align: left;
-  font-size: var(--ui-font-emphasis);
+  font-size: var(--ui-font-page);
   line-height: var(--ui-line-height-tight);
   font-weight: var(--ui-font-weight-strong);
   letter-spacing: var(--ui-letter-spacing-normal);
+}
+
+.chat-home-prompt__subtitle {
+  justify-self: start;
+  margin: var(--ui-gap-sm) 0 0;
+  padding-inline: calc(var(--ui-composer-content-inset) + var(--oc-border-width));
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-normal);
+  color: var(--text-soft);
+}
+
+.chat-home-goal {
+  margin-block-start: var(--ui-gap-lg);
 }
 
 .chat-home-after {

@@ -1,4 +1,14 @@
-import { createEffect, createMemo, createResource, createSignal, createUniqueId, on, onCleanup, Show } from "solid-js"
+import {
+  createEffect,
+  createMemo,
+  createResource,
+  createSignal,
+  createUniqueId,
+  For,
+  on,
+  onCleanup,
+  Show,
+} from "solid-js"
 import { appStore } from "../store/app"
 import { ApiError, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import {
@@ -22,6 +32,22 @@ import { Icon } from "./ui/Icon"
 import { TextField } from "./ui/TextField"
 
 const REFRESH_MS = 5_000
+const guideSteps = ["start", "define", "manage"] as const
+
+function GoalGuideSteps() {
+  return (
+    <ol class="continuous-goal__steps">
+      <For each={guideSteps}>
+        {(step) => (
+          <li>
+            <strong>{t(`continuous_goal.guide.${step}.title`)}</strong>
+            <span>{t(`continuous_goal.guide.${step}.body`)}</span>
+          </li>
+        )}
+      </For>
+    </ol>
+  )
+}
 const tones: Record<ContinuousGoal["status"], BadgeTone> = {
   active: "accent",
   paused: "neutral",
@@ -57,6 +83,8 @@ function errorSummary(error: unknown): string {
 export function ContinuousGoalControl(props: {
   owner?: ContinuousGoalTarget
   compact?: boolean
+  home?: boolean
+  onFocusComposer?: () => void
   selectionEpoch?: number
 }) {
   const formID = `continuous-goal-${createUniqueId()}`
@@ -280,73 +308,94 @@ export function ContinuousGoalControl(props: {
     <section
       ref={root}
       class="continuous-goal"
-      classList={{ "continuous-goal--compact": props.compact }}
+      classList={{ "continuous-goal--compact": props.compact, "continuous-goal--home": props.home }}
       aria-label={t("continuous_goal.title")}
       data-ui="continuous-goal-control"
     >
-      <div class="continuous-goal__row">
-        <Icon name="goals" size="standard" />
-        <strong class="continuous-goal__name">{t("continuous_goal.title")}</strong>
-        <Show
-          when={goal()}
-          fallback={
-            <span class="continuous-goal__empty">
-              {initialLoading()
-                ? t("continuous_goal.loading")
-                : props.owner
-                  ? t("continuous_goal.empty")
-                  : t("continuous_goal.choose_owner")}
-            </span>
-          }
-        >
-          {(current) => (
-            <>
-              <Badge tone={tones[current().status]} size="sm" aria-live="polite">
-                {t(`continuous_goal.status.${current().status}`)}
-              </Badge>
-              <span class="continuous-goal__objective" title={current().objective}>
-                {current().objective}
-              </span>
-              <span class="continuous-goal__usage" title={t("continuous_goal.usage_hint")}>
-                {number(current().tokensUsed)}
-                {current().tokenBudget === undefined ? "" : ` / ${number(current().tokenBudget!)}`}{" "}
-                {t("continuous_goal.tokens_short")} · {number(current().turnsAccepted)}
-                {current().turnBudget === undefined ? "" : ` / ${number(current().turnBudget!)}`}{" "}
-                {t("continuous_goal.turns_short")}
-              </span>
-              <Show when={current().status !== "complete"}>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  tone="neutral"
-                  disabled={disabled()}
-                  onClick={() => changeStatus(current().status === "active" ? "paused" : "active")}
-                >
-                  {t(
-                    current().status === "active"
-                      ? "continuous_goal.pause"
-                      : current().status === "budget_limited" || needsBudgetIncrease(current())
-                        ? "continuous_goal.adjust_resume"
-                        : "continuous_goal.resume",
-                  )}
-                </Button>
-              </Show>
-            </>
-          )}
-        </Show>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          tone="neutral"
-          disabled={busy() || initialLoading() || !!projection.error}
-          onClick={() => open(goal() ? "details" : "create")}
-          data-ui="continuous-goal-settings"
-        >
-          {t(goal() ? "continuous_goal.details" : props.owner ? "continuous_goal.create" : "continuous_goal.learn")}
+      <Show when={props.home}>
+        <div class="continuous-goal__welcome">
+          <div class="continuous-goal__welcome-icon" aria-hidden="true">
+            <Icon name="goals" size="large" />
+          </div>
+          <div>
+            <h2>{t("continuous_goal.home.title")}</h2>
+            <p>{t("continuous_goal.home.body")}</p>
+          </div>
+          <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => open("create")}>
+            {t("continuous_goal.learn")}
+          </Button>
+        </div>
+        <GoalGuideSteps />
+        <Button type="button" variant="outline" size="sm" tone="accent" onClick={props.onFocusComposer}>
+          {t("continuous_goal.home.begin")}
+          <Icon name="arrow-up" size="compact" />
         </Button>
-      </div>
+      </Show>
+      <Show when={!props.home}>
+        <div class="continuous-goal__row">
+          <Icon name="goals" size="standard" />
+          <strong class="continuous-goal__name">{t("continuous_goal.title")}</strong>
+          <Show
+            when={goal()}
+            fallback={
+              <span class="continuous-goal__empty">
+                {initialLoading()
+                  ? t("continuous_goal.loading")
+                  : props.owner
+                    ? t("continuous_goal.empty")
+                    : t("continuous_goal.choose_owner")}
+              </span>
+            }
+          >
+            {(current) => (
+              <>
+                <Badge tone={tones[current().status]} size="sm" aria-live="polite">
+                  {t(`continuous_goal.status.${current().status}`)}
+                </Badge>
+                <span class="continuous-goal__objective" title={current().objective}>
+                  {current().objective}
+                </span>
+                <span class="continuous-goal__usage" title={t("continuous_goal.usage_hint")}>
+                  {number(current().tokensUsed)}
+                  {current().tokenBudget === undefined ? "" : ` / ${number(current().tokenBudget!)}`}{" "}
+                  {t("continuous_goal.tokens_short")} · {number(current().turnsAccepted)}
+                  {current().turnBudget === undefined ? "" : ` / ${number(current().turnBudget!)}`}{" "}
+                  {t("continuous_goal.turns_short")}
+                </span>
+                <Show when={current().status !== "complete"}>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    tone="neutral"
+                    disabled={disabled()}
+                    onClick={() => changeStatus(current().status === "active" ? "paused" : "active")}
+                  >
+                    {t(
+                      current().status === "active"
+                        ? "continuous_goal.pause"
+                        : current().status === "budget_limited" || needsBudgetIncrease(current())
+                          ? "continuous_goal.adjust_resume"
+                          : "continuous_goal.resume",
+                    )}
+                  </Button>
+                </Show>
+              </>
+            )}
+          </Show>
+          <Button
+            type="button"
+            variant={goal() || !props.owner ? "ghost" : "outline"}
+            size="sm"
+            tone={goal() || !props.owner ? "neutral" : "accent"}
+            disabled={busy() || initialLoading() || !!projection.error}
+            onClick={() => open(goal() ? "details" : "create")}
+            data-ui="continuous-goal-settings"
+          >
+            {t(goal() ? "continuous_goal.details" : props.owner ? "continuous_goal.create" : "continuous_goal.learn")}
+          </Button>
+        </div>
+      </Show>
       <Show when={goal() && goal()!.status !== "active" && currentReason()}>
         <p class="continuous-goal__reason">{currentReason()}</p>
       </Show>
@@ -383,11 +432,13 @@ export function ContinuousGoalControl(props: {
         wide
         open={mode() !== null}
         title={t(
-          mode() === "complete"
-            ? "continuous_goal.complete_title"
-            : mode() === "create"
-              ? "continuous_goal.create_title"
-              : "continuous_goal.details_title",
+          !props.owner
+            ? "continuous_goal.learn"
+            : mode() === "complete"
+              ? "continuous_goal.complete_title"
+              : mode() === "create"
+                ? "continuous_goal.create_title"
+                : "continuous_goal.details_title",
         )}
         onClose={() => {
           if (!busy()) setMode(null)
@@ -429,7 +480,7 @@ export function ContinuousGoalControl(props: {
           fallback={
             <div class="continuous-goal__intro">
               <p>{t("continuous_goal.about")}</p>
-              <p>{t("continuous_goal.choose_owner")}</p>
+              <GoalGuideSteps />
               <p>{t("continuous_goal.pause_hint")}</p>
             </div>
           }
@@ -469,6 +520,7 @@ export function ContinuousGoalControl(props: {
               }
             >
               <p>{t("continuous_goal.about")}</p>
+              <p class="continuous-goal__hint">{t("continuous_goal.activation_hint")}</p>
               <TextField.Root as="label" variant="multiline">
                 <TextField.Label>{t("continuous_goal.objective")}</TextField.Label>
                 <TextField.TextArea

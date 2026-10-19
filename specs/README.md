@@ -3447,3 +3447,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [主流中成员连续性](records/2026-10/2026-10-15-member-parent-stream-continuity.md)：已有成员在主会话流中的真实阅读与生命周期。
 
 - [工作区链接读取失败](records/2026-10/2026-10-19-workspace-location-read-failure.md)：资源读取错误与启动恢复。
+
+- [Goal与默认首页](records/2026-10/2026-10-19-goal-home-discoverability.md)：使用路径及首页布局。

@@ -392,8 +392,8 @@
   "mission.conversation.draft_hint": "Your request is saved and ready to start. Edit it or start work from the Mission Board.",
   "mission.conversation.empty_hint": "This Mission has no conversation yet. Open the Mission Board to see its current request and work status.",
   "chat.task_load_failed": "Conversation could not be loaded",
-  "chat.home_prompt": "What should we build in {{project}}?",
-  "chat.home_prompt_global": "What should we build?",
+  "chat.home_prompt": "What would you like to work on in {{project}}?",
+  "chat.home_prompt_global": "What would you like to work on?",
   "chat.home_suggestions_label": "Suggested chat starters",
   "chat.home_suggestion.webpage": "Build a webpage",
   "chat.home_suggestion.webpage_prompt": "Build a polished webpage from my requirements and verify it in the browser.",
@@ -2523,5 +2523,16 @@
   "continuous_goal.validation.remaining": "To resume, each limit must exceed its cumulative usage.",
   "continuous_goal.validation.reason": "Enter actual evidence before marking this goal complete.",
   "continuous_goal.review_current": "Review current state; keep draft",
-  "continuous_goal.controller": "Goal controller"
+  "continuous_goal.controller": "Goal controller",
+  "chat.home_subtitle": "Describe the outcome you need. Start with a conversation.",
+  "continuous_goal.home.title": "Keep going with a continuous goal",
+  "continuous_goal.home.body": "Work across turns with clear completion criteria and an optional budget.",
+  "continuous_goal.home.begin": "Write your first request",
+  "continuous_goal.guide.start.title": "Start a conversation",
+  "continuous_goal.guide.start.body": "Send a request above, or open an existing Chat, Task, or Mission from the sidebar.",
+  "continuous_goal.guide.define.title": "Create its goal",
+  "continuous_goal.guide.define.body": "Choose Create goal at the top of the conversation. Add an outcome, acceptance criteria, and optional budgets.",
+  "continuous_goal.guide.manage.title": "Track progress and pause",
+  "continuous_goal.guide.manage.body": "Creation enables automatic continuation. Use the top bar to review usage, adjust budgets, pause, or mark complete.",
+  "continuous_goal.activation_hint": "Create goal enables automatic continuation. A blank budget means no limit."
 }

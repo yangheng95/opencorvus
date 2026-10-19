@@ -3077,6 +3077,14 @@ real orchestration participants with localized headers and preserved canonical a
 Manual interaction and screenshot review on the formal development `/ui` surface
 provide UI acceptance; API contract checks do not substitute for visual evidence.
 
+The launcher home places the same control's owner-free guide beside the composer,
+with explicit steps to start/open a conversation, create its goal, and manage its
+progress. Its write action only focuses the real composer. It creates no owner,
+Message, or goal. Selected conversations keep the owner-bound strip above their
+transcript; creation is a distinct action and the form explains automatic
+continuation and unspecified budgets. The home composition scrolls as one region
+so the input, starters, and guide remain reachable with a desktop dock open.
+
 ## Current diagnostic log viewer
 
 LogViewer reads the current backend event envelope and preserves nested subject `data`, actual ambient bindings and original raw record in Details. Elapsed duration comes from `data.duration`; subject time/level/service do not change the row header. Historical non-string event time has unknown chronology and its original value remains in details/raw. Unparsed output remains the actual raw diagnostic line without a parallel plaintext interpretation. The live component owns current aggregation/copy behavior; unused duplicate utility aggregation is retired.
