@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, expect, test } from "bun:test"
 import { configure } from "../src/services/api"
 import { loadConfigInfo, loadProviderInfo } from "../src/services/config-load"
+import { reloadProjectScope } from "../src/services/config"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import type { HostTransport, TransportRequest } from "../src/services/host-transport"
 import { appStore, setAppStore, setConfigSnapshot } from "../src/store/app"
@@ -32,6 +33,39 @@ test("project load publishes its complete configuration and settled channel reso
   expect({ config: appStore.config, channels: appStore.channels, issues: appStore.configLoadIssues }).toEqual({
     config: accepted, channels, issues: [],
   })
+})
+
+test("directory-free workspace refresh publishes global configuration and its empty project inventory", async () => {
+  setSettingsStore("directory", "")
+  configure({ directory: "" })
+  setAppStore("channels", [{ id: "prior-project" }])
+  const accepted = { permission_mode: "ask", locale: "zh-CN" }
+  const requests: TransportRequest[] = []
+  transport((request) => {
+    requests.push(request)
+    return accepted
+  })
+  expect(await reloadProjectScope()).toEqual([])
+  expect({ config: appStore.config, channels: appStore.channels, configIssues: appStore.configLoadIssues, issues: appStore.projectLoadIssues }).toEqual({
+    config: accepted, channels: [], configIssues: [], issues: [],
+  })
+  expect(requests.map(({ method, path }) => ({ method, path }))).toEqual([{ method: "GET", path: "global/config" }])
+})
+
+test("renewed global selection keeps the configuration accepted by its current provider read", async () => {
+  setSettingsStore("directory", "")
+  configure({ directory: "" })
+  const old = Promise.withResolvers<Record<string, unknown>>()
+  transport(() => old.promise)
+  const loading = loadConfigInfo()
+  setBoardStore("selectEpoch", (value) => value + 2)
+  const accepted = { permission_mode: "ask", locale: "zh-CN" }
+  const catalog = { connected: ["current-global"] }
+  transport((request) => request.path === "global/config" ? accepted : request.path === "global/providers" ? { catalog } : {})
+  await loadProviderInfo()
+  old.resolve({ permission_mode: "full_access", locale: "en-US" })
+  await loading
+  expect({ config: appStore.config, catalog: appStore.providerCatalog }).toEqual({ config: accepted, catalog })
 })
 
 test("global provider load publishes the complete global configuration with catalog and authentication", async () => {

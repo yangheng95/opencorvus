@@ -297,17 +297,29 @@ function enterDirectoryFreeWorkspace(savedDirectory: string, selectionEpoch: num
   clearProjectScopeData()
 }
 
+function refreshDirectoryFreeConfig(authority: ApiAuthority, selectionEpoch: number): void {
+  if (!appStore.connected) return
+  void reloadProjectScope({ authority }).catch((error) => {
+    if (!isApiAuthorityCurrent(authority) || !ownsWorkspaceSelection(selectionEpoch)) return
+    AppLog.error("project-load", "Global configuration refresh failed", {
+      error: error instanceof Error ? error.message : String(error),
+    })
+  })
+}
+
 /**
  * Close the current project selection without deleting project data.
  * This is the single lifecycle path for Project -> Close Project.
  */
 export async function closeProject(): Promise<void> {
+  const authority = captureApiAuthority()
   const admission = await requestWorkspaceSelection()
   if (admission.kind === "unchanged") return
   if (!ownsWorkspaceSelection(admission.epoch)) throw new DOMException("Project closing superseded", "AbortError")
   enterDirectoryFreeWorkspace("", admission.epoch)
   await saveSettings()
   if (!ownsWorkspaceSelection(admission.epoch)) throw new DOMException("Project closing superseded", "AbortError")
+  if (isApiAuthorityCurrent(authority)) refreshDirectoryFreeConfig(authority, admission.epoch)
 }
 
 /**
@@ -315,8 +327,10 @@ export async function closeProject(): Promise<void> {
  * only when the operator submits actual content.
  */
 export async function openGlobalChatLauncher(selectionEpoch: number): Promise<void> {
+  const authority = captureApiAuthority()
   if (!ownsWorkspaceSelection(selectionEpoch)) throw new DOMException("Global launcher superseded", "AbortError")
   enterDirectoryFreeWorkspace(settingsStore.savedDirectory, selectionEpoch)
+  refreshDirectoryFreeConfig(authority, selectionEpoch)
 }
 
 export function isMissingProjectDirectoryError(error: unknown, directory: string): boolean {
@@ -339,6 +353,8 @@ export function isMissingProjectDirectoryError(error: unknown, directory: string
  * removed Project cannot remain the persisted API request context.
  */
 export async function leaveUnavailableProject(directory: string): Promise<void> {
+  const authority = captureApiAuthority()
+  let recoveryEpoch: number | undefined
   const unavailableDirectory = directory.trim()
   if (!unavailableDirectory) return
   const unavailableKey = projectDirectoryKey(unavailableDirectory)
@@ -348,7 +364,8 @@ export async function leaveUnavailableProject(directory: string): Promise<void> 
   const savedDirectory =
     projectDirectoryKey(settingsStore.savedDirectory) === unavailableKey ? "" : settingsStore.savedDirectory
   if (ownsRuntimeDirectory) {
-    enterDirectoryFreeWorkspace(savedDirectory, beginWorkspaceSelection())
+    recoveryEpoch = beginWorkspaceSelection()
+    enterDirectoryFreeWorkspace(savedDirectory, recoveryEpoch)
   } else {
     // A selected Task or Session can temporarily own another live Project
     // while settings still retain this removed directory. Clear only the
@@ -361,6 +378,8 @@ export async function leaveUnavailableProject(directory: string): Promise<void> 
     })
   }
   await saveSettings()
+  if (recoveryEpoch !== undefined && ownsWorkspaceSelection(recoveryEpoch) && isApiAuthorityCurrent(authority))
+    refreshDirectoryFreeConfig(authority, recoveryEpoch)
 }
 
 /**

@@ -1,7 +1,7 @@
 // ── Config Service ──
 // Check config accessors and config update helpers.
 
-import { ApiError, apiJson, configure as configureApi } from "./api"
+import { ApiError, apiJson, configure as configureApi, serverSettledRequest } from "./api"
 import { readConfigMutationReceipt } from "./config-mutation-receipt"
 import { captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { appStore, setAppStore, setConfigSnapshot, type ProjectLoadIssue } from "../store/app"
@@ -152,12 +152,12 @@ export async function patchConfig(diff: Record<string, any>, options: ConfigRequ
   if (!appStore.connected) throw new Error("Cannot patch config while disconnected")
   let saved: Record<string, any>
   try {
-    saved = await apiJson(configRequestPath(options), {
+    saved = await apiJson(configRequestPath(options), serverSettledRequest({
       authority: options.authority,
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(diff),
-    })
+    }))
   } catch (error) {
     const committed = committedConfigFromError(error)
     if (committed && configResponseStillOwned(options, selectionEpoch)) setConfigSnapshot(committed)
@@ -175,12 +175,12 @@ export async function patchGlobalConfig(
   options = { ...options, authority: options.authority ?? captureApiAuthority() }
   if (!appStore.connected) throw new Error("Cannot patch global config while disconnected")
   try {
-    return await apiJson("global/config", {
+    return await apiJson("global/config", serverSettledRequest({
       authority: options.authority,
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(diff),
-    })
+    }))
   } catch (error) {
     const committed = committedConfigFromError(error)
     if (committed && configResponseStillOwned(options, selectionEpoch)) setConfigSnapshot(committed)
@@ -331,12 +331,12 @@ export async function patchSessionConfig(input: SessionConfigPatchRequest): Prom
   if (!sessionID) throw new Error("patchSessionConfig: sessionID is required")
   const saved = await apiJson(
     directoryScopedPath(`session/${encodeURIComponent(sessionID)}/config`, input.directory, "patchSessionConfig"),
-    {
+    serverSettledRequest({
       authority,
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(input.diff),
-    },
+    }),
   )
   if (isApiAuthorityCurrent(authority)) markSessionConfigStale(sessionID)
   return saved
@@ -465,12 +465,12 @@ async function updateConfigPath(
   }
   let saved: Record<string, any>
   try {
-    saved = await apiJson(configPath, {
+    saved = await apiJson(configPath, serverSettledRequest({
       authority,
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(diff),
-    })
+    }))
   } catch (error) {
     const committed = committedConfigFromError(error)
     if (committed && isApiAuthorityCurrent(authority) && ownsResponse()) setConfigSnapshot(committed)
@@ -495,7 +495,15 @@ export async function reloadProjectScope(options: { restoreWorkspace?: boolean; 
   const owns = () => isApiAuthorityCurrent(authority) && boardStore.selectEpoch === selectionEpoch && activeProjectDirectory().trim() === directory
   if (!directory) {
     clearTasksForMissingDirectory()
-    return []
+    const configIssues = await loadConfigInfo(undefined, {
+      authority,
+      directory,
+      isCurrentDirectory: (candidate) => candidate === directory && owns(),
+    })
+    if (!owns()) return []
+    const issues: ProjectLoadIssue[] = configIssues.map((issue) => ({ resource: "config", message: `${issue.resource}: ${issue.message}` }))
+    setAppStore("projectLoadIssues", issues)
+    return issues
   }
   configureApi({ directory })
   const [configResult, extensionsResult, metaResult, tasksResult] = await Promise.allSettled([

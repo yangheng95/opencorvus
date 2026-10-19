@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { configure } from "../src/services/api"
-import { patchConfig, patchGlobalConfig, updateConfig } from "../src/services/config"
+import { patchConfig, patchGlobalConfig, patchSessionConfig, updateConfig, updateGlobalConfig } from "../src/services/config"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import { HOST_CAPABILITIES, type HostTransport, type TransportRequest, type TransportResponse } from "../src/services/host-transport"
 import { appStore, setAppStore, setConfigSnapshot } from "../src/store/app"
@@ -30,6 +30,36 @@ describe("config service fail-fast writes", () => {
     configure({ directory: "" })
     setAppStore({ connected: false, config: null })
   })
+
+  test.each(["project-patch", "global-patch", "project-update", "global-update", "session-patch"] as const)(
+    "%s waits for the server's canonical configuration settlement", async (operation) => {
+      const directory = "C:/Users/example/project"
+      const global = operation.startsWith("global")
+      configure({ directory: global ? "" : directory })
+      setSettingsStore("directory", global ? "" : directory)
+      setBoardStore({ board: null, selectedSource: null })
+      setAppStore("connected", true)
+      const accepted = { model: "owned/after" }
+      const response = operation === "session-patch" ? { config: accepted, origin: { model: "session" } } : accepted
+      const requests: TransportRequest[] = []
+      __setHostTransportForTest(fakeTransport((request) => {
+        requests.push(request)
+        return { status: 200, ok: true, headers: {}, body: request.method === "GET" ? { model: "owned/before" } : response }
+      }))
+      const mutate = (config: Record<string, any>) => { config.model = accepted.model }
+      const result = operation === "project-patch" ? await patchConfig(accepted)
+        : operation === "global-patch" ? await patchGlobalConfig(accepted)
+        : operation === "project-update" ? await updateConfig(mutate)
+        : operation === "global-update" ? await updateGlobalConfig(mutate)
+        : await patchSessionConfig({ sessionID: "ses_config", directory, diff: accepted })
+      expect(result).toEqual(response)
+      expect(requests.filter((request) => request.method === "PATCH").map(({ path, timeoutMilliseconds, body }) => ({ path, timeoutMilliseconds, body }))).toEqual([{
+        path: global ? "global/config" : operation === "session-patch" ? "session/ses_config/config" : "config",
+        timeoutMilliseconds: null,
+        body: { kind: "json", value: accepted },
+      }])
+    },
+  )
 
   test("successful PATCH publishes the complete accepted configuration", async () => {
     const accepted = { network: { proxy: { url: "http://127.0.0.1:1", llmProvider: false, webResearch: false } } }

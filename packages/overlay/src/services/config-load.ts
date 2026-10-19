@@ -1,6 +1,7 @@
 import { batch } from "solid-js"
 import { appStore, setAppStore, setConfigSnapshot, type ConfigLoadIssue, type ProviderLoadIssue } from "../store/app"
 import { settingsStore } from "../store/settings"
+import { boardStore } from "../store/board"
 import { ApiError, apiJsonWithTimeout, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { activeProjectDirectory } from "./project-directory"
 
@@ -30,6 +31,20 @@ function ownsDirectoryLoad(options: DirectoryOwnedLoadOptions): boolean {
     activeProjectDirectory().trim() === directory &&
     (!options.isCurrentDirectory || options.isCurrentDirectory(directory))
   )
+}
+
+function captureDirectoryLoad(options: DirectoryOwnedLoadOptions): DirectoryOwnedLoadOptions & { authority: ApiAuthority; directory: string } {
+  const selectionEpoch = boardStore.selectEpoch
+  const directoryEpoch = settingsStore.directoryEpoch
+  const directory = (options.directory ?? activeProjectDirectory()).trim()
+  return {
+    ...options,
+    directory,
+    authority: options.authority ?? captureApiAuthority(),
+    isCurrentDirectory: (candidate) =>
+      boardStore.selectEpoch === selectionEpoch && settingsStore.directoryEpoch === directoryEpoch &&
+      candidate === directory && (!options.isCurrentDirectory || options.isCurrentDirectory(candidate)),
+  }
 }
 
 function providerInfoRequests(timeoutMilliseconds: number, options: DirectoryOwnedLoadOptions = {}) {
@@ -108,32 +123,22 @@ function providerProjectionIssues(value: Record<string, unknown>): ProviderLoadI
   })
 }
 
-function ownsConfigInfoLoad(
-  loadSequence: number,
-  directoryEpoch: number,
-  directory: string,
-  options: LoadConfigInfoOptions,
-): boolean {
-  if (loadSequence !== configInfoLoadSequence) return false
-  if (String(options.directory || "").trim()) return ownsDirectoryLoad(options)
-  return settingsStore.directoryEpoch === directoryEpoch && settingsStore.directory.trim() === directory
-}
-
 export async function loadConfigInfo(
   timeoutMilliseconds = CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS,
   options: LoadConfigInfoOptions = {},
 ): Promise<ConfigLoadIssue[]> {
-  options = { ...options, directory: options.directory ?? activeProjectDirectory(), authority: options.authority ?? captureApiAuthority() }
+  options = captureDirectoryLoad(options)
   assertApiAuthorityCurrent(options.authority)
   const loadSequence = ++configInfoLoadSequence
-  const directoryEpoch = settingsStore.directoryEpoch
-  const directory = String(options.directory || settingsStore.directory).trim()
+  const configPath = options.directory ? directoryOwnedPath("config", options) : "global/config"
   const [configResult, channelResult] = await Promise.allSettled([
-    apiJsonWithTimeout(directoryOwnedPath("config", options), timeoutMilliseconds, { authority: options.authority }),
-    apiJsonWithTimeout(directoryOwnedPath("channel", options), timeoutMilliseconds, { authority: options.authority }),
+    apiJsonWithTimeout(configPath, timeoutMilliseconds, { authority: options.authority }),
+    ...(options.directory
+      ? [apiJsonWithTimeout(directoryOwnedPath("channel", options), timeoutMilliseconds, { authority: options.authority })]
+      : []),
   ])
 
-  if (!isApiAuthorityCurrent(options.authority) || !ownsConfigInfoLoad(loadSequence, directoryEpoch, directory, options))
+  if (loadSequence !== configInfoLoadSequence || !ownsDirectoryLoad(options))
     return []
 
   const issues: ConfigLoadIssue[] = []
@@ -141,27 +146,27 @@ export async function loadConfigInfo(
   let channels: unknown[] | undefined
   if (configResult.status === "fulfilled") {
     try {
-      config = requireObjectResponse("config", configResult.value)
+      config = requireObjectResponse(configPath, configResult.value)
     } catch (error) {
       issues.push({ resource: "config", message: providerLoadErrorMessage(error) })
     }
   } else {
     issues.push({ resource: "config", message: providerLoadErrorMessage(configResult.reason) })
   }
-  if (channelResult.status === "fulfilled") {
+  if (channelResult?.status === "fulfilled") {
     try {
       channels = requireArrayResponse("channel", channelResult.value)
     } catch (error) {
       issues.push({ resource: "channel", message: providerLoadErrorMessage(error) })
     }
-  } else {
+  } else if (channelResult?.status === "rejected") {
     issues.push({ resource: "channel", message: providerLoadErrorMessage(channelResult.reason) })
   }
 
   batch(() => {
     if (config) setConfigSnapshot(config)
     setAppStore({
-      ...(channels ? { channels } : {}),
+      ...(!options.directory ? { channels: [] } : channels ? { channels } : {}),
       configLoadIssues: issues,
     })
   })
@@ -173,7 +178,7 @@ export async function loadProviderInfo(
   timeoutMilliseconds = CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS,
   options: DirectoryOwnedLoadOptions = {},
 ): Promise<ProviderLoadIssue[]> {
-  options = { ...options, directory: options.directory ?? activeProjectDirectory(), authority: options.authority ?? captureApiAuthority() }
+  options = captureDirectoryLoad(options)
   assertApiAuthorityCurrent(options.authority)
   const loadSequence = ++providerInfoLoadSequence
   const directory = String(options.directory || "").trim()

@@ -1,0 +1,73 @@
+# 首页设置与配置读取归属
+
+## Recall
+
+持续单agent自主迭代，当前HEAD/upstream为ca3293af9，上一goal turn为progress：Goal首页改版已提交推送并实际查看截图。本轮排查433真实页面发现的从无项目首页进入Settings/General显示config需要目录错误。用户后续单agent要求覆盖持久goal的旧Astra文字。原.bun、packages/opencorvus/bun保留；不操作用户18571页面、窗口或服务，不清库、不改迁移、不创建branch/worktree或发布。只使用自有QA412 runtime。
+
+## 修改前调查及影响分析
+
+已读AGENTS、433 Recall、05-config的三层/请求归属/全局配置投影合同、07-panel、init完整启动/重连/恢复、config-load/config读写、workspace全局launcher/关闭/缺失目录/连接离开及project refresh、connection-projection、General/Permissions、ComposerModelSelector、后端global/config及channel路由、transport routeRequiresProjectDirectory。全仓搜索loadConfigInfo两个生产调用、reloadProjectScope、Provider全局config读取、enterDirectoryFreeWorkspace四个入口和clearProjectScopeData。当前test/config-load-ownership为纯transport/store合同，无DOM/组件渲染，不把它当UI端到端。run-unit-tests支持精确文件且隔离runtime，禁止无目标全量运行。
+
+已观察现象是General摘要显示Project-scoped route GET /config requires configured directory。直接触发点：init在恢复URL之前捕获旧Project目录，恢复后仍调用reconcileCapabilities；该closure的extensions用旧目录，而loadConfigInfo默认重新捕获当前目录，空目录仍请求项目config/channel。校验只在请求完成后执行，已写入configLoadIssues无法由父级退休。旧路径为尽快显示历史而延迟能力加载，却未把调用本身及子投影绑定到同一捕获归属。另一代码事实：进入无目录工作区会清空config，全球配置当前只在打开Provider选择等专用入口读取；General可显示默认Full access，是否与实际global配置相违尚需真实写入/刷新证据。不能直接断言凭据/模型或业务调度根因。
+
+影响面为启动、显式Task/Chat/Mission定位、项目A/B选择与晚到资源、New Chat、Close Project、缺失目录恢复和连接变更后的配置/扩展投影。Task/Mission/Session执行轮次、队列和唤醒未见异常，不改后端执行机制。数据库/持久格式/公共HTTP不变；全局配置继续用既有GET/PATCH /global/config，项目用既有/config?directory。不能默认把缺目录项目请求改成全局写入，也不能隐藏原错误或造项目。
+
+## 实施前方案
+
+1. 新before/after（必要时verified）不可变publication，端口18627/18629/18631，复用成熟413 NativeService/ProcessFacade、600秒物理期限及完整auth/models绑定，真实gpt-6.1-sol预检后只做设置/历史阅读，不发业务输入。Provider凭据和模型目录成对复制与退休，源只读。
+2. before真实首页进入General截图。通过该自有QA页面把已有Full access改为Ask me（仅收紧QA权限），记录真实global/config的permission_mode；刷新自有页后再看General，判断是否丢失全局配置。保持Ask，不通过恢复Full access扩大权限。客户端Git偏好可作低影响保存/刷新验收，操作不初始化Git。
+3. 证实后在唯一配置reader内明确当前global/project读语义：空目录读取既有global/config，channel仍仅属于项目；不创建全局channel假路由或第二配置store。启动能力closure在执行前及子提交时绑定捕获目录、selection epoch、workspace epoch和API authority。全局工作区入口及重连通过现有reloadProjectScope刷新全局配置；连接离开commit保持同步，不向旧authority加读请求。字段保存继续显式区分global/project，不把错误作为路由fallback。按真实代码决定最小调用调整并记录。
+4. 聚焦非UI正向合同覆盖全局配置实际路径和明确返回投影、项目通道、当前owner退休后被新scope接受的正确投影。正式隔离Node Vite构建；after真实General显示Ask且刷新保持、正常项目→新对话配置恢复、Git客户端偏好保存。没有UI自动化测试；单纯清错误/空console不算成功。
+5. 关闭自有页、公开shutdown、原句柄join及native physical/output/request结算，凭据成对退休；及时保存原请求事实（共享dev.log下次启动会改写）。证据不含凭据、DB和完整Provider body。同步三索引/架构、适用检查、范围提交、fresh fetch/merge、完整pending审查和正常push；goal保持active。
+
+## Before证据及修改前追加审计
+
+18627实际General显示config目录错误及Full access（01）。真实点击Ask me后44,085ms原PATCH /global/config完成200并持久化Ask；并行GET在锁内等待38,822ms也完成200，而独立Node观察器30秒期限先到退出1，原错误保留。原请求最终结算，不能称为死锁。后续GET 1ms返回Ask；但原UI仍Full access（03），刷新后也Full access（04）。02是立即截图、事务尚未完成，文件名saved不表示已保存。原源码HostTransport默认15,000ms，config.ts三个canonical PATCH路径及Session PATCH使用默认期限；权限写队列因此在服务端commit前释放，且无法取得最终回执。
+
+按共享配置机制已横向读取withConfigMutationAuthority全入口、generation read/write与pending嵌套读排空、global/project canonical writer、候选校验、全部registered Project转换、runtime cache/事件结算、Session配置路由与UI保存者。原200完成事实排除本次永久锁死；global writer在同一个owner内逐Project验证既有配置及Skill/Provider/Profile，44秒具体耗时分布尚未知，不靠裁掉Project验证缩短。Task/Mission/Session正常/终态、重试/重启、串并行/多Project的数据继续沿原Config canonical generation，未改其执行轮次或调度；本批只修客户端丢失真实结算及配置读归属，不宣称后台性能优化完成。
+
+实施采用既有serverSettledRequest（timeoutMilliseconds:null）用于canonical project/global PATCH与updateConfigPath；Session PATCH也是持久配置与真实候选校验结算，使用同一边界；普通GET与proxy test保留其读取/诊断期限，不新增平行超时配置或吞掉错误。Service实际执行checker会通过生产getHostTransport browser实现、真实apiJson/config服务及独立HTTP服务写入非安全字段username=qa-scope-434并恢复原值，检查实际回执/当前配置；不是mock UI或Provider测试替代。纯transport正向测试同时验证请求结算策略与接受响应。
+
+loadConfigInfo明确global/project作用域；global只读现有global/config，不伪造channel回复。config与Provider reader共享既有authority/directory/selection/directory-epoch的归属捕获。init能力closure调用前即核对捕获归属，子提交沿同一predicate；全局启动/重连、New Chat、Close Project、缺失目录恢复在适当async调用边界读取global配置，连接离开同步commit不发旧authority请求。只有已连接时才加载；没有第二配置store或schema变化。before页已关闭、公开shutdown200、原9666 joined exit0，原请求事实及时归档。当前QA保持实际Ask，不为了测试恢复Full access。
+
+## 实现复核
+
+实现前复核当前Task恢复会合法bumpWorkspaceEpoch；能力读取必须在恢复后捕获当前selection/workspace epoch，而不能沿用恢复前列表的workspace epoch，否则正常同Project Task也会被误退休。本轮第一轮局部编辑即发现并修正此处，尚未构建publication或做after UI。callback仅在原目录/authority/lifecycle仍当前时启动；每个子loader绑定该次调用的真实epoch，列表旧issues在原epoch失去归属后不再拼回新投影。
+
+## 设置实际交互发现的公共Switch缺陷
+
+after 18629已真实显示Ask且刷新保持（05/07），Git偏好用键盘空格写入true并刷新可读（06/07）；随后真实鼠标点击可见开关仍保持true（08），不是保存资格。Playwright动作的setChecked也失败，均保留；键盘可恢复false。已读公共Switch/Checkbox primitive、全部四个生产消费页（General两处、Network两处、Channel布尔字段、Expert Squad布尔字段）及selection-control.css；它们都未要求Root为label。现Switch.Root as=label包着已内置toggle处理的Switch.Control。已安装Kobalte实际源码GTCT3DWP.js显示Control.onClick直接toggle，外层原生label又把click转发到Input，造成二次切换。Checkbox使用默认Root与正式Label，没有该双路径。
+
+修复公共Switch恢复库的默认Root，文字使用正式KobalteSwitch.Label，Input取得唯一id及真实aria-label，与现有Checkbox身份/无障碍模式一致；不手写event.preventDefault补丁。CSS依赖class/dataset而非label元素。此项为纯UI公共primitive修复，不新增或运行UI自动化测试。以新的verified 18631 publication真实鼠标点击、键盘、外部标签、保存/刷新与中文页面复核；不沿用中间bundle宣称已修复。现有网络代理等安全配置不做保存，验证只编辑表单草稿或读取。
+
+## 已完成的真实canonical配置写入验收
+
+实际checker第一次在执行前因根目录无法解析overlay专属jsonc-parser退出1，未发请求；改为解析overlay已有依赖后重跑原checker，没有mock或换验收。after原生服务中，生产patchGlobalConfig经生产browser HostTransport真实提交username=qa-scope-434，46,205ms后收到接受回执；生产loadConfigInfo读到该接受值；恢复原username字段及其原存在性，17,348ms后收到最终回执，完整解析canonical source等于原数据，Ask保持。两个请求均超过原15秒默认期限且实际成功，是本批server-owned结算的真实服务路径证据，不冒充网页点击或LLM业务。
+
+中间after UI的General已真实Ask且刷新保持，Git键盘写入/读取通过，鼠标问题已单独记录并追加公共primitive修复。after已公开shutdown200、原71893 joined exit0，原请求事实及时保存。下一次verified只用新immutable bundle，不能把中间鼠标失败页当作最终通过。
+
+## 最终真实验收
+
+verified 18631使用最终51.44秒正式Node Vite/renderer checker bundle，09正常已取消Task直接定位恢复原45秒/正文及Ask；10项目General正确Ask且项目批准记录入口存在。11真实鼠标点击Git开关一次为true；12点击外部文字标签为false；随后键盘Space为true，13刷新后保持true（该图在一次后续错误locator导致工具未直接展示后，已从本地实际打开人工复核）。14真实外观设置切中文后的General仍为Ask、Git true；后续真实鼠标恢复Git false。15/16网络代理开关草稿用真实鼠标切为true，再用其标签恢复false，未保存代理/连接配置。17项目返回New Chat后General为全局Ask且显示打开项目提示；18再次刷新后中文状态一致，Git偏好保留false。19打开Slack通道草稿，仅点组件内文字标签把默认true切为false，随后取消，不保存配置、不填凭据、不向外发消息。20回到原Work项目General，Ask正确、Git false。
+
+实际查看全部目标截图；未保留新增UI自动化测试或新UI fixture。后续导航测试尝试触及呈现调度，已经删除，失败日志保留；没有添加静态文案断言。公共Switch已全仓核对四类消费页，General/Network/Channel实际交互资格，Expert Squad只有代码横向审计，本批未保存其布尔配置。配置CLI checker为真实服务链而非网页；31项纯transport/store合同（7+15+9，67个正向expect）补充验证全局/项目路径、晚到归属及五类配置写入的server-owned请求参数，不代替截图。最终overlay typecheck、CSS token checker、正式Node Vite与renderer checker、docs:check、architecture-index均通过。没有HTTP/SDK/schema/迁移/任务执行协议改动。
+
+三个scope已公开shutdown200、原9666/71893/22638 joined exit0，native physical/output/request全部结算、各auth/models成对退休；额外私有authority两个文件也精确退休。原Codex authority尺寸/mtime保持准备前。每scope2次实际gpt-6.1-sol流预检，200和reader EOF，共6次；无本轮LLM业务输入、Task/Mission/Goal创建。原QA全局权限按本轮真实操作保留为Ask，未恢复为Full access；CLI临时username字段恢复完整原canonical数据；UI Git偏好恢复false。原服务日志在各scope结束后及时捕获。
+
+限制与后续：本批证明读取范围和真实写结算，不宣称全局配置保存已提速；原写44,085ms，生产CLI写46,205ms/恢复17,348ms，逐Project验证耗时分布仍需独立性能调查。未完成读取或读取超时时，仍沿既有currentPermissionMode默认显示Full access，本批资格为配置读取完成后的实际状态；下一批应把未知/加载态与已确认模式区分。没有完整并发导航、进程重启恢复或新成员Rendering资格，不能扩大结论。
+
+## 推送前导航时序复核
+
+审查发现新增await global config会把openGlobalChatLauncher的完成推迟到配置读返回，main的applyComposerIntent排在它之后；真实44秒写入证明读可能等待旧事务，此时不能让用户已看到新首页却仍保留旧Task提交模式。改为三个目录退出入口共享同一个独立配置刷新，沿原selection/authority退休响应与错误，导航不等待配置读。普通读取错误继续由configLoadIssues呈现，意外失败记录原AppLog，未隐藏或重试。该修正属于当前新增调用的完整性收尾，尚未提交。增加新final不可变scope18633及新的私有成对authority，已结算前三scope/凭据不复用；真实长写期间从Task进入New Chat，检查当前提交模式并在写完后重读General。
+
+本agent曾尝试给导航增加纯服务顺序测试，但调用实际进入conversation tree的requestAnimationFrame呈现调度，Node环境退出1。该新增测试实质触及UI投影，已完整删除其测试及新增import，没有添加浏览器polyfill或UI fixture；失败原日志保留，导航只使用真实页面验收。原三个纯transport/store合同文件仍是31项，未把错误测试包装为产品失败或端到端通过。
+
+## 当前交付构建与四个scope的最终结算
+
+当前实际publication为final 18633，正式Node Vite 50.78秒、renderer checker和typecheck通过；非阻塞导航修改后重新跑原三个合同文件31项通过，另一次原project ownership文件9项重跑通过。未保留不适用的新增导航测试，也没有用Frame polyfill把它伪装成非UI验收。
+
+21为当前构建正常Task原45秒/正文/Ask。原服务PATCH /global/config于15:31:04.025开始，真实New Chat点击15:31:30.445—30.574返回（129ms），22截图实际主输入目标已为Chat并显示首页；当时原写仍未完成。该值是一次人工交互记录，没有自动化UI时间阈值或benchmark分数。配置未加载时仍显示既有Full access是已知未完成项，22不能作权限已加载证据。原写76,031ms后返回接受，恢复16,720ms后完成，生产CLI确认临时username字段与存在性完整恢复、Ask保持。新配置读取未把导航留在旧Task意图。
+
+写完成后再次New Chat重读，23为实际全局Ask；24为当前构建真实鼠标Git开关true，随后外部标签恢复false。25为实际切换中文后的全局General：Ask、Git false。此轮没有再保存代理/通道或更改安全权限。final自有页关闭，公开shutdown200、原39668 joined exit0，native physical/output/request及其auth/models成对结算完成；新私有authority也精确成对退休。与前3scope合计4个scope/8次实际gpt-6.1-sol流预检，全部200和reader EOF；两个源authority准备及退休时原Codex文件尺寸/mtime一致。
+
+导航、数据投影和写结算已获得当前代码的实际证据；配置写入76秒、读取中的默认权限呈现仍是下一批优先问题，不把这两个剩余问题包装为已完成。所有修改按本批范围提交推送，不发布版本或清理用户文件。

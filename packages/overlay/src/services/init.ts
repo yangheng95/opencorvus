@@ -31,6 +31,7 @@ import {
 import { boardStore, setBoardStore, loadTasks, clearTasksForMissingDirectory, activeTaskID } from "../store/board"
 import { loadMeta } from "./meta"
 import { loadExtensions } from "./extensions"
+import { reloadProjectScope } from "./config"
 import {
   activeDirectory,
   ensureDefaultDirectory,
@@ -156,7 +157,13 @@ async function loadInitialData(
       vcsError: "",
       changes: [],
     })
-    return { loaded: false }
+    return {
+      loaded: false,
+      reconcileCapabilities: async () => {
+        if (isCurrentInitLifecycle(lifecycleGeneration) && isApiAuthorityCurrent(authority) && !activeDirectory().trim())
+          await reloadProjectScope({ authority })
+      },
+    }
   }
   // Opening a client observes its directory. Git initialization is an explicit
   // operator action and may change identity while another client owns work.
@@ -197,15 +204,22 @@ async function loadInitialData(
   // their own stores independently; a slow package scan must not delay the
   // selected conversation.
   const reconcileCapabilities = async () => {
+    const currentScope = () => isCurrentInitLifecycle(lifecycleGeneration) && isApiAuthorityCurrent(authority) &&
+      settingsStore.directory.trim() === directory && activeDirectory().trim() === directory
+    if (!currentScope()) return
+    const selectionEpoch = boardStore.selectEpoch
+    const capabilityEpoch = settingsStore.workspaceEpoch
+    const ownsCapabilities = () => currentScope() && ownsWorkspaceSelection(selectionEpoch) && settingsStore.workspaceEpoch === capabilityEpoch
+    const loadOptions = {
+      authority,
+      directory,
+      isCurrentDirectory: (candidate: string) => candidate === directory && ownsCapabilities(),
+    }
     const [extensionsResult, configResult] = await Promise.allSettled([
-      loadExtensions({
-        authority,
-        directory,
-        isCurrentDirectory: (candidate) => settingsStore.directory.trim() === candidate,
-      }),
-      loadConfigInfo(CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS, { authority }),
+      loadExtensions(loadOptions),
+      loadConfigInfo(CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS, loadOptions),
     ])
-    if (!owns() || settingsStore.directory.trim() !== directory) return
+    if (!ownsCapabilities()) return
     const capabilityIssues: ProjectLoadIssue[] = []
     const appendCapabilityFailure = (resource: ProjectLoadIssue["resource"], result: PromiseSettledResult<unknown>) => {
       if (result.status !== "rejected") return
@@ -232,7 +246,7 @@ async function loadInitialData(
         })),
       )
     }
-    const reconciled = [...issues, ...capabilityIssues]
+    const reconciled = [...(owns() ? issues : []), ...capabilityIssues]
     setAppStore("projectLoadIssues", reconciled)
     for (const issue of capabilityIssues) {
       AppLog.error("project-load", `${issue.resource} load failed`, { directory, error: issue.message })

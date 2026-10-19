@@ -3449,3 +3449,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [工作区链接读取失败](records/2026-10/2026-10-19-workspace-location-read-failure.md)：资源读取错误与启动恢复。
 
 - [Goal与默认首页](records/2026-10/2026-10-19-goal-home-discoverability.md)：使用路径及首页布局。
+
+- [首页设置配置归属](records/2026-10/2026-10-19-home-settings-scope.md)：恢复后读取与真实设置。

@@ -1629,6 +1629,14 @@ owns the interaction.
 
 ## Shared visual primitives
 
+Settings boolean switches use the existing Kobalte default Root, Control, Input,
+and associated Label. A native label cannot wrap a Control that already toggles
+the Input, because its forwarded click would toggle a second time. Explicit
+input IDs and accessible names belong to the Input; visible captions use the
+library Label. Pointer, external-label, and keyboard operation retain the same
+single checked-state contract across General, Network, Channel, and Expert Squad
+configuration forms.
+
 The existing design-language tokens own geometry, typography and neutral
 selection. Persistent titlebar and left navigation use one
 `oc-material-glass` primitive. Theme palettes provide its translucent fill and

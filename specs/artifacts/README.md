@@ -478,3 +478,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [工作区链接读取失败](2026-10-19-workspace-location-read-failure/README.md)：独立页面与物理收尾。
 
 - [Goal与默认首页](2026-10-19-goal-home-discoverability/README.md)：独立页面截图及结算证据。
+
+- [首页设置配置归属](2026-10-19-home-settings-scope/README.md)：真实General页面及物理结算。

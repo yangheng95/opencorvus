@@ -69,6 +69,15 @@ EngineInteraction 持久化；进程恢复复用同一 Request 创建时间与�
 
 ### Layer 2: Overlay Preferences — 客户端 UI 偏好
 
+Overlay 的配置投影按当前实际目录选择读取范围：项目读取 `/config?directory=…` 与项目 channel，
+无项目工作区读取既有 `/global/config`，并清空项目 channel 投影。启动、New Chat、关闭/丢失项目及
+重连通过同一配置 reader 刷新；Config 与 Provider reader 均绑定 API authority、目录和选择/目录轮次。
+恢复后的延迟能力加载在当前归属内发起，子读取与最终投影沿该归属结算，不能把恢复前的项目错误发布到首页。
+离开项目后的全局配置刷新独立于导航完成；读取不能延迟新会话提交意图的发布。
+项目、全局和 Session 配置 PATCH 使用既有 server-owned request settlement：传输默认读取期限不能
+提前宣称一个仍在 canonical commit/runtime settlement 中的写入失败；当前 owner 才接收其最终投影。
+普通配置 GET 和代理诊断仍保留各自读取期限。此边界不改变配置写事务、权限策略或任务执行轮次。
+
 - **单一协议**：`OverlayPersistedSettings` 是唯一持久化文档结构。必填字段、可选字段、枚举、数值范围与非空约束由 `@opencorvus-ai/transport-protocol` 定义；部分文档和未知字段都是无效输入。
 - **Browser host**：在 localStorage 的唯一键 `oc_settings` 中存放完整文档。
 - **Tauri host**：在应用配置目录的 `overlay.jsonc` 中存放同一文档，写入使用同目录临时文件原子替换。
