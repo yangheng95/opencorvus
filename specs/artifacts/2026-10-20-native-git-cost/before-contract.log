@@ -1,0 +1,27 @@
+$ bun script/run-tests.ts test/config-registration-batch.test.ts
+[1/1] START test/config-registration-batch.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+22 | export function withTimeout<T>(p: Promise<T>, ms: number, label: string): Promise<T> {
+23 |   let timer: ReturnType<typeof setTimeout> | undefined
+24 |   return Promise.race([
+25 |     p,
+26 |     new Promise<never>((_, reject) => {
+27 |       timer = setTimeout(() => reject(new AwaitTimeoutError(label, ms)), ms)
+                                           ^
+AwaitTimeoutError: independent admitted Project identities timed out after 1000ms
+ label: "independent admitted Project identities",
+    ms: 1000,
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\await-with-timeout.ts:27:39)
+(fail) a global cold candidate completes both independent admitted Project identities together [8887.83ms]
+
+ 0 pass
+ 1 fail
+Ran 1 test across 1 file. [11.79s]
+[1/1] DONE test/config-registration-batch.test.ts exit=1 duration=12.50s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\config-registration-batch.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\config-registration-batch.test.ts
+error: script "test" exited with code 1

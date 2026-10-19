@@ -1,0 +1,69 @@
+# 原生 Git 监管成本与配置保存
+
+## Recall
+
+持续单agent，原goal三Astra文案已被后续用户明确单agent要求覆盖。上一批442是progress：01a53f631已正常push且fresh fetch确认HEAD=origin/main；修复candidate Skill目录，55例/172断言、真实gpt-6.1-sol预检和HTTP候选来源/恢复通过。全量自有QA412保留72项目、schema2；所有442服务与原句柄joined0、私有授权对退休，global/Project完整恢复，原授权源metadata不变。现有.bun/和packages/opencorvus/bun/保留，不清库、不分支/worktree、不运行UI自动化，不操作用户18571或用户窗口进程。
+
+继续使用benchmark-debug-template的原链路，原完整性能门槛cold≤10000ms、restore≤5000ms、保存中真实page GET≤20000ms。442 after分别26534.5084/5201.5997ms、GET12935ms；cold/restore仍failed，不能仅减少阶段调用数或小用例通过就宣称目标完成。before并发GET未归档的证据缺口已保留，不追造。最终使用全历史真实native开发服务与正式441 UI、真实交互截图、完整配置恢复、原native物理/output/request结算后join，再成对退休凭据；如调用Provider，先复制完整auth+models，确认credential/catalog/实际gpt-6.1-sol一致且流式。
+
+## 修改前调查与影响面
+
+已读442 Recall/原始阶段、05-config、task-runtime-directory、Project.fromDirectory/identify/scanExactWorktreeRows/物理注册、ProjectDirectoryAdmission.run/acquire/settle及全部生产run调用、hostGit/Process/ProcessFacade/Windows supervisor、native Rust启动/Job结算、Filesystem durable publication及rename原语、process-occurrence与相关测试入口。ProjectDirectoryAdmission.run的全局文件队列跨身份复核完整持有，durable SQLite generation才是安全权威。442冷写70次held累计24075ms、admitted identity23397ms；140次Git阶段累计37108ms（并发累计，不等于墙钟），lookup与物理注册复核也有成本。
+
+触发点为cold全局保存验证全部已注册/活跃Project时建立身份；Task/Mission/Session及重启共用Project/Instance/Process authority。尚未证实具体进程成本，不能直接把全队列改为分目录、跳过Git/身份复核、减少Project集或以缓存替代当前事实。acquire对活跃重叠generation返回typed ClosedError；简单提前释放队列会改变同路径等待语义、alias/ancestor隔离及恢复，故本轮未选择此未经证明的改法。
+
+Windows helper解析按binding已缓存；每条命令的真实链为durable request→helper父进程/实例核对→CreateProcessW(原子Job归属、suspended)→helper/ready marker持久化→resume→target exit→Job active-process-zero→settlement marker→output closure→request cleanup。20ms就绪轮询只是线索，durable写和系统进程快照成本均未知。现有Git两个独立路径查询已并发；442实际Git --sq无法给两路径可靠quoted framing的拒绝结论保留。没有理由变更Git协议、进程归属或数据结构。
+
+## 实施前方案
+
+1. 先增加自有scratch诊断，不改生产逻辑：在隔离OPENCORVUS_HOME运行真实Process.runHost/hostGit，复用公开onSpawned及原Windows request observer，计时原durable request调用、ready返回与完整终态。只输出duration、marker/状态和实际进程身份；不输出env或Provider内容。按顺序和真实双查询各测若干次，所有原handle结算后退出。阶段观测只能定位，不能冒充全历史保存验收。
+2. 以测量决定后续生产方案。若本地工具/runner失败先修复并重跑原测量；若找到可根治成本，实施前补充对应调用面、公共契约、恢复/终态/串并行/多项目横向审计和明确方案，原错误与物理完整性保持。非UI实现需聚焦正向合同并复测原完整checker；不以新增fallback、旧路径兼容、硬编码或减少验收范围换取通过。
+3. 所有新增spec/artifact同步三索引，执行docs/API和architecture-index；范围提交，fetch/merge upstream、检查完整待推集合，正常hook与push。未知与failed门槛如实保留，完整goal维持active。
+
+## 结果
+
+原始12次Process.runHost真实Git：完整156.33—213.72ms，request durable发布2.46—17.74ms，ready返回86.65—138.35ms。每次原生Job与请求目录均完整结算清理。另在自有scratch复制完全相同Rust源码，仅加入单调时钟stderr观测并独立cargo build，12次实际调用证实helper marker约3ms、父进程全快照约22—30ms、CreateProcessW约10ms、Git执行约55—60ms、active-zero后观察约15ms。此诊断副本不交付、不用于全目标资格；原生产Rust/监管协议保持。单纯减少轮询、去掉持久写或父实例核验既不能根治全局串行，也会破坏安全合同，拒绝。
+
+## 根据测量确定的实现前方案与共享审计
+
+根因控制流已经明确：Config已有settledWork并发独立Project，但每个冷fromDirectory仍单独进入同一个ProjectDirectoryAdmission.run文件队列，在队列内完整执行两个Git查询与再次身份观察。70个目录因此串行支付原生进程成本。需要并行的是同一已持有跨进程queue callback中的独立注册复核，不是取消锁或跳过任何事实。
+
+采用ProjectDirectoryAdmission现有run作为唯一跨进程队列；增加一个显式registrationBatch输入（items、并行度、run），在一次原run持有期间通过原settledWork运行整批。fromDirectory的唯一注册入口改为runRegistration，声明初次发现的directory/worktree/proposedSandbox完整物理命名空间；同batch以现有key/overlaps比较所有较早工作，重叠命名空间按接纳顺序等前项完整结算，互不重叠才并行。这里只记录待执行Promise与物理输入，不复制SQLite token、Project身份或Config。全局queue始终持有，外部run/回收/promotion仍在同一个锁后等待；原acquire/settleMany、物理registration revalidate、admitted二次Git、occurrence/maintenance/duplicate检查均逐项原样执行。
+
+batch的AsyncLocalStorage只是原callback寿命内的执行范围，绑定当前data文件路径，原root成功/错误均排空已接纳工作再关闭；退出后的继承上下文重新走同一run。相同root的显式嵌套batch复用当前scope；其他root独立排队。处理物理key失败时当前工作完整结算，实际错误原样返回，不把失败改成空身份或默认成功。Config仅将当前settledWork调用换为该batch，保留全部directories、结果顺序与首个原错误、before/after/model/profile/Skill完整验证、persist时机与retention/reconcile寿命。
+
+横向审计：fromDirectory公共入口覆盖Server、CLI、Task/Mission/Session初始化和重启；未在batch内时仍使用原完整queue行为。既有inherited durable registration分支先于runRegistration，Managed Task/Worktree绑定仍用原token。sandbox增加、creation compensation/recovery、promotion restore等全部run调用不自动加入并发scope，不改它们的外部副作用或锁序。Worktree removal/reset/create、Project deletion及promotion acquire/provide/settle直接使用原SQLite generation与physical occurrence，当前修复不动其状态机、错误/恢复格式或终态。新增scope在global candidate workers内，只读取配置与引用，不进入这些mutating run；runtime reconcile在整批返回后。跨进程或崩溃仍以原filequeue与每个durable registration generation恢复，无新增batch持久事实或schema。官方[AsyncLocalStorage](https://nodejs.org/api/async_context.html)与[proper-lockfile](https://github.com/moxystudio/node-proper-lockfile)文档已核对，使用既有run而不引入第二个跨进程锁。
+
+验收先用原生产代码正向复现两个cold注册Project无法同时完成admitted barrier，再实现。聚焦测试覆盖独立Project并行真实身份、同路径/alias/ancestor有序完成、错误后完整清理和下一批成功、scope退休/嵌套与跨root隔离；重跑现有Project identity/GC/reclamation/creation/promotion/worktree跨进程、Config global/candidate/peer/lifecycle合同。真实完整QA新native服务按原cold/restore/page-read指标测量；不得缩小72项目集，不改模型、权限、schema、UI源码或原生监管。若有失败先追根因再改方案，不改预期掩盖。
+
+## 第一轮完整真实结果与继续实施前决定
+
+原代码正向cold barrier失败：32865 joined1，1000ms原错误；修复后相同用例及6个batch合同均通过，原54151 joined0；backend typecheck55681 joined0。原目录/回收/promotion跨进程筛选42177和8文件Config/candidate/peer/lifecycle/retention合同88466均joined0。没有运行UI测试。
+
+443-final原生18675实际gpt-6.1-sol流式预检通过，73项目、原已加载2。完整cold19736.8297ms、restore5534.5095ms，完整canonical恢复及Ask通过。保存中手动New chat的真实/global/config GET为16622ms/200，满足20s；cold10s、restore5s仍failed。原46183写入joined0，公开shutdown200、原75514 joined0后才继续改生产源码；截图与原dev.log/精确GET/spans已独立归档到scratch，下一scope不得覆盖这些证据。
+
+这次全队列内的注册确已并行：71个nested held的admission累计仅836ms，包含整批外层owner的held最大19296ms。但142次lookup累计87337ms、最大1157ms，admitted累计69302ms、Git58439ms均是重叠跨度，不可相加当墙钟。并行扫描重复为同一目标执行realpath/stat的实际资源成本已暴露；不是假定20ms轮询造成19秒。
+
+现在实施438已分析但当时因生命周期根因而暂缓的局部观察复用：一次scanExactWorktreeRows为同一目标创建一个惰性物理观察，完整遍历所有行；公共sameFilesystemLocation通过同一个私有比较函数读取观察，避免复制比较算法。samePath早返回、realpath早返回、bigint device/inode与仅ENOENT/ENOTDIR作为缺失保持，其他错误原样传播。每次公共调用、每次初始/每次admitted lookup仍独立新观察，不在batch/Instance/全局缓存路径或身份，不跨队列准入复用；其他registry physical revalidate完全保留。全仓同语义调用包括identity-convergence等继续走同一个公共物理谓词。
+
+需补充真实junction重定向后的当前观察正向合同，并重跑原filesystem wide-inode/hard-link、Git main/linked/alias、duplicate identity、目录准入及新batch合同。源码修改后启动新verified18677原生服务，继续保留所有73以上Project/Session历史、正式441 UI、完整来源恢复与原门槛。所有单项通过不代替完整cold/restore资格。
+
+新scope复核还需明确非法重入：普通独占run不能在其正在持有原queue的registrationBatch内再次排队，否则会等待自己的owner。全仓没有现有同语义typed error；增加ProjectRegistrationBatchMutationError，仅对同data queue且active scope的独占重入即时返回明确错误。独立或其他root、retired scope及合法registrationBatch嵌套不受影响。新增正向输入→错误合同及之后同一原queue成功接纳，防止新API引入10分钟自锁；不增加第二执行或重试路径。
+
+最终复核补充取消合同：registrationBatch直接转交原settledWork的AbortSignal；已接纳registration保持原完整generation结算，再返回原abort reason并允许外部queue下一项进入。以真实generation和有序终态验证，不新增取消实现或改写原超时策略。
+
+## 最终源码真实验收与未满足项
+
+verified18677使用最终源码、完整74项目、原已加载2：cold19611.1693ms、restore5280.8971ms，完整global canonical恢复、Ask保留，均200。实际保存中手动New chat的GET/global/config从20:48:32.266Z到20:48:48.667Z，16401ms/200，起点确在cold PATCH区间内。原4390 writer joined0，公开shutdown200，原55462 native launcher joined0；两个scope都确认原native physical/output/request终态及launcher exit0后，才精确退休私有443 auth/models。原授权源metadata不变。自有QA直接bun:sqlite readonly/create:false核对user_version2、Project count74；没有生产DB初始化或数据清理。
+
+阶段事实：最终144次lookup累计85126ms、Git58665ms（重叠跨度），整体cold19.61s，不能把局部目标复用宣称为整体门槛通过。新注册并发合同证实独立目录可以在同一原queue owner内同时完成，但所有外部独占操作仍需等该batch结算；真实cold和restore仍failed，原目标不变。后续继续调查全量物理registry观察、Git边界和Config/model验证的资源成本；不以部分通过、暖缓存或日志命名替代目标。
+
+人工视觉复核两个真实已完成chat与首页：真实OK、gpt-6.1-sol、Ask及441 Goal入口都可见；没有改UI源码。新8个queue/物理合同及1个cold Config合同最终88515 joined0；filesystem/Git/duplicate-convergence合同65267 joined0；最终backend typecheck3615 joined0。目录恢复/跨进程合同64699在最终源码再次joined0；Config/peer/lifecycle最终回跑使用56402原句柄，最终结算补录后归档。85个唯一用例/165断言的逐文件证据与两scope终态在artifact results.json，初轮与最终回跑日志分别保留。
+
+源差异复核只有三个生产文件：Config把原settledWork移交同一个directory registrationBatch，fromDirectory声明完整命名空间，其余注册body仅因formatter缩进；物理比较通过唯一私有实现消费当前局部观察。无原生监管、Provider、协议、配置面、DB/schema、消息或LLM流程改动，无未授权branch/worktree/tag/Release。架构05-config/task-runtime-directory与三索引已同步，docs/API与architecture-index及正常Git hook在提交推送时结算；完整goal保持active。
+
+最终结算补录：56402 Config回跑joined0，目录64699 joined0；新增取消合同后16085 joined0。最终去重86例/166断言，17个文件均有原runner exit0；final-directory-contracts、final-config-contracts、accepted-contracts替代对应早期用例的当前资格，早期日志仍保留。docs:check（345ops/26groups）和architecture-index（20篇当前文档）通过；diff --check及全部新生产调用点复核通过。没有未关闭的自有服务或验证句柄，性能资格仍failed，不标记完整goal完成。
+
+最终源码review把fromDirectory的queue声明和原token acquire改为引用同一个registrationDirectories常量，消除两份相同命名空间表达式，也避免formatter造成整个callback缩进差异。变量值、接纳与验证顺序保持，与真实验收的输入完全一致；以原cold Config正向和全部新queue合同再次核验此整理，不改变验收门槛或其他源码。
+
+整理后的reviewed-contracts原52487 joined0，10个新合同全部通过；results.json对应两文件指向该最后回跑，去重仍为86例/166断言。完整性能仍failed，范围提交及正常推送继续收敛。

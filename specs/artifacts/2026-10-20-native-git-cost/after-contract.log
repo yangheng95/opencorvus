@@ -1,0 +1,12 @@
+$ bun script/run-tests.ts test/config-registration-batch.test.ts
+[1/1] START test/config-registration-batch.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a global cold candidate completes both independent admitted Project identities together [5510.34ms]
+
+ 1 pass
+ 0 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [7.66s]
+[1/1] DONE test/config-registration-batch.test.ts exit=0 duration=8.29s

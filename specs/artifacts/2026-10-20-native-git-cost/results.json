@@ -1,0 +1,347 @@
+{
+  "batch": 443,
+  "baselineCommit": "01a53f631ae72c445d46aeffe471b5f5e76f62a4",
+  "criteria": {
+    "coldMs": 10000,
+    "restoreMs": 5000,
+    "pageReadMs": 20000
+  },
+  "scopes": [
+    {
+      "phase": "final",
+      "occurrence": "native-git-cost-443-final-6e7fa42f-7d38-421b-864d-c9f261cda9b8",
+      "preflight": {
+        "sessionID": "ses_hWCoHLUN4zC0It9nzNCt",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "canonical": {
+        "at": "2026-10-19T20:42:03.052Z",
+        "endedAt": "2026-10-19T20:42:28.327Z",
+        "phase": "final",
+        "port": 18675,
+        "occurrence": "native-git-cost-443-final-6e7fa42f-7d38-421b-864d-c9f261cda9b8",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 19736.8297,
+        "restoreMs": 5534.5095,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "inventory": [
+        {
+          "projects": 73,
+          "loaded": 2
+        }
+      ],
+      "concurrentReads": [
+        {
+          "requestID": "3ab25170-cbaf-4432-b1c1-dd33b27250ca",
+          "start": "2026-10-19T20:42:06.166Z",
+          "end": "2026-10-19T20:42:22.788Z",
+          "path": "/global/config",
+          "duration": 16622,
+          "statusCode": 200,
+          "writeRequestID": "25cf44bb-12ce-42e2-a93e-87a21fabe218"
+        }
+      ],
+      "physical": {
+        "native": {
+          "occurrence": "native-git-cost-443-final-6e7fa42f-7d38-421b-864d-c9f261cda9b8",
+          "outcome": "settled",
+          "host": {
+            "pid": 61184,
+            "processInstanceID": "win32:639280391613506067",
+            "occurrenceID": "81e6a75b-723f-42b6-96f2-d525fdf69fc6"
+          },
+          "target": {
+            "pid": 87236,
+            "processInstanceID": "win32:639280391623279256",
+            "occurrenceID": "8b6a6384-5114-49cc-8e84-b9fac12ea3bd"
+          },
+          "observedAtUtc": "2026-10-19T20:43:34.544Z",
+          "deadlineAt": 1792443560535,
+          "terminal": {
+            "occurrenceID": "native-git-cost-443-final-6e7fa42f-7d38-421b-864d-c9f261cda9b8",
+            "pid": 87236,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "pairedCleanupComplete": true,
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 61184,
+              "processInstanceID": "win32:639280391613506067",
+              "occurrenceID": "81e6a75b-723f-42b6-96f2-d525fdf69fc6"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 87236,
+              "processInstanceID": "win32:639280391623279256",
+              "occurrenceID": "8b6a6384-5114-49cc-8e84-b9fac12ea3bd"
+            }
+          }
+        ],
+        "observedAtUtc": "2026-10-19T20:43:35.8178529Z",
+        "physicalCompletion": true,
+        "copiedPair": [
+          {
+            "name": "auth.json",
+            "outcome": "retired"
+          },
+          {
+            "name": "models.json",
+            "outcome": "retired"
+          }
+        ],
+        "occurrence": "native-git-cost-443-final-6e7fa42f-7d38-421b-864d-c9f261cda9b8"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-19T20:43:35.8428921Z",
+        "childExitCode": 0
+      }
+    },
+    {
+      "phase": "verified",
+      "occurrence": "native-git-cost-443-verified-3e318a46-6673-4b47-84a0-b6673b371a71",
+      "preflight": {
+        "sessionID": "ses_hdqLOmyzlhryZPOVspfG",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "canonical": {
+        "at": "2026-10-19T20:48:29.059Z",
+        "endedAt": "2026-10-19T20:48:53.955Z",
+        "phase": "verified",
+        "port": 18677,
+        "occurrence": "native-git-cost-443-verified-3e318a46-6673-4b47-84a0-b6673b371a71",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 19611.1693,
+        "restoreMs": 5280.897099999995,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "inventory": [
+        {
+          "projects": 74,
+          "loaded": 2
+        }
+      ],
+      "concurrentReads": [
+        {
+          "requestID": "3643d311-4fc1-420a-81b4-4236a115a922",
+          "start": "2026-10-19T20:48:32.266Z",
+          "end": "2026-10-19T20:48:48.667Z",
+          "path": "/global/config",
+          "duration": 16401,
+          "statusCode": 200,
+          "writeRequestID": "a2080cef-90ff-46d8-be90-4d634805a4f4"
+        }
+      ],
+      "physical": {
+        "copiedPair": [
+          {
+            "outcome": "retired",
+            "name": "auth.json"
+          },
+          {
+            "outcome": "retired",
+            "name": "models.json"
+          }
+        ],
+        "native": {
+          "occurrence": "native-git-cost-443-verified-3e318a46-6673-4b47-84a0-b6673b371a71",
+          "outcome": "settled",
+          "host": {
+            "pid": 19892,
+            "processInstanceID": "win32:639280396155839638",
+            "occurrenceID": "963290fb-dee5-4924-ae3d-a2cf76410639"
+          },
+          "target": {
+            "pid": 86440,
+            "processInstanceID": "win32:639280396163704475",
+            "occurrenceID": "39bfbe8e-ccbc-4214-8824-fbff61a14e63"
+          },
+          "observedAtUtc": "2026-10-19T20:49:34.667Z",
+          "deadlineAt": 1792444015448,
+          "terminal": {
+            "occurrenceID": "native-git-cost-443-verified-3e318a46-6673-4b47-84a0-b6673b371a71",
+            "pid": 86440,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "physicalCompletion": true,
+        "occurrence": "native-git-cost-443-verified-3e318a46-6673-4b47-84a0-b6673b371a71",
+        "observedAtUtc": "2026-10-19T20:49:35.9267742Z",
+        "pairedCleanupComplete": true,
+        "chain": [
+          {
+            "identity": {
+              "pid": 19892,
+              "processInstanceID": "win32:639280396155839638",
+              "occurrenceID": "963290fb-dee5-4924-ae3d-a2cf76410639"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 86440,
+              "processInstanceID": "win32:639280396163704475",
+              "occurrenceID": "39bfbe8e-ccbc-4214-8824-fbff61a14e63"
+            },
+            "state": "dead_or_reused"
+          }
+        ]
+      },
+      "launcher": {
+        "childExitCode": 0,
+        "observedAtUtc": "2026-10-19T20:49:35.9510193Z"
+      }
+    }
+  ],
+  "validation": [
+    {
+      "file": "test/project-git-discovery.test.ts",
+      "cases": 1,
+      "assertions": 8,
+      "log": "final-directory-contracts.log"
+    },
+    {
+      "file": "test/project-directory-and-worktree-gc.test.ts",
+      "cases": 2,
+      "assertions": 3,
+      "log": "final-directory-contracts.log"
+    },
+    {
+      "file": "test/project-directory-exact-occurrence.test.ts",
+      "cases": 2,
+      "assertions": 5,
+      "log": "final-directory-contracts.log"
+    },
+    {
+      "file": "test/project-implicit-creation-journal.test.ts",
+      "cases": 5,
+      "assertions": 12,
+      "log": "final-directory-contracts.log"
+    },
+    {
+      "file": "test/project-promotion-journal.test.ts",
+      "cases": 4,
+      "assertions": 13,
+      "log": "final-directory-contracts.log"
+    },
+    {
+      "file": "test/config-candidate-skill-catalog.test.ts",
+      "cases": 7,
+      "assertions": 7,
+      "log": "final-config-contracts.log"
+    },
+    {
+      "file": "test/config-global-project-validation.test.ts",
+      "cases": 4,
+      "assertions": 28,
+      "log": "final-config-contracts.log"
+    },
+    {
+      "file": "test/config-catalog-lock-order.test.ts",
+      "cases": 4,
+      "assertions": 8,
+      "log": "final-config-contracts.log"
+    },
+    {
+      "file": "test/config-peer-convergence.test.ts",
+      "cases": 7,
+      "assertions": 8,
+      "log": "final-config-contracts.log"
+    },
+    {
+      "file": "test/config-skill-recovery-lock-order.test.ts",
+      "cases": 1,
+      "assertions": 3,
+      "log": "final-config-contracts.log"
+    },
+    {
+      "file": "test/instance-config-lifecycle-order.test.ts",
+      "cases": 17,
+      "assertions": 22,
+      "log": "final-config-contracts.log"
+    },
+    {
+      "file": "test/project-identity-retention.test.ts",
+      "cases": 4,
+      "assertions": 14,
+      "log": "final-config-contracts.log"
+    },
+    {
+      "file": "test/mcp-config-generation.test.ts",
+      "cases": 2,
+      "assertions": 6,
+      "log": "final-config-contracts.log"
+    },
+    {
+      "file": "test/project-registration-batch.test.ts",
+      "cases": 9,
+      "assertions": 9,
+      "log": "reviewed-contracts.log"
+    },
+    {
+      "file": "test/config-registration-batch.test.ts",
+      "cases": 1,
+      "assertions": 1,
+      "log": "reviewed-contracts.log"
+    },
+    {
+      "file": "test/project-filesystem-identity.test.ts",
+      "cases": 3,
+      "assertions": 5,
+      "log": "verified-contracts.log"
+    },
+    {
+      "file": "test/project-identity-convergence.test.ts",
+      "cases": 13,
+      "assertions": 14,
+      "log": "verified-contracts.log"
+    }
+  ],
+  "positiveCases": 86,
+  "positiveAssertions": 166,
+  "qualification": {
+    "cold": false,
+    "restore": false,
+    "pageRead": true,
+    "canonicalRestoration": true
+  },
+  "sourceAuthorityMetadataUnchanged": true,
+  "scope": "All original QA412 Project and Session history retained; 72 -> 73 -> 74 Projects. Original native helper and formal 441 UI, no UI/schema source change. Native phase diagnostic copy is separate from live service acceptance.",
+  "status": "failed",
+  "limitation": "Original cold and restore performance criteria remain unmet; concurrency and identity contracts passed. Cumulative overlapping phase spans are not wall-clock time."
+}

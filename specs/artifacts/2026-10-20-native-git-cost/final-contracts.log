@@ -1,0 +1,30 @@
+$ bun script/run-tests.ts test/project-registration-batch.test.ts test/config-registration-batch.test.ts
+[1/2] START test/project-registration-batch.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) an exclusive operation inside a registration batch returns its typed error and settles the queue [37.62ms]
+(pass) a fresh physical comparison observes a junction's current target after retargeting [8.57ms]
+(pass) a registration batch orders the same physical namespace through aliases and ancestor paths [472.59ms]
+(pass) a failed registration settles its peer and preserves the original error before a later batch [354.59ms]
+(pass) a retired registration context acquires the original queue after an independent current owner [40.30ms]
+(pass) a batch drains an accepted registration before releasing the original cross-process queue [17.45ms]
+(pass) a nested registration batch shares its original queue and returns its own ordered results [357.19ms]
+(pass) registration batches retain independent runtime-root queue ownership [18.64ms]
+
+ 8 pass
+ 0 fail
+ 8 expect() calls
+Ran 8 tests across 1 file. [5.14s]
+[1/2] DONE test/project-registration-batch.test.ts exit=0 duration=5.86s
+[2/2] START test/config-registration-batch.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a global cold candidate completes both independent admitted Project identities together [9246.84ms]
+
+ 1 pass
+ 0 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [10.49s]
+[2/2] DONE test/config-registration-batch.test.ts exit=0 duration=10.78s

@@ -1,0 +1,69 @@
+$ bun script/run-tests.ts test/project-git-discovery.test.ts test/project-directory-and-worktree-gc.test.ts test/project-directory-exact-occurrence.test.ts test/project-implicit-creation-journal.test.ts test/project-promotion-journal.test.ts "--test-name-pattern=Git discovery preserves|observes the exact staged|reports an unsettled quarantine|registration owns directory admission first|reclamation owns directory admission first|durable reclamation authority survives|registrar rejects same-path|serializes Project registration|commits discovery against|backward recovery keeps restored|forward promotion refuses|two backend processes publish|startup takes over|discovery of a registered nested"
+[1/5] START test/project-git-discovery.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Git discovery preserves the exact main, linked and aliased Project occurrence [3394.74ms]
+
+ 1 pass
+ 0 fail
+ 8 expect() calls
+Ran 1 test across 1 file. [6.58s]
+[1/5] DONE test/project-git-discovery.test.ts exit=0 duration=7.22s
+[2/5] START test/project-directory-and-worktree-gc.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Project directory integrity > serializes Project registration ahead of cleanup recovery and admits the exact retry [3052.56ms]
+(pass) Worktree GC uncertainty preservation > commits discovery against the latest sandbox authority without losing additions or reviving releases [8237.69ms]
+
+ 2 pass
+ 58 filtered out
+ 0 fail
+ 3 expect() calls
+Ran 2 tests across 1 file. [15.14s]
+[2/5] DONE test/project-directory-and-worktree-gc.test.ts exit=0 duration=15.40s
+[3/5] START test/project-directory-exact-occurrence.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) observes the exact staged and restored occurrence through real directory renames [11.90ms]
+(pass) reports an unsettled quarantine for distinct wide directory inodes with equal birth times [5.12ms]
+
+ 2 pass
+ 3 filtered out
+ 0 fail
+ 5 expect() calls
+Ran 2 tests across 1 file. [963.00ms]
+[3/5] DONE test/project-directory-exact-occurrence.test.ts exit=0 duration=1.20s
+[4/5] START test/project-implicit-creation-journal.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) anonymous Project creation journal > when registration owns directory admission first, reclamation preserves the committed Project [5660.88ms]
+(pass) anonymous Project creation journal > when reclamation owns directory admission first, a waiting backend observes the reclaimed directory [4800.78ms]
+(pass) anonymous Project creation journal > durable reclamation authority survives a compromised file lock and refuses peer registration [4244.98ms]
+(pass) anonymous Project creation journal > a registrar rejects same-path replacement observed while it waited for admission [5092.13ms]
+(pass) anonymous Project creation journal > discovery of a registered nested execution directory admits one canonical worktree owner [1384.91ms]
+
+ 5 pass
+ 24 filtered out
+ 0 fail
+ 12 expect() calls
+Ran 5 tests across 1 file. [22.12s]
+[4/5] DONE test/project-implicit-creation-journal.test.ts exit=0 duration=22.29s
+[5/5] START test/project-promotion-journal.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) anonymous Project promotion journal > two backend processes publish exactly one terminal promotion for one Project generation [5546.76ms]
+(pass) anonymous Project promotion journal > backward recovery keeps restored source closed to creation reclamation across file-lock compromise [8590.36ms]
+(pass) anonymous Project promotion journal > forward promotion refuses a destination under active parent reclamation after file-lock compromise [8523.31ms]
+(pass) anonymous Project promotion journal > startup takes over and releases destination and workspace admissions after promotion owner death [15289.59ms]
+
+ 4 pass
+ 13 filtered out
+ 0 fail
+ 13 expect() calls
+Ran 4 tests across 1 file. [39.06s]
+[5/5] DONE test/project-promotion-journal.test.ts exit=0 duration=39.26s

@@ -64,6 +64,13 @@ exact per-table receipt. Compound-key, directory-authority, embedded identity,
 or immutable Artifact conflicts fail the transaction; runtime schema discovery
 never expands the mutation surface.
 
+The physical-location predicate has one comparison implementation: normalized
+path, resolved physical path, then exact bigint device/inode identity. A complete
+registry lookup creates one lazy target observation for that scan while checking
+every row. Each public comparison and each initial/admitted discovery creates
+fresh observations; they are not retained across admission, requests or Instances.
+Missing-path and observable I/O error contracts remain unchanged.
+
 The repair process must hold the exact cross-process Runtime Server ownership
 for the database. Mutable foreign-key owners use explicit domain mappings;
 append-only permission evidence, durable publication outbox rows, immutable

@@ -228,6 +228,16 @@ model/profile/capability validation. Independent Projects
 use the shared settled-work queue with the host's available parallelism; every
 admitted operation settles before a candidate error can release the write
 generation. Results and original errors retain directory enumeration order.
+The candidate worker batch holds one original cross-process directory queue
+owner. Discovery registration joins that owner only for the active batch and
+same runtime data root. Its declared physical directory/worktree/sandbox keys
+serialize aliases and ancestor overlaps in acceptance order while independent
+namespaces proceed together. Every registration still acquires, revalidates and
+settles its original SQLite generations. Accepted callbacks drain on success or
+error before queue release; late contexts use ordinary admission. Exclusive
+directory mutations do not join the registration batch, and same-queue exclusive
+reentry returns `ProjectRegistrationBatchMutationError` instead of waiting on
+its own owner. There is no second cross-process queue or persisted batch fact.
 Only after the entire candidate succeeds may canonical persistence and the
 existing runtime transitions proceed. The paired before/after snapshots capture
 one actual physical Git worktree boundary and each load their own stable source

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [原生Git监管与目录批处理](records/2026-10/2026-10-20-native-git-cost.md)：真实进程分段、物理命名空间顺序及完整配置保存。
+
 - [候选配置的真实Skill目录](records/2026-10/2026-10-20-candidate-skill-catalog.md)：项目来源误判、同次新增来源/引用及完整保存基准。
 
 - [Goal首页入口与布局](records/2026-10/2026-10-20-goal-home-entry.md)：直接创建真实Chat目标、紧凑首页与人工视觉验收。

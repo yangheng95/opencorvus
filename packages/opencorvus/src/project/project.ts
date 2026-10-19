@@ -331,12 +331,29 @@ export namespace Project {
     }
   }
 
-  export async function sameFilesystemLocation(a: string, b: string) {
-    if (samePath(a, b)) return true
-    const [left, right] = await Promise.all([realComparePath(a), realComparePath(b)])
+  function filesystemObservation(value: string) {
+    let physical: Promise<string | undefined> | undefined
+    let identity: Promise<string | undefined> | undefined
+    return {
+      path: value,
+      physical: () => (physical ??= realComparePath(value)),
+      identity: () => (identity ??= statIdentity(value)),
+    }
+  }
+
+  async function sameObservedLocation(
+    a: ReturnType<typeof filesystemObservation>,
+    b: ReturnType<typeof filesystemObservation>,
+  ) {
+    if (samePath(a.path, b.path)) return true
+    const [left, right] = await Promise.all([a.physical(), b.physical()])
     if (left !== undefined && right !== undefined && left === right) return true
-    const [leftIdentity, rightIdentity] = await Promise.all([statIdentity(a), statIdentity(b)])
+    const [leftIdentity, rightIdentity] = await Promise.all([a.identity(), b.identity()])
     return leftIdentity !== undefined && rightIdentity !== undefined && leftIdentity === rightIdentity
+  }
+
+  export async function sameFilesystemLocation(a: string, b: string) {
+    return sameObservedLocation(filesystemObservation(a), filesystemObservation(b))
   }
 
   function sameDirectoryList(a: readonly string[], b: readonly string[]) {
@@ -376,8 +393,9 @@ export namespace Project {
   async function scanExactWorktreeRows(worktree: string) {
     const rows = Database.use((db) => db.select().from(ProjectTable).all())
     const matches: Row[] = []
+    const target = filesystemObservation(worktree)
     for (const row of rows) {
-      if (await sameFilesystemLocation(row.worktree, worktree)) matches.push(row)
+      if (await sameObservedLocation(filesystemObservation(row.worktree), target)) matches.push(row)
     }
     if (matches.length <= 1) return matches[0]
     const projectIDs = matches.map((row) => row.id).sort()
@@ -695,9 +713,10 @@ export namespace Project {
       })
     }
 
-    return ProjectDirectoryAdmission.run(async () => {
+    const registrationDirectories = [directory, data.worktree, ...(proposedSandbox ? [proposedSandbox] : [])]
+    return ProjectDirectoryAdmission.runRegistration(registrationDirectories, async () => {
       const registrations = await SkillReadDiagnostics.phase("project.registry.acquire", () =>
-        acquireRegistrationAdmissions([directory, data.worktree, ...(proposedSandbox ? [proposedSandbox] : [])]),
+        acquireRegistrationAdmissions(registrationDirectories),
       )
       let settled = false
       try {

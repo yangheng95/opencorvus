@@ -1,0 +1,76 @@
+$ bun script/run-tests.ts test/project-registration-batch.test.ts test/config-registration-batch.test.ts test/project-filesystem-identity.test.ts test/project-git-discovery.test.ts test/project-identity-convergence.test.ts
+[1/5] START test/project-registration-batch.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a fresh physical comparison observes a junction's current target after retargeting [15.56ms]
+(pass) a registration batch orders the same physical namespace through aliases and ancestor paths [366.67ms]
+(pass) a failed registration settles its peer and preserves the original error before a later batch [314.68ms]
+(pass) a retired registration context acquires the original queue after an independent current owner [35.74ms]
+(pass) a batch drains an accepted registration before releasing the original cross-process queue [11.63ms]
+(pass) a nested registration batch shares its original queue and returns its own ordered results [291.07ms]
+(pass) registration batches retain independent runtime-root queue ownership [11.66ms]
+
+ 7 pass
+ 0 fail
+ 7 expect() calls
+Ran 7 tests across 1 file. [4.22s]
+[1/5] DONE test/project-registration-batch.test.ts exit=0 duration=4.98s
+[2/5] START test/config-registration-batch.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a global cold candidate completes both independent admitted Project identities together [6254.92ms]
+
+ 1 pass
+ 0 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [7.12s]
+[2/5] DONE test/config-registration-batch.test.ts exit=0 duration=7.34s
+[3/5] START test/project-filesystem-identity.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) discovers the exact independent Project while a wide-inode peer is closed for deletion [3993.18ms]
+(pass) recognizes two real hard-link paths as the same filesystem identity [858.20ms]
+(pass) a later physical comparison observes the current replacement and its new hard link [8.51ms]
+
+ 3 pass
+ 0 fail
+ 5 expect() calls
+Ran 3 tests across 1 file. [6.28s]
+[3/5] DONE test/project-filesystem-identity.test.ts exit=0 duration=6.51s
+[4/5] START test/project-git-discovery.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Git discovery preserves the exact main, linked and aliased Project occurrence [2708.78ms]
+
+ 1 pass
+ 0 fail
+ 8 expect() calls
+Ran 1 test across 1 file. [4.14s]
+[4/5] DONE test/project-git-discovery.test.ts exit=0 duration=4.30s
+[5/5] START test/project-identity-convergence.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) explicit Project identity convergence > lookup reports duplicate identity without mutation, then explicit repair converges owned references [1885.58ms]
+(pass) explicit Project identity convergence > a compound identity collision returns a typed conflict and rolls back every migrated row [928.10ms]
+(pass) explicit Project identity convergence > an admitted Workspace creation preserves its exact duplicate Project occurrence [907.32ms]
+(pass) explicit Project identity convergence > physical aliases resolve to the same duplicate worktree occurrence before marker writes [1260.00ms]
+(pass) explicit Project identity convergence > a registered sandbox cannot bypass duplicate primary-worktree detection [1158.56ms]
+(pass) explicit Project identity convergence > explicit convergence commits the canonical Project transaction [835.04ms]
+(pass) explicit Project identity convergence > an immutable Task process binding preserves the duplicate Project occurrence [878.11ms]
+(pass) explicit Project identity convergence > an embedded attachment identity is reported as a typed preservation conflict [876.49ms]
+(pass) explicit Project identity convergence > append-only permission evidence is preserved as an explicit repair conflict [902.89ms]
+(pass) explicit Project identity convergence > a durable pending publication keeps its original Project occurrence [809.74ms]
+(pass) explicit Project identity convergence > a durable Session prompt owner preserves its exact Project occurrence [847.47ms]
+(pass) explicit Project identity convergence > a canonical Session prompt owner remains authoritative while its duplicate Project converges [990.78ms]
+(pass) explicit Project identity convergence > the reviewed repair mapping exactly covers the application tables with Project identity columns [2.12ms]
+
+ 13 pass
+ 0 fail
+ 14 expect() calls
+Ran 13 tests across 1 file. [13.28s]
+[5/5] DONE test/project-identity-convergence.test.ts exit=0 duration=13.45s

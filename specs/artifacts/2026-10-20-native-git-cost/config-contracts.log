@@ -1,0 +1,127 @@
+$ bun script/run-tests.ts test/config-candidate-skill-catalog.test.ts test/config-global-project-validation.test.ts test/config-catalog-lock-order.test.ts test/config-peer-convergence.test.ts test/config-skill-recovery-lock-order.test.ts test/instance-config-lifecycle-order.test.ts test/project-identity-retention.test.ts test/mcp-config-generation.test.ts
+[1/8] START test/config-candidate-skill-catalog.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a global username save retains each project's own configured Skill assignment [5523.15ms]
+(pass) a global source removal retains a Skill still configured by its Project [2104.37ms]
+(pass) an implicit Project Skill remains assigned when an unrelated global field changes [2218.12ms]
+(pass) a removed sole Skill source returns the assignment error and retains its complete canonical source [2326.30ms]
+(pass) a Project candidate adds its Skill source and assignment in one canonical mutation [1687.49ms]
+(pass) a global candidate repairs a Project assignment by adding its actual Skill source [2072.95ms]
+(pass) a candidate catalog resolves its own source while the runtime retains its current definition [1861.95ms]
+
+ 7 pass
+ 0 fail
+ 7 expect() calls
+Ran 7 tests across 1 file. [21.96s]
+[1/8] DONE test/config-candidate-skill-catalog.test.ts exit=0 duration=22.61s
+[2/8] START test/config-global-project-validation.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a retained global writer settles its original transition after repeated projection failures [3573.30ms]
+(pass) one global generation projects every registered project's own configuration [3695.43ms]
+(pass) one global mutation retains its exact candidate identities through persistence and runtime convergence [3784.94ms]
+(pass) an invalid Project returns the candidate error and a corrected source accepts a full retry [4137.91ms]
+
+ 4 pass
+ 0 fail
+ 28 expect() calls
+Ran 4 tests across 1 file. [16.61s]
+[2/8] DONE test/config-global-project-validation.test.ts exit=0 duration=16.93s
+[3/8] START test/config-catalog-lock-order.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) project Config mutation settles after a catalog reader observes Config [3062.18ms]
+(pass) project Config mutation settles after a reference reader observes Config [2386.77ms]
+(pass) global Config mutation settles after a catalog reader observes Config [3070.97ms]
+(pass) global Config mutation settles after a reference reader observes Config [2453.15ms]
+
+ 4 pass
+ 0 fail
+ 8 expect() calls
+Ran 4 tests across 1 file. [11.93s]
+[3/8] DONE test/config-catalog-lock-order.test.ts exit=0 duration=12.29s
+[4/8] START test/config-peer-convergence.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) cross-process Config convergence > a stable generation parses the exact source snapshot that owns its revision [2964.00ms]
+(pass) cross-process Config convergence > a committed writer transition retains its exact generation until event settlement succeeds [2447.05ms]
+(pass) cross-process Config convergence > a detached reader admitted by a writer settles before the next generation owner [2752.92ms]
+(pass) cross-process Config convergence > a loaded backend settles a peer Project write and publishes its current projection [13543.39ms]
+(pass) cross-process Config convergence > a peer global write refreshes every loaded Project from the same canonical generation [15782.60ms]
+(pass) cross-process Config convergence > a global-only backend publishes the canonical settlement event after a peer write [4569.76ms]
+(pass) cross-process Config convergence > a Project activated inside a global commit reads the committed generation [1643.32ms]
+
+ 7 pass
+ 0 fail
+ 8 expect() calls
+Ran 7 tests across 1 file. [45.70s]
+[4/8] DONE test/config-peer-convergence.test.ts exit=0 duration=45.94s
+[5/8] START test/config-skill-recovery-lock-order.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) published Skill recovery and a concurrent Config writer settle one catalog revision [18947.92ms]
+
+ 1 pass
+ 0 fail
+ 3 expect() calls
+Ran 1 test across 1 file. [19.71s]
+[5/8] DONE test/config-skill-recovery-lock-order.test.ts exit=0 duration=19.87s
+[6/8] START test/instance-config-lifecycle-order.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a global writer and a Config-reading initializer return the committed generation [2741.99ms]
+(pass) a Git-shape refresh and its catalog owner both serve the current Project [1029.41ms]
+(pass) a refresh drain settles serving work and the catalog owner's identity read [2229.09ms]
+(pass) a refresh drain settles serving work and the catalog owner's active read [1917.07ms]
+(pass) a refresh drain settles serving work and the catalog owner's iteration read [1984.04ms]
+(pass) a refresh drain settles serving work and the catalog owner's descendant read [2057.12ms]
+(pass) a dispose drain settles serving work and the catalog owner's identity read [1599.47ms]
+(pass) a dispose drain settles serving work and the catalog owner's active read [1634.85ms]
+(pass) a dispose drain settles serving work and the catalog owner's iteration read [1726.53ms]
+(pass) a dispose drain settles serving work and the catalog owner's descendant read [1473.43ms]
+(pass) a catalog owner's identity read observes the state created after an entered teardown settles [1944.48ms]
+(pass) late catalog work reads the value committed by the next actual owner [362.72ms]
+(pass) an accepted child projection reads its owner's generation before the next catalog writer [356.22ms]
+(pass) a descendant callback reuses the catalog lease while its ancestor still owns it [252.88ms]
+(pass) preparation retains its lifecycle turn until an accepted child reads the prepared context [1562.02ms]
+(pass) a catalog owner receives the current project admission error from every identity reader [1481.49ms]
+(pass) a catalog owner receives the current process admission error from every identity reader [1555.53ms]
+
+ 17 pass
+ 0 fail
+ 22 expect() calls
+Ran 17 tests across 1 file. [27.29s]
+[6/8] DONE test/instance-config-lifecycle-order.test.ts exit=0 duration=27.45s
+[7/8] START test/project-identity-retention.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) one retained identity scope preserves nested owners and State through idle convergence and explicit refresh [396.32ms]
+(pass) a failed identity scope preserves its original error and releases every physical lease [294.50ms]
+(pass) outside work settles its own identity while the original scope retains its Project [338.62ms]
+(pass) declared cached identities belong to the scope before its first Project callback [299.38ms]
+
+ 4 pass
+ 0 fail
+ 14 expect() calls
+Ran 4 tests across 1 file. [2.67s]
+[7/8] DONE test/project-identity-retention.test.ts exit=0 duration=2.81s
+[8/8] START test/mcp-config-generation.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) project writer and a first concurrent MCP status read settle with the committed generation [2344.90ms]
+(pass) global writer and a first concurrent MCP status read settle with the committed generation [1795.91ms]
+
+ 2 pass
+ 0 fail
+ 6 expect() calls
+Ran 2 tests across 1 file. [4.90s]
+[8/8] DONE test/mcp-config-generation.test.ts exit=0 duration=5.12s

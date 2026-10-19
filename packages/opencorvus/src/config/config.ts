@@ -37,7 +37,6 @@ import { AgentRoleContract } from "@/agent/role-contract"
 import { PromptProfileConfigSchema, PromptProfileOverlaySchema } from "@/agent/prompt-profile"
 import { isModelReference } from "@/provider/model-ref"
 import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
-import { settledWork } from "@/util/queue"
 import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
 import { McpConfigSchema } from "./mcp-schema"
 import { hostGit as git } from "@/util/git"
@@ -2830,7 +2829,8 @@ export namespace Config {
     const { validateConfigCandidate } = await import("@/config/candidate-validation")
     const { Instance } = await import("@/project/instance")
     const loadedDirectories = new Set(stateSource.inspectAll().map((entry) => Filesystem.resolve(entry.key)))
-    const outcomes = await settledWork({
+    const { ProjectDirectoryAdmission } = await import("@/project/directory-admission")
+    const outcomes = await ProjectDirectoryAdmission.registrationBatch({
       concurrency: os.availableParallelism(),
       items: directories,
       run: async (directory) =>

@@ -18,6 +18,7 @@ import { Log } from "@/util/log"
 import { ProcessLockCompromisedError, withSharedJsonFactLock } from "@/util/process-lock"
 import { ProjectDirectoryAdmissionTable } from "./project.sql"
 import { SkillReadDiagnostics } from "@/skill/read-diagnostics"
+import { settledWork } from "@/util/queue"
 
 /**
  * Durable Project-directory ownership admission.
@@ -33,6 +34,9 @@ export namespace ProjectDirectoryAdmission {
   const log = Log.create({ service: "project-directory-admission" })
   const locks = new Map<string, Promise<unknown>>()
   const tokenContext = new AsyncLocalStorage<Token>()
+  type RegistrationWork = { keys: Promise<string[]>; settled: Promise<void> }
+  type RegistrationBatch = { filepath: string; open: boolean; work: Set<RegistrationWork> }
+  const registrationContext = new AsyncLocalStorage<RegistrationBatch>()
   type Row = typeof ProjectDirectoryAdmissionTable.$inferSelect
   type BeforeAcquireHook = () => void | Promise<void>
   type AfterDurableAcquireHook = (token: Token) => void | Promise<void>
@@ -50,6 +54,13 @@ export namespace ProjectDirectoryAdmission {
       message: z.string(),
     }),
   )
+
+  export class RegistrationBatchMutationError extends Error {
+    override readonly name = "ProjectRegistrationBatchMutationError"
+    constructor() {
+      super("Exclusive directory operations must start outside the registration batch")
+    }
+  }
 
   export type Token = {
     directoryKey: string
@@ -230,6 +241,8 @@ export namespace ProjectDirectoryAdmission {
   }
 
   export async function run<T>(operation: () => Promise<T>): Promise<T> {
+    const inherited = registrationContext.getStore()
+    if (inherited?.open && inherited.filepath === lockFilepath()) throw new RegistrationBatchMutationError()
     await beforeAcquire?.()
     let completed = false
     let result!: T
@@ -264,6 +277,63 @@ export namespace ProjectDirectoryAdmission {
       }
       throw error
     }
+  }
+
+  /** One original cross-process queue owner for a settled batch of discovery.
+   * Only registration callbacks join it; destructive run callbacks retain
+   * their original exclusive admission. No durable ownership is inferred here. */
+  export async function registrationBatch<T, R>(input: Parameters<typeof settledWork<T, R>>[0]) {
+    const inherited = registrationContext.getStore()
+    if (inherited?.open && inherited.filepath === lockFilepath()) return settledWork(input)
+    return run(async () => {
+      const scope: RegistrationBatch = { filepath: lockFilepath(), open: true, work: new Set() }
+      return registrationContext.run(scope, async () => {
+        try {
+          return await settledWork(input)
+        } finally {
+          while (scope.work.size > 0) await Promise.all([...scope.work].map((work) => work.settled))
+          scope.open = false
+        }
+      })
+    })
+  }
+
+  /** Preserve order for every overlapping physical namespace within the batch.
+   * The original callback still acquires and settles its SQLite generations. */
+  export async function runRegistration<T>(directories: readonly string[], operation: () => Promise<T>): Promise<T> {
+    const scope = registrationContext.getStore()
+    if (!scope?.open || scope.filepath !== lockFilepath()) return run(operation)
+    return SkillReadDiagnostics.directoryOwner(async (run) => {
+      let finish!: () => void
+      const prior = [...scope.work]
+      const work: RegistrationWork = {
+        keys: Promise.resolve().then(async () => {
+          await beforeAcquire?.()
+          return Promise.all(directories.map(key))
+        }),
+        settled: new Promise<void>((resolve) => {
+          finish = resolve
+        }),
+      }
+      scope.work.add(work)
+      try {
+        const keys = await work.keys
+        const observations = await Promise.allSettled(prior.map((earlier) => earlier.keys))
+        await Promise.all(
+          observations.map((observation, index) => {
+            if (
+              observation.status === "rejected" ||
+              observation.value.some((earlier) => keys.some((current) => overlaps(earlier, current)))
+            )
+              return prior[index]!.settled
+          }),
+        )
+        return await run()
+      } finally {
+        scope.work.delete(work)
+        finish()
+      }
+    }, operation)
   }
 
   function ownerOf(row: Row): RuntimeProcessOccurrenceInfo {

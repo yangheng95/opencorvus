@@ -1,0 +1,149 @@
+{
+  "boundary": "Original Process.runHost and native Windows Job supervision, original durable request observed with a pass-through timer, original ready/output/complete settlement; diagnostic only, no production behavior or Git command changed",
+  "samples": [
+    {
+      "sample": "sequential-0",
+      "started": 485.1672,
+      "requestAt": 15.40930000000003,
+      "requestDir": "settled-and-cleaned",
+      "publishMs": 4.692299999999989,
+      "readyAt": 101.76570000000004,
+      "firstOutputAt": 146.03160000000003,
+      "outputClosedAt": 174.0512,
+      "exitCode": 0,
+      "totalMs": 181.83209999999997
+    },
+    {
+      "sample": "sequential-1",
+      "started": 667.322,
+      "requestAt": 9.217499999999973,
+      "requestDir": "settled-and-cleaned",
+      "publishMs": 2.4569999999999936,
+      "readyAt": 87.06420000000003,
+      "firstOutputAt": 126.5281,
+      "outputClosedAt": 150.99130000000002,
+      "exitCode": 0,
+      "totalMs": 156.33410000000003
+    },
+    {
+      "sample": "sequential-2",
+      "started": 823.8188,
+      "requestAt": 9.168099999999981,
+      "requestDir": "settled-and-cleaned",
+      "publishMs": 2.823199999999929,
+      "readyAt": 86.64679999999998,
+      "firstOutputAt": 130.31029999999998,
+      "outputClosedAt": 176.8424,
+      "exitCode": 0,
+      "totalMs": 203.5779
+    },
+    {
+      "sample": "sequential-3",
+      "started": 1027.7821,
+      "requestAt": 15.622600000000148,
+      "requestDir": "settled-and-cleaned",
+      "publishMs": 3.6102999999998246,
+      "readyAt": 138.35350000000017,
+      "firstOutputAt": 178.39890000000014,
+      "outputClosedAt": 203.75200000000018,
+      "exitCode": 0,
+      "totalMs": 210.31650000000013
+    },
+    {
+      "sample": "pair-top-0",
+      "started": 1238.2715,
+      "requestAt": 16.852499999999964,
+      "requestDir": "settled-and-cleaned",
+      "publishMs": 4.148999999999887,
+      "readyAt": 98.13210000000004,
+      "firstOutputAt": 138.99450000000002,
+      "outputClosedAt": 165.76469999999995,
+      "exitCode": 0,
+      "totalMs": 173.1833999999999
+    },
+    {
+      "sample": "pair-common-0",
+      "started": 1238.3473,
+      "requestAt": 16.718500000000176,
+      "requestDir": "settled-and-cleaned",
+      "publishMs": 17.503600000000006,
+      "readyAt": 108.52750000000015,
+      "firstOutputAt": 149.62490000000003,
+      "outputClosedAt": 180.7447000000002,
+      "exitCode": 0,
+      "totalMs": 191.1567
+    },
+    {
+      "sample": "pair-top-1",
+      "started": 1429.7141,
+      "requestAt": 21.23120000000017,
+      "requestDir": "settled-and-cleaned",
+      "publishMs": 3.8248000000000957,
+      "readyAt": 117.66050000000018,
+      "firstOutputAt": 163.61290000000008,
+      "outputClosedAt": 189.95990000000006,
+      "exitCode": 0,
+      "totalMs": 197.64679999999998
+    },
+    {
+      "sample": "pair-common-1",
+      "started": 1429.8345,
+      "requestAt": 21.245200000000068,
+      "requestDir": "settled-and-cleaned",
+      "publishMs": 17.74479999999994,
+      "readyAt": 124.62879999999996,
+      "firstOutputAt": 179.41750000000002,
+      "outputClosedAt": 206.558,
+      "exitCode": 0,
+      "totalMs": 213.72140000000013
+    },
+    {
+      "sample": "pair-top-2",
+      "started": 1643.7193,
+      "requestAt": 17.002300000000105,
+      "requestDir": "settled-and-cleaned",
+      "publishMs": 15.090099999999893,
+      "readyAt": 107.02500000000009,
+      "firstOutputAt": 149.38069999999993,
+      "outputClosedAt": 180.14350000000013,
+      "exitCode": 0,
+      "totalMs": 187.98590000000013
+    },
+    {
+      "sample": "pair-common-2",
+      "started": 1643.8157,
+      "requestAt": 16.836699999999837,
+      "requestDir": "settled-and-cleaned",
+      "publishMs": 3.645999999999958,
+      "readyAt": 95.41739999999982,
+      "firstOutputAt": 142.77179999999998,
+      "outputClosedAt": 164.8989999999999,
+      "exitCode": 0,
+      "totalMs": 171.81859999999983
+    },
+    {
+      "sample": "pair-top-3",
+      "started": 1831.8686,
+      "requestAt": 16.194600000000037,
+      "requestDir": "settled-and-cleaned",
+      "publishMs": 3.3243999999999687,
+      "readyAt": 95.7956999999999,
+      "firstOutputAt": 138.7277999999999,
+      "outputClosedAt": 165.87619999999993,
+      "exitCode": 0,
+      "totalMs": 173.21679999999992
+    },
+    {
+      "sample": "pair-common-3",
+      "started": 1831.9378,
+      "requestAt": 16.06529999999998,
+      "requestDir": "settled-and-cleaned",
+      "publishMs": 16.995999999999867,
+      "readyAt": 108.21730000000002,
+      "firstOutputAt": 151.2373,
+      "outputClosedAt": 184.22450000000003,
+      "exitCode": 0,
+      "totalMs": 188.16960000000017
+    }
+  ]
+}

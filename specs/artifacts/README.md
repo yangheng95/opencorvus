@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [原生Git监管与目录批处理](2026-10-20-native-git-cost/README.md)：真实阶段测量、注册并行/顺序合同及完整历史保存。
+
 - [候选配置的真实Skill目录](2026-10-20-candidate-skill-catalog/README.md)：失败→通过合同、真实HTTP候选来源、保存恢复与人工截图。
 
 - [Goal首页入口与布局](2026-10-20-goal-home-entry/README.md)：真实首页、表单、Goal执行与双语截图。
