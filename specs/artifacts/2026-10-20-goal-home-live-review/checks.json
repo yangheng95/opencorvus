@@ -1,0 +1,28 @@
+{
+  "build": {
+    "command": "bun run build:overlay --skip-tauri",
+    "originalHandle": 80102,
+    "exitCode": 0
+  },
+  "overlayChecks": {
+    "commands": [
+      "bun run --cwd packages/overlay typecheck",
+      "bun run --cwd packages/overlay check:i18n",
+      "bun run --cwd packages/overlay check:renderer-surface"
+    ],
+    "originalHandle": 53687,
+    "exitCode": 0,
+    "output": "check:i18n ok (2 locales, 2505 top-level keys); renderer public surface check passed (1 assignment, 1 declared global)"
+  },
+  "native": {
+    "originalHandles": [
+      53441,
+      17201
+    ],
+    "exitCodes": [
+      0,
+      0
+    ]
+  },
+  "ui": "Only real IAB manual interactions and actual 1280x720 screenshots with agent visual review; no UI automation"
+}

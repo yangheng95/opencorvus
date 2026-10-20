@@ -1,0 +1,77 @@
+{
+  "scope": "goal-home-live-review-459",
+  "history": {
+    "schema": {
+      "user_version": 2
+    },
+    "projects": 109,
+    "sessions": 147,
+    "baselines": [
+      {
+        "projects": 106,
+        "sessions": 143
+      },
+      {
+        "projects": 108,
+        "sessions": 146
+      }
+    ],
+    "mode": "Direct readonly SQLite after both original native/checker joins; all retained Project/Session identity, owner and directory compared; no production initializer, user database or history clearing"
+  },
+  "checks": {
+    "build": {
+      "command": "bun run build:overlay --skip-tauri",
+      "originalHandle": 80102,
+      "exitCode": 0
+    },
+    "overlayChecks": {
+      "commands": [
+        "bun run --cwd packages/overlay typecheck",
+        "bun run --cwd packages/overlay check:i18n",
+        "bun run --cwd packages/overlay check:renderer-surface"
+      ],
+      "originalHandle": 53687,
+      "exitCode": 0,
+      "output": "check:i18n ok (2 locales, 2505 top-level keys); renderer public surface check passed (1 assignment, 1 declared global)"
+    },
+    "native": {
+      "originalHandles": [
+        53441,
+        17201
+      ],
+      "exitCodes": [
+        0,
+        0
+      ]
+    },
+    "ui": "Only real IAB manual interactions and actual 1280x720 screenshots with agent visual review; no UI automation"
+  },
+  "screenshots": [
+    "before-home-en.png",
+    "before-home-zh.png",
+    "guide-en.png",
+    "guide-zh.png",
+    "create-project-ready-en.png",
+    "create-global-zh.png",
+    "automatic-turn-en.png",
+    "completed-en.png",
+    "completed-zh.png",
+    "after-home-en.png",
+    "after-home-clean-zh.png"
+  ],
+  "goal": {
+    "sessionID": "ses_-zURR5ESgzz9bL80N3L2",
+    "goalID": "pev_g0VYYus04006G2ZPSE1C",
+    "automaticTurnsAccepted": 1,
+    "turnBudget": 1,
+    "tokensUsed": 38351,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "reply": "GOALREADY459",
+    "completion": "Explicit operator decision through the real Details form after the budget-limited real automatic response; not autonomous model completion"
+  },
+  "copy": "Both home locales state that budgets are optional, matching the existing form/contract",
+  "visual": "Home, guide, project form, global form cancel and goal status manually viewed; final frozen build homes manually reviewed in both languages; no clipping observed at actual 1280x720",
+  "remaining": "Original full-history save/restore performance budgets remain unmet. Current Sources and side dock rendering are outside this focused Goal manual run; their prior evidence is not relabelled as current.",
+  "browser": "Direct user-requested IAB succeeded despite browser inventory reporting Work local-browser disabled; prior generalized blocker corrected; original user 18571 tab/process untouched"
+}

@@ -1,0 +1,299 @@
+{
+  "mode": "Direct readonly facts after original native exit; manual browser interaction only, no UI test",
+  "owner": "ses_-zURR5ESgzz9bL80N3L2",
+  "cancelled": "ses_-zURR4n5MzzR7nmNQonT",
+  "events": [
+    {
+      "id": "pev_g0VYYus04006G2ZPSE1C",
+      "type": "continuous_goal.created",
+      "payload": {
+        "owner": {
+          "kind": "chat",
+          "id": "ses_-zURR5ESgzz9bL80N3L2"
+        },
+        "request_id": "98ae8a12-2a89-4403-bee6-9af4456b5409",
+        "input": {
+          "turnBudget": 1,
+          "requestID": "98ae8a12-2a89-4403-bee6-9af4456b5409",
+          "objective": "For this isolated product verification, reply exactly GOALREADY459. Do not use tools or change files."
+        },
+        "author": "user"
+      }
+    },
+    {
+      "id": "pev_hckqbOzbaNjLKCeUSzRh",
+      "type": "continuous_goal.continuation_requested",
+      "payload": {
+        "goal_id": "pev_g0VYYus04006G2ZPSE1C",
+        "revision": "pev_g0VYYus04006G2ZPSE1C",
+        "frontier": "start",
+        "number": 1
+      }
+    },
+    {
+      "id": "pev_g0VYYv0Al00kuUvo0Avc",
+      "type": "continuous_goal.updated",
+      "payload": {
+        "goal_id": "pev_g0VYYus04006G2ZPSE1C",
+        "request_id": "0f599179-e18f-43b9-9d92-ba70b9352003",
+        "input": {
+          "requestID": "0f599179-e18f-43b9-9d92-ba70b9352003",
+          "goalID": "pev_g0VYYus04006G2ZPSE1C",
+          "expectedRevision": "pev_g0VYYus04006G2ZPSE1C",
+          "status": "complete",
+          "reason": "Manual product review: the real automatic turn returned GOALREADY459, the page displayed 1/1 accepted turns and 38,351 cumulative tokens, and the operator now completes this isolated verification goal."
+        },
+        "author": "user"
+      }
+    }
+  ],
+  "usage": {
+    "tokens": 38351
+  },
+  "conversations": [
+    {
+      "session": {
+        "id": "ses_-zURR5ESgzz9bL80N3L2",
+        "title": "Continuous goal controller — automatic continuation 1.",
+        "project_id": "prj_hSQinOa1MIVoNEeARpn5",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+      },
+      "messages": [
+        {
+          "id": "msg_g0VYYus4s00rAasvuh4j",
+          "data": {
+            "author": "work",
+            "role": "assistant",
+            "time": {
+              "created": 1792471769062,
+              "completed": 1792471772562
+            },
+            "parentID": "msg_hFFz06SKljzOCivOswvK",
+            "acceptedInputMessageIDs": [
+              "msg_hFFz06SKljzOCivOswvK"
+            ],
+            "modelID": "gpt-6.1-sol",
+            "providerID": "openai",
+            "agent": "work",
+            "path": {
+              "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+              "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+            },
+            "cost": 0,
+            "tokens": {
+              "total": 38351,
+              "input": 38343,
+              "output": 8,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "billing": {
+              "status": "priced"
+            },
+            "finish": "stop",
+            "orderKey": "v1:0001792471769062:0000000000000030:0000000000000000:message:msg_g0VYYus4s00rAasvuh4j"
+          }
+        },
+        {
+          "id": "msg_hFFz06SKljzOCivOswvK",
+          "data": {
+            "author": "goal-controller",
+            "role": "user",
+            "time": {
+              "created": 1792471769017
+            },
+            "agent": "work",
+            "model": {
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol"
+            },
+            "tools": {
+              "delegate_agent": true,
+              "panel_expert_squad_inspect": true,
+              "panel_query_task": true,
+              "panel_query_task_artifacts": true,
+              "panel_create_task": true,
+              "panel_wake_mission": true,
+              "panel_wake_work": true,
+              "panel_send_task_message": true,
+              "panel_respond_interaction": true,
+              "panel_cancel_task": true,
+              "panel_update_checks": true,
+              "panel_select_workspace": true,
+              "panel_update_goal": true,
+              "panel_delete_goal": true,
+              "question": true,
+              "bash": true,
+              "read": true,
+              "glob": true,
+              "search_code": true,
+              "edit": true,
+              "write": true,
+              "apply_patch": true,
+              "todo": true,
+              "schedule": true
+            },
+            "extra": {
+              "wake_reason": {
+                "source": "continuous_goal",
+                "goalID": "pev_g0VYYus04006G2ZPSE1C",
+                "revision": "pev_g0VYYus04006G2ZPSE1C",
+                "requestID": "pev_hckqbOzbaNjLKCeUSzRh"
+              },
+              "surface": "right-sidebar",
+              "source": "right-sidebar-conversation",
+              "experience": "work"
+            },
+            "orderKey": "v1:0001792471769017:0000000000000030:0000000000000000:message:msg_hFFz06SKljzOCivOswvK"
+          }
+        }
+      ],
+      "parts": [
+        {
+          "id": "prt_g0VYYusFg00kK9HxReYf",
+          "data": {
+            "type": "step-start"
+          }
+        },
+        {
+          "id": "prt_g0VYYuss400no7cSHpFF",
+          "data": {
+            "type": "text",
+            "text": "GOALREADY459",
+            "time": {
+              "start": 1792471772112,
+              "end": 1792471772261
+            },
+            "metadata": {
+              "openai": {
+                "itemId": "msg_079c41557150c484016ad6f2dc06348191959951f2299488b3",
+                "phase": "final_answer"
+              }
+            }
+          }
+        },
+        {
+          "id": "prt_g0VYYusyr00WGn0Hp7NL",
+          "data": {
+            "type": "step-finish",
+            "reason": "stop",
+            "cost": 0,
+            "tokens": {
+              "total": 38351,
+              "input": 38343,
+              "output": 8,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "billing": {
+              "status": "priced"
+            }
+          }
+        },
+        {
+          "id": "prt_h7d9Ld5EbE6flf9baPwe",
+          "data": {
+            "type": "text",
+            "text": "Continuous goal controller — automatic continuation 1.\nThe user authorized this ongoing objective: For this isolated product verification, reply exactly GOALREADY459. Do not use tools or change files.\nGoal: pev_g0VYYus04006G2ZPSE1C; prior settled frontier: start.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 0; token budget: unspecified.\nThis message is authored by the goal controller, not a new user instruction.",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hSQinOa1MIVoNEeARpn5/83cd34719d1aac9bb0363115b440411bdd0117981a9ddd6d2ceb12cb2b082133.json",
+              "catalog_snapshot_hash": "83cd34719d1aac9bb0363115b440411bdd0117981a9ddd6d2ceb12cb2b082133"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "session": {
+        "id": "ses_-zURR4n5MzzR7nmNQonT",
+        "title": "Work",
+        "project_id": "prj_hWYnHnSjhVe8EDPFLlis",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\runtime\\data\\projects\\2026\\10\\20\\bca78da1-2093-43aa-822c-acb787139869"
+      },
+      "messages": [],
+      "parts": []
+    }
+  ],
+  "provider": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "identity": {
+        "sessionID": "ses_hs5qr0M05MxCzmO9j7Q0",
+        "streamRequest": {
+          "requestID": "msg_hmT0TZTYUSzJk32r13vM",
+          "agentID": "memory",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VYYtuwi00mzDcY18nC",
+          "attempt": 0
+        }
+      },
+      "terminal": {
+        "kind": "eof",
+        "at": 1792471547042
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "identity": {
+        "sessionID": "ses_hs5qr0M05MxCzmO9j7Q0",
+        "streamRequest": {
+          "requestID": "msg_hmT0TZTYUSzJk32r13vM",
+          "agentID": "chat",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VYYtvIp00S1jFATsYH",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VYYtuwx007dqlayB1z"
+        }
+      },
+      "terminal": {
+        "kind": "eof",
+        "at": 1792471545983
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "identity": {
+        "sessionID": "ses_-zURR5ESgzz9bL80N3L2",
+        "streamRequest": {
+          "requestID": "msg_hFFz06SKljzOCivOswvK",
+          "agentID": "work",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VYYusFK009haBp39kj",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VYYus4s00rAasvuh4j"
+        }
+      },
+      "terminal": {
+        "kind": "eof",
+        "at": 1792471772530
+      }
+    }
+  ]
+}

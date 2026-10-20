@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [内置浏览器中的 Goal 首页复核](records/2026-10/2026-10-20-goal-home-live-review.md)：预算可选说明、[11 张实际截图与自动执行](artifacts/2026-10-20-goal-home-live-review/README.md)。
+
 - [Goal 公开错误合同](records/2026-10/2026-10-20-goal-error-contract.md)：具名错误与共享文档根因、[32 例及实际 SDK/HTTP 证据](artifacts/2026-10-20-goal-error-contract/README.md)。
 
 - [配置读取写回的共享所有权](records/2026-10/2026-10-20-config-read-write-ownership.md)：四个 peer 覆盖失败修复、117 例合同与[真实服务证据](artifacts/2026-10-20-config-read-write-ownership/README.md)。
