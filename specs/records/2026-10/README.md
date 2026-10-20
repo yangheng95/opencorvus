@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [原生helper启动隔离](2026-10-21-native-launch-isolation.md)：[只隔离spawn的真实合同、全149目录与完整配置原路径](../../artifacts/2026-10-21-native-launch-isolation/README.md)，保留原失败指标。
+
 - [配置物理路径读取成本](2026-10-21-config-physical-path-cost.md)：[263352次原文件系统观察及原生同步启动重叠](../../artifacts/2026-10-21-config-physical-path-cost/README.md)，未用局部速度替代原性能门槛。
 
 - [真实网页Sources与持续输出](2026-10-21-web-sources-live-review.md)：共享阅读锚点修复与[28张实际页面、两个独立固定Sol批次](../../artifacts/2026-10-21-web-sources-live-review/README.md)。

@@ -1,0 +1,937 @@
+{
+  "scopes": [
+    {
+      "scope": "smoke-v2",
+      "originalCommand": {
+        "toolChunk": "822907",
+        "exitCode": 0
+      },
+      "ready": {
+        "occurrence": "native-launch-isolation-484-smoke-e8a153f8-4891-4c59-b131-51ef201bc3aa",
+        "outcome": "ready",
+        "host": {
+          "pid": 71760,
+          "processInstanceID": "win32:639281187514130381",
+          "occurrenceID": "1dad4793-6060-4e19-9b39-534532f1dc2f"
+        },
+        "parent": {
+          "pid": 74948,
+          "processInstanceID": "win32:639281187508639958",
+          "occurrenceID": "c3f09be6-abed-4bbe-8ab8-e7156feb2dc8"
+        },
+        "target": {
+          "pid": 92312,
+          "processInstanceID": "win32:639281187529886837",
+          "occurrenceID": "09ef15f7-566a-482a-9e48-ab47e4da26a2"
+        },
+        "targetBirthAtMs": 1792521952988,
+        "deadlineAt": 1792522191394,
+        "observedAtUtc": "2026-10-20T18:45:53.034Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "--preload",
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/preload.ts",
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/smoke.ts"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "terminal": {
+        "occurrence": "native-launch-isolation-484-smoke-e8a153f8-4891-4c59-b131-51ef201bc3aa",
+        "outcome": "settled",
+        "host": {
+          "pid": 71760,
+          "processInstanceID": "win32:639281187514130381",
+          "occurrenceID": "1dad4793-6060-4e19-9b39-534532f1dc2f"
+        },
+        "target": {
+          "pid": 92312,
+          "processInstanceID": "win32:639281187529886837",
+          "occurrenceID": "09ef15f7-566a-482a-9e48-ab47e4da26a2"
+        },
+        "observedAtUtc": "2026-10-20T18:45:54.093Z",
+        "deadlineAt": 1792522191394,
+        "terminal": {
+          "occurrenceID": "native-launch-isolation-484-smoke-e8a153f8-4891-4c59-b131-51ef201bc3aa",
+          "pid": 92312,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-20T18:45:54.1691390Z",
+        "originalChildExit": 0
+      }
+    },
+    {
+      "scope": "contracts",
+      "originalCommand": {
+        "toolChunk": "e4676c",
+        "exitCode": 0
+      },
+      "ready": {
+        "occurrence": "native-launch-isolation-484-contracts-def4d481-a61d-43e1-8208-c4bc5055ea24",
+        "outcome": "ready",
+        "host": {
+          "pid": 47292,
+          "processInstanceID": "win32:639281188650363568",
+          "occurrenceID": "51ec784f-d0a4-4c23-b015-8c7da47e02cb"
+        },
+        "parent": {
+          "pid": 39984,
+          "processInstanceID": "win32:639281188644167355",
+          "occurrenceID": "d7da4a19-4824-4da2-9409-8c27c3f22dfc"
+        },
+        "target": {
+          "pid": 61684,
+          "processInstanceID": "win32:639281188666720293",
+          "occurrenceID": "55b737f3-9a38-4207-95a5-65b0d7df378e"
+        },
+        "targetBirthAtMs": 1792522066672,
+        "deadlineAt": 1792522305014,
+        "observedAtUtc": "2026-10-20T18:47:46.697Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "--preload",
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/preload.ts",
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/contracts.ts"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "terminal": {
+        "occurrence": "native-launch-isolation-484-contracts-def4d481-a61d-43e1-8208-c4bc5055ea24",
+        "outcome": "settled",
+        "host": {
+          "pid": 47292,
+          "processInstanceID": "win32:639281188650363568",
+          "occurrenceID": "51ec784f-d0a4-4c23-b015-8c7da47e02cb"
+        },
+        "target": {
+          "pid": 61684,
+          "processInstanceID": "win32:639281188666720293",
+          "occurrenceID": "55b737f3-9a38-4207-95a5-65b0d7df378e"
+        },
+        "observedAtUtc": "2026-10-20T18:47:50.228Z",
+        "deadlineAt": 1792522305014,
+        "terminal": {
+          "occurrenceID": "native-launch-isolation-484-contracts-def4d481-a61d-43e1-8208-c4bc5055ea24",
+          "pid": 61684,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "launcher": {
+        "originalChildExit": 0,
+        "observedAtUtc": "2026-10-20T18:47:50.2628525Z"
+      }
+    },
+    {
+      "scope": "contracts-three",
+      "originalCommand": {
+        "toolChunk": "5e739a",
+        "exitCode": 0
+      },
+      "ready": {
+        "occurrence": "native-launch-isolation-484-contracts-three-4e859816-6a51-45f8-880b-aa247cb2a24c",
+        "outcome": "ready",
+        "host": {
+          "pid": 59788,
+          "processInstanceID": "win32:639281191764763994",
+          "occurrenceID": "7cf6686e-1f0c-4ec3-b1b8-b2da145fbf1f"
+        },
+        "parent": {
+          "pid": 69100,
+          "processInstanceID": "win32:639281191759324789",
+          "occurrenceID": "b4948913-6411-4ba4-9940-1be781d79c13"
+        },
+        "target": {
+          "pid": 73668,
+          "processInstanceID": "win32:639281191781783079",
+          "occurrenceID": "ff73b40a-2512-4e42-bd65-b33e148b1b7c"
+        },
+        "targetBirthAtMs": 1792522378178,
+        "deadlineAt": 1792522616455,
+        "observedAtUtc": "2026-10-20T18:52:58.213Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "--preload",
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/preload.ts",
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/contracts.ts"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "terminal": {
+        "occurrence": "native-launch-isolation-484-contracts-three-4e859816-6a51-45f8-880b-aa247cb2a24c",
+        "outcome": "settled",
+        "host": {
+          "pid": 59788,
+          "processInstanceID": "win32:639281191764763994",
+          "occurrenceID": "7cf6686e-1f0c-4ec3-b1b8-b2da145fbf1f"
+        },
+        "target": {
+          "pid": 73668,
+          "processInstanceID": "win32:639281191781783079",
+          "occurrenceID": "ff73b40a-2512-4e42-bd65-b33e148b1b7c"
+        },
+        "observedAtUtc": "2026-10-20T18:53:01.519Z",
+        "deadlineAt": 1792522616455,
+        "terminal": {
+          "occurrenceID": "native-launch-isolation-484-contracts-three-4e859816-6a51-45f8-880b-aa247cb2a24c",
+          "pid": 73668,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "launcher": {
+        "originalChildExit": 0,
+        "observedAtUtc": "2026-10-20T18:53:01.5667779Z"
+      }
+    },
+    {
+      "scope": "main-a",
+      "originalCommand": {
+        "originalHandle": 88149,
+        "exitCode": 0
+      },
+      "ready": {
+        "occurrence": "native-launch-isolation-484-main-a-4b11ccf4-5f4b-44dc-baab-c8cddd98e602",
+        "outcome": "ready",
+        "host": {
+          "pid": 73156,
+          "processInstanceID": "win32:639281189423091762",
+          "occurrenceID": "488cd326-d6fd-4cb1-aed4-953200cc5f0d"
+        },
+        "parent": {
+          "pid": 27120,
+          "processInstanceID": "win32:639281189417764370",
+          "occurrenceID": "074df244-faa7-438a-a09c-50caad7313d1"
+        },
+        "target": {
+          "pid": 48768,
+          "processInstanceID": "win32:639281189438832868",
+          "occurrenceID": "737704c6-8420-4870-9b75-875382cb082c"
+        },
+        "targetBirthAtMs": 1792522143883,
+        "deadlineAt": 1792522382288,
+        "observedAtUtc": "2026-10-20T18:49:03.922Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/measure.ts"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "terminal": {
+        "occurrence": "native-launch-isolation-484-main-a-4b11ccf4-5f4b-44dc-baab-c8cddd98e602",
+        "outcome": "settled",
+        "host": {
+          "pid": 73156,
+          "processInstanceID": "win32:639281189423091762",
+          "occurrenceID": "488cd326-d6fd-4cb1-aed4-953200cc5f0d"
+        },
+        "target": {
+          "pid": 48768,
+          "processInstanceID": "win32:639281189438832868",
+          "occurrenceID": "737704c6-8420-4870-9b75-875382cb082c"
+        },
+        "observedAtUtc": "2026-10-20T18:49:21.630Z",
+        "deadlineAt": 1792522382288,
+        "terminal": {
+          "occurrenceID": "native-launch-isolation-484-main-a-4b11ccf4-5f4b-44dc-baab-c8cddd98e602",
+          "pid": 48768,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "launcher": {
+        "originalChildExit": 0,
+        "observedAtUtc": "2026-10-20T18:49:21.6781687Z"
+      }
+    },
+    {
+      "scope": "worker-a",
+      "originalCommand": {
+        "originalHandle": 37653,
+        "exitCode": 0
+      },
+      "ready": {
+        "occurrence": "native-launch-isolation-484-worker-a-de57ec1b-84c0-4c2f-94fe-7273bc3367b3",
+        "outcome": "ready",
+        "host": {
+          "pid": 12416,
+          "processInstanceID": "win32:639281189723376804",
+          "occurrenceID": "535a0ff3-6dd7-4b56-8220-6304f624eff2"
+        },
+        "parent": {
+          "pid": 93764,
+          "processInstanceID": "win32:639281189718075329",
+          "occurrenceID": "7bf8f7ad-062c-49c8-82b5-469b687d3c7e"
+        },
+        "target": {
+          "pid": 84840,
+          "processInstanceID": "win32:639281189738120032",
+          "occurrenceID": "04312adc-bcc1-42d9-a569-c26e3c52d4e5"
+        },
+        "targetBirthAtMs": 1792522173812,
+        "deadlineAt": 1792522412315,
+        "observedAtUtc": "2026-10-20T18:49:33.850Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "--preload",
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/preload.ts",
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/measure.ts"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "terminal": {
+        "occurrence": "native-launch-isolation-484-worker-a-de57ec1b-84c0-4c2f-94fe-7273bc3367b3",
+        "outcome": "settled",
+        "host": {
+          "pid": 12416,
+          "processInstanceID": "win32:639281189723376804",
+          "occurrenceID": "535a0ff3-6dd7-4b56-8220-6304f624eff2"
+        },
+        "target": {
+          "pid": 84840,
+          "processInstanceID": "win32:639281189738120032",
+          "occurrenceID": "04312adc-bcc1-42d9-a569-c26e3c52d4e5"
+        },
+        "observedAtUtc": "2026-10-20T18:49:51.354Z",
+        "deadlineAt": 1792522412315,
+        "terminal": {
+          "occurrenceID": "native-launch-isolation-484-worker-a-de57ec1b-84c0-4c2f-94fe-7273bc3367b3",
+          "pid": 84840,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "launcher": {
+        "originalChildExit": 0,
+        "observedAtUtc": "2026-10-20T18:49:51.3943600Z"
+      }
+    },
+    {
+      "scope": "worker-b",
+      "originalCommand": {
+        "originalHandle": 89478,
+        "exitCode": 0
+      },
+      "ready": {
+        "occurrence": "native-launch-isolation-484-worker-b-1bd7642b-13dc-43de-a9ac-101f4850986e",
+        "outcome": "ready",
+        "host": {
+          "pid": 91792,
+          "processInstanceID": "win32:639281190608487584",
+          "occurrenceID": "1717c719-bd9a-4ce2-aced-1bf35098e297"
+        },
+        "parent": {
+          "pid": 73232,
+          "processInstanceID": "win32:639281190603202719",
+          "occurrenceID": "8791e756-042a-42aa-8ed2-b225d4e8de71"
+        },
+        "target": {
+          "pid": 80496,
+          "processInstanceID": "win32:639281190622958289",
+          "occurrenceID": "84522796-a478-4241-bcce-0e7c2592413a"
+        },
+        "targetBirthAtMs": 1792522262295,
+        "deadlineAt": 1792522500827,
+        "observedAtUtc": "2026-10-20T18:51:02.319Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "--preload",
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/preload.ts",
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/measure.ts"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "terminal": {
+        "occurrence": "native-launch-isolation-484-worker-b-1bd7642b-13dc-43de-a9ac-101f4850986e",
+        "outcome": "settled",
+        "host": {
+          "pid": 91792,
+          "processInstanceID": "win32:639281190608487584",
+          "occurrenceID": "1717c719-bd9a-4ce2-aced-1bf35098e297"
+        },
+        "target": {
+          "pid": 80496,
+          "processInstanceID": "win32:639281190622958289",
+          "occurrenceID": "84522796-a478-4241-bcce-0e7c2592413a"
+        },
+        "observedAtUtc": "2026-10-20T18:51:18.352Z",
+        "deadlineAt": 1792522500827,
+        "terminal": {
+          "occurrenceID": "native-launch-isolation-484-worker-b-1bd7642b-13dc-43de-a9ac-101f4850986e",
+          "pid": 80496,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-20T18:51:18.3979513Z",
+        "originalChildExit": 0
+      }
+    },
+    {
+      "scope": "main-b",
+      "originalCommand": {
+        "originalHandle": 47916,
+        "exitCode": 0
+      },
+      "ready": {
+        "occurrence": "native-launch-isolation-484-main-b-8dfaeb4b-0204-4fb9-be33-ac22d1dd8c03",
+        "outcome": "ready",
+        "host": {
+          "pid": 81700,
+          "processInstanceID": "win32:639281190900579237",
+          "occurrenceID": "40525ca7-47c4-405a-a857-f69e0f0db729"
+        },
+        "parent": {
+          "pid": 16456,
+          "processInstanceID": "win32:639281190895389023",
+          "occurrenceID": "1700d05c-88d1-4607-8dca-07e61cd49d12"
+        },
+        "target": {
+          "pid": 91360,
+          "processInstanceID": "win32:639281190914681391",
+          "occurrenceID": "bfd10101-233e-42c9-8329-7645dfe155ad"
+        },
+        "targetBirthAtMs": 1792522291468,
+        "deadlineAt": 1792522530039,
+        "observedAtUtc": "2026-10-20T18:51:31.508Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/measure.ts"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "terminal": {
+        "occurrence": "native-launch-isolation-484-main-b-8dfaeb4b-0204-4fb9-be33-ac22d1dd8c03",
+        "outcome": "settled",
+        "host": {
+          "pid": 81700,
+          "processInstanceID": "win32:639281190900579237",
+          "occurrenceID": "40525ca7-47c4-405a-a857-f69e0f0db729"
+        },
+        "target": {
+          "pid": 91360,
+          "processInstanceID": "win32:639281190914681391",
+          "occurrenceID": "bfd10101-233e-42c9-8329-7645dfe155ad"
+        },
+        "observedAtUtc": "2026-10-20T18:51:49.656Z",
+        "deadlineAt": 1792522530039,
+        "terminal": {
+          "occurrenceID": "native-launch-isolation-484-main-b-8dfaeb4b-0204-4fb9-be33-ac22d1dd8c03",
+          "pid": 91360,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "launcher": {
+        "originalChildExit": 0,
+        "observedAtUtc": "2026-10-20T18:51:49.7050780Z"
+      }
+    },
+    {
+      "scope": "main-c",
+      "originalCommand": {
+        "originalHandle": 50861,
+        "exitCode": 0
+      },
+      "ready": {
+        "occurrence": "native-launch-isolation-484-main-c-0fac1268-8f10-41f7-8836-a44a14e98001",
+        "outcome": "ready",
+        "host": {
+          "pid": 77508,
+          "processInstanceID": "win32:639281191983154123",
+          "occurrenceID": "5f0673c9-cd6d-4daf-88b2-b90a52d1003e"
+        },
+        "parent": {
+          "pid": 81752,
+          "processInstanceID": "win32:639281191977870992",
+          "occurrenceID": "4cfa2d30-0de4-45c5-b8b6-7c9d975902a2"
+        },
+        "target": {
+          "pid": 38692,
+          "processInstanceID": "win32:639281191996727728",
+          "occurrenceID": "e0b0e06b-77c3-4052-91df-b2ec60bfda67"
+        },
+        "targetBirthAtMs": 1792522399672,
+        "deadlineAt": 1792522638298,
+        "observedAtUtc": "2026-10-20T18:53:19.699Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/measure.ts"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "terminal": {
+        "occurrence": "native-launch-isolation-484-main-c-0fac1268-8f10-41f7-8836-a44a14e98001",
+        "outcome": "settled",
+        "host": {
+          "pid": 77508,
+          "processInstanceID": "win32:639281191983154123",
+          "occurrenceID": "5f0673c9-cd6d-4daf-88b2-b90a52d1003e"
+        },
+        "target": {
+          "pid": 38692,
+          "processInstanceID": "win32:639281191996727728",
+          "occurrenceID": "e0b0e06b-77c3-4052-91df-b2ec60bfda67"
+        },
+        "observedAtUtc": "2026-10-20T18:53:39.147Z",
+        "deadlineAt": 1792522638298,
+        "terminal": {
+          "occurrenceID": "native-launch-isolation-484-main-c-0fac1268-8f10-41f7-8836-a44a14e98001",
+          "pid": 38692,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-20T18:53:39.1837395Z",
+        "originalChildExit": 0
+      }
+    },
+    {
+      "scope": "worker-three-a",
+      "originalCommand": {
+        "originalHandle": 3662,
+        "exitCode": 0
+      },
+      "ready": {
+        "occurrence": "native-launch-isolation-484-worker-three-a-4fe83fa8-36e5-47c3-9ced-2c679b88b0bd",
+        "outcome": "ready",
+        "host": {
+          "pid": 30376,
+          "processInstanceID": "win32:639281192507690944",
+          "occurrenceID": "d58422a4-d2d3-4642-a6d6-19f466661acf"
+        },
+        "parent": {
+          "pid": 84200,
+          "processInstanceID": "win32:639281192502545149",
+          "occurrenceID": "dbeda516-5cf7-4952-aa56-0f2e2e3ed890"
+        },
+        "target": {
+          "pid": 89952,
+          "processInstanceID": "win32:639281192521766781",
+          "occurrenceID": "b73b9686-de25-43f6-9784-d20f1433623e"
+        },
+        "targetBirthAtMs": 1792522452176,
+        "deadlineAt": 1792522690750,
+        "observedAtUtc": "2026-10-20T18:54:12.206Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "--preload",
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/preload.ts",
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/measure.ts"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "terminal": {
+        "occurrence": "native-launch-isolation-484-worker-three-a-4fe83fa8-36e5-47c3-9ced-2c679b88b0bd",
+        "outcome": "settled",
+        "host": {
+          "pid": 30376,
+          "processInstanceID": "win32:639281192507690944",
+          "occurrenceID": "d58422a4-d2d3-4642-a6d6-19f466661acf"
+        },
+        "target": {
+          "pid": 89952,
+          "processInstanceID": "win32:639281192521766781",
+          "occurrenceID": "b73b9686-de25-43f6-9784-d20f1433623e"
+        },
+        "observedAtUtc": "2026-10-20T18:54:27.619Z",
+        "deadlineAt": 1792522690750,
+        "terminal": {
+          "occurrenceID": "native-launch-isolation-484-worker-three-a-4fe83fa8-36e5-47c3-9ced-2c679b88b0bd",
+          "pid": 89952,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "launcher": {
+        "originalChildExit": 0,
+        "observedAtUtc": "2026-10-20T18:54:27.6589367Z"
+      }
+    },
+    {
+      "scope": "worker-three-b",
+      "originalCommand": {
+        "originalHandle": 37252,
+        "exitCode": 0
+      },
+      "ready": {
+        "occurrence": "native-launch-isolation-484-worker-three-b-73ece5d4-9cf5-4839-b25b-d416690ee7e4",
+        "outcome": "ready",
+        "host": {
+          "pid": 12724,
+          "processInstanceID": "win32:639281192963171142",
+          "occurrenceID": "730f1caf-e19b-4eea-a3d1-9b0b2a560f32"
+        },
+        "parent": {
+          "pid": 6772,
+          "processInstanceID": "win32:639281192957080457",
+          "occurrenceID": "a3399a97-a455-4096-a433-7ee12efa3647"
+        },
+        "target": {
+          "pid": 92728,
+          "processInstanceID": "win32:639281192979389309",
+          "occurrenceID": "674790bd-04fa-4f93-bb07-7a8651926b16"
+        },
+        "targetBirthAtMs": 1792522497938,
+        "deadlineAt": 1792522736227,
+        "observedAtUtc": "2026-10-20T18:54:57.962Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "--preload",
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/preload.ts",
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/measure.ts"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "terminal": {
+        "occurrence": "native-launch-isolation-484-worker-three-b-73ece5d4-9cf5-4839-b25b-d416690ee7e4",
+        "outcome": "settled",
+        "host": {
+          "pid": 12724,
+          "processInstanceID": "win32:639281192963171142",
+          "occurrenceID": "730f1caf-e19b-4eea-a3d1-9b0b2a560f32"
+        },
+        "target": {
+          "pid": 92728,
+          "processInstanceID": "win32:639281192979389309",
+          "occurrenceID": "674790bd-04fa-4f93-bb07-7a8651926b16"
+        },
+        "observedAtUtc": "2026-10-20T18:55:13.490Z",
+        "deadlineAt": 1792522736227,
+        "terminal": {
+          "occurrenceID": "native-launch-isolation-484-worker-three-b-73ece5d4-9cf5-4839-b25b-d416690ee7e4",
+          "pid": 92728,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-20T18:55:13.5369824Z",
+        "originalChildExit": 0
+      }
+    },
+    {
+      "scope": "main-d",
+      "originalCommand": {
+        "originalHandle": 47442,
+        "exitCode": 0
+      },
+      "ready": {
+        "occurrence": "native-launch-isolation-484-main-d-3b0618ea-4a5d-4dd2-9bdf-617241e7242c",
+        "outcome": "ready",
+        "host": {
+          "pid": 27120,
+          "processInstanceID": "win32:639281193704496910",
+          "occurrenceID": "3d4a8833-953e-49a1-8ad8-4d88ab6bfe21"
+        },
+        "parent": {
+          "pid": 63016,
+          "processInstanceID": "win32:639281193699269519",
+          "occurrenceID": "f7300c6c-4f66-4c0b-92d1-28dfd9954580"
+        },
+        "target": {
+          "pid": 81140,
+          "processInstanceID": "win32:639281193719184574",
+          "occurrenceID": "39673114-8521-485a-9375-ca23ee4f35ab"
+        },
+        "targetBirthAtMs": 1792522571918,
+        "deadlineAt": 1792522810432,
+        "observedAtUtc": "2026-10-20T18:56:11.941Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/measure.ts"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "terminal": {
+        "occurrence": "native-launch-isolation-484-main-d-3b0618ea-4a5d-4dd2-9bdf-617241e7242c",
+        "outcome": "settled",
+        "host": {
+          "pid": 27120,
+          "processInstanceID": "win32:639281193704496910",
+          "occurrenceID": "3d4a8833-953e-49a1-8ad8-4d88ab6bfe21"
+        },
+        "target": {
+          "pid": 81140,
+          "processInstanceID": "win32:639281193719184574",
+          "occurrenceID": "39673114-8521-485a-9375-ca23ee4f35ab"
+        },
+        "observedAtUtc": "2026-10-20T18:56:31.278Z",
+        "deadlineAt": 1792522810432,
+        "terminal": {
+          "occurrenceID": "native-launch-isolation-484-main-d-3b0618ea-4a5d-4dd2-9bdf-617241e7242c",
+          "pid": 81140,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "launcher": {
+        "originalChildExit": 0,
+        "observedAtUtc": "2026-10-20T18:56:31.3479315Z"
+      }
+    }
+  ],
+  "physicalCheck": {
+    "chain": [
+      {
+        "scope": "smoke-v2",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 71760,
+          "processInstanceID": "win32:639281187514130381",
+          "occurrenceID": "1dad4793-6060-4e19-9b39-534532f1dc2f"
+        }
+      },
+      {
+        "scope": "smoke-v2",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 92312,
+          "processInstanceID": "win32:639281187529886837",
+          "occurrenceID": "09ef15f7-566a-482a-9e48-ab47e4da26a2"
+        }
+      },
+      {
+        "scope": "contracts",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 47292,
+          "processInstanceID": "win32:639281188650363568",
+          "occurrenceID": "51ec784f-d0a4-4c23-b015-8c7da47e02cb"
+        }
+      },
+      {
+        "scope": "contracts",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 61684,
+          "processInstanceID": "win32:639281188666720293",
+          "occurrenceID": "55b737f3-9a38-4207-95a5-65b0d7df378e"
+        }
+      },
+      {
+        "scope": "contracts-three",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 59788,
+          "processInstanceID": "win32:639281191764763994",
+          "occurrenceID": "7cf6686e-1f0c-4ec3-b1b8-b2da145fbf1f"
+        }
+      },
+      {
+        "scope": "contracts-three",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 73668,
+          "processInstanceID": "win32:639281191781783079",
+          "occurrenceID": "ff73b40a-2512-4e42-bd65-b33e148b1b7c"
+        }
+      },
+      {
+        "scope": "main-a",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 73156,
+          "processInstanceID": "win32:639281189423091762",
+          "occurrenceID": "488cd326-d6fd-4cb1-aed4-953200cc5f0d"
+        }
+      },
+      {
+        "scope": "main-a",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 48768,
+          "processInstanceID": "win32:639281189438832868",
+          "occurrenceID": "737704c6-8420-4870-9b75-875382cb082c"
+        }
+      },
+      {
+        "scope": "worker-a",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 12416,
+          "processInstanceID": "win32:639281189723376804",
+          "occurrenceID": "535a0ff3-6dd7-4b56-8220-6304f624eff2"
+        }
+      },
+      {
+        "scope": "worker-a",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 84840,
+          "processInstanceID": "win32:639281189738120032",
+          "occurrenceID": "04312adc-bcc1-42d9-a569-c26e3c52d4e5"
+        }
+      },
+      {
+        "scope": "worker-b",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 91792,
+          "processInstanceID": "win32:639281190608487584",
+          "occurrenceID": "1717c719-bd9a-4ce2-aced-1bf35098e297"
+        }
+      },
+      {
+        "scope": "worker-b",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 80496,
+          "processInstanceID": "win32:639281190622958289",
+          "occurrenceID": "84522796-a478-4241-bcce-0e7c2592413a"
+        }
+      },
+      {
+        "scope": "main-b",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 81700,
+          "processInstanceID": "win32:639281190900579237",
+          "occurrenceID": "40525ca7-47c4-405a-a857-f69e0f0db729"
+        }
+      },
+      {
+        "scope": "main-b",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 91360,
+          "processInstanceID": "win32:639281190914681391",
+          "occurrenceID": "bfd10101-233e-42c9-8329-7645dfe155ad"
+        }
+      },
+      {
+        "scope": "main-c",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 77508,
+          "processInstanceID": "win32:639281191983154123",
+          "occurrenceID": "5f0673c9-cd6d-4daf-88b2-b90a52d1003e"
+        }
+      },
+      {
+        "scope": "main-c",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 38692,
+          "processInstanceID": "win32:639281191996727728",
+          "occurrenceID": "e0b0e06b-77c3-4052-91df-b2ec60bfda67"
+        }
+      },
+      {
+        "scope": "worker-three-a",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 30376,
+          "processInstanceID": "win32:639281192507690944",
+          "occurrenceID": "d58422a4-d2d3-4642-a6d6-19f466661acf"
+        }
+      },
+      {
+        "scope": "worker-three-a",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 89952,
+          "processInstanceID": "win32:639281192521766781",
+          "occurrenceID": "b73b9686-de25-43f6-9784-d20f1433623e"
+        }
+      },
+      {
+        "scope": "worker-three-b",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 12724,
+          "processInstanceID": "win32:639281192963171142",
+          "occurrenceID": "730f1caf-e19b-4eea-a3d1-9b0b2a560f32"
+        }
+      },
+      {
+        "scope": "worker-three-b",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 92728,
+          "processInstanceID": "win32:639281192979389309",
+          "occurrenceID": "674790bd-04fa-4f93-bb07-7a8651926b16"
+        }
+      },
+      {
+        "scope": "main-d",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 27120,
+          "processInstanceID": "win32:639281193704496910",
+          "occurrenceID": "3d4a8833-953e-49a1-8ad8-4d88ab6bfe21"
+        }
+      },
+      {
+        "scope": "main-d",
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 81140,
+          "processInstanceID": "win32:639281193719184574",
+          "occurrenceID": "39673114-8521-485a-9375-ca23ee4f35ab"
+        }
+      }
+    ],
+    "scopes": 11,
+    "observedAtUtc": "2026-10-20T19:08:43.2167397Z"
+  }
+}

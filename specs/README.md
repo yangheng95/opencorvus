@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [原生helper启动隔离](records/2026-10/2026-10-21-native-launch-isolation.md)：[局部2379次真实命令与完整配置对照、八张实图](artifacts/2026-10-21-native-launch-isolation/README.md)，原性能仍未达标，不交付未完整验证的私有传输。
+
 - [配置物理路径读取成本](records/2026-10/2026-10-21-config-physical-path-cost.md)：[全量交错读取、同一请求原生启动重叠与四张实图](artifacts/2026-10-21-config-physical-path-cost/README.md)，完整保存/恢复仍未达标。
 
 - [真实网页Sources与持续输出](records/2026-10/2026-10-21-web-sources-live-review.md)：共享阅读锚点根因修复及[28张人工实图、真实Sol流与原数据保留](artifacts/2026-10-21-web-sources-live-review/README.md)。

@@ -1,0 +1,57 @@
+{
+  "owner": {
+    "pid": 92312,
+    "processInstanceID": "win32:639281187529886837",
+    "occurrenceID": "efa4128f-5d27-42fe-8071-9e88ff1a4872"
+  },
+  "requests": [
+    {
+      "id": "b2522f61-6b42-4b45-87a4-13438c3bc398",
+      "ownerPID": 92312,
+      "ownerBirth": "win32:639281187529886837",
+      "occurrence": "efa4128f-5d27-42fe-8071-9e88ff1a4872",
+      "kind": "command"
+    }
+  ],
+  "result": {
+    "code": 7,
+    "stdout": "actual484\n",
+    "stderr": "actual-stderr484\n"
+  },
+  "worker": {
+    "facts": [
+      {
+        "id": 1,
+        "pid": 79524,
+        "ownerPID": 92312,
+        "code": 7,
+        "signal": null,
+        "streams": [
+          {
+            "channel": "stdout",
+            "outcome": "drained"
+          },
+          {
+            "channel": "stderr",
+            "outcome": "drained"
+          }
+        ]
+      }
+    ],
+    "workerSamples": [
+      {
+        "id": 1,
+        "at": 28.0082,
+        "returnedAt": 44.5244,
+        "pid": 79524,
+        "ownerPID": 92312
+      }
+    ],
+    "exit": 0
+  },
+  "live": {
+    "live": 0,
+    "owners": {}
+  },
+  "boundary": "Private launch adapter;original production Process.runHost and native proof;not full lifecycle or production qualification"
+}

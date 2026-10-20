@@ -1,0 +1,5 @@
+{"name":"binary input and two backpressured output channels","code":9,"stdinBytes":524288,"stdoutBytes":4718592,"stderrBytes":2097152}
+{"name":"active owned tree deadline and independent natural peer","deadline":{"occurrenceID":"private484-deadline","pid":36516,"reason":"deadline_exceeded","exitCode":1,"signal":null},"peer":{"occurrenceID":"private484-peer","pid":77036,"reason":"exited","exitCode":0,"signal":null}}
+{"name":"original cancellation receipt","receipt":{"occurrenceID":"private484-abort","pid":81516,"reason":"aborted","exitCode":1,"signal":null}}
+{"name":"output limit preserves exact bounded bytes and settled reason","receipt":{"occurrenceID":"private484-output-limit","pid":65284,"reason":"output_limit","exitCode":1,"signal":null},"stdoutBytes":65536}
+{"cases":4,"requests":5,"workerExit":0,"workerExits":[0,0,0],"live":{"live":0,"owners":{}}}

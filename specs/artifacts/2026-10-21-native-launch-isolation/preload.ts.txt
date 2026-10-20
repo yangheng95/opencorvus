@@ -1,0 +1,22 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import {pathToFileURL} from 'node:url'
+import assert from 'node:assert/strict'
+assert.equal(process.env.OPENCORVUS_DIAGNOSTIC_LAUNCH_MODE,'worker')
+const target=path.resolve(import.meta.dir,'../../packages/opencorvus/src/shell/process-supervisor.ts')
+await Bun.plugin({name:'private484-only-helper-launch',setup(builder){
+ builder.onLoad({filter:/packages[\\/]opencorvus[\\/]src[\\/]shell[\\/]process-supervisor\.ts$/},args=>{
+  assert.equal(path.resolve(args.path),target)
+  const text=fs.readFileSync(args.path,'utf8'),call='proc = spawn(helper, ["--request", requestPath], {'
+  assert.equal(text.split(call).length,2,'Exactly the original native helper spawn')
+  const contents='import {spawnOffMain as launchOffMain} from '+JSON.stringify(pathToFileURL(path.join(import.meta.dir,'adapter.ts')).href)+'\n'+text.replace(call,'proc = await launchOffMain(helper, ["--request", requestPath], {')
+  return{contents,loader:'ts'}
+ })
+ if(process.env.OPENCORVUS_DIAGNOSTIC_LAUNCH_EVIDENCE)builder.onLoad({filter:/packages[\\/]opencorvus[\\/]src[\\/]cli[\\/]cmd[\\/]serve\.ts$/},args=>{
+  const text=fs.readFileSync(args.path,'utf8'),call='`[serve] settled process-owned prompts sessions=${terminated.sessions} toolParts=${terminated.toolParts}`,\n      )\n      return terminated'
+  assert.equal(text.replaceAll('\r\n','\n').split(call).length,2,'Original runtime settlement owns worker retirement')
+  const imports='import {closeLaunchWorker as closePrivateLaunchWorkers} from '+JSON.stringify(pathToFileURL(path.join(import.meta.dir,'adapter.ts')).href)+'\nimport {writeFile as persistPrivateLaunchWorkers} from "node:fs/promises"\n'
+  const contents=imports+text.replaceAll('\r\n','\n').replace(call,'`[serve] settled process-owned prompts sessions=${terminated.sessions} toolParts=${terminated.toolParts}`,\n      )\n      const privateLaunchWorkers = await closePrivateLaunchWorkers()\n      await persistPrivateLaunchWorkers(process.env.OPENCORVUS_DIAGNOSTIC_LAUNCH_EVIDENCE + "/launch-worker-shutdown.json", JSON.stringify(privateLaunchWorkers), {flag:"wx"})\n      return terminated')
+  return{contents,loader:'ts'}
+ })
+}})

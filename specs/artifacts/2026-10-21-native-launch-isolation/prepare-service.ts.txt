@@ -1,0 +1,43 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+import {Database} from 'bun:sqlite'
+const root=import.meta.dir,stage=process.argv[2];assert(stage==='baseline'||stage==='variant')
+const base='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21',source='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh',target=base+'/native-launch-isolation-484-'+stage+'-data'
+assert(!fs.existsSync(target))
+if(stage==='variant'){
+ const prior=JSON.parse(fs.readFileSync(base+'/native-launch-isolation-484-baseline/evidence/physical-terminal-and-pair-cleanup.json','utf8'))
+ assert.equal(prior.originalExit,0);assert.equal(prior.maximumRequests,4);assert(prior.native.physicalCompletion&&prior.native.outputDrainComplete&&prior.native.requestCleanupComplete)
+}
+const db=new Database(source+'/runtime/data/opencorvus.db',{readonly:true,create:false})
+try{
+ db.exec('BEGIN');assert.deepEqual(db.query('PRAGMA user_version').get(),{user_version:3})
+ const tables=['project','session','message','part','protocol_event','tool_part_request','tool_part_outcome'],original=Object.fromEntries(tables.map(table=>[table,db.query('SELECT rowid,* FROM '+table+' ORDER BY rowid').all()]))
+ assert.equal(original.project.length,149);assert.equal(original.session.length,198)
+ for(const directory of ['runtime/data','runtime/config','runtime/tmp','home','appdata','localappdata','project'])fs.mkdirSync(target+'/'+directory,{recursive:true})
+ const image=db.serialize();fs.writeFileSync(target+'/runtime/data/opencorvus.db',image,{flag:'wx'});assert(fs.readFileSync(target+'/runtime/data/opencorvus.db').equals(image))
+ const canonical=fs.readFileSync(source+'/runtime/config/opencorvus.jsonc','utf8');fs.writeFileSync(target+'/runtime/config/opencorvus.jsonc',canonical,{flag:'wx'})
+ fs.writeFileSync(target+'/project/README.md','# Full configuration launch diagnosis\n\nComplete original registry and configuration retained.\n',{flag:'wx'})
+ const stat=fs.statSync(source+'/runtime/data/opencorvus.db')
+ fs.writeFileSync(root+'/'+stage+'-original-private.json',JSON.stringify({observedAt:new Date().toISOString(),source,base:target,sourceDatabase:{bytes:stat.size,modifiedAtMs:stat.mtimeMs},schema:3,canonical,original},null,2)+'\n',{flag:'wx'})
+}finally{db.exec('ROLLBACK');db.close(true)}
+const old=path.resolve(root,'../config-physical-path-cost-483'),diag=base+'/native-launch-isolation-484-'+stage,port=stage==='baseline'?18843:18845
+if(stage==='baseline')fs.writeFileSync(root+'/prepare-authority.mjs',fs.readFileSync(old+'/prepare-authority.mjs','utf8').replaceAll('config-physical-path-cost-483-authority','native-launch-isolation-484-authority'),{flag:'wx'})
+let serve=fs.readFileSync(old+'/serve.ts','utf8').replaceAll('config-physical-path-cost-483-data','native-launch-isolation-484-'+stage+'-data').replaceAll('config-physical-path-cost-483-authority','native-launch-isolation-484-authority').replaceAll('18841',String(port)).replaceAll('original-scope-private.json',stage+'-original-private.json').replace('483 independent mixed filesystem diagnosis fixed4;preflight and all helpers included;no business model input','484 '+stage+' fixed4 within declared batch8;preflight and all helpers included;no business model input')
+fs.writeFileSync(root+'/serve-'+stage+'.ts',serve,{flag:'wx'})
+let launch=fs.readFileSync(old+'/launch.ps1','utf8').replaceAll('config-physical-path-cost-483-data','native-launch-isolation-484-'+stage+'-data').replaceAll('config-physical-path-cost-483-mixed-final','native-launch-isolation-484-'+stage).replaceAll('18841',String(port)).replaceAll('"--preload" "$taskRepo/.tmp-product-iteration/config-physical-path-cost-483/profile.ts" ','').replaceAll('config-physical-path-cost-483/serve.ts','native-launch-isolation-484/serve-'+stage+'.ts')
+if(stage==='variant'){
+ launch=launch.replace('$taskEnvironment.TEMP=',"$taskEnvironment.OPENCORVUS_DIAGNOSTIC_LAUNCH_MODE='worker'\n$taskEnvironment.OPENCORVUS_DIAGNOSTIC_LAUNCH_LANES='3'\n$taskEnvironment.OPENCORVUS_DIAGNOSTIC_LAUNCH_EVIDENCE=$taskDiag+'/evidence'\n$taskEnvironment.TEMP=")
+ launch=launch.replace('$taskBun "$taskRepo/.tmp-product-iteration/native-launch-isolation-484/serve-variant.ts"','$taskBun "--preload" "$taskRepo/.tmp-product-iteration/native-launch-isolation-484/preload.ts" "$taskRepo/.tmp-product-iteration/native-launch-isolation-484/serve-variant.ts"')
+}
+fs.writeFileSync(root+'/launch-'+stage+'.ps1',launch,{flag:'wx'})
+for(const name of ['shutdown','settle']){
+ let text=fs.readFileSync(old+'/'+name+'.ps1','utf8').replaceAll('config-physical-path-cost-483-mixed-final','native-launch-isolation-484-'+stage).replaceAll('config-physical-path-cost-483-data','native-launch-isolation-484-'+stage+'-data').replaceAll('18841',String(port))
+ fs.writeFileSync(root+'/'+name+'-'+stage+'.ps1',text,{flag:'wx'})
+}
+fs.mkdirSync(root+'/'+stage)
+for(const file of ['config-write-after.ts','prepare-readers-after.ts','publish-after.ts','readers-after.mjs']){
+ let text=fs.readFileSync(old+'/mix/'+file,'utf8').replaceAll('config-physical-path-cost-483-mixed-final','native-launch-isolation-484-'+stage).replaceAll('config-physical-path-cost-483-data','native-launch-isolation-484-'+stage+'-data').replaceAll('18841',String(port)).replaceAll('qa-physical483-mixed','qa-launch484-'+stage)
+ fs.writeFileSync(root+'/'+stage+'/'+file,text,{flag:'wx'})
+}
+console.log(JSON.stringify({stage,port,maximumScopeRequests:4,maximumBatchRequests:8,source:'Readonly full149/198 clone;complete original canonical',UI:'Frozen formal482',privateLaunch:stage==='variant'?'Only helper spawn isolated across3 launch workers':'Original source implementation'}))

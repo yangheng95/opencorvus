@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [helper启动隔离的实际边界](2026-10-21-native-launch-isolation/README.md)：2379次局部真实命令、完整配置17.8/17.6秒对15.6/15.3秒及八张实图；未将私有原型引入生产。
+
 - [完整配置的物理读取与原生启动](2026-10-21-config-physical-path-cost/README.md)：全149项目交错路径观察、263352次原文件系统调用、四张人工实图和完整源数据保留；性能仍未达标。
 
 - [真实网页 Sources 与阅读锚点修复](2026-10-21-web-sources-live-review/README.md)：两条真实网页引用、28张人工实图，固定10/12发现批与4/6独立修复批，保留原数据并成对退休凭据。

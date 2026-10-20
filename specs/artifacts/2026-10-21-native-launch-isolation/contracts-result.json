@@ -1,0 +1,223 @@
+{
+  "owner": {
+    "pid": 61684,
+    "processInstanceID": "win32:639281188666720293",
+    "occurrenceID": "5185feab-9689-4747-acb1-b46f20d4c792"
+  },
+  "requests": [
+    {
+      "id": "55e8551d-979d-4dad-b4be-857f3c55e9c7",
+      "ownerPID": 61684,
+      "ownerBirth": "win32:639281188666720293",
+      "occurrence": "5185feab-9689-4747-acb1-b46f20d4c792",
+      "kind": "command"
+    },
+    {
+      "id": "47c8a3a7-4785-4fd1-9636-84662dde4035",
+      "ownerPID": 61684,
+      "ownerBirth": "win32:639281188666720293",
+      "occurrence": "5185feab-9689-4747-acb1-b46f20d4c792",
+      "kind": "command"
+    },
+    {
+      "id": "56e4844f-e128-49b4-a519-026be235313c",
+      "ownerPID": 61684,
+      "ownerBirth": "win32:639281188666720293",
+      "occurrence": "5185feab-9689-4747-acb1-b46f20d4c792",
+      "kind": "command"
+    },
+    {
+      "id": "fe4d42b4-8222-49b2-bb3a-5a7c1767caf8",
+      "ownerPID": 61684,
+      "ownerBirth": "win32:639281188666720293",
+      "occurrence": "5185feab-9689-4747-acb1-b46f20d4c792",
+      "kind": "command"
+    },
+    {
+      "id": "e0076c45-2e42-4403-8d74-5264d601eb5b",
+      "ownerPID": 61684,
+      "ownerBirth": "win32:639281188666720293",
+      "occurrence": "5185feab-9689-4747-acb1-b46f20d4c792",
+      "kind": "command"
+    }
+  ],
+  "cases": [
+    {
+      "name": "binary input and two backpressured output channels",
+      "code": 9,
+      "stdinBytes": 524288,
+      "stdoutBytes": 4718592,
+      "stderrBytes": 2097152
+    },
+    {
+      "name": "active owned tree deadline and independent natural peer",
+      "deadline": {
+        "occurrenceID": "private484-deadline",
+        "pid": 79312,
+        "reason": "deadline_exceeded",
+        "exitCode": 1,
+        "signal": null
+      },
+      "peer": {
+        "occurrenceID": "private484-peer",
+        "pid": 87740,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      }
+    },
+    {
+      "name": "original cancellation receipt",
+      "receipt": {
+        "occurrenceID": "private484-abort",
+        "pid": 56440,
+        "reason": "aborted",
+        "exitCode": 1,
+        "signal": null
+      }
+    },
+    {
+      "name": "output limit preserves exact bounded bytes and settled reason",
+      "receipt": {
+        "occurrenceID": "private484-output-limit",
+        "pid": 77332,
+        "reason": "output_limit",
+        "exitCode": 1,
+        "signal": null
+      },
+      "stdoutBytes": 65536
+    }
+  ],
+  "worker": {
+    "facts": [
+      {
+        "id": 1,
+        "pid": 89580,
+        "ownerPID": 61684,
+        "code": 9,
+        "signal": null,
+        "streams": [
+          {
+            "channel": "stdout",
+            "outcome": "drained"
+          },
+          {
+            "channel": "stderr",
+            "outcome": "drained"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "pid": 55928,
+        "ownerPID": 61684,
+        "code": 0,
+        "signal": null,
+        "streams": [
+          {
+            "channel": "stdout",
+            "outcome": "drained"
+          },
+          {
+            "channel": "stderr",
+            "outcome": "drained"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "pid": 54988,
+        "ownerPID": 61684,
+        "code": 1,
+        "signal": null,
+        "streams": [
+          {
+            "channel": "stdout",
+            "outcome": "drained"
+          },
+          {
+            "channel": "stderr",
+            "outcome": "drained"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "pid": 75996,
+        "ownerPID": 61684,
+        "code": 1,
+        "signal": null,
+        "streams": [
+          {
+            "channel": "stdout",
+            "outcome": "drained"
+          },
+          {
+            "channel": "stderr",
+            "outcome": "drained"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "pid": 84132,
+        "ownerPID": 61684,
+        "code": 1,
+        "signal": null,
+        "streams": [
+          {
+            "channel": "stdout",
+            "outcome": "drained"
+          },
+          {
+            "channel": "stderr",
+            "outcome": "drained"
+          }
+        ]
+      }
+    ],
+    "workerSamples": [
+      {
+        "id": 1,
+        "at": 23.3283,
+        "returnedAt": 110.9574,
+        "pid": 89580,
+        "ownerPID": 61684
+      },
+      {
+        "id": 2,
+        "at": 348.6427,
+        "returnedAt": 358.9078,
+        "pid": 54988,
+        "ownerPID": 61684
+      },
+      {
+        "id": 3,
+        "at": 360.5914,
+        "returnedAt": 371.2164,
+        "pid": 55928,
+        "ownerPID": 61684
+      },
+      {
+        "id": 4,
+        "at": 2190.5995,
+        "returnedAt": 2198.5917,
+        "pid": 75996,
+        "ownerPID": 61684
+      },
+      {
+        "id": 5,
+        "at": 2520.8718,
+        "returnedAt": 2599.0059,
+        "pid": 84132,
+        "ownerPID": 61684
+      }
+    ],
+    "exit": 0
+  },
+  "live": {
+    "live": 0,
+    "owners": {}
+  },
+  "boundary": "Private launch adapter actual positive contracts;original production facade/native Job/request markers;worker failure/detached/package not qualified"
+}

@@ -1,0 +1,93 @@
+{
+  "boundary": "Actual CUA screenshots followed immediately by scratch PNG write;these are file write times,not measured presentation-frame latency",
+  "frames": [
+    {
+      "image": "01-baseline-general.png",
+      "stage": "baseline",
+      "ownTab": "51",
+      "port": 18843,
+      "imageWrittenAt": "2026-10-20T18:59:46.678Z",
+      "originalWriterStartedAt": "2026-10-20T19:00:04.652Z",
+      "firstSaveCompletedAt": "2026-10-20T19:00:22.481Z",
+      "fullRestoreCompletedAt": "2026-10-20T19:00:40.054Z",
+      "relativeToWriter": "before save"
+    },
+    {
+      "image": "02-baseline-provider-wait.png",
+      "stage": "baseline",
+      "ownTab": "51",
+      "port": 18843,
+      "imageWrittenAt": "2026-10-20T19:00:10.461Z",
+      "originalWriterStartedAt": "2026-10-20T19:00:04.652Z",
+      "firstSaveCompletedAt": "2026-10-20T19:00:22.481Z",
+      "fullRestoreCompletedAt": "2026-10-20T19:00:40.054Z",
+      "relativeToWriter": "during save"
+    },
+    {
+      "image": "03-baseline-provider-loaded.png",
+      "stage": "baseline",
+      "ownTab": "51",
+      "port": 18843,
+      "imageWrittenAt": "2026-10-20T19:00:53.321Z",
+      "originalWriterStartedAt": "2026-10-20T19:00:04.652Z",
+      "firstSaveCompletedAt": "2026-10-20T19:00:22.481Z",
+      "fullRestoreCompletedAt": "2026-10-20T19:00:40.054Z",
+      "relativeToWriter": "after full restore"
+    },
+    {
+      "image": "04-baseline-ask-restored.png",
+      "stage": "baseline",
+      "ownTab": "51",
+      "port": 18843,
+      "imageWrittenAt": "2026-10-20T19:00:53.723Z",
+      "originalWriterStartedAt": "2026-10-20T19:00:04.652Z",
+      "firstSaveCompletedAt": "2026-10-20T19:00:22.481Z",
+      "fullRestoreCompletedAt": "2026-10-20T19:00:40.054Z",
+      "relativeToWriter": "after full restore"
+    },
+    {
+      "image": "05-variant-general.png",
+      "stage": "variant",
+      "ownTab": "52",
+      "port": 18845,
+      "imageWrittenAt": "2026-10-20T19:03:50.417Z",
+      "originalWriterStartedAt": "2026-10-20T19:04:08.112Z",
+      "firstSaveCompletedAt": "2026-10-20T19:04:23.736Z",
+      "fullRestoreCompletedAt": "2026-10-20T19:04:39.065Z",
+      "relativeToWriter": "before save"
+    },
+    {
+      "image": "06-variant-provider-wait.png",
+      "stage": "variant",
+      "ownTab": "52",
+      "port": 18845,
+      "imageWrittenAt": "2026-10-20T19:04:17.401Z",
+      "originalWriterStartedAt": "2026-10-20T19:04:08.112Z",
+      "firstSaveCompletedAt": "2026-10-20T19:04:23.736Z",
+      "fullRestoreCompletedAt": "2026-10-20T19:04:39.065Z",
+      "relativeToWriter": "during save"
+    },
+    {
+      "image": "07-variant-provider-loaded.png",
+      "stage": "variant",
+      "ownTab": "52",
+      "port": 18845,
+      "imageWrittenAt": "2026-10-20T19:05:28.418Z",
+      "originalWriterStartedAt": "2026-10-20T19:04:08.112Z",
+      "firstSaveCompletedAt": "2026-10-20T19:04:23.736Z",
+      "fullRestoreCompletedAt": "2026-10-20T19:04:39.065Z",
+      "relativeToWriter": "after full restore"
+    },
+    {
+      "image": "08-variant-ask-restored.png",
+      "stage": "variant",
+      "ownTab": "52",
+      "port": 18845,
+      "imageWrittenAt": "2026-10-20T19:05:28.846Z",
+      "originalWriterStartedAt": "2026-10-20T19:04:08.112Z",
+      "firstSaveCompletedAt": "2026-10-20T19:04:23.736Z",
+      "fullRestoreCompletedAt": "2026-10-20T19:04:39.065Z",
+      "relativeToWriter": "after full restore"
+    }
+  ]
+}

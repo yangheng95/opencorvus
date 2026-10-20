@@ -1,0 +1,298 @@
+{
+  "boundary": "Local native Git plus complete149 directory I/O;not Config acceptance;all Git output exactly matched original main-a before these results were published",
+  "commands": 2368,
+  "groups": [
+    {
+      "run": "main-a",
+      "mode": "main",
+      "runtime": "1.4.0",
+      "owner": {
+        "pid": 48768,
+        "processInstanceID": "win32:639281189438832868",
+        "occurrenceID": "c03571d2-78c7-47eb-95d5-cc4ea3449e97"
+      },
+      "projects": 149,
+      "gitProjects": 148,
+      "nonGitProjects": 1,
+      "commands": 296,
+      "concurrency": 12,
+      "wallMs": 16894.5181,
+      "mainMaxTickMs": 415.90639999999985,
+      "mainTickCount": 1433,
+      "statCalls": 44402,
+      "realpathCalls": 44402,
+      "requestIDs": 296,
+      "requestOwners": [
+        {
+          "pid": 48768,
+          "birth": "win32:639281189438832868",
+          "occurrence": "c03571d2-78c7-47eb-95d5-cc4ea3449e97"
+        }
+      ],
+      "mainSynchronousSpawnMs": 9011.824299999978,
+      "workerExits": [],
+      "live": {
+        "live": 0,
+        "owners": {}
+      }
+    },
+    {
+      "run": "worker-a",
+      "mode": "worker",
+      "runtime": "1.4.0",
+      "owner": {
+        "pid": 84840,
+        "processInstanceID": "win32:639281189738120032",
+        "occurrenceID": "6a7cce1c-e23b-4083-9cde-835cc75e9f46"
+      },
+      "projects": 149,
+      "gitProjects": 148,
+      "nonGitProjects": 1,
+      "commands": 296,
+      "concurrency": 12,
+      "wallMs": 16617.4078,
+      "mainMaxTickMs": 47.320199999998295,
+      "mainTickCount": 2778,
+      "statCalls": 44402,
+      "realpathCalls": 44402,
+      "requestIDs": 296,
+      "requestOwners": [
+        {
+          "pid": 84840,
+          "birth": "win32:639281189738120032",
+          "occurrence": "6a7cce1c-e23b-4083-9cde-835cc75e9f46"
+        }
+      ],
+      "mainSynchronousSpawnMs": 0,
+      "workerSynchronousSpawnMs": 10298.094500000036,
+      "workerExits": [
+        0
+      ],
+      "workerFacts": 296,
+      "live": {
+        "live": 0,
+        "owners": {}
+      }
+    },
+    {
+      "run": "worker-b",
+      "mode": "worker",
+      "runtime": "1.4.0",
+      "owner": {
+        "pid": 80496,
+        "processInstanceID": "win32:639281190622958289",
+        "occurrenceID": "cf1b22c6-0a65-4ac4-8caf-dea937de2f20"
+      },
+      "projects": 149,
+      "gitProjects": 148,
+      "nonGitProjects": 1,
+      "commands": 296,
+      "concurrency": 12,
+      "wallMs": 15187.3743,
+      "mainMaxTickMs": 59.39439999999922,
+      "mainTickCount": 2556,
+      "statCalls": 44402,
+      "realpathCalls": 44402,
+      "requestIDs": 296,
+      "requestOwners": [
+        {
+          "pid": 80496,
+          "birth": "win32:639281190622958289",
+          "occurrence": "cf1b22c6-0a65-4ac4-8caf-dea937de2f20"
+        }
+      ],
+      "mainSynchronousSpawnMs": 0,
+      "workerSynchronousSpawnMs": 8716.3264,
+      "workerExits": [
+        0
+      ],
+      "workerFacts": 296,
+      "live": {
+        "live": 0,
+        "owners": {}
+      }
+    },
+    {
+      "run": "main-b",
+      "mode": "main",
+      "runtime": "1.4.0",
+      "owner": {
+        "pid": 91360,
+        "processInstanceID": "win32:639281190914681391",
+        "occurrenceID": "5f6ce3b4-cb61-43c4-8883-146b4ba3ff27"
+      },
+      "projects": 149,
+      "gitProjects": 148,
+      "nonGitProjects": 1,
+      "commands": 296,
+      "concurrency": 12,
+      "wallMs": 17403.9744,
+      "mainMaxTickMs": 259.0633000000016,
+      "mainTickCount": 1365,
+      "statCalls": 44402,
+      "realpathCalls": 44402,
+      "requestIDs": 296,
+      "requestOwners": [
+        {
+          "pid": 91360,
+          "birth": "win32:639281190914681391",
+          "occurrence": "5f6ce3b4-cb61-43c4-8883-146b4ba3ff27"
+        }
+      ],
+      "mainSynchronousSpawnMs": 9902.68930000001,
+      "workerExits": [],
+      "live": {
+        "live": 0,
+        "owners": {}
+      }
+    },
+    {
+      "run": "main-c",
+      "mode": "main",
+      "runtime": "1.4.0",
+      "owner": {
+        "pid": 38692,
+        "processInstanceID": "win32:639281191996727728",
+        "occurrenceID": "e5ee9380-66bb-43c9-bb28-eedc960d682f"
+      },
+      "projects": 149,
+      "gitProjects": 148,
+      "nonGitProjects": 1,
+      "commands": 296,
+      "concurrency": 12,
+      "wallMs": 18741.218399999998,
+      "mainMaxTickMs": 267.25740000000224,
+      "mainTickCount": 1347,
+      "statCalls": 44402,
+      "realpathCalls": 44402,
+      "requestIDs": 296,
+      "requestOwners": [
+        {
+          "pid": 38692,
+          "birth": "win32:639281191996727728",
+          "occurrence": "e5ee9380-66bb-43c9-bb28-eedc960d682f"
+        }
+      ],
+      "mainSynchronousSpawnMs": 11375.65310000001,
+      "workerExits": [],
+      "live": {
+        "live": 0,
+        "owners": {}
+      }
+    },
+    {
+      "run": "worker-three-a",
+      "mode": "worker",
+      "runtime": "1.4.0",
+      "owner": {
+        "pid": 89952,
+        "processInstanceID": "win32:639281192521766781",
+        "occurrenceID": "575b2e04-7166-4326-a40b-ddca4fda96ae"
+      },
+      "projects": 149,
+      "gitProjects": 148,
+      "nonGitProjects": 1,
+      "commands": 296,
+      "concurrency": 12,
+      "wallMs": 14574.3879,
+      "mainMaxTickMs": 51.79000000000087,
+      "mainTickCount": 2461,
+      "statCalls": 44402,
+      "realpathCalls": 44402,
+      "requestIDs": 296,
+      "requestOwners": [
+        {
+          "pid": 89952,
+          "birth": "win32:639281192521766781",
+          "occurrence": "575b2e04-7166-4326-a40b-ddca4fda96ae"
+        }
+      ],
+      "mainSynchronousSpawnMs": 0,
+      "workerSynchronousSpawnMs": 10560.805900000007,
+      "workerExits": [
+        0,
+        0,
+        0
+      ],
+      "workerFacts": 296,
+      "live": {
+        "live": 0,
+        "owners": {}
+      }
+    },
+    {
+      "run": "worker-three-b",
+      "mode": "worker",
+      "runtime": "1.4.0",
+      "owner": {
+        "pid": 92728,
+        "processInstanceID": "win32:639281192979389309",
+        "occurrenceID": "202870d7-1a3e-49f6-ad38-1a4b46ec0744"
+      },
+      "projects": 149,
+      "gitProjects": 148,
+      "nonGitProjects": 1,
+      "commands": 296,
+      "concurrency": 12,
+      "wallMs": 14642.0079,
+      "mainMaxTickMs": 139.03299999999945,
+      "mainTickCount": 2402,
+      "statCalls": 44402,
+      "realpathCalls": 44402,
+      "requestIDs": 296,
+      "requestOwners": [
+        {
+          "pid": 92728,
+          "birth": "win32:639281192979389309",
+          "occurrence": "202870d7-1a3e-49f6-ad38-1a4b46ec0744"
+        }
+      ],
+      "mainSynchronousSpawnMs": 0,
+      "workerSynchronousSpawnMs": 11998.296899999978,
+      "workerExits": [
+        0,
+        0,
+        0
+      ],
+      "workerFacts": 296,
+      "live": {
+        "live": 0,
+        "owners": {}
+      }
+    },
+    {
+      "run": "main-d",
+      "mode": "main",
+      "runtime": "1.4.0",
+      "owner": {
+        "pid": 81140,
+        "processInstanceID": "win32:639281193719184574",
+        "occurrenceID": "6177f8e2-ac0e-49d5-99b4-8416a2fb95ed"
+      },
+      "projects": 149,
+      "gitProjects": 148,
+      "nonGitProjects": 1,
+      "commands": 296,
+      "concurrency": 12,
+      "wallMs": 18594.1013,
+      "mainMaxTickMs": 600.9423999999999,
+      "mainTickCount": 1623,
+      "statCalls": 44402,
+      "realpathCalls": 44402,
+      "requestIDs": 296,
+      "requestOwners": [
+        {
+          "pid": 81140,
+          "birth": "win32:639281193719184574",
+          "occurrence": "6177f8e2-ac0e-49d5-99b4-8416a2fb95ed"
+        }
+      ],
+      "mainSynchronousSpawnMs": 9558.757000000005,
+      "workerExits": [],
+      "live": {
+        "live": 0,
+        "owners": {}
+      }
+    }
+  ]
+}

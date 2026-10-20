@@ -1,0 +1,48 @@
+import {parentPort} from 'node:worker_threads'
+import {spawn} from 'node:child_process'
+if(!parentPort)throw Error('Launch worker requires its original parent port')
+const children=new Map<number,any>(),samples:any[]=[]
+let closing=false
+const errorData=(error:any)=>({name:error?.name??'Error',message:error?.message??String(error),code:error?.code,errno:error?.errno,syscall:error?.syscall,path:error?.path})
+function done(){if(closing&&children.size===0){parentPort!.postMessage({kind:'finished',pid:process.pid,samples});parentPort!.close()}}
+function send(entry:any,message:any){
+ if(!entry.admitted){entry.queued.push(message);return}
+ parentPort!.postMessage({id:entry.id,...message})
+ if(message.kind==='close'){children.delete(entry.id);done()}
+}
+parentPort.on('message',(message:any)=>{
+ if(message.kind==='shutdown'){closing=true;done();return}
+ if(message.kind==='spawn'){
+  if(closing)throw Error('Closed launch worker cannot accept a spawn')
+  const entry={id:message.id,admitted:false,queued:[] as any[],child:undefined as any}
+  children.set(entry.id,entry)
+  try{
+   const at=performance.now(),child=spawn(message.executable,message.args,message.options);entry.child=child
+   samples.push({id:entry.id,at,returnedAt:performance.now(),pid:child.pid,ownerPID:process.pid})
+   child.on('error',error=>{if(!child.pid)parentPort!.postMessage({id:entry.id,kind:'spawn-failed',error:errorData(error)});else send(entry,{kind:'error',error:errorData(error)})})
+   for(const channel of ['stdout','stderr'] as const){
+    const source=child[channel]
+    source?.on('data',(chunk:Buffer)=>{source.pause();send(entry,{kind:'data',channel,chunk})})
+    source?.on('end',()=>send(entry,{kind:'end',channel}))
+    source?.on('error',error=>send(entry,{kind:'stream-error',channel,error:errorData(error)}))
+   }
+   child.once('exit',(code,signal)=>send(entry,{kind:'exit',code,signal}))
+   child.once('close',(code,signal)=>{if(!child.pid){children.delete(entry.id);done()}else send(entry,{kind:'close',code,signal})})
+   if(child.pid)parentPort!.postMessage({id:entry.id,kind:'created',pid:child.pid,ownerPID:process.pid,stdin:Boolean(child.stdin),stdout:Boolean(child.stdout),stderr:Boolean(child.stderr)})
+  }catch(error){children.delete(entry.id);parentPort!.postMessage({id:entry.id,kind:'spawn-failed',error:errorData(error)});done()}
+  return
+ }
+ const entry=children.get(message.id)
+ if(!entry)return
+ if(message.kind==='admit'){entry.admitted=true;for(const event of entry.queued.splice(0))send(entry,event);return}
+ if(message.kind==='credit'){entry.child[message.channel]?.resume();return}
+ if(message.kind==='kill'){entry.child.kill(message.signal);return}
+ if(message.kind==='input'){
+  const complete=(error?:Error|null)=>parentPort!.postMessage({id:entry.id,kind:'input-ack',sequence:message.sequence,error:error?errorData(error):undefined})
+  if(message.final)entry.child.stdin.end(complete);else entry.child.stdin.write(Buffer.from(message.chunk),complete)
+  return
+ }
+ if(message.kind==='destroy-output'){entry.child[message.channel]?.destroy();return}
+ throw Error('Unknown private launch worker operation')
+})
+parentPort.postMessage({kind:'online',pid:process.pid})

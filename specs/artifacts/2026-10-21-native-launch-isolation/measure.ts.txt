@@ -1,0 +1,54 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import os from 'node:os'
+import assert from 'node:assert/strict'
+const root=import.meta.dir,mode=process.env.OPENCORVUS_DIAGNOSTIC_LAUNCH_MODE,run=process.env.OPENCORVUS_DIAGNOSTIC_LAUNCH_RUN
+assert(mode==='main'||mode==='worker');assert(run&&/^[a-z0-9-]+$/.test(run))
+const input=JSON.parse(await fs.readFile(root+'/../config-physical-path-cost-483/input-private.json','utf8')),items=input.projects
+assert.equal(items.length,149)
+const baseline=await Promise.all(items.map(async(row:any)=>{const info=await fs.stat(row.worktree,{bigint:true});let git=true;try{await fs.access(path.join(row.worktree,'.git'))}catch(error:any){if(error.code!=='ENOENT')throw error;git=false}return{git,physical:await fs.realpath(row.worktree),device:info.dev,inode:info.ino}}))
+const helper=path.resolve(process.env.OPENCORVUS_PROCESS_SUPERVISOR!),cp=require('node:child_process'),originalSpawn=cp.spawn,spawns:any[]=[]
+cp.spawn=function(executable:string,...args:any[]){const at=performance.now(),child=Reflect.apply(originalSpawn,this,[executable,...args]);if(path.resolve(executable)===helper)spawns.push({at,returnedAt:performance.now(),pid:child.pid});return child}
+require('node:module').syncBuiltinESMExports()
+const {installProcessShims}=await import('../../packages/opencorvus/src/runtime/shims');installProcessShims()
+const {Process}=await import('../../packages/opencorvus/src/util/process')
+const {ProcessSupervisor}=await import('../../packages/opencorvus/src/shell/process-supervisor')
+const {currentRuntimeProcessOccurrence}=await import('../../packages/opencorvus/src/runtime/process-occurrence')
+const {settledWork}=await import('../../packages/opencorvus/src/util/queue')
+const owner=currentRuntimeProcessOccurrence(),requests:any[]=[],outputs:any[]=[],ticks:number[]=[]
+const restore=ProcessSupervisor.setWindowsRequestObserverForTest(request=>{
+ assert.equal(request.owner_pid,owner.pid);assert.equal(request.owner_process_instance_id,owner.processInstanceID);assert.equal(request.runtime_occurrence_id,owner.occurrenceID)
+ requests.push({id:request.request_id,ownerPID:request.owner_pid,ownerBirth:request.owner_process_instance_id,occurrence:request.runtime_occurrence_id})
+})
+const started=performance.now();let previous=started,statCalls=0,realpathCalls=0
+const timer=setInterval(()=>{const now=performance.now();ticks.push(now-previous);previous=now},5)
+let outcomes:any[],wallMs:number
+try{
+ outcomes=await settledWork({items,concurrency:os.availableParallelism(),run:async(item:any,index:number)=>{
+  for(let observation=0;observation<2;observation++){
+   if(baseline[index].git){
+    const result=await Process.runHost(['git','-c','core.longPaths=true','rev-parse','--path-format=absolute','--show-toplevel','--git-common-dir'],{cwd:item.worktree,env:{GIT_CEILING_DIRECTORIES:path.dirname(item.worktree)},stdin:'ignore',inactivityTimeoutMs:15000})
+    assert.equal(result.code,0);const paths=result.stdout.toString().replace(/\r?\n$/,'').split(/\r?\n/);assert.equal(paths.length,2)
+    assert.equal(await fs.realpath(paths[0]!),baseline[index].physical);assert((await fs.stat(paths[1]!)).isDirectory())
+    outputs.push({id:item.id,observation,stdout:result.stdout.toString(),stderr:result.stderr.toString()})
+   }
+   for(let registered=0;registered<items.length;registered++){
+    const stat=await fs.stat(items[registered].worktree,{bigint:true});statCalls++
+    assert.equal(stat.dev,baseline[registered].device);assert.equal(stat.ino,baseline[registered].inode)
+   }
+   await Promise.all(items.map(async(row:any,registered:number)=>{assert.equal(await fs.realpath(row.worktree),baseline[registered].physical);realpathCalls++}))
+  }
+  return{id:item.id,git:baseline[index].git,observations:2}
+ }})
+ wallMs=performance.now()-started
+}finally{ticks.push(performance.now()-previous);clearInterval(timer);restore();cp.spawn=originalSpawn;require('node:module').syncBuiltinESMExports()}
+const failures=outcomes!.flatMap(o=>o.status==='rejected'?[{name:o.reason?.name,message:o.reason?.message}]:[])
+assert.deepEqual(failures,[])
+const sortedOutputs=outputs.toSorted((a,b)=>a.id.localeCompare(b.id)||a.observation-b.observation),expectedPath=root+'/expected-git-private.json'
+if(run==='main-a')await fs.writeFile(expectedPath,JSON.stringify(sortedOutputs),{flag:'wx'});else assert.deepEqual(sortedOutputs,JSON.parse(await fs.readFile(expectedPath,'utf8')))
+assert.equal(statCalls,149**2*2);assert.equal(realpathCalls,149**2*2);assert.equal(outputs.length,baseline.filter((row:any)=>row.git).length*2);assert.equal(requests.length,outputs.length)
+const worker=mode==='worker'?await(await import('./adapter')).closeLaunchWorker():undefined
+if(worker)assert.equal(worker.facts.length,requests.length)
+const result={observedAt:new Date().toISOString(),runtime:Bun.version,mode,run,owner,projects:items.length,gitProjects:baseline.filter((row:any)=>row.git).length,nonGitProjects:baseline.filter((row:any)=>!row.git).length,concurrency:os.availableParallelism(),wallMs:wallMs!,mainMaxTickMs:Math.max(...ticks),mainTickCount:ticks.length,statCalls,realpathCalls,requests,spawns,worker,live:ProcessSupervisor.metricsSnapshot(),failures,boundary:'Private causal mixture of actual original native Git and full149 directory reads;all output and identity checked;not production Config/full UI acceptance;no credentials/Provider/DB initializer'}
+await fs.writeFile(root+'/'+run+'-result.json',JSON.stringify(result,null,2)+'\n',{flag:'wx'})
+console.log(JSON.stringify({mode,run,projects:result.projects,gitProjects:result.gitProjects,nonGitProjects:result.nonGitProjects,commands:requests.length,wallMs:result.wallMs,mainMaxTickMs:result.mainMaxTickMs,statCalls,realpathCalls,mainSynchronousSpawnMs:spawns.reduce((sum,row)=>sum+row.returnedAt-row.at,0),workerSynchronousSpawnMs:worker?.workerSamples.reduce((sum:number,row:any)=>sum+row.returnedAt-row.at,0),workerExit:worker?.exit,live:result.live}))

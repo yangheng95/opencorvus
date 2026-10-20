@@ -1,0 +1,94 @@
+import {EventEmitter} from 'node:events'
+import {PassThrough,Writable} from 'node:stream'
+import {finished} from 'node:stream/promises'
+import {Worker} from 'node:worker_threads'
+import assert from 'node:assert/strict'
+import path from 'node:path'
+function createLaunchDispatcher(){
+let worker:Worker|undefined,ready:Promise<void>,closed:Promise<number>,counter=0,failure:Error|undefined,workerSamples:any[]=[]
+const pending=new Map<number,any>(),facts:any[]=[]
+const errorFrom=(value:any)=>Object.assign(new Error(value.message),value)
+function ensureWorker(){
+ if(worker)return worker
+ worker=new Worker(new URL('./worker.ts',import.meta.url))
+ ready=new Promise<void>((resolve,reject)=>{
+  worker!.once('error',reject)
+  worker!.on('message',(message:any)=>{
+   if(message.kind==='online'){assert.equal(message.pid,process.pid);resolve();return}
+   if(message.kind==='finished'){assert.equal(message.pid,process.pid);workerSamples=message.samples;return}
+   const entry=pending.get(message.id);assert(entry,'Original private spawn consumer')
+   if(message.kind==='spawn-failed'){entry.reject(errorFrom(message.error));pending.delete(message.id);if(pending.size===0)worker!.unref();return}
+   if(message.kind==='created'){
+    assert.equal(message.ownerPID,process.pid)
+    const child=entry.child;child.pid=message.pid
+    child.stdout=message.stdout?new PassThrough():null;child.stderr=message.stderr?new PassThrough():null
+    for(const channel of ['stdout','stderr']){
+     const stream=child[channel];if(!stream)continue
+     // EOF is forwarded from the actual source; close waits for consumption.
+     entry.streams.push(finished(stream,{readable:true,writable:false}).then(()=>({channel,outcome:'drained'}),(error)=>({channel,outcome:'error',code:error.code})))
+     stream.once('close',()=>{if(!stream.readableEnded)worker!.postMessage({kind:'destroy-output',id:message.id,channel})})
+    }
+    child.stdin=message.stdin?new Writable({
+     write(chunk,_encoding,callback){const sequence=++entry.sequence;entry.inputs.set(sequence,callback);worker!.postMessage({kind:'input',id:message.id,sequence,chunk})},
+     final(callback){const sequence=++entry.sequence;entry.inputs.set(sequence,callback);worker!.postMessage({kind:'input',id:message.id,sequence,final:true})},
+    }):null
+    entry.resolve(child)
+    setImmediate(()=>worker!.postMessage({kind:'admit',id:message.id}))
+    return
+   }
+   if(message.kind==='data'){
+    const stream=entry.child[message.channel],credit=()=>worker!.postMessage({kind:'credit',id:message.id,channel:message.channel})
+    if(stream.write(Buffer.from(message.chunk)))credit();else stream.once('drain',credit)
+    return
+   }
+   if(message.kind==='end'){entry.child[message.channel].end();return}
+   if(message.kind==='stream-error'){entry.child[message.channel].destroy(errorFrom(message.error));return}
+   if(message.kind==='input-ack'){const callback=entry.inputs.get(message.sequence);assert(callback);entry.inputs.delete(message.sequence);callback(message.error?errorFrom(message.error):undefined);return}
+   if(message.kind==='error'){entry.child.emit('error',errorFrom(message.error));return}
+   if(message.kind==='exit'){entry.child.exitCode=message.code;entry.child.signalCode=message.signal;entry.child.emit('exit',message.code,message.signal);return}
+   if(message.kind==='close'){
+    void Promise.all(entry.streams).then(streams=>{
+     facts.push({id:message.id,pid:entry.child.pid,ownerPID:process.pid,code:message.code,signal:message.signal,streams})
+     entry.child.emit('close',message.code,message.signal);pending.delete(message.id);if(pending.size===0)worker!.unref()
+    });return
+   }
+   throw Error('Unknown private launch worker event')
+  })
+ })
+ closed=new Promise(resolve=>worker!.once('exit',code=>{if(pending.size)failure=Error('Launch worker exited with original processes unresolved');resolve(code)}))
+ worker.on('error',error=>{failure=error;for(const entry of pending.values())if(!entry.child.pid)entry.reject(error);else entry.child.emit('error',error)})
+ return worker
+}
+async function spawnOffMain(executable:string,args:string[],options:any){
+ assert.equal(path.resolve(executable),path.resolve(process.env.OPENCORVUS_PROCESS_SUPERVISOR!))
+ assert(options.stdio.every((value:any)=>value==='ignore'||value==='pipe'),'Private diagnosis has no detached fd qualification')
+ if(failure)throw failure
+ const invocation={...options,cwd:options.cwd??process.cwd(),env:options.env?{...options.env}:undefined}
+ const current=ensureWorker();current.ref();await ready
+ const id=++counter,child:any=new EventEmitter()
+ child.pid=undefined;child.exitCode=null;child.signalCode=null
+ child.kill=(signal:string)=>{current.postMessage({kind:'kill',id,signal});return true}
+ child.unref=()=>undefined
+ return new Promise<any>((resolve,reject)=>{
+  pending.set(id,{child,resolve,reject,sequence:0,inputs:new Map(),streams:[]})
+  try{current.postMessage({kind:'spawn',id,executable,args,options:invocation})}catch(error){pending.delete(id);if(pending.size===0)current.unref();reject(error)}
+ })
+}
+async function closeLaunchWorker(){
+ assert.equal(pending.size,0,'All original processes and streams settled before worker close')
+ if(!worker)return{facts,workerSamples,exit:'not created'}
+ if(failure)throw failure
+ worker.ref();worker.postMessage({kind:'shutdown'});const exit=await closed;assert.equal(exit,0)
+ return{facts,workerSamples,exit}
+}
+return{spawnOffMain,closeLaunchWorker}
+}
+const count=process.env.OPENCORVUS_DIAGNOSTIC_LAUNCH_LANES==='3'?3:1
+const lanes=Array.from({length:count},()=>createLaunchDispatcher())
+let nextLane=0
+export function spawnOffMain(executable:string,args:string[],options:any){return lanes[nextLane++%lanes.length]!.spawnOffMain(executable,args,options)}
+export async function closeLaunchWorker(){
+ const results=await Promise.all(lanes.map(lane=>lane.closeLaunchWorker()))
+ for(const result of results)assert.equal(result.exit,0,'Every original launch worker exited naturally')
+ return{facts:results.flatMap((result,lane)=>result.facts.map(fact=>({...fact,lane}))),workerSamples:results.flatMap((result,lane)=>result.workerSamples.map(sample=>({...sample,lane}))),exit:results[0]!.exit,workerExits:results.map(result=>result.exit)}
+}

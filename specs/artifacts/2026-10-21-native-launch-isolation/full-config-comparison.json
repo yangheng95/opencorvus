@@ -1,0 +1,711 @@
+{
+  "fixedMaximumBatch": 8,
+  "actualRequests": 4,
+  "retiredUnusedAllowance": 4,
+  "boundary": "Two independent fresh full149/198 clones;formal482 UI;original Config/HostTransport/HTTP checker;variant is private loader only,not production delivery;scope cleanup maximumBatch field4 describes its own scope;overall declared batch is4+4=8",
+  "services": [
+    {
+      "stage": "baseline",
+      "physical": {
+        "originalExit": 0,
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 76288,
+              "processInstanceID": "win32:639281195556576446",
+              "occurrenceID": "1f5bb48b-f4e0-4a24-aaf3-da1ccf529f39"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 61948,
+              "processInstanceID": "win32:639281195564037736",
+              "occurrenceID": "e3dcce24-4cf3-4a6d-b15f-ef8650a13722"
+            }
+          }
+        ],
+        "shutdown": {
+          "observedAtUtc": "2026-10-20T19:01:00.4548512Z",
+          "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYcNFGh00Jxg4NVm77\"}",
+          "statusCode": 200,
+          "target": {
+            "pid": 61948,
+            "processInstanceID": "win32:639281195564037736",
+            "occurrenceID": "e3dcce24-4cf3-4a6d-b15f-ef8650a13722"
+          },
+          "occurrence": "native-launch-isolation-484-baseline-d53831dc-b535-4108-a57e-0e1451b6a647"
+        },
+        "maximumBatch": 4,
+        "requests": 2,
+        "observedAtUtc": "2026-10-20T19:01:02.7314682Z",
+        "native": {
+          "occurrence": "native-launch-isolation-484-baseline-d53831dc-b535-4108-a57e-0e1451b6a647",
+          "outcome": "settled",
+          "host": {
+            "pid": 76288,
+            "processInstanceID": "win32:639281195556576446",
+            "occurrenceID": "1f5bb48b-f4e0-4a24-aaf3-da1ccf529f39"
+          },
+          "target": {
+            "pid": 61948,
+            "processInstanceID": "win32:639281195564037736",
+            "occurrenceID": "e3dcce24-4cf3-4a6d-b15f-ef8650a13722"
+          },
+          "observedAtUtc": "2026-10-20T19:01:00.594Z",
+          "deadlineAt": 1792523955629,
+          "terminal": {
+            "occurrenceID": "native-launch-isolation-484-baseline-d53831dc-b535-4108-a57e-0e1451b6a647",
+            "pid": 61948,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "runtimePair": "complete auth/models retired after original native/output/request/launcher and source EOF",
+        "originalHandle": 25393,
+        "launcher": {
+          "childExitCode": 0,
+          "observedAtUtc": "2026-10-20T19:01:00.6368715Z"
+        },
+        "sourceReaders": "all200/streaming/sourceEOF",
+        "maximumRequests": 4
+      },
+      "ready": {
+        "occurrence": "native-launch-isolation-484-baseline-d53831dc-b535-4108-a57e-0e1451b6a647",
+        "outcome": "ready",
+        "host": {
+          "pid": 76288,
+          "processInstanceID": "win32:639281195556576446",
+          "occurrenceID": "1f5bb48b-f4e0-4a24-aaf3-da1ccf529f39"
+        },
+        "parent": {
+          "pid": 92076,
+          "processInstanceID": "win32:639281195533259407",
+          "occurrenceID": "bda2311f-715e-4c0a-8459-e89e6d500c4b"
+        },
+        "target": {
+          "pid": 61948,
+          "processInstanceID": "win32:639281195564037736",
+          "occurrenceID": "e3dcce24-4cf3-4a6d-b15f-ef8650a13722"
+        },
+        "targetBirthAtMs": 1792522756403,
+        "deadlineAt": 1792523955629,
+        "observedAtUtc": "2026-10-20T18:59:16.439Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/serve-baseline.ts",
+          "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/native-launch-isolation-484-baseline-data/runtime",
+          "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/native-launch-isolation-484-baseline-data/project",
+          "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/native-launch-isolation-484-baseline/evidence",
+          "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/native-launch-isolation-484-baseline/startup.json",
+          "18843",
+          "native-launch-isolation-484-baseline-d53831dc-b535-4108-a57e-0e1451b6a647"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "preflight": {
+        "owner": {
+          "pid": 61948,
+          "processInstanceID": "win32:639281195564037736",
+          "occurrenceID": "59e290e0-4ff6-4742-8dc6-9412ae0002b4"
+        },
+        "parent": {
+          "pid": 52040,
+          "processInstanceID": "win32:639281195563857643",
+          "occurrenceID": "c9d92bca-09b9-47da-b4ed-6cb4a7c6a431"
+        },
+        "occurrence": "native-launch-isolation-484-baseline-d53831dc-b535-4108-a57e-0e1451b6a647",
+        "preflight": {
+          "sessionID": "ses_hicl6oTPreYDYWt9N3XC",
+          "credential": "usable",
+          "catalog": "projected",
+          "actualModel": "gpt-6.1-sol",
+          "streaming": true
+        },
+        "maxRequests": 4,
+        "budgetScope": "484 baseline fixed4 within declared batch8;preflight and all helpers included;no business model input",
+        "observedAt": "2026-10-20T18:59:29.773Z"
+      },
+      "staging": {
+        "sourceBefore": [
+          {
+            "name": "auth.json",
+            "bytes": 2122,
+            "modifiedAtMs": 1792522754311.6675
+          },
+          {
+            "name": "models.json",
+            "bytes": 9155406,
+            "modifiedAtMs": 1791128890137.9968
+          }
+        ],
+        "sourceAfter": [
+          {
+            "name": "auth.json",
+            "bytes": 2122,
+            "modifiedAtMs": 1792522754311.6675
+          },
+          {
+            "name": "models.json",
+            "bytes": 9155406,
+            "modifiedAtMs": 1791128890137.9968
+          }
+        ],
+        "copiedPair": [
+          {
+            "name": "auth.json",
+            "bytes": 2122,
+            "modifiedAtMs": 1792522756885.7703
+          },
+          {
+            "name": "models.json",
+            "bytes": 9155406,
+            "modifiedAtMs": 1792522756889.8772
+          }
+        ],
+        "access": "current",
+        "catalog": "complete",
+        "refresh": "prohibited"
+      },
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "response_reader": {
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792522766868,
+            "boundAt": 1792522766870,
+            "chunkCount": 18,
+            "byteCount": 48175,
+            "firstByteReadAt": 1792522766873,
+            "lastByteReadAt": 1792522771509,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hicl6oTPreYDYWt9N3XC",
+              "streamRequest": {
+                "requestID": "msg_h9nLcJkIrqqC9xLoBPKX",
+                "agentID": "memory",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYcMqfn00NfZAH7liT",
+                "attempt": 0
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792522771559
+            }
+          },
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "response_reader": {
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792522768332,
+            "boundAt": 1792522768333,
+            "chunkCount": 39,
+            "byteCount": 516167,
+            "firstByteReadAt": 1792522768335,
+            "lastByteReadAt": 1792522769521,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hicl6oTPreYDYWt9N3XC",
+              "streamRequest": {
+                "requestID": "msg_h9nLcJkIrqqC9xLoBPKX",
+                "agentID": "chat",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYcMqvP00xBsa8WnZT",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VYcMqfv005nYZk3mDH"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792522769693
+            }
+          },
+          "status": 200
+        }
+      ],
+      "writer": {
+        "at": "2026-10-20T19:00:04.652Z",
+        "endedAt": "2026-10-20T19:00:40.054Z",
+        "phase": "candidate",
+        "port": 18843,
+        "occurrence": "native-launch-isolation-484-baseline-d53831dc-b535-4108-a57e-0e1451b6a647",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 17829.5306,
+        "restoreMs": 17563.074699999997,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "reader": {
+        "occurrence": "native-launch-isolation-484-baseline-d53831dc-b535-4108-a57e-0e1451b6a647",
+        "kind": "Public HTTP positive contracts concurrent with original canonical save; this is not browser or visual acceptance",
+        "results": [
+          {
+            "path": "/config",
+            "startedAt": "2026-10-20T19:00:04.885Z",
+            "endedAt": "2026-10-20T19:00:22.447Z",
+            "ms": 17559.972999999998,
+            "status": 200,
+            "permissionMode": "ask"
+          },
+          {
+            "path": "/provider",
+            "startedAt": "2026-10-20T19:00:04.889Z",
+            "endedAt": "2026-10-20T19:00:22.825Z",
+            "ms": 17935.6121,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/global/providers",
+            "startedAt": "2026-10-20T19:00:04.890Z",
+            "endedAt": "2026-10-20T19:00:22.667Z",
+            "ms": 17776.7328,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/session/ses_hicl6oTPreYDYWt9N3XC",
+            "startedAt": "2026-10-20T19:00:04.890Z",
+            "endedAt": "2026-10-20T19:00:05.100Z",
+            "ms": 209.60559999999896,
+            "status": 200,
+            "sessionID": "ses_hicl6oTPreYDYWt9N3XC"
+          }
+        ]
+      },
+      "history": {
+        "stage": "baseline",
+        "observedAt": "2026-10-20T19:00:44.880Z",
+        "originalCounts": {
+          "project": 149,
+          "session": 198,
+          "message": 518,
+          "part": 1155,
+          "protocol_event": 1407,
+          "tool_part_request": 119,
+          "tool_part_outcome": 119
+        },
+        "counts": {
+          "project": 151,
+          "session": 199,
+          "message": 520,
+          "part": 1159,
+          "protocol_event": 1410,
+          "tool_part_request": 119,
+          "tool_part_outcome": 119
+        },
+        "source": "Every original row in7 tables exactly retained; source DB size/mtime unchanged",
+        "clone": "Every original Session/Message/Part/protocol/Tool rowid/data/time exact; Project identity/ownership retained",
+        "changedProjectFields": [],
+        "schema": 3,
+        "canonical": "Complete parsed original restored"
+      },
+      "originalWriter": {
+        "handle": 5310,
+        "exitCode": 0
+      },
+      "originalReader": {
+        "handle": 62103,
+        "exitCode": 0
+      },
+      "criteria": {
+        "saveMaximumMs": 10000,
+        "savePass": false,
+        "restoreMaximumMs": 5000,
+        "restorePass": false,
+        "readerMaximumMs": 20000,
+        "readerPass": true
+      }
+    },
+    {
+      "stage": "variant",
+      "physical": {
+        "native": {
+          "occurrence": "native-launch-isolation-484-variant-2b11cfd0-c823-4982-9a05-dda804aa8a86",
+          "outcome": "settled",
+          "host": {
+            "pid": 89548,
+            "processInstanceID": "win32:639281197556085388",
+            "occurrenceID": "29dd6091-80e8-4373-ad04-e2684f7077af"
+          },
+          "target": {
+            "pid": 92516,
+            "processInstanceID": "win32:639281197563469262",
+            "occurrenceID": "d8c1a2a0-4479-4cc3-a92e-36f88bb392be"
+          },
+          "observedAtUtc": "2026-10-20T19:06:09.461Z",
+          "deadlineAt": 1792524155580,
+          "terminal": {
+            "occurrenceID": "native-launch-isolation-484-variant-2b11cfd0-c823-4982-9a05-dda804aa8a86",
+            "pid": 92516,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "shutdown": {
+          "target": {
+            "pid": 92516,
+            "processInstanceID": "win32:639281197563469262",
+            "occurrenceID": "d8c1a2a0-4479-4cc3-a92e-36f88bb392be"
+          },
+          "observedAtUtc": "2026-10-20T19:06:09.314937Z",
+          "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYcOXcK00iOGdYufAJ\"}",
+          "occurrence": "native-launch-isolation-484-variant-2b11cfd0-c823-4982-9a05-dda804aa8a86",
+          "statusCode": 200
+        },
+        "launcher": {
+          "observedAtUtc": "2026-10-20T19:06:09.5101804Z",
+          "childExitCode": 0
+        },
+        "sourceReaders": "all200/streaming/sourceEOF",
+        "requests": 2,
+        "originalHandle": 82248,
+        "maximumBatch": 4,
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 89548,
+              "processInstanceID": "win32:639281197556085388",
+              "occurrenceID": "29dd6091-80e8-4373-ad04-e2684f7077af"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 92516,
+              "processInstanceID": "win32:639281197563469262",
+              "occurrenceID": "d8c1a2a0-4479-4cc3-a92e-36f88bb392be"
+            }
+          }
+        ],
+        "originalExit": 0,
+        "observedAtUtc": "2026-10-20T19:06:11.5239692Z",
+        "runtimePair": "complete auth/models retired after original native/output/request/launcher and source EOF",
+        "maximumRequests": 4
+      },
+      "ready": {
+        "occurrence": "native-launch-isolation-484-variant-2b11cfd0-c823-4982-9a05-dda804aa8a86",
+        "outcome": "ready",
+        "host": {
+          "pid": 89548,
+          "processInstanceID": "win32:639281197556085388",
+          "occurrenceID": "29dd6091-80e8-4373-ad04-e2684f7077af"
+        },
+        "parent": {
+          "pid": 66824,
+          "processInstanceID": "win32:639281197535575541",
+          "occurrenceID": "e12dd88c-275e-47d3-82c4-9c2ba8f24510"
+        },
+        "target": {
+          "pid": 92516,
+          "processInstanceID": "win32:639281197563469262",
+          "occurrenceID": "d8c1a2a0-4479-4cc3-a92e-36f88bb392be"
+        },
+        "targetBirthAtMs": 1792522956346,
+        "deadlineAt": 1792524155580,
+        "observedAtUtc": "2026-10-20T19:02:36.384Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "--preload",
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/preload.ts",
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/native-launch-isolation-484/serve-variant.ts",
+          "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/native-launch-isolation-484-variant-data/runtime",
+          "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/native-launch-isolation-484-variant-data/project",
+          "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/native-launch-isolation-484-variant/evidence",
+          "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/native-launch-isolation-484-variant/startup.json",
+          "18845",
+          "native-launch-isolation-484-variant-2b11cfd0-c823-4982-9a05-dda804aa8a86"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "preflight": {
+        "owner": {
+          "pid": 92516,
+          "processInstanceID": "win32:639281197563469262",
+          "occurrenceID": "4d0d8c60-09e0-4a92-b3c1-69b10966c06d"
+        },
+        "parent": {
+          "pid": 47840,
+          "processInstanceID": "win32:639281197563267363",
+          "occurrenceID": "80b6b2a1-4253-42b0-832e-3a7e927f91f2"
+        },
+        "occurrence": "native-launch-isolation-484-variant-2b11cfd0-c823-4982-9a05-dda804aa8a86",
+        "preflight": {
+          "sessionID": "ses_hB8MfjtPtoVe4qK2CIoS",
+          "credential": "usable",
+          "catalog": "projected",
+          "actualModel": "gpt-6.1-sol",
+          "streaming": true
+        },
+        "maxRequests": 4,
+        "budgetScope": "484 variant fixed4 within declared batch8;preflight and all helpers included;no business model input",
+        "observedAt": "2026-10-20T19:02:49.556Z"
+      },
+      "staging": {
+        "sourceBefore": [
+          {
+            "name": "auth.json",
+            "bytes": 2122,
+            "modifiedAtMs": 1792522754311.6675
+          },
+          {
+            "name": "models.json",
+            "bytes": 9155406,
+            "modifiedAtMs": 1791128890137.9968
+          }
+        ],
+        "sourceAfter": [
+          {
+            "name": "auth.json",
+            "bytes": 2122,
+            "modifiedAtMs": 1792522754311.6675
+          },
+          {
+            "name": "models.json",
+            "bytes": 9155406,
+            "modifiedAtMs": 1791128890137.9968
+          }
+        ],
+        "copiedPair": [
+          {
+            "name": "auth.json",
+            "bytes": 2122,
+            "modifiedAtMs": 1792522956893.6167
+          },
+          {
+            "name": "models.json",
+            "bytes": 9155406,
+            "modifiedAtMs": 1792522956897.617
+          }
+        ],
+        "access": "current",
+        "catalog": "complete",
+        "refresh": "prohibited"
+      },
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "response_reader": {
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792522965737,
+            "boundAt": 1792522965739,
+            "chunkCount": 16,
+            "byteCount": 43915,
+            "firstByteReadAt": 1792522965741,
+            "lastByteReadAt": 1792522970433,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hB8MfjtPtoVe4qK2CIoS",
+              "streamRequest": {
+                "requestID": "msg_hdv8uO9lJNg46pJTPKdv",
+                "agentID": "memory",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYcNgOx00NSgsqUYTP",
+                "attempt": 0
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792522970495
+            }
+          },
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "response_reader": {
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792522967129,
+            "boundAt": 1792522967131,
+            "chunkCount": 39,
+            "byteCount": 516155,
+            "firstByteReadAt": 1792522967140,
+            "lastByteReadAt": 1792522968284,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hB8MfjtPtoVe4qK2CIoS",
+              "streamRequest": {
+                "requestID": "msg_hdv8uO9lJNg46pJTPKdv",
+                "agentID": "chat",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYcNgfG00M5HgDWtlS",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VYcNgPP00xlDLSrgeu"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792522969096
+            }
+          },
+          "status": 200
+        }
+      ],
+      "writer": {
+        "at": "2026-10-20T19:04:08.112Z",
+        "endedAt": "2026-10-20T19:04:39.065Z",
+        "phase": "candidate",
+        "port": 18845,
+        "occurrence": "native-launch-isolation-484-variant-2b11cfd0-c823-4982-9a05-dda804aa8a86",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 15624.482399999999,
+        "restoreMs": 15320.595899999997,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "reader": {
+        "occurrence": "native-launch-isolation-484-variant-2b11cfd0-c823-4982-9a05-dda804aa8a86",
+        "kind": "Public HTTP positive contracts concurrent with original canonical save; this is not browser or visual acceptance",
+        "results": [
+          {
+            "path": "/config",
+            "startedAt": "2026-10-20T19:04:08.316Z",
+            "endedAt": "2026-10-20T19:04:23.703Z",
+            "ms": 15385.9853,
+            "status": 200,
+            "permissionMode": "ask"
+          },
+          {
+            "path": "/provider",
+            "startedAt": "2026-10-20T19:04:08.318Z",
+            "endedAt": "2026-10-20T19:04:24.050Z",
+            "ms": 15731.2215,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/global/providers",
+            "startedAt": "2026-10-20T19:04:08.319Z",
+            "endedAt": "2026-10-20T19:04:23.933Z",
+            "ms": 15614.3669,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/session/ses_hB8MfjtPtoVe4qK2CIoS",
+            "startedAt": "2026-10-20T19:04:08.319Z",
+            "endedAt": "2026-10-20T19:04:08.333Z",
+            "ms": 13.47360000000117,
+            "status": 200,
+            "sessionID": "ses_hB8MfjtPtoVe4qK2CIoS"
+          }
+        ]
+      },
+      "history": {
+        "stage": "variant",
+        "observedAt": "2026-10-20T19:04:52.025Z",
+        "originalCounts": {
+          "project": 149,
+          "session": 198,
+          "message": 518,
+          "part": 1155,
+          "protocol_event": 1407,
+          "tool_part_request": 119,
+          "tool_part_outcome": 119
+        },
+        "counts": {
+          "project": 151,
+          "session": 199,
+          "message": 520,
+          "part": 1159,
+          "protocol_event": 1410,
+          "tool_part_request": 119,
+          "tool_part_outcome": 119
+        },
+        "source": "Every original row in7 tables exactly retained; source DB size/mtime unchanged",
+        "clone": "Every original Session/Message/Part/protocol/Tool rowid/data/time exact; Project identity/ownership retained",
+        "changedProjectFields": [],
+        "schema": 3,
+        "canonical": "Complete parsed original restored"
+      },
+      "originalWriter": {
+        "handle": 19717,
+        "exitCode": 0
+      },
+      "originalReader": {
+        "handle": 69453,
+        "exitCode": 0
+      },
+      "launchWorkers": {
+        "actualOwner": {
+          "pid": 92516,
+          "processInstanceID": "win32:639281197563469262",
+          "occurrenceID": "4d0d8c60-09e0-4a92-b3c1-69b10966c06d"
+        },
+        "workerExits": [
+          0,
+          0,
+          0
+        ],
+        "facts": 896,
+        "allStreams": "Original stdout/stderr drained before actual close",
+        "retirement": "After original runtime settlement;before original server process exit;no thread terminate"
+      },
+      "criteria": {
+        "saveMaximumMs": 10000,
+        "savePass": false,
+        "restoreMaximumMs": 5000,
+        "restorePass": false,
+        "readerMaximumMs": 20000,
+        "readerPass": true
+      }
+    }
+  ]
+}
