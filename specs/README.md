@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Goal 与真实附件移交](records/2026-10/2026-10-20-goal-attachment-handoff.md)：文件选择、原 Project 归属、宿主菜单与[10张实际截图和持久化事实](artifacts/2026-10-20-goal-attachment-handoff/README.md)。
+
 - [首页草稿与 Goal 创建](records/2026-10/2026-10-20-goal-composer-draft.md)：已有输入、作用域移交与[16张真实截图和两个流式目标](artifacts/2026-10-20-goal-composer-draft/README.md)。
 
 - [按真实开场意图命名会话](records/2026-10/2026-10-20-opening-intent-title.md)：参与者身份、Goal成果标题与[24项合同和实际页面](artifacts/2026-10-20-opening-intent-title/README.md)。

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Goal与真实附件移交](2026-10-20-goal-attachment-handoff/README.md)：10张真实截图、实际文件read与Sources、新宿主能力菜单和待发送附件保留。
+
 - [首页草稿与 Goal 创建](2026-10-20-goal-composer-draft/README.md)：16张真实截图、项目/全局/侧聊输入衔接及两个流式目标；保留文件上传未验收项。
 
 - [按真实开场意图命名会话](2026-10-20-opening-intent-title/README.md)：四个原失败、24项正向合同、五张实际截图及用户改名恢复。

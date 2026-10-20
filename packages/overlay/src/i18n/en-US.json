@@ -374,6 +374,8 @@
   "chat.attachment.remove": "Remove attachment",
   "chat.attachment_loader.file_title": "Add supported files",
   "chat.attachment_loader.folder_title": "Add a folder",
+  "chat.attachment_loader.folder_desktop_title": "Add a folder (desktop app)",
+  "chat.attachment_loader.folder_desktop_hint": "Open the desktop app to select a folder. You can add files in this browser.",
   "chat.attachment_loader.count": "Files {{files}}/{{fileLimit}} · Folders {{folders}}/{{folderLimit}}",
   "chat.attachment_loader.uploading": "Indexing {{count}} attachment(s)…",
   "chat.attachment_limit.title": "Attachment limit reached",

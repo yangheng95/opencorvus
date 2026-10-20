@@ -1,0 +1,18 @@
+{
+  "schema": {
+    "user_version": 2
+  },
+  "projects": 116,
+  "sessions": 158,
+  "baselines": [
+    {
+      "projects": 113,
+      "sessions": 155
+    },
+    {
+      "projects": 115,
+      "sessions": 157
+    }
+  ],
+  "verification": "Direct readonly SQLite after both original native/output/request/launcher joins; all original identities, owners and directories compared; no production initializer or user database"
+}

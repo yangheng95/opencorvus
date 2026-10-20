@@ -1,0 +1,74 @@
+{
+  "scope": "goal-attachment-handoff-462",
+  "history": {
+    "schema": {
+      "user_version": 2
+    },
+    "projects": 116,
+    "sessions": 158,
+    "baselines": [
+      {
+        "projects": 113,
+        "sessions": 155
+      },
+      {
+        "projects": 115,
+        "sessions": 157
+      }
+    ],
+    "verification": "Direct readonly SQLite after both original native/output/request/launcher joins; all original identities, owners and directories compared; no production initializer or user database"
+  },
+  "screenshots": [
+    "after-folder-menu-en.png",
+    "after-folder-menu-zh.png",
+    "after-goal-retains-file.png",
+    "after-pending-goal-complete.png",
+    "attachment-read-complete.png",
+    "attachment-read-result.png",
+    "attachment-source-reader.png",
+    "before-folder-error.png",
+    "global-uploaded.png",
+    "goal-pending-attachment.png"
+  ],
+  "checks": {
+    "build": {
+      "originalHandle": 45803,
+      "exitCode": 0,
+      "command": "bun run build:overlay --skip-tauri",
+      "vite": "1m 5s"
+    },
+    "overlay": {
+      "originalHandle": 32149,
+      "exitCode": 0,
+      "commands": [
+        "typecheck",
+        "check:i18n",
+        "check:renderer-surface"
+      ],
+      "locales": 2,
+      "keys": 2508
+    },
+    "native": {
+      "originalHandles": [
+        57863,
+        82413
+      ],
+      "exitCodes": [
+        0,
+        0
+      ]
+    }
+  },
+  "verified": [
+    "Real filechooser upload from directory-free home",
+    "Original Project retained when Goal creates Session",
+    "Goal prefill, pending hint and cancel preserve file/text",
+    "Actual read and exact second line reply",
+    "Compact attachment Sources name and exact read-only file content",
+    "Reproduced unsupported folder error",
+    "New formal UI English/Chinese desktop-only disabled item",
+    "New formal filechooser uploads and Goal creation retain pending input",
+    "One actual streaming goal turn with exact PENDING462READY and explicit operator completion"
+  ],
+  "remaining": "Desktop native directory picker is not visually qualified; IAB has no native-app control. Task/Mission distinct visual flow and original full-history config save10s/restore5s budgets remain unmet. No new live side-agent Rendering qualification."
+}

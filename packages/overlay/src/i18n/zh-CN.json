@@ -374,6 +374,8 @@
   "chat.attachment.remove": "移除附件",
   "chat.attachment_loader.file_title": "添加支持的文件",
   "chat.attachment_loader.folder_title": "添加文件夹",
+  "chat.attachment_loader.folder_desktop_title": "添加文件夹（桌面应用）",
+  "chat.attachment_loader.folder_desktop_hint": "请在桌面应用中选择文件夹。当前浏览器可以添加文件。",
   "chat.attachment_loader.count": "文件 {{files}}/{{fileLimit}} · 文件夹 {{folders}}/{{folderLimit}}",
   "chat.attachment_loader.uploading": "正在索引 {{count}} 个附件…",
   "chat.attachment_limit.title": "附件数量已达上限",

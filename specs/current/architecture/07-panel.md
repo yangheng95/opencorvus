@@ -2034,6 +2034,12 @@ launch-reference controls retain the toolbar's available space: the single
 attachment count/indexing status lives beside the attachment area above the
 input shell and can wrap. It remains visible during pending uploads without a
 chip, independently of input admission, and does not compete in the footer.
+The folder attachment menu reads the existing host capability for
+`workspace.pickDir`. A browser keeps a disabled, localized desktop-app folder
+item with an explanation; supported desktop hosts use the native picker. File
+selection continues through the ordinary HTML file input in both hosts. The
+menu and handler share that capability declaration; no recursive browser folder
+upload or alternative directory reference protocol is introduced.
 Model readiness
 comes from the canonical composer model projection even when the popover is
 closed. Per-project explicit launch intent restores from Overlay preferences;

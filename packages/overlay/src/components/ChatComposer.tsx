@@ -102,6 +102,7 @@ import {
 import { ComposerMentionMenu } from "./ComposerMentionMenu"
 import { ComposerReferenceSelector } from "./ComposerReferenceSelector"
 import { pickDirectory } from "../services/workspace"
+import { getHostTransport } from "../services/host-transport-runtime"
 import { activeProjectDirectory } from "../services/project-directory"
 import {
   composerAttachmentCapacity,
@@ -341,6 +342,7 @@ interface ComposerAttachmentLoadersProps {
 
 function ComposerAttachmentLoaders(props: ComposerAttachmentLoadersProps): JSX.Element {
   let fileInputRef: HTMLInputElement | undefined
+  const canPickFolder = getHostTransport().capabilities.nativeCommands["workspace.pickDir"]
 
   function openFilePicker(): void {
     if (props.disabled) return
@@ -348,7 +350,7 @@ function ComposerAttachmentLoaders(props: ComposerAttachmentLoadersProps): JSX.E
   }
 
   function openFolderPicker(): void {
-    if (props.disabled) return
+    if (props.disabled || !canPickFolder) return
     void props.onFolder()
   }
 
@@ -406,10 +408,14 @@ function ComposerAttachmentLoaders(props: ComposerAttachmentLoadersProps): JSX.E
               type="button"
               class="composer-attachment-menu-item"
               data-ui="composer-folder-loader-trigger"
+              disabled={props.disabled || !canPickFolder}
+              title={canPickFolder ? undefined : t("chat.attachment_loader.folder_desktop_hint")}
               onSelect={openFolderPicker}
             >
               <Icon name="folder-open" size="medium" />
-              <span>{t("chat.attachment_loader.folder_title")}</span>
+              <span>
+                {t(canPickFolder ? "chat.attachment_loader.folder_title" : "chat.attachment_loader.folder_desktop_title")}
+              </span>
             </DropdownMenu.Item>
             <DropdownMenu.Separator />
             <DropdownMenu.Sub gutter={6}>
