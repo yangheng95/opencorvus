@@ -1,0 +1,3645 @@
+{
+  "runtime": "1.4.0",
+  "inputs": {
+    "projects": 98,
+    "localGit": 97,
+    "selected": 24
+  },
+  "groups": [
+    {
+      "mode": "pipe",
+      "concurrency": 1,
+      "commands": 24,
+      "wallMs": 3484.8521,
+      "syncSpawnMs": 266.38199999999915,
+      "rows": [
+        {
+          "index": 0,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 11.899800000000027,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 148.7032999999999,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 1,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 10.764999999999986,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 138.35440000000006,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 2,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 11.286799999999971,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 140.1449,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 3,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 11.159999999999968,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 138.96530000000007,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 4,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 10.801699999999983,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 138.65969999999993,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 5,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 11.26150000000007,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 140.69610000000011,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 6,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 10.230000000000018,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 143.95010000000002,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 7,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 11.910799999999881,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 152.99590000000012,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 8,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 11.001700000000028,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 139.73170000000005,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 9,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 10.839899999999943,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 137.85500000000002,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 10,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 11.073700000000144,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 141.26819999999998,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 11,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 11.813599999999951,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 141.30160000000024,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 12,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 10.937999999999647,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 140.75369999999975,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 13,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 10.50570000000016,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 141.50999999999976,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 14,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 12.023599999999988,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 156.33300000000008,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 15,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 11.543099999999868,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 138.98680000000013,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 16,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 10.8128999999999,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 140.28949999999986,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 17,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 11.358799999999974,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 204.64609999999993,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 18,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 10.828399999999874,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 137.5978,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 19,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 10.450999999999567,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 141.51530000000002,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 20,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 10.514200000000073,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 142.42180000000008,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 21,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 10.812700000000405,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 138.63850000000002,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 22,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 11.250499999999647,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 143.17710000000034,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 23,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 11.298600000000079,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 138.13809999999967,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        }
+      ],
+      "outcomes": [
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/c8a89e6b-5977-49f7-85b1-75dbc4701dd3",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/c8a89e6b-5977-49f7-85b1-75dbc4701dd3/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/ab106718-2b7f-4a21-8e4b-7ce0b45830cc",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/ab106718-2b7f-4a21-8e4b-7ce0b45830cc/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/9e1c5c00-7079-4923-957c-7e786a16f013",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/9e1c5c00-7079-4923-957c-7e786a16f013/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/594ad2ef-3948-4ea9-a325-ae24bb4443a4",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/594ad2ef-3948-4ea9-a325-ae24bb4443a4/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/06a7790d-fe67-4b39-acf8-f223f106fbe3",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/06a7790d-fe67-4b39-acf8-f223f106fbe3/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/c3d4d6e6-f820-40d1-aa91-fa2fb69b6da2",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/c3d4d6e6-f820-40d1-aa91-fa2fb69b6da2/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/e9538899-7fcb-4cd1-bc0c-66e3be61fe8c",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/e9538899-7fcb-4cd1-bc0c-66e3be61fe8c/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/34d55a01-9d18-4356-93ee-8398f2a974f9",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/34d55a01-9d18-4356-93ee-8398f2a974f9/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/e5cfa237-9466-4056-8bcd-ac793989e37b",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/e5cfa237-9466-4056-8bcd-ac793989e37b/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/d5bbc21a-1a9d-4f69-b433-ec20315bff2c",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/d5bbc21a-1a9d-4f69-b433-ec20315bff2c/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/e06b3952-1578-4270-a906-e9bb5f5981ea",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/e06b3952-1578-4270-a906-e9bb5f5981ea/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/676e4b10-7337-4869-a3c6-2308cef4e2ac",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/676e4b10-7337-4869-a3c6-2308cef4e2ac/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/36167c8d-0278-4cb3-a865-529d9d8f9383",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/36167c8d-0278-4cb3-a865-529d9d8f9383/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/2c321cf5-91ad-4901-a040-59b16fe6dc9b",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/2c321cf5-91ad-4901-a040-59b16fe6dc9b/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/7a33b91c-a0e6-44ac-958f-fef660502a54",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/7a33b91c-a0e6-44ac-958f-fef660502a54/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5069353a-6e1c-43b5-9086-43d56d5dbb73",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5069353a-6e1c-43b5-9086-43d56d5dbb73/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/091cd1e3-1b35-4af3-a1b1-14d3351474fb",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/091cd1e3-1b35-4af3-a1b1-14d3351474fb/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/404503c8-c1d0-4ad6-b517-6a6ee41d5c15",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/404503c8-c1d0-4ad6-b517-6a6ee41d5c15/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/5ffc4aaa-11d9-401e-9a84-a8b58fa9ee67",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/5ffc4aaa-11d9-401e-9a84-a8b58fa9ee67/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/a604012d-9800-46b9-869e-fb0d78d67167",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/a604012d-9800-46b9-869e-fb0d78d67167/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/f0b13e50-61c8-429e-b803-692c3fde80fd",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/f0b13e50-61c8-429e-b803-692c3fde80fd/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5b6d04bb-0595-48fb-b9fb-ede5f479d1e6",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5b6d04bb-0595-48fb-b9fb-ede5f479d1e6/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/bf354935-0b6e-4743-8347-0718b6eac6d5",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/bf354935-0b6e-4743-8347-0718b6eac6d5/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/37f888bf-8d38-4d13-8f5c-95d8c6cffbf2",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/37f888bf-8d38-4d13-8f5c-95d8c6cffbf2/.git"
+          }
+        }
+      ]
+    },
+    {
+      "mode": "overlapped",
+      "concurrency": 1,
+      "commands": 24,
+      "wallMs": 3614.6494000000002,
+      "syncSpawnMs": 339.70730000000003,
+      "rows": [
+        {
+          "index": 0,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 12.276100000000042,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 156.98259999999982,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 1,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 11.443299999999908,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 156.46020000000044,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 2,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 11.070400000000518,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 136.13740000000053,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 3,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 10.80410000000029,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 141.58039999999983,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 4,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 11.835100000000239,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 140.3002000000006,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 5,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 11.02520000000004,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 139.2415000000001,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 6,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 10.962899999999536,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 141.79030000000057,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 7,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 11.25460000000021,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 204.08290000000034,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 8,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 10.711699999999837,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 137.91460000000006,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 9,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 11.213700000000244,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 156.65520000000015,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 10,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 12.940599999999904,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 169.40239999999994,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 11,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 11.200799999999617,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 142.54520000000048,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 12,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 10.935699999999997,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 140.36279999999988,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 13,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 11.669299999999566,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 140.7537999999995,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 14,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 11.513600000000224,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 140.79160000000047,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 15,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 10.592800000000352,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 139.91499999999996,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 16,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 12.585300000000643,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 142.48329999999987,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 17,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 10.184300000000803,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 141.96320000000014,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 18,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 77.9997999999996,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 198.77770000000055,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 19,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 12.734999999999673,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 141.67399999999998,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 20,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 10.607999999999265,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 139.6278000000002,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 21,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 10.834700000000339,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 158.22190000000046,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 22,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 12.10109999999986,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 154.4345999999996,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 23,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 11.209199999999328,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 136.57750000000033,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        }
+      ],
+      "outcomes": [
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/c8a89e6b-5977-49f7-85b1-75dbc4701dd3",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/c8a89e6b-5977-49f7-85b1-75dbc4701dd3/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/ab106718-2b7f-4a21-8e4b-7ce0b45830cc",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/ab106718-2b7f-4a21-8e4b-7ce0b45830cc/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/9e1c5c00-7079-4923-957c-7e786a16f013",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/9e1c5c00-7079-4923-957c-7e786a16f013/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/594ad2ef-3948-4ea9-a325-ae24bb4443a4",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/594ad2ef-3948-4ea9-a325-ae24bb4443a4/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/06a7790d-fe67-4b39-acf8-f223f106fbe3",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/06a7790d-fe67-4b39-acf8-f223f106fbe3/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/c3d4d6e6-f820-40d1-aa91-fa2fb69b6da2",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/c3d4d6e6-f820-40d1-aa91-fa2fb69b6da2/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/e9538899-7fcb-4cd1-bc0c-66e3be61fe8c",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/e9538899-7fcb-4cd1-bc0c-66e3be61fe8c/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/34d55a01-9d18-4356-93ee-8398f2a974f9",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/34d55a01-9d18-4356-93ee-8398f2a974f9/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/e5cfa237-9466-4056-8bcd-ac793989e37b",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/e5cfa237-9466-4056-8bcd-ac793989e37b/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/d5bbc21a-1a9d-4f69-b433-ec20315bff2c",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/d5bbc21a-1a9d-4f69-b433-ec20315bff2c/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/e06b3952-1578-4270-a906-e9bb5f5981ea",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/e06b3952-1578-4270-a906-e9bb5f5981ea/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/676e4b10-7337-4869-a3c6-2308cef4e2ac",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/676e4b10-7337-4869-a3c6-2308cef4e2ac/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/36167c8d-0278-4cb3-a865-529d9d8f9383",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/36167c8d-0278-4cb3-a865-529d9d8f9383/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/2c321cf5-91ad-4901-a040-59b16fe6dc9b",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/2c321cf5-91ad-4901-a040-59b16fe6dc9b/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/7a33b91c-a0e6-44ac-958f-fef660502a54",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/7a33b91c-a0e6-44ac-958f-fef660502a54/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5069353a-6e1c-43b5-9086-43d56d5dbb73",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5069353a-6e1c-43b5-9086-43d56d5dbb73/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/091cd1e3-1b35-4af3-a1b1-14d3351474fb",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/091cd1e3-1b35-4af3-a1b1-14d3351474fb/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/404503c8-c1d0-4ad6-b517-6a6ee41d5c15",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/404503c8-c1d0-4ad6-b517-6a6ee41d5c15/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/5ffc4aaa-11d9-401e-9a84-a8b58fa9ee67",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/5ffc4aaa-11d9-401e-9a84-a8b58fa9ee67/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/a604012d-9800-46b9-869e-fb0d78d67167",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/a604012d-9800-46b9-869e-fb0d78d67167/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/f0b13e50-61c8-429e-b803-692c3fde80fd",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/f0b13e50-61c8-429e-b803-692c3fde80fd/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5b6d04bb-0595-48fb-b9fb-ede5f479d1e6",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5b6d04bb-0595-48fb-b9fb-ede5f479d1e6/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/bf354935-0b6e-4743-8347-0718b6eac6d5",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/bf354935-0b6e-4743-8347-0718b6eac6d5/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/37f888bf-8d38-4d13-8f5c-95d8c6cffbf2",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/37f888bf-8d38-4d13-8f5c-95d8c6cffbf2/.git"
+          }
+        }
+      ]
+    },
+    {
+      "mode": "overlapped",
+      "concurrency": 12,
+      "commands": 24,
+      "wallMs": 1700.6372000000001,
+      "syncSpawnMs": 1172.8488000000007,
+      "rows": [
+        {
+          "index": 0,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 75.84869999999955,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 1187.4390999999996,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 1,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 15.51299999999992,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 1184.4696000000004,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 2,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 13.800199999999677,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 577.9484999999995,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 3,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 78.21840000000066,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 577.9607999999998,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 4,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 89.62700000000041,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 1186.0901000000003,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 5,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 18.174200000000383,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 577.9227000000001,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 6,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 26.35269999999946,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 1185.453700000001,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 7,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 13.682300000000396,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 577.5360000000001,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 8,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 17.942699999999604,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 1188.418200000001,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 9,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 13.79700000000048,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 576.8388999999997,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 10,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 11.92489999999998,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 577.2148000000007,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 11,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 145.23139999999967,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 1188.1234999999997,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 12,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 101.45449999999983,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 748.8527999999997,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 13,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 144.09649999999965,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 1023.2405000000008,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 14,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 164.15859999999884,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 817.4159000000009,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 15,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 42.44410000000062,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 767.0045000000009,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 16,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 15.790100000000166,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 816.5185000000001,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 17,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 88.05069999999978,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 818.2349000000013,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 18,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 15.975000000000364,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 483.40139999999883,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 19,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 16.30529999999999,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 499.58330000000024,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 20,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 15.958499999998821,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 510.7669999999998,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 21,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 15.691100000000006,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 510.0537000000004,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 22,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 16.3033000000014,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 509.2384000000002,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 23,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 16.508600000001024,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 497.0160999999989,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        }
+      ],
+      "outcomes": [
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/c8a89e6b-5977-49f7-85b1-75dbc4701dd3",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/c8a89e6b-5977-49f7-85b1-75dbc4701dd3/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/ab106718-2b7f-4a21-8e4b-7ce0b45830cc",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/ab106718-2b7f-4a21-8e4b-7ce0b45830cc/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/9e1c5c00-7079-4923-957c-7e786a16f013",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/9e1c5c00-7079-4923-957c-7e786a16f013/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/594ad2ef-3948-4ea9-a325-ae24bb4443a4",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/594ad2ef-3948-4ea9-a325-ae24bb4443a4/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/06a7790d-fe67-4b39-acf8-f223f106fbe3",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/06a7790d-fe67-4b39-acf8-f223f106fbe3/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/c3d4d6e6-f820-40d1-aa91-fa2fb69b6da2",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/c3d4d6e6-f820-40d1-aa91-fa2fb69b6da2/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/e9538899-7fcb-4cd1-bc0c-66e3be61fe8c",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/e9538899-7fcb-4cd1-bc0c-66e3be61fe8c/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/34d55a01-9d18-4356-93ee-8398f2a974f9",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/34d55a01-9d18-4356-93ee-8398f2a974f9/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/e5cfa237-9466-4056-8bcd-ac793989e37b",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/e5cfa237-9466-4056-8bcd-ac793989e37b/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/d5bbc21a-1a9d-4f69-b433-ec20315bff2c",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/d5bbc21a-1a9d-4f69-b433-ec20315bff2c/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/e06b3952-1578-4270-a906-e9bb5f5981ea",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/e06b3952-1578-4270-a906-e9bb5f5981ea/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/676e4b10-7337-4869-a3c6-2308cef4e2ac",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/676e4b10-7337-4869-a3c6-2308cef4e2ac/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/36167c8d-0278-4cb3-a865-529d9d8f9383",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/36167c8d-0278-4cb3-a865-529d9d8f9383/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/2c321cf5-91ad-4901-a040-59b16fe6dc9b",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/2c321cf5-91ad-4901-a040-59b16fe6dc9b/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/7a33b91c-a0e6-44ac-958f-fef660502a54",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/7a33b91c-a0e6-44ac-958f-fef660502a54/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5069353a-6e1c-43b5-9086-43d56d5dbb73",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5069353a-6e1c-43b5-9086-43d56d5dbb73/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/091cd1e3-1b35-4af3-a1b1-14d3351474fb",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/091cd1e3-1b35-4af3-a1b1-14d3351474fb/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/404503c8-c1d0-4ad6-b517-6a6ee41d5c15",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/404503c8-c1d0-4ad6-b517-6a6ee41d5c15/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/5ffc4aaa-11d9-401e-9a84-a8b58fa9ee67",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/5ffc4aaa-11d9-401e-9a84-a8b58fa9ee67/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/a604012d-9800-46b9-869e-fb0d78d67167",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/a604012d-9800-46b9-869e-fb0d78d67167/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/f0b13e50-61c8-429e-b803-692c3fde80fd",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/f0b13e50-61c8-429e-b803-692c3fde80fd/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5b6d04bb-0595-48fb-b9fb-ede5f479d1e6",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5b6d04bb-0595-48fb-b9fb-ede5f479d1e6/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/bf354935-0b6e-4743-8347-0718b6eac6d5",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/bf354935-0b6e-4743-8347-0718b6eac6d5/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/37f888bf-8d38-4d13-8f5c-95d8c6cffbf2",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/37f888bf-8d38-4d13-8f5c-95d8c6cffbf2/.git"
+          }
+        }
+      ]
+    },
+    {
+      "mode": "pipe",
+      "concurrency": 12,
+      "commands": 24,
+      "wallMs": 1393.517899999999,
+      "syncSpawnMs": 569.9970999999987,
+      "rows": [
+        {
+          "index": 0,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 14.60820000000058,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 433.0107000000007,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 1,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 15.675600000000486,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 436.53649999999834,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 2,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 16.148000000001048,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 632.0944,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 3,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 15.42279999999846,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 627.411900000001,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 4,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 16.38839999999982,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 443.53909999999996,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 5,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 15.982699999998658,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 499.1244000000006,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 6,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 16.51599999999962,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 555.9408000000003,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 7,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 106.78290000000015,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 556.1136999999999,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 8,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 19.669600000001083,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 676.7543000000005,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 9,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 16.003899999999703,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 684.931700000001,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 10,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 19.785499999999956,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 719.5722000000005,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 11,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 15.565899999999601,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 360.2677999999996,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 12,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 16.648000000001048,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 625.2911000000004,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 13,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 17.63719999999921,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 776.5445,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 14,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 16.48990000000049,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 667.9416000000001,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 15,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 16.933799999998882,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 755.2587999999996,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 16,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 99.33569999999963,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 755.9560000000001,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 17,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 17.926499999999578,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 790.6401999999998,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 18,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 16.815499999998792,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 726.8433999999997,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 19,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 15.461200000001554,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 717.7462000000014,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 20,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 17.241500000000087,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 704.7098999999998,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 21,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 16.057400000001508,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 697.4408000000003,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 22,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 15.064199999998891,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 694.2808000000005,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 23,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 15.836699999999837,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 653.1006000000016,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        }
+      ],
+      "outcomes": [
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/c8a89e6b-5977-49f7-85b1-75dbc4701dd3",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/c8a89e6b-5977-49f7-85b1-75dbc4701dd3/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/ab106718-2b7f-4a21-8e4b-7ce0b45830cc",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/ab106718-2b7f-4a21-8e4b-7ce0b45830cc/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/9e1c5c00-7079-4923-957c-7e786a16f013",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/9e1c5c00-7079-4923-957c-7e786a16f013/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/594ad2ef-3948-4ea9-a325-ae24bb4443a4",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/594ad2ef-3948-4ea9-a325-ae24bb4443a4/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/06a7790d-fe67-4b39-acf8-f223f106fbe3",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/06a7790d-fe67-4b39-acf8-f223f106fbe3/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/c3d4d6e6-f820-40d1-aa91-fa2fb69b6da2",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/c3d4d6e6-f820-40d1-aa91-fa2fb69b6da2/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/e9538899-7fcb-4cd1-bc0c-66e3be61fe8c",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/e9538899-7fcb-4cd1-bc0c-66e3be61fe8c/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/34d55a01-9d18-4356-93ee-8398f2a974f9",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/34d55a01-9d18-4356-93ee-8398f2a974f9/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/e5cfa237-9466-4056-8bcd-ac793989e37b",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/e5cfa237-9466-4056-8bcd-ac793989e37b/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/d5bbc21a-1a9d-4f69-b433-ec20315bff2c",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/d5bbc21a-1a9d-4f69-b433-ec20315bff2c/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/e06b3952-1578-4270-a906-e9bb5f5981ea",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/e06b3952-1578-4270-a906-e9bb5f5981ea/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/676e4b10-7337-4869-a3c6-2308cef4e2ac",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/676e4b10-7337-4869-a3c6-2308cef4e2ac/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/36167c8d-0278-4cb3-a865-529d9d8f9383",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/36167c8d-0278-4cb3-a865-529d9d8f9383/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/2c321cf5-91ad-4901-a040-59b16fe6dc9b",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/2c321cf5-91ad-4901-a040-59b16fe6dc9b/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/7a33b91c-a0e6-44ac-958f-fef660502a54",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/7a33b91c-a0e6-44ac-958f-fef660502a54/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5069353a-6e1c-43b5-9086-43d56d5dbb73",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5069353a-6e1c-43b5-9086-43d56d5dbb73/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/091cd1e3-1b35-4af3-a1b1-14d3351474fb",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/091cd1e3-1b35-4af3-a1b1-14d3351474fb/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/404503c8-c1d0-4ad6-b517-6a6ee41d5c15",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/404503c8-c1d0-4ad6-b517-6a6ee41d5c15/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/5ffc4aaa-11d9-401e-9a84-a8b58fa9ee67",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/5ffc4aaa-11d9-401e-9a84-a8b58fa9ee67/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/a604012d-9800-46b9-869e-fb0d78d67167",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/a604012d-9800-46b9-869e-fb0d78d67167/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/f0b13e50-61c8-429e-b803-692c3fde80fd",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/f0b13e50-61c8-429e-b803-692c3fde80fd/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5b6d04bb-0595-48fb-b9fb-ede5f479d1e6",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5b6d04bb-0595-48fb-b9fb-ede5f479d1e6/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/bf354935-0b6e-4743-8347-0718b6eac6d5",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/bf354935-0b6e-4743-8347-0718b6eac6d5/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/37f888bf-8d38-4d13-8f5c-95d8c6cffbf2",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/37f888bf-8d38-4d13-8f5c-95d8c6cffbf2/.git"
+          }
+        }
+      ]
+    },
+    {
+      "mode": "pipe",
+      "concurrency": 12,
+      "commands": 24,
+      "wallMs": 1714.4809999999998,
+      "syncSpawnMs": 1030.8132999999998,
+      "rows": [
+        {
+          "index": 0,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 16.146500000000742,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 390.34879999999976,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 1,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 15.625700000000506,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 544.3431999999993,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 2,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 15.97149999999965,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 549.1113999999998,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 3,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 16.74409999999989,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 630.8037999999997,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 4,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 16.268999999998414,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 545.0763999999999,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 5,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 15.34230000000025,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 544.7547000000013,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 6,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 17.123099999998885,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 622.8204999999998,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 7,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 15.648300000000745,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 544.7983999999997,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 8,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 16.10399999999936,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 633.5383000000002,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 9,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 16.80119999999988,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 548.0293000000001,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 10,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 68.09050000000025,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 378.4899999999998,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 11,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 16.29950000000099,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 629.7698,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 12,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 118.83519999999953,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 673.244999999999,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 13,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 34.19260000000031,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 663.2782000000007,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 14,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 101.13529999999992,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 852.3505000000005,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 15,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 16.493899999999485,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 781.1237000000001,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 16,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 16.806300000000192,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 852.2276999999995,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 17,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 16.52469999999994,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 780.4838,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 18,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 15.561900000000605,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 946.766599999999,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 19,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 14.767900000000736,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 777.0885999999991,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 20,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 16.293400000000474,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 856.7073,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 21,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 165.41640000000007,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 1020.7392,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 22,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 179.8765999999996,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 1080.3364999999994,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 23,
+          "kind": "git",
+          "mode": "pipe",
+          "spawnMs": 88.74339999999938,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 999.5555000000004,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        }
+      ],
+      "outcomes": [
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/c8a89e6b-5977-49f7-85b1-75dbc4701dd3",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/c8a89e6b-5977-49f7-85b1-75dbc4701dd3/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/ab106718-2b7f-4a21-8e4b-7ce0b45830cc",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/ab106718-2b7f-4a21-8e4b-7ce0b45830cc/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/9e1c5c00-7079-4923-957c-7e786a16f013",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/9e1c5c00-7079-4923-957c-7e786a16f013/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/594ad2ef-3948-4ea9-a325-ae24bb4443a4",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/594ad2ef-3948-4ea9-a325-ae24bb4443a4/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/06a7790d-fe67-4b39-acf8-f223f106fbe3",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/06a7790d-fe67-4b39-acf8-f223f106fbe3/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/c3d4d6e6-f820-40d1-aa91-fa2fb69b6da2",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/c3d4d6e6-f820-40d1-aa91-fa2fb69b6da2/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/e9538899-7fcb-4cd1-bc0c-66e3be61fe8c",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/e9538899-7fcb-4cd1-bc0c-66e3be61fe8c/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/34d55a01-9d18-4356-93ee-8398f2a974f9",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/34d55a01-9d18-4356-93ee-8398f2a974f9/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/e5cfa237-9466-4056-8bcd-ac793989e37b",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/e5cfa237-9466-4056-8bcd-ac793989e37b/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/d5bbc21a-1a9d-4f69-b433-ec20315bff2c",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/d5bbc21a-1a9d-4f69-b433-ec20315bff2c/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/e06b3952-1578-4270-a906-e9bb5f5981ea",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/e06b3952-1578-4270-a906-e9bb5f5981ea/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/676e4b10-7337-4869-a3c6-2308cef4e2ac",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/676e4b10-7337-4869-a3c6-2308cef4e2ac/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/36167c8d-0278-4cb3-a865-529d9d8f9383",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/36167c8d-0278-4cb3-a865-529d9d8f9383/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/2c321cf5-91ad-4901-a040-59b16fe6dc9b",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/2c321cf5-91ad-4901-a040-59b16fe6dc9b/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/7a33b91c-a0e6-44ac-958f-fef660502a54",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/7a33b91c-a0e6-44ac-958f-fef660502a54/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5069353a-6e1c-43b5-9086-43d56d5dbb73",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5069353a-6e1c-43b5-9086-43d56d5dbb73/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/091cd1e3-1b35-4af3-a1b1-14d3351474fb",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/091cd1e3-1b35-4af3-a1b1-14d3351474fb/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/404503c8-c1d0-4ad6-b517-6a6ee41d5c15",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/404503c8-c1d0-4ad6-b517-6a6ee41d5c15/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/5ffc4aaa-11d9-401e-9a84-a8b58fa9ee67",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/5ffc4aaa-11d9-401e-9a84-a8b58fa9ee67/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/a604012d-9800-46b9-869e-fb0d78d67167",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/a604012d-9800-46b9-869e-fb0d78d67167/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/f0b13e50-61c8-429e-b803-692c3fde80fd",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/f0b13e50-61c8-429e-b803-692c3fde80fd/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5b6d04bb-0595-48fb-b9fb-ede5f479d1e6",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5b6d04bb-0595-48fb-b9fb-ede5f479d1e6/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/bf354935-0b6e-4743-8347-0718b6eac6d5",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/bf354935-0b6e-4743-8347-0718b6eac6d5/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/37f888bf-8d38-4d13-8f5c-95d8c6cffbf2",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/37f888bf-8d38-4d13-8f5c-95d8c6cffbf2/.git"
+          }
+        }
+      ]
+    },
+    {
+      "mode": "overlapped",
+      "concurrency": 12,
+      "commands": 24,
+      "wallMs": 1756.2241000000013,
+      "syncSpawnMs": 1098.103599999995,
+      "rows": [
+        {
+          "index": 0,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 15.86869999999908,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 938.1932000000015,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 1,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 14.773800000000847,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 890.558500000001,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 2,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 16.36319999999978,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 1155.2019,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 3,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 245.53880000000026,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 1081.6697000000004,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 4,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 16.967999999998938,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 1159.4169000000002,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 5,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 88.84119999999893,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 1135.4570999999996,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 6,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 176.03709999999955,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 1083.8011999999999,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 7,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 14.893200000000434,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 892.299500000001,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 8,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 15.561200000000099,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 933.6107000000011,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 9,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 14.746600000000399,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 892.2804999999989,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 10,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 100.33950000000004,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 891.8287,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 11,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 101.46029999999882,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 1080.855300000001,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 12,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 17.871900000000096,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 410.8113999999987,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 13,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 18.24109999999928,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 438.0481,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 14,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 17.373599999998987,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 415.7520999999997,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 15,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 16.25720000000001,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 480.16229999999996,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 16,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 16.820300000001225,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 577.7983999999997,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 17,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 16.35399999999936,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 572.6349999999984,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 18,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 15.243399999999383,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 559.7227999999996,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 19,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 15.587799999999334,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 639.4627,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 20,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 16.004499999999098,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 585.1898000000001,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 21,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 15.595999999999549,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 559.7952999999998,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 22,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 16.845800000000963,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 593.9346999999998,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        },
+        {
+          "index": 23,
+          "kind": "git",
+          "mode": "overlapped",
+          "spawnMs": 94.51640000000043,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 562.7567999999992,
+          "code": 0,
+          "stdoutBytes": 333,
+          "stderrBytes": 0
+        }
+      ],
+      "outcomes": [
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/c8a89e6b-5977-49f7-85b1-75dbc4701dd3",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/c8a89e6b-5977-49f7-85b1-75dbc4701dd3/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/ab106718-2b7f-4a21-8e4b-7ce0b45830cc",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/ab106718-2b7f-4a21-8e4b-7ce0b45830cc/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/9e1c5c00-7079-4923-957c-7e786a16f013",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/9e1c5c00-7079-4923-957c-7e786a16f013/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/594ad2ef-3948-4ea9-a325-ae24bb4443a4",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/594ad2ef-3948-4ea9-a325-ae24bb4443a4/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/06a7790d-fe67-4b39-acf8-f223f106fbe3",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/06a7790d-fe67-4b39-acf8-f223f106fbe3/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/c3d4d6e6-f820-40d1-aa91-fa2fb69b6da2",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/c3d4d6e6-f820-40d1-aa91-fa2fb69b6da2/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/e9538899-7fcb-4cd1-bc0c-66e3be61fe8c",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/e9538899-7fcb-4cd1-bc0c-66e3be61fe8c/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/34d55a01-9d18-4356-93ee-8398f2a974f9",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/34d55a01-9d18-4356-93ee-8398f2a974f9/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/e5cfa237-9466-4056-8bcd-ac793989e37b",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/e5cfa237-9466-4056-8bcd-ac793989e37b/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/d5bbc21a-1a9d-4f69-b433-ec20315bff2c",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/d5bbc21a-1a9d-4f69-b433-ec20315bff2c/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/e06b3952-1578-4270-a906-e9bb5f5981ea",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/e06b3952-1578-4270-a906-e9bb5f5981ea/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/676e4b10-7337-4869-a3c6-2308cef4e2ac",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/676e4b10-7337-4869-a3c6-2308cef4e2ac/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/36167c8d-0278-4cb3-a865-529d9d8f9383",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/36167c8d-0278-4cb3-a865-529d9d8f9383/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/2c321cf5-91ad-4901-a040-59b16fe6dc9b",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/2c321cf5-91ad-4901-a040-59b16fe6dc9b/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/7a33b91c-a0e6-44ac-958f-fef660502a54",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/7a33b91c-a0e6-44ac-958f-fef660502a54/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5069353a-6e1c-43b5-9086-43d56d5dbb73",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5069353a-6e1c-43b5-9086-43d56d5dbb73/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/091cd1e3-1b35-4af3-a1b1-14d3351474fb",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/091cd1e3-1b35-4af3-a1b1-14d3351474fb/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/404503c8-c1d0-4ad6-b517-6a6ee41d5c15",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/404503c8-c1d0-4ad6-b517-6a6ee41d5c15/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/5ffc4aaa-11d9-401e-9a84-a8b58fa9ee67",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/15/5ffc4aaa-11d9-401e-9a84-a8b58fa9ee67/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/a604012d-9800-46b9-869e-fb0d78d67167",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/14/a604012d-9800-46b9-869e-fb0d78d67167/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/f0b13e50-61c8-429e-b803-692c3fde80fd",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/f0b13e50-61c8-429e-b803-692c3fde80fd/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5b6d04bb-0595-48fb-b9fb-ede5f479d1e6",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/5b6d04bb-0595-48fb-b9fb-ede5f479d1e6/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/bf354935-0b6e-4743-8347-0718b6eac6d5",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/bf354935-0b6e-4743-8347-0718b6eac6d5/.git"
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "code": 0,
+            "top": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/37f888bf-8d38-4d13-8f5c-95d8c6cffbf2",
+            "common": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/projects/2026/10/20/37f888bf-8d38-4d13-8f5c-95d8c6cffbf2/.git"
+          }
+        }
+      ]
+    },
+    {
+      "mode": "pipe",
+      "kind": "payload",
+      "rows": [
+        {
+          "index": 6,
+          "kind": "payload",
+          "mode": "pipe",
+          "spawnMs": 14.848799999999756,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 161.1185999999998,
+          "code": 0,
+          "stdoutBytes": 2097152,
+          "stderrBytes": 524288
+        }
+      ],
+      "result": {
+        "code": 0,
+        "stdoutBytes": 2097152,
+        "stderrBytes": 524288
+      }
+    },
+    {
+      "mode": "overlapped",
+      "kind": "payload",
+      "rows": [
+        {
+          "index": 7,
+          "kind": "payload",
+          "mode": "overlapped",
+          "spawnMs": 12.211300000000847,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 217.86919999999918,
+          "code": 0,
+          "stdoutBytes": 2097152,
+          "stderrBytes": 524288
+        }
+      ],
+      "result": {
+        "code": 0,
+        "stdoutBytes": 2097152,
+        "stderrBytes": 524288
+      }
+    },
+    {
+      "mode": "overlapped",
+      "kind": "payload",
+      "rows": [
+        {
+          "index": 8,
+          "kind": "payload",
+          "mode": "overlapped",
+          "spawnMs": 14.240099999999074,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 179.11889999999948,
+          "code": 0,
+          "stdoutBytes": 2097152,
+          "stderrBytes": 524288
+        }
+      ],
+      "result": {
+        "code": 0,
+        "stdoutBytes": 2097152,
+        "stderrBytes": 524288
+      }
+    },
+    {
+      "mode": "pipe",
+      "kind": "payload",
+      "rows": [
+        {
+          "index": 9,
+          "kind": "payload",
+          "mode": "pipe",
+          "spawnMs": 13.9971000000005,
+          "childCloses": [
+            {
+              "code": 0,
+              "signal": null
+            }
+          ],
+          "totalMs": 170.84020000000055,
+          "code": 0,
+          "stdoutBytes": 2097152,
+          "stderrBytes": 524288
+        }
+      ],
+      "result": {
+        "code": 0,
+        "stdoutBytes": 2097152,
+        "stderrBytes": 524288
+      }
+    }
+  ],
+  "liveHandles": {
+    "live": 0,
+    "owners": {}
+  },
+  "boundary": "Scratch-only stdio substitution through original production Process.runHost and native helper, original output and physical/request settlement; no Provider/auth/database initializer or end-to-end performance qualification"
+}

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Windows监管管道诊断](records/2026-10/2026-10-20-windows-supervised-stdio.md)：验证标准管道模式的真实启动成本、完整输出与结算。
+
 - [当前配置保存采样](records/2026-10/2026-10-20-config-current-profile.md)：完整目录的读取根因、不可变声明与独立模型投影、98项目实际性能及验收限制。
 
 - [Goal首页说明布局](records/2026-10/2026-10-20-goal-home-copy-layout.md)：追查桌面长说明截断、真实页面复核与入口操作。

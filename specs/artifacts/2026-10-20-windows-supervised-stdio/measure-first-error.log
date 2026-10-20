@@ -1,0 +1,21 @@
+{"mode":"pipe","concurrency":1,"wallMs":5692.3447,"syncSpawnMs":584.588600000002,"fulfilled":24}
+{"mode":"overlapped","concurrency":1,"wallMs":3663.6902999999993,"syncSpawnMs":343.9211000000014,"fulfilled":24}
+{"mode":"overlapped","concurrency":12,"wallMs":1143.6934999999994,"syncSpawnMs":644.6490999999987,"fulfilled":24}
+{"mode":"pipe","concurrency":12,"wallMs":1668.0506999999998,"syncSpawnMs":839.4182000000019,"fulfilled":24}
+{"mode":"pipe","concurrency":12,"wallMs":1131.3828999999987,"syncSpawnMs":541.6180000000022,"fulfilled":24}
+{"mode":"overlapped","concurrency":12,"wallMs":1907.8994999999995,"syncSpawnMs":1258.0028999999995,"fulfilled":24}
+{"mode":"pipe","kind":"payload","ms":196.85649999999987,"code":0,"stdoutBytes":2097152,"stderrBytes":524288}
+{"mode":"overlapped","kind":"payload","ms":635.0316999999995,"code":0,"stdoutBytes":2097152,"stderrBytes":524288}
+{"mode":"overlapped","kind":"payload","ms":479.34579999999914,"code":0,"stdoutBytes":2097152,"stderrBytes":524288}
+{"mode":"pipe","kind":"payload","ms":199.59619999999995,"code":0,"stdoutBytes":2097152,"stderrBytes":524288}
+80 |  }
+81 | }catch(error){failure=error;process.exitCode=1}
+82 | finally{
+83 |  cp.spawn=original;require('node:module').syncBuiltinESMExports()
+84 |  const failed=failure instanceof AggregateError?{name:failure.name,errors:failure.errors.map(error=>({name:error.name,message:error.message}))}:failure instanceof Error?{name:failure.name,message:failure.message}:undefined
+85 |  await fs.writeFile(root+'/measurements.json',JSON.stringify({runtime:Bun.version,inputs:{projects:input.projects,localGit:input.included.length,selected:24},groups,failure:failed,liveHandles:ProcessSupervisor.ownershipSnapshot(),boundary:'Scratch-only stdio substitution through original production Process.runHost and native helper, original output and physical/request settlement; no Provider/auth/database initializer or end-to-end performance qualification'},null,2),{flag:'wx'})
+                                                                                                                                                                                                                       ^
+TypeError: ProcessSupervisor.ownershipSnapshot is not a function. (In 'ProcessSupervisor.ownershipSnapshot()', 'ProcessSupervisor.ownershipSnapshot' is undefined)
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\windows-supervised-stdio-454\measure.ts:85:211
+
+Bun v1.4.0 (Windows x64)
