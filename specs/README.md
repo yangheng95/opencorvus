@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [成员来源阅读与渲染生命周期](records/2026-10/2026-10-21-member-reading-lifecycle.md)：[21图及真实成员网页流](artifacts/2026-10-21-member-reading-lifecycle/README.md)，六个Sol请求结算，未复现新的Rendering缺陷。
+
 - [持续目标输入反馈](records/2026-10/2026-10-21-goal-form-validation.md)：原生错误本地化、编辑后旧摘要退休与[19张人工页面](artifacts/2026-10-21-goal-form-validation/README.md)。
 
 - [网页工具摘要与Sources阅读](records/2026-10/2026-10-21-web-tool-summary.md)：真实请求地址摘要、展开响应信息与[11张人工实图](artifacts/2026-10-21-web-tool-summary/README.md)。

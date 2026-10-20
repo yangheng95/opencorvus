@@ -1,0 +1,170 @@
+{
+  "observedAt": "2026-10-20T20:29:54.246Z",
+  "permission": [
+    {
+      "id": "per_g0VYchJbX00KFhAYU2iq",
+      "request_id": "per_hSi7x4ZUa5bRXMmgohqA",
+      "event_type": "requested",
+      "session_id": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "message_id": "msg_g0VYcgodv00bgj5csVJS",
+      "tool_call_id": "call_775b70786e174c649a6bddd042e884b7",
+      "tool_name": "webfetch",
+      "time_created": 1792527643627,
+      "source_event_id": null,
+      "decision_scope": null
+    },
+    {
+      "id": "per_g0VYcjAFs00ZzuIpLO93",
+      "request_id": "per_hSi7x4ZUa5bRXMmgohqA",
+      "event_type": "allowed_once",
+      "session_id": null,
+      "message_id": null,
+      "tool_call_id": null,
+      "tool_name": null,
+      "time_created": 1792528084344,
+      "source_event_id": null,
+      "decision_scope": "invocation"
+    },
+    {
+      "id": "per_g0VYcjAGo00DBsv0lrlN",
+      "request_id": "per_hSi7x4ZUa5bRXMmgohqA",
+      "event_type": "execution_started",
+      "session_id": null,
+      "message_id": null,
+      "tool_call_id": null,
+      "tool_name": null,
+      "time_created": 1792528084402,
+      "source_event_id": "per_g0VYcjAFs00ZzuIpLO93",
+      "decision_scope": null
+    },
+    {
+      "id": "per_g0VYcjAKJ00IqWYlgdH9",
+      "request_id": "per_hSi7x4ZUa5bRXMmgohqA",
+      "event_type": "execution_succeeded",
+      "session_id": null,
+      "message_id": null,
+      "tool_call_id": null,
+      "tool_name": null,
+      "time_created": 1792528084619,
+      "source_event_id": null,
+      "decision_scope": null
+    },
+    {
+      "id": "per_g0VYcjALV005lXxk0T5k",
+      "request_id": "per_hSi7x4ZUa5bRXMmgohqA",
+      "event_type": "stale",
+      "session_id": null,
+      "message_id": null,
+      "tool_call_id": null,
+      "tool_name": null,
+      "time_created": 1792528084693,
+      "source_event_id": null,
+      "decision_scope": null
+    },
+    {
+      "id": "per_g0VYcjBDX00guWipV9OJ",
+      "request_id": "per_hGxtTs7Vjz85VmWNCXC6",
+      "event_type": "requested",
+      "session_id": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "message_id": "msg_g0VYcjAM200QzrOqMNso",
+      "tool_call_id": "call_41a3463d390a4c35af4f80fbc5892120",
+      "tool_name": "webfetch",
+      "time_created": 1792528088043,
+      "source_event_id": null,
+      "decision_scope": null
+    },
+    {
+      "id": "per_g0VYcjF9T00li64a7w3L",
+      "request_id": "per_hGxtTs7Vjz85VmWNCXC6",
+      "event_type": "allowed_once",
+      "session_id": null,
+      "message_id": null,
+      "tool_call_id": null,
+      "tool_name": null,
+      "time_created": 1792528103167,
+      "source_event_id": null,
+      "decision_scope": "invocation"
+    },
+    {
+      "id": "per_g0VYcjFAe00qU3eOnKFM",
+      "request_id": "per_hGxtTs7Vjz85VmWNCXC6",
+      "event_type": "execution_started",
+      "session_id": null,
+      "message_id": null,
+      "tool_call_id": null,
+      "tool_name": null,
+      "time_created": 1792528103240,
+      "source_event_id": "per_g0VYcjF9T00li64a7w3L",
+      "decision_scope": null
+    },
+    {
+      "id": "per_g0VYcjFYD00rCIH3IQUN",
+      "request_id": "per_hGxtTs7Vjz85VmWNCXC6",
+      "event_type": "execution_succeeded",
+      "session_id": null,
+      "message_id": null,
+      "tool_call_id": null,
+      "tool_name": null,
+      "time_created": 1792528104701,
+      "source_event_id": null,
+      "decision_scope": null
+    },
+    {
+      "id": "per_g0VYcjFZ800eusJWU193",
+      "request_id": "per_hGxtTs7Vjz85VmWNCXC6",
+      "event_type": "stale",
+      "session_id": null,
+      "message_id": null,
+      "tool_call_id": null,
+      "tool_name": null,
+      "time_created": 1792528104758,
+      "source_event_id": null,
+      "decision_scope": null
+    }
+  ],
+  "originalRequest": [
+    {
+      "id": "prt_g0VYcgpz900ji3XUkHrL",
+      "time_created": 1792527530804,
+      "data": {
+        "type": "tool-request",
+        "callID": "call_775b70786e174c649a6bddd042e884b7",
+        "tool": "webfetch",
+        "input": {
+          "url": "https://arxiv.org/abs/2509.11035v1",
+          "format": "text"
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_0ed946241d3016bb016ad7cca975b08191ae5125db5ae19ce6"
+          }
+        },
+        "time": {
+          "start": 1792527529771
+        }
+      }
+    }
+  ],
+  "originalOutcome": [
+    {
+      "id": "prt_hSaBK8qoClvT69pRL60s",
+      "time_created": 1792528084624,
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hlzFLgfeoxnhBDym2VGG",
+        "title": "https://arxiv.org/abs/2509.11035v1 (text/html; charset=utf-8)",
+        "metadata": {
+          "originalBytes": 5103,
+          "shownBytes": 5103,
+          "webfetchOutputClipped": false,
+          "webfetchEmbeddedAttachmentCount": 0,
+          "truncated": false
+        },
+        "time": {
+          "end": 1792528084623
+        }
+      }
+    }
+  ],
+  "classification": "Normal Ask permission before tool execute;confirmed same original requested/allowed_once/execution_started/execution_succeeded and Source. Client timeout is not the server execution terminal."
+}

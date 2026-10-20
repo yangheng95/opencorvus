@@ -1,0 +1,12 @@
+import fs from 'node:fs'
+import {Database} from 'bun:sqlite'
+const snapshot=JSON.parse(fs.readFileSync(import.meta.dir+'/after-original-private.json','utf8'))
+const db=new Database(snapshot.target+'/runtime/data/opencorvus.db',{readonly:true,create:false})
+const changes:any[]=[]
+for(const [table,rows] of Object.entries(snapshot.original) as [string,any[]][]){
+ const now=new Map((db.query('SELECT rowid,* FROM '+table+' ORDER BY rowid').all() as any[]).map(r=>[r.rowid,r]))
+ for(const row of rows){const actual=now.get(row.rowid);if(!actual){changes.push({table,rowid:row.rowid,deleted:true});continue}
+ const fields=Object.keys(row).filter(k=>JSON.stringify(row[k])!==JSON.stringify(actual[k]));if(fields.length)changes.push({table,id:row.id,fields,values:Object.fromEntries(fields.map(k=>[k,{before:row[k],after:actual[k]}]))})
+ }
+}
+db.close(true);fs.writeFileSync(import.meta.dir+'/original-differences-private.json',JSON.stringify({observedAt:new Date().toISOString(),changes},null,2)+'\n');console.log(JSON.stringify(changes))

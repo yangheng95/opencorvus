@@ -1,0 +1,2820 @@
+{
+  "pid": 79640,
+  "model": "gpt-6.1-sol",
+  "maxRequests": 8,
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792527250155,
+        "boundAt": 1792527250157,
+        "chunkCount": 19,
+        "byteCount": 38253,
+        "firstByteReadAt": 1792527250160,
+        "lastByteReadAt": 1792527253459,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_h2uQuKIicMiItFTpPyTx",
+          "streamRequest": {
+            "requestID": "msg_hSoe06da0ixukh6NAuwH",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYcfepf00ggdWpnw1a",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792527253490
+        }
+      },
+      "tool_declarations": {
+        "state": "absent",
+        "entries": []
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792527250514,
+        "boundAt": 1792527250516,
+        "chunkCount": 35,
+        "byteCount": 516143,
+        "firstByteReadAt": 1792527250519,
+        "lastByteReadAt": 1792527251641,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_h2uQuKIicMiItFTpPyTx",
+          "streamRequest": {
+            "requestID": "msg_hSoe06da0ixukh6NAuwH",
+            "agentID": "chat",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYcff3k00luhrPsnr2",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYcfepp004KgeXh5wj"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792527251737
+        }
+      },
+      "tool_declarations": {
+        "state": "array",
+        "entries": [
+          {
+            "index": 0,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "capability_search"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 8,
+                "nullableCount": 8,
+                "unknownNullableCount": 0,
+                "requiredCount": 8
+              }
+            ]
+          },
+          {
+            "index": 1,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "apply_patch"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "bash"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 6,
+                "nullableCount": 4,
+                "unknownNullableCount": 0,
+                "requiredCount": 6
+              }
+            ]
+          },
+          {
+            "index": 3,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "create_continuous_goal"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 4,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "delegate_agent"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 5,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "edit"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 4,
+                "nullableCount": 1,
+                "unknownNullableCount": 0,
+                "requiredCount": 4
+              }
+            ]
+          },
+          {
+            "index": 6,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "external_code_search"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 1,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 7,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "get_continuous_goal"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 0,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 0
+              }
+            ]
+          },
+          {
+            "index": 8,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "glob"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 1,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 9,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "memory"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 10,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "mission_state"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 11,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "panel_cancel_task"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 12,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "panel_create_task"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 14,
+                "nullableCount": 12,
+                "unknownNullableCount": 0,
+                "requiredCount": 14
+              }
+            ]
+          },
+          {
+            "index": 13,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "panel_delete_goal"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 14,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "panel_expert_squad_inspect"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 15,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "panel_query_task"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 3,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 16,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "panel_query_task_artifacts"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 17,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "panel_respond_interaction"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 18,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "panel_select_workspace"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 19,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "panel_send_task_message"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 4,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 4
+              }
+            ]
+          },
+          {
+            "index": 20,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "panel_update_checks"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 21,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "panel_update_goal"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 22,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "panel_wake_mission"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 1,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 23,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "panel_wake_work"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 1,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 24,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "planner"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 25,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "publish_interactive_artifact"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 26,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "question"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 27,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "read"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 28,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "schedule"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 29,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "search_code"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 30,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "skill_market"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 31,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "todo"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 32,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "update_continuous_goal"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 6,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 6
+              }
+            ]
+          },
+          {
+            "index": 33,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "webfetch"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 34,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "websearch"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 1,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 35,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "write"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 36,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "skill"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 5,
+                "nullableCount": 5,
+                "unknownNullableCount": 0,
+                "requiredCount": 5
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792527525362,
+        "boundAt": 1792527525364,
+        "chunkCount": 952,
+        "byteCount": 2199104,
+        "firstByteReadAt": 1792527525365,
+        "lastByteReadAt": 1792527640396,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+          "streamRequest": {
+            "requestID": "msg_g0VYcgobi00xPVPhYlQU",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYcgodZ00C5b8jKbCa",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792527640396
+        }
+      },
+      "tool_declarations": {
+        "state": "absent",
+        "entries": []
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792527528071,
+        "boundAt": 1792527528073,
+        "chunkCount": 43,
+        "byteCount": 462507,
+        "firstByteReadAt": 1792527528074,
+        "lastByteReadAt": 1792527530997,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+          "streamRequest": {
+            "requestID": "msg_g0VYcgobi00xPVPhYlQU",
+            "agentID": "work",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYcgolg00W069FlWez",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYcgodv00bgj5csVJS"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792527643614
+        }
+      },
+      "tool_declarations": {
+        "state": "array",
+        "entries": [
+          {
+            "index": 0,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "capability_search"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 8,
+                "nullableCount": 8,
+                "unknownNullableCount": 0,
+                "requiredCount": 8
+              }
+            ]
+          },
+          {
+            "index": 1,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "apply_patch"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "bash"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 6,
+                "nullableCount": 4,
+                "unknownNullableCount": 0,
+                "requiredCount": 6
+              }
+            ]
+          },
+          {
+            "index": 3,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "create_continuous_goal"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 4,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "edit"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 4,
+                "nullableCount": 1,
+                "unknownNullableCount": 0,
+                "requiredCount": 4
+              }
+            ]
+          },
+          {
+            "index": 5,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "external_code_search"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 1,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 6,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "get_continuous_goal"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 0,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 0
+              }
+            ]
+          },
+          {
+            "index": 7,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "glob"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 1,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 8,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "planner"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 9,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "publish_interactive_artifact"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 10,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "read"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 11,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "search_code"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 12,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "skill_market"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 13,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "todo"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 14,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "update_continuous_goal"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 6,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 6
+              }
+            ]
+          },
+          {
+            "index": 15,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "webfetch"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 16,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "websearch"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 1,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 17,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "work_artifact_author"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 5,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 5
+              }
+            ]
+          },
+          {
+            "index": 18,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "work_artifact_inspect"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 19,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "work_artifact_validate"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 20,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "write"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 21,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "skill"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 5,
+                "nullableCount": 5,
+                "unknownNullableCount": 0,
+                "requiredCount": 5
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792528086089,
+        "boundAt": 1792528086091,
+        "chunkCount": 44,
+        "byteCount": 469195,
+        "firstByteReadAt": 1792528086093,
+        "lastByteReadAt": 1792528087957,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+          "streamRequest": {
+            "requestID": "msg_g0VYcgobi00xPVPhYlQU",
+            "agentID": "work",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYcjAQh008yeG5cfaA",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYcjAM200QzrOqMNso"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792528088039
+        }
+      },
+      "tool_declarations": {
+        "state": "array",
+        "entries": [
+          {
+            "index": 0,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "capability_search"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 8,
+                "nullableCount": 8,
+                "unknownNullableCount": 0,
+                "requiredCount": 8
+              }
+            ]
+          },
+          {
+            "index": 1,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "apply_patch"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "bash"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 6,
+                "nullableCount": 4,
+                "unknownNullableCount": 0,
+                "requiredCount": 6
+              }
+            ]
+          },
+          {
+            "index": 3,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "create_continuous_goal"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 4,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "edit"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 4,
+                "nullableCount": 1,
+                "unknownNullableCount": 0,
+                "requiredCount": 4
+              }
+            ]
+          },
+          {
+            "index": 5,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "external_code_search"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 1,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 6,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "get_continuous_goal"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 0,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 0
+              }
+            ]
+          },
+          {
+            "index": 7,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "glob"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 1,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 8,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "planner"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 9,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "publish_interactive_artifact"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 10,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "read"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 11,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "search_code"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 12,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "skill_market"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 13,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "todo"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 14,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "update_continuous_goal"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 6,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 6
+              }
+            ]
+          },
+          {
+            "index": 15,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "webfetch"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 16,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "websearch"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 1,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 17,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "work_artifact_author"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 5,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 5
+              }
+            ]
+          },
+          {
+            "index": 18,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "work_artifact_inspect"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 19,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "work_artifact_validate"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 20,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "write"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 21,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "skill"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 5,
+                "nullableCount": 5,
+                "unknownNullableCount": 0,
+                "requiredCount": 5
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792528106359,
+        "boundAt": 1792528106360,
+        "chunkCount": 676,
+        "byteCount": 1848086,
+        "firstByteReadAt": 1792528106362,
+        "lastByteReadAt": 1792528205277,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+          "streamRequest": {
+            "requestID": "msg_g0VYcgobi00xPVPhYlQU",
+            "agentID": "work",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYcjFeF00cXl4YHahR",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYcjFZX00SaXQroFcZ"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792528205399
+        }
+      },
+      "tool_declarations": {
+        "state": "array",
+        "entries": [
+          {
+            "index": 0,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "capability_search"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 8,
+                "nullableCount": 8,
+                "unknownNullableCount": 0,
+                "requiredCount": 8
+              }
+            ]
+          },
+          {
+            "index": 1,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "apply_patch"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "bash"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 6,
+                "nullableCount": 4,
+                "unknownNullableCount": 0,
+                "requiredCount": 6
+              }
+            ]
+          },
+          {
+            "index": 3,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "create_continuous_goal"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 4,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "edit"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 4,
+                "nullableCount": 1,
+                "unknownNullableCount": 0,
+                "requiredCount": 4
+              }
+            ]
+          },
+          {
+            "index": 5,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "external_code_search"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 1,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 6,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "get_continuous_goal"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 0,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 0
+              }
+            ]
+          },
+          {
+            "index": 7,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "glob"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 1,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 8,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "planner"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 9,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "publish_interactive_artifact"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 10,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "read"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 11,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "search_code"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 12,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "skill_market"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 13,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "todo"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 1,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 1
+              }
+            ]
+          },
+          {
+            "index": 14,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "update_continuous_goal"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 6,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 6
+              }
+            ]
+          },
+          {
+            "index": 15,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "webfetch"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 3,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 3
+              }
+            ]
+          },
+          {
+            "index": 16,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "websearch"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 1,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 17,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "work_artifact_author"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 5,
+                "nullableCount": 2,
+                "unknownNullableCount": 0,
+                "requiredCount": 5
+              }
+            ]
+          },
+          {
+            "index": 18,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "work_artifact_inspect"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 19,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "work_artifact_validate"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 20,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "write"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 2,
+                "nullableCount": 0,
+                "unknownNullableCount": 0,
+                "requiredCount": 2
+              }
+            ]
+          },
+          {
+            "index": 21,
+            "type": "function",
+            "type_state": "present",
+            "name_state": "observed",
+            "names": [
+              {
+                "path": "name",
+                "state": "present",
+                "value": "skill"
+              }
+            ],
+            "schema_shapes": [
+              {
+                "path": "parameters",
+                "strict": "false",
+                "rootKind": "object",
+                "additionalProperties": "false",
+                "propertiesCount": 5,
+                "nullableCount": 5,
+                "unknownNullableCount": 0,
+                "requiredCount": 5
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    }
+  ],
+  "exhausted": false,
+  "observedAt": "2026-10-20T20:30:05.400Z"
+}

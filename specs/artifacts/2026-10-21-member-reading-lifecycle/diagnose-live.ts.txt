@@ -1,0 +1,19 @@
+import fs from 'node:fs'
+import {Database} from 'bun:sqlite'
+const prefix='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/member-reading-lifecycle-487-after-data/runtime/'
+const lines=fs.readFileSync(prefix+'log/dev.log','utf8').split('\n'), selected:any[]=[], services=new Map<string,number>()
+for(const line of lines){let x:any;try{x=JSON.parse(line)}catch{continue}
+ if(x.time<'2026-10-20T20:18:44Z')continue
+ const key=String(x.service);services.set(key,(services.get(key)??0)+1)
+ if(x.level==='error'||/webfetch|tool.execute|tool-call|abort|cancel|timeout|permission|interaction/i.test(x.message??'')||/webfetch|abort|timeout|permission|interaction/i.test(key))
+ selected.push({time:x.time,level:x.level,service:x.service,message:String(x.message).slice(0,250),keys:Object.keys(x.data??{}),...Object.fromEntries(Object.entries(x.data??{}).filter(([k,v])=>['phase','status','duration','sessionID','tool','toolID','name','error','type','partID','requestID'].includes(k)&&typeof v!=='object'))})
+}
+const db=new Database(prefix+'data/opencorvus.db',{readonly:true,create:false})
+const events=(db.query('SELECT id,type,emitted_at,payload FROM protocol_event WHERE (session_id=? OR aggregate_id=?) AND emitted_at>=? ORDER BY emitted_at').all('ses_-zUS0WzzQzzDOGrIbYwN','ses_-zUS0WzzQzzDOGrIbYwN',1792527524475) as any[]).map(r=>({...r,payload:JSON.parse(r.payload)}))
+const requests=db.query('SELECT id,time_created,data FROM tool_part_request WHERE message_id=?').all('msg_g0VYcgodv00bgj5csVJS')
+const outcomes=db.query('SELECT id,time_created,data FROM tool_part_outcome WHERE request_part_id=?').all('prt_g0VYcgpz900ji3XUkHrL')
+const permission=db.query('SELECT id,request_id,event_type,session_id,message_id,tool_call_id,tool_name,time_created,source_event_id,decision_scope FROM permission_ledger WHERE time_created>=? ORDER BY time_created').all(1792527524475)
+db.close(true)
+const result={observedAt:new Date().toISOString(),services:Object.fromEntries(services),selected:selected.slice(-35),events,requests,outcomes,permission}
+fs.writeFileSync(import.meta.dir+'/diagnose-decided-private.json',JSON.stringify(result,null,2)+'\n')
+console.log(JSON.stringify(result,null,2))

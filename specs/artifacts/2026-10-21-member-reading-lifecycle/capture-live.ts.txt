@@ -1,0 +1,17 @@
+import fs from 'node:fs'
+import {Database} from 'bun:sqlite'
+const root=import.meta.dir,evidence='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/member-reading-lifecycle-487-after/evidence',request=JSON.parse(fs.readFileSync(root+'/live-request.json','utf8'))
+const files=fs.readdirSync(evidence).filter(name=>/^provider-.*-\d+\.json$/.test(name)).sort((a,b)=>Number(b.match(/-(\d+)\.json$/)![1])-Number(a.match(/-(\d+)\.json$/)![1]))
+const audit=JSON.parse(fs.readFileSync(evidence+'/'+files[0],'utf8')),db=new Database('C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/member-reading-lifecycle-487-after-data/runtime/data/opencorvus.db',{readonly:true,create:false})
+try{
+ db.exec('BEGIN')
+ const rows=db.query('SELECT id,data FROM message WHERE session_id=? ORDER BY id').all(request.sessionID) as any[]
+ const messages=rows.map(row=>({id:row.id,...JSON.parse(row.data)})).filter(message=>message.role==='assistant'&&message.time.created>=Date.parse(request.observedAt)).map(message=>{
+  const parts=(db.query('SELECT id,data FROM part WHERE message_id=? ORDER BY id').all(message.id) as any[]).map(row=>({id:row.id,...JSON.parse(row.data)}))
+  return {id:message.id,parentID:message.parentID,time:message.time,finish:message.finish,error:message.error,textCharacters:parts.filter(part=>part.type==='text').reduce((sum,part)=>sum+part.text.length,0),sources:parts.filter(part=>part.type==='source-url').map(({id,sourceId,url,title,toolPartID})=>({id,sourceId,url,title,toolPartID}))}
+ })
+ const readers=audit.requests.map((item:any)=>({model:item.model,status:item.status,streaming:item.streaming,reader:item.response_reader})),frame=process.argv[2]??'status'
+ const result={observedAt:new Date().toISOString(),frame,screenshotCapturedAt:process.argv[3],requestMessageID:request.body.messageID,maximumScopeRequests:audit.maxRequests,requests:audit.requests.length,messages,readers,qualification:'Original readonly SQLite/actual source reader;manual screenshot separate;no UI assertions'}
+ fs.writeFileSync(root+'/frame-'+frame+'.json',JSON.stringify(result,null,2)+'\n')
+ console.log(JSON.stringify({observedAt:result.observedAt,requests:result.requests,maxRequests:result.maximumScopeRequests,messages,readers:readers.map(({model,status,streaming,reader}:any)=>({model,status,streaming,state:reader.state,terminal:reader.terminal?.kind,sessionID:reader.requestContext?.sessionID,agent:reader.requestContext?.streamRequest?.agentID,assistantID:reader.requestContext?.activity?.assistantMessageID}))}))
+}finally{db.exec('ROLLBACK');db.close(true)}

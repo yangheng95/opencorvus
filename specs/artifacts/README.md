@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [成员来源与渲染生命周期](2026-10-21-member-reading-lifecycle/README.md)：21图、六个真实Sol流、原权限等待与完整历史保留，未用完成态冒充新流。
+
 - [持续目标输入反馈](2026-10-21-goal-form-validation/README.md)：19张实图、首轮失败保留、原87行事实与三个原生scope完整结算。
 
 - [网页工具摘要与来源阅读](2026-10-21-web-tool-summary/README.md)：11张人工实图、原87行完整数据及原生收尾；请求地址与响应媒体信息各自可读。

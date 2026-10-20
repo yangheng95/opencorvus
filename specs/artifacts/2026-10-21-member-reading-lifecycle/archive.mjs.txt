@@ -1,0 +1,40 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+const root=import.meta.dirname,base='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21',out=path.resolve(root,'../../specs/artifacts/2026-10-21-member-reading-lifecycle')
+const read=p=>JSON.parse(fs.readFileSync(p,'utf8')),prep=read(root+'/authority-preparation.json'),authority=base+'/member-reading-lifecycle-487-authority'
+assert.equal(path.resolve(prep.privateAuthority),path.resolve(authority))
+const secretValues=new Set()
+function collect(v,key=''){if(typeof v==='string'&&v.length>=12&&/token|secret|password|key|access|refresh|account/i.test(key))secretValues.add(v);else if(v&&typeof v==='object')for(const[k,x]of Object.entries(v))collect(x,k)}
+collect(read(prep.source));collect(read(authority+'/auth.json'));assert(secretValues.size>=3)
+const stat=fs.statSync(prep.source);assert.equal(stat.size,prep.sourceBytes);assert.equal(stat.mtimeMs,prep.sourceModifiedAtMs)
+assert(fs.readFileSync(prep.catalogSource).equals(fs.readFileSync(authority+'/models.json')))
+fs.mkdirSync(out,{recursive:true})
+for(const file of fs.readdirSync(root).filter(n=>/^\d\d-.+\.png$/.test(n)||/^frame-.+\.json$/.test(n)||['before-preserved.json','after-preserved.json','authority-preparation.json','original-differences-private.json'].includes(n)))fs.copyFileSync(root+'/'+file,out+'/'+file.replace('-private',''))
+for(const file of ['prepare.ts','preserve.ts','send-live.ts','capture-live.ts','diagnose-live.ts','original-differences.ts','archive.mjs','launch-before.ps1','launch-live.ps1','shutdown-before.ps1','shutdown-after.ps1','settle-before.ps1','settle-live.ps1'])fs.copyFileSync(root+'/'+file,out+'/'+file+'.txt')
+const scopePhysical={}
+for(const[stage,handle]of [['before',8969],['after',93071]]){
+ const evidence=base+'/member-reading-lifecycle-487-'+stage+'/evidence'
+ const physical=read(evidence+(stage==='before'?'/physical-terminal.json':'/physical-terminal-and-pair-cleanup.json'))
+ assert.equal(physical.originalHandle,handle);assert.equal(physical.originalExit,0);assert.equal(physical.shutdown.statusCode,200)
+ assert(physical.native.physicalCompletion&&physical.native.outputDrainComplete&&physical.native.requestCleanupComplete)
+ scopePhysical[stage]={originalHandle:handle,exit:0,physical}
+}
+const evidence=base+'/member-reading-lifecycle-487-after/evidence',auditFile=fs.readdirSync(evidence).filter(n=>/^provider-.+-\d+\.json$/.test(n)).sort((a,b)=>Number(a.match(/-(\d+)\.json$/)[1])-Number(b.match(/-(\d+)\.json$/)[1])).at(-1),audit=read(evidence+'/'+auditFile)
+assert.equal(audit.requests.length,6);assert.equal(audit.maxRequests,8);assert.equal(audit.exhausted,false)
+for(const r of audit.requests){assert.equal(r.model,'gpt-6.1-sol');assert.equal(r.streaming,true);assert.equal(r.status,200);assert.equal(r.response_reader.terminal.kind,'eof')}
+fs.writeFileSync(out+'/provider-final.json',JSON.stringify(audit,null,2)+'\n')
+fs.writeFileSync(out+'/owned-scopes.json',JSON.stringify({observedAt:new Date().toISOString(),scopes:scopePhysical,input:{originalHandle:3759,exit:1,result:'Original client TimeoutError while server awaited Ask permission;never resent;actual original tool results and assistant finished normally'},modelBudget:{batchMaximum:16,liveMaximum:8,actual:6,repairReserved:8,repairActual:0,unused:'retired without transfer'},closedPages:['58','59']},null,2)+'\n')
+const diag=read(root+'/diagnose-decided-private.json')
+fs.writeFileSync(out+'/permission-lifecycle.json',JSON.stringify({observedAt:diag.observedAt,permission:diag.permission,originalRequest:diag.requests.map(r=>({...r,data:JSON.parse(r.data)})),originalOutcome:diag.outcomes.map(r=>({...r,data:JSON.parse(r.data)})),classification:'Normal Ask permission before tool execute;confirmed same original requested/allowed_once/execution_started/execution_succeeded and Source. Client timeout is not the server execution terminal.'},null,2)+'\n')
+let files=0,bytes=0
+function scan(dir){for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);assert(!fs.lstatSync(file).isSymbolicLink());if(entry.isDirectory())scan(file);else if(entry.isFile()){const b=fs.readFileSync(file);files++;bytes+=b.length;assert(![...secretValues].some(v=>b.includes(Buffer.from(v))),'Actual credential in owned evidence')}}}
+for(const dir of [root,out,...['before','after'].flatMap(stage=>[base+'/member-reading-lifecycle-487-'+stage,base+'/member-reading-lifecycle-487-'+stage+'-data'])])scan(dir)
+for(let p=path.resolve(authority);;p=path.dirname(p)){assert(!fs.lstatSync(p).isSymbolicLink());if(path.dirname(p)===p)break}
+assert.equal(fs.realpathSync(authority).toLowerCase(),path.resolve(authority).toLowerCase())
+for(const name of ['auth.json','models.json'])assert(fs.lstatSync(authority+'/'+name).isFile())
+for(const name of ['auth.json','models.json'])fs.unlinkSync(authority+'/'+name)
+const finalStat=fs.statSync(prep.source);assert.equal(finalStat.size,stat.size);assert.equal(finalStat.mtimeMs,stat.mtimeMs)
+const retirement={observedAt:new Date().toISOString(),actualCredentialValues:secretValues.size,scannedFiles:files,scannedBytes:bytes,actualValueScan:'clear',catalog:'Complete private model catalogue byte-equal to source before retirement',source:'Original auth size/mtime unchanged;no refresh/exchange/source write',runtimePair:'Complete auth/models retired after original93071/native/output/request/launcher/sourceEOF settlement',privatePair:['auth.json','models.json'].map(name=>({name,outcome:'retired'})),requests:'6 actual gpt-6.1-sol streaming200/sourceEOF;unused live2 and reservedrepair8 retired',userScope:'18571/user process/window/database untouched'}
+fs.writeFileSync(out+'/credential-retirement.json',JSON.stringify(retirement,null,2)+'\n')
+console.log(JSON.stringify({out,images:fs.readdirSync(out).filter(n=>n.endsWith('.png')).length,requests:6,retirement}))

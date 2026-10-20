@@ -1,0 +1,18 @@
+{
+  "observedAt": "2026-10-20T20:31:46.270Z",
+  "changes": [
+    {
+      "table": "session",
+      "id": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "fields": [
+        "time_updated"
+      ],
+      "values": {
+        "time_updated": {
+          "before": 1792498705995,
+          "after": 1792528205418
+        }
+      }
+    }
+  ]
+}

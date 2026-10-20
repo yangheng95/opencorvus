@@ -1,0 +1,165 @@
+{
+  "observedAt": "2026-10-20T20:32:41.698Z",
+  "scopes": {
+    "before": {
+      "originalHandle": 8969,
+      "exit": 0,
+      "physical": {
+        "launcher": {
+          "observedAtUtc": "2026-10-20T20:11:41.8024654Z",
+          "childExitCode": 0
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 87620,
+              "processInstanceID": "win32:639281233855498006",
+              "occurrenceID": "0f86d4e0-78f9-4b35-8cfb-acef6bdee8b9"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 93340,
+              "processInstanceID": "win32:639281233863832010",
+              "occurrenceID": "89590a04-93f9-4847-a7f2-2373891890db"
+            }
+          }
+        ],
+        "native": {
+          "occurrence": "member-reading-lifecycle-487-before-0f898d7e-34a0-4c00-af17-331d4a4a62fc",
+          "outcome": "settled",
+          "host": {
+            "pid": 87620,
+            "processInstanceID": "win32:639281233855498006",
+            "occurrenceID": "0f86d4e0-78f9-4b35-8cfb-acef6bdee8b9"
+          },
+          "target": {
+            "pid": 93340,
+            "processInstanceID": "win32:639281233863832010",
+            "occurrenceID": "89590a04-93f9-4847-a7f2-2373891890db"
+          },
+          "observedAtUtc": "2026-10-20T20:11:41.763Z",
+          "deadlineAt": 1792527784784,
+          "terminal": {
+            "occurrenceID": "member-reading-lifecycle-487-before-0f898d7e-34a0-4c00-af17-331d4a4a62fc",
+            "pid": 93340,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "shutdown": {
+          "statusCode": 200,
+          "observedAtUtc": "2026-10-20T20:11:41.7054711Z",
+          "target": {
+            "pid": 93340,
+            "processInstanceID": "win32:639281233863832010",
+            "occurrenceID": "89590a04-93f9-4847-a7f2-2373891890db"
+          },
+          "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYcf2bx00w2Gpdy62y\"}",
+          "occurrence": "member-reading-lifecycle-487-before-0f898d7e-34a0-4c00-af17-331d4a4a62fc"
+        },
+        "originalHandle": 8969,
+        "originalExit": 0,
+        "observedAtUtc": "2026-10-20T20:11:44.2431826Z"
+      }
+    },
+    "after": {
+      "originalHandle": 93071,
+      "exit": 0,
+      "physical": {
+        "originalHandle": 93071,
+        "shutdown": {
+          "target": {
+            "pid": 79640,
+            "processInstanceID": "win32:639281240412477179",
+            "occurrenceID": "905d130d-8869-46a6-a297-88aea5383b90"
+          },
+          "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYcjqMh00Rs0ZB0lQK\"}",
+          "observedAtUtc": "2026-10-20T20:30:46.2696465Z",
+          "statusCode": 200,
+          "occurrence": "member-reading-lifecycle-487-after-9865df82-d3d2-4732-9309-15eb8502b3fb"
+        },
+        "requests": 6,
+        "native": {
+          "occurrence": "member-reading-lifecycle-487-after-9865df82-d3d2-4732-9309-15eb8502b3fb",
+          "outcome": "settled",
+          "host": {
+            "pid": 77316,
+            "processInstanceID": "win32:639281240404901602",
+            "occurrenceID": "12096dda-6320-472d-ba55-5c3995f18d51"
+          },
+          "target": {
+            "pid": 79640,
+            "processInstanceID": "win32:639281240412477179",
+            "occurrenceID": "905d130d-8869-46a6-a297-88aea5383b90"
+          },
+          "observedAtUtc": "2026-10-20T20:30:46.409Z",
+          "deadlineAt": 1792528440459,
+          "terminal": {
+            "occurrenceID": "member-reading-lifecycle-487-after-9865df82-d3d2-4732-9309-15eb8502b3fb",
+            "pid": 79640,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "runtimePair": "complete auth/models retired after original native/output/request/launcher and source EOF",
+        "observedAtUtc": "2026-10-20T20:30:58.2531278Z",
+        "maximumRequests": 8,
+        "chain": [
+          {
+            "identity": {
+              "pid": 77316,
+              "processInstanceID": "win32:639281240404901602",
+              "occurrenceID": "12096dda-6320-472d-ba55-5c3995f18d51"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 79640,
+              "processInstanceID": "win32:639281240412477179",
+              "occurrenceID": "905d130d-8869-46a6-a297-88aea5383b90"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "originalExit": 0,
+        "maximumBatch": 16,
+        "sourceReaders": "all200/streaming/sourceEOF",
+        "launcher": {
+          "childExitCode": 0,
+          "observedAtUtc": "2026-10-20T20:30:46.4737857Z"
+        }
+      }
+    }
+  },
+  "input": {
+    "originalHandle": 3759,
+    "exit": 1,
+    "result": "Original client TimeoutError while server awaited Ask permission;never resent;actual original tool results and assistant finished normally"
+  },
+  "modelBudget": {
+    "batchMaximum": 16,
+    "liveMaximum": 8,
+    "actual": 6,
+    "repairReserved": 8,
+    "repairActual": 0,
+    "unused": "retired without transfer"
+  },
+  "closedPages": [
+    "58",
+    "59"
+  ]
+}

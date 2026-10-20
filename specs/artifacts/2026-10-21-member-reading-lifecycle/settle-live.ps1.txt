@@ -1,0 +1,27 @@
+param([Parameter(Mandatory=$true)][ValidateSet('before','after')][string]$Scope,[Parameter(Mandatory=$true)][int]$OriginalHandle)
+$ErrorActionPreference='Stop'
+$taskBase='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21'
+$taskEvidence="$taskBase/member-reading-lifecycle-487-after/evidence"
+$taskReady=Get-Content -Raw -LiteralPath "$taskEvidence/native-host-ready.json"|ConvertFrom-Json
+$taskSettled=Get-Content -Raw -LiteralPath "$taskEvidence/native-host-settled.json"|ConvertFrom-Json
+$taskLauncher=Get-Content -Raw -LiteralPath "$taskEvidence/launcher-child-exit.json"|ConvertFrom-Json
+$taskShutdown=Get-Content -Raw -LiteralPath "$taskEvidence/public-shutdown.json"|ConvertFrom-Json
+if(!$taskSettled.physicalCompletion -or !$taskSettled.outputDrainComplete -or !$taskSettled.requestCleanupComplete -or $taskSettled.occurrence -cne $taskReady.occurrence -or $taskSettled.target.processInstanceID -cne $taskReady.target.processInstanceID -or $taskLauncher.childExitCode -ne 0 -or $taskShutdown.statusCode -ne 200){throw 'Original native/output/request/launcher/public shutdown settlement required'}
+. 'D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-long-source-reading-406-launch.ps1' -FunctionsOnly
+$taskChain=@($taskReady.host,$taskReady.target)|ForEach-Object {@{identity=$_;state=(Get-OwnedNativeState $_)}}
+if(@($taskChain|Where-Object state -NE 'dead_or_reused').Count){throw 'Original occurrence remains live'}
+$taskPort=18859
+if(@(Get-NetTCPConnection -State Listen -LocalPort $taskPort -ErrorAction SilentlyContinue).Count){throw 'Owned port remains live'}
+$taskAudit=Get-ChildItem -LiteralPath $taskEvidence -File|Where-Object Name -Match '^provider-[0-9]+-[a-f0-9-]+-[0-9]+\.json$'|Sort-Object {[int]([regex]::Match($_.Name,'-([0-9]+)\.json$').Groups[1].Value)}|Select-Object -Last 1
+$taskSnapshot=Get-Content -Raw -LiteralPath $taskAudit.FullName|ConvertFrom-Json
+if($taskSnapshot.requests.Count -lt 2 -or $taskSnapshot.requests.Count -gt 8 -or $taskSnapshot.maxRequests -ne 8 -or $taskSnapshot.exhausted){throw 'Original fixed scope8 required'}
+foreach($taskRequest in $taskSnapshot.requests){if($taskRequest.model -cne 'gpt-6.1-sol' -or !$taskRequest.streaming -or $taskRequest.status -ne 200 -or $taskRequest.response_reader.terminal.kind -cne 'eof'){throw 'Every original source EOF required'}}
+$taskData=[IO.Path]::GetFullPath("$taskBase/member-reading-lifecycle-487-after-data/runtime/data")
+foreach($taskDir in @($taskBase,"$taskBase/member-reading-lifecycle-487-after-data","$taskBase/member-reading-lifecycle-487-after-data/runtime",$taskData)){if((Get-Item -LiteralPath $taskDir).Attributes -band [IO.FileAttributes]::ReparsePoint){throw 'Pair ancestor linked'}}
+foreach($taskName in @('auth.json','models.json')){
+ $taskFile=[IO.Path]::GetFullPath((Join-Path $taskData $taskName))
+ if([IO.Path]::GetDirectoryName($taskFile) -ne $taskData -or ((Get-Item -LiteralPath $taskFile).Attributes -band [IO.FileAttributes]::ReparsePoint)){throw 'Exact regular pair member required'}
+ Remove-Item -LiteralPath $taskFile -ErrorAction Stop
+}
+@{originalHandle=$OriginalHandle;originalExit=0;native=$taskSettled;chain=$taskChain;launcher=$taskLauncher;shutdown=$taskShutdown;requests=$taskSnapshot.requests.Count;maximumRequests=8;maximumBatch=16;sourceReaders='all200/streaming/sourceEOF';runtimePair='complete auth/models retired after original native/output/request/launcher and source EOF';observedAtUtc=[DateTime]::UtcNow.ToString('o')}|ConvertTo-Json -Depth 12|Set-Content -LiteralPath "$taskEvidence/physical-terminal-and-pair-cleanup.json"
+Write-Output "Original $Scope $OriginalHandle physically settled;$($taskSnapshot.requests.Count)/8 real requests sourceEOF;complete runtime pair retired"

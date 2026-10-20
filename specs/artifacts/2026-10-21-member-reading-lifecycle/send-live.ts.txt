@@ -1,0 +1,17 @@
+import fs from 'node:fs'
+import assert from 'node:assert/strict'
+import { Identifier } from '../../packages/opencorvus/src/id/id'
+const root=import.meta.dir,evidence='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/member-reading-lifecycle-487-after/evidence'
+const preflight=JSON.parse(fs.readFileSync(evidence+'/preflight-ready.json','utf8'));assert.equal(preflight.preflight.credential,'usable');assert.equal(preflight.preflight.catalog,'projected');assert.equal(preflight.preflight.actualModel,'gpt-6.1-sol')
+const files=fs.readdirSync(evidence).filter(name=>/^provider-.*-\d+\.json$/.test(name)).sort((a,b)=>Number(b.match(/-(\d+)\.json$/)![1])-Number(a.match(/-(\d+)\.json$/)![1]))
+const audit=JSON.parse(fs.readFileSync(evidence+'/'+files[0],'utf8'));assert.equal(audit.maxRequests,8);assert.equal(audit.requests.length,2)
+for(const request of audit.requests){assert.equal(request.model,'gpt-6.1-sol');assert.equal(request.streaming,true);assert.equal(request.status,200);assert.equal(request.response_reader.terminal.kind,'eof')}
+const directory='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/project',sessionID='ses_-zUS0WzzQzzDOGrIbYwN',messageID=Identifier.ascending('message')
+const text='MEMBER487WEB。这是给既有普通成员会话的一次有限界面阅读验收输入，不是新的委派。请只由你自己完成，不创建或调用任何其他成员，不创建Task、Mission、Goal，不运行命令，不读写本地文件。请用现有webfetch工具以text格式各实际读取一次这两个公开网页：https://arxiv.org/abs/2509.11035v1 和 https://aclanthology.org/2025.naacl-long.475/ 。每个地址仅请求一次；失败按真实结果说明，不重试、不扩展搜索。保留实际工具产生的网页来源，不造来源、摘录或论文结论。读取后直接连续写约6000字中文网页来源阅读与核验指南，共20节，每节有具体的读者操作、可见结果、边界说明，包含短段落、少量列表与末尾核对表。仅开头不超过150字可根据实际返回概括两个网页的题名/站点，其余只讨论如何核对标题、真实地址、版本、引用归属、工具结果、来源与模型解释、暂停跟随、切换成员、关闭重开侧栏、调宽后阅读和返回最新等操作与明确标注的展示建议。不要长引原文，不把未读内容当事实，不声称本次实测了界面操作。正文以MEMBER487WEBBEGIN开头，以MEMBER487WEBEND结束，一次连续写完，不人为停顿或等待回复。'
+const body={messageID,agent:'work',model:{providerID:'openai',modelID:'gpt-6.1-sol'},parts:[{type:'text',text}]},url=new URL('http://127.0.0.1:18859/session/'+sessionID+'/message');url.searchParams.set('directory',directory)
+fs.writeFileSync(root+'/live-request.json',JSON.stringify({url:url.toString(),body,sessionID,directory,observedAt:new Date().toISOString()},null,2)+'\n',{flag:'wx'})
+console.log(JSON.stringify({dispatchStarted:true,sessionID,messageID,maximumScopeRequests:8,observedAt:new Date().toISOString()}))
+const response=await fetch(url,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)}),result=await response.json() as any
+fs.writeFileSync(root+'/live-response-private.json',JSON.stringify({status:response.status,result,observedAt:new Date().toISOString()},null,2)+'\n',{flag:'wx'})
+console.log(JSON.stringify({status:response.status,sessionID,messageID,assistantMessageID:result.info?.id,finish:result.info?.finish,errorName:result.info?.error?.name,parts:result.parts?.map((part:any)=>({id:part.id,type:part.type,characters:part.text?.length}))}))
+if(!response.ok)process.exitCode=1

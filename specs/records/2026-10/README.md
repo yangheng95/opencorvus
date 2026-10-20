@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [成员来源阅读与渲染生命周期](2026-10-21-member-reading-lifecycle.md)：[21图、完成态同名成员与真实网页流](../../artifacts/2026-10-21-member-reading-lifecycle/README.md)，原权限等待已确认。
+
 - [持续目标输入反馈](2026-10-21-goal-form-validation.md)：中文浏览器错误、旧摘要残留根因与[最终输入/焦点/草稿实页复核](../../artifacts/2026-10-21-goal-form-validation/README.md)。
 
 - [网页工具摘要与Sources阅读](2026-10-21-web-tool-summary.md)：唯一摘要投影与[同一真实来源宽窄、双语及结果详情](../../artifacts/2026-10-21-web-tool-summary/README.md)。

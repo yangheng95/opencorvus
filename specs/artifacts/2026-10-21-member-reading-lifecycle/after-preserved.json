@@ -1,0 +1,42 @@
+{
+  "observedAt": "2026-10-20T20:32:03.357Z",
+  "stage": "after",
+  "schema": 3,
+  "integrity": "ok",
+  "preserved": {
+    "project": 149,
+    "session": 198,
+    "message": 518,
+    "part": 1155,
+    "protocol_event": 1407,
+    "tool_part_request": 119,
+    "tool_part_outcome": 119
+  },
+  "current": {
+    "project": 151,
+    "session": 199,
+    "message": 524,
+    "part": 1169,
+    "protocol_event": 1419,
+    "tool_part_request": 121,
+    "tool_part_outcome": 121
+  },
+  "canonical": {
+    "$schema": "https://opencorvus.ai/config.json",
+    "model": "openai/gpt-6.1-sol",
+    "small_model": "openai/gpt-6.1-sol",
+    "prompt_profile": {
+      "active": "base"
+    },
+    "permission_mode": "ask"
+  },
+  "documentedMutableUpdate": {
+    "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+    "field": "time_updated",
+    "before": 1792498705995,
+    "after": 1792528205418,
+    "reason": "Actual original member input and completed tool/text writes;Session.touch only changes this field"
+  },
+  "source": "All source rows and original bytes/mtime preserved",
+  "qualification": "Readonly persisted data;not a UI assertion or model-run qualification"
+}
