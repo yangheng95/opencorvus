@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [监管命令的启动线程与 Git 包装器](records/2026-10/2026-10-20-process-spawn-thread-cost.md)：[384 次实际命令与线程结算](artifacts/2026-10-20-process-spawn-thread-cost/README.md)，区分主线程响应与完整吞吐，不引入未经全链路证明的新执行路径。
+
 - [配置连续保存与实例初始化](records/2026-10/2026-10-20-physical-comparison-cost.md)：共享目录队列等待环修复、物理读取优化及[17张实图与失败→通过证据](artifacts/2026-10-20-physical-comparison-cost/README.md)。
 
 - [父会话与成员并发阅读](records/2026-10/2026-10-20-parent-member-render-continuity.md)：Sources、Rendering生命周期及[21张实图与审计器修复](artifacts/2026-10-20-parent-member-render-continuity/README.md)。

@@ -1,0 +1,13 @@
+import {parentPort,workerData} from 'node:worker_threads'
+import assert from 'node:assert/strict'
+assert(parentPort)
+const {run,finish}=await import('./runner')
+let running=false
+parentPort.on('message',async(message:any)=>{
+ if(message.kind==='close'){assert.equal(running,false);finish();parentPort!.close();return}
+ assert.equal(running,false);running=true
+ try{parentPort!.postMessage({id:message.id,result:await run(message.items,message.executable,message.concurrency)})}
+ catch(error:any){parentPort!.postMessage({id:message.id,error:{name:error?.name,message:error?.message}})}
+ finally{running=false}
+})
+parentPort.postMessage({kind:'ready',pid:process.pid,worker:workerData.index})

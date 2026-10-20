@@ -1,0 +1,49 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+import {AsyncLocalStorage} from 'node:async_hooks'
+const helper=path.resolve(process.env.OPENCORVUS_PROCESS_SUPERVISOR!)
+assert(helper.endsWith('native-parent-query-446/release-target/release/opencorvus-process-supervisor.exe'.replaceAll('/',path.sep)))
+type Row={index:number;spawnMs:number;closes:Array<{code:number|null;signal:string|null}>;request?:{id:string;dir:string;ownerPID:number;ownerBirth:string;occurrence:string};readyMs?:number;ms?:number;code?:number;stdout?:string;stderr?:string}
+const context=new AsyncLocalStorage<Row>()
+const cp=require('node:child_process'),original=cp.spawn
+cp.spawn=function(executable:string,args:string[],options:Record<string,unknown>){
+ const own=path.resolve(executable)===helper,row=context.getStore(),at=performance.now()
+ let child
+ try{child=Reflect.apply(original,this,[executable,args,options])}
+ finally{if(own&&row)row.spawnMs+=performance.now()-at}
+ if(own&&row)child.once('close',(code:number|null,signal:string|null)=>row.closes.push({code,signal}))
+ return child
+}
+require('node:module').syncBuiltinESMExports()
+const {installProcessShims}=await import('../../packages/opencorvus/src/runtime/shims')
+installProcessShims()
+const {Process}=await import('../../packages/opencorvus/src/util/process')
+const {ProcessSupervisor}=await import('../../packages/opencorvus/src/shell/process-supervisor')
+const {settledWork}=await import('../../packages/opencorvus/src/util/queue')
+const restore=ProcessSupervisor.setWindowsRequestObserverForTest(request=>{
+ const row=context.getStore();assert(row)
+ row.request={id:String(request.request_id),dir:path.dirname(String(request.ready_file)),ownerPID:Number(request.owner_pid),ownerBirth:String(request.owner_process_instance_id),occurrence:String(request.runtime_occurrence_id)}
+ assert.equal(row.request.ownerPID,process.pid)
+})
+export async function run(items:any[],executable:string,concurrency:number){
+ const rows:Row[]=[],started=performance.now()
+ const outcomes=await settledWork({items,concurrency,run:async(item:any,index:number)=>{
+  const row:Row={index,spawnMs:0,closes:[]};rows[index]=row
+  return context.run(row,async()=>{
+   const at=performance.now()
+   const result=await Process.runHost([executable,'-c','core.longPaths=true','rev-parse','--path-format=absolute','--show-toplevel','--git-common-dir'],{cwd:item.worktree,env:{GIT_CEILING_DIRECTORIES:path.dirname(item.worktree)},stdin:'ignore',owner:'process-spawn-thread-cost-475',inactivityTimeoutMs:15000,onSpawned:()=>{row.readyMs=performance.now()-at}})
+   row.ms=performance.now()-at;row.code=result.code;row.stdout=result.stdout.toString();row.stderr=result.stderr.toString()
+   assert.equal(result.code,0)
+   const paths=row.stdout.replace(/\r?\n$/,'').split(/\r?\n/);assert.equal(paths.length,2)
+   assert.equal(await fs.realpath(paths[0]!),await fs.realpath(item.worktree))
+   assert((await fs.stat(paths[1]!)).isDirectory())
+   assert.deepEqual(row.closes,[{code:0,signal:null}]);assert(row.request)
+   const remaining=await fs.readdir(path.dirname(row.request.dir));assert.equal(remaining.includes(path.basename(row.request.dir)),false)
+   return{index,stdout:row.stdout,stderr:row.stderr}
+  })
+ }})
+ const live=ProcessSupervisor.metricsSnapshot(),failures=outcomes.flatMap((o:any)=>o.status==='rejected'?[{name:o.reason?.name,message:o.reason?.message}]:[])
+ return{ms:performance.now()-started,syncSpawnMs:rows.reduce((n,row)=>n+row.spawnMs,0),rows,live,failures,pid:process.pid}
+}
+export function finish(){restore();cp.spawn=original;require('node:module').syncBuiltinESMExports()}

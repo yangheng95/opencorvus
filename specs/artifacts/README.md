@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [启动线程与 Git 包装器诊断](2026-10-20-process-spawn-thread-cost/README.md)：384 次真实 Git 输出、16 组交错量测及三个工作线程的正常退出。
+
 - [配置连续保存与实例初始化](2026-10-20-physical-comparison-cost/README.md)：真实等待环、完整配置恢复、连续两轮保存及17张人工截图。
 
 - [父会话与成员并发阅读](2026-10-20-parent-member-render-continuity/README.md)：Sources定位、双流阅读、被动owner证据与审计器修复后原检查器复验。

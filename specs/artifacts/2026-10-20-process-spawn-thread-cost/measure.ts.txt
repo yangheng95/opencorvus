@@ -1,0 +1,54 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+import {Worker} from 'node:worker_threads'
+const root=import.meta.dir
+assert.equal(path.resolve(process.env.OPENCORVUS_HOME!),path.join(root,'runtime'))
+const input=JSON.parse(await fs.readFile(root+'/../physical-comparison-cost-474/original-history-private.json','utf8'))
+const items=[]
+for(const item of input.projects){try{await fs.access(path.join(item.worktree,'.git'));items.push(item)}catch(error:any){if(error.code!=='ENOENT')throw error}}
+assert(items.length>=24)
+const selected=items.slice(0,24),executables={wrapper:'C:/Program Files/Git/cmd/git.exe',direct:'C:/Program Files/Git/mingw64/bin/git.exe'}
+for(const executable of Object.values(executables))assert((await fs.stat(executable)).isFile())
+const {run,finish}=await import('./runner')
+let next=0
+const workers:any[]=[],groups:any[]=[],expected=new Map<string,{stdout:string;stderr:string}>()
+let failure:any
+try{
+ for(let index=0;index<3;index++){
+  const worker=new Worker(new URL('./worker.ts',import.meta.url),{workerData:{index},env:{...process.env,OPENCORVUS_HOME:path.join(root,'worker-'+index,'runtime')}})
+  const pending=new Map(),closed=new Promise(resolve=>worker.once('exit',code=>resolve(code)))
+  const ready=new Promise<void>((resolve,reject)=>{
+   worker.once('error',reject)
+   worker.on('message',(message:any)=>{if(message.kind==='ready'){assert.equal(message.pid,process.pid);resolve();return}const entry=pending.get(message.id);assert(entry);pending.delete(message.id);message.error?entry.reject(Object.assign(new Error(message.error.message),{name:message.error.name})):entry.resolve(message.result)})
+  })
+  worker.on('error',error=>{for(const entry of pending.values())entry.reject(error);pending.clear()})
+  workers.push({worker,closed,call:(batch:any[],executable:string,concurrency:number)=>new Promise((resolve,reject)=>{const id=++next;pending.set(id,{resolve,reject});worker.postMessage({id,items:batch,executable,concurrency})})})
+  await ready
+ }
+ for(const [mode,binary,concurrency] of [['main','wrapper',1],['worker1','wrapper',1],['worker1','direct',1],['main','direct',1],['main','wrapper',12],['worker1','wrapper',12],['worker3','wrapper',12],['worker3','direct',12],['worker1','direct',12],['main','direct',12],['main','direct',12],['worker1','direct',12],['worker3','direct',12],['worker3','wrapper',12],['worker1','wrapper',12],['main','wrapper',12]] as const){
+  const ticks:number[]=[],started=performance.now();let previous=started
+  const timer=setInterval(()=>{const now=performance.now();ticks.push(now-previous);previous=now},5)
+  let results:any[]
+  try{
+   const executable=executables[binary]
+   results=mode==='main'?[await run(selected,executable,concurrency)]:mode==='worker1'?[await workers[0].call(selected,executable,concurrency)]:await Promise.all(workers.map((worker,index)=>worker.call(selected.filter((_,i)=>i%3===index),executable,Math.ceil(concurrency/3))))
+  }finally{const now=performance.now();ticks.push(now-previous);clearInterval(timer)}
+  for(let thread=0;thread<results.length;thread++){
+   const result=results[thread];assert.deepEqual(result.failures,[])
+   const batch=mode==='worker3'?selected.filter((_,i)=>i%3===thread):selected
+   for(const row of result.rows){const id=batch[row.index].id,baseline=expected.get(id);if(baseline){assert.equal(row.stdout,baseline.stdout);assert.equal(row.stderr,baseline.stderr)}else expected.set(id,{stdout:row.stdout,stderr:row.stderr})}
+  }
+  const row={mode,binary,concurrency,commands:results.reduce((n,r)=>n+r.rows.length,0),wallMs:performance.now()-started,syncSpawnMs:results.reduce((n,r)=>n+r.syncSpawnMs,0),mainMaxTickMs:Math.max(...ticks),mainTickCount:ticks.length,results}
+  groups.push(row)
+  await fs.writeFile(root+'/measurements-private.json',JSON.stringify({runtime:Bun.version,projects:input.projects.length,localGit:items.length,selected:24,groups},null,2))
+  console.log(JSON.stringify({mode,binary,concurrency,commands:row.commands,wallMs:row.wallMs,syncSpawnMs:row.syncSpawnMs,mainMaxTickMs:row.mainMaxTickMs,mainTickCount:row.mainTickCount}))
+ }
+}catch(error:any){failure={name:error?.name,message:error?.message};process.exitCode=1;console.error(JSON.stringify({failure}))}
+finally{
+ finish()
+ for(const entry of workers)entry.worker.postMessage({kind:'close'})
+ const exits=await Promise.all(workers.map(entry=>entry.closed))
+ await fs.writeFile(root+'/measurements-private.json',JSON.stringify({runtime:Bun.version,pid:process.pid,projects:input.projects.length,localGit:items.length,selected:24,groups,failure,workerExits:exits,boundary:'Diagnostic only: original Process.runHost/native supervision in main or standard same-process threads; selected actual Git directories; no production replacement, model, auth, DB initializer or full-configuration qualification'},null,2))
+ console.log(JSON.stringify({groups:groups.length,commands:groups.reduce((n,g)=>n+g.commands,0),workerExits:exits}))
+}

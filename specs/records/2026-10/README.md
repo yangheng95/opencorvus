@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [监管命令的启动线程与 Git 包装器](2026-10-20-process-spawn-thread-cost.md)：384 次真实监管命令、主线程停顿与总耗时的区别及[原句柄结算](../../artifacts/2026-10-20-process-spawn-thread-cost/README.md)。
+
 - [配置连续保存与实例初始化](2026-10-20-physical-comparison-cost.md)：缓存发布/目录队列共性根因、精确身份比较与[原检查器连续复测](../../artifacts/2026-10-20-physical-comparison-cost/README.md)。
 
 - [父会话与成员并发阅读](2026-10-20-parent-member-render-continuity.md)：双流、稳定阅读生命周期、审计绑定发布修复与[21张实图](../../artifacts/2026-10-20-parent-member-render-continuity/README.md)。

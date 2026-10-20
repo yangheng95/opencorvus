@@ -1,0 +1,17 @@
+{"mode":"main","binary":"wrapper","concurrency":1,"commands":24,"wallMs":4059.8158000000003,"syncSpawnMs":696.1390999999994,"mainMaxTickMs":108.13439999999991,"mainTickCount":585}
+{"mode":"worker1","binary":"wrapper","concurrency":1,"commands":24,"wallMs":2529.2963999999993,"syncSpawnMs":184.33810000000085,"mainMaxTickMs":6.560699999999997,"mainTickCount":424}
+{"mode":"worker1","binary":"direct","concurrency":1,"commands":24,"wallMs":2124.8248000000003,"syncSpawnMs":258.1880999999976,"mainMaxTickMs":6.404199999999037,"mainTickCount":357}
+{"mode":"main","binary":"direct","concurrency":1,"commands":24,"wallMs":2609.736000000001,"syncSpawnMs":336.2827999999954,"mainMaxTickMs":92.15020000000004,"mainTickCount":407}
+{"mode":"main","binary":"wrapper","concurrency":12,"commands":24,"wallMs":809.8837999999996,"syncSpawnMs":424.8891999999978,"mainMaxTickMs":98.58469999999943,"mainTickCount":71}
+{"mode":"worker1","binary":"wrapper","concurrency":12,"commands":24,"wallMs":1603.3545000000013,"syncSpawnMs":1356.770599999998,"mainMaxTickMs":7.8443999999981315,"mainTickCount":267}
+{"mode":"worker3","binary":"wrapper","concurrency":12,"commands":24,"wallMs":855.0565999999999,"syncSpawnMs":467.73429999999644,"mainMaxTickMs":10.752300000000105,"mainTickCount":139}
+{"mode":"worker3","binary":"direct","concurrency":12,"commands":24,"wallMs":708.2976000000017,"syncSpawnMs":829.3744999999999,"mainMaxTickMs":8.60689999999886,"mainTickCount":117}
+{"mode":"worker1","binary":"direct","concurrency":12,"commands":24,"wallMs":1752.854199999998,"syncSpawnMs":1517.3051000000087,"mainMaxTickMs":26.235799999998562,"mainTickCount":266}
+{"mode":"main","binary":"direct","concurrency":12,"commands":24,"wallMs":617.0887000000002,"syncSpawnMs":360.19609999998283,"mainMaxTickMs":121.49139999999898,"mainTickCount":47}
+{"mode":"main","binary":"direct","concurrency":12,"commands":24,"wallMs":900.847600000001,"syncSpawnMs":568.057199999992,"mainMaxTickMs":177.71500000000015,"mainTickCount":55}
+{"mode":"worker1","binary":"direct","concurrency":12,"commands":24,"wallMs":1021.0917000000009,"syncSpawnMs":720.6505999999899,"mainMaxTickMs":10.109000000000378,"mainTickCount":170}
+{"mode":"worker3","binary":"direct","concurrency":12,"commands":24,"wallMs":774.5779000000002,"syncSpawnMs":687.7071000000033,"mainMaxTickMs":46.45939999999973,"mainTickCount":85}
+{"mode":"worker3","binary":"wrapper","concurrency":12,"commands":24,"wallMs":1172.4773000000023,"syncSpawnMs":663.7807000000066,"mainMaxTickMs":30.02309999999852,"mainTickCount":181}
+{"mode":"worker1","binary":"wrapper","concurrency":12,"commands":24,"wallMs":891.1823000000004,"syncSpawnMs":487.15320000000065,"mainMaxTickMs":68.27909999999974,"mainTickCount":106}
+{"mode":"main","binary":"wrapper","concurrency":12,"commands":24,"wallMs":1118.7556000000004,"syncSpawnMs":696.4199999999946,"mainMaxTickMs":211.1294999999991,"mainTickCount":73}
+{"groups":16,"commands":384,"workerExits":[0,0,0]}

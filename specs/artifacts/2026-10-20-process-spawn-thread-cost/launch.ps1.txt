@@ -1,0 +1,30 @@
+$ErrorActionPreference='Stop'
+$taskRoot='D:/myhexin-local/opencorvus/.tmp-product-iteration/process-spawn-thread-cost-475'
+$taskOriginal=@{}
+Get-ChildItem Env: | ForEach-Object {$taskOriginal[$_.Name]=$_.Value}
+$taskEnvironment=@{}
+foreach($taskName in @('PATH','SystemRoot','WINDIR','ComSpec','PATHEXT','LANG','LC_ALL','LC_CTYPE')){if($taskOriginal.ContainsKey($taskName)){$taskEnvironment[$taskName]=$taskOriginal[$taskName]}}
+$taskEnvironment.OPENCORVUS_HOME="$taskRoot/runtime"
+$taskEnvironment.HOME="$taskRoot/home"
+$taskEnvironment.USERPROFILE="$taskRoot/home"
+$taskEnvironment.APPDATA="$taskRoot/appdata"
+$taskEnvironment.LOCALAPPDATA="$taskRoot/localappdata"
+$taskEnvironment.OPENCORVUS_DISABLE_EXTERNAL_SKILLS='1'
+$taskEnvironment.OPENCORVUS_DISABLE_AUTOUPDATE='1'
+$taskEnvironment.OPENCORVUS_TASK_PROCESS_MODE='native'
+$taskEnvironment.OPENCORVUS_PROCESS_SUPERVISOR='D:/myhexin-local/opencorvus/.tmp-product-iteration/native-parent-query-446/release-target/release/opencorvus-process-supervisor.exe'
+$taskEnvironment.TEMP="$taskRoot/runtime/tmp"
+$taskEnvironment.TMP=$taskEnvironment.TEMP
+$taskEnvironment.TMPDIR=$taskEnvironment.TEMP
+$taskBun='D:/myhexin-local/opencorvus/.tmp-product-iteration/sse-compression-305/bun140/bun-windows-x64/bun.exe'
+if(Test-Path -LiteralPath "$taskRoot/runtime"){throw 'Fresh runtime required'}
+try{
+ Get-ChildItem Env: | ForEach-Object {[Environment]::SetEnvironmentVariable($_.Name,$null,'Process')}
+ foreach($taskName in $taskEnvironment.Keys){[Environment]::SetEnvironmentVariable($taskName,$taskEnvironment[$taskName],'Process')}
+ & $taskBun "$taskRoot/measure.ts"
+ $taskExit=$LASTEXITCODE
+}finally{
+ Get-ChildItem Env: | ForEach-Object {[Environment]::SetEnvironmentVariable($_.Name,$null,'Process')}
+ foreach($taskName in $taskOriginal.Keys){[Environment]::SetEnvironmentVariable($taskName,$taskOriginal[$taskName],'Process')}
+}
+exit $taskExit

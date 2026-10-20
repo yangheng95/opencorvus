@@ -1,0 +1,33 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+const root=import.meta.dirname,out=path.resolve('specs/artifacts/2026-10-20-process-spawn-thread-cost')
+const report=JSON.parse(await fs.readFile(root+'/measurements-private.json','utf8'))
+assert.equal(report.groups.length,16);assert.equal(report.failure,undefined);assert.deepEqual(report.workerExits,[0,0,0])
+const baseline=report.groups[0].results[0].rows.map(row=>({index:row.index,stdout:row.stdout,stderr:row.stderr}))
+const ownerBirth=report.groups[0].results[0].rows[0].request.ownerBirth,requests=new Set(),occurrences=new Map()
+const groups=[]
+for(const group of report.groups){
+ const rows=[]
+ for(let thread=0;thread<group.results.length;thread++){
+  const result=group.results[thread];assert.deepEqual(result.failures,[]);assert.deepEqual(result.live,{live:0,owners:{}});assert.equal(result.pid,report.pid)
+  for(const row of result.rows){
+   const index=group.mode==='worker3'?row.index*3+thread:row.index
+   assert.equal(row.stdout,baseline[index].stdout);assert.equal(row.stderr,baseline[index].stderr);assert.equal(row.code,0)
+   const paths=row.stdout.replace(/\r?\n$/,'').split(/\r?\n/);assert.equal(paths.length,2);assert((await fs.stat(paths[0])).isDirectory());assert((await fs.stat(paths[1])).isDirectory())
+   assert.deepEqual(row.closes,[{code:0,signal:null}]);assert.equal(row.request.ownerPID,report.pid);assert.equal(row.request.ownerBirth,ownerBirth)
+   requests.add(row.request.id);occurrences.set(row.request.occurrence,(occurrences.get(row.request.occurrence)??0)+1)
+   const entries=await fs.readdir(path.dirname(row.request.dir));assert.equal(entries.length,0)
+   rows.push({selectedIndex:index,spawnMs:row.spawnMs,readyMs:row.readyMs,settledMs:row.ms,code:row.code,helperClose:row.closes[0],requestID:row.request.id,ownerPID:row.request.ownerPID,ownerBirth:row.request.ownerBirth,runtimeOccurrence:row.request.occurrence,requestSettlement:'original request cleaned after physical and output settlement',output:'exactly equals selectedDirectoryOutputs[selectedIndex]'})
+  }
+ }
+ assert.equal(rows.length,24)
+ groups.push({mode:group.mode,binary:group.binary,concurrency:group.concurrency,commands:group.commands,wallMs:group.wallMs,syncSpawnMs:group.syncSpawnMs,mainMaxTickMs:group.mainMaxTickMs,mainTickCount:group.mainTickCount,rows:rows.sort((a,b)=>a.selectedIndex-b.selectedIndex)})
+}
+assert.equal(requests.size,384)
+const footprints=[]
+for(const relative of ['runtime','worker-0/runtime','worker-1/runtime','worker-2/runtime'])footprints.push({runtime:relative,dataEntries:await fs.readdir(path.join(root,relative,'data')),temporaryEntries:await fs.readdir(path.join(root,relative,'tmp'))})
+await fs.writeFile(out+'/samples.jsonl',groups.flatMap((group,index)=>group.rows.map(row=>JSON.stringify({group:index,...row}))).join('\n')+'\n')
+await fs.writeFile(out+'/measurements.json',JSON.stringify({boundary:report.boundary,originalExecHandle:78949,originalExecExitCode:0,runtime:report.runtime,pid:report.pid,sourceSnapshotProjects:report.projects,actualLocalGit:report.localGit,selected:report.selected,commands:requests.size,selectedDirectoryOutputs:baseline,samples:'samples.jsonl: each original command with zero-based group and selectedIndex',groups:groups.map(({rows,...group})=>group),workerExits:report.workerExits,runtimeOccurrences:[...occurrences].map(([id,commands])=>({id,commands})),footprints,fullConfigurationPerformance:'No new qualification; prior cold10s/restore5s still failed; original contract preserved'},null,2)+'\n')
+await fs.copyFile(root+'/measure.log',out+'/measure.log')
+console.log(JSON.stringify({groups:groups.length,commands:requests.size,workerExits:report.workerExits,runtimeOccurrences:occurrences.size,footprints}))
