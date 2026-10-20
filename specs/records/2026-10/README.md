@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Task与Mission的Goal入口](2026-10-20-goal-owner-ui.md)：独立草稿、Mission实跑与[15张截图及同页切换](../../artifacts/2026-10-20-goal-owner-ui/README.md)。
+
 - [Goal 与真实附件移交](2026-10-20-goal-attachment-handoff.md)：文件选择、原 Project 归属、宿主菜单与[10张实际截图和持久化事实](../../artifacts/2026-10-20-goal-attachment-handoff/README.md)。
 
 - [首页草稿与 Goal 创建](2026-10-20-goal-composer-draft.md)：已有输入、作用域移交与[16张真实截图和两个流式目标](../../artifacts/2026-10-20-goal-composer-draft/README.md)。

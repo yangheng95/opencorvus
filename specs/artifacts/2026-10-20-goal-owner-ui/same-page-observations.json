@@ -1,0 +1,27 @@
+{
+  "tab": "8",
+  "port": 18749,
+  "method": "Manual command palette clicks and typing through CUA; no goto or reload between these selections",
+  "sequence": [
+    "Initial Mission page opened once",
+    "Command palette searched exact Task title and selected Task",
+    "Typed independent Task draft",
+    "Command palette selected visible Mission result",
+    "Typed independent Mission draft",
+    "Command palette searched exact Task title and selected Task; observed restored Task draft and Cancelled status",
+    "Command palette selected visible Mission result; observed restored Mission draft, Complete goal and 41550 tokens / 1 turn"
+  ],
+  "task": {
+    "id": "tsk_g00VY2wVPp007jvlKjOJ",
+    "draft": "同页 Task 草稿 463\n切换 Mission 后再返回，继续保留当前输入。"
+  },
+  "mission": {
+    "sessionID": "ses_-zURQjvQ8zz3y3NgFyVx",
+    "draft": "同页 Mission 草稿 463\n这段输入属于 Mission，保留已有完成目标。",
+    "goalID": "pev_g0VYZGNo400wC7tWqfTF",
+    "goalStatus": "complete",
+    "tokens": 41550,
+    "turns": 1
+  },
+  "kind": "Manual observation record; not a browser test or UI fixture"
+}

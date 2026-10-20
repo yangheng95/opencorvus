@@ -1,0 +1,222 @@
+{
+  "scope": "goal-owner-ui-463",
+  "preflight": {
+    "sessionID": "ses_hGB1YkZoB9LNFxkQD6Ms",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "settlement": {
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 59116,
+          "processInstanceID": "win32:639280735058911077",
+          "occurrenceID": "be4f5d97-d14e-4776-9158-749114a908d6"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 77636,
+          "processInstanceID": "win32:639280735065555842",
+          "occurrenceID": "a51d7f40-609a-4d30-917f-41e5e4f7e519"
+        }
+      }
+    ],
+    "observedAtUtc": "2026-10-20T06:17:51.0504424Z",
+    "native": {
+      "occurrence": "goal-owner-ui-463-dd260fb9-c12c-4a3d-b26d-f6b98701655d",
+      "outcome": "settled",
+      "host": {
+        "pid": 59116,
+        "processInstanceID": "win32:639280735058911077",
+        "occurrenceID": "be4f5d97-d14e-4776-9158-749114a908d6"
+      },
+      "target": {
+        "pid": 77636,
+        "processInstanceID": "win32:639280735065555842",
+        "occurrenceID": "a51d7f40-609a-4d30-917f-41e5e4f7e519"
+      },
+      "observedAtUtc": "2026-10-20T06:17:49.867Z",
+      "deadlineAt": 1792477905521,
+      "terminal": {
+        "occurrenceID": "goal-owner-ui-463-dd260fb9-c12c-4a3d-b26d-f6b98701655d",
+        "pid": 77636,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "physicalCompletion": true,
+    "copiedPair": [
+      {
+        "name": "auth.json",
+        "outcome": "retired"
+      },
+      {
+        "name": "models.json",
+        "outcome": "retired"
+      }
+    ],
+    "pairedCleanupComplete": true,
+    "occurrence": "goal-owner-ui-463-dd260fb9-c12c-4a3d-b26d-f6b98701655d"
+  },
+  "launcherExit": 0,
+  "publicShutdown": 200,
+  "provider": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "identity": {
+        "sessionID": "ses_hGB1YkZoB9LNFxkQD6Ms",
+        "streamRequest": {
+          "requestID": "msg_hCjr0CBJMg3QbRal6SYT",
+          "agentID": "memory",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VYZFc1C001bNDGBDmR",
+          "attempt": 0
+        }
+      },
+      "terminal": {
+        "kind": "eof",
+        "at": 1792476716065
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "identity": {
+        "sessionID": "ses_hGB1YkZoB9LNFxkQD6Ms",
+        "streamRequest": {
+          "requestID": "msg_hCjr0CBJMg3QbRal6SYT",
+          "agentID": "chat",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VYZFcCi00anL7G1IsY",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VYZFc1J00JaW8R7JtA"
+        }
+      },
+      "terminal": {
+        "kind": "eof",
+        "at": 1792476715823
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "identity": {
+        "sessionID": "ses_-zURQjvQ8zz3y3NgFyVx",
+        "streamRequest": {
+          "requestID": "msg_hu80HW5VlGYSeJ0jtCOJ",
+          "agentID": "memory",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VYZG4az00yI2vC1ImM",
+          "attempt": 0
+        }
+      },
+      "terminal": {
+        "kind": "eof",
+        "at": 1792476825850
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "identity": {
+        "sessionID": "ses_-zURQjvQ8zz3y3NgFyVx",
+        "streamRequest": {
+          "requestID": "msg_hu80HW5VlGYSeJ0jtCOJ",
+          "agentID": "mission",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VYZG586008msM8raJ5",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VYZG4ax00crwtL9JPj"
+        }
+      },
+      "terminal": {
+        "kind": "eof",
+        "at": 1792476828231
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "identity": {
+        "sessionID": "ses_-zURQjvQ8zz3y3NgFyVx",
+        "streamRequest": {
+          "requestID": "msg_hu80HW5VlGYSeJ0jtCOJ",
+          "agentID": "memory",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VYZG5a900DI428Sz4n",
+          "attempt": 0
+        }
+      },
+      "terminal": {
+        "kind": "eof",
+        "at": 1792476830187
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "identity": {
+        "sessionID": "ses_-zURQjvQ8zz3y3NgFyVx",
+        "streamRequest": {
+          "requestID": "msg_heTgyE0Gb1pKGMGWyuxK",
+          "agentID": "mission",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VYZGO6U00XpWXgeMe9",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VYZGNxb00bz6x7X1OZ"
+        }
+      },
+      "terminal": {
+        "kind": "eof",
+        "at": 1792476900536
+      }
+    }
+  ]
+}

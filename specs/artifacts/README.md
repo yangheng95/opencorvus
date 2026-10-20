@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Task与Mission当前Goal页面](2026-10-20-goal-owner-ui/README.md)：15张真实截图、Mission自动目标、URL恢复及同页搜索切换，保留新Task执行未验收范围。
+
 - [Goal与真实附件移交](2026-10-20-goal-attachment-handoff/README.md)：10张真实截图、实际文件read与Sources、新宿主能力菜单和待发送附件保留。
 
 - [首页草稿与 Goal 创建](2026-10-20-goal-composer-draft/README.md)：16张真实截图、项目/全局/侧聊输入衔接及两个流式目标；保留文件上传未验收项。

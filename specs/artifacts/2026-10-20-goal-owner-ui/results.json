@@ -1,0 +1,54 @@
+{
+  "scope": "goal-owner-ui-463",
+  "history": {
+    "schema": {
+      "user_version": 2
+    },
+    "projects": 118,
+    "sessions": 160,
+    "baseline": {
+      "projects": 116,
+      "sessions": 158
+    },
+    "verification": "Direct readonly SQLite after original physical/output/request/launcher joins; every original identity, Project owner and directory retained; no production initializer or user database"
+  },
+  "screenshots": [
+    "mission-cancel.png",
+    "mission-complete.png",
+    "mission-goal-result.png",
+    "mission-initial-result.png",
+    "mission-prefill.png",
+    "mission-reload.png",
+    "mission-return.png",
+    "task-after-mission.png",
+    "task-cancel.png",
+    "task-current-state.png",
+    "task-prefill.png",
+    "task-reload.png"
+  ],
+  "checks": {
+    "native": {
+      "originalHandle": 49317,
+      "exitCode": 0
+    },
+    "frontend": "Unchanged formal462 publication; actual source changes: none",
+    "provider": {
+      "totalRequests": 6,
+      "budget": 12,
+      "allModel": "gpt-6.1-sol",
+      "streaming": true,
+      "http": 200,
+      "terminal": "eof"
+    }
+  },
+  "verified": [
+    "Task correct scope and prefill",
+    "Task cancel, same URL reload and return retain own draft/cancelled status",
+    "Actual global Mission creation and first fixed reply",
+    "Mission correct scope, prefill, cancel and same URL reload",
+    "Actual one-turn Mission goal, budget41550/1 and exact reply",
+    "Return to Task and then Mission restores their corresponding visible states",
+    "Explicit operator Goal completion under public author=user"
+  ],
+  "remaining": "Actual Task Goal execution is not qualified in this run. Desktop native directory picker, full-history config save10s/restore5s and fresh side-agent live Rendering qualification remain unmet."
+}

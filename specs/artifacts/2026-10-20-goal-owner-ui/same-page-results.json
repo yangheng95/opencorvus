@@ -1,0 +1,42 @@
+{
+  "scope": "goal-owner-ui-463-final",
+  "history": {
+    "schema": {
+      "user_version": 2
+    },
+    "projects": 119,
+    "sessions": 161,
+    "baselines": [
+      {
+        "projects": 116,
+        "sessions": 158
+      },
+      {
+        "projects": 118,
+        "sessions": 160
+      }
+    ],
+    "verification": "Readonly SQLite after both original native/output/request/launcher joins; every original identity, owner and directory preserved"
+  },
+  "screenshots": [
+    "spa-mission.png",
+    "spa-task-return.png",
+    "spa-mission-return.png"
+  ],
+  "method": "Actual command-palette clicks and typing through CUA in the same Document, after its one initial navigation; manually viewed original screenshots, no UI automation",
+  "verified": [
+    "Task selected through actual search result",
+    "Task draft retained after Mission selection",
+    "Mission complete goal and 41550 tokens/1turn restored",
+    "Mission draft retained on subsequent actual selection",
+    "Persisted Mission messages/goal events and Task lifecycle preserved"
+  ],
+  "totalRequests": 8,
+  "originalCumulativeBudget": 12,
+  "frontend": "Same unchanged formal462 UI",
+  "native": {
+    "originalHandle": 47462,
+    "exitCode": 0
+  },
+  "remaining": "Actual Task Goal execution, desktop directory picker and original full-history config save10s/restore5s still unqualified or unmet."
+}

@@ -1,0 +1,124 @@
+{
+  "scope": "goal-owner-ui-463-final",
+  "preflight": {
+    "sessionID": "ses_hg8Z6vDxo2jaS47pB8wO",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "settlement": {
+    "pairedCleanupComplete": true,
+    "native": {
+      "occurrence": "goal-owner-ui-463-final-f752ee0c-9b11-4384-af1f-ed01baf85fa1",
+      "outcome": "settled",
+      "host": {
+        "pid": 91236,
+        "processInstanceID": "win32:639280740443869525",
+        "occurrenceID": "2b3c6d20-bc66-435d-856c-b76d0147f6ff"
+      },
+      "target": {
+        "pid": 70992,
+        "processInstanceID": "win32:639280740449803267",
+        "occurrenceID": "565d9960-dda6-493b-afe3-4045fcb936b2"
+      },
+      "observedAtUtc": "2026-10-20T06:24:03.815Z",
+      "deadlineAt": 1792478443662,
+      "terminal": {
+        "occurrenceID": "goal-owner-ui-463-final-f752ee0c-9b11-4384-af1f-ed01baf85fa1",
+        "pid": 70992,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "physicalCompletion": true,
+    "chain": [
+      {
+        "identity": {
+          "pid": 91236,
+          "processInstanceID": "win32:639280740443869525",
+          "occurrenceID": "2b3c6d20-bc66-435d-856c-b76d0147f6ff"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "identity": {
+          "pid": 70992,
+          "processInstanceID": "win32:639280740449803267",
+          "occurrenceID": "565d9960-dda6-493b-afe3-4045fcb936b2"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "observedAtUtc": "2026-10-20T06:24:05.0010281Z",
+    "occurrence": "goal-owner-ui-463-final-f752ee0c-9b11-4384-af1f-ed01baf85fa1",
+    "copiedPair": [
+      {
+        "name": "auth.json",
+        "outcome": "retired"
+      },
+      {
+        "name": "models.json",
+        "outcome": "retired"
+      }
+    ]
+  },
+  "launcherExit": 0,
+  "publicShutdown": 200,
+  "provider": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "identity": {
+        "sessionID": "ses_hg8Z6vDxo2jaS47pB8wO",
+        "streamRequest": {
+          "requestID": "msg_hhCsn0v15RGJejZ8xSCY",
+          "agentID": "memory",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VYZHsVy00TirVsozY2",
+          "attempt": 0
+        }
+      },
+      "terminal": {
+        "kind": "eof",
+        "at": 1792477257438
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "identity": {
+        "sessionID": "ses_hg8Z6vDxo2jaS47pB8wO",
+        "streamRequest": {
+          "requestID": "msg_hhCsn0v15RGJejZ8xSCY",
+          "agentID": "chat",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VYZHsjr00WkdJ568xJ",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VYZHsW600SNyNoZSJq"
+        }
+      },
+      "terminal": {
+        "kind": "eof",
+        "at": 1792477256119
+      }
+    }
+  ]
+}
