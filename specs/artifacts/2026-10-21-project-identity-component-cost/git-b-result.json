@@ -1,0 +1,48 @@
+{
+  "observedAt": "2026-10-20T22:19:00.254Z",
+  "runtime": "1.4.0",
+  "mode": "git",
+  "run": "git-b",
+  "owner": {
+    "pid": 80544,
+    "processInstanceID": "win32:639281315305326543",
+    "occurrenceID": "53ab14aa-d01d-4f24-837a-a3acfffb1dcd"
+  },
+  "projects": 149,
+  "gitProjects": 148,
+  "nonGitProjects": 1,
+  "concurrency": 12,
+  "wallMs": 8949.5428,
+  "mainMaxTickMs": 43.43329999999969,
+  "parentCpuUserMs": 1843,
+  "parentCpuSystemMs": 5688,
+  "statCalls": 0,
+  "realpathCalls": 0,
+  "queries": 296,
+  "terminal": {
+    "owner": {
+      "pid": 80544,
+      "processInstanceID": "win32:639281315305326543",
+      "occurrenceID": "53ab14aa-d01d-4f24-837a-a3acfffb1dcd"
+    },
+    "helper": {
+      "pid": 87984,
+      "processInstanceID": "win32:639281315313052829",
+      "occurrenceID": "75926d6b-72c1-41a5-99c5-cfbf0b5c2736"
+    },
+    "terminal": {
+      "code": 0,
+      "signal": null
+    },
+    "helperState": "dead_or_reused",
+    "outputComplete": true,
+    "queryRecords": 296
+  },
+  "live": {
+    "live": 0,
+    "owners": {}
+  },
+  "modelRequests": 0,
+  "boundary": "Isolated component control on complete original149 inputs only;not full Config,production behavior change or UI qualification. Counted directory loops exclude baseline/Git-output checks. Parent CPU excludes native helper and Git children. Components are not additive wall-clock parts of the mixed original request.",
+  "completeOriginal": "git-b-result.json.gz"
+}

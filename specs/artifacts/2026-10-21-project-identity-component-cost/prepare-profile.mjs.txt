@@ -1,0 +1,26 @@
+import fs from 'node:fs/promises'
+import assert from 'node:assert/strict'
+const root=import.meta.dirname
+let source=await fs.readFile(root+'/../native-query-scope-490/scope-client.ts','utf8')
+function replace(a,b){assert.equal(source.split(a).length,2,a);source=source.replace(a,b)}
+replace("path.join(import.meta.dir,'native-target/release/opencorvus-process-supervisor.exe')","path.join(import.meta.dir,'../native-query-scope-490/native-target/release/opencorvus-process-supervisor.exe')")
+replace('request:any,root:string','request:any,root:string,timing:any')
+replace('const value=JSON.parse(line),item=', 'const rawResponseAt=performance.now();const value=JSON.parse(line),item=')
+replace('const request=item.request,marker=', 'item.timing.rawResponseAt=rawResponseAt;const request=item.request,marker=')
+replace('let ready\n', 'item.timing.physicalReadAt=performance.now();let ready\n')
+replace('const receivedAt=performance.now()','item.timing.proofAcceptedAt=performance.now();const receivedAt=performance.now()')
+replace('this.records.push({request,helper:marker,ready,physical,result:value,receivedAt,requestCleanupComplete:true})','item.timing.cleanedAt=performance.now();this.records.push({request,helper:marker,ready,physical,result:value,receivedAt,requestCleanupComplete:true,timing:item.timing})')
+replace("  if(!path.isAbsolute(executable)","  const timing:any={startedAt:performance.now()}\n  if(!path.isAbsolute(executable)")
+replace('  const id=randomUUID(),root=', '  timing.resolvedAt=performance.now()\n  const id=randomUUID(),root=')
+replace('  const request={kind:', '  timing.directoryReadyAt=performance.now()\n  const request={kind:')
+replace('  let resolve!:', '  timing.publishedAt=performance.now()\n  let resolve!:')
+replace('this.pending.set(id,{resolve,reject,request,root})','this.pending.set(id,{resolve,reject,request,root,timing})')
+await fs.writeFile(root+'/scope-client-profile.ts',source)
+let components=await fs.readFile(root+'/components.ts','utf8')
+components=components.replace("await import('../native-query-scope-490/scope-client')","await import('./scope-client-profile')").replace('wallMs,mainMaxTickMs:', 'wallMs,measurementStartedAtMs:started,measurementFinishedAtMs:performance.now(),mainMaxTickMs:')
+await fs.writeFile(root+'/components-profile.ts',components)
+let launch=await fs.readFile(root+'/launch.ps1','utf8')
+launch=launch.replace("[ValidateSet('components')]","[ValidateSet('components-profile')]")
+launch=launch.replace('$taskBun "$taskScratch/$Stage.ts"','$taskBun --preload "$taskScratch/profile-native.ts" "$taskScratch/$Stage.ts"')
+await fs.writeFile(root+'/launch-profile.ps1',launch)
+console.log('Private original native call observer and per-query stage clocks prepared')

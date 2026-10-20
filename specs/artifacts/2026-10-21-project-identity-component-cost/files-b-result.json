@@ -1,0 +1,29 @@
+{
+  "observedAt": "2026-10-20T22:19:16.576Z",
+  "runtime": "1.4.0",
+  "mode": "files",
+  "run": "files-b",
+  "owner": {
+    "pid": 68192,
+    "processInstanceID": "win32:639281315528929799",
+    "occurrenceID": "13321d75-37e3-4409-a11d-934be8214267"
+  },
+  "projects": 149,
+  "gitProjects": 148,
+  "nonGitProjects": 1,
+  "concurrency": 12,
+  "wallMs": 2845.1084,
+  "mainMaxTickMs": 8.595700000000079,
+  "parentCpuUserMs": 1578,
+  "parentCpuSystemMs": 11688,
+  "statCalls": 44402,
+  "realpathCalls": 44402,
+  "queries": 0,
+  "live": {
+    "live": 0,
+    "owners": {}
+  },
+  "modelRequests": 0,
+  "boundary": "Isolated component control on complete original149 inputs only;not full Config,production behavior change or UI qualification. Counted directory loops exclude baseline/Git-output checks. Parent CPU excludes native helper and Git children. Components are not additive wall-clock parts of the mixed original request.",
+  "completeOriginal": "files-b-result.json.gz"
+}

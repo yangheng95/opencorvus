@@ -1,0 +1,27 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+import {gzipSync,gunzipSync} from 'node:zlib'
+const root=import.meta.dirname,out=path.resolve(root,'../../specs/artifacts/2026-10-21-project-identity-component-cost'),read=name=>JSON.parse(fs.readFileSync(root+'/'+name,'utf8'))
+fs.mkdirSync(out,{recursive:true})
+function archive(name,target=name){const raw=fs.readFileSync(root+'/'+name),compressed=gzipSync(raw);assert(gunzipSync(compressed).equals(raw),'Original archive bytes preserved');fs.writeFileSync(out+'/'+target+'.gz',compressed)}
+const physical=read('physical-scopes.json');assert.equal(physical.scopes.length,10)
+const matrix=physical.scopes.map(scope=>{
+ const run=scope.run,data=read(run+'-result.json')
+ assert.equal(scope.originalExit,0);assert.equal(data.owner.pid,scope.ready.target.pid);assert.equal(data.owner.processInstanceID,scope.ready.target.processInstanceID);assert.equal(data.live.live,0)
+ if(data.queries){assert.equal(data.queries,296);assert.equal(data.records.length,296);for(const row of data.records){assert.equal(row.request.owner_pid,data.owner.pid);assert.equal(row.request.owner_process_instance_id,data.owner.processInstanceID);assert.equal(row.request.runtime_occurrence_id,data.owner.occurrenceID);assert.equal(row.result.code,0);assert.equal(row.physical.active_processes,0);assert.equal(row.requestCleanupComplete,true)}}
+ archive(run+'-result.json')
+ const {records,itemTimings,...summary}=data
+ fs.writeFileSync(out+'/'+run+'-result.json',JSON.stringify({...summary,completeOriginal:run+'-result.json.gz'},null,2)+'\n')
+ fs.copyFileSync(root+'/'+run+'.log',out+'/'+run+'.log')
+ if(run.includes('profile'))archive(run+'-native-profile.json')
+ return{run,mode:data.mode,wallMs:data.wallMs,mainMaxTickMs:data.mainMaxTickMs,statCalls:data.statCalls,realpathCalls:data.realpathCalls,queries:data.queries,concurrency:data.concurrency,parentCpuUserMs:data.parentCpuUserMs,parentCpuSystemMs:data.parentCpuSystemMs,originalToolHandle:scope.originalToolHandle,originalExit:0}
+})
+assert.equal(matrix.reduce((sum,row)=>sum+row.statCalls,0),133206);assert.equal(matrix.reduce((sum,row)=>sum+row.realpathCalls,0),133206);assert.equal(matrix.reduce((sum,row)=>sum+row.queries,0),1776)
+fs.writeFileSync(out+'/matrix.json',JSON.stringify({observedAt:new Date().toISOString(),groups:matrix,totalCountedDirectoryLoopCalls:266412,gitObservations:1776,modelRequests:0,boundary:'Component controls only;not additive mixed-request wall-clock,full Config,UI or production ownership qualification. Directory loop counters exclude fresh baseline and actual Git output checks;Trace2 group has additional diagnostic IO.'},null,2)+'\n')
+for(const name of ['analysis.json','physical-scopes.json','source-preserved.json'])fs.copyFileSync(root+'/'+name,out+'/'+name)
+archive('trace-correlations.json');archive('native-profile-b-scope/runtime/git-trace2.jsonl','git-trace2.jsonl')
+for(const name of ['prepare.mjs','components.ts','profile-native.ts','prepare-profile.mjs','scope-client-profile.ts','components-profile.ts','launch.ps1','launch-profile.ps1','prepare-native-profile.mjs','scope-client-native-profile.ts','components-native-profile.ts','launch-native-profile.ps1','analyse.mjs','verify-physical.ps1','verify-source.ts','archive.mjs'])fs.copyFileSync(root+'/'+name,out+'/'+name+'.txt')
+archive('native/src/main.rs','native-main.rs.txt')
+for(const name of ['Cargo.toml','Cargo.lock'])fs.copyFileSync(root+'/native/'+name,out+'/'+name+'.txt')
+console.log(JSON.stringify({out,scopes:10,countedStat:133206,countedRealpath:133206,gitObservations:1776,modelRequests:0,groups:matrix.map(({run,wallMs})=>({run,wallMs}))}))

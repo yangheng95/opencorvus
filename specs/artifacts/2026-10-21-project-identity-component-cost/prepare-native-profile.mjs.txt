@@ -1,0 +1,38 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+const root=import.meta.dirname,prior=path.resolve(root,'../native-query-scope-490')
+await fs.mkdir(root+'/native/src',{recursive:true})
+for(const file of ['Cargo.toml','Cargo.lock'])await fs.copyFile(prior+'/native/'+file,root+'/native/'+file)
+let rust=(await fs.readFile(prior+'/native/src/main.rs','utf8')).replaceAll('\r\n','\n')
+function replace(a,b){assert.equal(rust.split(a).length,2,a.slice(0,100));rust=rust.replace(a,b)}
+const clock=[
+'    thread_local! { static QUERY_CLOCK491: std::cell::RefCell<Option<(Instant,Vec<(String,f64)>)>> = const { std::cell::RefCell::new(None) }; }',
+'    fn phase491(name:&str) { QUERY_CLOCK491.with(|slot| {if let Some((clock,phases))=slot.borrow_mut().as_mut(){phases.push((name.to_string(),clock.elapsed().as_secs_f64()*1000.0));}}); }',
+'',
+].join('\n')
+replace('    #[derive(Deserialize)]\n    #[serde(tag = "kind", rename_all = "snake_case")]',clock+'    #[derive(Deserialize)]\n    #[serde(tag = "kind", rename_all = "snake_case")]')
+replace('    fn execute_scope_query(query: ScopeQuery) -> serde_json::Value {','    fn execute_scope_query(query: ScopeQuery) -> serde_json::Value {\n        QUERY_CLOCK491.with(|slot| *slot.borrow_mut()=Some((Instant::now(),Vec::new())));\n        phase491("query-enter");')
+replace('fn prepare_target(request: &LaunchRequest, io: Option<&ScopeIo>) -> Result<(Handle, SuspendedTarget, String), String> {','fn prepare_target(request: &LaunchRequest, io: Option<&ScopeIo>) -> Result<(Handle, SuspendedTarget, String), String> {\n        phase491("prepare-enter");')
+replace('        publish_helper_marker(request, helper_pid, &helper_instance_id)?;','        publish_helper_marker(request, helper_pid, &helper_instance_id)?;\n        phase491("helper-published");')
+replace('        let standard_handles = if let Some(io) = io {','        phase491("owner-validated");\n        let standard_handles = if let Some(io) = io {')
+replace('        let (process, thread, pid) =\n            create_suspended_process(request, standard_handles, job.as_ref().map(|job| job.0), environment)?;','        phase491("job-created");\n        let (process, thread, pid) =\n            create_suspended_process(request, standard_handles, job.as_ref().map(|job| job.0), environment)?;\n        phase491("target-created");')
+replace('        let resumed = unsafe { ResumeThread(target.thread.0) };','        phase491("ready-published");\n        let resumed = unsafe { ResumeThread(target.thread.0) };')
+replace('        let mut cancellation_applied = false;\n        let mut transferred = false;','        phase491("target-resumed");\n        let mut cancellation_applied = false;\n        let mut transferred = false;')
+replace('        let mut code = 1u32;\n        let read_exit_code', '        phase491("target-exited");\n        let mut code = 1u32;\n        let read_exit_code')
+replace('        publish_settlement_marker(&request, target.pid)?;\n        drop(target);','        phase491("job-zero");\n        publish_settlement_marker(&request, target.pid)?;\n        phase491("settled-published");\n        drop(target);')
+replace('            finished.store(true,Ordering::Release);','            phase491("output-joined");\n            finished.store(true,Ordering::Release);')
+replace('            let mut failures=Vec::new();','            phase491("monitor-joined");\n            let mut failures=Vec::new();')
+replace('        match execute(){Ok(value)=>value,Err(error)=>serde_json::json!({"request_id":request_id,"error":error})}','        let mut result=match execute(){Ok(value)=>value,Err(error)=>serde_json::json!({"request_id":request_id,"error":error})};\n        let phases=QUERY_CLOCK491.with(|slot|slot.borrow_mut().take().unwrap().1);\n        result["native_phases"]=serde_json::to_value(phases).unwrap();\n        result')
+await fs.writeFile(root+'/native/src/main.rs',rust)
+let client=await fs.readFile(root+'/scope-client-profile.ts','utf8')
+client=client.replace("'../native-query-scope-490/native-target/release/opencorvus-process-supervisor.exe'","'native-target/release/opencorvus-process-supervisor.exe'")
+await fs.writeFile(root+'/scope-client-native-profile.ts',client)
+let components=await fs.readFile(root+'/components-profile.ts','utf8')
+components=components.replace("await import('./scope-client-profile')","await import('./scope-client-native-profile')")
+await fs.writeFile(root+'/components-native-profile.ts',components)
+let launch=await fs.readFile(root+'/launch-profile.ps1','utf8')
+launch=launch.replaceAll('components-profile','components-native-profile')
+launch=launch.replace("$taskEnvironment.TMPDIR=$taskEnvironment.TEMP","$taskEnvironment.TMPDIR=$taskEnvironment.TEMP\nif($Run -eq 'native-profile-b'){$taskEnvironment.GIT_TRACE2_EVENT=\"$taskRoot/runtime/git-trace2.jsonl\"}")
+await fs.writeFile(root+'/launch-native-profile.ps1',launch)
+console.log('Private native Instant phase observer prepared;original arguments and control flow preserved')

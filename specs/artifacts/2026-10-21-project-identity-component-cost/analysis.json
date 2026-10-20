@@ -1,0 +1,468 @@
+{
+  "observedAt": "2026-10-20T22:32:57.909Z",
+  "profiles": [
+    {
+      "run": "git-profile-a",
+      "wallMs": 8466.538700000001,
+      "blockingRenameWindows": {
+        "count": 296,
+        "sum": 326.7525000000014,
+        "median": 0.9294999999992797,
+        "p95": 2.1036999999996624,
+        "max": 6.246499999999969
+      },
+      "clientOverlappingWaits": {
+        "startedAt->resolvedAt": {
+          "count": 296,
+          "sum": 12322.795799999987,
+          "median": 30.985500000000684,
+          "p95": 117.76000000000022,
+          "max": 145.57459999999992
+        },
+        "resolvedAt->directoryReadyAt": {
+          "count": 296,
+          "sum": 266.7582999999988,
+          "median": 0.394800000000032,
+          "p95": 3.474399999999605,
+          "max": 18.504899999999907
+        },
+        "directoryReadyAt->publishedAt": {
+          "count": 296,
+          "sum": 2070.515800000012,
+          "median": 5.418700000000172,
+          "p95": 18.147000000000162,
+          "max": 33.97919999999999
+        },
+        "publishedAt->rawResponseAt": {
+          "count": 296,
+          "sum": 82423.4467,
+          "median": 267.5664999999999,
+          "p95": 420.2525999999998,
+          "max": 591.2035000000001
+        },
+        "rawResponseAt->physicalReadAt": {
+          "count": 296,
+          "sum": 1422.255899999996,
+          "median": 0.9646999999995387,
+          "p95": 16.970900000000256,
+          "max": 90.22870000000012
+        },
+        "physicalReadAt->proofAcceptedAt": {
+          "count": 296,
+          "sum": 167.06929999999784,
+          "median": 0.3558000000002721,
+          "p95": 1.2095999999992273,
+          "max": 8.819100000000617
+        },
+        "proofAcceptedAt->cleanedAt": {
+          "count": 296,
+          "sum": 537.9901000000123,
+          "median": 1.2644000000000233,
+          "p95": 3.7577000000001135,
+          "max": 37.02649999999994
+        }
+      },
+      "nativeOverlappingPhases": {},
+      "boundary": "Only synchronous native clock samples are serialized main-thread intervals. Promise/native request durations overlap and are not additive wall-clock or CPU."
+    },
+    {
+      "run": "git-profile-b",
+      "wallMs": 8523.836,
+      "blockingRenameWindows": {
+        "count": 296,
+        "sum": 340.42989999999986,
+        "median": 0.8833000000004176,
+        "p95": 2.496200000000499,
+        "max": 6.619599999999991
+      },
+      "clientOverlappingWaits": {
+        "startedAt->resolvedAt": {
+          "count": 296,
+          "sum": 12840.147999999994,
+          "median": 31.428899999999885,
+          "p95": 114.92290000000003,
+          "max": 277.80629999999996
+        },
+        "resolvedAt->directoryReadyAt": {
+          "count": 296,
+          "sum": 264.3105999999991,
+          "median": 0.41269999999985885,
+          "p95": 2.7937999999994645,
+          "max": 30.092200000000048
+        },
+        "directoryReadyAt->publishedAt": {
+          "count": 296,
+          "sum": 2266.1440999999973,
+          "median": 5.672699999999168,
+          "p95": 20.631200000000035,
+          "max": 36.28839999999991
+        },
+        "publishedAt->rawResponseAt": {
+          "count": 296,
+          "sum": 82127.89819999995,
+          "median": 268.3484999999996,
+          "p95": 415.3674000000001,
+          "max": 505.29549999999927
+        },
+        "rawResponseAt->physicalReadAt": {
+          "count": 296,
+          "sum": 1315.9907000000067,
+          "median": 0.996900000000096,
+          "p95": 18.882399999999507,
+          "max": 78.27560000000017
+        },
+        "physicalReadAt->proofAcceptedAt": {
+          "count": 296,
+          "sum": 205.3374000000083,
+          "median": 0.36380000000008295,
+          "p95": 1.57090000000062,
+          "max": 15.945500000000038
+        },
+        "proofAcceptedAt->cleanedAt": {
+          "count": 296,
+          "sum": 486.49179999999,
+          "median": 1.292500000000473,
+          "p95": 3.31470000000013,
+          "max": 19.278000000000247
+        }
+      },
+      "nativeOverlappingPhases": {},
+      "boundary": "Only synchronous native clock samples are serialized main-thread intervals. Promise/native request durations overlap and are not additive wall-clock or CPU."
+    },
+    {
+      "run": "native-profile-a",
+      "wallMs": 8797.2074,
+      "blockingRenameWindows": {
+        "count": 296,
+        "sum": 326.5006000000026,
+        "median": 0.8730000000000473,
+        "p95": 2.1262000000006083,
+        "max": 3.889799999999923
+      },
+      "clientOverlappingWaits": {
+        "startedAt->resolvedAt": {
+          "count": 296,
+          "sum": 12738.534999999998,
+          "median": 32.652000000000044,
+          "p95": 105.18229999999949,
+          "max": 182.3907999999999
+        },
+        "resolvedAt->directoryReadyAt": {
+          "count": 296,
+          "sum": 205.9128000000112,
+          "median": 0.4036000000005515,
+          "p95": 2.327099999999973,
+          "max": 6.991999999999962
+        },
+        "directoryReadyAt->publishedAt": {
+          "count": 296,
+          "sum": 2063.693599999997,
+          "median": 5.5659999999998035,
+          "p95": 16.10570000000007,
+          "max": 25.852499999999964
+        },
+        "publishedAt->rawResponseAt": {
+          "count": 296,
+          "sum": 84855.78910000001,
+          "median": 268.78250000000025,
+          "p95": 470.6638999999998,
+          "max": 837.5530000000003
+        },
+        "rawResponseAt->physicalReadAt": {
+          "count": 296,
+          "sum": 1333.543399999981,
+          "median": 1.127599999999802,
+          "p95": 16.291299999999865,
+          "max": 73.67349999999988
+        },
+        "physicalReadAt->proofAcceptedAt": {
+          "count": 296,
+          "sum": 218.4374000000014,
+          "median": 0.37219999999979336,
+          "p95": 2.7105000000001382,
+          "max": 12.40020000000004
+        },
+        "proofAcceptedAt->cleanedAt": {
+          "count": 296,
+          "sum": 524.7971000000166,
+          "median": 1.3004000000000815,
+          "p95": 3.635099999999966,
+          "max": 15.08159999999998
+        }
+      },
+      "nativeOverlappingPhases": {
+        "query-enter->prepare-enter": {
+          "count": 296,
+          "sum": 297.8655,
+          "median": 0.4362,
+          "p95": 3.5082000000000004,
+          "max": 22.9389
+        },
+        "prepare-enter->helper-published": {
+          "count": 296,
+          "sum": 2250.2199999999993,
+          "median": 5.3881,
+          "p95": 19.588900000000002,
+          "max": 33.510600000000004
+        },
+        "helper-published->owner-validated": {
+          "count": 296,
+          "sum": 10.50140000000001,
+          "median": 0.03310000000000013,
+          "p95": 0.04760000000000009,
+          "max": 0.12659999999999982
+        },
+        "owner-validated->job-created": {
+          "count": 296,
+          "sum": 7.222099999999976,
+          "median": 0.019499999999998963,
+          "p95": 0.030100000000000016,
+          "max": 1.1256000000000022
+        },
+        "job-created->target-created": {
+          "count": 296,
+          "sum": 7367.425,
+          "median": 5.918900000000001,
+          "p95": 100.2867,
+          "max": 160.4624
+        },
+        "target-created->ready-published": {
+          "count": 296,
+          "sum": 1758.4320000000007,
+          "median": 5.121799999999993,
+          "p95": 11.184800000000003,
+          "max": 26.143299999999996
+        },
+        "ready-published->target-resumed": {
+          "count": 296,
+          "sum": 2.344300000000082,
+          "median": 0.0057000000000009265,
+          "p95": 0.008099999999998886,
+          "max": 0.3440000000000012
+        },
+        "target-resumed->target-exited": {
+          "count": 296,
+          "sum": 64427.87759999998,
+          "median": 197.00420000000003,
+          "p95": 412.7304,
+          "max": 673.5079
+        },
+        "target-exited->job-zero": {
+          "count": 296,
+          "sum": 17.69579999999995,
+          "median": 0.024499999999989086,
+          "p95": 0.22390000000001464,
+          "max": 1.2830000000000155
+        },
+        "job-zero->settled-published": {
+          "count": 296,
+          "sum": 1963.2252999999996,
+          "median": 4.974899999999991,
+          "p95": 17.485400000000084,
+          "max": 38.34039999999999
+        },
+        "settled-published->output-joined": {
+          "count": 296,
+          "sum": 54.55809999999967,
+          "median": 0.18330000000000268,
+          "p95": 0.3392999999999802,
+          "max": 2.288599999999974
+        },
+        "output-joined->monitor-joined": {
+          "count": 296,
+          "sum": 3639.6344999999997,
+          "median": 11.797799999999938,
+          "p95": 23.606499999999926,
+          "max": 58.10570000000007
+        }
+      },
+      "boundary": "Only synchronous native clock samples are serialized main-thread intervals. Promise/native request durations overlap and are not additive wall-clock or CPU."
+    },
+    {
+      "run": "native-profile-b",
+      "wallMs": 11863.383699999998,
+      "blockingRenameWindows": {
+        "count": 296,
+        "sum": 337.76649999999347,
+        "median": 0.8410000000003492,
+        "p95": 2.5234999999993306,
+        "max": 12.551699999999983
+      },
+      "clientOverlappingWaits": {
+        "startedAt->resolvedAt": {
+          "count": 296,
+          "sum": 15804.05320000001,
+          "median": 31.75970000000052,
+          "p95": 129.70650000000023,
+          "max": 488.1755999999996
+        },
+        "resolvedAt->directoryReadyAt": {
+          "count": 296,
+          "sum": 225.5869999999959,
+          "median": 0.3945000000003347,
+          "p95": 2.9843999999993684,
+          "max": 6.510699999999815
+        },
+        "directoryReadyAt->publishedAt": {
+          "count": 296,
+          "sum": 1990.9990999999945,
+          "median": 5.402799999999843,
+          "p95": 14.224200000000565,
+          "max": 43.53610000000026
+        },
+        "publishedAt->rawResponseAt": {
+          "count": 296,
+          "sum": 116897.91359999999,
+          "median": 394.2489999999998,
+          "p95": 535.4858999999997,
+          "max": 691.4605000000001
+        },
+        "rawResponseAt->physicalReadAt": {
+          "count": 296,
+          "sum": 1501.2614000000015,
+          "median": 1.1401999999998225,
+          "p95": 19.490099999999074,
+          "max": 71.43090000000029
+        },
+        "physicalReadAt->proofAcceptedAt": {
+          "count": 296,
+          "sum": 227.64720000000898,
+          "median": 0.3625999999994747,
+          "p95": 2.254899999999907,
+          "max": 27.981900000000678
+        },
+        "proofAcceptedAt->cleanedAt": {
+          "count": 296,
+          "sum": 508.69569999999453,
+          "median": 1.297099999999773,
+          "p95": 4.412699999999859,
+          "max": 10.01700000000028
+        }
+      },
+      "nativeOverlappingPhases": {
+        "query-enter->prepare-enter": {
+          "count": 296,
+          "sum": 391.8665,
+          "median": 0.4116,
+          "p95": 4.0689,
+          "max": 49.2546
+        },
+        "prepare-enter->helper-published": {
+          "count": 296,
+          "sum": 2300.5877999999984,
+          "median": 5.0996,
+          "p95": 24.498799999999996,
+          "max": 48.557100000000005
+        },
+        "helper-published->owner-validated": {
+          "count": 296,
+          "sum": 11.122499999999958,
+          "median": 0.03389999999999915,
+          "p95": 0.05190000000000072,
+          "max": 0.2530000000000001
+        },
+        "owner-validated->job-created": {
+          "count": 296,
+          "sum": 7.474100000000022,
+          "median": 0.02069999999999972,
+          "p95": 0.033200000000000784,
+          "max": 0.6803999999999988
+        },
+        "job-created->target-created": {
+          "count": 296,
+          "sum": 5841.466399999999,
+          "median": 5.584699999999999,
+          "p95": 96.1947,
+          "max": 166.89839999999998
+        },
+        "target-created->ready-published": {
+          "count": 296,
+          "sum": 1718.935,
+          "median": 4.933199999999999,
+          "p95": 10.165600000000001,
+          "max": 30.7613
+        },
+        "ready-published->target-resumed": {
+          "count": 296,
+          "sum": 1.7369000000001478,
+          "median": 0.00560000000000116,
+          "p95": 0.007900000000002905,
+          "max": 0.024699999999995725
+        },
+        "target-resumed->target-exited": {
+          "count": 296,
+          "sum": 96757.03650000003,
+          "median": 324.07050000000004,
+          "p95": 468.28069999999997,
+          "max": 597.1842
+        },
+        "target-exited->job-zero": {
+          "count": 296,
+          "sum": 17.891899999999282,
+          "median": 0.024699999999995725,
+          "p95": 0.12189999999998236,
+          "max": 2.648399999999981
+        },
+        "job-zero->settled-published": {
+          "count": 296,
+          "sum": 1875.8173000000004,
+          "median": 4.524200000000064,
+          "p95": 15.04159999999996,
+          "max": 70.92339999999996
+        },
+        "settled-published->output-joined": {
+          "count": 296,
+          "sum": 56.125099999999236,
+          "median": 0.18280000000004293,
+          "p95": 0.4227999999999952,
+          "max": 2.4961999999999875
+        },
+        "output-joined->monitor-joined": {
+          "count": 296,
+          "sum": 4102.3741,
+          "median": 13.529100000000028,
+          "p95": 31.259299999999996,
+          "max": 63.850900000000024
+        }
+      },
+      "boundary": "Only synchronous native clock samples are serialized main-thread intervals. Promise/native request durations overlap and are not additive wall-clock or CPU."
+    }
+  ],
+  "traceSummary": {
+    "eventCount": 2368,
+    "processes": 296,
+    "worktrees": 148,
+    "observationsPerWorktree": 2,
+    "nativeRootsEqualCorrelatedGitPIDs": 0,
+    "gitInternalTotalMs": {
+      "count": 296,
+      "sum": 35165.664000000004,
+      "median": 110.54899999999999,
+      "p95": 175.124,
+      "max": 271.66499999999996
+    },
+    "gitTraceStartupToAncestryMs": {
+      "count": 296,
+      "sum": 27923.902000000013,
+      "median": 87.26400000000001,
+      "p95": 146.393,
+      "max": 252.92
+    },
+    "gitAfterAncestryToExitMs": {
+      "count": 296,
+      "sum": 2167.318999999999,
+      "median": 5.861000000000005,
+      "p95": 16.146999999999995,
+      "max": 36.427
+    },
+    "nativeRootResumedToExitMs": {
+      "count": 296,
+      "sum": 96757.03650000003,
+      "median": 324.07050000000004,
+      "p95": 468.28069999999997,
+      "max": 597.1842
+    },
+    "boundary": "Trace2 materially perturbs this sample through Windows ancestry/file logging. This is not an uninstrumented performance comparison;not a proof of Defender,OS bug,or exact child birth identity."
+  },
+  "decision": "Directory scans and synchronous rename do not explain the remaining scope by themselves. Original process-lifecycle window is still large;Trace2 overhead must not be subtracted from untraced samples. No production change justified by this component data alone."
+}

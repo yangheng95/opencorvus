@@ -1,0 +1,29 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+const samples:any[]=[]
+;(globalThis as any).__nativePublishSamples491=samples
+const originalFile='D:/myhexin-local/opencorvus/packages/opencorvus/src/util/rename-no-replace.ts'
+let loaded=0
+Bun.plugin({name:'491-native-publish-pass-through',setup(builder){builder.onLoad({filter:/[\\/]util[\\/]rename-no-replace\.ts$/},async(input)=>{
+ assert.equal(path.resolve(input.path).toLowerCase(),path.resolve(originalFile).toLowerCase())
+ let code=await Bun.file(input.path).text()
+ for(const [name,next]of [['renameWindows','replaceWindows'],['replaceWindows','/** Atomically replace a file']]){
+  const begin=code.indexOf('async function '+name+'('),end=code.indexOf(next.startsWith('/')?next:'async function '+next+'(',begin+1)
+  assert(begin>=0&&end>begin)
+  let segment=code.slice(begin,end)
+  const anchor='  const library = dlopen("kernel32.dll", {'
+  assert.equal(segment.split(anchor).length,2)
+  segment=segment.replace(anchor,'  const __nativeStart491=performance.now()\n'+anchor)
+  const close='    library.close()'
+  assert.equal(segment.split(close).length,2)
+  segment=segment.replace(close,close+'\n    ;(globalThis as any).__nativePublishSamples491.push({kind:"'+name+'",writeThrough,startedAt:__nativeStart491,finishedAt:performance.now()})')
+  code=code.slice(0,begin)+segment+code.slice(end)
+ }
+ loaded++
+ return{contents:code,loader:'ts'}
+})}})
+process.on('exit',(exitCode)=>{
+ const run=process.env.OPENCORVUS_DIAGNOSTIC_LAUNCH_RUN!
+ fs.writeFileSync(path.join(import.meta.dir,run+'-native-profile.json'),JSON.stringify({observedAt:new Date().toISOString(),pid:process.pid,exitCode,loaded,samples,boundary:'Private runtime onLoad clock observations of original parameter/result/error/flags;GetLastError read at original site;no production or native binary change'},null,2)+'\n',{flag:'wx'})
+})

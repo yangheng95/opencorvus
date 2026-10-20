@@ -1,0 +1,17 @@
+$ErrorActionPreference='Stop'
+$taskRoot='D:/myhexin-local/opencorvus/.tmp-product-iteration/project-identity-component-cost-491'
+. 'D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-long-source-reading-406-launch.ps1' -FunctionsOnly
+$taskRuns=@(@('files-a','8e42bd'),@('git-a',89498),@('stat-a','e868bd'),@('real-a','00e96a'),@('git-b',69666),@('files-b','837e0c'),@('git-profile-a',25230),@('git-profile-b',70064),@('native-profile-a',80136),@('native-profile-b',69322))
+$taskRecords=@()
+foreach($taskPair in $taskRuns){
+ $taskName=$taskPair[0];$taskEvidence="$taskRoot/$taskName-scope/evidence"
+ $taskReady=Get-Content -Raw -LiteralPath "$taskEvidence/native-host-ready.json"|ConvertFrom-Json
+ $taskSettled=Get-Content -Raw -LiteralPath "$taskEvidence/native-host-settled.json"|ConvertFrom-Json
+ $taskLauncher=Get-Content -Raw -LiteralPath "$taskEvidence/launcher-child-exit.json"|ConvertFrom-Json
+ if($taskSettled.outcome -ne 'settled' -or $taskSettled.terminal.reason -ne 'exited' -or $taskSettled.terminal.exitCode -ne 0 -or !$taskSettled.physicalCompletion -or !$taskSettled.outputDrainComplete -or !$taskSettled.requestCleanupComplete -or $taskLauncher.originalChildExit -ne 0 -or $taskSettled.occurrence -cne $taskReady.occurrence){throw "Incomplete original scope $taskName"}
+ $taskChain=@($taskReady.host,$taskReady.target)|ForEach-Object {@{identity=$_;state=(Get-OwnedNativeState $_)}}
+ if(@($taskChain|Where-Object state -ne 'dead_or_reused').Count){throw "Original scope remains live: $taskName"}
+ $taskRecords+=@{run=$taskName;originalToolHandle=$taskPair[1];originalExit=0;ready=$taskReady;native=$taskSettled;launcher=$taskLauncher;chain=$taskChain}
+}
+@{observedAtUtc=[DateTime]::UtcNow.ToString('o');scopes=$taskRecords;count=$taskRecords.Count;boundary='Ten original native/output/request/launcher settlements;all original exit0;no restarted occurrence'}|ConvertTo-Json -Depth 15|Set-Content -LiteralPath "$taskRoot/physical-scopes.json"
+Write-Output 'Ten original scopes physically settled;all original exit0'

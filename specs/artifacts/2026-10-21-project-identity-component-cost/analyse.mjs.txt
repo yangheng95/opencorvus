@@ -1,0 +1,44 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+const root=import.meta.dirname,read=name=>JSON.parse(fs.readFileSync(root+'/'+name,'utf8'))
+function stats(values){const a=[...values].sort((a,b)=>a-b);return{count:a.length,sum:a.reduce((a,b)=>a+b,0),median:a[Math.floor(a.length/2)],p95:a[Math.min(a.length-1,Math.floor(a.length*.95))],max:Math.max(...a)}}
+function nativeSummary(run){
+ const data=read(run+'-result.json'),profile=read(run+'-native-profile.json')
+ assert.equal(profile.loaded,1);assert.equal(profile.pid,data.owner.pid);assert.equal(profile.exitCode,0);assert.equal(profile.samples.length,296)
+ const stages={},nativePhases={}
+ const keys=['startedAt','resolvedAt','directoryReadyAt','publishedAt','rawResponseAt','physicalReadAt','proofAcceptedAt','cleanedAt']
+ for(const row of data.records){
+  for(let i=1;i<keys.length;i++)(stages[keys[i-1]+'->'+keys[i]]??=[]).push(row.timing[keys[i]]-row.timing[keys[i-1]])
+  const phases=row.result.native_phases??[]
+  for(let i=1;i<phases.length;i++)(nativePhases[phases[i-1][0]+'->'+phases[i][0]]??=[]).push(phases[i][1]-phases[i-1][1])
+ }
+ return{run,wallMs:data.wallMs,blockingRenameWindows:stats(profile.samples.map(row=>row.finishedAt-row.startedAt)),clientOverlappingWaits:Object.fromEntries(Object.entries(stages).map(([name,a])=>[name,stats(a)])),nativeOverlappingPhases:Object.fromEntries(Object.entries(nativePhases).map(([name,a])=>[name,stats(a)])),boundary:'Only synchronous native clock samples are serialized main-thread intervals. Promise/native request durations overlap and are not additive wall-clock or CPU.'}
+}
+const profiles=['git-profile-a','git-profile-b','native-profile-a','native-profile-b'].map(nativeSummary)
+const trace=fs.readFileSync(root+'/native-profile-b-scope/runtime/git-trace2.jsonl','utf8').trim().split(/\r?\n/).map(JSON.parse),traceBySid=new Map()
+for(const event of trace){const rows=traceBySid.get(event.sid)??[];rows.push(event);traceBySid.set(event.sid,rows)}
+assert.equal(traceBySid.size,296)
+const norm=value=>path.win32.resolve(value).toLowerCase(),byRepo=new Map(),native=read('native-profile-b-result.json'),nativeByRepo=new Map()
+for(const row of native.records){const key=norm(row.request.cwd),rows=nativeByRepo.get(key)??[];rows.push(row);nativeByRepo.set(key,rows)}
+for(const [sid,events]of traceBySid){
+ const start=events.find(row=>row.event==='start'),exit=events.find(row=>row.event==='exit'),last=events.find(row=>row.event==='atexit'),repo=events.find(row=>row.event==='def_repo'),ancestry=events.find(row=>row.key==='windows/ancestry')
+ assert(start&&exit&&last&&repo&&ancestry);assert.equal(exit.code,0);assert.equal(last.code,0)
+ assert.deepEqual(start.argv,['git.exe','-c','core.longPaths=true','rev-parse','--path-format=absolute','--show-toplevel','--git-common-dir'])
+ const key=norm(repo.worktree),rows=byRepo.get(key)??[];rows.push({sid,start,exit,last,repo,ancestry,pid:parseInt(sid.match(/-P([a-f0-9]+)$/i)[1],16)});byRepo.set(key,rows)
+}
+assert.equal(byRepo.size,148);assert.equal(nativeByRepo.size,148)
+const correlations=[]
+for(const [repo,traces]of byRepo){
+ const requests=nativeByRepo.get(repo);assert.equal(requests.length,2);assert.equal(traces.length,2)
+ requests.sort((a,b)=>a.timing.startedAt-b.timing.startedAt);traces.sort((a,b)=>a.start.time.localeCompare(b.start.time))
+ for(let observation=0;observation<2;observation++){
+  const request=requests[observation],trace=traces[observation],phases=request.result.native_phases
+  correlations.push({requestID:request.request.request_id,worktree:request.request.cwd,observation,nativeRootPID:request.ready.target_pid,nativeRootBirth:request.ready.target_process_instance_id,gitTraceSID:trace.sid,gitTracePID:trace.pid,gitTraceAncestorNames:trace.ancestry.value,traceStart:trace.start.time,traceExit:trace.exit.time,gitInternalTotalMs:trace.exit.t_abs*1000,gitTraceStartupToAncestryMs:(trace.ancestry.t_abs-trace.start.t_abs)*1000,gitAfterAncestryToExitMs:(trace.exit.t_abs-trace.ancestry.t_abs)*1000,nativeRootResumedToExitMs:phases.find(row=>row[0]==='target-exited')[1]-phases.find(row=>row[0]==='target-resumed')[1]})
+ }
+}
+fs.writeFileSync(root+'/trace-correlations.json',JSON.stringify({boundary:'Exact worktree plus the two sequential observations per worktree bind trace SIDs to request ordinals;different worktrees may overlap. Matching a PID somewhere in the entire batch is invalid due PID reuse. PID alone does not supply birth identity for the traced Git child.',records:correlations},null,2)+'\n',{flag:'wx'})
+const traceSummary={eventCount:trace.length,processes:traceBySid.size,worktrees:byRepo.size,observationsPerWorktree:2,nativeRootsEqualCorrelatedGitPIDs:correlations.filter(row=>row.nativeRootPID===row.gitTracePID).length,gitInternalTotalMs:stats(correlations.map(row=>row.gitInternalTotalMs)),gitTraceStartupToAncestryMs:stats(correlations.map(row=>row.gitTraceStartupToAncestryMs)),gitAfterAncestryToExitMs:stats(correlations.map(row=>row.gitAfterAncestryToExitMs)),nativeRootResumedToExitMs:stats(correlations.map(row=>row.nativeRootResumedToExitMs)),boundary:'Trace2 materially perturbs this sample through Windows ancestry/file logging. This is not an uninstrumented performance comparison;not a proof of Defender,OS bug,or exact child birth identity.'}
+const result={observedAt:new Date().toISOString(),profiles,traceSummary,decision:'Directory scans and synchronous rename do not explain the remaining scope by themselves. Original process-lifecycle window is still large;Trace2 overhead must not be subtracted from untraced samples. No production change justified by this component data alone.'}
+fs.writeFileSync(root+'/analysis.json',JSON.stringify(result,null,2)+'\n',{flag:'wx'})
+console.log(JSON.stringify({profiles:profiles.map(row=>({run:row.run,wall:row.wallMs,blockingRename:row.blockingRenameWindows,native:row.nativeOverlappingPhases})),traceSummary},null,2))

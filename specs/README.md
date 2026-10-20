@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [项目身份核验的组件成本](records/2026-10/2026-10-21-project-identity-component-cost.md)：[十个原scope与296项Trace2关联](artifacts/2026-10-21-project-identity-component-cost/README.md)，排除全表扫描/同步rename单一归因，保留完整配置未达状态。
+
 - [短期原生查询作用域](records/2026-10/2026-10-21-native-query-scope.md)：[原149目录交错对照与生命周期](artifacts/2026-10-21-native-query-scope/README.md)，局部17.5/17.9秒降至11.1/11.2秒，完整配置仍未达标，生产未改。
 
 - [Git原生组合与配置发现边界](records/2026-10/2026-10-21-git-native-discovery-batch.md)：[完整149目录八组对照](artifacts/2026-10-21-git-native-discovery-batch/README.md)，整表组合局部减半、隐式合批实际退化，生产未改。

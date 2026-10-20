@@ -1,0 +1,8 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
+const root=import.meta.dirname,prior=path.resolve(root,'../native-query-scope-490')
+for(const name of ['input-private.json','expected-git-private.json','verify-source.ts'])await fs.copyFile(path.join(prior,name),path.join(root,name))
+let launch=await fs.readFile(path.join(prior,'launch.ps1'),'utf8')
+launch=launch.replace("[ValidateSet('contracts','measure','lifecycle')]","[ValidateSet('components')]").replace("[ValidateSet('single','scope')]","[ValidateSet('files','git','stat','real')]").replaceAll('native-query-scope-490','project-identity-component-cost-491')
+await fs.writeFile(root+'/launch.ps1',launch)
+console.log('Private complete149 input and isolated launcher prepared;source database not initialized')

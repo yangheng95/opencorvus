@@ -1,0 +1,56 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import os from 'node:os'
+import assert from 'node:assert/strict'
+const root=import.meta.dir,mode=process.env.OPENCORVUS_DIAGNOSTIC_LAUNCH_MODE!,run=process.env.OPENCORVUS_DIAGNOSTIC_LAUNCH_RUN!
+assert(['files','git','stat','real'].includes(mode));assert.match(run,/^[a-z0-9-]+$/)
+const input=JSON.parse(await fs.readFile(root+'/input-private.json','utf8')),items=input.projects as Array<{id:string,worktree:string}>
+assert.equal(items.length,149)
+const baseline=await Promise.all(items.map(async row=>{const info=await fs.stat(row.worktree,{bigint:true});let git=true;try{await fs.access(path.join(row.worktree,'.git'))}catch(error:any){if(error.code!=='ENOENT')throw error;git=false}return{git,physical:await fs.realpath(row.worktree),device:info.dev,inode:info.ino}}))
+assert.equal(baseline.filter(row=>row.git).length,148)
+const {installProcessShims}=await import('../../packages/opencorvus/src/runtime/shims');installProcessShims()
+const {settledWork}=await import('../../packages/opencorvus/src/util/queue')
+const {QueryScope}=await import('../native-query-scope-490/scope-client')
+const {ProcessSupervisor}=await import('../../packages/opencorvus/src/shell/process-supervisor')
+const {currentRuntimeProcessOccurrence}=await import('../../packages/opencorvus/src/runtime/process-occurrence')
+const owner=currentRuntimeProcessOccurrence(),outputs:any[]=[],ticks:number[]=[],itemTimings:any[]=[]
+const expected=JSON.parse(await fs.readFile(root+'/expected-git-private.json','utf8'))
+let statCalls=0,realpathCalls=0,queries=0,completed=0
+const started=performance.now(),cpuStart=process.cpuUsage();let previous=started
+const timer=setInterval(()=>{const now=performance.now();ticks.push(now-previous);previous=now},5)
+const progress=setInterval(()=>console.log(JSON.stringify({run,mode,completed,statCalls,realpathCalls,queries,elapsedMs:performance.now()-started})),5000)
+let scope:InstanceType<typeof QueryScope>|undefined,terminal:any,outcomes:any[]=[]
+try{
+ if(mode==='git')scope=new QueryScope(path.join(process.env.OPENCORVUS_HOME!,'queries'))
+ outcomes=await settledWork({items,concurrency:os.availableParallelism(),run:async(item,index)=>{
+  const itemStarted=performance.now()
+  for(let observation=0;observation<2;observation++){
+   if(mode==='files'||mode==='stat')for(let registered=0;registered<items.length;registered++){
+    const stat=await fs.stat(items[registered].worktree,{bigint:true});statCalls++
+    assert.equal(stat.dev,baseline[registered].device);assert.equal(stat.ino,baseline[registered].inode)
+   }
+   if(mode==='files'||mode==='real')await Promise.all(items.map(async(row,n)=>{assert.equal(await fs.realpath(row.worktree),baseline[n].physical);realpathCalls++}))
+   if(scope&&baseline[index].git){
+    const result=await scope.run('git',['-c','core.longPaths=true','rev-parse','--path-format=absolute','--show-toplevel','--git-common-dir'],item.worktree)
+    queries++;assert.equal(result.code,0);assert.equal(result.error,null);assert.deepEqual(result.native_errors,[])
+    const stdout=result.stdout.toString(),stderr=result.stderr.toString(),paths=stdout.replace(/\r?\n$/,'').split(/\r?\n/)
+    assert.equal(paths.length,2);assert.equal(await fs.realpath(paths[0]),baseline[index].physical);assert((await fs.stat(paths[1])).isDirectory())
+    outputs.push({id:item.id,observation,stdout,stderr})
+   }
+  }
+  completed++;itemTimings.push({id:item.id,startedAt:itemStarted-started,finishedAt:performance.now()-started})
+  return {id:item.id,observations:2}
+ }})
+}finally{
+ if(scope)terminal=await scope.close()
+ ticks.push(performance.now()-previous);clearInterval(timer);clearInterval(progress)
+ await fs.writeFile(root+'/'+run+'-raw.json',JSON.stringify({run,mode,owner,outcomes:outcomes.map(row=>row.status==='rejected'?{status:row.status,error:{name:row.reason?.name,message:row.reason?.message}}:row),records:scope?.records,terminal,statCalls,realpathCalls,queries},null,2)+'\n',{flag:'wx'})
+}
+const wallMs=performance.now()-started,cpu=process.cpuUsage(cpuStart),failures=outcomes.flatMap(o=>o.status==='rejected'?[{name:o.reason?.name,message:o.reason?.message}]:[])
+assert.deepEqual(failures,[]);assert.equal(completed,149)
+assert.equal(statCalls,['files','stat'].includes(mode)?44402:0);assert.equal(realpathCalls,['files','real'].includes(mode)?44402:0)
+if(scope){assert.equal(queries,296);assert.deepEqual(outputs.toSorted((a,b)=>a.id.localeCompare(b.id)||a.observation-b.observation),expected)}
+const result={observedAt:new Date().toISOString(),runtime:Bun.version,mode,run,owner,projects:149,gitProjects:148,nonGitProjects:1,concurrency:os.availableParallelism(),wallMs,mainMaxTickMs:Math.max(...ticks),parentCpuUserMs:cpu.user/1000,parentCpuSystemMs:cpu.system/1000,statCalls,realpathCalls,queries,itemTimings,terminal,records:scope?.records,live:ProcessSupervisor.metricsSnapshot(),modelRequests:0,boundary:'Isolated component control on complete original149 inputs only;not full Config,production behavior change or UI qualification. Counted directory loops exclude baseline/Git-output checks. Parent CPU excludes native helper and Git children. Components are not additive wall-clock parts of the mixed original request.'}
+await fs.writeFile(root+'/'+run+'-result.json',JSON.stringify(result,null,2)+'\n',{flag:'wx'})
+const {itemTimings:_itemTimings,records,...summary}=result
+console.log(JSON.stringify(summary))

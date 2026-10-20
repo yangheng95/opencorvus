@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [项目身份组件与原生进程分段](2026-10-21-project-identity-component-cost/README.md)：266412次计数文件系统观察、1776次真实Git、Trace2扰动与逐目录身份关联，原十scope结算和3665行保留。
+
 - [原生查询作用域](2026-10-21-native-query-scope/README.md)：1184次完整149目录有效交错查询、十项聚合真实进程合同、原失败/八scope结算与3665行保留；私有原型未推广。
 
 - [Git原生查询组合](2026-10-21-git-native-discovery-batch/README.md)：同149目录/2368次查询观察的八组原始事实；隐式合批18.9/20.0秒退化，未交付生产。
