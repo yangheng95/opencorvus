@@ -189,6 +189,11 @@ operator explicitly reviews the current revision before resubmitting. Owner/serv
 selection retires the dialog and pending UI feedback. Request IDs bind the same
 submission content. Product labels, errors and number/date formatting follow the
 current locale; user/model originals and technical identities retain their actual values.
+Objective, budget and completion-evidence fields retain native constraint validation.
+Their invalid events report the existing localized goal error, and editing clears
+the custom validity and the prior local submission summary before updating the
+field value. Server failures retain their original disclosure. Native focus, required and
+numeric constraints still precede the unchanged application and service checks.
 
 The goal dialog keeps its header and action footer inside the existing bounded
 frame while its form or introduction owns body scrolling. Expanded diagnostics

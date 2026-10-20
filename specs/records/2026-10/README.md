@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [持续目标输入反馈](2026-10-21-goal-form-validation.md)：中文浏览器错误、旧摘要残留根因与[最终输入/焦点/草稿实页复核](../../artifacts/2026-10-21-goal-form-validation/README.md)。
+
 - [网页工具摘要与Sources阅读](2026-10-21-web-tool-summary.md)：唯一摘要投影与[同一真实来源宽窄、双语及结果详情](../../artifacts/2026-10-21-web-tool-summary/README.md)。
 
 - [原生helper启动隔离](2026-10-21-native-launch-isolation.md)：[只隔离spawn的真实合同、全149目录与完整配置原路径](../../artifacts/2026-10-21-native-launch-isolation/README.md)，保留原失败指标。

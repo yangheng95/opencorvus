@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [持续目标输入反馈](records/2026-10/2026-10-21-goal-form-validation.md)：原生错误本地化、编辑后旧摘要退休与[19张人工页面](artifacts/2026-10-21-goal-form-validation/README.md)。
+
 - [网页工具摘要与Sources阅读](records/2026-10/2026-10-21-web-tool-summary.md)：真实请求地址摘要、展开响应信息与[11张人工实图](artifacts/2026-10-21-web-tool-summary/README.md)。
 
 - [原生helper启动隔离](records/2026-10/2026-10-21-native-launch-isolation.md)：[局部2379次真实命令与完整配置对照、八张实图](artifacts/2026-10-21-native-launch-isolation/README.md)，原性能仍未达标，不交付未完整验证的私有传输。

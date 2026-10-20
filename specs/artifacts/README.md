@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [持续目标输入反馈](2026-10-21-goal-form-validation/README.md)：19张实图、首轮失败保留、原87行事实与三个原生scope完整结算。
+
 - [网页工具摘要与来源阅读](2026-10-21-web-tool-summary/README.md)：11张人工实图、原87行完整数据及原生收尾；请求地址与响应媒体信息各自可读。
 
 - [helper启动隔离的实际边界](2026-10-21-native-launch-isolation/README.md)：2379次局部真实命令、完整配置17.8/17.6秒对15.6/15.3秒及八张实图；未将私有原型引入生产。

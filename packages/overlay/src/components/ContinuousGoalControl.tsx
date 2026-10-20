@@ -636,7 +636,12 @@ export function ContinuousGoalControl(props: {
                 <TextField.Label>{t("continuous_goal.objective")}</TextField.Label>
                 <TextField.TextArea
                   value={objective()}
-                  onInput={(e) => setObjective(e.currentTarget.value)}
+                  onInvalid={(e) => e.currentTarget.setCustomValidity(t("continuous_goal.validation.objective"))}
+                  onInput={(e) => {
+                    e.currentTarget.setCustomValidity("")
+                    setValidation("")
+                    setObjective(e.currentTarget.value)
+                  }}
                   required
                   maxLength={16000}
                   rows={4}
@@ -673,7 +678,12 @@ export function ContinuousGoalControl(props: {
                         step="1"
                         value={tokens()}
                         disabled={busy() || editing()?.status === "complete"}
-                        onInput={(e) => setTokens(e.currentTarget.value)}
+                        onInvalid={(e) => e.currentTarget.setCustomValidity(t("continuous_goal.validation.budget"))}
+                        onInput={(e) => {
+                          e.currentTarget.setCustomValidity("")
+                          setValidation("")
+                          setTokens(e.currentTarget.value)
+                        }}
                         placeholder={t("continuous_goal.unlimited")}
                       />
                       <TextField.Description>{t("continuous_goal.token_hint")}</TextField.Description>
@@ -686,7 +696,12 @@ export function ContinuousGoalControl(props: {
                         step="1"
                         value={turns()}
                         disabled={busy() || editing()?.status === "complete"}
-                        onInput={(e) => setTurns(e.currentTarget.value)}
+                        onInvalid={(e) => e.currentTarget.setCustomValidity(t("continuous_goal.validation.budget"))}
+                        onInput={(e) => {
+                          e.currentTarget.setCustomValidity("")
+                          setValidation("")
+                          setTurns(e.currentTarget.value)
+                        }}
                         placeholder={t("continuous_goal.unlimited")}
                       />
                       <TextField.Description>{t("continuous_goal.turn_hint")}</TextField.Description>
@@ -722,7 +737,12 @@ export function ContinuousGoalControl(props: {
                 <TextField.Label>{t("continuous_goal.evidence")}</TextField.Label>
                 <TextField.TextArea
                   value={reason()}
-                  onInput={(e) => setReason(e.currentTarget.value)}
+                  onInvalid={(e) => e.currentTarget.setCustomValidity(t("continuous_goal.validation.reason"))}
+                  onInput={(e) => {
+                    e.currentTarget.setCustomValidity("")
+                    setValidation("")
+                    setReason(e.currentTarget.value)
+                  }}
                   required
                   maxLength={4000}
                   rows={4}

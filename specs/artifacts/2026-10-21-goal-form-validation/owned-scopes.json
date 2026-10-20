@@ -1,0 +1,311 @@
+{
+  "observedAt": "2026-10-20T19:53:18.388Z",
+  "scopes": {
+    "before": {
+      "originalHandle": 11212,
+      "originalExit": 0,
+      "ready": {
+        "owner": {
+          "pid": 40544,
+          "processInstanceID": "win32:639281220464458377",
+          "occurrenceID": "bac1f643-744b-458c-b6df-66c431909e3d"
+        },
+        "parent": {
+          "pid": 29744,
+          "processInstanceID": "win32:639281220464201716",
+          "occurrenceID": "7db17bb8-affb-490e-87cc-ff8db6cbddff"
+        },
+        "occurrence": "goal-form-validation-486-before-7a1cf2ab-7b42-4b9a-8667-ba6d12c6bab4",
+        "receipt": {
+          "schemaVersion": 1,
+          "occurrenceID": "goal-form-validation-486-before-7a1cf2ab-7b42-4b9a-8667-ba6d12c6bab4",
+          "outcome": "listening",
+          "url": "http://127.0.0.1:18851",
+          "pid": 40544
+        },
+        "health": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\goal-form-validation-486-before-data\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\goal-form-validation-486-before-data\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/goal-form-validation-486-before-data/home"
+          }
+        },
+        "observedAt": "2026-10-20T19:40:49.868Z",
+        "qualification": "Real development CLI and UI only; no credential/Provider qualification"
+      },
+      "physical": {
+        "observedAtUtc": "2026-10-20T19:43:51.6937074Z",
+        "originalExit": 0,
+        "originalHandle": 11212,
+        "shutdown": {
+          "target": {
+            "pid": 40544,
+            "processInstanceID": "win32:639281220464458377",
+            "occurrenceID": "fe0b5236-565a-4693-861f-660c5bda03c2"
+          },
+          "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYcXyq200M0ornMYDZ\"}",
+          "observedAtUtc": "2026-10-20T19:43:38.9079467Z",
+          "occurrence": "goal-form-validation-486-before-7a1cf2ab-7b42-4b9a-8667-ba6d12c6bab4",
+          "statusCode": 200
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 78740,
+              "processInstanceID": "win32:639281220457030478",
+              "occurrenceID": "b7d431f5-e6c9-485d-8796-499b166de4ea"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 40544,
+              "processInstanceID": "win32:639281220464458377",
+              "occurrenceID": "fe0b5236-565a-4693-861f-660c5bda03c2"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "launcher": {
+          "observedAtUtc": "2026-10-20T19:43:39.0042501Z",
+          "childExitCode": 0
+        },
+        "native": {
+          "occurrence": "goal-form-validation-486-before-7a1cf2ab-7b42-4b9a-8667-ba6d12c6bab4",
+          "outcome": "settled",
+          "host": {
+            "pid": 78740,
+            "processInstanceID": "win32:639281220457030478",
+            "occurrenceID": "b7d431f5-e6c9-485d-8796-499b166de4ea"
+          },
+          "target": {
+            "pid": 40544,
+            "processInstanceID": "win32:639281220464458377",
+            "occurrenceID": "fe0b5236-565a-4693-861f-660c5bda03c2"
+          },
+          "observedAtUtc": "2026-10-20T19:43:38.963Z",
+          "deadlineAt": 1792526444998,
+          "terminal": {
+            "occurrenceID": "goal-form-validation-486-before-7a1cf2ab-7b42-4b9a-8667-ba6d12c6bab4",
+            "pid": 40544,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        }
+      }
+    },
+    "after": {
+      "originalHandle": 46698,
+      "originalExit": 0,
+      "ready": {
+        "owner": {
+          "pid": 28312,
+          "processInstanceID": "win32:639281223163548020",
+          "occurrenceID": "d6c8fed7-e818-40ad-814c-b7ad57c06fe2"
+        },
+        "parent": {
+          "pid": 55928,
+          "processInstanceID": "win32:639281223163291490",
+          "occurrenceID": "171f7a38-550c-4bc5-a2e9-4a7ae931e6d5"
+        },
+        "occurrence": "goal-form-validation-486-after-afbbe294-6d62-414f-9acc-4966aad133b2",
+        "receipt": {
+          "schemaVersion": 1,
+          "occurrenceID": "goal-form-validation-486-after-afbbe294-6d62-414f-9acc-4966aad133b2",
+          "outcome": "listening",
+          "url": "http://127.0.0.1:18853",
+          "pid": 28312
+        },
+        "health": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\goal-form-validation-486-after-data\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\goal-form-validation-486-after-data\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/goal-form-validation-486-after-data/home"
+          }
+        },
+        "observedAt": "2026-10-20T19:45:19.855Z",
+        "qualification": "Real development CLI and UI only; no credential/Provider qualification"
+      },
+      "physical": {
+        "native": {
+          "occurrence": "goal-form-validation-486-after-afbbe294-6d62-414f-9acc-4966aad133b2",
+          "outcome": "settled",
+          "host": {
+            "pid": 16516,
+            "processInstanceID": "win32:639281223156504491",
+            "occurrenceID": "1d8ad9cf-9b1e-447b-be40-6a336cb59b80"
+          },
+          "target": {
+            "pid": 28312,
+            "processInstanceID": "win32:639281223163548020",
+            "occurrenceID": "9b13ac68-0537-48e1-9a11-beaf33f7188f"
+          },
+          "observedAtUtc": "2026-10-20T19:47:55.226Z",
+          "deadlineAt": 1792526714865,
+          "terminal": {
+            "occurrenceID": "goal-form-validation-486-after-afbbe294-6d62-414f-9acc-4966aad133b2",
+            "pid": 28312,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-20T19:47:57.8315846Z",
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 16516,
+              "processInstanceID": "win32:639281223156504491",
+              "occurrenceID": "1d8ad9cf-9b1e-447b-be40-6a336cb59b80"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 28312,
+              "processInstanceID": "win32:639281223163548020",
+              "occurrenceID": "9b13ac68-0537-48e1-9a11-beaf33f7188f"
+            }
+          }
+        ],
+        "launcher": {
+          "childExitCode": 0,
+          "observedAtUtc": "2026-10-20T19:47:55.2651217Z"
+        },
+        "originalExit": 0,
+        "originalHandle": 46698,
+        "shutdown": {
+          "target": {
+            "pid": 28312,
+            "processInstanceID": "win32:639281223163548020",
+            "occurrenceID": "9b13ac68-0537-48e1-9a11-beaf33f7188f"
+          },
+          "occurrence": "goal-form-validation-486-after-afbbe294-6d62-414f-9acc-4966aad133b2",
+          "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYcZ3VQ00FDTuQEwLP\"}",
+          "observedAtUtc": "2026-10-20T19:47:55.1731299Z",
+          "statusCode": 200
+        }
+      }
+    },
+    "final": {
+      "originalHandle": 17964,
+      "originalExit": 0,
+      "ready": {
+        "owner": {
+          "pid": 74204,
+          "processInstanceID": "win32:639281225658248256",
+          "occurrenceID": "e70aef8d-0047-4bc3-86b1-9d176b8d24d7"
+        },
+        "parent": {
+          "pid": 64748,
+          "processInstanceID": "win32:639281225658004650",
+          "occurrenceID": "ccd94f96-94f0-4a18-b773-b9ea241b78a8"
+        },
+        "occurrence": "goal-form-validation-486-final-7f8702eb-10ef-4f8c-8343-898bc20ba08a",
+        "receipt": {
+          "schemaVersion": 1,
+          "occurrenceID": "goal-form-validation-486-final-7f8702eb-10ef-4f8c-8343-898bc20ba08a",
+          "outcome": "listening",
+          "url": "http://127.0.0.1:18855",
+          "pid": 74204
+        },
+        "health": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\goal-form-validation-486-final-data\\runtime\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\goal-form-validation-486-final-data\\runtime\\data",
+            "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/goal-form-validation-486-final-data/home"
+          }
+        },
+        "observedAt": "2026-10-20T19:49:29.178Z",
+        "qualification": "Real development CLI and UI only; no credential/Provider qualification"
+      },
+      "physical": {
+        "originalExit": 0,
+        "native": {
+          "occurrence": "goal-form-validation-486-final-7f8702eb-10ef-4f8c-8343-898bc20ba08a",
+          "outcome": "settled",
+          "host": {
+            "pid": 63144,
+            "processInstanceID": "win32:639281225651315389",
+            "occurrenceID": "48e2f6d1-2bde-47aa-8be3-160e0fcd4164"
+          },
+          "target": {
+            "pid": 74204,
+            "processInstanceID": "win32:639281225658248256",
+            "occurrenceID": "378e051d-3ab1-4587-8e29-61c4646ee53e"
+          },
+          "observedAtUtc": "2026-10-20T19:52:10.438Z",
+          "deadlineAt": 1792526964265,
+          "terminal": {
+            "occurrenceID": "goal-form-validation-486-final-7f8702eb-10ef-4f8c-8343-898bc20ba08a",
+            "pid": 74204,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-20T19:52:12.9587749Z",
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 63144,
+              "processInstanceID": "win32:639281225651315389",
+              "occurrenceID": "48e2f6d1-2bde-47aa-8be3-160e0fcd4164"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 74204,
+              "processInstanceID": "win32:639281225658248256",
+              "occurrenceID": "378e051d-3ab1-4587-8e29-61c4646ee53e"
+            }
+          }
+        ],
+        "shutdown": {
+          "observedAtUtc": "2026-10-20T19:52:10.3828211Z",
+          "statusCode": 200,
+          "occurrence": "goal-form-validation-486-final-7f8702eb-10ef-4f8c-8343-898bc20ba08a",
+          "target": {
+            "pid": 74204,
+            "processInstanceID": "win32:639281225658248256",
+            "occurrenceID": "378e051d-3ab1-4587-8e29-61c4646ee53e"
+          },
+          "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYca7tg00tfJGK7aE5\"}"
+        },
+        "originalHandle": 17964,
+        "launcher": {
+          "observedAtUtc": "2026-10-20T19:52:10.478644Z",
+          "childExitCode": 0
+        }
+      }
+    }
+  },
+  "modelRequests": "No credential/catalogue staging, preflight, accepted goal or business model input in486",
+  "closedPages": [
+    "55",
+    "56",
+    "57"
+  ]
+}
