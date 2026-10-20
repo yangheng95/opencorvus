@@ -1,0 +1,78 @@
+$ bun script/run-tests.ts test/independent-callback-context.test.ts
+[1/1] START test/independent-callback-context.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+[{"level":"warn","time":"2026-10-20T09:19:13.316Z","service":"default","logDomain":"non-session","data":{"label":"event-fire-discovery","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-lQTKle\\test-48132-mCHQ64\\fixtures\\memory-FNySbp","error":"Database.use rejected because its inherited database effect owner is closed"},"message":"instance background work did not complete"}]
+40 |     await Database.awaitEffectIdle(5_000)
+41 |     await EventService.TestHooks.waitForIdle()
+42 |     if (EventService.TestHooks.fires(Instance.project.id)[0]?.status !== "succeeded") {
+43 |       console.info(JSON.stringify(await callbackDiagnostics()))
+44 |     }
+45 |     expect(EventService.TestHooks.fires(Instance.project.id)).toEqual([
+                                                                   ^
+error: expect(received).toEqual(expected)
+
+  [
+-   ObjectContaining {
++   {
++     "attempt": 0,
++     "causal_cycle": false,
++     "causation_ancestry": [],
++     "causation_fire_id": null,
++     "closure_event_id": null,
++     "created_session_id": "ses_g0VYa0mLB00XXNVuiFNJ",
++     "creates_session": true,
++     "definition_id": "evt_g0VYa0mL6005MJuKng6v",
++     "disposition": null,
++     "error": null,
+      "event_job_id": "evt_g0VYa0mL6005MJuKng6v",
++     "event_job_revision_id": "evt_g0VYa0mL6005MJuKng6v",
+      "event_occurrence_id": "event:independent-post-commit",
+-     "status": "succeeded",
++     "event_type": "test.independent.event",
++     "id": "cal_g0VYa0mLB00McxgW2lqT",
++     "lease_until": 0,
++     "message_id": null,
++     "mission_closure_event_id": null,
++     "mission_disposition": null,
++     "mission_opened_event_id": null,
++     "owner_id": null,
++     "owner_process_id": null,
++     "project_id": "prj_h1maLHEWCBTOY9tk1ACD",
++     "queue_position": 1,
++     "retry_at": null,
++     "status": "pending",
++     "target_session_id": "ses_g0VYa0mLB00XXNVuiFNJ",
++     "time_completed": null,
++     "time_created": 1792487953310,
++     "time_started": null,
++     "time_updated": 1792487953310,
+    },
+  ]
+
+- Expected  - 2
++ Received  + 30
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\independent-callback-context.test.ts:45:63)
+(fail) post-commit discovery settles the exact accepted Event fire under its independent database owner [1916.19ms]
+73 |       } })
+74 |     }
+75 |     for (const source of sources) await fs.writeFile(source.head, source.bytes)
+76 |     await Promise.race([
+77 |       Promise.all(expected.values()),
+78 |       Bun.sleep(5_000).then(async () => { throw new Error("Native HEAD callbacks did not persist both Project receipts: " + JSON.stringify(await callbackDiagnostics())) }),
+                                                         ^
+error: Native HEAD callbacks did not persist both Project receipts: [{"level":"error","time":"2026-10-20T09:19:16.051Z","service":"file.watcher","logDomain":"non-session","data":{"label":"Native file watcher callback for C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-lQTKle\\test-48132-mCHQ64\\fixtures\\memory-FP7RF5\\.git\\HEAD","error":"Database.immediateTransaction rejected because its inherited database effect owner is closed"},"message":"persistent file watcher callback failed"},{"level":"error","time":"2026-10-20T09:19:16.052Z","service":"file.watcher","logDomain":"non-session","data":{"label":"Native file watcher callback for C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-lQTKle\\test-48132-mCHQ64\\fixtures\\memory-7Ezp3q\\.git\\HEAD","error":"Database.immediateTransaction rejected because its inherited database effect owner is closed"},"message":"persistent file watcher callback failed"}]
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\independent-callback-context.test.ts:78:53)
+(fail) native HEAD callbacks perform database work for their original Projects after initialization effects settle [7723.24ms]
+
+ 0 pass
+ 2 fail
+ 1 expect() calls
+Ran 2 tests across 1 file. [13.14s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\independent-callback-context.test.ts
+[1/1] DONE test/independent-callback-context.test.ts exit=1 duration=13.66s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\independent-callback-context.test.ts
+error: script "test" exited with code 1

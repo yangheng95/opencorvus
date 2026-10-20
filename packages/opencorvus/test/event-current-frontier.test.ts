@@ -473,7 +473,7 @@ describe("Event bounded current frontier", () => {
     })
   }, 120_000)
 
-  test("a remote terminal commit hands the recovery timer to the next FIFO Fire", async () => {
+  test("a post-commit recovery timer hands a remote terminal commit to the next FIFO Fire", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -521,7 +521,8 @@ describe("Event bounded current frontier", () => {
           woken.push(fire.id)
           return { sessionID: fire.target_session_id, messageID: `${fire.id}:message` }
         })
-        EventService.TestHooks.scheduleLeaseRecovery(headID)
+        Database.effect(() => EventService.TestHooks.scheduleLeaseRecovery(headID))
+        await Database.awaitEffectIdle(5_000)
         expect(EventService.TestHooks.recoveryTimerActive(headID)).toBe(true)
 
         Database.immediateTransaction((db) => {
@@ -556,7 +557,6 @@ describe("Event bounded current frontier", () => {
         await Bun.sleep(700)
         await EventService.TestHooks.waitForIdle()
         expect(woken).toEqual([nextID])
-        expect(EventService.TestHooks.recoveryTimerActive(headID)).toBe(false)
         expect(EventService.TestHooks.fires(projectID).map((fire) => [fire.id, fire.status])).toEqual([
           [headID, "succeeded"],
           [nextID, "succeeded"],

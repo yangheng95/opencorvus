@@ -40,6 +40,15 @@ their independent reentry adapters. A callback whose original post-commit effect
 returned therefore executes under its own live owner; database closed-owner
 checks and physical completion tracking remain authoritative.
 
+Event fire discovery and its lease, retry and rollback recovery callbacks leave
+the initiating database transaction and effect context before entering their
+independently owned Instance work. Native HEAD and Parcel file callbacks use the
+same database boundary before their original lifecycle reentry. Session wake
+execution already enters through the initialized independent Project owner;
+its standby and terminal continuations retain that execution's owner. These
+boundaries preserve the original Project, occurrence, cancellation, leases and
+completion joins; they do not weaken database closed-owner checks.
+
 A global Task create carrying `requestID` first freezes the complete canonical caller request in
 `global_creation_allocation` before anonymous Project filesystem work. That occurrence owns one directory, one initial
 configuration snapshot, one append-once Task-resolution snapshot (profile, package revision, checks and process policy),

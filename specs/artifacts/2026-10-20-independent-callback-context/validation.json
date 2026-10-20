@@ -1,0 +1,37 @@
+{
+  "originalReproduction": {
+    "pass": 0,
+    "fail": 2,
+    "evidence": "baseline-diagnostic.log",
+    "root": "Event Database.use and two native HEAD Database.immediateTransaction callbacks inherited a closed effect owner"
+  },
+  "fixedLocal": {
+    "files": 6,
+    "cases": 22,
+    "assertions": 60,
+    "exitCode": 0,
+    "evidence": "regression.log"
+  },
+  "backendTypecheck": {
+    "exitCode": 0,
+    "originalHandle": 40498
+  },
+  "realProvider": {
+    "requests": 3,
+    "budget": 8,
+    "streaming": true
+  },
+  "manualUI": {
+    "tab": 19,
+    "closed": true,
+    "screenshot": "event-session-link-error.png",
+    "result": "Direct internal event Session as Chat URL returned 404; visual acceptance not achieved",
+    "productUIChanged": false,
+    "automationTests": "none added or run"
+  },
+  "checkerCorrections": [
+    "Match uses properties.file/properties.event; initial unmatched definition tombstoned through public API; original observer 46521 ended exit1 after inactivity",
+    "Assistant completion checked independently of accepted user wake Message; original input text is not a completed assistant reply"
+  ],
+  "sourceRuntime": "Original 13587 exit0; public shutdown200; native/output/request/launcher joined"
+}

@@ -15,6 +15,7 @@ import { readdir } from "fs/promises"
 import { requireRuntimePackage } from "@/runtime/package-require"
 import { GlobalBus } from "@/bus/global"
 import { InstanceLifecycleContext, type InstanceLifecycleCapabilities } from "@/project/instance-lifecycle-context"
+import { Database } from "@/storage/db"
 
 export namespace FileWatcher {
   const log = Log.create({ service: "file.watcher" })
@@ -91,7 +92,7 @@ export namespace FileWatcher {
 
   function persistentCallbackRunner(lifecycle: InstanceLifecycleCapabilities): PersistentCallbackRunner {
     return (directory, label, callback) => {
-      return (async () => {
+      return Database.runOutsideContext(async () => {
         const active = await lifecycle.reenter({
           directory,
           fn: async () => {
@@ -100,10 +101,9 @@ export namespace FileWatcher {
           },
         })
         if (active !== true) throw new Error(`${label} fired after its instance owner was released`)
-      })()
-        .catch((error) => {
-          log.error("persistent file watcher callback failed", { label, error: errorMessage(error) })
-        })
+      }).catch((error) => {
+        log.error("persistent file watcher callback failed", { label, error: errorMessage(error) })
+      })
     }
   }
 

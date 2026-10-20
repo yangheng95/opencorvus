@@ -756,46 +756,49 @@ export namespace EventService {
     if (s.discovery) return
     s.discoveryRequested = false
     let discovery!: Promise<void>
-    discovery = runInstanceBackgroundWork(
-      "event-fire-discovery",
-      async (signal) => {
-        try {
-          while (!signal.aborted && !s.lifecycle.signal.aborted) {
-            s.discoveryRequested = false
-            s.discoveryWake = Promise.withResolvers<void>()
-            const head = nextRunnableProjectHead()
-            if (!head) {
-              if (s.running.size === 0) return
-              await Promise.race([...s.running.values(), s.discoveryWake.promise])
-              continue
+    discovery = Database.runOutsideContext(() =>
+      runInstanceBackgroundWork(
+        "event-fire-discovery",
+        async (signal) => {
+          try {
+            while (!signal.aborted && !s.lifecycle.signal.aborted) {
+              s.discoveryRequested = false
+              s.discoveryWake = Promise.withResolvers<void>()
+              const head = nextRunnableProjectHead()
+              if (!head) {
+                if (s.running.size === 0) return
+                await Promise.race([...s.running.values(), s.discoveryWake.promise])
+                continue
+              }
+              const release = await acquireExecutionPermit(signal)
+              try {
+                signal.throwIfAborted()
+                enqueueFire(head.fire.id, head.definitionID, release, signal)
+              } catch (error) {
+                release()
+                if (error instanceof RuntimeExecutionAdmissionClosedError && error.kind === "scheduler_event_fire")
+                  return
+                throw error
+              }
             }
-            const release = await acquireExecutionPermit(signal)
-            try {
-              signal.throwIfAborted()
-              enqueueFire(head.fire.id, head.definitionID, release, signal)
-            } catch (error) {
-              release()
-              if (error instanceof RuntimeExecutionAdmissionClosedError && error.kind === "scheduler_event_fire") return
-              throw error
+          } catch (error) {
+            if (!signal.aborted && !s.lifecycle.signal.aborted && !s.discoveryRetry) {
+              s.discoveryRetry = setTimeout(() => {
+                s.discoveryRetry = undefined
+                runRecoveryOperation(s, recoverProjectFires)
+              }, FIRE_RECOVERY_MIN_DELAY_MS)
             }
+            throw error
+          } finally {
+            await Promise.allSettled(s.running.values())
           }
-        } catch (error) {
-          if (!signal.aborted && !s.lifecycle.signal.aborted && !s.discoveryRetry) {
-            s.discoveryRetry = setTimeout(() => {
-              s.discoveryRetry = undefined
-              runRecoveryOperation(s, recoverProjectFires)
-            }, FIRE_RECOVERY_MIN_DELAY_MS)
-          }
-          throw error
-        } finally {
-          await Promise.allSettled(s.running.values())
-        }
-      },
-      s.lifecycle.signal,
-    ).finally(() => {
-      if (s.discovery === discovery) s.discovery = undefined
-      if (s.discoveryRequested && !s.lifecycle.signal.aborted) runRecoveryOperation(s, recoverProjectFires)
-    })
+        },
+        s.lifecycle.signal,
+      ).finally(() => {
+        if (s.discovery === discovery) s.discovery = undefined
+        if (s.discoveryRequested && !s.lifecycle.signal.aborted) runRecoveryOperation(s, recoverProjectFires)
+      }),
+    )
     s.discovery = discovery
   }
 
@@ -1157,13 +1160,15 @@ export namespace EventService {
   function runRecoveryOperation(s: ReturnType<typeof state>, recover: () => void): void {
     if (s.lifecycle.signal.aborted) return
     let operation!: Promise<void>
-    operation = reenterActiveInstance({
-      directory: s.directory,
-      signal: s.lifecycle.signal,
-      fn: () => {
-        if (state() === s && !s.lifecycle.signal.aborted) recover()
-      },
-    })
+    operation = Database.runOutsideContext(() =>
+      reenterActiveInstance({
+        directory: s.directory,
+        signal: s.lifecycle.signal,
+        fn: () => {
+          if (state() === s && !s.lifecycle.signal.aborted) recover()
+        },
+      }),
+    )
       .catch((error) => {
         if (s.lifecycle.signal.aborted) return
         log.error("event recovery operation failed", { directory: s.directory, error: errorMessage(error) })

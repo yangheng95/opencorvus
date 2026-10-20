@@ -1,0 +1,83 @@
+$ bun script/run-tests.ts test/independent-callback-context.test.ts test/file-watcher-runtime-isolation.test.ts test/event-current-frontier.test.ts test/event-fire-claim-attempt.test.ts test/scheduler-event-durable-fire.test.ts test/session/session-created-effect.test.ts
+[1/6] START test/independent-callback-context.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) post-commit discovery settles the exact accepted Event fire under its independent database owner [1729.87ms]
+(pass) native HEAD callbacks perform database work for their original Projects after initialization effects settle [2628.25ms]
+
+ 2 pass
+ 0 fail
+ 3 expect() calls
+Ran 2 tests across 1 file. [7.79s]
+[1/6] DONE test/independent-callback-context.test.ts exit=0 duration=8.32s
+[2/6] START test/file-watcher-runtime-isolation.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a terminal native watcher reports its diagnostic and releases its complete subscription group [4.08ms]
+
+ 1 pass
+ 0 fail
+ 3 expect() calls
+Ran 1 test across 1 file. [705.00ms]
+[2/6] DONE test/file-watcher-runtime-isolation.test.ts exit=0 duration=0.81s
+[3/6] START test/event-current-frontier.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Event bounded current frontier > pages only current Project definitions and production acceptance reaches later pages [2514.02ms]
+(pass) Event bounded current frontier > selects one FIFO head per definition from retained history with fixed child-query stages [1522.83ms]
+(pass) Event bounded current frontier > production recovery drains every paged head in FIFO order and preserves sibling Project work [3360.11ms]
+(pass) Event bounded current frontier > a post-commit recovery timer hands a remote terminal commit to the next FIFO Fire [2120.06ms]
+(pass) Event bounded current frontier > a causal-cycle disposition advances only after its older FIFO head [1554.40ms]
+(pass) Event bounded current frontier > the current claim does not consume its own cooldown predecessor [1839.32ms]
+
+ 6 pass
+ 0 fail
+ 25 expect() calls
+Ran 6 tests across 1 file. [14.06s]
+[3/6] DONE test/event-current-frontier.test.ts exit=0 duration=14.26s
+[4/6] START test/event-fire-claim-attempt.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) event fire claim attempt counting > a claim reports the attempt it just took, which is the retry backoff exponent [1596.93ms]
+
+ 1 pass
+ 0 fail
+ 3 expect() calls
+Ran 1 test across 1 file. [2.78s]
+[4/6] DONE test/event-fire-claim-attempt.test.ts exit=0 duration=2.90s
+[5/6] START test/scheduler-event-durable-fire.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Event Job durable fact authority > settles an old Mission fire against its first opened occurrence after close and reopen [3347.37ms]
+(pass) Event Job durable fact authority > a closed Mission fire survives acceptance crash and terminalizes in FIFO recovery after reopen [2134.58ms]
+(pass) Event Job durable fact authority > a closed-Mission causal-cycle successor settles by its frozen Mission reservation at the FIFO head [1710.44ms]
+(pass) Event Job durable fact authority > the configured production wake owner persists and activates the exact Event fire Message [1857.93ms]
+(pass) Event Job durable fact authority > persists a transient Bus input once and binds one successful fire to the exact definition revision [1619.62ms]
+(pass) Event Job durable fact authority > runs distinct Event Job heads across Projects through one physical capacity frontier [2733.45ms]
+(pass) Event Job durable fact authority > keeps an accepted Event fire pending when its owner is cancelled after permit grant [1570.21ms]
+(pass) Event Job durable fact authority > definition removal appends a tombstone without erasing an already accepted fire [1223.65ms]
+(pass) Event Job durable fact authority > a retry keeps the same fire identity and appends ordered receipts [2399.83ms]
+(pass) Event Job durable fact authority > duplicate acceptance is idempotent and preserves one fire [1134.46ms]
+(pass) Event Job durable fact authority > same occurrence identity rejects a different immutable input [1057.75ms]
+
+ 11 pass
+ 0 fail
+ 24 expect() calls
+Ran 11 tests across 1 file. [22.75s]
+[5/6] DONE test/scheduler-event-durable-fire.test.ts exit=0 duration=22.96s
+[6/6] START test/session/session-created-effect.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Session Created post-commit lifecycle > delivers the exact global Created envelope from the durable post-commit publication [1713.90ms]
+
+ 1 pass
+ 0 fail
+ 2 expect() calls
+Ran 1 test across 1 file. [3.32s]
+[6/6] DONE test/session/session-created-effect.test.ts exit=0 duration=3.48s

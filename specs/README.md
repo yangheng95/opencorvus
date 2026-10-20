@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [独立回调的数据库上下文审计](records/2026-10/2026-10-20-independent-callback-context.md)：事件恢复、Session和文件监听的所有权边界与[22例及真实运行](artifacts/2026-10-20-independent-callback-context/README.md)。
+
 - [权限审批与历史的可读呈现](records/2026-10/2026-10-20-permission-readable-review.md)：结构化scope、恢复上下文修复与[17张人工截图](artifacts/2026-10-20-permission-readable-review/README.md)。
 
 - [新Task的真实Goal执行链](records/2026-10/2026-10-20-task-goal-live.md)：只读误审批根因修复、同一Task epoch3自动续跑与[12张截图及结算事实](artifacts/2026-10-20-task-goal-live/README.md)。
