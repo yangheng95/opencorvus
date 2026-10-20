@@ -1,0 +1,122 @@
+[1/9] START test/config-candidate-provider-plugins.test.ts
+(pass) a complete candidate snapshot projects the newly selected file plugin before publication [1886.35ms]
+(pass) the real project writer publishes a replacement plugin and its selected model together [2042.60ms]
+(pass) a candidate's empty plugin selection resolves the standard catalog model [1757.05ms]
+(pass) an explicit selection matching the loaded modules retains their original hook identity [1449.93ms]
+(pass) the loaded specifiers remain authoritative when the saved config has moved to another plugin [1433.07ms]
+(pass) one selected plugin receives each real Project's input while global keeps its declared model [2327.68ms]
+(pass) the project writer can replace a broken current plugin with an explicit empty selection [1472.32ms]
+(pass) an invalid candidate model reports its typed contract and preserves the current working selection [1459.00ms]
+ 8 pass
+ 0 fail
+ 9 expect() calls
+Ran 8 tests across 1 file. [17.45s]
+[1/9] DONE test/config-candidate-provider-plugins.test.ts exit=0 duration=18.06s
+[2/9] START test/plugin-revision.test.ts
+(pass) Plugin materialization revision > changes when only a transitive module in the deployment artifact changes [28.22ms]
+(pass) Plugin materialization revision > tracks a symlinked package dependency without hashing unrelated project files [21.74ms]
+(pass) Plugin materialization revision > tracks an ancestor-installed dependency imported by a direct-file Plugin [17.28ms]
+(pass) Plugin materialization revision > allows an absent optional peer that the Plugin does not import [12.41ms]
+(pass) Plugin materialization revision > uses Bun loader semantics for inline type-only imports and .js-to-.ts substitution [12.43ms]
+(pass) Plugin materialization revision > resolves an escaped local module dependency from that module's own node_modules [30.10ms]
+(pass) Plugin materialization revision > loads the same content-addressed Bun artifact whose bytes own the revision across cache reload [499.65ms]
+(pass) Plugin materialization revision > loads one physical Plugin artifact through a filesystem-aliased runtime root [75.82ms]
+(pass) Plugin materialization revision > binds manifest hooks to selected resource snapshots and advances Plugin.revision for resource bytes [118.97ms]
+ 9 pass
+ 0 fail
+ 16 expect() calls
+Ran 9 tests across 1 file. [1.71s]
+[2/9] DONE test/plugin-revision.test.ts exit=0 duration=1.84s
+[3/9] START test/plugin-process-facade.test.ts
+(pass) Plugin structured process capability > runs structured argv through the central supervisor and settles its owner [149.59ms]
+(pass) Plugin structured process capability > host detached capability preserves real stdin/output and exact terminal receipt [49.80ms]
+(pass) Plugin structured process capability > host detached control cancellation settles the actual process occurrence [81.38ms]
+(pass) Plugin structured process capability > projects the supervisor's exact signal terminal fact [0.40ms]
+ 4 pass
+ 0 fail
+ 7 expect() calls
+Ran 4 tests across 1 file. [1129.00ms]
+[3/9] DONE test/plugin-process-facade.test.ts exit=0 duration=1.25s
+[4/9] START test/provider-projection-isolation.test.ts
+(pass) empty model option defaults produce independent authored values for each projection [9.23ms]
+(pass) initial reasoning variants retain their source values and each projection owns later edits [1.60ms]
+(pass) authored reasoning variants serialize and clone as the model's current writable value [1.43ms]
+(pass) frozen models retain readable defaults and sealed models retain their authored reasoning value [0.86ms]
+(pass) each Provider projection owns its mutable metadata and preserves the current source declaration [0.93ms]
+(pass) a production Project plugin customizes its own Provider while another Project and global catalog retain their declarations [3542.05ms]
+(pass) published catalogs retain their original model generation across a canonical catalog update [212.83ms]
+(pass) frozen published Providers serialize complete models and sealed Providers retain authored models [107.05ms]
+(pass) environment selection preserves the selected key for ordinary single declaration [94.29ms]
+(pass) environment selection preserves the selected key for DashScope single declaration [110.08ms]
+(pass) environment selection preserves the selected key for DashScope common credential [90.68ms]
+(pass) environment selection preserves the selected key for DashScope multiple declarations [91.48ms]
+ 12 pass
+ 0 fail
+ 16 expect() calls
+Ran 12 tests across 1 file. [5.58s]
+[4/9] DONE test/provider-projection-isolation.test.ts exit=0 duration=5.74s
+[5/9] START test/provider-cache-identity.test.ts
+(pass) Provider cache identity > canonical sources are runtime-independent and exact bytes remain the cache authority [2.06ms]
+(pass) Provider cache identity > validated Provider config and declarative SDK options use canonical exact identities [5.06ms]
+(pass) Provider cache identity > production Provider state and SDK caches reuse only exact canonical inputs [2667.54ms]
+(pass) Provider cache identity > default Provider generations are Project-owned and follow current Config lifecycle [5039.61ms]
+(pass) Provider cache identity > production runtime capabilities execute without entering the declarative SDK cache [1494.94ms]
+(pass) Provider cache identity > releases one Provider capacity slot on response EOF, cancel, abort and transport error [1482.45ms]
+(pass) Provider cache identity > shares the final Provider stream capacity lease across two backend processes [9573.12ms]
+(pass) Provider cache identity > production Bedrock credential capability initializes without cache serialization [1613.62ms]
+(pass) Provider cache identity > DashScope credential lifetime publishes versioned SHA-256 identity [26.95ms]
+ 9 pass
+ 0 fail
+ 41 expect() calls
+Ran 9 tests across 1 file. [23.31s]
+[5/9] DONE test/provider-cache-identity.test.ts exit=0 duration=23.48s
+[6/9] START test/provider-helper-chat-hooks.test.ts
+(pass) OpenAI Codex OAuth owns the physical output-token request rule [0.22ms]
+(pass) a helper occurrence applies physical Provider hooks through the production request assembly [0.25ms]
+(pass) a user occurrence preserves message hooks before physical Provider rules converge the request [0.17ms]
+(pass) physical Provider execution accepts only internal Provider owners [0.20ms]
+ 4 pass
+ 0 fail
+ 7 expect() calls
+Ran 4 tests across 1 file. [1279.00ms]
+[6/9] DONE test/provider-helper-chat-hooks.test.ts exit=0 duration=1.43s
+[7/9] START test/config-candidate-skill-catalog.test.ts
+(pass) a global username save retains each project's own configured Skill assignment [3642.62ms]
+(pass) a global source removal retains a Skill still configured by its Project [1533.95ms]
+(pass) an implicit Project Skill remains assigned when an unrelated global field changes [1591.07ms]
+(pass) a removed sole Skill source returns the assignment error and retains its complete canonical source [1485.79ms]
+(pass) a Project candidate adds its Skill source and assignment in one canonical mutation [1615.09ms]
+(pass) a global candidate repairs a Project assignment by adding its actual Skill source [1569.31ms]
+(pass) a candidate catalog resolves its own source while the runtime retains its current definition [1542.56ms]
+ 7 pass
+ 0 fail
+ 7 expect() calls
+Ran 7 tests across 1 file. [14.26s]
+[7/9] DONE test/config-candidate-skill-catalog.test.ts exit=0 duration=14.42s
+[8/9] START test/config-global-project-validation.test.ts
+(pass) a retained global writer settles its original transition after repeated projection failures [1997.66ms]
+(pass) one global generation projects every registered project's own configuration [2871.00ms]
+(pass) one global mutation retains its exact candidate identities through persistence and runtime convergence [2616.03ms]
+(pass) an invalid Project returns the candidate error and a corrected source accepts a full retry [2677.55ms]
+ 4 pass
+ 0 fail
+ 28 expect() calls
+Ran 4 tests across 1 file. [11.43s]
+[8/9] DONE test/config-global-project-validation.test.ts exit=0 duration=11.58s
+[9/9] START test/server/config-candidate-status.test.ts
+(pass) public VCS metadata binds current Git information and directory admission [711.67ms]
+(pass) cold builtin collision returns canonical candidate validation 400 [2227.02ms]
+(pass) cold lawful external active profile with colliding nonactive builtin mount returns candidate 400 [3193.30ms]
+(pass) cold unavailable explicit model preserves model-first canonical 400 [3134.65ms]
+(pass) cold lawful runtime returns its real VCS output [3616.42ms]
+(pass) shared Hono canonical response ConfigCandidateValidationError [2.93ms]
+(pass) shared Hono canonical response ProviderModelNotFoundError [1.51ms]
+(pass) shared Hono canonical response AuthReadError [1.23ms]
+(pass) shared Hono canonical response DatabaseUnavailableError [0.95ms]
+(pass) shared Hono canonical response OwnedPromptControllersError [0.89ms]
+(pass) shared Hono canonical response Error [0.91ms]
+ 11 pass
+ 0 fail
+ 32 expect() calls
+Ran 11 tests across 1 file. [15.21s]
+[9/9] DONE test/server/config-candidate-status.test.ts exit=0 duration=15.40s

@@ -262,6 +262,15 @@ performed solely to guess which names a candidate removed. A Project-owned or
 implicit source remains valid, adding a source and assignment can commit together,
 and removing the sole source returns the existing assignment error before persistence.
 
+Provider model validation likewise supplies the candidate's complete plugin
+selection to the shared plugin loader. Adding or replacing a plugin and selecting
+its projected model can commit together. An explicit empty selection projects the
+standard catalog rather than current installed customizations. Candidate hooks
+retain the real Project inputs and existing process/resource ownership, while
+runtime services remain owned by ordinary Plugin activation. A candidate error
+preserves the current canonical configuration. Project-independent global
+Provider validation continues to use its declared built-in hook scope.
+
 MCP's shared state accessor enters the same Config generation read callback
 before creating or joining its initialization promise. Initialization reads both
 project-owned and effective configuration and settles staged credentials before

@@ -1,0 +1,62 @@
+[1/1] START test/config-candidate-provider-plugins.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+1214 |     const provider = runnableProvider(s, providerID)
+1215 |     if (!provider) {
+1216 |       const availableProviders = Object.keys(runnableProviders(s))
+1217 |       const matches = fuzzysort.go(providerID, availableProviders, { limit: 3, threshold: -10000 })
+1218 |       const suggestions = matches.map((m) => m.target)
+1219 |       throw new ModelNotFoundError({ providerID, modelID, suggestions })
+                   ^
+ProviderModelNotFoundError: ProviderModelNotFoundError: {"providerID":"candidate-plugin","modelID":"next","suggestions":[]}
+ data: {
+  providerID: "candidate-plugin",
+  modelID: "next",
+  suggestions: [],
+},
+
+      at modelFromState (D:\myhexin-local\opencorvus\packages\opencorvus\src\provider\provider.ts:1219:13)
+(fail) a complete candidate snapshot projects the newly selected file plugin before publication [1569.73ms]
+1214 |     const provider = runnableProvider(s, providerID)
+1215 |     if (!provider) {
+1216 |       const availableProviders = Object.keys(runnableProviders(s))
+1217 |       const matches = fuzzysort.go(providerID, availableProviders, { limit: 3, threshold: -10000 })
+1218 |       const suggestions = matches.map((m) => m.target)
+1219 |       throw new ModelNotFoundError({ providerID, modelID, suggestions })
+                   ^
+ProviderModelNotFoundError: ProviderModelNotFoundError: {"providerID":"candidate-plugin","modelID":"old","suggestions":[]}
+ data: {
+  providerID: "candidate-plugin",
+  modelID: "old",
+  suggestions: [],
+},
+
+      at modelFromState (D:\myhexin-local\opencorvus\packages\opencorvus\src\provider\provider.ts:1219:13)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-provider-plugins.test.ts:112:37)
+(fail) the real project writer publishes a replacement plugin and its selected model together [1395.82ms]
+1214 |     const provider = runnableProvider(s, providerID)
+1215 |     if (!provider) {
+1216 |       const availableProviders = Object.keys(runnableProviders(s))
+1217 |       const matches = fuzzysort.go(providerID, availableProviders, { limit: 3, threshold: -10000 })
+1218 |       const suggestions = matches.map((m) => m.target)
+1219 |       throw new ModelNotFoundError({ providerID, modelID, suggestions })
+                   ^
+ProviderModelNotFoundError: ProviderModelNotFoundError: {"providerID":"candidate-plugin","modelID":"base","suggestions":[]}
+ data: {
+  providerID: "candidate-plugin",
+  modelID: "base",
+  suggestions: [],
+},
+
+      at modelFromState (D:\myhexin-local\opencorvus\packages\opencorvus\src\provider\provider.ts:1219:13)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-provider-plugins.test.ts:134:32)
+(fail) a candidate's empty plugin selection resolves the standard catalog model [1420.13ms]
+
+ 0 pass
+ 3 fail
+Ran 3 tests across 1 file. [8.28s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-provider-plugins.test.ts
+[1/1] DONE test/config-candidate-provider-plugins.test.ts exit=1 duration=9.01s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-provider-plugins.test.ts

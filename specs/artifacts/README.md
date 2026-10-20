@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [候选Provider插件来源](2026-10-20-candidate-provider-plugins/README.md)：三个真实失败→68例合同、实际HTTP保存恢复、完整99项目性能与原native结算。
+
 - [Windows监管标准管道测量](2026-10-20-windows-supervised-stdio/README.md)：148条真实命令与完整结算；无稳定收益，保留生产pipe。
 
 - [当前配置采样与按需完整投影](2026-10-20-config-current-profile/README.md)：实际构造根因、82例合同、完整98项目与并发读取；保留性能和最新视觉验收未达项。

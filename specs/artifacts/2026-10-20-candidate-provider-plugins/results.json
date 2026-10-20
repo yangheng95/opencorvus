@@ -1,0 +1,50 @@
+{
+  "scope": "candidate-provider-plugins-455",
+  "preflight": {
+    "sessionID": "ses_h2h3fzUVFSMAHmrCsbVY",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "backendContracts": {
+    "files": 9,
+    "cases": 68,
+    "assertions": 163,
+    "originalRunnerExit": 0,
+    "originalTypecheckExit": 0
+  },
+  "publicPluginContract": {
+    "requests": 9,
+    "stages": [
+      "old",
+      "next",
+      "standard-selection",
+      "restored"
+    ],
+    "restored": true
+  },
+  "fullHistoryPerformance": {
+    "writeMs": 11478.691799999997,
+    "restoreMs": 11509.757999999994,
+    "coldBudgetMs": 10000,
+    "restoreBudgetMs": 5000,
+    "readBudgetMs": 20000,
+    "maxConcurrentReadMs": 11635.486500000003,
+    "qualification": "cold and restore failed; all four reads passed"
+  },
+  "ui": "No UI source changes; current browser access disabled in Work settings, no current visual qualification",
+  "originalNativeLauncherExit": 0,
+  "settlement": "Original physical, output, request and runtime-pair cleanup complete",
+  "history": {
+    "schema": {
+      "user_version": 2
+    },
+    "projects": 99,
+    "retainedOriginalProjectIdentities": 98,
+    "sessionCount": {
+      "count": 132
+    },
+    "mode": "Direct readonly SQLite after original native launcher/writer/readers joined; original 98 Project identities and worktrees retained; no production initializer"
+  }
+}

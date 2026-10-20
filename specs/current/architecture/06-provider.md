@@ -34,6 +34,14 @@ key; the existing declared-key priority and ambiguous multi-key behavior remain.
 The existing per-Project configuration/cache lifecycle remains authoritative;
 projection isolation does not introduce another catalog or shared mutable template.
 
+The Project builder derives plugin hooks from the same complete Config snapshot
+as its Provider options and model references. Explicit candidate additions,
+replacements and empty selections therefore use their own declared plugin input.
+The shared Plugin loader may retain existing hook identity for the exact loaded
+selection; it does not silently substitute the saved Project selection. Global
+builders keep their existing project-independent built-in hooks. Candidate
+projection does not activate plugin services or publish runtime plugin state.
+
 不同 LLM 提供商在 4 个维度上各不相同：
 
 | 维度         | 差异                                                                                          |

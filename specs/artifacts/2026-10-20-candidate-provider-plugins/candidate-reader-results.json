@@ -1,0 +1,42 @@
+{
+  "occurrence": "candidate-provider-plugins-455-70d25d7b-5070-4bcc-8482-2b60f4359462",
+  "kind": "Public HTTP positive contracts concurrent with original canonical save; this is not browser or visual acceptance",
+  "results": [
+    {
+      "path": "/config",
+      "startedAt": "2026-10-20T02:30:08.901Z",
+      "endedAt": "2026-10-20T02:30:20.207Z",
+      "ms": 11304.002100000002,
+      "status": 200,
+      "permissionMode": "ask"
+    },
+    {
+      "path": "/provider",
+      "startedAt": "2026-10-20T02:30:08.904Z",
+      "endedAt": "2026-10-20T02:30:20.540Z",
+      "ms": 11635.486500000003,
+      "status": 200,
+      "providers": 227,
+      "models": 8133,
+      "selectedModel": "gpt-6.1-sol"
+    },
+    {
+      "path": "/global/providers",
+      "startedAt": "2026-10-20T02:30:08.905Z",
+      "endedAt": "2026-10-20T02:30:20.404Z",
+      "ms": 11498.6354,
+      "status": 200,
+      "providers": 227,
+      "models": 8133,
+      "selectedModel": "gpt-6.1-sol"
+    },
+    {
+      "path": "/session/ses_h2h3fzUVFSMAHmrCsbVY",
+      "startedAt": "2026-10-20T02:30:08.906Z",
+      "endedAt": "2026-10-20T02:30:08.990Z",
+      "ms": 84.41599999999744,
+      "status": 200,
+      "sessionID": "ses_h2h3fzUVFSMAHmrCsbVY"
+    }
+  ]
+}

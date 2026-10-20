@@ -327,7 +327,7 @@ export namespace Provider {
       authAvailable = false
       issues.push(loadIssue("auth.read", error))
     }
-    const plugins = await (options.pluginHooks?.() ?? Plugin.list()).catch((error) => {
+    const plugins = await (options.pluginHooks?.() ?? Plugin.list(config.plugin ?? [])).catch((error) => {
       if (!Auth.findReadError(error)) issues.push(loadIssue("plugin.catalog", error))
       return []
     })

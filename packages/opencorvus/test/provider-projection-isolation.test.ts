@@ -183,7 +183,10 @@ test("a production Project plugin customizes its own Provider while another Proj
       JSON.stringify({ plugin: [pathToFileURL(plugin).href] }),
     )
     const global = await Provider.catalogGlobal(config)
-    const customized = await Instance.provide({ directory: first.path, fn: () => Provider.catalog({ config }) })
+    const customized = await Instance.provide({
+      directory: first.path,
+      fn: () => Provider.catalog({ config: { ...config, plugin: [pathToFileURL(plugin).href] } }),
+    })
     const isolated = await Instance.provide({ directory: second.path, fn: () => Provider.catalog({ config }) })
     const current = (await ModelsDev.get())[source.id]
     expect({

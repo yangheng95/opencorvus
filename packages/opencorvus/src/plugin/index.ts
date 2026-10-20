@@ -524,155 +524,148 @@ export namespace Plugin {
     return (await buildPluginModuleArtifact(specifier)).revision
   }
 
-  const state = createInstanceState(
-    async () => {
-      const config = await Config.get()
-      const hooks: HookEntry[] = []
-      const baseInput = {
-        credentials,
-        sessions,
-        project: Instance.project,
-        worktree: Instance.worktree,
-        directory: Instance.directory,
-        serverUrl: new URL(IN_PROCESS_BASE_URL),
-      }
+  async function loadState(specifiers: readonly string[]) {
+    const selectedSpecifiers = Object.freeze([...specifiers])
+    const hooks: HookEntry[] = []
+    const baseInput = {
+      credentials,
+      sessions,
+      project: Instance.project,
+      worktree: Instance.worktree,
+      directory: Instance.directory,
+      serverUrl: new URL(IN_PROCESS_BASE_URL),
+    }
 
-      function pluginInput(resources: PluginResources = emptyResources(), specifier = "anonymous"): PluginInput {
-        return {
-          ...baseInput,
-          process: supervisedHostProcessFacade(`plugin:${specifier}`, false),
-          resources,
-        }
-      }
-
-      for (const plugin of INTERNAL_PLUGINS) {
-        log.info("loading internal plugin", { name: plugin.name })
-        const specifier = `internal:${plugin.name || "anonymous"}`
-        try {
-          hooks.push({
-            owner: "internal",
-            specifier,
-            revision: canonicalDigestSource("internal-plugin-v1", {
-              specifier,
-              opencorvus_version: Installation.VERSION,
-            }).sha256,
-            hook: (await plugin(pluginInput(emptyResources(), specifier))) as RuntimeHooks,
-          })
-        } catch (cause) {
-          throw pluginFailure("initialization", specifier, cause)
-        }
-      }
-
-      function manifestModuleSpecifier(manifest: z.infer<typeof PluginManifest>) {
-        if (manifest.backendExport.startsWith("./")) {
-          return `${manifest.packageSpecifier}/${manifest.backendExport.slice(2)}`
-        }
-        if (manifest.backendExport.startsWith("/")) {
-          return `${manifest.packageSpecifier}${manifest.backendExport}`
-        }
-        return manifest.backendExport
-      }
-
-      async function loadPluginModule(
-        plugin: string,
-        diagnosticSpecifier = plugin,
-        serviceID?: string,
-        resources = emptyResources(),
-        options: { artifact?: PluginModuleArtifact; revision?: string } = {},
-      ) {
-        try {
-          const artifact = options.artifact ?? (await buildPluginModuleArtifact(plugin))
-          const moduleRevision = options.revision ?? artifact.revision
-          await TestHooks.afterModuleArtifactBuilt?.({
-            specifier: diagnosticSpecifier,
-            revision: artifact.revision,
-          })
-          const modulePath = await publishPluginModuleArtifact(artifact)
-          const mod = await import(pathToFileURL(modulePath).href)
-          const seen = new Set<PluginInstance>()
-          const loaded: HookEntry[] = []
-          for (const [_name, fn] of Object.entries<PluginInstance>(mod)) {
-            if (seen.has(fn)) continue
-            seen.add(fn)
-            loaded.push({
-              owner: "project",
-              specifier: diagnosticSpecifier,
-              serviceID,
-              revision: moduleRevision,
-              hook: await fn(pluginInput(resources, diagnosticSpecifier)),
-            })
-          }
-          if (loaded.length === 0) throw new Error("Plugin module does not export a plugin factory")
-          hooks.push(...loaded)
-        } catch (cause) {
-          throw pluginFailure("module load", diagnosticSpecifier, cause)
-        }
-      }
-
-      async function loadPluginSpecifier(plugin: string) {
-        if (plugin.endsWith(".json") || plugin.endsWith(".jsonc")) {
-          try {
-            const manifestPath = pluginManifestPath(plugin)
-            const raw = await readFile(manifestPath, "utf8")
-            const manifest = PluginManifest.parse(JSON.parse(raw))
-            const backend = manifestModuleSpecifier(manifest)
-            const backendArtifact = await buildPluginModuleArtifact(backend)
-            const resourceSnapshot = await createPluginResources(manifestPath, manifest.resources)
-            log.info("loading plugin manifest", {
-              path: plugin,
-              packageSpecifier: manifest.packageSpecifier,
-              backendExport: manifest.backendExport,
-              serviceID: manifest.serviceID,
-            })
-            await loadPluginModule(
-              backend,
-              plugin,
-              manifest.serviceID,
-              resourceSnapshot.resources,
-              {
-                artifact: backendArtifact,
-                revision: canonicalDigestSource("plugin-manifest-module-v2", {
-                  manifest_bytes: raw,
-                  backend_revision: backendArtifact.revision,
-                  resource_revision: resourceSnapshot.revision,
-                }).sha256,
-              },
-            )
-          } catch (cause) {
-            throw pluginFailure("manifest load", plugin, cause)
-          }
-          return
-        }
-
-        await loadPluginModule(plugin)
-      }
-
-      let plugins = config.plugin ?? []
-      if (plugins.length) await Config.waitForDependencies()
-
-      for (let plugin of plugins) {
-        log.info("loading plugin", { path: plugin })
-        if (!plugin.startsWith("file://")) {
-          const lastAtIndex = plugin.lastIndexOf("@")
-          const pkg = lastAtIndex > 0 ? plugin.substring(0, lastAtIndex) : plugin
-          const version = lastAtIndex > 0 ? plugin.substring(lastAtIndex + 1) : "latest"
-          plugin = await BunProc.install(pkg, version)
-        }
-        // Prevent duplicate initialization when plugins export the same function
-        // as both a named export and default export (e.g., `export const X` and `export default X`).
-        // Object.entries(mod) would return both entries pointing to the same function reference.
-        await loadPluginSpecifier(plugin)
-      }
-
+    function pluginInput(resources: PluginResources = emptyResources(), specifier = "anonymous"): PluginInput {
       return {
-        hooks,
-        input: pluginInput(),
-        services: undefined as Promise<Map<string, PluginServiceInfo>> | undefined,
+        ...baseInput,
+        process: supervisedHostProcessFacade(`plugin:${specifier}`, false),
+        resources,
       }
-    },
-    undefined,
-    "plugin",
-  )
+    }
+
+    for (const plugin of INTERNAL_PLUGINS) {
+      log.info("loading internal plugin", { name: plugin.name })
+      const specifier = `internal:${plugin.name || "anonymous"}`
+      try {
+        hooks.push({
+          owner: "internal",
+          specifier,
+          revision: canonicalDigestSource("internal-plugin-v1", {
+            specifier,
+            opencorvus_version: Installation.VERSION,
+          }).sha256,
+          hook: (await plugin(pluginInput(emptyResources(), specifier))) as RuntimeHooks,
+        })
+      } catch (cause) {
+        throw pluginFailure("initialization", specifier, cause)
+      }
+    }
+
+    function manifestModuleSpecifier(manifest: z.infer<typeof PluginManifest>) {
+      if (manifest.backendExport.startsWith("./")) {
+        return `${manifest.packageSpecifier}/${manifest.backendExport.slice(2)}`
+      }
+      if (manifest.backendExport.startsWith("/")) {
+        return `${manifest.packageSpecifier}${manifest.backendExport}`
+      }
+      return manifest.backendExport
+    }
+
+    async function loadPluginModule(
+      plugin: string,
+      diagnosticSpecifier = plugin,
+      serviceID?: string,
+      resources = emptyResources(),
+      options: { artifact?: PluginModuleArtifact; revision?: string } = {},
+    ) {
+      try {
+        const artifact = options.artifact ?? (await buildPluginModuleArtifact(plugin))
+        const moduleRevision = options.revision ?? artifact.revision
+        await TestHooks.afterModuleArtifactBuilt?.({
+          specifier: diagnosticSpecifier,
+          revision: artifact.revision,
+        })
+        const modulePath = await publishPluginModuleArtifact(artifact)
+        const mod = await import(pathToFileURL(modulePath).href)
+        const seen = new Set<PluginInstance>()
+        const loaded: HookEntry[] = []
+        for (const [_name, fn] of Object.entries<PluginInstance>(mod)) {
+          if (seen.has(fn)) continue
+          seen.add(fn)
+          loaded.push({
+            owner: "project",
+            specifier: diagnosticSpecifier,
+            serviceID,
+            revision: moduleRevision,
+            hook: await fn(pluginInput(resources, diagnosticSpecifier)),
+          })
+        }
+        if (loaded.length === 0) throw new Error("Plugin module does not export a plugin factory")
+        hooks.push(...loaded)
+      } catch (cause) {
+        throw pluginFailure("module load", diagnosticSpecifier, cause)
+      }
+    }
+
+    async function loadPluginSpecifier(plugin: string) {
+      if (plugin.endsWith(".json") || plugin.endsWith(".jsonc")) {
+        try {
+          const manifestPath = pluginManifestPath(plugin)
+          const raw = await readFile(manifestPath, "utf8")
+          const manifest = PluginManifest.parse(JSON.parse(raw))
+          const backend = manifestModuleSpecifier(manifest)
+          const backendArtifact = await buildPluginModuleArtifact(backend)
+          const resourceSnapshot = await createPluginResources(manifestPath, manifest.resources)
+          log.info("loading plugin manifest", {
+            path: plugin,
+            packageSpecifier: manifest.packageSpecifier,
+            backendExport: manifest.backendExport,
+            serviceID: manifest.serviceID,
+          })
+          await loadPluginModule(backend, plugin, manifest.serviceID, resourceSnapshot.resources, {
+            artifact: backendArtifact,
+            revision: canonicalDigestSource("plugin-manifest-module-v2", {
+              manifest_bytes: raw,
+              backend_revision: backendArtifact.revision,
+              resource_revision: resourceSnapshot.revision,
+            }).sha256,
+          })
+        } catch (cause) {
+          throw pluginFailure("manifest load", plugin, cause)
+        }
+        return
+      }
+
+      await loadPluginModule(plugin)
+    }
+
+    const plugins = selectedSpecifiers
+    if (plugins.length) await Config.waitForDependencies()
+
+    for (let plugin of plugins) {
+      log.info("loading plugin", { path: plugin })
+      if (!plugin.startsWith("file://")) {
+        const lastAtIndex = plugin.lastIndexOf("@")
+        const pkg = lastAtIndex > 0 ? plugin.substring(0, lastAtIndex) : plugin
+        const version = lastAtIndex > 0 ? plugin.substring(lastAtIndex + 1) : "latest"
+        plugin = await BunProc.install(pkg, version)
+      }
+      // Prevent duplicate initialization when plugins export the same function
+      // as both a named export and default export (e.g., `export const X` and `export default X`).
+      // Object.entries(mod) would return both entries pointing to the same function reference.
+      await loadPluginSpecifier(plugin)
+    }
+
+    return {
+      specifiers: selectedSpecifiers,
+      hooks,
+      input: pluginInput(),
+      services: undefined as Promise<Map<string, PluginServiceInfo>> | undefined,
+    }
+  }
+
+  const state = createInstanceState(async () => loadState((await Config.get()).plugin ?? []), undefined, "plugin")
 
   function registrationList(result: PluginServiceRegistration | PluginServiceRegistration[] | void) {
     if (!result) return []
@@ -792,16 +785,27 @@ export namespace Plugin {
     return output
   }
 
-  export async function list() {
-    return state().then((x) => x.hooks.map((entry) => entry.hook))
+  function sameSpecifiers(left: readonly string[], right: readonly string[]) {
+    return left.length === right.length && left.every((specifier, index) => specifier === right[index])
+  }
+
+  /** Explicit selection belongs to the supplied candidate, including an empty selection. */
+  export async function list(specifiers?: readonly string[]) {
+    const selected = specifiers === undefined ? undefined : [...specifiers]
+    if (selected && !sameSpecifiers(selected, (await Config.get()).plugin ?? [])) {
+      return (await loadState(selected)).hooks.map((entry) => entry.hook)
+    }
+    const current = await state()
+    const loaded = selected && !sameSpecifiers(selected, current.specifiers) ? await loadState(selected) : current
+    return loaded.hooks.map((entry) => entry.hook)
   }
 
   /** Exact identity of the loaded hook surface for occurrence materialization. */
   export async function revision(): Promise<string> {
-    const [current, config] = await Promise.all([state(), Config.get()])
+    const current = await state()
     return canonicalDigestSource("plugin-materialization-revision-v1", {
       opencorvus_version: Installation.VERSION,
-      configured_specifiers: [...(config.plugin ?? [])].sort(compareCanonicalStrings),
+      configured_specifiers: [...current.specifiers].sort(compareCanonicalStrings),
       loaded_hooks: current.hooks
         .map((entry) => ({
           owner: entry.owner,

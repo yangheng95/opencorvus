@@ -1,0 +1,118 @@
+{
+  "occurrence": "candidate-provider-plugins-455-70d25d7b-5070-4bcc-8482-2b60f4359462",
+  "boundary": "Actual public HTTP against original native development service and real file-plugin loader; no UI automation",
+  "preflight": {
+    "sessionID": "ses_h2h3fzUVFSMAHmrCsbVY",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "stages": [
+    {
+      "stage": "old",
+      "configModel": "openai/candidate-455-old",
+      "selected": {
+        "id": "candidate-455-old",
+        "name": "HTTP current old",
+        "providerID": "openai",
+        "apiID": "gpt-6.1-sol"
+      }
+    },
+    {
+      "stage": "next",
+      "configModel": "openai/candidate-455-next",
+      "selected": {
+        "id": "candidate-455-next",
+        "name": "HTTP candidate next",
+        "providerID": "openai",
+        "apiID": "gpt-6.1-sol"
+      }
+    },
+    {
+      "stage": "standard-selection",
+      "selected": {
+        "id": "gpt-6.1-sol",
+        "name": "GPT-6.1 Sol",
+        "providerID": "openai",
+        "apiID": "gpt-6.1-sol"
+      }
+    },
+    {
+      "stage": "restored",
+      "configModel": "openai/gpt-6.1-sol",
+      "selected": {
+        "id": "gpt-6.1-sol",
+        "name": "GPT-6.1 Sol",
+        "providerID": "openai",
+        "apiID": "gpt-6.1-sol"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "PATCH",
+      "route": "config",
+      "status": 200,
+      "ms": 81.66139999999999,
+      "bytes": 1728
+    },
+    {
+      "method": "GET",
+      "route": "provider",
+      "status": 200,
+      "ms": 125.01510000000002,
+      "bytes": 6274608
+    },
+    {
+      "method": "PATCH",
+      "route": "config",
+      "status": 200,
+      "ms": 59.72230000000002,
+      "bytes": 1730
+    },
+    {
+      "method": "GET",
+      "route": "provider",
+      "status": 200,
+      "ms": 119.60059999999999,
+      "bytes": 6274613
+    },
+    {
+      "method": "PATCH",
+      "route": "config",
+      "status": 200,
+      "ms": 95.2133,
+      "bytes": 1606
+    },
+    {
+      "method": "GET",
+      "route": "provider",
+      "status": 200,
+      "ms": 118.28729999999996,
+      "bytes": 6273451
+    },
+    {
+      "method": "PATCH",
+      "route": "config",
+      "status": 200,
+      "ms": 47.548,
+      "bytes": 1606
+    },
+    {
+      "method": "GET",
+      "route": "config",
+      "status": 200,
+      "ms": 1.7497000000000753,
+      "bytes": 1606
+    },
+    {
+      "method": "GET",
+      "route": "provider",
+      "status": 200,
+      "ms": 119.34360000000004,
+      "bytes": 6273451
+    }
+  ],
+  "restored": true
+}

@@ -1,0 +1,45 @@
+# 候选配置的 Provider 插件来源
+
+## Recall
+
+持续单agent迭代，后续单agent要求覆盖旧goal中的三个Astra，不委托。上一轮454属于progress：4ecc34f53838df0664512bc775b15d745cd327d3已正常推送、fresh fetch HEAD=upstream；148条实际命令排除overlapped管道的稳定收益，没有生产替换。开始只有既有.bun/和packages/opencorvus/bun/未跟踪。不操作用户18571、进程或数据库，不新建branch/worktree，不清理完整QA412的98 Project/schema2历史。浏览器被Work设置禁用，不绕过，不新增/运行UI自动化。当前完整配置cold10s/restore5s指标仍失败；本轮正确性调查不重定义性能资格。
+
+继续已应用benchmark-debug-template。453曾标明Provider显式候选读取Plugin.list当前项目hooks的语义未知；本轮追查该具体公共合同，避免继续重复无收益的原生spawn参数实验。已读453/454 Recall、当前05-config/06-provider/04-extensions/server-runtime-readiness、Provider.buildState/stateFor/modelFromState、Config.commitGlobalProjectCandidates/validateConfigCandidate/model-reference-validation、Plugin整个模块加载与list/revision/init、State及Instance身份租约、现有真实插件投影/候选Skill/插件revision合同和原隔离测试runner。全部搜索仅后端路径，未发现/运行UI自动化。
+
+## 修改前分析
+
+候选配置携带完整有效plugin列表，Provider.stateFor解析并以整个Config作为原投影来源；buildState却无条件使用当前Instance的Plugin.list()。该state在初始化时从Config.get读取已保存plugin，既不接收候选，也不声明自己的已加载specifier输入。因此配置中替换插件及模型引用时，候选可能仍从旧插件产生模型。直接触发点是Provider在Config持久化前校验显式snapshot。旧453修复声明的可变归属和模型构造，不处理插件来源，不能根治该疑点。仅源码路径不能作为结论，需真实文件插件、原loader和原Config writer复现。
+
+全仓Plugin.list调用还包括CLI认证、Provider认证/请求投影；无显式输入的运行时调用继续使用当前Instance hooks。global Provider按架构只使用内置auth/model hooks，不将installed Project插件提升为global权限。插件是显式信任的进程内执行扩展，加载必须沿现有模块构建/发布、manifest资源、依赖安装和host-owned process facade，不能另写轻量解析器或隐藏执行。Plugin.init才注册服务/config/Bus工作，候选只需要既有loader的hook结果；不得调用完整init来激活候选服务。完整失败/资源所有权与现有loader保持；若发现进程结算或调度异常立即横审共享入口。
+
+已发现现有投影隔离测试向Provider传入没有plugin字段的独立配置，但预期读取另一个已保存配置的插件；需在真实复现后判断并改成明确的完整候选输入，不能为旧测试保留双源。候选新增、替换、移除和原项目独立性都必须覆盖。默认/已加载hook复用须基于实际已加载的specifier事实，不能仅比较可变化的Config.get而误复用旧模块。当前加载revision也读取Config.get，需核对与已加载模块输入的一致性。持久schema、HTTP/SDK类型、LLM协议、Task/Mission/Session执行轮次和原生监管本轮不变；主要风险是重复初始化factory、错误复用旧hooks及候选提前注册服务。
+
+## 实施前方案与验收
+
+1. 新增聚焦后端正向合同：真实file插件用不同明确模型ID/名称，通过原Provider投影和Config项目writer验证完整候选新增/替换；先记录当前失败。原测试runner使用锁定Bun1.4.0、原446 helper和隔离数据库，不接触用户配置/凭据。补充移除后明确标准模型、跨项目和global内置范围的正确输出。
+2. 仅在复现证明后，提取原Plugin state initializer为唯一接受Config输入的loader，当前state和显式候选共用；state记录自己真正加载的specifier输入。Plugin.list的显式完整snapshot沿该loader选择精确hooks；只有与实际加载specifier相同的现有hook可复用。不同候选不注册服务、config hook或Bus事件，不增加Plugin cache、第二安装器或fallback。Provider把正在构造的同一完整Config传给此读取面，global入口保持其既有内置hooks。
+3. 同步受影响的旧测试为完整候选合同，聚焦原插件模块/资源/revision/process、Provider可变隔离/缓存/全局范围、Config候选保存/错误回滚及保留身份。测试断言明确模型值、成功保存状态或typed错误，不以缺少/不调用为核心，不使用摘要替代行为。完成类型检查。若实测不支持疑点，不修改生产，仅记录排除事实并继续下一证据路径。
+4. 有生产修改后启动自有项目开发/ui服务，以原完整QA历史实际公共HTTP执行项目配置插件与模型来源保存、读回、恢复，并完成授权gpt-6.1-sol精确模型流式预检；auth与完整models成对复制验证，敏感值不入日志/提交。原10s/5s/20s完整checker按实际影响复测，保留失败；浏览器仍禁用时明确最新视觉未达成，不用HTTP或类型替代截图。任何自有进程都按原公开shutdown及physical/output/request/launcher结算后退休配对。
+5. 安全证据和实际失败归档、更新三索引及相关当前架构，运行当前文档/API检查；范围commit、fetch/merge、完整待推集合复核、正常hook push及fresh fetch。持续目标保持active，不能把单一正确性修复包装为性能或完整体验完成。
+
+## 真实复现与实施前收敛
+
+原runner两次均完整结束exit1。首轮夹具只写自定义Provider，遗漏catalog要求的opencorvus/kilo，三个错误均来自无效夹具，不能作为产品证据；保存before-fixture-error.log并用现有ModelsDev.withLocalProviders修正。第二轮实际完整catalog下三个明确合同均失败：新增next模型抛ProviderModelNotFoundError；已成功读取旧插件old模型后，原Config.updateProjectPatch替换到next仍抛同一错误；空plugin候选读取base.name实际Current customized base而非Catalog base。源代码链与实际错误一致，根因为候选Provider始终读取当前Plugin.state。
+
+原initializer只有plugin specifier列表来自Config，其他输入均属于真实Instance/资源/凭据能力，因此唯一loader提取为接受readonly specifier列表，避免把整个Config重复解析或引入与插件无关的候选状态。Provider从正在构造的同一完整Config传入plugin ?? []；Plugin.list无输入仍表示当前Instance，显式空数组表示确切空选择。loader记录真正加载的specifiers，revision也从该加载事实读取。明确选择与当前Config一致且与实际state已加载列表一致时，复用原hook闭包；候选不同则沿同一loader构建自己的hooks。两次比较分别排除不必要的旧factory初始化和已保存Config变化但旧state尚在的误复用，不增加cache或替代来源。
+
+## 实施与当前验证
+
+提取原唯一模块loader，未复制模块构建/发布、manifest资源、依赖安装、内部插件或process facade。Plugin.list接受明确的readonly specifier列表；候选不同不会初始化无关的旧插件，也不会调用Plugin.init激活服务。相同selection复用实际已加载hook闭包；保存源已变化而旧state仍保留时，按实际loaded specifiers重新选择候选loader。state记录真正加载的输入，revision从同一事实读取。Provider只改为传入构造中的config.plugin ?? []；全局内置hook入口保持原契约。原投影隔离用例已改为明确携带它使用的真实file plugin，删除对旧隐式来源的依赖。没有schema、HTTP、SDK或UI改动。
+
+原21095首轮两文件15例/19断言joined0；扩充后的原59223九文件68例/163断言joined0，原52307类型检查joined0。八个新正向用例覆盖新增候选、原writer替换、空选择的标准模型、真实hook身份复用、Config已变化但loaded state仍旧、两个真实Project与global范围、移除损坏当前插件，以及typed模型错误后保留当前可用配置。相关插件module/resource/revision、host process facade、Provider缓存/物理hook/可变隔离、候选Skill、全局候选及真实Hono错误合同全部通过。没有UI自动化；初轮无效夹具错误与修正后的三个真实产品失败分别保留。
+
+自有18717开发/ui服务沿原native Host/Target/446 helper运行当前后端源码，UI源码未变化，使用452已冻结的完整资源副本。原授权source及完整models成对新复制，分别验证credential usable、catalog projected、actual gpt-6.1-sol、streaming=true。实际公共HTTP九个请求完成：插件old与其模型同次保存、替换为next与其模型、空插件切回标准模型、最终完整原项目canonical字段恢复；所有状态200，读取模型api.id均gpt-6.1-sol。没有为alias额外执行LLM或伪造Message。模型完整正文、原配置和授权仅保留私有scope。
+
+原29877全局checker和38870并发reader均joined0：完整99 Project、原schema2历史保留，全局username实际保存11478.692ms/完整恢复11509.758ms。原生产前端config service经browser HostTransport进入实际HTTP，canonical所有字段恢复；这里的browser是原传输adapter，不是浏览器/视觉验收。reader在同一writer的config.global.before started后进入，config/provider/global-provider/Session均200，最长11635.487ms，完整227 Provider/8133模型与实际gpt-6.1-sol保持。原cold10s/restore5s门槛仍失败，读取20s通过；本轮是来源正确性修复，不声称提速。
+
+服务公开shutdown200，原31489 native launcher joined exit0，原physical/output/request及runtime配对结算完成。浏览器仍被Work设置禁用，没有绕过或新截图，最新网页/视觉资格未达成。未操作用户18571、窗口、进程或用户数据库，所有历史继续保留。后续复核还需验证Plugin.revision排序是否抹平有语义的插件顺序，必须通过实际消费revision的输出复现，不能仅比较digest就认定缺陷或作为验收。
+
+## 交付复核
+
+最终readonly SQLite为schema2、99 Project、132 Session；逐一核对454原98个Project ID/worktree全部保留。原生settlement三项和runtime配对退休事实完整，私有auth/models在全部原句柄joined后，经实际当前/复制敏感值扫描精确退休；源metadata保持不变，没有source write/exchange/refresh。docs:check（345操作/26分组）、architecture-index（20文档）和api:routes-check均exit0。人工差异复核确认唯一loader提取外没有改变module/resource发布算法；恢复formatter触及的两个无关旧排版块，只保留本任务源变更。安全证据见[本轮归档](../../artifacts/2026-10-20-candidate-provider-plugins/README.md)。正常范围提交、上游merge、完整待推集合与hook push结束后复核HEAD/upstream；不发布版本、tag或Release，持续目标保持active。

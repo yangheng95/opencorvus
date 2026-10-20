@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [候选配置的Provider插件来源](records/2026-10/2026-10-20-candidate-provider-plugins.md)：核对完整候选与实际加载hook的一致性、项目隔离和配置保存。
+
 - [Windows监管管道诊断](records/2026-10/2026-10-20-windows-supervised-stdio.md)：验证标准管道模式的真实启动成本、完整输出与结算。
 
 - [当前配置保存采样](records/2026-10/2026-10-20-config-current-profile.md)：完整目录的读取根因、不可变声明与独立模型投影、98项目实际性能及验收限制。

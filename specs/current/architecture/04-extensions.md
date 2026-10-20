@@ -68,6 +68,16 @@ Locator schemas and serialization rules remain owned by the public catalog.
 - 运行时注入 `Plugin.state`，暴露 `Bus` / `Session` / `Config` / `Server` 给 plugin
 - installed plugin 是显式信任的进程内可执行扩展，不是 sandbox，并遵循严格失败契约。安装、加载、config 与 service 注册失败会终止项目启动；其他 hook 失败会终止触发它的 LLM、命令、工具或事件操作，不会继续消费未修改或部分修改的结果
 
+One plugin loader owns both the current Instance hooks and an explicit candidate's
+ordered specifier selection. `Plugin.list()` reads the current Instance;
+`Plugin.list(specifiers)` reads that exact selection, including an empty array.
+An existing hook closure is reused only when the selected and actually loaded
+specifiers agree. Candidate hook construction uses the same module artifacts,
+manifest resources, dependency installation and host process capability; it does
+not publish runtime state or invoke service/config/Bus activation. Loaded module
+state retains its actual specifier input, which also supplies its materialization
+revision rather than a later read of mutable configuration.
+
 Plugin receives one runtime-neutral structured process capability, not a Bun shell object. Its command is always an
 explicit executable plus argv; the public contract expresses environment as strings, I/O as asynchronous byte
 sources/sinks, signals as strings, a caller-visible occurrence identity, abort/deadline settlement and one terminal
