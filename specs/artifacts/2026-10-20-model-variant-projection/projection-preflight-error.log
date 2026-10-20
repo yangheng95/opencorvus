@@ -1,0 +1,22 @@
+20 |     const chunks:Buffer[]=[],errors:Buffer[]=[]
+21 |     child.stdout.on("data",chunk=>chunks.push(chunk));child.stderr.on("data",chunk=>errors.push(chunk))
+22 |     const result=await new Promise<{code:number|null;signal:NodeJS.Signals|null}>((resolve,reject)=>{child.once("error",reject);child.once("close",(code,signal)=>resolve({code,signal}))})
+23 |     assert.equal(result.code,0)
+24 |     const capability=JSON.parse(Buffer.concat(chunks).toString("utf8"))
+25 |     assert.equal(capability.protocol_version,3)
+                ^
+AssertionError: Expected values to be strictly equal:
+
+undefined !== 3
+
+ generatedMessage: true,
+     actual: undefined,
+   expected: 3,
+   operator: "strictEqual",
+       diff: "simple",
+       code: "ERR_ASSERTION"
+
+      at queries (D:\myhexin-local\opencorvus\.tmp-product-iteration\project-comparison-cost-451\projection-pressure.ts:25:12)
+      at processTicksAndRejections (native:7:39)
+
+Bun v1.4.0 (Windows x64)

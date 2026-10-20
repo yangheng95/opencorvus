@@ -1,0 +1,479 @@
+{
+  "host": "node",
+  "version": "25.7.0",
+  "projects": 89,
+  "directories": 89,
+  "operationsPerGroup": 470,
+  "equivalence": [
+    {
+      "method": "promise-realpath",
+      "kind": "path",
+      "matches": true
+    },
+    {
+      "method": "callback-realpath",
+      "kind": "path",
+      "matches": false
+    },
+    {
+      "method": "native-realpath",
+      "kind": "path",
+      "matches": true
+    },
+    {
+      "method": "promise-stat",
+      "kind": "identity",
+      "matches": true
+    },
+    {
+      "method": "callback-stat",
+      "kind": "identity",
+      "matches": true
+    }
+  ],
+  "fixtures": [
+    {
+      "method": "promise-realpath",
+      "values": [
+        {
+          "kind": "path",
+          "value": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\project-comparison-cost-451\\fixture\\directory"
+        },
+        {
+          "kind": "path",
+          "value": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\project-comparison-cost-451\\fixture\\directory"
+        },
+        {
+          "kind": "path",
+          "value": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\project-comparison-cost-451\\fixture\\source.txt"
+        },
+        {
+          "kind": "path",
+          "value": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\project-comparison-cost-451\\fixture\\hardlink.txt"
+        },
+        {
+          "kind": "error",
+          "name": "Error",
+          "code": "ENOENT",
+          "syscall": "realpath"
+        }
+      ]
+    },
+    {
+      "method": "callback-realpath",
+      "values": [
+        {
+          "kind": "path",
+          "value": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\project-comparison-cost-451\\fixture\\directory"
+        },
+        {
+          "kind": "path",
+          "value": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\project-comparison-cost-451\\fixture\\directory"
+        },
+        {
+          "kind": "path",
+          "value": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\project-comparison-cost-451\\fixture\\source.txt"
+        },
+        {
+          "kind": "path",
+          "value": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\project-comparison-cost-451\\fixture\\hardlink.txt"
+        },
+        {
+          "kind": "error",
+          "name": "Error",
+          "code": "ENOENT",
+          "syscall": "lstat"
+        }
+      ]
+    },
+    {
+      "method": "native-realpath",
+      "values": [
+        {
+          "kind": "path",
+          "value": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\project-comparison-cost-451\\fixture\\directory"
+        },
+        {
+          "kind": "path",
+          "value": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\project-comparison-cost-451\\fixture\\directory"
+        },
+        {
+          "kind": "path",
+          "value": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\project-comparison-cost-451\\fixture\\source.txt"
+        },
+        {
+          "kind": "path",
+          "value": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\project-comparison-cost-451\\fixture\\hardlink.txt"
+        },
+        {
+          "kind": "error",
+          "name": "Error",
+          "code": "ENOENT",
+          "syscall": "realpath"
+        }
+      ]
+    },
+    {
+      "method": "promise-stat",
+      "values": [
+        {
+          "kind": "identity",
+          "device": "3260155833",
+          "inode": "6473924469046516",
+          "directory": true,
+          "file": false
+        },
+        {
+          "kind": "identity",
+          "device": "3260155833",
+          "inode": "6473924469046516",
+          "directory": true,
+          "file": false
+        },
+        {
+          "kind": "identity",
+          "device": "3260155833",
+          "inode": "6473924469046518",
+          "directory": false,
+          "file": true
+        },
+        {
+          "kind": "identity",
+          "device": "3260155833",
+          "inode": "6473924469046518",
+          "directory": false,
+          "file": true
+        },
+        {
+          "kind": "error",
+          "name": "Error",
+          "code": "ENOENT",
+          "syscall": "stat"
+        }
+      ]
+    },
+    {
+      "method": "callback-stat",
+      "values": [
+        {
+          "kind": "identity",
+          "device": "3260155833",
+          "inode": "6473924469046516",
+          "directory": true,
+          "file": false
+        },
+        {
+          "kind": "identity",
+          "device": "3260155833",
+          "inode": "6473924469046516",
+          "directory": true,
+          "file": false
+        },
+        {
+          "kind": "identity",
+          "device": "3260155833",
+          "inode": "6473924469046518",
+          "directory": false,
+          "file": true
+        },
+        {
+          "kind": "identity",
+          "device": "3260155833",
+          "inode": "6473924469046518",
+          "directory": false,
+          "file": true
+        },
+        {
+          "kind": "error",
+          "name": "Error",
+          "code": "ENOENT",
+          "syscall": "stat"
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "round": 0,
+      "method": "promise-realpath",
+      "concurrency": 1,
+      "operations": 470,
+      "ms": 87.85210000000001,
+      "cpuUserMs": 31,
+      "cpuSystemMs": 79,
+      "results": {
+        "path": 465,
+        "identity": 0,
+        "error": 5
+      }
+    },
+    {
+      "round": 0,
+      "method": "callback-realpath",
+      "concurrency": 1,
+      "operations": 470,
+      "ms": 421.22870000000006,
+      "cpuUserMs": 172,
+      "cpuSystemMs": 375,
+      "results": {
+        "path": 465,
+        "identity": 0,
+        "error": 5
+      }
+    },
+    {
+      "round": 0,
+      "method": "native-realpath",
+      "concurrency": 1,
+      "operations": 470,
+      "ms": 74.17520000000002,
+      "cpuUserMs": 0,
+      "cpuSystemMs": 78,
+      "results": {
+        "path": 465,
+        "identity": 0,
+        "error": 5
+      }
+    },
+    {
+      "round": 0,
+      "method": "promise-stat",
+      "concurrency": 1,
+      "operations": 470,
+      "ms": 33.89530000000002,
+      "cpuUserMs": 15,
+      "cpuSystemMs": 15,
+      "results": {
+        "path": 0,
+        "identity": 465,
+        "error": 5
+      }
+    },
+    {
+      "round": 0,
+      "method": "callback-stat",
+      "concurrency": 1,
+      "operations": 470,
+      "ms": 31.967100000000073,
+      "cpuUserMs": 16,
+      "cpuSystemMs": 16,
+      "results": {
+        "path": 0,
+        "identity": 465,
+        "error": 5
+      }
+    },
+    {
+      "round": 0,
+      "method": "promise-realpath",
+      "concurrency": 12,
+      "operations": 470,
+      "ms": 20.847599999999943,
+      "cpuUserMs": 0,
+      "cpuSystemMs": 47,
+      "results": {
+        "path": 465,
+        "identity": 0,
+        "error": 5
+      }
+    },
+    {
+      "round": 0,
+      "method": "callback-realpath",
+      "concurrency": 12,
+      "operations": 470,
+      "ms": 80.78660000000002,
+      "cpuUserMs": 78,
+      "cpuSystemMs": 250,
+      "results": {
+        "path": 465,
+        "identity": 0,
+        "error": 5
+      }
+    },
+    {
+      "round": 0,
+      "method": "native-realpath",
+      "concurrency": 12,
+      "operations": 470,
+      "ms": 19.493299999999977,
+      "cpuUserMs": 0,
+      "cpuSystemMs": 62,
+      "results": {
+        "path": 465,
+        "identity": 0,
+        "error": 5
+      }
+    },
+    {
+      "round": 0,
+      "method": "promise-stat",
+      "concurrency": 12,
+      "operations": 470,
+      "ms": 6.388500000000022,
+      "cpuUserMs": 0,
+      "cpuSystemMs": 0,
+      "results": {
+        "path": 0,
+        "identity": 465,
+        "error": 5
+      }
+    },
+    {
+      "round": 0,
+      "method": "callback-stat",
+      "concurrency": 12,
+      "operations": 470,
+      "ms": 6.614799999999946,
+      "cpuUserMs": 0,
+      "cpuSystemMs": 47,
+      "results": {
+        "path": 0,
+        "identity": 465,
+        "error": 5
+      }
+    },
+    {
+      "round": 1,
+      "method": "callback-realpath",
+      "concurrency": 1,
+      "operations": 470,
+      "ms": 406.19179999999994,
+      "cpuUserMs": 125,
+      "cpuSystemMs": 328,
+      "results": {
+        "path": 465,
+        "identity": 0,
+        "error": 5
+      }
+    },
+    {
+      "round": 1,
+      "method": "native-realpath",
+      "concurrency": 1,
+      "operations": 470,
+      "ms": 71.17399999999998,
+      "cpuUserMs": 0,
+      "cpuSystemMs": 63,
+      "results": {
+        "path": 465,
+        "identity": 0,
+        "error": 5
+      }
+    },
+    {
+      "round": 1,
+      "method": "promise-stat",
+      "concurrency": 1,
+      "operations": 470,
+      "ms": 32.00610000000006,
+      "cpuUserMs": 0,
+      "cpuSystemMs": 31,
+      "results": {
+        "path": 0,
+        "identity": 465,
+        "error": 5
+      }
+    },
+    {
+      "round": 1,
+      "method": "callback-stat",
+      "concurrency": 1,
+      "operations": 470,
+      "ms": 29.319099999999935,
+      "cpuUserMs": 0,
+      "cpuSystemMs": 31,
+      "results": {
+        "path": 0,
+        "identity": 465,
+        "error": 5
+      }
+    },
+    {
+      "round": 1,
+      "method": "promise-realpath",
+      "concurrency": 1,
+      "operations": 470,
+      "ms": 76.33069999999998,
+      "cpuUserMs": 16,
+      "cpuSystemMs": 63,
+      "results": {
+        "path": 465,
+        "identity": 0,
+        "error": 5
+      }
+    },
+    {
+      "round": 1,
+      "method": "callback-realpath",
+      "concurrency": 12,
+      "operations": 470,
+      "ms": 71.15460000000007,
+      "cpuUserMs": 78,
+      "cpuSystemMs": 297,
+      "results": {
+        "path": 465,
+        "identity": 0,
+        "error": 5
+      }
+    },
+    {
+      "round": 1,
+      "method": "native-realpath",
+      "concurrency": 12,
+      "operations": 470,
+      "ms": 17.563699999999926,
+      "cpuUserMs": 0,
+      "cpuSystemMs": 47,
+      "results": {
+        "path": 465,
+        "identity": 0,
+        "error": 5
+      }
+    },
+    {
+      "round": 1,
+      "method": "promise-stat",
+      "concurrency": 12,
+      "operations": 470,
+      "ms": 4.994199999999864,
+      "cpuUserMs": 0,
+      "cpuSystemMs": 0,
+      "results": {
+        "path": 0,
+        "identity": 465,
+        "error": 5
+      }
+    },
+    {
+      "round": 1,
+      "method": "callback-stat",
+      "concurrency": 12,
+      "operations": 470,
+      "ms": 5.919000000000096,
+      "cpuUserMs": 0,
+      "cpuSystemMs": 0,
+      "results": {
+        "path": 0,
+        "identity": 465,
+        "error": 5
+      }
+    },
+    {
+      "round": 1,
+      "method": "promise-realpath",
+      "concurrency": 12,
+      "operations": 470,
+      "ms": 18.4070999999999,
+      "cpuUserMs": 47,
+      "cpuSystemMs": 109,
+      "results": {
+        "path": 465,
+        "identity": 0,
+        "error": 5
+      }
+    }
+  ],
+  "boundary": "Actual async filesystem observations on all registered QA paths and actual link/missing fixtures; diagnostic of API costs, not a Config benchmark, UI test, or caller settlement qualification",
+  "observedAt": "2026-10-20T00:15:39.787Z"
+}

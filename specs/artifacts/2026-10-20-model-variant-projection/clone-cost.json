@@ -1,0 +1,79 @@
+{
+  "runtime": "1.4.0",
+  "rows": [
+    {
+      "round": 0,
+      "mode": "native-clone",
+      "ms": 78.76009999999997,
+      "calls": 8162,
+      "empty": 0,
+      "providers": 227,
+      "models": 8162
+    },
+    {
+      "round": 1,
+      "mode": "fresh-empty-record",
+      "ms": 34.150100000000066,
+      "calls": 8162,
+      "empty": 8162,
+      "providers": 227,
+      "models": 8162
+    },
+    {
+      "round": 2,
+      "mode": "native-clone",
+      "ms": 26.377299999999877,
+      "calls": 8162,
+      "empty": 0,
+      "providers": 227,
+      "models": 8162
+    },
+    {
+      "round": 3,
+      "mode": "fresh-empty-record",
+      "ms": 21.385899999999992,
+      "calls": 8162,
+      "empty": 8162,
+      "providers": 227,
+      "models": 8162
+    },
+    {
+      "round": 4,
+      "mode": "native-clone",
+      "ms": 21.174600000000055,
+      "calls": 8162,
+      "empty": 0,
+      "providers": 227,
+      "models": 8162
+    },
+    {
+      "round": 5,
+      "mode": "fresh-empty-record",
+      "ms": 26.421699999999873,
+      "calls": 8162,
+      "empty": 8162,
+      "providers": 227,
+      "models": 8162
+    },
+    {
+      "round": 6,
+      "mode": "native-clone",
+      "ms": 20.43360000000007,
+      "calls": 8162,
+      "empty": 0,
+      "providers": 227,
+      "models": 8162
+    },
+    {
+      "round": 7,
+      "mode": "fresh-empty-record",
+      "ms": 20.478399999999965,
+      "calls": 8162,
+      "empty": 8162,
+      "providers": 227,
+      "models": 8162
+    }
+  ],
+  "boundary": "Diagnostic-only pass-through interception around original pure production converter; identical complete projected values. No Provider request, credentials, DB or production source change.",
+  "observedAt": "2026-10-20T00:28:39.405Z"
+}

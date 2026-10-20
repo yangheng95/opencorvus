@@ -1,0 +1,1234 @@
+{
+  "runtime": "1.4.0",
+  "sourceBytes": 9155406,
+  "projections": [
+    {
+      "index": 0,
+      "ms": 92.36110000000008,
+      "providers": 227,
+      "models": 8162,
+      "before": {
+        "heapSize": 136828024,
+        "heapCapacity": 169398760,
+        "objects": 1855251,
+        "rss": 298721280
+      },
+      "after": {
+        "heapSize": 136828024,
+        "heapCapacity": 180122088,
+        "objects": 1855251,
+        "rss": 312016896
+      }
+    },
+    {
+      "index": 1,
+      "ms": 87.88589999999999,
+      "providers": 227,
+      "models": 8162,
+      "before": {
+        "heapSize": 137025784,
+        "heapCapacity": 180746600,
+        "objects": 1855251,
+        "rss": 312762368
+      },
+      "after": {
+        "heapSize": 137025784,
+        "heapCapacity": 194803928,
+        "objects": 1855251,
+        "rss": 329396224
+      }
+    },
+    {
+      "index": 2,
+      "ms": 88.34079999999994,
+      "providers": 227,
+      "models": 8162,
+      "before": {
+        "heapSize": 133850074,
+        "heapCapacity": 170911610,
+        "objects": 2075465,
+        "rss": 308162560
+      },
+      "after": {
+        "heapSize": 133850074,
+        "heapCapacity": 176662250,
+        "objects": 2075465,
+        "rss": 310501376
+      }
+    },
+    {
+      "index": 3,
+      "ms": 92.92529999999988,
+      "providers": 227,
+      "models": 8162,
+      "before": {
+        "heapSize": 134047834,
+        "heapCapacity": 177237610,
+        "objects": 2075465,
+        "rss": 309858304
+      },
+      "after": {
+        "heapSize": 134047834,
+        "heapCapacity": 190000602,
+        "objects": 2075465,
+        "rss": 324521984
+      }
+    },
+    {
+      "index": 4,
+      "ms": 93.9688000000001,
+      "providers": 227,
+      "models": 8162,
+      "before": {
+        "heapSize": 148669804,
+        "heapCapacity": 187102156,
+        "objects": 2290093,
+        "rss": 321884160
+      },
+      "after": {
+        "heapSize": 148669804,
+        "heapCapacity": 193164092,
+        "objects": 2290093,
+        "rss": 325615616
+      }
+    },
+    {
+      "index": 5,
+      "ms": 96.86490000000003,
+      "providers": 227,
+      "models": 8162,
+      "before": {
+        "heapSize": 156102644,
+        "heapCapacity": 193250084,
+        "objects": 2397484,
+        "rss": 324841472
+      },
+      "after": {
+        "heapSize": 156102644,
+        "heapCapacity": 200983188,
+        "objects": 2397484,
+        "rss": 333561856
+      }
+    },
+    {
+      "index": 6,
+      "ms": 100.54530000000068,
+      "providers": 227,
+      "models": 8162,
+      "before": {
+        "heapSize": 163513828,
+        "heapCapacity": 201114388,
+        "objects": 2504871,
+        "rss": 332943360
+      },
+      "after": {
+        "heapSize": 163513828,
+        "heapCapacity": 208749188,
+        "objects": 2504871,
+        "rss": 341344256
+      }
+    },
+    {
+      "index": 7,
+      "ms": 106.29500000000007,
+      "providers": 227,
+      "models": 8162,
+      "before": {
+        "heapSize": 163711588,
+        "heapCapacity": 209308164,
+        "objects": 2504871,
+        "rss": 342179840
+      },
+      "after": {
+        "heapSize": 163711588,
+        "heapCapacity": 221088116,
+        "objects": 2504871,
+        "rss": 356892672
+      }
+    }
+  ],
+  "groups": [
+    {
+      "kind": "leaf-queries",
+      "label": "before-projections",
+      "memory": {
+        "heapSize": 136828024,
+        "heapCapacity": 169365992,
+        "objects": 1855251,
+        "rss": 298704896
+      },
+      "rows": [
+        {
+          "index": 0,
+          "spawnMs": 13.61700000000019,
+          "totalMs": 20.4670000000001,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 1,
+          "spawnMs": 7.505999999999858,
+          "totalMs": 15.872299999999996,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 2,
+          "spawnMs": 8.030700000000024,
+          "totalMs": 15.182900000000018,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 3,
+          "spawnMs": 7.918999999999869,
+          "totalMs": 14.988599999999906,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 4,
+          "spawnMs": 8.754899999999907,
+          "totalMs": 16.326299999999947,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 5,
+          "spawnMs": 8.248600000000124,
+          "totalMs": 15.292500000000018,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 6,
+          "spawnMs": 7.693200000000161,
+          "totalMs": 14.717200000000048,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 7,
+          "spawnMs": 8.04099999999994,
+          "totalMs": 15.201299999999947,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 8,
+          "spawnMs": 7.92489999999998,
+          "totalMs": 15.085800000000063,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 9,
+          "spawnMs": 7.3215000000000146,
+          "totalMs": 14.698100000000068,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 10,
+          "spawnMs": 8.075800000000072,
+          "totalMs": 15.203500000000076,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 11,
+          "spawnMs": 7.772399999999834,
+          "totalMs": 15.402199999999993,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        }
+      ]
+    },
+    {
+      "kind": "leaf-queries",
+      "label": "retained-1",
+      "memory": {
+        "heapSize": 137025784,
+        "heapCapacity": 180713832,
+        "objects": 1855251,
+        "rss": 312680448
+      },
+      "rows": [
+        {
+          "index": 0,
+          "spawnMs": 7.909200000000055,
+          "totalMs": 15.308700000000044,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 1,
+          "spawnMs": 7.916699999999992,
+          "totalMs": 15.062200000000075,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 2,
+          "spawnMs": 7.406600000000026,
+          "totalMs": 14.946500000000015,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 3,
+          "spawnMs": 8.823199999999815,
+          "totalMs": 16.208699999999908,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 4,
+          "spawnMs": 7.766800000000103,
+          "totalMs": 15.049099999999953,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 5,
+          "spawnMs": 8.309799999999996,
+          "totalMs": 16.197600000000193,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 6,
+          "spawnMs": 7.766099999999824,
+          "totalMs": 14.916600000000017,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 7,
+          "spawnMs": 7.763699999999972,
+          "totalMs": 15.556700000000092,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 8,
+          "spawnMs": 7.8646000000001095,
+          "totalMs": 15.081500000000005,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 9,
+          "spawnMs": 7.335299999999961,
+          "totalMs": 14.669099999999844,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 10,
+          "spawnMs": 8.085900000000038,
+          "totalMs": 15.003000000000156,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 11,
+          "spawnMs": 7.6288999999999305,
+          "totalMs": 14.583899999999858,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        }
+      ]
+    },
+    {
+      "kind": "leaf-queries",
+      "label": "retained-2",
+      "memory": {
+        "heapSize": 133850074,
+        "heapCapacity": 170911610,
+        "objects": 2075465,
+        "rss": 308150272
+      },
+      "rows": [
+        {
+          "index": 0,
+          "spawnMs": 8.24570000000017,
+          "totalMs": 18.060699999999997,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 1,
+          "spawnMs": 8.580799999999954,
+          "totalMs": 19.81679999999983,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 2,
+          "spawnMs": 10.822300000000041,
+          "totalMs": 25.879100000000108,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 3,
+          "spawnMs": 8.539900000000216,
+          "totalMs": 15.982500000000073,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 4,
+          "spawnMs": 7.813200000000052,
+          "totalMs": 15.16840000000002,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 5,
+          "spawnMs": 7.603900000000067,
+          "totalMs": 15.031500000000051,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 6,
+          "spawnMs": 8.422499999999673,
+          "totalMs": 15.850799999999708,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 7,
+          "spawnMs": 7.869799999999941,
+          "totalMs": 15.182800000000043,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 8,
+          "spawnMs": 8.6558,
+          "totalMs": 15.784500000000207,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 9,
+          "spawnMs": 7.473299999999654,
+          "totalMs": 14.692499999999654,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 10,
+          "spawnMs": 7.929000000000087,
+          "totalMs": 15.611700000000383,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 11,
+          "spawnMs": 7.947599999999966,
+          "totalMs": 14.955000000000382,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        }
+      ]
+    },
+    {
+      "kind": "leaf-queries",
+      "label": "retained-3",
+      "memory": {
+        "heapSize": 134047834,
+        "heapCapacity": 177204842,
+        "objects": 2075465,
+        "rss": 309784576
+      },
+      "rows": [
+        {
+          "index": 0,
+          "spawnMs": 8.4067,
+          "totalMs": 15.710699999999633,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 1,
+          "spawnMs": 73.87920000000031,
+          "totalMs": 81.90250000000015,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 2,
+          "spawnMs": 7.819100000000162,
+          "totalMs": 15.305499999999938,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 3,
+          "spawnMs": 7.591300000000047,
+          "totalMs": 14.898200000000088,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 4,
+          "spawnMs": 7.811400000000049,
+          "totalMs": 14.998399999999947,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 5,
+          "spawnMs": 7.86869999999999,
+          "totalMs": 14.949100000000271,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 6,
+          "spawnMs": 7.535600000000159,
+          "totalMs": 15.268300000000181,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 7,
+          "spawnMs": 7.390800000000127,
+          "totalMs": 15.66740000000027,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 8,
+          "spawnMs": 8.253799999999956,
+          "totalMs": 15.685899999999947,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 9,
+          "spawnMs": 7.8753999999999,
+          "totalMs": 15.128900000000158,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 10,
+          "spawnMs": 7.604399999999714,
+          "totalMs": 15.147500000000036,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 11,
+          "spawnMs": 7.788100000000213,
+          "totalMs": 15.341200000000299,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        }
+      ]
+    },
+    {
+      "kind": "leaf-queries",
+      "label": "retained-4",
+      "memory": {
+        "heapSize": 148669804,
+        "heapCapacity": 187085772,
+        "objects": 2290093,
+        "rss": 321880064
+      },
+      "rows": [
+        {
+          "index": 0,
+          "spawnMs": 8.358000000000175,
+          "totalMs": 18.66260000000011,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 1,
+          "spawnMs": 8.222400000000107,
+          "totalMs": 15.762100000000373,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 2,
+          "spawnMs": 10.639999999999873,
+          "totalMs": 17.94529999999986,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 3,
+          "spawnMs": 7.498300000000199,
+          "totalMs": 14.580899999999929,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 4,
+          "spawnMs": 7.76720000000023,
+          "totalMs": 15.54970000000003,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 5,
+          "spawnMs": 7.882599999999911,
+          "totalMs": 15.397599999999784,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 6,
+          "spawnMs": 7.9594999999999345,
+          "totalMs": 15.048600000000079,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 7,
+          "spawnMs": 7.5736000000001695,
+          "totalMs": 14.903999999999996,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 8,
+          "spawnMs": 7.768799999999828,
+          "totalMs": 14.949299999999766,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 9,
+          "spawnMs": 7.886500000000069,
+          "totalMs": 15.215799999999945,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 10,
+          "spawnMs": 7.527700000000095,
+          "totalMs": 14.684200000000146,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 11,
+          "spawnMs": 7.483600000000024,
+          "totalMs": 15.017900000000282,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        }
+      ]
+    },
+    {
+      "kind": "leaf-queries",
+      "label": "retained-5",
+      "memory": {
+        "heapSize": 156102644,
+        "heapCapacity": 193233700,
+        "objects": 2397484,
+        "rss": 324837376
+      },
+      "rows": [
+        {
+          "index": 0,
+          "spawnMs": 8.032900000000154,
+          "totalMs": 18.13220000000001,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 1,
+          "spawnMs": 8.703199999999924,
+          "totalMs": 16.0317,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 2,
+          "spawnMs": 7.259499999999662,
+          "totalMs": 14.71329999999989,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 3,
+          "spawnMs": 7.503000000000156,
+          "totalMs": 14.6858000000002,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 4,
+          "spawnMs": 7.475699999999961,
+          "totalMs": 14.881600000000162,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 5,
+          "spawnMs": 8.057800000000043,
+          "totalMs": 15.182999999999993,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 6,
+          "spawnMs": 7.445300000000316,
+          "totalMs": 14.482600000000275,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 7,
+          "spawnMs": 7.9702000000002045,
+          "totalMs": 15.101599999999962,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 8,
+          "spawnMs": 7.627400000000307,
+          "totalMs": 14.580000000000382,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 9,
+          "spawnMs": 7.362999999999829,
+          "totalMs": 14.946100000000115,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 10,
+          "spawnMs": 7.675299999999879,
+          "totalMs": 14.611099999999624,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 11,
+          "spawnMs": 7.957300000000032,
+          "totalMs": 15.247499999999945,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        }
+      ]
+    },
+    {
+      "kind": "leaf-queries",
+      "label": "retained-6",
+      "memory": {
+        "heapSize": 163513828,
+        "heapCapacity": 201098004,
+        "objects": 2504871,
+        "rss": 332939264
+      },
+      "rows": [
+        {
+          "index": 0,
+          "spawnMs": 8.614500000000135,
+          "totalMs": 17.483000000000175,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 1,
+          "spawnMs": 7.55600000000004,
+          "totalMs": 15.011200000000372,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 2,
+          "spawnMs": 7.831500000000233,
+          "totalMs": 15.237600000000384,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 3,
+          "spawnMs": 8.182999999999993,
+          "totalMs": 16.454800000000432,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 4,
+          "spawnMs": 7.6500999999998385,
+          "totalMs": 14.703799999999319,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 5,
+          "spawnMs": 7.728900000000067,
+          "totalMs": 14.92619999999988,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 6,
+          "spawnMs": 8.526299999999537,
+          "totalMs": 15.547300000000178,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 7,
+          "spawnMs": 7.762699999999313,
+          "totalMs": 14.979699999999866,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 8,
+          "spawnMs": 7.540100000000166,
+          "totalMs": 14.773200000000543,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 9,
+          "spawnMs": 7.920399999999972,
+          "totalMs": 14.925400000000081,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 10,
+          "spawnMs": 8.065499999999702,
+          "totalMs": 15.202699999999822,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 11,
+          "spawnMs": 7.6927999999998065,
+          "totalMs": 14.735899999999674,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        }
+      ]
+    },
+    {
+      "kind": "leaf-queries",
+      "label": "retained-7",
+      "memory": {
+        "heapSize": 163711588,
+        "heapCapacity": 209291780,
+        "objects": 2504871,
+        "rss": 342130688
+      },
+      "rows": [
+        {
+          "index": 0,
+          "spawnMs": 8.067599999999402,
+          "totalMs": 15.184699999999793,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 1,
+          "spawnMs": 7.37079999999969,
+          "totalMs": 14.751800000000003,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 2,
+          "spawnMs": 7.514000000000124,
+          "totalMs": 14.833800000000338,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 3,
+          "spawnMs": 7.622199999999793,
+          "totalMs": 14.747199999999793,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 4,
+          "spawnMs": 7.2247000000006665,
+          "totalMs": 15.006000000000313,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 5,
+          "spawnMs": 7.380400000000009,
+          "totalMs": 14.45640000000003,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 6,
+          "spawnMs": 7.7478000000000975,
+          "totalMs": 14.845800000000054,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 7,
+          "spawnMs": 8.124499999999898,
+          "totalMs": 15.330599999999322,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 8,
+          "spawnMs": 7.630799999999908,
+          "totalMs": 15.054900000000089,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 9,
+          "spawnMs": 7.691600000000108,
+          "totalMs": 14.70719999999983,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 10,
+          "spawnMs": 7.867899999999281,
+          "totalMs": 15.27639999999974,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 11,
+          "spawnMs": 8.473100000000159,
+          "totalMs": 16.032400000000052,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        }
+      ]
+    },
+    {
+      "kind": "leaf-queries",
+      "label": "retained-8",
+      "memory": {
+        "heapSize": 178329190,
+        "heapCapacity": 219298214,
+        "objects": 2719492,
+        "rss": 354340864
+      },
+      "rows": [
+        {
+          "index": 0,
+          "spawnMs": 8.042000000000371,
+          "totalMs": 19.68119999999999,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 1,
+          "spawnMs": 8.448599999999715,
+          "totalMs": 15.724900000000162,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 2,
+          "spawnMs": 11.723399999999856,
+          "totalMs": 18.876000000000204,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 3,
+          "spawnMs": 7.896200000000135,
+          "totalMs": 15.070300000000316,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 4,
+          "spawnMs": 7.533300000000054,
+          "totalMs": 14.681300000000192,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 5,
+          "spawnMs": 8.146200000000135,
+          "totalMs": 15.45849999999973,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 6,
+          "spawnMs": 8.014600000000428,
+          "totalMs": 15.344100000000253,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 7,
+          "spawnMs": 8.258300000000418,
+          "totalMs": 15.787000000000262,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 8,
+          "spawnMs": 7.504700000000412,
+          "totalMs": 14.496799999999894,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 9,
+          "spawnMs": 7.3728000000000975,
+          "totalMs": 14.640699999999924,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 10,
+          "spawnMs": 7.8171000000002095,
+          "totalMs": 14.894100000000435,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 11,
+          "spawnMs": 7.51299999999992,
+          "totalMs": 14.389500000000226,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        }
+      ]
+    },
+    {
+      "kind": "leaf-queries",
+      "label": "released-and-collected",
+      "memory": {
+        "heapSize": 173221268,
+        "heapCapacity": 214573764,
+        "objects": 2712382,
+        "rss": 348053504
+      },
+      "rows": [
+        {
+          "index": 0,
+          "spawnMs": 8.355400000000373,
+          "totalMs": 15.863000000000284,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 1,
+          "spawnMs": 7.569899999999507,
+          "totalMs": 14.67699999999968,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 2,
+          "spawnMs": 8.455799999999726,
+          "totalMs": 15.699699999999211,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 3,
+          "spawnMs": 7.490299999999479,
+          "totalMs": 14.562399999999798,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 4,
+          "spawnMs": 72.8732,
+          "totalMs": 80.99309999999969,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 5,
+          "spawnMs": 7.411399999999958,
+          "totalMs": 14.789099999999962,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 6,
+          "spawnMs": 7.624200000000201,
+          "totalMs": 15.363099999999577,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 7,
+          "spawnMs": 7.62289999999939,
+          "totalMs": 15.056099999999788,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 8,
+          "spawnMs": 7.287900000000263,
+          "totalMs": 14.78440000000046,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 9,
+          "spawnMs": 7.53020000000015,
+          "totalMs": 14.71730000000025,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 10,
+          "spawnMs": 7.47440000000006,
+          "totalMs": 15.09310000000005,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        },
+        {
+          "index": 11,
+          "spawnMs": 8.286800000000767,
+          "totalMs": 15.83430000000044,
+          "code": 0,
+          "stdoutBytes": 41,
+          "stderrBytes": 0
+        }
+      ]
+    }
+  ],
+  "boundary": "Actual production provider conversion and exact release helper leaf queries; original child close/output joins. No provider call, control request, native Job target or full Config qualification.",
+  "observedAt": "2026-10-20T00:31:55.757Z"
+}

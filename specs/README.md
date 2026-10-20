@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [模型推理选项投影实验](records/2026-10/2026-10-20-model-variant-projection.md)：完整保存未获稳定收益、撤回实验与投影正向回归合同。
+
 - [配置快照工作树边界](records/2026-10/2026-10-20-config-worktree-boundary.md)：已准入身份复用、独立只读发现与真实配置性能。
 
 - [连续写入中的目录读进展](records/2026-10/2026-10-20-catalog-reader-admission.md)：完整请求归因、共享owner入场及原全页面性能验证。

@@ -1,0 +1,1402 @@
+{
+  "decision": "Both production experiments withdrawn; delivered production source remains 060c9d5. Four positive regression cases retained.",
+  "baseline450": {
+    "projects": 88,
+    "coldMs": 13158.709,
+    "restoreMs": 12379.774,
+    "pageMaxMs": 10041
+  },
+  "experiments": {
+    "after": {
+      "experiment": "Rejected empty options clone optimization",
+      "write": {
+        "at": "2026-10-20T00:36:46.264Z",
+        "endedAt": "2026-10-20T00:37:13.475Z",
+        "phase": "after",
+        "port": 18701,
+        "occurrence": "project-comparison-cost-451-after-cc331f02-8da1-430f-b383-5438a1f7b72e",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 14397.130700000002,
+        "restoreMs": 12797.324800000002,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "preflight": {
+        "sessionID": "ses_hTbYbt1TkkSuVTvNiddJ",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "projects": 90,
+      "schema": {
+        "user_version": 2
+      },
+      "pageRequests": [
+        {
+          "requestID": "0f3d68dc-1760-45d9-857a-9e06b5101f0f",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "90662876-5b8d-40ee-9ed1-ff23e549152e",
+          "path": "/session/ses_hTbYbt1TkkSuVTvNiddJ/message",
+          "status": 200,
+          "ms": 151
+        },
+        {
+          "requestID": "545fe58f-0151-43a6-b092-1d6e7a98aecb",
+          "path": "/session/ses_hTbYbt1TkkSuVTvNiddJ/message",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "requestID": "d9c904c5-859f-4dac-b31f-332141ace81e",
+          "path": "/session/ses_hTbYbt1TkkSuVTvNiddJ/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "bb49d9a2-c6e6-4197-806b-bfe5512345bc",
+          "path": "/session/ses_hTbYbt1TkkSuVTvNiddJ/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "899f13c1-bf9d-4987-b3d3-79b13b338441",
+          "path": "/session/ses_hTbYbt1TkkSuVTvNiddJ/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "82bf768a-af8b-47cc-ab02-3287e248f0af",
+          "path": "/session/ses_hTbYbt1TkkSuVTvNiddJ/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "036d08f2-c880-4940-8f2b-9ad090849661",
+          "path": "/session/ses_hTbYbt1TkkSuVTvNiddJ/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "1081409c-46c0-4749-b944-cb0f71c849ed",
+          "path": "/session/ses_hTbYbt1TkkSuVTvNiddJ/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "5200a221-363c-4b9f-881a-f6011608adf3",
+          "path": "/ui/",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "c8dc5e09-28d9-4ce1-ad58-fe4b0384f284",
+          "path": "/ui/assets/main-Ck6Tft-o.js",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "12f47511-296e-4c27-ad6c-6d012454a637",
+          "path": "/ui/assets/CommandMenuSurface-CN3W_QEU.js",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "b8b7d652-3bb8-4df0-893b-630d430f8e60",
+          "path": "/ui/assets/CommandMenuSurface-9Ez69chO.css",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "dfaf6878-517a-48f5-82aa-ba12ddcf17aa",
+          "path": "/ui/assets/main-Ds4se8Gh.css",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "776c67bd-3f41-4558-a992-3dc8412a8948",
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "b54165fa-607f-459f-93b4-57115327925e",
+          "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "7decd486-bcaf-4cf3-95aa-54b62d2d110b",
+          "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "92c69576-a273-40bd-8287-e7e7a2943fac",
+          "path": "/ui/i18n/zh-CN.json",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "6ac04ca4-40d0-4a46-8179-d2638898c429",
+          "path": "/ui/i18n/en-US.json",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "73f445c9-4ccf-41a2-8e55-260fa233c39b",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "9ef2a4b5-45e6-4d9c-a8b6-e53022ab2ad0",
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "0c9da315-4901-4703-b190-6eb106dbcee6",
+          "path": "/global/composer-references",
+          "status": 200,
+          "ms": 48
+        },
+        {
+          "requestID": "4a340e1a-a6eb-477e-bee1-990554fde2c6",
+          "path": "/global/projects/discover",
+          "status": 200,
+          "ms": 14
+        },
+        {
+          "requestID": "33926696-4072-498d-8cc1-1af1d6a97430",
+          "path": "/work-ledger/events",
+          "status": 200,
+          "ms": 6
+        },
+        {
+          "requestID": "1744d27f-fd5d-4a9b-98a5-463116d9c8e8",
+          "path": "/mailbox",
+          "status": 200,
+          "ms": 11
+        },
+        {
+          "requestID": "d92bd95e-5383-4a9a-92d7-b5ac9185f42d",
+          "path": "/expert-squad/catalog",
+          "status": 200,
+          "ms": 185
+        },
+        {
+          "requestID": "3e0d1758-df15-4dcb-9154-8fb4d8c2aa6a",
+          "path": "/expert-squad/search",
+          "status": 200,
+          "ms": 8
+        },
+        {
+          "requestID": "bf41d9c0-9f30-45d1-9821-b83d87d0d325",
+          "path": "/mission-skill/catalog",
+          "status": 200,
+          "ms": 6
+        },
+        {
+          "requestID": "fee93ca0-8fb3-4456-8068-a75c2fedbb3b",
+          "path": "/chat/capability",
+          "status": 200,
+          "ms": 35
+        },
+        {
+          "requestID": "cf00e8ab-ab15-4c12-86e7-dd85c4654e06",
+          "path": "/global/tasks",
+          "status": 200,
+          "ms": 12
+        },
+        {
+          "requestID": "5ac55028-4d36-428d-ab27-c0c351d796f0",
+          "path": "/path",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "f1b3ceaf-eb2c-47a0-9c5c-e4576b1bbd26",
+          "path": "/vcs",
+          "status": 200,
+          "ms": 940
+        },
+        {
+          "requestID": "430af720-223e-4bce-85b6-58ac2d7c05f3",
+          "path": "/work-ledger",
+          "status": 200,
+          "ms": 24
+        },
+        {
+          "requestID": "da3e7289-08e3-4b25-8246-0d650a96e7d7",
+          "path": "/mission",
+          "status": 200,
+          "ms": 6
+        },
+        {
+          "requestID": "97217573-6e9c-460a-8db1-9776c80b62dc",
+          "path": "/work-ledger",
+          "status": 200,
+          "ms": 26
+        },
+        {
+          "requestID": "dced55ff-fee1-47ce-89f5-bf00a979d954",
+          "path": "/work-ledger",
+          "status": 200,
+          "ms": 17
+        },
+        {
+          "requestID": "389c923d-4dd0-4257-a939-7eb3c98a4bd4",
+          "path": "/expert-squad/inspect",
+          "status": 200,
+          "ms": 15
+        },
+        {
+          "requestID": "c142b158-71d2-44b3-a12d-7ddc3d852b54",
+          "path": "/experimental/project-memory",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "requestID": "9807a2d1-9e40-4e18-af02-0c1189ec2a24",
+          "path": "/skill/mounts",
+          "status": 200,
+          "ms": 103
+        },
+        {
+          "requestID": "7822a623-8924-41c3-98e6-85fcf9068ef7",
+          "path": "/mcp",
+          "status": 200,
+          "ms": 22
+        },
+        {
+          "requestID": "40e60dd8-5c63-4fad-ab0f-fa477b5c2434",
+          "path": "/config",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "48b577bb-1b5d-440c-b22e-adeb1a439157",
+          "path": "/channel",
+          "status": 200,
+          "ms": 409
+        },
+        {
+          "requestID": "f6e8a19d-a8f9-41ce-9ab3-1124c3709e15",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "df50f3cf-ec4a-4b4b-8e60-c924e124d8b0",
+          "path": "/continuous-goal/chat/ses_hTbYbt1TkkSuVTvNiddJ",
+          "status": 200,
+          "ms": 6
+        },
+        {
+          "requestID": "083538e5-9f70-409a-bcf5-114b63090cc5",
+          "path": "/expert-squad/catalog",
+          "status": 200,
+          "ms": 4406
+        },
+        {
+          "requestID": "72f37891-69aa-465c-9652-41eb5ac4580a",
+          "path": "/expert-squad/search",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "b7b30e6a-8cc5-4667-b5e6-c8e20899703e",
+          "path": "/mailbox",
+          "status": 200,
+          "ms": 7
+        },
+        {
+          "requestID": "206dc5fe-ced4-4fbc-b537-e5137257aa1b",
+          "path": "/mission-skill/catalog",
+          "status": 200,
+          "ms": 13
+        },
+        {
+          "requestID": "32f23fb9-2924-42d6-8896-c09d1e92d803",
+          "path": "/chat/capability",
+          "status": 200,
+          "ms": 4155
+        },
+        {
+          "requestID": "23eb8cfc-ef6c-4919-921c-66e3ee6ac46d",
+          "path": "/coding/chat/session/ses_hTbYbt1TkkSuVTvNiddJ",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "a03dd018-032c-40dd-9e15-38045d603ba8",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "40e2f5ac-2cb7-4646-8f14-ec11fc4a0c8d",
+          "path": "/config",
+          "status": 200,
+          "ms": 3881
+        },
+        {
+          "requestID": "cdb0380d-bbba-4d47-af70-6c019d6e7172",
+          "path": "/channel",
+          "status": 200,
+          "ms": 3901
+        },
+        {
+          "requestID": "8000689f-e6e0-4ba7-b9af-b26c1cdb90fb",
+          "path": "/skill/mounts",
+          "status": 200,
+          "ms": 4177
+        },
+        {
+          "requestID": "3b522586-5cd0-40e7-945d-a2a0eb34ceac",
+          "path": "/mcp",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "a9ffd272-03c0-446c-ac9a-48b4158b4a04",
+          "path": "/path",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "575dfff8-ba75-4649-b636-a950410a6c5c",
+          "path": "/global/config",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "1da7e48f-8b21-4358-bb06-a693948033c5",
+          "path": "/global/tasks",
+          "status": 200,
+          "ms": 16
+        },
+        {
+          "requestID": "442c92b0-fa66-4de6-8c51-b56fbfed2d06",
+          "path": "/vcs",
+          "status": 200,
+          "ms": 2200
+        },
+        {
+          "requestID": "c3d6d639-05d8-44ed-a07e-0de02070649b",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "5dccf230-724f-4b87-9b1f-40aaa2659b67",
+          "path": "/expert-squad/inspect",
+          "status": 200,
+          "ms": 5
+        },
+        {
+          "requestID": "6f60329a-74f2-47e7-9296-499ccbf221f4",
+          "path": "/continuous-goal/chat/ses_hTbYbt1TkkSuVTvNiddJ",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "b25f1978-ef78-4ddc-9989-c1693988ff87",
+          "path": "/experimental/project-memory",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "4ad291ec-d1b0-431c-bb23-cbb8aca3a5e6",
+          "path": "/session/ses_hTbYbt1TkkSuVTvNiddJ/conversation",
+          "status": 200,
+          "ms": 58
+        },
+        {
+          "requestID": "9a30b73f-7618-4a28-bcf8-5393e089527d",
+          "path": "/session/ses_hTbYbt1TkkSuVTvNiddJ/config",
+          "status": 200,
+          "ms": 10112
+        },
+        {
+          "requestID": "06306c4f-dc10-49c8-97fb-325480345abf",
+          "path": "/session/ses_hTbYbt1TkkSuVTvNiddJ/events",
+          "status": 200,
+          "ms": 54
+        },
+        {
+          "requestID": "f00f70a5-9c58-43e6-8cbd-9ac331dc5b7d",
+          "path": "/ui/assets/markdown-render.worker-DXg_fqFo.js",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "9128b799-550f-4288-a52c-82c228df47ae",
+          "path": "/continuous-goal/chat/ses_hTbYbt1TkkSuVTvNiddJ",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "9abd8aad-a918-446e-bcf2-0887d9010c55",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "c1c6cbc8-0f86-4435-b356-b2c1a2523d35",
+          "path": "/continuous-goal/chat/ses_hTbYbt1TkkSuVTvNiddJ",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "b969c8b5-6c39-441b-90f8-64b124ebbfe1",
+          "path": "/session/ses_hTbYbt1TkkSuVTvNiddJ/config",
+          "status": 200,
+          "ms": 5
+        },
+        {
+          "requestID": "5453f8a4-8dd8-40f6-aa2b-a3efbb3ea0f4",
+          "path": "/continuous-goal/chat/ses_hTbYbt1TkkSuVTvNiddJ",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "199f3f9a-2e55-41d7-baec-046b503383d4",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        }
+      ],
+      "pageMaxMs": 10112,
+      "gates": {
+        "coldUnder10s": false,
+        "restoreUnder5s": false,
+        "pageUnder20s": true
+      },
+      "publicShutdown": {
+        "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYXtSNm008hcp66NdQ\"}",
+        "statusCode": 200,
+        "target": {
+          "pid": 71232,
+          "processInstanceID": "win32:639280531186035405",
+          "occurrenceID": "ab44389e-de43-4719-b825-3929ee445f66"
+        },
+        "observedAtUtc": "2026-10-20T00:37:35.6872625Z",
+        "occurrence": "project-comparison-cost-451-after-cc331f02-8da1-430f-b383-5438a1f7b72e"
+      },
+      "settlement": {
+        "pairedCleanupComplete": true,
+        "native": {
+          "occurrence": "project-comparison-cost-451-after-cc331f02-8da1-430f-b383-5438a1f7b72e",
+          "outcome": "settled",
+          "host": {
+            "pid": 44604,
+            "processInstanceID": "win32:639280531179683879",
+            "occurrenceID": "b669f69d-f996-47f5-bfdf-a210b73a5e38"
+          },
+          "target": {
+            "pid": 71232,
+            "processInstanceID": "win32:639280531186035405",
+            "occurrenceID": "ab44389e-de43-4719-b825-3929ee445f66"
+          },
+          "observedAtUtc": "2026-10-20T00:37:35.831Z",
+          "deadlineAt": 1792457517836,
+          "terminal": {
+            "occurrenceID": "project-comparison-cost-451-after-cc331f02-8da1-430f-b383-5438a1f7b72e",
+            "pid": 71232,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "physicalCompletion": true,
+        "observedAtUtc": "2026-10-20T00:37:37.0783323Z",
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 44604,
+              "processInstanceID": "win32:639280531179683879",
+              "occurrenceID": "b669f69d-f996-47f5-bfdf-a210b73a5e38"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 71232,
+              "processInstanceID": "win32:639280531186035405",
+              "occurrenceID": "ab44389e-de43-4719-b825-3929ee445f66"
+            }
+          }
+        ],
+        "occurrence": "project-comparison-cost-451-after-cc331f02-8da1-430f-b383-5438a1f7b72e",
+        "copiedPair": [
+          {
+            "name": "auth.json",
+            "outcome": "retired"
+          },
+          {
+            "name": "models.json",
+            "outcome": "retired"
+          }
+        ]
+      },
+      "launcher": {
+        "childExitCode": 0,
+        "observedAtUtc": "2026-10-20T00:37:37.1132916Z"
+      },
+      "checker": {
+        "originalHandle": 56856,
+        "observedExitCode": 0
+      }
+    },
+    "final": {
+      "experiment": "Rejected deferred initial variants",
+      "write": {
+        "at": "2026-10-20T00:47:34.555Z",
+        "endedAt": "2026-10-20T00:48:00.302Z",
+        "phase": "final",
+        "port": 18703,
+        "occurrence": "model-variant-projection-451-final-58128c7a-0c19-495b-860b-8c3d852166dd",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 12973.353800000004,
+        "restoreMs": 12765.218499999995,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "preflight": {
+        "sessionID": "ses_hgiYfcZ7yiliviOwd99N",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "projects": 91,
+      "schema": {
+        "user_version": 2
+      },
+      "pageRequests": [
+        {
+          "requestID": "95aff723-e42a-471c-b5c5-ac3c30dc8de7",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "eb0dbfad-e25b-403c-9dfd-a4374f75def0",
+          "path": "/session/ses_hgiYfcZ7yiliviOwd99N/message",
+          "status": 200,
+          "ms": 88
+        },
+        {
+          "requestID": "dbae1f28-530f-4391-973d-49c06fa0f4f3",
+          "path": "/session/ses_hgiYfcZ7yiliviOwd99N/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "58e14d43-a6bd-4ec5-8811-a19a15879b1f",
+          "path": "/session/ses_hgiYfcZ7yiliviOwd99N/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "5101e9ee-0e1d-47dc-801d-a9c6e2d1e7e0",
+          "path": "/session/ses_hgiYfcZ7yiliviOwd99N/message",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "requestID": "7506cacc-f4d0-48b9-8e1b-98397cf67814",
+          "path": "/session/ses_hgiYfcZ7yiliviOwd99N/message",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "requestID": "c298b551-0679-41fd-a77f-da309a3e246c",
+          "path": "/session/ses_hgiYfcZ7yiliviOwd99N/message",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "requestID": "4ec77340-f205-4a7b-9bee-cc88c706f7bd",
+          "path": "/session/ses_hgiYfcZ7yiliviOwd99N/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "1a20ba60-a04b-494a-923b-2fa7c5a8136b",
+          "path": "/session/ses_hgiYfcZ7yiliviOwd99N/message",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "requestID": "c19dcd1a-aac3-4604-a550-fd6e22d8a51a",
+          "path": "/ui/",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "546df370-c424-424f-950d-d042844136c4",
+          "path": "/ui/assets/main-Ck6Tft-o.js",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "c642fbc7-c9c8-43d9-a8de-93806060b0e4",
+          "path": "/ui/assets/CommandMenuSurface-9Ez69chO.css",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "4e73627c-eced-4b7c-83f7-9c49a34c76ca",
+          "path": "/ui/assets/CommandMenuSurface-CN3W_QEU.js",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "5e56e3b0-b15a-4c47-bc68-2f92e0cf56f4",
+          "path": "/ui/assets/main-Ds4se8Gh.css",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "305080c2-c020-41e8-8fa5-90df0f81448e",
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "50fbd3b7-d60f-4b8f-8eaa-544d56484fa5",
+          "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "8c09cfe5-7408-4b4d-bb5e-ede6e3b7d4d6",
+          "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "b35e7888-e631-4b2b-8893-e6f2e19d6016",
+          "path": "/ui/i18n/zh-CN.json",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "275f54c4-c673-4b5f-a136-ca0a030567b5",
+          "path": "/ui/i18n/en-US.json",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "ceadb172-d6df-48d2-8c82-359503a61e0c",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "4fd0aab4-9c36-489f-9495-2b12e03f3777",
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "1eef1cb0-cb90-439e-82eb-99fd2609fc5c",
+          "path": "/global/composer-references",
+          "status": 200,
+          "ms": 41
+        },
+        {
+          "requestID": "b7fc620b-942b-4a4e-8f9e-85ba659b22c8",
+          "path": "/global/projects/discover",
+          "status": 200,
+          "ms": 15
+        },
+        {
+          "requestID": "2b2213b2-3d31-4e0f-88ba-52bc66d94233",
+          "path": "/work-ledger/events",
+          "status": 200,
+          "ms": 7
+        },
+        {
+          "requestID": "4dac6077-20a1-4b72-b636-c63b7b109c11",
+          "path": "/mailbox",
+          "status": 200,
+          "ms": 11
+        },
+        {
+          "requestID": "3b9852b6-54df-4d43-b470-2b5b08d736bd",
+          "path": "/chat/capability",
+          "status": 200,
+          "ms": 38
+        },
+        {
+          "requestID": "346933d5-2293-4559-ab2a-b1dc0d20799f",
+          "path": "/expert-squad/catalog",
+          "status": 200,
+          "ms": 206
+        },
+        {
+          "requestID": "1d5cfa5a-4981-408f-b906-83efe01d6779",
+          "path": "/expert-squad/search",
+          "status": 200,
+          "ms": 20
+        },
+        {
+          "requestID": "0826b35a-52c8-4810-9041-07228f62eb4f",
+          "path": "/mission-skill/catalog",
+          "status": 200,
+          "ms": 19
+        },
+        {
+          "requestID": "cc6d6192-c805-4e4f-a568-47649e001044",
+          "path": "/global/tasks",
+          "status": 200,
+          "ms": 13
+        },
+        {
+          "requestID": "3aad4c65-884e-4dc8-b04d-7524038d9b7f",
+          "path": "/vcs",
+          "status": 200,
+          "ms": 922
+        },
+        {
+          "requestID": "fbac2332-8df0-48a3-ab7d-754880665f1f",
+          "path": "/path",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "ca568a18-ffa7-42dc-8d24-faf287979780",
+          "path": "/work-ledger",
+          "status": 200,
+          "ms": 25
+        },
+        {
+          "requestID": "746bbf00-c197-4b59-8966-4fc3f380a273",
+          "path": "/mission",
+          "status": 200,
+          "ms": 9
+        },
+        {
+          "requestID": "f3cb67de-b4a7-4357-89f0-f9462ec40751",
+          "path": "/work-ledger",
+          "status": 200,
+          "ms": 28
+        },
+        {
+          "requestID": "ebd0917f-4434-42ef-8b78-43f435684a93",
+          "path": "/work-ledger",
+          "status": 200,
+          "ms": 15
+        },
+        {
+          "requestID": "d675f40f-74ee-40e3-b305-74b00bf7ca4d",
+          "path": "/expert-squad/inspect",
+          "status": 200,
+          "ms": 10
+        },
+        {
+          "requestID": "11bc8cba-cc50-4ed6-bbd4-006093cbb6ac",
+          "path": "/experimental/project-memory",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "56525aa5-248d-4456-aa79-7739eaf666f3",
+          "path": "/skill/mounts",
+          "status": 200,
+          "ms": 105
+        },
+        {
+          "requestID": "3c830268-db71-4193-ad7c-102ba282a8b0",
+          "path": "/mcp",
+          "status": 200,
+          "ms": 22
+        },
+        {
+          "requestID": "5423406e-341a-4e78-8324-4cba5560ce83",
+          "path": "/config",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "c86e5222-dd6f-472d-b5b9-f25634e75ed8",
+          "path": "/channel",
+          "status": 200,
+          "ms": 426
+        },
+        {
+          "requestID": "b16d0e1a-9b35-41a2-8a83-d5edcd0ab23a",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "93843e6d-00d2-410c-a909-6b84112d03a0",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 4
+        },
+        {
+          "requestID": "e6990e6c-d2ff-4606-a01a-1fa2d6416968",
+          "path": "/expert-squad/catalog",
+          "status": 200,
+          "ms": 9590
+        },
+        {
+          "requestID": "18b673ab-d591-43bb-858c-53263738620a",
+          "path": "/mailbox",
+          "status": 200,
+          "ms": 10
+        },
+        {
+          "requestID": "73d0ad48-7d70-41ae-ab51-d0b682cc073e",
+          "path": "/expert-squad/search",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "bbf1b6ff-b11a-4209-8f94-cafcec158d91",
+          "path": "/mission-skill/catalog",
+          "status": 200,
+          "ms": 13
+        },
+        {
+          "requestID": "59aef549-93e3-4741-a830-512e29f8d45f",
+          "path": "/chat/capability",
+          "status": 200,
+          "ms": 9376
+        },
+        {
+          "requestID": "ac2cfdc3-bc2c-4934-82a6-d97f23993999",
+          "path": "/coding/chat/session/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "requestID": "4e8a8e4a-8215-4db6-a762-716d6818ed80",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "50bfb3a7-0e2a-4000-bc96-886aabeb3e93",
+          "path": "/config",
+          "status": 200,
+          "ms": 9150
+        },
+        {
+          "requestID": "cdc23e59-e7c3-40c6-acff-791859380d99",
+          "path": "/channel",
+          "status": 200,
+          "ms": 9170
+        },
+        {
+          "requestID": "de935b7b-095b-42d9-b142-a39d4cdbefc6",
+          "path": "/skill/mounts",
+          "status": 200,
+          "ms": 9438
+        },
+        {
+          "requestID": "eb5f50c0-72f1-4191-a4e6-baa7c3fb4b5e",
+          "path": "/mcp",
+          "status": 200,
+          "ms": 4
+        },
+        {
+          "requestID": "0394d86c-6947-4326-913a-8826e0a60dae",
+          "path": "/path",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "d734d1f8-54c9-439c-80f5-f128c9616023",
+          "path": "/global/config",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "09477832-3178-4cb9-974d-80c4beea3175",
+          "path": "/vcs",
+          "status": 200,
+          "ms": 2237
+        },
+        {
+          "requestID": "85b011df-7170-4925-9c25-4d3a5ddf36c0",
+          "path": "/global/tasks",
+          "status": 200,
+          "ms": 13
+        },
+        {
+          "requestID": "fcf2f5bf-16b6-459a-b622-cf23f8728b7b",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 10
+        },
+        {
+          "requestID": "2f5ee463-f827-4394-8105-20614cc58cf4",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "8775e767-5622-4555-a832-7fa5fefbe540",
+          "path": "/expert-squad/inspect",
+          "status": 200,
+          "ms": 5
+        },
+        {
+          "requestID": "8b0c06bb-96a2-4f9c-b629-c9202ca3682d",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "2adad31b-07e2-4d0f-acfc-2857f105e028",
+          "path": "/experimental/project-memory",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "a73031ab-36f3-469a-8ba9-730239b7de73",
+          "path": "/session/ses_hgiYfcZ7yiliviOwd99N/conversation",
+          "status": 200,
+          "ms": 51
+        },
+        {
+          "requestID": "57d9180c-550d-4dba-ac88-9548f2388d8b",
+          "path": "/session/ses_hgiYfcZ7yiliviOwd99N/config",
+          "status": 200,
+          "ms": 10370
+        },
+        {
+          "requestID": "e1e0edad-d6ad-4c6f-be7d-7109fd1d4a15",
+          "path": "/session/ses_hgiYfcZ7yiliviOwd99N/events",
+          "status": 200,
+          "ms": 58
+        },
+        {
+          "requestID": "ce5670a8-3c44-4f96-ac61-84ab0f3dbcff",
+          "path": "/ui/assets/markdown-render.worker-DXg_fqFo.js",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "1d458b43-0c4d-4c18-a003-a2e55a003eff",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "requestID": "ff20c5dd-5068-4701-bbd4-07e23b1e63d9",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "6b3d0539-8dc2-4bac-81ec-efa06e147d57",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "requestID": "f589f331-d9b5-424b-8fae-269ba3f41e9e",
+          "path": "/session/ses_hgiYfcZ7yiliviOwd99N/config",
+          "status": 200,
+          "ms": 5
+        },
+        {
+          "requestID": "91b59b49-a9ac-42b0-b035-b5db80ee1e6e",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "1066e396-9391-4737-be3b-0a598a1998da",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "c47fae55-ac88-4902-bd25-f666174ac3e2",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "40ec5032-1638-4971-a44d-49f0dbdc3e71",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "ed3ae4bd-bab3-47b4-9a70-2588458dcb01",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "24a42b1c-3ceb-417a-bf12-4d22495dd684",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "8ea2df21-7021-4ecf-ab6d-05b2aabcb344",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "4d913b2a-a769-4c13-b1c4-b6b999e541ce",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "3468149a-f774-4b28-8d2c-c77b67b24bc5",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "1baacffc-c7b3-4a94-aefd-2c23d34c775f",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "392e482a-f2a7-4dfc-b098-3d8ed8539d61",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "4eb22fb2-9666-4383-99de-2be311c43f1d",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "80bd42b2-340a-4181-8bb7-c8dc09a0e095",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "b2f7f958-a63f-42c7-9a36-b8e33dc7baaa",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "ade8082e-9170-4563-a8c3-ed86d79eee71",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "0d3ecdab-e709-4360-98df-511c00146389",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "0741c8da-beea-476f-9678-457a783843c3",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "4693d020-6b49-4d14-b35a-d14cbb83da00",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "eb91a272-c8bd-42d0-9594-1ef5d6cc177b",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "c335e29f-e130-4eac-be2c-ecb55430066f",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "03c1eb4a-a2ac-45c1-94b0-874d2bed1e19",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "9bddc008-9c0b-4d07-b13f-5e3388a6b0c0",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "34ea0bf5-cd90-44dd-971e-e3b1e0f33eb4",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "1cf421c4-b0ad-49be-a6bb-1d79d09bf1b7",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "c32955bc-b489-4005-b3dc-461170096dcd",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "48ee4805-0c4c-4a33-9a48-b8a5940ed919",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "cc1520d9-70d1-4aee-8ae0-c185c84f18f6",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "20711448-efed-4b24-8c9c-00f943b5cf02",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "d788cbb5-e17d-4180-9843-8e37ee00dbdf",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "30c13451-fb96-4567-b731-b9497500b818",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "6611390f-1a92-4927-804d-fbe7c532a1bf",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "requestID": "d69cc788-60dc-45b5-adfe-527d6bbc21f7",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "ecc8b9d6-d769-4108-8ed8-a65e0ffa9d42",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "3c8c493b-81d2-4349-a6b6-44f09e1a299b",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "17dd8632-3fd1-47d6-9aea-171d8fc07f28",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "418b7482-1f92-4f7d-acfc-9b61d6daffc3",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "fad8161c-c600-418b-816d-060e3139e3c9",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "0b3ce983-fbba-4204-8cb8-a94664443ad1",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "9108cbc9-706d-495d-bce4-f54420309894",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "0a608c97-b096-491b-aa0e-85859fc600ae",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "86efbb83-8165-40f1-968f-bee8dc922a21",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "requestID": "b72aedeb-cc66-44f6-b8d8-899e51ea0864",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "d4c27002-4198-43f2-ba1d-fed66015e6fc",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "requestID": "e2345b0d-6a15-4b9f-b24b-e8056b4118fe",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "requestID": "a637b0b1-285c-4e49-91d0-a6918cdc99dc",
+          "path": "/continuous-goal/chat/ses_hgiYfcZ7yiliviOwd99N",
+          "status": 200,
+          "ms": 2
+        }
+      ],
+      "pageMaxMs": 10370,
+      "gates": {
+        "coldUnder10s": false,
+        "restoreUnder5s": false,
+        "pageUnder20s": true
+      },
+      "publicShutdown": {
+        "observedAtUtc": "2026-10-20T00:50:34.2810409Z",
+        "occurrence": "model-variant-projection-451-final-58128c7a-0c19-495b-860b-8c3d852166dd",
+        "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYXwivj00AAL1HDdYd\"}",
+        "target": {
+          "pid": 78432,
+          "processInstanceID": "win32:639280538802661379",
+          "occurrenceID": "dcb8546c-812c-4747-8fff-69a0588de203"
+        },
+        "statusCode": 200
+      },
+      "settlement": {
+        "observedAtUtc": "2026-10-20T00:50:45.8948203Z",
+        "copiedPair": [
+          {
+            "outcome": "retired",
+            "name": "auth.json"
+          },
+          {
+            "outcome": "retired",
+            "name": "models.json"
+          }
+        ],
+        "native": {
+          "occurrence": "model-variant-projection-451-final-58128c7a-0c19-495b-860b-8c3d852166dd",
+          "outcome": "settled",
+          "host": {
+            "pid": 83264,
+            "processInstanceID": "win32:639280538788981189",
+            "occurrenceID": "059526ab-7cca-49fb-b6f4-91b44fdb140f"
+          },
+          "target": {
+            "pid": 78432,
+            "processInstanceID": "win32:639280538802661379",
+            "occurrenceID": "dcb8546c-812c-4747-8fff-69a0588de203"
+          },
+          "observedAtUtc": "2026-10-20T00:50:34.431Z",
+          "deadlineAt": 1792458278815,
+          "terminal": {
+            "occurrenceID": "model-variant-projection-451-final-58128c7a-0c19-495b-860b-8c3d852166dd",
+            "pid": 78432,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "physicalCompletion": true,
+        "occurrence": "model-variant-projection-451-final-58128c7a-0c19-495b-860b-8c3d852166dd",
+        "chain": [
+          {
+            "identity": {
+              "pid": 83264,
+              "processInstanceID": "win32:639280538788981189",
+              "occurrenceID": "059526ab-7cca-49fb-b6f4-91b44fdb140f"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 78432,
+              "processInstanceID": "win32:639280538802661379",
+              "occurrenceID": "dcb8546c-812c-4747-8fff-69a0588de203"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "pairedCleanupComplete": true
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-20T00:50:35.8184838Z",
+        "childExitCode": 0
+      },
+      "checker": {
+        "originalHandle": 11479,
+        "observation": "Final tool output consumed during context truncation; repeat polling returns Unknown process id. No numeric exit code claimed; completed original accepted/restored/failures result retained."
+      }
+    }
+  },
+  "retainedQualification": {
+    "tests": 38,
+    "assertions": 129,
+    "skips": 0,
+    "runner": "Original production isolated test runner; retained-contracts.log"
+  },
+  "limits": [
+    "Project counts and manual page arrival differ across runs; no controlled overall speed gain established.",
+    "Local constructor timing is not complete save performance.",
+    "The final experimental checker numeric exit observation was lost, as recorded.",
+    "No POSIX validation in this batch."
+  ],
+  "observedAt": "2026-10-20T00:52:41.421Z"
+}

@@ -1,0 +1,55 @@
+{
+  "runtime": "1.4.0",
+  "rows": [
+    {
+      "round": 0,
+      "convertedMs": 21.68820000000005,
+      "serializedMs": 59.774900000000116,
+      "providers": 227,
+      "models": 8162,
+      "completeProjection": "equal"
+    },
+    {
+      "round": 1,
+      "convertedMs": 16.564300000000003,
+      "serializedMs": 57.13290000000006,
+      "providers": 227,
+      "models": 8162,
+      "completeProjection": "equal"
+    },
+    {
+      "round": 2,
+      "convertedMs": 20.592300000000023,
+      "serializedMs": 91.23399999999992,
+      "providers": 227,
+      "models": 8162,
+      "completeProjection": "equal"
+    },
+    {
+      "round": 3,
+      "convertedMs": 11.409200000000055,
+      "serializedMs": 53.434099999999944,
+      "providers": 227,
+      "models": 8162,
+      "completeProjection": "equal"
+    },
+    {
+      "round": 4,
+      "convertedMs": 11.242899999999963,
+      "serializedMs": 56.64300000000003,
+      "providers": 227,
+      "models": 8162,
+      "completeProjection": "equal"
+    },
+    {
+      "round": 5,
+      "convertedMs": 13.929000000000087,
+      "serializedMs": 52.99839999999995,
+      "providers": 227,
+      "models": 8162,
+      "completeProjection": "equal"
+    }
+  ],
+  "boundary": "Actual current constructor then complete serialization and value-by-value comparison with private pre-change projection; no digest, source string assertion or mocked converter.",
+  "observedAt": "2026-10-20T00:42:13.488Z"
+}

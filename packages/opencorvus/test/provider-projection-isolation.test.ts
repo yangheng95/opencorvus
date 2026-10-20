@@ -67,6 +67,64 @@ function customize(provider: Provider.Info) {
   model.capabilities.interleaved.field = "reasoning_details"
 }
 
+test("empty model option defaults produce independent authored values for each projection", () => {
+  const source = declaration()
+  source.models.reasoning.options = {}
+  const first = Provider.fromModelsDevProvider(source)
+  const second = Provider.fromModelsDevProvider(source)
+  first.models.reasoning.options.scope = "first"
+  second.models.reasoning.options.scope = "second"
+  const third = Provider.fromModelsDevProvider(source)
+  expect({
+    first: first.models.reasoning.options,
+    second: second.models.reasoning.options,
+    third: third.models.reasoning.options,
+    source: source.models.reasoning.options,
+  }).toEqual({ first: { scope: "first" }, second: { scope: "second" }, third: {}, source: {} })
+})
+
+test("initial reasoning variants retain their source values and each projection owns later edits", () => {
+  const source = declaration()
+  source.npm = "@ai-sdk/anthropic"
+  const first = Provider.fromModelsDevProvider(source)
+  const second = Provider.fromModelsDevProvider(source)
+  const model = first.models.reasoning
+  model.api.npm = "@ai-sdk/openai-compatible"
+  model.capabilities.reasoning = false
+  model.limit.output = 10
+  expect(model.variants).toEqual({
+    high: { thinking: { type: "enabled", budgetTokens: 499 } },
+    max: { thinking: { type: "enabled", budgetTokens: 999 } },
+  })
+  model.variants.high.thinking.budgetTokens = 77
+  expect({
+    first: model.variants.high.thinking.budgetTokens,
+    second: second.models.reasoning.variants.high.thinking.budgetTokens,
+  }).toEqual({ first: 77, second: 499 })
+})
+
+test("authored reasoning variants serialize and clone as the model's current writable value", () => {
+  const projection = Provider.fromModelsDevProvider(declaration())
+  projection.models.reasoning.variants = { authored: { budget: 32 } }
+  projection.models.reasoning.variants.authored.budget = 64
+  expect({
+    json: JSON.parse(JSON.stringify(projection)).models.reasoning.variants,
+    clone: structuredClone(projection).models.reasoning.variants,
+  }).toEqual({ json: { authored: { budget: 64 } }, clone: { authored: { budget: 64 } } })
+  projection.models.reasoning.variants = { next: { budget: 128 } }
+  expect(projection.models.reasoning.variants).toEqual({ next: { budget: 128 } })
+})
+
+test("frozen models retain readable defaults and sealed models retain their authored reasoning value", () => {
+  const source = declaration()
+  source.npm = "@ai-sdk/anthropic"
+  const frozen = Object.freeze(Provider.fromModelsDevProvider(source).models.reasoning)
+  expect(structuredClone(frozen).variants.high.thinking.budgetTokens).toBe(499)
+  const sealed = Object.seal(Provider.fromModelsDevProvider(source).models.reasoning)
+  sealed.variants = { authored: { budget: 256 } }
+  expect(sealed.variants).toEqual({ authored: { budget: 256 } })
+})
+
 test("each Provider projection owns its mutable metadata and preserves the current source declaration", () => {
   const source = declaration()
   const first = Provider.fromModelsDevProvider(source)
