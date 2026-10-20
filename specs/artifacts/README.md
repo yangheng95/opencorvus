@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [当前长文件来源与成员阅读](2026-10-21-sources-reading-review/README.md)：十张当前页面、11条公开来源和3665行原事实完整保留，明确网页摘录与新流覆盖缺口。
+
 - [Goal执行完成后的及时读取](2026-10-21-goal-settlement-refresh/README.md)：实际HTTP读取开始2716ms→29ms、八个Sol流式请求与九张人工页面；区分读取时间与画面帧延迟。
 
 - [Goal页面模型选择与指南](2026-10-21-goal-model-selection-review/README.md)：两个真实Goal、6个Sol流式请求及13张人工页面；全程未预设默认模型。

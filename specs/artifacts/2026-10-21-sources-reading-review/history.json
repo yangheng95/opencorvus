@@ -1,0 +1,60 @@
+{
+  "observedAt": "2026-10-20T17:13:12.910Z",
+  "schema": 3,
+  "comparisons": [
+    {
+      "table": "project",
+      "original": 149,
+      "copied": 149,
+      "result": "Every original rowid, identity, complete data and timestamp equal"
+    },
+    {
+      "table": "session",
+      "original": 198,
+      "copied": 198,
+      "result": "Every original rowid, identity, complete data and timestamp equal"
+    },
+    {
+      "table": "message",
+      "original": 518,
+      "copied": 518,
+      "result": "Every original rowid, identity, complete data and timestamp equal"
+    },
+    {
+      "table": "part",
+      "original": 1155,
+      "copied": 1155,
+      "result": "Every original rowid, identity, complete data and timestamp equal"
+    },
+    {
+      "table": "tool_part_request",
+      "original": 119,
+      "copied": 119,
+      "result": "Every original rowid, identity, complete data and timestamp equal"
+    },
+    {
+      "table": "tool_part_outcome",
+      "original": 119,
+      "copied": 119,
+      "result": "Every original rowid, identity, complete data and timestamp equal"
+    },
+    {
+      "table": "protocol_event",
+      "original": 1407,
+      "copied": 1407,
+      "result": "Every original rowid, identity, complete data and timestamp equal"
+    }
+  ],
+  "integrity": {
+    "integrity_check": "ok"
+  },
+  "sourceDatabase": "Original size/mtime unchanged; accessed with readonly SQLite transaction only",
+  "copy": "Official sqlite3_serialize snapshot; real source CLI and frozen480 formal UI; no schema evolution",
+  "scope": "Full seven business fact tables, not only displayed sources; no user database access",
+  "sources": {
+    "file": 27,
+    "url": 0,
+    "document": 0
+  },
+  "qualification": "Current completed history and actual manual interaction only; no new model task and no live rendering or web excerpt claim"
+}

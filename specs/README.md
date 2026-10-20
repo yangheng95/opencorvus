@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Sources阅读边界复核](records/2026-10/2026-10-21-sources-reading-review.md)：[十张实际页面及3665行完整原事实](artifacts/2026-10-21-sources-reading-review/README.md)，明确网页来源覆盖缺口。
+
 - [Goal执行结算后的投影](records/2026-10/2026-10-21-goal-settlement-refresh.md)：共享链路审计与[29ms实际读取、八个流式请求及九张实图](artifacts/2026-10-21-goal-settlement-refresh/README.md)。
 
 - [Goal页面模型选择](records/2026-10/2026-10-20-goal-model-selection-review.md)：首次使用的真实设置、模型选择、[同一目标恢复与Home新建](artifacts/2026-10-21-goal-model-selection-review/README.md)。

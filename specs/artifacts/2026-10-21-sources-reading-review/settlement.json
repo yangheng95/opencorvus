@@ -1,0 +1,98 @@
+{
+  "ready": {
+    "owner": {
+      "pid": 92760,
+      "processInstanceID": "win32:639281126608225484",
+      "occurrenceID": "4451a531-84ea-4015-8829-a7dd6a8d04ef"
+    },
+    "parent": {
+      "pid": 87388,
+      "processInstanceID": "win32:639281126607974452",
+      "occurrenceID": "adaedd3f-57f1-48b6-ad47-898b95c6a088"
+    },
+    "occurrence": "sources-reading-481-b93dff3b-544b-46cb-a880-8e972172ba62",
+    "receipt": {
+      "schemaVersion": 1,
+      "occurrenceID": "sources-reading-481-b93dff3b-544b-46cb-a880-8e972172ba62",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:18829",
+      "pid": 92760
+    },
+    "health": {
+      "healthy": true,
+      "version": "local",
+      "paths": {
+        "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\sources-reading-481-data\\runtime\\data\\opencorvus.db",
+        "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\sources-reading-481-data\\runtime\\data",
+        "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/sources-reading-481-data/home"
+      }
+    },
+    "observedAt": "2026-10-20T17:04:34.375Z",
+    "qualification": "Real development CLI and UI only; no credential/Provider qualification"
+  },
+  "physical": {
+    "originalExit": 0,
+    "native": {
+      "occurrence": "sources-reading-481-b93dff3b-544b-46cb-a880-8e972172ba62",
+      "outcome": "settled",
+      "host": {
+        "pid": 93568,
+        "processInstanceID": "win32:639281126565967321",
+        "occurrenceID": "bd9342fd-3d01-47c9-a816-34abb722bbb0"
+      },
+      "target": {
+        "pid": 92760,
+        "processInstanceID": "win32:639281126608225484",
+        "occurrenceID": "50d6624b-e3cc-4424-94ae-52658e21203b"
+      },
+      "observedAtUtc": "2026-10-20T17:12:17.176Z",
+      "deadlineAt": 1792517056561,
+      "terminal": {
+        "occurrenceID": "sources-reading-481-b93dff3b-544b-46cb-a880-8e972172ba62",
+        "pid": 92760,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "originalHandle": 18471,
+    "chain": [
+      {
+        "identity": {
+          "pid": 93568,
+          "processInstanceID": "win32:639281126565967321",
+          "occurrenceID": "bd9342fd-3d01-47c9-a816-34abb722bbb0"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "identity": {
+          "pid": 92760,
+          "processInstanceID": "win32:639281126608225484",
+          "occurrenceID": "50d6624b-e3cc-4424-94ae-52658e21203b"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "launcher": {
+      "observedAtUtc": "2026-10-20T17:12:17.2159113Z",
+      "childExitCode": 0
+    },
+    "shutdown": {
+      "statusCode": 200,
+      "occurrence": "sources-reading-481-b93dff3b-544b-46cb-a880-8e972172ba62",
+      "observedAtUtc": "2026-10-20T17:12:17.09745Z",
+      "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYbvsFG008HSaCUKJn\"}",
+      "target": {
+        "pid": 92760,
+        "processInstanceID": "win32:639281126608225484",
+        "occurrenceID": "50d6624b-e3cc-4424-94ae-52658e21203b"
+      }
+    },
+    "observedAtUtc": "2026-10-20T17:13:05.9423290Z"
+  }
+}
