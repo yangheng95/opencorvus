@@ -165,6 +165,16 @@ temporarily display the previous owner's goal. Visible controls refresh read-onl
 every five seconds and on focus, and re-read after explicit mutations. They do not
 schedule execution or maintain a second goal store.
 
+The existing selected-owner and independent SideChat streams also invalidate that
+same HTTP projection on connection snapshots, completed assistant Messages and
+terminal execution notices. Task streams additionally forward their existing goal
+decision and Task terminal notifications. Invalidation carries only the exact owner,
+project-directory identity and API authority; no Goal value is copied from an event
+or inferred from tool output. The control coalesces same-microtask notices and keeps
+its existing visibility, busy and selection-lifetime checks. Periodic observation
+still handles durable changes without an execution notice, including changes from
+another process. Native Session streams do not acquire an undeclared Goal protocol.
+
 The status strip shows objective, current state, cumulative tokens and accepted turns.
 Details expose the complete objective, original reason/evidence, localized date and
 budget controls. Creation allows unspecified budgets. Once set, a budget requires a

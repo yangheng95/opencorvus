@@ -1,0 +1,15 @@
+$ bun ../opencorvus/script/prepare-test-process-supervisor.ts
+$ bun run script/run-unit-tests.ts test/continuous-goal-refresh.test.ts
+D:\myhexin-local\opencorvus\packages\opencorvus\native\process-supervisor\target\runtime-c08fc40fab07463a\debug\opencorvus-process-supervisor.exe
+bun test v1.4.3 (c6da4a4d3)
+
+test\continuous-goal-refresh.test.ts:
+(pass) completed execution and reconnect notifications reach their exact Chat, Task and Mission projection [0.76ms]
+(pass) durable Task intent and terminal notifications request the same canonical projection [0.12ms]
+(pass) equal owner identities in different Projects retain their exact read scopes [0.14ms]
+(pass) a SideChat transport settlement reaches its independently scoped Goal reader [0.60ms]
+
+ 4 pass
+ 0 fail
+ 5 expect() calls
+Ran 4 tests across 1 file. [335.00ms]

@@ -1,0 +1,342 @@
+[
+  {
+    "scope": "before",
+    "originalHandle": 90003,
+    "originalExit": 0,
+    "ready": {
+      "occurrence": "goal-settlement-refresh-480-before-ae0ff015-5c9f-41ee-acdb-5a90e0023a9b",
+      "outcome": "ready",
+      "host": {
+        "pid": 80388,
+        "processInstanceID": "win32:639281103737702010",
+        "occurrenceID": "267dbf14-ee4f-4399-8864-e802a3aa8b05"
+      },
+      "parent": {
+        "pid": 72720,
+        "processInstanceID": "win32:639281103720962307",
+        "occurrenceID": "dd74755e-79a0-49e9-8676-3f855a44b57e"
+      },
+      "target": {
+        "pid": 85760,
+        "processInstanceID": "win32:639281103745089371",
+        "occurrenceID": "dc9d3c2a-e82d-468d-9f7a-daab3635d313"
+      },
+      "targetBirthAtMs": 1792513574508,
+      "deadlineAt": 1792514773742,
+      "observedAtUtc": "2026-10-20T16:26:14.537Z",
+      "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/goal-model-selection-479-bundle/bin/bun.exe",
+      "args": [
+        "D:/myhexin-local/opencorvus/.tmp-product-iteration/goal-settlement-refresh-480/serve-before.ts",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/goal-settlement-refresh-480-data/runtime",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/goal-settlement-refresh-480-data/project",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/goal-settlement-refresh-480-before/evidence",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/goal-settlement-refresh-480-before/startup.json",
+        "18825",
+        "goal-settlement-refresh-480-before-ae0ff015-5c9f-41ee-acdb-5a90e0023a9b"
+      ],
+      "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+    },
+    "physical": {
+      "observedAtUtc": "2026-10-20T16:32:03.9639064Z",
+      "sourceReaders": "4/4 EOF",
+      "runtimePair": "complete auth/models retired after physical/output/request/launcher and source EOF",
+      "requests": 4,
+      "maximumBatch": 8,
+      "chain": [
+        {
+          "identity": {
+            "pid": 80388,
+            "processInstanceID": "win32:639281103737702010",
+            "occurrenceID": "267dbf14-ee4f-4399-8864-e802a3aa8b05"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "identity": {
+            "pid": 85760,
+            "processInstanceID": "win32:639281103745089371",
+            "occurrenceID": "dc9d3c2a-e82d-468d-9f7a-daab3635d313"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "launcher": {
+        "observedAtUtc": "2026-10-20T16:32:01.8511398Z",
+        "childExitCode": 0
+      },
+      "maximumRequests": 4,
+      "native": {
+        "occurrence": "goal-settlement-refresh-480-before-ae0ff015-5c9f-41ee-acdb-5a90e0023a9b",
+        "outcome": "settled",
+        "host": {
+          "pid": 80388,
+          "processInstanceID": "win32:639281103737702010",
+          "occurrenceID": "267dbf14-ee4f-4399-8864-e802a3aa8b05"
+        },
+        "target": {
+          "pid": 85760,
+          "processInstanceID": "win32:639281103745089371",
+          "occurrenceID": "dc9d3c2a-e82d-468d-9f7a-daab3635d313"
+        },
+        "observedAtUtc": "2026-10-20T16:32:01.811Z",
+        "deadlineAt": 1792514773742,
+        "terminal": {
+          "occurrenceID": "goal-settlement-refresh-480-before-ae0ff015-5c9f-41ee-acdb-5a90e0023a9b",
+          "pid": 85760,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      }
+    },
+    "shutdown": {
+      "target": {
+        "pid": 85760,
+        "processInstanceID": "win32:639281103745089371",
+        "occurrenceID": "dc9d3c2a-e82d-468d-9f7a-daab3635d313"
+      },
+      "observedAtUtc": "2026-10-20T16:32:01.7022638Z",
+      "occurrence": "goal-settlement-refresh-480-before-ae0ff015-5c9f-41ee-acdb-5a90e0023a9b",
+      "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYbljtF00cLpAi3IwG\"}",
+      "statusCode": 200
+    },
+    "preflight": {
+      "owner": {
+        "pid": 85760,
+        "processInstanceID": "win32:639281103745089371",
+        "occurrenceID": "13345202-c50e-44aa-9029-5c158261eb56"
+      },
+      "parent": {
+        "pid": 69764,
+        "processInstanceID": "win32:639281103744784444",
+        "occurrenceID": "29790416-ce42-4c16-aee1-dbefd451eebb"
+      },
+      "occurrence": "goal-settlement-refresh-480-before-ae0ff015-5c9f-41ee-acdb-5a90e0023a9b",
+      "preflight": {
+        "sessionID": "ses_hMtb1679lcvOaAW0hB34",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "maxRequests": 4,
+      "budgetScope": "480-before fixed4 within batch8; preflight and all helpers included",
+      "observedAt": "2026-10-20T16:26:27.485Z"
+    },
+    "staging": {
+      "sourceBefore": [
+        {
+          "name": "auth.json",
+          "bytes": 2122,
+          "modifiedAtMs": 1792513571995.6318
+        },
+        {
+          "name": "models.json",
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968
+        }
+      ],
+      "sourceAfter": [
+        {
+          "name": "auth.json",
+          "bytes": 2122,
+          "modifiedAtMs": 1792513571995.6318
+        },
+        {
+          "name": "models.json",
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968
+        }
+      ],
+      "copiedPair": [
+        {
+          "name": "auth.json",
+          "bytes": 2122,
+          "modifiedAtMs": 1792513574972.9648
+        },
+        {
+          "name": "models.json",
+          "bytes": 9155406,
+          "modifiedAtMs": 1792513574976.97
+        }
+      ],
+      "access": "current",
+      "catalog": "complete",
+      "refresh": "prohibited"
+    }
+  },
+  {
+    "scope": "after",
+    "originalHandle": 30487,
+    "originalExit": 0,
+    "ready": {
+      "occurrence": "goal-settlement-refresh-480-after-701594e5-ec29-4914-96bc-024bcd931c7a",
+      "outcome": "ready",
+      "host": {
+        "pid": 77504,
+        "processInstanceID": "win32:639281108809235076",
+        "occurrenceID": "83d77a66-fee6-43bb-9a24-d3c26c03f5a4"
+      },
+      "parent": {
+        "pid": 91188,
+        "processInstanceID": "win32:639281108778798744",
+        "occurrenceID": "ba5f18fd-d13e-4348-904e-01363c18c5ed"
+      },
+      "target": {
+        "pid": 42232,
+        "processInstanceID": "win32:639281108814683727",
+        "occurrenceID": "ca9e5204-83b1-4d05-827c-1114584748bf"
+      },
+      "targetBirthAtMs": 1792514081468,
+      "deadlineAt": 1792515280021,
+      "observedAtUtc": "2026-10-20T16:34:41.497Z",
+      "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/goal-settlement-refresh-480-bundle/bin/bun.exe",
+      "args": [
+        "D:/myhexin-local/opencorvus/.tmp-product-iteration/goal-settlement-refresh-480/serve-after.ts",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/goal-settlement-refresh-480-data/runtime",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/goal-settlement-refresh-480-data/project",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/goal-settlement-refresh-480-after/evidence",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/goal-settlement-refresh-480-after/startup.json",
+        "18827",
+        "goal-settlement-refresh-480-after-701594e5-ec29-4914-96bc-024bcd931c7a"
+      ],
+      "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+    },
+    "physical": {
+      "runtimePair": "complete auth/models retired after physical/output/request/launcher and source EOF",
+      "sourceReaders": "4/4 EOF",
+      "native": {
+        "occurrence": "goal-settlement-refresh-480-after-701594e5-ec29-4914-96bc-024bcd931c7a",
+        "outcome": "settled",
+        "host": {
+          "pid": 77504,
+          "processInstanceID": "win32:639281108809235076",
+          "occurrenceID": "83d77a66-fee6-43bb-9a24-d3c26c03f5a4"
+        },
+        "target": {
+          "pid": 42232,
+          "processInstanceID": "win32:639281108814683727",
+          "occurrenceID": "ca9e5204-83b1-4d05-827c-1114584748bf"
+        },
+        "observedAtUtc": "2026-10-20T16:44:44.583Z",
+        "deadlineAt": 1792515280021,
+        "terminal": {
+          "occurrenceID": "goal-settlement-refresh-480-after-701594e5-ec29-4914-96bc-024bcd931c7a",
+          "pid": 42232,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "maximumBatch": 8,
+      "observedAtUtc": "2026-10-20T16:44:47.4264442Z",
+      "launcher": {
+        "observedAtUtc": "2026-10-20T16:44:44.6289258Z",
+        "childExitCode": 0
+      },
+      "requests": 4,
+      "maximumRequests": 4,
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 77504,
+            "processInstanceID": "win32:639281108809235076",
+            "occurrenceID": "83d77a66-fee6-43bb-9a24-d3c26c03f5a4"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 42232,
+            "processInstanceID": "win32:639281108814683727",
+            "occurrenceID": "ca9e5204-83b1-4d05-827c-1114584748bf"
+          }
+        }
+      ]
+    },
+    "shutdown": {
+      "occurrence": "goal-settlement-refresh-480-after-701594e5-ec29-4914-96bc-024bcd931c7a",
+      "observedAtUtc": "2026-10-20T16:44:44.4608348Z",
+      "target": {
+        "pid": 42232,
+        "processInstanceID": "win32:639281108814683727",
+        "occurrenceID": "ca9e5204-83b1-4d05-827c-1114584748bf"
+      },
+      "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYbowJm00wQx9BZpe8\"}",
+      "statusCode": 200
+    },
+    "preflight": {
+      "owner": {
+        "pid": 42232,
+        "processInstanceID": "win32:639281108814683727",
+        "occurrenceID": "12eb028e-1e05-4ba7-b98a-ef518b321e65"
+      },
+      "parent": {
+        "pid": 77752,
+        "processInstanceID": "win32:639281108814439993",
+        "occurrenceID": "78b2d863-5bea-49d5-87bc-9e105c63d8c1"
+      },
+      "occurrence": "goal-settlement-refresh-480-after-701594e5-ec29-4914-96bc-024bcd931c7a",
+      "preflight": {
+        "sessionID": "ses_hLsMikAsax3o1kNjqQ2G",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "maxRequests": 4,
+      "budgetScope": "480-after fixed4 within batch8; preflight and all helpers included",
+      "observedAt": "2026-10-20T16:34:51.137Z"
+    },
+    "staging": {
+      "sourceBefore": [
+        {
+          "name": "auth.json",
+          "bytes": 2122,
+          "modifiedAtMs": 1792513571995.6318
+        },
+        {
+          "name": "models.json",
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968
+        }
+      ],
+      "sourceAfter": [
+        {
+          "name": "auth.json",
+          "bytes": 2122,
+          "modifiedAtMs": 1792513571995.6318
+        },
+        {
+          "name": "models.json",
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968
+        }
+      ],
+      "copiedPair": [
+        {
+          "name": "auth.json",
+          "bytes": 2122,
+          "modifiedAtMs": 1792514081887.7383
+        },
+        {
+          "name": "models.json",
+          "bytes": 9155406,
+          "modifiedAtMs": 1792514081890.738
+        }
+      ],
+      "access": "current",
+      "catalog": "complete",
+      "refresh": "prohibited"
+    }
+  }
+]

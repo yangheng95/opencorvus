@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Goal执行完成后的及时读取](2026-10-21-goal-settlement-refresh/README.md)：实际HTTP读取开始2716ms→29ms、八个Sol流式请求与九张人工页面；区分读取时间与画面帧延迟。
+
 - [Goal页面模型选择与指南](2026-10-21-goal-model-selection-review/README.md)：两个真实Goal、6个Sol流式请求及13张人工页面；全程未预设默认模型。
 
 - [完整配置关键路径与终态复用](2026-10-20-config-critical-path-review/README.md)：原helper分段、28例结算合同与完整历史配置复验；性能门槛仍按实际结果判断。

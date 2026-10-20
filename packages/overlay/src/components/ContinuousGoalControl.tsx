@@ -14,6 +14,7 @@ import { ApiError, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority
 import {
   createContinuousGoal,
   loadContinuousGoal,
+  listenContinuousGoalRefresh,
   updateContinuousGoal,
   type ContinuousGoal,
   type ContinuousGoalTarget,
@@ -199,10 +200,20 @@ export function ContinuousGoalControl(props: {
         void refetch()
     }
     const timer = window.setInterval(refresh, REFRESH_MS)
+    let refreshQueued = false
+    const stopRefresh = listenContinuousGoalRefresh(current.target, current.authority, () => {
+      if (refreshQueued) return
+      refreshQueued = true
+      queueMicrotask(() => {
+        refreshQueued = false
+        refresh()
+      })
+    })
     window.addEventListener("focus", refresh)
     document.addEventListener("visibilitychange", refresh)
     onCleanup(() => {
       window.clearInterval(timer)
+      stopRefresh()
       window.removeEventListener("focus", refresh)
       document.removeEventListener("visibilitychange", refresh)
     })

@@ -44,6 +44,7 @@ import {
   taskRuntimeActivityKey,
 } from "./task-runtime-activity"
 import { refreshActiveComposerModelFromSession } from "./composer-model"
+import { observeContinuousGoalRefresh } from "./continuous-goal"
 import { captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 
 let sseHandle: StreamHandle | null = null
@@ -472,6 +473,11 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
         }
         try {
           if (event.type === "task.heartbeat" || event.type === "session.heartbeat") return
+          observeContinuousGoalRefresh({
+            kind: source.kind === "task" ? "task" : source.sessionKind === "mission" ? "mission" : "chat",
+            id: source.id,
+            directory,
+          }, authority, event)
           if (event.type === "task.connected" || event.type === "session.connected") {
             if (event.type === "session.connected") {
               if (source.kind !== "session") {

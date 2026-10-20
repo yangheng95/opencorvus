@@ -1,0 +1,60 @@
+$ bun ../opencorvus/script/prepare-test-process-supervisor.ts
+D:\myhexin-local\opencorvus\packages\opencorvus\native\process-supervisor\target\runtime-c08fc40fab07463a\debug\opencorvus-process-supervisor.exe
+$ bun run script/run-unit-tests.ts test/continuous-goal-refresh.test.ts test/continuous-goal-service.test.ts test/side-chat-transport.test.ts test/event-policy.test.ts
+bun test v1.4.3 (c6da4a4d3)
+
+test\continuous-goal-refresh.test.ts:
+(pass) completed execution and reconnect notifications reach their exact Chat, Task and Mission projection [0.72ms]
+(pass) durable Task intent and terminal notifications request the same canonical projection [0.13ms]
+(pass) a SideChat transport settlement reaches its independently scoped Goal reader [0.68ms]
+
+ 3 pass
+ 0 fail
+ 4 expect() calls
+Ran 3 tests across 1 file. [358.00ms]
+bun test v1.4.3 (c6da4a4d3)
+
+test\continuous-goal-service.test.ts:
+(pass) chat reads its exact encoded owner and project from the canonical API [1.36ms]
+(pass) task reads its exact encoded owner and project from the canonical API [0.07ms]
+(pass) mission reads its exact encoded owner and project from the canonical API [0.06ms]
+(pass) an existing owner with no goal returns the explicit empty projection [0.12ms]
+(pass) creation transmits the explicit objective, budgets and idempotent request identity [0.21ms]
+(pass) a budget update uses the precise goal revision and returns cumulative usage [0.20ms]
+(pass) a revision conflict preserves the named server error contract [0.36ms]
+(pass) a response arriving after connection retirement has an explicit response-phase authority error [0.19ms]
+
+ 8 pass
+ 0 fail
+ 15 expect() calls
+Ran 8 tests across 1 file. [220.00ms]
+bun test v1.4.3 (c6da4a4d3)
+
+test\side-chat-transport.test.ts:
+(pass) side permission decisions target the exact project-scoped Permission request [1.64ms]
+(pass) the side stream projects actionable questions and permission requests into their canonical reply contracts [2.02ms]
+(pass) side transport recovery preserves its exact Question owner and reports current business outcomes [3006.13ms]
+(pass) a current Side activity observation delivers its original failure contract [0.38ms]
+(pass) a side connection snapshot retains the same full Question owner and converges the canonical pending set [0.65ms]
+(pass) the side snapshot selects its exact Session from the canonical legal conversation tree [0.21ms]
+(pass) question.replied preserves its actual terminal provenance and leaves the other side Question pending [0.53ms]
+(pass) question.rejected preserves its actual terminal provenance and leaves the other side Question pending [0.18ms]
+(pass) question.expired preserves its actual terminal provenance and leaves the other side Question pending [0.17ms]
+(pass) question.abandoned preserves its actual terminal provenance and leaves the other side Question pending [0.19ms]
+(pass) a changed immutable Question expiry reports an explicit contract error with its original owner intact [0.32ms]
+(pass) a connection response missing mandatory pendingQuestions produces the current protocol error [0.14ms]
+(pass) a pending replay against a real terminal reports identity corruption instead of rewriting its status [0.18ms]
+
+ 13 pass
+ 0 fail
+ 34 expect() calls
+Ran 13 tests across 1 file. [3.19s]
+bun test v1.4.3 (c6da4a4d3)
+
+test\event-policy.test.ts:
+(pass) conversation event projection policy > routes durable scheduler notifications through the control-plane no-op owner [0.08ms]
+
+ 1 pass
+ 0 fail
+ 2 expect() calls
+Ran 1 test across 1 file. [126.00ms]

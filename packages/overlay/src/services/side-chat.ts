@@ -3,6 +3,7 @@ import { getHostTransport } from "./host-transport-runtime"
 import { STREAM_RECONNECT_DELAY_MS, type StreamHandle } from "./host-transport"
 import { AppLog } from "../utils/log"
 import { formatErrorDetails } from "../utils/error-details"
+import { observeContinuousGoalRefresh } from "./continuous-goal"
 import type { InteractionData } from "../components/InteractionCard"
 import { permissionInteraction, preparePermissionInteractions } from "../utils/permission-interaction"
 import { prepareQuestionInteractions, questionInteraction, resolveQuestionInteraction, reuseQuestionInteraction } from "../utils/question-interaction"
@@ -81,6 +82,7 @@ export function connectSideChat(
           if (!owns() || generation !== connectionGeneration) return
           try {
             const event = JSON.parse(data)
+            observeContinuousGoalRefresh({ kind: "chat", id: target.sessionID, directory: target.directory }, authority, event)
             if (event.type === "session.connected") {
               if (event.payload.sessionID !== target.sessionID) throw new Error("Side chat connection snapshot Session identity conflict")
               const snapshot = event.payload.conversationSnapshot
