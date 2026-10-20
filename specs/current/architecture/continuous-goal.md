@@ -142,6 +142,9 @@ The guide explains provider/model preparation, confirmation before a Home
 conversation exists, inherited permissions, immutable objectives and explicit
 resume after resolving a displayed blocker. Known model-configuration reasons
 use the current interface language and the actual localized Resume label.
+Its first step identifies the model menu below the Home message input and that
+menu's Configure Provider action for an empty connected-model list. Configured
+defaults may still be inherited; this guidance adds no model-selection policy.
 The home explanation uses body text and a regular primary control size; compact
 status-strip sizing belongs to existing conversation controls.
 The home copy states that budgets are optional, matching the form's unlimited

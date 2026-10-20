@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Goal页面模型选择与指南](2026-10-21-goal-model-selection-review/README.md)：两个真实Goal、6个Sol流式请求及13张人工页面；全程未预设默认模型。
+
 - [完整配置关键路径与终态复用](2026-10-20-config-critical-path-review/README.md)：原helper分段、28例结算合同与完整历史配置复验；性能门槛仍按实际结果判断。
 
 - [Goal首次使用与模型恢复](2026-10-20-goal-first-run-review/README.md)：13张人工截图、真实缺少模型状态、35例功能检查与同一Goal恢复完成。

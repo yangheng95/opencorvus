@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Goal页面模型选择](2026-10-20-goal-model-selection-review.md)：首次使用的真实配置和选择路径、[两个Goal与13张实图](../../artifacts/2026-10-21-goal-model-selection-review/README.md)，不以启动前默认模型替代页面验收。
+
 - [完整配置保存的关键路径](2026-10-20-config-critical-path-review.md)：原终态证明复用、完整配置检查器与[原生分段/人工截图](../../artifacts/2026-10-20-config-critical-path-review/README.md)。
 
 - [Goal首次使用与模型恢复](2026-10-20-goal-first-run-review.md)：共享模型配置阻塞、显式恢复和[真实流式及双语截图](../../artifacts/2026-10-20-goal-first-run-review/README.md)。
