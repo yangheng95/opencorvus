@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [权限审批与历史的可读呈现](2026-10-20-permission-readable-review.md)：统一请求投影、恢复上下文修复与[17张人工截图](../../artifacts/2026-10-20-permission-readable-review/README.md)。
+
 - [新Task的真实Goal执行链](2026-10-20-task-goal-live.md)：只读误审批根因修复、同一Task epoch3自动续跑与[12张截图及结算事实](../../artifacts/2026-10-20-task-goal-live/README.md)。
 
 - [完整配置保存的日志成本](2026-10-20-config-log-cost.md)：DEBUG/INFO真实对照、[四张截图和148次原生探针](../../artifacts/2026-10-20-config-log-cost/README.md)，保留性能失败。

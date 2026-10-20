@@ -1,0 +1,160 @@
+{
+  "method": "CUA actual IAB interactions, screenshots and manual visual review; no UI automation",
+  "frontend": {
+    "first": "Formal467 pending and initial history",
+    "final": "Formal467 compact-row history; pending branch content/style unchanged",
+    "current": "Current formal build after dead-path removal; actual history/details/keyboard/selection and native Ctrl+C review"
+  },
+  "screenshots": [
+    {
+      "file": "chat-write-approval-zh.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "phase": "Initial formal build"
+    },
+    {
+      "file": "chat-write-completed-zh.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "phase": "Initial formal build"
+    },
+    {
+      "file": "chat-write-details-zh.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "phase": "Initial formal build"
+    },
+    {
+      "file": "final-history-details-en.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "phase": "Final compact-row build"
+    },
+    {
+      "file": "final-history-en.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "phase": "Final compact-row build"
+    },
+    {
+      "file": "final-history-zh.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "phase": "Final compact-row build"
+    },
+    {
+      "file": "task-approval-details-en.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "phase": "Initial formal build"
+    },
+    {
+      "file": "task-approval-en.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "phase": "Initial formal build"
+    },
+    {
+      "file": "task-completed-zh.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "phase": "Initial formal build"
+    },
+    {
+      "file": "task-completion-approval-en.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "phase": "Initial formal build"
+    },
+    {
+      "file": "task-history-details-en.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "phase": "Initial formal build"
+    },
+    {
+      "file": "task-history-details-visible-en.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "phase": "Initial formal build"
+    },
+    {
+      "file": "task-history-en.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "phase": "Initial formal build"
+    },
+    {
+      "file": "task-history-restored-zh.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "phase": "Initial formal build"
+    },
+    {
+      "file": "current-history-en.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "phase": "Current final build after deletion of unreferenced text branch/CSS"
+    },
+    {
+      "file": "current-history-details-en.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "phase": "Current final build after deletion of unreferenced text branch/CSS"
+    },
+    {
+      "file": "current-details-selected-en.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
+      "phase": "Current final build after deletion of unreferenced text branch/CSS"
+    }
+  ],
+  "closedTabs": [
+    16,
+    17,
+    18
+  ],
+  "language": "English restored after both Chinese reviews",
+  "observed": "Live Goal and Task approvals in English, standalone file write approval in Chinese, history/details/keyboard/cold URL restore in final English and Chinese",
+  "unqualified": "Side Chat/live agent Rendering, all scope shapes and config performance",
+  "copy": {
+    "sourceCharacters": 920,
+    "copiedCharacters": 920,
+    "originalBrowserClipboardItems": 0,
+    "restored": "Empty text via writeText after generic empty-list write was rejected; original clipboard data was not printed"
+  }
+}

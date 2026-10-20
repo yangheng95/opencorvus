@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [可读权限审批与紧凑历史](2026-10-20-permission-readable-review/README.md)：17张人工截图、真实Task/Chat审批与恢复上下文修复。
+
 - [Task Goal 的真实权限与续跑](2026-10-20-task-goal-live/README.md)：只读误审批根因、修复后的真实自动续跑和12张人工截图。
 
 - [配置保存的日志与创建成本](2026-10-20-config-log-cost/README.md)：DEBUG/INFO四次真实写入、四张人工截图、请求CPU归因与148次原生探针；保存/恢复仍失败。

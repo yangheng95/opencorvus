@@ -33,6 +33,12 @@ that same project-owned scanner. Activity-reconciliation answers likewise return
 the persisted answered view. These acceptance paths never await the Orchestrator
 Turn, repeat ingress persistence, or infer acceptance from an activation count.
 The detached scanner owns its fresh Instance lease, completion, and recovery.
+Task background dispatch and scan handoffs also leave the caller's database
+transaction and post-commit effect context before acquiring that lease. Task and
+Mission control-driver heartbeat, hint, retry and rearm callbacks do the same at
+their independent reentry adapters. A callback whose original post-commit effect
+returned therefore executes under its own live owner; database closed-owner
+checks and physical completion tracking remain authoritative.
 
 A global Task create carrying `requestID` first freezes the complete canonical caller request in
 `global_creation_allocation` before anonymous Project filesystem work. That occurrence owns one directory, one initial

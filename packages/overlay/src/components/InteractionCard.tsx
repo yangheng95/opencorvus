@@ -4,9 +4,8 @@
 //   • inline in the conversation timeline (CardParts)
 // Owns its own busy / error / draft state and dispatches replies through
 // the shared `interaction-reply` service (which carries a per-id mutex), so
-// callers don't need to wire callbacks. Body markdown is always rendered
-// through `renderMarkdown`, eliminating the previous render-divergence
-// where the sidebar parsed markdown but the inline card showed raw text.
+// callers don't need to wire callbacks. Permissions retain their structured
+// Request scope through the shared approval/history content component.
 //
 // Visual treatment lives in `styles/surfaces/card.css` under `.interaction-card`,
 // reusing the same `--card-*` design vars as the agent / goal cards so all
@@ -14,8 +13,7 @@
 
 import { createEffect, createMemo, createSignal, createUniqueId, For, onCleanup, Show } from "solid-js"
 import { t } from "../utils/i18n"
-import { permissionRequestTitle } from "../utils/transcript"
-import { renderMarkdown } from "../utils/markdown"
+import { PermissionRequestContent } from "./PermissionRequestContent"
 import { boardStore, loadBoard } from "../store/board"
 import { captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import {
@@ -48,6 +46,8 @@ export interface InteractionData {
   status: string
   payload?: {
     toolName?: string
+    effectClass?: string
+    scope?: Record<string, unknown>
     choices?: Array<PermissionDecision | "deny">
     questions?: InteractionQuestion[]
     automatic?: {
@@ -80,10 +80,7 @@ export function InteractionCard(props: InteractionCardProps) {
   const dataKind = () => (isPermission() ? "interaction-permission" : "interaction-question")
   const iconName = () => (isPermission() ? "interaction-permission" : "interaction-question")
   const iconLabel = () => (isPermission() ? t("interaction.icon.permission") : t("interaction.icon.question"))
-  const title = () =>
-    isPermission() && typeof props.interaction.payload?.toolName === "string" && props.interaction.payload.toolName.trim()
-      ? permissionRequestTitle(props.interaction.payload.toolName)
-      : props.interaction.title
+  const title = () => props.interaction.title
   const domIDPrefix = createMemo(() => `interaction-${domID(instanceID)}-${domID(props.interaction.id)}`)
 
   const questions = createMemo<InteractionQuestion[]>(() => {
@@ -223,7 +220,7 @@ export function InteractionCard(props: InteractionCardProps) {
         class="interaction-card__content"
         data-ui={isDialogSurface() ? "interaction-dialog-scroll-region" : undefined}
       >
-        <Show when={title()}>
+        <Show when={!isPermission() && title()}>
           <div class="interaction-card__title">
             <span class="interaction-card__icon" role="img" aria-label={iconLabel()}>
               <Icon name={iconName()} size="medium" />
@@ -231,8 +228,8 @@ export function InteractionCard(props: InteractionCardProps) {
             {title()}
           </div>
         </Show>
-        <Show when={isPermission() && props.interaction.body}>
-          <div class="interaction-card__body md-content" innerHTML={renderMarkdown(props.interaction.body || "")} />
+        <Show when={isPermission()}>
+          <PermissionRequestContent interaction={props.interaction} />
         </Show>
         <Show when={error()}>
           <div

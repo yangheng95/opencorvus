@@ -304,6 +304,15 @@ describe("recovered pending interaction ownership", () => {
         stopAsked()
         const permission = await waitForInteraction(request.id)
         expect([question.status, permission.status]).toEqual(["pending", "pending"])
+        expect(permission.body).toBe(request.summary)
+        expect(permission.payload).toMatchObject({
+          toolName: request.toolName,
+          effectClass: request.effectClass,
+          scope: request.scope,
+          fingerprint: request.fingerprint,
+          choices: request.choices,
+          tool: { messageID: request.messageID, callID: request.toolCallID },
+        })
         return {
           projectID: Instance.project.id,
           taskID,

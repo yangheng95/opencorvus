@@ -3,6 +3,7 @@ import { sessionDirectoryFilterCondition } from "@/session/directory-filter"
 import { BusPublicationOutboxTable } from "@/bus/bus.sql"
 import { PermissionLedgerTable } from "@/permission/permission.sql"
 import { readPermissionRequestFacts } from "@/permission/ledger-facts"
+import { permissionInteractionRequest } from "@/permission/interaction-projection"
 import { isDeepStrictEqual } from "node:util"
 import { SessionTable } from "@/session/session.sql"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
@@ -680,29 +681,7 @@ export function projectInteractionRowInTransaction(db: Database.TxOrDb, row: Per
   const permissionFacts = permission ? readPermissionRequestFacts(db, permission.request_id) : undefined
   if (permission && !permissionFacts) throw new Error(`Interaction ${row.id} has no canonical Permission request`)
   if (permissionFacts) {
-    const original = permissionFacts.request
-    request = {
-      sessionID: original.sessionID,
-      externalID: original.id,
-      requestType: "permission",
-      title: `Permission: ${original.toolName}`,
-      body: `${original.summary}\n\n${JSON.stringify(original.scope, null, 2)}`,
-      payload: {
-        mode: original.mode,
-        policyRevision: original.policyRevision,
-        providerKind: original.providerKind,
-        providerID: original.providerID,
-        providerDigest: original.providerDigest,
-        toolName: original.toolName,
-        effectClass: original.effectClass,
-        scopeVersion: original.scopeVersion,
-        scope: original.scope,
-        fingerprint: original.fingerprint,
-        choices: original.choices,
-        tool: { messageID: original.messageID, callID: original.toolCallID },
-      },
-      timeCreated: original.timeCreated,
-    }
+    request = permissionInteractionRequest(permissionFacts.request)
   }
   if (!request?.sessionID || !request.externalID || !request.requestType || !request.title || request.body === null || !request.payload || !request.timeCreated) {
     throw new Error(`Interaction ${row.id} has incomplete immutable request authority`)

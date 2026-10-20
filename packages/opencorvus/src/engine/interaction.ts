@@ -29,6 +29,7 @@ import { PermissionLedgerTable } from "@/permission/permission.sql"
 import { Log } from "@/util/log"
 import { ProtocolStore } from "@/protocol/store"
 import { timelineInteractionResponseOrderKey } from "@/timeline/order"
+import { permissionInteractionRequest } from "@/permission/interaction-projection"
 
 const log = Log.create({ service: "engine.interaction" })
 
@@ -324,28 +325,9 @@ async function upsertPermission(request: PermissionAuthority.Request, _sourceOcc
   Database.transaction((db) => {
     insertEngineInteractionRequest(db, {
       taskID: owner.taskID,
-      sessionID: request.sessionID,
-      externalID: request.id,
-      requestType: "permission",
-      title: `Permission: ${request.toolName}`,
-      body: `${request.summary}\n\n${JSON.stringify(request.scope, null, 2)}`,
-      payload: {
-        mode: request.mode,
-        policyRevision: request.policyRevision,
-        providerKind: request.providerKind,
-        providerID: request.providerID,
-        providerDigest: request.providerDigest,
-        toolName: request.toolName,
-        effectClass: request.effectClass,
-        scopeVersion: request.scopeVersion,
-        scope: request.scope,
-        fingerprint: request.fingerprint,
-        choices: request.choices,
-        tool: { messageID: request.messageID, callID: request.toolCallID },
-      },
+      ...permissionInteractionRequest(request),
       eventSource: "interaction.permission",
       eventSummary: `Permission requested: ${request.toolName}`,
-      timeCreated: request.timeCreated,
       source: { kind: "permission_request", id: facts.requested.id },
     })
   })

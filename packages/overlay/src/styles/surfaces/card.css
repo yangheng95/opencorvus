@@ -1138,13 +1138,64 @@ body {
   background: color-mix(in srgb, var(--card-stage) 12%, transparent);
 }
 
-.interaction-card__body {
-  font-size: var(--ui-font-body);
+.permission-request {
+  min-inline-size: 0;
+  margin-block-end: var(--ui-gap-md);
+}
+.permission-request__heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ui-gap-sm);
+  min-inline-size: 0;
+}
+.permission-request__title {
+  font-weight: var(--ui-font-weight-strong);
+  overflow-wrap: anywhere;
+}
+.permission-request__effect {
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+}
+.permission-request[data-effect="destructive"] .permission-request__effect,
+.permission-request[data-effect="credential_release"] .permission-request__effect {
+  color: var(--bad);
+}
+.permission-request__hint {
+  color: var(--text-muted);
+  margin-block: var(--ui-gap-sm) var(--ui-gap-md);
+}
+.permission-request__label {
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+  margin-block-end: var(--ui-gap-xs);
+}
+.permission-request pre {
+  margin: 0;
+  padding: var(--ui-gap-sm) var(--ui-gap-md);
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-soft);
+  background: var(--surface-inset);
   color: var(--text);
-  margin-bottom: var(--ui-gap-md);
-  word-break: break-word;
+  font: var(--ui-font-caption) / var(--ui-line-height-normal) var(--mono);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  overflow: auto;
+  max-block-size: calc(200px * var(--ui-scale, 1));
   user-select: text;
-  -webkit-user-select: text;
+}
+.permission-request__details {
+  margin-block-start: var(--ui-gap-sm);
+}
+.permission-request[data-compact="true"] {
+  padding: var(--ui-gap-xs) var(--ui-gap-md);
+  margin-block: var(--ui-gap-xs);
+}
+.permission-response {
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+  padding-inline-start: var(--ui-gap-md);
+  margin-block-end: var(--ui-gap-sm);
 }
 
 .interaction-card__error {
@@ -1344,13 +1395,6 @@ body {
   margin-top: calc(-2px * var(--ui-scale));
   color: var(--card-stage);
   background: color-mix(in srgb, var(--card-stage) 10%, transparent);
-}
-
-.interaction-dialog-form .interaction-card__body {
-  margin: 0;
-  color: var(--text);
-  font-size: var(--ui-font-body);
-  line-height: var(--ui-line-height-reading);
 }
 
 .interaction-dialog-form .interaction-card__questions {

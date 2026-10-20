@@ -1,0 +1,64 @@
+{
+  "initial": {
+    "engineInteractionRecovery": {
+      "passed": 6,
+      "failed": 2,
+      "assertions": 75
+    },
+    "serverPermissionProjection": {
+      "passed": 8,
+      "failed": 0,
+      "assertions": 39
+    },
+    "css": "Undefined text-secondary token caught and replaced with existing text-muted",
+    "buildHarness": "First output redirection failed before build; corrected absolute path and real build reran"
+  },
+  "rootCause": "Independent Task handoffs retained a post-commit database owner after it closed; original failure also reproduced on pinned Bun1.4.0",
+  "fixed": {
+    "engineInteractionRecovery": {
+      "passed": 8,
+      "assertions": 77
+    },
+    "taskSweepScope": {
+      "passed": 3,
+      "assertions": 3
+    },
+    "missionCrossProcess": {
+      "passed": 5,
+      "assertions": 5
+    },
+    "serverPermissionProjection": {
+      "passed": 8,
+      "assertions": 39
+    },
+    "uniqueTests": 24,
+    "assertions": 124,
+    "focusedOriginalFailuresOnPinnedRuntime": {
+      "passed": 2,
+      "assertions": 53
+    }
+  },
+  "checks": {
+    "backendTypecheck": 0,
+    "overlayTypecheck": 0,
+    "i18n": {
+      "locales": 2,
+      "keys": 2520
+    },
+    "css": {
+      "references": 8866,
+      "documents": 2,
+      "stylesheets": 60,
+      "sourceFiles": 376
+    },
+    "formalBuilds": {
+      "firstSeconds": 64,
+      "correctedTokenSeconds": 56.57,
+      "finalCompactSeconds": 51.69,
+      "cleanupSeconds": 50.48
+    },
+    "rendererSurface": "passed",
+    "currentOverlayTypecheck": 0
+  },
+  "boundary": "No UI tests; removed encountered permission-mode UI projection test; shared audit remains open for other independent scheduler/Session/OS callback owners; actual Task/Mission control paths are qualified by these stated scopes"
+}

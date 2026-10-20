@@ -51,16 +51,14 @@ export function goalContextText(goals: any[]): string {
   return lines.join("\n")
 }
 
-/** Build interaction request prompt text (mirrors app.js interactionRequestText). */
+/** Build retained Question request text. Permissions use their structured scope renderer. */
 export function interactionRequestText(interaction: any): string {
   const title =
-    interaction?.type === "permission"
-      ? permissionRequestTitle(interaction.payload?.toolName)
-      : typeof interaction?.title === "string" && interaction.title.trim()
-        ? interaction.title.trim()
-        : interaction?.type === "question"
-          ? t("interaction.icon.question")
-          : t("detail.pending_interactions")
+    typeof interaction?.title === "string" && interaction.title.trim()
+      ? interaction.title.trim()
+      : interaction?.type === "question"
+        ? t("interaction.icon.question")
+        : t("detail.pending_interactions")
   const body = typeof interaction?.body === "string" ? interaction.body.trim() : ""
   return [title, body].filter(Boolean).join("\n\n")
 }

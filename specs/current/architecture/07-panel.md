@@ -794,6 +794,18 @@ The keyed accessor supplies current message data; removing a Message or changing
 the actual target retains the existing retirement behavior. Reconnection does
 not discard rendered history solely because its snapshot objects are new.
 Pending questions and permissions render through the existing InteractionCard.
+Permission approvals and retained requests share the structured scope renderer.
+The canonical ledger Request supplies Tool identity, effect, exact scope and
+available decisions; Task live/history projections use one helper, and standalone
+Session snapshots/live events retain those same fields. Request body is the
+original summary rather than embedded diagnostic JSON. Pending review shows the
+requested resource in a bounded, selectable region; the complete original scope
+remains in native Details. History defaults to a compact request and the original
+decision label. These permission facts use direct text and structured rendering,
+while Question and participant messages retain their Markdown contract. Product
+labels follow the current locale; technical identifiers and source values stay
+unchanged. This presentation does not change authorization, reply ownership or
+recorded ledger facts.
 Side Chat cards project their body parts through the shared conversation display
 contract, as child transcript cards do. Full protocol parts remain in the
 transcript; execution step markers are metadata rather than card body content.

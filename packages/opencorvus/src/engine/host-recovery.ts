@@ -174,7 +174,7 @@ const missionProjectReconciliationState = createInstanceState(
       minimumWakeDelayMilliseconds: 25,
       maximumWakeDelayMilliseconds: MISSION_LIVENESS_RECHECK_MS,
       reenter: async (fn) => {
-        await reenterActiveInstance({ directory, fn })
+        await Database.runOutsideContext(() => reenterActiveInstance({ directory, fn }))
       },
     })
   },

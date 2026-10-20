@@ -3,6 +3,7 @@ import { Key } from "@solid-primitives/keyed"
 import type { CardNode } from "../store/card-tree"
 import { TextPart } from "./TextPart"
 import { InteractionCard } from "./InteractionCard"
+import { PermissionRequestContent } from "./PermissionRequestContent"
 import { FilePart } from "./FilePart"
 import { describeToolPart, shortRelativePath, type ToolDisplayModel } from "../utils/tool"
 import { boardStore, selectedTaskDirectory } from "../store/board"
@@ -113,7 +114,18 @@ function RenderableCardPart(props: {
       </Match>
       <Match
         when={
-          (part()?.type === "interaction-question" || part()?.type === "interaction-permission") &&
+          part()?.type === "interaction-permission" && part().phase !== "pending" && part().interaction
+        }
+      >
+        <Show when={part().phase === "request"} fallback={
+          <div class="permission-response">{interactionHistoryText(part())}</div>
+        }>
+          <PermissionRequestContent interaction={part().interaction} compact />
+        </Show>
+      </Match>
+      <Match
+        when={
+          part()?.type === "interaction-question" &&
           part().phase !== "pending" &&
           part().interaction
         }

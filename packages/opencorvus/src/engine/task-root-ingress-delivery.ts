@@ -2030,7 +2030,7 @@ const driverState = createInstanceState(
         maximumPendingScans: PROJECT_MAXIMUM_PENDING_SCANS,
         retireSettledEntries: true,
         reenter: async (fn) => {
-          await reenterActiveInstance({ directory, fn })
+          await Database.runOutsideContext(() => reenterActiveInstance({ directory, fn }))
         },
       }),
       liveness,
@@ -2218,16 +2218,16 @@ export async function dispatchTaskLoop(input: DispatchTaskLoopInput): Promise<Di
  * because the caller (a Bus subscriber, an HTTP reply handler) must not block
  * on the Orchestrator Turn its own edge just enabled.
  */
-/** Detach `run` from the caller's instance lease before letting it float.
+/** Detach `run` from the caller's database owner and instance lease before letting it float.
  *
  * A background completion outlives the request that spawned it, but the
- * request's instance cache lease does not: the detached work would keep the
- * closed lease in its async context and fault on its next database access.
+ * request's instance lease and post-commit database owner do not: retaining
+ * either closed scope faults the independent scan on its next database access.
  * Re-entering acquires a fresh lease held exactly for the work's duration; a
  * project disposed in the meantime drops the work instead of faulting it. */
 function runDetachedFromCallerLease(run: () => Promise<unknown>): Promise<unknown> {
   const directory = runtimeState().directory
-  return reenterActiveInstance({ directory, fn: run })
+  return Database.runOutsideContext(() => reenterActiveInstance({ directory, fn: run }))
 }
 
 export function requestTaskControlScanInBackground(taskID: string, operation: string): void {
