@@ -14,11 +14,8 @@ export async function ensureTitle(input: { session: Session.Info; history: Messa
   if (input.session.parentID) return
   if (!Session.isDefaultTitle(input.session.title)) return
 
-  const firstRealUserIdx = input.history.findIndex((m) => m.info.role === "user")
+  const firstRealUserIdx = input.history.findIndex((m) => m.info.role === "user" && m.info.author === "user")
   if (firstRealUserIdx === -1) return
-
-  const isFirst = input.history.filter((m) => m.info.role === "user").length === 1
-  if (!isFirst) return
 
   // Gather all messages up to and including the first real user message for context.
   const contextMessages = input.history.slice(0, firstRealUserIdx + 1)
@@ -62,6 +59,6 @@ export async function ensureTitle(input: { session: Session.Info; history: Messa
     if (!cleaned) return
 
     const title = cleaned.length > 100 ? cleaned.substring(0, 97) + "..." : cleaned
-    return Session.setTitle({ sessionID: input.session.id, title })
+    return Session.setTitle({ sessionID: input.session.id, title, expectedTitle: input.session.title })
   }
 }

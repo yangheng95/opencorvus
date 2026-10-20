@@ -1,0 +1,141 @@
+[1/1] START test/session/opening-intent-title.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+43 |     ]
+44 |     for (const session of conversations) {
+45 |       const owner = resolveGoalOwner({ kind: session.kind === "mission" ? "mission" : "chat", id: session.id })
+46 |       const goal = createContinuousGoal(owner, { requestID: "title", objective: "验证用户成果命名\n保留实际消息和执行合同", turnBudget: 1 }, "user")
+47 |       const current = await Session.get(session.id)
+48 |       expect({ id: current.id, projectID: current.projectID, title: current.title, metadata: current.metadata, objective: goal.objective }).toEqual({
+                                                                                                                                                 ^
+error: expect(received).toEqual(expected)
+
+  {
+    "id": "ses_-zURR0qWyzzI3kcOvpMF",
+    "metadata": {
+      "conversation": {
+        "experience": "chat",
+        "surface": "right-sidebar",
+      },
+    },
+    "objective":
+  "验证用户成果命名
+  保留实际消息和执行合同"
+  ,
+    "projectID": "prj_h3gn0HvOgoflJFicS7XL",
+-   "title": "验证用户成果命名",
++   "title": "Chat",
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\opening-intent-title.test.ts:48:141)
+(fail) a Goal names each default conversation from its structured outcome [1762.92ms]
+(pass) a Goal and its replay retain the operator's current title and exact identity [1335.10ms]
+74 |     const host = await message(session.id, "goal-controller", "Technical controller input")
+75 |     await setSessionTitleFromFirstUserMessage(host)
+76 |     const first = await message(session.id, "user", "真正的首个人类成果\n下一行说明")
+77 |     await message(session.id, "user", "已接收的后续人类输入")
+78 |     await setSessionTitleFromFirstUserMessage(first)
+79 |     expect((await Session.get(session.id)).title).toBe("真正的首个人类成果")
+                                                       ^
+error: expect(received).toBe(expected)
+
+Expected: "真正的首个人类成果"
+Received: "Technical controller input"
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\opening-intent-title.test.ts:79:51)
+(fail) the first human input supplies the title after host inputs and multiple accepted humans [1406.04ms]
+90 |   await Instance.provide({ directory: project.path, fn: async () => {
+91 |     const session = await Session.create({ kind: "assistant" })
+92 |     const accepted = await Session.setTitle({ sessionID: session.id, title: "用户刚刚选择的名称" })
+93 |     const delayed = { sessionID: session.id, title: "迟到的自动标题", expectedTitle: session.title }
+94 |     const result = await Session.setTitle(delayed)
+95 |     expect({ result, stored: await Session.get(session.id) }).toEqual({ result: accepted, stored: accepted })
+                                                                   ^
+error: expect(received).toEqual(expected)
+
+  {
+    "result": {
+      "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-R2GRWC\test-79732-yC8nUU\fixtures\memory-vjtB84",
+      "id": "ses_-zURR0pRWzzsQdRZHIaZ",
+      "kind": "assistant",
+      "metadata": undefined,
+      "parentID": undefined,
+      "permission": undefined,
+      "projectID": "prj_h6u4MxMRanyq0v5C9ji1",
+      "share": undefined,
+      "slug": "clever-island",
+      "summary": undefined,
+      "time": {
+        "archived": undefined,
+        "created": 1792472793401,
+        "pinned": undefined,
+-       "updated": 1792472793403,
++       "updated": 1792472793405,
+      },
+-     "title": "用户刚刚选择的名称",
++     "title": "迟到的自动标题",
+      "version": "local",
+    },
+    "stored": {
+      "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-R2GRWC\test-79732-yC8nUU\fixtures\memory-vjtB84",
+      "id": "ses_-zURR0pRWzzsQdRZHIaZ",
+      "kind": "assistant",
+      "metadata": undefined,
+      "parentID": undefined,
+      "permission": undefined,
+      "projectID": "prj_h6u4MxMRanyq0v5C9ji1",
+      "share": undefined,
+      "slug": "clever-island",
+      "summary": undefined,
+      "time": {
+        "archived": undefined,
+        "created": 1792472793401,
+        "pinned": undefined,
+-       "updated": 1792472793403,
++       "updated": 1792472793405,
+      },
+-     "title": "用户刚刚选择的名称",
++     "title": "迟到的自动标题",
+      "version": "local",
+    },
+  }
+
+- Expected  - 4
++ Received  + 4
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\opening-intent-title.test.ts:95:63)
+(fail) a late automatic title returns the current operator choice through the canonical setter [1421.51ms]
+(pass) Task-owned Goals preserve the actual Task session title [1400.30ms]
+121 |       const human = await message(session.id, "user", title as string)
+122 |       await setSessionTitleFromFirstUserMessage(human)
+123 |       return { expected: title, current: await Session.get(session.id), directory }
+124 |     } })
+125 |   }))
+126 |   for (const result of results) expect({ title: result.current.title, directory: result.current.directory }).toEqual({ title: result.expected, directory: result.directory })
+                                                                                                                   ^
+error: expect(received).toEqual(expected)
+
+  {
+    "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-R2GRWC\test-79732-yC8nUU\fixtures\memory-cf37dD",
+-   "title": "第一项目成果",
++   "title": "Chat",
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\opening-intent-title.test.ts:126:110)
+(fail) parallel project inputs retain their own human title and ownership [2336.56ms]
+
+ 2 pass
+ 4 fail
+ 8 expect() calls
+Ran 6 tests across 1 file. [14.80s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\session\opening-intent-title.test.ts
+[1/1] DONE test/session/opening-intent-title.test.ts exit=1 duration=15.39s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\session\opening-intent-title.test.ts

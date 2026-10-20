@@ -1,0 +1,68 @@
+{
+  "scope": "opening-intent-title-460",
+  "history": {
+    "schema": {
+      "user_version": 2
+    },
+    "projects": 110,
+    "sessions": 149,
+    "baseline": {
+      "projects": 109,
+      "sessions": 147
+    },
+    "mode": "Direct readonly SQLite after original native/checker joins; every retained identity, Project owner and directory compared; no production initializer or user database"
+  },
+  "checks": {
+    "before": {
+      "originalHandle": 31998,
+      "exitCode": 1,
+      "cases": 6,
+      "passed": 2,
+      "failed": 4,
+      "assertions": 8
+    },
+    "contracts": {
+      "originalHandle": 53009,
+      "exitCode": 0,
+      "files": 4,
+      "cases": 24,
+      "assertions": 95
+    },
+    "typecheck": {
+      "originalHandle": 6360,
+      "exitCode": 0
+    },
+    "moduleTopology": {
+      "originalHandle": 22224,
+      "exitCode": 0,
+      "source": "Actual staged source --index; 1171 modules/5990 runtime edges/4 clean imports"
+    },
+    "native": {
+      "originalHandle": 3562,
+      "exitCode": 0
+    },
+    "ui": "Five actual IAB screenshots and manual real interactions; no UI automation; unchanged formal 459 frontend served by fresh current development backend"
+  },
+  "screenshots": [
+    "created-goal-en.png",
+    "automatic-goal-en.png",
+    "renamed-goal-en.png",
+    "reloaded-rename-en.png",
+    "completed-goal-en.png"
+  ],
+  "goal": {
+    "sessionID": "ses_-zURR01plzzo4CFAVTpg",
+    "goalID": "pev_g0VYZ06O800hLmJployd",
+    "automaticTurns": 1,
+    "turnBudget": 1,
+    "tokensUsed": 38352,
+    "reply": "TITLE460READY",
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "creationTitle": "验证持续目标会话命名",
+    "manualTitle": "用户保留的持续目标名称",
+    "reload": "Same exact Session restored with manual title, full original controller and assistant",
+    "completion": "Operator explicitly submitted evidence after real automatic response; not autonomous model completion"
+  },
+  "remaining": "Original full-history configuration save/restore performance budgets remain unmet. Historical technical conversation titles are retained; existing user-owned names are not batch-rewritten."
+}

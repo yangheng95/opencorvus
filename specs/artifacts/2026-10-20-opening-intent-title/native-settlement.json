@@ -1,0 +1,73 @@
+{
+  "scope": "opening-intent-title-460",
+  "preflight": {
+    "sessionID": "ses_hNocIOh6owFWj5XZOQpd",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "settlement": {
+    "chain": [
+      {
+        "identity": {
+          "pid": 82400,
+          "processInstanceID": "win32:639280697355297104",
+          "occurrenceID": "ed6a3224-f221-454d-9957-d36dd946c3d4"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "identity": {
+          "pid": 86556,
+          "processInstanceID": "win32:639280697420215241",
+          "occurrenceID": "d6b8716b-7f96-4917-af21-e14bd31631a6"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "native": {
+      "occurrence": "opening-intent-title-460-babcbea0-5ae2-4ba8-a4d8-daeac727b446",
+      "outcome": "settled",
+      "host": {
+        "pid": 82400,
+        "processInstanceID": "win32:639280697355297104",
+        "occurrenceID": "ed6a3224-f221-454d-9957-d36dd946c3d4"
+      },
+      "target": {
+        "pid": 86556,
+        "processInstanceID": "win32:639280697420215241",
+        "occurrenceID": "d6b8716b-7f96-4917-af21-e14bd31631a6"
+      },
+      "observedAtUtc": "2026-10-20T05:12:06.575Z",
+      "deadlineAt": 1792474134233,
+      "terminal": {
+        "occurrenceID": "opening-intent-title-460-babcbea0-5ae2-4ba8-a4d8-daeac727b446",
+        "pid": 86556,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "physicalCompletion": true,
+    "occurrence": "opening-intent-title-460-babcbea0-5ae2-4ba8-a4d8-daeac727b446",
+    "observedAtUtc": "2026-10-20T05:12:07.9095488Z",
+    "copiedPair": [
+      {
+        "name": "auth.json",
+        "outcome": "retired"
+      },
+      {
+        "name": "models.json",
+        "outcome": "retired"
+      }
+    ],
+    "pairedCleanupComplete": true
+  },
+  "launcherExit": 0,
+  "publicShutdown": 200
+}

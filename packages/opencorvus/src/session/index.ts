@@ -699,25 +699,33 @@ export namespace Session {
     return fromRow(row)
   })
 
+  export function setTitleInTransaction(input: { sessionID: string; title: string; expectedTitle?: string }) {
+    Database.requireActiveTransaction("Session.setTitleInTransaction")
+    return Database.use((db) => {
+      assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
+      const current = db.select().from(SessionTable).where(eq(SessionTable.id, input.sessionID)).get()
+      if (!current) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
+      if (input.expectedTitle !== undefined && current.title !== input.expectedTitle) return fromRow(current)
+      const row = db
+        .update(SessionTable)
+        .set({ title: input.title, time_updated: Date.now() })
+        .where(eq(SessionTable.id, input.sessionID))
+        .returning()
+        .get()!
+      const info = fromRow(row)
+      Bus.publishOwnedInTransaction(Event.Updated, { info })
+      return info
+    })
+  }
+
   export const setTitle = fn(
     z.object({
       sessionID: Identifier.schema("session"),
       title: z.string(),
+      expectedTitle: z.string().optional(),
     }),
     async (input) => {
-      return Database.immediateTransaction((db) => {
-        assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
-        const row = db
-          .update(SessionTable)
-          .set({ title: input.title, time_updated: Date.now() })
-          .where(eq(SessionTable.id, input.sessionID))
-          .returning()
-          .get()
-        if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
-        const info = fromRow(row)
-        Bus.publishOwnedInTransaction(Event.Updated, { info })
-        return info
-      })
+      return Database.immediateTransaction(() => setTitleInTransaction(input))
     },
   )
 

@@ -1,6 +1,8 @@
 import { Session } from "."
 import type { Message } from "./message"
 import { deriveTitle } from "@/title/derive"
+import { Database, NotFoundError, eq } from "@/storage/db"
+import { SessionTable } from "./session.sql"
 import {
   RIGHT_SIDEBAR_CHAT_DEFAULT_TITLE,
   RIGHT_SIDEBAR_WORK_DEFAULT_TITLE,
@@ -31,6 +33,21 @@ function firstTextTitle(parts: Message.Part[]): string | undefined {
   return deriveTitle(text)
 }
 
+/** The authorized objective and its initial conversation title commit together. */
+export function setSessionTitleFromGoalInTransaction(input: { sessionID: string; objective: string }) {
+  Database.requireActiveTransaction("setSessionTitleFromGoalInTransaction")
+  const row = Database.use((db) => db.select().from(SessionTable).where(eq(SessionTable.id, input.sessionID)).get())
+  if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
+  const session = Session.fromRow(row)
+  if (!isRightSidebarConversation(session) && !isMissionControl(session) && !Session.isDefaultTitle(session.title))
+    return
+  return Session.setTitleInTransaction({
+    sessionID: session.id,
+    title: deriveTitle(input.objective),
+    expectedTitle: session.title,
+  })
+}
+
 export async function setSessionTitleFromFirstUserMessage(input: {
   sessionID: string
   messageID: string
@@ -42,10 +59,10 @@ export async function setSessionTitleFromFirstUserMessage(input: {
   const session = await Session.get(input.sessionID)
   if (!isRightSidebarConversation(session) && !isMissionControl(session)) return undefined
 
-  const userMessages = (await Session.messages({ sessionID: input.sessionID })).filter(
-    (message) => message.info.role === "user",
+  const firstUser = (await Session.messages({ sessionID: input.sessionID })).find(
+    (message) => message.info.role === "user" && message.info.author === "user",
   )
-  if (userMessages.length !== 1 || userMessages[0]?.info.id !== input.messageID) return undefined
+  if (firstUser?.info.id !== input.messageID) return undefined
 
-  return Session.setTitle({ sessionID: input.sessionID, title })
+  return Session.setTitle({ sessionID: input.sessionID, title, expectedTitle: session.title })
 }

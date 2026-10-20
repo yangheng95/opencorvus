@@ -120,6 +120,13 @@ status-strip sizing belongs to existing conversation controls.
 The home copy states that budgets are optional, matching the form's unlimited
 default and the existing unspecified-budget execution contract.
 
+Creating a Chat or Mission goal names a still-default conversation from the
+structured objective, using the existing first-line title derivation in the
+same transaction as the goal fact. Task titles and custom conversation names
+retain their own authority. Replaying the creation request does not rename a
+conversation again. The controller's technical Message remains complete and
+visible; its transport role does not make it a human-authored naming input.
+
 The common conversation surface and an opened SideChat expose one continuous-goal
 control. Task binds its Task ID; Chat and Mission bind their canonical Session ID.
 Every request also binds project directory, current API authority and selection lifetime.

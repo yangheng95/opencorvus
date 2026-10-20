@@ -69,7 +69,7 @@ describe("Session title LLM activity", () => {
       retries: 0,
       activity: { id: expect.any(String), attempt: 0 },
     })
-    expect(setTitleSpy.mock.calls).toEqual([[{ sessionID: session.id, title: "Bounded title" }]])
+    expect(setTitleSpy.mock.calls).toEqual([[{ sessionID: session.id, title: "Bounded title", expectedTitle: session.title }]])
   })
 
   test("binds the title collector retry to one actual activity and persists its result", async () => {
@@ -93,7 +93,24 @@ describe("Session title LLM activity", () => {
     expect(inputs.map((input) => ({ sessionID: input.sessionID, userID: input.user?.id }))).toEqual([
       { sessionID: session.id, userID: history[0]!.info.id }, { sessionID: session.id, userID: history[0]!.info.id },
     ])
-    expect(writer.mock.calls).toEqual([[{ sessionID: session.id, title: "Retry title" }]])
+    expect(writer.mock.calls).toEqual([[{ sessionID: session.id, title: "Retry title", expectedTitle: session.title }]])
+  })
+  test("streams from the first human identity with a real host prefix and multiple human inputs", async () => {
+    const { session, history } = titleFixture()
+    const firstHuman = history[0]!
+    const host = { ...firstHuman, info: { ...firstHuman.info, id: "controller-prefix", author: "goal-controller" } }
+    const secondHuman = { ...firstHuman, info: { ...firstHuman.info, id: "second-human" } }
+    const calls: Parameters<typeof LLM.stream>[0][] = []
+    track(spyOn(LLM, "stream").mockImplementation(async input => {
+      calls.push(input)
+      return { stream: (async function* () {
+        yield { type: "text-delta" as const, id: "title", text: "Actual human outcome" }
+      })() } as never
+    }))
+    const writer = track(spyOn(Session, "setTitle").mockResolvedValue(session))
+    await ensureTitle({ session, history: [host, firstHuman, secondHuman] as Message.WithParts[], abort: new AbortController().signal })
+    expect(calls.map(input => ({ id: input.user?.id, author: input.user?.author }))).toEqual([{ id: firstHuman.info.id, author: "user" }])
+    expect(writer.mock.calls).toEqual([[{ sessionID: session.id, title: "Actual human outcome", expectedTitle: session.title }]])
   })
   test("composes the execution occurrence abort into the title activity signal", async () => {
     const { session, history } = titleFixture()

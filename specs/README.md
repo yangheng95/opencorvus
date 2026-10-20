@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [按真实开场意图命名会话](records/2026-10/2026-10-20-opening-intent-title.md)：参与者身份、Goal成果标题与[24项合同和实际页面](artifacts/2026-10-20-opening-intent-title/README.md)。
+
 - [内置浏览器中的 Goal 首页复核](records/2026-10/2026-10-20-goal-home-live-review.md)：预算可选说明、[11 张实际截图与自动执行](artifacts/2026-10-20-goal-home-live-review/README.md)。
 
 - [Goal 公开错误合同](records/2026-10/2026-10-20-goal-error-contract.md)：具名错误与共享文档根因、[32 例及实际 SDK/HTTP 证据](artifacts/2026-10-20-goal-error-contract/README.md)。

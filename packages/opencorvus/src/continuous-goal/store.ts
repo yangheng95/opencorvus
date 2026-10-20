@@ -2,6 +2,7 @@ import { isDeepStrictEqual } from "node:util"
 import { Database, and, asc, eq, inArray, sql } from "@/storage/db"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
+import { setSessionTitleFromGoalInTransaction } from "@/session/first-message-title"
 import { SessionTable } from "@/session/session.sql"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { taskIDForSession } from "@/engine/task-session-lineage"
@@ -319,6 +320,7 @@ export function createContinuousGoal(owner: GoalOwner, raw: z.input<typeof Conti
       return goalError("owner_unavailable", "Open the owner before creating a continuous goal.")
     assertExclusiveGoalScope(owner)
     append(owner, CREATED, { owner: { kind: owner.kind, id: owner.id }, request_id: input.requestID, input, author })
+    if (owner.kind !== "task") setSessionTitleFromGoalInTransaction({ sessionID: owner.sessionID, objective: input.objective })
     return readContinuousGoal(owner)!
   })
 }

@@ -1,0 +1,288 @@
+{
+  "mode": "Direct readonly facts after original native exit; manual browser interaction only, no UI test",
+  "owner": "ses_-zURR01plzzo4CFAVTpg",
+  "events": [
+    {
+      "id": "pev_g0VYZ06O800hLmJployd",
+      "type": "continuous_goal.created",
+      "payload": {
+        "owner": {
+          "kind": "chat",
+          "id": "ses_-zURR01plzzo4CFAVTpg"
+        },
+        "request_id": "5e4e323b-273c-427d-bba0-be9d78cb9012",
+        "input": {
+          "turnBudget": 1,
+          "requestID": "5e4e323b-273c-427d-bba0-be9d78cb9012",
+          "objective": "验证持续目标会话命名\nFor this isolated product verification, reply exactly TITLE460READY. Do not use tools or change files."
+        },
+        "author": "user"
+      }
+    },
+    {
+      "id": "pev_hazmDhCLXE6oQCh5KF5S",
+      "type": "continuous_goal.continuation_requested",
+      "payload": {
+        "goal_id": "pev_g0VYZ06O800hLmJployd",
+        "revision": "pev_g0VYZ06O800hLmJployd",
+        "frontier": "start",
+        "number": 1
+      }
+    },
+    {
+      "id": "pev_g0VYZ0TIR00ywx8CQZHP",
+      "type": "continuous_goal.updated",
+      "payload": {
+        "goal_id": "pev_g0VYZ06O800hLmJployd",
+        "request_id": "4687719b-f9d7-4a74-948e-9d90f56621c4",
+        "input": {
+          "requestID": "4687719b-f9d7-4a74-948e-9d90f56621c4",
+          "goalID": "pev_g0VYZ06O800hLmJployd",
+          "expectedRevision": "pev_g0VYZ06O800hLmJployd",
+          "status": "complete",
+          "reason": "Operator verification: the conversation adopted the outcome title, the real automatic turn returned TITLE460READY at 1/1 turns and 38,352 tokens, and the manual rename remained after reloading the same session."
+        },
+        "author": "user"
+      }
+    }
+  ],
+  "usage": {
+    "tokens": 38352
+  },
+  "conversations": [
+    {
+      "session": {
+        "id": "ses_-zURR01plzzo4CFAVTpg",
+        "title": "用户保留的持续目标名称",
+        "project_id": "prj_hSQinOa1MIVoNEeARpn5",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+      },
+      "messages": [
+        {
+          "id": "msg_g0VYZ06cY00ds8vTu7nY",
+          "data": {
+            "author": "work",
+            "role": "assistant",
+            "time": {
+              "created": 1792473016607,
+              "completed": 1792473019976
+            },
+            "parentID": "msg_hDhXxUZ9BVWzFj3bfNGA",
+            "acceptedInputMessageIDs": [
+              "msg_hDhXxUZ9BVWzFj3bfNGA"
+            ],
+            "modelID": "gpt-6.1-sol",
+            "providerID": "openai",
+            "agent": "work",
+            "path": {
+              "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+              "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+            },
+            "cost": 0,
+            "tokens": {
+              "total": 38352,
+              "input": 38345,
+              "output": 7,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "billing": {
+              "status": "priced"
+            },
+            "finish": "stop",
+            "orderKey": "v1:0001792473016607:0000000000000030:0000000000000000:message:msg_g0VYZ06cY00ds8vTu7nY"
+          }
+        },
+        {
+          "id": "msg_hDhXxUZ9BVWzFj3bfNGA",
+          "data": {
+            "author": "goal-controller",
+            "role": "user",
+            "time": {
+              "created": 1792473016567
+            },
+            "agent": "work",
+            "model": {
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol"
+            },
+            "tools": {
+              "delegate_agent": true,
+              "panel_expert_squad_inspect": true,
+              "panel_query_task": true,
+              "panel_query_task_artifacts": true,
+              "panel_create_task": true,
+              "panel_wake_mission": true,
+              "panel_wake_work": true,
+              "panel_send_task_message": true,
+              "panel_respond_interaction": true,
+              "panel_cancel_task": true,
+              "panel_update_checks": true,
+              "panel_select_workspace": true,
+              "panel_update_goal": true,
+              "panel_delete_goal": true,
+              "question": true,
+              "bash": true,
+              "read": true,
+              "glob": true,
+              "search_code": true,
+              "edit": true,
+              "write": true,
+              "apply_patch": true,
+              "todo": true,
+              "schedule": true
+            },
+            "extra": {
+              "wake_reason": {
+                "source": "continuous_goal",
+                "goalID": "pev_g0VYZ06O800hLmJployd",
+                "revision": "pev_g0VYZ06O800hLmJployd",
+                "requestID": "pev_hazmDhCLXE6oQCh5KF5S"
+              },
+              "surface": "right-sidebar",
+              "source": "right-sidebar-conversation",
+              "experience": "work"
+            },
+            "orderKey": "v1:0001792473016567:0000000000000030:0000000000000000:message:msg_hDhXxUZ9BVWzFj3bfNGA"
+          }
+        }
+      ],
+      "parts": [
+        {
+          "id": "prt_g0VYZ06mt00kD1GsO4ZA",
+          "data": {
+            "type": "step-start"
+          }
+        },
+        {
+          "id": "prt_g0VYZ07OV00tnAX8ym00",
+          "data": {
+            "type": "text",
+            "text": "TITLE460READY",
+            "time": {
+              "start": 1792473019579,
+              "end": 1792473019803
+            },
+            "metadata": {
+              "openai": {
+                "itemId": "msg_0b70ec254bddaa40016ad6f7bb78e48191b3ad2906cc9446bf",
+                "phase": "final_answer"
+              }
+            }
+          }
+        },
+        {
+          "id": "prt_g0VYZ07UW00p0lr1qaos",
+          "data": {
+            "type": "step-finish",
+            "reason": "stop",
+            "cost": 0,
+            "tokens": {
+              "total": 38352,
+              "input": 38345,
+              "output": 7,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "billing": {
+              "status": "priced"
+            }
+          }
+        },
+        {
+          "id": "prt_hpgqGQICZGZ0359MnJsP",
+          "data": {
+            "type": "text",
+            "text": "Continuous goal controller — automatic continuation 1.\nThe user authorized this ongoing objective: 验证持续目标会话命名\nFor this isolated product verification, reply exactly TITLE460READY. Do not use tools or change files.\nGoal: pev_g0VYZ06O800hLmJployd; prior settled frontier: start.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 0; token budget: unspecified.\nThis message is authored by the goal controller, not a new user instruction.",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hSQinOa1MIVoNEeARpn5/b9150119f43844aeff55947957be328047ea1f990d04a28689ce894fcb7adfb8.json",
+              "catalog_snapshot_hash": "b9150119f43844aeff55947957be328047ea1f990d04a28689ce894fcb7adfb8"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "provider": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "identity": {
+        "sessionID": "ses_hNocIOh6owFWj5XZOQpd",
+        "streamRequest": {
+          "requestID": "msg_hVVa5PXHRVcFgdpe0JNc",
+          "agentID": "memory",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VYYzq5i00ML64sE1b8",
+          "attempt": 0
+        }
+      },
+      "terminal": {
+        "kind": "eof",
+        "at": 1792472957486
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "identity": {
+        "sessionID": "ses_hNocIOh6owFWj5XZOQpd",
+        "streamRequest": {
+          "requestID": "msg_hVVa5PXHRVcFgdpe0JNc",
+          "agentID": "chat",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VYYzqNO00uer4bNHY5",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VYYzq5s00vL9ZXLJCG"
+        }
+      },
+      "terminal": {
+        "kind": "eof",
+        "at": 1792472956847
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "identity": {
+        "sessionID": "ses_-zURR01plzzo4CFAVTpg",
+        "streamRequest": {
+          "requestID": "msg_hDhXxUZ9BVWzFj3bfNGA",
+          "agentID": "work",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VYZ06mP00WkWmNJcr8",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VYZ06cY00ds8vTu7nY"
+        }
+      },
+      "terminal": {
+        "kind": "eof",
+        "at": 1792473019949
+      }
+    }
+  ]
+}

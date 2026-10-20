@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [按真实开场意图命名会话](2026-10-20-opening-intent-title/README.md)：四个原失败、24项正向合同、五张实际截图及用户改名恢复。
+
 - [内置浏览器中的 Goal 首页复核](2026-10-20-goal-home-live-review/README.md)：预算可选说明、11张实际截图、一轮gpt-6.1-sol自动执行与完整历史保留。
 
 - [Goal 错误与运行时 OpenAPI](2026-10-20-goal-error-contract/README.md)：具名错误、41→345 实际文档、重复/并发完整 schema 和 14 个 SDK/HTTP 请求。

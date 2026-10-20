@@ -1,0 +1,65 @@
+[1/4] START test/session/opening-intent-title.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a Goal names each default conversation from its structured outcome [2181.90ms]
+(pass) a Goal and its replay retain the operator's current title and exact identity [1464.60ms]
+(pass) the first human input supplies the title after host inputs and multiple accepted humans [1447.91ms]
+(pass) a late automatic title returns the current operator choice through the canonical setter [1330.46ms]
+(pass) Task-owned Goals preserve the actual Task session title [1332.61ms]
+(pass) parallel project inputs retain their own human title and ownership [2347.81ms]
+
+ 6 pass
+ 0 fail
+ 13 expect() calls
+Ran 6 tests across 1 file. [13.98s]
+[1/4] DONE test/session/opening-intent-title.test.ts exit=0 duration=14.62s
+[2/4] START test/session/title-activity.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Session title LLM activity > streams a generated title and persists the normalized first line [4.39ms]
+{"contract":"title activity retry","calls":[{"activity":{"id":"act_g0VYYzS6Q00n99JyPThV","attempt":0},"sessionID":"session-title-activity","userID":"message-title-user","agentID":"title"},{"activity":{"id":"act_g0VYYzS6Q00n99JyPThV","attempt":1},"sessionID":"session-title-activity","userID":"message-title-user","agentID":"title"}]}
+(pass) Session title LLM activity > binds the title collector retry to one actual activity and persists its result [2285.58ms]
+(pass) Session title LLM activity > streams from the first human identity with a real host prefix and multiple human inputs [0.80ms]
+(pass) Session title LLM activity > composes the execution occurrence abort into the title activity signal [2.80ms]
+
+ 4 pass
+ 0 fail
+ 10 expect() calls
+Ran 4 tests across 1 file. [3.46s]
+[2/4] DONE test/session/title-activity.test.ts exit=0 duration=3.59s
+[3/4] START test/continuous-goal.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) durable continuous goal contracts > Chat creation, exact replay, pause, resume and completion persist real revisions [1626.73ms]
+(pass) durable continuous goal contracts > one exact continuation reserves one turn and reports the explicit budget terminal [1706.23ms]
+(pass) durable continuous goal contracts > usage references count descendant requests and their late completion exactly once [1834.50ms]
+(pass) durable continuous goal contracts > Task owner identity and cancellation project distinct goal facts [1858.60ms]
+(pass) durable continuous goal contracts > Mission includes its exact child Tasks and returns a typed overlapping-owner error [1371.21ms]
+(pass) durable continuous goal contracts > public route and native Tool share one exact durable goal [1332.36ms]
+(pass) durable continuous goal contracts > explicit blocking wins over quota and resuming preserves settled usage [1403.47ms]
+(pass) durable continuous goal contracts > different Projects retain exact independent owners and metering [2806.89ms]
+(pass) durable continuous goal contracts > a settled assistant batch advances the exact latest input frontier [1448.40ms]
+(pass) durable continuous goal contracts > chat reopening preserves cancellation until an explicit goal revision [1630.59ms]
+(pass) durable continuous goal contracts > mission reopening preserves cancellation until an explicit goal revision [1257.36ms]
+(pass) durable continuous goal contracts > archive and restore retain one paused goal on the exact owner [1389.32ms]
+(pass) durable continuous goal contracts > the production Task archive entry retains pause when a completed Task is restored [1446.75ms]
+
+ 13 pass
+ 0 fail
+ 60 expect() calls
+Ran 13 tests across 1 file. [23.45s]
+[3/4] DONE test/continuous-goal.test.ts exit=0 duration=23.68s
+[4/4] START test/server/conversation-rename-identity.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) cold Chat and Work rename persist real titles and publish updates without an executable model [4520.94ms]
+
+ 1 pass
+ 0 fail
+ 12 expect() calls
+Ran 1 test across 1 file. [6.48s]
+[4/4] DONE test/server/conversation-rename-identity.test.ts exit=0 duration=6.64s
