@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Goal首页说明布局](2026-10-20-goal-home-copy-layout.md)：追查桌面长说明截断、真实页面复核与入口操作。
+
 - [模型推理选项投影实验](2026-10-20-model-variant-projection.md)：完整保存未获稳定收益、撤回实验与投影正向回归合同。
 
 - [配置快照工作树边界](2026-10-20-config-worktree-boundary.md)：已准入身份复用、独立只读发现与真实配置性能。

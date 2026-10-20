@@ -1,0 +1,34 @@
+{
+  "occurrence": "goal-home-copy-452-verified-9698d08a-f27e-480f-884b-2db7f6518962",
+  "mutations": [
+    {
+      "time": "2026-10-20T01:05:25.493Z",
+      "requestID": "2d23f5be-0a03-401f-b59e-0e596af25f0f",
+      "method": "POST",
+      "path": "/global/chat/start",
+      "status": "completed",
+      "statusCode": 202,
+      "duration": 2404
+    },
+    {
+      "time": "2026-10-20T01:06:03.435Z",
+      "requestID": "000fdb43-575d-4004-94c1-ed92d77d19c3",
+      "method": "POST",
+      "path": "/coding/work/session",
+      "status": "completed",
+      "statusCode": 201,
+      "duration": 64
+    },
+    {
+      "time": "2026-10-20T01:07:04.175Z",
+      "requestID": "09886ae8-66b5-4b5f-9cd0-116b840e6751",
+      "method": "POST",
+      "path": "/global/work",
+      "status": "completed",
+      "statusCode": 201,
+      "duration": 1531
+    }
+  ],
+  "observedAt": "2026-10-20T01:07:50.142Z",
+  "boundary": "Original development server request completion metadata during root-owned real UI interaction; no UI test or generated response"
+}

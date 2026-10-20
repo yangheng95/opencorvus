@@ -343,7 +343,7 @@ export function ContinuousGoalControl(props: {
           <Button
             type="button"
             variant="solid"
-            size="sm"
+            size="md"
             tone="accent"
             disabled={!appStore.connected || props.starting}
             onClick={() => void props.onStartGoal?.()}

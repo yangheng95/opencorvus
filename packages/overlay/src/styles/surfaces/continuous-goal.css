@@ -85,6 +85,7 @@
 
 .continuous-goal--home {
   padding: var(--ui-gap-xl) calc(var(--ui-composer-content-inset) + var(--oc-border-width));
+  font-size: var(--ui-font-body);
   border-block-start: var(--oc-border-width) solid var(--border);
   display: flex;
   align-items: center;

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Goal首页说明与入口层级](2026-10-20-goal-home-copy-layout/README.md)：正文与主按钮可读性，中英文桌面、指南及项目/全局创建的真实截图。
+
 - [模型投影实验与回归合同](2026-10-20-model-variant-projection/README.md)：撤回两项完整保存无稳定收益的优化，保留38例合同与真实页面、服务和数据证据。
 
 - [配置快照工作树边界](2026-10-20-config-worktree-boundary/README.md)：4个原失败、51例正向合同、真实HTTP子项目及完整历史性能。

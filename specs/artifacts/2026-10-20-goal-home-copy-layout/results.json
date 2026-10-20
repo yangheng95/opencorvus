@@ -1,0 +1,273 @@
+{
+  "change": "Only home: existing 14px body token and existing md primary create control. Ordinary status strip unchanged.",
+  "before": {
+    "body": {
+      "clientWidth": 467,
+      "fontSize": "12px",
+      "height": "18px",
+      "lineHeight": "18px",
+      "overflow": "visible",
+      "scrollWidth": 467,
+      "text": "Set a continuous goal with an outcome and a budget. Work continues across turns.",
+      "whiteSpace": "normal"
+    },
+    "create": {
+      "fontSize": "14px",
+      "height": "24px",
+      "size": "sm"
+    }
+  },
+  "verified": {
+    "body": {
+      "clientWidth": 467,
+      "fontSize": "14px",
+      "height": "42px",
+      "lineHeight": "21px",
+      "overflow": "visible",
+      "scrollWidth": 467,
+      "text": "Set a continuous goal with an outcome and a budget. Work continues across turns.",
+      "whiteSpace": "normal"
+    },
+    "create": {
+      "fontSize": "14px",
+      "height": "30px",
+      "size": "md"
+    }
+  },
+  "manualVisual": {
+    "viewport": "1280x720 desktop",
+    "sidebarWidths": [
+      280,
+      433
+    ],
+    "locales": [
+      "en-US",
+      "zh-CN"
+    ],
+    "guides": "Opened and reviewed in both locales",
+    "create": "Actual project and global home -> real Chat -> existing goal form; cancel retains empty Chat",
+    "tabs": "Owned 52/53 closed",
+    "newGoalExecution": "Not submitted; streaming native preflight is distinct from historical 441 goal execution"
+  },
+  "services": {
+    "goal-home-copy-452": {
+      "preflight": {
+        "sessionID": "ses_hKC7At7R2lITSCpJuDUl",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "shutdown": {
+        "occurrence": "goal-home-copy-452-5e5252cd-1700-480d-a399-f2c0e8c034b0",
+        "target": {
+          "pid": 73868,
+          "processInstanceID": "win32:639280548506149107",
+          "occurrenceID": "0cb264bd-8e9f-4765-8458-0a29fbd2b99d"
+        },
+        "observedAtUtc": "2026-10-20T01:04:52.6586267Z",
+        "statusCode": 200,
+        "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYY0KDr00hipq9h4fw\"}"
+      },
+      "settlement": {
+        "native": {
+          "occurrence": "goal-home-copy-452-5e5252cd-1700-480d-a399-f2c0e8c034b0",
+          "outcome": "settled",
+          "host": {
+            "pid": 79336,
+            "processInstanceID": "win32:639280548497530605",
+            "occurrenceID": "5b66e6e0-d89b-4449-b2f3-4be12d235ecb"
+          },
+          "target": {
+            "pid": 73868,
+            "processInstanceID": "win32:639280548506149107",
+            "occurrenceID": "0cb264bd-8e9f-4765-8458-0a29fbd2b99d"
+          },
+          "observedAtUtc": "2026-10-20T01:04:52.76Z",
+          "deadlineAt": 1792459249085,
+          "terminal": {
+            "occurrenceID": "goal-home-copy-452-5e5252cd-1700-480d-a399-f2c0e8c034b0",
+            "pid": 73868,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 79336,
+              "processInstanceID": "win32:639280548497530605",
+              "occurrenceID": "5b66e6e0-d89b-4449-b2f3-4be12d235ecb"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 73868,
+              "processInstanceID": "win32:639280548506149107",
+              "occurrenceID": "0cb264bd-8e9f-4765-8458-0a29fbd2b99d"
+            }
+          }
+        ],
+        "copiedPair": [
+          {
+            "outcome": "retired",
+            "name": "auth.json"
+          },
+          {
+            "outcome": "retired",
+            "name": "models.json"
+          }
+        ],
+        "observedAtUtc": "2026-10-20T01:04:54.6219300Z",
+        "physicalCompletion": true,
+        "occurrence": "goal-home-copy-452-5e5252cd-1700-480d-a399-f2c0e8c034b0",
+        "pairedCleanupComplete": true
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-20T01:04:54.7968270Z",
+        "childExitCode": 0
+      },
+      "originalExecHandle": 57603,
+      "originalExecExitCode": 0
+    },
+    "goal-home-copy-452-verified": {
+      "preflight": {
+        "sessionID": "ses_hMwoKQFC84LGB8gfUENe",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "shutdown": {
+        "target": {
+          "pid": 55312,
+          "processInstanceID": "win32:639280551193354921",
+          "occurrenceID": "3b33a97f-2c4b-407b-be40-960195c80219"
+        },
+        "observedAtUtc": "2026-10-20T01:07:51.8937788Z",
+        "occurrence": "goal-home-copy-452-verified-9698d08a-f27e-480f-884b-2db7f6518962",
+        "statusCode": 200,
+        "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYY14rW00a4iSS06CK\"}"
+      },
+      "settlement": {
+        "observedAtUtc": "2026-10-20T01:07:53.2161562Z",
+        "physicalCompletion": true,
+        "pairedCleanupComplete": true,
+        "occurrence": "goal-home-copy-452-verified-9698d08a-f27e-480f-884b-2db7f6518962",
+        "copiedPair": [
+          {
+            "outcome": "retired",
+            "name": "auth.json"
+          },
+          {
+            "outcome": "retired",
+            "name": "models.json"
+          }
+        ],
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 71256,
+              "processInstanceID": "win32:639280551186237264",
+              "occurrenceID": "ff939d8f-05cf-47a7-a9b5-10822a3dfa6b"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 55312,
+              "processInstanceID": "win32:639280551193354921",
+              "occurrenceID": "3b33a97f-2c4b-407b-be40-960195c80219"
+            }
+          }
+        ],
+        "native": {
+          "occurrence": "goal-home-copy-452-verified-9698d08a-f27e-480f-884b-2db7f6518962",
+          "outcome": "settled",
+          "host": {
+            "pid": 71256,
+            "processInstanceID": "win32:639280551186237264",
+            "occurrenceID": "ff939d8f-05cf-47a7-a9b5-10822a3dfa6b"
+          },
+          "target": {
+            "pid": 55312,
+            "processInstanceID": "win32:639280551193354921",
+            "occurrenceID": "3b33a97f-2c4b-407b-be40-960195c80219"
+          },
+          "observedAtUtc": "2026-10-20T01:07:52.005Z",
+          "deadlineAt": 1792459517787,
+          "terminal": {
+            "occurrenceID": "goal-home-copy-452-verified-9698d08a-f27e-480f-884b-2db7f6518962",
+            "pid": 55312,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        }
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-20T01:07:53.2399065Z",
+        "childExitCode": 0
+      },
+      "originalExecHandle": 35349,
+      "originalExecExitCode": 0
+    }
+  },
+  "checks": {
+    "officialBuild": {
+      "originalExecHandle": 20696,
+      "exitCode": 0
+    },
+    "overlayTypecheck": {
+      "originalExecHandle": 32697,
+      "exitCode": 0
+    },
+    "i18n": "passed",
+    "cssTokens": "passed",
+    "format": "passed",
+    "docs": "passed",
+    "architecture": "passed"
+  },
+  "data": {
+    "schema": {
+      "user_version": 2
+    },
+    "projects": {
+      "count": 94
+    },
+    "createdChats": [
+      {
+        "id": "ses_-zURRzNLvzziJt55rlmO",
+        "project_id": "prj_hSQinOa1MIVoNEeARpn5",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+        "title": "Work"
+      },
+      {
+        "id": "ses_-zURRz7YKzzSQQ3aohVT",
+        "project_id": "prj_hTCsFmWLvSsw0jnaxnUD",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\runtime\\data\\projects\\2026\\10\\20\\e551578b-c519-464e-8855-bc0e135db3fa",
+        "title": "Work"
+      }
+    ],
+    "mode": "Direct readonly SQLite after both original native launchers joined exit0; complete history retained; no production database initializer"
+  },
+  "limits": [
+    "Initial clipping did not reproduce; no clipping fix claimed.",
+    "Disk UI replacement did not replace immutable running source; verified in fresh 18707 native service.",
+    "No new full Goal execution; no mobile or POSIX validation.",
+    "Original config save performance targets remain unfulfilled."
+  ],
+  "observedAt": "2026-10-20T01:09:14.739Z"
+}

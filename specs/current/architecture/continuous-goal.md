@@ -110,6 +110,8 @@ consumed on handoff and cannot follow a later selection.
 No user Message is fabricated. Closing the form retains the empty Chat; submitting
 uses the same continuous-goal endpoint, budgets and visible controller Messages.
 Detailed steps live in the existing guide dialog rather than a permanent home tutorial.
+The home explanation uses body text and a regular primary control size; compact
+status-strip sizing belongs to existing conversation controls.
 
 The common conversation surface and an opened SideChat expose one continuous-goal
 control. Task binds its Task ID; Chat and Mission bind their canonical Session ID.
