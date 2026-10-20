@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [完整配置保存的关键路径](2026-10-20-config-critical-path-review.md)：原终态证明复用、完整配置检查器与[原生分段/人工截图](../../artifacts/2026-10-20-config-critical-path-review/README.md)。
+
 - [Goal首次使用与模型恢复](2026-10-20-goal-first-run-review.md)：共享模型配置阻塞、显式恢复和[真实流式及双语截图](../../artifacts/2026-10-20-goal-first-run-review/README.md)。
 
 - [Goal预算、暂停与恢复](2026-10-20-goal-budget-lifecycle-review.md)：正文滚动与固定操作区、当前额度比较和[双语实图/实际累计用量](../../artifacts/2026-10-20-goal-budget-lifecycle-review/README.md)。

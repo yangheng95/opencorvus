@@ -1,0 +1,82 @@
+$ bun script/run-tests.ts test/process-physical-settlement-reuse.test.ts test/process-supervisor-control-plane.test.ts test/foreground-process-facade.test.ts test/process-facade-settlement-barrier.test.ts test/windows-orphan-artifact-recovery.test.ts
+[1/5] START test/process-physical-settlement-reuse.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) concurrent terminal consumers retain one native exit and complete output [130.76ms]
+
+ 1 pass
+ 0 fail
+ 6 expect() calls
+Ran 1 test across 1 file. [2.40s]
+[1/5] DONE test/process-physical-settlement-reuse.test.ts exit=0 duration=3.03s
+[2/5] START test/process-supervisor-control-plane.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) ProcessSupervisor control-plane authority > foreground shell reclaims its child tree and returns the root command exit [170.96ms]
+background-request-capture {"callbackCount":1,"captures":[{"request":{"kind":"shell","command":"sleep 30 & exit 7","shell":"C:\\Program Files\\Git\\bin\\bash.exe","ready_file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-LFuwyR\\test-84308-8pSRrS\\runtime-root\\tmp\\supervisor-4BRTOt\\ready.json","request_id":"109d4134-23b7-4f13-b79e-5eb4561e43bd","launch_failed_file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-LFuwyR\\test-84308-8pSRrS\\runtime-root\\tmp\\supervisor-4BRTOt\\launch-failed.json","cancel_file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-LFuwyR\\test-84308-8pSRrS\\runtime-root\\tmp\\supervisor-4BRTOt\\cancel","settled_file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-LFuwyR\\test-84308-8pSRrS\\runtime-root\\tmp\\supervisor-4BRTOt\\settled.json","owner_pid":84308,"owner_process_instance_id":"win32:639281073573119912","runtime_occurrence_id":"6f086544-6ee3-4c4e-9378-c0ae7648587a"},"readyFileType":"string"}],"handlePID":72436,"capturedReadyFileType":"string"}
+background-request-after-validation {"request":{"kind":"shell","command":"sleep 30 & exit 7","shell":"C:\\Program Files\\Git\\bin\\bash.exe","ready_file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-LFuwyR\\test-84308-8pSRrS\\runtime-root\\tmp\\supervisor-4BRTOt\\ready.json","request_id":"109d4134-23b7-4f13-b79e-5eb4561e43bd","launch_failed_file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-LFuwyR\\test-84308-8pSRrS\\runtime-root\\tmp\\supervisor-4BRTOt\\launch-failed.json","cancel_file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-LFuwyR\\test-84308-8pSRrS\\runtime-root\\tmp\\supervisor-4BRTOt\\cancel","settled_file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-LFuwyR\\test-84308-8pSRrS\\runtime-root\\tmp\\supervisor-4BRTOt\\settled.json","owner_pid":84308,"owner_process_instance_id":"win32:639281073573119912","runtime_occurrence_id":"6f086544-6ee3-4c4e-9378-c0ae7648587a"},"readyFileType":"string"}
+background-root-exit-evidence {"requestID":"109d4134-23b7-4f13-b79e-5eb4561e43bd","readyPath":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-LFuwyR\\test-84308-8pSRrS\\runtime-root\\tmp\\supervisor-4BRTOt\\ready.json","ready":{"protocol":3,"detached":false,"request_id":"109d4134-23b7-4f13-b79e-5eb4561e43bd","helper_pid":48716,"target_pid":72436,"target_process_instance_id":"win32:639281073584285293","runtime_occurrence_id":"6f086544-6ee3-4c4e-9378-c0ae7648587a"},"helper":{"protocol":1,"request_id":"109d4134-23b7-4f13-b79e-5eb4561e43bd","helper_pid":48716,"helper_process_instance_id":"win32:639281073584108632","runtime_occurrence_id":"6f086544-6ee3-4c4e-9378-c0ae7648587a"},"occurrenceIDSource":"request-owner","rootObservation":"dead_or_reused","helperObservation":"exact_live","registeredOwner":{"count":1,"pids":[72436]}}
+(pass) ProcessSupervisor control-plane authority > background root exit preserves its original code while its owned job is disposed [149.92ms]
+(pass) ProcessSupervisor control-plane authority > Shell.run returns the foreground root exit after child cleanup [185.02ms]
+(pass) ProcessSupervisor control-plane authority > reclaims a descendant listener after the exact Windows owner process dies [1317.21ms]
+(pass) ProcessSupervisor control-plane authority > returns strict disposal only after physical exit and output settlement [30.88ms]
+(pass) ProcessSupervisor control-plane authority > retains the exact live owner until output settlement finishes [2.14ms]
+(pass) ProcessSupervisor control-plane authority > keeps physical ownership after an early output control failure [11.33ms]
+(pass) ProcessSupervisor control-plane authority > retains shutdown ownership when physical settlement proof is unavailable [3.98ms]
+(pass) ProcessSupervisor control-plane authority > reclaims the exact durable request when the dead helper's kill-on-close job proves settlement [5077.08ms]
+(pass) ProcessSupervisor control-plane authority > settles a Windows command that fails before target creation with explicit active-process-zero evidence [39.39ms]
+(pass) ProcessSupervisor control-plane authority > accepts proven process exit even when auxiliary disposal settlement is delayed [0.41ms]
+(pass) ProcessSupervisor control-plane authority > returns a fast command's real nonzero exit after the native readiness handshake [92.39ms]
+(pass) ProcessSupervisor control-plane authority > inherits the target environment without serializing it into the Windows request [110.16ms]
+(pass) ProcessSupervisor control-plane authority > executes a control-plane process while the Task Capsule runtime is configured [317.20ms]
+(pass) ProcessSupervisor control-plane authority > bounds a live Windows ripgrep stream without an unhandled output-settlement rejection [212.18ms]
+(pass) ProcessSupervisor control-plane authority > observes ripgrep stderr rejection before a bounded consumer exits [23.80ms]
+(pass) ProcessSupervisor control-plane authority > observes a deterministic Windows output-stream rejection at handle creation [1380.83ms]
+
+ 17 pass
+ 0 fail
+ 38 expect() calls
+Ran 17 tests across 1 file. [10.02s]
+[2/5] DONE test/process-supervisor-control-plane.test.ts exit=0 duration=10.12s
+[3/5] START test/foreground-process-facade.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) foreground facade returns the root's real exit after settling its owned child tree [208.31ms]
+(pass) foreground facade settles an output-active child tree at its request deadline and its peer naturally [2561.43ms]
+
+ 2 pass
+ 0 fail
+ 6 expect() calls
+Ran 2 tests across 1 file. [3.49s]
+[3/5] DONE test/foreground-process-facade.test.ts exit=0 duration=3.58s
+[4/5] START test/process-facade-settlement-barrier.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Host settlement retains original output failures after the raw barrier [2.86ms]
+(pass) Host settlement retains original output and late cleanup failures after the raw barrier [0.33ms]
+(pass) Host settlement preserves the sole original cleanup error after delivered output [0.45ms]
+(pass) Host settlement projects the exact original signal fact after complete raw closure [0.37ms]
+(pass) Task adapter joins the original settlement under the current persisted native binding [2277.17ms]
+
+ 5 pass
+ 0 fail
+ 18 expect() calls
+Ran 5 tests across 1 file. [4.37s]
+[4/5] DONE test/process-facade-settlement-barrier.test.ts exit=0 duration=4.47s
+[5/5] START test/windows-orphan-artifact-recovery.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) transferred Windows requests follow the exact successor's live and unknown dispositions [19.26ms]
+(pass) successor recovery removes only exact prior/dead request and workspace occurrences [1384.39ms]
+(pass) successor recovery rejects conflicting and wrongly identified pre-target settlement evidence [1163.65ms]
+
+ 3 pass
+ 0 fail
+ 16 expect() calls
+Ran 3 tests across 1 file. [3.31s]
+[5/5] DONE test/windows-orphan-artifact-recovery.test.ts exit=0 duration=3.42s

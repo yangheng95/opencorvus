@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [完整配置保存的关键路径](records/2026-10/2026-10-20-config-critical-path-review.md)：请求持久化/原生启动/清理实际分段与[原物理终态复用验收](artifacts/2026-10-20-config-critical-path-review/README.md)。
+
 - [Goal首次使用与模型恢复](records/2026-10/2026-10-20-goal-first-run-review.md)：缺少模型时的真实静默阻塞修复、[13张实图及同Goal真实恢复](artifacts/2026-10-20-goal-first-run-review/README.md)。
 
 - [Goal预算、暂停与恢复](records/2026-10/2026-10-20-goal-budget-lifecycle-review.md)：长错误弹窗与冲突额度比较修复、[19张实际页面及同Goal六轮证据](artifacts/2026-10-20-goal-budget-lifecycle-review/README.md)。

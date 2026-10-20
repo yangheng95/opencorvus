@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [完整配置关键路径与终态复用](2026-10-20-config-critical-path-review/README.md)：原helper分段、28例结算合同与完整历史配置复验；性能门槛仍按实际结果判断。
+
 - [Goal首次使用与模型恢复](2026-10-20-goal-first-run-review/README.md)：13张人工截图、真实缺少模型状态、35例功能检查与同一Goal恢复完成。
 
 - [Goal预算、暂停与恢复](2026-10-20-goal-budget-lifecycle-review/README.md)：19张实图、真实409草稿复核、同Goal六轮累计及原生结算。

@@ -1,0 +1,170 @@
+{
+  "boundary": "Private observation of original builtins only; original promises, arguments, streams and errors retained; no stdout consumer or environment/body recording",
+  "startedAtUnixMs": 1792509936629,
+  "endedAtUnixMs": 1792510190659,
+  "originalExecHandle": 54172,
+  "originalExit": 0,
+  "observedRequests": 895,
+  "otherObservedDirectories": [
+    {
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\runtime\\tmp\\supervisor-vNYTtz",
+      "firstAt": 5142.0596000000005,
+      "files": []
+    }
+  ],
+  "spans": [
+    {
+      "requestID": "23fc267d-ec70-4362-bc3e-22e4c1cdc662",
+      "start": 1792510116192,
+      "end": 1792510133485,
+      "duration": 17293,
+      "commands": 290,
+      "spawn": {
+        "count": 290,
+        "total": 6547.224899999768,
+        "median": 9.574799999973038,
+        "p95": 87.2153999999864,
+        "maximum": 243.08400000000256
+      },
+      "ready": {
+        "count": 290,
+        "total": 22321.458800000197,
+        "median": 49.908499999990454,
+        "p95": 188.71289999998407,
+        "maximum": 392.33739999998943
+      },
+      "readyToHelperExit": {
+        "count": 290,
+        "total": 30900.123700000113,
+        "median": 84.5619000000006,
+        "p95": 217.04409999999916,
+        "maximum": 464.3202000000165
+      },
+      "helperOutputClose": {
+        "count": 290,
+        "total": 6.699600000109058,
+        "median": 0.005499999999301508,
+        "p95": 0.1555999999982305,
+        "maximum": 0.6048000000009779
+      },
+      "closeToRequestCleanup": {
+        "count": 290,
+        "total": 4230.526199999993,
+        "median": 7.115300000004936,
+        "p95": 34.40989999999874,
+        "maximum": 249.36149999999907
+      },
+      "fileOperations": [
+        {
+          "name": "open",
+          "count": 290,
+          "total": 1137.6657000000414,
+          "median": 0.5740999999979977,
+          "p95": 13.258300000015879,
+          "maximum": 169.34339999998338
+        },
+        {
+          "name": "writeFile",
+          "count": 290,
+          "total": 281.6952000001038,
+          "median": 0.26850000000558794,
+          "p95": 6.301799999986542,
+          "maximum": 16.033499999990454
+        },
+        {
+          "name": "sync",
+          "count": 290,
+          "total": 2696.3314000000537,
+          "median": 3.5609999999869615,
+          "p95": 44.889899999980116,
+          "maximum": 147.15700000000652
+        },
+        {
+          "name": "close",
+          "count": 290,
+          "total": 1461.2137000000803,
+          "median": 0.6310999999986961,
+          "p95": 19.256299999979092,
+          "maximum": 115.45590000000084
+        }
+      ]
+    },
+    {
+      "requestID": "c27c1482-e890-4bb4-a45e-209ba263386c",
+      "start": 1792510133503,
+      "end": 1792510150535,
+      "duration": 17032,
+      "commands": 286,
+      "spawn": {
+        "count": 286,
+        "total": 6402.540699999983,
+        "median": 9.500900000013644,
+        "p95": 93.94409999999334,
+        "maximum": 226.20769999999902
+      },
+      "ready": {
+        "count": 286,
+        "total": 22352.117200000037,
+        "median": 51.672600000019884,
+        "p95": 195.6140000000014,
+        "maximum": 301.54879999998957
+      },
+      "readyToHelperExit": {
+        "count": 286,
+        "total": 29772.840800000093,
+        "median": 83.06620000000112,
+        "p95": 212.6479999999865,
+        "maximum": 374.98139999998966
+      },
+      "helperOutputClose": {
+        "count": 286,
+        "total": 5.1245999998936895,
+        "median": 0.004199999995762482,
+        "p95": 0.09890000001178123,
+        "maximum": 0.8264999999955762
+      },
+      "closeToRequestCleanup": {
+        "count": 286,
+        "total": 4414.321099999972,
+        "median": 7.390400000003865,
+        "p95": 32.68549999999232,
+        "maximum": 242.19599999999627
+      },
+      "fileOperations": [
+        {
+          "name": "open",
+          "count": 286,
+          "total": 1244.796400000283,
+          "median": 0.5803000000014435,
+          "p95": 12.763000000006286,
+          "maximum": 142.52150000000256
+        },
+        {
+          "name": "writeFile",
+          "count": 286,
+          "total": 460.11229999983334,
+          "median": 0.280399999988731,
+          "p95": 8.42929999998887,
+          "maximum": 82.41829999999027
+        },
+        {
+          "name": "sync",
+          "count": 286,
+          "total": 2791.4385999998776,
+          "median": 3.4047000000136904,
+          "p95": 42.922099999996135,
+          "maximum": 121.13430000000517
+        },
+        {
+          "name": "close",
+          "count": 286,
+          "total": 1329.0822999998054,
+          "median": 0.4510000000009313,
+          "p95": 18.655999999988126,
+          "maximum": 151.7335000000021
+        }
+      ]
+    }
+  ],
+  "interpretation": "Time-window correlation can include concurrent readers/page requests; cumulative overlapping spans are not CPU or whole-request wall time. No uninstrumented full-save gain is established."
+}

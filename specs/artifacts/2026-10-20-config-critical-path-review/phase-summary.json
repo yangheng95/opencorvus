@@ -1,0 +1,1826 @@
+[
+  {
+    "kind": "before",
+    "requestID": "23fc267d-ec70-4362-bc3e-22e4c1cdc662",
+    "endedAt": "2026-10-20T15:28:53.485Z",
+    "duration": 17293,
+    "phases": [
+      {
+        "name": "catalog.admission",
+        "count": 150,
+        "total": 327,
+        "median": 2,
+        "p95": 5,
+        "maximum": 11
+      },
+      {
+        "name": "catalog.recovery",
+        "count": 1,
+        "total": 1,
+        "median": 1,
+        "p95": 1,
+        "maximum": 1
+      },
+      {
+        "name": "config.global.projects",
+        "count": 1,
+        "total": 42,
+        "median": 42,
+        "p95": 42,
+        "maximum": 42
+      },
+      {
+        "name": "directory.admission",
+        "count": 147,
+        "total": 326,
+        "median": 2,
+        "p95": 5,
+        "maximum": 26
+      },
+      {
+        "name": "config.load",
+        "count": 736,
+        "total": 77317,
+        "median": 25,
+        "p95": 253,
+        "maximum": 261
+      },
+      {
+        "name": "config.verify",
+        "count": 736,
+        "total": 6338,
+        "median": 1,
+        "p95": 31,
+        "maximum": 39
+      },
+      {
+        "name": "config.global.before",
+        "count": 148,
+        "total": 3181,
+        "median": 18,
+        "p95": 45,
+        "maximum": 105
+      },
+      {
+        "name": "config.global.after",
+        "count": 148,
+        "total": 2565,
+        "median": 17,
+        "p95": 30,
+        "maximum": 56
+      },
+      {
+        "name": "state.read",
+        "count": 590,
+        "total": 39656,
+        "median": 1,
+        "p95": 260,
+        "maximum": 274
+      },
+      {
+        "name": "config.validate.models",
+        "count": 149,
+        "total": 6215,
+        "median": 41,
+        "p95": 68,
+        "maximum": 130
+      },
+      {
+        "name": "config.validate.profile",
+        "count": 149,
+        "total": 395,
+        "median": 3,
+        "p95": 5,
+        "maximum": 6
+      },
+      {
+        "name": "catalog.revision",
+        "count": 148,
+        "total": 123,
+        "median": 1,
+        "p95": 2,
+        "maximum": 10
+      },
+      {
+        "name": "skill.builtins",
+        "count": 148,
+        "total": 146,
+        "median": 1,
+        "p95": 2,
+        "maximum": 3
+      },
+      {
+        "name": "skill.config-directories",
+        "count": 148,
+        "total": 13,
+        "median": 0,
+        "p95": 1,
+        "maximum": 1
+      },
+      {
+        "name": "skill.explicit-scan",
+        "count": 295,
+        "total": 613,
+        "median": 1,
+        "p95": 5,
+        "maximum": 84
+      },
+      {
+        "name": "catalog.reentrant",
+        "count": 149,
+        "total": 18176,
+        "median": 5,
+        "p95": 15,
+        "maximum": 17250
+      },
+      {
+        "name": "catalog.held",
+        "count": 150,
+        "total": 35438,
+        "median": 5,
+        "p95": 15,
+        "maximum": 17253
+      },
+      {
+        "name": "catalog.release",
+        "count": 150,
+        "total": 42,
+        "median": 0,
+        "p95": 0,
+        "maximum": 38
+      },
+      {
+        "name": "catalog.total",
+        "count": 150,
+        "total": 35820,
+        "median": 7,
+        "p95": 20,
+        "maximum": 17292
+      },
+      {
+        "name": "config.validate.capabilities",
+        "count": 148,
+        "total": 1301,
+        "median": 7,
+        "p95": 20,
+        "maximum": 91
+      },
+      {
+        "name": "project.identity.git",
+        "count": 290,
+        "total": 107584,
+        "median": 345,
+        "p95": 663,
+        "maximum": 1020
+      },
+      {
+        "name": "project.identity.lookup",
+        "count": 292,
+        "total": 32833,
+        "median": 95,
+        "p95": 249,
+        "maximum": 498
+      },
+      {
+        "name": "project.identity.resolve",
+        "count": 290,
+        "total": 33361,
+        "median": 98,
+        "p95": 250,
+        "maximum": 499
+      },
+      {
+        "name": "project.identity.initial",
+        "count": 146,
+        "total": 90116,
+        "median": 580,
+        "p95": 942,
+        "maximum": 989
+      },
+      {
+        "name": "project.registry.capture",
+        "count": 146,
+        "total": 2347,
+        "median": 14,
+        "p95": 34,
+        "maximum": 57
+      },
+      {
+        "name": "project.registry.acquire",
+        "count": 146,
+        "total": 549,
+        "median": 3,
+        "p95": 8,
+        "maximum": 21
+      },
+      {
+        "name": "project.registry.revalidate",
+        "count": 146,
+        "total": 2023,
+        "median": 12,
+        "p95": 30,
+        "maximum": 36
+      },
+      {
+        "name": "project.identity.admitted",
+        "count": 146,
+        "total": 82299,
+        "median": 561,
+        "p95": 792,
+        "maximum": 1136
+      },
+      {
+        "name": "directory.held",
+        "count": 147,
+        "total": 101781,
+        "median": 580,
+        "p95": 810,
+        "maximum": 16491
+      },
+      {
+        "name": "directory.release",
+        "count": 147,
+        "total": 4,
+        "median": 0,
+        "p95": 0,
+        "maximum": 1
+      },
+      {
+        "name": "directory.total",
+        "count": 147,
+        "total": 102135,
+        "median": 583,
+        "p95": 813,
+        "maximum": 16494
+      },
+      {
+        "name": "state.initialize",
+        "count": 294,
+        "total": 39622,
+        "median": 233,
+        "p95": 267,
+        "maximum": 274
+      },
+      {
+        "name": "config.global.persist",
+        "count": 1,
+        "total": 2,
+        "median": 2,
+        "p95": 2,
+        "maximum": 2
+      },
+      {
+        "name": "config.global.reset",
+        "count": 1,
+        "total": 4,
+        "median": 4,
+        "p95": 4,
+        "maximum": 4
+      },
+      {
+        "name": "config.global.reconcile",
+        "count": 1,
+        "total": 685,
+        "median": 685,
+        "p95": 685,
+        "maximum": 685
+      },
+      {
+        "name": "config.global.write",
+        "count": 1,
+        "total": 17292,
+        "median": 17292,
+        "p95": 17292,
+        "maximum": 17292
+      },
+      {
+        "name": "request",
+        "count": 1,
+        "total": 17293,
+        "median": 17293,
+        "p95": 17293,
+        "maximum": 17293
+      }
+    ]
+  },
+  {
+    "kind": "before",
+    "requestID": "c27c1482-e890-4bb4-a45e-209ba263386c",
+    "endedAt": "2026-10-20T15:29:10.535Z",
+    "duration": 17032,
+    "phases": [
+      {
+        "name": "catalog.admission",
+        "count": 150,
+        "total": 718,
+        "median": 1,
+        "p95": 6,
+        "maximum": 194
+      },
+      {
+        "name": "catalog.recovery",
+        "count": 1,
+        "total": 1,
+        "median": 1,
+        "p95": 1,
+        "maximum": 1
+      },
+      {
+        "name": "config.global.projects",
+        "count": 1,
+        "total": 49,
+        "median": 49,
+        "p95": 49,
+        "maximum": 49
+      },
+      {
+        "name": "directory.admission",
+        "count": 145,
+        "total": 340,
+        "median": 1,
+        "p95": 6,
+        "maximum": 26
+      },
+      {
+        "name": "config.load",
+        "count": 730,
+        "total": 79894,
+        "median": 23,
+        "p95": 291,
+        "maximum": 299
+      },
+      {
+        "name": "config.verify",
+        "count": 730,
+        "total": 5706,
+        "median": 1,
+        "p95": 27,
+        "maximum": 31
+      },
+      {
+        "name": "config.global.before",
+        "count": 148,
+        "total": 2973,
+        "median": 15,
+        "p95": 48,
+        "maximum": 165
+      },
+      {
+        "name": "config.global.after",
+        "count": 148,
+        "total": 2277,
+        "median": 14,
+        "p95": 36,
+        "maximum": 53
+      },
+      {
+        "name": "state.read",
+        "count": 586,
+        "total": 47516,
+        "median": 1,
+        "p95": 322,
+        "maximum": 329
+      },
+      {
+        "name": "config.validate.models",
+        "count": 149,
+        "total": 5312,
+        "median": 34,
+        "p95": 67,
+        "maximum": 89
+      },
+      {
+        "name": "config.validate.profile",
+        "count": 149,
+        "total": 388,
+        "median": 2,
+        "p95": 6,
+        "maximum": 11
+      },
+      {
+        "name": "catalog.revision",
+        "count": 148,
+        "total": 129,
+        "median": 1,
+        "p95": 2,
+        "maximum": 21
+      },
+      {
+        "name": "skill.builtins",
+        "count": 148,
+        "total": 118,
+        "median": 1,
+        "p95": 1,
+        "maximum": 2
+      },
+      {
+        "name": "skill.config-directories",
+        "count": 148,
+        "total": 12,
+        "median": 0,
+        "p95": 1,
+        "maximum": 1
+      },
+      {
+        "name": "skill.explicit-scan",
+        "count": 295,
+        "total": 509,
+        "median": 1,
+        "p95": 4,
+        "maximum": 24
+      },
+      {
+        "name": "catalog.reentrant",
+        "count": 149,
+        "total": 17456,
+        "median": 4,
+        "p95": 13,
+        "maximum": 16665
+      },
+      {
+        "name": "catalog.held",
+        "count": 150,
+        "total": 34294,
+        "median": 4,
+        "p95": 15,
+        "maximum": 16834
+      },
+      {
+        "name": "catalog.release",
+        "count": 150,
+        "total": 6,
+        "median": 0,
+        "p95": 0,
+        "maximum": 2
+      },
+      {
+        "name": "catalog.total",
+        "count": 150,
+        "total": 35035,
+        "median": 6,
+        "p95": 23,
+        "maximum": 17031
+      },
+      {
+        "name": "config.validate.capabilities",
+        "count": 148,
+        "total": 1182,
+        "median": 6,
+        "p95": 18,
+        "maximum": 90
+      },
+      {
+        "name": "project.identity.git",
+        "count": 286,
+        "total": 107795,
+        "median": 349,
+        "p95": 680,
+        "maximum": 908
+      },
+      {
+        "name": "project.identity.lookup",
+        "count": 288,
+        "total": 29670,
+        "median": 88,
+        "p95": 212,
+        "maximum": 516
+      },
+      {
+        "name": "project.identity.resolve",
+        "count": 286,
+        "total": 29981,
+        "median": 90,
+        "p95": 217,
+        "maximum": 518
+      },
+      {
+        "name": "project.identity.initial",
+        "count": 144,
+        "total": 83083,
+        "median": 553,
+        "p95": 874,
+        "maximum": 1065
+      },
+      {
+        "name": "project.registry.capture",
+        "count": 144,
+        "total": 2441,
+        "median": 12,
+        "p95": 28,
+        "maximum": 144
+      },
+      {
+        "name": "project.registry.acquire",
+        "count": 144,
+        "total": 606,
+        "median": 3,
+        "p95": 9,
+        "maximum": 86
+      },
+      {
+        "name": "project.registry.revalidate",
+        "count": 144,
+        "total": 1950,
+        "median": 11,
+        "p95": 27,
+        "maximum": 46
+      },
+      {
+        "name": "project.identity.admitted",
+        "count": 144,
+        "total": 83895,
+        "median": 575,
+        "p95": 858,
+        "maximum": 939
+      },
+      {
+        "name": "directory.held",
+        "count": 145,
+        "total": 102962,
+        "median": 599,
+        "p95": 882,
+        "maximum": 15851
+      },
+      {
+        "name": "directory.release",
+        "count": 145,
+        "total": 2,
+        "median": 0,
+        "p95": 0,
+        "maximum": 1
+      },
+      {
+        "name": "directory.total",
+        "count": 145,
+        "total": 103318,
+        "median": 600,
+        "p95": 884,
+        "maximum": 15859
+      },
+      {
+        "name": "state.initialize",
+        "count": 290,
+        "total": 47490,
+        "median": 223,
+        "p95": 325,
+        "maximum": 329
+      },
+      {
+        "name": "config.global.persist",
+        "count": 1,
+        "total": 2,
+        "median": 2,
+        "p95": 2,
+        "maximum": 2
+      },
+      {
+        "name": "config.global.reset",
+        "count": 1,
+        "total": 3,
+        "median": 3,
+        "p95": 3,
+        "maximum": 3
+      },
+      {
+        "name": "config.global.reconcile",
+        "count": 1,
+        "total": 691,
+        "median": 691,
+        "p95": 691,
+        "maximum": 691
+      },
+      {
+        "name": "config.global.write",
+        "count": 1,
+        "total": 17031,
+        "median": 17031,
+        "p95": 17031,
+        "maximum": 17031
+      },
+      {
+        "name": "request",
+        "count": 1,
+        "total": 17032,
+        "median": 17032,
+        "p95": 17032,
+        "maximum": 17032
+      }
+    ]
+  },
+  {
+    "kind": "after",
+    "requestID": "0b217f7b-dd27-4468-bd16-fd60c34b6ca2",
+    "endedAt": "2026-10-20T15:39:33.274Z",
+    "duration": 17296,
+    "phases": [
+      {
+        "name": "catalog.admission",
+        "count": 151,
+        "total": 337,
+        "median": 2,
+        "p95": 5,
+        "maximum": 38
+      },
+      {
+        "name": "catalog.recovery",
+        "count": 1,
+        "total": 1,
+        "median": 1,
+        "p95": 1,
+        "maximum": 1
+      },
+      {
+        "name": "config.global.projects",
+        "count": 1,
+        "total": 41,
+        "median": 41,
+        "p95": 41,
+        "maximum": 41
+      },
+      {
+        "name": "directory.admission",
+        "count": 148,
+        "total": 357,
+        "median": 2,
+        "p95": 5,
+        "maximum": 16
+      },
+      {
+        "name": "config.load",
+        "count": 741,
+        "total": 82355,
+        "median": 31,
+        "p95": 266,
+        "maximum": 274
+      },
+      {
+        "name": "config.verify",
+        "count": 741,
+        "total": 5675,
+        "median": 1,
+        "p95": 23,
+        "maximum": 27
+      },
+      {
+        "name": "config.global.before",
+        "count": 149,
+        "total": 4065,
+        "median": 21,
+        "p95": 48,
+        "maximum": 199
+      },
+      {
+        "name": "config.global.after",
+        "count": 149,
+        "total": 2716,
+        "median": 16,
+        "p95": 37,
+        "maximum": 70
+      },
+      {
+        "name": "state.read",
+        "count": 594,
+        "total": 40750,
+        "median": 1,
+        "p95": 263,
+        "maximum": 271
+      },
+      {
+        "name": "config.validate.models",
+        "count": 150,
+        "total": 5989,
+        "median": 39,
+        "p95": 72,
+        "maximum": 80
+      },
+      {
+        "name": "config.validate.profile",
+        "count": 150,
+        "total": 456,
+        "median": 2,
+        "p95": 6,
+        "maximum": 20
+      },
+      {
+        "name": "catalog.revision",
+        "count": 149,
+        "total": 127,
+        "median": 1,
+        "p95": 3,
+        "maximum": 4
+      },
+      {
+        "name": "skill.builtins",
+        "count": 149,
+        "total": 144,
+        "median": 1,
+        "p95": 2,
+        "maximum": 2
+      },
+      {
+        "name": "skill.config-directories",
+        "count": 149,
+        "total": 14,
+        "median": 0,
+        "p95": 1,
+        "maximum": 1
+      },
+      {
+        "name": "skill.explicit-scan",
+        "count": 297,
+        "total": 523,
+        "median": 1,
+        "p95": 5,
+        "maximum": 10
+      },
+      {
+        "name": "catalog.reentrant",
+        "count": 150,
+        "total": 18084,
+        "median": 5,
+        "p95": 13,
+        "maximum": 17257
+      },
+      {
+        "name": "catalog.held",
+        "count": 151,
+        "total": 35349,
+        "median": 5,
+        "p95": 13,
+        "maximum": 17258
+      },
+      {
+        "name": "catalog.release",
+        "count": 151,
+        "total": 36,
+        "median": 0,
+        "p95": 0,
+        "maximum": 34
+      },
+      {
+        "name": "catalog.total",
+        "count": 151,
+        "total": 35731,
+        "median": 7,
+        "p95": 18,
+        "maximum": 17293
+      },
+      {
+        "name": "config.validate.capabilities",
+        "count": 149,
+        "total": 1199,
+        "median": 7,
+        "p95": 17,
+        "maximum": 44
+      },
+      {
+        "name": "project.identity.git",
+        "count": 292,
+        "total": 110164,
+        "median": 357,
+        "p95": 650,
+        "maximum": 916
+      },
+      {
+        "name": "project.identity.lookup",
+        "count": 294,
+        "total": 30757,
+        "median": 95,
+        "p95": 198,
+        "maximum": 568
+      },
+      {
+        "name": "project.identity.resolve",
+        "count": 292,
+        "total": 31228,
+        "median": 97,
+        "p95": 199,
+        "maximum": 569
+      },
+      {
+        "name": "project.identity.initial",
+        "count": 147,
+        "total": 86936,
+        "median": 573,
+        "p95": 840,
+        "maximum": 1018
+      },
+      {
+        "name": "project.registry.capture",
+        "count": 147,
+        "total": 2444,
+        "median": 13,
+        "p95": 34,
+        "maximum": 86
+      },
+      {
+        "name": "project.registry.acquire",
+        "count": 147,
+        "total": 559,
+        "median": 3,
+        "p95": 9,
+        "maximum": 16
+      },
+      {
+        "name": "project.registry.revalidate",
+        "count": 147,
+        "total": 2435,
+        "median": 12,
+        "p95": 39,
+        "maximum": 111
+      },
+      {
+        "name": "project.identity.admitted",
+        "count": 147,
+        "total": 85501,
+        "median": 549,
+        "p95": 1023,
+        "maximum": 1080
+      },
+      {
+        "name": "directory.held",
+        "count": 148,
+        "total": 105427,
+        "median": 575,
+        "p95": 1062,
+        "maximum": 16493
+      },
+      {
+        "name": "directory.release",
+        "count": 148,
+        "total": 10,
+        "median": 0,
+        "p95": 1,
+        "maximum": 1
+      },
+      {
+        "name": "directory.total",
+        "count": 148,
+        "total": 105812,
+        "median": 578,
+        "p95": 1063,
+        "maximum": 16496
+      },
+      {
+        "name": "state.initialize",
+        "count": 296,
+        "total": 40707,
+        "median": 245,
+        "p95": 268,
+        "maximum": 271
+      },
+      {
+        "name": "config.global.persist",
+        "count": 1,
+        "total": 2,
+        "median": 2,
+        "p95": 2,
+        "maximum": 2
+      },
+      {
+        "name": "config.global.reset",
+        "count": 1,
+        "total": 4,
+        "median": 4,
+        "p95": 4,
+        "maximum": 4
+      },
+      {
+        "name": "config.global.reconcile",
+        "count": 1,
+        "total": 691,
+        "median": 691,
+        "p95": 691,
+        "maximum": 691
+      },
+      {
+        "name": "config.global.write",
+        "count": 1,
+        "total": 17294,
+        "median": 17294,
+        "p95": 17294,
+        "maximum": 17294
+      },
+      {
+        "name": "request",
+        "count": 1,
+        "total": 17296,
+        "median": 17296,
+        "p95": 17296,
+        "maximum": 17296
+      }
+    ]
+  },
+  {
+    "kind": "after",
+    "requestID": "24de6e6a-5b31-4c99-a125-ef2a0872c229",
+    "endedAt": "2026-10-20T15:39:50.540Z",
+    "duration": 17259,
+    "phases": [
+      {
+        "name": "catalog.admission",
+        "count": 151,
+        "total": 558,
+        "median": 1,
+        "p95": 9,
+        "maximum": 130
+      },
+      {
+        "name": "catalog.recovery",
+        "count": 1,
+        "total": 102,
+        "median": 102,
+        "p95": 102,
+        "maximum": 102
+      },
+      {
+        "name": "config.global.projects",
+        "count": 1,
+        "total": 42,
+        "median": 42,
+        "p95": 42,
+        "maximum": 42
+      },
+      {
+        "name": "directory.admission",
+        "count": 146,
+        "total": 359,
+        "median": 2,
+        "p95": 9,
+        "maximum": 36
+      },
+      {
+        "name": "config.load",
+        "count": 735,
+        "total": 94909,
+        "median": 24,
+        "p95": 363,
+        "maximum": 374
+      },
+      {
+        "name": "config.verify",
+        "count": 735,
+        "total": 4879,
+        "median": 1,
+        "p95": 23,
+        "maximum": 24
+      },
+      {
+        "name": "config.global.before",
+        "count": 149,
+        "total": 3048,
+        "median": 16,
+        "p95": 42,
+        "maximum": 159
+      },
+      {
+        "name": "config.global.after",
+        "count": 149,
+        "total": 2694,
+        "median": 13,
+        "p95": 30,
+        "maximum": 230
+      },
+      {
+        "name": "state.read",
+        "count": 590,
+        "total": 41566,
+        "median": 1,
+        "p95": 269,
+        "maximum": 373
+      },
+      {
+        "name": "config.validate.models",
+        "count": 150,
+        "total": 5500,
+        "median": 33,
+        "p95": 65,
+        "maximum": 230
+      },
+      {
+        "name": "config.validate.profile",
+        "count": 150,
+        "total": 425,
+        "median": 2,
+        "p95": 6,
+        "maximum": 23
+      },
+      {
+        "name": "catalog.revision",
+        "count": 149,
+        "total": 115,
+        "median": 1,
+        "p95": 2,
+        "maximum": 14
+      },
+      {
+        "name": "skill.builtins",
+        "count": 149,
+        "total": 129,
+        "median": 1,
+        "p95": 1,
+        "maximum": 2
+      },
+      {
+        "name": "skill.config-directories",
+        "count": 149,
+        "total": 13,
+        "median": 0,
+        "p95": 1,
+        "maximum": 1
+      },
+      {
+        "name": "skill.explicit-scan",
+        "count": 297,
+        "total": 419,
+        "median": 1,
+        "p95": 3,
+        "maximum": 24
+      },
+      {
+        "name": "catalog.reentrant",
+        "count": 150,
+        "total": 17607,
+        "median": 4,
+        "p95": 12,
+        "maximum": 16902
+      },
+      {
+        "name": "catalog.held",
+        "count": 151,
+        "total": 34742,
+        "median": 4,
+        "p95": 14,
+        "maximum": 17127
+      },
+      {
+        "name": "catalog.release",
+        "count": 151,
+        "total": 2,
+        "median": 0,
+        "p95": 0,
+        "maximum": 2
+      },
+      {
+        "name": "catalog.total",
+        "count": 151,
+        "total": 35314,
+        "median": 6,
+        "p95": 20,
+        "maximum": 17259
+      },
+      {
+        "name": "config.validate.capabilities",
+        "count": 149,
+        "total": 1050,
+        "median": 6,
+        "p95": 19,
+        "maximum": 37
+      },
+      {
+        "name": "project.identity.git",
+        "count": 288,
+        "total": 109236,
+        "median": 342,
+        "p95": 712,
+        "maximum": 854
+      },
+      {
+        "name": "project.identity.lookup",
+        "count": 290,
+        "total": 28933,
+        "median": 85,
+        "p95": 228,
+        "maximum": 413
+      },
+      {
+        "name": "project.identity.resolve",
+        "count": 288,
+        "total": 29186,
+        "median": 86,
+        "p95": 229,
+        "maximum": 415
+      },
+      {
+        "name": "project.identity.initial",
+        "count": 145,
+        "total": 83088,
+        "median": 536,
+        "p95": 897,
+        "maximum": 1018
+      },
+      {
+        "name": "project.registry.capture",
+        "count": 145,
+        "total": 2816,
+        "median": 12,
+        "p95": 43,
+        "maximum": 226
+      },
+      {
+        "name": "project.registry.acquire",
+        "count": 145,
+        "total": 494,
+        "median": 3,
+        "p95": 9,
+        "maximum": 24
+      },
+      {
+        "name": "project.registry.revalidate",
+        "count": 145,
+        "total": 1944,
+        "median": 11,
+        "p95": 27,
+        "maximum": 34
+      },
+      {
+        "name": "project.identity.admitted",
+        "count": 145,
+        "total": 86691,
+        "median": 576,
+        "p95": 903,
+        "maximum": 1004
+      },
+      {
+        "name": "directory.held",
+        "count": 146,
+        "total": 105540,
+        "median": 591,
+        "p95": 927,
+        "maximum": 16028
+      },
+      {
+        "name": "directory.release",
+        "count": 146,
+        "total": 5,
+        "median": 0,
+        "p95": 0,
+        "maximum": 1
+      },
+      {
+        "name": "directory.total",
+        "count": 146,
+        "total": 105928,
+        "median": 592,
+        "p95": 932,
+        "maximum": 16032
+      },
+      {
+        "name": "state.initialize",
+        "count": 292,
+        "total": 41539,
+        "median": 249,
+        "p95": 269,
+        "maximum": 373
+      },
+      {
+        "name": "config.global.persist",
+        "count": 1,
+        "total": 2,
+        "median": 2,
+        "p95": 2,
+        "maximum": 2
+      },
+      {
+        "name": "config.global.reset",
+        "count": 1,
+        "total": 5,
+        "median": 5,
+        "p95": 5,
+        "maximum": 5
+      },
+      {
+        "name": "config.global.reconcile",
+        "count": 1,
+        "total": 806,
+        "median": 806,
+        "p95": 806,
+        "maximum": 806
+      },
+      {
+        "name": "config.global.write",
+        "count": 1,
+        "total": 17259,
+        "median": 17259,
+        "p95": 17259,
+        "maximum": 17259
+      },
+      {
+        "name": "request",
+        "count": 1,
+        "total": 17259,
+        "median": 17259,
+        "p95": 17259,
+        "maximum": 17259
+      }
+    ]
+  },
+  {
+    "kind": "after",
+    "requestID": "15f97a65-1d99-4b43-963b-29d3d8567857",
+    "endedAt": "2026-10-20T15:41:57.861Z",
+    "duration": 16867,
+    "phases": [
+      {
+        "name": "catalog.admission",
+        "count": 151,
+        "total": 279,
+        "median": 1,
+        "p95": 4,
+        "maximum": 27
+      },
+      {
+        "name": "catalog.recovery",
+        "count": 1,
+        "total": 0,
+        "median": 0,
+        "p95": 0,
+        "maximum": 0
+      },
+      {
+        "name": "config.global.projects",
+        "count": 1,
+        "total": 35,
+        "median": 35,
+        "p95": 35,
+        "maximum": 35
+      },
+      {
+        "name": "directory.admission",
+        "count": 146,
+        "total": 404,
+        "median": 2,
+        "p95": 10,
+        "maximum": 18
+      },
+      {
+        "name": "config.load",
+        "count": 735,
+        "total": 76472,
+        "median": 21,
+        "p95": 261,
+        "maximum": 288
+      },
+      {
+        "name": "config.verify",
+        "count": 735,
+        "total": 6362,
+        "median": 1,
+        "p95": 30,
+        "maximum": 135
+      },
+      {
+        "name": "config.global.before",
+        "count": 149,
+        "total": 3643,
+        "median": 15,
+        "p95": 67,
+        "maximum": 289
+      },
+      {
+        "name": "config.global.after",
+        "count": 149,
+        "total": 2888,
+        "median": 13,
+        "p95": 44,
+        "maximum": 178
+      },
+      {
+        "name": "state.read",
+        "count": 590,
+        "total": 43118,
+        "median": 1,
+        "p95": 292,
+        "maximum": 296
+      },
+      {
+        "name": "config.validate.models",
+        "count": 150,
+        "total": 5182,
+        "median": 31,
+        "p95": 60,
+        "maximum": 142
+      },
+      {
+        "name": "config.validate.profile",
+        "count": 150,
+        "total": 376,
+        "median": 2,
+        "p95": 5,
+        "maximum": 13
+      },
+      {
+        "name": "catalog.revision",
+        "count": 149,
+        "total": 80,
+        "median": 0,
+        "p95": 1,
+        "maximum": 5
+      },
+      {
+        "name": "skill.builtins",
+        "count": 149,
+        "total": 131,
+        "median": 1,
+        "p95": 2,
+        "maximum": 2
+      },
+      {
+        "name": "skill.config-directories",
+        "count": 149,
+        "total": 12,
+        "median": 0,
+        "p95": 1,
+        "maximum": 1
+      },
+      {
+        "name": "skill.explicit-scan",
+        "count": 297,
+        "total": 343,
+        "median": 1,
+        "p95": 3,
+        "maximum": 8
+      },
+      {
+        "name": "catalog.reentrant",
+        "count": 150,
+        "total": 17437,
+        "median": 4,
+        "p95": 8,
+        "maximum": 16832
+      },
+      {
+        "name": "catalog.held",
+        "count": 151,
+        "total": 34280,
+        "median": 4,
+        "p95": 9,
+        "maximum": 16834
+      },
+      {
+        "name": "catalog.release",
+        "count": 151,
+        "total": 32,
+        "median": 0,
+        "p95": 0,
+        "maximum": 30
+      },
+      {
+        "name": "catalog.total",
+        "count": 151,
+        "total": 34609,
+        "median": 5,
+        "p95": 12,
+        "maximum": 16866
+      },
+      {
+        "name": "config.validate.capabilities",
+        "count": 149,
+        "total": 937,
+        "median": 5,
+        "p95": 12,
+        "maximum": 39
+      },
+      {
+        "name": "project.identity.git",
+        "count": 288,
+        "total": 108938,
+        "median": 338,
+        "p95": 673,
+        "maximum": 1067
+      },
+      {
+        "name": "project.identity.lookup",
+        "count": 290,
+        "total": 28851,
+        "median": 84,
+        "p95": 202,
+        "maximum": 485
+      },
+      {
+        "name": "project.identity.resolve",
+        "count": 288,
+        "total": 29201,
+        "median": 87,
+        "p95": 203,
+        "maximum": 486
+      },
+      {
+        "name": "project.identity.initial",
+        "count": 145,
+        "total": 86061,
+        "median": 570,
+        "p95": 943,
+        "maximum": 1229
+      },
+      {
+        "name": "project.registry.capture",
+        "count": 145,
+        "total": 2408,
+        "median": 13,
+        "p95": 48,
+        "maximum": 91
+      },
+      {
+        "name": "project.registry.acquire",
+        "count": 145,
+        "total": 768,
+        "median": 3,
+        "p95": 7,
+        "maximum": 195
+      },
+      {
+        "name": "project.registry.revalidate",
+        "count": 145,
+        "total": 2296,
+        "median": 12,
+        "p95": 36,
+        "maximum": 111
+      },
+      {
+        "name": "project.identity.admitted",
+        "count": 145,
+        "total": 84466,
+        "median": 536,
+        "p95": 903,
+        "maximum": 981
+      },
+      {
+        "name": "directory.held",
+        "count": 146,
+        "total": 104019,
+        "median": 562,
+        "p95": 936,
+        "maximum": 16092
+      },
+      {
+        "name": "directory.release",
+        "count": 146,
+        "total": 1,
+        "median": 0,
+        "p95": 0,
+        "maximum": 1
+      },
+      {
+        "name": "directory.total",
+        "count": 146,
+        "total": 104444,
+        "median": 564,
+        "p95": 938,
+        "maximum": 16095
+      },
+      {
+        "name": "state.initialize",
+        "count": 292,
+        "total": 43082,
+        "median": 233,
+        "p95": 294,
+        "maximum": 296
+      },
+      {
+        "name": "config.global.persist",
+        "count": 1,
+        "total": 2,
+        "median": 2,
+        "p95": 2,
+        "maximum": 2
+      },
+      {
+        "name": "config.global.reset",
+        "count": 1,
+        "total": 4,
+        "median": 4,
+        "p95": 4,
+        "maximum": 4
+      },
+      {
+        "name": "config.global.reconcile",
+        "count": 1,
+        "total": 658,
+        "median": 658,
+        "p95": 658,
+        "maximum": 658
+      },
+      {
+        "name": "config.global.write",
+        "count": 1,
+        "total": 16866,
+        "median": 16866,
+        "p95": 16866,
+        "maximum": 16866
+      },
+      {
+        "name": "request",
+        "count": 1,
+        "total": 16867,
+        "median": 16867,
+        "p95": 16867,
+        "maximum": 16867
+      }
+    ]
+  },
+  {
+    "kind": "after",
+    "requestID": "ee3cd51a-1ffc-4b1c-b139-d99f6cb6266a",
+    "endedAt": "2026-10-20T15:42:14.199Z",
+    "duration": 16332,
+    "phases": [
+      {
+        "name": "catalog.admission",
+        "count": 151,
+        "total": 590,
+        "median": 1,
+        "p95": 4,
+        "maximum": 246
+      },
+      {
+        "name": "catalog.recovery",
+        "count": 1,
+        "total": 1,
+        "median": 1,
+        "p95": 1,
+        "maximum": 1
+      },
+      {
+        "name": "config.global.projects",
+        "count": 1,
+        "total": 37,
+        "median": 37,
+        "p95": 37,
+        "maximum": 37
+      },
+      {
+        "name": "directory.admission",
+        "count": 146,
+        "total": 525,
+        "median": 2,
+        "p95": 12,
+        "maximum": 82
+      },
+      {
+        "name": "config.load",
+        "count": 735,
+        "total": 69748,
+        "median": 20,
+        "p95": 245,
+        "maximum": 254
+      },
+      {
+        "name": "config.verify",
+        "count": 735,
+        "total": 4968,
+        "median": 1,
+        "p95": 22,
+        "maximum": 25
+      },
+      {
+        "name": "config.global.before",
+        "count": 149,
+        "total": 2471,
+        "median": 14,
+        "p95": 30,
+        "maximum": 70
+      },
+      {
+        "name": "config.global.after",
+        "count": 149,
+        "total": 2726,
+        "median": 13,
+        "p95": 28,
+        "maximum": 176
+      },
+      {
+        "name": "state.read",
+        "count": 590,
+        "total": 32812,
+        "median": 1,
+        "p95": 215,
+        "maximum": 249
+      },
+      {
+        "name": "config.validate.models",
+        "count": 150,
+        "total": 4873,
+        "median": 32,
+        "p95": 56,
+        "maximum": 89
+      },
+      {
+        "name": "config.validate.profile",
+        "count": 150,
+        "total": 342,
+        "median": 2,
+        "p95": 4,
+        "maximum": 5
+      },
+      {
+        "name": "catalog.revision",
+        "count": 149,
+        "total": 129,
+        "median": 1,
+        "p95": 2,
+        "maximum": 20
+      },
+      {
+        "name": "skill.builtins",
+        "count": 149,
+        "total": 111,
+        "median": 1,
+        "p95": 1,
+        "maximum": 2
+      },
+      {
+        "name": "skill.config-directories",
+        "count": 149,
+        "total": 8,
+        "median": 0,
+        "p95": 1,
+        "maximum": 1
+      },
+      {
+        "name": "skill.explicit-scan",
+        "count": 297,
+        "total": 465,
+        "median": 1,
+        "p95": 4,
+        "maximum": 18
+      },
+      {
+        "name": "catalog.reentrant",
+        "count": 150,
+        "total": 16708,
+        "median": 4,
+        "p95": 15,
+        "maximum": 15966
+      },
+      {
+        "name": "catalog.held",
+        "count": 151,
+        "total": 32925,
+        "median": 4,
+        "p95": 19,
+        "maximum": 16213
+      },
+      {
+        "name": "catalog.release",
+        "count": 151,
+        "total": 4,
+        "median": 0,
+        "p95": 0,
+        "maximum": 2
+      },
+      {
+        "name": "catalog.total",
+        "count": 151,
+        "total": 33536,
+        "median": 6,
+        "p95": 22,
+        "maximum": 16331
+      },
+      {
+        "name": "config.validate.capabilities",
+        "count": 149,
+        "total": 1012,
+        "median": 6,
+        "p95": 16,
+        "maximum": 30
+      },
+      {
+        "name": "project.identity.git",
+        "count": 288,
+        "total": 104549,
+        "median": 340,
+        "p95": 618,
+        "maximum": 697
+      },
+      {
+        "name": "project.identity.lookup",
+        "count": 290,
+        "total": 28525,
+        "median": 82,
+        "p95": 271,
+        "maximum": 440
+      },
+      {
+        "name": "project.identity.resolve",
+        "count": 288,
+        "total": 29001,
+        "median": 85,
+        "p95": 271,
+        "maximum": 451
+      },
+      {
+        "name": "project.identity.initial",
+        "count": 145,
+        "total": 80260,
+        "median": 513,
+        "p95": 831,
+        "maximum": 871
+      },
+      {
+        "name": "project.registry.capture",
+        "count": 145,
+        "total": 2802,
+        "median": 13,
+        "p95": 44,
+        "maximum": 285
+      },
+      {
+        "name": "project.registry.acquire",
+        "count": 145,
+        "total": 678,
+        "median": 3,
+        "p95": 13,
+        "maximum": 56
+      },
+      {
+        "name": "project.registry.revalidate",
+        "count": 145,
+        "total": 2221,
+        "median": 12,
+        "p95": 30,
+        "maximum": 69
+      },
+      {
+        "name": "project.identity.admitted",
+        "count": 145,
+        "total": 81177,
+        "median": 541,
+        "p95": 802,
+        "maximum": 834
+      },
+      {
+        "name": "directory.held",
+        "count": 146,
+        "total": 99729,
+        "median": 568,
+        "p95": 833,
+        "maximum": 15280
+      },
+      {
+        "name": "directory.release",
+        "count": 146,
+        "total": 2,
+        "median": 0,
+        "p95": 0,
+        "maximum": 1
+      },
+      {
+        "name": "directory.total",
+        "count": 146,
+        "total": 100272,
+        "median": 569,
+        "p95": 836,
+        "maximum": 15284
+      },
+      {
+        "name": "state.initialize",
+        "count": 292,
+        "total": 32781,
+        "median": 192,
+        "p95": 215,
+        "maximum": 249
+      },
+      {
+        "name": "config.global.persist",
+        "count": 1,
+        "total": 2,
+        "median": 2,
+        "p95": 2,
+        "maximum": 2
+      },
+      {
+        "name": "config.global.reset",
+        "count": 1,
+        "total": 4,
+        "median": 4,
+        "p95": 4,
+        "maximum": 4
+      },
+      {
+        "name": "config.global.reconcile",
+        "count": 1,
+        "total": 603,
+        "median": 603,
+        "p95": 603,
+        "maximum": 603
+      },
+      {
+        "name": "config.global.write",
+        "count": 1,
+        "total": 16331,
+        "median": 16331,
+        "p95": 16331,
+        "maximum": 16331
+      },
+      {
+        "name": "request",
+        "count": 1,
+        "total": 16331,
+        "median": 16331,
+        "p95": 16331,
+        "maximum": 16331
+      }
+    ]
+  }
+]

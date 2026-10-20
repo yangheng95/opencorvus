@@ -1870,7 +1870,10 @@ process.stdin.resume()
     const cleanupRequestDirectory = () => {
       if (requestCleanupComplete) return Promise.resolve()
       if (requestCleanupAttempt) return requestCleanupAttempt
-      const attempt = validateDurablePhysicalSettlement()
+      // The original exit promise already validated this exact native
+      // occurrence's physical settlement. Cleanup shares that fulfilled proof;
+      // its own failed filesystem operation remains independently retryable.
+      const attempt = exited
         .then(() => fs.rm(requestDir, { recursive: true, force: true }))
         .then(() => {
           requestCleanupComplete = true

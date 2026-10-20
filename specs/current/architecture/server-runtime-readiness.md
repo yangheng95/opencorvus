@@ -67,6 +67,15 @@ facade joins all three original branches before publishing its settlement
 receipt or error. An earlier output failure therefore cannot retire the public
 barrier while the original supervisor settlement is still pending.
 
+For a Windows supervisor request, the original `exited` promise validates its
+correlated native physical-settlement marker before it fulfills. Request cleanup
+depends on that same fulfilled promise; it does not rediscover the completed
+occurrence by reading its markers again. Output closure remains a separate
+required branch. A failed filesystem cleanup retains its own retryable attempt,
+while a missing or invalid physical proof still rejects the original exit and
+leaves durable orphan-recovery authority intact. A later process request owns a
+different occurrence and cannot reuse this promise.
+
 The public barrier uses the existing supervisor failure collector: a sole
 failure retains its original reference, and distinct terminal, output and
 cleanup causes are retained together. The successful receipt comes from the

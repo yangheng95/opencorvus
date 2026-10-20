@@ -1,0 +1,76 @@
+import assert from 'node:assert/strict'
+import path from 'node:path'
+const fs=require('node:fs'),fsp=require('node:fs/promises'),cp=require('node:child_process')
+const owned='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh'
+assert.equal(path.resolve(process.env.OPENCORVUS_HOME!),path.resolve(owned+'/runtime'))
+const output='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/config-critical-path-478-before/evidence/process-profile.json'
+const temporary=path.resolve(owned+'/runtime/tmp'),helper=path.resolve(process.env.OPENCORVUS_PROCESS_SUPERVISOR!)
+const startedAtUnixMs=Date.now(),started=performance.now(),rows=new Map<string,any>()
+const now=()=>performance.now()-started
+function rowFor(value:unknown){
+ if(typeof value!=='string')return undefined
+ const full=path.resolve(value),relative=path.relative(temporary,full),parts=relative.split(path.sep)
+ if(parts[0]==='..'||path.isAbsolute(relative)||!/^supervisor-[A-Za-z0-9_-]+$/.test(parts[0]??''))return undefined
+ const directory=path.join(temporary,parts[0]!)
+ let row=rows.get(directory)
+ if(!row){row={directory,firstAt:now(),files:[]};rows.set(directory,row)}
+ return row
+}
+function observe(value:any,settle:(error?:unknown,result?:any)=>void){
+ if(value&&typeof value.then==='function')void value.then((result:any)=>settle(undefined,result),(error:unknown)=>settle(error))
+ else settle(undefined,value)
+ return value
+}
+const originalOpen=fsp.open
+fsp.open=function(file:unknown,...args:any[]){
+ const row=rowFor(file),at=now(),value=Reflect.apply(originalOpen,this,[file,...args])
+ if(row)observe(value,(error,handle)=>{
+  row.files.push({operation:'open',at,settledAt:now(),outcome:error?'rejected':'fulfilled'})
+  if(error)return
+  for(const name of ['writeFile','sync','close']){
+   const original=handle[name]
+   handle[name]=function(...input:any[]){
+    const at=now()
+    if(name==='writeFile'&&typeof input[0]==='string'){
+     try{const request=JSON.parse(input[0]);if(typeof request.request_id==='string'){
+      row.request={id:request.request_id,ownerPID:request.owner_pid,ownerBirth:request.owner_process_instance_id,occurrence:request.runtime_occurrence_id,
+       kind:request.type??request.kind??null,cwd:typeof request.cwd==='string'&&path.resolve(request.cwd).startsWith(path.resolve(owned)+path.sep)?request.cwd:'outside-owned-root'}
+     }}catch{}
+    }
+    const result=Reflect.apply(original,this,input)
+    return observe(result,(error)=>row.files.push({operation:name,at,settledAt:now(),outcome:error?'rejected':'fulfilled'}))
+   }
+  }
+ })
+ return value
+}
+const originalRead=fsp.readFile
+fsp.readFile=function(file:unknown,...args:any[]){
+ const row=rowFor(file),at=now(),value=Reflect.apply(originalRead,this,[file,...args])
+ if(row&&typeof file==='string'&&path.basename(file)==='ready.json')observe(value,(error,result)=>{
+  if(error||row.readyAt!==undefined)return
+  try{const ready=JSON.parse(String(result));row.readyAt=now();row.readyReadAt=at;row.targetPID=ready.target_pid;row.targetBirth=ready.target_process_instance_id}catch{}
+ })
+ return value
+}
+const originalRemove=fsp.rm
+fsp.rm=function(file:unknown,...args:any[]){
+ const row=rowFor(file),at=now(),value=Reflect.apply(originalRemove,this,[file,...args])
+ if(row&&typeof file==='string'&&path.resolve(file)===row.directory)observe(value,error=>{row.cleanup={at,settledAt:now(),outcome:error?'rejected':'fulfilled'}})
+ return value
+}
+const originalSpawn=cp.spawn
+cp.spawn=function(executable:string,args:string[],options:any){
+ const row=typeof executable==='string'&&path.resolve(executable)===helper&&args?.[0]==='--request'?rowFor(args[1]):undefined
+ const at=now();let child
+ try{child=Reflect.apply(originalSpawn,this,[executable,args,options])}
+ finally{if(row)row.spawn={at,returnedAt:now()}}
+ if(row){row.helperPID=child.pid;child.once('spawn',()=>row.spawnEventAt=now());child.once('exit',(code:number|null,signal:string|null)=>row.exit={at:now(),code,signal});child.once('close',(code:number|null,signal:string|null)=>row.close={at:now(),code,signal})}
+ return child
+}
+require('node:module').syncBuiltinESMExports()
+assert.equal((await import('node:fs/promises')).open,fsp.open,'Original named fs binding must use the observed builtin')
+assert.equal((await import('node:child_process')).spawn,cp.spawn,'Original named spawn binding must use the observed builtin')
+process.once('exit',code=>{
+ fs.writeFileSync(output,JSON.stringify({boundary:'Private observation of original builtins only; original promises, arguments, streams and errors retained; no stdout consumer or environment/body recording',pid:process.pid,startedAtUnixMs,endedAtUnixMs:Date.now(),exitCode:code,rows:[...rows.values()]},null,2),{flag:'wx'})
+})
