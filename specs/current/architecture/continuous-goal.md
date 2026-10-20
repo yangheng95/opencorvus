@@ -164,6 +164,12 @@ selection retires the dialog and pending UI feedback. Request IDs bind the same
 submission content. Product labels, errors and number/date formatting follow the
 current locale; user/model originals and technical identities retain their actual values.
 
+The goal dialog keeps its header and action footer inside the existing bounded
+frame while its form or introduction owns body scrolling. Expanded diagnostics
+remain complete inside that body. A revision-conflict review displays the latest
+saved limits from the same HTTP projection alongside the retained form draft;
+reviewing the revision does not silently replace the draft's budget values.
+
 ## Verification
 
 Database/process tests verify identity, state, replay and usage separately from real

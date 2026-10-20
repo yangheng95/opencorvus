@@ -1,0 +1,20 @@
+{
+  "scopes": [
+    {
+      "scope": "goal-budget-lifecycle-476-before",
+      "originalHandle": 62334,
+      "exit": 0
+    },
+    {
+      "scope": "goal-budget-lifecycle-476-after",
+      "originalHandle": 76553,
+      "exit": 0
+    }
+  ],
+  "runtimePairs": "Complete pairs retired after original native physical/output/request settlement",
+  "privatePair": "Complete auth/models retired after actual-value scan",
+  "sourceMetadata": "Unchanged",
+  "sourceRefreshOrExchange": "Not performed",
+  "scannedFiles": 160,
+  "observedAt": "2026-10-20T14:18:55.665Z"
+}

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Goal预算、暂停与恢复](2026-10-20-goal-budget-lifecycle-review/README.md)：19张实图、真实409草稿复核、同Goal六轮累计及原生结算。
+
 - [启动线程与 Git 包装器诊断](2026-10-20-process-spawn-thread-cost/README.md)：384 次真实 Git 输出、16 组交错量测及三个工作线程的正常退出。
 
 - [配置连续保存与实例初始化](2026-10-20-physical-comparison-cost/README.md)：真实等待环、完整配置恢复、连续两轮保存及17张人工截图。

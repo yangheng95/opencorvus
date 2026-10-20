@@ -1,0 +1,19 @@
+{
+  "schema": 3,
+  "originalProjects": 145,
+  "originalSessions": 194,
+  "projects": 147,
+  "sessions": 196,
+  "goalOriginalRows": {
+    "messages": 4,
+    "parts": 9,
+    "protocol": 12
+  },
+  "sourcesOriginalRows": {
+    "sessions": 2,
+    "messages": 32,
+    "parts": 72,
+    "protocol": 62
+  },
+  "retention": "Every original Project/Session ID/directory/owner, each original goal Message/Part/protocol and both original Sources Sessions plus all their rows match exactly including rowid."
+}

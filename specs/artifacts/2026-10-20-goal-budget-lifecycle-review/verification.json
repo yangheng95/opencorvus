@@ -1,0 +1,36 @@
+{
+  "ui": "Actual native development /ui; manual screenshots, no UI tests",
+  "typecheck": {
+    "originalHandle": 15864,
+    "exit": 0
+  },
+  "finalBuild": {
+    "originalHandle": 49172,
+    "exit": 0,
+    "viteSeconds": 48.64,
+    "rendererSurface": "1 assignment,1 declared global"
+  },
+  "i18n": {
+    "exit": 0,
+    "locales": 2,
+    "keys": 2522
+  },
+  "originals": {
+    "before": 62334,
+    "after": 76553,
+    "acceptedObserver": 35864
+  },
+  "toolCorrections": [
+    "Scratch bundle preparation initially copied packaging dist instead of actual dist-vite; index guard rejected it before startup, wrong input retained separately, correct frozen bundle used for18807",
+    "Observer initially capped selected turn count at5; after bounded UI test used6 it rejected before HTTP, corrected to selected maximum7 and reread same completed goal, without new model input"
+  ],
+  "finalCurrentSourceTypecheck": {
+    "originalHandle": 21708,
+    "exit": 0
+  },
+  "finalChecks": {
+    "cssTokens": "60 application stylesheets/376 TS/TSX,exit0",
+    "docs": "345 operations/26 groups,exit0",
+    "architecture": "20 current documents,exit0"
+  }
+}

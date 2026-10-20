@@ -1,0 +1,119 @@
+{
+  "tabs": [
+    31,
+    32
+  ],
+  "closed": true,
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "screenshots": [
+    "01-before-limited.png",
+    "02-before-budget-validation.png",
+    "03-before-revision-conflict.png",
+    "04-before-reviewed-draft.png",
+    "05-before-expanded-error.png",
+    "06-before-whole-dialog-scroll.png",
+    "07-after-conflict-top.png",
+    "08-after-conflict-settled.png",
+    "09-after-saved-limits.png",
+    "10-after-diagnostic-bottom.png",
+    "11-after-paused-reload.png",
+    "12-after-explicit-resume-form.png",
+    "13-after-paused-settled.png",
+    "14-after-zh-conflict.png",
+    "15-after-zh-completion-form.png",
+    "16-after-zh-complete.png",
+    "17-after-zh-guide.png",
+    "18-after-zh-home-form.png",
+    "19-after-home-restored.png"
+  ],
+  "before": {
+    "draft": {
+      "tokenBudget": 150000,
+      "turnBudget": 2
+    },
+    "current": {
+      "id": "pev_g0VYaXcT300osY85ityb",
+      "revision": "pev_g0VYb613d002tubrySPE",
+      "owner": {
+        "kind": "chat",
+        "id": "ses_-zURPSNu3zz6SIH4nxQ7"
+      },
+      "objective": "请仅回复 GOAL472GLOBALREADY，完成这次有限文字目标。不要调用工具、读写文件、访问网站或委派。",
+      "status": "paused",
+      "reason": "QA476 peer explicitly paused this test goal.",
+      "tokenBudget": 250000,
+      "turnBudget": 5,
+      "tokensUsed": 33733,
+      "turnsAccepted": 1,
+      "createdAt": 1792495780185,
+      "updatedAt": 1792503977861,
+      "sessionID": "ses_-zURPSNu3zz6SIH4nxQ7",
+      "projectID": "prj_htZyDMlTs9cbVpOIsNF6",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\runtime\\data\\projects\\2026\\10\\20\\6c3e63bd-e207-4b3c-b262-eced03220398"
+    },
+    "requestID": "a6dc4abe-fbd9-4e09-874d-b98a63d677dc",
+    "observation": "Long conflict/expanded diagnostic scrolled the whole frame; footer could be reached only by scrolling title and earlier form content away."
+  },
+  "after": {
+    "draft": {
+      "tokenBudget": 150000,
+      "turnBudget": 2
+    },
+    "current": {
+      "id": "pev_g0VYaXcT300osY85ityb",
+      "revision": "pev_g0VYb8vtf00ZnqrTHZNb",
+      "owner": {
+        "kind": "chat",
+        "id": "ses_-zURPSNu3zz6SIH4nxQ7"
+      },
+      "objective": "请仅回复 GOAL472GLOBALREADY，完成这次有限文字目标。不要调用工具、读写文件、访问网站或委派。",
+      "status": "paused",
+      "reason": "QA476 peer explicitly paused this test goal.",
+      "tokenBudget": 250000,
+      "turnBudget": 5,
+      "tokensUsed": 33733,
+      "turnsAccepted": 1,
+      "createdAt": 1792495780185,
+      "updatedAt": 1792504673007,
+      "sessionID": "ses_-zURPSNu3zz6SIH4nxQ7",
+      "projectID": "prj_htZyDMlTs9cbVpOIsNF6",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\runtime\\data\\projects\\2026\\10\\20\\6c3e63bd-e207-4b3c-b262-eced03220398"
+    },
+    "requestID": "19420ec3-bb34-4134-94de-78f9354e78eb",
+    "savedPaused": {
+      "id": "pev_g0VYaXcT300osY85ityb",
+      "revision": "pev_g0VYb9mCj00wtlHeUfmD",
+      "owner": {
+        "kind": "chat",
+        "id": "ses_-zURPSNu3zz6SIH4nxQ7"
+      },
+      "objective": "请仅回复 GOAL472GLOBALREADY，完成这次有限文字目标。不要调用工具、读写文件、访问网站或委派。",
+      "status": "paused",
+      "reason": "QA476 peer explicitly paused this test goal.",
+      "tokenBudget": 150000,
+      "turnBudget": 2,
+      "tokensUsed": 33733,
+      "turnsAccepted": 1,
+      "createdAt": 1792495780185,
+      "updatedAt": 1792504874077,
+      "sessionID": "ses_-zURPSNu3zz6SIH4nxQ7",
+      "projectID": "prj_htZyDMlTs9cbVpOIsNF6",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\runtime\\data\\projects\\2026\\10\\20\\6c3e63bd-e207-4b3c-b262-eced03220398"
+    },
+    "observations": [
+      "Stable header/footer while form body scrolls through full diagnostic",
+      "Latest saved limits250000/5 shown beside retained150000/2 draft",
+      "Explicit review preserves draft and unchecked resume; actual save remains paused",
+      "Owned page reload retains paused goal and cumulative usage",
+      "Adjust/resume for paused exhausted goal, finite actual continuations and explicit toolbar pause",
+      "Chinese current-limits/error/completion form and real operator completion",
+      "Home intro and creation form open/close; English language restored"
+    ],
+    "repeatedCapture": "07 and08 are two actual captures with identical image bytes; both show the fixed footer. Initial visual misreading of07 was corrected by viewing the stored original. This is not evidence of a rendering flash; no layout timers were added."
+  },
+  "limits": "No UI automated tests. No new Task/Mission/SideChat execution, connection-failure or live Sources/Rendering qualification this batch. Original full-config cold10s/restore5s still not achieved.",
+  "canonical": "Exact complete original file retained"
+}

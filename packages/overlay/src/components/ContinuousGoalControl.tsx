@@ -539,6 +539,7 @@ export function ContinuousGoalControl(props: {
         }}
         backdropClose={!busy()}
         class="continuous-goal-dialog"
+        formClass="continuous-goal-dialog__frame"
         footer={
           <>
             <Button
@@ -749,6 +750,27 @@ export function ContinuousGoalControl(props: {
                 }
               >
                 {t("continuous_goal.error.review")}
+                <Show when={canReviewCurrentRevision() && goal()}>
+                  {(current) => (
+                    <div class="continuous-goal__current-limits">
+                      <strong>{t("continuous_goal.current_limits")}</strong>
+                      <dl class="continuous-goal__budgets">
+                        <div>
+                          <dt>{t("continuous_goal.token_budget")}</dt>
+                          <dd>
+                            {current().tokenBudget === undefined ? t("continuous_goal.unlimited") : number(current().tokenBudget!)}
+                          </dd>
+                        </div>
+                        <div>
+                          <dt>{t("continuous_goal.turn_budget")}</dt>
+                          <dd>
+                            {current().turnBudget === undefined ? t("continuous_goal.unlimited") : number(current().turnBudget!)}
+                          </dd>
+                        </div>
+                      </dl>
+                    </div>
+                  )}
+                </Show>
               </Feedback>
             </Show>
           </form>

@@ -81,6 +81,15 @@
   display: flex;
   flex-direction: column;
   gap: var(--ui-gap-lg);
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+.dialog-form.continuous-goal-dialog__frame {
+  overflow: hidden;
+}
+.dialog-form.continuous-goal-dialog__frame > .dialog-actions {
+  flex-shrink: 0;
 }
 
 .continuous-goal--home {
@@ -210,4 +219,19 @@
 .continuous-goal__secondary {
   display: flex;
   justify-content: flex-start;
+}
+.continuous-goal__current-limits {
+  display: grid;
+  gap: var(--ui-gap-sm);
+  margin-top: var(--ui-gap-md);
+}
+.continuous-goal__current-limits dl,
+.continuous-goal__current-limits dd {
+  margin: 0;
+}
+.continuous-goal__current-limits dt {
+  color: var(--text-soft);
+}
+.continuous-goal__current-limits dd {
+  font-variant-numeric: tabular-nums;
 }

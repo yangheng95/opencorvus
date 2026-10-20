@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Goal预算、暂停与恢复](2026-10-20-goal-budget-lifecycle-review.md)：正文滚动与固定操作区、当前额度比较和[双语实图/实际累计用量](../../artifacts/2026-10-20-goal-budget-lifecycle-review/README.md)。
+
 - [监管命令的启动线程与 Git 包装器](2026-10-20-process-spawn-thread-cost.md)：384 次真实监管命令、主线程停顿与总耗时的区别及[原句柄结算](../../artifacts/2026-10-20-process-spawn-thread-cost/README.md)。
 
 - [配置连续保存与实例初始化](2026-10-20-physical-comparison-cost.md)：缓存发布/目录队列共性根因、精确身份比较与[原检查器连续复测](../../artifacts/2026-10-20-physical-comparison-cost/README.md)。
