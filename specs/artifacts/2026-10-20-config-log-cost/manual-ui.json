@@ -1,0 +1,35 @@
+{
+  "method": "Actual CUA IAB navigation/clicks/screenshots and manual visual review; no UI automation",
+  "frontend": "Unchanged formal464 current build",
+  "dimensions": {
+    "width": 1280,
+    "height": 720
+  },
+  "observations": [
+    {
+      "file": "debug-wait.png",
+      "at": "2026-10-20T07:19:52.052Z",
+      "result": "Actual first write; loading feedback visible"
+    },
+    {
+      "file": "debug-loaded.png",
+      "at": "2026-10-20T07:20:21.903Z",
+      "result": "Catalog227/connected OpenAI restored"
+    },
+    {
+      "file": "info-wait.png",
+      "at": "2026-10-20T07:21:28.603Z",
+      "result": "Actual first write; loading feedback visible"
+    },
+    {
+      "file": "info-loaded.png",
+      "at": "2026-10-20T07:22:27.559Z",
+      "result": "Catalog227/connected OpenAI restored"
+    }
+  ],
+  "closedTabs": [
+    12,
+    13
+  ],
+  "qualificationBoundary": "No new Goal execution, Sources/live Rendering or native folder-picker qualification"
+}

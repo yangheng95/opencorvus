@@ -1,0 +1,217 @@
+{
+  "runs": [
+    {
+      "scope": "config-log-cost-465-debug",
+      "logLevel": "DEBUG",
+      "at": "2026-10-20T07:19:44.853Z",
+      "endedAt": "2026-10-20T07:20:15.353Z",
+      "phase": "candidate",
+      "port": 18765,
+      "occurrence": "config-log-cost-465-debug-98b1d98b-9fe9-43e7-b1f8-221bb9c02570",
+      "transport": "browser",
+      "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+      "accepted": true,
+      "restored": true,
+      "writeMs": 15638.1522,
+      "restoreMs": 14851.802500000005,
+      "failures": [],
+      "permissionMode": "ask",
+      "changedField": "username",
+      "dataRestoration": "Complete parsed canonical source equals the pre-check source",
+      "readers": [
+        {
+          "path": "/config",
+          "startedAt": "2026-10-20T07:19:44.923Z",
+          "endedAt": "2026-10-20T07:20:00.462Z",
+          "ms": 15538.031299999999,
+          "status": 200,
+          "permissionMode": "ask"
+        },
+        {
+          "path": "/provider",
+          "startedAt": "2026-10-20T07:19:44.926Z",
+          "endedAt": "2026-10-20T07:20:00.819Z",
+          "ms": 15892.9716,
+          "status": 200,
+          "providers": 227,
+          "models": 8133,
+          "selectedModel": "gpt-6.1-sol"
+        },
+        {
+          "path": "/global/providers",
+          "startedAt": "2026-10-20T07:19:44.926Z",
+          "endedAt": "2026-10-20T07:20:00.670Z",
+          "ms": 15743.872800000001,
+          "status": 200,
+          "providers": 227,
+          "models": 8133,
+          "selectedModel": "gpt-6.1-sol"
+        },
+        {
+          "path": "/session/ses_hqmBAYznpGdzPzPv560R",
+          "startedAt": "2026-10-20T07:19:44.927Z",
+          "endedAt": "2026-10-20T07:19:44.934Z",
+          "ms": 7.573399999997491,
+          "status": 200,
+          "sessionID": "ses_hqmBAYznpGdzPzPv560R"
+        }
+      ],
+      "admission": {
+        "time": "2026-10-20T07:19:44.902Z",
+        "phase": "config.global.before",
+        "requestID": "e2f1d825-1dc1-448a-af05-2aaca3d4b87e",
+        "occurrence": "config-log-cost-465-debug-98b1d98b-9fe9-43e7-b1f8-221bb9c02570"
+      },
+      "markers": [
+        {
+          "occurrence": "config-log-cost-465-debug-98b1d98b-9fe9-43e7-b1f8-221bb9c02570",
+          "requestID": "e2f1d825-1dc1-448a-af05-2aaca3d4b87e",
+          "phase": "config.global.before",
+          "time": "2026-10-20T07:19:44.902Z",
+          "logLevel": "DEBUG",
+          "authority": "Actual original global candidate phase entered; passive observation only"
+        },
+        {
+          "occurrence": "config-log-cost-465-debug-98b1d98b-9fe9-43e7-b1f8-221bb9c02570",
+          "requestID": "136b237a-44f8-45c5-85e4-6ee419d3af2a",
+          "phase": "config.global.before",
+          "time": "2026-10-20T07:20:00.969Z",
+          "logLevel": "DEBUG",
+          "authority": "Actual original global candidate phase entered; passive observation only"
+        }
+      ],
+      "projects": 124,
+      "log": {
+        "records": 36423,
+        "bytes": 13738358,
+        "levels": {
+          "info": 5418,
+          "debug": 31005
+        }
+      },
+      "originalThresholds": {
+        "saveMs": 10000,
+        "restoreMs": 5000,
+        "readMs": 20000
+      },
+      "performancePassed": false
+    },
+    {
+      "scope": "config-log-cost-465-info",
+      "logLevel": "INFO",
+      "at": "2026-10-20T07:21:22.739Z",
+      "endedAt": "2026-10-20T07:21:52.050Z",
+      "phase": "candidate",
+      "port": 18767,
+      "occurrence": "config-log-cost-465-info-3b6b3256-c8fd-496c-b1e4-06bbb650d769",
+      "transport": "browser",
+      "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+      "accepted": true,
+      "restored": true,
+      "writeMs": 14819.464900000003,
+      "restoreMs": 14484.728800000004,
+      "failures": [],
+      "permissionMode": "ask",
+      "changedField": "username",
+      "dataRestoration": "Complete parsed canonical source equals the pre-check source",
+      "readers": [
+        {
+          "path": "/config",
+          "startedAt": "2026-10-20T07:21:22.823Z",
+          "endedAt": "2026-10-20T07:21:37.542Z",
+          "ms": 14717.962299999996,
+          "status": 200,
+          "permissionMode": "ask"
+        },
+        {
+          "path": "/provider",
+          "startedAt": "2026-10-20T07:21:22.827Z",
+          "endedAt": "2026-10-20T07:21:37.914Z",
+          "ms": 15086.892200000002,
+          "status": 200,
+          "providers": 227,
+          "models": 8133,
+          "selectedModel": "gpt-6.1-sol"
+        },
+        {
+          "path": "/global/providers",
+          "startedAt": "2026-10-20T07:21:22.827Z",
+          "endedAt": "2026-10-20T07:21:37.762Z",
+          "ms": 14935.069100000004,
+          "status": 200,
+          "providers": 227,
+          "models": 8133,
+          "selectedModel": "gpt-6.1-sol"
+        },
+        {
+          "path": "/session/ses_hmZUV5Nl20LWDRvSlBo9",
+          "startedAt": "2026-10-20T07:21:22.828Z",
+          "endedAt": "2026-10-20T07:21:22.836Z",
+          "ms": 8.397399999998015,
+          "status": 200,
+          "sessionID": "ses_hmZUV5Nl20LWDRvSlBo9"
+        }
+      ],
+      "admission": {
+        "time": "2026-10-20T07:21:22.794Z",
+        "phase": "config.global.before",
+        "requestID": "405f2a51-31fd-48a7-a512-a6b91e6c4add",
+        "occurrence": "config-log-cost-465-info-3b6b3256-c8fd-496c-b1e4-06bbb650d769"
+      },
+      "markers": [
+        {
+          "occurrence": "config-log-cost-465-info-3b6b3256-c8fd-496c-b1e4-06bbb650d769",
+          "requestID": "405f2a51-31fd-48a7-a512-a6b91e6c4add",
+          "phase": "config.global.before",
+          "time": "2026-10-20T07:21:22.794Z",
+          "logLevel": "INFO",
+          "authority": "Actual original global candidate phase entered; passive observation only"
+        },
+        {
+          "occurrence": "config-log-cost-465-info-3b6b3256-c8fd-496c-b1e4-06bbb650d769",
+          "requestID": "266bc969-575e-4787-84eb-13f308cf5b25",
+          "phase": "config.global.before",
+          "time": "2026-10-20T07:21:38.048Z",
+          "logLevel": "INFO",
+          "authority": "Actual original global candidate phase entered; passive observation only"
+        }
+      ],
+      "projects": 125,
+      "log": {
+        "records": 5471,
+        "bytes": 1282242,
+        "levels": {
+          "info": 5471
+        }
+      },
+      "originalThresholds": {
+        "saveMs": 10000,
+        "restoreMs": 5000,
+        "readMs": 20000
+      },
+      "performancePassed": false
+    }
+  ],
+  "history": {
+    "schema": {
+      "user_version": 2
+    },
+    "projects": 125,
+    "sessions": 167,
+    "baselines": [
+      {
+        "projects": 123,
+        "sessions": 165
+      },
+      {
+        "projects": 124,
+        "sessions": 166
+      }
+    ],
+    "verification": "Direct readonly SQLite after both original native/output/request/launcher joins; every original identity, directory and owner preserved"
+  },
+  "conclusion": "Both DEBUG and INFO fail original save/restore targets; lower logging and small-marker reader do not repair performance; no product source changes",
+  "providerRequests": 4,
+  "originalCumulativeBudget": 12,
+  "canonical": "Complete parsed original restored; Ask preserved"
+}

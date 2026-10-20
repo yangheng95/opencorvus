@@ -1,0 +1,342 @@
+{
+  "profileStart": "2026-10-20T06:51:48.862Z",
+  "profileEnd": "2026-10-20T06:53:24.463Z",
+  "deltaEndOffsetMs": -1.65925,
+  "requests": [
+    {
+      "requestID": "ba9f5118-be9e-4359-a047-e5612128b44c",
+      "startedAt": "2026-10-20T06:52:46.868Z",
+      "endedAt": "2026-10-20T06:53:01.127Z",
+      "wallMs": 14259,
+      "selectedSamples": 1403,
+      "top": [
+        {
+          "name": "spawn",
+          "source": "",
+          "line": -1,
+          "samples": 602,
+          "callers": [
+            {
+              "name": "spawn",
+              "source": "node:child_process",
+              "line": 706
+            },
+            {
+              "name": "spawn",
+              "source": "node:child_process",
+              "line": 10
+            },
+            {
+              "name": "(anonymous)",
+              "source": "opencorvus/.tmp-product-iteration/config-current-io-cost-464/passive-io-v4.ts",
+              "line": 39
+            },
+            {
+              "name": "spawnWindowsRequest",
+              "source": "opencorvus/src/shell/process-supervisor.ts",
+              "line": 1595
+            }
+          ]
+        },
+        {
+          "name": "MoveFileExW",
+          "source": "",
+          "line": -1,
+          "samples": 34,
+          "callers": [
+            {
+              "name": "renameWindows",
+              "source": "opencorvus/src/util/rename-no-replace.ts",
+              "line": 97
+            },
+            {
+              "name": "(anonymous)",
+              "source": "",
+              "line": -1
+            },
+            {
+              "name": "processTicksAndRejections",
+              "source": "",
+              "line": 6
+            },
+            {
+              "name": "(root)",
+              "source": "",
+              "line": -1
+            }
+          ]
+        },
+        {
+          "name": "values",
+          "source": "",
+          "line": -1,
+          "samples": 30,
+          "callers": [
+            {
+              "name": "(anonymous)",
+              "source": "node_modules/drizzle-orm/bun-sqlite/session.js",
+              "line": 101
+            },
+            {
+              "name": "withStatement",
+              "source": "node_modules/drizzle-orm/bun-sqlite/session.js",
+              "line": 76
+            },
+            {
+              "name": "(anonymous)",
+              "source": "opencorvus/src/project/project.ts",
+              "line": 941
+            },
+            {
+              "name": "run",
+              "source": "node:async_hooks",
+              "line": 78
+            }
+          ]
+        },
+        {
+          "name": "stat",
+          "source": "",
+          "line": -1,
+          "samples": 30,
+          "callers": [
+            {
+              "name": "stat2",
+              "source": "node:fs",
+              "line": 183
+            },
+            {
+              "name": "isexe",
+              "source": "isexe@2.0.0/node_modules/isexe/windows.js",
+              "line": 33
+            },
+            {
+              "name": "isexe",
+              "source": "isexe@2.0.0/node_modules/isexe/index.js",
+              "line": 11
+            },
+            {
+              "name": "(anonymous)",
+              "source": "which@2.0.2/node_modules/which/which.js",
+              "line": 68
+            }
+          ]
+        },
+        {
+          "name": "(anonymous)",
+          "source": "",
+          "line": -1,
+          "samples": 26,
+          "callers": [
+            {
+              "name": "processTicksAndRejections",
+              "source": "",
+              "line": 6
+            },
+            {
+              "name": "(root)",
+              "source": "",
+              "line": -1
+            }
+          ]
+        },
+        {
+          "name": "map",
+          "source": "",
+          "line": 0,
+          "samples": 24,
+          "callers": [
+            {
+              "name": "withStatement",
+              "source": "node_modules/drizzle-orm/bun-sqlite/session.js",
+              "line": 76
+            },
+            {
+              "name": "(anonymous)",
+              "source": "opencorvus/src/project/project.ts",
+              "line": 941
+            },
+            {
+              "name": "run",
+              "source": "node:async_hooks",
+              "line": 78
+            },
+            {
+              "name": "provideDatabaseContext",
+              "source": "opencorvus/src/storage/db.ts",
+              "line": 1568
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "requestID": "201556dd-fdf5-47bb-a575-0a6ea78e03d0",
+      "startedAt": "2026-10-20T06:53:01.136Z",
+      "endedAt": "2026-10-20T06:53:16.707Z",
+      "wallMs": 15571,
+      "selectedSamples": 1558,
+      "top": [
+        {
+          "name": "spawn",
+          "source": "",
+          "line": -1,
+          "samples": 691,
+          "callers": [
+            {
+              "name": "spawn",
+              "source": "node:child_process",
+              "line": 706
+            },
+            {
+              "name": "spawn",
+              "source": "node:child_process",
+              "line": 10
+            },
+            {
+              "name": "(anonymous)",
+              "source": "opencorvus/.tmp-product-iteration/config-current-io-cost-464/passive-io-v4.ts",
+              "line": 39
+            },
+            {
+              "name": "spawnWindowsRequest",
+              "source": "opencorvus/src/shell/process-supervisor.ts",
+              "line": 1595
+            }
+          ]
+        },
+        {
+          "name": "values",
+          "source": "",
+          "line": -1,
+          "samples": 39,
+          "callers": [
+            {
+              "name": "(anonymous)",
+              "source": "node_modules/drizzle-orm/bun-sqlite/session.js",
+              "line": 101
+            },
+            {
+              "name": "withStatement",
+              "source": "node_modules/drizzle-orm/bun-sqlite/session.js",
+              "line": 76
+            },
+            {
+              "name": "(anonymous)",
+              "source": "opencorvus/src/protocol/delivery.ts",
+              "line": 1533
+            },
+            {
+              "name": "run",
+              "source": "node:async_hooks",
+              "line": 78
+            }
+          ]
+        },
+        {
+          "name": "stat",
+          "source": "",
+          "line": -1,
+          "samples": 32,
+          "callers": [
+            {
+              "name": "stat2",
+              "source": "node:fs",
+              "line": 183
+            },
+            {
+              "name": "isexe",
+              "source": "isexe@2.0.0/node_modules/isexe/windows.js",
+              "line": 33
+            },
+            {
+              "name": "isexe",
+              "source": "isexe@2.0.0/node_modules/isexe/index.js",
+              "line": 11
+            },
+            {
+              "name": "(anonymous)",
+              "source": "which@2.0.2/node_modules/which/which.js",
+              "line": 68
+            }
+          ]
+        },
+        {
+          "name": "MoveFileExW",
+          "source": "",
+          "line": -1,
+          "samples": 32,
+          "callers": [
+            {
+              "name": "renameWindows",
+              "source": "opencorvus/src/util/rename-no-replace.ts",
+              "line": 97
+            },
+            {
+              "name": "(anonymous)",
+              "source": "",
+              "line": -1
+            },
+            {
+              "name": "processTicksAndRejections",
+              "source": "",
+              "line": 6
+            },
+            {
+              "name": "(root)",
+              "source": "",
+              "line": -1
+            }
+          ]
+        },
+        {
+          "name": "resolve",
+          "source": "",
+          "line": -1,
+          "samples": 31,
+          "callers": [
+            {
+              "name": "bound resolve",
+              "source": "",
+              "line": -1
+            },
+            {
+              "name": "normalizeKey",
+              "source": "opencorvus/src/project/directory-admission.ts",
+              "line": 130
+            },
+            {
+              "name": "key",
+              "source": "opencorvus/src/project/directory-admission.ts",
+              "line": 137
+            },
+            {
+              "name": "(anonymous)",
+              "source": "",
+              "line": -1
+            }
+          ]
+        },
+        {
+          "name": "(anonymous)",
+          "source": "",
+          "line": -1,
+          "samples": 26,
+          "callers": [
+            {
+              "name": "processTicksAndRejections",
+              "source": "",
+              "line": 6
+            },
+            {
+              "name": "(root)",
+              "source": "",
+              "line": -1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "boundary": "Original prior CPU profile epoch-microsecond start and sample deltas aligned to exact HTTP windows; sample counts identify active stacks, not wall milliseconds. Relative call-frame paths only, no contents or arguments."
+}

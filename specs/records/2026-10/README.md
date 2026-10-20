@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [完整配置保存的日志成本](2026-10-20-config-log-cost.md)：DEBUG/INFO真实对照、[四张截图和148次原生探针](../../artifacts/2026-10-20-config-log-cost/README.md)，保留性能失败。
+
 - [配置保存成本与服务商加载反馈](2026-10-20-config-current-io-cost.md)：真实调用计数、撤回无收益实验与[12张截图及最终加载反馈](../../artifacts/2026-10-20-config-current-io-cost/README.md)。
 
 - [Task与Mission的Goal入口](2026-10-20-goal-owner-ui.md)：独立草稿、Mission实跑与[15张截图及同页切换](../../artifacts/2026-10-20-goal-owner-ui/README.md)。

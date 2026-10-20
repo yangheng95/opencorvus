@@ -1,0 +1,107 @@
+{
+  "flags": [
+    {
+      "mode": "detached",
+      "kind": "git",
+      "concurrency": 1,
+      "commands": 24,
+      "wallMs": 4531.8186000000005,
+      "syncSpawnMs": 698.5147000000002
+    },
+    {
+      "mode": "attached",
+      "kind": "git",
+      "concurrency": 1,
+      "commands": 24,
+      "wallMs": 2855.5290000000005,
+      "syncSpawnMs": 254.03210000000036
+    },
+    {
+      "mode": "attached",
+      "kind": "git",
+      "concurrency": 12,
+      "commands": 24,
+      "wallMs": 1347.9917000000005,
+      "syncSpawnMs": 914.1432000000004
+    },
+    {
+      "mode": "detached",
+      "kind": "git",
+      "concurrency": 12,
+      "commands": 24,
+      "wallMs": 992.1388999999999,
+      "syncSpawnMs": 361.4981000000025
+    },
+    {
+      "mode": "detached",
+      "kind": "git",
+      "concurrency": 12,
+      "commands": 24,
+      "wallMs": 1105.4272,
+      "syncSpawnMs": 504.13530000000355
+    },
+    {
+      "mode": "attached",
+      "kind": "git",
+      "concurrency": 12,
+      "commands": 24,
+      "wallMs": 1282.294899999999,
+      "syncSpawnMs": 728.2645999999968
+    },
+    {
+      "mode": "detached",
+      "kind": "payload",
+      "commands": 1,
+      "wallMs": 146.8184000000001,
+      "syncSpawnMs": 10.547199999999066,
+      "result": {
+        "code": 0,
+        "stdoutBytes": 2097152,
+        "stderrBytes": 524288
+      }
+    },
+    {
+      "mode": "attached",
+      "kind": "payload",
+      "commands": 1,
+      "wallMs": 138.21060000000034,
+      "syncSpawnMs": 8.86659999999938,
+      "result": {
+        "code": 0,
+        "stdoutBytes": 2097152,
+        "stderrBytes": 524288
+      }
+    },
+    {
+      "mode": "attached",
+      "kind": "payload",
+      "commands": 1,
+      "wallMs": 193.7512999999999,
+      "syncSpawnMs": 9.499400000000605,
+      "result": {
+        "code": 0,
+        "stdoutBytes": 2097152,
+        "stderrBytes": 524288
+      }
+    },
+    {
+      "mode": "detached",
+      "kind": "payload",
+      "commands": 1,
+      "wallMs": 145.1988999999994,
+      "syncSpawnMs": 10.45850000000064,
+      "result": {
+        "code": 0,
+        "stdoutBytes": 2097152,
+        "stderrBytes": 524288
+      }
+    }
+  ],
+  "totalCommands": 148,
+  "liveHandles": {
+    "live": 0,
+    "owners": {}
+  },
+  "boundary": "Scratch-only helper detached flag substitution through original production Process.runHost and native helper, original output and physical/request settlement; no Provider/auth/database initializer or end-to-end performance qualification",
+  "conclusion": "Attached helper flag lacks stable parallel benefit; original production detached strategy retained"
+}
