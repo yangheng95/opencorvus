@@ -1,0 +1,10 @@
+import fs from 'node:fs'
+const root=import.meta.dirname,old=root.replace('dependency-redirect-hardening-488','goal-form-validation-486')
+let prepare=fs.readFileSync(old+'/prepare.ts','utf8').replaceAll('goal-form-validation-486','dependency-redirect-hardening-488')
+prepare=prepare.replace("assert(stage==='before'||stage==='after'||stage==='final')","assert(stage==='after')")
+prepare=prepare.replace("port=stage==='before'?18851:stage==='after'?18853:18855","port=18861")
+prepare=prepare.replace("stage==='before'?base+'/web-tool-summary-485-after-bundle/bin/ui':repo+'/packages/overlay/dist-vite'","repo+'/packages/overlay/dist-vite'")
+prepare=prepare.replace("'486 '+stage+' Goal form qualification;no credentials or model requests'","'488 '+stage+' updated dependency compatibility;no credentials or model requests'")
+fs.writeFileSync(root+'/prepare.ts',prepare,{flag:'wx'})
+fs.copyFileSync(old+'/preserve.ts',root+'/preserve.ts',fs.constants.COPYFILE_EXCL)
+console.log('Prepared one independent18861 after scope;source/full history and original process contracts unchanged.')

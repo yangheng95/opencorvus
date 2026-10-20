@@ -1,0 +1,34 @@
+$ bun run check:sdk-imports && bun run check:ai-runtime && bun run check:database-migrations && bun run check:expert-squad-types && bunx turbo run typecheck
+$ bun run ./script/check-sdk-imports.ts
+sdk import check passed (OpenCorvusClient)
+$ bun run ./script/check-ai-runtime.ts
+ai runtime check passed (ai v7, provider v4, provider-utils v5, OpenRouter v3)
+$ bun run ./packages/opencorvus/script/check/database-migrations.ts
+database-migrations check ok — target version 3, in-memory SQLite objects match the declared migration target
+$ bunx tsc -p expert-squads/tsconfig.json
+• turbo 2.9.14
+
+   • Packages in scope: @opencorvus-ai/channel-config, @opencorvus-ai/channel-runtime, @opencorvus-ai/overlay, @opencorvus-ai/plugin, @opencorvus-ai/script, @opencorvus-ai/sdk, @opencorvus-ai/transport-protocol, @opencorvus-ai/util, @opencorvus/web, opencorvus
+   • Running typecheck in 10 packages
+   • Remote caching disabled
+
+@opencorvus-ai/channel-runtime:typecheck: cache miss, executing 087c2bd34bcdb6c8
+@opencorvus-ai/plugin:typecheck: cache miss, executing cee5c1f20fc423a9
+@opencorvus-ai/util:typecheck: cache hit, replaying logs d9707b3ad070e089
+@opencorvus-ai/util:typecheck: $ tsc --noEmit
+@opencorvus-ai/channel-config:typecheck: cache hit, replaying logs 8c1c3bc7cb7ee767
+@opencorvus-ai/channel-config:typecheck: $ tsc --noEmit
+opencorvus:typecheck: cache miss, executing c430c2eb64c47948
+@opencorvus-ai/sdk:typecheck: cache hit, replaying logs 667fe063684fca71
+@opencorvus-ai/sdk:typecheck: $ tsc --noEmit
+@opencorvus-ai/transport-protocol:typecheck: cache hit, replaying logs 8e0ab278e1ebafc0
+@opencorvus-ai/transport-protocol:typecheck: $ tsc --noEmit
+@opencorvus-ai/overlay:typecheck: cache miss, executing 8751ec1c2d407447
+opencorvus:typecheck: $ node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit
+@opencorvus-ai/plugin:typecheck: $ tsc --noEmit
+@opencorvus-ai/channel-runtime:typecheck: $ tsgo --noEmit
+@opencorvus-ai/overlay:typecheck: $ tsc --noEmit
+
+ Tasks:    8 successful, 8 total
+Cached:    4 cached, 8 total
+  Time:    49.655s

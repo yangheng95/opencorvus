@@ -1,0 +1,110 @@
+{
+  "observedAt": "2026-10-20T21:04:05.431Z",
+  "physical": {
+    "observedAtUtc": "2026-10-20T20:58:00.4207329Z",
+    "originalHandle": 5756,
+    "native": {
+      "occurrence": "dependency-redirect-hardening-488-after-667c1df8-ffea-41d6-a160-ac285b87dd1a",
+      "outcome": "settled",
+      "host": {
+        "pid": 77960,
+        "processInstanceID": "win32:639281261022571786",
+        "occurrenceID": "1e0b71c9-b460-437c-aa26-78b5a2c3196f"
+      },
+      "target": {
+        "pid": 89792,
+        "processInstanceID": "win32:639281261030710653",
+        "occurrenceID": "7809a070-a4ff-4a1a-8b02-7c92024ded9a"
+      },
+      "observedAtUtc": "2026-10-20T20:57:39.516Z",
+      "deadlineAt": 1792530502148,
+      "terminal": {
+        "occurrenceID": "dependency-redirect-hardening-488-after-667c1df8-ffea-41d6-a160-ac285b87dd1a",
+        "pid": 89792,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "originalExit": 0,
+    "shutdown": {
+      "observedAtUtc": "2026-10-20T20:57:39.4588286Z",
+      "statusCode": 200,
+      "target": {
+        "pid": 89792,
+        "processInstanceID": "win32:639281261030710653",
+        "occurrenceID": "7809a070-a4ff-4a1a-8b02-7c92024ded9a"
+      },
+      "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYcqc1t007C6lEIKDs\"}",
+      "occurrence": "dependency-redirect-hardening-488-after-667c1df8-ffea-41d6-a160-ac285b87dd1a"
+    },
+    "launcher": {
+      "childExitCode": 0,
+      "observedAtUtc": "2026-10-20T20:57:39.5563256Z"
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 77960,
+          "processInstanceID": "win32:639281261022571786",
+          "occurrenceID": "1e0b71c9-b460-437c-aa26-78b5a2c3196f"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 89792,
+          "processInstanceID": "win32:639281261030710653",
+          "occurrenceID": "7809a070-a4ff-4a1a-8b02-7c92024ded9a"
+        }
+      }
+    ]
+  },
+  "page": "Owned60 closed",
+  "modelRequests": 0,
+  "credentials": "No auth/models staging,Provider preflight or model input",
+  "extraInstaller": {
+    "originalHandle": 51194,
+    "originalExit": -1,
+    "receipt": {
+      "birth": "2026-10-20T20:49:30.5936780Z",
+      "action": "Cancel only the extra owned force installer;standard directory build pending;original service unchanged",
+      "pid": 64280,
+      "at": "2026-10-20T20:55:12.4842318Z"
+    },
+    "classification": "Extra owned force installer cancelled after original identity verification;normal frozen install passed after original service retired its loaded native watcher"
+  },
+  "builds": {
+    "firstWebsite": {
+      "originalHandle": 7149,
+      "exit": 1,
+      "output": "Root scratch output caused SSR external dependency to resolve from a different scope"
+    },
+    "standardWebsite": {
+      "originalHandle": 24993,
+      "exit": 0,
+      "output": "Original standard packages/web/dist;263HTML;23.25seconds"
+    },
+    "ui": {
+      "originalHandle": 60676,
+      "exit": 0
+    },
+    "typecheck": {
+      "originalHandle": 75172,
+      "exit": 0
+    },
+    "finalContracts": {
+      "originalHandle": 56396,
+      "exit": 0
+    },
+    "routes": {
+      "originalHandle": 11569,
+      "exit": 0
+    }
+  }
+}

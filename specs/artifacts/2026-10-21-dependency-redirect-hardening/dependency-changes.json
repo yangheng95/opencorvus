@@ -1,0 +1,131 @@
+{
+  "observedAt": "2026-10-20T21:04:05.428Z",
+  "changes": [
+    {
+      "entry": "@modelcontextprotocol/sdk",
+      "before": "@modelcontextprotocol/sdk@1.31.0",
+      "after": "@modelcontextprotocol/sdk@1.32.0"
+    },
+    {
+      "entry": "@oxc-project/types",
+      "before": "@oxc-project/types@0.143.0",
+      "after": "@oxc-project/types@0.154.0"
+    },
+    {
+      "entry": "@rolldown/binding-android-arm64",
+      "before": "@rolldown/binding-android-arm64@1.2.3",
+      "after": "@rolldown/binding-android-arm64@1.2.14"
+    },
+    {
+      "entry": "@rolldown/binding-darwin-arm64",
+      "before": "@rolldown/binding-darwin-arm64@1.2.3",
+      "after": "@rolldown/binding-darwin-arm64@1.2.14"
+    },
+    {
+      "entry": "@rolldown/binding-darwin-x64",
+      "before": "@rolldown/binding-darwin-x64@1.2.3",
+      "after": "@rolldown/binding-darwin-x64@1.2.14"
+    },
+    {
+      "entry": "@rolldown/binding-freebsd-x64",
+      "before": "@rolldown/binding-freebsd-x64@1.2.3",
+      "after": "@rolldown/binding-freebsd-x64@1.2.14"
+    },
+    {
+      "entry": "@rolldown/binding-linux-arm-gnueabihf",
+      "before": "@rolldown/binding-linux-arm-gnueabihf@1.2.3",
+      "after": "@rolldown/binding-linux-arm-gnueabihf@1.2.14"
+    },
+    {
+      "entry": "@rolldown/binding-linux-arm64-gnu",
+      "before": "@rolldown/binding-linux-arm64-gnu@1.2.3",
+      "after": "@rolldown/binding-linux-arm64-gnu@1.2.14"
+    },
+    {
+      "entry": "@rolldown/binding-linux-arm64-musl",
+      "before": "@rolldown/binding-linux-arm64-musl@1.2.3",
+      "after": "@rolldown/binding-linux-arm64-musl@1.2.14"
+    },
+    {
+      "entry": "@rolldown/binding-linux-ppc64-gnu",
+      "before": "@rolldown/binding-linux-ppc64-gnu@1.2.3",
+      "after": "@rolldown/binding-linux-ppc64-gnu@1.2.14"
+    },
+    {
+      "entry": "@rolldown/binding-linux-s390x-gnu",
+      "before": "@rolldown/binding-linux-s390x-gnu@1.2.3",
+      "after": "@rolldown/binding-linux-s390x-gnu@1.2.14"
+    },
+    {
+      "entry": "@rolldown/binding-linux-x64-gnu",
+      "before": "@rolldown/binding-linux-x64-gnu@1.2.3",
+      "after": "@rolldown/binding-linux-x64-gnu@1.2.14"
+    },
+    {
+      "entry": "@rolldown/binding-linux-x64-musl",
+      "before": "@rolldown/binding-linux-x64-musl@1.2.3",
+      "after": "@rolldown/binding-linux-x64-musl@1.2.14"
+    },
+    {
+      "entry": "@rolldown/binding-openharmony-arm64",
+      "before": "@rolldown/binding-openharmony-arm64@1.2.3",
+      "after": "@rolldown/binding-openharmony-arm64@1.2.14"
+    },
+    {
+      "entry": "@rolldown/binding-win32-arm64-msvc",
+      "before": "@rolldown/binding-win32-arm64-msvc@1.2.3",
+      "after": "@rolldown/binding-win32-arm64-msvc@1.2.14"
+    },
+    {
+      "entry": "@rolldown/binding-win32-x64-msvc",
+      "before": "@rolldown/binding-win32-x64-msvc@1.2.3",
+      "after": "@rolldown/binding-win32-x64-msvc@1.2.14"
+    },
+    {
+      "entry": "follow-redirects",
+      "before": "follow-redirects@1.16.0",
+      "after": "follow-redirects@1.16.1"
+    },
+    {
+      "entry": "hono",
+      "before": "hono@4.13.7",
+      "after": "hono@4.13.11"
+    },
+    {
+      "entry": "rolldown",
+      "before": "rolldown@1.2.3",
+      "after": "rolldown@1.2.14"
+    },
+    {
+      "entry": "vite",
+      "before": "vite@6.4.3",
+      "after": "vite@6.4.4"
+    },
+    {
+      "entry": "@astrojs/solid-js/vite",
+      "before": "vite@8.2.1",
+      "after": "vite@8.3.4"
+    },
+    {
+      "entry": "astro/vite",
+      "before": "vite@8.2.1",
+      "after": "vite@8.3.4"
+    },
+    {
+      "entry": "@rolldown/binding-android-arm-eabi",
+      "after": "@rolldown/binding-android-arm-eabi@1.2.14"
+    },
+    {
+      "entry": "@astrojs/solid-js/vite/picomatch",
+      "after": "picomatch@4.0.7"
+    },
+    {
+      "entry": "astro/vite/picomatch",
+      "after": "picomatch@4.0.7"
+    }
+  ],
+  "packages": 25,
+  "scope": "Targeted SDK/Hono/follow-redirects/Vite upgrades and the actual Vite8 Rolldown/OXC/picomatch dependencies;no unrelated package updates",
+  "runtime": "Project remains Bun1.4.0;frozen-final and actual isolated test log qualify this runtime",
+  "unusedCatalog": "Vite7.1.4 catalog has no consumer or installed7 package;unchanged"
+}

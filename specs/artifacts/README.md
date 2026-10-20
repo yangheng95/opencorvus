@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [网络依赖安全修复](2026-10-21-dependency-redirect-hardening/README.md)：MCP两种传输的明确307错误、同origin正常初始化、14个HTTP合同、11张人工图与原87行保留。
+
 - [成员来源与渲染生命周期](2026-10-21-member-reading-lifecycle/README.md)：21图、六个真实Sol流、原权限等待与完整历史保留，未用完成态冒充新流。
 
 - [持续目标输入反馈](2026-10-21-goal-form-validation/README.md)：19张实图、首轮失败保留、原87行事实与三个原生scope完整结算。

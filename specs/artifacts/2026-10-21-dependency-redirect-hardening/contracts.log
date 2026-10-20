@@ -1,0 +1,34 @@
+[1/2] START test/mcp/remote-redirect-contract.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) remote HTTP initialization keeps its body and configured header through a same-origin redirect [23.42ms]
+(pass) remote HTTP cross-origin redirect returns the SDK's explicit 307 transport error [7.19ms]
+(pass) remote SSE cross-origin redirect returns the SDK's explicit 307 event-source error [9.48ms]
+
+ 3 pass
+ 0 fail
+ 7 expect() calls
+Ran 3 tests across 1 file. [3.42s]
+[1/2] DONE test/mcp/remote-redirect-contract.test.ts exit=0 duration=5.06s
+[2/2] START test/server/static-resource-snapshot.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) captured resources retain exact transport bytes after the published directory is removed [111.57ms]
+(pass) independent captures of one published path serve their own complete bytes [44.71ms]
+(pass) newly published resource names receive the original source's explicit missing-resource response [34.12ms]
+(pass) concurrent and subsequent responses each receive the complete captured resource [29.63ms]
+(pass) resource URLs retain Unicode, spaces and literal percent filename identity [29.92ms]
+(pass) invalid resource URL assets/%00.bin has the forbidden response contract [27.77ms]
+(pass) invalid resource URL assets/..%5Coutside.bin has the forbidden response contract [24.31ms]
+(pass) invalid resource URL assets/% has the forbidden response contract [26.20ms]
+(pass) capture rejects a directory link to resources outside the published root [27.51ms]
+(pass) a declared resource manifest and required directories retain the complete captured response [37.87ms]
+(pass) a missing declared dependency returns the capture error contract [31.47ms]
+
+ 11 pass
+ 0 fail
+ 32 expect() calls
+Ran 11 tests across 1 file. [2.12s]
+[2/2] DONE test/server/static-resource-snapshot.test.ts exit=0 duration=2.39s

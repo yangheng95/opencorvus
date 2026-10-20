@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [网络依赖与开发编辑器安全修复](records/2026-10/2026-10-21-dependency-redirect-hardening.md)：MCP、Hono、重定向及Vite补丁，[14项真实HTTP合同与11张实页](artifacts/2026-10-21-dependency-redirect-hardening/README.md)。
+
 - [成员来源阅读与渲染生命周期](records/2026-10/2026-10-21-member-reading-lifecycle.md)：[21图及真实成员网页流](artifacts/2026-10-21-member-reading-lifecycle/README.md)，六个Sol请求结算，未复现新的Rendering缺陷。
 
 - [持续目标输入反馈](records/2026-10/2026-10-21-goal-form-validation.md)：原生错误本地化、编辑后旧摘要退休与[19张人工页面](artifacts/2026-10-21-goal-form-validation/README.md)。

@@ -1,0 +1,27 @@
+{
+  "observedAt": "2026-10-20T20:57:46.080Z",
+  "stage": "after",
+  "schema": 3,
+  "integrity": "ok",
+  "preserved": {
+    "project": 4,
+    "session": 4,
+    "message": 14,
+    "part": 33,
+    "protocol_event": 28,
+    "tool_part_request": 2,
+    "tool_part_outcome": 2
+  },
+  "current": {
+    "project": 5,
+    "session": 4,
+    "message": 14,
+    "part": 33,
+    "protocol_event": 28,
+    "tool_part_request": 2,
+    "tool_part_outcome": 2
+  },
+  "canonical": {},
+  "source": "All source rows and original bytes/mtime preserved",
+  "qualification": "Readonly persisted data;not a UI assertion or model-run qualification"
+}

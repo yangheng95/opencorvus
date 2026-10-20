@@ -122,6 +122,15 @@ denial-only turns are not automatically rewritten or repaired by startup recover
 
 ## Adjacent security boundaries
 
+Remote MCP Hypertext Transfer Protocol (HTTP) and Server-Sent Events (SSE)
+transports inherit the upstream Software Development Kit (SDK)'s default
+`same-origin` redirect policy. Method-preserving redirects within that boundary retain the
+original request body and configured headers; a cross-origin redirect returns
+the SDK's explicit transport error. The SDK also permits its defined same-host,
+default-port HTTP-to-HTTPS upgrade. This boundary belongs to the common transport
+dependency alongside credential materialization and OAuth handling. Application
+permission approval does not widen it.
+
 - Large Language Model telemetry may record operational metadata; prompt, message, response, and Tool content capture remains disabled without a separate opt-in contract.
 - OAuth diagnostics may record server/host/correlation metadata but never authorization URLs, state, code, token values, or pending-state lists.
 - Public unknown HTTP errors use a generic body and a request identifier; full diagnostics remain server-side.

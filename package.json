@@ -67,7 +67,7 @@
       "drizzle-kit": "1.0.0-beta.12-a5629fb",
       "drizzle-orm": "1.0.0-beta.20",
       "ai": "7.0.138",
-      "hono": "4.13.7",
+      "hono": "4.13.11",
       "hono-openapi": "1.1.2",
       "fuzzysort": "3.1.0",
       "luxon": "3.6.1",
@@ -132,7 +132,7 @@
     "web-tree-sitter"
   ],
   "overrides": {
-    "@modelcontextprotocol/sdk": "1.31.0",
+    "@modelcontextprotocol/sdk": "1.32.0",
     "@ai-sdk/cerebras": "3.0.68",
     "@ai-sdk/fireworks": "3.0.71",
     "@ai-sdk/google-vertex": "5.0.110",
@@ -158,7 +158,8 @@
     "fast-uri": "4.1.5",
     "fast-xml-parser": "5.10.1",
     "find-my-way": "9.7.0",
-    "hono": "4.13.7",
+    "follow-redirects": "1.16.1",
+    "hono": "4.13.11",
     "http-cache-semantics": "4.3.0",
     "ip-address": "10.7.1",
     "js-yaml": "4.3.2",

@@ -1,0 +1,20 @@
+import fs from 'node:fs'
+import assert from 'node:assert/strict'
+import {Database} from 'bun:sqlite'
+const stage=process.argv[2];assert(['before','after','final'].includes(stage))
+const root=import.meta.dir,snapshot=JSON.parse(fs.readFileSync(root+'/'+stage+'-original-private.json','utf8'))
+const db=new Database(snapshot.target+'/runtime/data/opencorvus.db',{readonly:true,create:false}),source=new Database(snapshot.source+'/runtime/data/opencorvus.db',{readonly:true,create:false})
+try{
+ db.exec('BEGIN');source.exec('BEGIN')
+ assert.deepEqual(db.query('PRAGMA user_version').get(),{user_version:3});assert.deepEqual(db.query('PRAGMA integrity_check').get(),{integrity_check:'ok'})
+ const preserved:Record<string,number>={},current:Record<string,number>={}
+ for(const [table,rows] of Object.entries(snapshot.original) as [string,any[]][]){
+  const actual=db.query('SELECT rowid,* FROM '+table+' ORDER BY rowid').all() as any[],byRowid=new Map(actual.map(row=>[row.rowid,row]))
+  assert.deepEqual(rows.map(row=>byRowid.get(row.rowid)),rows,table+' full original fields/identity/time')
+  assert.deepEqual(source.query('SELECT rowid,* FROM '+table+' ORDER BY rowid').all(),rows,table+' source complete rows')
+  preserved[table]=rows.length;current[table]=actual.length
+ }
+ const stat=fs.statSync(snapshot.source+'/runtime/data/opencorvus.db');assert.equal(stat.size,snapshot.sourceDatabase.bytes);assert.equal(stat.mtimeMs,snapshot.sourceDatabase.modifiedAtMs)
+ const result={observedAt:new Date().toISOString(),stage,schema:3,integrity:'ok',preserved,current,canonical:JSON.parse(fs.readFileSync(snapshot.target+'/runtime/config/opencorvus.jsonc','utf8')),source:'All source rows and original bytes/mtime preserved',qualification:'Readonly persisted data;not a UI assertion or model-run qualification'}
+ fs.writeFileSync(root+'/'+stage+'-preserved.json',JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result))
+}finally{db.exec('ROLLBACK');source.exec('ROLLBACK');db.close(true);source.close(true)}

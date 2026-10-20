@@ -1,0 +1,19 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+import {createRequire} from 'node:module'
+const root=import.meta.dirname,repo=path.resolve(root,'../..'),out=repo+'/specs/artifacts/2026-10-21-dependency-redirect-hardening'
+const read=p=>JSON.parse(fs.readFileSync(p,'utf8')),parse=createRequire(repo+'/packages/overlay/package.json')('jsonc-parser').parse
+fs.mkdirSync(out,{recursive:true})
+for(const name of fs.readdirSync(root).filter(n=>/^\d\d-.+\.png$/.test(n)))fs.copyFileSync(root+'/'+name,out+'/'+name.replace('04-settings-loading','04-settings'))
+for(const name of ['audit-before.json','audit-after.json','audit-final.json','after-preserved.json','installer-cancelled.json','install.log','update-preview.log','update-vite.log','frozen-install.log','frozen-final.log','reinstall.log','install-recovered.log','install-after-settlement.log','contracts.log','contracts-final.log','typecheck.log','ui-build.log','web-build.log','web-build-standard.log','routes.log'])fs.writeFileSync(out+'/'+name,fs.readFileSync(root+'/'+name,'utf8').split(/\r?\n/).map(x=>x.trimEnd()).join('\n').trimEnd()+'\n')
+for(const name of ['prepare-tools.mjs','prepare.ts','preserve.ts','launch-after.ps1','shutdown-after.ps1','settle-after.ps1','archive.mjs'])fs.copyFileSync(root+'/'+name,out+'/'+name+'.txt')
+const before=parse(fs.readFileSync(root+'/bun-before.lock','utf8')).packages,after=parse(fs.readFileSync(repo+'/bun.lock','utf8')).packages
+const changes=[...new Set([...Object.keys(before),...Object.keys(after)])].flatMap(entry=>JSON.stringify(before[entry])===JSON.stringify(after[entry])?[]:[{entry,before:before[entry]?.[0],after:after[entry]?.[0]}])
+for(const [entry,version]of [['@modelcontextprotocol/sdk','1.32.0'],['follow-redirects','1.16.1'],['hono','4.13.11'],['vite','6.4.4'],['astro/vite','8.3.4'],['@astrojs/solid-js/vite','8.3.4']])assert.equal(after[entry][0],(entry.includes('/vite')?'vite':entry)+'@'+version)
+fs.writeFileSync(out+'/dependency-changes.json',JSON.stringify({observedAt:new Date().toISOString(),changes,packages:changes.length,scope:'Targeted SDK/Hono/follow-redirects/Vite upgrades and the actual Vite8 Rolldown/OXC/picomatch dependencies;no unrelated package updates',runtime:'Project remains Bun1.4.0;frozen-final and actual isolated test log qualify this runtime',unusedCatalog:'Vite7.1.4 catalog has no consumer or installed7 package;unchanged'},null,2)+'\n')
+const evidence='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/dependency-redirect-hardening-488-after/evidence',physical=read(evidence+'/physical-terminal.json')
+assert.equal(physical.originalHandle,5756);assert.equal(physical.originalExit,0);assert.equal(physical.shutdown.statusCode,200)
+assert(physical.native.physicalCompletion&&physical.native.outputDrainComplete&&physical.native.requestCleanupComplete)
+fs.writeFileSync(out+'/owned-scope.json',JSON.stringify({observedAt:new Date().toISOString(),physical,page:'Owned60 closed',modelRequests:0,credentials:'No auth/models staging,Provider preflight or model input',extraInstaller:{originalHandle:51194,originalExit:-1,receipt:read(root+'/installer-cancelled.json'),classification:'Extra owned force installer cancelled after original identity verification;normal frozen install passed after original service retired its loaded native watcher'},builds:{firstWebsite:{originalHandle:7149,exit:1,output:'Root scratch output caused SSR external dependency to resolve from a different scope'},standardWebsite:{originalHandle:24993,exit:0,output:'Original standard packages/web/dist;263HTML;23.25seconds'},ui:{originalHandle:60676,exit:0},typecheck:{originalHandle:75172,exit:0},finalContracts:{originalHandle:56396,exit:0},routes:{originalHandle:11569,exit:0}}},null,2)+'\n')
+console.log(JSON.stringify({out,images:fs.readdirSync(out).filter(n=>n.endsWith('.png')).length,changedPackages:changes.length,originalScope:5756,requests:0}))
