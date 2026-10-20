@@ -1,0 +1,100 @@
+{
+  "contracts": [
+    {
+      "name": "Unicode arguments cwd and both original byte streams",
+      "request": "fb646788-3a07-4a8b-9a56-d2d77a434201"
+    },
+    {
+      "name": "Parallel peer stdout EOF belongs to its own query",
+      "fast": 474.1607,
+      "slow": 2080.4348
+    },
+    {
+      "name": "Named CreateProcess failure and independent same-scope peer success",
+      "failed": "32272b14-bf6a-4bcf-8827-52e543947a56",
+      "success": "d889c59e-0d75-4816-a304-7a8effda0a8e"
+    },
+    {
+      "name": "Explicit per-query cancellation joins exact Job and output",
+      "request": "4e04081f-4ea7-4b04-84a6-7b10f930be20"
+    },
+    {
+      "name": "Silent process returns explicit inactivity_timeout with native settlement",
+      "request": "256b814d-d12d-47ef-aa36-9869d8f0104f"
+    },
+    {
+      "name": "Actual stdout bytes refresh inactivity beyond total elapsed timeout",
+      "request": "36ef8c4d-0dbe-490d-8199-6b5b04b38d2e"
+    },
+    {
+      "name": "Bounded collected bytes and explicit output_limit settle target",
+      "request": "4c8d52d5-6068-41fa-9e80-dd6e28980848"
+    },
+    {
+      "name": "Original production Process.runHost single-request mode with private native build",
+      "code": 0
+    }
+  ],
+  "ordinaryScopeTerminal": {
+    "owner": {
+      "pid": 50852,
+      "processInstanceID": "win32:639281304964126184",
+      "occurrenceID": "69d5666e-a954-4f38-ada8-c8181afabfdc"
+    },
+    "helper": {
+      "pid": 72996,
+      "processInstanceID": "win32:639281304966789329",
+      "occurrenceID": "10114a0e-8cac-436c-bfdc-89846cd2ef04"
+    },
+    "terminal": {
+      "code": 0,
+      "signal": null
+    },
+    "helperState": "dead_or_reused",
+    "outputComplete": true,
+    "queryRecords": 9
+  },
+  "lifetime": [
+    {
+      "name": "Input EOF joins already admitted query before helper and output close",
+      "terminal": {
+        "owner": {
+          "pid": 45684,
+          "processInstanceID": "win32:639281307770508421",
+          "occurrenceID": "f49466ea-4efc-459b-8777-0a588c6caee3"
+        },
+        "helper": {
+          "pid": 89632,
+          "processInstanceID": "win32:639281307773033217",
+          "occurrenceID": "b92bd078-1d99-48b7-8234-2f84b5a25286"
+        },
+        "terminal": {
+          "code": 0,
+          "signal": null
+        },
+        "helperState": "dead_or_reused",
+        "outputComplete": true,
+        "queryRecords": 1
+      }
+    },
+    {
+      "name": "Exact original Bun owner death reclaims native query target and descendant",
+      "terminal": {
+        "code": null,
+        "signal": "SIGTERM"
+      },
+      "states": {
+        "owner": "dead_or_reused",
+        "helper": "dead_or_reused",
+        "target": "dead_or_reused",
+        "descendant": "dead_or_reused"
+      },
+      "qualification": "Native Job and parent exact-identity qualification;dead owner cannot fulfill its former JS response/output branch. This does not claim public recovery qualification."
+    }
+  ],
+  "queryBudget": 50,
+  "actualQueries": 12,
+  "retiredQueries": 38,
+  "modelRequests": 0,
+  "boundary": "Eight basic and two lifetime aggregate contracts;some contracts contain parallel queries. Counts include ordinary single mode. Worker crash,malformed framing,all production Host/Task/Mission/Session recovery remain unqualified."
+}

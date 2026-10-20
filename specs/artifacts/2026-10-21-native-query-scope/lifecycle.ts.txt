@@ -1,0 +1,34 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+import {spawn} from 'node:child_process'
+const {installProcessShims}=await import('../../packages/opencorvus/src/runtime/shims');installProcessShims()
+const {QueryScope}=await import('./scope-client')
+const physical=await import('../../packages/opencorvus/src/runtime/process-occurrence')
+const root=import.meta.dir,runRoot=process.env.OPENCORVUS_HOME!,facts:any[]=[]
+async function json(file:string){for(;;){try{return JSON.parse(await fs.readFile(file,'utf8'))}catch(error:any){if(error.code!=='ENOENT')throw error;await Bun.sleep(10)}}}
+const scope=new QueryScope(path.join(runRoot,'eof-queries'))
+const query=await scope.submit(process.execPath,['-e',`process.stdout.write('start');setTimeout(()=>process.stderr.write('final'),700)`],runRoot)
+await json(query.request.ready_file)
+scope.child.stdin!.end()
+const value=await query.result;assert.equal(value.code,0);assert.equal(value.stdout.toString(),'start');assert.equal(value.stderr.toString(),'final');const eofTerminal=await scope.close()
+facts.push({name:'Input EOF joins already admitted query before helper and output close',query:scope.records[0],terminal:eofTerminal})
+const parentRoot=path.join(runRoot,'owner-death');await fs.mkdir(parentRoot)
+const parent=spawn(process.execPath,[path.join(root,'parent-loss.ts'),parentRoot],{stdio:['ignore','pipe','pipe'],windowsHide:true,env:process.env})
+const parentTerminal=new Promise((resolve,reject)=>{parent.once('close',(code,signal)=>resolve({code,signal}));parent.once('error',reject)})
+const collect=async(stream:AsyncIterable<Uint8Array>)=>{const chunks:Buffer[]=[];for await(const chunk of stream)chunks.push(Buffer.from(chunk));return Buffer.concat(chunks).toString()}
+const parentOutput=Promise.all([collect(parent.stdout!),collect(parent.stderr!)])
+const prepared=await json(path.join(parentRoot,'parent-ready.json')),desc=await json(path.join(parentRoot,'descendant.json')),descendant=physical.observedProcessOccurrence(desc.pid)!
+assert.equal(prepared.owner.pid,parent.pid);assert.equal(physical.observeRuntimeProcessOccurrence(prepared.owner),'exact_live');assert.equal(physical.observeRuntimeProcessOccurrence(prepared.helper),'exact_live');assert(descendant,'Original descendant birth observation')
+const target={pid:prepared.ready.target_pid,processInstanceID:prepared.ready.target_process_instance_id,occurrenceID:prepared.request.request_id}
+assert.equal(physical.observeRuntimeProcessOccurrence(target),'exact_live')
+assert.equal(parent.kill('SIGTERM'),true)
+const terminal=await parentTerminal,output=await parentOutput
+const settled=await json(prepared.request.settled_file)
+assert.equal(settled.request_id,prepared.request.request_id);assert.equal(settled.helper_pid,prepared.helper.pid);assert.equal(settled.runtime_occurrence_id,prepared.owner.occurrenceID);assert.equal(settled.target_pid,target.pid);assert.equal(settled.active_processes,0)
+for(;;){if(physical.observeRuntimeProcessOccurrence(prepared.helper)==='dead_or_reused')break;await Bun.sleep(10)}
+const states={owner:physical.observeRuntimeProcessOccurrence(prepared.owner),helper:physical.observeRuntimeProcessOccurrence(prepared.helper),target:physical.observeRuntimeProcessOccurrence(target),descendant:physical.observeRuntimeProcessOccurrence(descendant)}
+assert.deepEqual(states,{owner:'dead_or_reused',helper:'dead_or_reused',target:'dead_or_reused',descendant:'dead_or_reused'})
+facts.push({name:'Exact original Bun owner death reclaims native query target and descendant',prepared,descendant,settled,states,terminal,parentOutput:output,qualification:'Native Job and parent exact-identity qualification;dead owner cannot fulfill its former JS response/output branch. This does not claim public recovery qualification.'})
+await fs.writeFile(root+'/lifecycle-result.json',JSON.stringify({observedAt:new Date().toISOString(),facts,queries:2,modelRequests:0},null,2)+'\n',{flag:'wx'})
+console.log(JSON.stringify({positiveLifetimeContracts:facts.length,queries:2,modelRequests:0}))

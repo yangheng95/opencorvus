@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [短期原生查询作用域](2026-10-21-native-query-scope.md)：[149目录有效交错/十项真实进程合同](../../artifacts/2026-10-21-native-query-scope/README.md)，局部约六秒收益仍未满足完整配置指标，生产未改。
+
 - [Git原生组合与配置发现边界](2026-10-21-git-native-discovery-batch.md)：[1708个真实helper/八个原scope与原3665行](../../artifacts/2026-10-21-git-native-discovery-batch/README.md)，排除本次隐式队列，未冒充配置达标。
 
 - [网络依赖与开发编辑器安全修复](2026-10-21-dependency-redirect-hardening.md)：[实际重定向合同、完整构建和中英文Goal/Sources页面](../../artifacts/2026-10-21-dependency-redirect-hardening/README.md)，原安装器失败及恢复均保留。

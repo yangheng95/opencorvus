@@ -1,0 +1,31 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+const {installProcessShims}=await import('../../packages/opencorvus/src/runtime/shims');installProcessShims()
+const {QueryScope}=await import('./scope-client')
+const {Process}=await import('../../packages/opencorvus/src/util/process')
+const root=import.meta.dir,scopeRoot=process.env.OPENCORVUS_HOME!,cwd=path.join(scopeRoot,'contracts space 中文')
+await fs.mkdir(cwd,{recursive:true})
+const scope=new QueryScope(path.join(scopeRoot,'queries')),facts:any[]=[]
+function accept(value:any,code=0){assert.equal(value.code,code);assert.deepEqual(value.native_errors,[]);return value}
+try{
+ const args=['你好 space','quote"value','trail \\'],ceiling=path.dirname(cwd)
+ const one=accept(await scope.run(process.execPath,['-e',`process.stdout.write(JSON.stringify({cwd:process.cwd(),args:process.argv.slice(1),ceiling:process.env.GIT_CEILING_DIRECTORIES}));process.stderr.write('stderr 中文')`,...args],cwd,{ceiling}))
+ assert.deepEqual(JSON.parse(one.stdout.toString()),{cwd:path.resolve(cwd),args,ceiling});assert.equal(one.stderr.toString(),'stderr 中文');facts.push({name:'Unicode arguments cwd and both original byte streams',request:one.request.request_id})
+ const slow=await scope.submit(process.execPath,['-e',`process.stdout.write('slow-start');setTimeout(()=>process.stdout.write('slow-end'),1600)`],cwd)
+ const fast=accept(await scope.run(process.execPath,['-e',`process.stdout.write('fast')`],cwd,{ceiling:cwd}))
+ const slowResult=accept(await slow.result);assert.equal(fast.stdout.toString(),'fast');assert.equal(slowResult.stdout.toString(),'slow-startslow-end');assert(fast.receivedAt<slowResult.receivedAt,'Fast query finishes independently of live peer pipes');facts.push({name:'Parallel peer stdout EOF belongs to its own query',fast:fast.receivedAt,slow:slowResult.receivedAt})
+ const [bad,peer]=await Promise.all([scope.run(path.join(cwd,'missing-owned-command.exe'),[],cwd),scope.run(process.execPath,['-e',`process.stdout.write(process.env.GIT_CEILING_DIRECTORIES)`],cwd,{ceiling:cwd})])
+ assert.equal(bad.code,null);assert.match(bad.native_errors[0],/CreateProcessW failed/);assert.equal(bad.physical_joined,true);assert.equal(bad.output_joined,true);accept(peer);assert.equal(peer.stdout.toString(),cwd);facts.push({name:'Named CreateProcess failure and independent same-scope peer success',failed:bad.request.request_id,success:peer.request.request_id})
+ const cancel=await scope.submit(process.execPath,['-e',`process.stdout.write('cancel-ready');setInterval(()=>{},1000)`],cwd)
+ for(;;){try{await fs.readFile(cancel.request.ready_file);break}catch(error:any){if(error.code!=='ENOENT')throw error;await Bun.sleep(10)}}
+ await cancel.cancel();const cancelled=accept(await cancel.result,1);facts.push({name:'Explicit per-query cancellation joins exact Job and output',request:cancelled.request.request_id})
+ const silent=await scope.run(process.execPath,['-e','setInterval(()=>{},1000)'],cwd,{inactivity:500});accept(silent,1);assert.equal(silent.error,'inactivity_timeout');facts.push({name:'Silent process returns explicit inactivity_timeout with native settlement',request:silent.request.request_id})
+ const active=accept(await scope.run(process.execPath,['-e',`let n=0;process.stdout.write('0');const t=setInterval(()=>{process.stdout.write(String(++n));if(n===4)clearInterval(t)},300)`],cwd,{inactivity:500}));assert.equal(active.stdout.toString(),'01234');facts.push({name:'Actual stdout bytes refresh inactivity beyond total elapsed timeout',request:active.request.request_id})
+ const large=await scope.run(process.execPath,['-e',`process.stdout.write('x'.repeat(200000));setInterval(()=>{},1000)`],cwd,{maximum:1024});accept(large,1);assert.equal(large.error,'output_limit');assert.equal(large.stdout.length,1024);facts.push({name:'Bounded collected bytes and explicit output_limit settle target',request:large.request.request_id})
+ const ordinary=await Process.runHost([process.execPath,'-e',`process.stdout.write('ordinary-out');process.stderr.write('ordinary-err')`],{cwd,stdin:'ignore',inactivityTimeoutMs:90000,maxOutputBytes:8*1024*1024});assert.equal(ordinary.code,0);assert.equal(ordinary.stdout.toString(),'ordinary-out');assert.equal(ordinary.stderr.toString(),'ordinary-err');facts.push({name:'Original production Process.runHost single-request mode with private native build',code:ordinary.code})
+}finally{
+ const terminal=await scope.close()
+ await fs.writeFile(root+'/contracts-result.json',JSON.stringify({observedAt:new Date().toISOString(),facts,terminal,records:scope.records,modelRequests:0,qualification:'Private native core only;not all production ownership/recovery or full Config qualification'},null,2)+'\n',{flag:'wx'})
+}
+console.log(JSON.stringify({positiveContracts:facts.length,queries:scope.records.length,normalSingleRequest:1,modelRequests:0}))

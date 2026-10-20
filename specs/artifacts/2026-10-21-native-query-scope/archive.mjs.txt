@@ -1,0 +1,36 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+import {gzipSync,gunzipSync} from 'node:zlib'
+const root=import.meta.dirname,out=path.resolve(root,'../../specs/artifacts/2026-10-21-native-query-scope'),read=p=>JSON.parse(fs.readFileSync(p,'utf8'))
+fs.mkdirSync(out,{recursive:true})
+const physical=read(root+'/physical-scopes.json'),input=read(root+'/input-private.json')
+assert.equal(physical.scopes.length,8)
+function archive(name,target=name){const raw=fs.readFileSync(root+'/'+name),compressed=gzipSync(raw);assert(gunzipSync(compressed).equals(raw),'Original archive bytes retained');fs.writeFileSync(out+'/'+target+'.gz',compressed)}
+const runs=['single-a','single-c','scope-c','scope-d','single-d']
+const matrix=runs.map(run=>{
+ const data=read(root+'/'+run+'-result.json'),scope=physical.scopes.find(row=>row.run===run)
+ assert.equal(data.owner.pid,scope.ready.target.pid);assert.equal(data.owner.processInstanceID,scope.ready.target.processInstanceID);assert.equal(data.statCalls,44402);assert.equal(data.realpathCalls,44402);assert.equal(data.live.live,0)
+ const requests=data.scopeRecords?.map(row=>row.request)??data.requests
+ assert.equal(requests.length,296);assert.equal(new Set(requests.map(row=>row.request_id)).size,296)
+ for(const request of requests){assert.equal(request.owner_pid,data.owner.pid);assert.equal(request.owner_process_instance_id,data.owner.processInstanceID);assert.equal(request.runtime_occurrence_id,data.owner.occurrenceID)}
+ if(data.scopeRecords)for(const row of data.scopeRecords){assert.equal(row.physical.active_processes,0);assert.equal(row.requestCleanupComplete,true);assert.equal(row.result.code,0);assert.equal(row.result.output_joined,true)}
+ archive(run+'-result.json')
+ const {requests:_requests,scopeRecords,spawns,...summary}=data
+ fs.writeFileSync(out+'/'+run+'-result.json',JSON.stringify({...summary,queries:296,helpers:spawns.length,completeOriginal:run+'-result.json.gz'},null,2)+'\n')
+ return {run,mode:data.mode,wallMs:data.wallMs,maximumMainTickMs:data.mainMaxTickMs,statCalls:data.statCalls,realpathCalls:data.realpathCalls,helpers:spawns.length,gitObservations:296,spawnMs:spawns.reduce((sum,row)=>sum+row.returnedAt-row.at,0),originalToolHandle:scope.originalToolHandle,originalExit:scope.originalExit}
+})
+const valid=matrix.filter(row=>row.run!=='single-a')
+fs.writeFileSync(out+'/matrix.json',JSON.stringify({observedAt:new Date().toISOString(),validInterleavedMatrix:valid,preRepairBaseline:matrix[0],validMatrixQueries:1184,validMatrixHelpers:594,totalSuccessfulGitObservations:1480,failedBeforeTargetAttempts:148,totalGitAttempts:1628,modelRequests:0,decision:'Private scope reduces local full149 mixture to11.12/11.19s versus17.47/17.92s. Original Config10s/5s not qualified. Prototype not promoted to production.',boundary:'Not full Config,UI,all native ownership entrypoints,or public restart/recovery qualification;88,804 counted registered-directory FS operations per group exclude baseline/output checks.'},null,2)+'\n')
+for(const name of ['contracts-result.json','lifecycle-result.json'])archive(name)
+const contracts=read(root+'/contracts-result.json'),lifecycle=read(root+'/lifecycle-result.json')
+fs.writeFileSync(out+'/contracts-summary.json',JSON.stringify({contracts:contracts.facts,ordinaryScopeTerminal:contracts.terminal,lifetime:lifecycle.facts.map(row=>({name:row.name,terminal:row.terminal,states:row.states,qualification:row.qualification})),queryBudget:50,actualQueries:12,retiredQueries:38,modelRequests:0,boundary:'Eight basic and two lifetime aggregate contracts;some contracts contain parallel queries. Counts include ordinary single mode. Worker crash,malformed framing,all production Host/Task/Mission/Session recovery remain unqualified.'},null,2)+'\n')
+archive('expected-git-private.json','original-git-outputs.json')
+for(const name of ['source-preserved.json','physical-scopes.json'])fs.copyFileSync(root+'/'+name,out+'/'+name)
+fs.writeFileSync(out+'/input-projects.json',JSON.stringify({schema:3,projects:input.projects.map(({id,worktree})=>({id,worktree})),qualification:'Complete149 original directories;private full message/protocol rows excluded'},null,2)+'\n')
+for(const name of ['prepare.mjs','scope.rs','scope-client.ts','contracts.ts','parent-loss.ts','lifecycle.ts','measure.ts','launch.ps1','verify-physical.ps1','verify-source.ts','archive.mjs'])fs.copyFileSync(root+'/'+name,out+'/'+name+'.txt')
+fs.copyFileSync(root+'/native/Cargo.toml',out+'/Cargo.toml.txt');fs.copyFileSync(root+'/native/Cargo.lock',out+'/Cargo.lock.txt');archive('native/src/main.rs','native-main.rs.txt')
+for(const row of physical.scopes){if(row.run==='scope-a'){archive(row.run+'.log');fs.writeFileSync(out+'/'+row.run+'.log','Original scope-a exit1: 148 nullable native exitcodes caused the aggregate assertion; one nonGit directory completed. Full original log bytes are retained in scope-a.log.gz.\n')}else fs.copyFileSync(root+'/'+row.run+'.log',out+'/'+row.run+'.log')}
+const failed=physical.scopes.find(row=>row.run==='scope-a')
+fs.writeFileSync(out+'/failed-scope-a.json',JSON.stringify({originalToolHandle:failed.originalToolHandle,originalExit:1,native:failed.native,observation:'148Git rows rejected after nullable native exitcode,one nonGit row fulfilled;first script asserted aggregate before raw-result publication. Full per-request errors were not retained and exact historical win32 error code cannot be reconstructed.',rootCauseEvidence:'Original production spawnWindowsCommand resolves bare executable with whichAsync. Initial prototype omitted that step and supplied git to lpApplicationName. Corrected original resolver rule is the only command-admission change before successful full matrix.',boundary:'Original failed scope preserved;not performance qualified or silently overwritten'},null,2)+'\n')
+console.log(JSON.stringify({out,validMatrix:valid.map(({run,wallMs,helpers})=>({run,wallMs,helpers})),successfulGitObservations:1480,failedPreTargetAttempts:148,contracts:10,contractQueries:12,physicalScopes:8,modelRequests:0}))

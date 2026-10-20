@@ -1,0 +1,34 @@
+{
+  "originalToolHandle": "cdca60",
+  "originalExit": 1,
+  "native": {
+    "occurrence": "native-query-scope-490-scope-a-a8c86945-a9d1-47c2-8188-cbb0fb28b044",
+    "outcome": "settled",
+    "host": {
+      "pid": 78784,
+      "processInstanceID": "win32:639281305814874727",
+      "occurrenceID": "559d34e1-aa09-4f0b-ae49-06e2ff9e61f1"
+    },
+    "target": {
+      "pid": 69464,
+      "processInstanceID": "win32:639281305832769210",
+      "occurrenceID": "fe83f54d-7eb5-475d-81d2-a2d1d087193a"
+    },
+    "observedAtUtc": "2026-10-20T22:03:05.368Z",
+    "deadlineAt": 1792534021466,
+    "terminal": {
+      "occurrenceID": "native-query-scope-490-scope-a-a8c86945-a9d1-47c2-8188-cbb0fb28b044",
+      "pid": 69464,
+      "reason": "exited",
+      "exitCode": 1,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "observation": "148Git rows rejected after nullable native exitcode,one nonGit row fulfilled;first script asserted aggregate before raw-result publication. Full per-request errors were not retained and exact historical win32 error code cannot be reconstructed.",
+  "rootCauseEvidence": "Original production spawnWindowsCommand resolves bare executable with whichAsync. Initial prototype omitted that step and supplied git to lpApplicationName. Corrected original resolver rule is the only command-admission change before successful full matrix.",
+  "boundary": "Original failed scope preserved;not performance qualified or silently overwritten"
+}

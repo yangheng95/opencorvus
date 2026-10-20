@@ -1,0 +1,78 @@
+{
+  "observedAt": "2026-10-20T22:10:03.219Z",
+  "validInterleavedMatrix": [
+    {
+      "run": "single-c",
+      "mode": "single",
+      "wallMs": 17468.2428,
+      "maximumMainTickMs": 247.2523000000001,
+      "statCalls": 44402,
+      "realpathCalls": 44402,
+      "helpers": 296,
+      "gitObservations": 296,
+      "spawnMs": 9020.015100000011,
+      "originalToolHandle": 19770,
+      "originalExit": 0
+    },
+    {
+      "run": "scope-c",
+      "mode": "scope",
+      "wallMs": 11117.9093,
+      "maximumMainTickMs": 50.924999999999955,
+      "statCalls": 44402,
+      "realpathCalls": 44402,
+      "helpers": 1,
+      "gitObservations": 296,
+      "spawnMs": 12.276700000000005,
+      "originalToolHandle": 58107,
+      "originalExit": 0
+    },
+    {
+      "run": "scope-d",
+      "mode": "scope",
+      "wallMs": 11194.0896,
+      "maximumMainTickMs": 75.60949999999866,
+      "statCalls": 44402,
+      "realpathCalls": 44402,
+      "helpers": 1,
+      "gitObservations": 296,
+      "spawnMs": 15.162799999999947,
+      "originalToolHandle": 64102,
+      "originalExit": 0
+    },
+    {
+      "run": "single-d",
+      "mode": "single",
+      "wallMs": 17921.683,
+      "maximumMainTickMs": 359.92019999999957,
+      "statCalls": 44402,
+      "realpathCalls": 44402,
+      "helpers": 296,
+      "gitObservations": 296,
+      "spawnMs": 9791.664899999992,
+      "originalToolHandle": 30367,
+      "originalExit": 0
+    }
+  ],
+  "preRepairBaseline": {
+    "run": "single-a",
+    "mode": "single",
+    "wallMs": 17963.9666,
+    "maximumMainTickMs": 329.5609000000004,
+    "statCalls": 44402,
+    "realpathCalls": 44402,
+    "helpers": 296,
+    "gitObservations": 296,
+    "spawnMs": 9681.759599999998,
+    "originalToolHandle": 8793,
+    "originalExit": 0
+  },
+  "validMatrixQueries": 1184,
+  "validMatrixHelpers": 594,
+  "totalSuccessfulGitObservations": 1480,
+  "failedBeforeTargetAttempts": 148,
+  "totalGitAttempts": 1628,
+  "modelRequests": 0,
+  "decision": "Private scope reduces local full149 mixture to11.12/11.19s versus17.47/17.92s. Original Config10s/5s not qualified. Prototype not promoted to production.",
+  "boundary": "Not full Config,UI,all native ownership entrypoints,or public restart/recovery qualification;88,804 counted registered-directory FS operations per group exclude baseline/output checks."
+}

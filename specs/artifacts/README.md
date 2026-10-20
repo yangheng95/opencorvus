@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [原生查询作用域](2026-10-21-native-query-scope/README.md)：1184次完整149目录有效交错查询、十项聚合真实进程合同、原失败/八scope结算与3665行保留；私有原型未推广。
+
 - [Git原生查询组合](2026-10-21-git-native-discovery-batch/README.md)：同149目录/2368次查询观察的八组原始事实；隐式合批18.9/20.0秒退化，未交付生产。
 
 - [网络依赖安全修复](2026-10-21-dependency-redirect-hardening/README.md)：MCP两种传输的明确307错误、同origin正常初始化、14个HTTP合同、11张人工图与原87行保留。

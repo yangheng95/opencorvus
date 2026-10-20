@@ -1,0 +1,28 @@
+{
+  "observedAt": "2026-10-20T22:05:55.947Z",
+  "runtime": "1.4.0",
+  "mode": "single",
+  "run": "single-d",
+  "owner": {
+    "pid": 74784,
+    "processInstanceID": "win32:639281307372143221",
+    "occurrenceID": "fec78b19-2c41-4370-b7bb-0512a29cee0b"
+  },
+  "projects": 149,
+  "gitProjects": 148,
+  "nonGitProjects": 1,
+  "concurrency": 12,
+  "wallMs": 17921.683,
+  "mainMaxTickMs": 359.92019999999957,
+  "statCalls": 44402,
+  "realpathCalls": 44402,
+  "live": {
+    "live": 0,
+    "owners": {}
+  },
+  "modelRequests": 0,
+  "qualification": "Private original full149 mixture only;all real per-item bytes equal489original andphysical identitiesfresh;not full Config or production lifetime qualification",
+  "queries": 296,
+  "helpers": 296,
+  "completeOriginal": "single-d-result.json.gz"
+}

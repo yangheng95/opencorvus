@@ -1,0 +1,18 @@
+$ErrorActionPreference='Stop'
+$taskRoot='D:/myhexin-local/opencorvus/.tmp-product-iteration/native-query-scope-490'
+. 'D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-long-source-reading-406-launch.ps1' -FunctionsOnly
+$taskRuns=@(@('contracts-a','ed937d',0),@('single-a',8793,0),@('scope-a','cdca60',1),@('single-c',19770,0),@('scope-c',58107,0),@('scope-d',64102,0),@('single-d',30367,0),@('lifecycle-a','a33fd0',0))
+$taskRecords=@()
+foreach($taskPair in $taskRuns){
+ $taskName=$taskPair[0];$taskEvidence="$taskRoot/$taskName-scope/evidence"
+ $taskReady=Get-Content -Raw -LiteralPath "$taskEvidence/native-host-ready.json"|ConvertFrom-Json
+ $taskSettled=Get-Content -Raw -LiteralPath "$taskEvidence/native-host-settled.json"|ConvertFrom-Json
+ $taskLauncher=Get-Content -Raw -LiteralPath "$taskEvidence/launcher-child-exit.json"|ConvertFrom-Json
+ $taskExpected=[int]$taskPair[2]
+ if($taskSettled.outcome -ne 'settled' -or $taskSettled.terminal.reason -ne 'exited' -or $taskSettled.terminal.exitCode -ne $taskExpected -or !$taskSettled.physicalCompletion -or !$taskSettled.outputDrainComplete -or !$taskSettled.requestCleanupComplete -or $taskLauncher.originalChildExit -ne $taskExpected -or $taskSettled.occurrence -cne $taskReady.occurrence){throw "Incomplete original scope $taskName"}
+ $taskChain=@($taskReady.host,$taskReady.target)|ForEach-Object {@{identity=$_;state=(Get-OwnedNativeState $_)}}
+ if(@($taskChain|Where-Object state -ne 'dead_or_reused').Count){throw "Original scope remains live: $taskName"}
+ $taskRecords+=@{run=$taskName;originalToolHandle=$taskPair[1];originalExit=$taskExpected;ready=$taskReady;native=$taskSettled;launcher=$taskLauncher;chain=$taskChain}
+}
+@{observedAtUtc=[DateTime]::UtcNow.ToString('o');scopes=$taskRecords;count=$taskRecords.Count;boundary='Eight original native/output/request/launcher settlements;original failed scope-a exit1 retained;no restarted occurrence'}|ConvertTo-Json -Depth 15|Set-Content -LiteralPath "$taskRoot/physical-scopes.json"
+Write-Output 'Eight original scopes physically settled;seven original exit0,scope-a original exit1'

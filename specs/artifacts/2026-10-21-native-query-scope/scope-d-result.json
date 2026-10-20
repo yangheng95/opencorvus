@@ -1,0 +1,47 @@
+{
+  "observedAt": "2026-10-20T22:05:19.963Z",
+  "runtime": "1.4.0",
+  "mode": "scope",
+  "run": "scope-d",
+  "owner": {
+    "pid": 74036,
+    "processInstanceID": "win32:639281307079417714",
+    "occurrenceID": "a2369af0-e366-4cb4-883d-007179745db0"
+  },
+  "projects": 149,
+  "gitProjects": 148,
+  "nonGitProjects": 1,
+  "concurrency": 12,
+  "wallMs": 11194.0896,
+  "mainMaxTickMs": 75.60949999999866,
+  "statCalls": 44402,
+  "realpathCalls": 44402,
+  "terminal": {
+    "owner": {
+      "pid": 74036,
+      "processInstanceID": "win32:639281307079417714",
+      "occurrenceID": "a2369af0-e366-4cb4-883d-007179745db0"
+    },
+    "helper": {
+      "pid": 11332,
+      "processInstanceID": "win32:639281307087712554",
+      "occurrenceID": "810cc94f-ff5e-42c8-95d1-70f2126d80aa"
+    },
+    "terminal": {
+      "code": 0,
+      "signal": null
+    },
+    "helperState": "dead_or_reused",
+    "outputComplete": true,
+    "queryRecords": 296
+  },
+  "live": {
+    "live": 0,
+    "owners": {}
+  },
+  "modelRequests": 0,
+  "qualification": "Private original full149 mixture only;all real per-item bytes equal489original andphysical identitiesfresh;not full Config or production lifetime qualification",
+  "queries": 296,
+  "helpers": 1,
+  "completeOriginal": "scope-d-result.json.gz"
+}

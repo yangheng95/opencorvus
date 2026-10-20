@@ -1,0 +1,54 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import os from 'node:os'
+import assert from 'node:assert/strict'
+const root=import.meta.dir,mode=process.env.OPENCORVUS_DIAGNOSTIC_LAUNCH_MODE,run=process.env.OPENCORVUS_DIAGNOSTIC_LAUNCH_RUN!
+assert(['single','scope'].includes(mode!));assert.match(run,/^[a-z0-9-]+$/)
+const input=JSON.parse(await fs.readFile(root+'/input-private.json','utf8')),items=input.projects as Array<{id:string,worktree:string}>
+assert.equal(items.length,149)
+const baseline=await Promise.all(items.map(async row=>{const info=await fs.stat(row.worktree,{bigint:true});let git=true;try{await fs.access(path.join(row.worktree,'.git'))}catch(error:any){if(error.code!=='ENOENT')throw error;git=false}return{git,physical:await fs.realpath(row.worktree),device:info.dev,inode:info.ino}}))
+assert.equal(baseline.filter(row=>row.git).length,148)
+const originalHelper=path.resolve(process.env.OPENCORVUS_PROCESS_SUPERVISOR!),scopeHelper=path.join(root,'native-target/release/opencorvus-process-supervisor.exe'),cp=require('node:child_process'),originalSpawn=cp.spawn,spawns:any[]=[]
+cp.spawn=function(executable:string,...args:any[]){const at=performance.now(),child=Reflect.apply(originalSpawn,this,[executable,...args]);if([originalHelper,path.resolve(scopeHelper)].includes(path.resolve(executable)))spawns.push({at,returnedAt:performance.now(),pid:child.pid,executable,args:args[0]});return child}
+require('node:module').syncBuiltinESMExports()
+const {installProcessShims}=await import('../../packages/opencorvus/src/runtime/shims');installProcessShims()
+const {Process}=await import('../../packages/opencorvus/src/util/process')
+const {ProcessSupervisor}=await import('../../packages/opencorvus/src/shell/process-supervisor')
+const {currentRuntimeProcessOccurrence}=await import('../../packages/opencorvus/src/runtime/process-occurrence')
+const {settledWork}=await import('../../packages/opencorvus/src/util/queue')
+const {QueryScope}=await import('./scope-client')
+const owner=currentRuntimeProcessOccurrence(),requests:any[]=[],outputs:any[]=[],ticks:number[]=[]
+const restore=ProcessSupervisor.setWindowsRequestObserverForTest(request=>{assert.equal(request.owner_pid,owner.pid);assert.equal(request.owner_process_instance_id,owner.processInstanceID);assert.equal(request.runtime_occurrence_id,owner.occurrenceID);requests.push(request)})
+const expected=JSON.parse(await fs.readFile(root+'/expected-git-private.json','utf8'))
+let statCalls=0,realpathCalls=0
+async function observeFiles(){for(let registered=0;registered<items.length;registered++){const stat=await fs.stat(items[registered].worktree,{bigint:true});statCalls++;assert.equal(stat.dev,baseline[registered].device);assert.equal(stat.ino,baseline[registered].inode)}await Promise.all(items.map(async(row,index)=>{assert.equal(await fs.realpath(row.worktree),baseline[index].physical);realpathCalls++}))}
+async function acceptPaths(index:number,observation:number,stdout:string,stderr:string){const paths=stdout.replace(/\r?\n$/,'').split(/\r?\n/);assert.equal(paths.length,2);assert.equal(await fs.realpath(paths[0]),baseline[index].physical);assert((await fs.stat(paths[1])).isDirectory());outputs.push({id:items[index].id,observation,stdout,stderr})}
+const started=performance.now();let previous=started;const timer=setInterval(()=>{const now=performance.now();ticks.push(now-previous);previous=now},5)
+let scope:InstanceType<typeof QueryScope>|undefined,terminal:any,outcomes:any[]=[]
+try{
+ if(mode==='scope')scope=new QueryScope(path.join(process.env.OPENCORVUS_HOME!,'queries'))
+ outcomes=await settledWork({items,concurrency:os.availableParallelism(),run:async(item,index)=>{
+  for(let observation=0;observation<2;observation++){
+   if(baseline[index].git){
+    const args=['-c','core.longPaths=true','rev-parse','--path-format=absolute','--show-toplevel','--git-common-dir']
+    const result=scope?await scope.run('git',args,item.worktree):await Process.runHost(['git',...args],{cwd:item.worktree,env:{GIT_CEILING_DIRECTORIES:path.dirname(item.worktree)},stdin:'ignore',inactivityTimeoutMs:90000,maxOutputBytes:8*1024*1024})
+    assert.equal(result.code,0);if(scope){assert.deepEqual(result.native_errors,[]);assert.equal(result.error,null)}
+    await acceptPaths(index,observation,result.stdout.toString(),result.stderr.toString())
+   }
+   await observeFiles()
+  }
+  return {id:item.id,observations:2}
+ }})
+}finally{
+ if(scope)terminal=await scope.close()
+ await fs.writeFile(root+'/'+run+'-raw.json',JSON.stringify({run,mode,owner,outcomes:outcomes.map(row=>row.status==='rejected'?{status:row.status,error:{name:row.reason?.name,message:row.reason?.message}}:row),scopeRecords:scope?.records,terminal,requests,spawns,statCalls,realpathCalls},null,2)+'\n',{flag:'wx'})
+ ticks.push(performance.now()-previous);clearInterval(timer);restore();cp.spawn=originalSpawn;require('node:module').syncBuiltinESMExports()
+}
+const wallMs=performance.now()-started,failures=outcomes.flatMap(o=>o.status==='rejected'?[{name:o.reason?.name,message:o.reason?.message}]:[])
+assert.deepEqual(failures,[])
+assert.deepEqual(outputs.toSorted((a,b)=>a.id.localeCompare(b.id)||a.observation-b.observation),expected)
+assert.equal(statCalls,149**2*2);assert.equal(realpathCalls,149**2*2);assert.equal(outputs.length,296)
+assert.equal(scope?scope.records.length:requests.length,296);assert.equal(spawns.length,scope?1:296)
+const result={observedAt:new Date().toISOString(),runtime:Bun.version,mode,run,owner,projects:149,gitProjects:148,nonGitProjects:1,concurrency:os.availableParallelism(),wallMs,mainMaxTickMs:Math.max(...ticks),statCalls,realpathCalls,requests,scopeRecords:scope?.records,terminal,spawns,live:ProcessSupervisor.metricsSnapshot(),modelRequests:0,qualification:'Private original full149 mixture only;all real per-item bytes equal489original andphysical identitiesfresh;not full Config or production lifetime qualification'}
+await fs.writeFile(root+'/'+run+'-result.json',JSON.stringify(result,null,2)+'\n',{flag:'wx'})
+console.log(JSON.stringify({run,mode,owner,wallMs,mainMaxTickMs:result.mainMaxTickMs,statCalls,realpathCalls,nativeScopeHelpers:spawns.length,gitObservations:outputs.length,spawnMs:spawns.reduce((sum,row)=>sum+row.returnedAt-row.at,0),live:result.live}))

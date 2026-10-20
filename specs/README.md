@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [短期原生查询作用域](records/2026-10/2026-10-21-native-query-scope.md)：[原149目录交错对照与生命周期](artifacts/2026-10-21-native-query-scope/README.md)，局部17.5/17.9秒降至11.1/11.2秒，完整配置仍未达标，生产未改。
+
 - [Git原生组合与配置发现边界](records/2026-10/2026-10-21-git-native-discovery-batch.md)：[完整149目录八组对照](artifacts/2026-10-21-git-native-discovery-batch/README.md)，整表组合局部减半、隐式合批实际退化，生产未改。
 
 - [网络依赖与开发编辑器安全修复](records/2026-10/2026-10-21-dependency-redirect-hardening.md)：MCP、Hono、重定向及Vite补丁，[14项真实HTTP合同与11张实页](artifacts/2026-10-21-dependency-redirect-hardening/README.md)。

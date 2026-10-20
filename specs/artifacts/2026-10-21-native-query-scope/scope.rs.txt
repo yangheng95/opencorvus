@@ -1,0 +1,111 @@
+    #[derive(Deserialize)]
+    struct ScopeQuery {
+        request: Request,
+        ceiling: String,
+        inactivity_timeout_ms: u64,
+        max_output_bytes: usize,
+    }
+
+    struct ScopeIo {
+        input: fs::File,
+        output: Handle,
+        error: Handle,
+        environment: Vec<u16>,
+    }
+
+    struct QueryActivity {
+        start: Instant,
+        last: AtomicU64,
+        bytes: AtomicUsize,
+        reason: Mutex<Option<String>>,
+    }
+
+    fn scope_pipe() -> Result<(fs::File, Handle), String> {
+        let mut read = null_mut(); let mut write = null_mut();
+        let attributes = SECURITY_ATTRIBUTES {nLength:std::mem::size_of::<SECURITY_ATTRIBUTES>() as u32,lpSecurityDescriptor:null_mut(),bInheritHandle:1};
+        if unsafe{CreatePipe(&mut read, &mut write, &attributes, 0)}==0 {return Err(format!("CreatePipe failed {}",unsafe{GetLastError()}));}
+        let read = Handle(read); let write = Handle(write);
+        if unsafe{SetHandleInformation(read.0,HANDLE_FLAG_INHERIT,0)}==0 {return Err(format!("SetHandleInformation failed {}",unsafe{GetLastError()}));}
+        let file=unsafe{fs::File::from_raw_handle(read.0)};
+        std::mem::forget(read);
+        Ok((file,write))
+    }
+
+    fn collect_query_bytes(mut input: fs::File, activity: Arc<QueryActivity>, maximum: usize) -> Result<Vec<u8>,String> {
+        let mut bytes=Vec::new(); let mut chunk=[0u8;16384];
+        loop {
+            let count=input.read(&mut chunk).map_err(|error|format!("query pipe read failed: {error}"))?;
+            if count==0 {return Ok(bytes);}
+            activity.last.store(activity.start.elapsed().as_millis() as u64,Ordering::Release);
+            let previous=activity.bytes.fetch_add(count,Ordering::AcqRel);
+            let retained=count.min(maximum.saturating_sub(previous));
+            bytes.extend_from_slice(&chunk[..retained]);
+            if previous.saturating_add(count)>maximum {*activity.reason.lock().unwrap()=Some("output_limit".into());}
+        }
+    }
+
+    fn execute_scope_query(query: ScopeQuery) -> serde_json::Value {
+        let (request_id,cancel_file)=match &query.request {
+            Request::Command{request_id,cancel_file,detached:false,..}=>(request_id.clone(),cancel_file.clone()),
+            _=>return serde_json::json!({"error":"query_scope_requires_owned_command"}),
+        };
+        let execute=|| -> Result<serde_json::Value,String> {
+            let (stdout,output)=scope_pipe()?; let (stderr,error)=scope_pipe()?;
+            let input=fs::OpenOptions::new().read(true).open("NUL").map_err(|error|format!("NUL open failed: {error}"))?;
+            if unsafe{SetHandleInformation(input.as_raw_handle(),HANDLE_FLAG_INHERIT,HANDLE_FLAG_INHERIT)}==0 {return Err(format!("NUL inherit failed {}",unsafe{GetLastError()}));}
+            let mut environment:Vec<_>=env::vars_os().filter(|(key,_)|!key.to_string_lossy().eq_ignore_ascii_case("GIT_CEILING_DIRECTORIES")).collect();
+            environment.push(("GIT_CEILING_DIRECTORIES".into(),query.ceiling.into()));
+            environment.sort_by_key(|(key,_)|key.to_string_lossy().to_uppercase());
+            let mut block=Vec::new();
+            for (key,value) in environment {block.extend(key.encode_wide());block.push('=' as u16);block.extend(value.encode_wide());block.push(0);}
+            block.push(0);
+            let activity=Arc::new(QueryActivity{start:Instant::now(),last:AtomicU64::new(0),bytes:AtomicUsize::new(0),reason:Mutex::new(None)});
+            let finished=Arc::new(AtomicBool::new(false));
+            let stdout={let activity=activity.clone();std::thread::spawn(move||collect_query_bytes(stdout,activity,query.max_output_bytes))};
+            let stderr={let activity=activity.clone();std::thread::spawn(move||collect_query_bytes(stderr,activity,query.max_output_bytes))};
+            let monitor={let activity=activity.clone();let finished=finished.clone();std::thread::spawn(move|| -> Result<(),String>{
+                while !finished.load(Ordering::Acquire) {
+                    let now=activity.start.elapsed().as_millis() as u64;
+                    if now.saturating_sub(activity.last.load(Ordering::Acquire))>=query.inactivity_timeout_ms {
+                        let mut reason=activity.reason.lock().unwrap();if reason.is_none(){*reason=Some("inactivity_timeout".into());}
+                    }
+                    if activity.reason.lock().unwrap().is_some() {fs::write(&cancel_file,b"scope-query-control").map_err(|error|format!("cancel publish failed: {error}"))?;return Ok(());}
+                    std::thread::sleep(std::time::Duration::from_millis(20));
+                }
+                Ok(())
+            })};
+            let native=run_request_with_io(query.request,Some(ScopeIo{input,output,error,environment:block}));
+            let stdout=stdout.join().map_err(|_|"stdout reader panicked")?;
+            let stderr=stderr.join().map_err(|_|"stderr reader panicked")?;
+            finished.store(true,Ordering::Release);
+            let monitor=monitor.join().map_err(|_|"inactivity monitor panicked")?;
+            let mut failures=Vec::new();
+            if let Err(error)=&native {failures.push(error.clone());}
+            if let Err(error)=&stdout {failures.push(error.clone());}
+            if let Err(error)=&stderr {failures.push(error.clone());}
+            if let Err(error)=monitor {failures.push(error);}
+            let reason=activity.reason.lock().unwrap().clone();
+            Ok(serde_json::json!({"request_id":request_id,"code":native.ok(),"error":reason,"native_errors":failures,"stdout":stdout.unwrap_or_default(),"stderr":stderr.unwrap_or_default(),"physical_joined":true,"output_joined":true}))
+        };
+        match execute(){Ok(value)=>value,Err(error)=>serde_json::json!({"request_id":request_id,"error":error})}
+    }
+
+    fn query_scope() -> Result<(),String> {
+        let mut workers=Vec::new();
+        let mut seen=std::collections::BTreeSet::new();
+        let output=Arc::new(Mutex::new(std::io::stdout()));
+        for line in std::io::stdin().lock().lines() {
+            let line=line.map_err(|error|format!("scope input failed: {error}"))?;
+            let query:ScopeQuery=serde_json::from_str(&line).map_err(|error|format!("scope request parse failed: {error}"))?;
+            let id=match &query.request {Request::Command{request_id,detached:false,..}=>request_id.clone(),_=>return Err("scope requires owned command".into())};
+            if !seen.insert(id) {return Err("scope duplicate request identity".into());}
+            let output=output.clone();
+            workers.push(std::thread::spawn(move|| -> Result<(),String>{
+                let result=execute_scope_query(query);let mut output=output.lock().map_err(|_|"scope output poisoned")?;
+                serde_json::to_writer(&mut *output,&result).map_err(|error|format!("scope output failed: {error}"))?;
+                output.write_all(b"\n").and_then(|_|output.flush()).map_err(|error|format!("scope flush failed: {error}"))
+            }));
+        }
+        let failures:Vec<_>=workers.into_iter().filter_map(|worker|match worker.join(){Ok(Ok(()))=>None,Ok(Err(error))=>Some(error),Err(_)=>Some("scope query panicked".into())}).collect();
+        if failures.is_empty(){Ok(())}else{Err(failures.join("; "))}
+    }

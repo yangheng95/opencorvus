@@ -1,0 +1,9 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
+const {installProcessShims}=await import('../../packages/opencorvus/src/runtime/shims');installProcessShims()
+const {QueryScope}=await import('./scope-client')
+const root=process.argv[2],descendant=path.join(root,'descendant.json'),scope=new QueryScope(path.join(root,'queries'))
+const query=await scope.submit(process.execPath,['-e',`const {spawn}=require('node:child_process');const fs=require('node:fs');const c=spawn(process.execPath,['-e','setInterval(()=>{},1000)'],{stdio:'inherit',windowsHide:true});fs.writeFileSync(${JSON.stringify(descendant)},JSON.stringify({pid:c.pid}));process.stdout.write('owned-tree-started');setInterval(()=>{},1000)`],root)
+for(;;){try{const ready=JSON.parse(await fs.readFile(query.request.ready_file,'utf8'));await fs.readFile(descendant);await fs.writeFile(path.join(root,'parent-ready.json'),JSON.stringify({owner:scope.owner,helper:scope.helper,request:query.request,ready}),{flag:'wx'});break}catch(error:any){if(error.code!=='ENOENT')throw error;await Bun.sleep(10)}}
+await query.result
+await scope.close()

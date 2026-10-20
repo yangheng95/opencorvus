@@ -1,0 +1,56 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+const root=path.dirname(new URL(import.meta.url).pathname).replace(/^\/([A-Za-z]:)/,'$1')
+await fs.mkdir(root+'/native/src',{recursive:true})
+const source='D:/myhexin-local/opencorvus/packages/opencorvus/native/process-supervisor'
+for(const file of ['Cargo.toml','Cargo.lock'])await fs.copyFile(source+'/'+file,root+'/native/'+file)
+let cargo=await fs.readFile(root+'/native/Cargo.toml','utf8')
+cargo=cargo.replace('"Win32_Foundation",','"Win32_Foundation",\n  "Win32_Storage_FileSystem",\n  "Win32_System_Pipes",')
+await fs.writeFile(root+'/native/Cargo.toml',cargo)
+let rust=await fs.readFile(source+'/src/main.rs','utf8')
+function replace(a,b){assert.equal(rust.split(a).length,2,a.slice(0,110));rust=rust.replace(a,b)}
+replace('    #[derive(Deserialize)]\n    #[serde(tag = "kind", rename_all = "snake_case")]','    use std::{io::{BufRead, Read, Write}, os::windows::io::{AsRawHandle, FromRawHandle}, sync::{Arc, Mutex, atomic::{AtomicBool, AtomicU64, AtomicUsize, Ordering}}, time::Instant};\n    use windows_sys::Win32::{Foundation::{SetHandleInformation, HANDLE_FLAG_INHERIT}, Security::SECURITY_ATTRIBUTES, System::{Pipes::CreatePipe, Threading::PROC_THREAD_ATTRIBUTE_HANDLE_LIST}};\n\n    #[derive(Deserialize)]\n    #[serde(tag = "kind", rename_all = "snake_case")]')
+replace('        _jobs: Box<[HANDLE]>,','        _values: Vec<Box<[HANDLE]>>,')
+const first=rust.indexOf('        fn for_job(job: HANDLE)'),last=rust.indexOf('\n    impl Drop for ProcessThreadAttributeList',first)
+assert(first>0&&last>first)
+rust=rust.slice(0,first)+String.raw`        fn for_target(job: Option<HANDLE>, handles: Option<&StandardHandles>) -> Result<Option<Self>, String> {
+            let mut values = Vec::new();
+            let mut keys = Vec::new();
+            if let Some(job) = job { keys.push(PROC_THREAD_ATTRIBUTE_JOB_LIST as usize); values.push(vec![job].into_boxed_slice()); }
+            if let Some(handles) = handles {
+                let mut inherited = vec![handles.input, handles.output, handles.error];
+                inherited.sort_unstable(); inherited.dedup();
+                keys.push(PROC_THREAD_ATTRIBUTE_HANDLE_LIST as usize); values.push(inherited.into_boxed_slice());
+            }
+            if values.is_empty() { return Ok(None); }
+            let mut bytes = 0usize;
+            unsafe { InitializeProcThreadAttributeList(null_mut(), values.len() as u32, 0, &mut bytes); }
+            if bytes == 0 { return Err(format!("attribute size failed {}", unsafe {GetLastError()})); }
+            let mut storage = vec![0usize; bytes.div_ceil(std::mem::size_of::<usize>())];
+            let pointer = storage.as_mut_ptr() as *mut c_void;
+            if unsafe {InitializeProcThreadAttributeList(pointer, values.len() as u32, 0, &mut bytes)} == 0 { return Err(format!("attribute init failed {}", unsafe{GetLastError()})); }
+            let result = Self {_storage:storage, _values:values, pointer};
+            for (key,value) in keys.iter().zip(result._values.iter()) {
+                if unsafe{UpdateProcThreadAttribute(pointer,0,*key,value.as_ptr() as *const c_void,std::mem::size_of_val(value.as_ref()),null_mut(),null())} == 0 { return Err(format!("attribute {key} failed {}",unsafe{GetLastError()})); }
+            }
+            Ok(Some(result))
+        }
+    }
+`+rust.slice(last)
+replace('        standard_handles: Option<&StandardHandles>,\n    ) -> Result<SuspendedTarget, String> {','        standard_handles: Option<&StandardHandles>,\n        environment: Option<&[u16]>,\n    ) -> Result<SuspendedTarget, String> {')
+replace('create_suspended_process(request, standard_handles, job.as_ref().map(|job| job.0))?','create_suspended_process(request, standard_handles, job.as_ref().map(|job| job.0), environment)?')
+replace('        job: Option<HANDLE>,\n    ) -> Result<(Handle, Handle, u32), String> {\n        let attributes = job.map(ProcessThreadAttributeList::for_job).transpose()?;','        job: Option<HANDLE>,\n        environment: Option<&[u16]>,\n    ) -> Result<(Handle, Handle, u32), String> {\n        let attributes = ProcessThreadAttributeList::for_target(job, standard_handles)?;')
+replace('            | if job.is_none() {\n                CREATE_BREAKAWAY_FROM_JOB\n            } else {\n                EXTENDED_STARTUPINFO_PRESENT\n            };','            | if job.is_none() { CREATE_BREAKAWAY_FROM_JOB } else { 0 }\n            | if attributes.is_some() { EXTENDED_STARTUPINFO_PRESENT } else { 0 };')
+replace('                null_mut(),\n                cwd_w.as_ref()', '                environment.map(|value| value.as_ptr() as *const c_void).unwrap_or(null()),\n                cwd_w.as_ref()')
+replace('fn prepare_target(request: &LaunchRequest) -> Result<(Handle, SuspendedTarget, String), String> {','fn prepare_target(request: &LaunchRequest, io: Option<&ScopeIo>) -> Result<(Handle, SuspendedTarget, String), String> {')
+replace('        let standard_handles = inherited_standard_handles()?;\n        let target = create_suspended_target(request, Some(&standard_handles))?;','        let standard_handles = if let Some(io) = io { StandardHandles {input:io.input.as_raw_handle(), output:io.output.0, error:io.error.0} } else { inherited_standard_handles()? };\n        let target = create_suspended_target(request, Some(&standard_handles), io.map(|io| io.environment.as_slice()))?;')
+replace('    fn run_request(request: Request) -> Result<u32, String> {\n        let request = launch_request(request);','    fn run_request(request: Request) -> Result<u32, String> { run_request_with_io(request, None) }\n\n    fn run_request_with_io(request: Request, io: Option<ScopeIo>) -> Result<u32, String> {\n        let request = launch_request(request);')
+replace('match prepare_target(&request) {','match prepare_target(&request, io.as_ref()) {')
+replace('        let target_instance_id = match process_instance_id(target.process.0) {','        drop(io); // Each target owns only its explicit inherited pipe ends.\n        let target_instance_id = match process_instance_id(target.process.0) {')
+replace('            (Some("--detached-capability"), None) => {','            (Some("--query-scope"), None) => {\n                match query_scope() { Ok(())=>std::process::exit(0),Err(error)=>{eprintln!("{error}");std::process::exit(125);} }\n            }\n            (Some("--detached-capability"), None) => {')
+const additions=await fs.readFile(root+'/scope.rs','utf8')
+replace('    pub fn main() {', additions+'\n    pub fn main() {')
+await fs.writeFile(root+'/native/src/main.rs',rust)
+for(const name of ['input-private.json','expected-git-private.json','verify-source.ts']) await fs.copyFile('D:/myhexin-local/opencorvus/.tmp-product-iteration/git-native-discovery-batch-489/'+name,root+'/'+name)
+console.log('Private native source prepared; original production files untouched')
