@@ -929,6 +929,8 @@
   "common.more": "更多",
   "chat.send_failed_inline": "消息发送未成功。请查看详情后再尝试。",
   "provider.load.unavailable": "{{owner}}暂时不可用。",
+  "provider.load.loading": "正在读取供应商信息…",
+  "provider.load.loading_description": "正在读取目录、连接状态和配置。保存设置期间可能需要等待更久。",
   "ledger.load_failed": "列表暂时无法加载。",
   "ledger.update_failed": "更新失败，当前显示此前加载的内容。",
   "common.close": "关闭",

@@ -1,0 +1,379 @@
+{
+  "settlements": [
+    {
+      "scope": "config-current-io-cost-464-before",
+      "native": {
+        "occurrence": "config-current-io-cost-464-before-ee7931de-10a7-4643-887f-8d84624c4c90",
+        "outcome": "settled",
+        "host": {
+          "pid": 64052,
+          "processInstanceID": "win32:639280749422997875",
+          "occurrenceID": "9ed54c3c-a8d9-44a6-8e39-c97ddac11623"
+        },
+        "target": {
+          "pid": 71060,
+          "processInstanceID": "win32:639280749429234796",
+          "occurrenceID": "d54f7851-57b7-4f64-a44f-794f6960c094"
+        },
+        "observedAtUtc": "2026-10-20T06:38:53.328Z",
+        "deadlineAt": 1792479341509,
+        "terminal": {
+          "occurrenceID": "config-current-io-cost-464-before-ee7931de-10a7-4643-887f-8d84624c4c90",
+          "pid": 71060,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "runtimePair": [
+        {
+          "outcome": "retired",
+          "name": "auth.json"
+        },
+        {
+          "outcome": "retired",
+          "name": "models.json"
+        }
+      ],
+      "launcherExit": 0,
+      "publicShutdown": 200,
+      "provider": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "scope": "config-current-io-cost-464-probe",
+      "native": {
+        "occurrence": "config-current-io-cost-464-probe-9610a805-cc25-4ad2-9915-eaac3d98e765",
+        "outcome": "settled",
+        "host": {
+          "pid": 82340,
+          "processInstanceID": "win32:639280753011875540",
+          "occurrenceID": "fbab9642-0c8a-46f2-ac40-334e01d932fb"
+        },
+        "target": {
+          "pid": 6952,
+          "processInstanceID": "win32:639280753017957480",
+          "occurrenceID": "c34d6358-c6fb-40fa-9a26-197a46ac8054"
+        },
+        "observedAtUtc": "2026-10-20T06:41:42.053Z",
+        "deadlineAt": 1792479700476,
+        "terminal": {
+          "occurrenceID": "config-current-io-cost-464-probe-9610a805-cc25-4ad2-9915-eaac3d98e765",
+          "pid": 6952,
+          "reason": "exited",
+          "exitCode": 1,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "runtimePair": [
+        {
+          "name": "auth.json",
+          "outcome": "retired"
+        },
+        {
+          "name": "models.json",
+          "outcome": "retired"
+        }
+      ],
+      "launcherExit": 1,
+      "publicShutdown": null,
+      "provider": [],
+      "observerFailure": {
+        "name": "AssertionError",
+        "phase": "Built-in export identity assertion before product wrapper import; original tool output recorded in spec"
+      }
+    },
+    {
+      "scope": "config-current-io-cost-464-probe-verified",
+      "native": {
+        "occurrence": "config-current-io-cost-464-probe-verified-f495a805-39c0-47f9-b895-9bc78594129a",
+        "outcome": "settled",
+        "host": {
+          "pid": 78352,
+          "processInstanceID": "win32:639280757011902964",
+          "occurrenceID": "83eeed86-1ca1-4045-b78c-2bf79f250aed"
+        },
+        "target": {
+          "pid": 41088,
+          "processInstanceID": "win32:639280757019408933",
+          "occurrenceID": "e2157980-ef37-4b11-8941-ae43357fa42f"
+        },
+        "observedAtUtc": "2026-10-20T06:48:22.283Z",
+        "deadlineAt": 1792480100809,
+        "terminal": {
+          "occurrenceID": "config-current-io-cost-464-probe-verified-f495a805-39c0-47f9-b895-9bc78594129a",
+          "pid": 41088,
+          "reason": "exited",
+          "exitCode": 1,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "runtimePair": [
+        {
+          "outcome": "retired",
+          "name": "auth.json"
+        },
+        {
+          "outcome": "retired",
+          "name": "models.json"
+        }
+      ],
+      "launcherExit": 1,
+      "publicShutdown": null,
+      "provider": [],
+      "observerFailure": {
+        "name": "AssertionError",
+        "phase": "Built-in export identity assertion before product wrapper import; original tool output recorded in spec"
+      }
+    },
+    {
+      "scope": "config-current-io-cost-464-probe-loaded",
+      "native": {
+        "occurrence": "config-current-io-cost-464-probe-loaded-04fbbf32-c61e-42d6-82e5-91e0cf3df944",
+        "outcome": "settled",
+        "host": {
+          "pid": 7368,
+          "processInstanceID": "win32:639280757825396715",
+          "occurrenceID": "91101e1d-0654-4213-98d2-6ef74164f2db"
+        },
+        "target": {
+          "pid": 73232,
+          "processInstanceID": "win32:639280757832122809",
+          "occurrenceID": "6a12cd31-838a-4b7c-85b4-9ec624ced194"
+        },
+        "observedAtUtc": "2026-10-20T06:51:24.865Z",
+        "deadlineAt": 1792480182086,
+        "terminal": {
+          "occurrenceID": "config-current-io-cost-464-probe-loaded-04fbbf32-c61e-42d6-82e5-91e0cf3df944",
+          "pid": 73232,
+          "reason": "exited",
+          "exitCode": 1,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "runtimePair": [
+        {
+          "outcome": "retired",
+          "name": "auth.json"
+        },
+        {
+          "outcome": "retired",
+          "name": "models.json"
+        }
+      ],
+      "launcherExit": 1,
+      "publicShutdown": null,
+      "provider": [],
+      "observerFailure": {
+        "name": "TypeError",
+        "message": "onLoad() expects an object returned"
+      }
+    },
+    {
+      "scope": "config-current-io-cost-464-probe-exact",
+      "native": {
+        "occurrence": "config-current-io-cost-464-probe-exact-b461d01b-98ef-4901-bd27-67f7ba069c4b",
+        "outcome": "settled",
+        "host": {
+          "pid": 70168,
+          "processInstanceID": "win32:639280759081332609",
+          "occurrenceID": "911f8b7d-b858-4afe-b8b8-c65f67abae53"
+        },
+        "target": {
+          "pid": 34224,
+          "processInstanceID": "win32:639280759088105655",
+          "occurrenceID": "e049e180-62c8-4ad6-bfbe-5fbeb5bc0cb8"
+        },
+        "observedAtUtc": "2026-10-20T06:53:24.656Z",
+        "deadlineAt": 1792480307476,
+        "terminal": {
+          "occurrenceID": "config-current-io-cost-464-probe-exact-b461d01b-98ef-4901-bd27-67f7ba069c4b",
+          "pid": 34224,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "runtimePair": [
+        {
+          "outcome": "retired",
+          "name": "auth.json"
+        },
+        {
+          "outcome": "retired",
+          "name": "models.json"
+        }
+      ],
+      "launcherExit": 0,
+      "publicShutdown": 200,
+      "provider": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "scope": "config-current-io-cost-464-after",
+      "native": {
+        "occurrence": "config-current-io-cost-464-after-ffc1406a-fd46-4226-81eb-80f1388492ed",
+        "outcome": "settled",
+        "host": {
+          "pid": 80656,
+          "processInstanceID": "win32:639280761659513219",
+          "occurrenceID": "15ac7b80-e5df-447e-a566-0ce09bf3c4b6"
+        },
+        "target": {
+          "pid": 91124,
+          "processInstanceID": "win32:639280761665587167",
+          "occurrenceID": "1ea1a48a-17c0-4825-81ea-8a612af671cf"
+        },
+        "observedAtUtc": "2026-10-20T06:58:46.83Z",
+        "deadlineAt": 1792480565285,
+        "terminal": {
+          "occurrenceID": "config-current-io-cost-464-after-ffc1406a-fd46-4226-81eb-80f1388492ed",
+          "pid": 91124,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "runtimePair": [
+        {
+          "name": "auth.json",
+          "outcome": "retired"
+        },
+        {
+          "name": "models.json",
+          "outcome": "retired"
+        }
+      ],
+      "launcherExit": 0,
+      "publicShutdown": 200,
+      "provider": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "scope": "config-current-io-cost-464-final",
+      "native": {
+        "occurrence": "config-current-io-cost-464-final-d9781a72-bf1d-4cad-a667-adc9acc2ed45",
+        "outcome": "settled",
+        "host": {
+          "pid": 39440,
+          "processInstanceID": "win32:639280765530747339",
+          "occurrenceID": "1fe7a362-fabf-4764-b46e-954fddfb7cd8"
+        },
+        "target": {
+          "pid": 64748,
+          "processInstanceID": "win32:639280765537152458",
+          "occurrenceID": "a44b692c-0df1-4756-905c-e5e994aebf18"
+        },
+        "observedAtUtc": "2026-10-20T07:06:11.86Z",
+        "deadlineAt": 1792480952219,
+        "terminal": {
+          "occurrenceID": "config-current-io-cost-464-final-d9781a72-bf1d-4cad-a667-adc9acc2ed45",
+          "pid": 64748,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "runtimePair": [
+        {
+          "name": "auth.json",
+          "outcome": "retired"
+        },
+        {
+          "name": "models.json",
+          "outcome": "retired"
+        }
+      ],
+      "launcherExit": 0,
+      "publicShutdown": 200,
+      "provider": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    }
+  ],
+  "totalRequests": 8,
+  "cumulativeBudget": 12
+}

@@ -1,0 +1,94 @@
+{
+  "coverage": [
+    "directory-admission.ts",
+    "project.ts",
+    "process-supervisor.ts"
+  ],
+  "requests": [
+    {
+      "requestID": "ba9f5118-be9e-4359-a047-e5612128b44c",
+      "httpWallMs": 14259,
+      "lookupRealpath": {
+        "calls": 28798,
+        "settled": 28798,
+        "rejected": 0,
+        "cumulativeMs": 27286.950400000547,
+        "synchronousMs": 0,
+        "maxInFlight": 10
+      },
+      "lookupStat": {
+        "calls": 28798,
+        "settled": 28798,
+        "rejected": 0,
+        "cumulativeMs": 12903.55149999979,
+        "synchronousMs": 0,
+        "maxInFlight": 8
+      },
+      "registryRealpath": {
+        "calls": 29393,
+        "settled": 29393,
+        "rejected": 0,
+        "cumulativeMs": 138609.85070000123,
+        "synchronousMs": 0,
+        "maxInFlight": 363
+      },
+      "spawn": {
+        "calls": 236,
+        "settled": 236,
+        "rejected": 0,
+        "cumulativeMs": 45004.58760000007,
+        "synchronousMs": 4723.402299999892,
+        "maxInFlight": 11
+      },
+      "lookupSpans": {
+        "phase": "project.identity.lookup",
+        "count": 238,
+        "totalMs": 40838,
+        "maxMs": 495
+      }
+    },
+    {
+      "requestID": "201556dd-fdf5-47bb-a575-0a6ea78e03d0",
+      "httpWallMs": 15571,
+      "lookupRealpath": {
+        "calls": 28314,
+        "settled": 28314,
+        "rejected": 0,
+        "cumulativeMs": 31061.668700001203,
+        "synchronousMs": 0,
+        "maxInFlight": 12
+      },
+      "lookupStat": {
+        "calls": 28314,
+        "settled": 28314,
+        "rejected": 0,
+        "cumulativeMs": 13277.144900000945,
+        "synchronousMs": 0,
+        "maxInFlight": 10
+      },
+      "registryRealpath": {
+        "calls": 28899,
+        "settled": 28899,
+        "rejected": 0,
+        "cumulativeMs": 184576.46919999996,
+        "synchronousMs": 0,
+        "maxInFlight": 285
+      },
+      "spawn": {
+        "calls": 232,
+        "settled": 232,
+        "rejected": 0,
+        "cumulativeMs": 46127.070000000094,
+        "synchronousMs": 5061.526700000075,
+        "maxInFlight": 12
+      },
+      "lookupSpans": {
+        "phase": "project.identity.lookup",
+        "count": 234,
+        "totalMs": 44968,
+        "maxMs": 752
+      }
+    }
+  ],
+  "boundary": "Passive measurement of original calls under actual HTTP request IDs; cumulative concurrent durations are not wall time; absolute instrumented duration is diagnostic only"
+}

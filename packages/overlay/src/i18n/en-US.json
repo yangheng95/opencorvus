@@ -929,6 +929,8 @@
   "common.more": "More",
   "chat.send_failed_inline": "Your message could not be sent. Review the details before trying again.",
   "provider.load.unavailable": "{{owner}} is unavailable.",
+  "provider.load.loading": "Loading provider details…",
+  "provider.load.loading_description": "Reading the catalog, connection status and configuration. This may take longer while settings are being saved.",
   "ledger.load_failed": "Could not load this list.",
   "ledger.update_failed": "Update failed. Showing previously loaded items.",
   "common.close": "Close",

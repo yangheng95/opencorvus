@@ -1,0 +1,1190 @@
+[
+  {
+    "at": "2026-10-20T06:37:37.616Z",
+    "endedAt": "2026-10-20T06:38:05.876Z",
+    "phase": "candidate",
+    "port": 18751,
+    "occurrence": "config-current-io-cost-464-before-ee7931de-10a7-4643-887f-8d84624c4c90",
+    "transport": "browser",
+    "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+    "accepted": true,
+    "restored": true,
+    "writeMs": 14050.108300000007,
+    "restoreMs": 14195.013000000006,
+    "failures": [],
+    "permissionMode": "ask",
+    "changedField": "username",
+    "dataRestoration": "Complete parsed canonical source equals the pre-check source",
+    "readers": [
+      {
+        "path": "/config",
+        "startedAt": "2026-10-20T06:37:37.766Z",
+        "endedAt": "2026-10-20T06:37:51.643Z",
+        "ms": 13875.416500000007,
+        "status": 200,
+        "permissionMode": "ask"
+      },
+      {
+        "path": "/provider",
+        "startedAt": "2026-10-20T06:37:37.769Z",
+        "endedAt": "2026-10-20T06:37:52.132Z",
+        "ms": 14362.853999999992,
+        "status": 200,
+        "providers": 227,
+        "models": 8133,
+        "selectedModel": "gpt-6.1-sol"
+      },
+      {
+        "path": "/global/providers",
+        "startedAt": "2026-10-20T06:37:37.769Z",
+        "endedAt": "2026-10-20T06:37:51.855Z",
+        "ms": 14085.700100000002,
+        "status": 200,
+        "providers": 227,
+        "models": 8133,
+        "selectedModel": "gpt-6.1-sol"
+      },
+      {
+        "path": "/session/ses_hVJXJr94hrQMZuOd4qmo",
+        "startedAt": "2026-10-20T06:37:37.770Z",
+        "endedAt": "2026-10-20T06:37:37.852Z",
+        "ms": 82.72000000000116,
+        "status": 200,
+        "sessionID": "ses_hVJXJr94hrQMZuOd4qmo"
+      }
+    ],
+    "originalThresholds": {
+      "saveMs": 10000,
+      "restoreMs": 5000,
+      "readMs": 20000
+    },
+    "performancePassed": false,
+    "phaseSummary": [
+      {
+        "request": {
+          "time": "2026-10-20T06:37:51.666Z",
+          "requestID": "b9313119-34dd-4a3a-9ad8-db6572093a84",
+          "method": "PATCH",
+          "path": "/global/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 14042
+        },
+        "inventory": [
+          {
+            "projects": 120,
+            "loaded": 2
+          }
+        ],
+        "summary": [
+          {
+            "phase": "project.identity.git",
+            "count": 234,
+            "totalMs": 77920,
+            "maxMs": 681
+          },
+          {
+            "phase": "project.identity.lookup",
+            "count": 236,
+            "totalMs": 39122,
+            "maxMs": 469
+          },
+          {
+            "phase": "config.global.write",
+            "count": 1,
+            "totalMs": 14041,
+            "maxMs": 14041
+          },
+          {
+            "phase": "config.global.before",
+            "count": 120,
+            "totalMs": 2611,
+            "maxMs": 116
+          },
+          {
+            "phase": "config.global.after",
+            "count": 120,
+            "totalMs": 1984,
+            "maxMs": 108
+          },
+          {
+            "phase": "project.registry.revalidate",
+            "count": 118,
+            "totalMs": 1536,
+            "maxMs": 92
+          },
+          {
+            "phase": "project.registry.capture",
+            "count": 118,
+            "totalMs": 1296,
+            "maxMs": 62
+          },
+          {
+            "phase": "config.global.reconcile",
+            "count": 1,
+            "totalMs": 527,
+            "maxMs": 527
+          },
+          {
+            "phase": "project.registry.acquire",
+            "count": 118,
+            "totalMs": 428,
+            "maxMs": 26
+          },
+          {
+            "phase": "config.global.projects",
+            "count": 1,
+            "totalMs": 28,
+            "maxMs": 28
+          },
+          {
+            "phase": "config.global.reset",
+            "count": 1,
+            "totalMs": 4,
+            "maxMs": 4
+          },
+          {
+            "phase": "config.global.persist",
+            "count": 1,
+            "totalMs": 1,
+            "maxMs": 1
+          }
+        ]
+      },
+      {
+        "request": {
+          "time": "2026-10-20T06:38:05.875Z",
+          "requestID": "3b3cec16-13a8-4ce2-b04d-b2b53986331e",
+          "method": "PATCH",
+          "path": "/global/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 14195
+        },
+        "inventory": [
+          {
+            "projects": 120,
+            "loaded": 4
+          }
+        ],
+        "summary": [
+          {
+            "phase": "project.identity.git",
+            "count": 230,
+            "totalMs": 73299,
+            "maxMs": 690
+          },
+          {
+            "phase": "project.identity.lookup",
+            "count": 232,
+            "totalMs": 40508,
+            "maxMs": 483
+          },
+          {
+            "phase": "config.global.write",
+            "count": 1,
+            "totalMs": 14194,
+            "maxMs": 14194
+          },
+          {
+            "phase": "config.global.before",
+            "count": 120,
+            "totalMs": 2315,
+            "maxMs": 123
+          },
+          {
+            "phase": "project.registry.capture",
+            "count": 116,
+            "totalMs": 2193,
+            "maxMs": 169
+          },
+          {
+            "phase": "config.global.after",
+            "count": 120,
+            "totalMs": 1828,
+            "maxMs": 87
+          },
+          {
+            "phase": "project.registry.revalidate",
+            "count": 116,
+            "totalMs": 1577,
+            "maxMs": 120
+          },
+          {
+            "phase": "config.global.reconcile",
+            "count": 1,
+            "totalMs": 556,
+            "maxMs": 556
+          },
+          {
+            "phase": "project.registry.acquire",
+            "count": 116,
+            "totalMs": 444,
+            "maxMs": 26
+          },
+          {
+            "phase": "config.global.projects",
+            "count": 1,
+            "totalMs": 32,
+            "maxMs": 32
+          },
+          {
+            "phase": "config.global.reset",
+            "count": 1,
+            "totalMs": 3,
+            "maxMs": 3
+          },
+          {
+            "phase": "config.global.persist",
+            "count": 1,
+            "totalMs": 1,
+            "maxMs": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "at": "2026-10-20T06:52:46.862Z",
+    "endedAt": "2026-10-20T06:53:16.708Z",
+    "phase": "candidate",
+    "port": 18759,
+    "occurrence": "config-current-io-cost-464-probe-exact-b461d01b-98ef-4901-bd27-67f7ba069c4b",
+    "transport": "browser",
+    "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+    "accepted": true,
+    "restored": true,
+    "writeMs": 14265.972500000003,
+    "restoreMs": 15570.880799999999,
+    "failures": [],
+    "permissionMode": "ask",
+    "changedField": "username",
+    "dataRestoration": "Complete parsed canonical source equals the pre-check source",
+    "readers": [
+      {
+        "path": "/config",
+        "startedAt": "2026-10-20T06:52:46.991Z",
+        "endedAt": "2026-10-20T06:53:01.100Z",
+        "ms": 14107.564800000002,
+        "status": 200,
+        "permissionMode": "ask"
+      },
+      {
+        "path": "/provider",
+        "startedAt": "2026-10-20T06:52:46.993Z",
+        "endedAt": "2026-10-20T06:53:01.464Z",
+        "ms": 14470.2622,
+        "status": 200,
+        "providers": 227,
+        "models": 8133,
+        "selectedModel": "gpt-6.1-sol"
+      },
+      {
+        "path": "/global/providers",
+        "startedAt": "2026-10-20T06:52:46.994Z",
+        "endedAt": "2026-10-20T06:53:01.327Z",
+        "ms": 14333.2845,
+        "status": 200,
+        "providers": 227,
+        "models": 8133,
+        "selectedModel": "gpt-6.1-sol"
+      },
+      {
+        "path": "/session/ses_hr9uzoPdAiO097YwUQNT",
+        "startedAt": "2026-10-20T06:52:46.994Z",
+        "endedAt": "2026-10-20T06:52:47.002Z",
+        "ms": 7.896500000000742,
+        "status": 200,
+        "sessionID": "ses_hr9uzoPdAiO097YwUQNT"
+      }
+    ],
+    "originalThresholds": {
+      "saveMs": 10000,
+      "restoreMs": 5000,
+      "readMs": 20000
+    },
+    "performancePassed": false,
+    "phaseSummary": [
+      {
+        "request": {
+          "time": "2026-10-20T06:53:01.127Z",
+          "requestID": "ba9f5118-be9e-4359-a047-e5612128b44c",
+          "method": "PATCH",
+          "path": "/global/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 14259
+        },
+        "inventory": [
+          {
+            "projects": 121,
+            "loaded": 2
+          }
+        ],
+        "summary": [
+          {
+            "phase": "project.identity.git",
+            "count": 236,
+            "totalMs": 78870,
+            "maxMs": 679
+          },
+          {
+            "phase": "project.identity.lookup",
+            "count": 238,
+            "totalMs": 40838,
+            "maxMs": 495
+          },
+          {
+            "phase": "config.global.write",
+            "count": 1,
+            "totalMs": 14258,
+            "maxMs": 14258
+          },
+          {
+            "phase": "config.global.before",
+            "count": 121,
+            "totalMs": 2438,
+            "maxMs": 264
+          },
+          {
+            "phase": "config.global.after",
+            "count": 121,
+            "totalMs": 2181,
+            "maxMs": 262
+          },
+          {
+            "phase": "project.registry.capture",
+            "count": 119,
+            "totalMs": 1522,
+            "maxMs": 113
+          },
+          {
+            "phase": "project.registry.revalidate",
+            "count": 119,
+            "totalMs": 1241,
+            "maxMs": 22
+          },
+          {
+            "phase": "config.global.reconcile",
+            "count": 1,
+            "totalMs": 509,
+            "maxMs": 509
+          },
+          {
+            "phase": "project.registry.acquire",
+            "count": 119,
+            "totalMs": 396,
+            "maxMs": 35
+          },
+          {
+            "phase": "config.global.projects",
+            "count": 1,
+            "totalMs": 28,
+            "maxMs": 28
+          },
+          {
+            "phase": "config.global.reset",
+            "count": 1,
+            "totalMs": 4,
+            "maxMs": 4
+          },
+          {
+            "phase": "config.global.persist",
+            "count": 1,
+            "totalMs": 2,
+            "maxMs": 2
+          }
+        ]
+      },
+      {
+        "request": {
+          "time": "2026-10-20T06:53:16.707Z",
+          "requestID": "201556dd-fdf5-47bb-a575-0a6ea78e03d0",
+          "method": "PATCH",
+          "path": "/global/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 15571
+        },
+        "inventory": [
+          {
+            "projects": 121,
+            "loaded": 4
+          }
+        ],
+        "summary": [
+          {
+            "phase": "project.identity.git",
+            "count": 232,
+            "totalMs": 78941,
+            "maxMs": 933
+          },
+          {
+            "phase": "project.identity.lookup",
+            "count": 234,
+            "totalMs": 44968,
+            "maxMs": 752
+          },
+          {
+            "phase": "config.global.write",
+            "count": 1,
+            "totalMs": 15570,
+            "maxMs": 15570
+          },
+          {
+            "phase": "config.global.before",
+            "count": 121,
+            "totalMs": 2570,
+            "maxMs": 168
+          },
+          {
+            "phase": "config.global.after",
+            "count": 121,
+            "totalMs": 1945,
+            "maxMs": 179
+          },
+          {
+            "phase": "project.registry.capture",
+            "count": 117,
+            "totalMs": 1890,
+            "maxMs": 124
+          },
+          {
+            "phase": "project.registry.revalidate",
+            "count": 117,
+            "totalMs": 1673,
+            "maxMs": 86
+          },
+          {
+            "phase": "config.global.reconcile",
+            "count": 1,
+            "totalMs": 671,
+            "maxMs": 671
+          },
+          {
+            "phase": "project.registry.acquire",
+            "count": 117,
+            "totalMs": 505,
+            "maxMs": 53
+          },
+          {
+            "phase": "config.global.projects",
+            "count": 1,
+            "totalMs": 26,
+            "maxMs": 26
+          },
+          {
+            "phase": "config.global.reset",
+            "count": 1,
+            "totalMs": 3,
+            "maxMs": 3
+          },
+          {
+            "phase": "config.global.persist",
+            "count": 1,
+            "totalMs": 2,
+            "maxMs": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "at": "2026-10-20T06:57:21.022Z",
+    "endedAt": "2026-10-20T06:57:50.156Z",
+    "phase": "candidate",
+    "port": 18761,
+    "occurrence": "config-current-io-cost-464-after-ffc1406a-fd46-4226-81eb-80f1388492ed",
+    "transport": "browser",
+    "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+    "accepted": true,
+    "restored": true,
+    "writeMs": 13453.277699999999,
+    "restoreMs": 15675.3966,
+    "failures": [],
+    "permissionMode": "ask",
+    "changedField": "username",
+    "dataRestoration": "Complete parsed canonical source equals the pre-check source",
+    "readers": [
+      {
+        "path": "/config",
+        "startedAt": "2026-10-20T06:57:21.152Z",
+        "endedAt": "2026-10-20T06:57:34.448Z",
+        "ms": 13294.786900000003,
+        "status": 200,
+        "permissionMode": "ask"
+      },
+      {
+        "path": "/provider",
+        "startedAt": "2026-10-20T06:57:21.157Z",
+        "endedAt": "2026-10-20T06:57:34.903Z",
+        "ms": 13745.729900000002,
+        "status": 200,
+        "providers": 227,
+        "models": 8133,
+        "selectedModel": "gpt-6.1-sol"
+      },
+      {
+        "path": "/global/providers",
+        "startedAt": "2026-10-20T06:57:21.158Z",
+        "endedAt": "2026-10-20T06:57:34.653Z",
+        "ms": 13494.976999999999,
+        "status": 200,
+        "providers": 227,
+        "models": 8133,
+        "selectedModel": "gpt-6.1-sol"
+      },
+      {
+        "path": "/session/ses_h0l2sJpFfYWugBgZNEkk",
+        "startedAt": "2026-10-20T06:57:21.158Z",
+        "endedAt": "2026-10-20T06:57:21.168Z",
+        "ms": 9.224500000000262,
+        "status": 200,
+        "sessionID": "ses_h0l2sJpFfYWugBgZNEkk"
+      }
+    ],
+    "originalThresholds": {
+      "saveMs": 10000,
+      "restoreMs": 5000,
+      "readMs": 20000
+    },
+    "performancePassed": false,
+    "phaseSummary": [
+      {
+        "request": {
+          "time": "2026-10-20T06:57:34.475Z",
+          "requestID": "a99d38f6-34aa-48d1-985a-509d185d5b0a",
+          "method": "PATCH",
+          "path": "/global/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 13445
+        },
+        "inventory": [
+          {
+            "projects": 122,
+            "loaded": 2
+          }
+        ],
+        "summary": [
+          {
+            "phase": "project.identity.git",
+            "count": 238,
+            "totalMs": 90301,
+            "maxMs": 880
+          },
+          {
+            "phase": "config.global.write",
+            "count": 1,
+            "totalMs": 13444,
+            "maxMs": 13444
+          },
+          {
+            "phase": "project.identity.lookup",
+            "count": 240,
+            "totalMs": 11436,
+            "maxMs": 200
+          },
+          {
+            "phase": "config.global.before",
+            "count": 122,
+            "totalMs": 6191,
+            "maxMs": 280
+          },
+          {
+            "phase": "config.global.after",
+            "count": 122,
+            "totalMs": 4552,
+            "maxMs": 179
+          },
+          {
+            "phase": "project.registry.capture",
+            "count": 120,
+            "totalMs": 1937,
+            "maxMs": 72
+          },
+          {
+            "phase": "project.registry.revalidate",
+            "count": 120,
+            "totalMs": 1874,
+            "maxMs": 231
+          },
+          {
+            "phase": "config.global.reconcile",
+            "count": 1,
+            "totalMs": 604,
+            "maxMs": 604
+          },
+          {
+            "phase": "project.registry.acquire",
+            "count": 120,
+            "totalMs": 594,
+            "maxMs": 19
+          },
+          {
+            "phase": "config.global.projects",
+            "count": 1,
+            "totalMs": 30,
+            "maxMs": 30
+          },
+          {
+            "phase": "config.global.reset",
+            "count": 1,
+            "totalMs": 4,
+            "maxMs": 4
+          },
+          {
+            "phase": "config.global.persist",
+            "count": 1,
+            "totalMs": 2,
+            "maxMs": 2
+          }
+        ]
+      },
+      {
+        "request": {
+          "time": "2026-10-20T06:57:50.155Z",
+          "requestID": "a957aed8-9a2b-4fe1-985b-5c758a89d65f",
+          "method": "PATCH",
+          "path": "/global/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 15674
+        },
+        "inventory": [
+          {
+            "projects": 122,
+            "loaded": 4
+          }
+        ],
+        "summary": [
+          {
+            "phase": "project.identity.git",
+            "count": 234,
+            "totalMs": 105096,
+            "maxMs": 1150
+          },
+          {
+            "phase": "config.global.write",
+            "count": 1,
+            "totalMs": 15674,
+            "maxMs": 15674
+          },
+          {
+            "phase": "project.identity.lookup",
+            "count": 236,
+            "totalMs": 15484,
+            "maxMs": 419
+          },
+          {
+            "phase": "config.global.before",
+            "count": 122,
+            "totalMs": 4569,
+            "maxMs": 117
+          },
+          {
+            "phase": "config.global.after",
+            "count": 122,
+            "totalMs": 4477,
+            "maxMs": 234
+          },
+          {
+            "phase": "project.registry.capture",
+            "count": 118,
+            "totalMs": 2141,
+            "maxMs": 112
+          },
+          {
+            "phase": "project.registry.revalidate",
+            "count": 118,
+            "totalMs": 1979,
+            "maxMs": 121
+          },
+          {
+            "phase": "project.registry.acquire",
+            "count": 118,
+            "totalMs": 793,
+            "maxMs": 163
+          },
+          {
+            "phase": "config.global.reconcile",
+            "count": 1,
+            "totalMs": 713,
+            "maxMs": 713
+          },
+          {
+            "phase": "config.global.projects",
+            "count": 1,
+            "totalMs": 27,
+            "maxMs": 27
+          },
+          {
+            "phase": "config.global.reset",
+            "count": 1,
+            "totalMs": 3,
+            "maxMs": 3
+          },
+          {
+            "phase": "config.global.persist",
+            "count": 1,
+            "totalMs": 2,
+            "maxMs": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "at": "2026-10-20T07:03:30.401Z",
+    "endedAt": "2026-10-20T07:04:00.169Z",
+    "phase": "candidate",
+    "port": 18763,
+    "occurrence": "config-current-io-cost-464-final-d9781a72-bf1d-4cad-a667-adc9acc2ed45",
+    "transport": "browser",
+    "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+    "accepted": true,
+    "restored": true,
+    "writeMs": 15094.236299999997,
+    "restoreMs": 14655.330999999998,
+    "failures": [],
+    "permissionMode": "ask",
+    "changedField": "username",
+    "dataRestoration": "Complete parsed canonical source equals the pre-check source",
+    "readers": [
+      {
+        "path": "/config",
+        "startedAt": "2026-10-20T07:03:30.548Z",
+        "endedAt": "2026-10-20T07:03:45.469Z",
+        "ms": 14920.2511,
+        "status": 200,
+        "permissionMode": "ask"
+      },
+      {
+        "path": "/provider",
+        "startedAt": "2026-10-20T07:03:30.551Z",
+        "endedAt": "2026-10-20T07:03:45.811Z",
+        "ms": 15260.5995,
+        "status": 200,
+        "providers": 227,
+        "models": 8133,
+        "selectedModel": "gpt-6.1-sol"
+      },
+      {
+        "path": "/global/providers",
+        "startedAt": "2026-10-20T07:03:30.551Z",
+        "endedAt": "2026-10-20T07:03:45.683Z",
+        "ms": 15132.1134,
+        "status": 200,
+        "providers": 227,
+        "models": 8133,
+        "selectedModel": "gpt-6.1-sol"
+      },
+      {
+        "path": "/session/ses_hjhyXK1uCODvXvaxRrce",
+        "startedAt": "2026-10-20T07:03:30.552Z",
+        "endedAt": "2026-10-20T07:03:30.565Z",
+        "ms": 13.400199999998222,
+        "status": 200,
+        "sessionID": "ses_hjhyXK1uCODvXvaxRrce"
+      }
+    ],
+    "originalThresholds": {
+      "saveMs": 10000,
+      "restoreMs": 5000,
+      "readMs": 20000
+    },
+    "performancePassed": false,
+    "phaseSummary": [
+      {
+        "request": {
+          "time": "2026-10-20T07:03:45.496Z",
+          "requestID": "566ff07d-3e4d-4ac7-b013-51c7feecb347",
+          "method": "PATCH",
+          "path": "/global/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 15088
+        },
+        "inventory": [
+          {
+            "projects": 123,
+            "loaded": 2
+          }
+        ],
+        "summary": [
+          {
+            "phase": "project.identity.git",
+            "count": 240,
+            "totalMs": 84944,
+            "maxMs": 967
+          },
+          {
+            "phase": "project.identity.lookup",
+            "count": 242,
+            "totalMs": 42020,
+            "maxMs": 417
+          },
+          {
+            "phase": "config.global.write",
+            "count": 1,
+            "totalMs": 15085,
+            "maxMs": 15085
+          },
+          {
+            "phase": "config.global.before",
+            "count": 123,
+            "totalMs": 2861,
+            "maxMs": 119
+          },
+          {
+            "phase": "config.global.after",
+            "count": 123,
+            "totalMs": 2327,
+            "maxMs": 144
+          },
+          {
+            "phase": "project.registry.revalidate",
+            "count": 121,
+            "totalMs": 1679,
+            "maxMs": 94
+          },
+          {
+            "phase": "project.registry.capture",
+            "count": 121,
+            "totalMs": 1500,
+            "maxMs": 117
+          },
+          {
+            "phase": "config.global.reconcile",
+            "count": 1,
+            "totalMs": 561,
+            "maxMs": 561
+          },
+          {
+            "phase": "project.registry.acquire",
+            "count": 121,
+            "totalMs": 447,
+            "maxMs": 21
+          },
+          {
+            "phase": "config.global.projects",
+            "count": 1,
+            "totalMs": 29,
+            "maxMs": 29
+          },
+          {
+            "phase": "config.global.reset",
+            "count": 1,
+            "totalMs": 3,
+            "maxMs": 3
+          },
+          {
+            "phase": "config.global.persist",
+            "count": 1,
+            "totalMs": 2,
+            "maxMs": 2
+          }
+        ]
+      },
+      {
+        "request": {
+          "time": "2026-10-20T07:04:00.168Z",
+          "requestID": "acd951a3-904b-44d8-9ed3-55dee2f82c38",
+          "method": "PATCH",
+          "path": "/global/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 14655
+        },
+        "inventory": [
+          {
+            "projects": 123,
+            "loaded": 4
+          }
+        ],
+        "summary": [
+          {
+            "phase": "project.identity.git",
+            "count": 236,
+            "totalMs": 77695,
+            "maxMs": 665
+          },
+          {
+            "phase": "project.identity.lookup",
+            "count": 238,
+            "totalMs": 42960,
+            "maxMs": 576
+          },
+          {
+            "phase": "config.global.write",
+            "count": 1,
+            "totalMs": 14653,
+            "maxMs": 14653
+          },
+          {
+            "phase": "config.global.before",
+            "count": 123,
+            "totalMs": 2390,
+            "maxMs": 215
+          },
+          {
+            "phase": "project.registry.capture",
+            "count": 119,
+            "totalMs": 1912,
+            "maxMs": 124
+          },
+          {
+            "phase": "config.global.after",
+            "count": 123,
+            "totalMs": 1892,
+            "maxMs": 176
+          },
+          {
+            "phase": "project.registry.revalidate",
+            "count": 119,
+            "totalMs": 1563,
+            "maxMs": 66
+          },
+          {
+            "phase": "config.global.reconcile",
+            "count": 1,
+            "totalMs": 552,
+            "maxMs": 552
+          },
+          {
+            "phase": "project.registry.acquire",
+            "count": 119,
+            "totalMs": 482,
+            "maxMs": 32
+          },
+          {
+            "phase": "config.global.projects",
+            "count": 1,
+            "totalMs": 30,
+            "maxMs": 30
+          },
+          {
+            "phase": "config.global.reset",
+            "count": 1,
+            "totalMs": 4,
+            "maxMs": 4
+          },
+          {
+            "phase": "config.global.persist",
+            "count": 1,
+            "totalMs": 2,
+            "maxMs": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "at": "2026-10-20T07:05:07.212Z",
+    "endedAt": "2026-10-20T07:05:36.039Z",
+    "phase": "candidate",
+    "port": 18763,
+    "occurrence": "config-current-io-cost-464-final-d9781a72-bf1d-4cad-a667-adc9acc2ed45",
+    "transport": "browser",
+    "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+    "accepted": true,
+    "restored": true,
+    "writeMs": 14663.3396,
+    "restoreMs": 14158.763500000005,
+    "failures": [],
+    "permissionMode": "ask",
+    "changedField": "username",
+    "dataRestoration": "Complete parsed canonical source equals the pre-check source",
+    "readers": null,
+    "originalThresholds": {
+      "saveMs": 10000,
+      "restoreMs": 5000,
+      "readMs": 20000
+    },
+    "performancePassed": false,
+    "phaseSummary": [
+      {
+        "request": {
+          "time": "2026-10-20T07:05:21.876Z",
+          "requestID": "91b5143e-8669-40d2-b70e-733190cf1e0b",
+          "method": "PATCH",
+          "path": "/global/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 14658
+        },
+        "inventory": [
+          {
+            "projects": 123,
+            "loaded": 4
+          }
+        ],
+        "summary": [
+          {
+            "phase": "project.identity.git",
+            "count": 236,
+            "totalMs": 80384,
+            "maxMs": 692
+          },
+          {
+            "phase": "project.identity.lookup",
+            "count": 238,
+            "totalMs": 43855,
+            "maxMs": 542
+          },
+          {
+            "phase": "config.global.write",
+            "count": 1,
+            "totalMs": 14656,
+            "maxMs": 14656
+          },
+          {
+            "phase": "config.global.before",
+            "count": 123,
+            "totalMs": 2047,
+            "maxMs": 104
+          },
+          {
+            "phase": "config.global.after",
+            "count": 123,
+            "totalMs": 2014,
+            "maxMs": 163
+          },
+          {
+            "phase": "project.registry.revalidate",
+            "count": 119,
+            "totalMs": 1630,
+            "maxMs": 179
+          },
+          {
+            "phase": "project.registry.capture",
+            "count": 119,
+            "totalMs": 1540,
+            "maxMs": 95
+          },
+          {
+            "phase": "project.registry.acquire",
+            "count": 119,
+            "totalMs": 663,
+            "maxMs": 119
+          },
+          {
+            "phase": "config.global.reconcile",
+            "count": 1,
+            "totalMs": 509,
+            "maxMs": 509
+          },
+          {
+            "phase": "config.global.projects",
+            "count": 1,
+            "totalMs": 26,
+            "maxMs": 26
+          },
+          {
+            "phase": "config.global.reset",
+            "count": 1,
+            "totalMs": 3,
+            "maxMs": 3
+          },
+          {
+            "phase": "config.global.persist",
+            "count": 1,
+            "totalMs": 2,
+            "maxMs": 2
+          }
+        ]
+      },
+      {
+        "request": {
+          "time": "2026-10-20T07:05:36.038Z",
+          "requestID": "a8f8069f-1d36-4975-93dc-d03286d8b1c8",
+          "method": "PATCH",
+          "path": "/global/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 14158
+        },
+        "inventory": [
+          {
+            "projects": 123,
+            "loaded": 4
+          }
+        ],
+        "summary": [
+          {
+            "phase": "project.identity.git",
+            "count": 236,
+            "totalMs": 75012,
+            "maxMs": 689
+          },
+          {
+            "phase": "project.identity.lookup",
+            "count": 238,
+            "totalMs": 42002,
+            "maxMs": 528
+          },
+          {
+            "phase": "config.global.write",
+            "count": 1,
+            "totalMs": 14157,
+            "maxMs": 14157
+          },
+          {
+            "phase": "config.global.after",
+            "count": 123,
+            "totalMs": 2313,
+            "maxMs": 290
+          },
+          {
+            "phase": "config.global.before",
+            "count": 123,
+            "totalMs": 2022,
+            "maxMs": 104
+          },
+          {
+            "phase": "project.registry.capture",
+            "count": 119,
+            "totalMs": 1577,
+            "maxMs": 96
+          },
+          {
+            "phase": "project.registry.revalidate",
+            "count": 119,
+            "totalMs": 1483,
+            "maxMs": 99
+          },
+          {
+            "phase": "project.registry.acquire",
+            "count": 119,
+            "totalMs": 551,
+            "maxMs": 101
+          },
+          {
+            "phase": "config.global.reconcile",
+            "count": 1,
+            "totalMs": 492,
+            "maxMs": 492
+          },
+          {
+            "phase": "config.global.projects",
+            "count": 1,
+            "totalMs": 27,
+            "maxMs": 27
+          },
+          {
+            "phase": "config.global.reset",
+            "count": 1,
+            "totalMs": 3,
+            "maxMs": 3
+          },
+          {
+            "phase": "config.global.persist",
+            "count": 1,
+            "totalMs": 2,
+            "maxMs": 2
+          }
+        ]
+      }
+    ]
+  }
+]

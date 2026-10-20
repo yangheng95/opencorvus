@@ -1,0 +1,62 @@
+{
+  "method": "Actual CUA IAB clicks, native page screenshots and manual visual review; no UI automation tests",
+  "dimensions": {
+    "width": 1280,
+    "height": 720
+  },
+  "screenshots": [
+    "baseline-settings-before.png",
+    "baseline-providers-during-write.png",
+    "baseline-settings-restored.png",
+    "after-settings-before.png",
+    "after-providers-during-write.png",
+    "after-providers-loaded.png",
+    "after-settings-restored.png",
+    "final-en-loading.png",
+    "final-en-loaded.png",
+    "final-zh-loading.png",
+    "final-zh-loaded.png",
+    "final-zh-ask.png"
+  ],
+  "observations": [
+    {
+      "file": "after-providers-during-write.png",
+      "at": "2026-10-20T06:57:27.921Z",
+      "result": "Old first-load view blank during actual save"
+    },
+    {
+      "file": "final-en-loading.png",
+      "at": "2026-10-20T07:03:36.858Z",
+      "result": "New English status during first actual save"
+    },
+    {
+      "file": "final-en-loaded.png",
+      "at": "2026-10-20T07:04:08.525Z",
+      "result": "Complete catalog227 and connected OpenAI restored"
+    },
+    {
+      "file": "final-zh-loading.png",
+      "at": "2026-10-20T07:05:12.802Z",
+      "result": "New Chinese status during second actual save"
+    },
+    {
+      "file": "final-zh-loaded.png",
+      "at": "2026-10-20T07:05:50.083Z",
+      "result": "Chinese complete catalog227 and connected OpenAI restored"
+    },
+    {
+      "file": "final-zh-ask.png",
+      "at": "2026-10-20T07:06:03.657Z",
+      "result": "Ask retained"
+    }
+  ],
+  "formalBuild": {
+    "originalHandle": 95803,
+    "exit": 0,
+    "seconds": 66,
+    "typecheck": "exit0",
+    "localeKeys": 2510,
+    "renderer": "1 declared global"
+  },
+  "qualificationBoundary": "UI loading presentation fixed; full-history save10s/restore5s still failed. Sources/live agent Rendering, native folder picker and new Task Goal execution receive no new qualification here."
+}

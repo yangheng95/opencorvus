@@ -1,0 +1,16 @@
+{
+  "scopes": [
+    "config-current-io-cost-464-before",
+    "config-current-io-cost-464-probe",
+    "config-current-io-cost-464-probe-verified",
+    "config-current-io-cost-464-probe-loaded",
+    "config-current-io-cost-464-probe-exact",
+    "config-current-io-cost-464-after",
+    "config-current-io-cost-464-final"
+  ],
+  "pairs": "Both copied members retired only after physical/output/request/launcher settlement and actual-value secret scan",
+  "sourceWritten": false,
+  "sourceMetadataUnchanged": true,
+  "refreshOrExchange": false,
+  "scannedFiles": 140
+}

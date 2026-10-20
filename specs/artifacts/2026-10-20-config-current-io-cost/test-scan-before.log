@@ -1,0 +1,41 @@
+$ bun script/run-tests.ts test/project-filesystem-identity.test.ts "--test-name-pattern=lookup settles"
+[1/1] START test/project-filesystem-identity.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+39 |   }) as typeof fs.realpath)
+40 |   const parallelism = spyOn(os, "availableParallelism").mockReturnValue(2)
+41 |   const lookup = Project.fromDirectory(directories[3]!).catch((error) => error)
+42 |   try {
+43 |     const reason = await withTimeout(lookup, 2_000, "full physical comparison settlement").catch((error) => error)
+44 |     expect({ reason, completed: completed.sort() }).toEqual({ reason: failures[0], completed: ["first", "second", "third"] })
+                                                         ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "completed": [
+-     "first",
+-     "second",
+-     "third",
+-   ],
+-   "reason": [Error: first physical observation failed],
++   "completed": [],
++   "reason": [AwaitTimeoutError: full physical comparison settlement timed out after 2000ms],
+  }
+
+- Expected  - 6
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\project-filesystem-identity.test.ts:44:53)
+(fail) lookup settles concurrent physical comparisons and returns the first registry error [2252.46ms]
+
+ 0 pass
+ 3 filtered out
+ 1 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [4.92s]
+[1/1] DONE test/project-filesystem-identity.test.ts exit=1 duration=5.58s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\project-filesystem-identity.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\project-filesystem-identity.test.ts
+error: script "test" exited with code 1

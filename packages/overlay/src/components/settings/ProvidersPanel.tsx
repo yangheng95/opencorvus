@@ -169,6 +169,7 @@ export default function ProvidersPanel() {
   const [expandedCatalogProviderID, setExpandedCatalogProviderID] = createSignal("")
   const [discoveringModels, setDiscoveringModels] = createSignal(false)
   const [discoveredModelCount, setDiscoveredModelCount] = createSignal<number | null>(null)
+  const [loadingProviderInfo, setLoadingProviderInfo] = createSignal(false)
 
   function providerLoadOptions(directory = activeDirectory().trim(), authority = captureApiAuthority()) {
     const selectionEpoch = boardStore.selectEpoch
@@ -226,6 +227,7 @@ export default function ProvidersPanel() {
   let providerRefreshSequence = 0
   let modelRefreshSequence = 0
   let providerTestScopeGeneration = 0
+  let providerInfoLoadSequence = 0
   const providerTestGenerations = new Map<string, number>()
 
   function retireProviderTest(providerID: string) {
@@ -325,11 +327,15 @@ export default function ProvidersPanel() {
   }
 
   async function reloadProviderInfo(directory: string, options: ReturnType<typeof providerLoadOptions>): Promise<void> {
+    const sequence = ++providerInfoLoadSequence
+    setLoadingProviderInfo(true)
     try {
       await loadProviderInfo(undefined, options)
     } catch (error) {
-      if (options.isCurrentDirectory(directory))
+      if (sequence === providerInfoLoadSequence && options.isCurrentDirectory(directory))
         setFormError(feedback("provider.form.error.reload_failed", formatErrorDetails(error)))
+    } finally {
+      if (sequence === providerInfoLoadSequence && options.isCurrentDirectory(directory)) setLoadingProviderInfo(false)
     }
   }
 
@@ -1194,6 +1200,12 @@ export default function ProvidersPanel() {
             clearDataTestID="provider-search-clear"
           />
         </div>
+
+        <Show when={loadingProviderInfo() && !appStore.providerCatalog}>
+          <Feedback tone="info" title={t("provider.load.loading")} aria-busy="true">
+            {t("provider.load.loading_description")}
+          </Feedback>
+        </Show>
 
         <For each={appStore.providerLoadIssues}>
           {(issue) => (

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [配置保存成本与服务商加载反馈](2026-10-20-config-current-io-cost/README.md)：真实被动计数、12张截图、中英文等待与目录恢复，明确保留性能失败。
+
 - [Task与Mission当前Goal页面](2026-10-20-goal-owner-ui/README.md)：15张真实截图、Mission自动目标、URL恢复及同页搜索切换，保留新Task执行未验收范围。
 
 - [Goal与真实附件移交](2026-10-20-goal-attachment-handoff/README.md)：10张真实截图、实际文件read与Sources、新宿主能力菜单和待发送附件保留。
