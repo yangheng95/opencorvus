@@ -127,9 +127,7 @@ test("exact input ownership reports mismatches and preserves independent Project
       )
       const fixed = await Session.create({ kind: "assistant", metadata: rightSidebarConversationMetadata("chat") })
       const input = await inputMessage(fixed.id, "work")
-      expect(() => persistedExecutionIdentity({ sessionID: fixed.id, inputMessageID: input.id })).toThrow(
-        `Execution identity ${fixed.id}/${input.id} target work differs from owner chat`,
-      )
+      expect(persistedExecutionIdentity({ sessionID: fixed.id, inputMessageID: input.id }).agentID).toBe("work")
     },
   })
 })
@@ -171,7 +169,7 @@ for (const agent of ["coding", "chat", "work"]) {
   })
 }
 
-test("persisted lifecycle replay retains exact actors through retries and each terminal reason", async () => {
+test("persisted lifecycle and messages retain exact actors through a Work surface upgrade and restart", async () => {
   await using project = await tmpdir({ git: true })
   let sessionID = ""
   const inputs: Array<{ id: string; agent: string; reason: string }> = []
@@ -184,6 +182,14 @@ test("persisted lifecycle replay retains exact actors through retries and each t
       for (const [agent, reason] of [["coding", "completed"], ["work", "aborted"], ["chat", "error"]] as const) {
         const input = await inputMessage(session.id, agent)
         inputs.push({ id: input.id, agent, reason })
+        await Session.updateMessage({
+          id: Identifier.ascending("message"), sessionID, parentID: input.id,
+          role: "assistant", author: agent, agent,
+          time: { created: Date.now(), completed: Date.now() },
+          providerID: "test", modelID: "test",
+          path: { cwd: Instance.directory, root: Instance.worktree }, cost: 0,
+          tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+        })
         SessionStatus.beginExecutionOccurrence(session.id, input.id, new AbortController().signal)
         await SessionStatus.set(session.id, { type: "streaming" }, { inputMessageID: input.id })
         const retry = { type: "retry", attempt: 1, message: "Provider retry", next: Date.now() + 100 } as const
@@ -195,6 +201,13 @@ test("persisted lifecycle replay retains exact actors through retries and each t
         await SessionStatus.set(session.id, { type: "terminal", reason }, { inputMessageID: input.id })
       }
       await awaitTaskMessageProtocolBridgeIdle()
+      await Session.mergeMetadata({ sessionID, patch: rightSidebarConversationMetadata("work") })
+      expect(
+        inputs.map(({ id }) => persistedExecutionIdentity({ sessionID, inputMessageID: id }).agentID),
+      ).toEqual(["coding", "work", "chat"])
+      expect(
+        (await Session.messages({ sessionID })).map((message) => projectPersistedSessionMessage(message).info.agentID),
+      ).toEqual(["coding", "coding", "work", "work", "chat", "chat"])
       expect(
         inputs.map(
           ({ id }) => ProtocolStore.latestSessionOccurrenceEvent(sessionID, "agent.execution.lifecycle", id)?.payload,
@@ -219,6 +232,12 @@ test("persisted lifecycle replay retains exact actors through retries and each t
           ({ id }) =>
             ProtocolStore.latestSessionOccurrenceEvent(sessionID, "agent.execution.lifecycle", id)?.payload?.agentID,
         ),
+      ).toEqual(["coding", "work", "chat"])
+      expect(
+        (await Session.messages({ sessionID })).map((message) => projectPersistedSessionMessage(message).info.agentID),
+      ).toEqual(["coding", "coding", "work", "work", "chat", "chat"])
+      expect(
+        inputs.map(({ id }) => persistedExecutionIdentity({ sessionID, inputMessageID: id }).agentID),
       ).toEqual(["coding", "work", "chat"])
     },
   })

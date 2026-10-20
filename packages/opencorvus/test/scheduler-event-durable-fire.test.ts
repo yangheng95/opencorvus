@@ -14,6 +14,7 @@ import { Config } from "@/config/config"
 import { provideInitializedProjectExecution } from "@/project/independent-project-owner"
 import { Session } from "@/session"
 import { SessionWake } from "@/session/wake"
+import { listWorkLedger } from "@/work-ledger/projection"
 import {
   closeMissionExecutionOperation,
   missionOperatorWakeReason,
@@ -380,6 +381,16 @@ describe("Event Job durable fact authority", () => {
           status: "succeeded",
         })
         const activated = await activation
+        expect(await Session.get(fire.target_session_id)).toMatchObject({
+          id: fire.target_session_id,
+          projectID: Instance.project.id,
+          directory: Instance.directory,
+          title: "production wake",
+          metadata: { conversation: { surface: "right-sidebar", experience: "work" } },
+        })
+        expect((await listWorkLedger({ directory: Instance.directory, search: "production wake" })).rows).toEqual([
+          expect.objectContaining({ kind: "chat", experience: "work", sessionID: fire.target_session_id }),
+        ])
         const message = (await Session.messages({ sessionID: fire.target_session_id })).find((entry) => entry.info.id === activated.messageID)
         expect({ fire, activated, message }).toMatchObject({
           fire: { target_session_id: activated.sessionID },

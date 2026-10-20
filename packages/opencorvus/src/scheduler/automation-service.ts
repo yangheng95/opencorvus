@@ -71,7 +71,8 @@ import {
   type MissionExecutionWakeAdmission,
 } from "@/mission/execution-closure"
 import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v2"
-import { createHash } from "node:crypto"
+import { deterministicAutomationID } from "./automation-identity"
+import { createRightSidebarConversationSession } from "@/chat/session"
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { Config } from "@/config/config"
 import {
@@ -2226,11 +2227,6 @@ export namespace AutomationService {
     disposition?: "target_deleted"
   }
 
-  function deterministicAutomationID(prefix: "cal" | "atr" | "ses" | "msg" | "prt", ...parts: string[]): string {
-    const digest = createHash("sha256").update(parts.join("\u0000")).digest("hex")
-    return `${prefix}_automation_${digest.slice(0, 32)}`
-  }
-
   function ensureAutomationFireInTransaction(
     db: Database.TxOrDb,
     input: {
@@ -2555,7 +2551,7 @@ export namespace AutomationService {
           return await Instance.provide({
             directory: worktree.directory,
             fn: async () => {
-              await ensureAutomationTargetSession(targetSessionID, job.prompt)
+              await ensureAutomationTargetSession(targetSessionID, job.name)
               return {
                 sessionID: await wakeSession(
                   job,
@@ -2571,7 +2567,7 @@ export namespace AutomationService {
             },
           })
         }
-        await ensureAutomationTargetSession(targetSessionID, job.prompt)
+        await ensureAutomationTargetSession(targetSessionID, job.name)
         return {
           sessionID: await wakeSession(job, fireID, targetSessionID, runID, runID, owner, signal, inactivityFence),
         }
@@ -2579,18 +2575,16 @@ export namespace AutomationService {
     })
   }
 
-  async function ensureAutomationTargetSession(sessionID: string, prompt: string): Promise<void> {
+  async function ensureAutomationTargetSession(sessionID: string, title: string): Promise<void> {
     const existing = await Session.getInProject({ sessionID, projectID: Instance.project.id }).catch((error) => {
       if (error instanceof NotFoundError) return undefined
       throw error
     })
     if (existing) return
     try {
-      await Session.createNext({
+      await createRightSidebarConversationSession("work", {
         id: sessionID,
-        kind: "assistant",
-        directory: Instance.directory,
-        title: `Scheduled: ${prompt.slice(0, 60)}`,
+        title,
       })
     } catch (error) {
       const converged = await Session.getInProject({ sessionID, projectID: Instance.project.id }).catch(() => undefined)

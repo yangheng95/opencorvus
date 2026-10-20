@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [调度结果可见入口与历史身份](2026-10-20-scheduled-result-visibility/README.md)：9张人工截图、真实事件/定时/后续输入、保留数据升级与完整原生结算。
+
 - [当前Sources与成员阅读复核](2026-10-20-sources-member-review/README.md)：10张人工截图、真实旧来源在新流中的阅读、同文件行定位及完整历史保留。
 
 - [独立回调的数据库所有权](2026-10-20-independent-callback-context/README.md)：两个原失败、22例正向合同和真实HEAD事件/流式模型回复。

@@ -25,6 +25,7 @@ import { ApplicationSchema, DatabaseAuthorityTable } from "./schema"
 import { SCHEMA_DDL } from "./ddl"
 import { migrateSchema, SchemaMigrationError } from "./schema-migration"
 import { DATABASE_MIGRATIONS } from "./migrations"
+import { standaloneScheduledConversationIdentityIssues } from "@/scheduler/scheduled-conversation-identity"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Identifier } from "@/id/id"
 import {
@@ -273,6 +274,15 @@ function assertCurrentDataIntegrity(
   db: SQLiteBunDatabase<typeof ApplicationSchema>,
   dbPath: string,
 ): void {
+  const scheduledConversationIssue = standaloneScheduledConversationIdentityIssues(sqlite)[0]
+  if (scheduledConversationIssue) {
+    throw new DatabaseUnavailableError({
+      message: `Scheduled result Session ${scheduledConversationIssue.sessionID} requires a valid visible conversation identity. Its data is retained.`,
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.scheduledConversationIdentity",
+      code: scheduledConversationIssue.kind === "missing" ? "DATA_MIGRATION_REQUIRED" : "DATA_INTEGRITY_ERROR",
+    })
+  }
   try {
     validateCurrentPermissionLedger(db)
   } catch (cause) {

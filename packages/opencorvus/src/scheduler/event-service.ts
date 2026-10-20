@@ -1,5 +1,6 @@
 import { Bus } from "@/bus"
 import { Instance, reenterActiveInstance, runInstanceBackgroundWork } from "@/project/instance"
+import { createRightSidebarConversationSession } from "@/chat/session"
 import { createInstanceState } from "@/project/instance-state"
 import { Database, and, desc, eq, sql } from "@/storage/db"
 import { Log } from "@/util/log"
@@ -1239,11 +1240,9 @@ export namespace EventService {
           .get(),
       )
       if (!existing) {
-        await Session.createNext({
+        await createRightSidebarConversationSession("work", {
           id: input.fire.target_session_id,
-          kind: "assistant",
-          directory: Instance.directory,
-          title: `Scheduled: ${input.job.prompt.slice(0, 60)}`,
+          title: input.job.name,
         })
       }
     }

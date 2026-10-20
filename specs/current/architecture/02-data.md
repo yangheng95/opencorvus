@@ -68,7 +68,7 @@ PASSIVE的busy/部分进度在下次周期继续；非暂态回写错误进入�
 
 ## 数据库版本化迁移
 
-当前版本为2，从新建的不可改写版本1基线开始支持自动迁移。唯一 registry 位于
+当前版本为3，从新建的不可改写版本1基线开始支持自动迁移。唯一 registry 位于
 `src/storage/migrations/index.ts`，每版保存完整、不可改写的目标 SQL；后续结构或持久
 payload 语义变更必须追加连续版本。`PRAGMA user_version` 是唯一已完成版本，当前
 `SCHEMA_DDL` 与 typed schema 继续定义唯一业务 reader/writer。`check:database-migrations`
@@ -104,6 +104,16 @@ SQLite 到同目录 `migration-backups`，包含 WAL 中的已提交行；独占
 `grant_decision_indexed` 审计行，为历史无 slot 的 grant_used 建立唯一决定定位。
 索引行保存实际迁移时间，源指向原 grant_used；原授权时间、执行 source、rowid 与结果保留。
 任何不唯一或不完整的图返回明确完整性错误，不猜赢家、不改历史批准或产生 Bus/模型消息。
+
+版本3复用版本2的完整不可改写目标DDL，只转换独立调度结果的可见会话身份。
+Event由原fire.created_session_id与exact definition Project确定；项目Automation由原
+run/revision/Project和不可变deterministicAutomationID确定。只有原assistant根缺少
+conversation身份时补canonical Work metadata，其他metadata、Session/Message/Part身份、
+权限、标题、目录、时间及调度回执保留；有效既有Chat/Work保持。冲突身份返回维护错误并
+回滚，不覆盖；被删除的Session不复活。正常完整性校验沿同一来源合同识别当前缺失/冲突，
+不在reader或打开路由增加兼容路径。查询不依赖语义迁移期间被暂时移除的索引。
+执行历史仍按各次持久化输入中的真实agent投影，当前Work surface不重写旧coding等参与者；
+后续新输入继续由当前Work overlay产生，与历史使用同一执行身份解析器。
 
 非空版本0返回 `SCHEMA_BASELINE_REQUIRED`，不属于本基线的升级范围；高于当前版本返回
 `SCHEMA_VERSION_AHEAD`。当前版本出现未声明结构漂移或有损转换返回

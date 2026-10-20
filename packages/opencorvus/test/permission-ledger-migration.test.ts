@@ -74,7 +74,7 @@ test("revision 2 indexes a unique retained capture, preserves original bytes and
   event(value, owner, "revoked", { source_event_id: grant.id, actor_id: "later-operator", time_created: 400 })
   const before = rows(value)
   const receipt = migrate(value)
-  expect({ from: receipt.from, to: receipt.to }).toEqual({ from: 1, to: 2 })
+  expect({ from: receipt.from, to: receipt.to }).toEqual({ from: 1, to: current.version })
   const original = rows(value).slice(0, before.length)
   expect(original).toEqual(before)
   const facts = readPermissionRequestFacts(value.db, captured.request_id)!
@@ -92,7 +92,7 @@ test("revision 2 indexes a unique retained capture, preserves original bytes and
       .toEqual({ version: 1, rows: before })
   } finally { backup.close(true) }
   const after = rows(value)
-  expect(migrate(value)).toEqual({ from: 2, to: 2 })
+  expect(migrate(value)).toEqual({ from: current.version, to: current.version })
   expect(rows(value)).toEqual(after)
 })
 
@@ -144,7 +144,7 @@ test("the current reader validates all direct decisions including original Full-
   const decision = event(value, owner, "allowed_once", { decision_slot: owner.request_id, actor_id: "full-access-policy" })
   expect(readPermissionRequestFacts(value.db, owner.request_id)).toMatchObject({ authority: decision, decision: "allow_once", autoReply: false })
   migrate(value)
-  expect(schemaVersion(value.sqlite)).toBe(2)
+  expect(schemaVersion(value.sqlite)).toBe(current.version)
 })
 
 test("current slotless captures, cross-Project grants and conflicting immutable owners have precise integrity errors", async () => {
@@ -228,7 +228,7 @@ test("the current production opener reports an unindexed capture as data integri
     editTestDatabase(sqlite => {
       const db = drizzle({ client: sqlite, schema: ApplicationSchema })
       expect({ version: schemaVersion(sqlite), rows: db.select().from(PermissionLedgerTable).orderBy(sql`rowid`).all() })
-        .toEqual({ version: 2, rows: original })
+        .toEqual({ version: current.version, rows: original })
     })
   } finally { await resetDatabase() }
 })

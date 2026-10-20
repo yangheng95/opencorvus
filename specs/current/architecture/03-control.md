@@ -420,6 +420,17 @@ server/routes/panel.ts          ControlMessage HTTP 入口 + control stream SSE
 - [task-control-plane.md](task-control-plane.md) — 进入 EngineService 之后的 Task Control Loop
 - [04-extensions.md](04-extensions.md) — channel 类型与 ACP/MCP/plugin 的边界
 
+## Standalone scheduled results
+
+Standalone Event fires and project-scoped Automation runs create their reserved
+result Session through the canonical Work conversation factory. The original
+fire/run still owns the exact Session and wake Message identities; the Work
+metadata makes that result discoverable in the existing ledger and opens it
+through the existing Work route. New result titles use the definition name.
+Session-bound, Task, Mission and global conversation targets retain their own
+identity and creation authority. Versioned data migration exposes historical
+standalone results without replaying their input or rewriting Message authors.
+
 ## Canonical diagnostic logging
 
 Worktree collection uses the current Project physical Git predicate after root availability and before managed/Git enumeration. An available non-Git Project yields explicit `non-git-project` preservation and an informational diagnostic; an unreadable physical Git marker yields `git-state-unavailable`, while a present invalid Git repository retains `registry-unavailable`. The domain owns one preservation-reason schema and the public cleanup inspection references it. Public reason/code/operation projection excludes internal paths/details; original ownership, candidate qualification and apply/removal contracts remain current.

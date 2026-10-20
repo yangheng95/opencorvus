@@ -19,16 +19,18 @@ export function persistedSessionAgentID(input: {
     }
     return input.projectedIdentity.agentID
   }
-  const rightSidebarIdentity = rightSidebarConversationAgentID({
-    kind: input.sessionKind,
-    metadata: input.metadata,
-  })
-  if (rightSidebarIdentity) return rightSidebarIdentity
+  // An occurrence keeps its durable input actor when the container's product
+  // surface changes. Session metadata describes the current container only.
   if (input.sessionKind === "assistant" && input.inputAgentID !== undefined) {
     const agentID = input.inputAgentID.trim()
     if (!agentID) throw new Error(`Session ${input.sessionID} execution input has no Agent identity`)
     return agentID
   }
+  const rightSidebarIdentity = rightSidebarConversationAgentID({
+    kind: input.sessionKind,
+    metadata: input.metadata,
+  })
+  if (rightSidebarIdentity) return rightSidebarIdentity
   if (RuntimeTemplateRegistry.isWorkerSessionKind(input.sessionKind)) {
     throw new Error(`Worker session ${input.sessionID} (${input.sessionKind}) is missing projected agent evidence`)
   }

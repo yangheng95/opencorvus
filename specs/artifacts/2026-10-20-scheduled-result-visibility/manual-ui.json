@@ -1,0 +1,29 @@
+{
+  "tabs": [
+    21,
+    22
+  ],
+  "closed": true,
+  "screenshots": [
+    "migrated-original-result-opened.png",
+    "migrated-result-listed-before-body-fix.png",
+    "new-automation-result.png",
+    "new-event-result.png",
+    "original-coding-and-new-work.png",
+    "original-member-sources.png",
+    "original-parent-work.png",
+    "original-task-goal.png",
+    "restored-original-and-followup.png"
+  ],
+  "language": "Configured English controls, original model and user prose unchanged",
+  "qualification": "Current formal UI from 467, current backend; no UI source modifications or UI automated tests",
+  "passed": [
+    "New actual Event and project Automation rows open their completed Work replies",
+    "Old actual Event opens original coding reply",
+    "UI-sent follow-up produces actual Work reply in same Session",
+    "Own page reload restores both original and new actors and replies",
+    "Original Task Goal state and token/turn budgets remain readable",
+    "Original ordinary member Sources README.md L2–3 remains visible in side dock"
+  ],
+  "boundary": "Static current screenshots do not qualify every transient Rendering frame; previous469 streaming sample remains separately documented"
+}

@@ -1,0 +1,654 @@
+{
+  "history": {
+    "originalProjects": 133,
+    "originalSessions": 179,
+    "projects": 135,
+    "sessions": 183,
+    "schema": 3,
+    "backup": {
+      "version": 2,
+      "originalGraph": "Exact rowid, columns and data retained in production migration backup",
+      "tables": [
+        "session",
+        "message",
+        "part",
+        "event_job",
+        "event_job_fire",
+        "event_job_fire_receipt",
+        "automation",
+        "automation_fire",
+        "automation_run",
+        "automation_run_receipt",
+        "permission_ledger"
+      ]
+    },
+    "current": "All original graph rows exactly retained; only old result conversation metadata added and that same Session's update time/tool-switch Ruleset updated by the authorized actual UI follow-up through existing prompt/run.ts",
+    "identities": "Every original Project/Session ID, directory and owner preserved"
+  },
+  "event": {
+    "definition": {
+      "id": "evt_g0VYaJua300x48kzllEb",
+      "name": "事件结果 470",
+      "eventType": "file.watcher.updated"
+    },
+    "fire": {
+      "id": "cal_g0VYaJuaD00Q1IgUIYcI",
+      "definition_id": "evt_g0VYaJua300x48kzllEb",
+      "queue_position": 1,
+      "event_job_revision_id": "evt_g0VYaJua300x48kzllEb",
+      "event_occurrence_id": "bus-occurrence:0e77dece-80a7-4083-a216-ca95b5b702c4",
+      "causation_fire_id": null,
+      "causal_cycle": 0,
+      "created_session_id": "ses_g0VYaJuaD00Fnn34urNe",
+      "mission_opened_event_id": null,
+      "mission_disposition": null,
+      "mission_closure_event_id": null,
+      "time_created": 1792492513226,
+      "outcome": "succeeded",
+      "message_id": "msg_event_014d0c331a59bea32b01440840e8db96"
+    },
+    "result": {
+      "sessionID": "ses_g0VYaJuaD00Fnn34urNe",
+      "inputID": "msg_event_014d0c331a59bea32b01440840e8db96",
+      "reply": {
+        "author": "work",
+        "role": "assistant",
+        "time": {
+          "created": 1792492513297,
+          "completed": 1792492517827
+        },
+        "parentID": "msg_event_014d0c331a59bea32b01440840e8db96",
+        "acceptedInputMessageIDs": [
+          "msg_event_014d0c331a59bea32b01440840e8db96"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "work",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+          "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 38876,
+          "input": 38869,
+          "output": 7,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001792492513297:0000000000000030:0000000000000000:message:msg_g0VYaJubJ0001jSevYTQ",
+        "id": "msg_g0VYaJubJ0001jSevYTQ",
+        "sessionID": "ses_g0VYaJuaD00Fnn34urNe"
+      },
+      "text": "EVENT470READY",
+      "session": {
+        "id": "ses_g0VYaJuaD00Fnn34urNe",
+        "slug": "witty-river",
+        "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+        "title": "事件结果 470",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "conversation": {
+            "experience": "work",
+            "surface": "right-sidebar"
+          }
+        },
+        "summary": {
+          "additions": 0,
+          "deletions": 0,
+          "files": 0
+        },
+        "permission": [
+          {
+            "permission": "delegate_agent",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_expert_squad_inspect",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_query_task",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_query_task_artifacts",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_create_task",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_wake_mission",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_wake_work",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_send_task_message",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_respond_interaction",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_cancel_task",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_update_checks",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_select_workspace",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_update_goal",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_delete_goal",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "question",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "bash",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "read",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "glob",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "search_code",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "edit",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "write",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "apply_patch",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "todo",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "schedule",
+            "pattern": "*",
+            "action": "allow"
+          }
+        ],
+        "time": {
+          "created": 1792492513238,
+          "updated": 1792492517815
+        }
+      },
+      "ledger": [
+        {
+          "kind": "chat",
+          "experience": "work",
+          "id": "ses_g0VYaJuaD00Fnn34urNe",
+          "sessionID": "ses_g0VYaJuaD00Fnn34urNe",
+          "title": "事件结果 470",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+          "created": 1792492513238,
+          "started": 1792492513238,
+          "updated": 1792492517815,
+          "pinned": false,
+          "status": "idle"
+        }
+      ]
+    }
+  },
+  "automation": {
+    "definition": {
+      "id": "atm_g0VYaJw2D00AVx0jdxZt",
+      "revisionId": "atm_g0VYaJw2D00AVx0jdxZt",
+      "name": "项目定时结果 470",
+      "nextRun": 4070908800000
+    },
+    "runs": [
+      {
+        "id": "atr_automation_8c13ba3c9f70199220c381e0d5dc4731",
+        "automationId": "atm_g0VYaJw2D00AVx0jdxZt",
+        "fireId": "atm_g0VYaJw2a005XYhTasqO",
+        "targetScope": "project",
+        "targetProjectId": "prj_hSQinOa1MIVoNEeARpn5",
+        "session": {
+          "id": "ses_automation_5aadd9670a9db59502d4a858530b73aa",
+          "title": "项目定时结果 470",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+          "kind": "assistant",
+          "experience": "work",
+          "productPillar": null
+        },
+        "outcome": "succeeded",
+        "disposition": null,
+        "closureEventID": null,
+        "startedAt": 1792492518830,
+        "completedAt": 1792492522391,
+        "error": null
+      }
+    ],
+    "result": {
+      "sessionID": "ses_automation_5aadd9670a9db59502d4a858530b73aa",
+      "inputID": "msg_automation_5aadd9670a9db59502d4a858530b73aa",
+      "reply": {
+        "author": "work",
+        "role": "assistant",
+        "time": {
+          "created": 1792492518886,
+          "completed": 1792492522386
+        },
+        "parentID": "msg_automation_5aadd9670a9db59502d4a858530b73aa",
+        "acceptedInputMessageIDs": [
+          "msg_automation_5aadd9670a9db59502d4a858530b73aa"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "work",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+          "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 38880,
+          "input": 38871,
+          "output": 9,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001792492518886:0000000000000030:0000000000000000:message:msg_g0VYaJw3S00aSfVhcMiw",
+        "id": "msg_g0VYaJw3S00aSfVhcMiw",
+        "sessionID": "ses_automation_5aadd9670a9db59502d4a858530b73aa"
+      },
+      "text": "AUTOMATION470READY",
+      "session": {
+        "id": "ses_automation_5aadd9670a9db59502d4a858530b73aa",
+        "slug": "cosmic-orchid",
+        "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+        "title": "项目定时结果 470",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "conversation": {
+            "experience": "work",
+            "surface": "right-sidebar"
+          }
+        },
+        "summary": {
+          "additions": 0,
+          "deletions": 0,
+          "files": 0
+        },
+        "permission": [
+          {
+            "permission": "delegate_agent",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_expert_squad_inspect",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_query_task",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_query_task_artifacts",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_create_task",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_wake_mission",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_wake_work",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_send_task_message",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_respond_interaction",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_cancel_task",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_update_checks",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_select_workspace",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_update_goal",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_delete_goal",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "question",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "bash",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "read",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "glob",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "search_code",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "edit",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "write",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "apply_patch",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "todo",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "schedule",
+            "pattern": "*",
+            "action": "allow"
+          }
+        ],
+        "time": {
+          "created": 1792492518842,
+          "updated": 1792492522373
+        }
+      },
+      "ledger": [
+        {
+          "kind": "chat",
+          "experience": "work",
+          "id": "ses_automation_5aadd9670a9db59502d4a858530b73aa",
+          "sessionID": "ses_automation_5aadd9670a9db59502d4a858530b73aa",
+          "title": "项目定时结果 470",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+          "created": 1792492518842,
+          "started": 1792492518842,
+          "updated": 1792492522373,
+          "pinned": false,
+          "status": "idle"
+        }
+      ]
+    }
+  },
+  "historicalFailure": [
+    {
+      "requestID": "0adf9d1d-6919-4cec-b0cc-94e774f016d7",
+      "status": 500,
+      "message": "overlayMeta: message on session ses_g0VYa3Gwj003t2ichNvt agent coding does not match persisted agent work"
+    },
+    {
+      "requestID": "3aad452c-3be4-49c8-bf76-d6caff170eea",
+      "status": 500,
+      "message": "overlayMeta: message on session ses_g0VYa3Gwj003t2ichNvt agent coding does not match persisted agent work"
+    },
+    {
+      "requestID": "1142a435-bb1a-4969-8b84-7609eae8b95e",
+      "status": 500,
+      "message": "overlayMeta: message on session ses_g0VYa3Gwj003t2ichNvt agent coding does not match persisted agent work"
+    },
+    {
+      "requestID": "2b9297ea-e76f-483f-a3ae-2979f90e33dc",
+      "status": 500,
+      "message": "overlayMeta: message on session ses_g0VYa3Gwj003t2ichNvt agent coding does not match persisted agent work"
+    }
+  ],
+  "followup": {
+    "sessionID": "ses_g0VYa3Gwj003t2ichNvt",
+    "input": {
+      "author": "user",
+      "role": "user",
+      "time": {
+        "created": 1792493356129
+      },
+      "agent": "work",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "tools": {
+        "delegate_agent": true,
+        "panel_expert_squad_inspect": true,
+        "panel_query_task": true,
+        "panel_query_task_artifacts": true,
+        "panel_create_task": true,
+        "panel_wake_mission": true,
+        "panel_wake_work": true,
+        "panel_send_task_message": true,
+        "panel_respond_interaction": true,
+        "panel_cancel_task": true,
+        "panel_update_checks": true,
+        "panel_select_workspace": true,
+        "panel_update_goal": true,
+        "panel_delete_goal": true,
+        "question": true,
+        "bash": true,
+        "read": true,
+        "glob": true,
+        "search_code": true,
+        "edit": true,
+        "write": true,
+        "apply_patch": true,
+        "todo": true,
+        "schedule": true
+      },
+      "extra": {
+        "project_memory_user_input": {
+          "version": 1,
+          "surface": "session.prompt",
+          "literalText": "这是隔离产品验收的有限后续输入。请仅回复 MIGRATED470WORKREADY；无需调用工具、读写文件、访问网站或委派。"
+        },
+        "publicSessionPromptIdentity": {
+          "version": 1,
+          "fingerprint": "f0cc830b4a60e861a9ad396f197f2cda395e405e68f37e6884537e38e46f93ba"
+        },
+        "surface": "right-sidebar",
+        "source": "right-sidebar-conversation",
+        "experience": "work"
+      },
+      "orderKey": "v1:0001792493356129:0000000000000030:0000000000000000:message:msg_2a12811b-7e80-471a-afd9-c3a119ac3aa6",
+      "id": "msg_2a12811b-7e80-471a-afd9-c3a119ac3aa6",
+      "sessionID": "ses_g0VYa3Gwj003t2ichNvt"
+    },
+    "reply": {
+      "author": "work",
+      "role": "assistant",
+      "time": {
+        "created": 1792493356192,
+        "completed": 1792493360433
+      },
+      "parentID": "msg_2a12811b-7e80-471a-afd9-c3a119ac3aa6",
+      "acceptedInputMessageIDs": [
+        "msg_2a12811b-7e80-471a-afd9-c3a119ac3aa6"
+      ],
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "agent": "work",
+      "path": {
+        "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+        "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+      },
+      "cost": 0,
+      "tokens": {
+        "total": 38931,
+        "input": 38920,
+        "output": 11,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      },
+      "billing": {
+        "status": "priced"
+      },
+      "finish": "stop",
+      "orderKey": "v1:0001792493356192:0000000000000030:0000000000000000:message:msg_g0VYaNRsO00pkTg37Ead",
+      "id": "msg_g0VYaNRsO00pkTg37Ead",
+      "sessionID": "ses_g0VYa3Gwj003t2ichNvt"
+    },
+    "oldReply": {
+      "author": "coding",
+      "role": "assistant",
+      "time": {
+        "created": 1792488547673,
+        "completed": 1792488552020
+      },
+      "parentID": "msg_event_1b912303118daab0c899985baa75ff5a",
+      "acceptedInputMessageIDs": [
+        "msg_event_1b912303118daab0c899985baa75ff5a"
+      ],
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "agent": "coding",
+      "path": {
+        "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+        "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+      },
+      "cost": 0,
+      "tokens": {
+        "total": 27713,
+        "input": 27706,
+        "output": 7,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      },
+      "billing": {
+        "status": "priced"
+      },
+      "finish": "stop",
+      "orderKey": "v1:0001792488547673:0000000000000030:0000000000000000:message:msg_g0VYa3Gxd00daSDZxItX",
+      "id": "msg_g0VYa3Gxd00daSDZxItX",
+      "sessionID": "ses_g0VYa3Gwj003t2ichNvt",
+      "channel": "assistant",
+      "resolvedRole": "coding",
+      "agentID": "coding",
+      "sessionAgentID": "coding",
+      "originSource": ""
+    },
+    "contract": "Public conversation hydrate HTTP200 retains coding for EVENT468READY and work for MIGRATED470WORKREADY"
+  },
+  "tests": {
+    "files": 7,
+    "cases": 66,
+    "assertions": 331
+  },
+  "currentScopeNativeErrors": 0
+}

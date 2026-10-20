@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [调度结果的可见会话身份](records/2026-10/2026-10-20-scheduled-result-visibility.md)：Event及项目Automation的Work结果、版本化历史迁移与[9张实际入口截图](artifacts/2026-10-20-scheduled-result-visibility/README.md)。
+
 - [Sources与成员侧栏当前体验](records/2026-10/2026-10-20-sources-member-review.md)：当前正式前端中的[10张截图和真实直播/完成证据](artifacts/2026-10-20-sources-member-review/README.md)。
 
 - [独立回调的数据库上下文审计](records/2026-10/2026-10-20-independent-callback-context.md)：事件恢复、Session和文件监听的所有权边界与[22例及真实运行](artifacts/2026-10-20-independent-callback-context/README.md)。

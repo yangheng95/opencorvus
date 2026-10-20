@@ -7,6 +7,7 @@ import { latestAutomationDefinitionInTransaction } from "../src/scheduler/automa
 import { GlobalRoutes } from "../src/server/routes/global"
 import { serverErrorResponse } from "../src/server/error-handler"
 import { Session } from "../src/session"
+import { listWorkLedger } from "../src/work-ledger/projection"
 import { Database, eq } from "../src/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
@@ -117,6 +118,14 @@ test("retargeted manual and due runs bind exact revision members and retain hist
       await AutomationService.update({ id: created.id, expectedRevisionId: AutomationService.list().find((row) => row.id === created.id)!.revisionId, status: "paused" })
       const originalRun = await AutomationService.runNow(created.id)
       expect(originalRun.map((row) => row.targetProjectId)).toEqual([firstID])
+      const resultSessionID = originalRun[0]!.session!.id
+      expect(await Session.get(resultSessionID)).toMatchObject({
+        id: resultSessionID, projectID: firstID, directory: first.path, title: "manual exact members",
+        metadata: { conversation: { surface: "right-sidebar", experience: "work" } },
+      })
+      expect((await listWorkLedger({ directory: first.path, search: "manual exact members" })).rows).toEqual([
+        expect.objectContaining({ kind: "chat", experience: "work", sessionID: resultSessionID }),
+      ])
       await AutomationService.update({ id: created.id, expectedRevisionId: AutomationService.list().find((row) => row.id === created.id)!.revisionId, target: { scope: "project", projectIds: [secondID, firstID] } })
       const revision = latestMembership(created.id)
       const runs = await AutomationService.runNow(created.id)
