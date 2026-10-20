@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [父会话与成员并发阅读](2026-10-20-parent-member-render-continuity.md)：双流、稳定阅读生命周期、审计绑定发布修复与[21张实图](../../artifacts/2026-10-20-parent-member-render-continuity/README.md)。
+
 - [首页Goal的确认边界](2026-10-20-goal-confirmation-boundary.md)：原首页取消保留草稿、确认后创建及[双模式真实执行](../../artifacts/2026-10-20-goal-confirmation-boundary/README.md)。
 
 - [普通成员阅读入口的中性名称](2026-10-20-agent-conversation-label.md)：公共入口文案修复与[8张当前正式构建实图](../../artifacts/2026-10-20-agent-conversation-label/README.md)。

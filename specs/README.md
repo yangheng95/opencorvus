@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [父会话与成员并发阅读](records/2026-10/2026-10-20-parent-member-render-continuity.md)：Sources、Rendering生命周期及[21张实图与审计器修复](artifacts/2026-10-20-parent-member-render-continuity/README.md)。
+
 - [首页Goal的确认边界](records/2026-10/2026-10-20-goal-confirmation-boundary.md)：[10张实图及两个真实有限目标](artifacts/2026-10-20-goal-confirmation-boundary/README.md)，表单确认后才创建会话。
 
 - [普通成员阅读入口的中性名称](records/2026-10/2026-10-20-agent-conversation-label.md)：[中英文侧栏、Sources与Goal页面8张实图](artifacts/2026-10-20-agent-conversation-label/README.md)，记录新发现的草稿关闭残留。

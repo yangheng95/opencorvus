@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [父会话与成员并发阅读](2026-10-20-parent-member-render-continuity/README.md)：Sources定位、双流阅读、被动owner证据与审计器修复后原检查器复验。
+
 - [首页Goal确认边界](2026-10-20-goal-confirmation-boundary/README.md)：10张人工截图、全局Work/项目Code的取消、真实确认与预算停止。
 
 - [成员入口与当前Goal页面](2026-10-20-agent-conversation-label/README.md)：中性成员名称、8张人工截图、语言恢复及草稿关闭残留的实际证据。

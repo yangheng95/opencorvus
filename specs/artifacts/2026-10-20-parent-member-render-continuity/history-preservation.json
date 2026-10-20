@@ -1,0 +1,29 @@
+{
+  "originalProjects": 139,
+  "originalSessions": 188,
+  "projects": 142,
+  "sessions": 191,
+  "schema": 3,
+  "originalPair": {
+    "messages": 20,
+    "parts": 48,
+    "protocol": 38,
+    "sessions": [
+      {
+        "id": "ses_-zUS0WzzQzzDOGrIbYwN",
+        "parentID": "ses_-zUS0X33CzzWEKMgCk98",
+        "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+        "beforeUpdated": 1792490157609,
+        "afterUpdated": 1792498705995
+      },
+      {
+        "id": "ses_-zUS0X33CzzWEKMgCk98",
+        "parentID": null,
+        "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+        "beforeUpdated": 1792004391763,
+        "afterUpdated": 1792498724848
+      }
+    ]
+  },
+  "identity": "Every original Project/Session ID, directory and ownership retained; original pair Message/Part/protocol rows including rowid match exactly; Session rows differ only by actual input time_updated."
+}

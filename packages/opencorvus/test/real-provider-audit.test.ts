@@ -3,7 +3,7 @@ import { mkdtemp, readFile, rm } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 import nativeProviderAudit from "../script/native-provider-audit-plugin"
-import { latestAuditSnapshotFiles } from "../script/audit-snapshot"
+import { createAuditSnapshotPublisher, latestAuditSnapshotFiles } from "../script/audit-snapshot"
 import { requireProcessProviderAudit } from "../script/real-provider-audit"
 import { assertCopiedOAuthAccess, CopiedOAuthCredentialExpiredError, CopiedOAuthRefreshForbiddenError, CredentialRedactor, RealProviderAudit, ProviderAuditProbeConfigurationError } from "../script/real-provider-audit"
 import { takeProviderResponseObserver, type ProviderRequestContext } from "../src/util/provider-response-observation"
@@ -172,10 +172,51 @@ test("throwing audit publisher preserves actual HTTP output, EOF and the exact e
     expect(publications).toEqual([
       { state: "awaiting_response", exhausted: false },
       { state: "awaiting_binding", exhausted: false },
+      { state: "reading", exhausted: false },
       { state: "settled", exhausted: false },
       { state: "settled", exhausted: true },
     ])
   } finally { await server.stop(true) }
+})
+
+test("concurrent actual response bindings publish both reading identities before EOF", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "provider-bind-publication-"))
+  const bodies = ["first actual transport body", "second actual transport body"]
+  const contexts: ProviderRequestContext[] = bodies.map((_, index) => ({
+    sessionID: `session-${index}`,
+    streamRequest: { requestID: `input-${index}`, agentID: "work", providerID: "local", modelID: "authorized-model", apiModelID: "authorized-model" },
+    activity: { id: `activity-${index}`, attempt: index, assistantMessageID: `assistant-${index}` },
+  }))
+  const server = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch: async (request) => {
+    const input = await request.json() as { index: number }
+    return new Response(bodies[input.index])
+  } })
+  try {
+    const publish = createAuditSnapshotPublisher(root, "provider")
+    using audit = new RealProviderAudit("authorized-model", 2, () => publish({ requests: audit.requests }))
+    const responses = await Promise.all(bodies.map((_, index) => fetch(server.url, {
+      method: "POST", body: JSON.stringify({ model: "authorized-model", stream: true, index }),
+    })))
+    const streams = responses.map((response, index) => {
+      const observer = takeProviderResponseObserver(response)
+      if (!observer || !response.body) throw new Error("Exact actual response observation required")
+      const stream = settlementTrackedReadableStream({ source: response.body,
+        onChunk: (chunk) => observer.onChunk(chunk.byteLength), onSettlement: observer.onSettlement })
+      observer.onBind(contexts[index])
+      return stream
+    })
+    const latest = (await latestAuditSnapshotFiles(root, "provider"))[0]!
+    const published = JSON.parse(await readFile(latest, "utf8"))
+    expect(published.requests.map((entry: RealProviderAudit["requests"][number]) => ({
+      state: entry.response_reader.state, context: entry.response_reader.requestContext,
+    }))).toEqual(contexts.map((context) => ({ state: "reading", context })))
+    expect(await Promise.all(streams.map((stream) => new Response(stream).text()))).toEqual(bodies)
+    const completed = JSON.parse(await readFile((await latestAuditSnapshotFiles(root, "provider"))[0]!, "utf8"))
+    expect(completed.requests.map((entry: RealProviderAudit["requests"][number]) => ({
+      state: entry.response_reader.state, context: entry.response_reader.requestContext,
+      terminal: entry.response_reader.terminal?.kind, bytes: entry.response_reader.byteCount,
+    }))).toEqual(contexts.map((context, index) => ({ state: "settled", context, terminal: "eof", bytes: Buffer.byteLength(bodies[index]!) })))
+  } finally { await server.stop(true); await rm(root, { recursive: true, force: true }) }
 })
 
 test("concurrent real local HTTP audit entries report their exact reader bytes and EOF", async () => {

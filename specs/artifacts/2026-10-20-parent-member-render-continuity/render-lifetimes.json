@@ -1,0 +1,1215 @@
+{
+  "logCount": 103,
+  "first": "2026-10-20T12:02:47.100Z",
+  "last": "2026-10-20T12:09:16.825Z",
+  "owners": [
+    {
+      "owner": 1,
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:02:48.039Z",
+          "kind": "create",
+          "owner": 1,
+          "at": 2794.5999999046326
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.065Z",
+          "kind": "state",
+          "owner": 1,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 127,
+          "at": 2823.4000000953674
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.114Z",
+          "kind": "dispose",
+          "owner": 1,
+          "at": 2872.199999809265
+        }
+      ]
+    },
+    {
+      "owner": 2,
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:02:48.044Z",
+          "kind": "create",
+          "owner": 2,
+          "at": 2801.5999999046326
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.065Z",
+          "kind": "state",
+          "owner": 2,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 61,
+          "at": 2824.300000190735
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.117Z",
+          "kind": "dispose",
+          "owner": 2,
+          "at": 2873.199999809265
+        }
+      ]
+    },
+    {
+      "owner": 3,
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:02:48.050Z",
+          "kind": "create",
+          "owner": 3,
+          "at": 2807.699999809265
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.065Z",
+          "kind": "state",
+          "owner": 3,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 159,
+          "at": 2824.699999809265
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.117Z",
+          "kind": "dispose",
+          "owner": 3,
+          "at": 2873.9000000953674
+        }
+      ]
+    },
+    {
+      "owner": 4,
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:02:48.054Z",
+          "kind": "create",
+          "owner": 4,
+          "at": 2811
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.066Z",
+          "kind": "state",
+          "owner": 4,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 200,
+          "at": 2825.0999999046326
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.323Z",
+          "kind": "state",
+          "owner": 4,
+          "empty": false,
+          "pending": true,
+          "streaming": false,
+          "error": "",
+          "length": 200,
+          "at": 3082.5999999046326
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.477Z",
+          "kind": "dispose",
+          "owner": 4,
+          "at": 3234.300000190735
+        }
+      ]
+    },
+    {
+      "owner": 5,
+      "identity": {
+        "html": 6724,
+        "message": "msg_g0VY3HWFk0018rVRP3hF",
+        "owner": "5",
+        "session": "ses_-zUS0X33CzzWEKMgCk98",
+        "text": 3645,
+        "top": -2814.197998046875
+      },
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:02:48.061Z",
+          "kind": "create",
+          "owner": 5,
+          "at": 2817.5999999046326
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.066Z",
+          "kind": "state",
+          "owner": 5,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 4024,
+          "at": 2825.4000000953674
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.349Z",
+          "kind": "state",
+          "owner": 5,
+          "empty": false,
+          "pending": true,
+          "streaming": false,
+          "error": "",
+          "length": 4024,
+          "at": 3108.800000190735
+        }
+      ]
+    },
+    {
+      "owner": 6,
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:02:48.291Z",
+          "kind": "create",
+          "owner": 6,
+          "at": 3048.5
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.299Z",
+          "kind": "state",
+          "owner": 6,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 127,
+          "at": 3059.0999999046326
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.351Z",
+          "kind": "state",
+          "owner": 6,
+          "empty": false,
+          "pending": true,
+          "streaming": false,
+          "error": "",
+          "length": 127,
+          "at": 3110.4000000953674
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.474Z",
+          "kind": "dispose",
+          "owner": 6,
+          "at": 3232.699999809265
+        }
+      ]
+    },
+    {
+      "owner": 7,
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:02:48.295Z",
+          "kind": "create",
+          "owner": 7,
+          "at": 3050.800000190735
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.300Z",
+          "kind": "state",
+          "owner": 7,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 61,
+          "at": 3059.4000000953674
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.352Z",
+          "kind": "state",
+          "owner": 7,
+          "empty": false,
+          "pending": true,
+          "streaming": false,
+          "error": "",
+          "length": 61,
+          "at": 3111.0999999046326
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.476Z",
+          "kind": "dispose",
+          "owner": 7,
+          "at": 3233.4000000953674
+        }
+      ]
+    },
+    {
+      "owner": 8,
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:02:48.299Z",
+          "kind": "create",
+          "owner": 8,
+          "at": 3056.800000190735
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.300Z",
+          "kind": "state",
+          "owner": 8,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 159,
+          "at": 3059.699999809265
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.352Z",
+          "kind": "state",
+          "owner": 8,
+          "empty": false,
+          "pending": true,
+          "streaming": false,
+          "error": "",
+          "length": 159,
+          "at": 3111.800000190735
+        },
+        {
+          "timestamp": "2026-10-20T12:02:48.476Z",
+          "kind": "dispose",
+          "owner": 8,
+          "at": 3233.9000000953674
+        }
+      ]
+    },
+    {
+      "owner": 9,
+      "identity": {
+        "html": 95,
+        "message": "msg_g0VXzT02A00m7QiMOU17",
+        "owner": "9",
+        "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+        "text": 53,
+        "top": 230
+      },
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:07:07.452Z",
+          "kind": "create",
+          "owner": 9,
+          "at": 262200.69999980927
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.477Z",
+          "kind": "state",
+          "owner": 9,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 52,
+          "at": 262226.59999990463
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.577Z",
+          "kind": "state",
+          "owner": 9,
+          "empty": false,
+          "pending": true,
+          "streaming": false,
+          "error": "",
+          "length": 52,
+          "at": 262308.30000019073
+        }
+      ]
+    },
+    {
+      "owner": 10,
+      "identity": {
+        "html": 398,
+        "message": "msg_g0VXzT1br00wrTu0eAW5",
+        "owner": "10",
+        "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+        "text": 228,
+        "top": 362.6875
+      },
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:07:07.455Z",
+          "kind": "create",
+          "owner": 10,
+          "at": 262203.59999990463
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.477Z",
+          "kind": "state",
+          "owner": 10,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 244,
+          "at": 262227.19999980927
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.577Z",
+          "kind": "state",
+          "owner": 10,
+          "empty": false,
+          "pending": true,
+          "streaming": false,
+          "error": "",
+          "length": 244,
+          "at": 262318.69999980927
+        }
+      ]
+    },
+    {
+      "owner": 11,
+      "identity": {
+        "html": 247,
+        "message": "msg_g0VXzUz7600DioAWQXRh",
+        "owner": "11",
+        "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+        "text": 205,
+        "top": 608.9479370117188
+      },
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:07:07.457Z",
+          "kind": "create",
+          "owner": 11,
+          "at": 262204.09999990463
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.478Z",
+          "kind": "state",
+          "owner": 11,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 204,
+          "at": 262227.59999990463
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.582Z",
+          "kind": "state",
+          "owner": 11,
+          "empty": false,
+          "pending": true,
+          "streaming": false,
+          "error": "",
+          "length": 204,
+          "at": 262331.40000009537
+        }
+      ]
+    },
+    {
+      "owner": 12,
+      "identity": {
+        "html": 3583,
+        "message": "msg_g0VXzV1GA00jCoOvj44p",
+        "owner": "12",
+        "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+        "text": 2078,
+        "top": 920.875
+      },
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:07:07.457Z",
+          "kind": "create",
+          "owner": 12,
+          "at": 262206.19999980927
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.478Z",
+          "kind": "state",
+          "owner": 12,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 2206,
+          "at": 262227.90000009537
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.596Z",
+          "kind": "state",
+          "owner": 12,
+          "empty": false,
+          "pending": true,
+          "streaming": false,
+          "error": "",
+          "length": 2206,
+          "at": 262345.30000019073
+        }
+      ]
+    },
+    {
+      "owner": 13,
+      "identity": {
+        "html": 246,
+        "message": "msg_g0VY0iRip003ai4hsVAX",
+        "owner": "13",
+        "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+        "text": 204,
+        "top": 3547.58349609375
+      },
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:07:07.459Z",
+          "kind": "create",
+          "owner": 13,
+          "at": 262206.90000009537
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.486Z",
+          "kind": "state",
+          "owner": 13,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 203,
+          "at": 262235
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.614Z",
+          "kind": "state",
+          "owner": 13,
+          "empty": false,
+          "pending": true,
+          "streaming": false,
+          "error": "",
+          "length": 203,
+          "at": 262363.40000009537
+        }
+      ]
+    },
+    {
+      "owner": 14,
+      "identity": {
+        "html": 5956,
+        "message": "msg_g0VY0iTsU000Owgk8djg",
+        "owner": "14",
+        "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+        "text": 2791,
+        "top": 3836
+      },
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:07:07.460Z",
+          "kind": "create",
+          "owner": 14,
+          "at": 262209.40000009537
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.486Z",
+          "kind": "state",
+          "owner": 14,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 3213,
+          "at": 262235.5
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.625Z",
+          "kind": "state",
+          "owner": 14,
+          "empty": false,
+          "pending": true,
+          "streaming": false,
+          "error": "",
+          "length": 3213,
+          "at": 262374.69999980927
+        }
+      ]
+    },
+    {
+      "owner": 15,
+      "identity": {
+        "html": 246,
+        "message": "msg_g0VY0lNZL00cqlX6yuAC",
+        "owner": "15",
+        "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+        "text": 204,
+        "top": 7783.59375
+      },
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:07:07.461Z",
+          "kind": "create",
+          "owner": 15,
+          "at": 262209.90000009537
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.487Z",
+          "kind": "state",
+          "owner": 15,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 203,
+          "at": 262235.90000009537
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.879Z",
+          "kind": "state",
+          "owner": 15,
+          "empty": false,
+          "pending": true,
+          "streaming": false,
+          "error": "",
+          "length": 203,
+          "at": 262502.5
+        }
+      ]
+    },
+    {
+      "owner": 16,
+      "identity": {
+        "html": 5820,
+        "message": "msg_g0VY0lQFS00Ck23sRgNC",
+        "owner": "16",
+        "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+        "text": 2689,
+        "top": 8072.0107421875
+      },
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:07:07.463Z",
+          "kind": "create",
+          "owner": 16,
+          "at": 262212.09999990463
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.488Z",
+          "kind": "state",
+          "owner": 16,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 3103,
+          "at": 262236.5
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.880Z",
+          "kind": "state",
+          "owner": 16,
+          "empty": false,
+          "pending": true,
+          "streaming": false,
+          "error": "",
+          "length": 3103,
+          "at": 262514
+        }
+      ]
+    },
+    {
+      "owner": 17,
+      "identity": {
+        "html": 345,
+        "message": "msg_g0VYa9kCG005PSduzw9Q",
+        "owner": "17",
+        "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+        "text": 303,
+        "top": 11952.427734375
+      },
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:07:07.465Z",
+          "kind": "create",
+          "owner": 17,
+          "at": 262212.59999990463
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.488Z",
+          "kind": "state",
+          "owner": 17,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 302,
+          "at": 262236.90000009537
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.880Z",
+          "kind": "state",
+          "owner": 17,
+          "empty": false,
+          "pending": true,
+          "streaming": false,
+          "error": "",
+          "length": 302,
+          "at": 262528
+        }
+      ]
+    },
+    {
+      "owner": 18,
+      "identity": {
+        "html": 6999,
+        "message": "msg_g0VYa9kDc00CY5LiJnwV",
+        "owner": "18",
+        "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+        "text": 3976,
+        "top": 12263.21875
+      },
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:07:07.465Z",
+          "kind": "create",
+          "owner": 18,
+          "at": 262212.90000009537
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.488Z",
+          "kind": "state",
+          "owner": 18,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 4392,
+          "at": 262237.19999980927
+        },
+        {
+          "timestamp": "2026-10-20T12:07:07.880Z",
+          "kind": "state",
+          "owner": 18,
+          "empty": false,
+          "pending": true,
+          "streaming": false,
+          "error": "",
+          "length": 4392,
+          "at": 262539.40000009537
+        }
+      ]
+    },
+    {
+      "owner": 19,
+      "identity": {
+        "html": 335,
+        "message": "msg_g0VYah8Fn00qmEh1R3mc",
+        "owner": "19",
+        "session": "ses_-zUS0X33CzzWEKMgCk98",
+        "text": 293,
+        "top": 671.875
+      },
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:07:27.474Z",
+          "kind": "create",
+          "owner": 19,
+          "at": 282219.90000009537
+        },
+        {
+          "timestamp": "2026-10-20T12:07:27.476Z",
+          "kind": "state",
+          "owner": 19,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 292,
+          "at": 282223.5
+        },
+        {
+          "timestamp": "2026-10-20T12:07:27.549Z",
+          "kind": "state",
+          "owner": 19,
+          "empty": false,
+          "pending": true,
+          "streaming": false,
+          "error": "",
+          "length": 292,
+          "at": 282295.80000019073
+        }
+      ]
+    },
+    {
+      "owner": 20,
+      "identity": {
+        "html": 335,
+        "message": "msg_g0VYah8Fn01KKKKNPbQ1",
+        "owner": "20",
+        "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+        "text": 293,
+        "top": 16853.146484375
+      },
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:07:27.520Z",
+          "kind": "create",
+          "owner": 20,
+          "at": 282265.40000009537
+        },
+        {
+          "timestamp": "2026-10-20T12:07:27.524Z",
+          "kind": "state",
+          "owner": 20,
+          "empty": true,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 292,
+          "at": 282271.40000009537
+        },
+        {
+          "timestamp": "2026-10-20T12:07:27.593Z",
+          "kind": "state",
+          "owner": 20,
+          "empty": false,
+          "pending": true,
+          "streaming": false,
+          "error": "",
+          "length": 292,
+          "at": 282339.80000019073
+        },
+        {
+          "timestamp": "2026-10-20T12:07:28.503Z",
+          "kind": "state",
+          "owner": 20,
+          "empty": false,
+          "pending": true,
+          "streaming": true,
+          "error": "",
+          "length": 292,
+          "at": 283249.40000009537
+        },
+        {
+          "timestamp": "2026-10-20T12:07:33.012Z",
+          "kind": "state",
+          "owner": 20,
+          "empty": false,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 292,
+          "at": 287759.30000019073
+        }
+      ]
+    },
+    {
+      "owner": 21,
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:07:30.979Z",
+          "kind": "create",
+          "owner": 21,
+          "at": 285725.5
+        },
+        {
+          "timestamp": "2026-10-20T12:07:30.979Z",
+          "kind": "state",
+          "owner": 21,
+          "empty": true,
+          "pending": false,
+          "streaming": true,
+          "error": "",
+          "length": 18,
+          "at": 285726.30000019073
+        },
+        {
+          "timestamp": "2026-10-20T12:07:31.015Z",
+          "kind": "state",
+          "owner": 21,
+          "empty": false,
+          "pending": true,
+          "streaming": true,
+          "error": "",
+          "length": 18,
+          "at": 285762.80000019073
+        },
+        {
+          "timestamp": "2026-10-20T12:08:18.685Z",
+          "kind": "dispose",
+          "owner": 21,
+          "at": 333432.30000019073
+        }
+      ]
+    },
+    {
+      "owner": 22,
+      "identity": {
+        "html": 11936,
+        "message": "msg_g0VYah8HU00rieSDI11z",
+        "owner": "22",
+        "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+        "text": 5886,
+        "top": 17163.9375
+      },
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:07:33.011Z",
+          "kind": "create",
+          "owner": 22,
+          "at": 287757.69999980927
+        },
+        {
+          "timestamp": "2026-10-20T12:07:33.013Z",
+          "kind": "state",
+          "owner": 22,
+          "empty": true,
+          "pending": false,
+          "streaming": true,
+          "error": "",
+          "length": 18,
+          "at": 287760.40000009537
+        },
+        {
+          "timestamp": "2026-10-20T12:07:33.064Z",
+          "kind": "state",
+          "owner": 22,
+          "empty": false,
+          "pending": true,
+          "streaming": true,
+          "error": "",
+          "length": 18,
+          "at": 287811.69999980927
+        },
+        {
+          "timestamp": "2026-10-20T12:09:14.896Z",
+          "kind": "state",
+          "owner": 22,
+          "empty": false,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 6491,
+          "at": 389640.30000019073
+        }
+      ]
+    },
+    {
+      "owner": 23,
+      "identity": {
+        "html": 10608,
+        "message": "msg_g0VYah8HH0030Ceh5lXH",
+        "owner": "23",
+        "session": "ses_-zUS0X33CzzWEKMgCk98",
+        "text": 6138,
+        "top": 1202.8333740234375
+      },
+      "events": [
+        {
+          "timestamp": "2026-10-20T12:08:18.917Z",
+          "kind": "create",
+          "owner": 23,
+          "at": 333587.40000009537
+        },
+        {
+          "timestamp": "2026-10-20T12:08:18.917Z",
+          "kind": "state",
+          "owner": 23,
+          "empty": true,
+          "pending": false,
+          "streaming": true,
+          "error": "",
+          "length": 3063,
+          "at": 333588.40000009537
+        },
+        {
+          "timestamp": "2026-10-20T12:08:18.917Z",
+          "kind": "state",
+          "owner": 23,
+          "empty": false,
+          "pending": true,
+          "streaming": true,
+          "error": "",
+          "length": 3063,
+          "at": 333620.19999980927
+        },
+        {
+          "timestamp": "2026-10-20T12:09:16.825Z",
+          "kind": "state",
+          "owner": 23,
+          "empty": false,
+          "pending": false,
+          "streaming": false,
+          "error": "",
+          "length": 6695,
+          "at": 391569.59999990463
+        }
+      ]
+    }
+  ],
+  "scroll": [
+    {
+      "level": "debug",
+      "message": "SCROLL473 {\"kind\":\"create\",\"owner\":1,\"at\":262198.09999990463}",
+      "timestamp": "2026-10-20T12:07:07.449Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "SCROLL473",
+      "payload": {
+        "kind": "create",
+        "owner": 1,
+        "at": 262198.09999990463
+      }
+    }
+  ],
+  "bubbles": [
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"create\",\"owner\":1,\"cardID\":\"user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_9f8966c9-0774-4ab4-a192-30207863bd3d\",\"at\":2789.699999809265}",
+      "timestamp": "2026-10-20T12:02:48.033Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "create",
+        "owner": 1,
+        "cardID": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_9f8966c9-0774-4ab4-a192-30207863bd3d",
+        "at": 2789.699999809265
+      }
+    },
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"create\",\"owner\":2,\"cardID\":\"assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VXzSxN100FhCIC5P2R\",\"at\":2799.9000000953674}",
+      "timestamp": "2026-10-20T12:02:48.041Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "create",
+        "owner": 2,
+        "cardID": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VXzSxN100FhCIC5P2R",
+        "at": 2799.9000000953674
+      }
+    },
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"create\",\"owner\":3,\"cardID\":\"assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VXzT4is00AK1DH2Jyu\",\"at\":2806.5}",
+      "timestamp": "2026-10-20T12:02:48.048Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "create",
+        "owner": 3,
+        "cardID": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VXzT4is00AK1DH2Jyu",
+        "at": 2806.5
+      }
+    },
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"create\",\"owner\":4,\"cardID\":\"user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_d953f4ff-f2d4-4d50-9933-7e83e47def30\",\"at\":2810.0999999046326}",
+      "timestamp": "2026-10-20T12:02:48.051Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "create",
+        "owner": 4,
+        "cardID": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_d953f4ff-f2d4-4d50-9933-7e83e47def30",
+        "at": 2810.0999999046326
+      }
+    },
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"create\",\"owner\":5,\"cardID\":\"assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VY3HUc200tMymSAsyl\",\"at\":2812.5999999046326}",
+      "timestamp": "2026-10-20T12:02:48.055Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "create",
+        "owner": 5,
+        "cardID": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VY3HUc200tMymSAsyl",
+        "at": 2812.5999999046326
+      }
+    },
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"dispose\",\"owner\":1,\"at\":2872.9000000953674}",
+      "timestamp": "2026-10-20T12:02:48.117Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "dispose",
+        "owner": 1,
+        "at": 2872.9000000953674
+      }
+    },
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"dispose\",\"owner\":2,\"at\":2873.5}",
+      "timestamp": "2026-10-20T12:02:48.117Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "dispose",
+        "owner": 2,
+        "at": 2873.5
+      }
+    },
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"dispose\",\"owner\":3,\"at\":2874.0999999046326}",
+      "timestamp": "2026-10-20T12:02:48.117Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "dispose",
+        "owner": 3,
+        "at": 2874.0999999046326
+      }
+    },
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"create\",\"owner\":6,\"cardID\":\"user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_9f8966c9-0774-4ab4-a192-30207863bd3d\",\"at\":3047.5}",
+      "timestamp": "2026-10-20T12:02:48.289Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "create",
+        "owner": 6,
+        "cardID": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_9f8966c9-0774-4ab4-a192-30207863bd3d",
+        "at": 3047.5
+      }
+    },
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"create\",\"owner\":7,\"cardID\":\"assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VXzSxN100FhCIC5P2R\",\"at\":3050}",
+      "timestamp": "2026-10-20T12:02:48.295Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "create",
+        "owner": 7,
+        "cardID": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VXzSxN100FhCIC5P2R",
+        "at": 3050
+      }
+    },
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"create\",\"owner\":8,\"cardID\":\"assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VXzT4is00AK1DH2Jyu\",\"at\":3052.800000190735}",
+      "timestamp": "2026-10-20T12:02:48.296Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "create",
+        "owner": 8,
+        "cardID": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VXzT4is00AK1DH2Jyu",
+        "at": 3052.800000190735
+      }
+    },
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"dispose\",\"owner\":6,\"at\":3233.0999999046326}",
+      "timestamp": "2026-10-20T12:02:48.476Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "dispose",
+        "owner": 6,
+        "at": 3233.0999999046326
+      }
+    },
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"dispose\",\"owner\":7,\"at\":3233.5999999046326}",
+      "timestamp": "2026-10-20T12:02:48.476Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "dispose",
+        "owner": 7,
+        "at": 3233.5999999046326
+      }
+    },
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"dispose\",\"owner\":8,\"at\":3234.0999999046326}",
+      "timestamp": "2026-10-20T12:02:48.476Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "dispose",
+        "owner": 8,
+        "at": 3234.0999999046326
+      }
+    },
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"dispose\",\"owner\":4,\"at\":3234.4000000953674}",
+      "timestamp": "2026-10-20T12:02:48.477Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "dispose",
+        "owner": 4,
+        "at": 3234.4000000953674
+      }
+    },
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"create\",\"owner\":9,\"cardID\":\"subagent-transcript:ses_-zUS0WzzQzzDOGrIbYwN\",\"at\":262199.09999990463}",
+      "timestamp": "2026-10-20T12:07:07.450Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "create",
+        "owner": 9,
+        "cardID": "subagent-transcript:ses_-zUS0WzzQzzDOGrIbYwN",
+        "at": 262199.09999990463
+      }
+    },
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"create\",\"owner\":10,\"cardID\":\"user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYah8Fn00qmEh1R3mc\",\"at\":282218.90000009537}",
+      "timestamp": "2026-10-20T12:07:27.472Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "create",
+        "owner": 10,
+        "cardID": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYah8Fn00qmEh1R3mc",
+        "at": 282218.90000009537
+      }
+    },
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"create\",\"owner\":11,\"cardID\":\"assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYah8HH0030Ceh5lXH\",\"at\":285724.80000019073}",
+      "timestamp": "2026-10-20T12:07:30.978Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "create",
+        "owner": 11,
+        "cardID": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYah8HH0030Ceh5lXH",
+        "at": 285724.80000019073
+      }
+    },
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"dispose\",\"owner\":11,\"at\":333432.69999980927}",
+      "timestamp": "2026-10-20T12:08:18.686Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "dispose",
+        "owner": 11,
+        "at": 333432.69999980927
+      }
+    },
+    {
+      "level": "debug",
+      "message": "BUBBLE473 {\"kind\":\"create\",\"owner\":12,\"cardID\":\"assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYah8HH0030Ceh5lXH\",\"at\":333586.59999990463}",
+      "timestamp": "2026-10-20T12:08:18.917Z",
+      "url": "http://127.0.0.1:18793/ui/assets/main-DmfsAssn.js",
+      "prefix": "BUBBLE473",
+      "payload": {
+        "kind": "create",
+        "owner": 12,
+        "cardID": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYah8HH0030Ceh5lXH",
+        "at": 333586.59999990463
+      }
+    }
+  ],
+  "errors": [],
+  "coverage": "Passive diagnostic observations over the one actual concurrent window and manual list/dock/file interactions; initial main virtualization and main width changes are distinct from retained member owners; sampled screenshots do not establish every visual frame."
+}

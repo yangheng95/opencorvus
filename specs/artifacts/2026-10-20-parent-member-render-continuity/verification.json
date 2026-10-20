@@ -1,0 +1,46 @@
+{
+  "tests": {
+    "originalHandle": 56935,
+    "exit": 0,
+    "files": 3,
+    "passed": 41,
+    "assertions": 174,
+    "command": "bun test test/real-provider-audit.test.ts test/provider-response-observation.test.ts test/provider-request-association.test.ts"
+  },
+  "ui": "Current formal 472 bundle; production UI unchanged; manual IAB tabs25/26/27; no UI automated tests",
+  "screenshots": [
+    "01-original-source.png",
+    "02-both-stream-source.png",
+    "03-both-stream-list.png",
+    "04-both-stream-return.png",
+    "05-both-stream-reopen.png",
+    "06-both-stream-source-file.png",
+    "07-both-stream-file-return.png",
+    "08-member-live-body.png",
+    "09-reading-after-body.png",
+    "10-formal-original-source.png",
+    "11-formal-stream-source.png",
+    "12-formal-list.png",
+    "13-formal-list-return.png",
+    "14-formal-completed-source.png",
+    "15-verified-source-before.png",
+    "16-verified-both-stream-source.png",
+    "17-verified-return.png",
+    "18-verified-reopen.png",
+    "19-verified-source-file.png",
+    "20-verified-file-return.png",
+    "21-verified-completed-source.png"
+  ],
+  "toolchainCorrection": "onBind now publishes the completed copied reader identity once. Previous formal disk snapshot stayed awaiting_binding until a later request or EOF; final actual identities were correct. Original checker rerun on18797 accepts both reading streams before completion.",
+  "limitations": "No new current Rendering recurrence established in this window; current cache/renderer unchanged. No all-frame capture; configured save latency target remains unmet.",
+  "backendTypecheck": {
+    "originalHandle": 25408,
+    "exit": 0,
+    "command": "bun run typecheck (packages/opencorvus)"
+  },
+  "docs": {
+    "command": "bun run docs:check",
+    "result": "345 operations,26 groups"
+  },
+  "accountingCorrection": "Final settled audit is5+5+5=15/16 actual calls, including all memory calls. Earlier4+5 intermediate accounting missed one memory call. Third scope ceiling7 could theoretically admit17 overall; actual usage stayed15; historical ceilings unchanged."
+}

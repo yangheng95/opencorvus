@@ -355,6 +355,8 @@ export class RealProviderAudit implements Disposable {
                   observed.identityState = "observed"
                   observed.requestContext = { sessionID: context.sessionID, streamRequest: { ...context.streamRequest }, ...(context.activity ? { activity: { ...context.activity } } : {}) }
                 }
+                // Readers of disk snapshots need the bound identity before EOF.
+                this.#publish(entry)
               },
               onChunk: (byteLength) => {
                 if (observed.state !== "reading") throw new Error("Response reader observation requires its bound reader")
