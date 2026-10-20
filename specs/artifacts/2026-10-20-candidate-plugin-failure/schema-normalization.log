@@ -1,0 +1,130 @@
+[1/1] START test/config-candidate-provider-plugins.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a complete candidate snapshot projects the newly selected file plugin before publication [1612.44ms]
+(pass) the real project writer publishes a replacement plugin and its selected model together [1762.18ms]
+(pass) a candidate's empty plugin selection resolves the standard catalog model [1400.68ms]
+(pass) an explicit selection matching the loaded modules retains their original hook identity [1656.33ms]
+(pass) the loaded specifiers remain authoritative when the saved config has moved to another plugin [1645.70ms]
+(pass) one selected plugin receives each real Project's input while global keeps its declared model [2289.11ms]
+(pass) the project writer can replace a broken current plugin with an explicit empty selection [1407.52ms]
+(pass) an invalid candidate model reports its typed contract and preserves the current working selection [1378.80ms]
+268 |           await fs.readFile(path.join(project.path, ".opencorvus", ConfigPaths.CANONICAL_FILE_NAME), "utf8"),
+269 |         )
+270 |         return { error, saved }
+271 |       },
+272 |     })
+273 |     expect(actual).toEqual({
+                         ^
+error: expect(received).toEqual(expected)
+
+  {
+    "error": {
+      "message": "config.plugin: Plugin module load failed for file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-jmCE6t/test-85760-hbfsOw/fixtures/memory-X8KSrI/failed-candidate.ts: Candidate factory failed",
+      "name": "ConfigCandidateValidationError",
+      "typed": true,
+    },
+    "saved": {
++     "$schema": "https://opencorvus.ai/config.json",
+      "enabled_providers": [
+        "candidate-plugin",
+      ],
+      "model": "candidate-plugin/base",
+      "permission_mode": "ask",
+      "plugin": [],
+      "prompt_profile": {
+        "active": "base",
+      },
+      "provider": {
+        "candidate-plugin": {
+          "options": {
+            "apiKey": "fixture-candidate",
+          },
+        },
+      },
+    },
+  }
+
+- Expected  - 0
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-provider-plugins.test.ts:273:20)
+(fail) a failed candidate factory returns the validation error before project publication with configured model [1385.78ms]
+268 |           await fs.readFile(path.join(project.path, ".opencorvus", ConfigPaths.CANONICAL_FILE_NAME), "utf8"),
+269 |         )
+270 |         return { error, saved }
+271 |       },
+272 |     })
+273 |     expect(actual).toEqual({
+                         ^
+error: expect(received).toEqual(expected)
+
+  {
+    "error": {
+      "message": "config.plugin: Plugin module load failed for file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-jmCE6t/test-85760-hbfsOw/fixtures/memory-mr5Utf/failed-candidate.ts: Candidate factory failed",
+      "name": "ConfigCandidateValidationError",
+      "typed": true,
+    },
+    "saved": {
++     "$schema": "https://opencorvus.ai/config.json",
+      "enabled_providers": [
+        "candidate-plugin",
+      ],
+      "permission_mode": "ask",
+      "plugin": [],
+      "prompt_profile": {
+        "active": "base",
+      },
+      "provider": {
+        "candidate-plugin": {
+          "options": {
+            "apiKey": "fixture-candidate",
+          },
+        },
+      },
+    },
+  }
+
+- Expected  - 0
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-provider-plugins.test.ts:273:20)
+(fail) a failed candidate factory returns the validation error before project publication with unspecified model [1484.60ms]
+291 |   const original = JSON.parse(await fs.readFile(globalFile, "utf8"))
+292 |   const failure = await Config.updateGlobalPatch({ plugin: [selected] }).then(
+293 |     () => ({ name: "accepted", message: "" }),
+294 |     (error) => ({ name: error.name, message: error.data?.message ?? error.message }),
+295 |   )
+296 |   expect({ failure, saved: JSON.parse(await fs.readFile(globalFile, "utf8")) }).toEqual({
+                                                                                      ^
+error: expect(received).toEqual(expected)
+
+  {
+    "failure": {
+      "message": "global config.plugin: Plugin module load failed for file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-jmCE6t/test-85760-hbfsOw/fixtures/memory-64RYvZ/failed-global-candidate.ts: Global candidate factory failed",
+      "name": "ConfigCandidateValidationError",
+    },
+    "saved": {
++     "$schema": "https://opencorvus.ai/config.json",
+      "permission_mode": "ask",
+      "prompt_profile": {
+        "active": "base",
+      },
+    },
+  }
+
+- Expected  - 0
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-provider-plugins.test.ts:296:81)
+(fail) a failed candidate factory preserves the global source while validating a registered Project [1512.65ms]
+
+ 8 pass
+ 3 fail
+ 12 expect() calls
+Ran 11 tests across 1 file. [21.21s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-provider-plugins.test.ts
+[1/1] DONE test/config-candidate-provider-plugins.test.ts exit=1 duration=21.90s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-provider-plugins.test.ts

@@ -1,0 +1,55 @@
+# 候选插件加载失败的提交边界
+
+## Recall
+
+持续单agent自主迭代，后续单agent要求覆盖旧goal的三个Astra，不委托。上一轮455属于progress：70c5f13ce2d7b96b2a15155d825eddc779801a27正常推送、fresh fetch HEAD=upstream；修复候选插件来源，68例/163断言、实际九个HTTP保存/恢复和gpt-6.1-sol流式预检通过。原31489、29877、38870全部joined0，native physical/output/request/runtime配对与private auth/models均结算退休；完整99 Project/132 Session/schema2保留。保存/恢复11478.692/11509.758ms仍未达10s/5s，四读取最长11635.487ms符合20s。本轮不能用正确性修复重定义性能资格。开始只有既有.bun/与packages/opencorvus/bun/未跟踪。
+
+继续已应用benchmark-debug-template；只用自有开发服务/ui和隔离后端runner。浏览器被Work设置禁用，不绕过、不新增/运行UI自动化，不操作用户18571、窗口、进程或数据库，不建branch/worktree、不清历史。若需Provider实际验收，已授权auth与完整models成对新复制，分别验证凭据、目录和实际gpt-6.1-sol流式请求，敏感值不入日志或提交；原物理/输出/请求/launcher和checker结算后精确退休复制对。
+
+## 修改前分析
+
+已读455 Recall及交付、当前04-extensions/05-config/06-provider的插件严格加载与候选提交合同、Plugin唯一loader/list/init、Provider.buildState/catalog/getModel及所有model-reference-validation调用、Config项目/global候选与persist/onWritten、Project bootstrap、Config错误和真实Hono映射、455正向测试与原隔离runner。当前module/resource/Job实现不变。上一轮的revision排序疑点不能单独以digest比较认定缺陷：实际CatalogOccurrenceBinding.materializationScope还包含整个Config的config_revision，插件顺序仍进入该来源；尚无真实消费端错误，本轮不修改该机制。
+
+当前可观察风险是候选插件的factory/module加载失败。Provider运行时目录按当前合同捕获错误为结构化plugin.catalog issue并保留其他可用Provider；但validateConfigModelReferences只逐个getModel，既未读取该issue，也在没有模型引用时跳过整个Provider读取。因此有效标准模型仍可让加载失败的候选通过，或无模型时完全漏检，随后canonical可能已写入才在Plugin.init严格失败。旧455只统一候选来源，没有改变运行时部分成功与写入前严格验证的边界。是否实际错误写入仍需原writer复现，不能仅凭代码认定。
+
+影响面包括项目与全局writer（后者验证全部已注册/活动Project）、Project bootstrap，以及共享模型校验的Chat/Task/Mission/SideChat会话overlay入口。global Provider scope按架构只加载内置hooks，不为没有真实Project的installed插件伪造Project或提前执行项目factory。plugin.models、auth.read、catalog.read及单Provider loader的既有部分成功合同不在本轮扩张；要核对的是整个installed hook catalog无法加载这一明确阶段，而非匹配异常文本。当前没有新的调度、队列、唤醒、恢复或终态异常；若出现，立即横审所有入口/轮次与正常终态/重试重启/串并行/多项目隔离。
+
+定义/公共合同：ConfigCandidateValidationError已经是现有400错误，现定义在candidate-validation并被路由、handler及测试引用。若model-reference-validation也需产生同一错误，应把唯一class/schema移至独立错误模块并保持现有导出路径，避免循环依赖和第二错误实现。Provider modelFromState只读取providers，现有catalog读面已返回该同源数据与issues；可以复用唯一模型选择算法从一次catalog读取验证全部引用，避免为检查issue另外执行一次factory，尤其Config含函数时原cache会跳过复用。现有getModel/getModelGlobal错误类型、建议及输出保持。schema、数据格式、HTTP/SDK定义和UI不变；主要风险是错误阶段过度拒绝、重复factory、空引用漏检和原错误契约变化。
+
+## 实施前方案与验收
+
+1. 在455已有真实file-plugin/原Config writer测试中补充正向错误合同：无模型引用与标准模型两种坏factory候选必须返回现有ConfigCandidateValidationError并保留原canonical和可用状态；全局writer覆盖已注册Project。先记录当前实际失败，完整结算隔离runner；不能以“未调用/不存在/未包含”作为核心断言。
+2. 确认后让共享模型校验读取一次原Provider catalog，检查明确plugin.catalog错误再沿唯一模型选择算法验证所有引用。无引用且没有Project插件选择时保持空验证语义；有installed选择则也验证catalog加载。提取现有模型选择函数供catalog和getModel共用，不重写匹配/建议，不新增cache、fallback或全局项目factory旁路。共享ConfigCandidateValidationError保持单一class/schema和原HTTP400映射。
+3. 正向覆盖坏factory、新增/替换/移除、相同hook身份、跨Project/global、标准Model、明确建议/错误契约、多引用读取使用同一真实投影、候选错误后正确来源和全局canonical保留。运行相关后端原checker、类型和API/文档检查；不无目标运行全量测试。不修改或运行UI自动化。
+4. 有生产修改后启动新自有18719开发/ui服务，保留全部历史；实际公共HTTP验证坏候选400、完整source保持和标准模型可读，随后健康插件成功保存/恢复。授权配对独立预检gpt-6.1-sol/streaming；原全局完整保存/恢复与写入期间读取20s范围复测，不缩项目/调预算或改变缓存上限。浏览器仍禁用时如实保留视觉未达成。
+5. 原public shutdown、physical/output/request/launcher/reader/writer均结算后核对全部原Project身份、完整history/schema，扫描实际敏感值并退休复制对。归档真实失败、结果、checker和安全证据，更新三索引及必要架构，范围commit、fetch/merge upstream、完整待推集合检查、正常hook push与fresh fetch。没有用户停止或完整目标完成证据，持续目标保持active。
+
+## 原writer复现
+
+原64971隔离runner joined exit1：旧八例通过，新三例全部失败。带标准模型与未指定模型的项目候选、已有真实注册Project的全局候选，factory均明确throw后仍返回accepted，canonical实际写入对应坏file plugin及正常自动$schema。没有post-commit错误来阻止或撤回这一写入。由真实file、原Plugin loader和Config writer输出证明漏检，测试输入catalog保留原必需本地Provider，无夹具错误。本轮按计划修复整个plugin.catalog失败的写入边界，保留运行时目录的部分成功投影。
+
+## 首轮修复复核发现的独立读取写入
+
+原77012首轮修复runner joined exit1：三个新case已全部返回正确ConfigCandidateValidationError，坏plugin保持原空选择，但文件多出$schema。追查Config.load确认正常读取会给没有schema的非空文件自动writeAtomic；它和legacy permission rewrite一样没有canonical-file lock。此失败记录保留为schema-normalization.log，不能将它算作完整源字节保留通过，也不能直接凭代码宣称已发生跨进程数据丢失。
+
+当前显式writer已经在一次canonical commit中写入最终$schema，故本轮插件事务fixture改为该当前格式，继续验证坏插件拒绝和完整当前canonical保留；不是对原失败结果改期望值。schema-less手写输入的读取回写仍是独立未解决项，下一轮须对metadata/legacy迁移的全部读写入口做共享owner审计及真实跨进程行为复现，不能只删schema分支而保留同根无锁写入。本轮不修改这套迁移/读取行为，相关限制明确保留。
+
+## 拒绝后的重试与实施前方案补充
+
+当前格式的原63722九文件66例/160断言及原52063类型检查均joined0；18719首轮真实服务已独立验证13个HTTP请求：项目/全局坏候选400、标准模型仍可读取、健康插件新增/替换与完整恢复。原95056 checker joined0。尚未把这轮称为最终全资格。
+
+补充真实正向重试合同后，先误用repairable名称过滤器匹配0例，原runner正确exit1；修正为实际repaired后，原检查再次exit1，已修复同一file URI的factory仍抛旧Repairable factory failure。根因为候选读取沿运行时scopedStates复用已返回部分成功的catalog；严格错误发生在builder之外，所以原promise异常清理不能移除这份部分成功结果。只在plugin错误时清cache还会遗漏profile/capability等后续拒绝，不能作为根治。
+
+方案修正：候选验证沿唯一buildState每次构造独立、未发布到运行时cache的目录快照，一次验证内全部模型引用共用它；global构造选项与catalog投影从原函数提取共享，保留单一构造和数据来源。运行时catalog/getModel的既有cache与部分成功合同保持。新增同URI修复重试的真实writer正向合同，最终新scope重新做实际预检、HTTP拒绝/重试/健康保存和完整历史性能。首轮18719按原public shutdown、physical/output/request/launcher结算后再启动最终scope，不热替换运行中模块；两组私有配对在全部最终结算与实际敏感值扫描后退休。
+
+原18719公开shutdown200，原28047 native launcher joined0并完成physical/output/request/runtime配对退休。最终原7505九文件67例/161断言joined0，原37594最终typecheck joined0；原规范错误过滤器与真正重试失败均保留。新公共reader沿唯一模型查找保留provider/model建议；运行时目录部分成功、原catalog代际及同一已加载hook身份均正向覆盖。fresh表示候选Provider投影的操作寿命；同selection仍复用实际加载module hook这一原运行时身份，不借验证热替换模块或另建插件状态。
+
+## 最终实际验收与交付复核
+
+新18721最终scope独立新复制已授权auth及完整models，原gpt-6.1-sol/streaming预检成功。原92387 checker joined0：18个实际公共HTTP请求通过，包括项目与global坏候选400、原canonical完全保留、标准模型仍可读、修改同一URI的factory后项目/global都成功提交、健康插件替换/空选择及原Project/global源完整恢复。首轮13请求与最终18请求分别保留，旧scope不冒充最终代码资格。
+
+原90805全局writer与3635 reader均joined0，完整101项目实际保存11881.957ms/恢复11464.019ms，全部canonical字段恢复；四个读取在同writer的config.global.before开始后进入，均200，最长11707.907ms，完整227 Provider/8133模型与精确gpt-6.1-sol保持。原10s/5s仍失败、20s读取通过；不声称性能已解决。没有缩项目、调整预算或提升缓存限额。
+
+最终scope公开shutdown200，原27072 launcher joined0；两个原native physical/output/request/launcher及全部HTTP/writer/reader完整结算。最终直接readonly SQLite：schema2、101 Project/134 Session，逐一核对本轮前99个Project/132 Session和最终scope前100/133全部身份/归属/目录均保留。两组private auth/models在扫描实际当前/两份复制敏感值后精确退休，未写源文件或由准备过程刷新/exchange。没有用户数据库初始化、迁移、用户进程或窗口操作。
+
+docs:check（345操作/26分组）、api:routes-check和architecture-index（20文档）均exit0；人工差异复核确认唯一构造、global选项与catalog投影被复用，没有第二cache或错误class。新错误模块保持原导出与400映射。安全证据见[本轮归档](../../artifacts/2026-10-20-candidate-plugin-failure/README.md)。UI代码未改且浏览器禁用，最新网页/视觉资格仍未达成。读取schema/legacy写回的独立未解决项继续保留，下一轮不得以元数据幂等为由排除并发覆盖风险。范围commit、fetch/merge、完整待推集合与正常hook push后复核HEAD/upstream；不发布版本、tag或Release，持续目标保持active。

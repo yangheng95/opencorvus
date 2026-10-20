@@ -1,0 +1,143 @@
+[1/1] START test/config-candidate-provider-plugins.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a complete candidate snapshot projects the newly selected file plugin before publication [1916.44ms]
+(pass) the real project writer publishes a replacement plugin and its selected model together [1928.99ms]
+(pass) a candidate's empty plugin selection resolves the standard catalog model [1432.17ms]
+(pass) an explicit selection matching the loaded modules retains their original hook identity [1480.44ms]
+(pass) the loaded specifiers remain authoritative when the saved config has moved to another plugin [1448.26ms]
+(pass) one selected plugin receives each real Project's input while global keeps its declared model [2443.76ms]
+(pass) the project writer can replace a broken current plugin with an explicit empty selection [1716.55ms]
+(pass) an invalid candidate model reports its typed contract and preserves the current working selection [1376.68ms]
+264 |           await fs.readFile(path.join(project.path, ".opencorvus", ConfigPaths.CANONICAL_FILE_NAME), "utf8"),
+265 |         )
+266 |         return { error, saved }
+267 |       },
+268 |     })
+269 |     expect(actual).toEqual({
+                         ^
+error: expect(received).toEqual(expected)
+
+  {
+    "error": {
+-     "message": "config.plugin: Plugin module load failed for file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-a8PVSd/test-88448-JRSoYl/fixtures/memory-EKU9vq/failed-candidate.ts: Candidate factory failed",
+-     "name": "ConfigCandidateValidationError",
++     "message": "",
++     "name": "accepted",
+    },
+    "saved": {
++     "$schema": "https://opencorvus.ai/config.json",
+      "enabled_providers": [
+        "candidate-plugin",
+      ],
+      "model": "candidate-plugin/base",
+      "permission_mode": "ask",
+-     "plugin": [],
++     "plugin": [
++       "file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-a8PVSd/test-88448-JRSoYl/fixtures/memory-EKU9vq/failed-candidate.ts",
++     ],
+      "prompt_profile": {
+        "active": "base",
+      },
+      "provider": {
+        "candidate-plugin": {
+          "options": {
+            "apiKey": "fixture-candidate",
+          },
+        },
+      },
+    },
+  }
+
+- Expected  - 3
++ Received  + 6
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-provider-plugins.test.ts:269:20)
+(fail) a failed candidate factory returns the validation error before project publication with configured model [1364.22ms]
+264 |           await fs.readFile(path.join(project.path, ".opencorvus", ConfigPaths.CANONICAL_FILE_NAME), "utf8"),
+265 |         )
+266 |         return { error, saved }
+267 |       },
+268 |     })
+269 |     expect(actual).toEqual({
+                         ^
+error: expect(received).toEqual(expected)
+
+  {
+    "error": {
+-     "message": "config.plugin: Plugin module load failed for file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-a8PVSd/test-88448-JRSoYl/fixtures/memory-67VTHj/failed-candidate.ts: Candidate factory failed",
+-     "name": "ConfigCandidateValidationError",
++     "message": "",
++     "name": "accepted",
+    },
+    "saved": {
++     "$schema": "https://opencorvus.ai/config.json",
+      "enabled_providers": [
+        "candidate-plugin",
+      ],
+      "permission_mode": "ask",
+-     "plugin": [],
++     "plugin": [
++       "file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-a8PVSd/test-88448-JRSoYl/fixtures/memory-67VTHj/failed-candidate.ts",
++     ],
+      "prompt_profile": {
+        "active": "base",
+      },
+      "provider": {
+        "candidate-plugin": {
+          "options": {
+            "apiKey": "fixture-candidate",
+          },
+        },
+      },
+    },
+  }
+
+- Expected  - 3
++ Received  + 6
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-provider-plugins.test.ts:269:20)
+(fail) a failed candidate factory returns the validation error before project publication with unspecified model [1470.19ms]
+286 |   const original = JSON.parse(await fs.readFile(globalFile, "utf8"))
+287 |   const failure = await Config.updateGlobalPatch({ plugin: [selected] }).then(
+288 |     () => ({ name: "accepted", message: "" }),
+289 |     (error) => ({ name: error.name, message: error.data?.message ?? error.message }),
+290 |   )
+291 |   expect({ failure, saved: JSON.parse(await fs.readFile(globalFile, "utf8")) }).toEqual({
+                                                                                      ^
+error: expect(received).toEqual(expected)
+
+  {
+    "failure": {
+-     "message": "global config.plugin: Plugin module load failed for file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-a8PVSd/test-88448-JRSoYl/fixtures/memory-H1SU3k/failed-global-candidate.ts: Global candidate factory failed",
+-     "name": "ConfigCandidateValidationError",
++     "message": "",
++     "name": "accepted",
+    },
+    "saved": {
++     "$schema": "https://opencorvus.ai/config.json",
+      "permission_mode": "ask",
++     "plugin": [
++       "file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-a8PVSd/test-88448-JRSoYl/fixtures/memory-H1SU3k/failed-global-candidate.ts",
++     ],
+      "prompt_profile": {
+        "active": "base",
+      },
+    },
+  }
+
+- Expected  - 2
++ Received  + 6
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-provider-plugins.test.ts:291:81)
+(fail) a failed candidate factory preserves the global source while validating a registered Project [1464.85ms]
+
+ 8 pass
+ 3 fail
+ 12 expect() calls
+Ran 11 tests across 1 file. [21.86s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-provider-plugins.test.ts
+[1/1] DONE test/config-candidate-provider-plugins.test.ts exit=1 duration=22.46s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-provider-plugins.test.ts

@@ -1,0 +1,120 @@
+[1/9] START test/config-candidate-provider-plugins.test.ts
+(pass) a complete candidate snapshot projects the newly selected file plugin before publication [1880.72ms]
+(pass) the real project writer publishes a replacement plugin and its selected model together [1860.83ms]
+(pass) a candidate's empty plugin selection resolves the standard catalog model [1370.63ms]
+(pass) an explicit selection matching the loaded modules retains their original hook identity [1406.56ms]
+(pass) the loaded specifiers remain authoritative when the saved config has moved to another plugin [1397.20ms]
+(pass) one selected plugin receives each real Project's input while global keeps its declared model [2327.73ms]
+(pass) the project writer can replace a broken current plugin with an explicit empty selection [1387.63ms]
+(pass) an invalid candidate model reports its typed contract and preserves the current working selection [1500.12ms]
+(pass) a failed candidate factory returns the validation error before project publication with configured model [1742.74ms]
+(pass) a failed candidate factory returns the validation error before project publication with unspecified model [1374.02ms]
+(pass) a failed candidate factory preserves the global source while validating a registered Project [1382.54ms]
+(pass) the runtime catalog retains its structured plugin issue and a readable standard model [1366.98ms]
+(pass) a retained catalog resolves its original model after a newer catalog publication [1349.30ms]
+(pass) catalog model resolution retains typed provider and model suggestions [1382.01ms]
+(pass) one candidate can publish standard and plugin model references together [1453.49ms]
+(pass) a repaired file plugin at the same selection accepts a fresh candidate retry [1506.20ms]
+ 16 pass
+ 0 fail
+ 17 expect() calls
+Ran 16 tests across 1 file. [28.26s]
+[1/9] DONE test/config-candidate-provider-plugins.test.ts exit=0 duration=29.09s
+[2/9] START test/provider-projection-isolation.test.ts
+(pass) empty model option defaults produce independent authored values for each projection [8.04ms]
+(pass) initial reasoning variants retain their source values and each projection owns later edits [2.17ms]
+(pass) authored reasoning variants serialize and clone as the model's current writable value [1.58ms]
+(pass) frozen models retain readable defaults and sealed models retain their authored reasoning value [1.15ms]
+(pass) each Provider projection owns its mutable metadata and preserves the current source declaration [1.11ms]
+(pass) a production Project plugin customizes its own Provider while another Project and global catalog retain their declarations [3196.88ms]
+(pass) published catalogs retain their original model generation across a canonical catalog update [171.14ms]
+(pass) frozen published Providers serialize complete models and sealed Providers retain authored models [82.77ms]
+(pass) environment selection preserves the selected key for ordinary single declaration [96.84ms]
+(pass) environment selection preserves the selected key for DashScope single declaration [99.73ms]
+(pass) environment selection preserves the selected key for DashScope common credential [83.65ms]
+(pass) environment selection preserves the selected key for DashScope multiple declarations [77.38ms]
+ 12 pass
+ 0 fail
+ 16 expect() calls
+Ran 12 tests across 1 file. [4.97s]
+[2/9] DONE test/provider-projection-isolation.test.ts exit=0 duration=5.13s
+[3/9] START test/provider-cache-identity.test.ts
+(pass) Provider cache identity > canonical sources are runtime-independent and exact bytes remain the cache authority [1.20ms]
+(pass) Provider cache identity > validated Provider config and declarative SDK options use canonical exact identities [12.44ms]
+(pass) Provider cache identity > production Provider state and SDK caches reuse only exact canonical inputs [1684.85ms]
+(pass) Provider cache identity > default Provider generations are Project-owned and follow current Config lifecycle [2900.32ms]
+(pass) Provider cache identity > production runtime capabilities execute without entering the declarative SDK cache [1191.67ms]
+(pass) Provider cache identity > releases one Provider capacity slot on response EOF, cancel, abort and transport error [1390.15ms]
+(pass) Provider cache identity > shares the final Provider stream capacity lease across two backend processes [8266.84ms]
+(pass) Provider cache identity > production Bedrock credential capability initializes without cache serialization [1568.29ms]
+(pass) Provider cache identity > DashScope credential lifetime publishes versioned SHA-256 identity [24.63ms]
+ 9 pass
+ 0 fail
+ 41 expect() calls
+Ran 9 tests across 1 file. [18.18s]
+[3/9] DONE test/provider-cache-identity.test.ts exit=0 duration=18.40s
+[4/9] START test/config-global-project-validation.test.ts
+(pass) a retained global writer settles its original transition after repeated projection failures [2192.41ms]
+(pass) one global generation projects every registered project's own configuration [2526.28ms]
+(pass) one global mutation retains its exact candidate identities through persistence and runtime convergence [2507.93ms]
+(pass) an invalid Project returns the candidate error and a corrected source accepts a full retry [2554.07ms]
+ 4 pass
+ 0 fail
+ 28 expect() calls
+Ran 4 tests across 1 file. [11.00s]
+[4/9] DONE test/config-global-project-validation.test.ts exit=0 duration=11.14s
+[5/9] START test/server/config-candidate-status.test.ts
+(pass) public VCS metadata binds current Git information and directory admission [673.09ms]
+(pass) cold builtin collision returns canonical candidate validation 400 [2278.67ms]
+(pass) cold lawful external active profile with colliding nonactive builtin mount returns candidate 400 [2224.81ms]
+(pass) cold unavailable explicit model preserves model-first canonical 400 [2112.11ms]
+(pass) cold lawful runtime returns its real VCS output [3098.69ms]
+(pass) shared Hono canonical response ConfigCandidateValidationError [1.53ms]
+(pass) shared Hono canonical response ProviderModelNotFoundError [0.69ms]
+(pass) shared Hono canonical response AuthReadError [0.73ms]
+(pass) shared Hono canonical response DatabaseUnavailableError [0.69ms]
+(pass) shared Hono canonical response OwnedPromptControllersError [0.65ms]
+(pass) shared Hono canonical response Error [0.69ms]
+ 11 pass
+ 0 fail
+ 32 expect() calls
+Ran 11 tests across 1 file. [12.68s]
+[5/9] DONE test/server/config-candidate-status.test.ts exit=0 duration=12.84s
+[6/9] START test/server/candidate-reader-provenance.test.ts
+(pass) actual exclusive README lock measures declaration, physical reader and candidate provenance then releases [3171.28ms]
+(pass) status reads remain available while the owned malformed declaration has a typed candidate error [1959.47ms]
+ 2 pass
+ 0 fail
+ 10 expect() calls
+Ran 2 tests across 1 file. [6.80s]
+[6/9] DONE test/server/candidate-reader-provenance.test.ts exit=0 duration=6.96s
+[7/9] START test/config-candidate-skill-catalog.test.ts
+(pass) a global username save retains each project's own configured Skill assignment [3245.62ms]
+(pass) a global source removal retains a Skill still configured by its Project [1377.90ms]
+(pass) an implicit Project Skill remains assigned when an unrelated global field changes [1335.11ms]
+(pass) a removed sole Skill source returns the assignment error and retains its complete canonical source [1394.82ms]
+(pass) a Project candidate adds its Skill source and assignment in one canonical mutation [1429.56ms]
+(pass) a global candidate repairs a Project assignment by adding its actual Skill source [1424.44ms]
+(pass) a candidate catalog resolves its own source while the runtime retains its current definition [1376.19ms]
+ 7 pass
+ 0 fail
+ 7 expect() calls
+Ran 7 tests across 1 file. [12.74s]
+[7/9] DONE test/config-candidate-skill-catalog.test.ts exit=0 duration=12.89s
+[8/9] START test/config-worktree-boundary.test.ts
+(pass) a standalone snapshot and its ordinary child Project use the same independent boundary [354.84ms]
+(pass) a global candidate projects its admitted child boundary into both runtime transition snapshots [962.01ms]
+(pass) a snapshot of a damaged local Git directory reports its own typed discovery failure [221.82ms]
+(pass) snapshot discovery maps Git availability to the repository error and the valid ordinary configuration [59.82ms]
+(pass) main, linked and aliased snapshots read the selected sandbox's own source [666.05ms]
+ 5 pass
+ 0 fail
+ 9 expect() calls
+Ran 6 tests across 1 file. [3.54s]
+[8/9] DONE test/config-worktree-boundary.test.ts exit=0 duration=3.75s
+[9/9] START test/config-registration-batch.test.ts
+(pass) a global cold candidate completes both independent admitted Project identities together [3616.76ms]
+ 1 pass
+ 0 fail
+ 1 expect() calls
+[9/9] DONE test/config-registration-batch.test.ts exit=0 duration=4.63s

@@ -271,6 +271,16 @@ runtime services remain owned by ordinary Plugin activation. A candidate error
 preserves the current canonical configuration. Project-independent global
 Provider validation continues to use its declared built-in hook scope.
 
+Each candidate validation owns one Provider projection from the same builder;
+it does not publish into the runtime Provider cache. All model references resolve
+from that retained catalog, with the existing model errors and suggestions.
+An installed hook-catalog load failure is a `ConfigCandidateValidationError`
+before canonical persistence, including a Project candidate with no explicit
+model reference. Runtime catalog reads keep their structured partial-success
+issues. A repaired file at the same uncommitted selection is observed on retry.
+The shared candidate error class/schema lives in `config/candidate-error.ts` and
+retains its existing validation-module export and HTTP 400 mapping.
+
 MCP's shared state accessor enters the same Config generation read callback
 before creating or joining its initialization promise. Initialization reads both
 project-owned and effective configuration and settles staged credentials before

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [候选插件错误与重试](2026-10-20-candidate-plugin-failure/README.md)：坏factory误提交与旧失败缓存、67例合同、18个实际HTTP及完整101项目验证；保留读取写回风险。
+
 - [候选Provider插件来源](2026-10-20-candidate-provider-plugins/README.md)：三个真实失败→68例合同、实际HTTP保存恢复、完整99项目性能与原native结算。
 
 - [Windows监管标准管道测量](2026-10-20-windows-supervised-stdio/README.md)：148条真实命令与完整结算；无稳定收益，保留生产pipe。

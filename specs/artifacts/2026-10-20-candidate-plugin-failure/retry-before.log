@@ -1,0 +1,32 @@
+[1/1] START test/config-candidate-provider-plugins.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+35 |   if (refs.length === 0 && !(providerScope === "project" && input.plugin?.length)) return
+36 |   const catalog =
+37 |     providerScope === "global" ? await Provider.catalogGlobal(input) : await Provider.catalog({ config: input })
+38 |   const pluginFailures = catalog.issues.filter((issue) => issue.phase === "plugin.catalog")
+39 |   if (pluginFailures.length) {
+40 |     throw new ConfigCandidateValidationError({
+               ^
+ConfigCandidateValidationError: ConfigCandidateValidationError: config.plugin: Plugin module load failed for file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-sj5N52/test-76408-7DG37S/fixtures/memory-Y0aJXx/repairable.ts: Repairable factory failure
+ data: {
+  message: "config.plugin: Plugin module load failed for file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-sj5N52/test-76408-7DG37S/fixtures/memory-Y0aJXx/repairable.ts: Repairable factory failure",
+},
+
+      at validateConfigModelReferences (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\model-reference-validation.ts:40:11)
+      at async validateConfigCandidate (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\candidate-validation.ts:18:30)
+      at async commit (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2518:17)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2735:40)
+      at async withProcessLock (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\process-lock.ts:86:26)
+      at async withKeyedLock (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\lock.ts:49:18)
+(fail) a repaired file plugin at the same selection accepts a fresh candidate retry [3062.90ms]
+
+ 0 pass
+ 15 filtered out
+ 1 fail
+Ran 1 test across 1 file. [7.07s]
+[1/1] DONE test/config-candidate-provider-plugins.test.ts exit=1 duration=7.64s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-provider-plugins.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\config-candidate-provider-plugins.test.ts

@@ -1,16 +1,12 @@
 import { PromptProfile } from "@/agent/prompt-profile"
 import { ConversationCapability } from "@/conversation/capability"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
-import { NamedError } from "@opencorvus-ai/util/error"
-import z from "zod"
 import type { Config } from "./config"
+import { ConfigCandidateValidationError } from "./candidate-error"
 import { validateConfigModelReferences } from "./model-reference-validation"
 import { SkillReadDiagnostics } from "@/skill/read-diagnostics"
 
-export const ConfigCandidateValidationError = NamedError.create(
-  "ConfigCandidateValidationError",
-  z.object({ message: z.string() }),
-)
+export { ConfigCandidateValidationError }
 
 export async function validateConfigCandidate(input: {
   config: Config.Info

@@ -42,6 +42,15 @@ selection; it does not silently substitute the saved Project selection. Global
 builders keep their existing project-independent built-in hooks. Candidate
 projection does not activate plugin services or publish runtime plugin state.
 
+`validationCatalog` constructs an operation-owned candidate through the same
+builder, global options and catalog projection as runtime reads. It retains one
+catalog for all reference lookups and leaves the runtime cache unchanged;
+rejected candidates therefore cannot retain a stale failure for the next attempt.
+`getModelFromCatalog` is the shared model-resolution implementation for this
+snapshot and the existing asynchronous model readers. Config validation treats
+the structured `plugin.catalog` stage as a candidate error; ordinary Provider
+catalogs continue to report that issue beside readable healthy models.
+
 不同 LLM 提供商在 4 个维度上各不相同：
 
 | 维度         | 差异                                                                                          |

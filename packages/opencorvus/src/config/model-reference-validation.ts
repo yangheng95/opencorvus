@@ -1,5 +1,6 @@
 import { Provider } from "@/provider/provider"
 import type { Config } from "./config"
+import { ConfigCandidateValidationError } from "./candidate-error"
 
 function collectModelReferences(input: Config.Info, root: string): Array<{ path: string; model: string }> {
   const refs: Array<{ path: string; model: string }> = []
@@ -30,17 +31,17 @@ export async function validateConfigModelReferences(
   root = "config",
   providerScope: "project" | "global" = "project",
 ) {
-  for (const ref of collectModelReferences(input, root)) {
-    const parsed = Provider.parseModel(ref.model)
-    const model =
-      providerScope === "global"
-        ? Provider.getModelGlobal(parsed.providerID, parsed.modelID, input)
-        : Provider.getModel(parsed.providerID, parsed.modelID, { config: input })
-    await model.catch((error) => {
-      if (error instanceof Provider.ModelNotFoundError) {
-        error.data.suggestions = error.data.suggestions ?? []
-      }
-      throw error
+  const refs = collectModelReferences(input, root)
+  if (refs.length === 0 && !(providerScope === "project" && input.plugin?.length)) return
+  const catalog = await Provider.validationCatalog(input, providerScope)
+  const pluginFailures = catalog.issues.filter((issue) => issue.phase === "plugin.catalog")
+  if (pluginFailures.length) {
+    throw new ConfigCandidateValidationError({
+      message: `${root}.plugin: ${pluginFailures.map((issue) => issue.message).join("\n")}`,
     })
+  }
+  for (const ref of refs) {
+    const parsed = Provider.parseModel(ref.model)
+    Provider.getModelFromCatalog(catalog, parsed.providerID, parsed.modelID)
   }
 }

@@ -725,15 +725,18 @@ export namespace Provider {
     return cachedState(states, source, init)
   }
 
+  function globalBuildOptions(configAvailable = true) {
+    return {
+      environment: { ...process.env },
+      pluginHooks: Plugin.listGlobalProviderHooks,
+      includeCustomLoaders: false,
+      configAvailable,
+    }
+  }
+
   function globalStateFor(config: Config.Info, configAvailable = true): Promise<ProviderState> {
     const snapshot = Config.Info.parse(config)
-    const init = () =>
-      buildState(snapshot, {
-        environment: { ...process.env },
-        pluginHooks: Plugin.listGlobalProviderHooks,
-        includeCustomLoaders: false,
-        configAvailable,
-      })
+    const init = () => buildState(snapshot, globalBuildOptions(configAvailable))
     if (containsRuntimeCapability(snapshot)) return init()
     const { source } = configStateSource(snapshot, configAvailable)
     return cachedState(globalScopedStates, source, init)
@@ -847,12 +850,12 @@ export namespace Provider {
     return provider !== undefined && Object.keys(provider.models).length > 0
   }
 
-  function runnableProvider(state: ProviderState, providerID: string): Info | undefined {
+  function runnableProvider(state: Pick<ProviderState, "providers">, providerID: string): Info | undefined {
     const provider = state.providers[providerID]
     return hasRunnableModels(provider) ? provider : undefined
   }
 
-  function runnableProviders(state: ProviderState): Record<string, Info> {
+  function runnableProviders(state: Pick<ProviderState, "providers">): Record<string, Info> {
     return Object.fromEntries(Object.entries(state.providers).filter(([, provider]) => hasRunnableModels(provider)))
   }
 
@@ -879,20 +882,26 @@ export namespace Provider {
     return globalStateFor(config).then(runnableProviders)
   }
 
-  export async function catalog(opts?: { config?: Config.Info; configAvailable?: boolean }) {
-    return stateFor(opts?.config, opts?.configAvailable).then((state) => ({
+  function catalogFromState(state: ProviderState) {
+    return {
       database: state.database,
       providers: runnableProviders(state),
       issues: state.issues,
-    }))
+    }
+  }
+
+  export async function catalog(opts?: { config?: Config.Info; configAvailable?: boolean }) {
+    return stateFor(opts?.config, opts?.configAvailable).then(catalogFromState)
   }
 
   export async function catalogGlobal(config: Config.Info, configAvailable = true) {
-    return globalStateFor(config, configAvailable).then((state) => ({
-      database: state.database,
-      providers: runnableProviders(state),
-      issues: state.issues,
-    }))
+    return globalStateFor(config, configAvailable).then(catalogFromState)
+  }
+
+  /** An uncommitted candidate owns one current projection and never publishes into runtime state. */
+  export async function validationCatalog(config: Config.Info, scope: "project" | "global" = "project") {
+    const snapshot = Config.Info.parse(config)
+    return catalogFromState(await buildState(snapshot, scope === "global" ? globalBuildOptions() : {}))
   }
 
   /**
@@ -1210,7 +1219,8 @@ export namespace Provider {
     return globalStateFor(config).then((s) => runnableProvider(s, providerID)!)
   }
 
-  function modelFromState(s: ProviderState, providerID: string, modelID: string): Model {
+  /** Resolve a model from one retained catalog read, including its original suggestions. */
+  export function getModelFromCatalog(s: Pick<ProviderState, "providers">, providerID: string, modelID: string): Model {
     const provider = runnableProvider(s, providerID)
     if (!provider) {
       const availableProviders = Object.keys(runnableProviders(s))
@@ -1230,11 +1240,11 @@ export namespace Provider {
   }
 
   export async function getModel(providerID: string, modelID: string, opts?: { config?: Config.Info }) {
-    return modelFromState(await stateFor(opts?.config), providerID, modelID)
+    return getModelFromCatalog(await stateFor(opts?.config), providerID, modelID)
   }
 
   export async function getModelGlobal(providerID: string, modelID: string, config: Config.Info) {
-    return modelFromState(await globalStateFor(config), providerID, modelID)
+    return getModelFromCatalog(await globalStateFor(config), providerID, modelID)
   }
 
   export async function getLanguage(

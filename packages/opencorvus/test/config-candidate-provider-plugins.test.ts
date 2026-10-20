@@ -3,6 +3,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import { pathToFileURL } from "node:url"
 import { Config } from "@/config/config"
+import { ConfigCandidateValidationError } from "@/config/candidate-validation"
 import { ConfigPaths } from "@/config/paths"
 import { Global } from "@/global"
 import { Instance } from "@/project/instance"
@@ -13,7 +14,11 @@ import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 const providerID = "candidate-plugin"
 const globalFile = path.join(Global.Path.config, ConfigPaths.CANONICAL_FILE_NAME)
-const baseline = { prompt_profile: { active: "base" }, permission_mode: "ask" }
+const baseline = {
+  $schema: "https://opencorvus.ai/config.json",
+  prompt_profile: { active: "base" },
+  permission_mode: "ask",
+}
 let originalCatalog: Buffer
 
 beforeEach(async () => {
@@ -241,4 +246,181 @@ test("an invalid candidate model reports its typed contract and preserves the cu
     saved: `${providerID}/base`,
     working: "Catalog base",
   })
+})
+
+for (const modelReference of ["configured", "unspecified"] as const) {
+  test(`a failed candidate factory returns the validation error before project publication with ${modelReference} model`, async () => {
+    await using project = await memoryProject()
+    const config = configuration()
+    if (modelReference === "unspecified") delete config.model
+    await projectConfig(project.path, config)
+    const file = path.join(project.path, "failed-candidate.ts")
+    await fs.writeFile(file, 'export default async () => { throw new Error("Candidate factory failed") }\n')
+    const selected = pathToFileURL(file).href
+    const actual = await Instance.provideProjectIdentity({
+      directory: project.path,
+      fn: async () => {
+        const error = await Config.updateProjectPatch({ plugin: [selected] }).then(
+          () => ({ name: "accepted", message: "" }),
+          (failure) => ({
+            name: failure.name,
+            message: failure.data?.message ?? failure.message,
+            typed: failure instanceof ConfigCandidateValidationError,
+          }),
+        )
+        const saved = JSON.parse(
+          await fs.readFile(path.join(project.path, ".opencorvus", ConfigPaths.CANONICAL_FILE_NAME), "utf8"),
+        )
+        return { error, saved }
+      },
+    })
+    expect(actual).toEqual({
+      error: {
+        name: "ConfigCandidateValidationError",
+        message: `config.plugin: Plugin module load failed for ${selected}: Candidate factory failed`,
+        typed: true,
+      },
+      saved: config,
+    })
+  })
+}
+
+test("a failed candidate factory preserves the global source while validating a registered Project", async () => {
+  await using project = await memoryProject()
+  await projectConfig(project.path, configuration())
+  await Instance.provideProjectIdentity({ directory: project.path, fn: () => undefined })
+  const file = path.join(project.path, "failed-global-candidate.ts")
+  await fs.writeFile(file, 'export default async () => { throw new Error("Global candidate factory failed") }\n')
+  const selected = pathToFileURL(file).href
+  const original = JSON.parse(await fs.readFile(globalFile, "utf8"))
+  const failure = await Config.updateGlobalPatch({ plugin: [selected] }).then(
+    () => ({ name: "accepted", message: "" }),
+    (error) => ({ name: error.name, message: error.data?.message ?? error.message }),
+  )
+  expect({ failure, saved: JSON.parse(await fs.readFile(globalFile, "utf8")) }).toEqual({
+    failure: {
+      name: "ConfigCandidateValidationError",
+      message: `global config.plugin: Plugin module load failed for ${selected}: Global candidate factory failed`,
+    },
+    saved: original,
+  })
+})
+
+test("the runtime catalog retains its structured plugin issue and a readable standard model", async () => {
+  await using project = await memoryProject()
+  await projectConfig(project.path, configuration())
+  const file = path.join(project.path, "partial-catalog.ts")
+  await fs.writeFile(file, 'export default async () => { throw new Error("Readable catalog failure") }\n')
+  const selected = pathToFileURL(file).href
+  const actual = await Instance.provideProjectIdentity({
+    directory: project.path,
+    fn: async () => {
+      const catalog = await Provider.catalog({ config: configuration([selected]) })
+      return {
+        issue: catalog.issues.find((issue) => issue.phase === "plugin.catalog"),
+        readable: Provider.getModelFromCatalog(catalog, providerID, "base").name,
+      }
+    },
+  })
+  expect(actual).toEqual({
+    issue: {
+      phase: "plugin.catalog",
+      message: `Plugin module load failed for ${selected}: Readable catalog failure`,
+    },
+    readable: "Catalog base",
+  })
+})
+
+test("a retained catalog resolves its original model after a newer catalog publication", async () => {
+  await using project = await memoryProject()
+  await projectConfig(project.path, configuration())
+  const actual = await Instance.provideProjectIdentity({
+    directory: project.path,
+    fn: async () => {
+      const before = await Provider.catalog({ config: configuration() })
+      const source = (await ModelsDev.get())[providerID].models.base
+      await ModelsDev.replaceProviderModels(providerID, { base: { ...source, name: "Published next base" } })
+      await Provider.resetAll()
+      const after = await Provider.catalog({ config: configuration() })
+      return {
+        retained: Provider.getModelFromCatalog(before, providerID, "base").name,
+        current: Provider.getModelFromCatalog(after, providerID, "base").name,
+      }
+    },
+  })
+  expect(actual).toEqual({ retained: "Catalog base", current: "Published next base" })
+})
+
+test("catalog model resolution retains typed provider and model suggestions", async () => {
+  await using project = await memoryProject()
+  await projectConfig(project.path, configuration())
+  const failures = await Instance.provideProjectIdentity({
+    directory: project.path,
+    fn: async () => {
+      const catalog = await Provider.catalog({ config: configuration() })
+      return [
+        { provider: "candidate-plugn", model: "base" },
+        { provider: providerID, model: "bas" },
+      ].map((ref) => {
+        try {
+          Provider.getModelFromCatalog(catalog, ref.provider, ref.model)
+          throw new Error("Expected typed lookup error")
+        } catch (error) {
+          if (!(error instanceof Provider.ModelNotFoundError)) throw error
+          return { name: error.name, ...error.data }
+        }
+      })
+    },
+  })
+  expect(failures).toEqual([
+    { name: "ProviderModelNotFoundError", providerID: "candidate-plugn", modelID: "base", suggestions: [providerID] },
+    { name: "ProviderModelNotFoundError", providerID, modelID: "bas", suggestions: ["base"] },
+  ])
+})
+
+test("one candidate can publish standard and plugin model references together", async () => {
+  await using project = await memoryProject()
+  await projectConfig(project.path, configuration())
+  const selected = await plugin(project.path, "small", "Candidate small")
+  const actual = await Instance.provideProjectIdentity({
+    directory: project.path,
+    fn: async () => {
+      await Config.updateProjectPatch({
+        plugin: [selected],
+        model: `${providerID}/base`,
+        small_model: `${providerID}/small`,
+      })
+      const config = await Config.get()
+      const catalog = await Provider.catalog({ config })
+      return {
+        primary: Provider.getModelFromCatalog(catalog, providerID, "base").name,
+        small: Provider.getModelFromCatalog(catalog, providerID, "small").name,
+        selected: config.small_model,
+      }
+    },
+  })
+  expect(actual).toEqual({ primary: "Catalog base", small: "Candidate small", selected: `${providerID}/small` })
+})
+
+test("a repaired file plugin at the same selection accepts a fresh candidate retry", async () => {
+  await using project = await memoryProject()
+  await projectConfig(project.path, configuration())
+  const file = path.join(project.path, "repairable.ts")
+  await fs.writeFile(file, 'export default async()=>{throw new Error("Repairable factory failure")}\n')
+  const selected = pathToFileURL(file).href
+  const actual = await Instance.provideProjectIdentity({
+    directory: project.path,
+    fn: async () => {
+      const first = await Config.updateProjectPatch({ plugin: [selected] }).catch((error) => error)
+      if (!(first instanceof ConfigCandidateValidationError)) throw first ?? new Error("Expected first candidate error")
+      await fs.writeFile(
+        file,
+        `export default async()=>({provider:{id:${JSON.stringify(providerID)},models(provider){return {...provider.models,base:{...provider.models.base,name:"Repaired base"}}}}})`,
+      )
+      await Config.updateProjectPatch({ plugin: [selected] })
+      const saved = await Config.get()
+      return { first: first.name, selected: saved.plugin, model: (await Provider.getModel(providerID, "base")).name }
+    },
+  })
+  expect(actual).toEqual({ first: "ConfigCandidateValidationError", selected: [selected], model: "Repaired base" })
 })

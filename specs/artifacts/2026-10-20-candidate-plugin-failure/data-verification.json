@@ -1,0 +1,16 @@
+{
+  "schema": {
+    "user_version": 2
+  },
+  "projects": 101,
+  "sessions": 134,
+  "retainedBeforeBoth": {
+    "projects": 99,
+    "sessions": 132
+  },
+  "retainedBeforeFinal": {
+    "projects": 100,
+    "sessions": 133
+  },
+  "mode": "Direct readonly SQLite after both original native occurrences settled; every original Project and Session identity/owner/directory row compared; no production initializer"
+}

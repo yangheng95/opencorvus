@@ -1,0 +1,101 @@
+{
+  "scope": "candidate-plugin-failure-456",
+  "preflight": [
+    {
+      "scope": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/candidate-plugin-failure-456",
+      "sessionID": "ses_hniios9sOw2PIshUqiH2",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true
+    },
+    {
+      "scope": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/candidate-plugin-failure-456-final",
+      "sessionID": "ses_hHyCTTWuKvyfdVBjW1vW",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true
+    }
+  ],
+  "backendContracts": {
+    "files": 9,
+    "cases": 67,
+    "assertions": 161,
+    "originalRunnerExit": 0,
+    "originalTypecheckExit": 0
+  },
+  "http": {
+    "initial": {
+      "requests": 13,
+      "stages": [
+        "project-rejected",
+        "global-rejected",
+        "old",
+        "next",
+        "standard-selection",
+        "restored"
+      ],
+      "restored": true
+    },
+    "final": {
+      "requests": 18,
+      "stages": [
+        "project-rejected",
+        "global-rejected",
+        "repaired-same-selection",
+        "global-repaired-same-selection",
+        "old",
+        "next",
+        "standard-selection",
+        "restored"
+      ],
+      "restored": true
+    }
+  },
+  "fullHistoryPerformance": {
+    "writeMs": 11881.957300000002,
+    "restoreMs": 11464.018800000005,
+    "coldBudgetMs": 10000,
+    "restoreBudgetMs": 5000,
+    "readBudgetMs": 20000,
+    "maxConcurrentReadMs": 11707.906799999997,
+    "qualification": "cold and restore failed; all four reads passed"
+  },
+  "ui": "No UI source changes; Work local browser access remains disabled, no current visual qualification",
+  "native": [
+    {
+      "scope": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/candidate-plugin-failure-456",
+      "launcherExit": 0,
+      "physical": true,
+      "output": true,
+      "request": true,
+      "runtimePair": true
+    },
+    {
+      "scope": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/candidate-plugin-failure-456-final",
+      "launcherExit": 0,
+      "physical": true,
+      "output": true,
+      "request": true,
+      "runtimePair": true
+    }
+  ],
+  "history": {
+    "schema": {
+      "user_version": 2
+    },
+    "projects": 101,
+    "sessions": 134,
+    "retainedBeforeBoth": {
+      "projects": 99,
+      "sessions": 132
+    },
+    "retainedBeforeFinal": {
+      "projects": 100,
+      "sessions": 133
+    },
+    "mode": "Direct readonly SQLite after both original native occurrences settled; every original Project and Session identity/owner/directory row compared; no production initializer"
+  },
+  "remaining": "Schema-less configuration reader metadata/legacy writeback owner audit remains unresolved; the normalization failure log is retained."
+}

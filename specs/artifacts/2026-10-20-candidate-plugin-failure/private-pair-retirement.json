@@ -1,0 +1,36 @@
+{
+  "sourceWritten": false,
+  "preparationExchangeOrRefresh": false,
+  "pairedCatalog": "Complete adjacent source models copied and independently projected for both real streaming preflights",
+  "actualCredentialValueScan": "Passed on archived evidence, both owned scopes and task source; no values emitted",
+  "retired": [
+    {
+      "authority": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/candidate-plugin-failure-456-authority",
+      "sourceMetadataUnchanged": true,
+      "members": [
+        {
+          "name": "auth.json",
+          "outcome": "retired after all original native/HTTP/writer/reader joins"
+        },
+        {
+          "name": "models.json",
+          "outcome": "retired after all original native/HTTP/writer/reader joins"
+        }
+      ]
+    },
+    {
+      "authority": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/candidate-plugin-failure-456-final-authority",
+      "sourceMetadataUnchanged": true,
+      "members": [
+        {
+          "name": "auth.json",
+          "outcome": "retired after all original native/HTTP/writer/reader joins"
+        },
+        {
+          "name": "models.json",
+          "outcome": "retired after all original native/HTTP/writer/reader joins"
+        }
+      ]
+    }
+  ]
+}

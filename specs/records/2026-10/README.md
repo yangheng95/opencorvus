@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [候选插件失败的提交边界](2026-10-20-candidate-plugin-failure.md)：严格验证与部分成功目录的边界、原canonical保留及全局项目覆盖。
+
 - [候选配置的Provider插件来源](2026-10-20-candidate-provider-plugins.md)：核对完整候选与实际加载hook的一致性、项目隔离和配置保存。
 
 - [Windows监管管道诊断](2026-10-20-windows-supervised-stdio.md)：验证标准管道模式的真实启动成本、完整输出与结算。

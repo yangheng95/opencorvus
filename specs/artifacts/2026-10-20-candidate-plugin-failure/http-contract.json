@@ -1,0 +1,168 @@
+{
+  "occurrence": "candidate-plugin-failure-456-5a5d4e4c-4061-40fb-b862-c0b9953e9f03",
+  "boundary": "Actual public HTTP against original native development service and real file-plugin loader; no UI automation",
+  "preflight": {
+    "sessionID": "ses_hniios9sOw2PIshUqiH2",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "stages": [
+    {
+      "stage": "project-rejected",
+      "status": 400,
+      "message": "config.plugin: Plugin module load failed for file:///C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/candidate-plugin-failure-456/bad-candidate.ts: Owned candidate factory failure",
+      "selected": {
+        "id": "gpt-6.1-sol",
+        "name": "GPT-6.1 Sol",
+        "providerID": "openai",
+        "apiID": "gpt-6.1-sol"
+      }
+    },
+    {
+      "stage": "global-rejected",
+      "status": 400,
+      "message": "global config.plugin: Plugin module load failed for file:///C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/candidate-plugin-failure-456/bad-candidate.ts: Owned candidate factory failure",
+      "selected": {
+        "id": "gpt-6.1-sol",
+        "name": "GPT-6.1 Sol",
+        "providerID": "openai",
+        "apiID": "gpt-6.1-sol"
+      }
+    },
+    {
+      "stage": "old",
+      "configModel": "openai/candidate-456-old",
+      "selected": {
+        "id": "candidate-456-old",
+        "name": "HTTP current old",
+        "providerID": "openai",
+        "apiID": "gpt-6.1-sol"
+      }
+    },
+    {
+      "stage": "next",
+      "configModel": "openai/candidate-456-next",
+      "selected": {
+        "id": "candidate-456-next",
+        "name": "HTTP candidate next",
+        "providerID": "openai",
+        "apiID": "gpt-6.1-sol"
+      }
+    },
+    {
+      "stage": "standard-selection",
+      "selected": {
+        "id": "gpt-6.1-sol",
+        "name": "GPT-6.1 Sol",
+        "providerID": "openai",
+        "apiID": "gpt-6.1-sol"
+      }
+    },
+    {
+      "stage": "restored",
+      "configModel": "openai/gpt-6.1-sol",
+      "selected": {
+        "id": "gpt-6.1-sol",
+        "name": "GPT-6.1 Sol",
+        "providerID": "openai",
+        "apiID": "gpt-6.1-sol"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "PATCH",
+      "route": "config",
+      "status": 400,
+      "ms": 55.4983,
+      "bytes": 450
+    },
+    {
+      "method": "GET",
+      "route": "provider",
+      "status": 200,
+      "ms": 116.31259999999999,
+      "bytes": 6273451
+    },
+    {
+      "method": "PATCH",
+      "route": "global/config",
+      "status": 400,
+      "ms": 10924.1492,
+      "bytes": 464
+    },
+    {
+      "method": "GET",
+      "route": "provider",
+      "status": 200,
+      "ms": 83.73290000000088,
+      "bytes": 6273451
+    },
+    {
+      "method": "PATCH",
+      "route": "config",
+      "status": 200,
+      "ms": 72.0601000000006,
+      "bytes": 1722
+    },
+    {
+      "method": "GET",
+      "route": "provider",
+      "status": 200,
+      "ms": 136.40699999999924,
+      "bytes": 6274608
+    },
+    {
+      "method": "PATCH",
+      "route": "config",
+      "status": 200,
+      "ms": 54.883199999998396,
+      "bytes": 1724
+    },
+    {
+      "method": "GET",
+      "route": "provider",
+      "status": 200,
+      "ms": 111.81369999999879,
+      "bytes": 6274613
+    },
+    {
+      "method": "PATCH",
+      "route": "config",
+      "status": 200,
+      "ms": 75.27019999999902,
+      "bytes": 1602
+    },
+    {
+      "method": "GET",
+      "route": "provider",
+      "status": 200,
+      "ms": 134.36769999999888,
+      "bytes": 6273451
+    },
+    {
+      "method": "PATCH",
+      "route": "config",
+      "status": 200,
+      "ms": 36.91369999999915,
+      "bytes": 1602
+    },
+    {
+      "method": "GET",
+      "route": "config",
+      "status": 200,
+      "ms": 1.3687000000008993,
+      "bytes": 1602
+    },
+    {
+      "method": "GET",
+      "route": "provider",
+      "status": 200,
+      "ms": 112.19809999999961,
+      "bytes": 6273451
+    }
+  ],
+  "restored": true
+}
