@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [当前Sources与成员阅读复核](2026-10-20-sources-member-review/README.md)：10张人工截图、真实旧来源在新流中的阅读、同文件行定位及完整历史保留。
+
 - [独立回调的数据库所有权](2026-10-20-independent-callback-context/README.md)：两个原失败、22例正向合同和真实HEAD事件/流式模型回复。
 
 - [可读权限审批与紧凑历史](2026-10-20-permission-readable-review/README.md)：17张人工截图、真实Task/Chat审批与恢复上下文修复。

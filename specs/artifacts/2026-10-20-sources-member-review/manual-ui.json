@@ -1,0 +1,32 @@
+{
+  "tab": 20,
+  "closed": true,
+  "language": "English; original model prose Chinese",
+  "screenshots": [
+    "before-price-sources.png",
+    "completed-member-reply.png",
+    "delivery-source-opened.png",
+    "delivery-sources-visible.png",
+    "live-list-return.png",
+    "live-original-sources.png",
+    "ordinary-member-before-live.png",
+    "ordinary-parent-before-live.png",
+    "price-source-opened.png",
+    "price-sources-visible.png"
+  ],
+  "clipboard": {
+    "source": "README.md:2",
+    "copied": "Original complete source path plus :2",
+    "originalItems": "Preserved without printing; restored via clipboard API"
+  },
+  "files": {
+    "price": "Existing File tab selected exact line 2",
+    "delivery": "Same File tab selected exact line 3"
+  },
+  "live": {
+    "originalSources": "README.md L2–3 remained visible",
+    "listReturn": "Same member and reading position restored while the new assistant was still incomplete",
+    "completed": "Same original assistant Message finished stop; final Markdown table and STREAM469END manually viewed"
+  },
+  "qualification": "Current formal UI from 467; no UI source changes, new build or automated UI tests"
+}

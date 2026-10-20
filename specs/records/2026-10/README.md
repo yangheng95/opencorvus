@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Sources与成员侧栏当前体验](2026-10-20-sources-member-review.md)：已有真实成员来源与[10张截图及当前流式阅读](../../artifacts/2026-10-20-sources-member-review/README.md)。
+
 - [独立回调的数据库上下文审计](2026-10-20-independent-callback-context.md)：post-commit后独立回调、[22例和真实HEAD事件/模型回复](../../artifacts/2026-10-20-independent-callback-context/README.md)。
 
 - [权限审批与历史的可读呈现](2026-10-20-permission-readable-review.md)：统一请求投影、恢复上下文修复与[17张人工截图](../../artifacts/2026-10-20-permission-readable-review/README.md)。

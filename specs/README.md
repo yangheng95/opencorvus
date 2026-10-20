@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Sources与成员侧栏当前体验](records/2026-10/2026-10-20-sources-member-review.md)：当前正式前端中的[10张截图和真实直播/完成证据](artifacts/2026-10-20-sources-member-review/README.md)。
+
 - [独立回调的数据库上下文审计](records/2026-10/2026-10-20-independent-callback-context.md)：事件恢复、Session和文件监听的所有权边界与[22例及真实运行](artifacts/2026-10-20-independent-callback-context/README.md)。
 
 - [权限审批与历史的可读呈现](records/2026-10/2026-10-20-permission-readable-review.md)：结构化scope、恢复上下文修复与[17张人工截图](artifacts/2026-10-20-permission-readable-review/README.md)。
