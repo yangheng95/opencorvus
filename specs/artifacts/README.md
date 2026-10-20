@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [完整配置的物理读取与原生启动](2026-10-21-config-physical-path-cost/README.md)：全149项目交错路径观察、263352次原文件系统调用、四张人工实图和完整源数据保留；性能仍未达标。
+
 - [真实网页 Sources 与阅读锚点修复](2026-10-21-web-sources-live-review/README.md)：两条真实网页引用、28张人工实图，固定10/12发现批与4/6独立修复批，保留原数据并成对退休凭据。
 
 - [当前长文件来源与成员阅读](2026-10-21-sources-reading-review/README.md)：十张当前页面、11条公开来源和3665行原事实完整保留，明确网页摘录与新流覆盖缺口。

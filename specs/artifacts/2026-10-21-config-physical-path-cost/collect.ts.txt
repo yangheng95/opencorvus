@@ -1,0 +1,47 @@
+import fs from 'node:fs'
+import assert from 'node:assert/strict'
+import {Database} from 'bun:sqlite'
+import {isDeepStrictEqual} from 'node:util'
+const root=import.meta.dir,base='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21',diag=base+'/config-physical-path-cost-483-mixed-final'
+const read=(p:string)=>JSON.parse(fs.readFileSync(p,'utf8'))
+const original=read(root+'/original-scope-private.json'),physical=read(diag+'/evidence/physical-terminal-and-pair-cleanup.json')
+assert.equal(physical.originalHandle,52880);assert.equal(physical.originalExit,0);assert.equal(physical.maximumRequests,4);assert.equal(physical.maximumBatch,4);assert.equal(physical.requests,2)
+const profile=read(diag+'/evidence/filesystem-profile.json');assert.equal(profile.exitCode,0)
+const log=fs.readFileSync(diag+'/runtime-dev-private.log','utf8').split(/\r?\n/).flatMap(line=>{try{return[JSON.parse(line)]}catch{return[]}})
+function stats(values:number[]){const ordered=values.toSorted((a,b)=>a-b);return{count:ordered.length,total:ordered.reduce((sum,value)=>sum+value,0),median:ordered[Math.floor(ordered.length/2)],p95:ordered[Math.floor(ordered.length*.95)],maximum:ordered.at(-1)}}
+function union(intervals:number[][]){const ordered=intervals.toSorted((a,b)=>a[0]!-b[0]!),merged:number[][]=[];for(const [start,end]of ordered){const last=merged.at(-1);if(last&&last[1]!>=start!)last[1]=Math.max(last[1]!,end!);else merged.push([start!,end!])}return merged}
+const windows=log.filter(row=>row.service==='server'&&row.data?.path==='/global/config'&&row.data.method==='PATCH'&&row.data.status==='completed').map(row=>{
+ const end=Date.parse(row.time),start=end-row.data.duration,offset=profile.startedAtUnixMs
+ const calls=profile.rows.filter((r:any[])=>offset+r[2]>=start&&offset+r[2]<end)
+ const spawns=profile.spawns.filter((s:any)=>offset+s.at>=start&&offset+s.at<end)
+ const blocked=union(spawns.map((s:any)=>[s.at,s.returnedAt]))
+ const categories=[...new Set(calls.map((r:any[])=>r[0]+':'+r[1]))]
+ const phases=log.filter(p=>p.service==='skill-read-diagnostics'&&p.data?.http?.requestID===row.data.requestID&&p.data.status==='completed')
+ return{requestID:row.data.requestID,start,end,durationMs:row.data.duration,operations:calls.length,synchronousSpawn:{...stats(spawns.map((s:any)=>s.returnedAt-s.at)),unionMs:blocked.reduce((sum,i)=>sum+i[1]!-i[0]!,0)},fileOperations:categories.map(key=>({key,...stats(calls.filter((r:any[])=>r[0]+':'+r[1]===key).map((r:any[])=>r[3]-r[2]))})).toSorted((a,b)=>b.total-a.total),longestFileCalls:calls.toSorted((a:any[],b:any[])=>(b[3]-b[2])-(a[3]-a[2])).slice(0,12).map((r:any[])=>({operation:r[0],category:r[1],at:r[2],observedDurationMs:r[3]-r[2],outcome:r[4],overlappingSynchronousSpawnMs:blocked.reduce((sum,i)=>sum+Math.max(0,Math.min(r[3],i[1]!)-Math.max(r[2],i[0]!)),0)})),phases:[...new Set(phases.map(p=>p.data.phase))].map(name=>({name,...stats(phases.filter(p=>p.data.phase===name).map(p=>p.data.duration))})),originalProjectWriteAttempts:profile.originalProjectWriteAttempts.filter((w:any)=>offset+w.at>=start&&offset+w.at<end)}
+})
+assert.equal(windows.length,2)
+const current=new Database(original.base+'/runtime/data/opencorvus.db',{readonly:true,create:false}),source=new Database(original.source+'/runtime/data/opencorvus.db',{readonly:true,create:false})
+let history:any
+try{
+ const tables=Object.keys(original.original),changedProjectFields=new Set<string>()
+ for(const table of tables){
+  assert.deepEqual(source.query('SELECT rowid,* FROM '+table+' ORDER BY rowid').all(),original.original[table],'Original full QA remains exact: '+table)
+  for(const row of original.original[table]){
+   const key=table==='tool_part_outcome'?'request_part_id':'id',actual=current.query('SELECT rowid,* FROM '+table+' WHERE '+key+'=?').get(row[key]) as any
+   assert(actual)
+   if(table==='project'){
+    for(const field of Object.keys(row))if(!isDeepStrictEqual(actual[field],row[field])){changedProjectFields.add(field);assert.equal(field,'time_updated','Original Project identity/ownership retained')}
+   }else assert.deepEqual(actual,row,'Original cloned fact retained: '+table)
+  }
+ }
+ assert.deepEqual(current.query('PRAGMA user_version').get(),{user_version:3});assert.deepEqual(source.query('PRAGMA user_version').get(),{user_version:3})
+ assert.deepEqual(JSON.parse(fs.readFileSync(original.base+'/runtime/config/opencorvus.jsonc','utf8')),JSON.parse(original.canonical))
+ const sourceStat=fs.statSync(original.source+'/runtime/data/opencorvus.db');assert.equal(sourceStat.size,original.sourceDatabase.bytes);assert.equal(sourceStat.mtimeMs,original.sourceDatabase.modifiedAtMs)
+ history={originalCounts:Object.fromEntries(tables.map(table=>[table,original.original[table].length])),counts:Object.fromEntries(tables.map(table=>[table,(current.query('SELECT COUNT(*) AS count FROM '+table).get() as any).count])),source:'Every original row in all7 tables exactly equals original full QA; source DB size/mtime unchanged',clone:'All original Session/Message/Part/protocol/Tool facts including rowid/data/time exact; Project identity/ownership exact with ordinary time_updated refresh',changedProjectFields:[...changedProjectFields],schema:3,canonical:'Complete parsed original restored'}
+}finally{current.close(true);source.close(true)}
+const writer=read(root+'/mix/after-write.json'),reader=read(root+'/mix/after-reader-results.json')
+assert(writer.accepted&&writer.restored);assert.equal(writer.failures.length,0);assert.equal(reader.results.length,4)
+for(const row of reader.results)assert.equal(row.status,200)
+const result={observedAt:new Date().toISOString(),boundary:'Instrumented diagnostic;all operations are original production;overlapping sums are not wall time/CPU/disk-only duration;local matrix is not full acceptance',profile:{pid:profile.pid,startedAtUnixMs:profile.startedAtUnixMs,endedAtUnixMs:profile.endedAtUnixMs,originalExit:profile.exitCode,filesystemCalls:profile.rows.length,spawns:profile.spawns.length,originalProjectWriteAttempts:profile.originalProjectWriteAttempts},windows,writer,reader,criteria:{saveMaximumMs:10000,savePass:writer.writeMs<=10000,restoreMaximumMs:5000,restorePass:writer.restoreMs<=5000,readerMaximumMs:20000,readerPass:reader.results.every((r:any)=>r.ms<=20000)},history,physical}
+fs.writeFileSync(root+'/mixed-result.json',JSON.stringify(result,null,2)+'\n',{flag:'wx'})
+console.log(JSON.stringify({profile:result.profile,windows:windows.map(w=>({request:w.requestID,ms:w.durationMs,fileCalls:w.operations,spawn:w.synchronousSpawn,topFiles:w.fileOperations.slice(0,5),longest:w.longestFileCalls.slice(0,2)})),writer:{save:writer.writeMs,restore:writer.restoreMs},criteria:result.criteria,history}))

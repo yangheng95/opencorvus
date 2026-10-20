@@ -1,0 +1,36 @@
+import fs from 'node:fs'
+import fsp from 'node:fs/promises'
+import path from 'node:path'
+import os from 'node:os'
+import assert from 'node:assert/strict'
+import {promisify} from 'node:util'
+const root=import.meta.dirname,input=JSON.parse(fs.readFileSync(root+'/input-private.json','utf8'))
+const runtime=process.versions.bun?'bun':'node',tag=process.argv[2]
+assert(tag&&/^[a-z0-9.-]+$/.test(tag))
+const owned=root+'/'+tag+'-scope'
+fs.mkdirSync(owned)
+const native=promisify(fs.realpath.native),promise=fsp.realpath,methods={promise,native}
+fs.mkdirSync(owned+'/directory');fs.writeFileSync(owned+'/file','483 physical path diagnosis\n')
+await fsp.symlink(owned+'/directory',owned+'/junction','junction')
+const candidates=input.projects.map(row=>({id:row.id,path:row.worktree}))
+for(const [id,name] of [['owned-directory','directory'],['owned-junction','junction'],['missing','missing/child'],['non-directory','file/child']])candidates.push({id,path:owned+'/'+name})
+if(process.platform==='win32')candidates.push({id:'directory-case',path:(owned+'/directory').toUpperCase()})
+async function observe(read,value){try{return{kind:'path',value:await read(value)}}catch(error){return{kind:'error',name:error.name,code:error.code,syscall:error.syscall}}}
+const baseline=await Promise.all(candidates.map(async row=>({id:row.id,promise:await observe(promise,row.path),native:await observe(native,row.path)})))
+for(const result of baseline.slice(0,input.projects.length))assert.deepEqual(result.native,result.promise,'Exact native/Promise output and error contract: '+result.id)
+const projectBaseline=baseline.slice(0,input.projects.length),rounds=[],concurrency=os.availableParallelism()
+for(const name of ['promise','native','native','promise']){
+ const start=performance.now(),read=methods[name],completed=[]
+ let next=0
+ await Promise.all(Array.from({length:Math.min(concurrency,input.projects.length)},async()=>{
+  for(;;){const index=next++;if(index>=input.projects.length)return
+   for(let other=0;other<input.projects.length;other++)assert.deepEqual(await observe(read,input.projects[other].worktree),projectBaseline[other].promise)
+   completed.push(index)
+  }
+ }))
+ assert.equal(completed.length,input.projects.length)
+ const result={method:name,durationMs:performance.now()-start,calls:input.projects.length**2,completedScans:completed.length,concurrency};rounds.push(result);console.log(JSON.stringify({runtime,...result}))
+}
+const result={observedAt:new Date().toISOString(),runtime,tag,version:process.versions.bun??process.version,platform:process.platform,projects:input.projects.length,sessions:input.sessions,schema:input.schema,concurrency,identity:{nativeIsCallbackRealpath:fs.realpath.native===fs.realpath,promisifiedNativeIsPromisesRealpath:native===promise},contracts:baseline.map(({id,promise,native})=>({id,promise:promise.kind==='path'?{kind:'path'}:promise,native:native.kind==='path'?{kind:'path'}:native,exactlyEqual:JSON.stringify(promise)===JSON.stringify(native)})),rounds,boundary:'Local filesystem diagnosis over every original Project; not Config service, UI or full performance acceptance; no credentials/Provider/DB initializer or writes to original QA'}
+fs.writeFileSync(root+'/'+tag+'-result.json',JSON.stringify(result,null,2)+'\n',{flag:'wx'})
+console.log(JSON.stringify({runtime,projects:result.projects,contracts:result.contracts.length,identity:result.identity,rounds:rounds.length,settled:'All actual reads completed'}))

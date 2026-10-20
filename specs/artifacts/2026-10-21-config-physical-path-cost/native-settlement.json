@@ -1,0 +1,307 @@
+{
+  "maximumRequests": 4,
+  "actualRequests": 2,
+  "retiredUnusedAllowance": 2,
+  "ready": {
+    "occurrence": "config-physical-path-cost-483-mixed-final-d7d82bce-643b-4e5c-ab7b-83964f181f8f",
+    "outcome": "ready",
+    "host": {
+      "pid": 88192,
+      "processInstanceID": "win32:639281176168557536",
+      "occurrenceID": "d13a9478-683e-4400-80b9-c138653052fb"
+    },
+    "parent": {
+      "pid": 79736,
+      "processInstanceID": "win32:639281176152050537",
+      "occurrenceID": "e932f9ca-1cf1-4f6d-81bb-8c0b0ea1ff70"
+    },
+    "target": {
+      "pid": 92004,
+      "processInstanceID": "win32:639281176173938996",
+      "occurrenceID": "27161a8f-dfc2-498a-a5f5-82c3fb4806c8"
+    },
+    "targetBirthAtMs": 1792520817393,
+    "deadlineAt": 1792522016821,
+    "observedAtUtc": "2026-10-20T18:26:57.408Z",
+    "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+    "args": [
+      "--preload",
+      "D:/myhexin-local/opencorvus/.tmp-product-iteration/config-physical-path-cost-483/profile.ts",
+      "D:/myhexin-local/opencorvus/.tmp-product-iteration/config-physical-path-cost-483/serve.ts",
+      "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/config-physical-path-cost-483-data/runtime",
+      "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/config-physical-path-cost-483-data/project",
+      "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/config-physical-path-cost-483-mixed-final/evidence",
+      "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/config-physical-path-cost-483-mixed-final/startup.json",
+      "18841",
+      "config-physical-path-cost-483-mixed-final-d7d82bce-643b-4e5c-ab7b-83964f181f8f"
+    ],
+    "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+  },
+  "preflight": {
+    "owner": {
+      "pid": 92004,
+      "processInstanceID": "win32:639281176173938996",
+      "occurrenceID": "9344f375-e099-4e7e-86e5-736b14a8fe48"
+    },
+    "parent": {
+      "pid": 81796,
+      "processInstanceID": "win32:639281176173768606",
+      "occurrenceID": "4a799e77-586a-47fe-9536-28ab5b1b339d"
+    },
+    "occurrence": "config-physical-path-cost-483-mixed-final-d7d82bce-643b-4e5c-ab7b-83964f181f8f",
+    "preflight": {
+      "sessionID": "ses_hbRVMe5guyAsIboCNyIV",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true
+    },
+    "maxRequests": 4,
+    "budgetScope": "483 independent mixed filesystem diagnosis fixed4;preflight and all helpers included;no business model input",
+    "observedAt": "2026-10-20T18:27:07.654Z"
+  },
+  "staging": {
+    "sourceBefore": [
+      {
+        "name": "auth.json",
+        "bytes": 2122,
+        "modifiedAtMs": 1792520759514.2146
+      },
+      {
+        "name": "models.json",
+        "bytes": 9155406,
+        "modifiedAtMs": 1791128890137.9968
+      }
+    ],
+    "sourceAfter": [
+      {
+        "name": "auth.json",
+        "bytes": 2122,
+        "modifiedAtMs": 1792520759514.2146
+      },
+      {
+        "name": "models.json",
+        "bytes": 9155406,
+        "modifiedAtMs": 1791128890137.9968
+      }
+    ],
+    "copiedPair": [
+      {
+        "name": "auth.json",
+        "bytes": 2122,
+        "modifiedAtMs": 1792520817799.9487
+      },
+      {
+        "name": "models.json",
+        "bytes": 9155406,
+        "modifiedAtMs": 1792520817802.9492
+      }
+    ],
+    "access": "current",
+    "catalog": "complete",
+    "refresh": "prohibited"
+  },
+  "physical": {
+    "observedAtUtc": "2026-10-20T18:29:17.6046255Z",
+    "chain": [
+      {
+        "identity": {
+          "pid": 88192,
+          "processInstanceID": "win32:639281176168557536",
+          "occurrenceID": "d13a9478-683e-4400-80b9-c138653052fb"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "identity": {
+          "pid": 92004,
+          "processInstanceID": "win32:639281176173938996",
+          "occurrenceID": "27161a8f-dfc2-498a-a5f5-82c3fb4806c8"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "sourceReaders": "all200/streaming/sourceEOF",
+    "originalHandle": 52880,
+    "shutdown": {
+      "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYcFFbt004vNX5vG6F\"}",
+      "statusCode": 200,
+      "target": {
+        "pid": 92004,
+        "processInstanceID": "win32:639281176173938996",
+        "occurrenceID": "27161a8f-dfc2-498a-a5f5-82c3fb4806c8"
+      },
+      "occurrence": "config-physical-path-cost-483-mixed-final-d7d82bce-643b-4e5c-ab7b-83964f181f8f",
+      "observedAtUtc": "2026-10-20T18:29:15.1483428Z"
+    },
+    "launcher": {
+      "observedAtUtc": "2026-10-20T18:29:15.520328Z",
+      "childExitCode": 0
+    },
+    "originalExit": 0,
+    "maximumBatch": 4,
+    "maximumRequests": 4,
+    "native": {
+      "occurrence": "config-physical-path-cost-483-mixed-final-d7d82bce-643b-4e5c-ab7b-83964f181f8f",
+      "outcome": "settled",
+      "host": {
+        "pid": 88192,
+        "processInstanceID": "win32:639281176168557536",
+        "occurrenceID": "d13a9478-683e-4400-80b9-c138653052fb"
+      },
+      "target": {
+        "pid": 92004,
+        "processInstanceID": "win32:639281176173938996",
+        "occurrenceID": "27161a8f-dfc2-498a-a5f5-82c3fb4806c8"
+      },
+      "observedAtUtc": "2026-10-20T18:29:15.479Z",
+      "deadlineAt": 1792522016821,
+      "terminal": {
+        "occurrenceID": "config-physical-path-cost-483-mixed-final-d7d82bce-643b-4e5c-ab7b-83964f181f8f",
+        "pid": 92004,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "requests": 2,
+    "runtimePair": "complete auth/models retired after original native/output/request/launcher and source EOF"
+  },
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792520824656,
+        "boundAt": 1792520824658,
+        "chunkCount": 22,
+        "byteCount": 41648,
+        "firstByteReadAt": 1792520824660,
+        "lastByteReadAt": 1792520829991,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hbRVMe5guyAsIboCNyIV",
+          "streamRequest": {
+            "requestID": "msg_hBvCKVcx1lU1FzI2Rg6t",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYcEhRK00DWSLNuggK",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792520830083
+        }
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792520825997,
+        "boundAt": 1792520825999,
+        "chunkCount": 48,
+        "byteCount": 515455,
+        "firstByteReadAt": 1792520826001,
+        "lastByteReadAt": 1792520827138,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hbRVMe5guyAsIboCNyIV",
+          "streamRequest": {
+            "requestID": "msg_hBvCKVcx1lU1FzI2Rg6t",
+            "agentID": "chat",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYcEhg2007sxSz1Hfc",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYcEhRS00VOMSWEFbH"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792520827259
+        }
+      },
+      "status": 200
+    }
+  ],
+  "failedBeforeProvider": {
+    "runtimePair": "Complete pair retired after exact physical/output/request settlement",
+    "actualProviderRequests": 0,
+    "originalToolChunk": "806405",
+    "chain": [
+      {
+        "identity": {
+          "pid": 84092,
+          "processInstanceID": "win32:639281175608868548",
+          "occurrenceID": "620fc36f-e997-41d6-a60b-a608cae1fcfb"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "identity": {
+          "pid": 66088,
+          "processInstanceID": "win32:639281175616149477",
+          "occurrenceID": "62351dfa-8488-4d35-948d-fd473e6770f1"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "launcherReceipt": "Original source tool error before log exists;Copy-Item masked final receipt;fixed before retry",
+    "originalToolExit": 1,
+    "providerAudit": "Not yet installed;failure before initialization/preflight",
+    "native": {
+      "occurrence": "config-physical-path-cost-483-mixed-1ae5e976-b025-40c3-a597-6444a1ff21a7",
+      "outcome": "settled",
+      "host": {
+        "pid": 84092,
+        "processInstanceID": "win32:639281175608868548",
+        "occurrenceID": "620fc36f-e997-41d6-a60b-a608cae1fcfb"
+      },
+      "target": {
+        "pid": 66088,
+        "processInstanceID": "win32:639281175616149477",
+        "occurrenceID": "62351dfa-8488-4d35-948d-fd473e6770f1"
+      },
+      "observedAtUtc": "2026-10-20T18:26:02.136Z",
+      "deadlineAt": 1792521960859,
+      "terminal": {
+        "occurrenceID": "config-physical-path-cost-483-mixed-1ae5e976-b025-40c3-a597-6444a1ff21a7",
+        "pid": 66088,
+        "reason": "exited",
+        "exitCode": 1,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "observedAtUtc": "2026-10-20T18:26:55.0770533Z"
+  },
+  "reader": {
+    "originalHandle": 33574,
+    "originalExit": 0
+  },
+  "writer": {
+    "originalHandle": 93366,
+    "originalExit": 0
+  }
+}

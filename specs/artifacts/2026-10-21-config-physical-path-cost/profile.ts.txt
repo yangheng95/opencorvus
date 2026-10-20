@@ -1,0 +1,29 @@
+import assert from 'node:assert/strict'
+import path from 'node:path'
+const fs=require('node:fs'),fsp=require('node:fs/promises'),cp=require('node:child_process')
+const base='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21',owned=base+'/config-physical-path-cost-483-data',out=base+'/config-physical-path-cost-483-mixed-final/evidence/filesystem-profile.json'
+assert.equal(path.resolve(process.env.OPENCORVUS_HOME!),path.resolve(owned+'/runtime'))
+const snapshot=JSON.parse(fs.readFileSync('D:/myhexin-local/opencorvus/.tmp-product-iteration/config-physical-path-cost-483/input-private.json','utf8'))
+const originalDirectories=new Set(snapshot.projects.map((row:any)=>path.resolve(row.worktree).toLowerCase()))
+const startedAtUnixMs=Date.now(),started=performance.now(),rows:any[]=[],spawns:any[]=[],writes:any[]=[]
+const now=()=>performance.now()-started
+function category(file:unknown){if(typeof file!=='string')return'other';const full=path.resolve(file).toLowerCase();if(full.startsWith(path.resolve(owned+'/runtime/tmp').toLowerCase()+path.sep))return'native-request';if(originalDirectories.has(full))return'original-registered-directory';if(full.endsWith(path.sep+'opencorvus.jsonc'))return'canonical-source';if(full.startsWith(path.resolve(owned).toLowerCase()+path.sep))return'owned-runtime';return'other'}
+function observe(value:any,settle:(error?:unknown,result?:any)=>void){if(value&&typeof value.then==='function')void value.then((result:any)=>settle(undefined,result),(error:unknown)=>settle(error));else settle(undefined,value);return value}
+for(const name of ['stat','lstat','realpath','access','readFile','readdir','mkdir','open','writeFile','rename','rm','unlink']){
+ const original=fsp[name]
+ fsp[name]=function(...args:any[]){const at=now(),kind=category(args[0]),value=Reflect.apply(original,this,args)
+  if(['writeFile','rename','rm','unlink','mkdir'].includes(name)&&typeof args[0]==='string'&&kind==='other'){
+   const full=path.resolve(args[0]).toLowerCase(),owner=snapshot.projects.find((row:any)=>full===path.resolve(row.worktree).toLowerCase()||full.startsWith(path.resolve(row.worktree).toLowerCase()+path.sep))
+   if(owner)writes.push({operation:name,at,projectID:owner.id,basename:path.basename(args[0])})
+  }
+  return observe(value,(error,result)=>{
+   rows.push([name,kind,at,now(),error?.code??'fulfilled'])
+   if(name==='open'&&kind==='native-request'&&!error)for(const operation of ['writeFile','sync','close']){
+    const invoke=result[operation];result[operation]=function(...input:any[]){const at=now();return observe(Reflect.apply(invoke,this,input),(error)=>rows.push(['handle.'+operation,kind,at,now(),error?.code??'fulfilled']))}
+   }
+  })
+ }
+}
+const originalSpawn=cp.spawn
+cp.spawn=function(...args:any[]){const at=now(),value=Reflect.apply(originalSpawn,this,args);spawns.push({at,returnedAt:now(),pid:value.pid});return value}
+process.on('exit',(exitCode:number)=>fs.writeFileSync(out,JSON.stringify({boundary:'Pass-through observation of original promises/arguments/results/errors;no content/environment/body capture;instrumented timings are diagnostic only',startedAtUnixMs,endedAtUnixMs:Date.now(),pid:process.pid,exitCode,rows,spawns,originalProjectWriteAttempts:writes},null,2)+'\n',{flag:'wx'}))

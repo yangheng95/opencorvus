@@ -1,0 +1,1405 @@
+{
+  "observedAt": "2026-10-20T18:30:30.584Z",
+  "boundary": "Instrumented diagnostic;all operations are original production;overlapping sums are not wall time/CPU/disk-only duration;local matrix is not full acceptance",
+  "profile": {
+    "pid": 92004,
+    "startedAtUnixMs": 1792520817451,
+    "endedAtUnixMs": 1792520955181,
+    "originalExit": 0,
+    "filesystemCalls": 263352,
+    "spawns": 896,
+    "originalProjectWriteAttempts": []
+  },
+  "windows": [
+    {
+      "requestID": "c6d12fc8-c02d-4f5d-8f90-b0316261c0c9",
+      "start": 1792520882165,
+      "end": 1792520900727,
+      "durationMs": 18562,
+      "operations": 124891,
+      "synchronousSpawn": {
+        "count": 294,
+        "total": 6909.749099999986,
+        "median": 9.176299999999173,
+        "p95": 88.73459999999614,
+        "maximum": 260.65529999999853,
+        "unionMs": 6909.749099999986
+      },
+      "fileOperations": [
+        {
+          "key": "realpath:original-registered-directory",
+          "count": 45436,
+          "total": 259361.50660000445,
+          "median": 4.2748999999967054,
+          "p95": 15.532500000001164,
+          "maximum": 93.55319999999483
+        },
+        {
+          "key": "readFile:canonical-source",
+          "count": 7665,
+          "total": 76215.3132000002,
+          "median": 2.2409000000043306,
+          "p95": 36.1649000000034,
+          "maximum": 79.14510000000882
+        },
+        {
+          "key": "stat:original-registered-directory",
+          "count": 44696,
+          "total": 36806.721399999056,
+          "median": 0.2638999999908265,
+          "p95": 1.9443999999930384,
+          "maximum": 261.0713000000105
+        },
+        {
+          "key": "access:other",
+          "count": 7724,
+          "total": 26708.082899999412,
+          "median": 1.049299999998766,
+          "p95": 13.85439999999653,
+          "maximum": 78.71959999999672
+        },
+        {
+          "key": "lstat:other",
+          "count": 2524,
+          "total": 16060.36600000014,
+          "median": 0.868400000006659,
+          "p95": 26.646300000007614,
+          "maximum": 45.09739999999874
+        },
+        {
+          "key": "readFile:owned-runtime",
+          "count": 4541,
+          "total": 12678.701899999578,
+          "median": 0.6043999999965308,
+          "p95": 12.686999999990803,
+          "maximum": 248.5636999999988
+        },
+        {
+          "key": "access:canonical-source",
+          "count": 1798,
+          "total": 11465.845799999937,
+          "median": 4.344100000002072,
+          "p95": 16.562900000004447,
+          "maximum": 19.083400000003166
+        },
+        {
+          "key": "lstat:owned-runtime",
+          "count": 1818,
+          "total": 8205.52360000043,
+          "median": 0.8571999999985565,
+          "p95": 18.8179999999993,
+          "maximum": 22.58310000000347
+        },
+        {
+          "key": "readFile:native-request",
+          "count": 1650,
+          "total": 6017.510900000278,
+          "median": 0.7204000000056112,
+          "p95": 12.743000000002212,
+          "maximum": 261.04039999999804
+        },
+        {
+          "key": "access:owned-runtime",
+          "count": 2290,
+          "total": 5784.208999999588,
+          "median": 0.9104999999981374,
+          "p95": 8.453000000008615,
+          "maximum": 43.533500000005006
+        },
+        {
+          "key": "rm:native-request",
+          "count": 588,
+          "total": 4208.8696999999665,
+          "median": 1.7176000000035856,
+          "p95": 20.82170000000042,
+          "maximum": 203.79670000000624
+        },
+        {
+          "key": "handle.sync:native-request",
+          "count": 294,
+          "total": 3154.1460000001243,
+          "median": 3.5028000000020256,
+          "p95": 72.72569999999541,
+          "maximum": 240.89979999999923
+        },
+        {
+          "key": "handle.close:native-request",
+          "count": 294,
+          "total": 2518.7782000000807,
+          "median": 0.8606999999901745,
+          "p95": 32.69750000000931,
+          "maximum": 250.0564999999915
+        },
+        {
+          "key": "realpath:owned-runtime",
+          "count": 745,
+          "total": 2378.644099999983,
+          "median": 2.2399999999906868,
+          "p95": 8.921699999991688,
+          "maximum": 70.98489999999583
+        },
+        {
+          "key": "open:native-request",
+          "count": 294,
+          "total": 1751.0440000000017,
+          "median": 0.5912000000098487,
+          "p95": 19.938399999999092,
+          "maximum": 251.3808999999892
+        },
+        {
+          "key": "mkdir:owned-runtime",
+          "count": 449,
+          "total": 798.4323999997941,
+          "median": 0.5144999999902211,
+          "p95": 2.406300000002375,
+          "maximum": 242.88459999999031
+        },
+        {
+          "key": "readFile:other",
+          "count": 296,
+          "total": 674.8880999999237,
+          "median": 0.9225000000005821,
+          "p95": 4.243300000001909,
+          "maximum": 91.56590000000142
+        },
+        {
+          "key": "stat:owned-runtime",
+          "count": 592,
+          "total": 504.5535999997155,
+          "median": 0.3744999999908032,
+          "p95": 2.6420000000071013,
+          "maximum": 22.985599999999977
+        },
+        {
+          "key": "handle.writeFile:native-request",
+          "count": 294,
+          "total": 498.24079999997775,
+          "median": 0.24149999998917338,
+          "p95": 4.111900000003516,
+          "maximum": 202.5957999999955
+        },
+        {
+          "key": "readdir:owned-runtime",
+          "count": 454,
+          "total": 410.4704999999158,
+          "median": 0.477100000003702,
+          "p95": 3.2888999999995576,
+          "maximum": 9.382400000002235
+        },
+        {
+          "key": "readdir:other",
+          "count": 149,
+          "total": 130.10139999999956,
+          "median": 0.5106000000087079,
+          "p95": 2.0570000000006985,
+          "maximum": 18.06010000000242
+        },
+        {
+          "key": "stat:native-request",
+          "count": 294,
+          "total": 103.95079999990412,
+          "median": 0.14549999999871943,
+          "p95": 1.158000000010361,
+          "maximum": 10.299199999994016
+        },
+        {
+          "key": "rm:owned-runtime",
+          "count": 2,
+          "total": 1.973100000002887,
+          "median": 1.6059999999997672,
+          "p95": 1.6059999999997672,
+          "maximum": 1.6059999999997672
+        },
+        {
+          "key": "writeFile:owned-runtime",
+          "count": 3,
+          "total": 1.888599999998405,
+          "median": 0.5668000000005122,
+          "p95": 0.833199999993667,
+          "maximum": 0.833199999993667
+        },
+        {
+          "key": "open:owned-runtime",
+          "count": 1,
+          "total": 0.2654999999940628,
+          "median": 0.2654999999940628,
+          "p95": 0.2654999999940628,
+          "maximum": 0.2654999999940628
+        }
+      ],
+      "longestFileCalls": [
+        {
+          "operation": "stat",
+          "category": "original-registered-directory",
+          "at": 70805.6744,
+          "observedDurationMs": 261.0713000000105,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 260.65529999999853
+        },
+        {
+          "operation": "stat",
+          "category": "original-registered-directory",
+          "at": 70805.74040000001,
+          "observedDurationMs": 261.04320000000007,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 260.65529999999853
+        },
+        {
+          "operation": "readFile",
+          "category": "native-request",
+          "at": 70805.77810000001,
+          "observedDurationMs": 261.04039999999804,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 260.65529999999853
+        },
+        {
+          "operation": "stat",
+          "category": "original-registered-directory",
+          "at": 70805.7057,
+          "observedDurationMs": 260.9948000000004,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 260.65529999999853
+        },
+        {
+          "operation": "stat",
+          "category": "original-registered-directory",
+          "at": 70805.6481,
+          "observedDurationMs": 260.9597999999969,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 260.65529999999853
+        },
+        {
+          "operation": "open",
+          "category": "native-request",
+          "at": 80244.89060000001,
+          "observedDurationMs": 251.3808999999892,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 242.34380000000237
+        },
+        {
+          "operation": "handle.close",
+          "category": "native-request",
+          "at": 80244.79740000001,
+          "observedDurationMs": 250.0564999999915,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 242.34380000000237
+        },
+        {
+          "operation": "stat",
+          "category": "original-registered-directory",
+          "at": 76388.77570000001,
+          "observedDurationMs": 248.72309999998834,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 248.05969999999797
+        },
+        {
+          "operation": "stat",
+          "category": "original-registered-directory",
+          "at": 76388.75790000001,
+          "observedDurationMs": 248.67829999999958,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 248.05969999999797
+        },
+        {
+          "operation": "stat",
+          "category": "original-registered-directory",
+          "at": 76388.73090000001,
+          "observedDurationMs": 248.6518999999971,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 248.05969999999797
+        },
+        {
+          "operation": "readFile",
+          "category": "owned-runtime",
+          "at": 76388.6708,
+          "observedDurationMs": 248.5636999999988,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 248.05969999999797
+        },
+        {
+          "operation": "handle.close",
+          "category": "native-request",
+          "at": 80244.7779,
+          "observedDurationMs": 248.50960000000487,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 242.34380000000237
+        }
+      ],
+      "phases": [
+        {
+          "name": "catalog.admission",
+          "count": 153,
+          "total": 339,
+          "median": 2,
+          "p95": 5,
+          "maximum": 20
+        },
+        {
+          "name": "catalog.recovery",
+          "count": 1,
+          "total": 1,
+          "median": 1,
+          "p95": 1,
+          "maximum": 1
+        },
+        {
+          "name": "config.global.projects",
+          "count": 1,
+          "total": 44,
+          "median": 44,
+          "p95": 44,
+          "maximum": 44
+        },
+        {
+          "name": "directory.admission",
+          "count": 149,
+          "total": 419,
+          "median": 1,
+          "p95": 6,
+          "maximum": 94
+        },
+        {
+          "name": "config.load",
+          "count": 750,
+          "total": 88301,
+          "median": 28,
+          "p95": 277,
+          "maximum": 288
+        },
+        {
+          "name": "config.verify",
+          "count": 750,
+          "total": 7027,
+          "median": 2,
+          "p95": 29,
+          "maximum": 39
+        },
+        {
+          "name": "config.global.before",
+          "count": 151,
+          "total": 3743,
+          "median": 21,
+          "p95": 44,
+          "maximum": 288
+        },
+        {
+          "name": "config.global.after",
+          "count": 151,
+          "total": 2712,
+          "median": 16,
+          "p95": 31,
+          "maximum": 41
+        },
+        {
+          "name": "state.read",
+          "count": 602,
+          "total": 47845,
+          "median": 1,
+          "p95": 304,
+          "maximum": 311
+        },
+        {
+          "name": "config.validate.models",
+          "count": 152,
+          "total": 6701,
+          "median": 42,
+          "p95": 78,
+          "maximum": 141
+        },
+        {
+          "name": "config.validate.profile",
+          "count": 152,
+          "total": 491,
+          "median": 3,
+          "p95": 7,
+          "maximum": 23
+        },
+        {
+          "name": "catalog.revision",
+          "count": 151,
+          "total": 146,
+          "median": 1,
+          "p95": 4,
+          "maximum": 10
+        },
+        {
+          "name": "skill.builtins",
+          "count": 151,
+          "total": 157,
+          "median": 1,
+          "p95": 2,
+          "maximum": 2
+        },
+        {
+          "name": "skill.config-directories",
+          "count": 151,
+          "total": 26,
+          "median": 0,
+          "p95": 1,
+          "maximum": 1
+        },
+        {
+          "name": "skill.explicit-scan",
+          "count": 301,
+          "total": 489,
+          "median": 1,
+          "p95": 4,
+          "maximum": 19
+        },
+        {
+          "name": "catalog.reentrant",
+          "count": 152,
+          "total": 19367,
+          "median": 5,
+          "p95": 14,
+          "maximum": 18516
+        },
+        {
+          "name": "catalog.held",
+          "count": 153,
+          "total": 37889,
+          "median": 5,
+          "p95": 14,
+          "maximum": 18518
+        },
+        {
+          "name": "catalog.release",
+          "count": 153,
+          "total": 44,
+          "median": 0,
+          "p95": 0,
+          "maximum": 41
+        },
+        {
+          "name": "catalog.total",
+          "count": 153,
+          "total": 38292,
+          "median": 7,
+          "p95": 16,
+          "maximum": 18561
+        },
+        {
+          "name": "config.validate.capabilities",
+          "count": 151,
+          "total": 1233,
+          "median": 7,
+          "p95": 16,
+          "maximum": 28
+        },
+        {
+          "name": "project.identity.git",
+          "count": 294,
+          "total": 114974,
+          "median": 361,
+          "p95": 691,
+          "maximum": 870
+        },
+        {
+          "name": "project.identity.lookup",
+          "count": 296,
+          "total": 37145,
+          "median": 107,
+          "p95": 264,
+          "maximum": 578
+        },
+        {
+          "name": "project.identity.resolve",
+          "count": 294,
+          "total": 37468,
+          "median": 109,
+          "p95": 266,
+          "maximum": 579
+        },
+        {
+          "name": "project.identity.initial",
+          "count": 148,
+          "total": 93295,
+          "median": 575,
+          "p95": 1019,
+          "maximum": 1110
+        },
+        {
+          "name": "project.registry.capture",
+          "count": 148,
+          "total": 2037,
+          "median": 11,
+          "p95": 32,
+          "maximum": 89
+        },
+        {
+          "name": "project.registry.acquire",
+          "count": 148,
+          "total": 657,
+          "median": 3,
+          "p95": 9,
+          "maximum": 78
+        },
+        {
+          "name": "project.registry.revalidate",
+          "count": 148,
+          "total": 1996,
+          "median": 11,
+          "p95": 27,
+          "maximum": 75
+        },
+        {
+          "name": "project.identity.admitted",
+          "count": 148,
+          "total": 92873,
+          "median": 588,
+          "p95": 897,
+          "maximum": 1107
+        },
+        {
+          "name": "directory.held",
+          "count": 149,
+          "total": 113669,
+          "median": 615,
+          "p95": 1041,
+          "maximum": 17680
+        },
+        {
+          "name": "directory.release",
+          "count": 149,
+          "total": 2,
+          "median": 0,
+          "p95": 0,
+          "maximum": 1
+        },
+        {
+          "name": "directory.total",
+          "count": 149,
+          "total": 114109,
+          "median": 618,
+          "p95": 1044,
+          "maximum": 17683
+        },
+        {
+          "name": "state.initialize",
+          "count": 299,
+          "total": 47813,
+          "median": 272,
+          "p95": 308,
+          "maximum": 311
+        },
+        {
+          "name": "config.global.persist",
+          "count": 1,
+          "total": 2,
+          "median": 2,
+          "p95": 2,
+          "maximum": 2
+        },
+        {
+          "name": "config.global.reset",
+          "count": 1,
+          "total": 5,
+          "median": 5,
+          "p95": 5,
+          "maximum": 5
+        },
+        {
+          "name": "config.global.reconcile",
+          "count": 1,
+          "total": 760,
+          "median": 760,
+          "p95": 760,
+          "maximum": 760
+        },
+        {
+          "name": "config.global.write",
+          "count": 1,
+          "total": 18561,
+          "median": 18561,
+          "p95": 18561,
+          "maximum": 18561
+        },
+        {
+          "name": "request",
+          "count": 1,
+          "total": 18562,
+          "median": 18562,
+          "p95": 18562,
+          "maximum": 18562
+        }
+      ],
+      "originalProjectWriteAttempts": []
+    },
+    {
+      "requestID": "c247a867-40dd-4db2-a033-3445ed9a209d",
+      "start": 1792520900735,
+      "end": 1792520919175,
+      "durationMs": 18440,
+      "operations": 124099,
+      "synchronousSpawn": {
+        "count": 292,
+        "total": 6516.326999999932,
+        "median": 9.546999999991385,
+        "p95": 88.83620000000519,
+        "maximum": 248.89380000000529,
+        "unionMs": 6516.326999999932
+      },
+      "fileOperations": [
+        {
+          "key": "realpath:original-registered-directory",
+          "count": 45129,
+          "total": 246659.80850000528,
+          "median": 4.478799999997136,
+          "p95": 13.05209999998624,
+          "maximum": 33.15709999999672
+        },
+        {
+          "key": "readFile:canonical-source",
+          "count": 7607,
+          "total": 70593.99559999998,
+          "median": 1.8859000000084052,
+          "p95": 36.71370000000752,
+          "maximum": 81.3631000000023
+        },
+        {
+          "key": "stat:original-registered-directory",
+          "count": 44394,
+          "total": 34158.44030000108,
+          "median": 0.27700000000186265,
+          "p95": 1.9736999999877298,
+          "maximum": 260.5593000000081
+        },
+        {
+          "key": "access:other",
+          "count": 7675,
+          "total": 24792.837799999834,
+          "median": 1.01490000000922,
+          "p95": 13.092600000003586,
+          "maximum": 141.68519999999262
+        },
+        {
+          "key": "lstat:other",
+          "count": 2513,
+          "total": 12006.913899999738,
+          "median": 0.8013999999966472,
+          "p95": 20.23279999999795,
+          "maximum": 24.72060000000056
+        },
+        {
+          "key": "readFile:owned-runtime",
+          "count": 4548,
+          "total": 11356.98719999961,
+          "median": 0.5203999999939697,
+          "p95": 12.5569000000105,
+          "maximum": 142.59590000000026
+        },
+        {
+          "key": "access:canonical-source",
+          "count": 1786,
+          "total": 10941.190299999755,
+          "median": 4.10899999999674,
+          "p95": 15.540200000003097,
+          "maximum": 17.553899999998976
+        },
+        {
+          "key": "lstat:owned-runtime",
+          "count": 1811,
+          "total": 8961.068999999567,
+          "median": 0.8095999999932246,
+          "p95": 18.14289999999164,
+          "maximum": 36.26669999999285
+        },
+        {
+          "key": "readFile:native-request",
+          "count": 1637,
+          "total": 7449.9204000000755,
+          "median": 0.7171000000089407,
+          "p95": 15.563999999998487,
+          "maximum": 260.7361000000092
+        },
+        {
+          "key": "access:owned-runtime",
+          "count": 2278,
+          "total": 6220.876899999712,
+          "median": 0.8503000000055181,
+          "p95": 8.558300000004238,
+          "maximum": 37.78750000000582
+        },
+        {
+          "key": "rm:native-request",
+          "count": 584,
+          "total": 3923.6771000000444,
+          "median": 1.7978000000002794,
+          "p95": 25.1310000000085,
+          "maximum": 249.62979999999516
+        },
+        {
+          "key": "handle.sync:native-request",
+          "count": 292,
+          "total": 3270.554500000173,
+          "median": 3.5135000000009313,
+          "p95": 28.50940000000992,
+          "maximum": 222.90920000000915
+        },
+        {
+          "key": "handle.close:native-request",
+          "count": 292,
+          "total": 2472.753399999827,
+          "median": 0.6972999999998137,
+          "p95": 24.86609999999928,
+          "maximum": 250.15540000000328
+        },
+        {
+          "key": "realpath:owned-runtime",
+          "count": 740,
+          "total": 2310.6093999999575,
+          "median": 2.1304000000091037,
+          "p95": 6.853999999992084,
+          "maximum": 247.4771000000037
+        },
+        {
+          "key": "open:native-request",
+          "count": 292,
+          "total": 964.2167999999365,
+          "median": 0.5717000000004191,
+          "p95": 14.253699999986566,
+          "maximum": 107.77070000000822
+        },
+        {
+          "key": "stat:owned-runtime",
+          "count": 588,
+          "total": 549.5574999998935,
+          "median": 0.41749999999592546,
+          "p95": 2.722299999993993,
+          "maximum": 30.243700000006356
+        },
+        {
+          "key": "mkdir:owned-runtime",
+          "count": 447,
+          "total": 541.0289999998204,
+          "median": 0.5213999999978114,
+          "p95": 2.7419000000081724,
+          "maximum": 49.54820000000473
+        },
+        {
+          "key": "handle.writeFile:native-request",
+          "count": 292,
+          "total": 497.99549999999,
+          "median": 0.23420000000623986,
+          "p95": 9.66030000000319,
+          "maximum": 89.25810000000638
+        },
+        {
+          "key": "readdir:owned-runtime",
+          "count": 453,
+          "total": 439.9283000001742,
+          "median": 0.5571000000054482,
+          "p95": 2.4611000000004424,
+          "maximum": 37.449500000002445
+        },
+        {
+          "key": "readFile:other",
+          "count": 294,
+          "total": 400.92730000019947,
+          "median": 0.7465999999985797,
+          "p95": 2.7118999999947846,
+          "maximum": 36.658500000005006
+        },
+        {
+          "key": "stat:native-request",
+          "count": 292,
+          "total": 164.6007999999274,
+          "median": 0.13539999999920838,
+          "p95": 1.1454000000085216,
+          "maximum": 86.6709000000119
+        },
+        {
+          "key": "readdir:other",
+          "count": 149,
+          "total": 107.53459999995539,
+          "median": 0.41849999999976717,
+          "p95": 2.408100000000559,
+          "maximum": 9.38169999999809
+        },
+        {
+          "key": "writeFile:owned-runtime",
+          "count": 3,
+          "total": 47.72459999998682,
+          "median": 10.101899999994203,
+          "p95": 37.14959999998973,
+          "maximum": 37.14959999998973
+        },
+        {
+          "key": "open:owned-runtime",
+          "count": 1,
+          "total": 30.004099999991013,
+          "median": 30.004099999991013,
+          "p95": 30.004099999991013,
+          "maximum": 30.004099999991013
+        },
+        {
+          "key": "rm:owned-runtime",
+          "count": 2,
+          "total": 0.8570000000036089,
+          "median": 0.4477000000042608,
+          "p95": 0.4477000000042608,
+          "maximum": 0.4477000000042608
+        }
+      ],
+      "longestFileCalls": [
+        {
+          "operation": "readFile",
+          "category": "native-request",
+          "at": 92817.8524,
+          "observedDurationMs": 260.7361000000092,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 260.01860000001034
+        },
+        {
+          "operation": "readFile",
+          "category": "native-request",
+          "at": 92817.87250000001,
+          "observedDurationMs": 260.6137000000017,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 260.01860000001034
+        },
+        {
+          "operation": "stat",
+          "category": "original-registered-directory",
+          "at": 92817.8171,
+          "observedDurationMs": 260.5593000000081,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 260.01860000001034
+        },
+        {
+          "operation": "handle.close",
+          "category": "native-request",
+          "at": 83924.9017,
+          "observedDurationMs": 250.15540000000328,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 186.69700000001467
+        },
+        {
+          "operation": "rm",
+          "category": "native-request",
+          "at": 92817.34980000001,
+          "observedDurationMs": 249.62979999999516,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 248.89380000000529
+        },
+        {
+          "operation": "handle.close",
+          "category": "native-request",
+          "at": 83924.86760000001,
+          "observedDurationMs": 248.1689999999944,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 186.69700000001467
+        },
+        {
+          "operation": "realpath",
+          "category": "owned-runtime",
+          "at": 83427.51670000001,
+          "observedDurationMs": 247.4771000000037,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 0
+        },
+        {
+          "operation": "handle.close",
+          "category": "native-request",
+          "at": 83924.88650000001,
+          "observedDurationMs": 246.21229999999923,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 186.69700000001467
+        },
+        {
+          "operation": "handle.close",
+          "category": "native-request",
+          "at": 85377.5386,
+          "observedDurationMs": 238.1371000000072,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 210.92819999998028
+        },
+        {
+          "operation": "handle.sync",
+          "category": "native-request",
+          "at": 92588.2565,
+          "observedDurationMs": 222.90920000000915,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 218.4713999999949
+        },
+        {
+          "operation": "handle.sync",
+          "category": "native-request",
+          "at": 92590.26400000001,
+          "observedDurationMs": 220.8747999999905,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 218.4713999999949
+        },
+        {
+          "operation": "stat",
+          "category": "original-registered-directory",
+          "at": 92592.35200000001,
+          "observedDurationMs": 218.70279999999912,
+          "outcome": "fulfilled",
+          "overlappingSynchronousSpawnMs": 218.4713999999949
+        }
+      ],
+      "phases": [
+        {
+          "name": "catalog.admission",
+          "count": 153,
+          "total": 697,
+          "median": 2,
+          "p95": 6,
+          "maximum": 248
+        },
+        {
+          "name": "catalog.recovery",
+          "count": 1,
+          "total": 1,
+          "median": 1,
+          "p95": 1,
+          "maximum": 1
+        },
+        {
+          "name": "config.global.projects",
+          "count": 1,
+          "total": 42,
+          "median": 42,
+          "p95": 42,
+          "maximum": 42
+        },
+        {
+          "name": "directory.admission",
+          "count": 148,
+          "total": 379,
+          "median": 2,
+          "p95": 7,
+          "maximum": 30
+        },
+        {
+          "name": "config.load",
+          "count": 746,
+          "total": 79171,
+          "median": 28,
+          "p95": 246,
+          "maximum": 256
+        },
+        {
+          "name": "config.verify",
+          "count": 746,
+          "total": 6883,
+          "median": 1,
+          "p95": 38,
+          "maximum": 41
+        },
+        {
+          "name": "config.global.before",
+          "count": 151,
+          "total": 3438,
+          "median": 17,
+          "p95": 58,
+          "maximum": 105
+        },
+        {
+          "name": "config.global.after",
+          "count": 151,
+          "total": 2966,
+          "median": 16,
+          "p95": 43,
+          "maximum": 86
+        },
+        {
+          "name": "state.read",
+          "count": 599,
+          "total": 41749,
+          "median": 1,
+          "p95": 274,
+          "maximum": 281
+        },
+        {
+          "name": "config.validate.models",
+          "count": 152,
+          "total": 5998,
+          "median": 36,
+          "p95": 68,
+          "maximum": 227
+        },
+        {
+          "name": "config.validate.profile",
+          "count": 152,
+          "total": 446,
+          "median": 3,
+          "p95": 7,
+          "maximum": 11
+        },
+        {
+          "name": "catalog.revision",
+          "count": 151,
+          "total": 124,
+          "median": 1,
+          "p95": 3,
+          "maximum": 4
+        },
+        {
+          "name": "skill.builtins",
+          "count": 151,
+          "total": 117,
+          "median": 1,
+          "p95": 1,
+          "maximum": 2
+        },
+        {
+          "name": "skill.config-directories",
+          "count": 151,
+          "total": 14,
+          "median": 0,
+          "p95": 1,
+          "maximum": 1
+        },
+        {
+          "name": "skill.explicit-scan",
+          "count": 301,
+          "total": 489,
+          "median": 1,
+          "p95": 4,
+          "maximum": 12
+        },
+        {
+          "name": "catalog.reentrant",
+          "count": 152,
+          "total": 18813,
+          "median": 4,
+          "p95": 14,
+          "maximum": 18043
+        },
+        {
+          "name": "catalog.held",
+          "count": 153,
+          "total": 37111,
+          "median": 5,
+          "p95": 14,
+          "maximum": 18292
+        },
+        {
+          "name": "catalog.release",
+          "count": 153,
+          "total": 7,
+          "median": 0,
+          "p95": 0,
+          "maximum": 4
+        },
+        {
+          "name": "catalog.total",
+          "count": 153,
+          "total": 37829,
+          "median": 6,
+          "p95": 19,
+          "maximum": 18440
+        },
+        {
+          "name": "config.validate.capabilities",
+          "count": 151,
+          "total": 1109,
+          "median": 6,
+          "p95": 18,
+          "maximum": 28
+        },
+        {
+          "name": "project.identity.git",
+          "count": 292,
+          "total": 114587,
+          "median": 378,
+          "p95": 732,
+          "maximum": 964
+        },
+        {
+          "name": "project.identity.lookup",
+          "count": 294,
+          "total": 34613,
+          "median": 104,
+          "p95": 217,
+          "maximum": 585
+        },
+        {
+          "name": "project.identity.resolve",
+          "count": 292,
+          "total": 35022,
+          "median": 105,
+          "p95": 221,
+          "maximum": 586
+        },
+        {
+          "name": "project.identity.initial",
+          "count": 147,
+          "total": 89755,
+          "median": 581,
+          "p95": 887,
+          "maximum": 1194
+        },
+        {
+          "name": "project.registry.capture",
+          "count": 147,
+          "total": 2035,
+          "median": 13,
+          "p95": 25,
+          "maximum": 40
+        },
+        {
+          "name": "project.registry.acquire",
+          "count": 147,
+          "total": 658,
+          "median": 4,
+          "p95": 9,
+          "maximum": 35
+        },
+        {
+          "name": "project.registry.revalidate",
+          "count": 147,
+          "total": 1911,
+          "median": 12,
+          "p95": 24,
+          "maximum": 35
+        },
+        {
+          "name": "project.identity.admitted",
+          "count": 147,
+          "total": 90198,
+          "median": 587,
+          "p95": 945,
+          "maximum": 986
+        },
+        {
+          "name": "directory.held",
+          "count": 148,
+          "total": 110510,
+          "median": 614,
+          "p95": 964,
+          "maximum": 17176
+        },
+        {
+          "name": "directory.release",
+          "count": 148,
+          "total": 2,
+          "median": 0,
+          "p95": 0,
+          "maximum": 1
+        },
+        {
+          "name": "directory.total",
+          "count": 148,
+          "total": 110908,
+          "median": 616,
+          "p95": 965,
+          "maximum": 17206
+        },
+        {
+          "name": "state.initialize",
+          "count": 297,
+          "total": 41720,
+          "median": 242,
+          "p95": 277,
+          "maximum": 281
+        },
+        {
+          "name": "config.global.persist",
+          "count": 1,
+          "total": 1,
+          "median": 1,
+          "p95": 1,
+          "maximum": 1
+        },
+        {
+          "name": "config.global.reset",
+          "count": 1,
+          "total": 4,
+          "median": 4,
+          "p95": 4,
+          "maximum": 4
+        },
+        {
+          "name": "config.global.reconcile",
+          "count": 1,
+          "total": 689,
+          "median": 689,
+          "p95": 689,
+          "maximum": 689
+        },
+        {
+          "name": "config.global.write",
+          "count": 1,
+          "total": 18440,
+          "median": 18440,
+          "p95": 18440,
+          "maximum": 18440
+        },
+        {
+          "name": "request",
+          "count": 1,
+          "total": 18440,
+          "median": 18440,
+          "p95": 18440,
+          "maximum": 18440
+        }
+      ],
+      "originalProjectWriteAttempts": []
+    }
+  ],
+  "writer": {
+    "at": "2026-10-20T18:28:02.159Z",
+    "endedAt": "2026-10-20T18:28:39.176Z",
+    "phase": "candidate",
+    "port": 18841,
+    "occurrence": "config-physical-path-cost-483-mixed-final-d7d82bce-643b-4e5c-ab7b-83964f181f8f",
+    "transport": "browser",
+    "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+    "accepted": true,
+    "restored": true,
+    "writeMs": 18568.5697,
+    "restoreMs": 18440.229199999998,
+    "failures": [],
+    "permissionMode": "ask",
+    "changedField": "username",
+    "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+  },
+  "reader": {
+    "occurrence": "config-physical-path-cost-483-mixed-final-d7d82bce-643b-4e5c-ab7b-83964f181f8f",
+    "kind": "Public HTTP positive contracts concurrent with original canonical save; this is not browser or visual acceptance",
+    "results": [
+      {
+        "path": "/config",
+        "startedAt": "2026-10-20T18:28:02.403Z",
+        "endedAt": "2026-10-20T18:28:20.691Z",
+        "ms": 18287.536200000002,
+        "status": 200,
+        "permissionMode": "ask"
+      },
+      {
+        "path": "/provider",
+        "startedAt": "2026-10-20T18:28:02.405Z",
+        "endedAt": "2026-10-20T18:28:21.079Z",
+        "ms": 18674.1227,
+        "status": 200,
+        "providers": 227,
+        "models": 8133,
+        "selectedModel": "gpt-6.1-sol"
+      },
+      {
+        "path": "/global/providers",
+        "startedAt": "2026-10-20T18:28:02.406Z",
+        "endedAt": "2026-10-20T18:28:20.933Z",
+        "ms": 18527.090500000002,
+        "status": 200,
+        "providers": 227,
+        "models": 8133,
+        "selectedModel": "gpt-6.1-sol"
+      },
+      {
+        "path": "/session/ses_hbRVMe5guyAsIboCNyIV",
+        "startedAt": "2026-10-20T18:28:02.407Z",
+        "endedAt": "2026-10-20T18:28:02.450Z",
+        "ms": 43.85490000000027,
+        "status": 200,
+        "sessionID": "ses_hbRVMe5guyAsIboCNyIV"
+      }
+    ]
+  },
+  "criteria": {
+    "saveMaximumMs": 10000,
+    "savePass": false,
+    "restoreMaximumMs": 5000,
+    "restorePass": false,
+    "readerMaximumMs": 20000,
+    "readerPass": true
+  },
+  "history": {
+    "originalCounts": {
+      "project": 149,
+      "session": 198,
+      "message": 518,
+      "part": 1155,
+      "protocol_event": 1407,
+      "tool_part_request": 119,
+      "tool_part_outcome": 119
+    },
+    "counts": {
+      "project": 151,
+      "session": 199,
+      "message": 520,
+      "part": 1159,
+      "protocol_event": 1411,
+      "tool_part_request": 119,
+      "tool_part_outcome": 119
+    },
+    "source": "Every original row in all7 tables exactly equals original full QA; source DB size/mtime unchanged",
+    "clone": "All original Session/Message/Part/protocol/Tool facts including rowid/data/time exact; Project identity/ownership exact with ordinary time_updated refresh",
+    "changedProjectFields": [],
+    "schema": 3,
+    "canonical": "Complete parsed original restored"
+  },
+  "physical": {
+    "observedAtUtc": "2026-10-20T18:29:17.6046255Z",
+    "chain": [
+      {
+        "identity": {
+          "pid": 88192,
+          "processInstanceID": "win32:639281176168557536",
+          "occurrenceID": "d13a9478-683e-4400-80b9-c138653052fb"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "identity": {
+          "pid": 92004,
+          "processInstanceID": "win32:639281176173938996",
+          "occurrenceID": "27161a8f-dfc2-498a-a5f5-82c3fb4806c8"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "sourceReaders": "all200/streaming/sourceEOF",
+    "originalHandle": 52880,
+    "shutdown": {
+      "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYcFFbt004vNX5vG6F\"}",
+      "statusCode": 200,
+      "target": {
+        "pid": 92004,
+        "processInstanceID": "win32:639281176173938996",
+        "occurrenceID": "27161a8f-dfc2-498a-a5f5-82c3fb4806c8"
+      },
+      "occurrence": "config-physical-path-cost-483-mixed-final-d7d82bce-643b-4e5c-ab7b-83964f181f8f",
+      "observedAtUtc": "2026-10-20T18:29:15.1483428Z"
+    },
+    "launcher": {
+      "observedAtUtc": "2026-10-20T18:29:15.520328Z",
+      "childExitCode": 0
+    },
+    "originalExit": 0,
+    "maximumBatch": 4,
+    "maximumRequests": 4,
+    "native": {
+      "occurrence": "config-physical-path-cost-483-mixed-final-d7d82bce-643b-4e5c-ab7b-83964f181f8f",
+      "outcome": "settled",
+      "host": {
+        "pid": 88192,
+        "processInstanceID": "win32:639281176168557536",
+        "occurrenceID": "d13a9478-683e-4400-80b9-c138653052fb"
+      },
+      "target": {
+        "pid": 92004,
+        "processInstanceID": "win32:639281176173938996",
+        "occurrenceID": "27161a8f-dfc2-498a-a5f5-82c3fb4806c8"
+      },
+      "observedAtUtc": "2026-10-20T18:29:15.479Z",
+      "deadlineAt": 1792522016821,
+      "terminal": {
+        "occurrenceID": "config-physical-path-cost-483-mixed-final-d7d82bce-643b-4e5c-ab7b-83964f181f8f",
+        "pid": 92004,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "requests": 2,
+    "runtimePair": "complete auth/models retired after original native/output/request/launcher and source EOF"
+  }
+}

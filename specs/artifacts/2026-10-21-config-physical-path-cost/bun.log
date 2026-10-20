@@ -1,0 +1,38 @@
+13 | const candidates=input.projects.map(row=>({id:row.id,path:row.worktree}))
+14 | for(const [id,name] of [['owned-directory','directory'],['owned-junction','junction'],['missing','missing/child'],['non-directory','file/child']])candidates.push({id,path:owned+'/'+name})
+15 | if(process.platform==='win32')candidates.push({id:'directory-case',path:(owned+'/directory').toUpperCase()})
+16 | async function observe(read,value){try{return{kind:'path',value:await read(value)}}catch(error){return{kind:'error',name:error.name,code:error.code,syscall:error.syscall}}}
+17 | const baseline=await Promise.all(candidates.map(async row=>({id:row.id,promise:await observe(promise,row.path),native:await observe(native,row.path)})))
+18 | for(const result of baseline)assert.deepEqual(result.native,result.promise,'Exact native/Promise output and error contract: '+result.id)
+                                         ^
+AssertionError: Exact native/Promise output and error contract: missing
++ actual - expected
+
+  {
+    code: 'ENOENT',
+    kind: 'error',
+    name: 'Error',
++   syscall: 'realpath'
+-   syscall: 'lstat'
+  }
+
+ generatedMessage: false,
+     actual: {
+  kind: "error",
+  name: "Error",
+  code: "ENOENT",
+  syscall: "realpath",
+},
+   expected: {
+  kind: "error",
+  name: "Error",
+  code: "ENOENT",
+  syscall: "lstat",
+},
+   operator: "deepStrictEqual",
+       diff: "simple",
+       code: "ERR_ASSERTION"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\config-physical-path-cost-483\probe.mjs:18:37
+
+Bun v1.4.3 (Windows x64)

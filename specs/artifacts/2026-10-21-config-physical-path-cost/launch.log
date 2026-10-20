@@ -1,0 +1,37 @@
+22 |  const stat=await fs.stat(path.join(directory,name));return{name,bytes:stat.size,modifiedAtMs:stat.mtimeMs}
+23 | }))
+24 | const sourceBefore=await pairMetadata(authority)
+25 | const access=await stageDiagnosticProvider({authSource:authority+'/auth.json',dataDirectory:runtime+'/data',modelID:'gpt-6.1-sol',redactor})
+26 | await publish('provider-pair-staging.json',{sourceBefore,sourceAfter:await pairMetadata(authority),copiedPair:await pairMetadata(runtime+'/data'),access:'current',catalog:'complete',refresh:'prohibited'})
+27 | const canonical=JSON.parse(await fs.readFile(runtime+'/config/opencorvus.jsonc','utf8'));assert.deepEqual(canonical,{})
+                                                                                                     ^
+AssertionError: Expected values to be strictly deep-equal:
++ actual - expected
+
++ {
++   '$schema': 'https://opencorvus.ai/config.json',
++   model: 'openai/gpt-6.1-sol',
++   permission_mode: 'ask',
++   prompt_profile: {
++     active: 'base'
++   },
++   small_model: 'openai/gpt-6.1-sol'
++ }
+- {}
+
+ generatedMessage: true,
+     actual: {
+  $schema: "https://opencorvus.ai/config.json",
+  model: "openai/gpt-6.1-sol",
+  small_model: "openai/gpt-6.1-sol",
+  prompt_profile: [Object ...],
+  permission_mode: "ask",
+},
+   expected: {},
+   operator: "deepStrictEqual",
+       diff: "simple",
+       code: "ERR_ASSERTION"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\config-physical-path-cost-483\serve.ts:27:97
+
+Bun v1.4.0 (Windows x64)

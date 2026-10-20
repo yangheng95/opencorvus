@@ -1,0 +1,1602 @@
+{
+  "observedAt": "2026-10-20T18:21:39.485Z",
+  "runtime": "node",
+  "tag": "node-25.7.0",
+  "version": "v25.7.0",
+  "platform": "win32",
+  "projects": 149,
+  "sessions": 198,
+  "schema": {
+    "user_version": 3
+  },
+  "concurrency": 12,
+  "identity": {
+    "nativeIsCallbackRealpath": false,
+    "promisifiedNativeIsPromisesRealpath": false
+  },
+  "contracts": [
+    {
+      "id": "prj_h0jl8wve0ZxTFEHezj7y",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h1HXTAWNcrpg4OgvAlzj",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h2sEos9NLPiSbToDgVjl",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h3fMXGVKqZ68MvII9Maz",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h4in9R2Uv1uQpw1wgenv",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h5KmHhxMnXDmQdgRSRjC",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h5M5xOI3jjbmJrkx9B4W",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h5mdOPepTAHT68BYzOhC",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h5sOlwqbgl8Qq4Ss8Oat",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h65jTQNZPIgs1hs6LE1N",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h6DtFUu2hceRiysDNOHN",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h6KV8p0NqpgA6evSrml1",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h6ugXtVKTv1lyVY15CwV",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h71YUvhSPY1iHPdQc31P",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h7ILxYgMH0SfOy8fZn3F",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h7X4W3MMBEC384vJtfBi",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h7YxtOAKFIJcicDTED1q",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h87bU2r6ayJ9WnpVDsOw",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h8ZVBEColqkA3lMgy1RM",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h9KWpU8evgejoE1YvIJL",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_h9MZvYncD2s8qz2eFyw9",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hAPsdQxtQvbDlgS3UxnG",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hBCAtTRexGKQFw3zVZdz",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hBLvTwVQQQ2DVe086hf6",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hBptYIIlIU04vDYL8T2N",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hC9J41PipIfymRSdlAKn",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hCbQin6tvhXcL2s0LauL",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hCgX4dvn3qsvqxSAgjEA",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hDE330HWkqfSyyWg7CAv",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hDGgjwhvWAMmwf1Zf0sa",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hDTzZNR28CBViEJvWSEm",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hDbqvciN6oixUqF2jcIe",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hEBDQn0Nou0ElgBGHzB5",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hEsFIC3V8hRvfu7y2ucw",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hF45vsFrFc5FxOdnUUwL",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hFGsj6okAJnRA6xz7svM",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hFQBUh3mWhuMP7B3A0JE",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hFaMbDQx54ReU2tEDdDj",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hGIU2DrbJG8sSpQNTQzE",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hGL2hG7ra9yo7BiF3OE4",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hGfCv166xck3oKHnM1ua",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hGsrYQlnncotYW5OI9vs",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hHnCjaDjt1gFppLZIXbh",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hI5wlbdNHZHTearbjRY6",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hIHtRoVbaRD7rb3ujtWL",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hIXZGzeM4dlNdFZnebZB",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hJAvzhLEveeGiYLTnsL7",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hJB0gayfxtueUBAo7BKS",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hKe5hPs41jUPzZGbwExr",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hKtW0E1GdF5qlQkHuB3B",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hLrjAzoQoC06dzvfG3KK",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hLtGNpEw536E9lln9yqY",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hM7K3v1GbLW5VAiDEBCD",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hMGvVY5u2e5FiKMYg7KX",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hNAZmRJUsMnl4Y8Psjbc",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hNDClAJPGIMa4JT6sI8r",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hNZOsmy0LljCyHQqMeBa",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hNiWMIyYG4ToqzJX229Y",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hO0NItTdv6G9HR0e8iXd",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hO1J3KtWJ6qBjgKsRqHE",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hO6dnFFdkG5dKJ7woaJH",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hOdPDtirLx939ekOtVyD",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hPX4n436F8c0HmUMopfL",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hQ5fc3vaKr7JyXhaJoeI",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hQbwiYi3UH1lXs7KYO94",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hQfy1av7kAQoUmemko7h",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hS0xaFnk2mm41botOhx6",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hSEHaTsQ8JrTbTTE86xh",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hSQinOa1MIVoNEeARpn5",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hSUim0rNjyA6kMDoqacH",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hSeAUwplsFyFaAHCHOdu",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hT4CNyXpwVY3wcEDlhA4",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hTCsFmWLvSsw0jnaxnUD",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hToomOtQRBE4lOstJmef",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hUORHil4AFM1vi45wFha",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hUxPZRqdsIim8GrX8kKf",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hVL520VFGo6DFQnNPURh",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hVLCtsXuYosJyTo81gLl",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hVU0BJnm2xndbjOZjKRc",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hVe28Wc9EsW7X4qEMDz4",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hVkJskJAIgEz9tuGPGJo",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hVy5CttM5qHT09YjTchS",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hWBsHl3GNoXzIKQfyXqV",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hWYnHnSjhVe8EDPFLlis",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hWd1qKOo07uQU3geUSA7",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hWe3sr05qzWMZrA3ACga",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hWhOhe1nWHHEUD9yAvkI",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hYk5LCEBDjoqup2h4nFZ",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hZKiCTqfqMco1VfbrE69",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hadTDagMAqwuMlwdMZLK",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hb5lz5yPRJb6xcgcnsh6",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hbEm5rLI43QnkwUOSPuj",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hcREEWxdM2SCb3usOsCD",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hdMhQHPlQftItFTykeRp",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hdOxSnBpX5U7cDI5SEko",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hdiHvSJgtY9V4T4kt8wr",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hdiNMkCXYWwfSxCsDT49",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hdmr5ZTolTifDlTFnkBl",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hdub4pCWFDy3MSklfzDV",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_heGbKs8LCs0uzkBaCAAv",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hfq8ITEnbKn8wfyvmj8N",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hg0RARKH3hEtuVQRLlA7",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hgeRXQ1p5cyNiRfhdX46",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hgqQa1ZLyOzGYXMlkEJr",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hgrp1S0roojRStTw2SxY",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hhIKM7w9oxy1V7vKMxHJ",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hhLik0eu86piPydON9xE",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hhSGsvuvGUxVTR21x6Zy",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hi8MxhArtveWB5utxDXj",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hiFKo6kW09ci1zr3dzq2",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hiHEnex7lckhNRpJ0wOH",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hiKwd0ae8QqqtzcPJbyF",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hijUhNSzpScuTLW5nVso",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hjFcXvPlswfFApUjXkgf",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hjK5OFnbCs8VB06EL9ee",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hjbdnDxeJUoHJ00LCMVq",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hjjM1uIDAGt1Hc2aH90e",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hk0ldpnwBaDTqtfmnwsP",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hk2bQmX30jGRK8guskF8",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hkXrTOBBgcRJqEf60nYb",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hlNqFU90ft3ahTslzOdH",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hlgT5xROYWG7Xwrixlvy",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hmMM9Hg0KhbzcDLtijTi",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hmVotw7dCTpwVPPP2qbX",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hmimABn4lG4zt11axIG3",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hmr4MZOvGSr8ibwb97ua",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hmwDms7WvbqM8pEL0sEg",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hopuWaFWQhz78Owl7ycj",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hp1fuEkeuicjozSWdhKU",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hpvs7GxZ8l6pbr3Ofyry",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hq7cfpIBp9mdRZPg3Hmx",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hqKWnsjOHnpAeXRloDXn",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hqNSQTagCWz6QbFHfPUx",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hqZT0rNrqFlVzWBm05l6",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hqodjf09GGTnQba9LBW7",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hquHOIk8BJLKKZyBUxnN",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_htIleM5P7lAtYbBiV5w7",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_htZyDMlTs9cbVpOIsNF6",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_htyX0YzvD2f14rtFVHn7",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hu8q4pWWx9n1KfSW72bs",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_huQmv4BJNxkOaR51Vxwq",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hvqwlnrIBfpmzymCTCDh",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hx4AFKOutmVU7o1JFeU4",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hx7qCNb4gF29LMAguPQW",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hxRWAe2CJ2Dhw3aR3tV5",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hxuROTTCuIFCnf6V9id4",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hyA3BVKNkepOzVqoaLWd",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hyY5eowIS3KNLIaLUAmY",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "prj_hz45iqYJ9Qf9fmoAfIwv",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "owned-directory",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "owned-junction",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "missing",
+      "promise": {
+        "kind": "error",
+        "name": "Error",
+        "code": "ENOENT",
+        "syscall": "realpath"
+      },
+      "native": {
+        "kind": "error",
+        "name": "Error",
+        "code": "ENOENT",
+        "syscall": "realpath"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "non-directory",
+      "promise": {
+        "kind": "error",
+        "name": "Error",
+        "code": "ENOENT",
+        "syscall": "realpath"
+      },
+      "native": {
+        "kind": "error",
+        "name": "Error",
+        "code": "ENOENT",
+        "syscall": "realpath"
+      },
+      "exactlyEqual": true
+    },
+    {
+      "id": "directory-case",
+      "promise": {
+        "kind": "path"
+      },
+      "native": {
+        "kind": "path"
+      },
+      "exactlyEqual": true
+    }
+  ],
+  "rounds": [
+    {
+      "method": "promise",
+      "durationMs": 917.5263,
+      "calls": 22201,
+      "completedScans": 149,
+      "concurrency": 12
+    },
+    {
+      "method": "native",
+      "durationMs": 832.8303999999999,
+      "calls": 22201,
+      "completedScans": 149,
+      "concurrency": 12
+    },
+    {
+      "method": "native",
+      "durationMs": 817.1607000000001,
+      "calls": 22201,
+      "completedScans": 149,
+      "concurrency": 12
+    },
+    {
+      "method": "promise",
+      "durationMs": 852.5459999999998,
+      "calls": 22201,
+      "completedScans": 149,
+      "concurrency": 12
+    }
+  ],
+  "boundary": "Local filesystem diagnosis over every original Project; not Config service, UI or full performance acceptance; no credentials/Provider/DB initializer or writes to original QA"
+}

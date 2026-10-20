@@ -1,0 +1,5 @@
+{"runtime":"node","method":"promise","durationMs":917.5263,"calls":22201,"completedScans":149,"concurrency":12}
+{"runtime":"node","method":"native","durationMs":832.8303999999999,"calls":22201,"completedScans":149,"concurrency":12}
+{"runtime":"node","method":"native","durationMs":817.1607000000001,"calls":22201,"completedScans":149,"concurrency":12}
+{"runtime":"node","method":"promise","durationMs":852.5459999999998,"calls":22201,"completedScans":149,"concurrency":12}
+{"runtime":"node","projects":149,"contracts":154,"identity":{"nativeIsCallbackRealpath":false,"promisifiedNativeIsPromisesRealpath":false},"rounds":4,"settled":"All actual reads completed"}
