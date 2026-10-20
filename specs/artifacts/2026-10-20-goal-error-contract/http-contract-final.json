@@ -1,0 +1,97 @@
+{
+  "scope": "goal-error-contract-458-final",
+  "occurrence": "goal-error-contract-458-final-1fe22e63-9a9f-4276-9d46-55e4caacfd1d",
+  "requests": [
+    {
+      "stage": "SDK get unavailable owner",
+      "status": 409,
+      "ms": 512.6582999999999
+    },
+    {
+      "stage": "Canonical home Work Chat creation",
+      "status": 201,
+      "ms": 74.76890000000003
+    },
+    {
+      "stage": "SDK create",
+      "status": 200,
+      "ms": 12.01260000000002
+    },
+    {
+      "stage": "SDK pause",
+      "status": 200,
+      "ms": 6.418800000000033
+    },
+    {
+      "stage": "SDK create unresolved conflict",
+      "status": 409,
+      "ms": 4.284600000000069
+    },
+    {
+      "stage": "SDK stale revision",
+      "status": 409,
+      "ms": 3.8777000000000044
+    },
+    {
+      "stage": "SDK read paused",
+      "status": 200,
+      "ms": 3.740600000000086
+    },
+    {
+      "stage": "SDK explicit resume",
+      "status": 200,
+      "ms": 7.812799999999925
+    },
+    {
+      "stage": "SDK explicit complete",
+      "status": 200,
+      "ms": 5.617099999999937
+    },
+    {
+      "stage": "SDK retained completed read",
+      "status": 200,
+      "ms": 2.633299999999963
+    },
+    {
+      "stage": "Public OpenAPI",
+      "status": 200,
+      "ms": 683.8506999999998
+    }
+  ],
+  "states": [
+    {
+      "stage": "created",
+      "status": "active",
+      "revision": "pev_g0VYYr6a800LeJIthzSD",
+      "turnsAccepted": 0
+    },
+    {
+      "stage": "paused",
+      "status": "paused",
+      "revision": "pev_g0VYYr6aG00Wkp1y5L0I",
+      "turnsAccepted": 0
+    },
+    {
+      "stage": "resumed",
+      "status": "active",
+      "revision": "pev_g0VYYr6aa00mkeyulaXA",
+      "turnsAccepted": 0
+    },
+    {
+      "stage": "complete",
+      "status": "complete",
+      "revision": "pev_g0VYYr6ag00GNR1KHlxd",
+      "turnsAccepted": 0
+    }
+  ],
+  "documents": [],
+  "terminal": {
+    "goalID": "pev_g0VYYr6a800LeJIthzSD",
+    "sessionID": "ses_-zURR8tR9zz4WhqYCwUp",
+    "status": "complete",
+    "turnsAccepted": 0,
+    "tokensUsed": 0
+  },
+  "qualification": "Actual newly built SDK -> public development HTTP -> original Goal store and retained revisions; complete runtime paths/components match the generated canonical document through repeated/concurrent requests; native preflight proves exact streaming model, not full new Goal execution; no UI automation",
+  "outcome": "failed"
+}

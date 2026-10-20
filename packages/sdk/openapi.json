@@ -25928,7 +25928,7 @@
                       "type": "object"
                     },
                     "name": {
-                      "const": "Goal owner or revision conflict.",
+                      "const": "ContinuousGoalError",
                       "type": "string"
                     }
                   },
@@ -25940,7 +25940,7 @@
                 }
               }
             },
-            "description": "ContinuousGoalError"
+            "description": "Goal owner or revision conflict."
           }
         },
         "summary": "Read continuous goal",
@@ -26199,7 +26199,7 @@
                       "type": "object"
                     },
                     "name": {
-                      "const": "Goal owner, state or revision conflict.",
+                      "const": "ContinuousGoalError",
                       "type": "string"
                     }
                   },
@@ -26211,7 +26211,7 @@
                 }
               }
             },
-            "description": "ContinuousGoalError"
+            "description": "Goal owner, state or revision conflict."
           }
         },
         "summary": "Update continuous goal",
@@ -26450,7 +26450,7 @@
                       "type": "object"
                     },
                     "name": {
-                      "const": "Goal owner or request conflict.",
+                      "const": "ContinuousGoalError",
                       "type": "string"
                     }
                   },
@@ -26462,7 +26462,7 @@
                 }
               }
             },
-            "description": "ContinuousGoalError"
+            "description": "Goal owner or request conflict."
           }
         },
         "summary": "Create continuous goal",

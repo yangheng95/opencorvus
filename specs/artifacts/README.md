@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Goal 错误与运行时 OpenAPI](2026-10-20-goal-error-contract/README.md)：具名错误、41→345 实际文档、重复/并发完整 schema 和 14 个 SDK/HTTP 请求。
+
 - [配置读取写回的共享所有权](2026-10-20-config-read-write-ownership/README.md)：四个实际 peer 覆盖失败、117 例合同、最终真实 HTTP 与完整历史保留。
 
 - [候选插件错误与重试](2026-10-20-candidate-plugin-failure/README.md)：坏factory误提交与旧失败缓存、67例合同、18个实际HTTP及完整101项目验证；保留读取写回风险。

@@ -13,7 +13,7 @@ import { Log } from "@/util/log"
 import { buildLogSupportBundle } from "@/util/log-support-bundle"
 import { Env } from "@/runtime/env"
 import { Hono } from "hono"
-import { describeRoute, openAPIRouteHandler, resolver } from "hono-openapi"
+import { describeRoute, resolver } from "hono-openapi"
 import { validator } from "@/server/validator"
 import { streamGlobalSSE, streamProjectSSE } from "../sse"
 import { VcsCommitMessageStreamEvent } from "@opencorvus-ai/transport-protocol"
@@ -56,7 +56,6 @@ import {
   admitServerShutdown,
   serverLifecycleOccurrence,
 } from "../lifecycle-occurrence"
-import { AppDocumentation } from "./documentation"
 import { RestartUnavailableReason } from "../restart"
 import { requestID, serverErrorResponse } from "../error-handler"
 import { writeVcsCommitMessageStreamError } from "../vcs-stream-error"
@@ -153,15 +152,13 @@ export function resetAppRouteFactoriesForOpenApi() {
   PtyRoutes.reset()
 }
 
-export function AppRoutes(root: Hono) {
+export function AppRoutes() {
   return new Hono()
     .onError(serverErrorResponse)
-    .get(
-      "/doc",
-      openAPIRouteHandler(root, {
-        documentation: AppDocumentation,
-      }),
-    )
+    .get("/doc", async (c) => {
+      const { Server } = await import("../server")
+      return c.json(await Server.openapi())
+    })
     .route("/project", ProjectRoutes())
     .route("/terminal", TerminalRoutes())
     .route("/config", ConfigRoutes())

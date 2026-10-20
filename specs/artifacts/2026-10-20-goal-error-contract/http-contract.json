@@ -1,0 +1,19 @@
+{
+  "scope": "goal-error-contract-458",
+  "occurrence": "goal-error-contract-458-d2172f4d-1b8c-4320-9e3b-81c396c4c6c0",
+  "requests": [
+    {
+      "stage": "SDK get unavailable owner",
+      "status": 409,
+      "ms": 584.2177
+    },
+    {
+      "stage": "Canonical home Work Chat creation",
+      "status": 201,
+      "ms": 0
+    }
+  ],
+  "states": [],
+  "qualification": "Actual newly built SDK -> public development HTTP -> original Goal store and retained revisions; native preflight proves exact streaming model, not full new Goal execution; no UI automation",
+  "outcome": "failed"
+}

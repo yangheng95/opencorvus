@@ -1,0 +1,220 @@
+[1/4] START test/server/openapi-runtime-inventory.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+26 |       const response = await Server.App().request(`/doc?directory=${encodeURIComponent(project.path)}`)
+27 |       expect(response.status).toBe(200)
+28 |       const actual = await response.json()
+29 |       const canonical = await Server.openapi()
+30 |       expect(operationIDs(actual)).toEqual(operationIDs(canonical))
+31 |       expect(actual).toEqual(JSON.parse(JSON.stringify(canonical)))
+                          ^
+error: expect(received).toEqual(expected)
+
+@@ -541,10 +541,50 @@
+            {
+              "$ref": "#/components/schemas/WellKnownAuth",
+            },
+          ],
+        },
++       "AuthReadError": {
++         "additionalProperties": false,
++         "properties": {
++           "data": {
++             "additionalProperties": false,
++             "properties": {
++               "message": {
++                 "type": "string",
++               },
++               "operation": {
++                 "const": "read_saved_credentials",
++                 "type": "string",
++               },
++               "reason": {
++                 "enum": [
++                   "io",
++                   "malformed_json",
++                   "invalid_credential",
++                 ],
++                 "type": "string",
++               },
++             },
++             "required": [
++               "operation",
++               "reason",
++               "message",
++             ],
++             "type": "object",
++           },
++           "name": {
++             "const": "AuthReadError",
++             "type": "string",
++           },
++         },
++         "required": [
++           "name",
++           "data",
++         ],
++         "type": "object",
++       },
+        "AutomationRevisionConflictError": {
+          "properties": {
+            "data": {
+              "properties": {
+                "automationID": {
+@@ -17675,10 +17715,30 @@
+            "name",
+            "data",
+          ],
+          "type": "object",
+        },
++       "SkillMarketUpstreamError": {
++         "properties": {
++           "data": {
++             "additionalProperties": {},
++             "propertyNames": {
++               "type": "string",
++             },
++             "type": "object",
++           },
++           "name": {
++             "const": "SkillMarketUpstreamError",
++             "type": "string",
++           },
++         },
++         "required": [
++           "name",
++           "data",
++         ],
++         "type": "object",
++       },
+        "SlackChannelConfig": {
+          "additionalProperties": false,
+          "properties": {
+            "appToken": {
+              "description": "Slack app token for Socket Mode",
+@@ -21385,10 +21445,48 @@
+            },
+            "taskID": {
+              "type": "string",
+            },
+          },
++         "type": "object",
++       },
++       "WorktreeOwnershipObservationError": {
++         "additionalProperties": false,
++         "properties": {
++           "data": {
++             "additionalProperties": false,
++             "properties": {
++               "code": {
++                 "type": "string",
++               },
++               "message": {
++                 "type": "string",
++               },
++               "operation": {
++                 "type": "string",
++               },
++               "scope": {
++                 "type": "string",
++               },
++             },
++             "required": [
++               "operation",
++               "code",
++               "scope",
++               "message",
++             ],
++             "type": "object",
++           },
++           "name": {
++             "const": "WorktreeOwnershipObservationError",
++             "type": "string",
++           },
++         },
++         "required": [
++           "name",
++           "data",
++         ],
+          "type": "object",
+        },
+        "WorktreeRemoveInput": {
+          "properties": {
+            "directory": {
+
+- Expected  - 0
++ Received  + 98
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\openapi-runtime-inventory.test.ts:31:22)
+(fail) runtime OpenAPI publishes the complete canonical operation inventory and Goal errors [2904.00ms]
+(pass) concurrent runtime documents retain their full inventory beside the actual Goal error response [2979.65ms]
+
+ 1 pass
+ 1 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [10.48s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\openapi-runtime-inventory.test.ts
+[1/4] DONE test/server/openapi-runtime-inventory.test.ts exit=1 duration=11.27s
+[2/4] START test/server/continuous-goal-error-contract.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Goal GET documents its actual named conflict response [1406.72ms]
+(pass) Goal POST documents its actual named conflict response [1159.34ms]
+(pass) Goal PATCH documents its actual named conflict response [1284.25ms]
+
+ 3 pass
+ 0 fail
+ 9 expect() calls
+Ran 3 tests across 1 file. [5.07s]
+[2/4] DONE test/server/continuous-goal-error-contract.test.ts exit=0 duration=5.22s
+[3/4] START test/continuous-goal.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) durable continuous goal contracts > Chat creation, exact replay, pause, resume and completion persist real revisions [1319.13ms]
+(pass) durable continuous goal contracts > one exact continuation reserves one turn and reports the explicit budget terminal [1243.09ms]
+(pass) durable continuous goal contracts > usage references count descendant requests and their late completion exactly once [1307.34ms]
+(pass) durable continuous goal contracts > Task owner identity and cancellation project distinct goal facts [1652.96ms]
+(pass) durable continuous goal contracts > Mission includes its exact child Tasks and returns a typed overlapping-owner error [1170.92ms]
+(pass) durable continuous goal contracts > public route and native Tool share one exact durable goal [1121.67ms]
+(pass) durable continuous goal contracts > explicit blocking wins over quota and resuming preserves settled usage [1242.84ms]
+(pass) durable continuous goal contracts > different Projects retain exact independent owners and metering [2653.92ms]
+(pass) durable continuous goal contracts > a settled assistant batch advances the exact latest input frontier [1148.75ms]
+(pass) durable continuous goal contracts > chat reopening preserves cancellation until an explicit goal revision [1311.97ms]
+(pass) durable continuous goal contracts > mission reopening preserves cancellation until an explicit goal revision [1319.60ms]
+(pass) durable continuous goal contracts > archive and restore retain one paused goal on the exact owner [1488.88ms]
+(pass) durable continuous goal contracts > the production Task archive entry retains pause when a completed Task is restored [1161.84ms]
+
+ 13 pass
+ 0 fail
+ 60 expect() calls
+Ran 13 tests across 1 file. [19.70s]
+[3/4] DONE test/continuous-goal.test.ts exit=0 duration=19.84s
+[4/4] START test/server/validation-error-projection.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) public validation error projection > projects the canonical OAuth expiry error with its response identity [9.45ms]
+(pass) public validation error projection > projects the canonical API metadata error with its response identity [0.66ms]
+(pass) public validation error projection > retains the explicit diagnostic contract for root union [0.68ms]
+(pass) public validation error projection > retains the explicit diagnostic contract for dynamic record key [0.34ms]
+(pass) public validation error projection > retains the explicit diagnostic contract for strict object [0.56ms]
+(pass) public validation error projection > retains the explicit diagnostic contract for authored custom prose [0.36ms]
+(pass) public validation error projection > normalizes Standard Schema property-key locations and message-only errors [0.08ms]
+(pass) public validation error projection > passes transformed query, param and JSON values to the typed handler [1.70ms]
+(pass) public validation error projection > retains optional JSON inference and the parsed empty object [0.46ms]
+(pass) public validation error projection > uses the shared projection for query failures [0.53ms]
+(pass) public validation error projection > uses the shared projection for param failures [0.45ms]
+(pass) public validation error projection > retains the parser-authored malformed JSON response [2.29ms]
+(pass) public validation error projection > projects the canonical Global Chat attachment MIME location [1.19ms]
+(pass) public validation error projection > publishes the actual request metadata and explicit BadRequestError schema [9.33ms]
+
+ 14 pass
+ 0 fail
+ 20 expect() calls
+Ran 14 tests across 1 file. [1.58s]
+OpenCorvus failed test files (1):
+[4/4] DONE test/server/validation-error-projection.test.ts exit=0 duration=1.71s
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\openapi-runtime-inventory.test.ts

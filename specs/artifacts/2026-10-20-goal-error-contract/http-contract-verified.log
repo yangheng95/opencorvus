@@ -1,0 +1,12 @@
+{"scope":"goal-error-contract-458","requests":11,"states":["active","paused","active","complete"],"terminal":"complete","outcome":"failed"}
+47 |  terminal=await checked('SDK retained completed read',200,()=>client.continuousGoal.get(target,options()))
+48 |  assert.equal(terminal.id,initial.id);assert.equal(terminal.objective,objective);assert.equal(terminal.revision,completed.revision);assert.equal(terminal.status,'complete')
+49 |  const started=performance.now(),document=await fetch(base+'/doc',options());assert.equal(document.status,200)
+50 |  const spec=await document.json();rows.push({stage:'Public OpenAPI',status:document.status,ms:performance.now()-started})
+51 |  for(const method of ['get','post','patch']){
+52 |   const operation=spec.paths['/continuous-goal/{kind}/{ownerID}'][method]
+                                  ^
+TypeError: undefined is not an object (evaluating 'spec.paths["/continuous-goal/{kind}/{ownerID}"][method]')
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\goal-error-contract-458\http-contract.ts:52:30
+
+Bun v1.4.0 (Windows x64)

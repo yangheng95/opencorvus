@@ -1,0 +1,24 @@
+{"scope":"goal-error-contract-458","requests":2,"states":[],"outcome":"failed"}
+24 | try{
+25 |  const unavailable=await checked('SDK get unavailable owner',409,()=>client.continuousGoal.get({kind:'chat',ownerID:'missing-owner'},options()))
+26 |  assert.equal(unavailable.name,'ContinuousGoalError');assert.equal(unavailable.data.code,'owner_unavailable')
+27 |  const response=await fetch(base+'/coding/work/session?directory='+encodeURIComponent(directory),{...options(),method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})
+28 |  rows.push({stage:'Canonical home Work Chat creation',status:response.status,ms:0});assert.equal(response.status,201)
+29 |  const created=await response.json();ownerID=created.session.id;assert.equal(created.session.directory,directory)
+                                                                            ^
+AssertionError: Expected values to be strictly equal:
++ actual - expected
+
++ 'C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project'
+- 'C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/project'
+
+ generatedMessage: true,
+     actual: "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+   expected: "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/project",
+   operator: "strictEqual",
+       diff: "simple",
+       code: "ERR_ASSERTION"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\goal-error-contract-458\http-contract.ts:29:72
+
+Bun v1.4.0 (Windows x64)

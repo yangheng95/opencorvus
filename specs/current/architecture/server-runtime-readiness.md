@@ -1,5 +1,19 @@
 # Server runtime readiness
 
+The public `/doc` response and SDK generation both use `Server.openapi()` over
+the complete route inventory, including deferred Project routes and global/auth
+routes. Documentation is generated on request without eagerly activating Project
+business operations. The runtime proxy is a dispatch boundary, not a partial
+OpenAPI authority; query parameters and required JSON bodies share the same
+canonical normalization. Route-factory reset during inventory construction
+replaces factory references and leaves already constructed serving routes intact.
+Each inventory owns fresh response/content/media containers before conversion.
+The shared schema resolvers remain intact, so repeated and concurrent generation
+register the same complete components rather than retaining references whose
+definitions were consumed by an earlier conversion.
+The CLI subsequently adds SDK usage examples through its existing `x-codeSamples`
+presentation extension; that enrichment does not define another wire schema.
+
 Managed SDK startup accepts only the occurrence-bound readiness receipt. On
 timeout, abort, failed receipt or early exit, it settles the owned process and
 drains its pipes before attaching the byte-bounded diagnostic tail to the

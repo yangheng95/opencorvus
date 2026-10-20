@@ -1,0 +1,12 @@
+[1/1] START test/server/openapi-runtime-inventory.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) runtime OpenAPI publishes the complete canonical operation inventory and Goal errors [2810.76ms]
+(pass) concurrent runtime documents retain their full inventory beside the actual Goal error response [3078.70ms]
+
+ 2 pass
+ 0 fail
+ 9 expect() calls
+Ran 2 tests across 1 file. [10.59s]
+[1/1] DONE test/server/openapi-runtime-inventory.test.ts exit=0 duration=11.34s

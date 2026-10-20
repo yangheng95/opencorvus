@@ -228,9 +228,9 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 
 | Method | Path | Summary | operationId |
 |---|---|---|---|
-| GET | `/continuous-goal/{kind}/{ownerID}` | Read continuous goal Errors: `Goal owner or revision conflict.`. | `continuousGoal.get` |
-| PATCH | `/continuous-goal/{kind}/{ownerID}` | Update continuous goal Body: `expectedRevision`, `goalID`, `reason`, `requestID`, `status`, `tokenBudget`, `turnBudget`; Errors: `Goal owner, state or revision conflict.`. | `continuousGoal.update` |
-| POST | `/continuous-goal/{kind}/{ownerID}` | Create continuous goal Body: `objective`, `requestID`, `tokenBudget`, `turnBudget`; Errors: `Goal owner or request conflict.`. | `continuousGoal.create` |
+| GET | `/continuous-goal/{kind}/{ownerID}` | Read continuous goal Errors: `ContinuousGoalError`. | `continuousGoal.get` |
+| PATCH | `/continuous-goal/{kind}/{ownerID}` | Update continuous goal Body: `expectedRevision`, `goalID`, `reason`, `requestID`, `status`, `tokenBudget`, `turnBudget`; Errors: `ContinuousGoalError`. | `continuousGoal.update` |
+| POST | `/continuous-goal/{kind}/{ownerID}` | Create continuous goal Body: `objective`, `requestID`, `tokenBudget`, `turnBudget`; Errors: `ContinuousGoalError`. | `continuousGoal.create` |
 
 ### Coding
 

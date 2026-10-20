@@ -1,0 +1,103 @@
+[1/4] START test/server/openapi-runtime-inventory.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+22 |   await using project = await memoryProject()
+23 |   await Instance.provide({
+24 |     directory: project.path,
+25 |     fn: async () => {
+26 |       const response = await Server.App().request(`/doc?directory=${encodeURIComponent(project.path)}`)
+27 |       expect(response.status).toBe(200)
+                                   ^
+error: expect(received).toBe(expected)
+
+Expected: 200
+Received: 500
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\openapi-runtime-inventory.test.ts:27:31)
+(fail) runtime OpenAPI publishes the complete canonical operation inventory and Goal errors [1799.45ms]
+657 |             ...(responses
+658 |               ? {
+659 |                   responses: Object.fromEntries(
+660 |                     Object.entries(responses).map(([status, response]) => [
+661 |                       status,
+662 |                       "content" in response && response.content
+                                         ^
+TypeError: response is not an Object. (evaluating '"content" in response')
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\server\server.ts:662:36)
+      at map (1:11)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\server\server.ts:660:47)
+      at map (1:11)
+      at routeInventoryApp (D:\myhexin-local\opencorvus\packages\opencorvus\src\server\server.ts:644:8)
+      at async openapi (D:\myhexin-local\opencorvus\packages\opencorvus\src\server\server.ts:974:48)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\openapi-runtime-inventory.test.ts:57:64)
+(fail) concurrent runtime documents retain their full inventory beside the actual Goal error response [2093.85ms]
+
+ 0 pass
+ 2 fail
+ 1 expect() calls
+Ran 2 tests across 1 file. [8.55s]
+[1/4] DONE test/server/openapi-runtime-inventory.test.ts exit=1 duration=9.17s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\openapi-runtime-inventory.test.ts
+[2/4] START test/server/continuous-goal-error-contract.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Goal GET documents its actual named conflict response [1372.75ms]
+(pass) Goal POST documents its actual named conflict response [1241.60ms]
+(pass) Goal PATCH documents its actual named conflict response [1247.14ms]
+
+ 3 pass
+ 0 fail
+ 9 expect() calls
+Ran 3 tests across 1 file. [5.09s]
+[2/4] DONE test/server/continuous-goal-error-contract.test.ts exit=0 duration=5.22s
+[3/4] START test/continuous-goal.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) durable continuous goal contracts > Chat creation, exact replay, pause, resume and completion persist real revisions [1351.09ms]
+(pass) durable continuous goal contracts > one exact continuation reserves one turn and reports the explicit budget terminal [1393.26ms]
+(pass) durable continuous goal contracts > usage references count descendant requests and their late completion exactly once [1456.34ms]
+(pass) durable continuous goal contracts > Task owner identity and cancellation project distinct goal facts [1146.41ms]
+(pass) durable continuous goal contracts > Mission includes its exact child Tasks and returns a typed overlapping-owner error [1214.69ms]
+(pass) durable continuous goal contracts > public route and native Tool share one exact durable goal [1136.38ms]
+(pass) durable continuous goal contracts > explicit blocking wins over quota and resuming preserves settled usage [1236.78ms]
+(pass) durable continuous goal contracts > different Projects retain exact independent owners and metering [2468.79ms]
+(pass) durable continuous goal contracts > a settled assistant batch advances the exact latest input frontier [1217.97ms]
+(pass) durable continuous goal contracts > chat reopening preserves cancellation until an explicit goal revision [1392.61ms]
+(pass) durable continuous goal contracts > mission reopening preserves cancellation until an explicit goal revision [1349.90ms]
+(pass) durable continuous goal contracts > archive and restore retain one paused goal on the exact owner [1155.62ms]
+(pass) durable continuous goal contracts > the production Task archive entry retains pause when a completed Task is restored [1267.28ms]
+
+ 13 pass
+ 0 fail
+ 60 expect() calls
+Ran 13 tests across 1 file. [19.29s]
+[3/4] DONE test/continuous-goal.test.ts exit=0 duration=19.42s
+[4/4] START test/server/validation-error-projection.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) public validation error projection > projects the canonical OAuth expiry error with its response identity [9.54ms]
+(pass) public validation error projection > projects the canonical API metadata error with its response identity [0.66ms]
+(pass) public validation error projection > retains the explicit diagnostic contract for root union [0.49ms]
+(pass) public validation error projection > retains the explicit diagnostic contract for dynamic record key [0.30ms]
+(pass) public validation error projection > retains the explicit diagnostic contract for strict object [0.43ms]
+(pass) public validation error projection > retains the explicit diagnostic contract for authored custom prose [0.32ms]
+(pass) public validation error projection > normalizes Standard Schema property-key locations and message-only errors [0.08ms]
+(pass) public validation error projection > passes transformed query, param and JSON values to the typed handler [1.64ms]
+(pass) public validation error projection > retains optional JSON inference and the parsed empty object [0.54ms]
+(pass) public validation error projection > uses the shared projection for query failures [0.58ms]
+(pass) public validation error projection > uses the shared projection for param failures [0.39ms]
+(pass) public validation error projection > retains the parser-authored malformed JSON response [2.15ms]
+(pass) public validation error projection > projects the canonical Global Chat attachment MIME location [1.17ms]
+(pass) public validation error projection > publishes the actual request metadata and explicit BadRequestError schema [9.09ms]
+
+ 14 pass
+ 0 fail
+ 20 expect() calls
+Ran 14 tests across 1 file. [1.60s]
+OpenCorvus failed test files (1):
+[4/4] DONE test/server/validation-error-projection.test.ts exit=0 duration=1.73s
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\openapi-runtime-inventory.test.ts

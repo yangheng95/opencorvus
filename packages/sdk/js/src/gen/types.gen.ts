@@ -8106,13 +8106,13 @@ export type ContinuousGoalGetData = {
 
 export type ContinuousGoalGetErrors = {
   /**
-   * ContinuousGoalError
+   * Goal owner or revision conflict.
    */
   409: {
     data: {
       [key: string]: unknown
     }
-    name: "Goal owner or revision conflict."
+    name: "ContinuousGoalError"
   }
 }
 
@@ -8180,13 +8180,13 @@ export type ContinuousGoalUpdateData = {
 
 export type ContinuousGoalUpdateErrors = {
   /**
-   * ContinuousGoalError
+   * Goal owner, state or revision conflict.
    */
   409: {
     data: {
       [key: string]: unknown
     }
-    name: "Goal owner, state or revision conflict."
+    name: "ContinuousGoalError"
   }
 }
 
@@ -8251,13 +8251,13 @@ export type ContinuousGoalCreateData = {
 
 export type ContinuousGoalCreateErrors = {
   /**
-   * ContinuousGoalError
+   * Goal owner or request conflict.
    */
   409: {
     data: {
       [key: string]: unknown
     }
-    name: "Goal owner or request conflict."
+    name: "ContinuousGoalError"
   }
 }
 

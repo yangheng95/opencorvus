@@ -1,0 +1,212 @@
+{
+  "status": 200,
+  "runtime": [
+    {
+      "path": "/global/usage",
+      "method": "get",
+      "id": "global.usage"
+    },
+    {
+      "path": "/global/automations",
+      "method": "get",
+      "id": "global.automations.list"
+    },
+    {
+      "path": "/global/automations",
+      "method": "post",
+      "id": "global.automations.create"
+    },
+    {
+      "path": "/global/automations/{id}",
+      "method": "patch",
+      "id": "global.automations.update"
+    },
+    {
+      "path": "/global/automations/{id}",
+      "method": "delete",
+      "id": "global.automations.delete"
+    },
+    {
+      "path": "/global/automations/{id}/run",
+      "method": "post",
+      "id": "global.automations.run"
+    },
+    {
+      "path": "/global/automations/{id}/fires",
+      "method": "get",
+      "id": "global.automations.fires"
+    },
+    {
+      "path": "/global/automations/{id}/runs",
+      "method": "get",
+      "id": "global.automations.runs"
+    },
+    {
+      "path": "/global/chat",
+      "method": "post",
+      "id": "global.chat.create"
+    },
+    {
+      "path": "/global/chat/start",
+      "method": "post",
+      "id": "global.chat.start"
+    },
+    {
+      "path": "/global/work",
+      "method": "post",
+      "id": "global.work.create"
+    },
+    {
+      "path": "/global/composer-references",
+      "method": "get",
+      "id": "global.composerReferences"
+    },
+    {
+      "path": "/global/composer-expert-squads",
+      "method": "get",
+      "id": "global.composerExpertSquads"
+    },
+    {
+      "path": "/global/health",
+      "method": "get",
+      "id": "global.health"
+    },
+    {
+      "path": "/global/agents",
+      "method": "get",
+      "id": "global.agents.list"
+    },
+    {
+      "path": "/global/providers",
+      "method": "get",
+      "id": "global.providers.list"
+    },
+    {
+      "path": "/global/providers/{providerID}/account-usage",
+      "method": "get",
+      "id": "global.providers.account.usage"
+    },
+    {
+      "path": "/global/providers/auth",
+      "method": "get",
+      "id": "global.providers.auth"
+    },
+    {
+      "path": "/global/providers/{providerID}/auth/prompts",
+      "method": "post",
+      "id": "global.providers.auth.prompts"
+    },
+    {
+      "path": "/global/providers/{providerID}/auth/execute",
+      "method": "post",
+      "id": "global.providers.auth.execute"
+    },
+    {
+      "path": "/global/providers/{providerID}/oauth/authorize",
+      "method": "post",
+      "id": "global.providers.oauth.authorize"
+    },
+    {
+      "path": "/global/providers/{providerID}/oauth/cancel",
+      "method": "post",
+      "id": "global.providers.oauth.cancel"
+    },
+    {
+      "path": "/global/providers/{providerID}/oauth/callback",
+      "method": "post",
+      "id": "global.providers.oauth.callback"
+    },
+    {
+      "path": "/global/providers/discover-models",
+      "method": "post",
+      "id": "global.providers.discover.models"
+    },
+    {
+      "path": "/global/providers/{providerID}/test",
+      "method": "post",
+      "id": "global.providers.test"
+    },
+    {
+      "path": "/global/providers/refresh",
+      "method": "post",
+      "id": "global.providers.refresh"
+    },
+    {
+      "path": "/global/providers/{providerID}",
+      "method": "delete",
+      "id": "global.providers.remove"
+    },
+    {
+      "path": "/global/providers/models/refresh",
+      "method": "post",
+      "id": "global.providers.models.refresh"
+    },
+    {
+      "path": "/global/skill/market",
+      "method": "get",
+      "id": "global.skill.market"
+    },
+    {
+      "path": "/global/skill/market/search",
+      "method": "get",
+      "id": "global.skill.market.search"
+    },
+    {
+      "path": "/global/skill/market/detail",
+      "method": "get",
+      "id": "global.skill.market.detail"
+    },
+    {
+      "path": "/global/skill/market/install",
+      "method": "post",
+      "id": "global.skill.market.install"
+    },
+    {
+      "path": "/global/skill/install",
+      "method": "post",
+      "id": "global.skill.install"
+    },
+    {
+      "path": "/global/projects/discover",
+      "method": "get",
+      "id": "global.projects.discover"
+    },
+    {
+      "path": "/global/projects/anonymous",
+      "method": "post",
+      "id": "global.projects.anonymous"
+    },
+    {
+      "path": "/global/event",
+      "method": "get",
+      "id": "global.event"
+    },
+    {
+      "path": "/global/config",
+      "method": "get",
+      "id": "global.config.get"
+    },
+    {
+      "path": "/global/config",
+      "method": "patch",
+      "id": "global.config.update"
+    },
+    {
+      "path": "/global/dispose",
+      "method": "post",
+      "id": "global.dispose"
+    },
+    {
+      "path": "/auth/{providerID}",
+      "method": "put",
+      "id": "auth.set"
+    },
+    {
+      "path": "/auth/{providerID}",
+      "method": "delete",
+      "id": "auth.remove"
+    }
+  ],
+  "generatedCount": 345,
+  "kind": "Actual public HTTP metadata before shared route fix; no UI or source assertion"
+}

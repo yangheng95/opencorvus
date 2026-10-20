@@ -1,0 +1,96 @@
+{
+  "scope": "goal-error-contract-458",
+  "occurrence": "goal-error-contract-458-d2172f4d-1b8c-4320-9e3b-81c396c4c6c0",
+  "requests": [
+    {
+      "stage": "SDK get unavailable owner",
+      "status": 409,
+      "ms": 9.038499999999999
+    },
+    {
+      "stage": "Canonical home Work Chat creation",
+      "status": 201,
+      "ms": 54.88490000000001
+    },
+    {
+      "stage": "SDK create",
+      "status": 200,
+      "ms": 10.610199999999992
+    },
+    {
+      "stage": "SDK pause",
+      "status": 200,
+      "ms": 7.278500000000008
+    },
+    {
+      "stage": "SDK create unresolved conflict",
+      "status": 409,
+      "ms": 4.2590999999999894
+    },
+    {
+      "stage": "SDK stale revision",
+      "status": 409,
+      "ms": 4.009999999999991
+    },
+    {
+      "stage": "SDK read paused",
+      "status": 200,
+      "ms": 2.9860999999999933
+    },
+    {
+      "stage": "SDK explicit resume",
+      "status": 200,
+      "ms": 6.0090000000000146
+    },
+    {
+      "stage": "SDK explicit complete",
+      "status": 200,
+      "ms": 5.347799999999978
+    },
+    {
+      "stage": "SDK retained completed read",
+      "status": 200,
+      "ms": 4.580199999999991
+    },
+    {
+      "stage": "Public OpenAPI",
+      "status": 200,
+      "ms": 92.38149999999999
+    }
+  ],
+  "states": [
+    {
+      "stage": "created",
+      "status": "active",
+      "revision": "pev_g0VYYnYTi00tuZuRNFkn",
+      "turnsAccepted": 0
+    },
+    {
+      "stage": "paused",
+      "status": "paused",
+      "revision": "pev_g0VYYnYTr00vIMWZryoI",
+      "turnsAccepted": 0
+    },
+    {
+      "stage": "resumed",
+      "status": "active",
+      "revision": "pev_g0VYYnYU900v2TdzgXyA",
+      "turnsAccepted": 0
+    },
+    {
+      "stage": "complete",
+      "status": "complete",
+      "revision": "pev_g0VYYnYUE00IS5U0mwcp",
+      "turnsAccepted": 0
+    }
+  ],
+  "terminal": {
+    "goalID": "pev_g0VYYnYTi00tuZuRNFkn",
+    "sessionID": "ses_-zURRCRXGzzA7qb8m4pc",
+    "status": "complete",
+    "turnsAccepted": 0,
+    "tokensUsed": 0
+  },
+  "qualification": "Actual newly built SDK -> public development HTTP -> original Goal store and retained revisions; native preflight proves exact streaming model, not full new Goal execution; no UI automation",
+  "outcome": "failed"
+}

@@ -1,0 +1,145 @@
+[1/1] START test/server/continuous-goal-error-contract.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+54 |           status: 409,
+55 |           name: "ContinuousGoalError",
+56 |           code: contract.code,
+57 |         })
+58 |         const spec = await generateSpecs(app)
+59 |         expect(spec.paths?.["/continuous-goal/{kind}/{ownerID}"]?.[contract.method]?.responses?.["409"]).toMatchObject({
+                                                                                                              ^
+error: expect(received).toMatchObject(expected)
+
+  {
+    "content": {
+      "application/json": {
+        "schema": {
+          "properties": {
++           "data": {
++             "additionalProperties": {},
++             "propertyNames": {
++               "type": "string",
++             },
++             "type": "object",
++           },
+            "name": {
+-             "const": "ContinuousGoalError",
++             "const": "Goal owner or revision conflict.",
++             "type": "string",
+            },
+          },
+          "required": [
+            "name",
+            "data",
+          ],
+          "type": "object",
+        },
+      },
+    },
+-   "description": "Goal owner or revision conflict.",
++   "description": "ContinuousGoalError",
+  }
+
+- Expected  - 2
++ Received  + 10
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\continuous-goal-error-contract.test.ts:59:106)
+(fail) Goal GET documents its actual named conflict response [2945.88ms]
+54 |           status: 409,
+55 |           name: "ContinuousGoalError",
+56 |           code: contract.code,
+57 |         })
+58 |         const spec = await generateSpecs(app)
+59 |         expect(spec.paths?.["/continuous-goal/{kind}/{ownerID}"]?.[contract.method]?.responses?.["409"]).toMatchObject({
+                                                                                                              ^
+error: expect(received).toMatchObject(expected)
+
+  {
+    "content": {
+      "application/json": {
+        "schema": {
+          "properties": {
++           "data": {
++             "additionalProperties": {},
++             "propertyNames": {
++               "type": "string",
++             },
++             "type": "object",
++           },
+            "name": {
+-             "const": "ContinuousGoalError",
++             "const": "Goal owner or request conflict.",
++             "type": "string",
+            },
+          },
+          "required": [
+            "name",
+            "data",
+          ],
+          "type": "object",
+        },
+      },
+    },
+-   "description": "Goal owner or request conflict.",
++   "description": "ContinuousGoalError",
+  }
+
+- Expected  - 2
++ Received  + 10
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\continuous-goal-error-contract.test.ts:59:106)
+(fail) Goal POST documents its actual named conflict response [1570.67ms]
+54 |           status: 409,
+55 |           name: "ContinuousGoalError",
+56 |           code: contract.code,
+57 |         })
+58 |         const spec = await generateSpecs(app)
+59 |         expect(spec.paths?.["/continuous-goal/{kind}/{ownerID}"]?.[contract.method]?.responses?.["409"]).toMatchObject({
+                                                                                                              ^
+error: expect(received).toMatchObject(expected)
+
+  {
+    "content": {
+      "application/json": {
+        "schema": {
+          "properties": {
++           "data": {
++             "additionalProperties": {},
++             "propertyNames": {
++               "type": "string",
++             },
++             "type": "object",
++           },
+            "name": {
+-             "const": "ContinuousGoalError",
++             "const": "Goal owner, state or revision conflict.",
++             "type": "string",
+            },
+          },
+          "required": [
+            "name",
+            "data",
+          ],
+          "type": "object",
+        },
+      },
+    },
+-   "description": "Goal owner, state or revision conflict.",
++   "description": "ContinuousGoalError",
+  }
+
+- Expected  - 2
++ Received  + 10
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\continuous-goal-error-contract.test.ts:59:106)
+(fail) Goal PATCH documents its actual named conflict response [1343.26ms]
+
+ 0 pass
+ 3 fail
+ 9 expect() calls
+Ran 3 tests across 1 file. [11.17s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\continuous-goal-error-contract.test.ts
+[1/1] DONE test/server/continuous-goal-error-contract.test.ts exit=1 duration=12.05s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\continuous-goal-error-contract.test.ts

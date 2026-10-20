@@ -1,6 +1,6 @@
 import { Log } from "../util/log"
 import { initializeContinuousGoals } from "@/continuous-goal/controller"
-import { generateSpecs } from "hono-openapi"
+import { describeRoute, generateSpecs, uniqueSymbol, type HandlerUniqueProperty } from "hono-openapi"
 import { Hono } from "hono"
 import { cors } from "hono/cors"
 import { basicAuth } from "hono/basic-auth"
@@ -606,12 +606,12 @@ export namespace Server {
     return requireServerUrl()
   }
 
-  async function loadProjectRoutesApp(root: Hono) {
+  async function loadProjectRoutesApp() {
     if (projectRoutesApp) return projectRoutesApp
     if (!projectRoutesAppPromise) {
       projectRoutesAppPromise = import("./routes/app")
         .then(({ AppRoutes }) => {
-          projectRoutesApp = AppRoutes(root)
+          projectRoutesApp = AppRoutes()
           return projectRoutesApp
         })
         .catch((error) => {
@@ -632,14 +632,51 @@ export namespace Server {
     resetAppRouteFactoriesForOpenApi()
     GlobalRoutes.reset()
     AuthRoutes.reset()
-    const documented = AppRoutes(new Hono())
+    const documented = AppRoutes()
       .route("/global", GlobalRoutes())
       .route("/auth", AuthRoutes())
       .route("/ui", OverlayUI.routes(Object.freeze({ kind: "missing", identity: "missing" })))
     const routed = documented as unknown as Hono & {
       routes: Array<{ method: string }>
     }
-    routed.routes = routed.routes.filter((route) => route.method !== "ALL")
+    routed.routes = routed.routes
+      .filter((route) => route.method !== "ALL")
+      .map((route) => {
+        const metadata = (route.handler as typeof route.handler & { [uniqueSymbol]?: HandlerUniqueProperty })[
+          uniqueSymbol
+        ]
+        if (!metadata || !("spec" in metadata)) return route
+        const responses = metadata.spec.responses
+        // hono-openapi replaces each media.schema with its resolved JSON schema.
+        // Give this inventory its own containers so shared responses keep their
+        // resolvers and register components on every independent generation.
+        return {
+          ...route,
+          handler: describeRoute({
+            ...metadata.spec,
+            ...(responses
+              ? {
+                  responses: Object.fromEntries(
+                    Object.entries(responses).map(([status, response]) => [
+                      status,
+                      response && "content" in response && response.content
+                        ? {
+                            ...response,
+                            content: Object.fromEntries(
+                              Object.entries(response.content).map(([media, value]) => [
+                                media,
+                                value ? { ...value } : value,
+                              ]),
+                            ),
+                          }
+                        : response,
+                    ]),
+                  ),
+                }
+              : {}),
+          }),
+        }
+      })
     return routed
   }
 
@@ -921,7 +958,7 @@ export namespace Server {
           )
         })
         .all("*", async (c) => {
-          const projectApp = await loadProjectRoutesApp(app)
+          const projectApp = await loadProjectRoutesApp()
           const response = await projectApp.fetch(c.req.raw, c.env)
           response.headers.set("x-opencorvus-request-id", requestID(c))
           return response

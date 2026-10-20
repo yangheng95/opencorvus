@@ -27,7 +27,7 @@ export function ContinuousGoalRoutes() {
           "Read the ongoing goal for a Chat Session, Task or Mission Session in the selected Project. Separate from Delivery Slice Goals.",
         responses: {
           200: response,
-          409: namedErrorResponse("ContinuousGoalError", "Goal owner or revision conflict."),
+          409: namedErrorResponse("Goal owner or revision conflict.", "ContinuousGoalError"),
         },
       }),
       validator("param", OwnerParams),
@@ -43,7 +43,7 @@ export function ContinuousGoalRoutes() {
         operationId: "continuousGoal.create",
         description:
           "Explicitly authorize an ongoing goal on an existing owner. requestID is idempotent; one unresolved goal per execution scope.",
-        responses: { 200: response, 409: namedErrorResponse("ContinuousGoalError", "Goal owner or request conflict.") },
+        responses: { 200: response, 409: namedErrorResponse("Goal owner or request conflict.", "ContinuousGoalError") },
       }),
       validator("param", OwnerParams),
       validator("json", ContinuousGoalCreate),
@@ -61,7 +61,7 @@ export function ContinuousGoalRoutes() {
           "Pause, explicitly resume, block, complete or change explicit budgets using the exact current goal ID and revision. Usage remains cumulative.",
         responses: {
           200: response,
-          409: namedErrorResponse("ContinuousGoalError", "Goal owner, state or revision conflict."),
+          409: namedErrorResponse("Goal owner, state or revision conflict.", "ContinuousGoalError"),
         },
       }),
       validator("param", OwnerParams),

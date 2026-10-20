@@ -14,6 +14,11 @@ GET/POST/PATCH /continuous-goal/:kind/:ownerID uses the same project-scoped stor
 kind is chat, task or mission. ownerID is a Task ID for task and the canonical Session
 ID otherwise. requestID replays one mutation; updates require goalID and expectedRevision.
 
+Owner, request and revision conflicts return HTTP 409 with the named
+`ContinuousGoalError` body and its domain `data.code`. All three operation responses
+declare that same name in OpenAPI and the generated SDK; human descriptions are
+response documentation, not alternate error identities.
+
 ## Facts and projections
 
 protocol_event stores continuous_goal.created, continuous_goal.updated and
