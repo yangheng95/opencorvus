@@ -1,0 +1,139 @@
+{
+  "occurrence": "git-executable-flow-492-after-138ea9b7-514e-4ccb-ac2c-baf6b8553313",
+  "provider": [
+    {
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol",
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792537264216,
+        "boundAt": 1792537264218,
+        "chunkCount": 14,
+        "byteCount": 42682,
+        "firstByteReadAt": 1792537264239,
+        "lastByteReadAt": 1792537269190,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hZYapE0sPeUDeeRZ3h4L",
+          "streamRequest": {
+            "requestID": "msg_hc71geY2z9KTIxOSPgeZ",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYdLg5600f9yWB2sKk",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792537269248
+        }
+      }
+    },
+    {
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol",
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792537265196,
+        "boundAt": 1792537265198,
+        "chunkCount": 38,
+        "byteCount": 516023,
+        "firstByteReadAt": 1792537265201,
+        "lastByteReadAt": 1792537266340,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hZYapE0sPeUDeeRZ3h4L",
+          "streamRequest": {
+            "requestID": "msg_hc71geY2z9KTIxOSPgeZ",
+            "agentID": "chat",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYdLgJp008fqh80ZK8",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYdLg5D001yLXxLuIt"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792537266505
+        }
+      }
+    }
+  ],
+  "copiedPair": [
+    {
+      "name": "auth.json",
+      "bytes": 2122,
+      "outcome": "retired-after-original-physical-and-source-EOF"
+    },
+    {
+      "name": "models.json",
+      "bytes": 9155406,
+      "outcome": "retired-after-original-physical-and-source-EOF"
+    }
+  ],
+  "observedAtUtc": "2026-10-20T23:11:53.5959779Z",
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 60992,
+        "processInstanceID": "win32:639281340553807220",
+        "occurrenceID": "206e5357-0943-4785-9fe0-91592793f054"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 82316,
+        "processInstanceID": "win32:639281340562414365",
+        "occurrenceID": "a196c0a7-12b0-4265-9660-13792a42f42c"
+      }
+    }
+  ],
+  "requests": 2,
+  "launcher": {
+    "observedAtUtc": "2026-10-20T23:11:52.1482806Z",
+    "originalChildExit": 0
+  },
+  "pairedCleanupComplete": true,
+  "maximumRequests": 2,
+  "native": {
+    "occurrence": "git-executable-flow-492-after-138ea9b7-514e-4ccb-ac2c-baf6b8553313",
+    "outcome": "settled",
+    "host": {
+      "pid": 60992,
+      "processInstanceID": "win32:639281340553807220",
+      "occurrenceID": "206e5357-0943-4785-9fe0-91592793f054"
+    },
+    "target": {
+      "pid": 82316,
+      "processInstanceID": "win32:639281340562414365",
+      "occurrenceID": "a196c0a7-12b0-4265-9660-13792a42f42c"
+    },
+    "observedAtUtc": "2026-10-20T23:11:52.087Z",
+    "deadlineAt": 1792538455357,
+    "terminal": {
+      "occurrenceID": "git-executable-flow-492-after-138ea9b7-514e-4ccb-ac2c-baf6b8553313",
+      "pid": 82316,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  }
+}

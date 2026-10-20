@@ -1,0 +1,480 @@
+[
+  {
+    "native": {
+      "occurrence": "git-executable-flow-492-before-3d1b55e1-0eb5-45bd-8e9e-7b0301d2a5f8",
+      "outcome": "settled",
+      "host": {
+        "pid": 24492,
+        "processInstanceID": "win32:639281333436743057",
+        "occurrenceID": "ee0a09c7-8e89-48cd-82c8-da9ba0feeced"
+      },
+      "target": {
+        "pid": 88516,
+        "processInstanceID": "win32:639281333445016035",
+        "occurrenceID": "c3f23315-17cd-47f3-83cc-90f561a3b0fe"
+      },
+      "observedAtUtc": "2026-10-20T22:55:44.312Z",
+      "deadlineAt": 1792537743642,
+      "terminal": {
+        "occurrenceID": "git-executable-flow-492-before-3d1b55e1-0eb5-45bd-8e9e-7b0301d2a5f8",
+        "pid": 88516,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "launcher": {
+      "observedAtUtc": "2026-10-20T22:55:44.3747374Z",
+      "originalChildExit": 0
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 24492,
+          "processInstanceID": "win32:639281333436743057",
+          "occurrenceID": "ee0a09c7-8e89-48cd-82c8-da9ba0feeced"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 88516,
+          "processInstanceID": "win32:639281333445016035",
+          "occurrenceID": "c3f23315-17cd-47f3-83cc-90f561a3b0fe"
+        }
+      }
+    ],
+    "stage": "before",
+    "kind": "service"
+  },
+  {
+    "native": {
+      "occurrence": "git-executable-flow-492-checker-before-1cf6c1b6-3169-4d42-b4e6-27e04e624a71",
+      "outcome": "settled",
+      "host": {
+        "pid": 21860,
+        "processInstanceID": "win32:639281336454439845",
+        "occurrenceID": "105554ec-bb16-4da4-be18-ef833b42b23f"
+      },
+      "target": {
+        "pid": 46004,
+        "processInstanceID": "win32:639281336462604244",
+        "occurrenceID": "3081ea28-9d53-4d2d-a73c-62b6f4a80aaa"
+      },
+      "observedAtUtc": "2026-10-20T22:54:40.007Z",
+      "deadlineAt": 1792537085420,
+      "terminal": {
+        "occurrenceID": "git-executable-flow-492-checker-before-1cf6c1b6-3169-4d42-b4e6-27e04e624a71",
+        "pid": 46004,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "launcher": {
+      "originalChildExit": 0,
+      "observedAtUtc": "2026-10-20T22:54:40.0563918Z"
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 21860,
+          "processInstanceID": "win32:639281336454439845",
+          "occurrenceID": "105554ec-bb16-4da4-be18-ef833b42b23f"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 46004,
+          "processInstanceID": "win32:639281336462604244",
+          "occurrenceID": "3081ea28-9d53-4d2d-a73c-62b6f4a80aaa"
+        }
+      }
+    ],
+    "stage": "before",
+    "kind": "checker"
+  },
+  {
+    "native": {
+      "occurrence": "git-executable-flow-492-after-138ea9b7-514e-4ccb-ac2c-baf6b8553313",
+      "outcome": "settled",
+      "host": {
+        "pid": 60992,
+        "processInstanceID": "win32:639281340553807220",
+        "occurrenceID": "206e5357-0943-4785-9fe0-91592793f054"
+      },
+      "target": {
+        "pid": 82316,
+        "processInstanceID": "win32:639281340562414365",
+        "occurrenceID": "a196c0a7-12b0-4265-9660-13792a42f42c"
+      },
+      "observedAtUtc": "2026-10-20T23:11:52.087Z",
+      "deadlineAt": 1792538455357,
+      "terminal": {
+        "occurrenceID": "git-executable-flow-492-after-138ea9b7-514e-4ccb-ac2c-baf6b8553313",
+        "pid": 82316,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "launcher": {
+      "observedAtUtc": "2026-10-20T23:11:52.1482806Z",
+      "originalChildExit": 0
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 60992,
+          "processInstanceID": "win32:639281340553807220",
+          "occurrenceID": "206e5357-0943-4785-9fe0-91592793f054"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 82316,
+          "processInstanceID": "win32:639281340562414365",
+          "occurrenceID": "a196c0a7-12b0-4265-9660-13792a42f42c"
+        }
+      }
+    ],
+    "stage": "after",
+    "kind": "service"
+  },
+  {
+    "native": {
+      "occurrence": "git-executable-flow-492-checker-after-f2fb45da-0551-40b1-90eb-23cc5605bbb6",
+      "outcome": "settled",
+      "host": {
+        "pid": 93664,
+        "processInstanceID": "win32:639281341670083087",
+        "occurrenceID": "fdb98cd1-5462-4bdf-af5f-620e5759f999"
+      },
+      "target": {
+        "pid": 66900,
+        "processInstanceID": "win32:639281341679418233",
+        "occurrenceID": "54c10ee7-830b-45e1-9072-659011974814"
+      },
+      "observedAtUtc": "2026-10-20T23:03:27.141Z",
+      "deadlineAt": 1792537606985,
+      "terminal": {
+        "occurrenceID": "git-executable-flow-492-checker-after-f2fb45da-0551-40b1-90eb-23cc5605bbb6",
+        "pid": 66900,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "launcher": {
+      "originalChildExit": 0,
+      "observedAtUtc": "2026-10-20T23:03:27.1871208Z"
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 93664,
+          "processInstanceID": "win32:639281341670083087",
+          "occurrenceID": "fdb98cd1-5462-4bdf-af5f-620e5759f999"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 66900,
+          "processInstanceID": "win32:639281341679418233",
+          "occurrenceID": "54c10ee7-830b-45e1-9072-659011974814"
+        }
+      }
+    ],
+    "stage": "after",
+    "kind": "checker"
+  },
+  {
+    "native": {
+      "occurrence": "git-executable-flow-492-control-before-d9dc5c08-a309-4b78-b280-18931021c4e8",
+      "outcome": "settled",
+      "host": {
+        "pid": 60164,
+        "processInstanceID": "win32:639281349090950862",
+        "occurrenceID": "9b362012-4a64-456d-8b87-b7d5db55274e"
+      },
+      "target": {
+        "pid": 29168,
+        "processInstanceID": "win32:639281349099595408",
+        "occurrenceID": "3e5528b3-a873-4f33-9760-c7db9da95ce1"
+      },
+      "observedAtUtc": "2026-10-20T23:18:54.407Z",
+      "deadlineAt": 1792538349073,
+      "terminal": {
+        "occurrenceID": "git-executable-flow-492-control-before-d9dc5c08-a309-4b78-b280-18931021c4e8",
+        "pid": 29168,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "launcher": {
+      "observedAtUtc": "2026-10-20T23:18:54.4648915Z",
+      "originalChildExit": 0
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 60164,
+          "processInstanceID": "win32:639281349090950862",
+          "occurrenceID": "9b362012-4a64-456d-8b87-b7d5db55274e"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 29168,
+          "processInstanceID": "win32:639281349099595408",
+          "occurrenceID": "3e5528b3-a873-4f33-9760-c7db9da95ce1"
+        }
+      }
+    ],
+    "stage": "control-before",
+    "kind": "service"
+  },
+  {
+    "native": {
+      "occurrence": "git-executable-flow-492-checker-control-before-8585d257-5348-49b7-bbb7-9628f44d9792",
+      "outcome": "settled",
+      "host": {
+        "pid": 22576,
+        "processInstanceID": "win32:639281349540278793",
+        "occurrenceID": "83741163-3e36-47b9-a6f8-8ef16af7f995"
+      },
+      "target": {
+        "pid": 3416,
+        "processInstanceID": "win32:639281349550043581",
+        "occurrenceID": "4ff24d11-0aa9-4f97-9382-4be40492a163"
+      },
+      "observedAtUtc": "2026-10-20T23:16:33.062Z",
+      "deadlineAt": 1792538394006,
+      "terminal": {
+        "occurrenceID": "git-executable-flow-492-checker-control-before-8585d257-5348-49b7-bbb7-9628f44d9792",
+        "pid": 3416,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "launcher": {
+      "observedAtUtc": "2026-10-20T23:16:33.1132736Z",
+      "originalChildExit": 0
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 22576,
+          "processInstanceID": "win32:639281349540278793",
+          "occurrenceID": "83741163-3e36-47b9-a6f8-8ef16af7f995"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 3416,
+          "processInstanceID": "win32:639281349550043581",
+          "occurrenceID": "4ff24d11-0aa9-4f97-9382-4be40492a163"
+        }
+      }
+    ],
+    "stage": "control-before",
+    "kind": "checker"
+  },
+  {
+    "native": {
+      "occurrence": "git-executable-flow-492-control-after-8901f478-7a7e-4343-8219-6d07cc2414ea",
+      "outcome": "settled",
+      "host": {
+        "pid": 74536,
+        "processInstanceID": "win32:639281351455397029",
+        "occurrenceID": "95f567fd-a4a0-480f-8181-789d9cbfc71f"
+      },
+      "target": {
+        "pid": 49464,
+        "processInstanceID": "win32:639281351464020944",
+        "occurrenceID": "3465f26a-cd08-425a-ac16-5fe8470f6c8d"
+      },
+      "observedAtUtc": "2026-10-20T23:20:12.924Z",
+      "deadlineAt": 1792538585517,
+      "terminal": {
+        "occurrenceID": "git-executable-flow-492-control-after-8901f478-7a7e-4343-8219-6d07cc2414ea",
+        "pid": 49464,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "launcher": {
+      "originalChildExit": 0,
+      "observedAtUtc": "2026-10-20T23:20:12.9848789Z"
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 74536,
+          "processInstanceID": "win32:639281351455397029",
+          "occurrenceID": "95f567fd-a4a0-480f-8181-789d9cbfc71f"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 49464,
+          "processInstanceID": "win32:639281351464020944",
+          "occurrenceID": "3465f26a-cd08-425a-ac16-5fe8470f6c8d"
+        }
+      }
+    ],
+    "stage": "control-after",
+    "kind": "service"
+  },
+  {
+    "native": {
+      "occurrence": "git-executable-flow-492-checker-control-after-19e9a3b3-9d3a-4776-ae4b-1f5dc367d9c6",
+      "outcome": "settled",
+      "host": {
+        "pid": 79052,
+        "processInstanceID": "win32:639281351624367049",
+        "occurrenceID": "52371b3e-26da-41cc-b139-4101a17f9987"
+      },
+      "target": {
+        "pid": 83008,
+        "processInstanceID": "win32:639281351633396820",
+        "occurrenceID": "dd36e30a-8b1b-4074-a303-75c832199bd9"
+      },
+      "observedAtUtc": "2026-10-20T23:20:04.35Z",
+      "deadlineAt": 1792538602412,
+      "terminal": {
+        "occurrenceID": "git-executable-flow-492-checker-control-after-19e9a3b3-9d3a-4776-ae4b-1f5dc367d9c6",
+        "pid": 83008,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "launcher": {
+      "observedAtUtc": "2026-10-20T23:20:04.39621Z",
+      "originalChildExit": 0
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 79052,
+          "processInstanceID": "win32:639281351624367049",
+          "occurrenceID": "52371b3e-26da-41cc-b139-4101a17f9987"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 83008,
+          "processInstanceID": "win32:639281351633396820",
+          "occurrenceID": "dd36e30a-8b1b-4074-a303-75c832199bd9"
+        }
+      }
+    ],
+    "stage": "control-after",
+    "kind": "checker"
+  },
+  {
+    "launcher": {
+      "observedAtUtc": "2026-10-20T22:52:55.2352167Z",
+      "originalChildExit": 1
+    },
+    "native": {
+      "occurrence": "git-executable-flow-492-checker-before-45a60c72-339f-467a-b81e-496d2d5f3084",
+      "outcome": "settled",
+      "host": {
+        "pid": 93888,
+        "processInstanceID": "win32:639281335740648117",
+        "occurrenceID": "5654a53a-a15a-4035-acad-5a2cc71b60e4"
+      },
+      "target": {
+        "pid": 30044,
+        "processInstanceID": "win32:639281335749818840",
+        "occurrenceID": "1b94e4fe-ba10-4743-a31e-a2dd80204c41"
+      },
+      "observedAtUtc": "2026-10-20T22:52:55.185Z",
+      "deadlineAt": 1792537014044,
+      "terminal": {
+        "occurrenceID": "git-executable-flow-492-checker-before-45a60c72-339f-467a-b81e-496d2d5f3084",
+        "pid": 30044,
+        "reason": "exited",
+        "exitCode": 1,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 93888,
+          "processInstanceID": "win32:639281335740648117",
+          "occurrenceID": "5654a53a-a15a-4035-acad-5a2cc71b60e4"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 30044,
+          "processInstanceID": "win32:639281335749818840",
+          "occurrenceID": "1b94e4fe-ba10-4743-a31e-a2dd80204c41"
+        }
+      }
+    ],
+    "stage": "before",
+    "reason": "Checker selected CLI default instead of actual anonymous Session directory;real HTTP NotFoundError404",
+    "kind": "checker-failed-001"
+  }
+]

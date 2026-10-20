@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Git可执行路径传递](2026-10-21-git-executable-flow.md)：[四组完整配置对照、实际Sol与中英文Goal页面](../../artifacts/2026-10-21-git-executable-flow/README.md)，候选局部正确但无收益，已撤回生产改动。
+
 - [项目身份核验的组成成本](2026-10-21-project-identity-component-cost.md)：[组件控制/原生分段/Trace2与十scope结算](../../artifacts/2026-10-21-project-identity-component-cost/README.md)，没有从并行累计或诊断扰动猜根因。
 
 - [短期原生查询作用域](2026-10-21-native-query-scope.md)：[149目录有效交错/十项真实进程合同](../../artifacts/2026-10-21-native-query-scope/README.md)，局部约六秒收益仍未满足完整配置指标，生产未改。

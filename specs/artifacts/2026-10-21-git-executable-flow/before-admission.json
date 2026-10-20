@@ -1,0 +1,22 @@
+{
+  "pid": 88516,
+  "owner": {
+    "pid": 88516,
+    "processInstanceID": "win32:639281333445016035",
+    "occurrenceID": "cda23468-4b18-4464-b855-455437784ded"
+  },
+  "occurrence": "git-executable-flow-492-before-3d1b55e1-0eb5-45bd-8e9e-7b0301d2a5f8",
+  "port": 18863,
+  "preflight": {
+    "sessionID": "ses_hHkLB41qN4BUj28wFZOl",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "maxRequests": 2,
+  "qualificationKind": "NativeService",
+  "budgetScope": "preflight-and-selected-qualification-surface-cumulative-same-process",
+  "nextAction": "root-owned-manual-conversation",
+  "credentialCleanup": "parent-owned-after-physical-exit"
+}

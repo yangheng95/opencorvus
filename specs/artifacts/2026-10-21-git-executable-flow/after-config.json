@@ -1,0 +1,33 @@
+{
+  "at": "2026-10-20T23:02:48.320Z",
+  "endedAt": "2026-10-20T23:03:27.116Z",
+  "stage": "after",
+  "port": 18865,
+  "occurrence": "git-executable-flow-492-after-138ea9b7-514e-4ccb-ac2c-baf6b8553313",
+  "transport": "browser",
+  "accepted": true,
+  "restored": true,
+  "writeMs": 20718.7455,
+  "restoreMs": 18054.903599999998,
+  "failures": [],
+  "permissionMode": "ask",
+  "saveField": "username",
+  "restoreWireKeys": [
+    "$schema",
+    "model",
+    "small_model",
+    "prompt_profile",
+    "permission_mode",
+    "username"
+  ],
+  "restore": "Entire original source object plus explicit deletion of the added field;complete parsed canonical equals original",
+  "criteria": {
+    "saveMaxMs": 10000,
+    "savePass": false,
+    "restoreMaxMs": 5000,
+    "restorePass": false,
+    "readMaxMs": 20000,
+    "readPass": false
+  },
+  "boundary": "Production config service->browser HostTransport->real public HTTP on all149 original directories/full source. Non-UI integration;not browser/visual acceptance."
+}

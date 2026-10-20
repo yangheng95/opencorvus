@@ -1,0 +1,184 @@
+{
+  "decision": "Withdraw exact production candidate;full performance criteria failed",
+  "rows": [
+    {
+      "stage": "before",
+      "saveMs": 17110.4444,
+      "restoreMs": 16434.472,
+      "readMaxMs": 17235.312400000003,
+      "criteria": {
+        "saveMaxMs": 10000,
+        "savePass": false,
+        "restoreMaxMs": 5000,
+        "restorePass": false,
+        "readMaxMs": 20000,
+        "readPass": true
+      },
+      "completeCanonical": true,
+      "reads": [
+        {
+          "endpoint": "/config",
+          "status": 200,
+          "ms": 16877.727499999997
+        },
+        {
+          "endpoint": "/provider",
+          "status": 200,
+          "ms": 17235.312400000003,
+          "providers": 227,
+          "models": 8133,
+          "targetModel": "gpt-6.1-sol"
+        },
+        {
+          "endpoint": "/global/providers",
+          "status": 200,
+          "ms": 17080.898999999998,
+          "providers": 227,
+          "models": 8133,
+          "targetModel": "gpt-6.1-sol"
+        },
+        {
+          "endpoint": "/session/ses_hHkLB41qN4BUj28wFZOl",
+          "status": 200,
+          "ms": 78.63050000000004
+        }
+      ],
+      "modelMaximum": 2
+    },
+    {
+      "stage": "after",
+      "saveMs": 20718.7455,
+      "restoreMs": 18054.903599999998,
+      "readMaxMs": 20821.1144,
+      "criteria": {
+        "saveMaxMs": 10000,
+        "savePass": false,
+        "restoreMaxMs": 5000,
+        "restorePass": false,
+        "readMaxMs": 20000,
+        "readPass": false
+      },
+      "completeCanonical": true,
+      "reads": [
+        {
+          "endpoint": "/config",
+          "status": 200,
+          "ms": 20485.8143
+        },
+        {
+          "endpoint": "/provider",
+          "status": 200,
+          "ms": 20821.1144,
+          "providers": 227,
+          "models": 8133,
+          "targetModel": "gpt-6.1-sol"
+        },
+        {
+          "endpoint": "/global/providers",
+          "status": 200,
+          "ms": 20689.6503,
+          "providers": 227,
+          "models": 8133,
+          "targetModel": "gpt-6.1-sol"
+        },
+        {
+          "endpoint": "/session/ses_hZYapE0sPeUDeeRZ3h4L",
+          "status": 200,
+          "ms": 164.4906000000001
+        }
+      ],
+      "modelMaximum": 2
+    },
+    {
+      "stage": "control-before",
+      "saveMs": 18999.355900000002,
+      "restoreMs": 17632.8049,
+      "readMaxMs": 19081.1719,
+      "criteria": {
+        "saveMaxMs": 10000,
+        "savePass": false,
+        "restoreMaxMs": 5000,
+        "restorePass": false,
+        "readMaxMs": 20000,
+        "readPass": true
+      },
+      "completeCanonical": true,
+      "reads": [
+        {
+          "endpoint": "/config",
+          "status": 200,
+          "ms": 18762.4964
+        },
+        {
+          "endpoint": "/provider",
+          "status": 200,
+          "ms": 19081.1719,
+          "providers": 227,
+          "models": 8133,
+          "targetModel": "gpt-6.1-sol"
+        },
+        {
+          "endpoint": "/global/providers",
+          "status": 200,
+          "ms": 18943.305800000002,
+          "providers": 227,
+          "models": 8133,
+          "targetModel": "gpt-6.1-sol"
+        },
+        {
+          "endpoint": "/session/ses_hHkLB41qN4BUj28wFZOl",
+          "status": 200,
+          "ms": 34.669000000000096
+        }
+      ],
+      "modelMaximum": 0
+    },
+    {
+      "stage": "control-after",
+      "saveMs": 19059.552,
+      "restoreMs": 20866.633200000004,
+      "readMaxMs": 19120.5322,
+      "criteria": {
+        "saveMaxMs": 10000,
+        "savePass": false,
+        "restoreMaxMs": 5000,
+        "restorePass": false,
+        "readMaxMs": 20000,
+        "readPass": true
+      },
+      "completeCanonical": true,
+      "reads": [
+        {
+          "endpoint": "/config",
+          "status": 200,
+          "ms": 18828.2523
+        },
+        {
+          "endpoint": "/provider",
+          "status": 200,
+          "ms": 19120.5322,
+          "providers": 227,
+          "models": 8133,
+          "targetModel": "gpt-6.1-sol"
+        },
+        {
+          "endpoint": "/global/providers",
+          "status": 200,
+          "ms": 19013.0429,
+          "providers": 227,
+          "models": 8133,
+          "targetModel": "gpt-6.1-sol"
+        },
+        {
+          "endpoint": "/session/ses_hHkLB41qN4BUj28wFZOl",
+          "status": 200,
+          "ms": 166.50829999999996
+        }
+      ],
+      "modelMaximum": 0
+    }
+  ],
+  "maximumModelRequests": 4,
+  "actualModelRequests": 4,
+  "controlsActualModelRequests": 0
+}

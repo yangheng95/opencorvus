@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Git可执行路径传递对照](2026-10-21-git-executable-flow/README.md)：四个完整配置checker、九张人工截图、固定四次实际Sol与九个原native scope结算；生产候选撤回，原性能目标仍未达。
+
 - [项目身份组件与原生进程分段](2026-10-21-project-identity-component-cost/README.md)：266412次计数文件系统观察、1776次真实Git、Trace2扰动与逐目录身份关联，原十scope结算和3665行保留。
 
 - [原生查询作用域](2026-10-21-native-query-scope/README.md)：1184次完整149目录有效交错查询、十项聚合真实进程合同、原失败/八scope结算与3665行保留；私有原型未推广。

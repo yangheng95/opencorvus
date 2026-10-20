@@ -1,0 +1,69 @@
+{
+  "observedAtUtc": "2026-10-20T23:20:14.4411515Z",
+  "pairedCleanupComplete": true,
+  "maximumRequests": 0,
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 74536,
+        "processInstanceID": "win32:639281351455397029",
+        "occurrenceID": "95f567fd-a4a0-480f-8181-789d9cbfc71f"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 49464,
+        "processInstanceID": "win32:639281351464020944",
+        "occurrenceID": "3465f26a-cd08-425a-ac16-5fe8470f6c8d"
+      }
+    }
+  ],
+  "occurrence": "git-executable-flow-492-control-after-8901f478-7a7e-4343-8219-6d07cc2414ea",
+  "copiedPair": [
+    {
+      "name": "auth.json",
+      "outcome": "retired-after-original-physical-and-source-EOF",
+      "bytes": 2122
+    },
+    {
+      "name": "models.json",
+      "outcome": "retired-after-original-physical-and-source-EOF",
+      "bytes": 9155406
+    }
+  ],
+  "requests": 0,
+  "launcher": {
+    "originalChildExit": 0,
+    "observedAtUtc": "2026-10-20T23:20:12.9848789Z"
+  },
+  "native": {
+    "occurrence": "git-executable-flow-492-control-after-8901f478-7a7e-4343-8219-6d07cc2414ea",
+    "outcome": "settled",
+    "host": {
+      "pid": 74536,
+      "processInstanceID": "win32:639281351455397029",
+      "occurrenceID": "95f567fd-a4a0-480f-8181-789d9cbfc71f"
+    },
+    "target": {
+      "pid": 49464,
+      "processInstanceID": "win32:639281351464020944",
+      "occurrenceID": "3465f26a-cd08-425a-ac16-5fe8470f6c8d"
+    },
+    "observedAtUtc": "2026-10-20T23:20:12.924Z",
+    "deadlineAt": 1792538585517,
+    "terminal": {
+      "occurrenceID": "git-executable-flow-492-control-after-8901f478-7a7e-4343-8219-6d07cc2414ea",
+      "pid": 49464,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "provider": null
+}

@@ -1,0 +1,43 @@
+[1/3] START test/host-git-executable.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a resolved host Git executable returns real metadata with the caller's scoped environment [640.95ms]
+
+ 1 pass
+ 0 fail
+ 6 expect() calls
+Ran 1 test across 1 file. [3.73s]
+[1/3] DONE test/host-git-executable.test.ts exit=0 duration=5.30s
+[2/3] START test/project-git-discovery.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Git availability selects the explicit repository error and the ordinary directory identity [314.69ms]
+(pass) an existing damaged Git directory returns its explicit discovery error [439.16ms]
+(pass) a damaged local Git directory inside a valid parent repository returns its own discovery error [493.05ms]
+(pass) Git discovery resolves an unborn worktree with a separate metadata directory [1018.22ms]
+(skip) POSIX Git discovery preserves newline and trailing whitespace in repository paths
+(pass) Git discovery preserves the exact main, linked and aliased Project occurrence [1785.68ms]
+
+ 5 pass
+ 1 skip
+ 0 fail
+ 14 expect() calls
+Ran 6 tests across 1 file. [5.41s]
+[2/3] DONE test/project-git-discovery.test.ts exit=0 duration=5.53s
+[3/3] START test/server/project-git-initialization.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Git identity mutation returns an owned-controller conflict for active assistant work [522.90ms]
+(pass) Git identity mutation returns an owned-controller conflict for active mission work [292.05ms]
+(pass) Git identity mutation returns an owned-controller conflict for active root work [277.29ms]
+(pass) explicit Git initialization creates and returns the exact idle project [962.42ms]
+(pass) an active sibling project preserves independent Git initialization [958.64ms]
+
+ 5 pass
+ 0 fail
+ 9 expect() calls
+Ran 5 tests across 1 file. [6.49s]
+[3/3] DONE test/server/project-git-initialization.test.ts exit=0 duration=6.63s

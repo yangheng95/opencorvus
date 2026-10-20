@@ -1,0 +1,39 @@
+import { expect, test } from "bun:test"
+import fs from "node:fs/promises"
+import path from "node:path"
+import { hostGit } from "@/util/git"
+import { whichAsync } from "@/util/which"
+import { tmpdir } from "./fixture/fixture"
+
+test("a resolved host Git executable returns real metadata with the caller's scoped environment", async () => {
+  const resolved = await whichAsync("git")
+  expect(typeof resolved).toBe("string")
+  const executable = path.resolve(resolved!)
+  await using root = await tmpdir({ git: true })
+  const expectedVersion = await hostGit(["--version"], { cwd: root.path, timeoutProfile: "fast" })
+  expect(expectedVersion.exitCode).toBe(0)
+  const unavailablePath = path.join(root.path, "unavailable-bin")
+  const options = {
+    cwd: root.path,
+    env: { PATH: unavailablePath, Path: unavailablePath, GIT_CEILING_DIRECTORIES: path.dirname(root.path) },
+    timeoutProfile: "fast" as const,
+  }
+  const version = await hostGit(["--version"], options, executable)
+  expect({ code: version.exitCode, stdout: version.text() }).toEqual({
+    code: 0,
+    stdout: expectedVersion.text(),
+  })
+  const longPaths = await hostGit(["config", "--get", "core.longPaths"], options, executable)
+  expect({ code: longPaths.exitCode, value: longPaths.text().trim() }).toEqual({ code: 0, value: "true" })
+  const metadata = await hostGit(
+    ["rev-parse", "--path-format=absolute", "--show-toplevel", "--git-common-dir"],
+    options,
+    executable,
+  )
+  expect(metadata.exitCode).toBe(0)
+  const directories = metadata.text().trimEnd().split(/\r?\n/)
+  expect(await Promise.all(directories.map((directory) => fs.realpath(directory)))).toEqual([
+    await fs.realpath(root.path),
+    await fs.realpath(path.join(root.path, ".git")),
+  ])
+})

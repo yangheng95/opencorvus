@@ -1,0 +1,23 @@
+{
+  "pid": 49464,
+  "owner": {
+    "pid": 49464,
+    "processInstanceID": "win32:639281351464020944",
+    "occurrenceID": "b1016a9e-79fe-4027-a68e-b24e538435bb"
+  },
+  "occurrence": "git-executable-flow-492-control-after-8901f478-7a7e-4343-8219-6d07cc2414ea",
+  "port": 18869,
+  "maxRequests": 0,
+  "sessionID": "ses_hHkLB41qN4BUj28wFZOl",
+  "projectedModel": "gpt-6.1-sol",
+  "sourcePreflight": {
+    "path": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/git-executable-flow-492-before/evidence/preflight-ready.json",
+    "occurrence": "git-executable-flow-492-before-3d1b55e1-0eb5-45bd-8e9e-7b0301d2a5f8",
+    "owner": {
+      "pid": 88516,
+      "processInstanceID": "win32:639281333445016035",
+      "occurrenceID": "cda23468-4b18-4464-b855-455437784ded"
+    }
+  },
+  "boundary": "API-only control;no new model input,preflight,Session or outbound request;actual credential and projected model checked above. Original completed preflight is provenance,not a new owner request."
+}

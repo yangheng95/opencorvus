@@ -1,0 +1,23 @@
+22 |  const controller=new AbortController();let timer:ReturnType<typeof setTimeout>
+23 |  const touch=()=>{clearTimeout(timer);timer=setTimeout(()=>controller.abort(new Error('HTTP_INACTIVITY_90000MS')),90000)};touch()
+24 |  try{const response=await fetch(url,{signal:controller.signal}),chunks:Buffer[]=[];for await(const chunk of response.body!) {touch();chunks.push(Buffer.from(chunk))}return{status:response.status,body:JSON.parse(Buffer.concat(chunks).toString())}}finally{clearTimeout(timer!)}
+25 | }
+26 | const session=(await request(base+'/session/'+preflight.preflight.sessionID+'?directory='+encodeURIComponent('C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/project'))).body
+27 | assert.equal(session.id,preflight.preflight.sessionID);assert.equal(typeof session.directory,'string')
+            ^
+AssertionError: Expected values to be strictly equal:
++ actual - expected
+
++ undefined
+- 'ses_hHkLB41qN4BUj28wFZOl'
+
+ generatedMessage: true,
+     actual: undefined,
+   expected: "ses_hHkLB41qN4BUj28wFZOl",
+   operator: "strictEqual",
+       diff: "simple",
+       code: "ERR_ASSERTION"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\git-executable-flow-492\check-config.ts:27:8
+
+Bun v1.4.0 (Windows x64)

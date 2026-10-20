@@ -1,0 +1,87 @@
+diff --git a/packages/opencorvus/src/project/project.ts b/packages/opencorvus/src/project/project.ts
+index 65730fa7c..46345792b 100644
+--- a/packages/opencorvus/src/project/project.ts
++++ b/packages/opencorvus/src/project/project.ts
+@@ -273,7 +273,7 @@ export namespace Project {
+     return generated(path.join(directory, ".git"))
+   }
+ 
+-  async function gitRepositoryPaths(directory: string) {
++  async function gitRepositoryPaths(directory: string, executable: string) {
+     // Windows directory names exclude line-control characters. POSIX names
+     // can contain them, so those hosts read each scalar path independently.
+     const commands =
+@@ -286,7 +286,7 @@ export namespace Project {
+     // A damaged local .git must report its own failure, rather than silently
+     // discovering a parent repository. Keep Git's ordinary ownership checks.
+     const env = { GIT_CEILING_DIRECTORIES: path.dirname(directory) }
+-    const outcomes = await Promise.allSettled(commands.map((args) => git(args, { cwd: directory, env })))
++    const outcomes = await Promise.allSettled(commands.map((args) => git(args, { cwd: directory, env }, executable)))
+     const errors = outcomes.flatMap((outcome) => (outcome.status === "rejected" ? [outcome.reason] : []))
+     if (errors.length === 1) throw errors[0]
+     if (errors.length > 1) throw new AggregateError(errors, `Git discovery execution failed: ${directory}`)
+@@ -326,14 +326,17 @@ export namespace Project {
+ 
+   async function discoverGitDirectory(directory: string) {
+     if (!(await Filesystem.exists(path.join(directory, ".git")))) return undefined
+-    if (!(await whichAsync("git"))) {
++    const executable = await whichAsync("git")
++    if (!executable) {
+       throw new GitDiscoveryError({
+         directory,
+         reason: "command-unavailable",
+         message: `Git is required to discover the existing repository: ${directory}`,
+       })
+     }
+-    const paths = await SkillReadDiagnostics.phase("project.identity.git", () => gitRepositoryPaths(directory))
++    const paths = await SkillReadDiagnostics.phase("project.identity.git", () =>
++      gitRepositoryPaths(directory, Filesystem.resolve(executable)),
++    )
+     const sandbox = await displayGitTop(directory, gitpath(directory, paths.top))
+     const common = gitpath(directory, paths.common)
+     const rawWorktree = common === sandbox ? sandbox : path.dirname(common)
+@@ -1291,10 +1294,11 @@ export namespace Project {
+         project: current.project,
+       })
+     }
+-    if (!(await whichAsync("git"))) {
++    const executable = await whichAsync("git")
++    if (!executable) {
+       throw new Error("git is not installed")
+     }
+-    const result = await git(["init"], { cwd: directory })
++    const result = await git(["init"], { cwd: directory }, Filesystem.resolve(executable))
+     if (result.exitCode !== 0) {
+       const detail = result.stderr.toString().trim() || result.text().trim() || "git init failed"
+       throw new Error(detail)
+diff --git a/packages/opencorvus/src/util/git.ts b/packages/opencorvus/src/util/git.ts
+index 98b69d78c..067ec8e6c 100644
+--- a/packages/opencorvus/src/util/git.ts
++++ b/packages/opencorvus/src/util/git.ts
+@@ -100,8 +100,9 @@ async function executeGit(
+   }
+ }
+ 
+-export function hostGit(args: string[], opts: GitOptions): Promise<GitResult> {
+-  return executeGit(Process.runHost, args, opts)
++/** Accept the executable from a caller's current host lookup when one is already available. */
++export function hostGit(args: string[], opts: GitOptions, executable = "git"): Promise<GitResult> {
++  return executeGit(Process.runHost, args, opts, gitProcessArgs(args, executable))
+ }
+ 
+ export function taskGit(
+diff --git a/specs/current/architecture/task-runtime-directory.md b/specs/current/architecture/task-runtime-directory.md
+index 42f7a938b..8f1badbc6 100644
+--- a/specs/current/architecture/task-runtime-directory.md
++++ b/specs/current/architecture/task-runtime-directory.md
+@@ -52,6 +52,10 @@ only Git's own final LF so path whitespace and embedded newlines remain intact.
+ All admitted reads settle before an error returns. Unavailable or failed Git commands or invalid
+ path output return `ProjectGitDiscoveryError` (HTTP 400), rather than guessed
+ directory metadata. Process execution failures retain their original cause.
++Each discovery or explicit initialization passes its freshly resolved absolute
++host Git executable to the same supervised Git adapter. Availability and execution
++therefore share that observation's tool selection, without another PATH search
++or a cache across initial and admitted observations.
+ Discovery with a local `.git` bounds Git's automatic search at the parent
+ directory through `GIT_CEILING_DIRECTORIES`. A damaged child repository therefore
+ reports its own error while retaining Git's ordinary ownership checks.

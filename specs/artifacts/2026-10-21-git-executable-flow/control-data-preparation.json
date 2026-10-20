@@ -1,0 +1,20 @@
+{
+  "observedAt": "2026-10-20T23:14:37.754Z",
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/git-executable-flow-492-before",
+  "counts": {
+    "project": 150,
+    "session": 199,
+    "message": 520,
+    "part": 1159,
+    "protocol_event": 1411,
+    "tool_part_request": 119,
+    "tool_part_outcome": 119
+  },
+  "schema": 3,
+  "controls": [
+    "control-before",
+    "control-after"
+  ],
+  "modelRequests": 0,
+  "boundary": "Both exact same settled full DB/canonical snapshot including original149 and prior real preflight Project/Session;no new Session/model input;no UI in controls"
+}

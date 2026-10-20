@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Git可执行路径传递的完整对照](records/2026-10/2026-10-21-git-executable-flow.md)：[四组真实配置、九张人工图与原scope结算](artifacts/2026-10-21-git-executable-flow/README.md)，候选未证明收益已撤回，保留完整性能未达事实。
+
 - [项目身份核验的组件成本](records/2026-10/2026-10-21-project-identity-component-cost.md)：[十个原scope与296项Trace2关联](artifacts/2026-10-21-project-identity-component-cost/README.md)，排除全表扫描/同步rename单一归因，保留完整配置未达状态。
 
 - [短期原生查询作用域](records/2026-10/2026-10-21-native-query-scope.md)：[原149目录交错对照与生命周期](artifacts/2026-10-21-native-query-scope/README.md)，局部17.5/17.9秒降至11.1/11.2秒，完整配置仍未达标，生产未改。

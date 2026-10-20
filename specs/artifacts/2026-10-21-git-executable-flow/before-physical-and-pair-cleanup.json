@@ -1,0 +1,139 @@
+{
+  "launcher": {
+    "observedAtUtc": "2026-10-20T22:55:44.3747374Z",
+    "originalChildExit": 0
+  },
+  "copiedPair": [
+    {
+      "name": "auth.json",
+      "bytes": 2122,
+      "outcome": "retired-after-original-physical-and-source-EOF"
+    },
+    {
+      "name": "models.json",
+      "bytes": 9155406,
+      "outcome": "retired-after-original-physical-and-source-EOF"
+    }
+  ],
+  "maximumRequests": 2,
+  "native": {
+    "occurrence": "git-executable-flow-492-before-3d1b55e1-0eb5-45bd-8e9e-7b0301d2a5f8",
+    "outcome": "settled",
+    "host": {
+      "pid": 24492,
+      "processInstanceID": "win32:639281333436743057",
+      "occurrenceID": "ee0a09c7-8e89-48cd-82c8-da9ba0feeced"
+    },
+    "target": {
+      "pid": 88516,
+      "processInstanceID": "win32:639281333445016035",
+      "occurrenceID": "c3f23315-17cd-47f3-83cc-90f561a3b0fe"
+    },
+    "observedAtUtc": "2026-10-20T22:55:44.312Z",
+    "deadlineAt": 1792537743642,
+    "terminal": {
+      "occurrenceID": "git-executable-flow-492-before-3d1b55e1-0eb5-45bd-8e9e-7b0301d2a5f8",
+      "pid": 88516,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "observedAtUtc": "2026-10-20T22:57:07.8729461Z",
+  "occurrence": "git-executable-flow-492-before-3d1b55e1-0eb5-45bd-8e9e-7b0301d2a5f8",
+  "chain": [
+    {
+      "identity": {
+        "pid": 24492,
+        "processInstanceID": "win32:639281333436743057",
+        "occurrenceID": "ee0a09c7-8e89-48cd-82c8-da9ba0feeced"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "identity": {
+        "pid": 88516,
+        "processInstanceID": "win32:639281333445016035",
+        "occurrenceID": "c3f23315-17cd-47f3-83cc-90f561a3b0fe"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "requests": 2,
+  "pairedCleanupComplete": true,
+  "provider": [
+    {
+      "model": "gpt-6.1-sol",
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792536556691,
+        "boundAt": 1792536556694,
+        "chunkCount": 14,
+        "byteCount": 39288,
+        "firstByteReadAt": 1792536556697,
+        "lastByteReadAt": 1792536561085,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hHkLB41qN4BUj28wFZOl",
+          "streamRequest": {
+            "requestID": "msg_ha2S5x5rjpVEAKMqmxBo",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYdIi4700wKwmCqVH2",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792536561142
+        }
+      },
+      "status": 200,
+      "streaming": true
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792536558306,
+        "boundAt": 1792536558307,
+        "chunkCount": 40,
+        "byteCount": 516035,
+        "firstByteReadAt": 1792536558341,
+        "lastByteReadAt": 1792536559749,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hHkLB41qN4BUj28wFZOl",
+          "streamRequest": {
+            "requestID": "msg_ha2S5x5rjpVEAKMqmxBo",
+            "agentID": "chat",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYdIiL800ffNAOWMN3",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYdIi4L00ASqXZONE1"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792536559941
+        }
+      },
+      "status": 200,
+      "streaming": true
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "observedAt": "2026-10-20T23:21:35.455Z",
+  "schema": 3,
+  "source": {
+    "integrity": "ok",
+    "counts": {
+      "project": 149,
+      "session": 198,
+      "message": 518,
+      "part": 1155,
+      "protocol_event": 1407,
+      "tool_part_request": 119,
+      "tool_part_outcome": 119
+    },
+    "bytes": 60063744,
+    "modifiedAtMs": 1792511048746.7432,
+    "originalRows": "all rowid/fields/time exact"
+  },
+  "clones": [
+    {
+      "stage": "before",
+      "schema": 3,
+      "integrity": "ok",
+      "originalRows": "all rowid/fields/time exact",
+      "current": {
+        "project": 150,
+        "session": 199,
+        "message": 520,
+        "part": 1159,
+        "protocol_event": 1411,
+        "tool_part_request": 119,
+        "tool_part_outcome": 119
+      },
+      "canonical": "entire original parsed object exact"
+    },
+    {
+      "stage": "after",
+      "schema": 3,
+      "integrity": "ok",
+      "originalRows": "all rowid/fields/time exact",
+      "current": {
+        "project": 150,
+        "session": 199,
+        "message": 520,
+        "part": 1159,
+        "protocol_event": 1411,
+        "tool_part_request": 119,
+        "tool_part_outcome": 119
+      },
+      "canonical": "entire original parsed object exact"
+    },
+    {
+      "stage": "control-before",
+      "schema": 3,
+      "integrity": "ok",
+      "originalRows": "all rowid/fields/time exact",
+      "current": {
+        "project": 150,
+        "session": 199,
+        "message": 520,
+        "part": 1159,
+        "protocol_event": 1411,
+        "tool_part_request": 119,
+        "tool_part_outcome": 119
+      },
+      "canonical": "entire original parsed object exact"
+    },
+    {
+      "stage": "control-after",
+      "schema": 3,
+      "integrity": "ok",
+      "originalRows": "all rowid/fields/time exact",
+      "current": {
+        "project": 150,
+        "session": 199,
+        "message": 520,
+        "part": 1159,
+        "protocol_event": 1411,
+        "tool_part_request": 119,
+        "tool_part_outcome": 119
+      },
+      "canonical": "entire original parsed object exact"
+    }
+  ],
+  "canonicalKeys": [
+    "$schema",
+    "model",
+    "small_model",
+    "prompt_profile",
+    "permission_mode"
+  ],
+  "boundary": "Readonly full original rowid/fields/times and actual entire canonical;no initializer,model request or UI assertion",
+  "authority": {
+    "sourceAuthBytes": 3929,
+    "sourceAuthModifiedAtMs": 1792460418696.2107,
+    "selectedPair": "same authorized access/refresh and full exact catalog bytes",
+    "source": "source file metadata preserved;no refresh/exchange/write",
+    "catalogBytes": 9155406,
+    "maximumRequests": 4
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "occurrence": "git-executable-flow-492-before-3d1b55e1-0eb5-45bd-8e9e-7b0301d2a5f8",
+  "admission": {
+    "time": "2026-10-20T22:54:06.488Z",
+    "requestID": "c5abb991-7e89-4a4c-a787-2f14116429a6",
+    "phase": "config.global.before"
+  },
+  "results": [
+    {
+      "endpoint": "/config",
+      "startedAt": "2026-10-20T22:54:06.623Z",
+      "endedAt": "2026-10-20T22:54:23.502Z",
+      "ms": 16877.727499999997,
+      "status": 200,
+      "permissionMode": "ask"
+    },
+    {
+      "endpoint": "/provider",
+      "startedAt": "2026-10-20T22:54:06.624Z",
+      "endedAt": "2026-10-20T22:54:23.864Z",
+      "ms": 17235.312400000003,
+      "status": 200,
+      "providers": 227,
+      "models": 8133,
+      "targetModel": "gpt-6.1-sol",
+      "projection": "Complete all provider/model identity sets retained"
+    },
+    {
+      "endpoint": "/global/providers",
+      "startedAt": "2026-10-20T22:54:06.624Z",
+      "endedAt": "2026-10-20T22:54:23.712Z",
+      "ms": 17080.898999999998,
+      "status": 200,
+      "providers": 227,
+      "models": 8133,
+      "targetModel": "gpt-6.1-sol",
+      "projection": "Complete all provider/model identity sets retained"
+    },
+    {
+      "endpoint": "/session/ses_hHkLB41qN4BUj28wFZOl",
+      "startedAt": "2026-10-20T22:54:06.624Z",
+      "endedAt": "2026-10-20T22:54:06.702Z",
+      "ms": 78.63050000000004,
+      "status": 200,
+      "sessionID": "ses_hHkLB41qN4BUj28wFZOl"
+    }
+  ],
+  "failures": []
+}
