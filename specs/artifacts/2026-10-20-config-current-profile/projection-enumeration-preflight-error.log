@@ -1,0 +1,9 @@
+1 | import fs from "node:fs"
+2 | import path from "node:path"
+3 | const owned = path.join(import.meta.dir, "projection-diagnostic")
+4 | if (process.env.OPENCORVUS_HOME !== owned || fs.existsSync(owned)) throw Error("Exact fresh private diagnostic root required")
+                                                                             ^
+error: Exact fresh private diagnostic root required
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\config-current-profile-453\trace-projection.ts:4:74
+
+Bun v1.4.0 (Windows x64)

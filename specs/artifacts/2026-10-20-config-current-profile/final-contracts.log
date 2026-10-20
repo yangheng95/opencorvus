@@ -1,0 +1,173 @@
+$ bun script/run-tests.ts test/provider-projection-isolation.test.ts test/provider-live-model-refresh.test.ts test/provider-discovery-bootstrap.test.ts test/openai-codex-model-projection.test.ts test/provider-cache-identity.test.ts test/provider-model-billing-coverage.test.ts test/config-global-project-validation.test.ts test/provider-credential-presence.test.ts test/provider-empty-declarations.test.ts
+[1/9] START test/provider-projection-isolation.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) empty model option defaults produce independent authored values for each projection [8.11ms]
+(pass) initial reasoning variants retain their source values and each projection owns later edits [1.21ms]
+(pass) authored reasoning variants serialize and clone as the model's current writable value [2.43ms]
+(pass) frozen models retain readable defaults and sealed models retain their authored reasoning value [1.34ms]
+(pass) each Provider projection owns its mutable metadata and preserves the current source declaration [1.30ms]
+(pass) a production Project plugin customizes its own Provider while another Project and global catalog retain their declarations [5714.34ms]
+(pass) published catalogs retain their original model generation across a canonical catalog update [254.86ms]
+(pass) frozen published Providers serialize complete models and sealed Providers retain authored models [85.89ms]
+(pass) environment selection preserves the selected key for ordinary single declaration [157.69ms]
+(pass) environment selection preserves the selected key for DashScope single declaration [213.69ms]
+(pass) environment selection preserves the selected key for DashScope common credential [208.83ms]
+(pass) environment selection preserves the selected key for DashScope multiple declarations [232.59ms]
+
+ 12 pass
+ 0 fail
+ 16 expect() calls
+Ran 12 tests across 1 file. [12.39s]
+[1/9] DONE test/provider-projection-isolation.test.ts exit=0 duration=13.29s
+[2/9] START test/provider-live-model-refresh.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Provider live model refresh authority > the default catalog migration adds the bundled OpenCorvus declaration and explicit overrides stay strict [542.24ms]
+(pass) Provider live model refresh authority > both public routes publish exact live identities through one durable catalog writer [4800.51ms]
+(pass) Provider live model refresh authority > duplicate live identities return an explicit failure and preserve the canonical catalog [136.81ms]
+(pass) Provider live model refresh authority > live metadata rejects extensions instead of publishing inferred catalog fields [118.22ms]
+(pass) Provider live model refresh authority > malformed saved Auth is the public typed 503 and strict live metadata never commits [1808.29ms]
+
+ 5 pass
+ 0 fail
+ 17 expect() calls
+Ran 5 tests across 1 file. [11.83s]
+[2/9] DONE test/provider-live-model-refresh.test.ts exit=0 duration=12.10s
+[3/9] START test/provider-discovery-bootstrap.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Provider discovery before model availability > a configured endpoint retains discovery when the independent model catalog is malformed [1720.13ms]
+(pass) Provider discovery before model availability > both routes use their configured zero-model endpoint with the saved API credential [592.39ms]
+(pass) Provider discovery before model availability > explicit credentials and existing model endpoint discovery retain their positive responses [371.38ms]
+(pass) Provider discovery before model availability > catalog-only discovery uses the one current top-level declaration and configured overrides [482.96ms]
+(pass) Provider discovery before model availability > configured facts and the public runnable view retain distinct positive contracts [350.04ms]
+(pass) Provider discovery before model availability > excluded providers and undeclared addresses return the existing bound-address error [411.00ms]
+(pass) Provider discovery before model availability > live refresh restores a zero-model catalog with the configured API key selected ahead of saved Auth [583.94ms]
+(pass) Provider discovery before model availability > an explicit empty configured API key produces the credential error contract [443.57ms]
+(pass) Provider discovery before model availability > malformed saved Auth remains a typed 503 for generic discovery [231.35ms]
+
+ 9 pass
+ 0 fail
+ 21 expect() calls
+Ran 9 tests across 1 file. [9.28s]
+[3/9] DONE test/provider-discovery-bootstrap.test.ts exit=0 duration=9.50s
+[4/9] START test/openai-codex-model-projection.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Codex OAuth projects declared integer-major and multi-digit-minor identities with their catalog metadata [22.17ms]
+(pass) global and Project Provider resolution preserve exact gpt-6-luna under OAuth [1880.82ms]
+
+ 2 pass
+ 0 fail
+ 10 expect() calls
+Ran 2 tests across 1 file. [3.30s]
+[4/9] DONE test/openai-codex-model-projection.test.ts exit=0 duration=3.48s
+[5/9] START test/provider-cache-identity.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Provider cache identity > canonical sources are runtime-independent and exact bytes remain the cache authority [0.69ms]
+(pass) Provider cache identity > validated Provider config and declarative SDK options use canonical exact identities [2.86ms]
+(pass) Provider cache identity > production Provider state and SDK caches reuse only exact canonical inputs [1780.42ms]
+(pass) Provider cache identity > default Provider generations are Project-owned and follow current Config lifecycle [3429.80ms]
+(pass) Provider cache identity > production runtime capabilities execute without entering the declarative SDK cache [1534.42ms]
+(pass) Provider cache identity > releases one Provider capacity slot on response EOF, cancel, abort and transport error [1731.11ms]
+(pass) Provider cache identity > shares the final Provider stream capacity lease across two backend processes [13906.06ms]
+(pass) Provider cache identity > production Bedrock credential capability initializes without cache serialization [3910.70ms]
+(pass) Provider cache identity > DashScope credential lifetime publishes versioned SHA-256 identity [94.14ms]
+
+ 9 pass
+ 0 fail
+ 41 expect() calls
+Ran 9 tests across 1 file. [27.65s]
+[5/9] DONE test/provider-cache-identity.test.ts exit=0 duration=27.90s
+[6/9] START test/provider-model-billing-coverage.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Provider model billing coverage > preserves request-time long-context pricing when config overrides only the base rate [0.18ms]
+(pass) Provider model billing coverage > does not label an absent configured/catalog price as confirmed free [0.04ms]
+(pass) Provider model billing coverage > preserves the catalog price when Copilot omits optional remote token prices [4.49ms]
+
+ 3 pass
+ 0 fail
+ 3 expect() calls
+Ran 3 tests across 1 file. [2.35s]
+[6/9] DONE test/provider-model-billing-coverage.test.ts exit=0 duration=2.83s
+[7/9] START test/config-global-project-validation.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a retained global writer settles its original transition after repeated projection failures [2683.48ms]
+(pass) one global generation projects every registered project's own configuration [3978.46ms]
+(pass) one global mutation retains its exact candidate identities through persistence and runtime convergence [3807.83ms]
+(pass) an invalid Project returns the candidate error and a corrected source accepts a full retry [3107.69ms]
+
+ 4 pass
+ 0 fail
+ 28 expect() calls
+Ran 4 tests across 1 file. [15.54s]
+[7/9] DONE test/config-global-project-validation.test.ts exit=0 duration=15.84s
+[8/9] START test/provider-credential-presence.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Provider API-key configuration presence > both public scopes expose zero-model source facts while keeping the exact runnable projection [1253.90ms]
+(pass) Provider API-key configuration presence > project configuration supplies its own presence fact without changing the global configuration [652.75ms]
+(pass) Provider API-key configuration presence > real built-in OAuth loaders publish dummy and access options while API-key presence stays false [551.85ms]
+(pass) Provider API-key configuration presence > explicit API-key configuration remains a positive fact alongside OAuth and an empty override preserves saved API existence [583.50ms]
+(pass) Provider API-key configuration presence > missing Auth is a successfully observed empty authority in both scopes [588.88ms]
+(pass) Provider API-key configuration presence > malformed_json Auth observation yields unknown while a separately observed configured key remains true [549.68ms]
+(pass) Provider API-key configuration presence > io Auth observation yields unknown while a separately observed configured key remains true [598.21ms]
+(pass) Provider API-key configuration presence > ConfigJsonError through each public route publishes a configuration issue and unknown presence [525.56ms]
+(pass) Provider API-key configuration presence > ConfigInvalidError through each public route publishes a configuration issue and unknown presence [580.16ms]
+(pass) Provider API-key configuration presence > successful and failed observations of empty configuration have distinct reusable Provider cache identities [900.42ms]
+(pass) Provider API-key configuration presence > multiple environment candidates retain unknown and existing provider filters retain exact public collections [690.17ms]
+(pass) Provider API-key configuration presence > an actual built-in loader error preserves unknown and independently configured API evidence [780.24ms]
+(pass) Provider API-key configuration presence > an observed environment API key remains configured when a later built-in loader fails [810.32ms]
+(pass) Provider API-key configuration presence > vendor-owned API options and a real custom-loader failure publish unknown [743.82ms]
+
+ 14 pass
+ 0 fail
+ 26 expect() calls
+Ran 14 tests across 1 file. [12.52s]
+[8/9] DONE test/provider-credential-presence.test.ts exit=0 duration=12.73s
+[9/9] START test/provider-empty-declarations.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Provider empty declaration contracts > merging an overlay into a missing prompt object applies its nested deletion [312.98ms]
+(pass) Provider empty declaration contracts > previewing deletion from an empty overlay preserves inherited prompt values [43.94ms]
+(pass) Provider empty declaration contracts > previewing deletion from an explicit override overlay preserves inherited prompt values [44.48ms]
+(pass) Provider empty declaration contracts > merging a nested object patch into missing metadata applies null and empty-object values [58.02ms]
+(pass) Provider empty declaration contracts > merging a nested object patch into scalar metadata applies null and empty-object values [46.36ms]
+(pass) Provider empty declaration contracts > global JSONC writer preserves the complete source for scalar to empty object [312.57ms]
+(pass) Provider empty declaration contracts > global JSONC writer preserves the complete source for missing object with nested deletion [79.32ms]
+(pass) Provider empty declaration contracts > global JSONC writer preserves the complete source for existing object with an empty patch [130.56ms]
+(pass) Provider empty declaration contracts > global public save persists an explicit models-only empty object [57.77ms]
+(pass) Provider empty declaration contracts > global public save accepts absent and empty model declarations [159.89ms]
+(pass) Provider empty declaration contracts > global catalog models remain runnable through an empty declaration and cleared override [221.50ms]
+(pass) Provider empty declaration contracts > global clearing the final unreferenced declaration retains the saved Auth fact [190.92ms]
+(pass) Provider empty declaration contracts > global clearing a model referenced model returns the canonical 400 [203.99ms]
+(pass) Provider empty declaration contracts > global clearing a agent referenced model returns the canonical 400 [130.36ms]
+(pass) Provider empty declaration contracts > project JSONC writer preserves the complete source for scalar to empty object [953.89ms]
+(pass) Provider empty declaration contracts > project JSONC writer preserves the complete source for missing object with nested deletion [1136.34ms]
+(pass) Provider empty declaration contracts > project JSONC writer preserves the complete source for existing object with an empty patch [819.11ms]
+(pass) Provider empty declaration contracts > project public save persists an explicit models-only empty object [523.44ms]
+(pass) Provider empty declaration contracts > project public save accepts absent and empty model declarations [640.16ms]
+(pass) Provider empty declaration contracts > project catalog models remain runnable through an empty declaration and cleared override [702.79ms]
+(pass) Provider empty declaration contracts > project clearing the final unreferenced declaration retains the saved Auth fact [558.07ms]
+(pass) Provider empty declaration contracts > project clearing a model referenced model returns the canonical 400 [562.10ms]
+(pass) Provider empty declaration contracts > project clearing a agent referenced model returns the canonical 400 [523.76ms]
+(pass) Provider empty declaration contracts > clearing a project model override restores the global declaration [612.89ms]
+
+ 24 pass
+ 0 fail
+ 92 expect() calls
+Ran 24 tests across 1 file. [13.47s]
+[9/9] DONE test/provider-empty-declarations.test.ts exit=0 duration=13.73s

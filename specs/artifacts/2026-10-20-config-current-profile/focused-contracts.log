@@ -1,0 +1,111 @@
+$ bun script/run-tests.ts test/provider-projection-isolation.test.ts test/provider-live-model-refresh.test.ts test/provider-discovery-bootstrap.test.ts test/openai-codex-model-projection.test.ts test/provider-cache-identity.test.ts test/provider-model-billing-coverage.test.ts test/config-global-project-validation.test.ts
+[1/7] START test/provider-projection-isolation.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) empty model option defaults produce independent authored values for each projection [5.03ms]
+(pass) initial reasoning variants retain their source values and each projection owns later edits [1.07ms]
+(pass) authored reasoning variants serialize and clone as the model's current writable value [0.99ms]
+(pass) frozen models retain readable defaults and sealed models retain their authored reasoning value [1.11ms]
+(pass) each Provider projection owns its mutable metadata and preserves the current source declaration [0.92ms]
+(pass) a production Project plugin customizes its own Provider while another Project and global catalog retain their declarations [4774.30ms]
+(pass) published catalogs retain their original model generation across a canonical catalog update [203.18ms]
+(pass) frozen published Providers serialize complete models and sealed Providers retain authored models [120.74ms]
+
+ 8 pass
+ 0 fail
+ 12 expect() calls
+Ran 8 tests across 1 file. [10.22s]
+[1/7] DONE test/provider-projection-isolation.test.ts exit=0 duration=11.20s
+[2/7] START test/provider-live-model-refresh.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Provider live model refresh authority > the default catalog migration adds the bundled OpenCorvus declaration and explicit overrides stay strict [306.25ms]
+(pass) Provider live model refresh authority > both public routes publish exact live identities through one durable catalog writer [3937.92ms]
+(pass) Provider live model refresh authority > duplicate live identities return an explicit failure and preserve the canonical catalog [87.54ms]
+(pass) Provider live model refresh authority > live metadata rejects extensions instead of publishing inferred catalog fields [91.27ms]
+(pass) Provider live model refresh authority > malformed saved Auth is the public typed 503 and strict live metadata never commits [1210.51ms]
+
+ 5 pass
+ 0 fail
+ 17 expect() calls
+Ran 5 tests across 1 file. [8.35s]
+[2/7] DONE test/provider-live-model-refresh.test.ts exit=0 duration=8.52s
+[3/7] START test/provider-discovery-bootstrap.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Provider discovery before model availability > a configured endpoint retains discovery when the independent model catalog is malformed [1198.23ms]
+(pass) Provider discovery before model availability > both routes use their configured zero-model endpoint with the saved API credential [426.33ms]
+(pass) Provider discovery before model availability > explicit credentials and existing model endpoint discovery retain their positive responses [263.01ms]
+(pass) Provider discovery before model availability > catalog-only discovery uses the one current top-level declaration and configured overrides [310.31ms]
+(pass) Provider discovery before model availability > configured facts and the public runnable view retain distinct positive contracts [289.43ms]
+(pass) Provider discovery before model availability > excluded providers and undeclared addresses return the existing bound-address error [363.44ms]
+(pass) Provider discovery before model availability > live refresh restores a zero-model catalog with the configured API key selected ahead of saved Auth [392.55ms]
+(pass) Provider discovery before model availability > an explicit empty configured API key produces the credential error contract [388.00ms]
+(pass) Provider discovery before model availability > malformed saved Auth remains a typed 503 for generic discovery [201.25ms]
+
+ 9 pass
+ 0 fail
+ 21 expect() calls
+Ran 9 tests across 1 file. [6.51s]
+[3/7] DONE test/provider-discovery-bootstrap.test.ts exit=0 duration=6.69s
+[4/7] START test/openai-codex-model-projection.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Codex OAuth projects declared integer-major and multi-digit-minor identities with their catalog metadata [19.70ms]
+(pass) global and Project Provider resolution preserve exact gpt-6-luna under OAuth [1842.83ms]
+
+ 2 pass
+ 0 fail
+ 10 expect() calls
+Ran 2 tests across 1 file. [3.16s]
+[4/7] DONE test/openai-codex-model-projection.test.ts exit=0 duration=3.32s
+[5/7] START test/provider-cache-identity.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Provider cache identity > canonical sources are runtime-independent and exact bytes remain the cache authority [2.32ms]
+(pass) Provider cache identity > validated Provider config and declarative SDK options use canonical exact identities [5.90ms]
+(pass) Provider cache identity > production Provider state and SDK caches reuse only exact canonical inputs [1898.25ms]
+(pass) Provider cache identity > default Provider generations are Project-owned and follow current Config lifecycle [3405.94ms]
+(pass) Provider cache identity > production runtime capabilities execute without entering the declarative SDK cache [1389.18ms]
+(pass) Provider cache identity > releases one Provider capacity slot on response EOF, cancel, abort and transport error [1832.85ms]
+(pass) Provider cache identity > shares the final Provider stream capacity lease across two backend processes [9038.79ms]
+(pass) Provider cache identity > production Bedrock credential capability initializes without cache serialization [1437.10ms]
+(pass) Provider cache identity > DashScope credential lifetime publishes versioned SHA-256 identity [32.20ms]
+
+ 9 pass
+ 0 fail
+ 41 expect() calls
+Ran 9 tests across 1 file. [20.33s]
+[5/7] DONE test/provider-cache-identity.test.ts exit=0 duration=20.52s
+[6/7] START test/provider-model-billing-coverage.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Provider model billing coverage > preserves request-time long-context pricing when config overrides only the base rate [0.14ms]
+(pass) Provider model billing coverage > does not label an absent configured/catalog price as confirmed free [0.03ms]
+(pass) Provider model billing coverage > preserves the catalog price when Copilot omits optional remote token prices [4.68ms]
+
+ 3 pass
+ 0 fail
+ 3 expect() calls
+Ran 3 tests across 1 file. [1160.00ms]
+[6/7] DONE test/provider-model-billing-coverage.test.ts exit=0 duration=1.32s
+[7/7] START test/config-global-project-validation.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a retained global writer settles its original transition after repeated projection failures [2033.47ms]
+(pass) one global generation projects every registered project's own configuration [2520.27ms]
+(pass) one global mutation retains its exact candidate identities through persistence and runtime convergence [2630.55ms]
+(pass) an invalid Project returns the candidate error and a corrected source accepts a full retry [2879.06ms]
+
+ 4 pass
+ 0 fail
+ 28 expect() calls
+Ran 4 tests across 1 file. [11.38s]
+[7/7] DONE test/config-global-project-validation.test.ts exit=0 duration=11.52s

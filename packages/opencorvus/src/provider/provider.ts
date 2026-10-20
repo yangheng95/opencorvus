@@ -110,7 +110,7 @@ export namespace Provider {
   export const Model = ProviderModelSchema
   export type Model = ProviderModel
 
-  function sourceModelStatus(provider: ModelsDev.Provider, model: ModelsDev.Model): Model["status"] {
+  function sourceModelStatus(provider: ModelsDev.ProviderSnapshot, model: ModelsDev.ModelSnapshot): Model["status"] {
     if (model.status === "deprecated") {
       throw new Error(`Deprecated source model ${provider.id}/${model.id} cannot be published`)
     }
@@ -170,7 +170,7 @@ export namespace Provider {
     }
   }
 
-  function fromModelsDevModel(provider: ModelsDev.Provider, model: ModelsDev.Model): Model {
+  function fromModelsDevModel(provider: ModelsDev.ProviderSnapshot, model: ModelsDev.ModelSnapshot): Model {
     const m: Model = {
       id: model.id,
       providerID: provider.id,
@@ -238,19 +238,46 @@ export namespace Provider {
     return m
   }
 
-  export function fromModelsDevProvider(provider: ModelsDev.Provider): Info {
+  function fromModelsDevModels(provider: ModelsDev.ProviderSnapshot): Info["models"] {
+    return Object.fromEntries(
+      Object.entries(provider.models)
+        .filter(([, model]) => model.status !== "deprecated")
+        .map(([id, model]) => [id, fromModelsDevModel(provider, model)]),
+    )
+  }
+
+  export function fromModelsDevProvider(provider: ModelsDev.ProviderSnapshot): Info {
     return {
       id: provider.id,
       source: "custom",
       name: provider.name,
       env: [...(provider.env ?? [])],
       options: {},
-      models: Object.fromEntries(
-        Object.entries(provider.models)
-          .filter(([, model]) => model.status !== "deprecated")
-          .map(([id, model]) => [id, fromModelsDevModel(provider, model)]),
-      ),
+      models: fromModelsDevModels(provider),
     }
+  }
+
+  function fromCatalogSnapshot(provider: ModelsDev.ProviderSnapshot): Info {
+    const result = fromModelsDevProvider({ ...provider, models: {} })
+    let initialized = false
+    let models: Info["models"]
+    Object.defineProperty(result, "models", {
+      enumerable: true,
+      configurable: true,
+      get: () => {
+        if (!initialized) {
+          models = fromModelsDevModels(provider)
+          initialized = true
+        }
+        return models
+      },
+      set: (value: Info["models"]) => {
+        if (Object.isFrozen(result)) throw new TypeError("Cannot assign to read only Provider.models")
+        models = value
+        initialized = true
+      },
+    })
+    return result
   }
 
   type ProviderState = {
@@ -278,13 +305,13 @@ export namespace Provider {
     const issues: LoadIssue[] = []
     const modelsDev = await ModelsDev.get().catch((error) => {
       issues.push(loadIssue("catalog.read", error))
-      return {} as Record<string, ModelsDev.Provider>
+      return {} as ModelsDev.CatalogSnapshot
     })
     const database: Record<string, Info> = {}
     const failedProviderIDs = new Set<string>()
     for (const [providerID, provider] of Object.entries(modelsDev)) {
       try {
-        database[providerID] = fromModelsDevProvider(provider)
+        database[providerID] = fromCatalogSnapshot(provider)
       } catch (error) {
         issues.push(loadIssue("catalog.provider", error, providerID))
       }
@@ -465,18 +492,15 @@ export namespace Provider {
     const dashscopeCommonKeys = ["DASHSCOPE_API_KEY"]
     for (const [providerID, provider] of entries(database)) {
       if (disabled.has(providerID)) continue
-      // DashScope detection: any model in this provider uses a dashscope API URL.
-      // Previously checked provider.api?.includes("dashscope") but Provider.Info
-      // has no top-level .api field — api.url lives per-model.
-      const isDashScope = Object.values(provider.models).some((m) => m.api?.url?.includes("dashscope"))
       // alibaba-cn has special embedded-key logic below
       if (providerID === "alibaba-cn" || providerID === "alibaba") continue
-      const candidates = isDashScope ? [...provider.env, ...dashscopeCommonKeys] : provider.env
-      const apiKey = candidates.map((item) => env[item]?.trim()).find(Boolean)
+      const declaredKey = provider.env.map((item) => env[item]?.trim()).find(Boolean)
+      const apiKey = declaredKey ?? dashscopeCommonKeys.map((item) => env[item]?.trim()).find(Boolean)
       if (!apiKey) continue
-      // When the provider declares more than one env candidate (e.g. ["AZURE_KEY", "OPENAI_KEY"]),
-      // we cannot guess which one carries the active credential. Leave key unset and let the SDK pick.
-      if (!isDashScope && provider.env.length > 1) continue
+      // A single declared key wins for both ordinary and DashScope providers.
+      // Inspect projected models only when DashScope classification changes key selection.
+      const requiresDashScope = !declaredKey || provider.env.length > 1
+      if (requiresDashScope && !Object.values(provider.models).some((m) => m.api?.url?.includes("dashscope"))) continue
       provider.apiKeyConfigured = true
       mergeProvider(providerID, {
         source: "env",
@@ -843,7 +867,7 @@ export namespace Provider {
   }
 
   /** The current declaration owns discovery, independently of individual inference endpoints. */
-  export function discoveryEndpoint(providerID: string, config: Config.Info, declaration?: ModelsDev.Provider) {
+  export function discoveryEndpoint(providerID: string, config: Config.Info, declaration?: ModelsDev.ProviderSnapshot) {
     return (config.provider?.[providerID]?.api ?? declaration?.api)?.trim().replace(/\/+$/, "")
   }
 

@@ -1,0 +1,28 @@
+{
+  "after": "All four original native physical/output/request and launcher settlements, all original checkers/readers joined0, runtime pairs retired, actual old/new/current authority values scanned",
+  "pairs": [
+    {
+      "scope": "original-copied-authority",
+      "members": [
+        "auth.json",
+        "models.json"
+      ],
+      "outcome": "retired",
+      "catalogEqualToCurrentSource": true,
+      "sourceMetadataMatchesCurrent": false
+    },
+    {
+      "scope": "renewed-copy-of-current-authority",
+      "members": [
+        "auth.json",
+        "models.json"
+      ],
+      "outcome": "retired",
+      "catalogEqualToCurrentSource": true,
+      "sourceMetadataMatchesCurrent": true
+    }
+  ],
+  "originalSourceMetadataChange": "4318 -> 3929 bytes, modified at 2026-10-20T01:40:18.696Z; source updater unknown. No exchange/refresh/source writes performed by the task.",
+  "renewedSourceMetadataUnchanged": true,
+  "observedAt": "2026-10-20T01:51:21.024Z"
+}

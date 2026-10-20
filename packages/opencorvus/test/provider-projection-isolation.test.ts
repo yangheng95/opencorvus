@@ -212,3 +212,128 @@ test("a production Project plugin customizes its own Provider while another Proj
     ModelsDev.Data.reset()
   }
 })
+
+test("published catalogs retain their original model generation across a canonical catalog update", async () => {
+  const original = await fs.readFile(ModelsDev.catalogPath())
+  const source = declaration()
+  try {
+    await fs.writeFile(ModelsDev.catalogPath(), JSON.stringify({ ...(await ModelsDev.get()), [source.id]: source }))
+    ModelsDev.Data.reset()
+    const config = Config.Info.parse({ enabled_providers: [] })
+    const before = await Provider.catalogGlobal(config)
+    await ModelsDev.replaceProviderModels(source.id, {
+      reasoning: { ...source.models.reasoning, name: "Updated reasoning", limit: { context: 20000, output: 2000 } },
+    })
+    await Provider.resetAll()
+    const after = await Provider.catalogGlobal(config)
+    const modelValues = (catalog: typeof before) => {
+      const model = catalog.database[source.id].models.reasoning
+      return { name: model.name, context: model.limit.context, output: model.limit.output, options: model.options }
+    }
+    expect({ before: modelValues(before), after: modelValues(after) }).toEqual({
+      before: {
+        name: "Reasoning",
+        context: 10000,
+        output: 1000,
+        options: { metadata: { tags: ["catalog"], tuning: { budget: 11 } } },
+      },
+      after: {
+        name: "Updated reasoning",
+        context: 20000,
+        output: 2000,
+        options: { metadata: { tags: ["catalog"], tuning: { budget: 11 } } },
+      },
+    })
+  } finally {
+    await fs.writeFile(ModelsDev.catalogPath(), original)
+    ModelsDev.Data.reset()
+  }
+})
+
+test("frozen published Providers serialize complete models and sealed Providers retain authored models", async () => {
+  const original = await fs.readFile(ModelsDev.catalogPath())
+  const source = declaration()
+  try {
+    await fs.writeFile(ModelsDev.catalogPath(), JSON.stringify({ ...(await ModelsDev.get()), [source.id]: source }))
+    ModelsDev.Data.reset()
+    const config = Config.Info.parse({ enabled_providers: [] })
+    const first = (await Provider.catalogGlobal(config)).database[source.id]
+    Object.freeze(first)
+    const expected = Provider.fromModelsDevProvider(source).models
+    expect({ json: JSON.parse(JSON.stringify(first)).models, cloned: structuredClone(first).models }).toEqual({
+      json: expected,
+      cloned: expected,
+    })
+    await Provider.resetAll()
+    const second = Object.seal((await Provider.catalogGlobal(config)).database[source.id])
+    const authored = Provider.fromModelsDevProvider(source).models
+    authored.reasoning.name = "Authored sealed value"
+    second.models = authored
+    expect({
+      name: second.models.reasoning.name,
+      source: (await ModelsDev.get())[source.id].models.reasoning.name,
+    }).toEqual({
+      name: "Authored sealed value",
+      source: "Reasoning",
+    })
+  } finally {
+    await fs.writeFile(ModelsDev.catalogPath(), original)
+    ModelsDev.Data.reset()
+  }
+})
+
+test.each([
+  {
+    label: "ordinary single declaration",
+    api: "https://projection.invalid/v1",
+    env: ["PROJECTION_ENV_A"],
+    own: "declared-key",
+    selected: "declared-key",
+  },
+  {
+    label: "DashScope single declaration",
+    api: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    env: ["PROJECTION_ENV_A"],
+    own: "declared-key",
+    selected: "declared-key",
+  },
+  {
+    label: "DashScope common credential",
+    api: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    env: ["PROJECTION_ENV_A"],
+    own: "",
+    selected: "common-key",
+  },
+  {
+    label: "DashScope multiple declarations",
+    api: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    env: ["PROJECTION_ENV_A", "PROJECTION_ENV_B"],
+    own: "first-declared-key",
+    selected: "first-declared-key",
+  },
+])("environment selection preserves the selected key for $label", async (input) => {
+  const original = await fs.readFile(ModelsDev.catalogPath())
+  const variables = ["PROJECTION_ENV_A", "PROJECTION_ENV_B", "DASHSCOPE_API_KEY"]
+  const environment = variables.map((name) => [name, process.env[name]] as const)
+  const source = { ...declaration(), api: input.api, env: input.env }
+  try {
+    process.env.PROJECTION_ENV_A = input.own
+    process.env.PROJECTION_ENV_B = "second-declared-key"
+    process.env.DASHSCOPE_API_KEY = "common-key"
+    await fs.writeFile(ModelsDev.catalogPath(), JSON.stringify({ ...(await ModelsDev.get()), [source.id]: source }))
+    ModelsDev.Data.reset()
+    const catalog = await Provider.catalogGlobal(Config.Info.parse({ enabled_providers: [source.id] }))
+    const provider = catalog.providers[source.id]
+    expect({ key: provider.key, model: provider.models.reasoning.name }).toEqual({
+      key: input.selected,
+      model: "Reasoning",
+    })
+  } finally {
+    for (const [name, value] of environment) {
+      if (value === undefined) delete process.env[name]
+      else process.env[name] = value
+    }
+    await fs.writeFile(ModelsDev.catalogPath(), original)
+    ModelsDev.Data.reset()
+  }
+})

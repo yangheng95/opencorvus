@@ -42,59 +42,61 @@ export namespace ModelsDev {
     })
     .strict()
 
-  export const Model = z.object({
-    id: z.string(),
-    name: z.string(),
-    family: z.string().optional(),
-    release_date: z.string(),
-    attachment: z.boolean(),
-    reasoning: z.boolean(),
-    temperature: z.boolean().default(false),
-    tool_call: z.boolean(),
-    interleaved: z
-      .union([
-        z.literal(true),
-        z
-          .object({
-            field: z.enum(["reasoning_content", "reasoning_details"]),
-          })
-          .strict(),
-      ])
-      .optional(),
-    cost: z
-      .object({
-        input: z.number(),
+  export const Model = z
+    .object({
+      id: z.string(),
+      name: z.string(),
+      family: z.string().optional(),
+      release_date: z.string(),
+      attachment: z.boolean(),
+      reasoning: z.boolean(),
+      temperature: z.boolean().default(false),
+      tool_call: z.boolean(),
+      interleaved: z
+        .union([
+          z.literal(true),
+          z
+            .object({
+              field: z.enum(["reasoning_content", "reasoning_details"]),
+            })
+            .strict(),
+        ])
+        .optional(),
+      cost: z
+        .object({
+          input: z.number(),
+          output: z.number(),
+          cache_read: z.number().optional(),
+          cache_write: z.number().optional(),
+          context_over_200k: z
+            .object({
+              input: z.number(),
+              output: z.number(),
+              cache_read: z.number().optional(),
+              cache_write: z.number().optional(),
+            })
+            .optional(),
+        })
+        .optional(),
+      limit: z.object({
+        context: z.number(),
+        input: z.number().optional(),
         output: z.number(),
-        cache_read: z.number().optional(),
-        cache_write: z.number().optional(),
-        context_over_200k: z
-          .object({
-            input: z.number(),
-            output: z.number(),
-            cache_read: z.number().optional(),
-            cache_write: z.number().optional(),
-          })
-          .optional(),
-      })
-      .optional(),
-    limit: z.object({
-      context: z.number(),
-      input: z.number().optional(),
-      output: z.number(),
-    }),
-    modalities: z
-      .object({
-        input: z.array(z.enum(["text", "audio", "image", "video", "pdf"])),
-        output: z.array(z.enum(["text", "audio", "image", "video", "pdf"])),
-      })
-      .optional(),
-    experimental: Experimental.optional(),
-    status: z.enum(["alpha", "beta", "deprecated"]).optional(),
-    options: z.record(z.string(), z.any()).default({}),
-    headers: z.record(z.string(), z.string()).optional(),
-    provider: z.object({ npm: z.string().optional(), api: z.string().optional() }).optional(),
-    variants: z.record(z.string(), z.record(z.string(), z.any())).optional(),
-  }).passthrough()
+      }),
+      modalities: z
+        .object({
+          input: z.array(z.enum(["text", "audio", "image", "video", "pdf"])),
+          output: z.array(z.enum(["text", "audio", "image", "video", "pdf"])),
+        })
+        .optional(),
+      experimental: Experimental.optional(),
+      status: z.enum(["alpha", "beta", "deprecated"]).optional(),
+      options: z.record(z.string(), z.any()).default({}),
+      headers: z.record(z.string(), z.string()).optional(),
+      provider: z.object({ npm: z.string().optional(), api: z.string().optional() }).optional(),
+      variants: z.record(z.string(), z.record(z.string(), z.any())).optional(),
+    })
+    .passthrough()
   export type Model = z.infer<typeof Model>
 
   /** Authoritative live metadata has no persisted-catalog defaults or extension fields. */
@@ -118,6 +120,25 @@ export namespace ModelsDev {
     .passthrough()
 
   export type Provider = z.infer<typeof Provider>
+
+  type Immutable<T> = T extends readonly unknown[]
+    ? ReadonlyArray<Immutable<T[number]>>
+    : T extends object
+      ? { readonly [K in keyof T]: Immutable<T[K]> }
+      : T
+  export type ModelSnapshot = Immutable<Model>
+  export type ProviderSnapshot = Immutable<Provider>
+  export type CatalogSnapshot = Readonly<Record<string, ProviderSnapshot>>
+
+  function freezeCatalog(catalog: Record<string, Provider>): CatalogSnapshot {
+    function freeze(value: unknown): void {
+      if (!value || typeof value !== "object" || Object.isFrozen(value)) return
+      for (const child of Object.values(value)) freeze(child)
+      Object.freeze(value)
+    }
+    freeze(catalog)
+    return catalog
+  }
 
   const Catalog = z.record(z.string(), Provider)
 
@@ -283,17 +304,22 @@ export namespace ModelsDev {
     try {
       input = await Filesystem.readJson(source)
     } catch (error) {
-      throw new Error(`Model catalog ${source} is unreadable: ${error instanceof Error ? error.message : String(error)}`)
+      throw new Error(
+        `Model catalog ${source} is unreadable: ${error instanceof Error ? error.message : String(error)}`,
+      )
     }
-    return parseCatalog(input, source)
+    return freezeCatalog(parseCatalog(input, source))
   })
 
   export async function get() {
     const result = await Data()
-    return result as Record<string, Provider>
+    return result
   }
 
-  export async function replaceProviderModels(providerID: string, models: Record<string, Model>): Promise<Provider> {
+  export async function replaceProviderModels(
+    providerID: string,
+    models: Readonly<Record<string, ModelSnapshot>>,
+  ): Promise<Provider> {
     const parsedModels = z.record(z.string(), Model).parse(models)
     const next = await writeCatalogTransaction((current) => {
       const provider = current[providerID]

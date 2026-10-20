@@ -1,0 +1,425 @@
+{
+  "beforeConsumerRepair": {
+    "boundary": "Private diagnostic only: same production global Provider builder with transparent model-record ownKeys observation and same-value frozen/unfrozen inputs; no LLM, network Provider request, credentials, database initializer or E2E qualification",
+    "results": [
+      {
+        "mode": "frozen",
+        "ms": 66.90920000000006,
+        "materializedProviders": 227,
+        "runnable": [
+          "openai"
+        ],
+        "callers": [
+          {
+            "caller": "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:341:41)",
+            "providers": 3,
+            "example": {
+              "providerID": "openai",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at models (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\plugin\\openai\\codex.ts:411:48)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:341:41)",
+                "    at processTicksAndRejections (native:7:39)"
+              ]
+            }
+          },
+          {
+            "caller": "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:498:41)",
+            "providers": 224,
+            "example": {
+              "providerID": "deepinfra",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:498:41)",
+                "    at processTicksAndRejections (native:7:39)"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "mode": "unfrozen",
+        "ms": 46.89490000000001,
+        "materializedProviders": 227,
+        "runnable": [
+          "openai"
+        ],
+        "callers": [
+          {
+            "caller": "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:341:41)",
+            "providers": 3,
+            "example": {
+              "providerID": "openai",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at models (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\plugin\\openai\\codex.ts:411:48)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:341:41)",
+                "    at processTicksAndRejections (native:7:39)"
+              ]
+            }
+          },
+          {
+            "caller": "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:498:41)",
+            "providers": 224,
+            "example": {
+              "providerID": "deepinfra",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:498:41)",
+                "    at processTicksAndRejections (native:7:39)"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "mode": "frozen",
+        "ms": 43.48009999999999,
+        "materializedProviders": 227,
+        "runnable": [
+          "openai"
+        ],
+        "callers": [
+          {
+            "caller": "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:341:41)",
+            "providers": 3,
+            "example": {
+              "providerID": "openai",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at models (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\plugin\\openai\\codex.ts:411:48)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:341:41)",
+                "    at processTicksAndRejections (native:7:39)"
+              ]
+            }
+          },
+          {
+            "caller": "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:498:41)",
+            "providers": 224,
+            "example": {
+              "providerID": "deepinfra",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:498:41)",
+                "    at processTicksAndRejections (native:7:39)"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "mode": "unfrozen",
+        "ms": 30.244300000000067,
+        "materializedProviders": 227,
+        "runnable": [
+          "openai"
+        ],
+        "callers": [
+          {
+            "caller": "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:341:41)",
+            "providers": 3,
+            "example": {
+              "providerID": "openai",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at models (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\plugin\\openai\\codex.ts:411:48)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:341:41)",
+                "    at processTicksAndRejections (native:7:39)"
+              ]
+            }
+          },
+          {
+            "caller": "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:498:41)",
+            "providers": 224,
+            "example": {
+              "providerID": "deepinfra",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:498:41)",
+                "    at processTicksAndRejections (native:7:39)"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "afterConsumerRepair": {
+    "boundary": "Private diagnostic only: same production global Provider builder with transparent model-record ownKeys observation and same-value frozen/unfrozen inputs; no LLM, network Provider request, credentials, database initializer or E2E qualification",
+    "results": [
+      {
+        "mode": "frozen",
+        "ms": 36.35620000000017,
+        "materializedProviders": 8,
+        "runnable": [
+          "openai"
+        ],
+        "callers": [
+          {
+            "caller": "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:341:41)",
+            "providers": 3,
+            "example": {
+              "providerID": "openai",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection-final.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at models (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\plugin\\openai\\codex.ts:411:48)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:341:41)",
+                "    at processTicksAndRejections (native:7:39)"
+              ]
+            }
+          },
+          {
+            "caller": "    at mergeProvider (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:391:31)",
+            "providers": 4,
+            "example": {
+              "providerID": "deepseek",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection-final.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at s (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\remeda@2.26.0\\node_modules\\remeda\\dist\\chunk-PDQFB3TV.js:1:134)",
+                "    at mergeProvider (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:391:31)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:505:7)"
+              ]
+            }
+          },
+          {
+            "caller": "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:503:47)",
+            "providers": 1,
+            "example": {
+              "providerID": "google",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection-final.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:503:47)",
+                "    at processTicksAndRejections (native:7:39)"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "mode": "unfrozen",
+        "ms": 7.270800000000008,
+        "materializedProviders": 8,
+        "runnable": [
+          "openai"
+        ],
+        "callers": [
+          {
+            "caller": "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:341:41)",
+            "providers": 3,
+            "example": {
+              "providerID": "openai",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection-final.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at models (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\plugin\\openai\\codex.ts:411:48)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:341:41)",
+                "    at processTicksAndRejections (native:7:39)"
+              ]
+            }
+          },
+          {
+            "caller": "    at mergeProvider (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:391:31)",
+            "providers": 4,
+            "example": {
+              "providerID": "deepseek",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection-final.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at s (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\remeda@2.26.0\\node_modules\\remeda\\dist\\chunk-PDQFB3TV.js:1:134)",
+                "    at mergeProvider (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:391:31)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:505:7)"
+              ]
+            }
+          },
+          {
+            "caller": "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:503:47)",
+            "providers": 1,
+            "example": {
+              "providerID": "google",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection-final.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:503:47)",
+                "    at processTicksAndRejections (native:7:39)"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "mode": "frozen",
+        "ms": 5.684100000000171,
+        "materializedProviders": 8,
+        "runnable": [
+          "openai"
+        ],
+        "callers": [
+          {
+            "caller": "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:341:41)",
+            "providers": 3,
+            "example": {
+              "providerID": "openai",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection-final.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at models (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\plugin\\openai\\codex.ts:411:48)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:341:41)",
+                "    at processTicksAndRejections (native:7:39)"
+              ]
+            }
+          },
+          {
+            "caller": "    at mergeProvider (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:391:31)",
+            "providers": 4,
+            "example": {
+              "providerID": "deepseek",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection-final.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at s (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\remeda@2.26.0\\node_modules\\remeda\\dist\\chunk-PDQFB3TV.js:1:134)",
+                "    at mergeProvider (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:391:31)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:505:7)"
+              ]
+            }
+          },
+          {
+            "caller": "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:503:47)",
+            "providers": 1,
+            "example": {
+              "providerID": "google",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection-final.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:503:47)",
+                "    at processTicksAndRejections (native:7:39)"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "mode": "unfrozen",
+        "ms": 5.329299999999876,
+        "materializedProviders": 8,
+        "runnable": [
+          "openai"
+        ],
+        "callers": [
+          {
+            "caller": "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:341:41)",
+            "providers": 3,
+            "example": {
+              "providerID": "openai",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection-final.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at models (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\plugin\\openai\\codex.ts:411:48)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:341:41)",
+                "    at processTicksAndRejections (native:7:39)"
+              ]
+            }
+          },
+          {
+            "caller": "    at mergeProvider (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:391:31)",
+            "providers": 4,
+            "example": {
+              "providerID": "deepseek",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection-final.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at s (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\remeda@2.26.0\\node_modules\\remeda\\dist\\chunk-PDQFB3TV.js:1:134)",
+                "    at mergeProvider (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:391:31)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:505:7)"
+              ]
+            }
+          },
+          {
+            "caller": "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:503:47)",
+            "providers": 1,
+            "example": {
+              "providerID": "google",
+              "enumerations": 1,
+              "stack": [
+                "    at ownKeys (D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\config-current-profile-453\\trace-projection-final.ts:22:93)",
+                "    at entries (unknown)",
+                "    at fromModelsDevModels (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:243:14)",
+                "    at get (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:269:20)",
+                "    at buildState (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:503:47)",
+                "    at processTicksAndRejections (native:7:39)"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "boundary": "Scratch transparent ownKeys observation of original production global builder only; no Provider request or E2E qualification"
+}

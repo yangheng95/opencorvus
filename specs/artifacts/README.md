@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [当前配置采样与按需完整投影](2026-10-20-config-current-profile/README.md)：实际构造根因、82例合同、完整98项目与并发读取；保留性能和最新视觉验收未达项。
+
 - [Goal首页说明与入口层级](2026-10-20-goal-home-copy-layout/README.md)：正文与主按钮可读性，中英文桌面、指南及项目/全局创建的真实截图。
 
 - [模型投影实验与回归合同](2026-10-20-model-variant-projection/README.md)：撤回两项完整保存无稳定收益的优化，保留38例合同与真实页面、服务和数据证据。

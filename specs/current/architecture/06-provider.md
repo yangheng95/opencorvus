@@ -15,11 +15,22 @@ MCP OAuth uses the extension credential owner, not Provider account OAuth. Its p
 
 ## 核心挑战
 
-Canonical model declarations and runtime Provider projections have separate mutable
-data ownership. `fromModelsDevProvider` creates a fresh environment list, model
+Canonical model declarations are one recursively immutable parsed `ModelsDev.Data`
+generation; catalog refresh and model replacement atomically publish the canonical
+file and reset that generation. Readers retain their original generation across a
+later publication. Runtime Provider projections have separate mutable data
+ownership. `fromModelsDevProvider` eagerly creates a fresh environment list, model
 headers, nested declarative options and interleaved-capability object for every
 projection. Project plugins may customize that projection; the canonical ModelsDev
 declaration, another Project and the global projection retain their own values.
+The internal builder projects Provider metadata immediately and materializes that
+Provider's owned `models` field on its first read from the retained immutable
+generation. Assigning the field replaces its current value; JSON and structured
+cloning still expose complete models. Frozen Provider records remain readable and
+sealed writable records accept an authored model collection. No getter performs
+I/O or consults a later catalog generation. Environment credential selection reads
+projected model URLs only when DashScope classification can change the selected
+key; the existing declared-key priority and ambiguous multi-key behavior remain.
 The existing per-Project configuration/cache lifecycle remains authoritative;
 projection isolation does not introduce another catalog or shared mutable template.
 

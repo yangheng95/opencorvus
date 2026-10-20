@@ -1,0 +1,68 @@
+# 当前配置保存链路的处理器采样
+
+## Recall
+
+用户持续授权单agent自主体验、排查、实现、真实验证、提交和正常推送；后续单agent要求覆盖旧goal中的三个Astra，不委托。上一轮452属于progress：c64e0931b4ab2ef4ae01f30ddfc36702729ec875已推送且fresh fetch HEAD=upstream，首页Goal正文14px、创建按钮30px，中英文桌面、280/433侧栏、指南、项目/全局创建与取消均实际截图复核。原57603/35349服务和runtime/private auth/models均已结算退休，完整QA历史94 Project/schema2。开始只有既有.bun/与packages/opencorvus/bun/未跟踪。
+
+原配置cold≤10s、restore≤5s、页面GET≤20s资格保持。451的完整91项目为12.973/12.765s，保存两项门槛未达；Provider空record与初始variants懒计算实验已全部撤回，生产代码仍即时转换且拥有独立可变模型。底层Promise/callback/native文件接口没有稳定替换收益，也不重做436/439未获完整改善的扫描并行实验。452仅UI改动，不宣称刷新了性能结果。
+
+沿已应用benchmark-debug-template与computer-use，实际开发/ui、独立页面、截图人工复核；不操作用户18571或用户进程，不清库、不减少项目、不改schema，不建branch/worktree，不新增/运行UI自动化。真实Provider仅使用已授权现有auth与完整models配对，分别核对凭据、目录、实际gpt-6.1-sol和流式请求。所有临时对按原native物理/输出/请求/launcher结算后精确退休，敏感值不入提交。任何本轮修改都须范围commit、fetch/merge、待推完整审查及正常push。
+
+## 修改前分析
+
+已读452/451 Recall、444原CPU采样与异步which修复、446原生父查询结果，当前Config.commitGlobalCandidate/commitGlobalProjectCandidates/readOnlyProjectSnapshot/loadStateOnce、candidate-validation/model-reference-validation、Provider.buildState/stateFor/ModelsDev.get、Plugin.state/list、Project Git与物理扫描、SkillReadDiagnostics同源阶段合同。全局保存必须在真实保留身份下对所有Project验证候选，发布/恢复和逐项目配置不能缩为当前页面；初次/准入两次身份与Git检查、完整大inode、别名/重复、所有正常错误保持。
+
+451 cold config.load451次/total34650ms，model validation92次/7490ms，Git176次/66097ms，lookup178次/32158ms；这些是重叠异步span，不能相加作CPU或墙钟。ModelsDev.Data本身已lazy持有校验目录，不能凭转换成本假定每次重读9MB文件。Plugin.list属于真实Project Instance所有，state()确实读取Config.get，Provider显式候选仍读取当前Project hooks；是否形成候选插件语义问题未知，本轮不能未经合同/真实复现引入新的Plugin候选体系或安装副作用。当前明确需要的是修改444同步PATH与446父查询后的完整CPU证据，而不是继续凭旧样本猜测。
+
+旧444使用75项目且曾有同步which，后续修复与当前94项目负载不同，原20.94s profile不能直接证明当前13s的CPU组成。当前原阶段已经足够关联HTTP/子span，本轮先不增加生产日志、phase或缓存。具体执行热点、分配与native启动占比仍未知；调度/队列/恢复本轮无已证新异常，不修改Task/Mission/Session执行轮次。若实际出现新的共享收敛异常，按全部入口、正常/终态、重试重启、串并行和隔离立即横审。
+
+## 实施前方案
+
+1. 在452原native已完整结算的基础上，复制最新正式UI到新自有bundle；原Bun1.4.0目标仅加入已在444确认的--cpu-prof参数，native Host/Target协议保持。新18709服务保留全部94+历史，用原真实前端config service→browser HostTransport→HTTP保存/完整canonical恢复checker，并真实页面交互和截图。采样计时明确标为诊断，不当作无采样性能通过。
+2. 原checker完成、公开shutdown、原native物理/输出/请求/launcher全部joined后读取profile。按真实请求时间窗口分析互斥self样本、调用栈和actual sample/timeDelta；不把不规则timeDelta错误归到当前函数，不相加inclusive或span总时长。原profile、完整日志、配置和Provider正文私有，只归档安全函数/模块/数量与请求阶段摘要。
+3. 如证据指出可修根因，补齐全仓定义/调用/公共合同/历史决定/数据/测试/交付影响分析及方案，再改唯一实现并提供聚焦正向合同。随后无采样新服务完整历史、原10s/5s/20s checker及真实页面复核。若没有可靠修复证据，不交付无收益复杂度；明确记录排除项和下一条由样本支持的调查，持续goal不完成。
+4. 所有原句柄结算、配对退休、最终readonly SQLite完整history/schema核对；新artifact精确路径归档、扫描实际敏感值、同步三索引和必要架构，docs/API/类型等按真实改动选择。范围commit、fetch/merge、待推集合检查、正常hook push与fresh fetch。禁止用profile或静态检查冒充功能/视觉/完整目标验收。
+
+## 当前采样结果与实施前补充方案
+
+原18709 checker72362 joined0，完整95项目profiled cold13133.559ms/restore13940.375ms，canonical全值恢复。原3610 native launcher公开shutdown200后joined0，physical/output/request/runtime配对结算，tab54已关闭；私有配对仅为后续无采样scope保留。原CPU的真实请求窗口分别1410/1452个样本，native spawn自身515/504，Provider转换栈297/345，初始variants自身30/42、structuredClone自身28/33。native启动仍最大，但仅延后variants覆盖比例很小；全Provider目录反复构造是另一个已证完整工作块。互斥self比例不冒充精确CPU毫秒。scratch生成器先把finally误替换成beforely，执行checker前审查发现并精确修正，生成规则改为词边界替换；没有运行错误checker或改产品流程。
+
+进一步全仓查明：ModelsDev.Data只在当前校验文件版本上持有一个解析结果，所有生产get调用都只读取；replaceProviderModels/refresh沿既有原子文件事务产生新版本并reset Data，未直接修改已返回对象。CLI auth/github、Provider operations/discovery均读取元数据，不拥有修改共享目录的权力。Provider buildState却在任何实际Model读取之前把全部227 Provider/8162 Model转换为每Project拥有的对象，随后大多只使用env/apiKeyConfigured等Provider元数据。候选验证和插件调用须保留完整可发现目录，不能过滤Provider或共享可变DTO。
+
+实施：将ModelsDev.Data现有单一解析版本显式冻结为类型与运行时只读的CatalogSnapshot；不增加第二catalog/cache，文件和既有writer仍是唯一权威，事务返回的owned结果不变。仅buildState从这个不可变版本创建Provider元数据，将同一个Info.models字段的独立可变Model集合延至首次读取时沿现有唯一转换算法生成。原公开fromModelsDevProvider对调用者可变声明保持即时、完全独立转换，不改变其快照/错误语义。元数据构造复用原函数的空models输入；模型转换提取一个被两入口共用的私有函数，禁止复制字段映射。getter保留唯一字段值与初始化标记，显式赋值设置同一值；冻结Info正常读取、密封但可写Info正常赋值，JSON/structuredClone仍得到完整模型。插件接收的Info和Model仍独立可变，只有原始文件版本只读；旧Provider在catalog刷新后延迟读取也必须获得旧版本真实值。
+
+影响与验收：内部ModelsDev.get返回类型收紧为递归只读，搜索到的全部定义/调用及类型检查必须跟随其真正读取合同；不改HTTP、SDK、Model schema、配置、数据格式、Task/Mission/Session轮次或原生监管。新增正向合同覆盖实际catalog写入/刷新前后两代Provider明确模型值、冻结Info完整序列化/clone和密封Info赋值、现有生产插件与跨项目隔离。完整227 Provider/8162 Model元数据仍可序列化，真实inactive provider目录、活跃模型、身份、价格、状态、variants和错误合同回归；不以计数/懒调用次数或源码字符串为核心测试。类型/聚焦测试后新18711无采样完整历史与原10s/5s/20s checker、真实截图复核。若完整性能无稳定收益则撤回相应复杂度，不能仅凭CPU局部或绿色测试交付性能结论。
+
+## 首轮无采样结果与真正的强制读取点
+
+首次类型57585 exit2揭示实时metadata writer从readonly旧声明展开新model时仍要求可变输入；该writer本来就先Zod.parse创建owned新对象，故将参数收紧为读取readonly模型record，原返回与原子写入不变。6685最终typecheck exit0；16978原七文件40例/132断言全部exit0。Prettier对原Model fluent schema进行换行，没有增加passthrough或改变schema；已逐项核对HEAD与完整diff。
+
+18711首轮无采样96项目cold14373.478/restore14139.191ms，accepted/restored=true，canonical全值恢复，仍未改善。原76189 checker和17157 native均joined0、公开shutdown200、physical/output/request/runtime配对结算，自己的tab55已关闭。未将绿色局部测试称为性能成功。
+
+为确认实际强制点，只在新私有root执行同一生产global Provider builder，用同值model record的ownKeys观察及原/解冻输入对比；没有LLM/真实Provider请求、凭据或DB initializer，不作为E2E资格。初次精确root guard因Windows分隔符不同exit1，修正为解析后的绝对路径比较后原probe exit0。四轮227个Provider均实际构造了模型；其中3个由真实内置模型projection hook读取，224个调用栈精确指向provider.ts环境凭据选择的Object.values(provider.models)。冻结/解冻分别约43/30ms，局部本身不作完整性能结论。
+
+直接根因是现有DashScope环境key选择在任何Provider上、甚至没有任何可用环境key时，先扫描所有Model.api.url，强制全目录构造。上一轮方案只延后生产者，没有消除这个真实消费者，故未根治。修正同一数据流：先从当前Provider.env和既有DashScope common keys寻找实际候选；没有候选就结束该条。单一声明env已有值时，旧DashScope/普通分支都会选同一值，直接采用。只有需要common key或多声明env需要DashScope特定选择时，才沿原模型URL分类规则读取模型。特殊alibaba/alibaba-cn仍沿原唯一处理。没有新增关键词、Provider白名单、过滤目录、跨调用cache或LLM流程gate。
+
+验收补充正向环境选择表：普通单env与DashScope单env保留声明key优先，DashScope无声明值采用原common key，多声明DashScope仍采用首个已配置声明key；原未知凭据/多个非DashScope env合同回归。保留完整目录和插件先行修改语义，分类仍在实际plugin投影之后读取，不能改用原始URL或硬编码Provider ID。随后新无采样18713完整96+历史原checker及截图，首轮失败证据保留。
+
+## 最终预检的真实凭据失效与恢复
+
+原24253最终typecheck joined0、11318九文件原runner joined0；全部正向断言通过。18713实际模型预检在2026-10-20T01:41:50Z返回401/token_revoked，说明现有临时OAuth副本已失效，不能把final服务标为完整Provider验收通过。只读源metadata发现auth.json从复制时4318字节变成3929字节、modifiedAtUtc=01:40:18.696Z；是谁更新未知，未将因果归给应用或用户。原复制映射脚本没有exchange/refresh/source-write路径，不重写本机授权源。
+
+原89137配置checker已在原物理native-ready下等待gate，尚未写入；让同一原checker执行非LLM配置保存/完整恢复，以明确行为结算该句柄，再公开shutdown并退休runtime配对。该scope的配置计时仅为失效凭据环境诊断，绝不替代成功模型预检或最终无采样资格。之后创建新鲜18715 scope，复制更新后的已授权source及完整models为新独立私有配对，不覆盖原失败证据或凭据文件，重新分别验证credentials/catalog/精确gpt-6.1-sol streaming。原私有副本在所有关联native结算后归档实际敏感值扫描再退休，源metadata变更如实记录。
+
+实际结算：89137 joined0、accepted/restored=true，配置cold11350.803/restore974.726ms；10242公开shutdown后joined0，launcher receipt实际childExitCode=0，native physical/output/request/runtime配对齐备。原wrapper catch曾设置process.exitCode=1，但正式HTTP shutdown后进程最终exit0；因此以failed.json的401认定预检失败，不用进程0包装qual通过，也不捏造exit1。没有Task执行或调度异常，资格失败与服务物理正常退出是不同事实。最终原回归为82个用例/254断言、0skip（包括14个凭据presence与24个空声明合同），type24253/runner11318均joined0。
+
+## 最终实测、读取进展与验收边界
+
+更新后既有授权源配对在新18715原native成功预检credential usable/catalog projected/actual gpt-6.1-sol/streaming=true，未做token exchange/refresh或原授权文件写入。四轮私有同值全目录诊断的实际构造Provider从227降为8（当前进程实际环境和内置hooks会读取的集合），并保留完整可发现目录；该数字只是调用栈诊断，不作为正向验收核心断言。最终公共/project模型接口均真实返回227 Providers/8133有效模型，gpt-6.1-sol完整可用；该数包含现有插件/运行时过滤，与纯声明转换8162不同，不将数字相等当作完整正确性。正向行为以82例/254断言、实际所选模型、刷新代际和完整序列化合同为准。
+
+原37098 checker joined0，完整98项目无采样cold12034.218ms/restore930.098ms，原PATCH服务时长11780/930ms，canonical所有字段恢复。首轮4个真实HTTP读取在同一gate发起并均200，最长330.741ms；读取启动先于writer实际进入候选，不能把它冒称为写锁期间进展。因此补做同原服务原99070 checker及80712 reader，先等待原config.global.before started（01:48:04.393Z，request24ede9c6-96cf-4ea2-8f5e-b72cb17a161b）再接收4个请求。它们在01:48:04.514–.518Z开始，config/provider/global-provider分别约10100/10468/10318ms且200，Session元数据19ms/200；完整重复保存10981.915ms/恢复11440.776ms，两原句柄joined0且再次完整canonical还原。
+
+不能把0.93s宣称稳定restore。按真实阶段核对：首次restore初始loaded98且没有project.identity.initial/git阶段；复测保存loaded1、复测restore loaded4，两者均有94次initial/admitted和186次Git。读取server.ts request-finally的唯一scheduleConvergence和serve.ts同一Instance.converge入口，flag默认runtime cache limit4；Instance只claim idle turn，原global writer通过withRetainedProjectIdentities覆盖candidate/persist/reconcile，82例中的保留身份合同亦通过。真实日志记录“converged idle Project runtimes”并回收闲置集合，持久Project仍98。该现象符合已声明缓存生命周期，不是执行Task/Mission/Session轮次的异常、不据此跳过身份检查或扩大缓存；共享SchedulerTaskOwner/active lease守卫、终态物理结算和持久历史保持原路径。冷保存10s与复测恢复5s目标仍失败，最终并发HTTP20s目标通过；不能宣布持续goal完成或保证固定提速比例。
+
+最后18715的浏览器入口被Work设置禁用；没有使用其他技术绕过。最终代码没有UI改动，但该scope没有实际页面交互与新截图，因此最新scope的网页/视觉验收明确未达成。18709/18711的真实截图只证明各自源码阶段，不能替代18715最终界面验收。用真实公共HTTP正向合同补充后端证据，不冒充UI自动化或视觉验收。首个reader工具漏带目录收到原DirectoryRequiredError/400，保留工具失败日志；从原preflight Session直接readonly SQLite读取真实directory后，沿原project路由合同修正并成功，不改产品路由或弱化隔离。
+
+18715公开shutdown200，原84304 joined exit0；全部四scope原native physical/output/request/launcher和runtime临时配对均结算。最新scope没有创建成功的浏览器tab，无用户窗口操作。源码保留已证的完整按需投影与按实际候选分类，删除浪费的即时构造而不缩减目录；实测还受原生spawn和完整冷身份重建主导，这些未解决项及最终浏览器限制如实交付。
+
+最终直接readonly SQLite核对为schema2/98 Project。两组private auth/models在全部原结算、归档实际旧/新/当前敏感值扫描后精确退休；原授权源更新事实保留，第二次复制后的源metadata保持一致。原profile、9MB源目录、完整日志与Provider正文均不入仓，安全摘要见[本轮归档](../../artifacts/2026-10-20-config-current-profile/README.md)。

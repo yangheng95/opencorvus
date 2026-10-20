@@ -1,0 +1,2328 @@
+{
+  "scopes": {
+    "before": {
+      "source": "Delivered c64e0931b before implementation",
+      "profile": true,
+      "preflight": {
+        "ok": true,
+        "sessionID": "ses_hBhsFyv86kTwTnHfVS0l",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "write": {
+        "at": "2026-10-20T01:18:07.327Z",
+        "endedAt": "2026-10-20T01:18:34.406Z",
+        "phase": "before",
+        "port": 18709,
+        "occurrence": "config-current-profile-453-before-81206171-8cd5-44ae-a8fc-3304ca4043d5",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 13133.559400000002,
+        "restoreMs": 13940.375099999997,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "getRequests": [
+        {
+          "time": "2026-10-20T01:17:05.304Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:17:07.373Z",
+          "path": "/session/ses_hBhsFyv86kTwTnHfVS0l/message",
+          "status": 200,
+          "ms": 73
+        },
+        {
+          "time": "2026-10-20T01:17:07.881Z",
+          "path": "/session/ses_hBhsFyv86kTwTnHfVS0l/message",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:17:08.387Z",
+          "path": "/session/ses_hBhsFyv86kTwTnHfVS0l/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:17:08.891Z",
+          "path": "/session/ses_hBhsFyv86kTwTnHfVS0l/message",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:17:09.396Z",
+          "path": "/session/ses_hBhsFyv86kTwTnHfVS0l/message",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "time": "2026-10-20T01:17:09.899Z",
+          "path": "/session/ses_hBhsFyv86kTwTnHfVS0l/message",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:17:10.403Z",
+          "path": "/session/ses_hBhsFyv86kTwTnHfVS0l/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:17:10.907Z",
+          "path": "/session/ses_hBhsFyv86kTwTnHfVS0l/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:17:11.411Z",
+          "path": "/session/ses_hBhsFyv86kTwTnHfVS0l/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:17:55.824Z",
+          "path": "/ui/",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:17:55.839Z",
+          "path": "/ui/assets/main-BgQCyxuv.js",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:17:55.840Z",
+          "path": "/ui/assets/CommandMenuSurface-CN3W_QEU.js",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:17:55.845Z",
+          "path": "/ui/assets/CommandMenuSurface-9Ez69chO.css",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:17:55.846Z",
+          "path": "/ui/assets/main-C1-OUgxq.css",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:17:55.846Z",
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:17:55.847Z",
+          "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:17:55.887Z",
+          "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:17:55.959Z",
+          "path": "/ui/i18n/zh-CN.json",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:17:55.959Z",
+          "path": "/ui/i18n/en-US.json",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:17:56.116Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:17:56.122Z",
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:17:56.150Z",
+          "path": "/global/projects/discover",
+          "status": 200,
+          "ms": 8
+        },
+        {
+          "time": "2026-10-20T01:17:56.157Z",
+          "path": "/work-ledger/events",
+          "status": 200,
+          "ms": 7
+        },
+        {
+          "time": "2026-10-20T01:17:56.178Z",
+          "path": "/mailbox",
+          "status": 200,
+          "ms": 15
+        },
+        {
+          "time": "2026-10-20T01:17:56.189Z",
+          "path": "/expert-squad/search",
+          "status": 200,
+          "ms": 10
+        },
+        {
+          "time": "2026-10-20T01:17:56.190Z",
+          "path": "/mission-skill/catalog",
+          "status": 200,
+          "ms": 9
+        },
+        {
+          "time": "2026-10-20T01:17:56.192Z",
+          "path": "/global/composer-references",
+          "status": 200,
+          "ms": 55
+        },
+        {
+          "time": "2026-10-20T01:17:56.211Z",
+          "path": "/global/tasks",
+          "status": 200,
+          "ms": 13
+        },
+        {
+          "time": "2026-10-20T01:17:56.213Z",
+          "path": "/path",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:17:56.232Z",
+          "path": "/chat/capability",
+          "status": 200,
+          "ms": 35
+        },
+        {
+          "time": "2026-10-20T01:17:56.317Z",
+          "path": "/expert-squad/catalog",
+          "status": 200,
+          "ms": 139
+        },
+        {
+          "time": "2026-10-20T01:17:56.347Z",
+          "path": "/work-ledger",
+          "status": 200,
+          "ms": 25
+        },
+        {
+          "time": "2026-10-20T01:17:56.355Z",
+          "path": "/mission",
+          "status": 200,
+          "ms": 7
+        },
+        {
+          "time": "2026-10-20T01:17:56.362Z",
+          "path": "/mailbox",
+          "status": 200,
+          "ms": 7
+        },
+        {
+          "time": "2026-10-20T01:17:56.397Z",
+          "path": "/work-ledger",
+          "status": 200,
+          "ms": 35
+        },
+        {
+          "time": "2026-10-20T01:17:56.410Z",
+          "path": "/expert-squad/inspect",
+          "status": 200,
+          "ms": 12
+        },
+        {
+          "time": "2026-10-20T01:17:56.432Z",
+          "path": "/work-ledger",
+          "status": 200,
+          "ms": 17
+        },
+        {
+          "time": "2026-10-20T01:17:56.523Z",
+          "path": "/ui/assets/noto-sans-sc-119-wght-normal-BfzSEbFz.woff2",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:17:56.523Z",
+          "path": "/ui/assets/noto-sans-sc-118-wght-normal-BPEb0gM9.woff2",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:17:56.524Z",
+          "path": "/ui/assets/noto-sans-sc-116-wght-normal-vdFVzbO2.woff2",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:17:56.525Z",
+          "path": "/ui/assets/noto-sans-sc-115-wght-normal-BN__2iBG.woff2",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:17:56.528Z",
+          "path": "/ui/assets/noto-sans-sc-112-wght-normal-CiZxJMyY.woff2",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:17:56.529Z",
+          "path": "/ui/assets/noto-sans-sc-117-wght-normal-Dsz3vkzU.woff2",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:17:56.532Z",
+          "path": "/ui/assets/noto-sans-sc-113-wght-normal-OgQXOX6x.woff2",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:17:56.536Z",
+          "path": "/ui/assets/noto-sans-sc-114-wght-normal-CRH9SDZu.woff2",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:17:57.148Z",
+          "path": "/vcs",
+          "status": 200,
+          "ms": 935
+        },
+        {
+          "time": "2026-10-20T01:17:57.155Z",
+          "path": "/experimental/project-memory",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "time": "2026-10-20T01:17:57.160Z",
+          "path": "/config",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:17:57.182Z",
+          "path": "/mcp",
+          "status": 200,
+          "ms": 25
+        },
+        {
+          "time": "2026-10-20T01:17:57.280Z",
+          "path": "/skill/mounts",
+          "status": 200,
+          "ms": 125
+        },
+        {
+          "time": "2026-10-20T01:17:57.694Z",
+          "path": "/channel",
+          "status": 200,
+          "ms": 535
+        },
+        {
+          "time": "2026-10-20T01:18:07.160Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:18:10.723Z",
+          "path": "/continuous-goal/chat/ses_hBhsFyv86kTwTnHfVS0l",
+          "status": 200,
+          "ms": 4
+        },
+        {
+          "time": "2026-10-20T01:18:10.755Z",
+          "path": "/mailbox",
+          "status": 200,
+          "ms": 7
+        },
+        {
+          "time": "2026-10-20T01:18:10.766Z",
+          "path": "/expert-squad/search",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:18:10.772Z",
+          "path": "/coding/chat/session/ses_hBhsFyv86kTwTnHfVS0l",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "time": "2026-10-20T01:18:10.773Z",
+          "path": "/mission-skill/catalog",
+          "status": 200,
+          "ms": 7
+        },
+        {
+          "time": "2026-10-20T01:18:10.969Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:18:20.438Z",
+          "path": "/config",
+          "status": 200,
+          "ms": 9408
+        },
+        {
+          "time": "2026-10-20T01:18:20.459Z",
+          "path": "/channel",
+          "status": 200,
+          "ms": 9429
+        },
+        {
+          "time": "2026-10-20T01:18:20.463Z",
+          "path": "/path",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:18:20.464Z",
+          "path": "/mcp",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:18:20.464Z",
+          "path": "/global/config",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:18:20.474Z",
+          "path": "/global/tasks",
+          "status": 200,
+          "ms": 9
+        },
+        {
+          "time": "2026-10-20T01:18:20.477Z",
+          "path": "/continuous-goal/chat/ses_hBhsFyv86kTwTnHfVS0l",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:18:20.479Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:18:20.486Z",
+          "path": "/chat/capability",
+          "status": 200,
+          "ms": 9718
+        },
+        {
+          "time": "2026-10-20T01:18:20.677Z",
+          "path": "/skill/mounts",
+          "status": 200,
+          "ms": 9646
+        },
+        {
+          "time": "2026-10-20T01:18:20.693Z",
+          "path": "/expert-squad/catalog",
+          "status": 200,
+          "ms": 9937
+        },
+        {
+          "time": "2026-10-20T01:18:20.706Z",
+          "path": "/expert-squad/inspect",
+          "status": 200,
+          "ms": 6
+        },
+        {
+          "time": "2026-10-20T01:18:20.863Z",
+          "path": "/continuous-goal/chat/ses_hBhsFyv86kTwTnHfVS0l",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:18:22.518Z",
+          "path": "/vcs",
+          "status": 200,
+          "ms": 2054
+        },
+        {
+          "time": "2026-10-20T01:18:22.524Z",
+          "path": "/experimental/project-memory",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:18:22.572Z",
+          "path": "/session/ses_hBhsFyv86kTwTnHfVS0l/conversation",
+          "status": 200,
+          "ms": 48
+        },
+        {
+          "time": "2026-10-20T01:18:22.702Z",
+          "path": "/session/ses_hBhsFyv86kTwTnHfVS0l/events",
+          "status": 200,
+          "ms": 59
+        },
+        {
+          "time": "2026-10-20T01:18:22.747Z",
+          "path": "/ui/assets/markdown-render.worker-DXg_fqFo.js",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:18:25.756Z",
+          "path": "/continuous-goal/chat/ses_hBhsFyv86kTwTnHfVS0l",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:18:27.166Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:18:30.815Z",
+          "path": "/continuous-goal/chat/ses_hBhsFyv86kTwTnHfVS0l",
+          "status": 200,
+          "ms": 4
+        },
+        {
+          "time": "2026-10-20T01:18:34.388Z",
+          "path": "/session/ses_hBhsFyv86kTwTnHfVS0l/config",
+          "status": 200,
+          "ms": 11783
+        },
+        {
+          "time": "2026-10-20T01:18:34.413Z",
+          "path": "/session/ses_hBhsFyv86kTwTnHfVS0l/config",
+          "status": 200,
+          "ms": 5
+        },
+        {
+          "time": "2026-10-20T01:18:35.754Z",
+          "path": "/continuous-goal/chat/ses_hBhsFyv86kTwTnHfVS0l",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:18:37.168Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:18:40.760Z",
+          "path": "/continuous-goal/chat/ses_hBhsFyv86kTwTnHfVS0l",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:18:45.761Z",
+          "path": "/continuous-goal/chat/ses_hBhsFyv86kTwTnHfVS0l",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:18:47.167Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:18:50.764Z",
+          "path": "/continuous-goal/chat/ses_hBhsFyv86kTwTnHfVS0l",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:18:55.757Z",
+          "path": "/continuous-goal/chat/ses_hBhsFyv86kTwTnHfVS0l",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:18:57.158Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:19:00.757Z",
+          "path": "/continuous-goal/chat/ses_hBhsFyv86kTwTnHfVS0l",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:19:05.752Z",
+          "path": "/continuous-goal/chat/ses_hBhsFyv86kTwTnHfVS0l",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:19:07.167Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        }
+      ],
+      "convergence": [
+        {
+          "time": "2026-10-20T01:18:20.457Z",
+          "retained": 4,
+          "active": 2,
+          "maximumRetained": 4,
+          "disposed": 91
+        },
+        {
+          "time": "2026-10-20T01:18:34.405Z",
+          "retained": 4,
+          "active": 2,
+          "maximumRetained": 4,
+          "disposed": 91
+        }
+      ],
+      "publicShutdown": {
+        "occurrence": "config-current-profile-453-before-81206171-8cd5-44ae-a8fc-3304ca4043d5",
+        "observedAtUtc": "2026-10-20T01:19:07.8422927Z",
+        "statusCode": 200,
+        "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYY3ui200L06Z4VYF0\"}",
+        "target": {
+          "pid": 67576,
+          "processInstanceID": "win32:639280558215504518",
+          "occurrenceID": "d7ee80c9-2cb9-43ff-8f4b-b1293a678de7"
+        }
+      },
+      "settlement": {
+        "observedAtUtc": "2026-10-20T01:19:09.4333287Z",
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 72568,
+              "processInstanceID": "win32:639280558209194311",
+              "occurrenceID": "94e7e68a-59e5-4b8d-aab4-8bd4ff4143c4"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 67576,
+              "processInstanceID": "win32:639280558215504518",
+              "occurrenceID": "d7ee80c9-2cb9-43ff-8f4b-b1293a678de7"
+            }
+          }
+        ],
+        "native": {
+          "occurrence": "config-current-profile-453-before-81206171-8cd5-44ae-a8fc-3304ca4043d5",
+          "outcome": "settled",
+          "host": {
+            "pid": 72568,
+            "processInstanceID": "win32:639280558209194311",
+            "occurrenceID": "94e7e68a-59e5-4b8d-aab4-8bd4ff4143c4"
+          },
+          "target": {
+            "pid": 67576,
+            "processInstanceID": "win32:639280558215504518",
+            "occurrenceID": "d7ee80c9-2cb9-43ff-8f4b-b1293a678de7"
+          },
+          "observedAtUtc": "2026-10-20T01:19:08.145Z",
+          "deadlineAt": 1792460220154,
+          "terminal": {
+            "occurrenceID": "config-current-profile-453-before-81206171-8cd5-44ae-a8fc-3304ca4043d5",
+            "pid": 67576,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "physicalCompletion": true,
+        "pairedCleanupComplete": true,
+        "occurrence": "config-current-profile-453-before-81206171-8cd5-44ae-a8fc-3304ca4043d5",
+        "copiedPair": [
+          {
+            "outcome": "retired",
+            "name": "auth.json"
+          },
+          {
+            "outcome": "retired",
+            "name": "models.json"
+          }
+        ]
+      },
+      "launcher": {
+        "childExitCode": 0,
+        "observedAtUtc": "2026-10-20T01:19:09.4658989Z"
+      },
+      "originalHandles": {
+        "launcher": 3610,
+        "checker": 72362
+      },
+      "originalHandlesExitCode": 0
+    },
+    "after": {
+      "source": "Initial lazy model experiment before environment consumer repair",
+      "profile": false,
+      "preflight": {
+        "ok": true,
+        "sessionID": "ses_hN6AKw8XV7i9Et1VMp37",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "write": {
+        "at": "2026-10-20T01:30:31.898Z",
+        "endedAt": "2026-10-20T01:31:00.419Z",
+        "phase": "after",
+        "port": 18711,
+        "occurrence": "config-current-profile-453-after-1fd4c0a4-8b30-46ab-acce-3fa8112f59c9",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 14373.4778,
+        "restoreMs": 14139.191200000001,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "getRequests": [
+        {
+          "time": "2026-10-20T01:29:39.157Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:29:41.234Z",
+          "path": "/session/ses_hN6AKw8XV7i9Et1VMp37/message",
+          "status": 200,
+          "ms": 76
+        },
+        {
+          "time": "2026-10-20T01:29:41.747Z",
+          "path": "/session/ses_hN6AKw8XV7i9Et1VMp37/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:29:42.253Z",
+          "path": "/session/ses_hN6AKw8XV7i9Et1VMp37/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:29:42.759Z",
+          "path": "/session/ses_hN6AKw8XV7i9Et1VMp37/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:29:43.264Z",
+          "path": "/session/ses_hN6AKw8XV7i9Et1VMp37/message",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "time": "2026-10-20T01:29:43.768Z",
+          "path": "/session/ses_hN6AKw8XV7i9Et1VMp37/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:29:44.274Z",
+          "path": "/session/ses_hN6AKw8XV7i9Et1VMp37/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:29:44.781Z",
+          "path": "/session/ses_hN6AKw8XV7i9Et1VMp37/message",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "time": "2026-10-20T01:29:45.286Z",
+          "path": "/session/ses_hN6AKw8XV7i9Et1VMp37/message",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "time": "2026-10-20T01:30:23.276Z",
+          "path": "/ui/",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:30:23.290Z",
+          "path": "/ui/assets/main-BgQCyxuv.js",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:30:23.294Z",
+          "path": "/ui/assets/CommandMenuSurface-CN3W_QEU.js",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:30:23.297Z",
+          "path": "/ui/assets/CommandMenuSurface-9Ez69chO.css",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:30:23.297Z",
+          "path": "/ui/assets/main-C1-OUgxq.css",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:30:23.298Z",
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:30:23.298Z",
+          "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:30:23.337Z",
+          "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:30:23.410Z",
+          "path": "/ui/i18n/zh-CN.json",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:30:23.410Z",
+          "path": "/ui/i18n/en-US.json",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:30:23.575Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:30:23.584Z",
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:30:23.613Z",
+          "path": "/work-ledger/events",
+          "status": 200,
+          "ms": 6
+        },
+        {
+          "time": "2026-10-20T01:30:23.615Z",
+          "path": "/global/projects/discover",
+          "status": 200,
+          "ms": 14
+        },
+        {
+          "time": "2026-10-20T01:30:23.633Z",
+          "path": "/mailbox",
+          "status": 200,
+          "ms": 12
+        },
+        {
+          "time": "2026-10-20T01:30:23.643Z",
+          "path": "/expert-squad/search",
+          "status": 200,
+          "ms": 8
+        },
+        {
+          "time": "2026-10-20T01:30:23.645Z",
+          "path": "/global/composer-references",
+          "status": 200,
+          "ms": 48
+        },
+        {
+          "time": "2026-10-20T01:30:23.662Z",
+          "path": "/global/tasks",
+          "status": 200,
+          "ms": 13
+        },
+        {
+          "time": "2026-10-20T01:30:23.664Z",
+          "path": "/path",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:30:23.666Z",
+          "path": "/mission-skill/catalog",
+          "status": 200,
+          "ms": 18
+        },
+        {
+          "time": "2026-10-20T01:30:23.686Z",
+          "path": "/chat/capability",
+          "status": 200,
+          "ms": 39
+        },
+        {
+          "time": "2026-10-20T01:30:23.786Z",
+          "path": "/work-ledger",
+          "status": 200,
+          "ms": 28
+        },
+        {
+          "time": "2026-10-20T01:30:23.792Z",
+          "path": "/mission",
+          "status": 200,
+          "ms": 6
+        },
+        {
+          "time": "2026-10-20T01:30:23.826Z",
+          "path": "/work-ledger",
+          "status": 200,
+          "ms": 31
+        },
+        {
+          "time": "2026-10-20T01:30:23.853Z",
+          "path": "/work-ledger",
+          "status": 200,
+          "ms": 20
+        },
+        {
+          "time": "2026-10-20T01:30:23.890Z",
+          "path": "/expert-squad/catalog",
+          "status": 200,
+          "ms": 257
+        },
+        {
+          "time": "2026-10-20T01:30:23.940Z",
+          "path": "/ui/assets/noto-sans-sc-119-wght-normal-BfzSEbFz.woff2",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:30:23.941Z",
+          "path": "/ui/assets/noto-sans-sc-118-wght-normal-BPEb0gM9.woff2",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:30:23.942Z",
+          "path": "/ui/assets/noto-sans-sc-116-wght-normal-vdFVzbO2.woff2",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:30:23.942Z",
+          "path": "/ui/assets/noto-sans-sc-115-wght-normal-BN__2iBG.woff2",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:30:23.943Z",
+          "path": "/ui/assets/noto-sans-sc-112-wght-normal-CiZxJMyY.woff2",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:30:23.944Z",
+          "path": "/ui/assets/noto-sans-sc-117-wght-normal-Dsz3vkzU.woff2",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:30:23.948Z",
+          "path": "/ui/assets/noto-sans-sc-113-wght-normal-OgQXOX6x.woff2",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:30:23.949Z",
+          "path": "/ui/assets/noto-sans-sc-114-wght-normal-CRH9SDZu.woff2",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:30:23.965Z",
+          "path": "/expert-squad/inspect",
+          "status": 200,
+          "ms": 13
+        },
+        {
+          "time": "2026-10-20T01:30:24.444Z",
+          "path": "/vcs",
+          "status": 200,
+          "ms": 780
+        },
+        {
+          "time": "2026-10-20T01:30:24.449Z",
+          "path": "/experimental/project-memory",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:30:24.453Z",
+          "path": "/config",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:30:24.467Z",
+          "path": "/mcp",
+          "status": 200,
+          "ms": 17
+        },
+        {
+          "time": "2026-10-20T01:30:24.549Z",
+          "path": "/skill/mounts",
+          "status": 200,
+          "ms": 100
+        },
+        {
+          "time": "2026-10-20T01:30:24.991Z",
+          "path": "/channel",
+          "status": 200,
+          "ms": 539
+        },
+        {
+          "time": "2026-10-20T01:30:34.465Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:30:35.579Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 6
+        },
+        {
+          "time": "2026-10-20T01:30:35.601Z",
+          "path": "/mailbox",
+          "status": 200,
+          "ms": 11
+        },
+        {
+          "time": "2026-10-20T01:30:35.614Z",
+          "path": "/expert-squad/search",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "time": "2026-10-20T01:30:35.620Z",
+          "path": "/mission-skill/catalog",
+          "status": 200,
+          "ms": 6
+        },
+        {
+          "time": "2026-10-20T01:30:35.625Z",
+          "path": "/coding/chat/session/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:30:35.753Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "time": "2026-10-20T01:30:46.244Z",
+          "path": "/config",
+          "status": 200,
+          "ms": 10474
+        },
+        {
+          "time": "2026-10-20T01:30:46.268Z",
+          "path": "/channel",
+          "status": 200,
+          "ms": 10497
+        },
+        {
+          "time": "2026-10-20T01:30:46.276Z",
+          "path": "/path",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:30:46.277Z",
+          "path": "/mcp",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:30:46.277Z",
+          "path": "/global/config",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:30:46.290Z",
+          "path": "/global/tasks",
+          "status": 200,
+          "ms": 11
+        },
+        {
+          "time": "2026-10-20T01:30:46.294Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:30:46.296Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:30:46.301Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:30:46.304Z",
+          "path": "/chat/capability",
+          "status": 200,
+          "ms": 10687
+        },
+        {
+          "time": "2026-10-20T01:30:46.529Z",
+          "path": "/expert-squad/catalog",
+          "status": 200,
+          "ms": 10928
+        },
+        {
+          "time": "2026-10-20T01:30:46.548Z",
+          "path": "/expert-squad/inspect",
+          "status": 200,
+          "ms": 6
+        },
+        {
+          "time": "2026-10-20T01:30:46.555Z",
+          "path": "/skill/mounts",
+          "status": 200,
+          "ms": 10783
+        },
+        {
+          "time": "2026-10-20T01:30:48.568Z",
+          "path": "/vcs",
+          "status": 200,
+          "ms": 2290
+        },
+        {
+          "time": "2026-10-20T01:30:48.582Z",
+          "path": "/experimental/project-memory",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:30:48.641Z",
+          "path": "/session/ses_hN6AKw8XV7i9Et1VMp37/conversation",
+          "status": 200,
+          "ms": 59
+        },
+        {
+          "time": "2026-10-20T01:30:48.839Z",
+          "path": "/session/ses_hN6AKw8XV7i9Et1VMp37/events",
+          "status": 200,
+          "ms": 65
+        },
+        {
+          "time": "2026-10-20T01:30:48.840Z",
+          "path": "/ui/assets/markdown-render.worker-DXg_fqFo.js",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:30:50.605Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:30:54.624Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:30:55.635Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 4
+        },
+        {
+          "time": "2026-10-20T01:31:00.397Z",
+          "path": "/session/ses_hN6AKw8XV7i9Et1VMp37/config",
+          "status": 200,
+          "ms": 11726
+        },
+        {
+          "time": "2026-10-20T01:31:00.424Z",
+          "path": "/session/ses_hN6AKw8XV7i9Et1VMp37/config",
+          "status": 200,
+          "ms": 4
+        },
+        {
+          "time": "2026-10-20T01:31:00.622Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:31:04.459Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:31:05.602Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:31:10.604Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:31:14.455Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:31:15.595Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "time": "2026-10-20T01:31:20.599Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:31:24.456Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:31:25.598Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:31:30.605Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:31:34.455Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:31:35.599Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:31:40.594Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:31:44.462Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:31:45.603Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:31:50.603Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:31:54.457Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:31:55.599Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:32:00.602Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:32:04.466Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:32:05.600Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:32:10.595Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:32:14.450Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:32:15.598Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:32:20.597Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:32:24.455Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:32:25.601Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "time": "2026-10-20T01:32:30.598Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:32:34.461Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:32:35.603Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:32:40.603Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:32:44.456Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:32:45.604Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:32:50.607Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:32:54.452Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:32:55.594Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:33:00.600Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:33:04.458Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:33:05.606Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:33:10.592Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:33:14.453Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:33:15.596Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:33:20.596Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:33:24.464Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:33:25.605Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:33:30.606Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:33:34.460Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:33:35.596Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:33:40.605Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:33:44.460Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:33:45.599Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:33:50.599Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:33:54.455Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:33:55.597Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:34:00.596Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:34:04.465Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:34:05.595Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:34:10.603Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:34:14.455Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:34:15.597Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:34:20.598Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:34:24.460Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:34:25.599Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:34:30.594Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:34:34.453Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:34:35.596Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:34:40.595Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:34:44.459Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:34:45.604Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:34:50.614Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:34:54.466Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:34:55.602Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:35:00.605Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:35:04.456Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:35:05.602Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:35:10.596Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:35:14.463Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:35:15.595Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:35:20.604Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:35:24.452Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:35:25.596Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:35:30.599Z",
+          "path": "/continuous-goal/chat/ses_hN6AKw8XV7i9Et1VMp37",
+          "status": 200,
+          "ms": 2
+        }
+      ],
+      "convergence": [
+        {
+          "time": "2026-10-20T01:30:46.267Z",
+          "retained": 4,
+          "active": 2,
+          "maximumRetained": 4,
+          "disposed": 92
+        },
+        {
+          "time": "2026-10-20T01:31:00.416Z",
+          "retained": 4,
+          "active": 2,
+          "maximumRetained": 4,
+          "disposed": 92
+        }
+      ],
+      "publicShutdown": {
+        "observedAtUtc": "2026-10-20T01:35:31.5769242Z",
+        "statusCode": 200,
+        "target": {
+          "pid": 77960,
+          "processInstanceID": "win32:639280565749158906",
+          "occurrenceID": "785484ad-9a11-4dc8-b383-d5a4a92f58d4"
+        },
+        "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYY82cZ00qcCp8Y0eZ\"}",
+        "occurrence": "config-current-profile-453-after-1fd4c0a4-8b30-46ab-acce-3fa8112f59c9"
+      },
+      "settlement": {
+        "physicalCompletion": true,
+        "pairedCleanupComplete": true,
+        "copiedPair": [
+          {
+            "name": "auth.json",
+            "outcome": "retired"
+          },
+          {
+            "name": "models.json",
+            "outcome": "retired"
+          }
+        ],
+        "occurrence": "config-current-profile-453-after-1fd4c0a4-8b30-46ab-acce-3fa8112f59c9",
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 87892,
+              "processInstanceID": "win32:639280565742784329",
+              "occurrenceID": "a90e6587-64bf-4257-b963-da6a5a7cb455"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 77960,
+              "processInstanceID": "win32:639280565749158906",
+              "occurrenceID": "785484ad-9a11-4dc8-b383-d5a4a92f58d4"
+            }
+          }
+        ],
+        "native": {
+          "occurrence": "config-current-profile-453-after-1fd4c0a4-8b30-46ab-acce-3fa8112f59c9",
+          "outcome": "settled",
+          "host": {
+            "pid": 87892,
+            "processInstanceID": "win32:639280565742784329",
+            "occurrenceID": "a90e6587-64bf-4257-b963-da6a5a7cb455"
+          },
+          "target": {
+            "pid": 77960,
+            "processInstanceID": "win32:639280565749158906",
+            "occurrenceID": "785484ad-9a11-4dc8-b383-d5a4a92f58d4"
+          },
+          "observedAtUtc": "2026-10-20T01:35:31.723Z",
+          "deadlineAt": 1792460974230,
+          "terminal": {
+            "occurrenceID": "config-current-profile-453-after-1fd4c0a4-8b30-46ab-acce-3fa8112f59c9",
+            "pid": 77960,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-20T01:35:32.9573322Z"
+      },
+      "launcher": {
+        "childExitCode": 0,
+        "observedAtUtc": "2026-10-20T01:35:32.9938203Z"
+      },
+      "originalHandles": {
+        "launcher": 17157,
+        "checker": 76189
+      },
+      "originalHandlesExitCode": 0
+    },
+    "final": {
+      "source": "Final source",
+      "profile": false,
+      "preflight": {
+        "ok": false,
+        "status": 401,
+        "code": "token_revoked",
+        "message": "Original copied OAuth token invalidated; current source metadata had changed; fresh paired copy succeeds in verified scope"
+      },
+      "write": {
+        "at": "2026-10-20T01:43:22.722Z",
+        "endedAt": "2026-10-20T01:43:35.053Z",
+        "phase": "final",
+        "port": 18713,
+        "occurrence": "config-current-profile-453-final-6d04f2ab-0518-48d8-b9e3-976c20149838",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 11350.8027,
+        "restoreMs": 974.7262999999948,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "getRequests": [
+        {
+          "time": "2026-10-20T01:41:47.039Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:41:49.100Z",
+          "path": "/session/ses_h0eLUwoBT2jonMuJ2NxN/message",
+          "status": 200,
+          "ms": 74
+        },
+        {
+          "time": "2026-10-20T01:41:49.633Z",
+          "path": "/session/ses_h0eLUwoBT2jonMuJ2NxN/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:41:50.140Z",
+          "path": "/session/ses_h0eLUwoBT2jonMuJ2NxN/message",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:43:34.077Z",
+          "path": "/global/config",
+          "status": 200,
+          "ms": 1
+        }
+      ],
+      "convergence": [],
+      "publicShutdown": {
+        "observedAtUtc": "2026-10-20T01:44:05.1833208Z",
+        "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYYACEj00yE3dQ2Y9G\"}",
+        "occurrence": "config-current-profile-453-final-6d04f2ab-0518-48d8-b9e3-976c20149838",
+        "statusCode": 200,
+        "target": {
+          "pid": 25792,
+          "processInstanceID": "win32:639280573033163662",
+          "occurrenceID": "288ca482-3562-435f-b064-18dc82c3ef6d"
+        }
+      },
+      "settlement": {
+        "copiedPair": [
+          {
+            "name": "auth.json",
+            "outcome": "retired"
+          },
+          {
+            "name": "models.json",
+            "outcome": "retired"
+          }
+        ],
+        "physicalCompletion": true,
+        "occurrence": "config-current-profile-453-final-6d04f2ab-0518-48d8-b9e3-976c20149838",
+        "observedAtUtc": "2026-10-20T01:44:06.5927142Z",
+        "chain": [
+          {
+            "identity": {
+              "pid": 52292,
+              "processInstanceID": "win32:639280573026953372",
+              "occurrenceID": "05518e33-68b9-40bf-aaf5-ce07fb6bd953"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 25792,
+              "processInstanceID": "win32:639280573033163662",
+              "occurrenceID": "288ca482-3562-435f-b064-18dc82c3ef6d"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "native": {
+          "occurrence": "config-current-profile-453-final-6d04f2ab-0518-48d8-b9e3-976c20149838",
+          "outcome": "settled",
+          "host": {
+            "pid": 52292,
+            "processInstanceID": "win32:639280573026953372",
+            "occurrenceID": "05518e33-68b9-40bf-aaf5-ce07fb6bd953"
+          },
+          "target": {
+            "pid": 25792,
+            "processInstanceID": "win32:639280573033163662",
+            "occurrenceID": "288ca482-3562-435f-b064-18dc82c3ef6d"
+          },
+          "observedAtUtc": "2026-10-20T01:44:05.295Z",
+          "deadlineAt": 1792461701880,
+          "terminal": {
+            "occurrenceID": "config-current-profile-453-final-6d04f2ab-0518-48d8-b9e3-976c20149838",
+            "pid": 25792,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "pairedCleanupComplete": true
+      },
+      "launcher": {
+        "childExitCode": 0,
+        "observedAtUtc": "2026-10-20T01:44:06.6162353Z"
+      },
+      "originalHandles": {
+        "launcher": 10242,
+        "checker": 89137
+      },
+      "originalHandlesExitCode": 0
+    },
+    "verified": {
+      "source": "Final source",
+      "profile": false,
+      "preflight": {
+        "ok": true,
+        "sessionID": "ses_hQdzpbR5OBfmRETrZToL",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "write": {
+        "at": "2026-10-20T01:46:37.516Z",
+        "endedAt": "2026-10-20T01:46:50.484Z",
+        "phase": "verified",
+        "port": 18715,
+        "occurrence": "config-current-profile-453-verified-ba197d89-caef-4479-8c92-cb9cc99d54ae",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 12034.218300000008,
+        "restoreMs": 930.0981000000029,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "getRequests": [
+        {
+          "time": "2026-10-20T01:44:15.963Z",
+          "path": "/global/health",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "time": "2026-10-20T01:44:18.720Z",
+          "path": "/session/ses_hQdzpbR5OBfmRETrZToL/message",
+          "status": 200,
+          "ms": 99
+        },
+        {
+          "time": "2026-10-20T01:44:19.228Z",
+          "path": "/session/ses_hQdzpbR5OBfmRETrZToL/message",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "time": "2026-10-20T01:44:19.744Z",
+          "path": "/session/ses_hQdzpbR5OBfmRETrZToL/message",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "time": "2026-10-20T01:44:20.250Z",
+          "path": "/session/ses_hQdzpbR5OBfmRETrZToL/message",
+          "status": 200,
+          "ms": 4
+        },
+        {
+          "time": "2026-10-20T01:44:20.790Z",
+          "path": "/session/ses_hQdzpbR5OBfmRETrZToL/message",
+          "status": 200,
+          "ms": 4
+        },
+        {
+          "time": "2026-10-20T01:44:21.296Z",
+          "path": "/session/ses_hQdzpbR5OBfmRETrZToL/message",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "time": "2026-10-20T01:44:21.807Z",
+          "path": "/session/ses_hQdzpbR5OBfmRETrZToL/message",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "time": "2026-10-20T01:44:22.313Z",
+          "path": "/session/ses_hQdzpbR5OBfmRETrZToL/message",
+          "status": 200,
+          "ms": 4
+        },
+        {
+          "time": "2026-10-20T01:45:30.914Z",
+          "path": "/session/ses_hQdzpbR5OBfmRETrZToL",
+          "status": 400,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:46:20.698Z",
+          "path": "/session/ses_hQdzpbR5OBfmRETrZToL",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:46:37.523Z",
+          "path": "/session/ses_hQdzpbR5OBfmRETrZToL",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:46:37.523Z",
+          "path": "/config",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "time": "2026-10-20T01:46:37.649Z",
+          "path": "/provider",
+          "status": 200,
+          "ms": 128
+        },
+        {
+          "time": "2026-10-20T01:46:37.763Z",
+          "path": "/global/providers",
+          "status": 200,
+          "ms": 242
+        },
+        {
+          "time": "2026-10-20T01:46:49.552Z",
+          "path": "/global/config",
+          "status": 200,
+          "ms": 0
+        },
+        {
+          "time": "2026-10-20T01:47:45.839Z",
+          "path": "/session/ses_hQdzpbR5OBfmRETrZToL",
+          "status": 200,
+          "ms": 3
+        },
+        {
+          "time": "2026-10-20T01:48:04.536Z",
+          "path": "/session/ses_hQdzpbR5OBfmRETrZToL",
+          "status": 200,
+          "ms": 2
+        },
+        {
+          "time": "2026-10-20T01:48:14.614Z",
+          "path": "/config",
+          "status": 200,
+          "ms": 10082
+        },
+        {
+          "time": "2026-10-20T01:48:14.636Z",
+          "path": "/global/config",
+          "status": 200,
+          "ms": 1
+        },
+        {
+          "time": "2026-10-20T01:48:14.761Z",
+          "path": "/global/providers",
+          "status": 200,
+          "ms": 10227
+        },
+        {
+          "time": "2026-10-20T01:48:14.917Z",
+          "path": "/provider",
+          "status": 200,
+          "ms": 10384
+        }
+      ],
+      "convergence": [
+        {
+          "time": "2026-10-20T01:47:45.854Z",
+          "retained": 4,
+          "active": 1,
+          "maximumRetained": 4,
+          "disposed": 94
+        },
+        {
+          "time": "2026-10-20T01:48:14.631Z",
+          "retained": 4,
+          "active": 1,
+          "maximumRetained": 4,
+          "disposed": 94
+        }
+      ],
+      "publicShutdown": {
+        "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYYBSRK00qz00pdl4L\"}",
+        "occurrence": "config-current-profile-453-verified-ba197d89-caef-4479-8c92-cb9cc99d54ae",
+        "target": {
+          "pid": 87712,
+          "processInstanceID": "win32:639280574510295061",
+          "occurrenceID": "26da0892-39eb-4c4e-90df-bd57480f6d82"
+        },
+        "statusCode": 200,
+        "observedAtUtc": "2026-10-20T01:49:05.8035212Z"
+      },
+      "settlement": {
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 37704,
+              "processInstanceID": "win32:639280574503542263",
+              "occurrenceID": "29ef2e7f-1709-4429-a26d-5684c2a388e9"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 87712,
+              "processInstanceID": "win32:639280574510295061",
+              "occurrenceID": "26da0892-39eb-4c4e-90df-bd57480f6d82"
+            }
+          }
+        ],
+        "physicalCompletion": true,
+        "native": {
+          "occurrence": "config-current-profile-453-verified-ba197d89-caef-4479-8c92-cb9cc99d54ae",
+          "outcome": "settled",
+          "host": {
+            "pid": 37704,
+            "processInstanceID": "win32:639280574503542263",
+            "occurrenceID": "29ef2e7f-1709-4429-a26d-5684c2a388e9"
+          },
+          "target": {
+            "pid": 87712,
+            "processInstanceID": "win32:639280574510295061",
+            "occurrenceID": "26da0892-39eb-4c4e-90df-bd57480f6d82"
+          },
+          "observedAtUtc": "2026-10-20T01:49:05.944Z",
+          "deadlineAt": 1792461849665,
+          "terminal": {
+            "occurrenceID": "config-current-profile-453-verified-ba197d89-caef-4479-8c92-cb9cc99d54ae",
+            "pid": 87712,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "occurrence": "config-current-profile-453-verified-ba197d89-caef-4479-8c92-cb9cc99d54ae",
+        "observedAtUtc": "2026-10-20T01:49:07.2618886Z",
+        "pairedCleanupComplete": true,
+        "copiedPair": [
+          {
+            "name": "auth.json",
+            "outcome": "retired"
+          },
+          {
+            "name": "models.json",
+            "outcome": "retired"
+          }
+        ]
+      },
+      "launcher": {
+        "childExitCode": 0,
+        "observedAtUtc": "2026-10-20T01:49:07.2934616Z"
+      },
+      "originalHandles": {
+        "launcher": 84304,
+        "checker": 37098,
+        "reader": 74693,
+        "repeatChecker": 99070,
+        "repeatReader": 80712
+      },
+      "originalHandlesExitCode": 0
+    }
+  },
+  "measurements": {
+    "before": {
+      "coldMs": 13133.559400000002,
+      "restoreMs": 13940.375099999997,
+      "coldWithin10s": false,
+      "restoreWithin5s": false
+    },
+    "after": {
+      "coldMs": 14373.4778,
+      "restoreMs": 14139.191200000001,
+      "coldWithin10s": false,
+      "restoreWithin5s": false
+    },
+    "final": {
+      "coldMs": 11350.8027,
+      "restoreMs": 974.7262999999948,
+      "coldWithin10s": false,
+      "restoreWithin5s": true
+    },
+    "verified": {
+      "coldMs": 12034.218300000008,
+      "restoreMs": 930.0981000000029,
+      "coldWithin10s": false,
+      "restoreWithin5s": true
+    }
+  },
+  "repeat": {
+    "write": {
+      "at": "2026-10-20T01:48:03.651Z",
+      "endedAt": "2026-10-20T01:48:26.078Z",
+      "phase": "repeat",
+      "port": 18715,
+      "occurrence": "config-current-profile-453-verified-ba197d89-caef-4479-8c92-cb9cc99d54ae",
+      "transport": "browser",
+      "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+      "accepted": true,
+      "restored": true,
+      "writeMs": 10981.9149,
+      "restoreMs": 11440.7759,
+      "failures": [],
+      "permissionMode": "ask",
+      "changedField": "username",
+      "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+    },
+    "readers": {
+      "occurrence": "config-current-profile-453-verified-ba197d89-caef-4479-8c92-cb9cc99d54ae",
+      "kind": "Public HTTP positive contracts concurrent with original canonical save; this is not browser or visual acceptance",
+      "results": [
+        {
+          "path": "/config",
+          "startedAt": "2026-10-20T01:48:04.514Z",
+          "endedAt": "2026-10-20T01:48:14.615Z",
+          "ms": 10100.175299999999,
+          "status": 200,
+          "permissionMode": "ask"
+        },
+        {
+          "path": "/provider",
+          "startedAt": "2026-10-20T01:48:04.517Z",
+          "endedAt": "2026-10-20T01:48:14.985Z",
+          "ms": 10468.148500000003,
+          "status": 200,
+          "providers": 227,
+          "models": 8133,
+          "selectedModel": "gpt-6.1-sol"
+        },
+        {
+          "path": "/global/providers",
+          "startedAt": "2026-10-20T01:48:04.518Z",
+          "endedAt": "2026-10-20T01:48:14.835Z",
+          "ms": 10317.909200000002,
+          "status": 200,
+          "providers": 227,
+          "models": 8133,
+          "selectedModel": "gpt-6.1-sol"
+        },
+        {
+          "path": "/session/ses_hQdzpbR5OBfmRETrZToL",
+          "startedAt": "2026-10-20T01:48:04.518Z",
+          "endedAt": "2026-10-20T01:48:04.537Z",
+          "ms": 18.93709999999919,
+          "status": 200,
+          "sessionID": "ses_hQdzpbR5OBfmRETrZToL"
+        }
+      ]
+    },
+    "readerAdmission": {
+      "time": "2026-10-20T01:48:04.393Z",
+      "phase": "config.global.before",
+      "requestID": "24ede9c6-96cf-4ea2-8f5e-b72cb17a161b",
+      "occurrence": "config-current-profile-453-verified-ba197d89-caef-4479-8c92-cb9cc99d54ae"
+    },
+    "coldWithin10s": false,
+    "restoreWithin5s": false,
+    "acceptedReaderWithin20s": true
+  },
+  "tests": {
+    "files": 9,
+    "passed": 82,
+    "assertions": 254,
+    "skipped": 0,
+    "originalRunner": 11318,
+    "originalRunnerExit": 0,
+    "originalTypecheck": 24253,
+    "originalTypecheckExit": 0
+  },
+  "data": {
+    "schema": {
+      "user_version": 2
+    },
+    "projects": {
+      "count": 98
+    },
+    "mode": "Direct readonly SQLite after all four original native launchers and all config/read checkers joined exit0; complete history retained; no production initializer"
+  },
+  "visual": {
+    "before": "Real browser tab54 screenshot and interaction on delivered source",
+    "after": "Real browser tab55 screenshot and interaction on initial lazy models experiment before environment repair",
+    "final": "Latest scope browser creation blocked by Work setting; no bypass, new screenshot or actual page acceptance claimed",
+    "uiSource": "Unchanged formal 452 UI"
+  },
+  "limits": [
+    "Original 10s cold and 5s restore goals remain unmet; one 0.93s restore is not stable performance.",
+    "CPU profile samples and overlapping spans are not wall-time totals or fixed speedup evidence.",
+    "Latest full page/visual acceptance unfulfilled because browser use is disabled.",
+    "No POSIX validation or release."
+  ],
+  "observedAt": "2026-10-20T01:51:20.993Z"
+}
