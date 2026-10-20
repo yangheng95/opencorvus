@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [首页Goal的确认边界](2026-10-20-goal-confirmation-boundary.md)：原首页取消保留草稿、确认后创建及[双模式真实执行](../../artifacts/2026-10-20-goal-confirmation-boundary/README.md)。
+
 - [普通成员阅读入口的中性名称](2026-10-20-agent-conversation-label.md)：公共入口文案修复与[8张当前正式构建实图](../../artifacts/2026-10-20-agent-conversation-label/README.md)。
 
 - [调度结果的可见会话身份](2026-10-20-scheduled-result-visibility.md)：新旧独立调度结果的canonical Work身份、保留数据升级与[真实运行证据](../../artifacts/2026-10-20-scheduled-result-visibility/README.md)。

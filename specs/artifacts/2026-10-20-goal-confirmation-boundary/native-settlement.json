@@ -1,0 +1,140 @@
+{
+  "scope": "goal-confirmation-boundary-472",
+  "originalHandle": 81175,
+  "launcherExit": 0,
+  "publicShutdown": 200,
+  "native": {
+    "occurrence": "goal-confirmation-boundary-472-b79d8da3-f6fd-491e-9b79-9ad8813aa115",
+    "outcome": "settled",
+    "host": {
+      "pid": 77300,
+      "processInstanceID": "win32:639280924623402301",
+      "occurrenceID": "19c6fb59-36ac-4286-9c01-f323785c979a"
+    },
+    "target": {
+      "pid": 18268,
+      "processInstanceID": "win32:639280924630224685",
+      "occurrenceID": "f22e2c89-3971-4862-82db-63b640f9cc9a"
+    },
+    "observedAtUtc": "2026-10-20T11:37:31.176Z",
+    "deadlineAt": 1792496861588,
+    "terminal": {
+      "occurrenceID": "goal-confirmation-boundary-472-b79d8da3-f6fd-491e-9b79-9ad8813aa115",
+      "pid": 18268,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "runtimePair": [
+    {
+      "name": "auth.json",
+      "outcome": "retired"
+    },
+    {
+      "name": "models.json",
+      "outcome": "retired"
+    }
+  ],
+  "preflight": {
+    "sessionID": "ses_hzpr4YaHiez1dx0OSCJd",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof",
+      "owner": {
+        "sessionID": "ses_hzpr4YaHiez1dx0OSCJd",
+        "streamRequest": {
+          "requestID": "msg_hUX8thHNGp7skcjUkurq",
+          "agentID": "memory",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VYaXABf00HhjLebLrm",
+          "attempt": 0
+        }
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof",
+      "owner": {
+        "sessionID": "ses_hzpr4YaHiez1dx0OSCJd",
+        "streamRequest": {
+          "requestID": "msg_hUX8thHNGp7skcjUkurq",
+          "agentID": "chat",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VYaXASp00d6N8nFlND",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VYaXABn00TiPSSNk8W"
+        }
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof",
+      "owner": {
+        "sessionID": "ses_-zURPSNu3zz6SIH4nxQ7",
+        "streamRequest": {
+          "requestID": "msg_hp3bew0hSgpmAwpo427y",
+          "agentID": "work",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VYaXcju00oSmBxUY27",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VYaXcaM00TmDIIXZAL"
+        }
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof",
+      "owner": {
+        "sessionID": "ses_-zURPRFwZzzTe6qazRhB",
+        "streamRequest": {
+          "requestID": "msg_h3qOdqJ3DLBpIXhAcH3O",
+          "agentID": "chat",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VYaYkYf00eOQPulICO",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VYaYkPz006Am9Si45L"
+        }
+      }
+    }
+  ],
+  "scopeAndBatchBudget": 10
+}

@@ -108,12 +108,18 @@ archives affect only goals whose exact owner is that Session.
 ## User controls
 
 The home page offers Create goal beside a compact explanation and How it works.
-It uses the existing project/global Conversation creation and selection authority
-to create one real Chat, then opens that exact Session's existing goal form. This
-one-time form request binds the original API authority and selection epoch, is
-consumed on handoff and cannot follow a later selection.
-No user Message is fabricated. Closing the form retains the empty Chat; submitting
-uses the same continuous-goal endpoint, budgets and visible controller Messages.
+It opens the existing goal form before creating a Conversation. The Home form
+binds the original API authority, selection epoch and composer draft scope;
+closing it retains the Home and its draft. Explicit form confirmation uses the
+existing project/global Conversation creation and selection authority to create
+one real Chat. The one-time form request then carries the confirmed input and
+the same requestID to that exact Session's existing goal mutation. The handoff
+binds its API authority and new selection epoch, is consumed once and cannot
+follow a later selection. A submitted creation failure retains any real Chat
+already committed; cancellation never needs a compensating deletion.
+No user Message is fabricated. Submission uses the same continuous-goal endpoint,
+budgets and visible controller Messages; existing-owner and SideChat controls
+retain their current mutation path. How it works is a separate introduction mode.
 Starting from the composer moves its text and quotation through one write to the
 existing draft store, after creation authority is rechecked and before selecting
 the newly published Session. That creation preserves staged attachments; ordinary

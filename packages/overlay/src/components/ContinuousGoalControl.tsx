@@ -35,7 +35,13 @@ import { TextField } from "./ui/TextField"
 const REFRESH_MS = 5_000
 const guideSteps = ["start", "define", "manage"] as const
 
-export type GoalFormRequest = { sessionID: string; authority: ApiAuthority; selectionEpoch: number }
+export type GoalLaunchContext = { authority: ApiAuthority; selectionEpoch: number; composerDraftKey?: string }
+export type GoalFormRequest = {
+  sessionID: string
+  authority: ApiAuthority
+  selectionEpoch: number
+  input: ContinuousGoalCreateInput
+}
 
 function GoalGuideSteps() {
   return (
@@ -87,7 +93,7 @@ export function ContinuousGoalControl(props: {
   owner?: ContinuousGoalTarget
   compact?: boolean
   home?: boolean
-  onStartGoal?: () => Promise<void>
+  onStartGoal?: (input: ContinuousGoalCreateInput, context: GoalLaunchContext) => Promise<void>
   starting?: boolean
   createRequest?: GoalFormRequest
   onCreateHandled?: () => void
@@ -119,7 +125,7 @@ export function ContinuousGoalControl(props: {
     const current = projection()
     return current?.key === source()?.key ? current?.value : undefined
   }
-  const [mode, setMode] = createSignal<"details" | "create" | "complete" | null>(null)
+  const [mode, setMode] = createSignal<"details" | "create" | "complete" | "about" | null>(null)
   const [editing, setEditing] = createSignal<ContinuousGoal>()
   const [objective, setObjective] = createSignal("")
   const [tokens, setTokens] = createSignal("")
@@ -132,6 +138,8 @@ export function ContinuousGoalControl(props: {
   const [notice, setNotice] = createSignal("")
   let attempt: { key: string; requestID: string } | undefined
   let createDraft: { key: string; text: string } | undefined
+  let launchOwner: GoalLaunchContext | undefined
+  let disposed = false
   let root: HTMLElement | undefined
   let noticeState = ""
   const number = (value: number) => new Intl.NumberFormat(localeTag()).format(value)
@@ -139,10 +147,27 @@ export function ContinuousGoalControl(props: {
     const value = goal()?.reason
     return value && systemReasons.has(value) ? t(`continuous_goal.reason.${value}`) : value
   }
-  const owns = (key: string) => source()?.key === key
+  const owns = (key: string) => !disposed && source()?.key === key
   const initialLoading = () => projection.state === "pending"
   const disabled = () => busy() || initialLoading() || !source() || !!projection.error
   const pendingComposerContext = () => !!props.hasStagedAttachments || !!composerQuotation(props.composerDraftKey)
+  const ownsLaunch = () => !disposed && !!launchOwner && isApiAuthorityCurrent(launchOwner.authority) &&
+    launchOwner.selectionEpoch === props.selectionEpoch && launchOwner.composerDraftKey === props.composerDraftKey
+  const hasForm = () => !!props.owner || (props.home && mode() === "create")
+
+  onCleanup(() => {
+    disposed = true
+    launchOwner = undefined
+  })
+  createEffect(() => {
+    const revision = captureApiAuthority().revision
+    const selectionEpoch = props.selectionEpoch
+    const draftKey = props.composerDraftKey
+    if (props.home && launchOwner && (launchOwner.authority.revision !== revision ||
+      launchOwner.selectionEpoch !== selectionEpoch || launchOwner.composerDraftKey !== draftKey)) {
+      setMode(null)
+    }
+  })
 
   createEffect(
     on(
@@ -187,7 +212,13 @@ export function ContinuousGoalControl(props: {
     if (current && noticeState && `${current.id}:${current.status}` !== noticeState) setNotice("")
   })
 
-  function open(next: "details" | "create" | "complete") {
+  function open(next: "details" | "create" | "complete" | "about") {
+    if (props.home && next === "create") {
+      if (props.selectionEpoch === undefined) throw new Error("Home Goal form requires its workspace selection epoch")
+      launchOwner = {
+        authority: captureApiAuthority(), selectionEpoch: props.selectionEpoch, composerDraftKey: props.composerDraftKey,
+      }
+    } else launchOwner = undefined
     const current = goal()
     createDraft = next === "create" && props.composerDraftKey
       ? { key: props.composerDraftKey, text: composerDraftText(props.composerDraftKey) }
@@ -213,12 +244,35 @@ export function ContinuousGoalControl(props: {
     const current = source()
     if (current?.target.kind !== "chat" || current.target.id !== requested.sessionID) return
     open("create")
+    const { requestID: submittedRequestID, ...input } = requested.input
+    setObjective(input.objective)
+    setTokens(input.tokenBudget === undefined ? "" : String(input.tokenBudget))
+    setTurns(input.turnBudget === undefined ? "" : String(input.turnBudget))
+    attempt = { key: JSON.stringify([current.key, input]), requestID: submittedRequestID }
     props.onCreateHandled?.()
+    void mutate(input)
   })
   function requestID(input: unknown) {
-    const key = JSON.stringify([source()?.key, input])
+    const owner = props.home
+      ? [launchOwner?.authority.revision, launchOwner?.selectionEpoch, launchOwner?.composerDraftKey]
+      : source()?.key
+    const key = JSON.stringify([owner, input])
     if (attempt?.key !== key) attempt = { key, requestID: randomUUID() }
     return attempt!.requestID
+  }
+  async function launch(input: ContinuousGoalCreateInput) {
+    const owner = launchOwner
+    if (!owner || !ownsLaunch() || busy() || props.starting || !props.onStartGoal) return
+    setBusy(true)
+    setFailure(undefined)
+    setValidation("")
+    try {
+      await props.onStartGoal(input, owner)
+    } catch (error) {
+      if (ownsLaunch()) setFailure(error)
+    } finally {
+      if (!disposed && launchOwner === owner) setBusy(false)
+    }
   }
   async function mutate(
     input: Omit<ContinuousGoalCreateInput, "requestID"> | Omit<ContinuousGoalUpdateInput, "requestID">,
@@ -294,11 +348,13 @@ export function ContinuousGoalControl(props: {
       const turnBudget = budget(turns(), existing?.turnBudget)
       if (!existing) {
         if (!objective().trim()) throw new Error("continuous_goal.validation.objective")
-        void mutate({
+        const input = {
           objective: objective().trim(),
           ...(tokenBudget !== undefined ? { tokenBudget } : {}),
           ...(turnBudget !== undefined ? { turnBudget } : {}),
-        })
+        }
+        if (props.home) void launch({ ...input, requestID: requestID(input) })
+        else void mutate(input)
         return
       }
       const status =
@@ -358,13 +414,13 @@ export function ContinuousGoalControl(props: {
             variant="solid"
             size="md"
             tone="accent"
-            disabled={!appStore.connected || props.starting}
-            onClick={() => void props.onStartGoal?.()}
+            disabled={!appStore.connected || props.starting || busy()}
+            onClick={() => open("create")}
           >
             <Icon name="goals" size="compact" />
             {t(props.starting ? "continuous_goal.home.starting" : "continuous_goal.create")}
           </Button>
-          <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => open("create")}>
+          <Button type="button" variant="ghost" size="sm" tone="neutral" disabled={busy() || props.starting} onClick={() => open("about")}>
             {t("continuous_goal.home.how")}
           </Button>
         </div>
@@ -470,7 +526,7 @@ export function ContinuousGoalControl(props: {
         wide
         open={mode() !== null}
         title={t(
-          !props.owner
+          !hasForm()
             ? "continuous_goal.learn"
             : mode() === "complete"
               ? "continuous_goal.complete_title"
@@ -495,8 +551,9 @@ export function ContinuousGoalControl(props: {
             >
               {t("common.close")}
             </Button>
-            <Show when={source() && (editing()?.status !== "complete" || mode() === "create")}>
-              <Button type="submit" form={formID} variant="solid" size="sm" tone="accent" disabled={disabled()}>
+            <Show when={hasForm() && (source() || props.home) && (editing()?.status !== "complete" || mode() === "create")}>
+              <Button type="submit" form={formID} variant="solid" size="sm" tone="accent"
+                disabled={props.home ? busy() || props.starting || !appStore.connected || !ownsLaunch() : disabled()}>
                 {t(
                   busy()
                     ? "continuous_goal.saving"
@@ -514,7 +571,7 @@ export function ContinuousGoalControl(props: {
         }
       >
         <Show
-          when={props.owner}
+          when={hasForm()}
           fallback={
             <div class="continuous-goal__intro">
               <p>{t("continuous_goal.about")}</p>
@@ -531,7 +588,7 @@ export function ContinuousGoalControl(props: {
               save()
             }}
           >
-            <p class="continuous-goal__scope">{t(`continuous_goal.scope.${props.owner!.kind}`)}</p>
+            <p class="continuous-goal__scope">{t(props.owner ? `continuous_goal.scope.${props.owner.kind}` : "continuous_goal.scope.new_chat")}</p>
             <Show
               when={mode() === "create"}
               fallback={

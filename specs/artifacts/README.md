@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [首页Goal确认边界](2026-10-20-goal-confirmation-boundary/README.md)：10张人工截图、全局Work/项目Code的取消、真实确认与预算停止。
+
 - [成员入口与当前Goal页面](2026-10-20-agent-conversation-label/README.md)：中性成员名称、8张人工截图、语言恢复及草稿关闭残留的实际证据。
 
 - [调度结果可见入口与历史身份](2026-10-20-scheduled-result-visibility/README.md)：9张人工截图、真实事件/定时/后续输入、保留数据升级与完整原生结算。

@@ -15,7 +15,8 @@ import { SidebarVersionLabel } from "./SidebarVersionLabel"
 import { SidebarUpdateButton } from "./SidebarUpdateButton"
 import { SessionDialogHost } from "./SessionDialogHost"
 import { TaskStatusHeader } from "./TaskStatusHeader"
-import { ContinuousGoalControl, type GoalFormRequest } from "./ContinuousGoalControl"
+import { ContinuousGoalControl, type GoalFormRequest, type GoalLaunchContext } from "./ContinuousGoalControl"
+import type { ContinuousGoalCreateInput } from "../services/continuous-goal"
 import { TaskOutcomeBadge } from "./TaskOutcomeBadge"
 import { TitlebarBrand } from "./titlebar/TitlebarBrand"
 import { TitlebarMenubar } from "./titlebar/TitlebarMenubar"
@@ -204,7 +205,7 @@ export interface AppProps {
   onOpenSubagentConversation: (sessionID: string) => void
   onOpenRightDockAddMenu: () => void
   onNewChat: () => Promise<void>
-  onStartGoal: () => Promise<GoalFormRequest | undefined>
+  onStartGoal: (input: ContinuousGoalCreateInput, context: GoalLaunchContext) => Promise<GoalFormRequest | undefined>
   composerDraftKey?: string
   hasStagedAttachments?: boolean
   onSelectMission: (row: WorkLedgerMissionRow) => Promise<void>
@@ -223,11 +224,11 @@ export interface AppProps {
 export function App(props: AppProps) {
   const [goalFormRequest, setGoalFormRequest] = createSignal<GoalFormRequest>()
   const [startingGoal, setStartingGoal] = createSignal(false)
-  async function startGoal() {
+  async function startGoal(input: ContinuousGoalCreateInput, context: GoalLaunchContext) {
     if (startingGoal()) return
     setStartingGoal(true)
     try {
-      setGoalFormRequest(await props.onStartGoal())
+      setGoalFormRequest(await props.onStartGoal(input, context))
     } finally {
       setStartingGoal(false)
     }
@@ -585,6 +586,9 @@ export function App(props: AppProps) {
                                         <div class="chat-home-goal">
                                           <ContinuousGoalControl
                                             home
+                                            selectionEpoch={boardStore.selectEpoch}
+                                            composerDraftKey={props.composerDraftKey}
+                                            hasStagedAttachments={props.hasStagedAttachments}
                                             starting={startingGoal()}
                                             onStartGoal={startGoal}
                                           />

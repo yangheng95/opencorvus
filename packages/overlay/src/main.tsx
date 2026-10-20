@@ -2411,9 +2411,14 @@ function OverlayRoot() {
       composerDraftKey={panelComposerDraftKey()}
       hasStagedAttachments={messageStore.chatAttachments.length > 0}
       onNewChat={() => openGlobalComposer(DEFAULT_COMPOSER_INTENT)}
-      onStartGoal={async () => {
-        const authority = captureApiAuthority()
-        let request: { sessionID: string; authority: typeof authority; selectionEpoch: number } | undefined
+      onStartGoal={async (input, context) => {
+        const authority = context.authority
+        assertApiAuthorityCurrent(authority)
+        assertUserNavigationCurrent(context.selectionEpoch)
+        if (context.composerDraftKey !== panelComposerDraftKey()) {
+          throw new DOMException("Home Goal draft superseded", "AbortError")
+        }
+        let request: { sessionID: string; authority: typeof authority; selectionEpoch: number; input: typeof input } | undefined
         await runUserNavigation("goal.start-chat", async () => {
           const directory = activeDirectory().trim()
           const model = appStore.composerModel || undefined
@@ -2431,7 +2436,7 @@ function OverlayRoot() {
             : await createGlobalConversationSession(options)
           assertApiAuthorityCurrent(authority)
           assertUserNavigationCurrent(admission.epoch)
-          request = { sessionID: created, authority, selectionEpoch: admission.epoch }
+          request = { sessionID: created, authority, selectionEpoch: admission.epoch, input }
         })
         return request
       }}

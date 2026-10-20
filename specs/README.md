@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [首页Goal的确认边界](records/2026-10/2026-10-20-goal-confirmation-boundary.md)：[10张实图及两个真实有限目标](artifacts/2026-10-20-goal-confirmation-boundary/README.md)，表单确认后才创建会话。
+
 - [普通成员阅读入口的中性名称](records/2026-10/2026-10-20-agent-conversation-label.md)：[中英文侧栏、Sources与Goal页面8张实图](artifacts/2026-10-20-agent-conversation-label/README.md)，记录新发现的草稿关闭残留。
 
 - [调度结果的可见会话身份](records/2026-10/2026-10-20-scheduled-result-visibility.md)：Event及项目Automation的Work结果、版本化历史迁移与[9张实际入口截图](artifacts/2026-10-20-scheduled-result-visibility/README.md)。

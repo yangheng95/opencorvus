@@ -1,0 +1,28 @@
+{
+  "tab": 24,
+  "closed": true,
+  "screenshots": [
+    "existing-goal-details-chinese.png",
+    "global-cancel-retains-home-draft.png",
+    "global-confirmed-result.png",
+    "global-form-before-create.png",
+    "goal-help-chinese.png",
+    "project-cancel-retains-home-draft.png",
+    "project-chinese-form-before-create.png",
+    "project-confirmed-result-chinese.png",
+    "project-result-after-reload.png",
+    "project-result-english-restored.png"
+  ],
+  "observations": [
+    "Global Work Home prefilled form opens before any selected Session",
+    "Closing retains same launcher URL and exact Home text",
+    "Confirmed edited objective creates global goal and one actual work reply",
+    "Project Code Chinese Home prefilled form and close preserve project and text",
+    "Confirmed edited objective creates goal in original Project and one actual chat reply",
+    "Both show budget_limited and 1/1 turns",
+    "Project URL reload restores same goal and reply",
+    "Existing owner Details remains usable",
+    "English preference restored"
+  ],
+  "limits": "This batch did not execute new Task/Mission/SideChat goals, attachment/quotation submissions, connection-replacement/failure paths or streaming Sources/Rendering; existing mutation/selection guards remain in code. No UI automated tests added or run."
+}
