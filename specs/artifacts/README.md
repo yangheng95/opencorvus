@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Git启动下限与发布源码](2026-10-21-git-startup-floor/README.md)：六个原scope/1776项真实命令，query≈version且cmd也13秒，实际父同步spawn与原物理/源3665行保留；生产未改。
+
 - [Git可执行路径传递对照](2026-10-21-git-executable-flow/README.md)：四个完整配置checker、九张人工截图、固定四次实际Sol与九个原native scope结算；生产候选撤回，原性能目标仍未达。
 
 - [项目身份组件与原生进程分段](2026-10-21-project-identity-component-cost/README.md)：266412次计数文件系统观察、1776次真实Git、Trace2扰动与逐目录身份关联，原十scope结算和3665行保留。

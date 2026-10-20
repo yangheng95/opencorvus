@@ -1,0 +1,29 @@
+{
+  "observedAt": "2026-10-20T23:31:36.456Z",
+  "runtime": "1.4.0",
+  "run": "query-a",
+  "mode": "query",
+  "owner": {
+    "pid": 79120,
+    "processInstanceID": "win32:639281358793669247",
+    "occurrenceID": "1c120f7a-9c1d-4a1f-84c5-c204fa484e98"
+  },
+  "projects": 149,
+  "gitProjects": 148,
+  "nonGitProjects": 1,
+  "concurrency": 12,
+  "wallMs": 16178.8192,
+  "queries": 296,
+  "helperProcesses": 296,
+  "mainMaxTickMs": 642.9193999999998,
+  "spawnMs": 11562.858900000021,
+  "parentCpuUserMs": 2203,
+  "parentCpuSystemMs": 9547,
+  "physicalRequests": 296,
+  "live": {
+    "live": 0,
+    "owners": {}
+  },
+  "modelRequests": 0,
+  "boundary": "Actual original Process.runHost/native component control across all original149 directory inputs;two sequential observations per Git directory. Version/cmd are startup counterfactuals,not Git identity or full Config acceptance. Native durable markers tapped from actual unchanged reads;no mock/stub. Parent CPU excludes children."
+}

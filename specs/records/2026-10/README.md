@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Git启动下限与安装版源码](2026-10-21-git-startup-floor.md)：[六组149输入/1776项实际命令及原scope结算](../../artifacts/2026-10-21-git-startup-floor/README.md)，保留完整配置仍未达事实，不用内部Git路径绕过。
+
 - [Git可执行路径传递](2026-10-21-git-executable-flow.md)：[四组完整配置对照、实际Sol与中英文Goal页面](../../artifacts/2026-10-21-git-executable-flow/README.md)，候选局部正确但无收益，已撤回生产改动。
 
 - [项目身份核验的组成成本](2026-10-21-project-identity-component-cost.md)：[组件控制/原生分段/Trace2与十scope结算](../../artifacts/2026-10-21-project-identity-component-cost/README.md)，没有从并行累计或诊断扰动猜根因。

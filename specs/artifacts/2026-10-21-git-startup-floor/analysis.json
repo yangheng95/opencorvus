@@ -1,0 +1,204 @@
+{
+  "observedAt": "2026-10-20T23:35:42.603Z",
+  "rows": [
+    {
+      "observedAt": "2026-10-20T23:31:36.456Z",
+      "runtime": "1.4.0",
+      "run": "query-a",
+      "mode": "query",
+      "owner": {
+        "pid": 79120,
+        "processInstanceID": "win32:639281358793669247",
+        "occurrenceID": "1c120f7a-9c1d-4a1f-84c5-c204fa484e98"
+      },
+      "projects": 149,
+      "gitProjects": 148,
+      "nonGitProjects": 1,
+      "concurrency": 12,
+      "wallMs": 16178.8192,
+      "queries": 296,
+      "helperProcesses": 296,
+      "mainMaxTickMs": 642.9193999999998,
+      "spawnMs": 11562.858900000021,
+      "parentCpuUserMs": 2203,
+      "parentCpuSystemMs": 9547,
+      "physicalRequests": 296,
+      "live": {
+        "live": 0,
+        "owners": {}
+      },
+      "modelRequests": 0,
+      "boundary": "Actual original Process.runHost/native component control across all original149 directory inputs;two sequential observations per Git directory. Version/cmd are startup counterfactuals,not Git identity or full Config acceptance. Native durable markers tapped from actual unchanged reads;no mock/stub. Parent CPU excludes children.",
+      "originalRequestPathJoins": 296,
+      "nativeProof": "Each exact request path + request_id + runtime occurrence + owner birth + corresponding helper PID,original ready/settled active0 and helper close0. PID reuse does not define identity.",
+      "timing": "Wall includes original command settlement and raw evidence write,excludes imports and pre/post physical qualification. Spawn sum is synchronous parent call intervals,overlapping native child lifetimes;not additive to them."
+    },
+    {
+      "observedAt": "2026-10-20T23:32:02.006Z",
+      "runtime": "1.4.0",
+      "run": "version-a",
+      "mode": "version",
+      "owner": {
+        "pid": 75932,
+        "processInstanceID": "win32:639281359050176597",
+        "occurrenceID": "f2ca9deb-2dc2-4d4a-875c-5ca9531308b1"
+      },
+      "projects": 149,
+      "gitProjects": 148,
+      "nonGitProjects": 1,
+      "concurrency": 12,
+      "wallMs": 15898.824,
+      "queries": 296,
+      "helperProcesses": 296,
+      "mainMaxTickMs": 480.8290999999999,
+      "spawnMs": 10861.7637,
+      "parentCpuUserMs": 2516,
+      "parentCpuSystemMs": 8750,
+      "physicalRequests": 296,
+      "live": {
+        "live": 0,
+        "owners": {}
+      },
+      "modelRequests": 0,
+      "boundary": "Actual original Process.runHost/native component control across all original149 directory inputs;two sequential observations per Git directory. Version/cmd are startup counterfactuals,not Git identity or full Config acceptance. Native durable markers tapped from actual unchanged reads;no mock/stub. Parent CPU excludes children.",
+      "originalRequestPathJoins": 296,
+      "nativeProof": "Each exact request path + request_id + runtime occurrence + owner birth + corresponding helper PID,original ready/settled active0 and helper close0. PID reuse does not define identity.",
+      "timing": "Wall includes original command settlement and raw evidence write,excludes imports and pre/post physical qualification. Spawn sum is synchronous parent call intervals,overlapping native child lifetimes;not additive to them."
+    },
+    {
+      "observedAt": "2026-10-20T23:32:34.104Z",
+      "runtime": "1.4.0",
+      "run": "cmd-a",
+      "mode": "cmd",
+      "owner": {
+        "pid": 88740,
+        "processInstanceID": "win32:639281359402674209",
+        "occurrenceID": "e1fd1140-c049-4171-a9c8-b258e6843264"
+      },
+      "projects": 149,
+      "gitProjects": 148,
+      "nonGitProjects": 1,
+      "concurrency": 12,
+      "wallMs": 13018.7836,
+      "queries": 296,
+      "helperProcesses": 296,
+      "mainMaxTickMs": 460.47220000000004,
+      "spawnMs": 9946.490299999989,
+      "parentCpuUserMs": 1141,
+      "parentCpuSystemMs": 4875,
+      "physicalRequests": 296,
+      "live": {
+        "live": 0,
+        "owners": {}
+      },
+      "modelRequests": 0,
+      "boundary": "Actual original Process.runHost/native component control across all original149 directory inputs;two sequential observations per Git directory. Version/cmd are startup counterfactuals,not Git identity or full Config acceptance. Native durable markers tapped from actual unchanged reads;no mock/stub. Parent CPU excludes children.",
+      "originalRequestPathJoins": 296,
+      "nativeProof": "Each exact request path + request_id + runtime occurrence + owner birth + corresponding helper PID,original ready/settled active0 and helper close0. PID reuse does not define identity.",
+      "timing": "Wall includes original command settlement and raw evidence write,excludes imports and pre/post physical qualification. Spawn sum is synchronous parent call intervals,overlapping native child lifetimes;not additive to them."
+    },
+    {
+      "observedAt": "2026-10-20T23:32:58.071Z",
+      "runtime": "1.4.0",
+      "run": "cmd-b",
+      "mode": "cmd",
+      "owner": {
+        "pid": 66620,
+        "processInstanceID": "win32:639281359635185397",
+        "occurrenceID": "76d3e984-ba72-4da0-a38a-e65e4dbcf309"
+      },
+      "projects": 149,
+      "gitProjects": 148,
+      "nonGitProjects": 1,
+      "concurrency": 12,
+      "wallMs": 13722.0966,
+      "queries": 296,
+      "helperProcesses": 296,
+      "mainMaxTickMs": 608.3683000000001,
+      "spawnMs": 10470.12999999998,
+      "parentCpuUserMs": 1297,
+      "parentCpuSystemMs": 4813,
+      "physicalRequests": 296,
+      "live": {
+        "live": 0,
+        "owners": {}
+      },
+      "modelRequests": 0,
+      "boundary": "Actual original Process.runHost/native component control across all original149 directory inputs;two sequential observations per Git directory. Version/cmd are startup counterfactuals,not Git identity or full Config acceptance. Native durable markers tapped from actual unchanged reads;no mock/stub. Parent CPU excludes children.",
+      "originalRequestPathJoins": 296,
+      "nativeProof": "Each exact request path + request_id + runtime occurrence + owner birth + corresponding helper PID,original ready/settled active0 and helper close0. PID reuse does not define identity.",
+      "timing": "Wall includes original command settlement and raw evidence write,excludes imports and pre/post physical qualification. Spawn sum is synchronous parent call intervals,overlapping native child lifetimes;not additive to them."
+    },
+    {
+      "observedAt": "2026-10-20T23:33:44.522Z",
+      "runtime": "1.4.0",
+      "run": "version-b",
+      "mode": "version",
+      "owner": {
+        "pid": 77872,
+        "processInstanceID": "win32:639281360082460847",
+        "occurrenceID": "36ce50ce-724d-44a6-9735-8be78a27f4c1"
+      },
+      "projects": 149,
+      "gitProjects": 148,
+      "nonGitProjects": 1,
+      "concurrency": 12,
+      "wallMs": 15166.7101,
+      "queries": 296,
+      "helperProcesses": 296,
+      "mainMaxTickMs": 525.8051000000014,
+      "spawnMs": 9000.772500000015,
+      "parentCpuUserMs": 2532,
+      "parentCpuSystemMs": 7703,
+      "physicalRequests": 296,
+      "live": {
+        "live": 0,
+        "owners": {}
+      },
+      "modelRequests": 0,
+      "boundary": "Actual original Process.runHost/native component control across all original149 directory inputs;two sequential observations per Git directory. Version/cmd are startup counterfactuals,not Git identity or full Config acceptance. Native durable markers tapped from actual unchanged reads;no mock/stub. Parent CPU excludes children.",
+      "originalRequestPathJoins": 296,
+      "nativeProof": "Each exact request path + request_id + runtime occurrence + owner birth + corresponding helper PID,original ready/settled active0 and helper close0. PID reuse does not define identity.",
+      "timing": "Wall includes original command settlement and raw evidence write,excludes imports and pre/post physical qualification. Spawn sum is synchronous parent call intervals,overlapping native child lifetimes;not additive to them."
+    },
+    {
+      "observedAt": "2026-10-20T23:34:24.534Z",
+      "runtime": "1.4.0",
+      "run": "query-b",
+      "mode": "query",
+      "owner": {
+        "pid": 80096,
+        "processInstanceID": "win32:639281360468599235",
+        "occurrenceID": "7418bb77-2e5f-4580-aafc-0fb8aa87a53b"
+      },
+      "projects": 149,
+      "gitProjects": 148,
+      "nonGitProjects": 1,
+      "concurrency": 12,
+      "wallMs": 16680.517200000002,
+      "queries": 296,
+      "helperProcesses": 296,
+      "mainMaxTickMs": 927.3815000000001,
+      "spawnMs": 11509.75550000001,
+      "parentCpuUserMs": 2703,
+      "parentCpuSystemMs": 8735,
+      "physicalRequests": 296,
+      "live": {
+        "live": 0,
+        "owners": {}
+      },
+      "modelRequests": 0,
+      "boundary": "Actual original Process.runHost/native component control across all original149 directory inputs;two sequential observations per Git directory. Version/cmd are startup counterfactuals,not Git identity or full Config acceptance. Native durable markers tapped from actual unchanged reads;no mock/stub. Parent CPU excludes children.",
+      "originalRequestPathJoins": 296,
+      "nativeProof": "Each exact request path + request_id + runtime occurrence + owner birth + corresponding helper PID,original ready/settled active0 and helper close0. PID reuse does not define identity.",
+      "timing": "Wall includes original command settlement and raw evidence write,excludes imports and pre/post physical qualification. Spawn sum is synchronous parent call intervals,overlapping native child lifetimes;not additive to them."
+    }
+  ],
+  "commands": 1776,
+  "projects": 149,
+  "physicalRequests": 1776,
+  "modelRequests": 0,
+  "production": "unchanged",
+  "fullConfigCriteria": "Original save10s/entire restore5s/read20s remain separate and not requalified here",
+  "inference": "Query≈version;cmd also13s. Large common cost survives removal of repository parsing and Git itself. Parent synchronous helper spawns sum9-11.6s;these are serialized calls,not sum of parallel child lifetime. This evidence localizes cost but does not prove a replacement protocol safe or full Config fixed."
+}
