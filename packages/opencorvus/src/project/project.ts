@@ -324,6 +324,31 @@ export namespace Project {
     return { top: paths[0]!, common: paths[1]! }
   }
 
+  async function discoverGitDirectory(directory: string) {
+    if (!(await Filesystem.exists(path.join(directory, ".git")))) return undefined
+    if (!(await whichAsync("git"))) {
+      throw new GitDiscoveryError({
+        directory,
+        reason: "command-unavailable",
+        message: `Git is required to discover the existing repository: ${directory}`,
+      })
+    }
+    const paths = await SkillReadDiagnostics.phase("project.identity.git", () => gitRepositoryPaths(directory))
+    const sandbox = await displayGitTop(directory, gitpath(directory, paths.top))
+    const common = gitpath(directory, paths.common)
+    const rawWorktree = common === sandbox ? sandbox : path.dirname(common)
+    const worktree = await displayGitTop(directory, rawWorktree)
+    return { sandbox, worktree, common }
+  }
+
+  /** Read the selected directory's sandbox boundary without registering a Project. */
+  export async function worktreeBoundary(directory: string) {
+    const resolved = Filesystem.resolve(directory)
+    await assertDirectoryIntegrity(resolved)
+    const repository = await discoverGitDirectory(resolved)
+    return repository ? repository.sandbox : resolved
+  }
+
   function comparePath(value: string) {
     const normalized = path.normalize(Filesystem.windowsPath(value)).replace(/[\\/]+$/, "")
     return process.platform === "win32" ? normalized.toLowerCase() : normalized
@@ -640,17 +665,8 @@ export namespace Project {
             worktree: registered.project.worktree,
           }
         }
-        const gitBinary = await whichAsync("git")
         const dotgit = path.join(directory, ".git")
-        const local = await Filesystem.exists(dotgit)
-
-        if (local && !gitBinary) {
-          throw new GitDiscoveryError({
-            directory,
-            reason: "command-unavailable",
-            message: `Git is required to discover the existing repository: ${directory}`,
-          })
-        }
+        const repository = await discoverGitDirectory(directory)
 
         // Note (W2-V32): a previous version auto-ran `git init` here when the
         // directory was a non-git subfolder of an existing parent repo (the old
@@ -661,19 +677,9 @@ export namespace Project {
         // We now leave non-git subfolders as non-git: callers that need a
         // working tree throw WorktreeNotGitError and the overlay drives an
         // explicit user-confirmed init via POST /project/current/init-git.
-        const hasLocalGit = local
-
-        if (hasLocalGit) {
-          // Both facts belong to this repository. Resolve the common directory
-          // absolutely so its meaning is independent of the displayed top path.
-          const paths = await SkillReadDiagnostics.phase("project.identity.git", () => gitRepositoryPaths(directory))
-          const sandbox = await displayGitTop(directory, gitpath(directory, paths.top))
-          const resolvedCommon = gitpath(directory, paths.common)
-          const rawWorktree = resolvedCommon === sandbox ? sandbox : path.dirname(resolvedCommon)
-          const worktree = await displayGitTop(directory, rawWorktree)
-          const id = await SkillReadDiagnostics.phase("project.identity.resolve", () =>
-            identify(resolvedCommon, worktree),
-          )
+        if (repository) {
+          const { sandbox, worktree, common } = repository
+          const id = await SkillReadDiagnostics.phase("project.identity.resolve", () => identify(common, worktree))
 
           return {
             id,

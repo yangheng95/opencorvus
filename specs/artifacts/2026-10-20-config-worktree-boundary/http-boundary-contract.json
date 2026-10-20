@@ -1,0 +1,54 @@
+{
+  "occurrence": "config-worktree-boundary-450-after-6f7a2601-c733-4331-9bc4-5a1c25b8baa5",
+  "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\config-worktree-boundary-450-parent\\ordinary child",
+  "parent": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\config-worktree-boundary-450-parent",
+  "rows": [
+    {
+      "method": "GET",
+      "path": "/config",
+      "status": 200,
+      "requestID": "e29a9235-fc91-4746-9cb6-9998fbe6d961",
+      "config": {
+        "username": "",
+        "profile": "base",
+        "mode": "ask"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/global/config",
+      "status": 200,
+      "requestID": "717b34cd-a7fa-43d6-9b9b-b05f4e8e9fc8",
+      "config": {
+        "username": "qa-boundary-450-http",
+        "profile": "base",
+        "mode": "ask"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/config",
+      "status": 200,
+      "requestID": "21acd8a2-c77f-4fe0-9f3c-51add2dc86ad",
+      "config": {
+        "username": "qa-boundary-450-http",
+        "profile": "base",
+        "mode": "ask"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/global/config",
+      "status": 200,
+      "requestID": "6319317d-4d8b-46d1-928a-0d1b5ec78479",
+      "config": {
+        "profile": "base",
+        "mode": "ask"
+      }
+    }
+  ],
+  "restored": true,
+  "history": "Owned parent fixture and registered child retained with all prior QA Projects",
+  "boundary": "Actual public HTTP global candidate validation over an ordinary child with a configured Git parent; no route, request or response mock",
+  "observedAt": "2026-10-20T00:00:35.487Z"
+}

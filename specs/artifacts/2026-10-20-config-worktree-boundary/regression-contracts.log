@@ -1,0 +1,92 @@
+$ bun script/run-tests.ts test/config-layer-inheritance.test.ts test/config-global-project-validation.test.ts test/config-candidate-skill-catalog.test.ts test/project-filesystem-identity.test.ts test/project-identity-retention.test.ts
+[1/5] START test/config-layer-inheritance.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) declared configuration layers and effective defaults > absent project source preserves explicit global profile and permission [1055.88ms]
+(pass) declared configuration layers and effective defaults > empty project source preserves explicit global profile and permission [976.31ms]
+(pass) declared configuration layers and effective defaults > whitespace project source preserves explicit global profile and permission [1060.78ms]
+(pass) declared configuration layers and effective defaults > empty object project source preserves explicit global profile and permission [1175.16ms]
+(pass) declared configuration layers and effective defaults > unrelated username project source preserves explicit global profile and permission [919.65ms]
+(pass) declared configuration layers and effective defaults > partial nested objects preserve the actual inherited question, memory and terminal values [888.57ms]
+(pass) declared configuration layers and effective defaults > a source relation is checked with its actual inherited memory limit [939.51ms]
+(pass) declared configuration layers and effective defaults > explicit defaults, false, zero and empty argument arrays remain authored values [855.95ms]
+(pass) declared configuration layers and effective defaults > source values normalize explicit leaves while getProject keeps the declared shape [1544.34ms]
+(pass) declared configuration layers and effective defaults > unknown field produces the canonical typed source error [869.54ms]
+(pass) declared configuration layers and effective defaults > wrong permission type produces the canonical typed source error [966.57ms]
+(pass) declared configuration layers and effective defaults > invalid effective memory relation produces the canonical typed source error [935.31ms]
+(pass) declared configuration layers and effective defaults > project atomic writer reads only authored values and publishes a valid cumulative candidate [1837.77ms]
+(pass) declared configuration layers and effective defaults > the public project PATCH handler retains inheritance and null restores a global field [1833.94ms]
+(pass) declared configuration layers and effective defaults > global atomic callbacks separate effective defaults from the actual writable source [278.22ms]
+(pass) declared configuration layers and effective defaults > global null deletion preserves schema defaults and the sparse writable source [357.80ms]
+(pass) declared configuration layers and effective defaults > inline and explicit resource-directory layers merge only their declared nested leaves [1048.73ms]
+(pass) declared configuration layers and effective defaults > configured extension arrays keep their additive order and ordinary arrays remain replaceable [1851.94ms]
+(pass) declared configuration layers and effective defaults > legacy explicit permission migration remains an authored source decision [999.99ms]
+(pass) declared configuration layers and effective defaults > Skill path installation, policy update and removal preserve the canonical source contract [1818.51ms]
+(pass) declared configuration layers and effective defaults > Provider removal consumes the actual sparse project source and publishes its committed result [1739.84ms]
+(pass) declared configuration layers and effective defaults > two projects preserve their separate authored overrides over one global source [2877.20ms]
+(pass) declared configuration layers and effective defaults > inherited Ask mode becomes a real request and an explicit allow_once result [1641.02ms]
+
+ 23 pass
+ 0 fail
+ 72 expect() calls
+Ran 23 tests across 1 file. [32.25s]
+[1/5] DONE test/config-layer-inheritance.test.ts exit=0 duration=33.06s
+[2/5] START test/config-global-project-validation.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a retained global writer settles its original transition after repeated projection failures [2246.91ms]
+(pass) one global generation projects every registered project's own configuration [2752.32ms]
+(pass) one global mutation retains its exact candidate identities through persistence and runtime convergence [3308.93ms]
+(pass) an invalid Project returns the candidate error and a corrected source accepts a full retry [2768.88ms]
+
+ 4 pass
+ 0 fail
+ 28 expect() calls
+Ran 4 tests across 1 file. [12.51s]
+[2/5] DONE test/config-global-project-validation.test.ts exit=0 duration=12.67s
+[3/5] START test/config-candidate-skill-catalog.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a global username save retains each project's own configured Skill assignment [3523.51ms]
+(pass) a global source removal retains a Skill still configured by its Project [1575.36ms]
+(pass) an implicit Project Skill remains assigned when an unrelated global field changes [1626.03ms]
+(pass) a removed sole Skill source returns the assignment error and retains its complete canonical source [1622.64ms]
+(pass) a Project candidate adds its Skill source and assignment in one canonical mutation [1544.99ms]
+(pass) a global candidate repairs a Project assignment by adding its actual Skill source [1489.25ms]
+(pass) a candidate catalog resolves its own source while the runtime retains its current definition [1391.71ms]
+
+ 7 pass
+ 0 fail
+ 7 expect() calls
+Ran 7 tests across 1 file. [14.09s]
+[3/5] DONE test/config-candidate-skill-catalog.test.ts exit=0 duration=14.26s
+[4/5] START test/project-filesystem-identity.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) discovers the exact independent Project while a wide-inode peer is closed for deletion [3065.91ms]
+(pass) recognizes two real hard-link paths as the same filesystem identity [699.35ms]
+(pass) a later physical comparison observes the current replacement and its new hard link [8.57ms]
+
+ 3 pass
+ 0 fail
+ 5 expect() calls
+Ran 3 tests across 1 file. [5.10s]
+[4/5] DONE test/project-filesystem-identity.test.ts exit=0 duration=5.22s
+[5/5] START test/project-identity-retention.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) one retained identity scope preserves nested owners and State through idle convergence and explicit refresh [333.13ms]
+(pass) a failed identity scope preserves its original error and releases every physical lease [257.20ms]
+(pass) outside work settles its own identity while the original scope retains its Project [244.13ms]
+(pass) declared cached identities belong to the scope before its first Project callback [248.64ms]
+
+ 4 pass
+ 0 fail
+ 14 expect() calls
+Ran 4 tests across 1 file. [2.29s]
+[5/5] DONE test/project-identity-retention.test.ts exit=0 duration=2.41s

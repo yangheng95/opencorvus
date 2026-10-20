@@ -1,0 +1,485 @@
+{
+  "batch": 450,
+  "baselineCommit": "20b67437570fba7476a07d67eeeb2030a651fd29",
+  "scope": "Global candidate before/after snapshots consume the retained admitted sandbox boundary. Standalone read-only snapshots and Project registration share strict physical Git discovery; normal directories remain independent. Original initial/admitted registration and complete candidate validation retained.",
+  "before": {
+    "source": "../2026-10-20-catalog-reader-admission/results.json after scope",
+    "projects": 87,
+    "canonical": {
+      "at": "2026-10-19T23:42:13.784Z",
+      "endedAt": "2026-10-19T23:42:47.950Z",
+      "phase": "after",
+      "port": 18697,
+      "occurrence": "catalog-reader-admission-449-after-ebcc1672-9fc2-49bd-9719-b5ac263430e6",
+      "transport": "browser",
+      "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+      "accepted": true,
+      "restored": true,
+      "writeMs": 16789.5263,
+      "restoreMs": 17368.494,
+      "failures": [],
+      "permissionMode": "ask",
+      "changedField": "username",
+      "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+    },
+    "maxReadMs": 17355
+  },
+  "after": {
+    "preflight": {
+      "sessionID": "ses_hKc91xeyK1NVxgLXwyR7",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true
+    },
+    "canonical": {
+      "at": "2026-10-19T23:58:15.547Z",
+      "endedAt": "2026-10-19T23:58:41.091Z",
+      "phase": "after",
+      "port": 18699,
+      "occurrence": "config-worktree-boundary-450-after-6f7a2601-c733-4331-9bc4-5a1c25b8baa5",
+      "transport": "browser",
+      "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+      "accepted": true,
+      "restored": true,
+      "writeMs": 13158.709299999999,
+      "restoreMs": 12379.774399999995,
+      "failures": [],
+      "permissionMode": "ask",
+      "changedField": "username",
+      "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+    },
+    "physical": {
+      "native": {
+        "occurrence": "config-worktree-boundary-450-after-6f7a2601-c733-4331-9bc4-5a1c25b8baa5",
+        "outcome": "settled",
+        "host": {
+          "pid": 92608,
+          "processInstanceID": "win32:639280510081190047",
+          "occurrenceID": "5dbd41ac-184f-4b7b-8227-aa323da56bd8"
+        },
+        "target": {
+          "pid": 86956,
+          "processInstanceID": "win32:639280510088164925",
+          "occurrenceID": "b5bf7e9e-f9e2-42ab-8f21-d8f6e6850e1e"
+        },
+        "observedAtUtc": "2026-10-20T00:00:51.47Z",
+        "deadlineAt": 1792455408065,
+        "terminal": {
+          "occurrenceID": "config-worktree-boundary-450-after-6f7a2601-c733-4331-9bc4-5a1c25b8baa5",
+          "pid": 86956,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "occurrence": "config-worktree-boundary-450-after-6f7a2601-c733-4331-9bc4-5a1c25b8baa5",
+      "physicalCompletion": true,
+      "pairedCleanupComplete": true,
+      "chain": [
+        {
+          "identity": {
+            "pid": 92608,
+            "processInstanceID": "win32:639280510081190047",
+            "occurrenceID": "5dbd41ac-184f-4b7b-8227-aa323da56bd8"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "identity": {
+            "pid": 86956,
+            "processInstanceID": "win32:639280510088164925",
+            "occurrenceID": "b5bf7e9e-f9e2-42ab-8f21-d8f6e6850e1e"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "copiedPair": [
+        {
+          "name": "auth.json",
+          "outcome": "retired"
+        },
+        {
+          "name": "models.json",
+          "outcome": "retired"
+        }
+      ],
+      "observedAtUtc": "2026-10-20T00:00:52.7657100Z"
+    },
+    "launcher": {
+      "childExitCode": 0,
+      "observedAtUtc": "2026-10-20T00:00:52.7888173Z"
+    },
+    "inventory": [
+      [
+        {
+          "projects": 88,
+          "loaded": 2
+        }
+      ],
+      [
+        {
+          "projects": 88,
+          "loaded": 4
+        }
+      ]
+    ],
+    "concurrentReads": [
+      {
+        "requestID": "051bf8df-0f5f-4ed7-bbee-034c82a9ccc8",
+        "writeRequestID": "74a2b424-f12c-42eb-accd-00a3e518a3c3",
+        "path": "/global/health",
+        "start": "2026-10-19T23:58:18.865Z",
+        "end": "2026-10-19T23:58:18.866Z",
+        "ms": 1,
+        "status": 200
+      },
+      {
+        "requestID": "ae416317-f903-4123-8377-73eb2707994d",
+        "writeRequestID": "74a2b424-f12c-42eb-accd-00a3e518a3c3",
+        "path": "/continuous-goal/chat/ses_hKc91xeyK1NVxgLXwyR7",
+        "start": "2026-10-19T23:58:19.854Z",
+        "end": "2026-10-19T23:58:19.860Z",
+        "ms": 6,
+        "status": 200
+      },
+      {
+        "requestID": "40f72bdd-3072-448e-af72-44aab3145caa",
+        "writeRequestID": "74a2b424-f12c-42eb-accd-00a3e518a3c3",
+        "path": "/mailbox",
+        "start": "2026-10-19T23:58:19.899Z",
+        "end": "2026-10-19T23:58:19.913Z",
+        "ms": 14,
+        "status": 200
+      },
+      {
+        "requestID": "2b860fd4-26a2-4f40-9fe2-0b11eaf7aaec",
+        "writeRequestID": "74a2b424-f12c-42eb-accd-00a3e518a3c3",
+        "path": "/expert-squad/search",
+        "start": "2026-10-19T23:58:19.925Z",
+        "end": "2026-10-19T23:58:19.927Z",
+        "ms": 2,
+        "status": 200
+      },
+      {
+        "requestID": "3335e786-c77f-425b-979b-14c943de283a",
+        "writeRequestID": "74a2b424-f12c-42eb-accd-00a3e518a3c3",
+        "path": "/mission-skill/catalog",
+        "start": "2026-10-19T23:58:19.927Z",
+        "end": "2026-10-19T23:58:19.938Z",
+        "ms": 11,
+        "status": 200
+      },
+      {
+        "requestID": "5ee703ab-cc61-4f34-a7c0-0a35d2be5bef",
+        "writeRequestID": "74a2b424-f12c-42eb-accd-00a3e518a3c3",
+        "path": "/coding/chat/session/ses_hKc91xeyK1NVxgLXwyR7",
+        "start": "2026-10-19T23:58:20.025Z",
+        "end": "2026-10-19T23:58:20.028Z",
+        "ms": 3,
+        "status": 200
+      },
+      {
+        "requestID": "7e95575a-6f1e-45d6-9c94-70b94c8e97a8",
+        "writeRequestID": "74a2b424-f12c-42eb-accd-00a3e518a3c3",
+        "path": "/global/health",
+        "start": "2026-10-19T23:58:20.073Z",
+        "end": "2026-10-19T23:58:20.073Z",
+        "ms": 0,
+        "status": 200
+      },
+      {
+        "requestID": "0e4c1341-b967-4a93-80cb-698c6d37aa3a",
+        "writeRequestID": "74a2b424-f12c-42eb-accd-00a3e518a3c3",
+        "path": "/config",
+        "start": "2026-10-19T23:58:20.116Z",
+        "end": "2026-10-19T23:58:28.683Z",
+        "ms": 8567,
+        "status": 200
+      },
+      {
+        "requestID": "59023bfa-a55e-40a6-ab65-00f61f5e3984",
+        "writeRequestID": "74a2b424-f12c-42eb-accd-00a3e518a3c3",
+        "path": "/channel",
+        "start": "2026-10-19T23:58:20.118Z",
+        "end": "2026-10-19T23:58:28.704Z",
+        "ms": 8586,
+        "status": 200
+      },
+      {
+        "requestID": "dead82e0-c93f-434b-86c2-a184bc89db89",
+        "writeRequestID": "d879ae75-04ee-419c-8308-706a081589b1",
+        "path": "/global/tasks",
+        "start": "2026-10-19T23:58:28.711Z",
+        "end": "2026-10-19T23:58:28.722Z",
+        "ms": 11,
+        "status": 200
+      },
+      {
+        "requestID": "df522c82-5483-4ef1-bcdd-1b1f496e9e2b",
+        "writeRequestID": "d879ae75-04ee-419c-8308-706a081589b1",
+        "path": "/continuous-goal/chat/ses_hKc91xeyK1NVxgLXwyR7",
+        "start": "2026-10-19T23:58:28.724Z",
+        "end": "2026-10-19T23:58:28.726Z",
+        "ms": 2,
+        "status": 200
+      },
+      {
+        "requestID": "8235ac2f-0674-4d1f-bb1b-1dc9a68efe30",
+        "writeRequestID": "74a2b424-f12c-42eb-accd-00a3e518a3c3",
+        "path": "/chat/capability",
+        "start": "2026-10-19T23:58:19.930Z",
+        "end": "2026-10-19T23:58:28.734Z",
+        "ms": 8804,
+        "status": 200
+      },
+      {
+        "requestID": "f7a533a7-0bef-4bf7-b9cf-b12488ad85e9",
+        "writeRequestID": "d879ae75-04ee-419c-8308-706a081589b1",
+        "path": "/global/health",
+        "start": "2026-10-19T23:58:28.853Z",
+        "end": "2026-10-19T23:58:28.853Z",
+        "ms": 0,
+        "status": 200
+      },
+      {
+        "requestID": "18364b1e-2c93-4297-9d13-09f35a5149aa",
+        "writeRequestID": "74a2b424-f12c-42eb-accd-00a3e518a3c3",
+        "path": "/expert-squad/catalog",
+        "start": "2026-10-19T23:58:19.914Z",
+        "end": "2026-10-19T23:58:28.934Z",
+        "ms": 9020,
+        "status": 200
+      },
+      {
+        "requestID": "49eb0913-5a1c-41d5-a803-298b26883c7f",
+        "writeRequestID": "d879ae75-04ee-419c-8308-706a081589b1",
+        "path": "/expert-squad/inspect",
+        "start": "2026-10-19T23:58:28.945Z",
+        "end": "2026-10-19T23:58:28.950Z",
+        "ms": 5,
+        "status": 200
+      },
+      {
+        "requestID": "134f07b2-9658-4907-9c1e-bc29993262de",
+        "writeRequestID": "74a2b424-f12c-42eb-accd-00a3e518a3c3",
+        "path": "/skill/mounts",
+        "start": "2026-10-19T23:58:20.119Z",
+        "end": "2026-10-19T23:58:28.969Z",
+        "ms": 8850,
+        "status": 200
+      },
+      {
+        "requestID": "7a70aca7-6a2c-48a0-8892-42cef7f34dfb",
+        "writeRequestID": "d879ae75-04ee-419c-8308-706a081589b1",
+        "path": "/continuous-goal/chat/ses_hKc91xeyK1NVxgLXwyR7",
+        "start": "2026-10-19T23:58:29.891Z",
+        "end": "2026-10-19T23:58:29.893Z",
+        "ms": 2,
+        "status": 200
+      },
+      {
+        "requestID": "afcd1c57-d87d-4ac6-a13a-10df1db6ca3c",
+        "writeRequestID": "d879ae75-04ee-419c-8308-706a081589b1",
+        "path": "/experimental/project-memory",
+        "start": "2026-10-19T23:58:30.930Z",
+        "end": "2026-10-19T23:58:30.931Z",
+        "ms": 1,
+        "status": 200
+      },
+      {
+        "requestID": "23da50c6-33d9-4f0a-a0bd-36fd531780fb",
+        "writeRequestID": "d879ae75-04ee-419c-8308-706a081589b1",
+        "path": "/session/ses_hKc91xeyK1NVxgLXwyR7/conversation",
+        "start": "2026-10-19T23:58:30.932Z",
+        "end": "2026-10-19T23:58:30.998Z",
+        "ms": 66,
+        "status": 200
+      },
+      {
+        "requestID": "4b1622b9-e00e-4af6-ac64-1b626619e12d",
+        "writeRequestID": "d879ae75-04ee-419c-8308-706a081589b1",
+        "path": "/session/ses_hKc91xeyK1NVxgLXwyR7/events",
+        "start": "2026-10-19T23:58:31.087Z",
+        "end": "2026-10-19T23:58:31.134Z",
+        "ms": 47,
+        "status": 200
+      },
+      {
+        "requestID": "50789756-9bc2-4c68-a3cd-175882bf89f7",
+        "writeRequestID": "d879ae75-04ee-419c-8308-706a081589b1",
+        "path": "/ui/assets/markdown-render.worker-DXg_fqFo.js",
+        "start": "2026-10-19T23:58:31.134Z",
+        "end": "2026-10-19T23:58:31.134Z",
+        "ms": 0,
+        "status": 200
+      },
+      {
+        "requestID": "2843d331-773b-4bd4-8117-25f612d361cd",
+        "writeRequestID": "d879ae75-04ee-419c-8308-706a081589b1",
+        "path": "/continuous-goal/chat/ses_hKc91xeyK1NVxgLXwyR7",
+        "start": "2026-10-19T23:58:34.896Z",
+        "end": "2026-10-19T23:58:34.898Z",
+        "ms": 2,
+        "status": 200
+      },
+      {
+        "requestID": "ad8bc05c-f6ee-406d-b650-f2218763c0ce",
+        "writeRequestID": "d879ae75-04ee-419c-8308-706a081589b1",
+        "path": "/global/health",
+        "start": "2026-10-19T23:58:38.837Z",
+        "end": "2026-10-19T23:58:38.837Z",
+        "ms": 0,
+        "status": 200
+      },
+      {
+        "requestID": "9da7792c-3aac-45e9-84a0-48c80f5335e2",
+        "writeRequestID": "d879ae75-04ee-419c-8308-706a081589b1",
+        "path": "/continuous-goal/chat/ses_hKc91xeyK1NVxgLXwyR7",
+        "start": "2026-10-19T23:58:39.899Z",
+        "end": "2026-10-19T23:58:39.902Z",
+        "ms": 3,
+        "status": 200
+      },
+      {
+        "requestID": "14428492-c1c6-4717-ab9b-dc8afe0d8c9a",
+        "writeRequestID": "d879ae75-04ee-419c-8308-706a081589b1",
+        "path": "/session/ses_hKc91xeyK1NVxgLXwyR7/config",
+        "start": "2026-10-19T23:58:31.032Z",
+        "end": "2026-10-19T23:58:41.073Z",
+        "ms": 10041,
+        "status": 200
+      }
+    ],
+    "maxReadMs": 10041,
+    "http": {
+      "occurrence": "config-worktree-boundary-450-after-6f7a2601-c733-4331-9bc4-5a1c25b8baa5",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\config-worktree-boundary-450-parent\\ordinary child",
+      "parent": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\config-worktree-boundary-450-parent",
+      "rows": [
+        {
+          "method": "GET",
+          "path": "/config",
+          "status": 200,
+          "requestID": "e29a9235-fc91-4746-9cb6-9998fbe6d961",
+          "config": {
+            "username": "",
+            "profile": "base",
+            "mode": "ask"
+          }
+        },
+        {
+          "method": "PATCH",
+          "path": "/global/config",
+          "status": 200,
+          "requestID": "717b34cd-a7fa-43d6-9b9b-b05f4e8e9fc8",
+          "config": {
+            "username": "qa-boundary-450-http",
+            "profile": "base",
+            "mode": "ask"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/config",
+          "status": 200,
+          "requestID": "21acd8a2-c77f-4fe0-9f3c-51add2dc86ad",
+          "config": {
+            "username": "qa-boundary-450-http",
+            "profile": "base",
+            "mode": "ask"
+          }
+        },
+        {
+          "method": "PATCH",
+          "path": "/global/config",
+          "status": 200,
+          "requestID": "6319317d-4d8b-46d1-928a-0d1b5ec78479",
+          "config": {
+            "profile": "base",
+            "mode": "ask"
+          }
+        }
+      ],
+      "restored": true,
+      "history": "Owned parent fixture and registered child retained with all prior QA Projects",
+      "boundary": "Actual public HTTP global candidate validation over an ordinary child with a configured Git parent; no route, request or response mock",
+      "observedAt": "2026-10-20T00:00:35.487Z"
+    },
+    "data": {
+      "schema": {
+        "user_version": 2
+      },
+      "projects": {
+        "count": 89
+      },
+      "mode": "Direct SQLite read-only after original native launcher joined exit0; no production initializer"
+    }
+  },
+  "validation": [
+    {
+      "file": "test/config-worktree-boundary.test.ts",
+      "cases": 5,
+      "assertions": 9,
+      "skips": 1,
+      "log": "after-contracts.log"
+    },
+    {
+      "file": "test/project-git-discovery.test.ts",
+      "cases": 5,
+      "assertions": 14,
+      "skips": 1,
+      "log": "after-contracts.log"
+    },
+    {
+      "file": "test/config-layer-inheritance.test.ts",
+      "cases": 23,
+      "assertions": 72,
+      "skips": 0,
+      "log": "regression-contracts.log"
+    },
+    {
+      "file": "test/config-global-project-validation.test.ts",
+      "cases": 4,
+      "assertions": 28,
+      "skips": 0,
+      "log": "regression-contracts.log"
+    },
+    {
+      "file": "test/config-candidate-skill-catalog.test.ts",
+      "cases": 7,
+      "assertions": 7,
+      "skips": 0,
+      "log": "regression-contracts.log"
+    },
+    {
+      "file": "test/project-filesystem-identity.test.ts",
+      "cases": 3,
+      "assertions": 5,
+      "skips": 0,
+      "log": "regression-contracts.log"
+    },
+    {
+      "file": "test/project-identity-retention.test.ts",
+      "cases": 4,
+      "assertions": 14,
+      "skips": 0,
+      "log": "regression-contracts.log"
+    }
+  ],
+  "backendCases": 51,
+  "backendAssertions": 149,
+  "platformSkips": 2,
+  "sourceAuthorityMetadataUnchanged": true,
+  "qualification": {
+    "functional": "passed: actual typed discovery/boundary contracts, public HTTP ordinary-child candidate, canonical restoration and original native settlement",
+    "cold": false,
+    "restore": false,
+    "pageReads": true
+  },
+  "knownLimitations": "Original cold10s and restore5s targets remain unmet. Full88 Project history used for performance; the additional retained HTTP child makes final89 Projects. Schema2 unchanged. POSIX special-path branches are skipped on Windows; no platform qualification claim. No UI automation or production-user database initializer."
+}

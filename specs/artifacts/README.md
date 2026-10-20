@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [配置快照工作树边界](2026-10-20-config-worktree-boundary/README.md)：4个原失败、51例正向合同、真实HTTP子项目及完整历史性能。
+
 - [目录读取入场顺序](2026-10-20-catalog-reader-admission/README.md)：真实插队、44例共享合同、全部页面读取和保留历史验证。
 
 - [Git身份与原生启动压力](2026-10-20-native-spawn-pressure/README.md)：损坏/缺失Git根因、38例合同、公开HTTP及全页面性能未达标证据。

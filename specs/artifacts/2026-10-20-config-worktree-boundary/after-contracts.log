@@ -1,0 +1,35 @@
+$ bun script/run-tests.ts test/config-worktree-boundary.test.ts test/project-git-discovery.test.ts
+[1/2] START test/config-worktree-boundary.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a standalone snapshot and its ordinary child Project use the same independent boundary [516.07ms]
+(pass) a global candidate projects its admitted child boundary into both runtime transition snapshots [2347.27ms]
+(pass) a snapshot of a damaged local Git directory reports its own typed discovery failure [353.74ms]
+(pass) snapshot discovery maps Git availability to the repository error and the valid ordinary configuration [75.30ms]
+(pass) main, linked and aliased snapshots read the selected sandbox's own source [705.13ms]
+(skip) POSIX snapshots preserve the repository's exact newline and whitespace boundary
+
+ 5 pass
+ 1 skip
+ 0 fail
+ 9 expect() calls
+Ran 6 tests across 1 file. [6.68s]
+[1/2] DONE test/config-worktree-boundary.test.ts exit=0 duration=7.37s
+[2/2] START test/project-git-discovery.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Git availability selects the explicit repository error and the ordinary directory identity [426.58ms]
+(pass) an existing damaged Git directory returns its explicit discovery error [505.98ms]
+(pass) a damaged local Git directory inside a valid parent repository returns its own discovery error [724.20ms]
+(pass) Git discovery resolves an unborn worktree with a separate metadata directory [1690.34ms]
+(skip) POSIX Git discovery preserves newline and trailing whitespace in repository paths
+(pass) Git discovery preserves the exact main, linked and aliased Project occurrence [2107.77ms]
+
+ 5 pass
+ 1 skip
+ 0 fail
+ 14 expect() calls
+Ran 6 tests across 1 file. [7.36s]
+[2/2] DONE test/project-git-discovery.test.ts exit=0 duration=7.50s

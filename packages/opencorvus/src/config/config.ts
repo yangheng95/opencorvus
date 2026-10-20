@@ -39,7 +39,6 @@ import { isModelReference } from "@/provider/model-ref"
 import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
 import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
 import { McpConfigSchema } from "./mcp-schema"
-import { hostGit as git } from "@/util/git"
 import { SkillMountOverlaySchema, SkillMountProjectConfigSchema } from "@/skill/mount-config"
 import {
   ExpertSquadRuntimeOverridesSchema,
@@ -2355,21 +2354,11 @@ export namespace Config {
     return (await currentProjectState()).config
   }
 
-  async function readOnlyWorktreeBoundary(directory: string) {
-    const resolvedDirectory = Filesystem.resolve(directory)
-    const result = await git(["rev-parse", "--show-toplevel"], {
-      cwd: resolvedDirectory,
-      timeoutProfile: "fast",
-    })
-    if (result.exitCode !== 0) return resolvedDirectory
-    const topLevel = result.text().trim()
-    return topLevel ? Filesystem.resolve(topLevel) : resolvedDirectory
-  }
-
   export async function snapshotForProject(directory: string, globalConfigOverride?: Source) {
     const resolvedDirectory = Filesystem.resolve(directory)
+    const { Project } = await import("@/project/project")
     const worktree = await SkillReadDiagnostics.phase("config.snapshot.worktree", () =>
-      readOnlyWorktreeBoundary(resolvedDirectory),
+      Project.worktreeBoundary(resolvedDirectory),
     )
     return readOnlyProjectSnapshot(resolvedDirectory, worktree, globalConfigOverride)
   }
@@ -2618,10 +2607,7 @@ export namespace Config {
       current = isRecord(current) && Object.hasOwn(current, segment) ? current[segment] : undefined
     }
     if (!isRecord(current)) {
-      input = applyEdits(
-        input,
-        modify(input, path, {}, { formattingOptions: { insertSpaces: true, tabSize: 2 } }),
-      )
+      input = applyEdits(input, modify(input, path, {}, { formattingOptions: { insertSpaces: true, tabSize: 2 } }))
     }
 
     return Object.entries(patch).reduce((result, [key, value]) => {
@@ -2837,9 +2823,7 @@ export namespace Config {
         await Instance.provideProjectIdentity({
           directory,
           fn: async (): Promise<GlobalProjectTransition> => {
-            const worktree = await SkillReadDiagnostics.phase("config.snapshot.worktree", () =>
-              readOnlyWorktreeBoundary(directory),
-            )
+            const worktree = Instance.worktree
             const before = await SkillReadDiagnostics.phase("config.global.before", () =>
               readOnlyProjectSnapshot(directory, worktree),
             )

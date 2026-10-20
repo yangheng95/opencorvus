@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [配置快照工作树边界](2026-10-20-config-worktree-boundary.md)：已准入身份复用、独立只读发现与真实配置性能。
+
 - [连续写入中的目录读进展](2026-10-20-catalog-reader-admission.md)：完整请求归因、共享owner入场及原全页面性能验证。
 
 - [原生监管命令的并发压力](2026-10-20-native-spawn-pressure.md)：真实Process完整结算与主线程启动成本的并发对比。

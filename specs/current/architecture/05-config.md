@@ -239,11 +239,16 @@ directory mutations do not join the registration batch, and same-queue exclusive
 reentry returns `ProjectRegistrationBatchMutationError` instead of waiting on
 its own owner. There is no second cross-process queue or persisted batch fact.
 Only after the entire candidate succeeds may canonical persistence and the
-existing runtime transitions proceed. The paired before/after snapshots capture
-one actual physical Git worktree boundary and each load their own stable source
-generation through the same snapshot reader. Public standalone snapshots keep
-their independent boundary discovery. No Project is omitted and no cross-write
-source cache or alternate identity authority is introduced.
+existing runtime transitions proceed. The paired before/after snapshots consume
+the retained identity context's admitted sandbox boundary (`Instance.worktree`),
+and each load their own stable source generation through the same snapshot reader.
+This boundary is the selected linked worktree or ordinary directory, rather than
+the Project's primary worktree. Public standalone snapshots independently discover
+their boundary through the same read-only Project Git discovery used by registration;
+they do not register a Project or write its marker. A directory without its own
+`.git` is an independent boundary; an existing damaged repository or unavailable
+Git command returns the original typed Project discovery error. No Project is
+omitted and no cross-write source cache or alternate identity authority is introduced.
 
 Skill assignment validation consumes the candidate Project's effective Config.
 The same Skill catalog loader accepts explicit Config data for current runtime,
