@@ -20,6 +20,7 @@ import { formatErrorDetails } from "./diagnostics"
 import type { WorkLedgerStreamEvent } from "./sse"
 import { clearComposerModelProjection, projectComposerModelFromSession } from "./composer-model"
 import { replaceWorkspaceLocation } from "./workspace-location"
+import { moveComposerDraftToNewSession } from "./composer-draft"
 
 type ConversationSessionResponse = {
   session: ConversationSessionInfo
@@ -48,6 +49,7 @@ export type SelectConversationSessionOptions = {
   experience: ConversationExperience
   signal?: AbortSignal
   selectionEpoch: number
+  preserveComposerAttachments?: boolean
 }
 
 export type ConversationSessionActionTarget = {
@@ -271,6 +273,7 @@ async function createConversationSessionFromPath(options: {
   experience: ConversationExperience
   signal?: AbortSignal
   body?: Record<string, unknown>
+  composerDraftKey?: string
 }): Promise<string> {
   const authority = options.authority ?? captureApiAuthority()
   assertApiAuthorityCurrent(authority)
@@ -293,6 +296,7 @@ async function createConversationSessionFromPath(options: {
     throw new DOMException("Conversation creation superseded", "AbortError")
   }
   assertNotAborted(options.signal)
+  if (options.composerDraftKey) moveComposerDraftToNewSession(options.composerDraftKey, sessionIDFromResponse(response))
   setSessionRow(response.session)
   try {
     return await selectConversationSession({
@@ -302,6 +306,7 @@ async function createConversationSessionFromPath(options: {
       experience: options.experience,
       signal: options.signal,
       selectionEpoch,
+      preserveComposerAttachments: Boolean(options.composerDraftKey),
     })
   } catch (error) {
     // Creation already has its canonical receipt; retired view hydration does not undo it.
@@ -316,6 +321,7 @@ export async function createConversationSession(options: {
   directory: string
   experience: ConversationExperience
   model?: string
+  composerDraftKey?: string
   signal?: AbortSignal
 }): Promise<string> {
   const directory = options.directory.trim()
@@ -328,6 +334,7 @@ export async function createConversationSession(options: {
     experience: options.experience,
     signal: options.signal,
     body: options.model?.trim() ? { model: options.model.trim() } : {},
+    composerDraftKey: options.composerDraftKey,
   })
 }
 
@@ -336,6 +343,7 @@ export async function createGlobalConversationSession(options: {
   selectionEpoch: number
   experience: ConversationExperience
   model?: string
+  composerDraftKey?: string
   signal?: AbortSignal
 }): Promise<string> {
   const model = options.model?.trim()
@@ -346,6 +354,7 @@ export async function createGlobalConversationSession(options: {
     experience: options.experience,
     signal: options.signal,
     body: model ? { model } : {},
+    composerDraftKey: options.composerDraftKey,
   })
 }
 
@@ -370,7 +379,7 @@ export async function selectConversationSession(options: SelectConversationSessi
   abortChatRequest()
   clearComposerModelProjection()
   cancelConversationReplay()
-  setChatAttachments([])
+  if (!options.preserveComposerAttachments) setChatAttachments([])
   stopSSE()
   resetSelectedLiveCursor()
   batch(() => {

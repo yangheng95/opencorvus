@@ -21,6 +21,7 @@ import {
   type ContinuousGoalUpdateInput,
 } from "../services/continuous-goal"
 import { formatErrorDetails } from "../services/diagnostics"
+import { composerDraftText, composerQuotation, setComposerDraft } from "../services/composer-draft"
 import { randomUUID } from "../utils/random-id"
 import { localeTag, t } from "../utils/i18n"
 import { Badge, type BadgeTone } from "./ui/Badge"
@@ -91,6 +92,8 @@ export function ContinuousGoalControl(props: {
   createRequest?: GoalFormRequest
   onCreateHandled?: () => void
   selectionEpoch?: number
+  composerDraftKey?: string
+  hasStagedAttachments?: boolean
 }) {
   const formID = `continuous-goal-${createUniqueId()}`
   const source = createMemo(
@@ -128,6 +131,7 @@ export function ContinuousGoalControl(props: {
   const [validation, setValidation] = createSignal("")
   const [notice, setNotice] = createSignal("")
   let attempt: { key: string; requestID: string } | undefined
+  let createDraft: { key: string; text: string } | undefined
   let root: HTMLElement | undefined
   let noticeState = ""
   const number = (value: number) => new Intl.NumberFormat(localeTag()).format(value)
@@ -138,6 +142,7 @@ export function ContinuousGoalControl(props: {
   const owns = (key: string) => source()?.key === key
   const initialLoading = () => projection.state === "pending"
   const disabled = () => busy() || initialLoading() || !source() || !!projection.error
+  const pendingComposerContext = () => !!props.hasStagedAttachments || !!composerQuotation(props.composerDraftKey)
 
   createEffect(
     on(
@@ -150,6 +155,7 @@ export function ContinuousGoalControl(props: {
         setNotice("")
         setBusy(false)
         attempt = undefined
+        createDraft = undefined
       },
     ),
   )
@@ -183,8 +189,11 @@ export function ContinuousGoalControl(props: {
 
   function open(next: "details" | "create" | "complete") {
     const current = goal()
+    createDraft = next === "create" && props.composerDraftKey
+      ? { key: props.composerDraftKey, text: composerDraftText(props.composerDraftKey) }
+      : undefined
     setEditing(next === "create" ? undefined : current)
-    setObjective(next === "create" ? "" : (current?.objective ?? ""))
+    setObjective(next === "create" ? (createDraft?.text ?? "") : (current?.objective ?? ""))
     setTokens(next === "create" ? "" : current?.tokenBudget === undefined ? "" : String(current.tokenBudget))
     setTurns(next === "create" ? "" : current?.turnBudget === undefined ? "" : String(current.turnBudget))
     setReason("")
@@ -227,6 +236,10 @@ export function ContinuousGoalControl(props: {
           ? await updateContinuousGoal(current.target, body, current.authority)
           : await createContinuousGoal(current.target, body, current.authority)
       if (!owns(current.key)) return
+      if ("objective" in body && createDraft && !pendingComposerContext() && composerDraftText(createDraft.key) === createDraft.text) {
+        setComposerDraft(createDraft.key, "")
+      }
+      createDraft = undefined
       attempt = undefined
       setMode(null)
       noticeState = `${saved.id}:${saved.status}`
@@ -546,6 +559,9 @@ export function ContinuousGoalControl(props: {
             >
               <p>{t("continuous_goal.about")}</p>
               <p class="continuous-goal__hint">{t("continuous_goal.activation_hint")}</p>
+              <Show when={pendingComposerContext()}>
+                <p class="continuous-goal__hint">{t("continuous_goal.pending_context_hint")}</p>
+              </Show>
               <TextField.Root as="label" variant="multiline">
                 <TextField.Label>{t("continuous_goal.objective")}</TextField.Label>
                 <TextField.TextArea

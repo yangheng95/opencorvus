@@ -203,6 +203,21 @@ export function setComposerDraft(key: string | null | undefined, text: string): 
   writeComposerDraftRecords(next)
 }
 
+/** Move input to a freshly created Session before its first workspace selection. */
+export function moveComposerDraftToNewSession(sourceKey: string, sessionID: string): void {
+  const source = normalizeComposerDraftKey(sourceKey)
+  const target = workspaceComposerDraftKey("", sessionID, "")
+  if (!source || source === target) return
+  const entry = composerDraftStore.drafts[source]
+  if (!entry) return
+  const next = {
+    ...composerDraftStore.drafts,
+    [target]: { text: entry.text, quotation: entry.quotation, updated: Date.now() },
+  }
+  delete next[source]
+  writeComposerDraftRecords(pruneComposerDraftRecords(next))
+}
+
 export function clearComposerDraft(key: string | null | undefined): void {
   setComposerQuotation(key, undefined)
   setComposerDraft(key, "")

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [首页草稿与 Goal 创建](2026-10-20-goal-composer-draft/README.md)：16张真实截图、项目/全局/侧聊输入衔接及两个流式目标；保留文件上传未验收项。
+
 - [按真实开场意图命名会话](2026-10-20-opening-intent-title/README.md)：四个原失败、24项正向合同、五张实际截图及用户改名恢复。
 
 - [内置浏览器中的 Goal 首页复核](2026-10-20-goal-home-live-review/README.md)：预算可选说明、11张实际截图、一轮gpt-6.1-sol自动执行与完整历史保留。

@@ -2408,6 +2408,8 @@ function OverlayRoot() {
           onDeleteMission={deleteMissionBoardMission}
         />
       }
+      composerDraftKey={panelComposerDraftKey()}
+      hasStagedAttachments={messageStore.chatAttachments.length > 0}
       onNewChat={() => openGlobalComposer(DEFAULT_COMPOSER_INTENT)}
       onStartGoal={async () => {
         const authority = captureApiAuthority()
@@ -2416,13 +2418,14 @@ function OverlayRoot() {
           const directory = activeDirectory().trim()
           const model = appStore.composerModel || undefined
           const experience = conversationExperienceFromProductPillar(composerIntent().productPillar)
+          const composerDraftKey = panelComposerDraftKey()
           const admission = await requestWorkspaceSelection()
           if (admission.kind === "unchanged") return
           await closeConfigDialog()
           assertApiAuthorityCurrent(authority)
           assertUserNavigationCurrent(admission.epoch)
           resetCenterWorkbenchToPrimaryPanel("chat")
-          const options = { authority, selectionEpoch: admission.epoch, experience, model }
+          const options = { authority, selectionEpoch: admission.epoch, experience, model, composerDraftKey }
           const created = directory
             ? await createConversationSession({ ...options, directory })
             : await createGlobalConversationSession(options)

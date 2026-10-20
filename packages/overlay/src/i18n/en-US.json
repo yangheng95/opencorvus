@@ -2538,5 +2538,6 @@
   "continuous_goal.guide.define.body": "Fill in the outcome and acceptance criteria. Optionally set token or automatic turn budgets, then choose Create goal.",
   "continuous_goal.guide.manage.title": "Track progress and pause",
   "continuous_goal.guide.manage.body": "Creation enables automatic continuation. Use the top bar to review usage, adjust budgets, pause, or mark complete.",
-  "continuous_goal.activation_hint": "Create goal enables automatic continuation. A blank budget means no limit."
+  "continuous_goal.activation_hint": "Create goal enables automatic continuation. A blank budget means no limit.",
+  "continuous_goal.pending_context_hint": "The goal uses the outcome text below. Quotes and attachments stay in the message input. To include them as context, close this form and send them first."
 }

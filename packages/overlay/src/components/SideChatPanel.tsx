@@ -398,6 +398,7 @@ export function SideChatPanel(props: {
       <Show when={selected() && props.source}>
         <ContinuousGoalControl
           compact
+          composerDraftKey={key()}
           selectionEpoch={boardStore.selectEpoch}
           owner={{ kind: "chat", id: selected(), directory: props.source!.directory }}
         />

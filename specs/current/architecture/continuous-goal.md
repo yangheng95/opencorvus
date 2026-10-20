@@ -114,6 +114,14 @@ one-time form request binds the original API authority and selection epoch, is
 consumed on handoff and cannot follow a later selection.
 No user Message is fabricated. Closing the form retains the empty Chat; submitting
 uses the same continuous-goal endpoint, budgets and visible controller Messages.
+Starting from the composer moves its text and quotation through one write to the
+existing draft store, after creation authority is rechecked and before selecting
+the newly published Session. That creation preserves staged attachments; ordinary
+history selection retains its existing cleanup. The form reads the exact supplied
+composer key, including SideChat's own key, and cancellation preserves the draft.
+Successful creation consumes only unchanged plain text without pending quotation
+or attachments. Pending context stays in the message input and is explained in the
+current interface language; creating a goal does not send that context as a Message.
 Detailed steps live in the existing guide dialog rather than a permanent home tutorial.
 The home explanation uses body text and a regular primary control size; compact
 status-strip sizing belongs to existing conversation controls.

@@ -205,6 +205,8 @@ export interface AppProps {
   onOpenRightDockAddMenu: () => void
   onNewChat: () => Promise<void>
   onStartGoal: () => Promise<GoalFormRequest | undefined>
+  composerDraftKey?: string
+  hasStagedAttachments?: boolean
   onSelectMission: (row: WorkLedgerMissionRow) => Promise<void>
   onSelectTask: (taskID: string, directory: string) => Promise<void>
   onSelectChat: (sessionID: string, directory: string, experience: "chat" | "work") => Promise<void>
@@ -534,6 +536,8 @@ export function App(props: AppProps) {
                             </header>
                             <Show when={!props.homeActive}>
                               <ContinuousGoalControl
+                                composerDraftKey={props.composerDraftKey}
+                                hasStagedAttachments={props.hasStagedAttachments}
                                 createRequest={goalFormRequest()}
                                 onCreateHandled={() => setGoalFormRequest(undefined)}
                                 selectionEpoch={boardStore.selectEpoch}

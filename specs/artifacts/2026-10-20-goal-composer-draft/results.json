@@ -1,0 +1,111 @@
+{
+  "scope": "goal-composer-draft-461",
+  "history": {
+    "schema": {
+      "user_version": 2
+    },
+    "projects": 113,
+    "sessions": 155,
+    "baselines": [
+      {
+        "projects": 110,
+        "sessions": 149
+      },
+      {
+        "projects": 111,
+        "sessions": 151
+      }
+    ],
+    "mode": "Direct readonly SQLite after both original native and related checker joins; every retained identity, owner and directory compared; no production initializer or user database"
+  },
+  "checks": {
+    "build": {
+      "command": "bun run build:overlay --skip-tauri",
+      "originalHandle": 66574,
+      "exitCode": 0,
+      "duration": "58.93s Vite"
+    },
+    "overlay": {
+      "originalHandle": 48852,
+      "exitCode": 0,
+      "commands": [
+        "typecheck",
+        "check:i18n",
+        "check:renderer-surface"
+      ],
+      "locales": 2,
+      "keys": 2506
+    },
+    "native": {
+      "originalHandles": [
+        25799,
+        52653
+      ],
+      "exitCodes": [
+        0,
+        0
+      ]
+    },
+    "ui": "Sixteen actual 1280x720 IAB screenshots, manual interaction and visual review; no UI automation"
+  },
+  "screenshots": [
+    "after-edited-goal-complete.png",
+    "after-edited-goal-created.png",
+    "after-edited-goal-run.png",
+    "after-global-cancel-zh.png",
+    "after-global-prefill-zh.png",
+    "after-pending-quote-retained.png",
+    "after-project-cancel.png",
+    "after-project-prefill.png",
+    "after-project-reload.png",
+    "after-quote-pending-form-en.png",
+    "after-quote-pending-form-zh.png",
+    "after-sidechat-cancel-zh.png",
+    "after-sidechat-prefill-zh.png",
+    "before-blank-form.png",
+    "before-cancel-empty.png",
+    "before-home-draft.png"
+  ],
+  "verified": [
+    "Project home draft prefill",
+    "Cancel retains editable input",
+    "Same-session reload restores draft",
+    "Edited objective executes DRAFT461READY",
+    "Consumed unchanged plain text clears after success",
+    "Actual selected quote and pending text retained across a second goal executing QUOTE461READY",
+    "English/Chinese pending-context copy",
+    "Global directory-free draft prefill and cancel",
+    "Independent main and SideChat draft prefill/cancel"
+  ],
+  "goals": [
+    {
+      "id": "pev_g0VYZ5zD2000SZMmOzNS",
+      "objective": "从草稿确认的目标 461\nFor this isolated product verification, reply exactly DRAFT461READY. Do not use tools or change files.",
+      "usage": {
+        "tokens": 38356
+      },
+      "completion": {
+        "requestID": "e5bccf59-aaed-48e9-b7c7-a681586e37bb",
+        "goalID": "pev_g0VYZ5zD2000SZMmOzNS",
+        "expectedRevision": "pev_g0VYZ5zD2000SZMmOzNS",
+        "status": "complete",
+        "reason": "Operator verified project draft prefill, cancel and same-session reload. The edited objective was executed by a real automatic turn and returned DRAFT461READY at 1/1 turns and 38,356 tokens. Its consumed plain-text draft cleared after successful creation."
+      }
+    },
+    {
+      "id": "pev_g0VYZ6lNu00j5oEHbk9m",
+      "objective": "引用保留确认 461\nFor this isolated product verification, reply exactly QUOTE461READY. Do not use tools or change files.",
+      "usage": {
+        "tokens": 38534
+      },
+      "completion": {
+        "requestID": "d8aff205-f3d2-4632-9659-a2316ae5e0f5",
+        "goalID": "pev_g0VYZ6lNu00j5oEHbk9m",
+        "expectedRevision": "pev_g0VYZ6lNu00j5oEHbk9m",
+        "status": "complete",
+        "reason": "Operator verified the real selected quotation DRAFT461READY and its pending draft remain visible after creating this separate goal. The real automatic turn returned QUOTE461READY at 1/1 turns and 38,534 tokens. The quote was not sent as a fabricated user message."
+      }
+    }
+  ],
+  "remaining": "Actual file/folder upload and pending attachment handoff are not visually qualified in this run; quotation is the exercised pending-context case. Original full-history configuration save/restore performance budgets remain unmet. This run is not a fresh live Sources/Rendering qualification."
+}
