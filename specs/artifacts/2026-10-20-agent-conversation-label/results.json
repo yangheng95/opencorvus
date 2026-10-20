@@ -1,0 +1,39 @@
+{
+  "history": {
+    "originalProjects": 135,
+    "originalSessions": 183,
+    "projects": 137,
+    "sessions": 185,
+    "schema": 3,
+    "retained": "Every original Project/Session identity, directory and owner retained",
+    "newData": "One actual preflight conversation and one actual Goal-preview conversation, each in its canonical anonymous Project; neither purged"
+  },
+  "cancelledGoalPreview": {
+    "statusCode": 200,
+    "observedAtUtc": "2026-10-20T11:10:38.5445310Z",
+    "sessionID": "ses_-zURPXrRrzzcvguIfGye",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\runtime\\data\\projects\\2026\\10\\20\\20600768-f7f3-4c2f-b7a4-3a68bb7c4b7a",
+    "body": null,
+    "session": {
+      "id": "ses_-zURPXrRrzzcvguIfGye",
+      "project_id": "prj_hGsrYQlnncotYW5OI9vs",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\runtime\\data\\projects\\2026\\10\\20\\20600768-f7f3-4c2f-b7a4-3a68bb7c4b7a",
+      "title": "Work",
+      "metadata": "{\"conversation\":{\"experience\":\"work\",\"surface\":\"right-sidebar\"},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}"
+    },
+    "messages": {
+      "count": 0
+    },
+    "observation": "Opening then closing the Goal form created and retained an empty global Work conversation; this new UX issue is not fixed by the locale-label change"
+  },
+  "build": {
+    "command": "bun run build:overlay --skip-tauri",
+    "originalHandle": 60859,
+    "exit": 0,
+    "stages": "Node Vite only; skip exits before SDK/backend/Tauri",
+    "database": "Current version remains3; no new migration"
+  },
+  "catalog": "check:i18n passed: 2 locales,2520 top-level keys",
+  "sourceChange": "Only two existing right_dock.tool.subagent locale values",
+  "automatedUITests": "Not run or added"
+}

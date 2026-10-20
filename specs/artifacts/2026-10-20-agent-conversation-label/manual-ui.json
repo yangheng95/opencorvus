@@ -1,0 +1,24 @@
+{
+  "tab": 23,
+  "closed": true,
+  "screenshots": [
+    "agents-chinese-sources.png",
+    "agents-english-sources.png",
+    "agents-english.png",
+    "goal-cancel-leaves-conversation.png",
+    "goal-draft-chinese.png",
+    "goal-help-chinese.png",
+    "home-goal-chinese.png",
+    "home-goal-english.png"
+  ],
+  "observation": [
+    "English Agents tab fits",
+    "Actual ordinary member list roundtrip",
+    "Original README.md L2–3 source visible",
+    "Real Settings Appearance locale switch to Chinese",
+    "Chinese tab/selector/region use 成员会话",
+    "Chinese default home, three-step Goal help and draft form",
+    "Original English preference restored and actual English home viewed"
+  ],
+  "limits": "No new Goal submitted, no new member business input, no claim of a new streaming/Rendering qualification; empty conversation after cancelling preview remains an open issue"
+}

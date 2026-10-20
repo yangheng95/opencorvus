@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [普通成员阅读入口的中性名称](2026-10-20-agent-conversation-label.md)：公共入口文案修复与[8张当前正式构建实图](../../artifacts/2026-10-20-agent-conversation-label/README.md)。
+
 - [调度结果的可见会话身份](2026-10-20-scheduled-result-visibility.md)：新旧独立调度结果的canonical Work身份、保留数据升级与[真实运行证据](../../artifacts/2026-10-20-scheduled-result-visibility/README.md)。
 
 - [Sources与成员侧栏当前体验](2026-10-20-sources-member-review.md)：已有真实成员来源与[10张截图及当前流式阅读](../../artifacts/2026-10-20-sources-member-review/README.md)。
