@@ -1,0 +1,14 @@
+import fs from 'node:fs'
+import assert from 'node:assert/strict'
+import {Database} from 'bun:sqlite'
+const source='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/runtime/data/opencorvus.db'
+const database=new Database(source,{readonly:true,create:false})
+try{
+ database.exec('BEGIN');assert.deepEqual(database.query('PRAGMA user_version').get(),{user_version:3})
+ const tables=['project','session','message','part','protocol_event','tool_part_request','tool_part_outcome'],original=Object.fromEntries(tables.map(t=>[t,database.query('SELECT rowid,* FROM '+t+' ORDER BY rowid').all()]))
+ const projects=original.project as Array<{id:string,worktree:string}>
+ assert.equal(projects.length,149);assert.equal(original.session.length,198)
+ const stat=fs.statSync(source)
+ fs.writeFileSync(import.meta.dir+'/input-private.json',JSON.stringify({source,sourceBytes:stat.size,sourceModifiedAtMs:stat.mtimeMs,projects,original},null,2)+'\n',{flag:'wx'})
+ console.log(JSON.stringify({schema:3,projects:projects.length,sessions:original.session.length,rows:Object.values(original).reduce((sum,rows)=>sum+rows.length,0),boundary:'Readonly complete original facts;no initializer,credentials or models'}))
+}finally{database.exec('ROLLBACK');database.close(true)}

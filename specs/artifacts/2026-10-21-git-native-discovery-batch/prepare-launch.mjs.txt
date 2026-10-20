@@ -1,0 +1,6 @@
+import fs from 'node:fs'
+const root=import.meta.dirname,old=root.replace('git-native-discovery-batch-489','native-launch-isolation-484')
+let source=fs.readFileSync(old+'/launch.ps1','utf8').replaceAll('native-launch-isolation-484','git-native-discovery-batch-489')
+source=source.replace("[ValidateSet('contracts','measure')]","[ValidateSet('measure')]").replace("[ValidateSet('main','worker')]","[ValidateSet('single','batch')]")
+fs.writeFileSync(root+'/launch.ps1',source,{flag:'wx'})
+console.log('Prepared four-minute owned native scopes;no worker adapter or production mutation.')

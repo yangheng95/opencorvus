@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Git原生查询组合](2026-10-21-git-native-discovery-batch/README.md)：同149目录/2368次查询观察的八组原始事实；隐式合批18.9/20.0秒退化，未交付生产。
+
 - [网络依赖安全修复](2026-10-21-dependency-redirect-hardening/README.md)：MCP两种传输的明确307错误、同origin正常初始化、14个HTTP合同、11张人工图与原87行保留。
 
 - [成员来源与渲染生命周期](2026-10-21-member-reading-lifecycle/README.md)：21图、六个真实Sol流、原权限等待与完整历史保留，未用完成态冒充新流。

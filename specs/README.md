@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Git原生组合与配置发现边界](records/2026-10/2026-10-21-git-native-discovery-batch.md)：[完整149目录八组对照](artifacts/2026-10-21-git-native-discovery-batch/README.md)，整表组合局部减半、隐式合批实际退化，生产未改。
+
 - [网络依赖与开发编辑器安全修复](records/2026-10/2026-10-21-dependency-redirect-hardening.md)：MCP、Hono、重定向及Vite补丁，[14项真实HTTP合同与11张实页](artifacts/2026-10-21-dependency-redirect-hardening/README.md)。
 
 - [成员来源阅读与渲染生命周期](records/2026-10/2026-10-21-member-reading-lifecycle.md)：[21图及真实成员网页流](artifacts/2026-10-21-member-reading-lifecycle/README.md)，六个Sol请求结算，未复现新的Rendering缺陷。

@@ -1,0 +1,33 @@
+{
+  "observedAt": "2026-10-20T21:31:43.010Z",
+  "runtime": "1.4.0",
+  "mode": "micro",
+  "run": "micro-b",
+  "owner": {
+    "pid": 68848,
+    "processInstanceID": "win32:639281286821093086",
+    "occurrenceID": "173c4c48-4e62-4d41-9fdd-9b319fb6a708"
+  },
+  "projects": 149,
+  "gitProjects": 148,
+  "nonGitProjects": 1,
+  "concurrency": 12,
+  "wallMs": 19970.812700000002,
+  "mainMaxTickMs": 421.76550000000134,
+  "statCalls": 44402,
+  "realpathCalls": 44402,
+  "live": {
+    "live": 0,
+    "owners": {}
+  },
+  "qualification": "Local full149 mixture only;actual per-project Git bytes/physical identities equal original;not full Config acceptance. Batch error/per-row nonempty stderr/ceiling generality not qualified;no production change,credentials or model calls",
+  "helperCommands": 264,
+  "batchSizeHistogram": {
+    "1": 243,
+    "2": 18,
+    "3": 1,
+    "4": 1,
+    "10": 1
+  },
+  "completeOriginal": "micro-b-result.json.gz"
+}

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Git原生组合与配置发现边界](2026-10-21-git-native-discovery-batch.md)：[1708个真实helper/八个原scope与原3665行](../../artifacts/2026-10-21-git-native-discovery-batch/README.md)，排除本次隐式队列，未冒充配置达标。
+
 - [网络依赖与开发编辑器安全修复](2026-10-21-dependency-redirect-hardening.md)：[实际重定向合同、完整构建和中英文Goal/Sources页面](../../artifacts/2026-10-21-dependency-redirect-hardening/README.md)，原安装器失败及恢复均保留。
 
 - [成员来源阅读与渲染生命周期](2026-10-21-member-reading-lifecycle.md)：[21图、完成态同名成员与真实网页流](../../artifacts/2026-10-21-member-reading-lifecycle/README.md)，原权限等待已确认。

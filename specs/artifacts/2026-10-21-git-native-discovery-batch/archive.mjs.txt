@@ -1,0 +1,26 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+import {gzipSync,gunzipSync} from 'node:zlib'
+const root=import.meta.dirname,out=path.resolve(root,'../../specs/artifacts/2026-10-21-git-native-discovery-batch'),read=p=>JSON.parse(fs.readFileSync(p,'utf8'))
+fs.mkdirSync(out,{recursive:true})
+const runs=['single-a','batch-a','batch-b','single-b','single-c','micro-a','micro-b','single-d'],physical=read(root+'/physical-scopes.json'),input=read(root+'/input-private.json')
+assert.equal(physical.scopes.length,8)
+const matrix=runs.map(run=>{
+ const data=read(root+'/'+run+'-result.json'),scope=physical.scopes.find(s=>s.run===run);assert.equal(data.owner.pid,scope.ready.target.pid);assert.equal(data.owner.processInstanceID,scope.ready.target.processInstanceID);assert.equal(data.statCalls,44402);assert.equal(data.realpathCalls,44402);assert.equal(data.live.live,0)
+ const ids=new Set(data.requests.map(request=>request.id));assert.equal(ids.size,data.requests.length)
+ for(const request of data.requests){assert.equal(request.ownerPID,data.owner.pid);assert.equal(request.ownerBirth,data.owner.processInstanceID);assert.equal(request.occurrence,data.owner.occurrenceID)}
+ assert.equal(data.sourceDatabase.size,input.sourceBytes);assert.equal(data.sourceDatabase.mtimeMs,input.sourceModifiedAtMs)
+ const histogram={};for(const batch of data.batchDetails??[])histogram[batch.projects]=(histogram[batch.projects]??0)+1
+ const raw=fs.readFileSync(root+'/'+run+'-result.json'),compressed=gzipSync(raw);assert(gunzipSync(compressed).equals(raw),'Exact original result bytes preserved');fs.writeFileSync(out+'/'+run+'-result.json.gz',compressed)
+ const {requests,spawns,batchDetails,sourceDatabase,...summary}=data
+ fs.writeFileSync(out+'/'+run+'-result.json',JSON.stringify({...summary,helperCommands:requests.length,batchSizeHistogram:histogram,completeOriginal:run+'-result.json.gz'},null,2)+'\n');fs.writeFileSync(out+'/'+run+'.log',fs.readFileSync(root+'/'+run+'.log','utf8').trimEnd()+'\n')
+ return {run,mode:data.mode,owner:data.owner,concurrency:data.concurrency,wallMs:data.wallMs,maximumMainTickMs:data.mainMaxTickMs,registeredDirectoryStatCalls:data.statCalls,registeredDirectoryRealpathCalls:data.realpathCalls,helperCommands:data.requests.length,gitObservations:296,synchronousSpawnMs:data.spawns.reduce((sum,row)=>sum+row.returnedAt-row.at,0),batchSizeHistogram:histogram,originalHandle:scope.originalHandle,originalExit:0}
+})
+fs.writeFileSync(out+'/matrix.json',JSON.stringify({observedAt:new Date().toISOString(),boundary:'Local full149 mixtures;not full Config,UI,or all batching designs. Directory-cycle counters exclude baseline/output qualification reads. The before/after source arrays and all Git output comparisons are exact,not source hashes.',groups:matrix,helperCommands:matrix.reduce((sum,row)=>sum+row.helperCommands,0),gitObservations:2368,decision:'Whole-inventory serial Git composition reduces this mixture,while the tested same-ceiling event-turn microbatch regresses.The microbatch prototype is rejected;production unchanged;complete Config10s/5s remains unproven.'},null,2)+'\n')
+const original=fs.readFileSync(root+'/expected-git-private.json'),compressed=gzipSync(original);assert(gunzipSync(compressed).equals(original),'Exact original Git output bytes preserved');fs.writeFileSync(out+'/original-git-outputs.json.gz',compressed)
+if(fs.existsSync(out+'/original-git-outputs.json'))fs.unlinkSync(out+'/original-git-outputs.json')
+fs.writeFileSync(out+'/input-projects.json',JSON.stringify({projects:input.projects.map(({id,worktree})=>({id,worktree})),schema:3,qualification:'Complete original149 Project input;private full message/protocol history excluded'},null,2)+'\n')
+for(const name of ['source-preserved.json','physical-scopes.json'])fs.copyFileSync(root+'/'+name,out+'/'+name)
+for(const name of ['prepare.ts','measure.ts','measure-inventory.ts.txt','launch.ps1','launch-first.ps1.txt','prepare-launch.mjs','verify-source.ts','verify-physical.ps1','archive.mjs'])fs.copyFileSync(root+'/'+name,out+'/'+name+(name.endsWith('.txt')?'':'.txt'))
+console.log(JSON.stringify({out,groups:matrix.map(({run,wallMs,helperCommands,batchSizeHistogram})=>({run,wallMs,helperCommands,batchSizeHistogram})),helperCommands:matrix.reduce((sum,row)=>sum+row.helperCommands,0),observations:2368}))

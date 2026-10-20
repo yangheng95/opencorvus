@@ -1,0 +1,17 @@
+$ErrorActionPreference='Stop'
+$taskRoot='D:/myhexin-local/opencorvus/.tmp-product-iteration/git-native-discovery-batch-489'
+. 'D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-long-source-reading-406-launch.ps1' -FunctionsOnly
+$taskRuns=@(@('single-a',64502),@('batch-a',87947),@('batch-b',7485),@('single-b',9279),@('single-c',97316),@('micro-a',84055),@('micro-b',3163),@('single-d',52471))
+$taskRecords=@()
+foreach($taskPair in $taskRuns){
+ $taskName=$taskPair[0];$taskEvidence="$taskRoot/$taskName-scope/evidence"
+ $taskReady=Get-Content -Raw -LiteralPath "$taskEvidence/native-host-ready.json"|ConvertFrom-Json
+ $taskSettled=Get-Content -Raw -LiteralPath "$taskEvidence/native-host-settled.json"|ConvertFrom-Json
+ $taskLauncher=Get-Content -Raw -LiteralPath "$taskEvidence/launcher-child-exit.json"|ConvertFrom-Json
+ if($taskSettled.outcome -ne 'settled' -or $taskSettled.terminal.reason -ne 'exited' -or $taskSettled.terminal.exitCode -ne 0 -or !$taskSettled.physicalCompletion -or !$taskSettled.outputDrainComplete -or !$taskSettled.requestCleanupComplete -or $taskLauncher.originalChildExit -ne 0 -or $taskSettled.occurrence -cne $taskReady.occurrence){throw "Incomplete original scope $taskName"}
+ $taskChain=@($taskReady.host,$taskReady.target)|ForEach-Object {@{identity=$_;state=(Get-OwnedNativeState $_)}}
+ if(@($taskChain|Where-Object state -ne 'dead_or_reused').Count){throw "Original scope remains live: $taskName"}
+ $taskRecords+=@{run=$taskName;originalHandle=[int]$taskPair[1];originalExit=0;ready=$taskReady;native=$taskSettled;launcher=$taskLauncher;chain=$taskChain}
+}
+@{observedAtUtc=[DateTime]::UtcNow.ToString('o');scopes=$taskRecords;count=$taskRecords.Count;boundary='Eight original native/output/request/launcher settlements;no restarted occurrence'}|ConvertTo-Json -Depth 15|Set-Content -LiteralPath "$taskRoot/physical-scopes.json"
+Write-Output "Eight original scopes physically settled;all original handles exit0"

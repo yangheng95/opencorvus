@@ -1,0 +1,655 @@
+{
+  "observedAtUtc": "2026-10-20T21:36:16.9000182Z",
+  "boundary": "Eight original native/output/request/launcher settlements;no restarted occurrence",
+  "count": 8,
+  "scopes": [
+    {
+      "originalExit": 0,
+      "ready": {
+        "occurrence": "git-native-discovery-batch-489-single-a-791fb321-8ac6-4b91-af5a-9aa4b329b223",
+        "outcome": "ready",
+        "host": {
+          "pid": 65016,
+          "processInstanceID": "win32:639281280385648524",
+          "occurrenceID": "2462e7bb-a761-447a-9104-8d3405499fda"
+        },
+        "parent": {
+          "pid": 93708,
+          "processInstanceID": "win32:639281280380133876",
+          "occurrenceID": "df4f5a59-a3bf-4b49-8ef6-f98894163684"
+        },
+        "target": {
+          "pid": 64404,
+          "processInstanceID": "win32:639281280405181778",
+          "occurrenceID": "5fdfded5-60d2-4089-bcb6-4fa97134b41c"
+        },
+        "targetBirthAtMs": 1792531240518,
+        "deadlineAt": 1792531478541,
+        "observedAtUtc": "2026-10-20T21:20:40.545Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/git-native-discovery-batch-489/measure.ts"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-20T21:20:59.518085Z",
+        "originalChildExit": 0
+      },
+      "native": {
+        "occurrence": "git-native-discovery-batch-489-single-a-791fb321-8ac6-4b91-af5a-9aa4b329b223",
+        "outcome": "settled",
+        "host": {
+          "pid": 65016,
+          "processInstanceID": "win32:639281280385648524",
+          "occurrenceID": "2462e7bb-a761-447a-9104-8d3405499fda"
+        },
+        "target": {
+          "pid": 64404,
+          "processInstanceID": "win32:639281280405181778",
+          "occurrenceID": "5fdfded5-60d2-4089-bcb6-4fa97134b41c"
+        },
+        "observedAtUtc": "2026-10-20T21:20:59.448Z",
+        "deadlineAt": 1792531478541,
+        "terminal": {
+          "occurrenceID": "git-native-discovery-batch-489-single-a-791fb321-8ac6-4b91-af5a-9aa4b329b223",
+          "pid": 64404,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 65016,
+            "processInstanceID": "win32:639281280385648524",
+            "occurrenceID": "2462e7bb-a761-447a-9104-8d3405499fda"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 64404,
+            "processInstanceID": "win32:639281280405181778",
+            "occurrenceID": "5fdfded5-60d2-4089-bcb6-4fa97134b41c"
+          }
+        }
+      ],
+      "run": "single-a",
+      "originalHandle": 64502
+    },
+    {
+      "originalExit": 0,
+      "ready": {
+        "occurrence": "git-native-discovery-batch-489-batch-a-987fd04e-264f-4e53-9a2e-2e715adbc40d",
+        "outcome": "ready",
+        "host": {
+          "pid": 89180,
+          "processInstanceID": "win32:639281280865513118",
+          "occurrenceID": "2eb70d6c-04a0-4f4a-a7ba-93be993f4a7a"
+        },
+        "parent": {
+          "pid": 79360,
+          "processInstanceID": "win32:639281280860933697",
+          "occurrenceID": "2d0ae3a6-8b75-476f-abfb-7988b9c0771d"
+        },
+        "target": {
+          "pid": 82408,
+          "processInstanceID": "win32:639281280882804600",
+          "occurrenceID": "51f59b52-b226-4cd1-9fb7-58965f5f456d"
+        },
+        "targetBirthAtMs": 1792531288280,
+        "deadlineAt": 1792531526530,
+        "observedAtUtc": "2026-10-20T21:21:28.308Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/git-native-discovery-batch-489/measure.ts"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-20T21:21:38.5980415Z",
+        "originalChildExit": 0
+      },
+      "native": {
+        "occurrence": "git-native-discovery-batch-489-batch-a-987fd04e-264f-4e53-9a2e-2e715adbc40d",
+        "outcome": "settled",
+        "host": {
+          "pid": 89180,
+          "processInstanceID": "win32:639281280865513118",
+          "occurrenceID": "2eb70d6c-04a0-4f4a-a7ba-93be993f4a7a"
+        },
+        "target": {
+          "pid": 82408,
+          "processInstanceID": "win32:639281280882804600",
+          "occurrenceID": "51f59b52-b226-4cd1-9fb7-58965f5f456d"
+        },
+        "observedAtUtc": "2026-10-20T21:21:38.551Z",
+        "deadlineAt": 1792531526530,
+        "terminal": {
+          "occurrenceID": "git-native-discovery-batch-489-batch-a-987fd04e-264f-4e53-9a2e-2e715adbc40d",
+          "pid": 82408,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 89180,
+            "processInstanceID": "win32:639281280865513118",
+            "occurrenceID": "2eb70d6c-04a0-4f4a-a7ba-93be993f4a7a"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 82408,
+            "processInstanceID": "win32:639281280882804600",
+            "occurrenceID": "51f59b52-b226-4cd1-9fb7-58965f5f456d"
+          }
+        }
+      ],
+      "run": "batch-a",
+      "originalHandle": 87947
+    },
+    {
+      "originalExit": 0,
+      "ready": {
+        "occurrence": "git-native-discovery-batch-489-batch-b-2577bd96-8392-45eb-b322-8609dc1ed931",
+        "outcome": "ready",
+        "host": {
+          "pid": 91212,
+          "processInstanceID": "win32:639281282079206877",
+          "occurrenceID": "611b5362-c378-40cd-bd6b-f19ff8b0d3d3"
+        },
+        "parent": {
+          "pid": 83440,
+          "processInstanceID": "win32:639281282074548068",
+          "occurrenceID": "2499837f-63b5-4331-841b-4fab443f037a"
+        },
+        "target": {
+          "pid": 78836,
+          "processInstanceID": "win32:639281282096975943",
+          "occurrenceID": "6032ae9c-0830-4c83-a44f-1a39b80414f1"
+        },
+        "targetBirthAtMs": 1792531409697,
+        "deadlineAt": 1792531647900,
+        "observedAtUtc": "2026-10-20T21:23:29.722Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/git-native-discovery-batch-489/measure.ts"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "launcher": {
+        "originalChildExit": 0,
+        "observedAtUtc": "2026-10-20T21:23:40.026923Z"
+      },
+      "native": {
+        "occurrence": "git-native-discovery-batch-489-batch-b-2577bd96-8392-45eb-b322-8609dc1ed931",
+        "outcome": "settled",
+        "host": {
+          "pid": 91212,
+          "processInstanceID": "win32:639281282079206877",
+          "occurrenceID": "611b5362-c378-40cd-bd6b-f19ff8b0d3d3"
+        },
+        "target": {
+          "pid": 78836,
+          "processInstanceID": "win32:639281282096975943",
+          "occurrenceID": "6032ae9c-0830-4c83-a44f-1a39b80414f1"
+        },
+        "observedAtUtc": "2026-10-20T21:23:39.98Z",
+        "deadlineAt": 1792531647900,
+        "terminal": {
+          "occurrenceID": "git-native-discovery-batch-489-batch-b-2577bd96-8392-45eb-b322-8609dc1ed931",
+          "pid": 78836,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 91212,
+            "processInstanceID": "win32:639281282079206877",
+            "occurrenceID": "611b5362-c378-40cd-bd6b-f19ff8b0d3d3"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 78836,
+            "processInstanceID": "win32:639281282096975943",
+            "occurrenceID": "6032ae9c-0830-4c83-a44f-1a39b80414f1"
+          }
+        }
+      ],
+      "run": "batch-b",
+      "originalHandle": 7485
+    },
+    {
+      "originalExit": 0,
+      "ready": {
+        "occurrence": "git-native-discovery-batch-489-single-b-1713a064-0506-4937-a515-ac4f5fb2114e",
+        "outcome": "ready",
+        "host": {
+          "pid": 86664,
+          "processInstanceID": "win32:639281282781788065",
+          "occurrenceID": "066f2ba3-d918-48a4-89d6-9cad901c85ab"
+        },
+        "parent": {
+          "pid": 76432,
+          "processInstanceID": "win32:639281282777364215",
+          "occurrenceID": "bf145793-98b2-40d3-859c-e513ac66fbff"
+        },
+        "target": {
+          "pid": 74828,
+          "processInstanceID": "win32:639281282798525414",
+          "occurrenceID": "56c1f079-8ace-4406-b0b9-30484e00ba45"
+        },
+        "targetBirthAtMs": 1792531479852,
+        "deadlineAt": 1792531718159,
+        "observedAtUtc": "2026-10-20T21:24:39.886Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/git-native-discovery-batch-489/measure.ts"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-20T21:24:59.4098936Z",
+        "originalChildExit": 0
+      },
+      "native": {
+        "occurrence": "git-native-discovery-batch-489-single-b-1713a064-0506-4937-a515-ac4f5fb2114e",
+        "outcome": "settled",
+        "host": {
+          "pid": 86664,
+          "processInstanceID": "win32:639281282781788065",
+          "occurrenceID": "066f2ba3-d918-48a4-89d6-9cad901c85ab"
+        },
+        "target": {
+          "pid": 74828,
+          "processInstanceID": "win32:639281282798525414",
+          "occurrenceID": "56c1f079-8ace-4406-b0b9-30484e00ba45"
+        },
+        "observedAtUtc": "2026-10-20T21:24:59.358Z",
+        "deadlineAt": 1792531718159,
+        "terminal": {
+          "occurrenceID": "git-native-discovery-batch-489-single-b-1713a064-0506-4937-a515-ac4f5fb2114e",
+          "pid": 74828,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 86664,
+            "processInstanceID": "win32:639281282781788065",
+            "occurrenceID": "066f2ba3-d918-48a4-89d6-9cad901c85ab"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 74828,
+            "processInstanceID": "win32:639281282798525414",
+            "occurrenceID": "56c1f079-8ace-4406-b0b9-30484e00ba45"
+          }
+        }
+      ],
+      "run": "single-b",
+      "originalHandle": 9279
+    },
+    {
+      "originalExit": 0,
+      "ready": {
+        "occurrence": "git-native-discovery-batch-489-single-c-b1fc8cf0-5c3d-469c-902a-7b2ed079882d",
+        "outcome": "ready",
+        "host": {
+          "pid": 78668,
+          "processInstanceID": "win32:639281284879697607",
+          "occurrenceID": "76849ae8-0240-4c9e-833b-c3b6bc31e8ce"
+        },
+        "parent": {
+          "pid": 54348,
+          "processInstanceID": "win32:639281284874890457",
+          "occurrenceID": "e3174e6f-4130-448b-b3a6-b2cb7966f504"
+        },
+        "target": {
+          "pid": 79052,
+          "processInstanceID": "win32:639281284896140706",
+          "occurrenceID": "98b1e30d-5f2f-4750-a218-6f371c8fe416"
+        },
+        "targetBirthAtMs": 1792531689614,
+        "deadlineAt": 1792531927948,
+        "observedAtUtc": "2026-10-20T21:28:09.639Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/git-native-discovery-batch-489/measure.ts"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "launcher": {
+        "originalChildExit": 0,
+        "observedAtUtc": "2026-10-20T21:28:27.7000031Z"
+      },
+      "native": {
+        "occurrence": "git-native-discovery-batch-489-single-c-b1fc8cf0-5c3d-469c-902a-7b2ed079882d",
+        "outcome": "settled",
+        "host": {
+          "pid": 78668,
+          "processInstanceID": "win32:639281284879697607",
+          "occurrenceID": "76849ae8-0240-4c9e-833b-c3b6bc31e8ce"
+        },
+        "target": {
+          "pid": 79052,
+          "processInstanceID": "win32:639281284896140706",
+          "occurrenceID": "98b1e30d-5f2f-4750-a218-6f371c8fe416"
+        },
+        "observedAtUtc": "2026-10-20T21:28:27.64Z",
+        "deadlineAt": 1792531927948,
+        "terminal": {
+          "occurrenceID": "git-native-discovery-batch-489-single-c-b1fc8cf0-5c3d-469c-902a-7b2ed079882d",
+          "pid": 79052,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 78668,
+            "processInstanceID": "win32:639281284879697607",
+            "occurrenceID": "76849ae8-0240-4c9e-833b-c3b6bc31e8ce"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 79052,
+            "processInstanceID": "win32:639281284896140706",
+            "occurrenceID": "98b1e30d-5f2f-4750-a218-6f371c8fe416"
+          }
+        }
+      ],
+      "run": "single-c",
+      "originalHandle": 97316
+    },
+    {
+      "originalExit": 0,
+      "ready": {
+        "occurrence": "git-native-discovery-batch-489-micro-a-e6659512-d733-4029-b2ec-19140e1ec01c",
+        "outcome": "ready",
+        "host": {
+          "pid": 85256,
+          "processInstanceID": "win32:639281285319956342",
+          "occurrenceID": "137a88e9-db13-48be-bd3f-89f217b27ceb"
+        },
+        "parent": {
+          "pid": 79432,
+          "processInstanceID": "win32:639281285315342564",
+          "occurrenceID": "e7f708f6-b1b1-415a-bfb6-a5252da28f63"
+        },
+        "target": {
+          "pid": 86560,
+          "processInstanceID": "win32:639281285336969380",
+          "occurrenceID": "fd15e3f8-4917-4ba0-9864-93fc20b32205"
+        },
+        "targetBirthAtMs": 1792531733696,
+        "deadlineAt": 1792531971974,
+        "observedAtUtc": "2026-10-20T21:28:53.723Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/git-native-discovery-batch-489/measure.ts"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "launcher": {
+        "originalChildExit": 0,
+        "observedAtUtc": "2026-10-20T21:29:13.6466712Z"
+      },
+      "native": {
+        "occurrence": "git-native-discovery-batch-489-micro-a-e6659512-d733-4029-b2ec-19140e1ec01c",
+        "outcome": "settled",
+        "host": {
+          "pid": 85256,
+          "processInstanceID": "win32:639281285319956342",
+          "occurrenceID": "137a88e9-db13-48be-bd3f-89f217b27ceb"
+        },
+        "target": {
+          "pid": 86560,
+          "processInstanceID": "win32:639281285336969380",
+          "occurrenceID": "fd15e3f8-4917-4ba0-9864-93fc20b32205"
+        },
+        "observedAtUtc": "2026-10-20T21:29:13.566Z",
+        "deadlineAt": 1792531971974,
+        "terminal": {
+          "occurrenceID": "git-native-discovery-batch-489-micro-a-e6659512-d733-4029-b2ec-19140e1ec01c",
+          "pid": 86560,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 85256,
+            "processInstanceID": "win32:639281285319956342",
+            "occurrenceID": "137a88e9-db13-48be-bd3f-89f217b27ceb"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 86560,
+            "processInstanceID": "win32:639281285336969380",
+            "occurrenceID": "fd15e3f8-4917-4ba0-9864-93fc20b32205"
+          }
+        }
+      ],
+      "run": "micro-a",
+      "originalHandle": 84055
+    },
+    {
+      "originalExit": 0,
+      "ready": {
+        "occurrence": "git-native-discovery-batch-489-micro-b-d509b89e-bbd5-4129-83fb-7da12c85170a",
+        "outcome": "ready",
+        "host": {
+          "pid": 29660,
+          "processInstanceID": "win32:639281286803672002",
+          "occurrenceID": "6962378c-4f44-46d2-aa46-6fb322c7cc97"
+        },
+        "parent": {
+          "pid": 80748,
+          "processInstanceID": "win32:639281286798954234",
+          "occurrenceID": "24ad7a8c-0041-4ae5-b7b8-04e7d0114045"
+        },
+        "target": {
+          "pid": 68848,
+          "processInstanceID": "win32:639281286821093086",
+          "occurrenceID": "c5e54306-1ea0-4276-85e4-511f47377d35"
+        },
+        "targetBirthAtMs": 1792531882109,
+        "deadlineAt": 1792532120346,
+        "observedAtUtc": "2026-10-20T21:31:22.147Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/git-native-discovery-batch-489/measure.ts"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-20T21:31:43.1253442Z",
+        "originalChildExit": 0
+      },
+      "native": {
+        "occurrence": "git-native-discovery-batch-489-micro-b-d509b89e-bbd5-4129-83fb-7da12c85170a",
+        "outcome": "settled",
+        "host": {
+          "pid": 29660,
+          "processInstanceID": "win32:639281286803672002",
+          "occurrenceID": "6962378c-4f44-46d2-aa46-6fb322c7cc97"
+        },
+        "target": {
+          "pid": 68848,
+          "processInstanceID": "win32:639281286821093086",
+          "occurrenceID": "c5e54306-1ea0-4276-85e4-511f47377d35"
+        },
+        "observedAtUtc": "2026-10-20T21:31:43.069Z",
+        "deadlineAt": 1792532120346,
+        "terminal": {
+          "occurrenceID": "git-native-discovery-batch-489-micro-b-d509b89e-bbd5-4129-83fb-7da12c85170a",
+          "pid": 68848,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 29660,
+            "processInstanceID": "win32:639281286803672002",
+            "occurrenceID": "6962378c-4f44-46d2-aa46-6fb322c7cc97"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 68848,
+            "processInstanceID": "win32:639281286821093086",
+            "occurrenceID": "c5e54306-1ea0-4276-85e4-511f47377d35"
+          }
+        }
+      ],
+      "run": "micro-b",
+      "originalHandle": 3163
+    },
+    {
+      "originalExit": 0,
+      "ready": {
+        "occurrence": "git-native-discovery-batch-489-single-d-0353ce18-6a73-417c-be35-176c85d97e53",
+        "outcome": "ready",
+        "host": {
+          "pid": 71480,
+          "processInstanceID": "win32:639281288151314741",
+          "occurrenceID": "30c6fa27-2d69-42c5-b21e-02a10c25ee74"
+        },
+        "parent": {
+          "pid": 88212,
+          "processInstanceID": "win32:639281288146767199",
+          "occurrenceID": "f70a6efd-723c-4228-91f2-24c9d60d1f70"
+        },
+        "target": {
+          "pid": 67628,
+          "processInstanceID": "win32:639281288168429554",
+          "occurrenceID": "f1c5ca73-5193-40a4-ae0e-e670a58888f5"
+        },
+        "targetBirthAtMs": 1792532016842,
+        "deadlineAt": 1792532255102,
+        "observedAtUtc": "2026-10-20T21:33:36.876Z",
+        "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/web-sources-repair-482-v2-bundle/bin/bun.exe",
+        "args": [
+          "D:/myhexin-local/opencorvus/.tmp-product-iteration/git-native-discovery-batch-489/measure.ts"
+        ],
+        "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-20T21:33:55.8479884Z",
+        "originalChildExit": 0
+      },
+      "native": {
+        "occurrence": "git-native-discovery-batch-489-single-d-0353ce18-6a73-417c-be35-176c85d97e53",
+        "outcome": "settled",
+        "host": {
+          "pid": 71480,
+          "processInstanceID": "win32:639281288151314741",
+          "occurrenceID": "30c6fa27-2d69-42c5-b21e-02a10c25ee74"
+        },
+        "target": {
+          "pid": 67628,
+          "processInstanceID": "win32:639281288168429554",
+          "occurrenceID": "f1c5ca73-5193-40a4-ae0e-e670a58888f5"
+        },
+        "observedAtUtc": "2026-10-20T21:33:55.795Z",
+        "deadlineAt": 1792532255102,
+        "terminal": {
+          "occurrenceID": "git-native-discovery-batch-489-single-d-0353ce18-6a73-417c-be35-176c85d97e53",
+          "pid": 67628,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 71480,
+            "processInstanceID": "win32:639281288151314741",
+            "occurrenceID": "30c6fa27-2d69-42c5-b21e-02a10c25ee74"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 67628,
+            "processInstanceID": "win32:639281288168429554",
+            "occurrenceID": "f1c5ca73-5193-40a4-ae0e-e670a58888f5"
+          }
+        }
+      ],
+      "run": "single-d",
+      "originalHandle": 52471
+    }
+  ]
+}

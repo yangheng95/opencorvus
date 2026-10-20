@@ -1,0 +1,180 @@
+{
+  "observedAt": "2026-10-20T21:39:02.253Z",
+  "boundary": "Local full149 mixtures;not full Config,UI,or all batching designs. Directory-cycle counters exclude baseline/output qualification reads. The before/after source arrays and all Git output comparisons are exact,not source hashes.",
+  "groups": [
+    {
+      "run": "single-a",
+      "mode": "single",
+      "owner": {
+        "pid": 64404,
+        "processInstanceID": "win32:639281280405181778",
+        "occurrenceID": "8ab32d1f-3d0a-49e6-a827-f5615fc1ef91"
+      },
+      "concurrency": 12,
+      "wallMs": 17990.633,
+      "maximumMainTickMs": 650.5755,
+      "registeredDirectoryStatCalls": 44402,
+      "registeredDirectoryRealpathCalls": 44402,
+      "helperCommands": 296,
+      "gitObservations": 296,
+      "synchronousSpawnMs": 10320.233500000017,
+      "batchSizeHistogram": {},
+      "originalHandle": 64502,
+      "originalExit": 0
+    },
+    {
+      "run": "batch-a",
+      "mode": "batch",
+      "owner": {
+        "pid": 82408,
+        "processInstanceID": "win32:639281280882804600",
+        "occurrenceID": "5286de52-646a-49c2-ad0b-66423fd4ced4"
+      },
+      "concurrency": 12,
+      "wallMs": 9389.974100000001,
+      "maximumMainTickMs": 17.385700000000043,
+      "registeredDirectoryStatCalls": 44402,
+      "registeredDirectoryRealpathCalls": 44402,
+      "helperCommands": 2,
+      "gitObservations": 296,
+      "synchronousSpawnMs": 21.07720000000063,
+      "batchSizeHistogram": {},
+      "originalHandle": 87947,
+      "originalExit": 0
+    },
+    {
+      "run": "batch-b",
+      "mode": "batch",
+      "owner": {
+        "pid": 78836,
+        "processInstanceID": "win32:639281282096975943",
+        "occurrenceID": "d903af8d-15fe-48e0-924a-7bb9dddfa4fa"
+      },
+      "concurrency": 12,
+      "wallMs": 9304.7462,
+      "maximumMainTickMs": 83.1801999999999,
+      "registeredDirectoryStatCalls": 44402,
+      "registeredDirectoryRealpathCalls": 44402,
+      "helperCommands": 2,
+      "gitObservations": 296,
+      "synchronousSpawnMs": 85.57260000000042,
+      "batchSizeHistogram": {},
+      "originalHandle": 7485,
+      "originalExit": 0
+    },
+    {
+      "run": "single-b",
+      "mode": "single",
+      "owner": {
+        "pid": 74828,
+        "processInstanceID": "win32:639281282798525414",
+        "occurrenceID": "a62f6a39-4ff3-4aeb-9253-40a54b721c72"
+      },
+      "concurrency": 12,
+      "wallMs": 18581.349899999997,
+      "maximumMainTickMs": 527.1913,
+      "registeredDirectoryStatCalls": 44402,
+      "registeredDirectoryRealpathCalls": 44402,
+      "helperCommands": 296,
+      "gitObservations": 296,
+      "synchronousSpawnMs": 10720.057899999982,
+      "batchSizeHistogram": {},
+      "originalHandle": 9279,
+      "originalExit": 0
+    },
+    {
+      "run": "single-c",
+      "mode": "single",
+      "owner": {
+        "pid": 79052,
+        "processInstanceID": "win32:639281284896140706",
+        "occurrenceID": "b4347913-d545-49b9-bd9d-0a04e1b077c7"
+      },
+      "concurrency": 12,
+      "wallMs": 17161.9518,
+      "maximumMainTickMs": 424.24710000000005,
+      "registeredDirectoryStatCalls": 44402,
+      "registeredDirectoryRealpathCalls": 44402,
+      "helperCommands": 296,
+      "gitObservations": 296,
+      "synchronousSpawnMs": 9835.357000000036,
+      "batchSizeHistogram": {},
+      "originalHandle": 97316,
+      "originalExit": 0
+    },
+    {
+      "run": "micro-a",
+      "mode": "micro",
+      "owner": {
+        "pid": 86560,
+        "processInstanceID": "win32:639281285336969380",
+        "occurrenceID": "48235335-3008-4bcd-bf13-6928a228c858"
+      },
+      "concurrency": 12,
+      "wallMs": 18920.2296,
+      "maximumMainTickMs": 326.6769999999997,
+      "registeredDirectoryStatCalls": 44402,
+      "registeredDirectoryRealpathCalls": 44402,
+      "helperCommands": 256,
+      "gitObservations": 296,
+      "synchronousSpawnMs": 9496.4336,
+      "batchSizeHistogram": {
+        "1": 230,
+        "2": 19,
+        "3": 6,
+        "10": 1
+      },
+      "originalHandle": 84055,
+      "originalExit": 0
+    },
+    {
+      "run": "micro-b",
+      "mode": "micro",
+      "owner": {
+        "pid": 68848,
+        "processInstanceID": "win32:639281286821093086",
+        "occurrenceID": "173c4c48-4e62-4d41-9fdd-9b319fb6a708"
+      },
+      "concurrency": 12,
+      "wallMs": 19970.812700000002,
+      "maximumMainTickMs": 421.76550000000134,
+      "registeredDirectoryStatCalls": 44402,
+      "registeredDirectoryRealpathCalls": 44402,
+      "helperCommands": 264,
+      "gitObservations": 296,
+      "synchronousSpawnMs": 9565.080100000021,
+      "batchSizeHistogram": {
+        "1": 243,
+        "2": 18,
+        "3": 1,
+        "4": 1,
+        "10": 1
+      },
+      "originalHandle": 3163,
+      "originalExit": 0
+    },
+    {
+      "run": "single-d",
+      "mode": "single",
+      "owner": {
+        "pid": 67628,
+        "processInstanceID": "win32:639281288168429554",
+        "occurrenceID": "1d6b9dab-67e8-4f07-88f4-387bf7295802"
+      },
+      "concurrency": 12,
+      "wallMs": 18089.4089,
+      "maximumMainTickMs": 543.3873999999998,
+      "registeredDirectoryStatCalls": 44402,
+      "registeredDirectoryRealpathCalls": 44402,
+      "helperCommands": 296,
+      "gitObservations": 296,
+      "synchronousSpawnMs": 10045.522800000028,
+      "batchSizeHistogram": {},
+      "originalHandle": 52471,
+      "originalExit": 0
+    }
+  ],
+  "helperCommands": 1708,
+  "gitObservations": 2368,
+  "decision": "Whole-inventory serial Git composition reduces this mixture,while the tested same-ceiling event-turn microbatch regresses.The microbatch prototype is rejected;production unchanged;complete Config10s/5s remains unproven."
+}

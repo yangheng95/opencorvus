@@ -1,0 +1,27 @@
+{
+  "observedAt": "2026-10-20T21:20:59.381Z",
+  "runtime": "1.4.0",
+  "mode": "single",
+  "run": "single-a",
+  "owner": {
+    "pid": 64404,
+    "processInstanceID": "win32:639281280405181778",
+    "occurrenceID": "8ab32d1f-3d0a-49e6-a827-f5615fc1ef91"
+  },
+  "projects": 149,
+  "gitProjects": 148,
+  "nonGitProjects": 1,
+  "concurrency": 12,
+  "wallMs": 17990.633,
+  "mainMaxTickMs": 650.5755,
+  "statCalls": 44402,
+  "realpathCalls": 44402,
+  "live": {
+    "live": 0,
+    "owners": {}
+  },
+  "qualification": "Local full149 mixture only;actual per-project Git bytes/physical identities equal original;not full Config acceptance. Batch error/per-row nonempty stderr/ceiling generality not qualified;no production change,credentials or model calls",
+  "helperCommands": 296,
+  "batchSizeHistogram": {},
+  "completeOriginal": "single-a-result.json.gz"
+}
