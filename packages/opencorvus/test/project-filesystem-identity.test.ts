@@ -70,3 +70,54 @@ test("a later physical comparison observes the current replacement and its new h
   await fs.link(replacement, currentAlias)
   expect(await Project.sameFilesystemLocation(replacement, currentAlias)).toBe(true)
 })
+
+test("a real directory alias resolves its physical identity when inode metadata is unknown", async () => {
+  await using directory = await tmpdir()
+  const target = path.join(directory.path, "target")
+  const alias = path.join(directory.path, "alias")
+  await fs.mkdir(target)
+  await fs.symlink(target, alias, process.platform === "win32" ? "junction" : "dir")
+  const original = fs.stat
+  using _stat = spyOn(fs, "stat").mockImplementation((async (file, options) => {
+    const info = await original(file, options)
+    if (file === alias) Object.defineProperty(info, "ino", { value: typeof info.ino === "bigint" ? 0n : 0 })
+    return info
+  }) as typeof fs.stat)
+  expect(await Project.sameFilesystemLocation(target, alias)).toBe(true)
+})
+
+test("a required metadata read returns its original filesystem error", async () => {
+  await using directory = await tmpdir()
+  const source = path.join(directory.path, "source.txt")
+  const alias = path.join(directory.path, "alias.txt")
+  await fs.writeFile(source, "actual metadata error contract")
+  await fs.link(source, alias)
+  const failure = Object.assign(new Error("actual declared filesystem access failure"), { code: "EACCES" })
+  const original = fs.stat
+  using _stat = spyOn(fs, "stat").mockImplementation((async (file, options) => {
+    if (file === source) throw failure
+    return original(file, options)
+  }) as typeof fs.stat)
+  expect(await Project.sameFilesystemLocation(source, alias).catch((error) => error)).toBe(failure)
+})
+
+test("unknown metadata preserves the original required physical-path error", async () => {
+  await using directory = await tmpdir()
+  const source = path.join(directory.path, "source.txt")
+  const alias = path.join(directory.path, "alias.txt")
+  await fs.writeFile(source, "actual physical path error contract")
+  await fs.link(source, alias)
+  const originalStat = fs.stat
+  using _stat = spyOn(fs, "stat").mockImplementation((async (file, options) => {
+    const info = await originalStat(file, options)
+    Object.defineProperty(info, "ino", { value: typeof info.ino === "bigint" ? 0n : 0 })
+    return info
+  }) as typeof fs.stat)
+  const originalRealpath = fs.realpath
+  const failure = Object.assign(new Error("actual declared physical path access failure"), { code: "EACCES" })
+  using _realpath = spyOn(fs, "realpath").mockImplementation((async (file, options) => {
+    if (file === source) throw failure
+    return originalRealpath(file, options)
+  }) as typeof fs.realpath)
+  expect(await Project.sameFilesystemLocation(source, alias).catch((error) => error)).toBe(failure)
+})

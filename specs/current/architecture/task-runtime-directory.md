@@ -56,6 +56,16 @@ Discovery with a local `.git` bounds Git's automatic search at the parent
 directory through `GIT_CEILING_DIRECTORIES`. A damaged child repository therefore
 reports its own error while retaining Git's ordinary ownership checks.
 
+Ordinary Instance cache creation owns or joins the existing directory registration
+batch before publishing its pending Project discovery. That queue remains owned
+until the original discovery settles, so another batch owner cannot join a cached
+Promise whose discovery is parked behind its own queue. Ready cache reads retain
+their existing path. Normal provision and identity-only provision use the same
+factory; cancelled serving consumers retain their original abort boundary without
+cancelling shared discovery. An explicitly inherited durable registration for the
+exact physical directory continues through the original token, occurrence and
+generation checks. This boundary adds no lock, cache or durable fact.
+
 `Instance.withRetainedProjectIdentities` gives a multi-stage operation one
 explicit resource lifetime over its declared directories. Existing cache entries
 are synchronously reserved with the original non-serving leases; identity-only
@@ -78,11 +88,15 @@ or immutable Artifact conflicts fail the transaction; runtime schema discovery
 never expands the mutation surface.
 
 The physical-location predicate has one comparison implementation: normalized
-path, resolved physical path, then exact bigint device/inode identity. A complete
+path, then fresh exact bigint device/inode identity. When either identity is
+unknown (including an unavailable inode), it compares resolved physical paths.
+An available pair of exact identities determines the result directly; it does
+not require an additional path projection. Necessary filesystem observations
+map only ENOENT/ENOTDIR to unknown and propagate other original I/O errors. A complete
 registry lookup creates one lazy target observation for that scan while checking
 every row. Each public comparison and each initial/admitted discovery creates
 fresh observations; they are not retained across admission, requests or Instances.
-Missing-path and observable I/O error contracts remain unchanged.
+The predicate does not retain a second path or identity authority.
 
 The repair process must hold the exact cross-process Runtime Server ownership
 for the database. Mutable foreign-key owners use explicit domain mappings;

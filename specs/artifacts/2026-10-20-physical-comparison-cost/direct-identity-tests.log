@@ -1,0 +1,58 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\project-filesystem-identity.test.ts:
+(pass) discovers the exact independent Project while a wide-inode peer is closed for deletion [2819.12ms]
+(pass) recognizes two real hard-link paths as the same filesystem identity [725.57ms]
+(pass) a later physical comparison observes the current replacement and its new hard link [7.91ms]
+(pass) a real directory alias resolves its physical identity when inode metadata is unknown [5.77ms]
+(pass) a required metadata read returns its original filesystem error [4.69ms]
+(pass) unknown metadata preserves the original required physical-path error [5.18ms]
+
+test\project-git-discovery.test.ts:
+(pass) Git availability selects the explicit repository error and the ordinary directory identity [287.62ms]
+(pass) an existing damaged Git directory returns its explicit discovery error [430.78ms]
+(pass) a damaged local Git directory inside a valid parent repository returns its own discovery error [494.52ms]
+(pass) Git discovery resolves an unborn worktree with a separate metadata directory [1106.01ms]
+(skip) POSIX Git discovery preserves newline and trailing whitespace in repository paths
+(pass) Git discovery preserves the exact main, linked and aliased Project occurrence [1679.53ms]
+
+test\project-identity-convergence.test.ts:
+(pass) explicit Project identity convergence > lookup reports duplicate identity without mutation, then explicit repair converges owned references [1264.08ms]
+(pass) explicit Project identity convergence > a compound identity collision returns a typed conflict and rolls back every migrated row [584.95ms]
+(pass) explicit Project identity convergence > an admitted Workspace creation preserves its exact duplicate Project occurrence [655.07ms]
+(pass) explicit Project identity convergence > physical aliases resolve to the same duplicate worktree occurrence before marker writes [736.07ms]
+(pass) explicit Project identity convergence > a registered sandbox cannot bypass duplicate primary-worktree detection [651.84ms]
+(pass) explicit Project identity convergence > explicit convergence commits the canonical Project transaction [654.83ms]
+(pass) explicit Project identity convergence > an immutable Task process binding preserves the duplicate Project occurrence [709.37ms]
+(pass) explicit Project identity convergence > an embedded attachment identity is reported as a typed preservation conflict [706.70ms]
+(pass) explicit Project identity convergence > append-only permission evidence is preserved as an explicit repair conflict [856.78ms]
+(pass) explicit Project identity convergence > a durable pending publication keeps its original Project occurrence [577.00ms]
+(pass) explicit Project identity convergence > a durable Session prompt owner preserves its exact Project occurrence [569.25ms]
+(pass) explicit Project identity convergence > a canonical Session prompt owner remains authoritative while its duplicate Project converges [582.14ms]
+(pass) explicit Project identity convergence > the reviewed repair mapping exactly covers the application tables with Project identity columns [1.06ms]
+
+test\project-identity-retention.test.ts:
+(pass) one retained identity scope preserves nested owners and State through idle convergence and explicit refresh [167.55ms]
+(pass) a failed identity scope preserves its original error and releases every physical lease [255.05ms]
+(pass) outside work settles its own identity while the original scope retains its Project [259.77ms]
+(pass) declared cached identities belong to the scope before its first Project callback [239.44ms]
+
+test\project-registration-batch.test.ts:
+(pass) a cancelled batch settles its accepted registration and returns the original abort reason [244.28ms]
+(pass) an exclusive operation inside a registration batch returns its typed error and settles the queue [7.27ms]
+(pass) a fresh physical comparison observes a junction's current target after retargeting [4.30ms]
+(pass) a registration batch orders the same physical namespace through aliases and ancestor paths [365.73ms]
+(pass) a failed registration settles its peer and preserves the original error before a later batch [248.15ms]
+(pass) a retired registration context acquires the original queue after an independent current owner [28.61ms]
+(pass) a batch drains an accepted registration before releasing the original cross-process queue [6.55ms]
+(pass) a nested registration batch shares its original queue and returns its own ordered results [250.23ms]
+(pass) registration batches retain independent runtime-root queue ownership [9.86ms]
+
+1 tests skipped:
+(skip) POSIX Git discovery preserves newline and trailing whitespace in repository paths
+
+ 37 pass
+ 1 skip
+ 0 fail
+ 59 expect() calls
+Ran 38 tests across 5 files. [20.86s]

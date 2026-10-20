@@ -1,0 +1,52 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\config-global-project-validation.test.ts:
+(pass) a retained global writer settles its original transition after repeated projection failures [1831.87ms]
+(pass) one global generation projects every registered project's own configuration [2120.12ms]
+(pass) one global mutation retains its exact candidate identities through persistence and runtime convergence [2216.96ms]
+(pass) an invalid Project returns the candidate error and a corrected source accepts a full retry [2392.47ms]
+
+test\config-peer-convergence.test.ts:
+(pass) cross-process Config convergence > a stable generation parses the exact source snapshot that owns its revision [1542.93ms]
+(pass) cross-process Config convergence > a committed writer transition retains its exact generation until event settlement succeeds [894.67ms]
+(pass) cross-process Config convergence > a detached reader admitted by a writer settles before the next generation owner [943.97ms]
+(pass) cross-process Config convergence > a loaded backend settles a peer Project write and publishes its current projection [8502.40ms]
+(pass) cross-process Config convergence > a peer global write refreshes every loaded Project from the same canonical generation [8862.22ms]
+(pass) cross-process Config convergence > a global-only backend publishes the canonical settlement event after a peer write [3269.30ms]
+(pass) cross-process Config convergence > a Project activated inside a global commit reads the committed generation [1142.69ms]
+
+test\config-registration-batch.test.ts:
+367 |     let info
+368 |     try {
+369 |       info = await stat(directory)
+370 |     } catch (error) {
+371 |       if (!isMissingPathError(error)) throw error
+372 |       throw new DirectoryIntegrityError({
+                      ^
+ProjectDirectoryIntegrityError: ProjectDirectoryIntegrityError: Project directory does not exist: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-1BEQIG\test-83296-khUmw1\fixtures\memory-ebDutn
+ data: {
+  directory: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-1BEQIG\\test-83296-khUmw1\\fixtures\\memory-ebDutn",
+  reason: "missing",
+  message: "Project directory does not exist: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-1BEQIG\\test-83296-khUmw1\\fixtures\\memory-ebDutn",
+},
+
+      at assertDirectoryIntegrity (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\project.ts:372:17)
+      at fromDirectory (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\project.ts:653:11)
+      at stage (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\open-lifecycle.ts:38:28)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:172:73
+      at processTicksAndRejections (unknown:7:39)
+(fail) a global cold candidate completes both independent admitted Project identities together [2068.78ms]
+
+test\config-worktree-boundary.test.ts:
+(pass) a standalone snapshot and its ordinary child Project use the same independent boundary [335.22ms]
+(pass) a global candidate projects its admitted child boundary into both runtime transition snapshots [319.97ms]
+(pass) a snapshot of a damaged local Git directory reports its own typed discovery failure [173.60ms]
+(pass) snapshot discovery maps Git availability to the repository error and the valid ordinary configuration [49.04ms]
+(pass) main, linked and aliased snapshots read the selected sandbox's own source [540.88ms]
+(skip) POSIX snapshots preserve the repository's exact newline and whitespace boundary
+
+ 16 pass
+ 1 skip
+ 1 fail
+ 43 expect() calls
+Ran 18 tests across 4 files. [39.89s]

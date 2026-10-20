@@ -1,0 +1,93 @@
+$ bun script/run-tests.ts test/project-filesystem-identity.test.ts test/project-registration-batch.test.ts test/project-git-discovery.test.ts test/project-identity-convergence.test.ts test/config-worktree-boundary.test.ts
+[1/5] START test/project-filesystem-identity.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) discovers the exact independent Project while a wide-inode peer is closed for deletion [3555.25ms]
+(pass) recognizes two real hard-link paths as the same filesystem identity [583.35ms]
+(pass) a later physical comparison observes the current replacement and its new hard link [6.89ms]
+(pass) a real directory alias resolves its physical identity when inode metadata is unknown [3.97ms]
+(pass) a required metadata read returns its original filesystem error [4.27ms]
+(pass) unknown metadata preserves the original required physical-path error [4.26ms]
+
+ 6 pass
+ 0 fail
+ 8 expect() calls
+Ran 6 tests across 1 file. [6.81s]
+[1/5] DONE test/project-filesystem-identity.test.ts exit=0 duration=7.44s
+[2/5] START test/project-registration-batch.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a cancelled batch settles its accepted registration and returns the original abort reason [263.54ms]
+(pass) an exclusive operation inside a registration batch returns its typed error and settles the queue [7.92ms]
+(pass) a fresh physical comparison observes a junction's current target after retargeting [4.84ms]
+(pass) a registration batch orders the same physical namespace through aliases and ancestor paths [305.94ms]
+(pass) a failed registration settles its peer and preserves the original error before a later batch [241.24ms]
+(pass) a retired registration context acquires the original queue after an independent current owner [31.58ms]
+(pass) a batch drains an accepted registration before releasing the original cross-process queue [7.85ms]
+(pass) a nested registration batch shares its original queue and returns its own ordered results [233.61ms]
+(pass) registration batches retain independent runtime-root queue ownership [11.19ms]
+
+ 9 pass
+ 0 fail
+ 9 expect() calls
+Ran 9 tests across 1 file. [2.16s]
+[2/5] DONE test/project-registration-batch.test.ts exit=0 duration=2.25s
+[3/5] START test/project-git-discovery.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Git availability selects the explicit repository error and the ordinary directory identity [331.13ms]
+(pass) an existing damaged Git directory returns its explicit discovery error [375.53ms]
+(pass) a damaged local Git directory inside a valid parent repository returns its own discovery error [431.24ms]
+(pass) Git discovery resolves an unborn worktree with a separate metadata directory [1009.38ms]
+(skip) POSIX Git discovery preserves newline and trailing whitespace in repository paths
+(pass) Git discovery preserves the exact main, linked and aliased Project occurrence [1767.09ms]
+
+ 5 pass
+ 1 skip
+ 0 fail
+ 14 expect() calls
+Ran 6 tests across 1 file. [5.17s]
+[3/5] DONE test/project-git-discovery.test.ts exit=0 duration=5.27s
+[4/5] START test/project-identity-convergence.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) explicit Project identity convergence > lookup reports duplicate identity without mutation, then explicit repair converges owned references [1396.76ms]
+(pass) explicit Project identity convergence > a compound identity collision returns a typed conflict and rolls back every migrated row [720.94ms]
+(pass) explicit Project identity convergence > an admitted Workspace creation preserves its exact duplicate Project occurrence [937.81ms]
+(pass) explicit Project identity convergence > physical aliases resolve to the same duplicate worktree occurrence before marker writes [734.48ms]
+(pass) explicit Project identity convergence > a registered sandbox cannot bypass duplicate primary-worktree detection [578.15ms]
+(pass) explicit Project identity convergence > explicit convergence commits the canonical Project transaction [613.92ms]
+(pass) explicit Project identity convergence > an immutable Task process binding preserves the duplicate Project occurrence [664.01ms]
+(pass) explicit Project identity convergence > an embedded attachment identity is reported as a typed preservation conflict [567.39ms]
+(pass) explicit Project identity convergence > append-only permission evidence is preserved as an explicit repair conflict [672.91ms]
+(pass) explicit Project identity convergence > a durable pending publication keeps its original Project occurrence [566.39ms]
+(pass) explicit Project identity convergence > a durable Session prompt owner preserves its exact Project occurrence [640.51ms]
+(pass) explicit Project identity convergence > a canonical Session prompt owner remains authoritative while its duplicate Project converges [591.49ms]
+(pass) explicit Project identity convergence > the reviewed repair mapping exactly covers the application tables with Project identity columns [1.31ms]
+
+ 13 pass
+ 0 fail
+ 14 expect() calls
+Ran 13 tests across 1 file. [9.46s]
+[4/5] DONE test/project-identity-convergence.test.ts exit=0 duration=9.56s
+[5/5] START test/config-worktree-boundary.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a standalone snapshot and its ordinary child Project use the same independent boundary [350.80ms]
+(pass) a global candidate projects its admitted child boundary into both runtime transition snapshots [2156.69ms]
+(pass) a snapshot of a damaged local Git directory reports its own typed discovery failure [368.91ms]
+(pass) snapshot discovery maps Git availability to the repository error and the valid ordinary configuration [65.06ms]
+(pass) main, linked and aliased snapshots read the selected sandbox's own source [943.57ms]
+(skip) POSIX snapshots preserve the repository's exact newline and whitespace boundary
+
+ 5 pass
+ 1 skip
+ 0 fail
+ 9 expect() calls
+Ran 6 tests across 1 file. [5.02s]
+[5/5] DONE test/config-worktree-boundary.test.ts exit=0 duration=5.32s

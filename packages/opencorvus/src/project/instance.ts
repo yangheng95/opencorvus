@@ -1,6 +1,7 @@
 import { Log } from "@/util/log"
 import { Context as RuntimeContext } from "../util/context"
 import { Project } from "./project"
+import { ProjectDirectoryAdmission } from "./directory-admission"
 import { State } from "./state"
 import { iife } from "@/util/iife"
 import { GlobalBus } from "@/bus/global"
@@ -158,7 +159,42 @@ export interface InstanceCacheConvergence {
   failures?: Array<{ directory: string; message: string }>
 }
 
-function getOrCreateCacheEntry(directory: string, key: string): CacheEntry {
+async function getOrCreateCacheEntry(directory: string, key: string): Promise<CacheEntry> {
+  const existing = cache.get(key)
+  if (existing) {
+    retainProjectIdentity(key, existing)
+    return existing
+  }
+  const create = () => {
+    assertNotDisposing(directory)
+    assertInheritedLeaseOpen(leaseContext.tryUse(), "create an instance")
+    const entry = createDiscoveredCacheEntry(directory, key)
+    retainProjectIdentity(key, entry)
+    return entry
+  }
+  const inherited = ProjectDirectoryAdmission.current()
+  if (
+    inherited?.kind === "registration" &&
+    inherited.directoryKey === (await ProjectDirectoryAdmission.key(directory))
+  ) {
+    return create()
+  }
+  const [outcome] = await ProjectDirectoryAdmission.registrationBatch({
+    items: [directory],
+    concurrency: 1,
+    run: async () => {
+      const entry = create()
+      // Publish a pending discovery only under the directory queue that can
+      // complete it, so another batch owner can safely join this exact entry.
+      await entry.context
+      return entry
+    },
+  })
+  if (outcome!.status === "rejected") throw outcome!.reason
+  return outcome!.value
+}
+
+function createDiscoveredCacheEntry(directory: string, key: string): CacheEntry {
   const existing = cache.get(key)
   if (existing) return existing
   Log.Default.info("creating instance", { directory })
@@ -1426,7 +1462,7 @@ export const Instance: InstanceApi = {
     for (;;) {
       input.signal?.throwIfAborted()
       assertNotDisposing(directory)
-      const entry = getOrCreateCacheEntry(directory, key)
+      const entry = await awaitWithAbort(getOrCreateCacheEntry(directory, key), input.signal)
       entry.lastAccess = ++accessSequence
       // Project discovery is the authority for this exact entry. Await it
       // before capability preflight so a deterministic discovery failure is
@@ -1577,7 +1613,7 @@ export const Instance: InstanceApi = {
     }
     for (;;) {
       assertNotDisposing(directory)
-      const entry = getOrCreateCacheEntry(directory, key)
+      const entry = await getOrCreateCacheEntry(directory, key)
       retainProjectIdentity(key, entry)
       entry.lastAccess = ++accessSequence
       const ctx = await entry.context

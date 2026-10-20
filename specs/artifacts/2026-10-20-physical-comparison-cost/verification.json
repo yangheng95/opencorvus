@@ -1,0 +1,61 @@
+{
+  "identityAndConfig": {
+    "originalHandle": 32466,
+    "exit": 0,
+    "files": 9,
+    "passed": 54,
+    "skipped": 2,
+    "assertions": 103
+  },
+  "lifecycle": {
+    "originalHandle": 24523,
+    "exit": 1,
+    "explanation": "10 files passed; old alias race expectation failed because fresh queue discovery now makes both aliases read the same single durable owner. Corrected positive contract and reran that file with the new late-admission contracts and background settlement."
+  },
+  "finalQueueAndBackground": {
+    "originalHandle": 91331,
+    "exit": 0,
+    "files": 4,
+    "passed": 33,
+    "assertions": 87
+  },
+  "typecheck": {
+    "originalHandle": 96292,
+    "exit": 0
+  },
+  "rootReproduction": {
+    "before": "Official original2s held-batch identity timed out; outer queue release allowed independent caller to finish",
+    "after": "Real queue, exact inherited durable registration and late process-admission error contracts pass"
+  },
+  "testCorrection": "Direct multi-file bun test43578 failed on a deleted previous-file fixture. Existing repository runner isolates each file in a physically joined process. Original nine files passed there; no production directory skipping or test compatibility workaround.",
+  "screenshots": [
+    "01-before-settings.png",
+    "02-before-providers-writing.png",
+    "03-before-providers-restored.png",
+    "04-before-ask-restored.png",
+    "05-after-settings.png",
+    "06-after-providers-writing.png",
+    "07-after-providers-restored.png",
+    "08-after-ask-restored.png",
+    "09-repeat-providers-writing.png",
+    "10-after-failed-scope.png",
+    "11-fixed-original-restored.png",
+    "12-fixed-providers-writing.png",
+    "13-fixed-providers-restored.png",
+    "14-fixed-ask-restored.png",
+    "15-fixed-repeat-writing.png",
+    "16-fixed-repeat-restored.png",
+    "17-fixed-final-ask.png"
+  ],
+  "ui": "Current formal472; product UI unchanged. Actual IAB tabs28/29/30 manually viewed; no UI automated tests.",
+  "limits": "Original10s/5s not achieved unless explicitly true in performance.json; local matrix is not whole config acceptance.",
+  "finalCurrentSource": {
+    "originalHandle": 10113,
+    "exit": 0,
+    "files": 18,
+    "passed": 112,
+    "skipped": 2,
+    "assertions": 236,
+    "command": "Repository official per-file native isolated runner; selected identity, Config, Instance, managed Task and background contracts"
+  }
+}

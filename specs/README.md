@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [配置连续保存与实例初始化](records/2026-10/2026-10-20-physical-comparison-cost.md)：共享目录队列等待环修复、物理读取优化及[17张实图与失败→通过证据](artifacts/2026-10-20-physical-comparison-cost/README.md)。
+
 - [父会话与成员并发阅读](records/2026-10/2026-10-20-parent-member-render-continuity.md)：Sources、Rendering生命周期及[21张实图与审计器修复](artifacts/2026-10-20-parent-member-render-continuity/README.md)。
 
 - [首页Goal的确认边界](records/2026-10/2026-10-20-goal-confirmation-boundary.md)：[10张实图及两个真实有限目标](artifacts/2026-10-20-goal-confirmation-boundary/README.md)，表单确认后才创建会话。

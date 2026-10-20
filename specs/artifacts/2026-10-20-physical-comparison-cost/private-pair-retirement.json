@@ -1,0 +1,25 @@
+{
+  "scopes": [
+    {
+      "scope": "physical-comparison-cost-474-before",
+      "originalHandle": 40950,
+      "exit": 0
+    },
+    {
+      "scope": "physical-comparison-cost-474-after",
+      "originalHandle": 29596,
+      "exit": 1
+    },
+    {
+      "scope": "physical-comparison-cost-474-fixed",
+      "originalHandle": 57855,
+      "exit": 0
+    }
+  ],
+  "runtimePairs": "Complete pair retired after original native physical/output/request settlement",
+  "privatePair": "Complete auth/models pair retired after actual-value scan",
+  "sourceMetadata": "Unchanged",
+  "refreshOrExchange": "Not performed",
+  "scannedFiles": 233,
+  "observedAt": "2026-10-20T13:08:12.386Z"
+}

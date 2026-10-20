@@ -1,0 +1,47 @@
+$ bun script/run-tests.ts test/instance-directory-lock-order.test.ts
+[1/1] START test/instance-directory-lock-order.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+40 |   } finally {
+41 |     publishHeld()
+42 |     independent = await withTimeout(outside, 10_000, "independent identity physical settlement")
+43 |   }
+44 |   const identity = { id: registered.project.id, generation: registered.generation }
+45 |   expect({ outcomes, independent }).toEqual({ outcomes: [{ status: "fulfilled", value: identity }], independent: identity })
+                                         ^
+error: expect(received).toEqual(expected)
+
+  {
+    "independent": {
+      "generation": "79e5a4ce-757b-47a3-9612-328f139f6ea9",
+      "id": "prj_h7Uj8dcGPY7Jw3kI3vey",
+    },
+    "outcomes": [
+      {
+-       "status": "fulfilled",
+-       "value": {
+-         "generation": "79e5a4ce-757b-47a3-9612-328f139f6ea9",
+-         "id": "prj_h7Uj8dcGPY7Jw3kI3vey",
+-       },
++       "reason": [AwaitTimeoutError: held registration batch identity timed out after 2000ms],
++       "status": "rejected",
+      },
+    ],
+  }
+
+- Expected  - 5
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\instance-directory-lock-order.test.ts:45:37)
+(fail) an independent instance request and a held registration batch settle the same exact Project [3565.03ms]
+
+ 0 pass
+ 1 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [5.74s]
+[1/1] DONE test/instance-directory-lock-order.test.ts exit=1 duration=6.31s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\instance-directory-lock-order.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\instance-directory-lock-order.test.ts
+error: script "test" exited with code 1

@@ -1,0 +1,297 @@
+$ bun script/run-tests.ts test/project-filesystem-identity.test.ts test/project-registration-batch.test.ts test/project-git-discovery.test.ts test/project-identity-convergence.test.ts test/project-identity-retention.test.ts test/config-global-project-validation.test.ts test/config-registration-batch.test.ts test/config-worktree-boundary.test.ts test/config-peer-convergence.test.ts test/instance-directory-lock-order.test.ts test/project-instance-lock-liveness.test.ts test/project-instance-capability-refresh.test.ts test/instance-preflight-catalog-order.test.ts test/instance-config-lifecycle-order.test.ts test/instance-nested-provide-during-preparation.test.ts test/session-execution-authority-managed-worktree.test.ts test/instance-background-shutdown.test.ts test/instance-background-work.test.ts
+[1/18] START test/project-filesystem-identity.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) discovers the exact independent Project while a wide-inode peer is closed for deletion [3791.06ms]
+(pass) recognizes two real hard-link paths as the same filesystem identity [752.45ms]
+(pass) a later physical comparison observes the current replacement and its new hard link [6.23ms]
+(pass) a real directory alias resolves its physical identity when inode metadata is unknown [3.77ms]
+(pass) a required metadata read returns its original filesystem error [4.16ms]
+(pass) unknown metadata preserves the original required physical-path error [4.69ms]
+
+ 6 pass
+ 0 fail
+ 8 expect() calls
+Ran 6 tests across 1 file. [7.11s]
+[1/18] DONE test/project-filesystem-identity.test.ts exit=0 duration=7.60s
+[2/18] START test/project-registration-batch.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a cancelled batch settles its accepted registration and returns the original abort reason [264.80ms]
+(pass) an exclusive operation inside a registration batch returns its typed error and settles the queue [7.89ms]
+(pass) a fresh physical comparison observes a junction's current target after retargeting [5.47ms]
+(pass) a registration batch orders the same physical namespace through aliases and ancestor paths [315.17ms]
+(pass) a failed registration settles its peer and preserves the original error before a later batch [242.85ms]
+(pass) a retired registration context acquires the original queue after an independent current owner [31.83ms]
+(pass) a batch drains an accepted registration before releasing the original cross-process queue [9.71ms]
+(pass) a nested registration batch shares its original queue and returns its own ordered results [284.60ms]
+(pass) registration batches retain independent runtime-root queue ownership [22.40ms]
+
+ 9 pass
+ 0 fail
+ 9 expect() calls
+Ran 9 tests across 1 file. [2.25s]
+[2/18] DONE test/project-registration-batch.test.ts exit=0 duration=2.35s
+[3/18] START test/project-git-discovery.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Git availability selects the explicit repository error and the ordinary directory identity [349.14ms]
+(pass) an existing damaged Git directory returns its explicit discovery error [377.77ms]
+(pass) a damaged local Git directory inside a valid parent repository returns its own discovery error [528.76ms]
+(pass) Git discovery resolves an unborn worktree with a separate metadata directory [1146.44ms]
+(skip) POSIX Git discovery preserves newline and trailing whitespace in repository paths
+(pass) Git discovery preserves the exact main, linked and aliased Project occurrence [1870.22ms]
+
+ 5 pass
+ 1 skip
+ 0 fail
+ 14 expect() calls
+Ran 6 tests across 1 file. [5.43s]
+[3/18] DONE test/project-git-discovery.test.ts exit=0 duration=5.53s
+[4/18] START test/project-identity-convergence.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) explicit Project identity convergence > lookup reports duplicate identity without mutation, then explicit repair converges owned references [1795.14ms]
+(pass) explicit Project identity convergence > a compound identity collision returns a typed conflict and rolls back every migrated row [605.38ms]
+(pass) explicit Project identity convergence > an admitted Workspace creation preserves its exact duplicate Project occurrence [561.10ms]
+(pass) explicit Project identity convergence > physical aliases resolve to the same duplicate worktree occurrence before marker writes [876.05ms]
+(pass) explicit Project identity convergence > a registered sandbox cannot bypass duplicate primary-worktree detection [623.81ms]
+(pass) explicit Project identity convergence > explicit convergence commits the canonical Project transaction [582.96ms]
+(pass) explicit Project identity convergence > an immutable Task process binding preserves the duplicate Project occurrence [609.77ms]
+(pass) explicit Project identity convergence > an embedded attachment identity is reported as a typed preservation conflict [659.33ms]
+(pass) explicit Project identity convergence > append-only permission evidence is preserved as an explicit repair conflict [572.19ms]
+(pass) explicit Project identity convergence > a durable pending publication keeps its original Project occurrence [676.77ms]
+(pass) explicit Project identity convergence > a durable Session prompt owner preserves its exact Project occurrence [658.42ms]
+(pass) explicit Project identity convergence > a canonical Session prompt owner remains authoritative while its duplicate Project converges [791.81ms]
+(pass) explicit Project identity convergence > the reviewed repair mapping exactly covers the application tables with Project identity columns [1.09ms]
+
+ 13 pass
+ 0 fail
+ 14 expect() calls
+Ran 13 tests across 1 file. [9.75s]
+[4/18] DONE test/project-identity-convergence.test.ts exit=0 duration=9.84s
+[5/18] START test/project-identity-retention.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) one retained identity scope preserves nested owners and State through idle convergence and explicit refresh [372.06ms]
+(pass) a failed identity scope preserves its original error and releases every physical lease [245.48ms]
+(pass) outside work settles its own identity while the original scope retains its Project [280.42ms]
+(pass) declared cached identities belong to the scope before its first Project callback [307.97ms]
+
+ 4 pass
+ 0 fail
+ 14 expect() calls
+Ran 4 tests across 1 file. [2.55s]
+[5/18] DONE test/project-identity-retention.test.ts exit=0 duration=2.65s
+[6/18] START test/config-global-project-validation.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a retained global writer settles its original transition after repeated projection failures [1916.43ms]
+(pass) one global generation projects every registered project's own configuration [2221.10ms]
+(pass) one global mutation retains its exact candidate identities through persistence and runtime convergence [2062.78ms]
+(pass) an invalid Project returns the candidate error and a corrected source accepts a full retry [2199.70ms]
+
+ 4 pass
+ 0 fail
+ 26 expect() calls
+Ran 4 tests across 1 file. [10.50s]
+[6/18] DONE test/config-global-project-validation.test.ts exit=0 duration=10.61s
+[7/18] START test/config-registration-batch.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a global cold candidate completes both independent admitted Project identities together [3361.06ms]
+
+ 1 pass
+ 0 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [4.08s]
+[7/18] DONE test/config-registration-batch.test.ts exit=0 duration=4.20s
+[8/18] START test/config-worktree-boundary.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a standalone snapshot and its ordinary child Project use the same independent boundary [342.60ms]
+(pass) a global candidate projects its admitted child boundary into both runtime transition snapshots [1024.40ms]
+(pass) a snapshot of a damaged local Git directory reports its own typed discovery failure [205.63ms]
+(pass) snapshot discovery maps Git availability to the repository error and the valid ordinary configuration [55.17ms]
+(pass) main, linked and aliased snapshots read the selected sandbox's own source [450.98ms]
+(skip) POSIX snapshots preserve the repository's exact newline and whitespace boundary
+
+ 5 pass
+ 1 skip
+ 0 fail
+ 9 expect() calls
+Ran 6 tests across 1 file. [3.12s]
+[8/18] DONE test/config-worktree-boundary.test.ts exit=0 duration=3.24s
+[9/18] START test/config-peer-convergence.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) cross-process Config convergence > a stable generation parses the exact source snapshot that owns its revision [1614.43ms]
+(pass) cross-process Config convergence > a committed writer transition retains its exact generation until event settlement succeeds [1011.10ms]
+(pass) cross-process Config convergence > a detached reader admitted by a writer settles before the next generation owner [1083.91ms]
+(pass) cross-process Config convergence > a loaded backend settles a peer Project write and publishes its current projection [8682.23ms]
+(pass) cross-process Config convergence > a peer global write refreshes every loaded Project from the same canonical generation [9002.73ms]
+(pass) cross-process Config convergence > a global-only backend publishes the canonical settlement event after a peer write [3207.65ms]
+(pass) cross-process Config convergence > a Project activated inside a global commit reads the committed generation [1140.56ms]
+
+ 7 pass
+ 0 fail
+ 8 expect() calls
+Ran 7 tests across 1 file. [26.82s]
+[9/18] DONE test/config-peer-convergence.test.ts exit=0 duration=26.93s
+[10/18] START test/instance-directory-lock-order.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) an independent instance request and a held registration batch settle the same exact Project [1635.23ms]
+(pass) queued discovery returns the current process admission error after settlement closes entry [631.26ms]
+(pass) an exact durable registration discovers its Project while another batch owns the queue [2299.35ms]
+
+ 3 pass
+ 0 fail
+ 3 expect() calls
+Ran 3 tests across 1 file. [5.30s]
+[10/18] DONE test/instance-directory-lock-order.test.ts exit=0 duration=5.42s
+[11/18] START test/project-instance-lock-liveness.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) admits every concurrent first admission while one of them holds a long caller function [426.03ms]
+(pass) runs a new initializer to completion while another serving lease stays busy [256.82ms]
+(pass) performs newly-required exclusive preparation from the queue without head-jumping [638.81ms]
+(pass) runs one shared initializer exactly once across concurrent first admissions [268.56ms]
+(pass) commits two disjoint Project registrations captured before either enters the shared queue [266.55ms]
+(pass) concurrent aliases read the same currently admitted physical Project owner [267.59ms]
+(pass) prepares a nested same-key provide with a new initializer while another lease serves [254.63ms]
+(pass) settles concurrent open, dispose, and serve on one Project without deadlock [353.08ms]
+(pass) completes a pending disposal under a continuous admission stream [335.63ms]
+
+ 9 pass
+ 0 fail
+ 20 expect() calls
+Ran 9 tests across 1 file. [4.06s]
+[11/18] DONE test/project-instance-lock-liveness.test.ts exit=0 duration=4.18s
+[12/18] START test/project-instance-capability-refresh.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a non-Git to Git refresh revalidates capability authority before admitting a peer lease [990.00ms]
+
+ 1 pass
+ 0 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [1.69s]
+[12/18] DONE test/project-instance-capability-refresh.test.ts exit=0 duration=1.79s
+[13/18] START test/instance-preflight-catalog-order.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a catalog owner reads the current project while a new capability preflight awaits that owner [1435.82ms]
+
+ 1 pass
+ 0 fail
+ 2 expect() calls
+Ran 1 test across 1 file. [2.24s]
+[13/18] DONE test/instance-preflight-catalog-order.test.ts exit=0 duration=2.35s
+[14/18] START test/instance-config-lifecycle-order.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a global writer and a Config-reading initializer return the committed generation [1982.41ms]
+(pass) a Git-shape refresh and its catalog owner both serve the current Project [752.96ms]
+(pass) a refresh drain settles serving work and the catalog owner's identity read [1489.45ms]
+(pass) a refresh drain settles serving work and the catalog owner's active read [1558.99ms]
+(pass) a refresh drain settles serving work and the catalog owner's iteration read [1583.38ms]
+(pass) a refresh drain settles serving work and the catalog owner's descendant read [1668.74ms]
+(pass) a dispose drain settles serving work and the catalog owner's identity read [1515.13ms]
+(pass) a dispose drain settles serving work and the catalog owner's active read [1145.96ms]
+(pass) a dispose drain settles serving work and the catalog owner's iteration read [1192.92ms]
+(pass) a dispose drain settles serving work and the catalog owner's descendant read [1239.64ms]
+(pass) a catalog owner's identity read observes the state created after an entered teardown settles [1482.41ms]
+(pass) late catalog work reads the value committed by the next actual owner [419.75ms]
+(pass) an accepted child projection reads its owner's generation before the next catalog writer [382.79ms]
+(pass) a descendant callback reuses the catalog lease while its ancestor still owns it [505.31ms]
+(pass) preparation retains its lifecycle turn until an accepted child reads the prepared context [1854.39ms]
+(pass) a catalog owner receives the current project admission error from every identity reader [1726.14ms]
+(pass) a catalog owner receives the current process admission error from every identity reader [1651.68ms]
+
+ 17 pass
+ 0 fail
+ 22 expect() calls
+Ran 17 tests across 1 file. [23.22s]
+[14/18] DONE test/instance-config-lifecycle-order.test.ts exit=0 duration=23.38s
+[15/18] START test/instance-nested-provide-during-preparation.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) instance re-entry during its own context preparation > a project-scoped read inside the initializer runs in the project's own context [1741.63ms]
+(pass) instance re-entry during its own context preparation > nested reads see the same project identity the initializer is preparing [1247.31ms]
+(pass) instance re-entry during its own context preparation > project-open terminal profile settlement returns one durable resolved default profile [1347.14ms]
+(pass) instance re-entry during its own context preparation > production bootstrap completes a typed terminal-profile degradation and serves the Project [1780.90ms]
+(pass) instance re-entry during its own context preparation > production bootstrap fails an unexpected terminal settlement and rolls its Instance back [2006.75ms]
+
+ 5 pass
+ 0 fail
+ 16 expect() calls
+Ran 5 tests across 1 file. [10.09s]
+[15/18] DONE test/instance-nested-provide-during-preparation.test.ts exit=0 duration=10.29s
+[16/18] START test/session-execution-authority-managed-worktree.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) uses the exact managed-worktree Session directory for pending, durable, and file-effect authority [4850.18ms]
+
+ 1 pass
+ 0 fail
+ 5 expect() calls
+Ran 1 test across 1 file. [6.15s]
+[16/18] DONE test/session-execution-authority-managed-worktree.test.ts exit=0 duration=6.25s
+[17/18] START test/instance-background-shutdown.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a process gate cancels background work and retains the foreground owner until retry settlement [1529.12ms]
+(pass) listener shutdown cancels 1 serial Project owners and joins physical cleanup [1902.68ms]
+(pass) listener shutdown cancels 2 serial Project owners and joins physical cleanup [2123.10ms]
+(pass) listener shutdown cancels 2 parallel Project owners and joins physical cleanup [2173.11ms]
+
+ 4 pass
+ 0 fail
+ 23 expect() calls
+Ran 4 tests across 1 file. [9.41s]
+[17/18] DONE test/instance-background-shutdown.test.ts exit=0 duration=9.59s
+[18/18] START test/instance-background-work.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) instance background work > retains the source fault diagnostic after owner cancellation and joins physical cleanup [1642.40ms]
+(pass) instance background work > retains the same text fault diagnostic after owner cancellation and joins physical cleanup [1056.89ms]
+(pass) instance background work > retains the instance admission fault diagnostic after owner cancellation and joins physical cleanup [899.23ms]
+(pass) instance background work > retains the database admission fault diagnostic after owner cancellation and joins physical cleanup [919.23ms]
+(pass) instance background work > retains the mixed fault diagnostic after owner cancellation and joins physical cleanup [891.76ms]
+(pass) instance background work > retains the cleanup fault diagnostic after owner cancellation and joins physical cleanup [955.35ms]
+(pass) instance background work > settles exact external owner reason %s after complete unwind [953.97ms]
+(pass) instance background work > settles exact external owner reason %s after complete unwind [946.42ms]
+(pass) instance background work > settles exact external owner reason external primitive after complete unwind [949.19ms]
+(pass) instance background work > global disposal cancels scheduled owners across projects before draining their leases [2901.94ms]
+(pass) instance background work > settles nested background registration from a abort listener after teardown closes admission [858.22ms]
+(pass) instance background work > settles nested background registration from a draining owner after teardown closes admission [964.40ms]
+(pass) instance background work > keeps an admitted background lease valid through its complete cancellation settlement [972.50ms]
+(pass) instance background work > returns a settled completion when teardown races background admission [1051.75ms]
+(pass) instance background work > background work keeps a valid instance context for as long as it runs [1110.69ms]
+(pass) instance background work > instance disposal cancels in-flight background work instead of waiting for it [950.42ms]
+(pass) instance background work > work scheduled and completed before disposal leaves nothing for disposal to cancel [1024.12ms]
+
+ 17 pass
+ 0 fail
+ 41 expect() calls
+Ran 17 tests across 1 file. [19.79s]
+[18/18] DONE test/instance-background-work.test.ts exit=0 duration=19.90s

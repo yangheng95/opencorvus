@@ -1,0 +1,412 @@
+{
+  "thresholdStatus": "Original cold10s/restore5s retained; any false criterion remains unmet.",
+  "results": [
+    {
+      "scope": "physical-comparison-cost-474-before",
+      "label": "before",
+      "history": {
+        "schema": {
+          "user_version": 3
+        },
+        "projects": {
+          "count": 143
+        },
+        "mode": "Direct readonly SQLite; full history retained; no production initializer"
+      },
+      "writer": {
+        "at": "2026-10-20T12:33:30.814Z",
+        "endedAt": "2026-10-20T12:34:08.058Z",
+        "phase": "candidate",
+        "port": 18799,
+        "occurrence": "physical-comparison-cost-474-before-5880fa37-f4b6-4545-9842-9e769242a2e7",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 20028.4108,
+        "restoreMs": 17209.7454,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "reader": {
+        "occurrence": "physical-comparison-cost-474-before-5880fa37-f4b6-4545-9842-9e769242a2e7",
+        "kind": "Public HTTP positive contracts concurrent with original canonical save; this is not browser or visual acceptance",
+        "results": [
+          {
+            "path": "/config",
+            "startedAt": "2026-10-20T12:33:30.876Z",
+            "endedAt": "2026-10-20T12:33:50.815Z",
+            "ms": 19937.9068,
+            "status": 200,
+            "permissionMode": "ask"
+          },
+          {
+            "path": "/provider",
+            "startedAt": "2026-10-20T12:33:30.879Z",
+            "endedAt": "2026-10-20T12:33:51.260Z",
+            "ms": 20381.175600000002,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/global/providers",
+            "startedAt": "2026-10-20T12:33:30.879Z",
+            "endedAt": "2026-10-20T12:33:51.021Z",
+            "ms": 20141.6691,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/session/ses_hmDA8QAuQ64GddtLGajS",
+            "startedAt": "2026-10-20T12:33:30.880Z",
+            "endedAt": "2026-10-20T12:33:30.888Z",
+            "ms": 8.161099999999351,
+            "status": 200,
+            "sessionID": "ses_hmDA8QAuQ64GddtLGajS"
+          }
+        ]
+      },
+      "criteria": {
+        "coldMaximumMs": 10000,
+        "coldPass": false,
+        "restoreMaximumMs": 5000,
+        "restorePass": false,
+        "concurrentReadMaximumMs": 20000,
+        "concurrentReadPass": false
+      }
+    },
+    {
+      "scope": "physical-comparison-cost-474-after",
+      "label": "after",
+      "history": {
+        "schema": {
+          "user_version": 3
+        },
+        "projects": {
+          "count": 144
+        },
+        "mode": "Direct readonly SQLite; full history retained; no production initializer"
+      },
+      "writer": {
+        "at": "2026-10-20T12:41:24.266Z",
+        "endedAt": "2026-10-20T12:41:57.459Z",
+        "phase": "candidate",
+        "port": 18801,
+        "occurrence": "physical-comparison-cost-474-after-12b9f254-ccb2-4929-ac7d-54391d2b0ebc",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 16658.95,
+        "restoreMs": 16527.4223,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "reader": {
+        "occurrence": "physical-comparison-cost-474-after-12b9f254-ccb2-4929-ac7d-54391d2b0ebc",
+        "kind": "Public HTTP positive contracts concurrent with original canonical save; this is not browser or visual acceptance",
+        "results": [
+          {
+            "path": "/config",
+            "startedAt": "2026-10-20T12:41:24.345Z",
+            "endedAt": "2026-10-20T12:41:40.896Z",
+            "ms": 16549.604400000004,
+            "status": 200,
+            "permissionMode": "ask"
+          },
+          {
+            "path": "/provider",
+            "startedAt": "2026-10-20T12:41:24.349Z",
+            "endedAt": "2026-10-20T12:41:41.352Z",
+            "ms": 17003.6155,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/global/providers",
+            "startedAt": "2026-10-20T12:41:24.349Z",
+            "endedAt": "2026-10-20T12:41:41.111Z",
+            "ms": 16761.7581,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/session/ses_hs21zPjdCe02kK4ukBdo",
+            "startedAt": "2026-10-20T12:41:24.350Z",
+            "endedAt": "2026-10-20T12:41:24.360Z",
+            "ms": 9.54359999999906,
+            "status": 200,
+            "sessionID": "ses_hs21zPjdCe02kK4ukBdo"
+          }
+        ]
+      },
+      "criteria": {
+        "coldMaximumMs": 10000,
+        "coldPass": false,
+        "restoreMaximumMs": 5000,
+        "restorePass": false,
+        "concurrentReadMaximumMs": 20000,
+        "concurrentReadPass": true
+      }
+    },
+    {
+      "scope": "physical-comparison-cost-474-after",
+      "label": "repeat",
+      "history": {
+        "schema": {
+          "user_version": 3
+        },
+        "projects": {
+          "count": 144
+        },
+        "mode": "Direct readonly SQLite; full history retained; no production initializer"
+      },
+      "writer": {
+        "at": "2026-10-20T12:43:31.775Z",
+        "endedAt": "2026-10-20T12:48:31.790Z",
+        "phase": "candidate",
+        "port": 18801,
+        "occurrence": "physical-comparison-cost-474-after-12b9f254-ccb2-4929-ac7d-54391d2b0ebc",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": false,
+        "writeMs": 15684.349800000002,
+        "restoreMs": 0,
+        "failures": [
+          {
+            "phase": "restore",
+            "name": "TimeoutError"
+          }
+        ],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Restoration requires investigation"
+      },
+      "reader": {
+        "occurrence": "physical-comparison-cost-474-after-12b9f254-ccb2-4929-ac7d-54391d2b0ebc",
+        "kind": "Public HTTP positive contracts concurrent with original canonical save; this is not browser or visual acceptance",
+        "results": [
+          {
+            "path": "/config",
+            "startedAt": "2026-10-20T12:43:31.845Z",
+            "endedAt": "2026-10-20T12:43:47.434Z",
+            "ms": 15587.6781,
+            "status": 200,
+            "permissionMode": "ask"
+          },
+          {
+            "path": "/provider",
+            "startedAt": "2026-10-20T12:43:31.848Z",
+            "endedAt": "2026-10-20T12:43:47.730Z",
+            "ms": 15881.6469,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/global/providers",
+            "startedAt": "2026-10-20T12:43:31.849Z",
+            "endedAt": "2026-10-20T12:43:47.632Z",
+            "ms": 15782.816900000002,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/session/ses_hs21zPjdCe02kK4ukBdo",
+            "startedAt": "2026-10-20T12:43:31.850Z",
+            "endedAt": "2026-10-20T12:43:31.859Z",
+            "ms": 9.699800000000323,
+            "status": 200,
+            "sessionID": "ses_hs21zPjdCe02kK4ukBdo"
+          }
+        ]
+      },
+      "criteria": {
+        "coldMaximumMs": 10000,
+        "coldPass": false,
+        "restoreMaximumMs": 5000,
+        "restorePass": false,
+        "concurrentReadMaximumMs": 20000,
+        "concurrentReadPass": true
+      }
+    },
+    {
+      "scope": "physical-comparison-cost-474-fixed",
+      "label": "fixed",
+      "history": {
+        "schema": {
+          "user_version": 3
+        },
+        "projects": {
+          "count": 145
+        },
+        "mode": "Direct readonly SQLite; full history retained; no production initializer"
+      },
+      "writer": {
+        "at": "2026-10-20T13:03:13.932Z",
+        "endedAt": "2026-10-20T13:03:46.099Z",
+        "phase": "candidate",
+        "port": 18803,
+        "occurrence": "physical-comparison-cost-474-fixed-4e2667b6-4b39-4b4d-a851-810b0219c967",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 15811.2648,
+        "restoreMs": 16342.003100000002,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "reader": {
+        "occurrence": "physical-comparison-cost-474-fixed-4e2667b6-4b39-4b4d-a851-810b0219c967",
+        "kind": "Public HTTP positive contracts concurrent with original canonical save; this is not browser or visual acceptance",
+        "results": [
+          {
+            "path": "/config",
+            "startedAt": "2026-10-20T13:03:14.012Z",
+            "endedAt": "2026-10-20T13:03:29.718Z",
+            "ms": 15705.619900000002,
+            "status": 200,
+            "permissionMode": "ask"
+          },
+          {
+            "path": "/provider",
+            "startedAt": "2026-10-20T13:03:14.015Z",
+            "endedAt": "2026-10-20T13:03:30.056Z",
+            "ms": 16041.452899999998,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/global/providers",
+            "startedAt": "2026-10-20T13:03:14.016Z",
+            "endedAt": "2026-10-20T13:03:29.927Z",
+            "ms": 15910.817299999999,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/session/ses_h2J1nABFbbdMQr80QLN2",
+            "startedAt": "2026-10-20T13:03:14.016Z",
+            "endedAt": "2026-10-20T13:03:14.025Z",
+            "ms": 9.065499999998792,
+            "status": 200,
+            "sessionID": "ses_h2J1nABFbbdMQr80QLN2"
+          }
+        ]
+      },
+      "criteria": {
+        "coldMaximumMs": 10000,
+        "coldPass": false,
+        "restoreMaximumMs": 5000,
+        "restorePass": false,
+        "concurrentReadMaximumMs": 20000,
+        "concurrentReadPass": true
+      }
+    },
+    {
+      "scope": "physical-comparison-cost-474-fixed",
+      "label": "repeat",
+      "history": {
+        "schema": {
+          "user_version": 3
+        },
+        "projects": {
+          "count": 145
+        },
+        "mode": "Direct readonly SQLite; full history retained; no production initializer"
+      },
+      "writer": {
+        "at": "2026-10-20T13:05:21.870Z",
+        "endedAt": "2026-10-20T13:05:54.734Z",
+        "phase": "candidate",
+        "port": 18803,
+        "occurrence": "physical-comparison-cost-474-fixed-4e2667b6-4b39-4b4d-a851-810b0219c967",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 16618.4541,
+        "restoreMs": 16227.504100000002,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "reader": {
+        "occurrence": "physical-comparison-cost-474-fixed-4e2667b6-4b39-4b4d-a851-810b0219c967",
+        "kind": "Public HTTP positive contracts concurrent with original canonical save; this is not browser or visual acceptance",
+        "results": [
+          {
+            "path": "/config",
+            "startedAt": "2026-10-20T13:05:21.932Z",
+            "endedAt": "2026-10-20T13:05:38.462Z",
+            "ms": 16528.5391,
+            "status": 200,
+            "permissionMode": "ask"
+          },
+          {
+            "path": "/provider",
+            "startedAt": "2026-10-20T13:05:21.935Z",
+            "endedAt": "2026-10-20T13:05:38.831Z",
+            "ms": 16895.369,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/global/providers",
+            "startedAt": "2026-10-20T13:05:21.936Z",
+            "endedAt": "2026-10-20T13:05:38.682Z",
+            "ms": 16746.0227,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/session/ses_h2J1nABFbbdMQr80QLN2",
+            "startedAt": "2026-10-20T13:05:21.936Z",
+            "endedAt": "2026-10-20T13:05:21.944Z",
+            "ms": 7.816600000000108,
+            "status": 200,
+            "sessionID": "ses_h2J1nABFbbdMQr80QLN2"
+          }
+        ]
+      },
+      "criteria": {
+        "coldMaximumMs": 10000,
+        "coldPass": false,
+        "restoreMaximumMs": 5000,
+        "restorePass": false,
+        "concurrentReadMaximumMs": 20000,
+        "concurrentReadPass": true
+      }
+    }
+  ],
+  "canonical": "Complete parsed source equals all three privately persisted original snapshots",
+  "permission": "ask"
+}

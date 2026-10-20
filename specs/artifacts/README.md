@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [配置连续保存与实例初始化](2026-10-20-physical-comparison-cost/README.md)：真实等待环、完整配置恢复、连续两轮保存及17张人工截图。
+
 - [父会话与成员并发阅读](2026-10-20-parent-member-render-continuity/README.md)：Sources定位、双流阅读、被动owner证据与审计器修复后原检查器复验。
 
 - [首页Goal确认边界](2026-10-20-goal-confirmation-boundary/README.md)：10张人工截图、全局Work/项目Code的取消、真实确认与预算停止。

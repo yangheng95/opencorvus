@@ -1,0 +1,74 @@
+$ bun script/run-tests.ts test/instance-directory-lock-order.test.ts test/project-instance-lock-liveness.test.ts test/instance-background-shutdown.test.ts test/instance-background-work.test.ts
+[1/4] START test/instance-directory-lock-order.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) an independent instance request and a held registration batch settle the same exact Project [2170.65ms]
+(pass) queued discovery returns the current process admission error after settlement closes entry [1545.43ms]
+(pass) an exact durable registration discovers its Project while another batch owns the queue [2135.88ms]
+
+ 3 pass
+ 0 fail
+ 3 expect() calls
+Ran 3 tests across 1 file. [8.27s]
+[1/4] DONE test/instance-directory-lock-order.test.ts exit=0 duration=8.83s
+[2/4] START test/project-instance-lock-liveness.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) admits every concurrent first admission while one of them holds a long caller function [520.36ms]
+(pass) runs a new initializer to completion while another serving lease stays busy [306.61ms]
+(pass) performs newly-required exclusive preparation from the queue without head-jumping [665.62ms]
+(pass) runs one shared initializer exactly once across concurrent first admissions [290.71ms]
+(pass) commits two disjoint Project registrations captured before either enters the shared queue [314.98ms]
+(pass) concurrent aliases read the same currently admitted physical Project owner [293.43ms]
+(pass) prepares a nested same-key provide with a new initializer while another lease serves [269.68ms]
+(pass) settles concurrent open, dispose, and serve on one Project without deadlock [379.19ms]
+(pass) completes a pending disposal under a continuous admission stream [371.54ms]
+
+ 9 pass
+ 0 fail
+ 20 expect() calls
+Ran 9 tests across 1 file. [4.27s]
+[2/4] DONE test/project-instance-lock-liveness.test.ts exit=0 duration=4.38s
+[3/4] START test/instance-background-shutdown.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a process gate cancels background work and retains the foreground owner until retry settlement [1819.14ms]
+(pass) listener shutdown cancels 1 serial Project owners and joins physical cleanup [2076.73ms]
+(pass) listener shutdown cancels 2 serial Project owners and joins physical cleanup [3259.96ms]
+(pass) listener shutdown cancels 2 parallel Project owners and joins physical cleanup [3355.91ms]
+
+ 4 pass
+ 0 fail
+ 23 expect() calls
+Ran 4 tests across 1 file. [13.88s]
+[3/4] DONE test/instance-background-shutdown.test.ts exit=0 duration=14.01s
+[4/4] START test/instance-background-work.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) instance background work > retains the source fault diagnostic after owner cancellation and joins physical cleanup [1748.15ms]
+(pass) instance background work > retains the same text fault diagnostic after owner cancellation and joins physical cleanup [1093.21ms]
+(pass) instance background work > retains the instance admission fault diagnostic after owner cancellation and joins physical cleanup [950.19ms]
+(pass) instance background work > retains the database admission fault diagnostic after owner cancellation and joins physical cleanup [1048.62ms]
+(pass) instance background work > retains the mixed fault diagnostic after owner cancellation and joins physical cleanup [955.98ms]
+(pass) instance background work > retains the cleanup fault diagnostic after owner cancellation and joins physical cleanup [1065.93ms]
+(pass) instance background work > settles exact external owner reason %s after complete unwind [1002.10ms]
+(pass) instance background work > settles exact external owner reason %s after complete unwind [1020.95ms]
+(pass) instance background work > settles exact external owner reason external primitive after complete unwind [1117.96ms]
+(pass) instance background work > global disposal cancels scheduled owners across projects before draining their leases [2869.71ms]
+(pass) instance background work > settles nested background registration from a abort listener after teardown closes admission [1053.74ms]
+(pass) instance background work > settles nested background registration from a draining owner after teardown closes admission [922.94ms]
+(pass) instance background work > keeps an admitted background lease valid through its complete cancellation settlement [934.74ms]
+(pass) instance background work > returns a settled completion when teardown races background admission [850.99ms]
+(pass) instance background work > background work keeps a valid instance context for as long as it runs [1105.04ms]
+(pass) instance background work > instance disposal cancels in-flight background work instead of waiting for it [940.44ms]
+(pass) instance background work > work scheduled and completed before disposal leaves nothing for disposal to cancel [1050.99ms]
+
+ 17 pass
+ 0 fail
+ 41 expect() calls
+Ran 17 tests across 1 file. [20.56s]
+[4/4] DONE test/instance-background-work.test.ts exit=0 duration=20.67s

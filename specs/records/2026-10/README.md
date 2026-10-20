@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [配置连续保存与实例初始化](2026-10-20-physical-comparison-cost.md)：缓存发布/目录队列共性根因、精确身份比较与[原检查器连续复测](../../artifacts/2026-10-20-physical-comparison-cost/README.md)。
+
 - [父会话与成员并发阅读](2026-10-20-parent-member-render-continuity.md)：双流、稳定阅读生命周期、审计绑定发布修复与[21张实图](../../artifacts/2026-10-20-parent-member-render-continuity/README.md)。
 
 - [首页Goal的确认边界](2026-10-20-goal-confirmation-boundary.md)：原首页取消保留草稿、确认后创建及[双模式真实执行](../../artifacts/2026-10-20-goal-confirmation-boundary/README.md)。

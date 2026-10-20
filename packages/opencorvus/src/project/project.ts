@@ -418,10 +418,10 @@ export namespace Project {
     b: ReturnType<typeof filesystemObservation>,
   ) {
     if (samePath(a.path, b.path)) return true
-    const [left, right] = await Promise.all([a.physical(), b.physical()])
-    if (left !== undefined && right !== undefined && left === right) return true
     const [leftIdentity, rightIdentity] = await Promise.all([a.identity(), b.identity()])
-    return leftIdentity !== undefined && rightIdentity !== undefined && leftIdentity === rightIdentity
+    if (leftIdentity !== undefined && rightIdentity !== undefined) return leftIdentity === rightIdentity
+    const [left, right] = await Promise.all([a.physical(), b.physical()])
+    return left !== undefined && right !== undefined && left === right
   }
 
   export async function sameFilesystemLocation(a: string, b: string) {

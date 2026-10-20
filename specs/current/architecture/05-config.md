@@ -248,6 +248,11 @@ error before queue release; late contexts use ordinary admission. Exclusive
 directory mutations do not join the registration batch, and same-queue exclusive
 reentry returns `ProjectRegistrationBatchMutationError` instead of waiting on
 its own owner. There is no second cross-process queue or persisted batch fact.
+The shared Instance factory publishes a new discovery only after joining this
+same registration authority, and settles discovery before returning the queue.
+An independent pending cache entry therefore cannot wait behind a candidate
+batch whose worker is joining that entry. Exact inherited durable registration
+and ready cache identities retain their original ownership paths.
 Only after the entire candidate succeeds may canonical persistence and the
 existing runtime transitions proceed. The paired before/after snapshots consume
 the retained identity context's admitted sandbox boundary (`Instance.worktree`),

@@ -222,7 +222,7 @@ test("commits two disjoint Project registrations captured before either enters t
   expect(projectIDs.every((projectID) => listedProjectIDs.includes(projectID))).toBe(true)
 })
 
-test("admits one physical Project owner when two aliases capture before the shared queue", async () => {
+test("concurrent aliases read the same currently admitted physical Project owner", async () => {
   const directory = await fixtureDirectory("project-registration-physical-")
   const alias = `${directory}-alias`
   await symlink(directory, alias, process.platform === "win32" ? "junction" : "dir")
@@ -243,16 +243,13 @@ test("admits one physical Project owner when two aliases capture before the shar
     release.resolve()
   }
 
-  const outcomes = await withDeadline(
-    Promise.allSettled([original, aliased]),
+  const identities = await withDeadline(
+    Promise.all([original, aliased]),
     30_000,
     "aliased Project registration settlement",
   )
-  const accepted = outcomes.filter((outcome) => outcome.status === "fulfilled")
-  const rejected = outcomes.filter((outcome) => outcome.status === "rejected")
-  expect({ accepted: accepted.length, rejected: rejected.length }).toEqual({ accepted: 1, rejected: 1 })
-  expect(rejected[0]?.reason).toBeInstanceOf(Project.RegisteredDirectoryConflictError)
-  expect(Project.list().map((project) => project.id)).toContain(accepted[0]?.value)
+  const owners = Project.list().map((project) => project.id)
+  expect({ identities, owners }).toEqual({ identities: [owners[0], owners[0]], owners: [owners[0]] })
 })
 
 test("prepares a nested same-key provide with a new initializer while another lease serves", async () => {
