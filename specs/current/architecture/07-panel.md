@@ -1006,6 +1006,10 @@ diagnostics remain available in the existing disclosures. Sources and tool input
 retain their own controls.
 Trace data uses the code typography role;
 the disclosure identity uses caption. Sources keep their chronological position.
+The webfetch identity detail projects its structured request URL directly, before
+generic result-title selection. Response media/encoding remains in the original
+result disclosure; a source title never replaces the request identity. Canonical
+failure messages keep their shared precedence over this request detail.
 A source run keeps its first citation directly available with its complete
 readable identity and existing resource action. Additional sources use the shared
 native Disclosure, initially collapsed with an explicit remaining count;

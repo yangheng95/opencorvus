@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [网页工具摘要与Sources阅读](2026-10-21-web-tool-summary.md)：唯一摘要投影与[同一真实来源宽窄、双语及结果详情](../../artifacts/2026-10-21-web-tool-summary/README.md)。
+
 - [原生helper启动隔离](2026-10-21-native-launch-isolation.md)：[只隔离spawn的真实合同、全149目录与完整配置原路径](../../artifacts/2026-10-21-native-launch-isolation/README.md)，保留原失败指标。
 
 - [配置物理路径读取成本](2026-10-21-config-physical-path-cost.md)：[263352次原文件系统观察及原生同步启动重叠](../../artifacts/2026-10-21-config-physical-path-cost/README.md)，未用局部速度替代原性能门槛。

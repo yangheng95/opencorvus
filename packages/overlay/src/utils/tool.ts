@@ -392,6 +392,9 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
   const failure = toolFailurePresentation((safeState as any).failure).message || shortValue((safeState as any).error)
   if (failure) return singleLine(failure)
   const n = toolNameKey(name)
+  // The request URL identifies this fetch. Response media/encoding belongs to
+  // the result disclosure rather than the compact transcript identity.
+  if (n === "webfetch") return typeof safeInput.url === "string" ? safeInput.url : ""
   if (n === "dispatchagent") {
     const dispatch = record((safeInput as any).dispatch) ? (safeInput as any).dispatch : {}
     const target = firstNonEmptyString((dispatch as any).target)

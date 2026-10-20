@@ -1,0 +1,69 @@
+{
+  "observedAt": "2026-10-20T19:28:40.261Z",
+  "stage": "after",
+  "schema": 3,
+  "integrity": "ok",
+  "preserved": {
+    "project": 4,
+    "session": 4,
+    "message": 14,
+    "part": 33,
+    "protocol_event": 28,
+    "tool_part_request": 2,
+    "tool_part_outcome": 2
+  },
+  "added": {
+    "project": 1,
+    "session": 0,
+    "message": 0,
+    "part": 0,
+    "protocol_event": 0,
+    "tool_part_request": 0,
+    "tool_part_outcome": 0
+  },
+  "sourceDatabaseMetadata": "Original bytes/mtime preserved",
+  "sourceRows": "Every original complete row preserved",
+  "canonical": {},
+  "public": {
+    "sessionID": "ses_-zURO184czznthTwpxQt",
+    "status": 200,
+    "sources": [
+      {
+        "id": "prt_g0VYbytpJ00JCFlmgB4N",
+        "messageID": "msg_g0VYbys1Q00ZH58GiToo",
+        "sourceId": "52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c",
+        "url": "https://arxiv.org/abs/2509.11035v1",
+        "title": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debate",
+        "toolPartID": "prt_g0VYbytP600tEkyWOr00"
+      },
+      {
+        "id": "prt_g0VYbyv8C00AIcho26YH",
+        "messageID": "msg_g0VYbytq100O7O4IBejr",
+        "sourceId": "8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc",
+        "url": "https://aclanthology.org/2025.naacl-long.475/",
+        "title": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology",
+        "toolPartID": "prt_g0VYbyuZR00OoJawQl8Y"
+      }
+    ],
+    "tools": [
+      {
+        "id": "prt_g0VYbytP600tEkyWOr00",
+        "messageID": "msg_g0VYbys1Q00ZH58GiToo",
+        "tool": "webfetch",
+        "status": "completed",
+        "url": "https://arxiv.org/abs/2509.11035v1",
+        "resultTitle": "https://arxiv.org/abs/2509.11035v1 (text/html; charset=utf-8)",
+        "outputCharacters": 5088
+      },
+      {
+        "id": "prt_g0VYbyuZR00OoJawQl8Y",
+        "messageID": "msg_g0VYbytq100O7O4IBejr",
+        "tool": "webfetch",
+        "status": "completed",
+        "url": "https://aclanthology.org/2025.naacl-long.475/",
+        "resultTitle": "https://aclanthology.org/2025.naacl-long.475/ (text/html; charset=utf-8)",
+        "outputCharacters": 16346
+      }
+    ]
+  }
+}

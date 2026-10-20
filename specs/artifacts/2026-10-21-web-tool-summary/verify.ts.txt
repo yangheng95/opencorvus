@@ -1,0 +1,34 @@
+import fs from 'node:fs'
+import assert from 'node:assert/strict'
+import {Database} from 'bun:sqlite'
+const stage=process.argv[2];assert(stage==='before'||stage==='after')
+const settled=process.argv[3]==='settled'
+const root=import.meta.dir,original=JSON.parse(fs.readFileSync(root+'/'+stage+'-original-private.json','utf8'))
+const db=new Database(original.target+'/runtime/data/opencorvus.db',{readonly:true,create:false}),source=new Database(original.source+'/runtime/data/opencorvus.db',{readonly:true,create:false})
+const preserved:Record<string,number>={},added:Record<string,number>={}
+try{
+ assert.deepEqual(db.query('PRAGMA user_version').get(),{user_version:3});assert.deepEqual(db.query('PRAGMA integrity_check').get(),{integrity_check:'ok'})
+ for(const [table,rows] of Object.entries(original.original) as [string,any[]][]){
+  const actual=db.query('SELECT rowid,* FROM '+table+' ORDER BY rowid').all() as any[],byRowid=new Map(actual.map(row=>[row.rowid,row]))
+  assert.deepEqual(rows.map(row=>byRowid.get(row.rowid)),rows,table+' original complete persisted rows')
+  assert.deepEqual(source.query('SELECT rowid,* FROM '+table+' ORDER BY rowid').all(),rows,table+' source complete rows')
+  preserved[table]=rows.length;added[table]=actual.length-rows.length
+ }
+ const stat=fs.statSync(original.source+'/runtime/data/opencorvus.db');assert.equal(stat.size,original.sourceDatabase.bytes);assert.equal(stat.mtimeMs,original.sourceDatabase.modifiedAtMs)
+ const sources=(original.original.part as any[]).flatMap(row=>{const part=JSON.parse(row.data);return part.type==='source-url'?[{...part,id:row.id,messageID:row.message_id}]:[]})
+ let publicResult:any
+ if(stage==='after'&&!settled){
+  const prior=JSON.parse(fs.readFileSync(root+'/before-verified.json','utf8'));assert.deepEqual(prior.preserved,preserved)
+  const identity=JSON.parse(fs.readFileSync(root+'/../../specs/artifacts/2026-10-21-web-sources-live-review/repair-sources.json','utf8'))
+  const response=await fetch('http://127.0.0.1:18849/session/'+encodeURIComponent(identity.sessionID)+'/message?directory='+encodeURIComponent(identity.directory));assert.equal(response.status,200)
+  const messages=await response.json() as any[],parts=messages.flatMap(message=>message.parts)
+  const actualSources=parts.filter(part=>part.type==='source-url')
+  for(const expected of sources){const actual=actualSources.find(part=>part.id===expected.id);for(const [key,value] of Object.entries(expected))assert.deepEqual(actual[key],value)}
+  const tools=parts.filter(part=>part.type==='tool'&&part.tool==='webfetch')
+  assert.equal(tools.length,2)
+  for(const tool of tools){assert.equal(tool.state.status,'completed');assert.equal(typeof tool.state.input.url,'string');assert.equal(typeof tool.state.title,'string');assert(tool.state.title.startsWith(tool.state.input.url+' ('));assert.equal(typeof tool.state.output,'string');assert(tool.state.output.length>100)}
+  publicResult={sessionID:identity.sessionID,status:200,sources:actualSources.map(({id,messageID,sourceId,url,title,toolPartID})=>({id,messageID,sourceId,url,title,toolPartID})),tools:tools.map(tool=>({id:tool.id,messageID:tool.messageID,tool:tool.tool,status:tool.state.status,url:tool.state.input.url,resultTitle:tool.state.title,outputCharacters:tool.state.output.length}))}
+ }
+ const result={observedAt:new Date().toISOString(),stage,settled,schema:3,integrity:'ok',preserved,added,sourceDatabaseMetadata:'Original bytes/mtime preserved',sourceRows:'Every original complete row preserved',canonical:JSON.parse(fs.readFileSync(original.target+'/runtime/config/opencorvus.jsonc','utf8')),public:publicResult}
+ fs.writeFileSync(root+'/'+stage+(settled?'-settled':'')+'-verified.json',JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result))
+}finally{db.close(true);source.close(true)}

@@ -1,0 +1,30 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+import {Database} from 'bun:sqlite'
+const stage=process.argv[2];assert(stage==='before'||stage==='after')
+const root=import.meta.dir,repo=path.resolve(root,'../..'),base='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21'
+const source=base+'/web-sources-live-482-data',target=base+'/web-tool-summary-485-'+stage+'-data',diag=base+'/web-tool-summary-485-'+stage,bundle=base+'/web-tool-summary-485-'+stage+'-bundle',port=stage==='before'?18847:18849
+assert(!fs.existsSync(target));assert(!fs.existsSync(diag));assert(!fs.existsSync(bundle))
+const tables=['project','session','message','part','protocol_event','tool_part_request','tool_part_outcome'],db=new Database(source+'/runtime/data/opencorvus.db',{readonly:true,create:false})
+try{
+ db.exec('BEGIN');assert.deepEqual(db.query('PRAGMA user_version').get(),{user_version:3})
+ const original=Object.fromEntries(tables.map(table=>[table,db.query('SELECT rowid,* FROM '+table+' ORDER BY rowid').all()]))
+ for(const dir of ['runtime/data','runtime/config','runtime/tmp','home','appdata','localappdata','project'])fs.mkdirSync(target+'/'+dir,{recursive:true})
+ const image=db.serialize();fs.writeFileSync(target+'/runtime/data/opencorvus.db',image,{flag:'wx'})
+ fs.copyFileSync(source+'/runtime/config/opencorvus.jsonc',target+'/runtime/config/opencorvus.jsonc',fs.constants.COPYFILE_EXCL)
+ fs.cpSync(source+'/project',target+'/project',{recursive:true,errorOnExist:false,force:false})
+ const sourceStat=fs.statSync(source+'/runtime/data/opencorvus.db')
+ fs.writeFileSync(root+'/'+stage+'-original-private.json',JSON.stringify({source,target,schema:3,original,sourceDatabase:{bytes:sourceStat.size,modifiedAtMs:sourceStat.mtimeMs}},null,2)+'\n',{flag:'wx'})
+}finally{db.exec('ROLLBACK');db.close(true)}
+assert(!fs.existsSync(target+'/runtime/data/auth.json'));assert(!fs.existsSync(target+'/runtime/data/models.json'))
+fs.mkdirSync(bundle+'/bin',{recursive:true});fs.copyFileSync(base+'/web-sources-repair-482-v2-bundle/bin/bun.exe',bundle+'/bin/bun.exe',fs.constants.COPYFILE_EXCL)
+fs.cpSync(stage==='before'?base+'/web-sources-repair-482-v2-bundle/bin/ui':repo+'/packages/overlay/dist-vite',bundle+'/bin/ui',{recursive:true,errorOnExist:true,force:false})
+const old=repo+'/.tmp-product-iteration/web-sources-repair-482'
+let serve=fs.readFileSync(old+'/serve-visual.ts','utf8').replaceAll('web-sources-live-482-data','web-tool-summary-485-'+stage+'-data').replaceAll('18835',String(port)).replace('Existing real Sources and freshly built UI; no credential staging, Provider preflight or model task','485 '+stage+' complete real Sources history;no credentials or model requests')
+fs.writeFileSync(root+'/serve-'+stage+'.ts',serve,{flag:'wx'})
+for(const name of ['launch','shutdown','settle']){
+ let value=fs.readFileSync(old+'/'+name+'-visual-v2.ps1','utf8').replaceAll('web-sources-live-482-data','web-tool-summary-485-'+stage+'-data').replaceAll('web-sources-repair-482-visual-v2','web-tool-summary-485-'+stage).replaceAll('web-sources-repair-482-v2-bundle','web-tool-summary-485-'+stage+'-bundle').replaceAll('18839',String(port)).replaceAll('web-sources-repair-482/serve-visual-v2.ts','web-tool-summary-485/serve-'+stage+'.ts')
+ fs.writeFileSync(root+'/'+name+'-'+stage+'.ps1',value,{flag:'wx'})
+}
+console.log(JSON.stringify({stage,port,counts:Object.fromEntries(tables.map(t=>[t,JSON.parse(fs.readFileSync(root+'/'+stage+'-original-private.json','utf8')).original[t].length])),bundle,qualification:'Complete real history clone;no credentials or model requests'}))

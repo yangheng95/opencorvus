@@ -538,6 +538,9 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
           >
             <ToolPayload stateKey={payloadStateKey("input")} label={t("tool.input")} value={inputPayload()} live={status() === "pending"} collapsed />
           </Show>
+          <Show when={key() === "webfetch" && status() === "completed" && typeof state().title === "string" && state().title}>
+            {(title) => <div class="msg-tool-state">{title()}</div>}
+          </Show>
           <Show when={status() === "pending" || status() === "running"}>
             <div class="msg-tool-state" role="status">
               {t(status() === "pending" ? "tool.receiving_input" : "tool.awaiting_result")}
