@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [推送密钥检查的历史与快照](records/2026-10/2026-10-21-push-secret-snapshots.md)：[中间提交真实拒绝与71757输入前后对照](artifacts/2026-10-21-push-secret-snapshots/README.md)，覆盖历史版本、去重提速并清除错误中的凭据片段。
+
 - [Git启动下限与发布源码](records/2026-10/2026-10-21-git-startup-floor.md)：[1776个真实命令、原生物理与六组对照](artifacts/2026-10-21-git-startup-floor/README.md)，版本输出与仓库查询接近，定位共同创建成本，未改生产。
 
 - [Git可执行路径传递的完整对照](records/2026-10/2026-10-21-git-executable-flow.md)：[四组真实配置、九张人工图与原scope结算](artifacts/2026-10-21-git-executable-flow/README.md)，候选未证明收益已撤回，保留完整性能未达事实。

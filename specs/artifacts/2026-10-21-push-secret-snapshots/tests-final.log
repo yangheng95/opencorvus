@@ -1,0 +1,14 @@
+bun test v1.4.0 (34cbb9a40)
+
+script\secret-scan.test.ts:
+(pass) pre-push input preserves update, creation and deletion object boundaries [0.28ms]
+(pass) malformed hook input returns the explicit protocol error [0.11ms]
+(pass) historical versions, shared content paths and the staged snapshot produce their credential reports [1607.96ms]
+(pass) new refs and merge ancestry expose their changed file snapshots [1486.62ms]
+(pass) default HEAD and index scans retain each path of a committed credential blob [716.75ms]
+(pass) the real CLI rejects a pushed intermediate credential with an explicit file and pattern [1006.79ms]
+
+ 6 pass
+ 0 fail
+ 10 expect() calls
+Ran 6 tests across 1 file. [5.83s]

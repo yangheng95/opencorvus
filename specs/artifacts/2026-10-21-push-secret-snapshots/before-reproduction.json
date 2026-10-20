@@ -1,0 +1,31 @@
+{
+  "observedAt": "2026-10-20T23:43:52.437Z",
+  "fixture": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\push-secret-snapshots-494\\reproduction",
+  "base": "ac325176ff0b878d0fe7e1fd12f4d59376fe42bd",
+  "intermediate": "8993dd113af5c03548f21f73b10b760462a6f9f8",
+  "tip": "5f46e373ad28564cae3ec2f8d41ae6c10ef99168",
+  "prePushInput": "refs/heads/qa-fixture 5f46e373ad28564cae3ec2f8d41ae6c10ef99168 refs/heads/qa-fixture ac325176ff0b878d0fe7e1fd12f4d59376fe42bd\n",
+  "originalCLI": {
+    "status": 0,
+    "stdout": "[secret-scan] OK — 0 hits across tracked sources\n",
+    "stderr": ""
+  },
+  "actualIntermediateHits": [
+    {
+      "file": "secrets.ts",
+      "lineNumber": 1,
+      "patternId": "provider-key",
+      "description": "Model-provider key (sk-...)",
+      "match": "sk-QAExampleQAEx…"
+    }
+  ],
+  "intermediateBytes": 72,
+  "diffTreeRecords": [
+    ":100644 100644 99b5065b3d65c3ea2bf251b97e4bcf85ea923d97 1f2dcacc3c5b0c2eac18c35fedc680f07fd2b69b M",
+    "secrets.ts",
+    ":100644 100644 1f2dcacc3c5b0c2eac18c35fedc680f07fd2b69b 7b9ec40af4e87646ae17257c99a56e08ec278673 M",
+    "secrets.ts"
+  ],
+  "credential": "Generated fake shape only;no actual credential or Provider request",
+  "rootCause": "Original pre-push parser discards remote baseline and scans local tip/index,while an actual pushed intermediate commit contains a recognized key"
+}

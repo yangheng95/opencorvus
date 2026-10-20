@@ -1,0 +1,57 @@
+{
+  "observedAt": "2026-10-20T23:54:40.505Z",
+  "fixedHead": "696cc64789091306bde46d93c7a43a436af8d8ce",
+  "indexedFiles": 71757,
+  "indexSnapshots": "All71757 path/object/mode/size exactly equal;original index bytes unchanged",
+  "before": {
+    "observedAt": "2026-10-20T23:50:48.290Z",
+    "startedAt": "2026-10-20T23:49:29.859Z",
+    "run": "before",
+    "mode": "before",
+    "runtime": "1.4.0",
+    "head": "696cc64789091306bde46d93c7a43a436af8d8ce",
+    "owner": {
+      "pid": 89712,
+      "processInstanceID": "win32:639281369695992984",
+      "occurrenceID": "3c06e037-6e64-4eea-b92b-4c3bc506260c"
+    },
+    "indexedFiles": 71757,
+    "wallMs": 78420.49059999999,
+    "parentCpuUserMs": 13672,
+    "parentCpuSystemMs": 7735,
+    "hits": [],
+    "gitCalls": 741,
+    "blobQueries": 72511,
+    "blobOutputBytes": 2994593485,
+    "modelRequests": 0,
+    "boundary": "Original real scanner core over same696cc6478 tree and exact index bytes. All selected real Git blobs,not file mocks;separate from UI/full Config qualification. Immutable source object identity used for dedup,not a mutable-source hash gate."
+  },
+  "after": {
+    "observedAt": "2026-10-20T23:52:26.673Z",
+    "startedAt": "2026-10-20T23:51:46.488Z",
+    "run": "after",
+    "mode": "after",
+    "runtime": "1.4.0",
+    "head": "696cc64789091306bde46d93c7a43a436af8d8ce",
+    "owner": {
+      "pid": 37580,
+      "processInstanceID": "win32:639281371061926271",
+      "occurrenceID": "47e8cd29-d763-4238-9865-11a85bfdd906"
+    },
+    "indexedFiles": 71757,
+    "wallMs": 40173.2471,
+    "parentCpuUserMs": 6797,
+    "parentCpuSystemMs": 4063,
+    "hits": [],
+    "gitCalls": 372,
+    "blobQueries": 36253,
+    "blobOutputBytes": 1497175930,
+    "modelRequests": 0,
+    "boundary": "Original real scanner core over same696cc6478 tree and exact index bytes. All selected real Git blobs,not file mocks;separate from UI/full Config qualification. Immutable source object identity used for dedup,not a mutable-source hash gate."
+  },
+  "millisecondsSaved": 38247.24349999999,
+  "ratio": 0.51227997673353,
+  "security": "Historical CLI and real Git positive contracts checked separately;clean current-tree result is not the historical regression test",
+  "limits": "Full Config performance and UI/Sources/Rendering are not requalified by this backend tool change",
+  "modelRequests": 0
+}

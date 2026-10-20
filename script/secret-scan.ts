@@ -5,13 +5,13 @@
  * Scans ONLY git-tracked files (so .gitignored .env / .secrets are
  * excluded). Fails the build if any common API-key / credential
  * pattern is found in source. Designed to run in pre-push so a
- * credential-shaped content is caught before it lands in a commit.
+ * credential-shaped content is caught before it reaches remote history.
  *
  * Why a fresh script and not an extension to audit-bundle.ts:
  *   - audit-bundle.ts targets PRODUCTION BUNDLES (dist/extension.cjs,
  *     media/ui), not git-tracked sources.
- *   - This scan operates on pushed git trees plus the git index so the
- *     coverage is independent of any package's build status.
+ *   - This scan covers pushed tips, changed file snapshots in every newly
+ *     pushed commit, and the git index, independent of package build status.
  *
  * Allow-list: tests intentionally embed fake-looking secrets to
  *   exercise the scanner. Lines containing `secret-scan: ignore`
@@ -41,10 +41,8 @@ interface SecretPattern {
  *  - `AKIA[A-Z0-9]{16}` matches AWS access key (fixed length 20).
  *  - `AIza[A-Za-z0-9_-]{35}` matches Google API key (length 39).
  *  - `xoxb-`/`xoxp-` Slack bot/user tokens.
- *  - `eyJ[A-Za-z0-9_-]{30,}\.[A-Za-z0-9_-]{30,}\.` JWT shape (catches
+ *  - `eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{10,}` JWT shape (catches
  *    embedded user JWTs / opaque service tokens).
- *  - Bare `password\s*[:=]\s*["'][^"'$]{8,}` — heuristic for
- *    hand-pasted plaintext password assignments.
  */
 export const SECRET_PATTERNS: ReadonlyArray<SecretPattern> = [
   { id: "provider-key", description: "Model-provider key (sk-...)", pattern: /sk-[A-Za-z0-9]{20,}/ },
@@ -95,15 +93,21 @@ export interface SecretHit {
   lineNumber: number
   patternId: string
   description: string
-  match: string
+}
+
+export interface PrePushUpdate {
+  localRef: string
+  localObjectId: string
+  remoteRef: string
+  remoteObjectId: string
 }
 
 export interface ScanOptions {
   repoRoot: string
   /** Override the file list for fixture tests. Production scans git object snapshots. */
   files?: string[]
-  /** Git commit or tree object ids to scan before the index. Default: HEAD when it exists. */
-  refs?: string[]
+  /** Exact four-field Git hook updates. Without hook input, scan HEAD and the index. */
+  pushUpdates?: PrePushUpdate[]
   /** Override the pattern set (used by tests). */
   patterns?: ReadonlyArray<SecretPattern>
 }
@@ -212,24 +216,86 @@ function resolveHeadRef(repoRoot: string): string | undefined {
   return result.stdout.trim()
 }
 
-function scanRefs(repoRoot: string, refs: string[] | undefined): string[] {
-  if (refs) return [...new Set(refs)]
+function scanTips(repoRoot: string, updates: PrePushUpdate[] | undefined): string[] {
+  if (updates)
+    return [
+      ...new Set(updates.filter((update) => !/^0+$/.test(update.localObjectId)).map((update) => update.localObjectId)),
+    ]
   const head = resolveHeadRef(repoRoot)
   return head ? [head] : []
 }
 
-export function parsePrePushLocalRefs(input: string): string[] {
-  const refs = new Set<string>()
+export function parsePrePushUpdates(input: string): PrePushUpdate[] {
+  const updates: PrePushUpdate[] = []
   for (const line of input.split(/\r?\n/)) {
     const trimmed = line.trim()
     if (!trimmed) continue
     const fields = trimmed.split(/\s+/)
-    if (fields.length < 2) throw new Error(`invalid pre-push ref line: ${line}`)
-    const localObjectId = fields[1]!
-    if (/^0+$/.test(localObjectId)) continue
-    refs.add(localObjectId)
+    if (
+      fields.length !== 4 ||
+      ![fields[1], fields[3]].every((value) => /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/.test(value!))
+    ) {
+      throw new Error(`invalid pre-push ref line: ${line}`)
+    }
+    const [localRef, localObjectId, remoteRef, remoteObjectId] = fields as [string, string, string, string]
+    updates.push({ localRef, localObjectId, remoteRef, remoteObjectId })
   }
-  return [...refs]
+  return updates
+}
+
+function listPushedChanges(repoRoot: string, updates: PrePushUpdate[]): GitIndexEntry[] {
+  const commits = new Set<string>()
+  for (const update of updates) {
+    if (/^0+$/.test(update.localObjectId)) continue
+    const revisions = [
+      update.localObjectId,
+      ...(/^0+$/.test(update.remoteObjectId) ? [] : [`^${update.remoteObjectId}`]),
+    ]
+    const result = spawnSync("git", ["-C", repoRoot, "rev-list", "--reverse", ...revisions, "--"], {
+      maxBuffer: 64 * 1024 * 1024,
+    })
+    if (result.error) throw result.error
+    if (result.status !== 0) throw new Error(`git rev-list failed: ${result.stderr.toString("utf8").trim()}`)
+    for (const commit of result.stdout.toString("utf8").split(/\r?\n/)) if (commit) commits.add(commit)
+  }
+  if (commits.size === 0) return []
+  const result = spawnSync(
+    "git",
+    [
+      "-C",
+      repoRoot,
+      "diff-tree",
+      "--stdin",
+      "--root",
+      "-r",
+      "-m",
+      "--no-renames",
+      "--raw",
+      "--no-abbrev",
+      "--no-commit-id",
+      "-z",
+    ],
+    { input: [...commits].join("\n") + "\n", maxBuffer: 64 * 1024 * 1024 },
+  )
+  if (result.error) throw result.error
+  if (result.status !== 0) throw new Error(`git diff-tree failed: ${result.stderr.toString("utf8").trim()}`)
+  const records = result.stdout.toString("utf8").split("\0")
+  const entries: GitIndexEntry[] = []
+  for (let index = 0; index < records.length; index++) {
+    const header = records[index]!
+    if (!header) continue
+    const fields = header.split(" ")
+    const file = records[++index]
+    if (fields.length !== 5 || !/^:[0-7]{6}$/.test(fields[0]!) || !file) {
+      throw new Error(`invalid git diff-tree record: ${header}`)
+    }
+    const mode = Number.parseInt(fields[1]!, 8)
+    if (mode === 0 || mode === GITLINK_MODE || !shouldScan(file)) continue
+    entries.push({ file, objectId: fields[3]!, size: 0, mode, stage: 0 })
+  }
+  if (entries.length === 0) return []
+  const sizes = readGitObjectSizes(repoRoot, [...new Set(entries.map((entry) => entry.objectId))])
+  return entries.map((entry) => ({ ...entry, size: sizes.get(entry.objectId)! }))
 }
 
 function shouldScan(rel: string): boolean {
@@ -263,7 +329,6 @@ function scanText(
         lineNumber: i + 1,
         patternId: p.id,
         description: p.description,
-        match: m[0].slice(0, 16) + (m[0].length > 16 ? "…" : ""),
       })
     }
   }
@@ -397,12 +462,18 @@ export function scan(opts: ScanOptions): SecretHit[] {
     return hits
   }
 
-  const refEntries = scanRefs(opts.repoRoot, opts.refs).flatMap((ref) => listTreeEntries(opts.repoRoot, ref))
+  const refEntries = scanTips(opts.repoRoot, opts.pushUpdates).flatMap((ref) => listTreeEntries(opts.repoRoot, ref))
   const indexEntries = listTrackedEntries(opts.repoRoot)
-  const entries = [...refEntries, ...indexEntries].filter(
-    (entry) => shouldScan(entry.file) && entry.mode !== GITLINK_MODE && entry.size <= MAX_SCANNED_BYTES,
-  )
-  for (const chunk of chunkGitEntries(entries)) {
+  const pushedEntries = opts.pushUpdates ? listPushedChanges(opts.repoRoot, opts.pushUpdates) : []
+  const entries = new Map<string, GitIndexEntry>()
+  for (const entry of [...refEntries, ...indexEntries, ...pushedEntries]) {
+    if (!shouldScan(entry.file) || entry.mode === GITLINK_MODE || entry.size > MAX_SCANNED_BYTES) continue
+    // A Git blob identifies immutable bytes. Keep each path and each version,
+    // while sharing identical tip/index/history snapshots within this scan.
+    const key = `${entry.file}\0${entry.objectId}`
+    if (!entries.has(key)) entries.set(key, entry)
+  }
+  for (const chunk of chunkGitEntries([...entries.values()])) {
     const blobs = readGitBlobs(opts.repoRoot, chunk)
     for (const entry of chunk) {
       const blob = blobs.get(entry.objectId)
@@ -424,20 +495,25 @@ if (import.meta.main) {
   // canonical conversion that handles both POSIX and Windows.
   const here = path.dirname(fileURLToPath(import.meta.url))
   const repoRoot = path.resolve(here, "..")
-  const refs = args.includes("--pre-push-stdin") ? parsePrePushLocalRefs(fs.readFileSync(0, "utf8")) : undefined
-  const hits = scan({ repoRoot, refs })
+  const pushUpdates = args.includes("--pre-push-stdin") ? parsePrePushUpdates(fs.readFileSync(0, "utf8")) : undefined
+  console.log(
+    pushUpdates
+      ? "[secret-scan] Checking pushed file snapshots and the index"
+      : "[secret-scan] Checking HEAD and index file snapshots",
+  )
+  const hits = scan({ repoRoot, pushUpdates })
   if (hits.length === 0) {
     console.log(`[secret-scan] OK — 0 hits across tracked sources`)
     process.exit(0)
   }
   console.error(`[secret-scan] FAIL — ${hits.length} hit(s):`)
   for (const h of hits) {
-    console.error(`  ${h.file}:${h.lineNumber}  [${h.patternId}] ${h.description} → ${h.match}`)
+    console.error(`  ${h.file}:${h.lineNumber}  [${h.patternId}] ${h.description}`)
   }
   console.error(
     `\nIf the match is a deliberate test fixture, append \`// ${IGNORE_DIRECTIVE}\` to the line.\n` +
-      `If it is a real secret: revoke it at the issuing service, then remove from source. The string\n` +
-      `also lives in git history — recovery requires \`git filter-repo\` plus a coordinated force-push.`,
+      `Revoke any real credential, then remove it from every commit to be pushed and from the index.\n` +
+      `If it was published earlier, coordinate history cleanup with the maintainers.`,
   )
   process.exit(1)
 }

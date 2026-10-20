@@ -1,0 +1,164 @@
+[
+  {
+    "native": {
+      "occurrence": "push-secret-snapshots-494-before-80d3bc52-3533-46bb-8331-1514efde15c1",
+      "outcome": "settled",
+      "host": {
+        "pid": 82808,
+        "processInstanceID": "win32:639281369679707218",
+        "occurrenceID": "c859e87c-5262-4c65-ad3d-74d97aafedcb"
+      },
+      "target": {
+        "pid": 89712,
+        "processInstanceID": "win32:639281369695992984",
+        "occurrenceID": "134d63a0-180b-4667-b078-ed0ae4b37e6a"
+      },
+      "observedAtUtc": "2026-10-20T23:50:48.416Z",
+      "deadlineAt": 1792540407950,
+      "terminal": {
+        "occurrenceID": "push-secret-snapshots-494-before-80d3bc52-3533-46bb-8331-1514efde15c1",
+        "pid": 89712,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "run": "before",
+    "ready": {
+      "occurrence": "push-secret-snapshots-494-before-80d3bc52-3533-46bb-8331-1514efde15c1",
+      "outcome": "ready",
+      "host": {
+        "pid": 82808,
+        "processInstanceID": "win32:639281369679707218",
+        "occurrenceID": "c859e87c-5262-4c65-ad3d-74d97aafedcb"
+      },
+      "parent": {
+        "pid": 23976,
+        "processInstanceID": "win32:639281369674648957",
+        "occurrenceID": "1fb1449d-1f70-4ceb-8997-0fd1957ead0b"
+      },
+      "target": {
+        "pid": 89712,
+        "processInstanceID": "win32:639281369695992984",
+        "occurrenceID": "134d63a0-180b-4667-b078-ed0ae4b37e6a"
+      },
+      "targetBirthAtMs": 1792540169599,
+      "deadlineAt": 1792540407950,
+      "observedAtUtc": "2026-10-20T23:49:29.629Z",
+      "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/dependency-redirect-hardening-488-after-bundle/bin/bun.exe",
+      "args": [
+        "D:/myhexin-local/opencorvus/.tmp-product-iteration/push-secret-snapshots-494/benchmark.ts"
+      ],
+      "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+    },
+    "runtimeDataFiles": [],
+    "launcher": {
+      "observedAtUtc": "2026-10-20T23:50:48.4632661Z",
+      "originalChildExit": 0
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 82808,
+          "processInstanceID": "win32:639281369679707218",
+          "occurrenceID": "c859e87c-5262-4c65-ad3d-74d97aafedcb"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 89712,
+          "processInstanceID": "win32:639281369695992984",
+          "occurrenceID": "134d63a0-180b-4667-b078-ed0ae4b37e6a"
+        }
+      }
+    ],
+    "boundary": "Exact original native host/target birth,not PID/name-only proof;no source initializer or model input"
+  },
+  {
+    "native": {
+      "occurrence": "push-secret-snapshots-494-after-1033ceb8-56c5-4591-827d-eceec2f6fb4d",
+      "outcome": "settled",
+      "host": {
+        "pid": 89768,
+        "processInstanceID": "win32:639281371044825704",
+        "occurrenceID": "fa32adba-46e8-4c7f-a4c3-beca7ea5f89b"
+      },
+      "target": {
+        "pid": 37580,
+        "processInstanceID": "win32:639281371061926271",
+        "occurrenceID": "57cfe6b1-1a66-431b-a1c4-90d2f4dd972a"
+      },
+      "observedAtUtc": "2026-10-20T23:52:26.798Z",
+      "deadlineAt": 1792540544462,
+      "terminal": {
+        "occurrenceID": "push-secret-snapshots-494-after-1033ceb8-56c5-4591-827d-eceec2f6fb4d",
+        "pid": 37580,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "run": "after",
+    "ready": {
+      "occurrence": "push-secret-snapshots-494-after-1033ceb8-56c5-4591-827d-eceec2f6fb4d",
+      "outcome": "ready",
+      "host": {
+        "pid": 89768,
+        "processInstanceID": "win32:639281371044825704",
+        "occurrenceID": "fa32adba-46e8-4c7f-a4c3-beca7ea5f89b"
+      },
+      "parent": {
+        "pid": 73956,
+        "processInstanceID": "win32:639281371040087930",
+        "occurrenceID": "a132b2ec-d0d7-427f-a898-b0b9637ee5fa"
+      },
+      "target": {
+        "pid": 37580,
+        "processInstanceID": "win32:639281371061926271",
+        "occurrenceID": "57cfe6b1-1a66-431b-a1c4-90d2f4dd972a"
+      },
+      "targetBirthAtMs": 1792540306192,
+      "deadlineAt": 1792540544462,
+      "observedAtUtc": "2026-10-20T23:51:46.227Z",
+      "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/dependency-redirect-hardening-488-after-bundle/bin/bun.exe",
+      "args": [
+        "D:/myhexin-local/opencorvus/.tmp-product-iteration/push-secret-snapshots-494/benchmark.ts"
+      ],
+      "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+    },
+    "runtimeDataFiles": [],
+    "launcher": {
+      "observedAtUtc": "2026-10-20T23:52:26.8442256Z",
+      "originalChildExit": 0
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 89768,
+          "processInstanceID": "win32:639281371044825704",
+          "occurrenceID": "fa32adba-46e8-4c7f-a4c3-beca7ea5f89b"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 37580,
+          "processInstanceID": "win32:639281371061926271",
+          "occurrenceID": "57cfe6b1-1a66-431b-a1c4-90d2f4dd972a"
+        }
+      }
+    ],
+    "boundary": "Exact original native host/target birth,not PID/name-only proof;no source initializer or model input"
+  }
+]

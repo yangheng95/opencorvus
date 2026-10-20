@@ -122,6 +122,18 @@ denial-only turns are not automatically rewritten or repaired by startup recover
 
 ## Adjacent security boundaries
 
+Repository delivery uses `script/secret-scan.ts` as its credential checker.
+Pre-push input retains Git's local and remote object identities, covering the
+complete pushed tips and index plus newly introduced or changed file snapshots
+throughout the new commit ancestry, including root and merge commits. Identical
+path/blob snapshots share one scan within the invocation; different paths and
+versions retain their own findings. The default Continuous Integration (CI) invocation reads HEAD and
+the index. Extension, size, Gitlink and explicit fixture-line rules apply to
+every selected snapshot. Missing objects or invalid hook input fail explicitly.
+Reports contain file, line, rule and description; credential content and
+credential-derived prefixes are not diagnostic fields. Earlier remote publication requires
+maintainer-coordinated cleanup rather than an automatic history rewrite.
+
 Remote MCP Hypertext Transfer Protocol (HTTP) and Server-Sent Events (SSE)
 transports inherit the upstream Software Development Kit (SDK)'s default
 `same-origin` redirect policy. Method-preserving redirects within that boundary retain the

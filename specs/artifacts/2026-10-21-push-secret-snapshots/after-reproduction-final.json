@@ -1,0 +1,9 @@
+{
+  "observedAt": "2026-10-20T23:55:49.917Z",
+  "fixture": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\push-secret-snapshots-494\\reproduction",
+  "input": "refs/heads/qa-fixture 5f46e373ad28564cae3ec2f8d41ae6c10ef99168 refs/heads/qa-fixture ac325176ff0b878d0fe7e1fd12f4d59376fe42bd\n",
+  "status": 1,
+  "stdout": "[secret-scan] Checking pushed file snapshots and the index\n",
+  "stderr": "[secret-scan] FAIL — 1 hit(s):\n  secrets.ts:1  [provider-key] Model-provider key (sk-...)\n\nIf the match is a deliberate test fixture, append `// secret-scan: ignore` to the line.\nRevoke any real credential, then remove it from every commit to be pushed and from the index.\nIf it was published earlier, coordinate history cleanup with the maintainers.\n",
+  "credential": "Original generated fake only;no credential-derived diagnostic content or Provider request"
+}

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [推送历史密钥与快照去重](2026-10-21-push-secret-snapshots/README.md)：旧CLI成功→当前明确拒绝的实际Git复现、6项正向合同、71757输入78.42→40.17秒与原生/数据收尾；错误报告无凭据派生片段。
+
 - [Git启动下限与发布源码](2026-10-21-git-startup-floor/README.md)：六个原scope/1776项真实命令，query≈version且cmd也13秒，实际父同步spawn与原物理/源3665行保留；生产未改。
 
 - [Git可执行路径传递对照](2026-10-21-git-executable-flow/README.md)：四个完整配置checker、九张人工截图、固定四次实际Sol与九个原native scope结算；生产候选撤回，原性能目标仍未达。
