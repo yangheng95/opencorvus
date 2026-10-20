@@ -1,0 +1,23 @@
+{
+  "sourceWritten": false,
+  "preparationExchangeOrRefresh": false,
+  "actualCredentialValueScan": "Passed on archived evidence, all owned native scopes and task source; values not emitted",
+  "catalog": "Complete adjacent catalog copied and separately projected with actual gpt-6.1-sol streaming in all three scopes",
+  "retired": [
+    {
+      "scope": "config-read-write-ownership-457",
+      "privatePair": "retired after physical/output/request/launcher and all checker joins",
+      "sourceMetadataUnchanged": true
+    },
+    {
+      "scope": "config-read-write-ownership-457-final",
+      "privatePair": "retired after physical/output/request/launcher and all checker joins",
+      "sourceMetadataUnchanged": true
+    },
+    {
+      "scope": "config-read-write-ownership-457-verified",
+      "privatePair": "retired after physical/output/request/launcher and all checker joins",
+      "sourceMetadataUnchanged": true
+    }
+  ]
+}

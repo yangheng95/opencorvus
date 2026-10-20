@@ -1,0 +1,24 @@
+{"requests":4,"stages":["schema-less read preserves the entire authored text"],"restored":true}
+32 |  assert.equal(await fs.readFile(target,'utf8'),text)
+33 |  stages.push('schema-less read preserves the entire authored text')
+34 |  const bad=scope+'/bad-candidate.ts'
+35 |  await fs.writeFile(bad,'export default async()=>{throw new Error("Owned read-owner candidate error")}\n',{flag:'wx'})
+36 |  const rejected=await request('PATCH',{plugin:[pathToFileURL(bad).href]},400)
+37 |  assert.equal(rejected.name,'ConfigCandidateValidationError')
+             ^
+AssertionError: Expected values to be strictly equal:
++ actual - expected
+
++ undefined
+- 'ConfigCandidateValidationError'
+
+ generatedMessage: true,
+     actual: undefined,
+   expected: "ConfigCandidateValidationError",
+   operator: "strictEqual",
+       diff: "simple",
+       code: "ERR_ASSERTION"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\config-read-write-ownership-457\http-contract.ts:37:9
+
+Bun v1.4.0 (Windows x64)

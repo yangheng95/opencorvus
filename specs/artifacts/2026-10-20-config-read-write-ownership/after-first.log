@@ -1,0 +1,14 @@
+[1/1] START test/config-read-write-ownership.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) project schema reader retains a real peer's accepted fields [7290.88ms]
+(pass) project legacy-permission reader retains a real peer's accepted fields [3578.38ms]
+(pass) global schema reader retains a real peer's accepted fields [3457.89ms]
+(pass) global legacy-permission reader retains a real peer's accepted fields [3735.30ms]
+
+ 4 pass
+ 0 fail
+ 8 expect() calls
+Ran 4 tests across 1 file. [20.60s]
+[1/1] DONE test/config-read-write-ownership.test.ts exit=0 duration=21.22s

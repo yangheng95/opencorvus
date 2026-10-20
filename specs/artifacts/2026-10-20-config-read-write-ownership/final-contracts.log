@@ -1,0 +1,182 @@
+[1/2] START test/config-read-write-ownership.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) project schema reader retains a real peer's accepted fields [6740.95ms]
+(pass) project legacy-permission reader retains a real peer's accepted fields [3751.49ms]
+(pass) global schema reader retains a real peer's accepted fields [3632.93ms]
+(pass) global legacy-permission reader retains a real peer's accepted fields [3424.53ms]
+(pass) ordinary reads retain the complete authored schema-less source [1330.03ms]
+(pass) legacy migration retains comments and literal references with its version-one audit [1371.89ms]
+(pass) legacy migration resolves the configured environment value before persisting its canonical mode [1370.85ms]
+(pass) project atomic owner settles legacy source reads within its callback [3122.52ms]
+(pass) global atomic owner settles legacy source reads within its callback [1737.67ms]
+(pass) project and global peer owners converge from both legacy sources [4311.44ms]
+(pass) MCP owner commits the current metadata and preserves migrated authored fields [739.48ms]
+
+ 11 pass
+ 0 fail
+ 20 expect() calls
+Ran 11 tests across 1 file. [34.08s]
+[1/2] DONE test/config-read-write-ownership.test.ts exit=0 duration=34.85s
+[2/2] START test/config-jsonc-diagnostics.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Config JSONC diagnostic projection > literal input produces the exact syntax, named-error and CLI diagnostics [6.46ms]
+(pass) Config JSONC diagnostic projection > environment input produces the exact syntax, named-error and CLI diagnostics [2.32ms]
+(pass) Config JSONC diagnostic projection > file input produces the exact syntax, named-error and CLI diagnostics [2.04ms]
+(pass) Config JSONC diagnostic projection > LF source reports its one-based final line and column [2.08ms]
+(pass) Config JSONC diagnostic projection > CRLF source reports its one-based final line and column [1.52ms]
+(pass) Config JSONC diagnostic projection > CR source reports its one-based final line and column [1.45ms]
+(pass) Config JSONC diagnostic projection > Unicode positions use the parser's UTF-16 offsets [1.98ms]
+(pass) Config JSONC diagnostic projection > multiple syntax errors retain the parser's diagnostic order [1.82ms]
+(pass) Config JSONC diagnostic projection > valid comments, trailing commas and both substitutions produce their actual values [1.87ms]
+187 |     ] as const) {
+188 |       test(`${scope} malformed ${label} source preserves distinct reader and writer coordinates`, async () => {
+189 |         await writeFile(configFile(scope), `{"provider":{"owned":{"options":{"apiKey":"${value}"}}}`)
+190 |         const readerError = await jsonError(() => readConfig(scope))
+191 |         const writerError = await jsonError(() => writeConfig(scope, { username: "owned-update" }))
+192 |         expect({ reader: readerError.toObject(), writer: writerError.toObject() }).toEqual({
+                                                                                         ^
+error: expect(received).toEqual(expected)
+
+  {
+    "reader": {
+      "data": {
+        "message": "CloseBraceExpected at line 1, column 53",
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-8kO5Yt\test-28944-nLAcBb\runtime-root\config\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+    "writer": {
+      "data": {
+-       "message": "CloseBraceExpected at line 1, column 86",
++       "message": "CloseBraceExpected at line 1, column 53",
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-8kO5Yt\test-28944-nLAcBb\runtime-root\config\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:192:84)
+(fail) Config JSONC diagnostic projection > global malformed environment source preserves distinct reader and writer coordinates [29.83ms]
+187 |     ] as const) {
+188 |       test(`${scope} malformed ${label} source preserves distinct reader and writer coordinates`, async () => {
+189 |         await writeFile(configFile(scope), `{"provider":{"owned":{"options":{"apiKey":"${value}"}}}`)
+190 |         const readerError = await jsonError(() => readConfig(scope))
+191 |         const writerError = await jsonError(() => writeConfig(scope, { username: "owned-update" }))
+192 |         expect({ reader: readerError.toObject(), writer: writerError.toObject() }).toEqual({
+                                                                                         ^
+error: expect(received).toEqual(expected)
+
+  {
+    "reader": {
+      "data": {
+        "message": "CloseBraceExpected at line 1, column 53",
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-8kO5Yt\test-28944-nLAcBb\runtime-root\config\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+    "writer": {
+      "data": {
+-       "message": "CloseBraceExpected at line 1, column 87",
++       "message": "CloseBraceExpected at line 1, column 53",
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-8kO5Yt\test-28944-nLAcBb\runtime-root\config\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:192:84)
+(fail) Config JSONC diagnostic projection > global malformed file source preserves distinct reader and writer coordinates [24.47ms]
+(pass) Config JSONC diagnostic projection > global canonical reader reports the exact stored-file syntax error [11.97ms]
+(pass) Config JSONC diagnostic projection > global canonical writer reports the exact existing-file syntax error [11.79ms]
+(pass) Config JSONC diagnostic projection > global public Config reads and writes return the named 500 contract [9695.75ms]
+(pass) Config JSONC diagnostic projection > global Provider catalog publishes the exact partial-success configuration issue [120.32ms]
+(pass) Config JSONC diagnostic projection > global writer preserves literal references while its reader expands them [268.07ms]
+187 |     ] as const) {
+188 |       test(`${scope} malformed ${label} source preserves distinct reader and writer coordinates`, async () => {
+189 |         await writeFile(configFile(scope), `{"provider":{"owned":{"options":{"apiKey":"${value}"}}}`)
+190 |         const readerError = await jsonError(() => readConfig(scope))
+191 |         const writerError = await jsonError(() => writeConfig(scope, { username: "owned-update" }))
+192 |         expect({ reader: readerError.toObject(), writer: writerError.toObject() }).toEqual({
+                                                                                         ^
+error: expect(received).toEqual(expected)
+
+  {
+    "reader": {
+      "data": {
+        "message": "CloseBraceExpected at line 1, column 53",
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-8kO5Yt\test-28944-nLAcBb\fixtures\memory-kWaEgy\.opencorvus\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+    "writer": {
+      "data": {
+-       "message": "CloseBraceExpected at line 1, column 86",
++       "message": "CloseBraceExpected at line 1, column 53",
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-8kO5Yt\test-28944-nLAcBb\fixtures\memory-kWaEgy\.opencorvus\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:192:84)
+(fail) Config JSONC diagnostic projection > project malformed environment source preserves distinct reader and writer coordinates [527.83ms]
+187 |     ] as const) {
+188 |       test(`${scope} malformed ${label} source preserves distinct reader and writer coordinates`, async () => {
+189 |         await writeFile(configFile(scope), `{"provider":{"owned":{"options":{"apiKey":"${value}"}}}`)
+190 |         const readerError = await jsonError(() => readConfig(scope))
+191 |         const writerError = await jsonError(() => writeConfig(scope, { username: "owned-update" }))
+192 |         expect({ reader: readerError.toObject(), writer: writerError.toObject() }).toEqual({
+                                                                                         ^
+error: expect(received).toEqual(expected)
+
+  {
+    "reader": {
+      "data": {
+        "message": "CloseBraceExpected at line 1, column 53",
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-8kO5Yt\test-28944-nLAcBb\fixtures\memory-kWaEgy\.opencorvus\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+    "writer": {
+      "data": {
+-       "message": "CloseBraceExpected at line 1, column 87",
++       "message": "CloseBraceExpected at line 1, column 53",
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-8kO5Yt\test-28944-nLAcBb\fixtures\memory-kWaEgy\.opencorvus\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:192:84)
+(fail) Config JSONC diagnostic projection > project malformed file source preserves distinct reader and writer coordinates [574.32ms]
+(pass) Config JSONC diagnostic projection > project canonical reader reports the exact stored-file syntax error [387.75ms]
+(pass) Config JSONC diagnostic projection > project canonical writer reports the exact existing-file syntax error [441.71ms]
+(pass) Config JSONC diagnostic projection > project public Config reads and writes return the named 500 contract [692.53ms]
+(pass) Config JSONC diagnostic projection > project Provider catalog publishes the exact partial-success configuration issue [538.81ms]
+(pass) Config JSONC diagnostic projection > project writer preserves literal references while its reader expands them [490.33ms]
+(pass) Config JSONC diagnostic projection > the actual HTTP failure log retains the same canonical syntax diagnostic [23.03ms]
+
+ 20 pass
+ 4 fail
+ 30 expect() calls
+Ran 24 tests across 1 file. [18.59s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts
+[2/2] DONE test/config-jsonc-diagnostics.test.ts exit=1 duration=18.82s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts

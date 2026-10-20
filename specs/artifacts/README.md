@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [配置读取写回的共享所有权](2026-10-20-config-read-write-ownership/README.md)：四个实际 peer 覆盖失败、117 例合同、最终真实 HTTP 与完整历史保留。
+
 - [候选插件错误与重试](2026-10-20-candidate-plugin-failure/README.md)：坏factory误提交与旧失败缓存、67例合同、18个实际HTTP及完整101项目验证；保留读取写回风险。
 
 - [候选Provider插件来源](2026-10-20-candidate-provider-plugins/README.md)：三个真实失败→68例合同、实际HTTP保存恢复、完整99项目性能与原native结算。

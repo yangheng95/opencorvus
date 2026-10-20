@@ -1,0 +1,140 @@
+[1/8] START test/config-read-write-ownership.test.ts
+(pass) project schema reader retains a real peer's accepted fields [6063.78ms]
+(pass) project legacy-permission reader retains a real peer's accepted fields [3581.97ms]
+(pass) global schema reader retains a real peer's accepted fields [3513.12ms]
+(pass) global legacy-permission reader retains a real peer's accepted fields [3442.78ms]
+(pass) ordinary reads retain the complete authored schema-less source [1349.30ms]
+(pass) legacy migration retains comments and literal references with its version-one audit [1485.83ms]
+(pass) project atomic owner settles legacy source reads within its callback [3267.76ms]
+(pass) global atomic owner settles legacy source reads within its callback [1569.58ms]
+(pass) project and global peer owners converge from both legacy sources [4279.17ms]
+(pass) MCP owner commits the current metadata and preserves migrated authored fields [681.15ms]
+ 10 pass
+ 0 fail
+ 19 expect() calls
+Ran 10 tests across 1 file. [31.38s]
+[1/8] DONE test/config-read-write-ownership.test.ts exit=0 duration=32.01s
+[2/8] START test/config-peer-convergence.test.ts
+(pass) cross-process Config convergence > a stable generation parses the exact source snapshot that owns its revision [1684.66ms]
+(pass) cross-process Config convergence > a committed writer transition retains its exact generation until event settlement succeeds [1128.74ms]
+(pass) cross-process Config convergence > a detached reader admitted by a writer settles before the next generation owner [1305.14ms]
+(pass) cross-process Config convergence > a loaded backend settles a peer Project write and publishes its current projection [9164.11ms]
+(pass) cross-process Config convergence > a peer global write refreshes every loaded Project from the same canonical generation [12436.25ms]
+(pass) cross-process Config convergence > a global-only backend publishes the canonical settlement event after a peer write [3852.47ms]
+(pass) cross-process Config convergence > a Project activated inside a global commit reads the committed generation [1551.00ms]
+ 7 pass
+ 0 fail
+ 8 expect() calls
+Ran 7 tests across 1 file. [32.30s]
+[2/8] DONE test/config-peer-convergence.test.ts exit=0 duration=32.46s
+[3/8] START test/config-layer-inheritance.test.ts
+(pass) declared configuration layers and effective defaults > absent project source preserves explicit global profile and permission [994.90ms]
+(pass) declared configuration layers and effective defaults > empty project source preserves explicit global profile and permission [1116.49ms]
+(pass) declared configuration layers and effective defaults > whitespace project source preserves explicit global profile and permission [1120.57ms]
+(pass) declared configuration layers and effective defaults > empty object project source preserves explicit global profile and permission [1065.64ms]
+(pass) declared configuration layers and effective defaults > unrelated username project source preserves explicit global profile and permission [1125.09ms]
+(pass) declared configuration layers and effective defaults > partial nested objects preserve the actual inherited question, memory and terminal values [1286.56ms]
+(pass) declared configuration layers and effective defaults > a source relation is checked with its actual inherited memory limit [1085.73ms]
+(pass) declared configuration layers and effective defaults > explicit defaults, false, zero and empty argument arrays remain authored values [1038.19ms]
+(pass) declared configuration layers and effective defaults > source values normalize explicit leaves while getProject keeps the declared shape [1685.55ms]
+(pass) declared configuration layers and effective defaults > unknown field produces the canonical typed source error [948.43ms]
+(pass) declared configuration layers and effective defaults > wrong permission type produces the canonical typed source error [997.13ms]
+(pass) declared configuration layers and effective defaults > invalid effective memory relation produces the canonical typed source error [1120.59ms]
+(pass) declared configuration layers and effective defaults > project atomic writer reads only authored values and publishes a valid cumulative candidate [2157.17ms]
+(pass) declared configuration layers and effective defaults > the public project PATCH handler retains inheritance and null restores a global field [1799.74ms]
+(pass) declared configuration layers and effective defaults > global atomic callbacks separate effective defaults from the actual writable source [346.38ms]
+(pass) declared configuration layers and effective defaults > global null deletion preserves schema defaults and the sparse writable source [548.99ms]
+(pass) declared configuration layers and effective defaults > inline and explicit resource-directory layers merge only their declared nested leaves [1651.75ms]
+(pass) declared configuration layers and effective defaults > configured extension arrays keep their additive order and ordinary arrays remain replaceable [2107.38ms]
+(pass) declared configuration layers and effective defaults > legacy explicit permission migration remains an authored source decision [1423.70ms]
+(pass) declared configuration layers and effective defaults > Skill path installation, policy update and removal preserve the canonical source contract [2418.38ms]
+(pass) declared configuration layers and effective defaults > Provider removal consumes the actual sparse project source and publishes its committed result [1450.30ms]
+(pass) declared configuration layers and effective defaults > two projects preserve their separate authored overrides over one global source [2778.72ms]
+(pass) declared configuration layers and effective defaults > inherited Ask mode becomes a real request and an explicit allow_once result [1617.72ms]
+ 23 pass
+ 0 fail
+ 72 expect() calls
+Ran 23 tests across 1 file. [33.60s]
+[3/8] DONE test/config-layer-inheritance.test.ts exit=0 duration=33.77s
+[4/8] START test/config-global-defaults.test.ts
+(pass) effective global configuration defaults > absent source yields canonical defaults and conversation preflight [19.61ms]
+(pass) effective global configuration defaults > empty source yields canonical defaults and conversation preflight [3.78ms]
+(pass) effective global configuration defaults > whitespace source yields canonical defaults and conversation preflight [4.04ms]
+(pass) effective global configuration defaults > empty object source yields canonical defaults and conversation preflight [6.93ms]
+(pass) effective global configuration defaults > source revision changes publish explicit settings and then canonical defaults [43.32ms]
+(pass) effective global configuration defaults > first atomic write receives canonical defaults and publishes the requested setting [342.84ms]
+(pass) effective global configuration defaults > experimental source publishes its current declared settings through canonical normalization [12.54ms]
+ 7 pass
+ 0 fail
+ 20 expect() calls
+Ran 7 tests across 1 file. [3.06s]
+[4/8] DONE test/config-global-defaults.test.ts exit=0 duration=3.23s
+[5/8] START test/config-candidate-provider-plugins.test.ts
+(pass) a complete candidate snapshot projects the newly selected file plugin before publication [1659.33ms]
+(pass) the real project writer publishes a replacement plugin and its selected model together [1918.45ms]
+(pass) a candidate's empty plugin selection resolves the standard catalog model [2025.10ms]
+(pass) an explicit selection matching the loaded modules retains their original hook identity [1655.25ms]
+(pass) the loaded specifiers remain authoritative when the saved config has moved to another plugin [1628.69ms]
+(pass) one selected plugin receives each real Project's input while global keeps its declared model [3019.38ms]
+(pass) the project writer can replace a broken current plugin with an explicit empty selection [1513.82ms]
+(pass) an invalid candidate model reports its typed contract and preserves the current working selection [1691.75ms]
+(pass) a failed candidate factory returns the validation error before project publication with configured model [1757.60ms]
+(pass) a failed candidate factory returns the validation error before project publication with unspecified model [1514.65ms]
+(pass) a failed candidate factory preserves the global source while validating a registered Project [1750.67ms]
+(pass) the runtime catalog retains its structured plugin issue and a readable standard model [1488.13ms]
+(pass) a retained catalog resolves its original model after a newer catalog publication [1544.44ms]
+(pass) catalog model resolution retains typed provider and model suggestions [1704.83ms]
+(pass) one candidate can publish standard and plugin model references together [1524.22ms]
+(pass) a repaired file plugin at the same selection accepts a fresh candidate retry [1805.60ms]
+ 16 pass
+ 0 fail
+ 17 expect() calls
+Ran 16 tests across 1 file. [29.67s]
+[5/8] DONE test/config-candidate-provider-plugins.test.ts exit=0 duration=29.85s
+[6/8] START test/config-catalog-lock-order.test.ts
+(pass) project Config mutation settles after a catalog reader observes Config [2142.11ms]
+(pass) project Config mutation settles after a reference reader observes Config [1466.47ms]
+(pass) global Config mutation settles after a catalog reader observes Config [1510.43ms]
+(pass) global Config mutation settles after a reference reader observes Config [1461.77ms]
+ 4 pass
+ 0 fail
+ 8 expect() calls
+Ran 4 tests across 1 file. [7.55s]
+[6/8] DONE test/config-catalog-lock-order.test.ts exit=0 duration=7.70s
+[7/8] START test/mcp-config-generation.test.ts
+(pass) project writer and a first concurrent MCP status read settle with the committed generation [2230.78ms]
+(pass) global writer and a first concurrent MCP status read settle with the committed generation [1575.08ms]
+ 2 pass
+ 0 fail
+ 6 expect() calls
+Ran 2 tests across 1 file. [4.61s]
+[7/8] DONE test/mcp-config-generation.test.ts exit=0 duration=4.75s
+[8/8] START test/permission-two-mode.test.ts
+(pass) permission execution physical owners > retains a live exact effect owner through bootstrap reconciliation and result commit [1796.90ms]
+(pass) permission execution physical owners > reconciles each Project's own execution facts while a different Project has a live effect [3058.03ms]
+(pass) permission execution physical owners > resumes the same MCP protocol task after an exact live owner's explicit lease handback [1426.24ms]
+(pass) permission execution physical owners > preserves the complete missing-owner started ledger as unproven recovery evidence [1366.75ms]
+(pass) permission execution physical owners > preserves the complete opaque-owner started ledger as unproven recovery evidence [1388.63ms]
+(pass) permission execution physical owners > retains an actual result serialization failure and the original started evidence [1374.70ms]
+(pass) two-mode permission authority > one-time legacy permission config migration emits the canonical Full access or Ask me choice [1.00ms]
+(pass) two-mode permission authority > uses Full access when permission mode is omitted [1370.28ms]
+(pass) two-mode permission authority > legacy configuration is captured once by the Session permission policy fact [1693.69ms]
+(pass) two-mode permission authority > Ask me records an exact project grant, reuses it, and asks again for changed arguments [1748.78ms]
+(pass) two-mode permission authority > Project deletion terminals reusable grants before a same-path Project occurrence asks again [2556.23ms]
+(pass) two-mode permission authority > Full access executes built-in and MCP calls while retaining auditable outcomes [1405.56ms]
+(pass) two-mode permission authority > an event consumer can decide during publication without losing the authorization wake [1496.98ms]
+(pass) two-mode permission authority > project-scoped permission authority resolves exact owned facts when unowned historical residue exists [1367.05ms]
+(pass) two-mode permission authority > reply and stale settlement converge on one durable typed decision [1438.66ms]
+(pass) two-mode permission authority > Session deletion cancels a pending request and retains its authorization history [1625.13ms]
+(pass) two-mode permission authority > Session deletion fences a Permission admitted after real Prompt cancellation and settles its waiter [1652.84ms]
+(pass) two-mode permission authority > scope fingerprints redact secrets and bind exact provider and arguments [1667.27ms]
+(pass) two-mode permission authority > a project symlink read is authorized against its canonical external target [1450.86ms]
+(pass) two-mode permission authority > grant expiry and stale settlement produce durable typed lifecycles [1400.32ms]
+(pass) two-mode permission authority > an unknown execution outcome is explicitly reconciled without rewriting its history [1372.79ms]
+(pass) two-mode permission authority > a completed execution replays the original Session-owned result and outcome identity [1322.28ms]
+(pass) two-mode permission authority > projects a structured Permission result through the canonical Tool output boundary [1563.39ms]
+ 23 pass
+ 0 fail
+ 90 expect() calls
+Ran 23 tests across 1 file. [36.97s]
+[8/8] DONE test/permission-two-mode.test.ts exit=0 duration=37.11s

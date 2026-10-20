@@ -78,7 +78,7 @@ export namespace Config {
   }
 
   type ConfigLoadOptions = {
-    writeSchema?: boolean
+    persistMigrations?: boolean
     projectOwnedSource?: "project" | "non-project"
     base?: Info
   }
@@ -97,6 +97,12 @@ export namespace Config {
   }
 
   const CONFIG_SCHEMA_URL = "https://opencorvus.ai/config.json"
+  const LEGACY_PERMISSION_FIELDS = ["permission", "tool_permissions"] as const
+
+  function legacyPermissionFields(input: unknown) {
+    if (!input || typeof input !== "object" || Array.isArray(input)) return []
+    return LEGACY_PERMISSION_FIELDS.filter((key) => Object.prototype.hasOwnProperty.call(input, key))
+  }
 
   export type LegacyPermissionMigration = Readonly<{
     sourceFields: readonly ("permission" | "tool_permissions")[]
@@ -122,9 +128,7 @@ export namespace Config {
   } {
     if (!input || typeof input !== "object" || Array.isArray(input)) return { config: input }
     const source = input as Record<string, unknown>
-    const sourceFields = (["permission", "tool_permissions"] as const).filter((key) =>
-      Object.prototype.hasOwnProperty.call(source, key),
-    )
+    const sourceFields = legacyPermissionFields(source)
     if (sourceFields.length === 0) return { config: input }
     const explicit = source.permission_mode
     if (explicit !== undefined && explicit !== "full_access" && explicit !== "ask") {
@@ -328,7 +332,7 @@ export namespace Config {
 
   async function loadStateOnce(options: LoadStateOptions = {}) {
     const loadOptions: ConfigLoadOptions = {
-      writeSchema: options.readOnly !== true,
+      persistMigrations: options.readOnly !== true,
       projectOwnedSource: "non-project",
     }
     const directory = options.directory ?? ProjectInstanceContext.use().directory
@@ -383,8 +387,6 @@ export namespace Config {
         }
         const wellknown = (await response.json()) as any
         const remoteConfig = wellknown.config ?? {}
-        // Add $schema to prevent load() from trying to write back to a non-existent file
-        if (!remoteConfig.$schema) remoteConfig.$schema = CONFIG_SCHEMA_URL
         result = mergeConfigConcatArrays(
           result,
           await load(
@@ -501,7 +503,7 @@ export namespace Config {
     // Kept separate from directories array to avoid write operations when installing plugins
     // which would fail on system directories requiring elevated permissions
     // This way it only loads config file and not skills/plugins/commands
-    const managedLoadOptions = { ...loadOptions, writeSchema: false, base: result }
+    const managedLoadOptions = { ...loadOptions, persistMigrations: false, base: result }
     const managedFile = await ConfigPaths.assertCanonicalDirectory(managedDir)
     result = mergeConfigConcatArrays(result, await loadStateFile(managedFile, managedLoadOptions))
 
@@ -1936,68 +1938,21 @@ export namespace Config {
     options: { path: string } | { dir: string; source: string },
     loadOptions?: ConfigLoadOptions,
   ) {
-    let original = text
     const source = "path" in options ? options.path : options.source
-    const isFile = "path" in options
-    let data = await ConfigPaths.parseText(
+    const data = await ConfigPaths.parseText(
       text,
       "path" in options ? options.path : { source: options.source, dir: options.dir },
     )
 
     const legacy = migrateLegacyPermissionConfig(data)
-    data = legacy.config
-    if (legacy.migration) {
-      log.info("legacy permission configuration migrated", {
-        source,
-        sourceFields: legacy.migration.sourceFields,
-        permissionMode: legacy.migration.permissionMode,
-        reason: legacy.migration.reason,
-      })
-      if (isFile && loadOptions?.writeSchema !== false) {
-        original = applyEdits(
-          original,
-          modify(original, ["permission_mode"], legacy.migration.permissionMode, {
-            formattingOptions: { insertSpaces: true, tabSize: 2 },
-          }),
-        )
-        original = applyEdits(
-          original,
-          modify(original, ["permission_migration"], (data as Record<string, unknown>).permission_migration, {
-            formattingOptions: { insertSpaces: true, tabSize: 2 },
-          }),
-        )
-        for (const field of legacy.migration.sourceFields) {
-          original = applyEdits(
-            original,
-            modify(original, [field], undefined, { formattingOptions: { insertSpaces: true, tabSize: 2 } }),
-          )
-        }
-        // Deliberately unlocked. `loadFile` runs inside `writeConfigFile`'s
-        // own commit hook, so taking the write lock here would deadlock
-        // against the write that is calling it. Atomic replacement is what
-        // this rewrite can guarantee on its own: the file is never torn, and
-        // the migration is idempotent, so a concurrent writer that loses it
-        // re-applies it on its next load.
-        await Filesystem.writeAtomic(options.path, original)
-      }
+    if (legacy.migration && "path" in options && loadOptions?.persistMigrations !== false) {
+      await ensurePermissionMigration(options.path)
     }
 
-    assertProjectOwnedConfigSource(data, source, loadOptions)
-
-    const parsed = parseSourceLayer(data, source, loadOptions?.base)
-    // A file that holds nothing but the empty object is either untouched or
-    // freshly provisioned by the write lock. Injecting a `$schema` into it
-    // would turn a read into a write, and would put content into a file the
-    // user never created.
-    const isEmptyObjectFile = original.trim() === "{}"
-    if (!parsed.$schema && isFile && !isEmptyObjectFile && loadOptions?.writeSchema !== false) {
-      parsed.$schema = CONFIG_SCHEMA_URL
-      const updated = original.replace(/^\s*\{/, `{\n  "$schema": "${CONFIG_SCHEMA_URL}",`)
-      // Unlocked for the same reason as the migration rewrite above, and
-      // idempotent: the next load re-injects it if a concurrent writer wins.
-      await Filesystem.writeAtomic(options.path, updated)
-    }
-    return parsed
+    // Parse this exact snapshot, even if its migration just changed the file.
+    // The enclosing source-revision check reloads any changed generation.
+    assertProjectOwnedConfigSource(legacy.config, source, loadOptions)
+    return parseSourceLayer(legacy.config, source, loadOptions?.base)
   }
   export const { JsonError, InvalidError } = ConfigPaths
 
@@ -2401,7 +2356,7 @@ export namespace Config {
         const resolved = await loadState({ readOnly: true })
         const source = await readSourceSnapshot(target)
         const config = await loadSourceSnapshot(source, {
-          writeSchema: false,
+          persistMigrations: false,
           projectOwnedSource: "project",
           base: resolved.config,
         })
@@ -2424,7 +2379,7 @@ export namespace Config {
 
   async function resolveGlobalCandidate(globalConfig: Source) {
     const target = globalConfigFile()
-    const source = await loadGlobalConfig({ writeSchema: false }, (filepath, options) =>
+    const source = await loadGlobalConfig({ persistMigrations: false }, (filepath, options) =>
       Filesystem.resolve(filepath) === Filesystem.resolve(target)
         ? Promise.resolve(parseSourceLayer(globalConfig, target))
         : loadFile(filepath, options),
@@ -2460,10 +2415,21 @@ export namespace Config {
           if (error.code === "ENOENT") return "{}"
           throw error
         })
-        const edits = modify(text, ["mcp", name], mcpConfig, {
-          formattingOptions: { tabSize: 2, insertSpaces: true },
-        })
-        await Filesystem.writeAtomic(configPath, applyEdits(text, edits))
+        let updated = applyEdits(
+          text,
+          modify(text, ["mcp", name], mcpConfig, {
+            formattingOptions: { tabSize: 2, insertSpaces: true },
+          }),
+        )
+        if (!parseConfig(updated, configPath).$schema) {
+          updated = applyEdits(
+            updated,
+            modify(updated, ["$schema"], CONFIG_SCHEMA_URL, {
+              formattingOptions: { tabSize: 2, insertSpaces: true },
+            }),
+          )
+        }
+        await Filesystem.writeAtomic(configPath, updated)
       })
     if (Filesystem.resolve(configPath) === Filesystem.resolve(globalConfigFile())) {
       const { SkillManager } = await import("@/skill/manager")
@@ -2616,7 +2582,7 @@ export namespace Config {
     }, input)
   }
 
-  function parseConfig(text: string, filepath: string): Source {
+  function parseConfigData(text: string, filepath: string): unknown {
     const errors: JsoncParseError[] = []
     const data = parseJsonc(text, errors, { allowTrailingComma: true })
     if (errors.length) {
@@ -2626,8 +2592,35 @@ export namespace Config {
       })
     }
 
-    const migrated = migrateLegacyPermissionConfig(data)
-    return migrated.config as Source
+    return data
+  }
+
+  function parseConfig(text: string, filepath: string): Source {
+    return migrateLegacyPermissionConfig(parseConfigData(text, filepath)).config as Source
+  }
+
+  async function migratePermissionText(text: string, filepath: string) {
+    const legacy = migrateLegacyPermissionConfig(await ConfigPaths.parseText(text, filepath))
+    if (!legacy.migration) return { text }
+    const canonical = legacy.config as Record<string, unknown>
+    let updated = text
+    for (const field of ["permission_mode", "permission_migration"] as const) {
+      updated = applyEdits(
+        updated,
+        modify(updated, [field], canonical[field], {
+          formattingOptions: { insertSpaces: true, tabSize: 2 },
+        }),
+      )
+    }
+    for (const field of legacy.migration.sourceFields) {
+      updated = applyEdits(
+        updated,
+        modify(updated, [field], undefined, {
+          formattingOptions: { insertSpaces: true, tabSize: 2 },
+        }),
+      )
+    }
+    return { text: updated, migration: legacy.migration }
   }
 
   // RFC 7396-compatible deep merge: null values in the source delete the
@@ -2680,15 +2673,63 @@ export namespace Config {
   // clobber the first agent's override. Keyed by absolute filepath so the
   // project file and the global file get independent locks.
   const writeConfigLocks = new Map<string, Promise<unknown>>()
+  type ConfigFileOwner = { key: string; active: boolean; parent?: ConfigFileOwner }
+  const configFileOwner = new AsyncLocalStorage<ConfigFileOwner>()
+
+  async function ensurePermissionMigration(filepath: string) {
+    const key = Filesystem.normalizeForCompare(filepath)
+    for (let owner = configFileOwner.getStore(); owner; owner = owner.parent) {
+      if (owner.active && owner.key === key) return
+    }
+    await withConfigFileLock(filepath, async () => undefined, "expanded")
+  }
 
   /** Every writer of a config file takes the same cross-process lock. */
-  function withConfigFileLock<T>(filepath: string, run: () => Promise<T>): Promise<T> {
+  function withConfigFileLock<T>(
+    filepath: string,
+    run: () => Promise<T>,
+    sourceSyntax: "literal" | "expanded" = "literal",
+  ): Promise<T> {
+    filepath = Filesystem.resolve(filepath)
     return withSharedJsonFactLock({
       locks: writeConfigLocks,
       filepath,
       // Exactly what `loadFile` synthesizes for a missing file.
       empty: "{}",
-      run,
+      run: async () => {
+        const owner: ConfigFileOwner = {
+          key: Filesystem.normalizeForCompare(filepath),
+          active: true,
+          parent: configFileOwner.getStore(),
+        }
+        return configFileOwner.run(owner, async () => {
+          try {
+            // Normalize this target before a commit hook can read any source.
+            // Migration owns only these bytes; it never enters a Config/cache
+            // owner or acquires another file lock.
+            const current = await Filesystem.readText(filepath)
+            if (current.trim()) {
+              // Explicit writers diagnose their authored JSONC before any
+              // substitution. Reader-triggered migration has the reader's
+              // expanded syntax contract, including unquoted env values.
+              if (sourceSyntax === "literal") parseConfigData(current, filepath)
+              const migrated = await migratePermissionText(current, filepath)
+              if (migrated.migration) {
+                await Filesystem.writeAtomic(filepath, migrated.text)
+                log.info("legacy permission configuration migrated", {
+                  source: filepath,
+                  sourceFields: migrated.migration.sourceFields,
+                  permissionMode: migrated.migration.permissionMode,
+                  reason: migrated.migration.reason,
+                })
+              }
+            }
+            return await run()
+          } finally {
+            owner.active = false
+          }
+        })
+      },
     })
   }
 
@@ -2720,7 +2761,7 @@ export namespace Config {
       const existing = await normalize(before)
       const appliedPatch = typeof config === "function" ? await config(existing) : config
       if (filepath.endsWith(".jsonc")) {
-        let updated = patchJsonc(before, appliedPatch)
+        let updated = (await migratePermissionText(patchJsonc(before, appliedPatch), filepath)).text
         let merged = await normalize(updated)
         if (Object.keys(merged).length > 0 && !merged.$schema) {
           updated = applyEdits(
@@ -2742,7 +2783,7 @@ export namespace Config {
       }
       const writable = mergeWithNullDelete(existing, appliedPatch)
       if (Object.keys(writable).length > 0 && !writable.$schema) writable.$schema = CONFIG_SCHEMA_URL
-      const serialized = JSON.stringify(writable, null, 2)
+      const serialized = (await migratePermissionText(JSON.stringify(writable, null, 2), filepath)).text
       const merged = await normalize(serialized)
       const persist = () => Filesystem.writeAtomic(filepath, serialized)
       if (hooks?.commit) await hooks.commit(merged, appliedPatch, persist)

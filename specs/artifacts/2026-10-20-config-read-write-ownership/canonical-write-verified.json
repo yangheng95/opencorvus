@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-20T03:57:57.933Z",
+  "endedAt": "2026-10-20T03:58:23.304Z",
+  "phase": "candidate",
+  "port": 18727,
+  "occurrence": "config-read-write-ownership-457-verified-a9eed977-1d0d-4c9d-8379-e1b2a1541e97",
+  "transport": "browser",
+  "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+  "accepted": true,
+  "restored": true,
+  "writeMs": 12798.661399999999,
+  "restoreMs": 12560.433200000003,
+  "failures": [],
+  "permissionMode": "ask",
+  "changedField": "username",
+  "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+}

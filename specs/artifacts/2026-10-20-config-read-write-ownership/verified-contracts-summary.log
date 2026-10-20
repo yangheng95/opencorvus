@@ -1,0 +1,47 @@
+[1/2] START test/config-read-write-ownership.test.ts
+(pass) project schema reader retains a real peer's accepted fields [5957.70ms]
+(pass) project legacy-permission reader retains a real peer's accepted fields [3871.40ms]
+(pass) global schema reader retains a real peer's accepted fields [3434.98ms]
+(pass) global legacy-permission reader retains a real peer's accepted fields [3466.93ms]
+(pass) ordinary reads retain the complete authored schema-less source [1424.66ms]
+(pass) legacy migration retains comments and literal references with its version-one audit [1402.49ms]
+(pass) legacy migration resolves the configured environment value before persisting its canonical mode [1344.35ms]
+(pass) project atomic owner settles legacy source reads within its callback [3130.49ms]
+(pass) global atomic owner settles legacy source reads within its callback [1562.81ms]
+(pass) project and global peer owners converge from both legacy sources [4558.78ms]
+(pass) MCP owner commits the current metadata and preserves migrated authored fields [701.62ms]
+ 11 pass
+ 0 fail
+ 20 expect() calls
+Ran 11 tests across 1 file. [33.00s]
+[1/2] DONE test/config-read-write-ownership.test.ts exit=0 duration=33.84s
+[2/2] START test/config-jsonc-diagnostics.test.ts
+(pass) Config JSONC diagnostic projection > literal input produces the exact syntax, named-error and CLI diagnostics [6.30ms]
+(pass) Config JSONC diagnostic projection > environment input produces the exact syntax, named-error and CLI diagnostics [1.80ms]
+(pass) Config JSONC diagnostic projection > file input produces the exact syntax, named-error and CLI diagnostics [1.51ms]
+(pass) Config JSONC diagnostic projection > LF source reports its one-based final line and column [1.32ms]
+(pass) Config JSONC diagnostic projection > CRLF source reports its one-based final line and column [1.22ms]
+(pass) Config JSONC diagnostic projection > CR source reports its one-based final line and column [1.06ms]
+(pass) Config JSONC diagnostic projection > Unicode positions use the parser's UTF-16 offsets [1.18ms]
+(pass) Config JSONC diagnostic projection > multiple syntax errors retain the parser's diagnostic order [1.10ms]
+(pass) Config JSONC diagnostic projection > valid comments, trailing commas and both substitutions produce their actual values [1.55ms]
+(pass) Config JSONC diagnostic projection > global malformed environment source preserves distinct reader and writer coordinates [22.85ms]
+(pass) Config JSONC diagnostic projection > global malformed file source preserves distinct reader and writer coordinates [9.44ms]
+(pass) Config JSONC diagnostic projection > global canonical reader reports the exact stored-file syntax error [3.84ms]
+(pass) Config JSONC diagnostic projection > global canonical writer reports the exact existing-file syntax error [9.15ms]
+(pass) Config JSONC diagnostic projection > global public Config reads and writes return the named 500 contract [198.26ms]
+(pass) Config JSONC diagnostic projection > global Provider catalog publishes the exact partial-success configuration issue [86.17ms]
+(pass) Config JSONC diagnostic projection > global writer preserves literal references while its reader expands them [268.57ms]
+(pass) Config JSONC diagnostic projection > project malformed environment source preserves distinct reader and writer coordinates [392.28ms]
+(pass) Config JSONC diagnostic projection > project malformed file source preserves distinct reader and writer coordinates [367.75ms]
+(pass) Config JSONC diagnostic projection > project canonical reader reports the exact stored-file syntax error [369.22ms]
+(pass) Config JSONC diagnostic projection > project canonical writer reports the exact existing-file syntax error [357.80ms]
+(pass) Config JSONC diagnostic projection > project public Config reads and writes return the named 500 contract [635.78ms]
+(pass) Config JSONC diagnostic projection > project Provider catalog publishes the exact partial-success configuration issue [421.35ms]
+(pass) Config JSONC diagnostic projection > project writer preserves literal references while its reader expands them [433.40ms]
+(pass) Config JSONC diagnostic projection > the actual HTTP failure log retains the same canonical syntax diagnostic [20.96ms]
+ 24 pass
+ 0 fail
+ 30 expect() calls
+Ran 24 tests across 1 file. [6.96s]
+[2/2] DONE test/config-jsonc-diagnostics.test.ts exit=0 duration=7.14s

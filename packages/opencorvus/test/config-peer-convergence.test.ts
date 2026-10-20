@@ -207,7 +207,7 @@ describe.serial("cross-process Config convergence", () => {
         path.join(import.meta.dir, "fixture", "config-peer-writer.ts"),
         "project",
         changedProject.path,
-        "peer-middle",
+        JSON.stringify({ agent: { coding: { description: "peer-middle" } } }),
       ],
       {
         cwd: path.resolve(import.meta.dir, ".."),
@@ -253,7 +253,7 @@ describe.serial("cross-process Config convergence", () => {
           path.join(import.meta.dir, "fixture", "config-peer-writer.ts"),
           "project",
           changedProject.path,
-          "peer-later",
+          JSON.stringify({ agent: { coding: { description: "peer-later" } } }),
         ],
         {
           cwd: path.resolve(import.meta.dir, ".."),
@@ -414,7 +414,7 @@ describe.serial("cross-process Config convergence", () => {
           path.join(import.meta.dir, "fixture", "config-peer-writer.ts"),
           "global",
           firstProject.path,
-          "peer-global-middle",
+          JSON.stringify({ username: "peer-global-middle" }),
         ],
         {
           cwd: path.resolve(import.meta.dir, ".."),
@@ -455,7 +455,7 @@ describe.serial("cross-process Config convergence", () => {
             path.join(import.meta.dir, "fixture", "config-peer-writer.ts"),
             "project",
             firstProject.path,
-            "cross-source",
+            JSON.stringify({ agent: { coding: { description: "cross-source" } } }),
           ],
           {
             cwd: path.resolve(import.meta.dir, ".."),
@@ -487,7 +487,7 @@ describe.serial("cross-process Config convergence", () => {
             path.join(import.meta.dir, "fixture", "config-peer-writer.ts"),
             "global",
             firstProject.path,
-            "peer-global-later",
+            JSON.stringify({ username: "peer-global-later" }),
           ],
           {
             cwd: path.resolve(import.meta.dir, ".."),
@@ -583,7 +583,7 @@ describe.serial("cross-process Config convergence", () => {
         path.join(import.meta.dir, "fixture", "config-peer-writer.ts"),
         "global",
         writerProject.path,
-        "global-only-after",
+        JSON.stringify({ username: "global-only-after" }),
       ],
       {
         cwd: path.resolve(import.meta.dir, ".."),

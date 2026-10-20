@@ -179,6 +179,16 @@ parser 必须消费生成该 digest 的同一份 snapshot；完成层级合并�
 显式 writer 在 canonical-file owner 内一次性写入最终 `$schema` 与配置正文，读取路径不得再把已提交的
 业务配置拆成第二个 schema generation。
 
+普通 schema-less 文件读取保留完整 authored 文本；`$schema` 由 Project/global 和 MCP 显式
+writer 在同一次 canonical 提交中补齐。旧 `permission` / `tool_permissions` 的 version 1
+自动迁移保留既有模式映射和审计字段，但持久化必须取得同一个 canonical-file owner，
+在锁内重读当前物理文本后修改权限字段，保留其他声明、注释及 env/file 字面引用。
+每个 writer 入锁后先迁移自身目标，再运行任何域 callback；迁移准备只解析和替换该文件，
+不进入 Config/cache/catalog owner 或另一文件锁。活跃 exact-file owner 内的 reader
+复用已完成的迁移准备，不能因此重入 mutation；退出 scope 后的继承 context 必须重新
+排队。reader 仍解析其原 snapshot，由原 source revision 检查决定重读，不能把锁内新文本
+冒充旧 revision 的内容。只读 candidate、managed 与非文件层只投影转换，不持久化。
+
 `execution_capacity` 是 global JSONC 独有的物理资源策略，分别限定 Scheduler Message、Automation、
 Event 和 Provider 的活跃 effect 数。Project source 在 commit 前按 canonical typed config error 拒绝该
 字段，不能覆盖或影子化全局策略；这些数值不拥有 occurrence、FIFO、重试、租约或业务终态。

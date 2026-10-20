@@ -1,0 +1,121 @@
+[1/1] START test/config-read-write-ownership.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+77 |         const saved = JSON.parse(await fs.readFile(target, "utf8"))
+78 |         expect({
+79 |           interleaved,
+80 |           acknowledgement,
+81 |           reader: { username: read.username, mode: read.permission_mode },
+82 |         }).toEqual({
+                ^
+error: expect(received).toEqual(expected)
+
+  {
+    "acknowledgement": {
+      "description": "peer-after",
+    },
+    "interleaved": true,
+    "reader": {
+-     "mode": "ask",
+-     "username": "peer-after",
++     "mode": "full_access",
++     "username": "reader-before",
+    },
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-read-write-ownership.test.ts:82:12)
+(fail) project schema reader retains a real peer's accepted fields [9877.69ms]
+77 |         const saved = JSON.parse(await fs.readFile(target, "utf8"))
+78 |         expect({
+79 |           interleaved,
+80 |           acknowledgement,
+81 |           reader: { username: read.username, mode: read.permission_mode },
+82 |         }).toEqual({
+                ^
+error: expect(received).toEqual(expected)
+
+  {
+    "acknowledgement": {
+      "description": "peer-after",
+    },
+    "interleaved": true,
+    "reader": {
+-     "mode": "ask",
+-     "username": "peer-after",
++     "mode": "full_access",
++     "username": "reader-before",
+    },
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-read-write-ownership.test.ts:82:12)
+(fail) project legacy-permission reader retains a real peer's accepted fields [3592.64ms]
+77 |         const saved = JSON.parse(await fs.readFile(target, "utf8"))
+78 |         expect({
+79 |           interleaved,
+80 |           acknowledgement,
+81 |           reader: { username: read.username, mode: read.permission_mode },
+82 |         }).toEqual({
+                ^
+error: expect(received).toEqual(expected)
+
+  {
+    "acknowledgement": {
+      "username": "peer-after",
+    },
+    "interleaved": true,
+    "reader": {
+-     "mode": "ask",
+-     "username": "peer-after",
++     "mode": "full_access",
++     "username": "reader-before",
+    },
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-read-write-ownership.test.ts:82:12)
+(fail) global schema reader retains a real peer's accepted fields [3410.87ms]
+77 |         const saved = JSON.parse(await fs.readFile(target, "utf8"))
+78 |         expect({
+79 |           interleaved,
+80 |           acknowledgement,
+81 |           reader: { username: read.username, mode: read.permission_mode },
+82 |         }).toEqual({
+                ^
+error: expect(received).toEqual(expected)
+
+  {
+    "acknowledgement": {
+      "username": "peer-after",
+    },
+    "interleaved": true,
+    "reader": {
+-     "mode": "ask",
+-     "username": "peer-after",
++     "mode": "full_access",
++     "username": "reader-before",
+    },
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-read-write-ownership.test.ts:82:12)
+(fail) global legacy-permission reader retains a real peer's accepted fields [3442.17ms]
+
+ 0 pass
+ 4 fail
+ 4 expect() calls
+Ran 4 tests across 1 file. [25.82s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\config-read-write-ownership.test.ts
+[1/1] DONE test/config-read-write-ownership.test.ts exit=1 duration=30.11s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\config-read-write-ownership.test.ts

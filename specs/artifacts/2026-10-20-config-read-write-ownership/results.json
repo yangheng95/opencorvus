@@ -1,0 +1,180 @@
+{
+  "scope": "config-read-write-ownership-457-verified",
+  "contract": {
+    "scope": "config-read-write-ownership-457-verified",
+    "requests": [
+      {
+        "method": "GET",
+        "route": "/config",
+        "status": 200,
+        "ms": 16.632299999999994
+      },
+      {
+        "method": "PATCH",
+        "route": "/config",
+        "status": 400,
+        "ms": 75.80109999999999
+      },
+      {
+        "method": "GET",
+        "route": "/config",
+        "status": 200,
+        "ms": 33.9487
+      },
+      {
+        "method": "PATCH",
+        "route": "/config",
+        "status": 200,
+        "ms": 65.2716
+      },
+      {
+        "method": "PATCH",
+        "route": "/config",
+        "status": 200,
+        "ms": 57.00169999999997
+      },
+      {
+        "method": "GET",
+        "route": "/config",
+        "status": 200,
+        "ms": 10.317999999999984
+      }
+    ],
+    "stages": [
+      "schema-less read preserves the entire authored text",
+      "typed candidate rejection preserves the complete schema-less source",
+      "current writer saves migrated policy and schema in its canonical commit"
+    ],
+    "restored": true,
+    "qualification": "Actual public development HTTP; independent original peer-writer race covered by focused tests; not UI/visual acceptance"
+  },
+  "tests": {
+    "files": 9,
+    "uniqueCases": 117,
+    "uniqueAssertions": 271,
+    "source": "Eight-file focused run; ownership replaced with final run and diagnostic file added. Original checker logs retained in owned scratch.",
+    "perFile": [
+      {
+        "file": "test/config-read-write-ownership.test.ts",
+        "cases": 11,
+        "assertions": 20
+      },
+      {
+        "file": "test/config-peer-convergence.test.ts",
+        "cases": 7,
+        "assertions": 8
+      },
+      {
+        "file": "test/config-layer-inheritance.test.ts",
+        "cases": 23,
+        "assertions": 72
+      },
+      {
+        "file": "test/config-global-defaults.test.ts",
+        "cases": 7,
+        "assertions": 20
+      },
+      {
+        "file": "test/config-candidate-provider-plugins.test.ts",
+        "cases": 16,
+        "assertions": 17
+      },
+      {
+        "file": "test/config-catalog-lock-order.test.ts",
+        "cases": 4,
+        "assertions": 8
+      },
+      {
+        "file": "test/mcp-config-generation.test.ts",
+        "cases": 2,
+        "assertions": 6
+      },
+      {
+        "file": "test/permission-two-mode.test.ts",
+        "cases": 23,
+        "assertions": 90
+      },
+      {
+        "file": "test/config-jsonc-diagnostics.test.ts",
+        "cases": 24,
+        "assertions": 30
+      }
+    ]
+  },
+  "history": {
+    "schema": {
+      "user_version": 2
+    },
+    "projects": 104,
+    "sessions": 137,
+    "baselines": [
+      {
+        "projects": 101,
+        "sessions": 134
+      },
+      {
+        "projects": 102,
+        "sessions": 135
+      },
+      {
+        "projects": 103,
+        "sessions": 136
+      }
+    ],
+    "mode": "Direct readonly SQLite after all physical and checker joins; every original Project/Session identity, owner and directory retained; no production initializer or data clearing"
+  },
+  "performance": {
+    "writeMs": 12798.661399999999,
+    "restoreMs": 12560.433200000003,
+    "coldBudgetMs": 10000,
+    "restoreBudgetMs": 5000,
+    "readBudgetMs": 20000,
+    "maxReadMs": 12968.4221,
+    "qualification": "Original save and restore budgets remain unmet; all four concurrent HTTP reads passed"
+  },
+  "native": [
+    {
+      "scope": "config-read-write-ownership-457",
+      "launcherExit": 0,
+      "physical": true,
+      "output": true,
+      "requests": true,
+      "runtimePair": true,
+      "preflight": {
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      }
+    },
+    {
+      "scope": "config-read-write-ownership-457-final",
+      "launcherExit": 0,
+      "physical": true,
+      "output": true,
+      "requests": true,
+      "runtimePair": true,
+      "preflight": {
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      }
+    },
+    {
+      "scope": "config-read-write-ownership-457-verified",
+      "launcherExit": 0,
+      "physical": true,
+      "output": true,
+      "requests": true,
+      "runtimePair": true,
+      "preflight": {
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      }
+    }
+  ],
+  "ui": "UI source unchanged; Work browser access disabled, current visual qualification unmet"
+}
