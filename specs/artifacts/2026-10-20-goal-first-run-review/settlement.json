@@ -1,0 +1,308 @@
+{
+  "before": {
+    "ready": {
+      "occurrence": "goal-first-run-477-before-3a11239e-5671-4ca0-b8d5-d69a29e8acff",
+      "outcome": "ready",
+      "host": {
+        "pid": 88036,
+        "processInstanceID": "win32:639281043859616820",
+        "occurrenceID": "57a9eb15-66d0-4a6b-a13e-6157c67131e5"
+      },
+      "parent": {
+        "pid": 91024,
+        "processInstanceID": "win32:639281043841964669",
+        "occurrenceID": "54b1db51-5dc7-4b26-8632-2cacdde6c746"
+      },
+      "target": {
+        "pid": 71360,
+        "processInstanceID": "win32:639281043868133465",
+        "occurrenceID": "56aaf9a3-e10c-4657-a664-497ba532b865"
+      },
+      "targetBirthAtMs": 1792507586813,
+      "deadlineAt": 1792508785935,
+      "observedAtUtc": "2026-10-20T14:46:26.840Z",
+      "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/goal-budget-lifecycle-476-bundle/bin/bun.exe",
+      "args": [
+        "D:/myhexin-local/opencorvus/.tmp-product-iteration/goal-first-run-477/serve.ts",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/goal-first-run-477-data/runtime",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/goal-first-run-477-data/project",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/goal-first-run-477-before/evidence",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/goal-first-run-477-before/startup.json",
+        "18809",
+        "goal-first-run-477-before-3a11239e-5671-4ca0-b8d5-d69a29e8acff"
+      ],
+      "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+    },
+    "shutdown": {
+      "occurrence": "goal-first-run-477-before-3a11239e-5671-4ca0-b8d5-d69a29e8acff",
+      "observedAtUtc": "2026-10-20T14:54:45.3390053Z",
+      "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYbNFaW00Bo3wNEDgd\"}",
+      "statusCode": 200,
+      "target": {
+        "pid": 71360,
+        "processInstanceID": "win32:639281043868133465",
+        "occurrenceID": "56aaf9a3-e10c-4657-a664-497ba532b865"
+      }
+    },
+    "physical": {
+      "observedAtUtc": "2026-10-20T14:57:36.3276533Z",
+      "modelCatalog": "Nonsecret metadata retained for owned restart",
+      "credentialStage": "Not performed",
+      "chain": [
+        {
+          "identity": {
+            "pid": 88036,
+            "processInstanceID": "win32:639281043859616820",
+            "occurrenceID": "57a9eb15-66d0-4a6b-a13e-6157c67131e5"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "identity": {
+            "pid": 71360,
+            "processInstanceID": "win32:639281043868133465",
+            "occurrenceID": "56aaf9a3-e10c-4657-a664-497ba532b865"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "native": {
+        "occurrence": "goal-first-run-477-before-3a11239e-5671-4ca0-b8d5-d69a29e8acff",
+        "outcome": "settled",
+        "host": {
+          "pid": 88036,
+          "processInstanceID": "win32:639281043859616820",
+          "occurrenceID": "57a9eb15-66d0-4a6b-a13e-6157c67131e5"
+        },
+        "target": {
+          "pid": 71360,
+          "processInstanceID": "win32:639281043868133465",
+          "occurrenceID": "56aaf9a3-e10c-4657-a664-497ba532b865"
+        },
+        "observedAtUtc": "2026-10-20T14:54:45.413Z",
+        "deadlineAt": 1792508785935,
+        "terminal": {
+          "occurrenceID": "goal-first-run-477-before-3a11239e-5671-4ca0-b8d5-d69a29e8acff",
+          "pid": 71360,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      }
+    },
+    "launcher": {
+      "childExitCode": 0,
+      "observedAtUtc": "2026-10-20T14:54:45.4608686Z"
+    }
+  },
+  "after": {
+    "ready": {
+      "occurrence": "goal-first-run-477-after-f03931e0-ca54-47dd-bddb-a2ca3af25ad7",
+      "outcome": "ready",
+      "host": {
+        "pid": 84160,
+        "processInstanceID": "win32:639281051033534768",
+        "occurrenceID": "4e2b0e67-4fc3-4b55-b414-05b3b70d18b3"
+      },
+      "parent": {
+        "pid": 77800,
+        "processInstanceID": "win32:639281050979064466",
+        "occurrenceID": "af9fadbb-66d1-44c6-91b9-0bef8ee70621"
+      },
+      "target": {
+        "pid": 51144,
+        "processInstanceID": "win32:639281051041564474",
+        "occurrenceID": "0b2f4932-4869-4215-b6d6-c3360165ff35"
+      },
+      "targetBirthAtMs": 1792508304156,
+      "deadlineAt": 1792509502450,
+      "observedAtUtc": "2026-10-20T14:58:24.182Z",
+      "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/goal-first-run-477-bundle/bin/bun.exe",
+      "args": [
+        "D:/myhexin-local/opencorvus/.tmp-product-iteration/goal-first-run-477/serve-after.ts",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/goal-first-run-477-data/runtime",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/goal-first-run-477-data/project",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/goal-first-run-477-after/evidence",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/goal-first-run-477-after/startup.json",
+        "18811",
+        "goal-first-run-477-after-f03931e0-ca54-47dd-bddb-a2ca3af25ad7"
+      ],
+      "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+    },
+    "shutdown": {
+      "statusCode": 200,
+      "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYbOm23005ZgLclbhY\"}",
+      "occurrence": "goal-first-run-477-after-f03931e0-ca54-47dd-bddb-a2ca3af25ad7",
+      "target": {
+        "pid": 51144,
+        "processInstanceID": "win32:639281051041564474",
+        "occurrenceID": "0b2f4932-4869-4215-b6d6-c3360165ff35"
+      },
+      "observedAtUtc": "2026-10-20T15:00:48.3952023Z"
+    },
+    "physical": {
+      "observedAtUtc": "2026-10-20T15:01:08.6689289Z",
+      "chain": [
+        {
+          "identity": {
+            "pid": 84160,
+            "processInstanceID": "win32:639281051033534768",
+            "occurrenceID": "4e2b0e67-4fc3-4b55-b414-05b3b70d18b3"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "identity": {
+            "pid": 51144,
+            "processInstanceID": "win32:639281051041564474",
+            "occurrenceID": "0b2f4932-4869-4215-b6d6-c3360165ff35"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "native": {
+        "occurrence": "goal-first-run-477-after-f03931e0-ca54-47dd-bddb-a2ca3af25ad7",
+        "outcome": "settled",
+        "host": {
+          "pid": 84160,
+          "processInstanceID": "win32:639281051033534768",
+          "occurrenceID": "4e2b0e67-4fc3-4b55-b414-05b3b70d18b3"
+        },
+        "target": {
+          "pid": 51144,
+          "processInstanceID": "win32:639281051041564474",
+          "occurrenceID": "0b2f4932-4869-4215-b6d6-c3360165ff35"
+        },
+        "observedAtUtc": "2026-10-20T15:00:48.455Z",
+        "deadlineAt": 1792509502450,
+        "terminal": {
+          "occurrenceID": "goal-first-run-477-after-f03931e0-ca54-47dd-bddb-a2ca3af25ad7",
+          "pid": 51144,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "modelCatalog": "Nonsecret metadata retained until next paired stage",
+      "credentialStage": "Not performed"
+    },
+    "launcher": {
+      "observedAtUtc": "2026-10-20T15:00:48.4878735Z",
+      "childExitCode": 0
+    }
+  },
+  "recovery": {
+    "ready": {
+      "occurrence": "goal-first-run-477-recovery-281a30d9-fb34-4f4a-9f9c-654a8b69723e",
+      "outcome": "ready",
+      "host": {
+        "pid": 70080,
+        "processInstanceID": "win32:639281053190615578",
+        "occurrenceID": "848b1101-64f7-4e14-a38f-ea46fdd0d345"
+      },
+      "parent": {
+        "pid": 82180,
+        "processInstanceID": "win32:639281053173115012",
+        "occurrenceID": "98f7a917-4864-4e27-b11c-880ded2b529f"
+      },
+      "target": {
+        "pid": 84672,
+        "processInstanceID": "win32:639281053196239579",
+        "occurrenceID": "917b85c2-cce1-45f1-9ccf-2a23d96581cb"
+      },
+      "targetBirthAtMs": 1792508519623,
+      "deadlineAt": 1792509719030,
+      "observedAtUtc": "2026-10-20T15:01:59.652Z",
+      "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/goal-first-run-477-final-bundle/bin/bun.exe",
+      "args": [
+        "D:/myhexin-local/opencorvus/.tmp-product-iteration/goal-first-run-477/serve-recovery.ts",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/goal-first-run-477-data/runtime",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/goal-first-run-477-data/project",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/goal-first-run-477-recovery/evidence",
+        "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-20/goal-first-run-477-recovery/startup.json",
+        "18811",
+        "goal-first-run-477-recovery-281a30d9-fb34-4f4a-9f9c-654a8b69723e"
+      ],
+      "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+    },
+    "shutdown": {
+      "observedAtUtc": "2026-10-20T15:05:52.4790555Z",
+      "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYbQ38g00sGh2RVC96\"}",
+      "statusCode": 200,
+      "occurrence": "goal-first-run-477-recovery-281a30d9-fb34-4f4a-9f9c-654a8b69723e",
+      "target": {
+        "pid": 84672,
+        "processInstanceID": "win32:639281053196239579",
+        "occurrenceID": "917b85c2-cce1-45f1-9ccf-2a23d96581cb"
+      }
+    },
+    "physical": {
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 70080,
+            "processInstanceID": "win32:639281053190615578",
+            "occurrenceID": "848b1101-64f7-4e14-a38f-ea46fdd0d345"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 84672,
+            "processInstanceID": "win32:639281053196239579",
+            "occurrenceID": "917b85c2-cce1-45f1-9ccf-2a23d96581cb"
+          }
+        }
+      ],
+      "runtimePair": "retired after physical/output/request/launcher and EOF",
+      "native": {
+        "occurrence": "goal-first-run-477-recovery-281a30d9-fb34-4f4a-9f9c-654a8b69723e",
+        "outcome": "settled",
+        "host": {
+          "pid": 70080,
+          "processInstanceID": "win32:639281053190615578",
+          "occurrenceID": "848b1101-64f7-4e14-a38f-ea46fdd0d345"
+        },
+        "target": {
+          "pid": 84672,
+          "processInstanceID": "win32:639281053196239579",
+          "occurrenceID": "917b85c2-cce1-45f1-9ccf-2a23d96581cb"
+        },
+        "observedAtUtc": "2026-10-20T15:05:52.589Z",
+        "deadlineAt": 1792509719030,
+        "terminal": {
+          "occurrenceID": "goal-first-run-477-recovery-281a30d9-fb34-4f4a-9f9c-654a8b69723e",
+          "pid": 84672,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "observedAtUtc": "2026-10-20T15:06:32.0664296Z",
+      "requests": 4,
+      "launcher": {
+        "observedAtUtc": "2026-10-20T15:05:52.6219859Z",
+        "childExitCode": 0
+      },
+      "maximumRequests": 6,
+      "sourceReaders": "4/4 EOF"
+    },
+    "launcher": {
+      "observedAtUtc": "2026-10-20T15:05:52.6219859Z",
+      "childExitCode": 0
+    }
+  }
+}

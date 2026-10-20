@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Goal首次使用与模型恢复](records/2026-10/2026-10-20-goal-first-run-review.md)：缺少模型时的真实静默阻塞修复、[13张实图及同Goal真实恢复](artifacts/2026-10-20-goal-first-run-review/README.md)。
+
 - [Goal预算、暂停与恢复](records/2026-10/2026-10-20-goal-budget-lifecycle-review.md)：长错误弹窗与冲突额度比较修复、[19张实际页面及同Goal六轮证据](artifacts/2026-10-20-goal-budget-lifecycle-review/README.md)。
 
 - [监管命令的启动线程与 Git 包装器](records/2026-10/2026-10-20-process-spawn-thread-cost.md)：[384 次实际命令与线程结算](artifacts/2026-10-20-process-spawn-thread-cost/README.md)，区分主线程响应与完整吞吐，不引入未经全链路证明的新执行路径。

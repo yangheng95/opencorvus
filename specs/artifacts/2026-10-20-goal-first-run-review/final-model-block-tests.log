@@ -1,0 +1,16 @@
+$ bun script/run-tests.ts test/continuous-goal-model-block.test.ts
+[1/1] START test/continuous-goal-model-block.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) chat records a missing model as a durable blocker and preserves usage across explicit retries [1535.38ms]
+(pass) task records a missing model as a durable blocker and preserves usage across explicit retries [1625.81ms]
+(pass) mission records a missing model as a durable blocker and preserves usage across explicit retries [1438.36ms]
+(pass) concurrent missing-model admissions replay one durable blocker [1551.01ms]
+(pass) a user pause wins over an earlier model admission attempt [1184.39ms]
+
+ 5 pass
+ 0 fail
+ 27 expect() calls
+Ran 5 tests across 1 file. [11.64s]
+[1/1] DONE test/continuous-goal-model-block.test.ts exit=0 duration=12.18s

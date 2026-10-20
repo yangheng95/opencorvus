@@ -1,0 +1,38 @@
+$ bun script/run-tests.ts test/continuous-goal-model-block.test.ts
+[1/1] START test/continuous-goal-model-block.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) chat records a missing model as a durable blocker and preserves usage across explicit retries [1551.63ms]
+(pass) task records a missing model as a durable blocker and preserves usage across explicit retries [1778.37ms]
+(pass) mission records a missing model as a durable blocker and preserves usage across explicit retries [1407.92ms]
+ 95 |     const outcomes = await Promise.allSettled([reconcileContinuousGoal(owner), reconcileContinuousGoal(owner)])
+ 96 |     expect(outcomes.map((outcome) => {
+ 97 |       if (outcome.status === "fulfilled") return outcome.value
+ 98 |       if (ContinuousGoalError.isInstance(outcome.reason)) return outcome.reason.data.code
+ 99 |       throw outcome.reason
+100 |     }).sort()).toEqual(["blocked", "revision_conflict"])
+                     ^
+error: expect(received).toEqual(expected)
+
+  [
+    "blocked",
+-   "revision_conflict",
++   "blocked",
+  ]
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\continuous-goal-model-block.test.ts:100:16)
+(fail) concurrent missing-model admissions retain the winning intent revision [1339.68ms]
+
+ 3 pass
+ 1 fail
+ 22 expect() calls
+Ran 4 tests across 1 file. [11.14s]
+[1/1] DONE test/continuous-goal-model-block.test.ts exit=1 duration=11.68s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\continuous-goal-model-block.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\continuous-goal-model-block.test.ts
+error: script "test" exited with code 1

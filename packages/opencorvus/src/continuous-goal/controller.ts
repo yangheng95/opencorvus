@@ -6,6 +6,7 @@ import { Message } from "@/session/message"
 import { Identifier } from "@/id/id"
 import { Scheduler } from "@/scheduler"
 import { Log } from "@/util/log"
+import { MissingModelConfigError } from "@/config/model-resolution-error"
 import { runWithInitializedIndependentProject } from "@/project/independent-project-owner"
 import { taskLifecycleProjection } from "@/engine/task-lifecycle"
 import { pendingInteractionCounts, listAllMissionTasks } from "@/engine/store"
@@ -25,6 +26,7 @@ import {
   planGoalContinuation,
   requestGoalContinuation,
   projectGoalOwners,
+  updateContinuousGoal,
   type GoalOwner,
   type GoalContinuation,
 } from "./store"
@@ -195,6 +197,30 @@ async function deliverConversation(
 export async function reconcileContinuousGoal(owner: GoalOwner, signal?: AbortSignal): Promise<string> {
   const goal = readContinuousGoal(owner)
   if (!goal) return "absent"
+  try {
+    return await reconcileGoal(owner, goal, signal)
+  } catch (error) {
+    if (!MissingModelConfigError.isInstance(error) || !error.data.agent) throw error
+    // Model admission failed on the original execution path. Record that real
+    // blocker on the same intent revision, before asking the operator to resume.
+    // A concurrent user decision or owner boundary retains its existing fence.
+    updateContinuousGoal(
+      owner,
+      {
+        requestID: `${goal.id}:${goal.revision}:model_not_configured`,
+        goalID: goal.id,
+        expectedRevision: goal.revision,
+        status: "blocked",
+        reason: "model_not_configured",
+      },
+      "goal-controller",
+    )
+    log.error("goal blocked by missing model configuration", { owner, error: String(error) })
+    return "blocked"
+  }
+}
+
+async function reconcileGoal(owner: GoalOwner, goal: ContinuousGoalView, signal?: AbortSignal): Promise<string> {
   if (goal.status === "complete" || goal.status === "paused" || goal.status === "blocked") return goal.status
   const previous = latestGoalContinuation(owner)
   if (previous) {

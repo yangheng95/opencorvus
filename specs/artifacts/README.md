@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Goal首次使用与模型恢复](2026-10-20-goal-first-run-review/README.md)：13张人工截图、真实缺少模型状态、35例功能检查与同一Goal恢复完成。
+
 - [Goal预算、暂停与恢复](2026-10-20-goal-budget-lifecycle-review/README.md)：19张实图、真实409草稿复核、同Goal六轮累计及原生结算。
 
 - [启动线程与 Git 包装器诊断](2026-10-20-process-spawn-thread-cost/README.md)：384 次真实 Git 输出、16 组交错量测及三个工作线程的正常退出。

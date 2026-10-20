@@ -97,6 +97,15 @@ newly interrupted frontier under a new physical Prompt generation.
 Pause stops new automatic Message admission. Already committed input may settle through
 its normal owner; uncommitted candidates must revalidate current intent and frontier.
 Goal state does not discard requested external effects or replace Task/Mission completion.
+When the original model resolver rejects admission with an agent-bound
+MissingModelConfigError, the same reconciler records a blocked revision authored
+by goal-controller with reason model_not_configured. The existing request replay
+and expected-revision transaction coalesces identical failures and preserves a
+concurrent operator decision. Structural lineage errors and unrelated failures
+retain their original error paths. This configuration blocker does not create a
+Message, count a turn, choose a model or retry through another execution path.
+After configuring the model, the operator explicitly resumes the same goal;
+original usage and accepted input identities remain intact.
 Archived/deleted owners and closed Mission occurrences are not silently reopened.
 Cancellation/closure after the last explicit goal revision keeps that goal paused
 even when an operator later reopens the owner. Only an explicit active revision
@@ -129,6 +138,10 @@ Successful creation consumes only unchanged plain text without pending quotation
 or attachments. Pending context stays in the message input and is explained in the
 current interface language; creating a goal does not send that context as a Message.
 Detailed steps live in the existing guide dialog rather than a permanent home tutorial.
+The guide explains provider/model preparation, confirmation before a Home
+conversation exists, inherited permissions, immutable objectives and explicit
+resume after resolving a displayed blocker. Known model-configuration reasons
+use the current interface language and the actual localized Resume label.
 The home explanation uses body text and a regular primary control size; compact
 status-strip sizing belongs to existing conversation controls.
 The home copy states that budgets are optional, matching the form's unlimited

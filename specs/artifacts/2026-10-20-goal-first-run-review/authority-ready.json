@@ -1,0 +1,17 @@
+{
+  "owner": {
+    "pid": 84672,
+    "processInstanceID": "win32:639281053196239579",
+    "occurrenceID": "3c58500a-2cbe-4850-b247-29a4384d435b"
+  },
+  "parent": {
+    "pid": 89912,
+    "processInstanceID": "win32:639281053195982637",
+    "occurrenceID": "110d93c0-1ebe-4ad7-81fd-b78571193f4a"
+  },
+  "occurrence": "goal-first-run-477-recovery-281a30d9-fb34-4f4a-9f9c-654a8b69723e",
+  "credential": "available",
+  "catalog": "exact model projected",
+  "model": "openai/gpt-6.1-sol",
+  "maxRequests": 6
+}

@@ -71,6 +71,7 @@ const systemReasons = new Set([
   "mission_closed",
   "token_budget",
   "turn_budget",
+  "model_not_configured",
 ])
 
 function needsBudgetIncrease(goal: ContinuousGoal): boolean {

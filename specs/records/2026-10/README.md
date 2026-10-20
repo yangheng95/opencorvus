@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Goal首次使用与模型恢复](2026-10-20-goal-first-run-review.md)：共享模型配置阻塞、显式恢复和[真实流式及双语截图](../../artifacts/2026-10-20-goal-first-run-review/README.md)。
+
 - [Goal预算、暂停与恢复](2026-10-20-goal-budget-lifecycle-review.md)：正文滚动与固定操作区、当前额度比较和[双语实图/实际累计用量](../../artifacts/2026-10-20-goal-budget-lifecycle-review/README.md)。
 
 - [监管命令的启动线程与 Git 包装器](2026-10-20-process-spawn-thread-cost.md)：384 次真实监管命令、主线程停顿与总耗时的区别及[原句柄结算](../../artifacts/2026-10-20-process-spawn-thread-cost/README.md)。
