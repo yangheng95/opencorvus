@@ -409,12 +409,21 @@ The primary conversation keeps at most 50 reading positions in that same UI
 store, keyed by captured API authority revision and actual source kind/ID.
 Selection clears transient primary disclosures without clearing this bounded
 view memory. Before replay or projection retirement, its one registered visible
-reader captures the current top/following intent, viewport width and first visible
+reader captures the current top/following intent, viewport width and visible
 content anchor in transcript order. Text anchors carry the quotation Message,
 text ordinal, rendered Markdown block ordinal and block offset. Source anchors
 carry the original Message and stable type/Session/Message/source identity of the
 visible source row, plus its viewport offset. Source rows remain citations rather
-than quotation text. Both anchor kinds use the same bounded reading-position
+than quotation text. An explicitly focused Source row in the same transcript
+has priority over earlier visible prose when capturing that existing anchor;
+the same visibility and closed-disclosure filters still apply. The existing
+position Map's previous Source anchor retains that priority while its original
+row remains visible, so layout controls and restore settlement do not replace
+the reader's selected citation with preceding prose. Current Source focus takes
+precedence over that previous row. Other captures retain their chronological
+visible order. This lets the original width-restoration
+controller preserve the reader's selected citation while preceding text rewraps.
+Both anchor kinds use the same bounded reading-position
 store and restoration owner. A long first-visible Message can rewrap internally without changing its
 virtual item index, so its whole-text pixel offset is not a reading anchor.
 Empty, hidden, loading, unhydrated or

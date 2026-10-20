@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [真实网页Sources与持续输出](2026-10-21-web-sources-live-review.md)：共享阅读锚点修复与[28张实际页面、两个独立固定Sol批次](../../artifacts/2026-10-21-web-sources-live-review/README.md)。
+
 - [Sources阅读边界复核](2026-10-21-sources-reading-review.md)：[完整历史与十张人工图](../../artifacts/2026-10-21-sources-reading-review/README.md)，本轮没有生产修复根因。
 
 - [Goal执行结算后的投影](2026-10-21-goal-settlement-refresh.md)：同一canonical读取、精确owner及[真实结算后的实际页面读取](../../artifacts/2026-10-21-goal-settlement-refresh/README.md)。

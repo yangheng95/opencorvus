@@ -93,7 +93,7 @@ function SubagentConversationScroll(props: {
     if (props.active() && !restoringPosition && scrollController && scrollElement && scrollElement.clientHeight > 0)
       props.saveReadingPosition({
         ...scrollController.readingPosition(),
-        anchor: captureConversationReadingAnchor(scrollElement),
+        anchor: captureConversationReadingAnchor(scrollElement, props.readingPosition()?.anchor),
       })
   }
   const changeTracking = (value: boolean) => {

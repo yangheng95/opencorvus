@@ -1,0 +1,539 @@
+{
+  "initialObserver": {
+    "outcome": "Local checker incorrectly treated an intermediate tool-calls assistant completion as whole input completion; corrected before further qualification",
+    "snapshot": {
+      "frame": "live-ready",
+      "observedAt": "2026-10-20T17:24:23.183Z",
+      "user": {
+        "id": "msg_0b86680f-b1cc-474a-9612-d37d3fbe3e8c",
+        "session_id": "ses_-zURO184czznthTwpxQt",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\web-sources-live-482-data\\project"
+      },
+      "reply": {
+        "id": "msg_g0VYbytq100O7O4IBejr",
+        "completed": 1792517063154,
+        "finish": "tool-calls",
+        "model": "gpt-6.1-sol",
+        "provider": "openai"
+      },
+      "textCharacters": 0,
+      "textParts": [],
+      "sources": [
+        {
+          "id": "prt_g0VYbytpJ00JCFlmgB4N",
+          "messageID": "msg_g0VYbys1Q00ZH58GiToo",
+          "type": "source-url",
+          "sourceId": "52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c",
+          "url": "https://arxiv.org/abs/2509.11035v1",
+          "title": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debate",
+          "provider": "opencorvus-webfetch",
+          "toolPartID": "prt_g0VYbytP600tEkyWOr00"
+        },
+        {
+          "id": "prt_g0VYbyv8C00AIcho26YH",
+          "messageID": "msg_g0VYbytq100O7O4IBejr",
+          "type": "source-url",
+          "sourceId": "8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc",
+          "url": "https://aclanthology.org/2025.naacl-long.475/",
+          "title": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology",
+          "provider": "opencorvus-webfetch",
+          "toolPartID": "prt_g0VYbyuZR00OoJawQl8Y"
+        }
+      ],
+      "tools": [
+        {
+          "id": "prt_g0VYbytP600tEkyWOr00",
+          "tool": "webfetch",
+          "input": {
+            "url": "https://arxiv.org/abs/2509.11035v1",
+            "format": "text"
+          },
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VYbyuZR00OoJawQl8Y",
+          "tool": "webfetch",
+          "input": {
+            "url": "https://aclanthology.org/2025.naacl-long.475/",
+            "format": "text"
+          },
+          "outcome": "completed"
+        }
+      ],
+      "readers": [
+        {
+          "state": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792517057283
+          },
+          "status": 200,
+          "context": {
+            "sessionID": "ses_-zURO184czznthTwpxQt",
+            "streamRequest": {
+              "requestID": "msg_0b86680f-b1cc-474a-9612-d37d3fbe3e8c",
+              "agentID": "work",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VYbys8q00Dv2sADIuJ",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VYbys1Q00ZH58GiToo"
+            }
+          }
+        },
+        {
+          "state": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792517061679
+          },
+          "status": 200,
+          "context": {
+            "sessionID": "ses_-zURO184czznthTwpxQt",
+            "streamRequest": {
+              "requestID": "msg_0b86680f-b1cc-474a-9612-d37d3fbe3e8c",
+              "agentID": "work",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VYbytuM00b5O9cXaUk",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VYbytq100O7O4IBejr"
+            }
+          }
+        }
+      ],
+      "actualRequests": 5,
+      "maximumRequests": 6,
+      "budgetExhausted": false,
+      "live": false
+    }
+  },
+  "correctedFirst": {
+    "frame": "corrected-live",
+    "observedAt": "2026-10-20T17:25:06.776Z",
+    "user": {
+      "id": "msg_0b86680f-b1cc-474a-9612-d37d3fbe3e8c",
+      "session_id": "ses_-zURO184czznthTwpxQt",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\web-sources-live-482-data\\project"
+    },
+    "reply": {
+      "id": "msg_g0VYbyv9A00D55BccyEs",
+      "model": "gpt-6.1-sol",
+      "provider": "openai"
+    },
+    "textCharacters": 2465,
+    "textParts": [
+      {
+        "id": "prt_g0VYbyvlt00i05LbFNOa",
+        "characters": 2465
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VYbytpJ00JCFlmgB4N",
+        "messageID": "msg_g0VYbys1Q00ZH58GiToo",
+        "type": "source-url",
+        "sourceId": "52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c",
+        "url": "https://arxiv.org/abs/2509.11035v1",
+        "title": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debate",
+        "provider": "opencorvus-webfetch",
+        "toolPartID": "prt_g0VYbytP600tEkyWOr00"
+      },
+      {
+        "id": "prt_g0VYbyv8C00AIcho26YH",
+        "messageID": "msg_g0VYbytq100O7O4IBejr",
+        "type": "source-url",
+        "sourceId": "8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc",
+        "url": "https://aclanthology.org/2025.naacl-long.475/",
+        "title": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology",
+        "provider": "opencorvus-webfetch",
+        "toolPartID": "prt_g0VYbyuZR00OoJawQl8Y"
+      }
+    ],
+    "tools": [
+      {
+        "id": "prt_g0VYbytP600tEkyWOr00",
+        "tool": "webfetch",
+        "input": {
+          "url": "https://arxiv.org/abs/2509.11035v1",
+          "format": "text"
+        },
+        "outcome": "completed"
+      },
+      {
+        "id": "prt_g0VYbyuZR00OoJawQl8Y",
+        "tool": "webfetch",
+        "input": {
+          "url": "https://aclanthology.org/2025.naacl-long.475/",
+          "format": "text"
+        },
+        "outcome": "completed"
+      }
+    ],
+    "readers": [
+      {
+        "state": "settled",
+        "terminal": {
+          "kind": "eof",
+          "at": 1792517057283
+        },
+        "status": 200,
+        "context": {
+          "sessionID": "ses_-zURO184czznthTwpxQt",
+          "streamRequest": {
+            "requestID": "msg_0b86680f-b1cc-474a-9612-d37d3fbe3e8c",
+            "agentID": "work",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYbys8q00Dv2sADIuJ",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYbys1Q00ZH58GiToo"
+          }
+        }
+      },
+      {
+        "state": "settled",
+        "terminal": {
+          "kind": "eof",
+          "at": 1792517061679
+        },
+        "status": 200,
+        "context": {
+          "sessionID": "ses_-zURO184czznthTwpxQt",
+          "streamRequest": {
+            "requestID": "msg_0b86680f-b1cc-474a-9612-d37d3fbe3e8c",
+            "agentID": "work",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYbytuM00b5O9cXaUk",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYbytq100O7O4IBejr"
+          }
+        }
+      },
+      {
+        "state": "reading",
+        "status": 200,
+        "context": {
+          "sessionID": "ses_-zURO184czznthTwpxQt",
+          "streamRequest": {
+            "requestID": "msg_0b86680f-b1cc-474a-9612-d37d3fbe3e8c",
+            "agentID": "work",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYbyvDV00QvSIoGQJk",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYbyv9A00D55BccyEs"
+          }
+        }
+      }
+    ],
+    "actualRequests": 6,
+    "maximumRequests": 6,
+    "budgetExhausted": false,
+    "live": true
+  },
+  "secondLiveStart": {
+    "frame": "after-live-ready",
+    "scope": "after",
+    "observedAt": "2026-10-20T17:34:07.686Z",
+    "user": {
+      "id": "msg_7729b0f7-ec9c-452c-b3ad-cf74e89b14ab",
+      "session_id": "ses_-zURO184czznthTwpxQt",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\web-sources-live-482-data\\project"
+    },
+    "reply": {
+      "id": "msg_g0VYc1M3n005KGhCcjKW",
+      "model": "gpt-6.1-sol",
+      "provider": "openai"
+    },
+    "textCharacters": 21,
+    "textParts": [
+      {
+        "id": "prt_g0VYc1N6y00YWoRlwque",
+        "characters": 21
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VYbytpJ00JCFlmgB4N",
+        "messageID": "msg_g0VYbys1Q00ZH58GiToo",
+        "type": "source-url",
+        "sourceId": "52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c",
+        "url": "https://arxiv.org/abs/2509.11035v1",
+        "title": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debate",
+        "provider": "opencorvus-webfetch",
+        "toolPartID": "prt_g0VYbytP600tEkyWOr00"
+      },
+      {
+        "id": "prt_g0VYbyv8C00AIcho26YH",
+        "messageID": "msg_g0VYbytq100O7O4IBejr",
+        "type": "source-url",
+        "sourceId": "8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc",
+        "url": "https://aclanthology.org/2025.naacl-long.475/",
+        "title": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology",
+        "provider": "opencorvus-webfetch",
+        "toolPartID": "prt_g0VYbyuZR00OoJawQl8Y"
+      }
+    ],
+    "tools": [
+      {
+        "id": "prt_g0VYbytP600tEkyWOr00",
+        "tool": "webfetch",
+        "input": {
+          "url": "https://arxiv.org/abs/2509.11035v1",
+          "format": "text"
+        },
+        "outcome": "completed"
+      },
+      {
+        "id": "prt_g0VYbyuZR00OoJawQl8Y",
+        "tool": "webfetch",
+        "input": {
+          "url": "https://aclanthology.org/2025.naacl-long.475/",
+          "format": "text"
+        },
+        "outcome": "completed"
+      }
+    ],
+    "readers": [
+      {
+        "state": "reading",
+        "status": 200,
+        "context": {
+          "sessionID": "ses_-zURO184czznthTwpxQt",
+          "streamRequest": {
+            "requestID": "msg_7729b0f7-ec9c-452c-b3ad-cf74e89b14ab",
+            "agentID": "work",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYc1MBa003wbWT6WR9",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYc1M3n005KGhCcjKW"
+          }
+        }
+      }
+    ],
+    "actualRequests": 4,
+    "maximumRequests": 6,
+    "budgetExhausted": false,
+    "live": true
+  },
+  "secondImage07": {
+    "frame": "after-image-07",
+    "scope": "after",
+    "observedAt": "2026-10-20T17:34:16.336Z",
+    "user": {
+      "id": "msg_7729b0f7-ec9c-452c-b3ad-cf74e89b14ab",
+      "session_id": "ses_-zURO184czznthTwpxQt",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\web-sources-live-482-data\\project"
+    },
+    "reply": {
+      "id": "msg_g0VYc1M3n005KGhCcjKW",
+      "model": "gpt-6.1-sol",
+      "provider": "openai"
+    },
+    "textCharacters": 464,
+    "textParts": [
+      {
+        "id": "prt_g0VYc1N6y00YWoRlwque",
+        "characters": 464
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VYbytpJ00JCFlmgB4N",
+        "messageID": "msg_g0VYbys1Q00ZH58GiToo",
+        "type": "source-url",
+        "sourceId": "52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c",
+        "url": "https://arxiv.org/abs/2509.11035v1",
+        "title": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debate",
+        "provider": "opencorvus-webfetch",
+        "toolPartID": "prt_g0VYbytP600tEkyWOr00"
+      },
+      {
+        "id": "prt_g0VYbyv8C00AIcho26YH",
+        "messageID": "msg_g0VYbytq100O7O4IBejr",
+        "type": "source-url",
+        "sourceId": "8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc",
+        "url": "https://aclanthology.org/2025.naacl-long.475/",
+        "title": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology",
+        "provider": "opencorvus-webfetch",
+        "toolPartID": "prt_g0VYbyuZR00OoJawQl8Y"
+      }
+    ],
+    "tools": [
+      {
+        "id": "prt_g0VYbytP600tEkyWOr00",
+        "tool": "webfetch",
+        "input": {
+          "url": "https://arxiv.org/abs/2509.11035v1",
+          "format": "text"
+        },
+        "outcome": "completed"
+      },
+      {
+        "id": "prt_g0VYbyuZR00OoJawQl8Y",
+        "tool": "webfetch",
+        "input": {
+          "url": "https://aclanthology.org/2025.naacl-long.475/",
+          "format": "text"
+        },
+        "outcome": "completed"
+      }
+    ],
+    "readers": [
+      {
+        "state": "reading",
+        "status": 200,
+        "context": {
+          "sessionID": "ses_-zURO184czznthTwpxQt",
+          "streamRequest": {
+            "requestID": "msg_7729b0f7-ec9c-452c-b3ad-cf74e89b14ab",
+            "agentID": "work",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYc1MBa003wbWT6WR9",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYc1M3n005KGhCcjKW"
+          }
+        }
+      }
+    ],
+    "actualRequests": 4,
+    "maximumRequests": 6,
+    "budgetExhausted": false,
+    "live": true
+  },
+  "secondPostImage08": {
+    "frame": "after-image-08",
+    "scope": "after",
+    "observedAt": "2026-10-20T17:36:06.892Z",
+    "user": {
+      "id": "msg_7729b0f7-ec9c-452c-b3ad-cf74e89b14ab",
+      "session_id": "ses_-zURO184czznthTwpxQt",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\web-sources-live-482-data\\project"
+    },
+    "reply": {
+      "id": "msg_g0VYc1M3n005KGhCcjKW",
+      "completed": 1792517755548,
+      "finish": "stop",
+      "model": "gpt-6.1-sol",
+      "provider": "openai"
+    },
+    "textCharacters": 6294,
+    "textParts": [
+      {
+        "id": "prt_g0VYc1N6y00YWoRlwque",
+        "characters": 6294
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VYbytpJ00JCFlmgB4N",
+        "messageID": "msg_g0VYbys1Q00ZH58GiToo",
+        "type": "source-url",
+        "sourceId": "52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c",
+        "url": "https://arxiv.org/abs/2509.11035v1",
+        "title": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debate",
+        "provider": "opencorvus-webfetch",
+        "toolPartID": "prt_g0VYbytP600tEkyWOr00"
+      },
+      {
+        "id": "prt_g0VYbyv8C00AIcho26YH",
+        "messageID": "msg_g0VYbytq100O7O4IBejr",
+        "type": "source-url",
+        "sourceId": "8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc",
+        "url": "https://aclanthology.org/2025.naacl-long.475/",
+        "title": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology",
+        "provider": "opencorvus-webfetch",
+        "toolPartID": "prt_g0VYbyuZR00OoJawQl8Y"
+      }
+    ],
+    "tools": [
+      {
+        "id": "prt_g0VYbytP600tEkyWOr00",
+        "tool": "webfetch",
+        "input": {
+          "url": "https://arxiv.org/abs/2509.11035v1",
+          "format": "text"
+        },
+        "outcome": "completed"
+      },
+      {
+        "id": "prt_g0VYbyuZR00OoJawQl8Y",
+        "tool": "webfetch",
+        "input": {
+          "url": "https://aclanthology.org/2025.naacl-long.475/",
+          "format": "text"
+        },
+        "outcome": "completed"
+      }
+    ],
+    "readers": [
+      {
+        "state": "settled",
+        "terminal": {
+          "kind": "eof",
+          "at": 1792517755518
+        },
+        "status": 200,
+        "context": {
+          "sessionID": "ses_-zURO184czznthTwpxQt",
+          "streamRequest": {
+            "requestID": "msg_7729b0f7-ec9c-452c-b3ad-cf74e89b14ab",
+            "agentID": "work",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYc1MBa003wbWT6WR9",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYc1M3n005KGhCcjKW"
+          }
+        }
+      }
+    ],
+    "actualRequests": 4,
+    "maximumRequests": 6,
+    "budgetExhausted": false,
+    "live": false
+  },
+  "images": [
+    {
+      "image": "02-live-body.png",
+      "imageWrittenAt": "2026-10-20T17:25:18.085Z"
+    },
+    {
+      "image": "07-original-sources-after-continue.png",
+      "imageWrittenAt": "2026-10-20T17:34:10.030Z"
+    },
+    {
+      "image": "08-original-sources-live-narrow.png",
+      "imageWrittenAt": "2026-10-20T17:35:21.630Z"
+    }
+  ],
+  "qualification": "02 body live;07 original Sources live;08 original PNG timestamp within same second reader reading-to-EOF interval;post-image08 snapshot already completed and is not itself a live observation"
+}

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [真实网页Sources与持续输出](records/2026-10/2026-10-21-web-sources-live-review.md)：共享阅读锚点根因修复及[28张人工实图、真实Sol流与原数据保留](artifacts/2026-10-21-web-sources-live-review/README.md)。
+
 - [Sources阅读边界复核](records/2026-10/2026-10-21-sources-reading-review.md)：[十张实际页面及3665行完整原事实](artifacts/2026-10-21-sources-reading-review/README.md)，明确网页来源覆盖缺口。
 
 - [Goal执行结算后的投影](records/2026-10/2026-10-21-goal-settlement-refresh.md)：共享链路审计与[29ms实际读取、八个流式请求及九张实图](artifacts/2026-10-21-goal-settlement-refresh/README.md)。

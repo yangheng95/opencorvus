@@ -139,7 +139,7 @@ export function SideChatPanel(props: {
     const owner = reader
     if (!owner || owner.restoring || !isApiAuthorityCurrent(owner.authority) || boardStore.selectEpoch !== owner.epoch || selected() !== owner.sessionID || sourceKey() !== owner.sourceKey) return
     if (!scroll?.isConnected || scroll.clientHeight <= 0 || scroll.closest("[inert], [hidden]")) return
-    setSideChatReadingPosition(owner.key, { ...owner.controller.readingPosition(), anchor: captureConversationReadingAnchor(scroll) })
+    setSideChatReadingPosition(owner.key, { ...owner.controller.readingPosition(), anchor: captureConversationReadingAnchor(scroll, sideChatReadingPosition(owner.key)?.anchor) })
   }
   onCleanup(() => {
     generation++

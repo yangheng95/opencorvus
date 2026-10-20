@@ -450,7 +450,7 @@ export function Conversation(props: {
     // Layout-induced scroll/clamp events must not replace the pre-resize reader.
     // Explicit reading input and settled restoration can adopt the new layout.
     if (!currentLayout && remembered && !remembered.following && remembered.viewportWidth !== el.clientWidth && !scrollController.hasScrollInput()) return
-    const anchor = captureConversationReadingAnchor(el)
+    const anchor = captureConversationReadingAnchor(el, remembered?.anchor)
     setMainReadingPosition(owner.key, { ...position, viewportWidth: el.clientWidth, anchor })
   }
   const changeTracking = (following: boolean, explicit = true) => {

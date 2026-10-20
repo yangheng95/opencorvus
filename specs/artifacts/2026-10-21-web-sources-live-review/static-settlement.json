@@ -1,0 +1,138 @@
+[
+  {
+    "scope": "web-sources-repair-482-visual",
+    "settlement": {
+      "originalExit": 0,
+      "launcher": {
+        "observedAtUtc": "2026-10-20T17:52:43.0577348Z",
+        "childExitCode": 0
+      },
+      "native": {
+        "occurrence": "web-sources-repair-482-visual-ec9c1959-2ebc-4f4c-a286-6a1c549c48f5",
+        "outcome": "settled",
+        "host": {
+          "pid": 91988,
+          "processInstanceID": "win32:639281152853452955",
+          "occurrenceID": "0c448f15-21e0-4aaf-9b7a-0de312992755"
+        },
+        "target": {
+          "pid": 77416,
+          "processInstanceID": "win32:639281152859599943",
+          "occurrenceID": "1a047066-b788-43b3-8f52-7983e5a75a71"
+        },
+        "observedAtUtc": "2026-10-20T17:52:43.014Z",
+        "deadlineAt": 1792519684679,
+        "terminal": {
+          "occurrenceID": "web-sources-repair-482-visual-ec9c1959-2ebc-4f4c-a286-6a1c549c48f5",
+          "pid": 77416,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 91988,
+            "processInstanceID": "win32:639281152853452955",
+            "occurrenceID": "0c448f15-21e0-4aaf-9b7a-0de312992755"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 77416,
+            "processInstanceID": "win32:639281152859599943",
+            "occurrenceID": "1a047066-b788-43b3-8f52-7983e5a75a71"
+          }
+        }
+      ],
+      "shutdown": {
+        "statusCode": 200,
+        "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYc63Jr00sSzfsVzmQ\"}",
+        "observedAtUtc": "2026-10-20T17:52:42.9495974Z",
+        "occurrence": "web-sources-repair-482-visual-ec9c1959-2ebc-4f4c-a286-6a1c549c48f5",
+        "target": {
+          "pid": 77416,
+          "processInstanceID": "win32:639281152859599943",
+          "occurrenceID": "1a047066-b788-43b3-8f52-7983e5a75a71"
+        }
+      },
+      "originalHandle": 44087,
+      "observedAtUtc": "2026-10-20T17:52:45.6583149Z"
+    }
+  },
+  {
+    "scope": "web-sources-repair-482-visual-v2",
+    "settlement": {
+      "originalHandle": 43263,
+      "shutdown": {
+        "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYc8A8g001nOIqb9Lk\"}",
+        "observedAtUtc": "2026-10-20T18:01:05.8237289Z",
+        "target": {
+          "pid": 88068,
+          "processInstanceID": "win32:639281158244600949",
+          "occurrenceID": "539beeda-c38f-4b76-83f8-ba5e00d0c480"
+        },
+        "statusCode": 200,
+        "occurrence": "web-sources-repair-482-visual-v2-0f67ada0-6fd0-4415-aa80-591d6f9121cc"
+      },
+      "observedAtUtc": "2026-10-20T18:01:07.8977744Z",
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 80172,
+            "processInstanceID": "win32:639281158238916705",
+            "occurrenceID": "b20f1a00-c7a3-4695-90fe-964d44ddf38f"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 88068,
+            "processInstanceID": "win32:639281158244600949",
+            "occurrenceID": "539beeda-c38f-4b76-83f8-ba5e00d0c480"
+          }
+        }
+      ],
+      "originalExit": 0,
+      "launcher": {
+        "observedAtUtc": "2026-10-20T18:01:05.9155285Z",
+        "childExitCode": 0
+      },
+      "native": {
+        "occurrence": "web-sources-repair-482-visual-v2-0f67ada0-6fd0-4415-aa80-591d6f9121cc",
+        "outcome": "settled",
+        "host": {
+          "pid": 80172,
+          "processInstanceID": "win32:639281158238916705",
+          "occurrenceID": "b20f1a00-c7a3-4695-90fe-964d44ddf38f"
+        },
+        "target": {
+          "pid": 88068,
+          "processInstanceID": "win32:639281158244600949",
+          "occurrenceID": "539beeda-c38f-4b76-83f8-ba5e00d0c480"
+        },
+        "observedAtUtc": "2026-10-20T18:01:05.874Z",
+        "deadlineAt": 1792520223138,
+        "terminal": {
+          "occurrenceID": "web-sources-repair-482-visual-v2-0f67ada0-6fd0-4415-aa80-591d6f9121cc",
+          "pid": 88068,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      }
+    }
+  }
+]

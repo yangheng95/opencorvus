@@ -17,10 +17,18 @@ export function conversationReadingAnchorOwner(container: HTMLElement, anchor: C
     : container.querySelectorAll<HTMLElement>(`[data-quotation-message="${CSS.escape(anchor.messageID)}"]`)[anchor.textIndex]
 }
 
-export function captureConversationReadingAnchor(container: HTMLElement): ConversationReadingAnchor | undefined {
+export function captureConversationReadingAnchor(container: HTMLElement, previous?: ConversationReadingAnchor): ConversationReadingAnchor | undefined {
   const viewport = container.getBoundingClientRect()
   const quotes = Array.from(container.querySelectorAll<HTMLElement>("[data-quotation-message]"))
-  const candidates = container.querySelectorAll<HTMLElement>("[data-quotation-message], [data-source-identity][data-source-message-id]")
+  const candidates = Array.from(container.querySelectorAll<HTMLElement>("[data-quotation-message], [data-source-identity][data-source-message-id]"))
+  // Keep the reader's selected citation while it remains visible, including
+  // after a layout control takes focus and the restored position is saved.
+  const previousSource = previous?.kind === "source" ? conversationReadingAnchorOwner(container, previous) : undefined
+  const focusedSource = container.ownerDocument.activeElement?.closest<HTMLElement>("[data-source-identity][data-source-message-id]")
+  for (const source of [previousSource, focusedSource]) {
+    const index = source ? candidates.indexOf(source) : -1
+    if (index > 0) candidates.unshift(candidates.splice(index, 1)[0]!)
+  }
   for (const candidate of candidates) {
     const rect = readingRect(candidate)
     if (!rect || rect.bottom <= viewport.top || rect.top >= viewport.bottom) continue

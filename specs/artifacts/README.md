@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [真实网页 Sources 与阅读锚点修复](2026-10-21-web-sources-live-review/README.md)：两条真实网页引用、28张人工实图，固定10/12发现批与4/6独立修复批，保留原数据并成对退休凭据。
+
 - [当前长文件来源与成员阅读](2026-10-21-sources-reading-review/README.md)：十张当前页面、11条公开来源和3665行原事实完整保留，明确网页摘录与新流覆盖缺口。
 
 - [Goal执行完成后的及时读取](2026-10-21-goal-settlement-refresh/README.md)：实际HTTP读取开始2716ms→29ms、八个Sol流式请求与九张人工页面；区分读取时间与画面帧延迟。
