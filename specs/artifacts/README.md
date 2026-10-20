@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Task Goal 的真实权限与续跑](2026-10-20-task-goal-live/README.md)：只读误审批根因、修复后的真实自动续跑和12张人工截图。
+
 - [配置保存的日志与创建成本](2026-10-20-config-log-cost/README.md)：DEBUG/INFO四次真实写入、四张人工截图、请求CPU归因与148次原生探针；保存/恢复仍失败。
 
 - [配置保存成本与服务商加载反馈](2026-10-20-config-current-io-cost/README.md)：真实被动计数、12张截图、中英文等待与目录恢复，明确保留性能失败。

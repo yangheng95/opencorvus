@@ -4,6 +4,7 @@ import { canonicalDigestSource, compareCanonicalStrings } from "@/util/canonical
 import { projectedTaskToolRuntimeBindingOf } from "@/tool/projected-task-tool-runtime-binding"
 import { internalStageToolBindingOf, stageToolMaterializerBindingOf } from "@/agent/stage-tool-materializer"
 import { MCP } from "@/mcp"
+import { nativeTaskToolBindingOf } from "@/tool/native-task-tool-binding"
 
 export type RuntimeToolOwnerKind = "projected" | "stage"
 const RuntimeToolFactoryInput = z.json()
@@ -30,6 +31,7 @@ export type RuntimeToolLeafFactory = RuntimeToolLeafBinding & {
 
 function bindingFingerprint(tool: AITool) {
   return {
+    native_task: nativeTaskToolBindingOf(tool as object) ?? null,
     projected: projectedTaskToolRuntimeBindingOf(tool as object) ?? null,
     stage: stageToolMaterializerBindingOf(tool as object) ?? null,
     internal_stage: internalStageToolBindingOf(tool as object) ?? null,

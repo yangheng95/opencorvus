@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [新Task的真实Goal执行链](records/2026-10/2026-10-20-task-goal-live.md)：只读误审批根因修复、同一Task epoch3自动续跑与[12张截图及结算事实](artifacts/2026-10-20-task-goal-live/README.md)。
+
 - [完整配置保存的日志成本](records/2026-10/2026-10-20-config-log-cost.md)：DEBUG/INFO真实对照、[四张截图和148次原生探针](artifacts/2026-10-20-config-log-cost/README.md)，保留性能失败。
 
 - [配置保存成本与服务商加载反馈](records/2026-10/2026-10-20-config-current-io-cost.md)：真实调用计数、撤回无收益实验与[12张截图及最终加载反馈](artifacts/2026-10-20-config-current-io-cost/README.md)。

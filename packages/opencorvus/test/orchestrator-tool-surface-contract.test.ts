@@ -40,6 +40,10 @@ import {
 } from "../src/tool/execution-mode"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { ToolRegistry } from "../src/tool/registry"
+import { nativeTaskToolBindingOf } from "../src/tool/native-task-tool-binding"
+import { withTaskToolInvocation } from "../src/tool/task-tool-invocation"
+import { Config } from "../src/config/config"
+import { permissionDescriptor } from "../src/permission/invocation"
 
 afterAll(async () => {
   await resetMemoryDatabase()
@@ -115,7 +119,11 @@ test("materializes only the exact scheduler Tool leaf selected by its runtime fa
       using observer = OrchestratorToolsTestHooks.replaceToolFactoryObserver((toolID) => {
         materialized.push(toolID)
       })
-      const first = await orchestratorToolSurface("Exact read-context scheduler leaf", sendSchedulerMessage, "read_context")
+      const first = await orchestratorToolSurface(
+        "Exact read-context scheduler leaf",
+        sendSchedulerMessage,
+        "read_context",
+      )
       expect(Object.keys(first.tools)).toEqual(["read_context"])
       expect(materialized).toEqual(["read_context"])
 
@@ -139,6 +147,79 @@ test("builds every scheduler-projectable built-in Tool an expert-squad manifest 
       )
       expect(factoryOwned.map((id) => built.has(id))).toEqual(factoryOwned.map(() => true))
       expect(await ToolRegistry.ids()).toEqual(expect.arrayContaining(registryOwned))
+    },
+  })
+})
+
+test("retains Core origin on exact Task readers and executes persisted context in Ask mode", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      await Config.updateProjectPatch({ permission_mode: "ask" })
+      for (const [toolName, providerKind] of [
+        ["get_continuous_goal", "builtin"],
+        ["read_task_message", "internal"],
+        ["read_context", "internal"],
+      ] as const) {
+        const { taskID, root, tools } = await orchestratorToolSurface(
+          "Core Task reader",
+          sendSchedulerMessage,
+          toolName,
+        )
+        expect(nativeTaskToolBindingOf(tools[toolName])).toEqual({ taskID, sessionID: root.id, toolName, providerKind })
+        if (toolName !== "read_context") continue
+        const args = { scope: "decisions" }
+        const result = await withTaskToolInvocation(
+          {
+            projectID: Instance.project.id,
+            sessionID: root.id,
+            messageID: "msg_native-context",
+            toolCallID: "call_native-context",
+            toolPartID: "prt_native-context",
+            providerName: toolName,
+            providerID: toolName,
+            providerKind,
+            args,
+          },
+          { toolIDs: [toolName], permission: [] },
+          async () => {
+            const tool = tools[toolName] as { execute: (args: unknown, options: unknown) => Promise<unknown> }
+            return tool.execute(args, { toolCallId: "call_native-context", messages: [] })
+          },
+        )
+        expect(result).toBe("No context available yet.")
+      }
+    },
+  })
+})
+
+test("preserves Core mutation and same-name package permission effects", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const { tools } = await orchestratorToolSurface(
+        "Core Goal mutation",
+        sendSchedulerMessage,
+        "update_continuous_goal",
+      )
+      const binding = nativeTaskToolBindingOf(tools.update_continuous_goal)!
+      const mutation = await permissionDescriptor({
+        providerKind: binding.providerKind,
+        providerID: binding.toolName,
+        toolName: binding.toolName,
+        args: { status: "complete", reason: "Verified goal" },
+      })
+      const external = await permissionDescriptor({
+        providerKind: "projected",
+        providerID: "get_continuous_goal",
+        providerDigest: "package-revision",
+        toolName: "get_continuous_goal",
+        args: {},
+      })
+      expect(mutation!.scope).toMatchObject({ provider_kind: "builtin", effect_class: "external_effect" })
+      expect(external!.scope).toMatchObject({ provider_kind: "projected", effect_class: "external_effect" })
     },
   })
 })

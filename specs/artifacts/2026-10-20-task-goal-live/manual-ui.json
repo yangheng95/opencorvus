@@ -1,0 +1,96 @@
+{
+  "method": "CUA actual IAB interactions and manual visual review; no UI automation",
+  "frontend": "Formal464 unchanged",
+  "screenshots": [
+    {
+      "file": "initial-draft.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "file": "chat-initial-result.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "file": "task-initial-approval.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "file": "task-initial-completed.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "file": "task-goal-form.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "file": "task-goal-read-approval.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "file": "task-goal-before-final.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "file": "task-goal-final-form.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "file": "task-goal-final-write-approval.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "file": "task-final-complete-approval.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "file": "task-goal-final-completed.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "file": "task-goal-final-restored.png",
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      }
+    }
+  ],
+  "closedTabs": [
+    14,
+    15
+  ],
+  "boundary": "Initial Chat is not Task creation qualification; original public Task API separately recorded; both Goal forms and all single approvals were actual UI actions",
+  "unresolved": "Permission raw JSON dominates settled conversation; Sources/live Rendering and config performance have no new qualification"
+}

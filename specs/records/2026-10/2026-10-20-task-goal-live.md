@@ -1,0 +1,41 @@
+# 新 Task 的真实 Goal 执行链
+
+## Recall
+
+持续单 agent 自主迭代，不委托；后续用户禁止子 agent 覆盖旧 goal 三 Astra 文字。465为progress：2fb4887fe31b76009c2e0c3aa55a6b5d05d6d9f4已正常push且fresh fetch确认HEAD=origin/main。DEBUG/INFO真实对照、去除reader整日志扫描及148个helper创建标志探针均没有解决完整保存性能，未改生产；125 Project/167 Session/schema2、两份原身份/归属/目录完整保留。原两native/四reader-writer及flag-probe完整exit0，公开shutdown200，runtime/private auth+完整models复制对退休。原10s/5s性能仍失败，四读20s通过。463已验Task表单/取消/草稿与Mission实际Goal，但新Task Goal执行未验；464修首次Provider加载反馈。开始仅原.bun/和packages/opencorvus/bun/未跟踪。
+
+沿用benchmark-debug-template和既有CUA IAB browserID2。已读465/463 Recall、当前continuous-goal完整事实/执行/恢复/界面合同、Task控制面、App/Composer目标、task/chat service原panel/message/stream创建/选中与scope、EngineRoutes POST /task及官方continuous-goal-check的Task请求/完成校验。Chat composer target只有Chat/Mission；无Session的原panel发送允许创建Task，已有Session走其Session消息。不能凭首页显示Chat字样假设当前owner是Task。Task Goal绑定Task ID，完成/failed可由当前Goal receipt在epoch+1重开；cancelled需真实operator输入，不能借旧取消Task冒充自动续跑成功。
+
+## 修改前分析与验收方案
+
+当前未知是从真实新Task到Task Goal创建、controller自动输入、原Task ingress/队列/epoch重开、模型完成判断与最终UI投影的完整链。触发点为当前workspace source与新Task选择、已完成Task上Goal创建及reconciler。入口表单、Task完成和Goal完成是不同合同，不能只看标题或模型自述。初始不改源码；如出现调度/队列/唤醒/恢复/并发/终态问题，立即按共享机制横审全部生产入口、Task/Mission/Session occurrence、正常终态、重试/重启、串并行/多项目，代码/持久化/实际运行排除后才可缩小。非适用项：无预设schema/迁移、公开API或资源格式变更，不清库、不写用户真实数据库。
+
+1. 使用自有18769 native开发/UI服务、当前源码与464正式前端、完整QA412历史；仅操作新IAB tab。保留原用户18571/窗口/进程。原413 NativeService监管与配对authority流程继续使用：credential可用、全models投影、实际gpt-6.1-sol流分别验证；不refresh/exchange或写源。每scope最多12，整批含修复前后最多24实际Provider请求；20分钟仅native安全寿命，实际Task按真实活动/inactivity判断，不把观察超时当终止/重启依据。
+2. 通过真实首页发送有限文本请求创建全新Task，选择Code以便明确productPillar，并要求本轮给出TASK466INITIALREADY且按原Task合同结算；不由模型创建Goal、不委派子agent/子Task，不依赖文件、外部站点或权限变更。这是实际operator UI输入，不注入模型/界面双路消息。若真实发送选择成Session，先核对事实并使用原Task创建入口，明确Task创建与Goal UI各自证据，不制造新协议或伪称UI Task创建成功。
+3. 在该新Task完成后，从其实际Goal控件创建目标，明确目标回复TASKGOAL466READY、核对至少一条真实goal-controller自动输入后通过现有Goal工具complete并引用实际内容，随后按原Task合同完成。UI指定turnBudget2/tokenBudget180000用于有限验收，不改默认无限预算。观察同一Task ID、epoch+1 reopened event、continuation receipt/message、真实流式模型/UsageLedger归属、Goal complete与Task completed、控制面现有lease全部结算。不能以人工complete按钮替代模型自动完成资格；如需要人为收束，明确记录未通过。
+4. 实际截图覆盖初始输入、Task选中/完成、Task scope表单、运行中状态、真实controller participant和最终Goal/Task状态；手动重新选择/URL返回核对持久化。不新增、修改或运行UI自动化、DOM/组件/源码文案/快照/Playwright test。backend readonly HTTP/SQLite/protocol事实是独立功能证据，不能代替视觉。发现真实UI或非UI bug前先补齐根因/调用/公共合同/数据/测试/文档/风险分析，非UI需聚焦正向测试，UI需正式build与新真实截图复验。
+5. 原Task/Goal和所有物理prompt/control工作结算后关闭自有页、公开shutdown、join原native physical/output/request/launcher；source canonical/Ask保持、readonly SQLite核对每个原Project/Session与新Task/Goal/controller/usage事实。实际秘密扫描后runtime/private配对副本退休。三索引、当前docs检查、范围commit、fetch/merge与完整pending审查、正常push及fresh fetch。长期goal active，不在仓库创建开发分支/worktree/tag/Release。应用在自有QA项目内按其Task运行时产生的隔离执行目录属于实际产品验收，不能用于绕过仓库脏工作区或hooks。
+
+## 基线真实发现及修复前根因分析
+
+真实首页 Code/Chat 首发创建的是conversation Session ses_-zURQOS7fzzedFT4OK43，输出TASK466INITIALREADY；没有Task创建资格。按预案通过既有POST /task真实202创建Task tsk_g00VYZbqeD00cnjpD4Jt/根Session ses_-zURQO9DTzzYctM6sm3m/原Project prj_hSQinOa1MIVoNEeARpn5；UI从真实sidebar条目选中。在Ask下完成manage_task单次授权后，公开投影为epoch1/completed，随后真实Task作用域表单创建Goal pev_g0VYZcUFw00jUmF1dffB、180000 tokens/2 turns。原controller消息msg_hKcvnULNtYCBkRHonFvb触发同一Task epoch2，turnsAccepted1。
+
+实测get_continuous_goal与read_task_message两个只读调用都变成projected/external_effect审批。逐次Allow Once只用于收束修复前运行；Goal模型已输出TASKGOAL466READY，并在实际证据reason下调用update_continuous_goal完成，写入仍走Ask单次批准。随后工具的预设12实际请求额度耗尽，下一请求在本地被E2E_REQUEST_BUDGET_EXHAUSTED拦住，Task epoch2最终failed/interrupted；这是明确的有限harness诱发失败，不能宣称Task正常完成资格。Goalcomplete/190366 tokens/1turn为实际持久化结果；已接受请求的迟到用量可超预算，符合既有合同，不把中途0用量推断为计量bug。未增大12/本批24额度。tab14关闭、公开shutdown200、原37992 exit0，native physical/output/request/launcher及runtime复制对结算，raw-runtime.log保全；Task失败与服务正常退出分别记录。
+
+已读全部相关定义/调用：tool/continuous-goal共享execute及Task AiTool桥；orchestrator materializePublicTool及全部静态publicTools构造、read_task_message真实root-message/provenance约束、read_context纯DecisionLog读取；ToolRegistry全局IDs和permission/invocation的唯一builtin effect表；agent/stage-tool-materializer内部stage标识、Session runtime-tool-owner exact fingerprint、SessionLoop wrapExtraTool与真实PermissionAuthority/TaskToolInvocation、普通registry Tool路径。get_continuous_goal已在唯一OBSERVATION_ONLY_BUILTINS中，但Task原生AiTool没有保留Core/builtin来源，被wrapExtraTool的通用runtime-owner投影绑为package-tool，并一律providerKind projected。因此read-only效果表根本没有使用。read_task_message/read_context是Core私有Task观察工具，也缺少host internal来源。此前测试只覆盖Goal持久化/Task续跑、全权限真实checker与worker stage内部Tool，未覆盖Ask下Core Task原生工具的真实权限来源；不能在permissionDescriptor里按同名projected工具放行，否则外部package/MCP同名会越权。
+
+实施方案：为真实Core Task Tool工厂的输出添加一个不可枚举、不可变、绑定Task/Session/Tool的native来源标识，纳入已有runtime owner fingerprint。仅由Core原生publicTools的真实构造处赋予：全局Tool仍使用已有GLOBAL_TOOL_ID_SET和builtin effect单一来源，Core私有只读read_task_message/read_context使用现有internal provider语义。SessionLoop先验证精确Task/Session/名称与当前runtime contract，再把来源交给原withTaskToolInvocation/PermissionAuthority；外部package/MCP没有该标识，保持原projected权限。不会按工具同名、字符串关键字或用户prompt隐藏/放行工具；不改模型选择/队列/Task状态机，不增加授权模式或第二effect表。写/进程/网络/破坏/凭据类Core Tool继续由原builtin effect与scope校验，manage_task等未分类的effectful投影仍保留原授权。所有原执行身份、Task lineage、exact reveal、输入持久化和源码callback守卫保留。
+
+影响面横审包含Task scheduler在普通/重开/恢复/终态occurrence的Core工厂、Chat/Mission普通registry路径、worker stage internal与package/MCP工厂。原生来源不是DB或新的持久协议；schema2、已提交permission ledger scope和历史请求不改写；已有挂起请求仍由原精确scope校验，不把新来源倒灌到旧批准中。新runtime occurrence按同一工厂重建标识，跨Task/Session/名称或双重来源必须返回明确错误。聚焦正向合同需覆盖Ask实际观察结果、Core写入仍产生原effect descriptor、同名package保持projected scope、错归属错误和exact factory重建。实际最终新scope18771复用本Task已failed终态后创建新Goal身份，验证epoch3和本次Task正常completed、真实getter结果与模型完成；限定剩余12请求，避免再次混入首页Chat和首次Task建立的辅助请求。无UI代码变化时复用正式464 UI，实际截图仍需重新查看。原权限弹窗/历史大段JSON已发现但本批先修功能来源，不以隐藏原始证据或UI改文案遮蔽该阻断。
+
+## 修复与最终验收
+
+已落地单一 Core native Task/Session/Tool 来源标识（不可枚举/不可变/精确重复绑定），仅真实 orchestrator publicTools 工厂使用；GLOBAL_TOOL_ID_SET 复用原 builtin effect 分类，两个私有只读操作使用原 internal 语义。SessionLoop 拒绝无运行时、错 Task/Session/Tool 与双重来源，保留原调用 authority/Capability/lineage；runtime owner materialization 纳入标识。没有更改 PermissionAuthority effect 表、投影同名放行、Ask模式、原Task完成审批、schema或持久化协议。security-permission 当前架构同步说明。
+
+最终自有18771/新tab15复用正式464 UI，凭据可用/完整目录投影/实际Sol流预检分别通过。UI在同一Task创建新Goal pev_g0VYZiDQM00GU2yidyXi（240000tokens/2turns，独立新预算；没有抬高每scope12/整批24实际请求上限），controller msg_hF0GzLgwsYzMbV3cxCYu自动重开epoch3。实际 ToolRequest/Outcome 正向记录：get_continuous_goal completed且返回这次Goal身份；read_task_message completed且返回本次continuous_goal真实作者/原文；模型可见输出TASKGOAL466FIXED；update_continuous_goal与manage_task均实际completed。两个实际requested ledger保留Ask：前者builtin/external_effect、后者projected/external_effect；分别真实UI Allow Once，无Task/Project blanket grant。Goal模型complete，Task completed/terminalEvent pev_g0VYZig5W00UTVt6L5vt；UI离开后重新选中仍完成。最终累计186465tokens/1turn，截图174822→186465来自已接受工作迟到用量，不是历史覆盖。
+
+原Task创建资格来自原POST /task，首页Chat首发只能计conversation，已在证据中保留边界。基线12请求均200/stream/eof，额度耗尽事实保留；最终9请求均200/stream/eof，合计21/预设24。第9个后台memory流84秒后真实eof；audit快照只在后续publish更新，早先awaiting_binding是尚未刷新的观察，不作为物理未结算结论。读取原Provider source reader结算后再确认公开session/status为completed，然后公开shutdown200。原37992/59764最终均exit0，native physical/output/request/launcher全结算，原Target80548/87344及birth identity记录；tab14/15关闭。raw-runtime.log保全，runtime复制对结算后退休；两份private auth+全models经实际值秘密扫描后成对退休，源metadata不变，无refresh/exchange。
+
+最终readonly SQLite为127 Project/172 Session/schema2，基线125/167和最终启动前126/171的每个原身份/目录/归属逐条保持。完整canonical与465原保存快照相同、Ask保持。没有清库或构建触及用户数据库。全部证据与12张实际1280×720人工截图在[Task Goal产物](../../artifacts/2026-10-20-task-goal-live/README.md)；真实截图确认审批原始JSON污染历史，这项UI问题尚未修复。Sources/侧agent直播Rendering/原生picker无本轮新资格，保存/恢复性能失败继续保留。
+
+聚焦正向验证：4文件22例（native binding、orchestrator真实工厂/Ask read_context、runtime owner、stage materializer）和3文件34例（Goal合同、exact authority、routine grants）共56例/180断言通过；backend typecheck exit0；docs:check 345ops/26groups、architecture-index20文档通过。没有运行UI自动化、全量bun test；前端无源码变化无需新build。过程中格式化器引入了大范围无关换行/缩进，已保存完整差异、确认3个文件起始无用户改动后只恢复这3个精确文件并重新apply功能patch；交付差异仅本轮来源修复。一次误发的无效路径命令已直接失败，没有状态变化。

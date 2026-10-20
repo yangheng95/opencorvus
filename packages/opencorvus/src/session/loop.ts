@@ -66,6 +66,7 @@ import {
   type ProviderToolNameOwner,
 } from "@/tool/provider-name-authority"
 import { withTaskToolInvocation } from "@/tool/task-tool-invocation"
+import { assertNativeTaskToolBinding, nativeTaskToolBindingOf } from "@/tool/native-task-tool-binding"
 import { bindProjectedTaskToolRuntime, projectedTaskToolRuntimeBindingOf } from "@/tool/task-tool-execution-scope"
 import type { ResolvedSkillSurface } from "@/skill/surface"
 import { skillLoaderAvailable } from "@/skill/eligibility"
@@ -5519,6 +5520,7 @@ export namespace SessionLoop {
     const assertExactMcpCurrent = MCP.exactToolAssertion(raw as object)
     const stageMaterializerBinding = stageToolMaterializerBindingOf(raw as object)
     const internalStageBinding = internalStageToolBindingOf(raw as object)
+    const nativeTaskBinding = nativeTaskToolBindingOf(raw as object)
     if (internalStageBinding) {
       const runtimeIdentity = SessionRuntimeContractStore.get(ctx.sessionID)?.identity
       const runtimeAdapterID =
@@ -5533,11 +5535,34 @@ export namespace SessionLoop {
     }
     let projectedBinding = projectedTaskToolRuntimeBindingOf(raw as object)
     const runtimeContract = SessionRuntimeContractStore.get(ctx.sessionID)
+    if (nativeTaskBinding) {
+      if (
+        !runtimeContract ||
+        browserPermissionKey ||
+        computerPermissionKey ||
+        mcpAuthorityBinding ||
+        ctx.mcpAppLifecycle ||
+        projectedBinding ||
+        stageMaterializerBinding ||
+        internalStageBinding
+      ) {
+        throw new Error(`Native Task Tool ${name} requires one unambiguous Core runtime owner`)
+      }
+      assertNativeTaskToolBinding(nativeTaskBinding, {
+        taskID: runtimeContract.identity.taskID,
+        sessionID: ctx.sessionID,
+        toolName: name,
+      })
+      if (runtimeContract.identity.sessionID !== ctx.sessionID) {
+        throw new Error(`Native Task Tool ${name} runtime Session does not match its execution owner`)
+      }
+    }
     if (
       !browserPermissionKey &&
       !computerPermissionKey &&
       !mcpAuthorityBinding &&
       !projectedBinding &&
+      !nativeTaskBinding &&
       runtimeContract
     ) {
       const ownerKind = sessionRuntimeToolOwner(runtimeContract)?.kind(name)
@@ -5567,7 +5592,8 @@ export namespace SessionLoop {
       !mcpAuthorityBinding &&
       !projectedBinding &&
       !stageMaterializerBinding &&
-      !internalStageBinding
+      !internalStageBinding &&
+      !nativeTaskBinding
     ) {
       throw new Error(`Projected Tool ${name} is missing its immutable authorization binding`)
     }
@@ -5623,9 +5649,11 @@ export namespace SessionLoop {
               ? ("computer" as const)
               : ctx.mcpAppLifecycle
                 ? ("mcp_app" as const)
-                : internalStageBinding
-                  ? ("internal" as const)
-                  : ("projected" as const),
+                : nativeTaskBinding
+                  ? nativeTaskBinding.providerKind
+                  : internalStageBinding
+                    ? ("internal" as const)
+                    : ("projected" as const),
           providerID:
             mcpAuthorityBinding?.serverID ??
             stageMaterializerBinding?.id ??

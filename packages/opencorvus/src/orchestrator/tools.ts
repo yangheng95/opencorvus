@@ -101,6 +101,7 @@ import { Session } from "@/session"
 import type { TaskRootMessageKind } from "@/protocol/task-root-message-schema"
 import { CONTINUOUS_GOAL_TOOL_IDS } from "@/continuous-goal/schema"
 import { createContinuousGoalAiTool } from "@/tool/continuous-goal"
+import { bindNativeTaskTool, nativeTaskToolProviderKind } from "@/tool/native-task-tool-binding"
 import {
   isProjectedWorkerRuntimeContract,
   SessionRuntimeContractStore,
@@ -3093,6 +3094,12 @@ export function createOrchestratorTools(input: {
       }
   if (input.exactToolID && publicTools[input.exactToolID] === undefined) {
     throw new Error(`Orchestrator public Tool ${JSON.stringify(input.exactToolID)} is unavailable.`)
+  }
+  for (const [toolName, tool] of Object.entries(publicTools)) {
+    const providerKind = nativeTaskToolProviderKind(toolName)
+    if (providerKind && tool && typeof tool === "object") {
+      bindNativeTaskTool(tool, { taskID: input.taskID, sessionID: input.agentSessionID, toolName, providerKind })
+    }
   }
   for (const decisionToolName of ORCHESTRATOR_DECISION_TOOL_NAMES) {
     const decisionTool = publicTools[decisionToolName]
