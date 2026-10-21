@@ -1,0 +1,36 @@
+10 |  const row=db.query('SELECT data FROM message WHERE id=? AND session_id=?').get(output.result.info.id,input.sessionID) as any
+11 |  const info=JSON.parse(row.data);assert.equal(info.role,'assistant');assert.equal(info.finish,'stop');assert.equal(typeof info.time.completed,'number')
+12 |  const messages=db.query('SELECT id FROM message WHERE session_id=? AND time_created>=? ORDER BY time_created,id').all(input.sessionID,Date.parse(input.at)-1000) as {id:string}[]
+13 |  const publicFacts=[]
+14 |  for(const {id}of messages){const url=new URL('http://127.0.0.1:'+(stage==='before'?18905:18907)+'/session/'+input.sessionID+'/message/'+id);url.searchParams.set('directory','C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/project');const response=await fetch(url);assert.equal(response.status,200);publicFacts.push(await response.json())}
+15 |  const owners=db.query('SELECT * FROM session_prompt_owner WHERE session_id=?').all(input.sessionID);assert.deepEqual(owners,[])
+                                                                                                                 ^
+AssertionError: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   {
++     directory: 'C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project',
++     generation: 'cal_g0VYesG1X00OYIynqn37',
++     owner_occurrence_id: '9a835bf5-7ddd-4659-9b01-286c70038d43',
++     owner_pid: 70556,
++     owner_process_instance_id: 'win32:639281563595058299',
++     project_id: 'prj_hSQinOa1MIVoNEeARpn5',
++     session_id: 'ses_-zUS0WzzQzzDOGrIbYwN',
++     time_acquired: 1792559804143
++   }
++ ]
+- []
+
+ generatedMessage: true,
+     actual: [
+  [Object ...]
+],
+   expected: [],
+   operator: "deepStrictEqual",
+       diff: "simple",
+       code: "ERR_ASSERTION"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\member-stream-owner-503\check-runtime.ts:15:109
+
+Bun v1.4.3 (Windows x64)

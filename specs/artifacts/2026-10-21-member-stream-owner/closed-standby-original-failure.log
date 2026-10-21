@@ -1,0 +1,44 @@
+ 8 | try{
+ 9 |  const sessionID=old.owner.session_id
+10 |  const ownerRows=db.query('SELECT * FROM session_prompt_owner WHERE session_id=?').all(sessionID)
+11 |  const current=(db.query("SELECT seq,id,type,payload FROM protocol_event WHERE aggregate_id=? AND type='agent.execution.lifecycle' ORDER BY seq DESC LIMIT 1").get(sessionID) as any)
+12 |  current.payload=JSON.parse(current.payload)
+13 |  assert.deepEqual(current,old.lifecycle[0]);assert.equal(ownerRows.length,0)
+             ^
+AssertionError: Expected values to be strictly deep-equal:
++ actual - expected
+
+  {
++   id: 'pev_g0VYevTk800LkKcrLRg6',
+-   id: 'pev_g0VYet0bJ000JQ4qlnD5',
+    payload: {
+      inputMessageID: 'msg_g0VYesG0v00FFvV6yGyb',
+      status: {
+        type: 'idle'
+      }
+    },
++   seq: 53,
+-   seq: 52,
+    type: 'agent.execution.lifecycle'
+  }
+
+ generatedMessage: true,
+     actual: {
+  seq: 53,
+  id: "pev_g0VYevTk800LkKcrLRg6",
+  type: "agent.execution.lifecycle",
+  payload: [Object ...],
+},
+   expected: {
+  seq: 52,
+  id: "pev_g0VYet0bJ000JQ4qlnD5",
+  type: "agent.execution.lifecycle",
+  payload: [Object ...],
+},
+   operator: "deepStrictEqual",
+       diff: "simple",
+       code: "ERR_ASSERTION"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\member-stream-owner-503\closed-standby.ts:13:9
+
+Bun v1.4.3 (Windows x64)

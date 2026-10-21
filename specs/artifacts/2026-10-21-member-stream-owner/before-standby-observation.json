@@ -1,0 +1,65 @@
+{
+  "at": "2026-10-21T05:28:58.955Z",
+  "http": 200,
+  "status": {
+    "type": "idle"
+  },
+  "owner": {
+    "session_id": "ses_-zUS0WzzQzzDOGrIbYwN",
+    "project_id": "prj_hSQinOa1MIVoNEeARpn5",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+    "generation": "cal_g0VYesG1X00OYIynqn37",
+    "owner_pid": 70556,
+    "owner_process_instance_id": "win32:639281563595058299",
+    "owner_occurrence_id": "9a835bf5-7ddd-4659-9b01-286c70038d43",
+    "time_acquired": 1792559804143
+  },
+  "lifecycle": [
+    {
+      "seq": 52,
+      "id": "pev_g0VYet0bJ000JQ4qlnD5",
+      "type": "agent.execution.lifecycle",
+      "payload": {
+        "inputMessageID": "msg_g0VYesG0v00FFvV6yGyb",
+        "status": {
+          "type": "idle"
+        }
+      }
+    },
+    {
+      "seq": 51,
+      "id": "pev_g0VYesZkP00BTCYACr0X",
+      "type": "agent.execution.lifecycle",
+      "payload": {
+        "inputMessageID": "msg_g0VYesG0v00FFvV6yGyb",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "seq": 50,
+      "id": "pev_g0VYesZiu00ad7qPPPwl",
+      "type": "agent.execution.lifecycle",
+      "payload": {
+        "inputMessageID": "msg_g0VYesG0v00FFvV6yGyb",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    }
+  ],
+  "standbyLogs": [
+    {
+      "level": "info",
+      "time": "2026-10-21T05:19:43.176Z",
+      "service": "session.prompt",
+      "logDomain": "session",
+      "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "data": {
+        "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN"
+      },
+      "message": "entering standby"
+    }
+  ]
+}

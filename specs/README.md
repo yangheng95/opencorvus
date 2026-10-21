@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [成员真实流与呈现身份](records/2026-10/2026-10-21-member-stream-owner-review.md)：[11张实图、六次实际Sol与精确待机/数据审计](artifacts/2026-10-21-member-stream-owner/README.md)，原20个正文身份观察稳定，生产未改，连续帧/新Task成员仍未完全覆盖。
+
 - [真实交付、变更与只读预览](records/2026-10/2026-10-21-deliverable-completion-review.md)：[30张实图、42项合同及两次真实Sol交付](artifacts/2026-10-21-deliverable-completion/README.md)，修复大结果变更丢失、审批空范围、窄栏Review与无模型预览400。
 
 - [真实交付与取消审批](records/2026-10/2026-10-21-real-deliverable-review.md)：[7张实图、22项合同与完整进程结算](artifacts/2026-10-21-real-deliverable-review/README.md)，修复取消后的残留审批和启动发现，保留两文件交付未达事实。

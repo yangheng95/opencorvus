@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [成员实时正文与呈现身份](2026-10-21-member-stream-owner-review.md)：[11图、六次Sol和原物理结算](../../artifacts/2026-10-21-member-stream-owner/README.md)，保留两个错误验收假设及5行隔离副本自然变化，未制造生产补丁。
+
 - [真实交付、变更与只读预览](2026-10-21-deliverable-completion-review.md)：[两次真实Sol交付、30图及42项后端合同](../../artifacts/2026-10-21-deliverable-completion/README.md)，历史无需迁移恢复摘要，保留空scope/拥挤Review/预览400原失败和完整原生结算。
 
 - [真实交付与取消审批](2026-10-21-real-deliverable-review.md)：[真实Sol取消缺陷、7张实图及22项合同](../../artifacts/2026-10-21-real-deliverable-review/README.md)，单一权限账本与启动恢复收敛；原两文件任务仍未达。

@@ -1,0 +1,129 @@
+{
+  "at": "2026-10-21T05:36:16.949Z",
+  "sourcePreservation": {
+    "allOriginalRows": "Exact rowid/primary key/all fields/times",
+    "bytes": 65212416,
+    "modifiedAtMs": 1792558400881.8098
+  },
+  "schema": 3,
+  "tables": 90,
+  "originalRows": 140168,
+  "allOriginalDifferences": [
+    {
+      "table": "memory_chunk",
+      "identity": "mck_h0TwOCuDIItgGfxTGf6k",
+      "fields": [
+        "content",
+        "token_count",
+        "time_updated"
+      ]
+    },
+    {
+      "table": "memory_file",
+      "identity": "mem_hBhVOjG2IHNZ58LGhFBJ",
+      "fields": [
+        "time_updated"
+      ]
+    },
+    {
+      "table": "runtime_execution_capacity_lease",
+      "identity": "[1]",
+      "fields": [
+        "lease_id",
+        "owner_id",
+        "time_acquired",
+        "expires_at"
+      ]
+    },
+    {
+      "table": "runtime_execution_capacity_lease",
+      "identity": "[2]",
+      "fields": [
+        "lease_id",
+        "owner_id",
+        "time_acquired",
+        "expires_at"
+      ]
+    },
+    {
+      "table": "session",
+      "identity": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "fields": [
+        "time_updated"
+      ]
+    }
+  ],
+  "memory": {
+    "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+    "fileID": "mem_hBhVOjG2IHNZ58LGhFBJ",
+    "chunkID": "mck_h0TwOCuDIItgGfxTGf6k",
+    "oldRevision": 38,
+    "newRevision": 39,
+    "oldTokenCount": 7719,
+    "newTokenCount": 7577,
+    "oldMarkdownCodeUnits": 30615,
+    "newMarkdownCodeUnits": 30062,
+    "originalCovered": 41,
+    "currentCovered": 42,
+    "actualInputID": "msg_g0VYesG0v00FFvV6yGyb",
+    "timeUpdated": 1792559942329,
+    "organizer": {
+      "at": "2026-10-21T05:19:02.330Z",
+      "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+      "revision": 39,
+      "tokenCount": 7577,
+      "coveredOccurrenceIDs": [
+        "msg_g0VYesG0v00FFvV6yGyb"
+      ]
+    }
+  },
+  "session": {
+    "id": "ses_-zUS0WzzQzzDOGrIbYwN",
+    "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+    "oldUpdated": 1792546092004,
+    "currentUpdated": 1792559983137
+  },
+  "capacity": [
+    {
+      "before": {
+        "rowid": 1,
+        "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+        "slot": 0,
+        "lease_id": "27abbf66-9cf6-4f23-a0cc-9986b9b5b324",
+        "owner_id": "runtime:88420:471a3446-944a-4ac8-884b-f7193d950e87",
+        "time_acquired": 1792557918443,
+        "expires_at": 1792557935432
+      },
+      "after": {
+        "rowid": 1,
+        "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+        "slot": 0,
+        "lease_id": "65bd3044-c7c3-41ba-b170-6d975f40b583",
+        "owner_id": "runtime:70556:a0074ffc-fcf6-40c6-bbfe-2c12948bb693",
+        "time_acquired": 1792559804207,
+        "expires_at": 1792559942318
+      }
+    },
+    {
+      "before": {
+        "rowid": 2,
+        "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+        "slot": 1,
+        "lease_id": "a53644db-22b0-4852-86bb-ca46660cfc5f",
+        "owner_id": "runtime:88420:2bd8c190-9c5d-4dd4-ab5c-b71595eb96f4",
+        "time_acquired": 1792557881294,
+        "expires_at": 1792557884839
+      },
+      "after": {
+        "rowid": 2,
+        "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+        "slot": 1,
+        "lease_id": "46117eaf-e3fd-4c3f-a225-6fd5afad236e",
+        "owner_id": "runtime:70556:34405a1f-db1c-4656-85e1-f8b1d7850d32",
+        "time_acquired": 1792559879977,
+        "expires_at": 1792559983119
+      }
+    }
+  ],
+  "qualification": "All original rows compared by exact identity/all fields. Only the five enumerated original rows changed in isolated clone; original source all rows/config/file bytes/mtime retained. Project memory revision39 covers actual input and matches real organizer completion; no memory contents are exported."
+}

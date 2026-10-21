@@ -1,0 +1,63 @@
+{
+  "at": "2026-10-21T05:37:44.667Z",
+  "productionRevision": "9c90c1cedcc94e9aa209a79f4bf0c669ddae9605",
+  "developerAgents": 1,
+  "qualificationKind": "Existing ordinary member; single finite public input; manual IAB interactions and real screenshots",
+  "originalPublicInputExec": 12396,
+  "originalServiceExec": 24329,
+  "originalInputExit": 0,
+  "serviceExit": 0,
+  "port": 18905,
+  "closedBrowserTab": 79,
+  "budget": {
+    "plannedTotal": 24,
+    "beforeMaximum": 12,
+    "beforeActual": 6,
+    "conditionalAfterMaximum": 12,
+    "afterActual": 0,
+    "remaining": "6 before and 12 conditional after unused slots retired; scope closed"
+  },
+  "screenshots": 11,
+  "consoleBatches": [
+    {
+      "name": "before-console-001.json",
+      "originalRows": 0,
+      "retainedPassiveRows": 0
+    },
+    {
+      "name": "before-console-002.json",
+      "originalRows": 397,
+      "retainedPassiveRows": 397
+    },
+    {
+      "name": "before-console-003.json",
+      "originalRows": 500,
+      "retainedPassiveRows": 500
+    },
+    {
+      "name": "before-console-004.json",
+      "originalRows": 500,
+      "retainedPassiveRows": 500
+    },
+    {
+      "name": "before-console-005.json",
+      "originalRows": 500,
+      "retainedPassiveRows": 500
+    },
+    {
+      "name": "before-console-006.json",
+      "originalRows": 500,
+      "retainedPassiveRows": 500
+    },
+    {
+      "name": "before-console-007.json",
+      "originalRows": 500,
+      "retainedPassiveRows": 500
+    }
+  ],
+  "consoleBoundary": "Capture activated after initial mounts. Browser logs return at most500 recent rows per call; snapshots have gaps. Dedup only describes observed events; no continuous lifecycle/frames or performance proof.",
+  "visualBoundary": "03/04 captured actual unfinished final assistant; runtime001 at05:19:04.642Z records source reader reading. 05 and subsequent captures are completion-state qualification. No Task-worker/new-member/reconnect matrix or every-frame proof.",
+  "productionDisposition": "No new root cause demonstrated; no production patch; passive diagnostic bundle only; no after build/service/authority created",
+  "resourceDisposition": "Own public shutdown200; exact native/source readers/output/request/launcher settled; runtime and newly copied authority auth/models retired; no user process/window/database operated",
+  "dataDisposition": "Original source90tables140168rows/schema3 and canonical config fully retained. Isolated target five original rows naturally changed as enumerated; memory revision38→39 covers this actual input. Original user auth/catalog retained."
+}
