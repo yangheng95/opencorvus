@@ -1,0 +1,65 @@
+{
+  "native": {
+    "occurrence": "goal-deliverable-navigation-498-before-f0b6a712-9fa0-4fee-8b06-4a9c790951c2",
+    "outcome": "settled",
+    "host": {
+      "pid": 73600,
+      "processInstanceID": "win32:639281438602129892",
+      "occurrenceID": "2db5b874-bc3c-47d1-bbe7-81bc15469b1a"
+    },
+    "target": {
+      "pid": 74204,
+      "processInstanceID": "win32:639281438610645789",
+      "occurrenceID": "0c1e36ee-f579-4dd6-ac54-8d4bcf8d9864"
+    },
+    "observedAtUtc": "2026-10-21T01:52:04.063Z",
+    "deadlineAt": 1792548259396,
+    "terminal": {
+      "occurrenceID": "goal-deliverable-navigation-498-before-f0b6a712-9fa0-4fee-8b06-4a9c790951c2",
+      "pid": 74204,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "originalExit": 0,
+  "observedAtUtc": "2026-10-21T01:52:07.3569445Z",
+  "launcher": {
+    "childExitCode": 0,
+    "observedAtUtc": "2026-10-21T01:52:04.1719893Z"
+  },
+  "chain": [
+    {
+      "identity": {
+        "pid": 73600,
+        "processInstanceID": "win32:639281438602129892",
+        "occurrenceID": "2db5b874-bc3c-47d1-bbe7-81bc15469b1a"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "identity": {
+        "pid": 74204,
+        "processInstanceID": "win32:639281438610645789",
+        "occurrenceID": "0c1e36ee-f579-4dd6-ac54-8d4bcf8d9864"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "shutdown": {
+    "target": {
+      "pid": 74204,
+      "processInstanceID": "win32:639281438610645789",
+      "occurrenceID": "0c1e36ee-f579-4dd6-ac54-8d4bcf8d9864"
+    },
+    "statusCode": 200,
+    "observedAtUtc": "2026-10-21T01:52:03.9925288Z",
+    "occurrence": "goal-deliverable-navigation-498-before-f0b6a712-9fa0-4fee-8b06-4a9c790951c2",
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYe2jNf00USpkXIq1V\"}"
+  },
+  "originalHandle": 38166
+}

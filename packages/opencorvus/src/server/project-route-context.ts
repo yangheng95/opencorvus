@@ -69,6 +69,7 @@ const PROJECT_IDENTITY_PROVIDER_ROUTE_KEYS = [
 ]
 
 const PROJECT_IDENTITY_CONVERSATION_ROUTE_PATTERNS = [
+  /^GET \/continuous-goal\/(?:chat|task|mission)\/[^/]+$/,
   /^GET \/task\/[^/]+\/build-observation\/[^/]+\/content$/,
   /^GET \/coding\/(?:chat|work)\/sessions$/,
   /^GET \/coding\/(?:chat|work)\/session\/[^/]+$/,

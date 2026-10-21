@@ -1,0 +1,31 @@
+[1/2] START test/project-route-context.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Project route context authority > assigns continuous-goal reads to Project identity and mutations to runtime for every owner kind [1.27ms]
+(pass) Project route context authority > uses exact identity metadata reads while memory organization and prompt retain runtime [0.18ms]
+(pass) Project route context authority > classifies ordinary conversation title mutations through exact Project identity [0.07ms]
+(pass) Project route context authority > uses Project identity for persisted Session pages and event subscriptions [0.12ms]
+(pass) Project route context authority > classifies persisted deletions independently from live Project discovery [0.13ms]
+(pass) Project route context authority > keeps identity-only configuration and full runtime routes distinct [0.08ms]
+(pass) Project route context authority > provisions obsolete packages through identity-only routes [0.05ms]
+(pass) Project route context authority > gives project-owned routes on globally-served routers the same runtime authority as their siblings [0.06ms]
+
+ 8 pass
+ 0 fail
+ 8 expect() calls
+Ran 8 tests across 1 file. [2.44s]
+[1/2] DONE test/project-route-context.test.ts exit=0 duration=4.09s
+[2/2] START test/server/continuous-goal-error-contract.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Goal GET documents its actual named conflict response [1752.91ms]
+(pass) Goal POST documents its actual named conflict response [1146.19ms]
+(pass) Goal PATCH documents its actual named conflict response [1384.48ms]
+
+ 3 pass
+ 0 fail
+ 9 expect() calls
+Ran 3 tests across 1 file. [7.21s]
+[2/2] DONE test/server/continuous-goal-error-contract.test.ts exit=0 duration=7.38s

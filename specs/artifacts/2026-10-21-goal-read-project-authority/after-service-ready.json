@@ -1,0 +1,31 @@
+{
+  "owner": {
+    "pid": 83572,
+    "processInstanceID": "win32:639281444520265000",
+    "occurrenceID": "46a4d78d-d5a6-40ac-8c5d-32bfe0f6b799"
+  },
+  "parent": {
+    "pid": 76728,
+    "processInstanceID": "win32:639281444520085151",
+    "occurrenceID": "05400c3c-f521-432f-b3aa-cea6fa69923c"
+  },
+  "occurrence": "goal-deliverable-navigation-498-after-28283e6a-df11-49b0-890c-21ed584269aa",
+  "receipt": {
+    "schemaVersion": 1,
+    "occurrenceID": "goal-deliverable-navigation-498-after-28283e6a-df11-49b0-890c-21ed584269aa",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18881",
+    "pid": 83572
+  },
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\goal-deliverable-navigation-498-after-data\\runtime\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\goal-deliverable-navigation-498-after-data\\runtime\\data",
+      "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/goal-deliverable-navigation-498-after-data/home"
+    }
+  },
+  "observedAt": "2026-10-21T01:54:16.081Z",
+  "qualification": "Real development CLI and UI only; no credential/Provider qualification"
+}

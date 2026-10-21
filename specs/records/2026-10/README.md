@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [持续目标读取的项目权限](2026-10-21-goal-read-project-authority.md)：[真实读取400→200及原90表保留](../../artifacts/2026-10-21-goal-read-project-authority/README.md)，三owner共享身份上下文，执行校验保留，后台重复初始化继续审计。
+
 - [Markdown分批呈现连续性](2026-10-21-markdown-batch-continuity.md)：[真实成员流与原挂载记录](../../artifacts/2026-10-21-markdown-batch-continuity/README.md)，修复早期块变化时裁掉未处理尾部，失败样本和10次Sol保留。
 
 - [Goal入口与默认布局实际体验](2026-10-21-goal-entry-workspace-review.md)：[九图与真实Home创建/读取/完成](../../artifacts/2026-10-21-goal-entry-workspace-review/README.md)，保留未复现和成员Rendering/完整配置性能未达边界。

@@ -2,6 +2,21 @@ import { describe, expect, test } from "bun:test"
 import { projectRouteContextKind } from "@/server/project-route-context"
 
 describe("Project route context authority", () => {
+  test("assigns continuous-goal reads to Project identity and mutations to runtime for every owner kind", () => {
+    expect(
+      ["chat", "task", "mission"].map((kind) => ({
+        kind,
+        read: projectRouteContextKind(`/continuous-goal/${kind}/owner_1`, "GET"),
+        create: projectRouteContextKind(`/continuous-goal/${kind}/owner_1`, "POST"),
+        update: projectRouteContextKind(`/continuous-goal/${kind}/owner_1`, "PATCH"),
+      })),
+    ).toEqual([
+      { kind: "chat", read: "identity", create: "runtime", update: "runtime" },
+      { kind: "task", read: "identity", create: "runtime", update: "runtime" },
+      { kind: "mission", read: "identity", create: "runtime", update: "runtime" },
+    ])
+  })
+
   test("uses exact identity metadata reads while memory organization and prompt retain runtime", () => {
     expect({
       search: projectRouteContextKind("/expert-squad/search", "GET"),

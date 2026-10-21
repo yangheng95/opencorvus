@@ -1,0 +1,53 @@
+12 |   for(const db of [source,clone]){assert.deepEqual(db.query('PRAGMA user_version').get(),{user_version:3});assert.deepEqual(db.query('PRAGMA integrity_check').get(),{integrity_check:'ok'})}
+13 |   const schema="SELECT type,name,tbl_name,sql FROM sqlite_master WHERE name NOT LIKE 'sqlite_%' ORDER BY type,name"
+14 |   assert.deepEqual(clone.query(schema).all(),source.query(schema).all())
+15 |   const differences:any[]=[],counts:Record<string,any>={}
+16 |   for(const [table,rows]of Object.entries(input.original) as [string,any[]][]){
+17 |    assert.deepEqual(source.query(input.queries[table]).all(),rows)
+               ^
+AssertionError: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    {
++     block: Uint8Array(0) [],
+-     block: {},
+      id: 1
+    },
+    {
++     block: Uint8Array(7) [
++       0,
++       0,
++       0,
++       0,
++       0,
++       0,
++       0
++     ],
+-     block: {
+-       '0': 0,
+-       '1': 0,
+-       '2': 0,
+-       '3': 0,
+-       '4': 0,
+-       '5': 0,
+-       '6': 0
+-     },
+      id: 10
+    }
+  ]
+
+ generatedMessage: true,
+     actual: [
+  [Object ...], [Object ...]
+],
+   expected: [
+  [Object ...], [Object ...]
+],
+   operator: "deepStrictEqual",
+       diff: "simple",
+       code: "ERR_ASSERTION"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\goal-deliverable-navigation-498\preserve.ts:17:11
+
+Bun v1.4.0 (Windows x64)

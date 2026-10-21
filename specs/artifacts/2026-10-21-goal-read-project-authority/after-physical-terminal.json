@@ -1,0 +1,65 @@
+{
+  "originalHandle": 51039,
+  "launcher": {
+    "observedAtUtc": "2026-10-21T02:05:52.4375031Z",
+    "childExitCode": 0
+  },
+  "shutdown": {
+    "statusCode": 200,
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYe6Crk00SL58QNgil\"}",
+    "occurrence": "goal-deliverable-navigation-498-after-28283e6a-df11-49b0-890c-21ed584269aa",
+    "observedAtUtc": "2026-10-21T02:05:52.3138097Z",
+    "target": {
+      "pid": 83572,
+      "processInstanceID": "win32:639281444520265000",
+      "occurrenceID": "ff0921d2-818f-41f5-8bcc-d55c79a40d79"
+    }
+  },
+  "native": {
+    "occurrence": "goal-deliverable-navigation-498-after-28283e6a-df11-49b0-890c-21ed584269aa",
+    "outcome": "settled",
+    "host": {
+      "pid": 84096,
+      "processInstanceID": "win32:639281444511643409",
+      "occurrenceID": "428a0ba8-7750-4739-9fb5-cdc3d9067eab"
+    },
+    "target": {
+      "pid": 83572,
+      "processInstanceID": "win32:639281444520265000",
+      "occurrenceID": "ff0921d2-818f-41f5-8bcc-d55c79a40d79"
+    },
+    "observedAtUtc": "2026-10-21T02:05:52.381Z",
+    "deadlineAt": 1792548850288,
+    "terminal": {
+      "occurrenceID": "goal-deliverable-navigation-498-after-28283e6a-df11-49b0-890c-21ed584269aa",
+      "pid": 83572,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 84096,
+        "processInstanceID": "win32:639281444511643409",
+        "occurrenceID": "428a0ba8-7750-4739-9fb5-cdc3d9067eab"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 83572,
+        "processInstanceID": "win32:639281444520265000",
+        "occurrenceID": "ff0921d2-818f-41f5-8bcc-d55c79a40d79"
+      }
+    }
+  ],
+  "originalExit": 0,
+  "observedAtUtc": "2026-10-21T02:06:01.0449027Z"
+}

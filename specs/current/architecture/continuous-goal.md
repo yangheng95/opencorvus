@@ -14,6 +14,12 @@ GET/POST/PATCH /continuous-goal/:kind/:ownerID uses the same project-scoped stor
 kind is chat, task or mission. ownerID is a Task ID for task and the canonical Session
 ID otherwise. requestID replays one mutation; updates require goalID and expectedRevision.
 
+The GET uses the shared Project identity context, like persisted conversation
+reads. Its stored objective, status and usage remain readable when the selected
+model or runtime configuration is unavailable. Owner membership, deletion and
+archive validation still apply. POST and PATCH retain full runtime context and
+its existing configuration validation; reading a goal does not admit execution.
+
 Owner, request and revision conflicts return HTTP 409 with the named
 `ContinuousGoalError` body and its domain `data.code`. All three operation responses
 declare that same name in OpenAPI and the generated SDK; human descriptions are

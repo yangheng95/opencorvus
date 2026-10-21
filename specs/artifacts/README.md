@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [持续目标读取的项目权限](2026-10-21-goal-read-project-authority/README.md)：五张人工实图、三类真实旧Goal与六项HTTP合同、原90表131156行及两原native完整结算；无模型输入或schema升级。
+
 - [Markdown分批呈现连续性](2026-10-21-markdown-batch-continuity/README.md)：49→1真实截断、当前单一数组修复、15张人工图及10/16实际Sol；源3665行与两原native收尾。
 
 - [Goal入口与默认布局实测](2026-10-21-goal-entry-workspace-review/README.md)：九张人工图、真实Goal完成事实、两原native收敛和3665行保留；没有用验证记录冒充新生产修复。
