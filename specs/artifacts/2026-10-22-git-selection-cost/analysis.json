@@ -1,0 +1,138 @@
+{
+  "at": "2026-10-21T22:25:24.762Z",
+  "projects": 166,
+  "gitProjects": 165,
+  "modelRequests": 0,
+  "maximumGitQueries": 660,
+  "actualGitQueries": 660,
+  "fullOutputComparison": "All four original scopes match by Project id/stdout/stderr/formal resolved executable",
+  "runs": [
+    {
+      "run": "resolve-a",
+      "mode": "resolve",
+      "runtime": "1.4.0",
+      "owner": {
+        "pid": 94972,
+        "processInstanceID": "win32:639282181831788012",
+        "occurrenceID": "1faaf921-e5dc-40c9-898f-8e846a322eaa"
+      },
+      "completed": 166,
+      "queries": 0,
+      "wallMs": 783.2788,
+      "parentCpuUserMs": 984,
+      "parentCpuSystemMs": 2000,
+      "mainMaxTickMs": 10.637899999999945,
+      "concurrency": 12,
+      "metrics": {
+        "live": 0,
+        "owners": {}
+      }
+    },
+    {
+      "run": "ordinary-a",
+      "mode": "ordinary",
+      "runtime": "1.4.0",
+      "owner": {
+        "pid": 92244,
+        "processInstanceID": "win32:639282181933008582",
+        "occurrenceID": "0cef9eb5-a19e-4a86-9d7f-f08aab811d2b"
+      },
+      "completed": 166,
+      "queries": 165,
+      "wallMs": 10057.5222,
+      "parentCpuUserMs": 2281,
+      "parentCpuSystemMs": 6563,
+      "mainMaxTickMs": 401.9209000000001,
+      "concurrency": 12,
+      "metrics": {
+        "live": 0,
+        "owners": {}
+      }
+    },
+    {
+      "run": "selected-a",
+      "mode": "selected",
+      "runtime": "1.4.0",
+      "owner": {
+        "pid": 71060,
+        "processInstanceID": "win32:639282182113795633",
+        "occurrenceID": "24137e32-13e5-421c-97d2-f9ed33e1c8a1"
+      },
+      "completed": 166,
+      "queries": 165,
+      "wallMs": 9493.6255,
+      "parentCpuUserMs": 1703,
+      "parentCpuSystemMs": 5110,
+      "mainMaxTickMs": 274.2318000000005,
+      "concurrency": 12,
+      "metrics": {
+        "live": 0,
+        "owners": {}
+      }
+    },
+    {
+      "run": "selected-b",
+      "mode": "selected",
+      "runtime": "1.4.0",
+      "owner": {
+        "pid": 77712,
+        "processInstanceID": "win32:639282182320448296",
+        "occurrenceID": "a239547e-1e03-4f74-9892-fc0115cac339"
+      },
+      "completed": 166,
+      "queries": 165,
+      "wallMs": 10467.3046,
+      "parentCpuUserMs": 1718,
+      "parentCpuSystemMs": 5719,
+      "mainMaxTickMs": 798.8686999999991,
+      "concurrency": 12,
+      "metrics": {
+        "live": 0,
+        "owners": {}
+      }
+    },
+    {
+      "run": "ordinary-b",
+      "mode": "ordinary",
+      "runtime": "1.4.0",
+      "owner": {
+        "pid": 92776,
+        "processInstanceID": "win32:639282182604671697",
+        "occurrenceID": "2bf6966a-96a4-469b-b3c0-bf309f7d13af"
+      },
+      "completed": 166,
+      "queries": 165,
+      "wallMs": 9808.527,
+      "parentCpuUserMs": 2078,
+      "parentCpuSystemMs": 7750,
+      "mainMaxTickMs": 349.6259,
+      "concurrency": 12,
+      "metrics": {
+        "live": 0,
+        "owners": {}
+      }
+    },
+    {
+      "run": "resolve-b",
+      "mode": "resolve",
+      "runtime": "1.4.0",
+      "owner": {
+        "pid": 53860,
+        "processInstanceID": "win32:639282182917069567",
+        "occurrenceID": "f6868668-341b-44ae-9120-0c12e59e4785"
+      },
+      "completed": 166,
+      "queries": 0,
+      "wallMs": 376.1586,
+      "parentCpuUserMs": 594,
+      "parentCpuSystemMs": 1766,
+      "mainMaxTickMs": 9.843900000000076,
+      "concurrency": 12,
+      "metrics": {
+        "live": 0,
+        "owners": {}
+      }
+    }
+  ],
+  "boundary": "Complete original166 directory component control;not mixed configuration,UI or production acceptance. Formal Git for Windows cmd entry retained. CPU only parent. First resolution durations overlap command windows and are not additive."
+}

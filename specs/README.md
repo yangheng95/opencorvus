@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Git 正式入口解析成本](records/2026-10/2026-10-22-git-selection-cost.md)：[166目录/660次零模型组件诊断](artifacts/2026-10-22-git-selection-cost/README.md)，复用正式入口未获稳定吞吐收益，生产不改；六原scope与90表157001原行完整结算/保持。
+
 - [配置全量验证与准入发现](records/2026-10/2026-10-22-config-admitted-discovery.md)：[166目录两轮实测与九原图](artifacts/2026-10-22-config-admitted-discovery/README.md)，保留完整fresh准入，将保存/恢复约21–23秒降至约14秒；读取20秒通过，10/5秒仍未达，16项正向合同及4/8真实Sol结算。
 
 - [Sources键盘与侧栏焦点](records/2026-10/2026-10-22-source-keyboard-dock.md)：[十张实图](artifacts/2026-10-22-source-keyboard-dock/README.md)，来源/Tool原生Tab、Home/End和整栏焦点链；剪贴板工具观测冲突由真实CtrlV复核，两源正确，零模型/原数据保持。

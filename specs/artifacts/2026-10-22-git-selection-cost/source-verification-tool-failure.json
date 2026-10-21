@@ -1,0 +1,11 @@
+{
+  "originalToolChunk": "795e9e",
+  "originalExit": 1,
+  "stage": "After exact database/canonical bytes and size/mtime comparison;before final field-summary output",
+  "error": "AssertionError: SQLite Uint8Array BLOB result compared directly against its JSON snapshot object",
+  "actualExample": "block: Uint8Array(7) [0,0,0,0,0,0,0]",
+  "expectedExample": "block: {'0':0,'1':0,'2':0,'3':0,'4':0,'5':0,'6':0}",
+  "repair": "Apply the same lossless JSON representation used by the frozen snapshot to each observed row;retain original whole-database byte comparison",
+  "dataAction": "Read-only source;no database writes,models,queries or active occurrence restarted",
+  "sourceSnapshot": "verify-source-before-json-normalization.ts.gz"
+}
