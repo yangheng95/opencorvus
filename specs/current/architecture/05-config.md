@@ -11,9 +11,17 @@
 
 ### Layer 1: Config.Info — 项目配置（唯一权威源）
 
-- **存储**：`opencorvus.jsonc`（文件层级合并：managed → global → project → local → env）
+- **存储**：`opencorvus.jsonc`，按声明的来源优先级合并。
 - **验证**：Zod schema（完整，无 `as any`）
 - **接口**：`GET /config` · `PATCH /config`（JSON Merge Patch RFC 7396）· SSE `config.changed`
+
+有效值按低到高合并：remote well-known、global、`OPENCORVUS_CONFIG` 自定义文件、project、独立
+`OPENCORVUS_CONFIG_DIR` 资源配置、inline、managed。每个文件来源保留原稀疏声明和新鲜 revision
+校验；global 配置文件只在 custom 之前合并一次。global 目录仍参与 command/plugin 等资源扫描和
+原依赖安装，但资源扫描不会重新把 global 文件的值提升到 custom 之上；显式资源目录规范化后
+等于 global 目录时同样只承担该资源职责。比较使用现有 `Filesystem.normalizeForCompare`，遵循
+Windows 的大小写等价与 POSIX 的大小写语义；不另建目录身份或配置来源。project、独立资源、
+inline 和 managed 的覆盖语义保持。
 
 **字段分组**（来源：`src/config/config.ts` 的 ConfigSchema）：
 

@@ -441,7 +441,13 @@ export namespace Config {
         canonicalProjectFile !== undefined &&
         Filesystem.resolve(dir) === Filesystem.resolve(path.dirname(canonicalProjectFile))
       const isNonProjectConfigDir = dir === Flag.OPENCORVUS_CONFIG_DIR || dir === Global.Path.config
-      const loadsConfig = isExactProjectConfigDir || isNonProjectConfigDir
+      // The global file was already merged before the custom-file layer.
+      // Keep its directory for resources without promoting its values again.
+      const isGlobalConfigDir =
+        Filesystem.normalizeForCompare(Filesystem.resolve(dir)) ===
+        Filesystem.normalizeForCompare(Filesystem.resolve(Global.Path.config))
+      const loadsConfig =
+        isExactProjectConfigDir || (isNonProjectConfigDir && !isGlobalConfigDir)
       if (loadsConfig) {
         const filepath = await ConfigPaths.assertCanonicalDirectory(dir)
         const projectOwnedSource = isExactProjectConfigDir ? "project" : "non-project"

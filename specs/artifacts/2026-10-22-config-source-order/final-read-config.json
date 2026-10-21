@@ -1,0 +1,26 @@
+{
+  "at": "2026-10-21T22:55:07.287Z",
+  "occurrence": "config-source-order-520-final-read-47ed1a97-a7f2-43c7-8371-39f4f9a9f336",
+  "results": [
+    {
+      "route": "/config",
+      "status": 200,
+      "username": "QA custom source 520",
+      "permissionMode": "full_access",
+      "model": "openai/gpt-6.1-sol",
+      "profile": "base"
+    },
+    {
+      "route": "/global/config",
+      "status": 200,
+      "permissionMode": "ask",
+      "model": "openai/gpt-6.1-sol",
+      "profile": "base"
+    }
+  ],
+  "modelRequests": 0,
+  "modelBudget": 0,
+  "providerQualification": "None;complete public catalog only;no credentials",
+  "resourceDirectory": "C:/USERS/HENGU/.CODEX/OPENCORVUS-PRODUCT-ITERATION/2026-10-22/CONFIG-SOURCE-ORDER-520-FINAL-READ/RUNTIME/CONFIG/.",
+  "boundary": "Actual final source/API/Windows case-equivalent explicit directory;global canonical read only"
+}

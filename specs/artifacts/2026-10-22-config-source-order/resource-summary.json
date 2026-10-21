@@ -1,0 +1,442 @@
+{
+  "at": "2026-10-21T22:48:35.349Z",
+  "maximumBatchRequests": 8,
+  "actualRequests": 4,
+  "scopes": [
+    {
+      "stage": "before",
+      "physical": {
+        "providerQualificationPassed": true,
+        "qualificationFailures": [],
+        "copiedPair": [
+          {
+            "outcome": "retired-after-original-physical-output-request-and-exact-birth-settlement",
+            "name": "auth.json",
+            "bytes": 2122
+          },
+          {
+            "outcome": "retired-after-original-physical-output-request-and-exact-birth-settlement",
+            "name": "models.json",
+            "bytes": 9155406
+          }
+        ],
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 52816,
+              "processInstanceID": "win32:639282192064029148",
+              "occurrenceID": "1ea9e67b-073d-432a-b286-261df82def36"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 87108,
+              "processInstanceID": "win32:639282192070351711",
+              "occurrenceID": "4a592cbc-bf1d-4904-ac09-a6a2b02cf90d"
+            }
+          }
+        ],
+        "occurrence": "config-source-order-520-before-ba52e1cb-72a8-4825-9c95-fe82fc25c045",
+        "launcher": {
+          "observedAtUtc": "2026-10-21T22:41:58.0735093Z",
+          "originalChildExit": 0
+        },
+        "requests": 2,
+        "provider": [
+          {
+            "sourceReader": {
+              "boundary": "provider-source-reader",
+              "state": "settled",
+              "receivedAt": 1792622418012,
+              "boundAt": 1792622418015,
+              "chunkCount": 16,
+              "byteCount": 41717,
+              "firstByteReadAt": 1792622418018,
+              "lastByteReadAt": 1792622421423,
+              "identityState": "observed",
+              "requestContext": {
+                "sessionID": "ses_hzEGqhW7b5Wbx5UmSLhv",
+                "streamRequest": {
+                  "requestID": "msg_h8mHfMRaELRr5kydzYuv",
+                  "agentID": "memory",
+                  "providerID": "openai",
+                  "modelID": "gpt-6.1-sol",
+                  "apiModelID": "gpt-6.1-sol"
+                },
+                "activity": {
+                  "id": "act_g0VYj6yQC00R4Mw1uitN",
+                  "attempt": 0
+                }
+              },
+              "terminal": {
+                "kind": "eof",
+                "at": 1792622421464
+              }
+            },
+            "status": 200,
+            "model": "gpt-6.1-sol",
+            "streaming": true
+          },
+          {
+            "sourceReader": {
+              "boundary": "provider-source-reader",
+              "state": "settled",
+              "receivedAt": 1792622419228,
+              "boundAt": 1792622419230,
+              "chunkCount": 38,
+              "byteCount": 516035,
+              "firstByteReadAt": 1792622419232,
+              "lastByteReadAt": 1792622420215,
+              "identityState": "observed",
+              "requestContext": {
+                "sessionID": "ses_hzEGqhW7b5Wbx5UmSLhv",
+                "streamRequest": {
+                  "requestID": "msg_h8mHfMRaELRr5kydzYuv",
+                  "agentID": "chat",
+                  "providerID": "openai",
+                  "modelID": "gpt-6.1-sol",
+                  "apiModelID": "gpt-6.1-sol"
+                },
+                "activity": {
+                  "id": "act_g0VYj6yjr00ioDdXvue1",
+                  "attempt": 0,
+                  "assistantMessageID": "msg_g0VYj6yQT004CeAA46xR"
+                }
+              },
+              "terminal": {
+                "kind": "eof",
+                "at": 1792622420726
+              }
+            },
+            "status": 200,
+            "model": "gpt-6.1-sol",
+            "streaming": true
+          }
+        ],
+        "pairedCleanupComplete": true,
+        "maximumRequests": 4,
+        "native": {
+          "occurrence": "config-source-order-520-before-ba52e1cb-72a8-4825-9c95-fe82fc25c045",
+          "outcome": "settled",
+          "host": {
+            "pid": 52816,
+            "processInstanceID": "win32:639282192064029148",
+            "occurrenceID": "1ea9e67b-073d-432a-b286-261df82def36"
+          },
+          "target": {
+            "pid": 87108,
+            "processInstanceID": "win32:639282192070351711",
+            "occurrenceID": "4a592cbc-bf1d-4904-ac09-a6a2b02cf90d"
+          },
+          "observedAtUtc": "2026-10-21T22:41:58.022Z",
+          "deadlineAt": 1792623606379,
+          "terminal": {
+            "occurrenceID": "config-source-order-520-before-ba52e1cb-72a8-4825-9c95-fe82fc25c045",
+            "pid": 87108,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-21T22:42:32.8852555Z"
+      },
+      "privateRetirement": {
+        "at": "2026-10-21T22:42:33.784Z",
+        "scannedFiles": 63,
+        "scannedBytes": 52045489,
+        "secretValueMatches": 0,
+        "sourceAuth": {
+          "bytes": 3929,
+          "modifiedAtMs": 1792460418696.2107,
+          "access": "exact original",
+          "refresh": "exact original"
+        },
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "currentModifiedAtMs": 1791128890137.9968,
+          "bytesExact": true,
+          "modifiedBeforePreparation": true,
+          "boundary": "Original catalog mtime exactly matches preparation;complete bytes equal captured pair"
+        },
+        "runtimePair": "Both members retired by original physical/source-EOF settlement",
+        "retired": [
+          {
+            "name": "auth.json",
+            "bytes": 2122,
+            "outcome": "Retired after original native,source EOF,runtime pair retirement and actual-value scan"
+          },
+          {
+            "name": "models.json",
+            "bytes": 9155406,
+            "outcome": "Retired after original native,source EOF,runtime pair retirement and actual-value scan"
+          }
+        ],
+        "requests": 2,
+        "maximumRequests": 4,
+        "allActualRequests": "gpt-6.1-sol,stream=true,200,original source EOF",
+        "status": "Configured workspace review source/runtime pairs physically retired; actual Task outcome retained separately; no credential-bearing service remains"
+      }
+    },
+    {
+      "stage": "after",
+      "physical": {
+        "pairedCleanupComplete": true,
+        "native": {
+          "occurrence": "config-source-order-520-after-c5e42d9f-d68f-4469-9bdb-f15037894170",
+          "outcome": "settled",
+          "host": {
+            "pid": 87500,
+            "processInstanceID": "win32:639282194790311327",
+            "occurrenceID": "391b69ab-ef87-4314-9948-c723cde42a74"
+          },
+          "target": {
+            "pid": 92780,
+            "processInstanceID": "win32:639282194803021844",
+            "occurrenceID": "a6ded3e5-38f7-4e86-b19c-169cc2f7647b"
+          },
+          "observedAtUtc": "2026-10-21T22:47:20.125Z",
+          "deadlineAt": 1792623878285,
+          "terminal": {
+            "occurrenceID": "config-source-order-520-after-c5e42d9f-d68f-4469-9bdb-f15037894170",
+            "pid": 92780,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "copiedPair": [
+          {
+            "name": "auth.json",
+            "bytes": 2122,
+            "outcome": "retired-after-original-physical-output-request-and-exact-birth-settlement"
+          },
+          {
+            "name": "models.json",
+            "bytes": 9155406,
+            "outcome": "retired-after-original-physical-output-request-and-exact-birth-settlement"
+          }
+        ],
+        "providerQualificationPassed": true,
+        "launcher": {
+          "observedAtUtc": "2026-10-21T22:47:20.1781418Z",
+          "originalChildExit": 0
+        },
+        "qualificationFailures": [],
+        "provider": [
+          {
+            "status": 200,
+            "streaming": true,
+            "sourceReader": {
+              "boundary": "provider-source-reader",
+              "state": "settled",
+              "receivedAt": 1792622691397,
+              "boundAt": 1792622691402,
+              "chunkCount": 14,
+              "byteCount": 43470,
+              "firstByteReadAt": 1792622691407,
+              "lastByteReadAt": 1792622695691,
+              "identityState": "observed",
+              "requestContext": {
+                "sessionID": "ses_hQ8QnQ3NHfRTDcJU2ZaH",
+                "streamRequest": {
+                  "requestID": "msg_heAKPvT6RZL1zBLtzHCp",
+                  "agentID": "memory",
+                  "providerID": "openai",
+                  "modelID": "gpt-6.1-sol",
+                  "apiModelID": "gpt-6.1-sol"
+                },
+                "activity": {
+                  "id": "act_g0VYj87Qg00zoBYFSQ0C",
+                  "attempt": 0
+                }
+              },
+              "terminal": {
+                "kind": "eof",
+                "at": 1792622695733
+              }
+            },
+            "model": "gpt-6.1-sol"
+          },
+          {
+            "status": 200,
+            "streaming": true,
+            "sourceReader": {
+              "boundary": "provider-source-reader",
+              "state": "settled",
+              "receivedAt": 1792622692341,
+              "boundAt": 1792622692343,
+              "chunkCount": 44,
+              "byteCount": 516023,
+              "firstByteReadAt": 1792622692346,
+              "lastByteReadAt": 1792622693529,
+              "identityState": "observed",
+              "requestContext": {
+                "sessionID": "ses_hQ8QnQ3NHfRTDcJU2ZaH",
+                "streamRequest": {
+                  "requestID": "msg_heAKPvT6RZL1zBLtzHCp",
+                  "agentID": "chat",
+                  "providerID": "openai",
+                  "modelID": "gpt-6.1-sol",
+                  "apiModelID": "gpt-6.1-sol"
+                },
+                "activity": {
+                  "id": "act_g0VYj87ps00O1lusD1he",
+                  "attempt": 0,
+                  "assistantMessageID": "msg_g0VYj87Qt00agf7o4V1d"
+                }
+              },
+              "terminal": {
+                "kind": "eof",
+                "at": 1792622693632
+              }
+            },
+            "model": "gpt-6.1-sol"
+          }
+        ],
+        "chain": [
+          {
+            "identity": {
+              "pid": 87500,
+              "processInstanceID": "win32:639282194790311327",
+              "occurrenceID": "391b69ab-ef87-4314-9948-c723cde42a74"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 92780,
+              "processInstanceID": "win32:639282194803021844",
+              "occurrenceID": "a6ded3e5-38f7-4e86-b19c-169cc2f7647b"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "occurrence": "config-source-order-520-after-c5e42d9f-d68f-4469-9bdb-f15037894170",
+        "maximumRequests": 4,
+        "requests": 2,
+        "observedAtUtc": "2026-10-21T22:47:21.3130671Z"
+      },
+      "privateRetirement": {
+        "at": "2026-10-21T22:47:22.398Z",
+        "scannedFiles": 72,
+        "scannedBytes": 101892468,
+        "secretValueMatches": 0,
+        "sourceAuth": {
+          "bytes": 3929,
+          "modifiedAtMs": 1792460418696.2107,
+          "access": "exact original",
+          "refresh": "exact original"
+        },
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "currentModifiedAtMs": 1791128890137.9968,
+          "bytesExact": true,
+          "modifiedBeforePreparation": true,
+          "boundary": "Original catalog mtime exactly matches preparation;complete bytes equal captured pair"
+        },
+        "runtimePair": "Both members retired by original physical/source-EOF settlement",
+        "retired": [
+          {
+            "name": "auth.json",
+            "bytes": 2122,
+            "outcome": "Retired after original native,source EOF,runtime pair retirement and actual-value scan"
+          },
+          {
+            "name": "models.json",
+            "bytes": 9155406,
+            "outcome": "Retired after original native,source EOF,runtime pair retirement and actual-value scan"
+          }
+        ],
+        "requests": 2,
+        "maximumRequests": 4,
+        "allActualRequests": "gpt-6.1-sol,stream=true,200,original source EOF",
+        "status": "Configured workspace review source/runtime pairs physically retired; actual Task outcome retained separately; no credential-bearing service remains"
+      }
+    }
+  ],
+  "boundary": "Both original source/native/output/request/launcher/physical birth chains complete;runtime and private paired members retired independently. Failed first tool had no staged runtime authority or provider request.",
+  "finalZeroModel": {
+    "at": "2026-10-21T22:56:25.2811179Z",
+    "launcher": {
+      "observedAtUtc": "2026-10-21T22:56:24.2485009Z",
+      "originalChildExit": 0
+    },
+    "publicCatalog": {
+      "bytes": 9155406,
+      "outcome": "retired after original full physical/output/request/launcher settlement"
+    },
+    "originalHandle": 43298,
+    "boundary": "Final exact production source/API/manual page on actual Windows case-equivalent resource directory;no model/credential qualification claim",
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 82584,
+          "processInstanceID": "win32:639282200634389313",
+          "occurrenceID": "c97d7089-f3d8-4cfb-b639-4f278b4f2270"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 74628,
+          "processInstanceID": "win32:639282200643272934",
+          "occurrenceID": "8ef21333-f4c2-4a54-94a0-761dfe9fbfdf"
+        }
+      }
+    ],
+    "provider": {
+      "at": "2026-10-21T22:54:28.052Z",
+      "maximum": 0,
+      "actual": 0,
+      "exhausted": false,
+      "requests": [],
+      "scope": "Final source order read;complete public catalog only;no credentials;zero model requests"
+    },
+    "originalExit": 0,
+    "native": {
+      "occurrence": "config-source-order-520-final-read-47ed1a97-a7f2-43c7-8371-39f4f9a9f336",
+      "outcome": "settled",
+      "host": {
+        "pid": 82584,
+        "processInstanceID": "win32:639282200634389313",
+        "occurrenceID": "c97d7089-f3d8-4cfb-b639-4f278b4f2270"
+      },
+      "target": {
+        "pid": 74628,
+        "processInstanceID": "win32:639282200643272934",
+        "occurrenceID": "8ef21333-f4c2-4a54-94a0-761dfe9fbfdf"
+      },
+      "observedAtUtc": "2026-10-21T22:56:24.197Z",
+      "deadlineAt": 1792624462686,
+      "terminal": {
+        "occurrenceID": "config-source-order-520-final-read-47ed1a97-a7f2-43c7-8371-39f4f9a9f336",
+        "pid": 74628,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "shutdown": {
+      "occurrence": "config-source-order-520-final-read-47ed1a97-a7f2-43c7-8371-39f4f9a9f336",
+      "body": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYjB242007vN0fGSZU\"}",
+      "at": "2026-10-21T22:56:24.1099155Z",
+      "statusCode": 200
+    },
+    "credentials": "None staged or used"
+  }
+}

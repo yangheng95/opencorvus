@@ -1,0 +1,103 @@
+{
+  "at": "2026-10-21T22:48:35.346Z",
+  "before": {
+    "originalHandle": 79508,
+    "exit": 1,
+    "pass": 4,
+    "fail": 2,
+    "expects": 12,
+    "log": "precedence-before.log.gz"
+  },
+  "after": {
+    "originalHandle": 51914,
+    "exit": 0,
+    "files": [
+      {
+        "file": "config-source-precedence.test.ts",
+        "pass": 6,
+        "expects": 12
+      },
+      {
+        "file": "config-layer-inheritance.test.ts",
+        "pass": 23,
+        "expects": 72
+      },
+      {
+        "file": "config-peer-convergence.test.ts",
+        "pass": 7,
+        "expects": 8
+      },
+      {
+        "file": "config-global-project-validation.test.ts",
+        "pass": 4,
+        "expects": 26
+      }
+    ],
+    "pass": 40,
+    "fail": 0,
+    "expects": 118,
+    "log": "config-contracts-after.log.gz"
+  },
+  "backendTypecheck": {
+    "originalHandle": 3478,
+    "exit": 0
+  },
+  "formalUI": "Existing unchanged main-DhV28lza from515;no new UI source/build claim",
+  "ui": "Five actual screenshots manually viewed;no UI automated tests",
+  "services": {
+    "firstFailed": {
+      "originalChunk": "7e2bff",
+      "exit": 1,
+      "requests": 0
+    },
+    "before": {
+      "originalHandle": 8872,
+      "exit": 0,
+      "tab": 112,
+      "closed": true
+    },
+    "after": {
+      "originalHandle": 45522,
+      "exit": 0,
+      "tab": 113,
+      "closed": true
+    }
+  },
+  "boundary": "Exact original tool outcomes recorded by root;logs retain original test/runtime output. Backend contracts are not UI qualification;manual screenshots are separate.",
+  "final": {
+    "sourceCaseTest": {
+      "originalHandle": 88046,
+      "exit": 0,
+      "pass": 8,
+      "fail": 0,
+      "expects": 16
+    },
+    "previousCaseFailure": {
+      "originalHandle": 52378,
+      "exit": 1,
+      "pass": 7,
+      "fail": 1
+    },
+    "retainedOtherFiles": {
+      "pass": 34,
+      "expects": 106
+    },
+    "uniqueCurrentTests": {
+      "pass": 42,
+      "fail": 0,
+      "expects": 122
+    },
+    "backendTypecheck": {
+      "originalHandle": 1609,
+      "exit": 0
+    },
+    "zeroModelFinalService": {
+      "originalHandle": 43298,
+      "exit": 0,
+      "tab": 114,
+      "closed": true
+    },
+    "manualScreenshots": 7,
+    "boundary": "Final8 source cases replace earlier6 source cases in original40;repeat runs not added to unique counts. Original40 matrix retained above."
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "at": "2026-10-21T22:45:10.471Z",
+  "stage": "after",
+  "label": "initial",
+  "occurrence": "config-source-order-520-after-c5e42d9f-d68f-4469-9bdb-f15037894170",
+  "preflight": {
+    "sessionID": "ses_hQ8QnQ3NHfRTDcJU2ZaH",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "actualRequests": 2,
+  "maximumRequests": 4,
+  "canonical": "Read-only original global source retained",
+  "custom": {
+    "username": "QA custom source 520",
+    "permission_mode": "full_access"
+  },
+  "results": [
+    {
+      "path": "/config",
+      "status": 200,
+      "requestID": null,
+      "username": "QA custom source 520",
+      "permissionMode": "full_access",
+      "model": "openai/gpt-6.1-sol",
+      "profile": "base"
+    },
+    {
+      "path": "/global/config",
+      "status": 200,
+      "requestID": null,
+      "permissionMode": "ask",
+      "model": "openai/gpt-6.1-sol",
+      "profile": "base"
+    }
+  ]
+}

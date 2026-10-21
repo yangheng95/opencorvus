@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [配置来源顺序](records/2026-10/2026-10-22-config-source-order.md)：[42正向合同与7张真图](artifacts/2026-10-22-config-source-order/README.md)，修复global重复合并覆盖custom及Windows别名，保留目录资源；Sol4/8/八成员退休、最终零模型、90表原数据/166目录保持。
+
 - [Git 正式入口解析成本](records/2026-10/2026-10-22-git-selection-cost.md)：[166目录/660次零模型组件诊断](artifacts/2026-10-22-git-selection-cost/README.md)，复用正式入口未获稳定吞吐收益，生产不改；六原scope与90表157001原行完整结算/保持。
 
 - [配置全量验证与准入发现](records/2026-10/2026-10-22-config-admitted-discovery.md)：[166目录两轮实测与九原图](artifacts/2026-10-22-config-admitted-discovery/README.md)，保留完整fresh准入，将保存/恢复约21–23秒降至约14秒；读取20秒通过，10/5秒仍未达，16项正向合同及4/8真实Sol结算。

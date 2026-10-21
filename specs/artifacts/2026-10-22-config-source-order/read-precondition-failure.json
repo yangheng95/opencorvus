@@ -1,0 +1,12 @@
+{
+  "originalToolChunk": "44bfd5",
+  "originalExit": 1,
+  "stage": "Two readonly HTTP responses passed status200;scalar assertion before result file was persisted",
+  "actualObservedScalar": { "username": "QA custom source 520", "mode": "ask" },
+  "incorrectExpectedScalar": { "username": "hengu", "mode": "ask" },
+  "reason": "Sparse original global source declares permission_mode but omits username;only colliding custom values are overwritten",
+  "repair": "Persist observed HTTP response fields before assertions and compute expected username from actual sparse source;original failure snapshot retained",
+  "evidenceLimit": "Original complete response and request IDs were not saved;do not reconstruct them. Before menu screenshots independently show Ask me selected",
+  "extraExitOutput": "Node25.7.0 printed UV_HANDLE_CLOSING during unhandled assertion teardown;not attributed to product",
+  "retry": "Before service closed normally;no restart or extra model request for this checker error"
+}
