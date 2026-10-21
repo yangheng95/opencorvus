@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Markdown分帧替换连续性](records/2026-10/2026-10-21-markdown-batch-continuity.md)：[真实49→1截断、修复后48→50与15张实图](artifacts/2026-10-21-markdown-batch-continuity/README.md)，保留格式失败样本和后台reader原结算。
+
 - [Goal入口与默认布局实测](records/2026-10/2026-10-21-goal-entry-workspace-review.md)：[九张中英文实图与真实单轮目标](artifacts/2026-10-21-goal-entry-workspace-review/README.md)，7次真实Sol请求完整结算，当前入口/来源通过，生产未改。
 
 - [Git暂存区权威读取](records/2026-10/2026-10-21-git-index-authority.md)：[真实漏检/多索引格式与71787输入对照](artifacts/2026-10-21-git-index-authority/README.md)，删除二进制解码、恢复真实内容大小，保留实测成本。

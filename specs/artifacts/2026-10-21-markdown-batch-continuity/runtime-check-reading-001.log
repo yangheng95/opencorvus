@@ -1,0 +1,23 @@
+14 |    const text=output.result.parts.filter((p:any)=>p.type==='text').map((p:any)=>p.text).join('')
+15 |    conversations.push({key,sessionID:input.sessionID,inputID:input.body.messageID,assistantID:output.result.info.id,finish:persisted.finish,completed:persisted.time.completed,textFacts:{length:text.length,paragraphUnits:text.split(/\n\s*\n/).length,referenceDefinitionOffset:text.lastIndexOf('[md497-reference]:'),definitionHasBlankLine:text.includes('\n\n[md497-reference]:'),end:text.slice(-90)},boundary:'Actual model text facts describe formatting;not a UI assertion or replacement for visible link review'})
+16 |   }
+17 |   const names=fs.readdirSync(run+'/evidence').filter(n=>/^provider-.*-\d+\.json$/.test(n)).sort((a,b)=>Number(a.match(/-(\d+)\.json$/)![1])-Number(b.match(/-(\d+)\.json$/)![1])),audit=JSON.parse(fs.readFileSync(run+'/evidence/'+names.at(-1),'utf8'))
+18 |   assert.equal(audit.maxRequests,8);assert(audit.requests.length<=8)
+19 |   for(const request of audit.requests){assert.equal(request.model,'gpt-6.1-sol');assert.equal(request.streaming,true);assert.equal(request.status,200);assert.equal(request.response_reader.state,'settled');assert.equal(request.response_reader.terminal.kind,'eof')}
+                                                                                                                                                                   ^
+AssertionError: Expected values to be strictly equal:
++ actual - expected
+
++ 'reading'
+- 'settled'
+
+ generatedMessage: true,
+     actual: "reading",
+   expected: "settled",
+   operator: "strictEqual",
+       diff: "simple",
+       code: "ERR_ASSERTION"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\markdown-batch-continuity-497\check-runtime.ts:19:159
+
+Bun v1.4.0 (Windows x64)

@@ -1,0 +1,30 @@
+{
+  "observedAt": "2026-10-21T01:13:31.596Z",
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh",
+  "projects": 149,
+  "sessions": 198,
+  "schema": 3,
+  "originalCounts": {
+    "project": 149,
+    "session": 198,
+    "message": 518,
+    "part": 1155,
+    "protocol_event": 1407,
+    "tool_part_request": 119,
+    "tool_part_outcome": 119
+  },
+  "canonicalKeys": [
+    "$schema",
+    "model",
+    "small_model",
+    "prompt_profile",
+    "permission_mode"
+  ],
+  "canonicalBytes": 201,
+  "clones": [
+    "before",
+    "after"
+  ],
+  "sourceDatabase": "All original rows/fields/rowid/time and bytes/mtime retained;readonly serialize,not initializer",
+  "modelRequests": 0
+}

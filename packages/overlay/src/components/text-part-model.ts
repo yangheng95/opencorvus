@@ -34,15 +34,19 @@ export function createStreamingTextPartModel(props: { text: string; streaming?: 
     const current = frozenHtml()
     let prefix = 0
     while (prefix < current.length && prefix < target.length && current[prefix] === target[prefix]) prefix++
-    const next = current.slice(0, prefix)
+    const next = current.slice()
     const deadline = performance.now() + 4
-    for (let index = prefix; index < target.length && index < prefix + 16; index++) {
-      next.push(target[index])
+    let index = prefix
+    for (; index < target.length && index < prefix + 16; index++) {
+      next[index] = target[index]
       setFrozenHtml(next.slice())
-      if (performance.now() >= deadline) break
+      if (performance.now() >= deadline) {
+        index++
+        break
+      }
     }
-    if (complete && prefix === target.length && current.length !== target.length) setFrozenHtml(target.slice())
-    if (frozenHtml().length < target.length) mountFrame = requestAnimationFrame(mount)
+    if (complete && index === target.length && next.length !== target.length) setFrozenHtml(target.slice())
+    if (index < target.length) mountFrame = requestAnimationFrame(mount)
     else if (complete) setPending(false)
   }
   const renderer = createMarkdownRenderer((reply, request) => {

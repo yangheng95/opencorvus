@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Markdown分批呈现连续性](2026-10-21-markdown-batch-continuity.md)：[真实成员流与原挂载记录](../../artifacts/2026-10-21-markdown-batch-continuity/README.md)，修复早期块变化时裁掉未处理尾部，失败样本和10次Sol保留。
+
 - [Goal入口与默认布局实际体验](2026-10-21-goal-entry-workspace-review.md)：[九图与真实Home创建/读取/完成](../../artifacts/2026-10-21-goal-entry-workspace-review/README.md)，保留未复现和成员Rendering/完整配置性能未达边界。
 
 - [Git索引读取权威](2026-10-21-git-index-authority.md)：[六原fixture、CRLF、20正向合同和完整checker](../../artifacts/2026-10-21-git-index-authority/README.md)，SHA-256与有效小blob漏检修复，原失败保留。

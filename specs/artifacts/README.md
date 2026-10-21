@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Markdown分批呈现连续性](2026-10-21-markdown-batch-continuity/README.md)：49→1真实截断、当前单一数组修复、15张人工图及10/16实际Sol；源3665行与两原native收尾。
+
 - [Goal入口与默认布局实测](2026-10-21-goal-entry-workspace-review/README.md)：九张人工图、真实Goal完成事实、两原native收敛和3665行保留；没有用验证记录冒充新生产修复。
 
 - [Git索引与真实暂存大小](2026-10-21-git-index-authority/README.md)：多格式/共享/稀疏/相对index实际修复，20合同与71787身份/19741缓存大小校正；增加约2秒成本、未冒充提速。

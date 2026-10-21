@@ -1,0 +1,277 @@
+{
+  "native": {
+    "occurrence": "markdown-batch-continuity-497-after-26443787-9f99-467e-83f7-db1af9c421f2",
+    "outcome": "settled",
+    "host": {
+      "pid": 43208,
+      "processInstanceID": "win32:639281424812114219",
+      "occurrenceID": "89b272c0-3aac-44d3-af15-cb8e8343119d"
+    },
+    "target": {
+      "pid": 91936,
+      "processInstanceID": "win32:639281424825577093",
+      "occurrenceID": "d3f7adda-36b2-45ea-b9ef-dc0f22bd1f02"
+    },
+    "observedAtUtc": "2026-10-21T01:30:55.872Z",
+    "deadlineAt": 1792546881184,
+    "terminal": {
+      "occurrenceID": "markdown-batch-continuity-497-after-26443787-9f99-467e-83f7-db1af9c421f2",
+      "pid": 91936,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "provider": [
+    {
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol",
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792545694520,
+        "boundAt": 1792545694524,
+        "chunkCount": 17,
+        "byteCount": 31665,
+        "firstByteReadAt": 1792545694528,
+        "lastByteReadAt": 1792545696396,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hswW9n4By0ZRattf8xz2",
+          "streamRequest": {
+            "requestID": "msg_h6BrYHs67p7laAoGldXR",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYdv32N00QtwRjH6cP",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792545696488
+        }
+      }
+    },
+    {
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol",
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792545695262,
+        "boundAt": 1792545695263,
+        "chunkCount": 41,
+        "byteCount": 516095,
+        "firstByteReadAt": 1792545695265,
+        "lastByteReadAt": 1792545696362,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hswW9n4By0ZRattf8xz2",
+          "streamRequest": {
+            "requestID": "msg_h6BrYHs67p7laAoGldXR",
+            "agentID": "chat",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYdv3KB00K9vK7s3Wc",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYdv32a00GfzTuWJAb"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792545696542
+        }
+      }
+    },
+    {
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol",
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792545725255,
+        "boundAt": 1792545725257,
+        "chunkCount": 947,
+        "byteCount": 2172382,
+        "firstByteReadAt": 1792545725259,
+        "lastByteReadAt": 1792545848777,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+          "streamRequest": {
+            "requestID": "msg_g0VYdvAng00OJrPLpN9V",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYdvAqZ00RT2l0SfYF",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792545848777
+        }
+      }
+    },
+    {
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol",
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792545726333,
+        "boundAt": 1792545726334,
+        "chunkCount": 665,
+        "byteCount": 1473127,
+        "firstByteReadAt": 1792545726345,
+        "lastByteReadAt": 1792545825834,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+          "streamRequest": {
+            "requestID": "msg_g0VYdvAng00OJrPLpN9V",
+            "agentID": "work",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYdvB2t007FZ4GSN6O",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYdvApy00OT0zAmME0"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792545825995
+        }
+      }
+    },
+    {
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol",
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792546018932,
+        "boundAt": 1792546018934,
+        "chunkCount": 792,
+        "byteCount": 2261751,
+        "firstByteReadAt": 1792546018936,
+        "lastByteReadAt": 1792546133304,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+          "streamRequest": {
+            "requestID": "msg_g0VYdwPV400K9iYlaIPy",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYdwPX200qwn3lLH3h",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792546133305
+        }
+      }
+    },
+    {
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol",
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792546021171,
+        "boundAt": 1792546021173,
+        "chunkCount": 443,
+        "byteCount": 1458890,
+        "firstByteReadAt": 1792546021180,
+        "lastByteReadAt": 1792546091680,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+          "streamRequest": {
+            "requestID": "msg_g0VYdwPV400K9iYlaIPy",
+            "agentID": "work",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYdwPiz00BFRDO1mPq",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYdwPXJ00f5pPDw8DA"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792546091982
+        }
+      }
+    }
+  ],
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 43208,
+        "processInstanceID": "win32:639281424812114219",
+        "occurrenceID": "89b272c0-3aac-44d3-af15-cb8e8343119d"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 91936,
+        "processInstanceID": "win32:639281424825577093",
+        "occurrenceID": "d3f7adda-36b2-45ea-b9ef-dc0f22bd1f02"
+      }
+    }
+  ],
+  "occurrence": "markdown-batch-continuity-497-after-26443787-9f99-467e-83f7-db1af9c421f2",
+  "requests": 6,
+  "launcher": {
+    "observedAtUtc": "2026-10-21T01:30:55.9327189Z",
+    "originalChildExit": 0
+  },
+  "observedAtUtc": "2026-10-21T01:30:58.7959509Z",
+  "pairedCleanupComplete": true,
+  "maximumRequests": 8,
+  "copiedPair": [
+    {
+      "bytes": 2122,
+      "outcome": "retired-after-original-physical-and-source-EOF",
+      "name": "auth.json"
+    },
+    {
+      "bytes": 9155406,
+      "outcome": "retired-after-original-physical-and-source-EOF",
+      "name": "models.json"
+    }
+  ]
+}

@@ -581,6 +581,14 @@ and bounded frame mounts. Unmatched Markdown syntax follows the current
 parser's interpretation rather than guessed closing delimiters. Tool raw-input
 previews retain their own existing display limit.
 
+Frame mounts replace accepted HTML blocks by index while retaining the already
+presented tail until the current result supplies its final length. A changed early
+block, including a newly resolved reference link, does not truncate the rest of
+the document while later blocks await their frame. The frame's local cursor,
+rather than the retained array length, determines remaining mount work. A complete
+result trims any surplus tail only after its target blocks have been processed;
+an actually empty source still clears its presentation immediately.
+
 Transcript follow remains owned by each caller's tracking signal. The shared
 controller releases follow on owned upward input before asynchronous resize;
 editable keyboard controls and another nested transcript retain their input.
