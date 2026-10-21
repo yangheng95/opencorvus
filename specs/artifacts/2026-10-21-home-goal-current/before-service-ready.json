@@ -1,0 +1,31 @@
+{
+  "owner": {
+    "pid": 83008,
+    "processInstanceID": "win32:639281622978487927",
+    "occurrenceID": "c9d48992-c085-4115-a96d-eb44df57706a"
+  },
+  "parent": {
+    "pid": 87324,
+    "processInstanceID": "win32:639281622977688797",
+    "occurrenceID": "46adda91-1799-457f-8eae-cfcb39ba037b"
+  },
+  "occurrence": "home-goal-current-506-before-service-2c0c12d6-88ac-42c4-8ef2-04d18e3b6a01",
+  "receipt": {
+    "schemaVersion": 1,
+    "occurrenceID": "home-goal-current-506-before-service-2c0c12d6-88ac-42c4-8ef2-04d18e3b6a01",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18917",
+    "pid": 83008
+  },
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\home-goal-current-506-before\\runtime\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\home-goal-current-506-before\\runtime\\data",
+      "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/home-goal-current-506-before/home"
+    }
+  },
+  "observedAt": "2026-10-21T06:51:41.735Z",
+  "qualification": "Real development CLI/UI;zero-model historical read qualification; no Provider credential qualification"
+}

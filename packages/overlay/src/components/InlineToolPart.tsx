@@ -566,7 +566,11 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
             <TodoListPart todos={todoItems()!} variant={mode() === "body" ? "card" : "inline"} />
           </Show>
           <Show when={status() === "error" && error()}>
-            <Feedback tone="error" details={failure().diagnostic ? stripAnsi(failure().diagnostic!) : undefined}>
+            <Feedback
+              tone={display().cancelled ? "neutral" : "error"}
+              title={display().cancelled ? display().statusLabel : undefined}
+              details={failure().diagnostic ? stripAnsi(failure().diagnostic!) : undefined}
+            >
               <div class="msg-tool-failure-message">{error()}</div>
             </Feedback>
           </Show>

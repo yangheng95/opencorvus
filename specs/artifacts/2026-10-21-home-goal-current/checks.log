@@ -1,0 +1,10 @@
+$ bun run script/check-i18n.ts
+check:i18n ok (2 locales, 2526 top-level keys)
+$ bun run script/check-css-token-usage.ts
+CSS token entry graphs valid: 8875 references across 2 documents; 268 global tokens have an acyclic dependency graph; 60 application stylesheets and 379 application TS/TSX files conform to the bounded design-language roles; 2 Interactive Artifact stylesheets are content-owned and exempt. Selector inheritance is intentionally outside this static check.
+$ bun run script/check-renderer-public-surface.ts
+renderer public surface check passed (1 assignment, 1 declared global)
+$ bun run ./packages/opencorvus/script/docs/render-api-md.ts --check
+docs:check ok (345 ops, 26 groups)
+$ bun run ./packages/opencorvus/script/check/architecture-index.ts
+architecture-index ok — 20 current documents indexed, every link live

@@ -36,11 +36,15 @@ export function toolPayloadText(value: unknown): string {
 }
 
 /** The summary and expanded body read the same canonical failure. */
-export function toolFailurePresentation(value: unknown): { message: string; diagnostic?: string } {
-  if (value === undefined) return { message: "" }
+export function toolFailurePresentation(value: unknown): { message: string; diagnostic?: string; cancelled: boolean } {
+  if (value === undefined) return { message: "", cancelled: false }
   const parsed = ToolFailureCause.safeParse(value)
-  if (parsed.success) return { message: parsed.data.message, diagnostic: renderToolFailureCause(parsed.data) }
-  return { message: toolPayloadText(value) }
+  if (parsed.success) return {
+    message: parsed.data.message,
+    diagnostic: renderToolFailureCause(parsed.data),
+    cancelled: parsed.data.kind === "MessageAbortedError" && parsed.data.name === "MessageAbortedError",
+  }
+  return { message: toolPayloadText(value), cancelled: false }
 }
 
 function stableClone(value: unknown): unknown {
@@ -366,6 +370,7 @@ export interface ToolDisplayModel {
   label: string
   detail: string
   status?: ToolDisplayStatus
+  cancelled: boolean
   statusLabel: string
 }
 
@@ -485,12 +490,14 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
 export function describeToolCall(name: string, input: unknown, state: unknown, base = ""): ToolDisplayModel {
   const label = typeof name === "string" && name.trim() ? name.trim() : "tool"
   const status = normalizeToolStatus(record(state) ? (state as any).status : undefined)
+  const cancelled = status === "error" && toolFailurePresentation(record(state) ? (state as any).failure : undefined).cancelled
   return {
     icon: displayToolIconName(label),
     label,
     detail: displayToolDetail(label, input, state, base),
     status,
-    statusLabel: status ? toolStatusLabel(status) : "",
+    cancelled,
+    statusLabel: cancelled ? t("task.status.cancelled") : status ? toolStatusLabel(status) : "",
   }
 }
 

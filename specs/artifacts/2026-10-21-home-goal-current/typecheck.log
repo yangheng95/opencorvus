@@ -1,0 +1,35 @@
+$ bun run check:sdk-imports && bun run check:ai-runtime && bun run check:database-migrations && bun run check:expert-squad-types && bunx turbo run typecheck
+$ bun run ./script/check-sdk-imports.ts
+sdk import check passed (OpenCorvusClient)
+$ bun run ./script/check-ai-runtime.ts
+ai runtime check passed (ai v7, provider v4, provider-utils v5, OpenRouter v3)
+$ bun run ./packages/opencorvus/script/check/database-migrations.ts
+database-migrations check ok — target version 3, in-memory SQLite objects match the declared migration target
+$ bunx tsc -p expert-squads/tsconfig.json
+• turbo 2.9.14
+
+   • Packages in scope: @opencorvus-ai/channel-config, @opencorvus-ai/channel-runtime, @opencorvus-ai/overlay, @opencorvus-ai/plugin, @opencorvus-ai/script, @opencorvus-ai/sdk, @opencorvus-ai/transport-protocol, @opencorvus-ai/util, @opencorvus/web, opencorvus
+   • Running typecheck in 10 packages
+   • Remote caching disabled
+
+@opencorvus-ai/transport-protocol:typecheck: cache hit, replaying logs 25cd50c044e946ff
+@opencorvus-ai/transport-protocol:typecheck: $ tsc --noEmit
+opencorvus:typecheck: cache hit, replaying logs 3b2476be331caf6f
+opencorvus:typecheck: $ node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit
+@opencorvus-ai/overlay:typecheck: cache miss, executing 32b5758a036b0bd6
+@opencorvus-ai/channel-config:typecheck: cache hit, replaying logs 8c1c3bc7cb7ee767
+@opencorvus-ai/channel-config:typecheck: $ tsc --noEmit
+@opencorvus-ai/plugin:typecheck: cache hit, replaying logs cee5c1f20fc423a9
+@opencorvus-ai/plugin:typecheck: $ tsc --noEmit
+@opencorvus-ai/channel-runtime:typecheck: cache hit, replaying logs 087c2bd34bcdb6c8
+@opencorvus-ai/channel-runtime:typecheck: $ tsgo --noEmit
+@opencorvus-ai/util:typecheck: cache hit, replaying logs d9707b3ad070e089
+@opencorvus-ai/util:typecheck: $ tsc --noEmit
+@opencorvus-ai/sdk:typecheck: cache hit, replaying logs 667fe063684fca71
+@opencorvus-ai/sdk:typecheck: $ tsc --noEmit
+@opencorvus-ai/overlay:typecheck: $ tsc --noEmit
+
+ Tasks:    8 successful, 8 total
+Cached:    7 cached, 8 total
+  Time:    26.282s 
+

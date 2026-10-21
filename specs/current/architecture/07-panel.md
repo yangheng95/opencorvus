@@ -1028,6 +1028,14 @@ activity summaries and session chips use the same failure-message projection as
 the body, before selecting input or result descriptions. Arguments and full
 diagnostics remain available in the existing disclosures. Sources and tool inputs
 retain their own controls.
+The same canonical failure presentation recognizes a `MessageAbortedError`
+kind/name pair as cancellation. Tool transport status stays `error`; only the
+localized presentation distinguishes its cancelled label and group count from
+execution failures. Cancelled results retain their original reason and complete
+diagnostic in neutral Feedback. Other failures keep error Feedback, and a group
+with a cancelled result does not present an all-completed marker. The shared
+Main and member renderers derive this directly from each Tool's failure, never
+from Task status, reason text or a second cancellation store.
 Trace data uses the code typography role;
 the disclosure identity uses caption. Sources keep their chronological position.
 The webfetch identity detail projects its structured request URL directly, before

@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-21T07:06:28.127Z",
+  "typecheck": {
+    "command": "bun run typecheck",
+    "result": "8 successful / 8;7 cached;26.282s",
+    "originalSession": 96517,
+    "exit": 0
+  },
+  "build": {
+    "command": "node .tmp-product-iteration/home-goal-current-506/build.mjs after",
+    "result": "Formal Vite configuration;1m9s",
+    "originalSession": 24810,
+    "exit": 0
+  },
+  "checksLog": "checks.log",
+  "ui": "Only actual CUA interaction/screenshots/manual visual review; no UI automated tests",
+  "screenshots": 16,
+  "publicTool": "HTTP200 and complete original typed failure; no storage changes"
+}

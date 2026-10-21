@@ -1,0 +1,38 @@
+{
+  "at": "2026-10-21T07:01:11.288Z",
+  "http": 200,
+  "id": "prt_g0VYeNHpt00RNOnwctXO",
+  "sessionID": "ses_-zURLdMI8zzyihTDZeVm",
+  "messageID": "msg_hVJgmC6k7rnLSZAUZUeH",
+  "tool": "manage_task",
+  "transportStatus": "error",
+  "persistedOutcome": "failed",
+  "failure": {
+    "kind": "MessageAbortedError",
+    "name": "MessageAbortedError",
+    "message": "The QA operator ends this incomplete private run before its fixed12-request scope can be exhausted. Four actual internal memory requests made the original test budget insufficient;retain all evidence and repeat the original two-file acceptance in a separately reviewed finite scope.",
+    "originSite": "session.processor.catch",
+    "classification": "llm-activity",
+    "data": {
+      "sessionID": "ses_-zURLdMI8zzyihTDZeVm",
+      "canonical_error_metadata": {
+        "cancellation": {
+          "actor": "user",
+          "source": "task.cancel",
+          "surface": "api",
+          "requestID": "9dbc099b-ff38-498d-82e7-cc19b8f66930",
+          "reason": "The QA operator ends this incomplete private run before its fixed12-request scope can be exhausted. Four actual internal memory requests made the original test budget insufficient;retain all evidence and repeat the original two-file acceptance in a separately reviewed finite scope.",
+          "targetSessionID": "ses_-zURLdMI8zzyihTDZeVm",
+          "taskID": "tsk_g00VYeMccK0078SroWDw",
+          "causationEventID": "pev_g0VYeP73r007mPuiefGt"
+        }
+      },
+      "failure_occurrence": {
+        "session_id": "ses_-zURLdMI8zzyihTDZeVm",
+        "assistant_message_id": "msg_hVJgmC6k7rnLSZAUZUeH",
+        "error_name": "MessageAbortedError"
+      }
+    }
+  },
+  "qualification": "Exact original canonical Tool failure, retained by the actual public message-Part read; UI labels are qualified only by manual screenshots"
+}

@@ -8,7 +8,7 @@ import { FilePart } from "./FilePart"
 import { describeToolPart, shortRelativePath, type ToolDisplayModel } from "../utils/tool"
 import { boardStore, selectedTaskDirectory } from "../store/board"
 import { toolToCardNode } from "../utils/tool-card-node"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
 import { interactionRequestText, interactionResponseText } from "../utils/transcript"
 import {
   isCardRenderableMessagePartType,
@@ -237,7 +237,9 @@ function ExecutionEventRun(props: PartCollectionProps) {
   const pendingCount = () => tools().filter((tool) => tool.status === "pending").length
   const runningCount = () => tools().filter((tool) => tool.status === "running").length
   const activeCount = () => pendingCount() + runningCount()
-  const errorCount = () => tools().filter((tool) => tool.status === "error").length
+  const errorCount = () => tools().filter((tool) => tool.status === "error" && !tool.cancelled).length
+  const cancelledCount = () => tools().filter((tool) => tool.cancelled).length
+  const number = (count: number) => count.toLocaleString(localeTag())
   const active = () => Boolean(props.streaming && activeCount() > 0)
   const summary = () =>
     latest()
@@ -266,15 +268,18 @@ function ExecutionEventRun(props: PartCollectionProps) {
         </Show>
         <span class="msg-work-details__status">
           <Show when={pendingCount()}>
-            <span>{t("tool.group_receiving_input", { count: pendingCount() })}</span>
+            <span>{t("tool.group_receiving_input", { count: number(pendingCount()) })}</span>
           </Show>
           <Show when={runningCount()}>
-            <span>{t("tool.group_running", { count: runningCount() })}</span>
+            <span>{t("tool.group_running", { count: number(runningCount()) })}</span>
           </Show>
           <Show when={errorCount()}>
-            <span data-status="error">{t("tool.group_errors", { count: errorCount() })}</span>
+            <span data-status="error">{t("tool.group_errors", { count: number(errorCount()) })}</span>
           </Show>
-          <Show when={!activeCount() && !errorCount()}>
+          <Show when={cancelledCount()}>
+            <span>{t("tool.group_cancelled", { count: number(cancelledCount()) })}</span>
+          </Show>
+          <Show when={!activeCount() && !errorCount() && !cancelledCount()}>
             <Icon
               name="status-completed"
               class="msg-tool-complete"

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [当前首页与取消工具呈现](2026-10-21-home-goal-current/README.md)：16张人工实图、原始Tool公共读取200、正式构建/类型、零模型和完整90表保留；仅呈现层修复取消误标失败。
+
 - [权限历史系统终止语义](2026-10-21-permission-termination-history/README.md)：五张中英文人工图、12项后端合同/331断言、旧ETag→新body与90表145033行原字段保留；系统取消与原拒绝区分，无schema/执行改动。
 
 - [新Task成员真实来源与正文](2026-10-21-task-member-stream/README.md)：12张人工图、15次实际Sol、唯一真实worker/两Sources/12节长文/正常终态，源90表141633行保持；采集范围成员身份稳定，生产未改。

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [当前首页与取消工具呈现](records/2026-10/2026-10-21-home-goal-current-review.md)：[16张人工实图与原始工具事实](artifacts/2026-10-21-home-goal-current/README.md)，修复明确取消被计失败/红色错误，首页Goal与草稿取消实测；90表145033原行保持。
+
 - [权限历史的系统终止语义](records/2026-10/2026-10-21-permission-termination-history.md)：[五张中英文实图、12项合同与完整历史保留](artifacts/2026-10-21-permission-termination-history/README.md)，修复原系统取消显示Reject，原决定/执行/schema不变。
 
 - [新Task成员来源与正文流](records/2026-10/2026-10-21-task-member-stream-review.md)：[12张实图、15次实际Sol和自然Task完成](artifacts/2026-10-21-task-member-stream/README.md)，真实新成员两来源与流中列表/调宽覆盖，生产未改，原141633行源保持。

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [当前首页与取消工具呈现](2026-10-21-home-goal-current-review.md)：[16张真实中英文页面](../../artifacts/2026-10-21-home-goal-current/README.md)，同一MessageAbortedError由失败汇总/红框改为取消，持久状态/原因/诊断保持。
+
 - [权限历史的系统终止语义](2026-10-21-permission-termination-history.md)：[真实Reject→Cancelled/已取消、五图与12项/331断言](../../artifacts/2026-10-21-permission-termination-history/README.md)，单一账本投影与formatter修复，原90表145033行保持。
 
 - [新Task成员来源与正文流](2026-10-21-task-member-stream-review.md)：[真实新worker、12图和15次Sol](../../artifacts/2026-10-21-task-member-stream/README.md)，5836字元自然正文/Task终态与完整原生结算，主区域挂载原因仍待追查。

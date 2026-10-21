@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-21T07:06:28.125Z",
+  "stages": [
+    {
+      "stage": "before",
+      "originalHandle": 11546,
+      "originalExit": 0,
+      "tab": 83,
+      "tabDisposition": "Closed through CUA after actual manual screenshots",
+      "native": {
+        "pid": 83008,
+        "processInstanceID": "win32:639281622978487927",
+        "occurrenceID": "32f446ff-641c-49e6-88bc-f964bf5fb291"
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "launcher": {
+        "observedAtUtc": "2026-10-21T06:57:14.3917466Z",
+        "childExitCode": 0
+      },
+      "publicShutdown": 200,
+      "modelBudget": 0,
+      "modelActual": 0,
+      "exhausted": false
+    },
+    {
+      "stage": "after",
+      "originalHandle": 33162,
+      "originalExit": 0,
+      "tab": 84,
+      "tabDisposition": "Closed through CUA after actual manual screenshots",
+      "native": {
+        "pid": 82388,
+        "processInstanceID": "win32:639281628477259342",
+        "occurrenceID": "a1785433-f672-4b67-91c8-a621337e5ea9"
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "launcher": {
+        "observedAtUtc": "2026-10-21T07:03:54.8178672Z",
+        "childExitCode": 0
+      },
+      "publicShutdown": 200,
+      "modelBudget": 0,
+      "modelActual": 0,
+      "exhausted": false
+    }
+  ],
+  "credentials": "No auth or models catalog copied",
+  "userResources": "No operation on user18571 windows/process/database",
+  "newInput": "No Task/Goal/Message or Provider input created",
+  "qualification": "Current home and original cancelled Tool UI; no new streaming/ordinary failure/mixed group/member cancellation qualification"
+}
