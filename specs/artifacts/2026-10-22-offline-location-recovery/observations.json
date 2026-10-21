@@ -1,0 +1,76 @@
+{
+  "at": "2026-10-21T20:07:46.907Z",
+  "sourceBaseCommit": "b36a57b8991ea3775166a4cb6be6c94d2a69b372",
+  "scope": "Single developer;real independent UI/API services;no response interception or hidden browser state",
+  "build": {
+    "runner": "Node formal Vite configuration",
+    "exitCode": 0,
+    "modules": 7313,
+    "seconds": 54.51,
+    "publication": "main-DhV28lza.js"
+  },
+  "controlContracts": {
+    "initialSix": {
+      "before": {
+        "pass": 4,
+        "fail": 2
+      },
+      "after": {
+        "pass": 6,
+        "fail": 0
+      }
+    },
+    "final": {
+      "pass": 7,
+      "fail": 0,
+      "assertions": 11
+    },
+    "kind": "Transport control receipts including actual loopback HTTP;not UI automation or end-to-end qualification"
+  },
+  "validation": [
+    {
+      "command": "bun run --cwd packages/overlay typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "bun run --cwd packages/overlay check:i18n",
+      "exitCode": 0,
+      "keys": 2529
+    },
+    {
+      "command": "bun run docs:check",
+      "exitCode": 0
+    },
+    {
+      "command": "bun run check:architecture-index",
+      "exitCode": 0
+    }
+  ],
+  "manual": {
+    "screenshots": 13,
+    "pages": [
+      105,
+      106
+    ],
+    "before": "Offline Task URL stayed Home after API online;manual selection then opened same Task",
+    "after": [
+      "Original Task restored on first healthy connection",
+      "Later cross-project Chat retained through same-document API restart",
+      "Exact Chat URL cold-start restored original conversation",
+      "Offline New chat intent remained after API online"
+    ],
+    "draft": "Screenshot13 draft entered after online;not an offline draft retention claim",
+    "transitional": "Screenshot06 and selected-chat-location.json captured before selection settled;07 and selected-chat-ready-location.json own the accepted Chat URL"
+  },
+  "provider": {
+    "maximum": 0,
+    "actual": 0,
+    "credentialsOrCatalogCopies": "None"
+  },
+  "limits": [
+    "No Mission or native WebView2 real-page qualification",
+    "No new LLM execution,all Sources or continuous-frame Rendering qualification",
+    "No forced initial metadata interruption or concurrent user navigation during its in-flight window"
+  ],
+  "resourceSummary": "All seven original native/output/request/launcher/birth chains complete;all public shutdown200;pages105/106 closed;original data/schema3/canonical retained"
+}

@@ -57,8 +57,8 @@ export interface InitOptions {
   /** Restore a Session or launcher through its explicit UI navigation lifecycle. */
   restoreClientLocation?: (location: ClientWorkspaceLocation, authority: ApiAuthority) => Promise<void>
   /**
-   * Called once the initial connection check succeeds so the caller can
-   * trigger any render-side updates that depend on live data.
+   * Called when the first healthy workspace initialization settles, including
+   * a startup which first connects through the monitor after being offline.
    */
   onConnected?: () => void | Promise<void>
   /**
@@ -319,7 +319,7 @@ export async function initApp(options: InitOptions = {}): Promise<void> {
     }
   }
 
-  let initialLocation: { kind: "valid"; location: WorkspaceLocation | null } | { kind: "invalid" }
+  let initialLocation: { kind: "valid"; location: WorkspaceLocation | null } | { kind: "invalid" } | undefined
   try {
     initialLocation = { kind: "valid", location: workspaceLocationFromSearch(initialSearch) }
   } catch (error) {
@@ -328,72 +328,70 @@ export async function initApp(options: InitOptions = {}): Promise<void> {
     reportWorkspaceLocationFailure(error)
   }
 
-  // 5. Check connection
-  let startupAuthority: ApiAuthority | undefined
-  const connected = await checkServerConnection({
-    onHealthy: (authority) => {
-      startupAuthority = authority
-      return undefined
-    },
-  })
-  if (!isCurrentInitLifecycle(lifecycleGeneration)) return
-
-  if (connected && startupAuthority && isApiAuthorityCurrent(startupAuthority)) {
+  const initialSelectionEpoch = boardStore.selectEpoch
+  const ownsStartupIntent = () => settingsStore.workspaceEpoch === 0 && boardStore.selectEpoch === initialSelectionEpoch
+  let workspaceReady = false
+  const recoverWorkspace = async (authority: ApiAuthority) => {
+    const current = () => isCurrentInitLifecycle(lifecycleGeneration) && isApiAuthorityCurrent(authority)
+    if (!current()) return
+    const startup = initialLocation
+    workspaceReady = false
     startWorkLedgerSSE()
-    // An explicit location owns its directory through the ordinary selector.
-    // Restore it before unrelated launch-directory discovery can fail or
-    // publish a different default workspace.
-    if (initialLocation.kind === "valid" && initialLocation.location) {
-      const authority = startupAuthority
-      const location = initialLocation.location
+    // The first healthy connection consumes the document's launch intent,
+    // unless an ordinary navigation owner has already superseded it.
+    if (startup?.kind === "valid" && startup.location && ownsStartupIntent()) {
+      const location = startup.location
       await settleWorkspaceRestore(
         () => restoreInitialWorkspaceLocation({ authority, location, restoreClientLocation: options.restoreClientLocation }),
         authority,
       )
     }
-    if (!isCurrentInitLifecycle(lifecycleGeneration)) return
-    if (!isApiAuthorityCurrent(startupAuthority)) return
-    // 6. Load the actual workspace; cold starts without a locator discover
-    // their default directory and restore their saved selection below.
+    if (!current()) return
     const initialData = await loadInitialData(lifecycleGeneration, resolveInitialDirectory)
-    if (!isCurrentInitLifecycle(lifecycleGeneration)) return
-    if (initialLocation.kind === "valid" && !initialLocation.location && initialData.loaded && isApiAuthorityCurrent(startupAuthority)) {
-      const authority = startupAuthority
-      const location = initialLocation.location
-      await settleWorkspaceRestore(
-        () => restoreInitialWorkspaceLocation({ authority, location, restoreClientLocation: options.restoreClientLocation }),
-        authority,
-      )
-    }
-    if (!isCurrentInitLifecycle(lifecycleGeneration)) return
-    if (isApiAuthorityCurrent(startupAuthority)) {
+    if (!current()) return
+    if (startup) {
+      if (startup.kind === "valid" && !startup.location && initialData.loaded) {
+        await settleWorkspaceRestore(
+          () => restoreInitialWorkspaceLocation({ authority, location: null, restoreClientLocation: options.restoreClientLocation }),
+          authority,
+        )
+      }
+      if (!current()) return
       void initialData.reconcileCapabilities?.()
       await onConnected?.()
+      if (!current()) return
+      initialLocation = undefined
+    } else {
+      if (initialData.loaded) await settleWorkspaceRestore(() => restoreInitialWorkspace(authority), authority)
+      if (!current()) return
+      await refreshConnectionWorkspace(authority)
+      if (!current()) return
+      void initialData.reconcileCapabilities?.()
+      await onReconnect?.()
     }
-    if (!isCurrentInitLifecycle(lifecycleGeneration)) return
+    if (current()) workspaceReady = true
   }
 
-  if (!isCurrentInitLifecycle(lifecycleGeneration)) return
-
-  // 7. Start reconnect loop
-  stopConnectionMonitor()
-  startConnectionMonitor(async () => {
-    if (!isCurrentInitLifecycle(lifecycleGeneration)) return
-    syncApiConfig()
-    const authority = captureApiAuthority()
-    startWorkLedgerSSE()
-    const initialData = await loadInitialData(lifecycleGeneration, resolveInitialDirectory)
-    if (!isCurrentInitLifecycle(lifecycleGeneration)) return
-    if (!isApiAuthorityCurrent(authority)) return
-    if (initialData.loaded) await settleWorkspaceRestore(() => restoreInitialWorkspace(authority), authority)
-    if (!isCurrentInitLifecycle(lifecycleGeneration)) return
-    if (!isApiAuthorityCurrent(authority)) return
-    await refreshConnectionWorkspace(authority)
-    if (!isCurrentInitLifecycle(lifecycleGeneration)) return
-    void initialData.reconcileCapabilities?.()
-    await onReconnect?.()
-    if (!isCurrentInitLifecycle(lifecycleGeneration)) return
-  }, reconnectInterval)
+  try {
+    let startupAuthority: ApiAuthority | undefined
+    const connected = await checkServerConnection({
+      onHealthy: (authority) => {
+        startupAuthority = authority
+        return undefined
+      },
+    })
+    if (isCurrentInitLifecycle(lifecycleGeneration) && connected && startupAuthority && isApiAuthorityCurrent(startupAuthority)) {
+      await recoverWorkspace(startupAuthority)
+    }
+  } finally {
+    if (isCurrentInitLifecycle(lifecycleGeneration)) {
+      startConnectionMonitor(async () => {
+        if (!isCurrentInitLifecycle(lifecycleGeneration)) return
+        syncApiConfig()
+        await recoverWorkspace(captureApiAuthority())
+      }, () => workspaceReady, reconnectInterval)
+    }
+  }
 }
 
 export function createInitialDirectoryResolver(

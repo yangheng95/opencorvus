@@ -1,0 +1,282 @@
+[
+  {
+    "stage": "before-ui",
+    "port": 18963,
+    "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/source-entry-navigation-514-after",
+    "originalHandle": 40607,
+    "originalExit": 0,
+    "shutdownStatus": 200,
+    "native": {
+      "occurrence": "offline-location-recovery-515-before-ui-service-727c283c-003e-4cd9-81f6-c3b1c9a65d9f",
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    },
+    "chain": [
+      {
+        "identity": {
+          "pid": 75348,
+          "processInstanceID": "win32:639282076263356635",
+          "occurrenceID": "1a7273a2-c1e4-4e5d-adaf-42a1c76ff8c4"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "identity": {
+          "pid": 87268,
+          "processInstanceID": "win32:639282076273008304",
+          "occurrenceID": "01026dac-2c60-44a7-913b-1da5c136b50e"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "provider": {
+      "at": "2026-10-21T19:27:11.535Z",
+      "maximum": 0,
+      "actual": 0,
+      "exhausted": false,
+      "requests": [],
+      "scope": "Offline startup location review; no credentials or model catalog copied"
+    }
+  },
+  {
+    "stage": "before-api",
+    "port": 18965,
+    "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/source-entry-navigation-514-after",
+    "originalHandle": 41759,
+    "originalExit": 0,
+    "shutdownStatus": 200,
+    "native": {
+      "occurrence": "offline-location-recovery-515-before-api-service-bb8ef62c-594e-4dbe-81f6-c98cf64f7d86",
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    },
+    "chain": [
+      {
+        "identity": {
+          "pid": 70672,
+          "processInstanceID": "win32:639282077076977898",
+          "occurrenceID": "df899298-6fe8-4431-9a47-3e2bebdcb781"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "identity": {
+          "pid": 66820,
+          "processInstanceID": "win32:639282077086796603",
+          "occurrenceID": "3f0311fb-8fa9-4b8d-9622-23529e705545"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "provider": {
+      "at": "2026-10-21T19:28:32.552Z",
+      "maximum": 0,
+      "actual": 0,
+      "exhausted": false,
+      "requests": [],
+      "scope": "Offline startup location review; no credentials or model catalog copied"
+    }
+  },
+  {
+    "stage": "after-ui",
+    "port": 18967,
+    "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/offline-location-recovery-515-before-ui",
+    "originalHandle": 5056,
+    "originalExit": 0,
+    "shutdownStatus": 200,
+    "native": {
+      "occurrence": "offline-location-recovery-515-after-ui-service-b40615b9-8d7e-4cab-a115-7dbbbd36a227",
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 67368,
+          "processInstanceID": "win32:639282087337018275",
+          "occurrenceID": "a612f0f2-9d06-413f-b9a9-0dde43b10efb"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 94444,
+          "processInstanceID": "win32:639282087348860743",
+          "occurrenceID": "c4456afe-28d8-4f61-96fb-c57e9938b157"
+        }
+      }
+    ],
+    "provider": {
+      "at": "2026-10-21T19:45:38.732Z",
+      "maximum": 0,
+      "actual": 0,
+      "exhausted": false,
+      "requests": [],
+      "scope": "Offline startup location review; no credentials or model catalog copied"
+    }
+  },
+  {
+    "stage": "after-api",
+    "port": 18969,
+    "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/offline-location-recovery-515-before-api",
+    "originalHandle": 5282,
+    "originalExit": 0,
+    "shutdownStatus": 200,
+    "native": {
+      "occurrence": "offline-location-recovery-515-after-api-service-a7541572-e558-4e78-ad30-d3e5a3fb020c",
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 95020,
+          "processInstanceID": "win32:639282087678269278",
+          "occurrenceID": "2c658bc3-a59c-4298-9906-aef56976efeb"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 21872,
+          "processInstanceID": "win32:639282087689120002",
+          "occurrenceID": "f0e50e84-07b4-46a7-bb6b-e402ef406ab7"
+        }
+      }
+    ],
+    "provider": {
+      "at": "2026-10-21T19:46:12.839Z",
+      "maximum": 0,
+      "actual": 0,
+      "exhausted": false,
+      "requests": [],
+      "scope": "Offline startup location review; no credentials or model catalog copied"
+    }
+  },
+  {
+    "stage": "after-api-restart",
+    "port": 18969,
+    "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/offline-location-recovery-515-after-api",
+    "originalHandle": 4438,
+    "originalExit": 0,
+    "shutdownStatus": 200,
+    "native": {
+      "occurrence": "offline-location-recovery-515-after-api-restart-service-da7a1726-526e-465c-82dc-ebbd1f5c61e5",
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    },
+    "chain": [
+      {
+        "identity": {
+          "pid": 81520,
+          "processInstanceID": "win32:639282089438490717",
+          "occurrenceID": "8e3f267b-4718-42f5-a289-217a41fc0e76"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "identity": {
+          "pid": 94404,
+          "processInstanceID": "win32:639282089447604233",
+          "occurrenceID": "99c6daaa-89ac-4369-9b94-e851b1974a08"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "provider": {
+      "at": "2026-10-21T19:49:08.621Z",
+      "maximum": 0,
+      "actual": 0,
+      "exhausted": false,
+      "requests": [],
+      "scope": "Offline startup location review; no credentials or model catalog copied"
+    }
+  },
+  {
+    "stage": "after-api-session",
+    "port": 18969,
+    "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/offline-location-recovery-515-after-api-restart",
+    "originalHandle": 45131,
+    "originalExit": 0,
+    "shutdownStatus": 200,
+    "native": {
+      "occurrence": "offline-location-recovery-515-after-api-session-service-ef3c8ae0-4a70-41de-96d5-a6c80994801b",
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 71924,
+          "processInstanceID": "win32:639282090259787253",
+          "occurrenceID": "e1c3c831-2376-47fc-87d1-4b0204533117"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 88960,
+          "processInstanceID": "win32:639282090268664928",
+          "occurrenceID": "41b45139-de3a-4db5-8469-965f5dd11d86"
+        }
+      }
+    ],
+    "provider": {
+      "at": "2026-10-21T19:50:30.719Z",
+      "maximum": 0,
+      "actual": 0,
+      "exhausted": false,
+      "requests": [],
+      "scope": "Offline startup location review; no credentials or model catalog copied"
+    }
+  },
+  {
+    "stage": "after-api-supersede",
+    "port": 18969,
+    "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/offline-location-recovery-515-after-api-session",
+    "originalHandle": 12101,
+    "originalExit": 0,
+    "shutdownStatus": 200,
+    "native": {
+      "occurrence": "offline-location-recovery-515-after-api-supersede-service-e2fb4cf5-e756-419f-8f28-0f119e610217",
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 14824,
+          "processInstanceID": "win32:639282091463153105",
+          "occurrenceID": "762f1cd4-8337-45ea-97c8-458af49a12aa"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 85100,
+          "processInstanceID": "win32:639282091472122922",
+          "occurrenceID": "74fe346a-83a9-4cd7-b8d0-ec86716fd14e"
+        }
+      }
+    ],
+    "provider": {
+      "at": "2026-10-21T19:52:31.088Z",
+      "maximum": 0,
+      "actual": 0,
+      "exhausted": false,
+      "requests": [],
+      "scope": "Offline startup location review; no credentials or model catalog copied"
+    }
+  }
+]

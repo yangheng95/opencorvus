@@ -1,0 +1,22 @@
+{
+  "pid": 93208,
+  "owner": {
+    "pid": 93208,
+    "processInstanceID": "win32:639282113521309786",
+    "occurrenceID": "6d033305-f7bc-40ff-8274-0471e3e7eea8"
+  },
+  "occurrence": "offline-location-recovery-515-qualified-api-956e3046-808a-4722-b077-6c908f758903",
+  "port": 18973,
+  "preflight": {
+    "sessionID": "ses_hvC6vcVvLHMykgVaRcrv",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "maxRequests": 8,
+  "qualificationKind": "NativeService",
+  "budgetScope": "preflight-and-selected-qualification-surface-cumulative-same-process",
+  "nextAction": "root-owned-manual-conversation",
+  "credentialCleanup": "parent-owned-after-physical-exit"
+}

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [离线启动链接与首次连接恢复](2026-10-22-offline-location-recovery/README.md)：十五张人工图、真实前后端离线/上线与PID替换；Task/Chat恢复及新意图优先、七项正向合同，七scope零模型及独立配置完整Sol预检2/8、原数据和四成员授权退休结算。
+
 - [Sources 导航与权限历史呈现](2026-10-22-source-entry-navigation/README.md)：十张人工图、原决定槽与 continuation 退休事实；过去式历史批准修复、中英实页和来源复制/打开/重开验证，零模型/原数据保持。
 
 - [Goal 首页信息层级与默认布局](2026-10-22-goal-home-hierarchy/README.md)：九张人工图、正式构建与中英交互，输入/示例/持续目标层级清楚；两scope90表156566原行保持、零模型与完整物理结算。

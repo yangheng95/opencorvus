@@ -1,0 +1,556 @@
+{
+  "at": "2026-10-21T20:10:23.342Z",
+  "total": 53,
+  "serverFailures": [
+    {
+      "stage": "before-api",
+      "time": "2026-10-21T19:29:32.506Z",
+      "requestID": "7e41d905-337a-4f22-8413-df651b8bd432",
+      "path": "/channel",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "name": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    },
+    {
+      "stage": "before-api",
+      "time": "2026-10-21T19:29:33.603Z",
+      "requestID": "221cd783-d1f5-4512-8d6e-6459bb88a60a",
+      "path": "/session/ses_-zURI8flEzz7XOW5XhCo/config",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "name": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    },
+    {
+      "stage": "before-api",
+      "time": "2026-10-21T19:29:33.722Z",
+      "requestID": "ccc9aa9f-8821-4d1a-87d9-ac667c394204",
+      "path": "/session/ses_-zURI8flEzz7XOW5XhCo/config",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "name": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:21.117Z",
+      "requestID": "fe499856-baea-4443-bb01-6d547a8c434d",
+      "path": "/channel",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "name": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:22.359Z",
+      "requestID": "d2469ec7-a096-471f-894c-b059ff5c3964",
+      "path": "/session/ses_-zURI8flEzz7XOW5XhCo/config",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "name": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:22.909Z",
+      "requestID": "117ab2e5-74a6-4649-aeee-6c8739da3ab5",
+      "path": "/session/ses_-zURI8flEzz7XOW5XhCo/config",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "name": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:23.673Z",
+      "requestID": "cf19ecb4-deed-4c77-b0a4-5a9d07236968",
+      "path": "/channel",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "name": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:55.132Z",
+      "requestID": "24c510c7-15e3-4d1f-8460-18e1965f7aa1",
+      "path": "/channel",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "name": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:56.461Z",
+      "requestID": "9d02e399-1efb-44c1-a400-5080da845c7f",
+      "path": "/session/ses_hQ3FfPiEUHmcbvhsNsTE/config",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "name": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:56.562Z",
+      "requestID": "37bb2c86-5b48-48a2-a1cb-04035192cfba",
+      "path": "/session/ses_hQ3FfPiEUHmcbvhsNsTE/config",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "name": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    },
+    {
+      "stage": "after-api-restart",
+      "time": "2026-10-21T19:49:11.495Z",
+      "requestID": "837e5959-8bd5-4bdb-a2d0-e00e029ba716",
+      "path": "/session/ses_hQ3FfPiEUHmcbvhsNsTE/config",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "name": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    },
+    {
+      "stage": "after-api-restart",
+      "time": "2026-10-21T19:49:12.828Z",
+      "requestID": "3a65a1dd-dbb1-4d7e-9a39-cba0f02ec7a6",
+      "path": "/channel",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "name": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    },
+    {
+      "stage": "after-api-restart",
+      "time": "2026-10-21T19:49:14.116Z",
+      "requestID": "b144f661-f3dd-4035-936e-dc7aa7d157be",
+      "path": "/session/ses_hQ3FfPiEUHmcbvhsNsTE/config",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "name": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    },
+    {
+      "stage": "after-api-restart",
+      "time": "2026-10-21T19:49:14.129Z",
+      "requestID": "a60d5656-fb8a-4923-93e3-c61804bef9d4",
+      "path": "/channel",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "name": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    },
+    {
+      "stage": "after-api-restart",
+      "time": "2026-10-21T19:49:14.207Z",
+      "requestID": "164c2c81-1989-4038-ba61-9d1c3728206c",
+      "path": "/session/ses_hQ3FfPiEUHmcbvhsNsTE/config",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "name": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    },
+    {
+      "stage": "after-api-session",
+      "time": "2026-10-21T19:50:39.919Z",
+      "requestID": "2bd072be-7d59-47aa-92dc-b3d6627ad916",
+      "path": "/session/ses_hQ3FfPiEUHmcbvhsNsTE/config",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "name": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    },
+    {
+      "stage": "after-api-session",
+      "time": "2026-10-21T19:50:40.080Z",
+      "requestID": "e7a0095c-9ab0-4a14-b563-e7c42f35c060",
+      "path": "/session/ses_hQ3FfPiEUHmcbvhsNsTE/config",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "name": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    },
+    {
+      "stage": "after-api-session",
+      "time": "2026-10-21T19:50:41.184Z",
+      "requestID": "9c36b826-06d4-4c1a-ad6f-b3831c51329d",
+      "path": "/channel",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "name": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    }
+  ],
+  "projectErrors": [
+    {
+      "stage": "before-api",
+      "time": "2026-10-21T19:29:32.504Z",
+      "stageName": "config.validate",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "stage": "before-api",
+      "time": "2026-10-21T19:29:33.597Z",
+      "stageName": "config.validate",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "stage": "before-api",
+      "time": "2026-10-21T19:29:33.721Z",
+      "stageName": "config.validate",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:21.113Z",
+      "stageName": "config.validate",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:22.355Z",
+      "stageName": "config.validate",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:22.908Z",
+      "stageName": "config.validate",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:23.672Z",
+      "stageName": "config.validate",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:55.131Z",
+      "stageName": "config.validate",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:56.460Z",
+      "stageName": "config.validate",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:56.560Z",
+      "stageName": "config.validate",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "stage": "after-api-restart",
+      "time": "2026-10-21T19:49:11.489Z",
+      "stageName": "config.validate",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "stage": "after-api-restart",
+      "time": "2026-10-21T19:49:12.827Z",
+      "stageName": "config.validate",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "stage": "after-api-restart",
+      "time": "2026-10-21T19:49:14.115Z",
+      "stageName": "config.validate",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "stage": "after-api-restart",
+      "time": "2026-10-21T19:49:14.128Z",
+      "stageName": "config.validate",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "stage": "after-api-restart",
+      "time": "2026-10-21T19:49:14.205Z",
+      "stageName": "config.validate",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "stage": "after-api-session",
+      "time": "2026-10-21T19:50:39.851Z",
+      "stageName": "config.validate",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "stage": "after-api-session",
+      "time": "2026-10-21T19:50:40.077Z",
+      "stageName": "config.validate",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "stage": "after-api-session",
+      "time": "2026-10-21T19:50:41.183Z",
+      "stageName": "config.validate",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    }
+  ],
+  "clientErrors": [
+    {
+      "stage": "before-api",
+      "time": "2026-10-21T19:29:33.870Z",
+      "service": "overlay:project-load",
+      "message": "config reload failed",
+      "error": "channel: API 400 channel?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5Cebb75947-7467-434b-b3ec-aa7eea039f08: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}"
+    },
+    {
+      "stage": "before-api",
+      "time": "2026-10-21T19:29:33.871Z",
+      "service": "overlay:ui",
+      "message": "Model configuration unavailable",
+      "diagnosticID": "composer-model:projection",
+      "details": "HTTP GET 400 session/ses_-zURI8flEzz7XOW5XhCo/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5Cebb75947-7467-434b-b3ec-aa7eea039f08\\x0a\\x0aRequest ID: ccc9aa9f-8821-4d1a-87d9-ac667c394204\\x0a\\x0aApiError: API 400 session/ses_-zURI8flEzz7XOW5XhCo/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5Cebb75947-7467-434b-b3ec-aa7eea039f08: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}\\x0a    at Pe (http://127.0.0.1:18963/ui/assets/main-WG2_rq1Y.js:67:140669)\\x0a    at async Joe (http://127.0.0.1:18963/ui/assets/main-WG2_rq1Y.js:76:81245)\\x0a    at async Rh (http://127.0.0.1:18963/ui/assets/main-WG2_rq1Y.js:76:86247)\\x0a\\x0aresponse body:\\x0a{\\x0a  \"name\": \"ProviderModelNotFoundError\",\\x0a  \"data\": {\\x0a    \"providerID\": \"openai\",\\x0a    \"modelID\": \"gpt-6.1-sol\",\\x0a    \"suggestions\": []\\x0a  }\\x0a}"
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:22.850Z",
+      "service": "overlay:project-load",
+      "message": "config reload failed",
+      "error": "channel: API 400 channel?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5Cebb75947-7467-434b-b3ec-aa7eea039f08: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}"
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:22.850Z",
+      "service": "overlay:ui",
+      "message": "Model configuration unavailable",
+      "diagnosticID": "composer-model:projection",
+      "details": "HTTP GET 400 session/ses_-zURI8flEzz7XOW5XhCo/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5Cebb75947-7467-434b-b3ec-aa7eea039f08\\x0a\\x0aRequest ID: d2469ec7-a096-471f-894c-b059ff5c3964\\x0a\\x0aApiError: API 400 session/ses_-zURI8flEzz7XOW5XhCo/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5Cebb75947-7467-434b-b3ec-aa7eea039f08: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}\\x0a    at Pe (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:67:140669)\\x0a    at async Zoe (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:76:81245)\\x0a    at async Rh (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:76:86247)\\x0a\\x0aresponse body:\\x0a{\\x0a  \"name\": \"ProviderModelNotFoundError\",\\x0a  \"data\": {\\x0a    \"providerID\": \"openai\",\\x0a    \"modelID\": \"gpt-6.1-sol\",\\x0a    \"suggestions\": []\\x0a  }\\x0a}"
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:23.285Z",
+      "service": "overlay:ui",
+      "message": "Model configuration unavailable",
+      "diagnosticID": "composer-model:projection",
+      "details": "HTTP GET 400 session/ses_-zURI8flEzz7XOW5XhCo/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5Cebb75947-7467-434b-b3ec-aa7eea039f08\\x0a\\x0aRequest ID: 117ab2e5-74a6-4649-aeee-6c8739da3ab5\\x0a\\x0aApiError: API 400 session/ses_-zURI8flEzz7XOW5XhCo/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5Cebb75947-7467-434b-b3ec-aa7eea039f08: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}\\x0a    at Pe (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:67:140669)\\x0a    at async Zoe (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:76:81245)\\x0a    at async Rh (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:76:86247)\\x0a\\x0aresponse body:\\x0a{\\x0a  \"name\": \"ProviderModelNotFoundError\",\\x0a  \"data\": {\\x0a    \"providerID\": \"openai\",\\x0a    \"modelID\": \"gpt-6.1-sol\",\\x0a    \"suggestions\": []\\x0a  }\\x0a}"
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:24.233Z",
+      "service": "overlay:project-load",
+      "message": "config load failed",
+      "error": "channel: API 400 channel?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5Cebb75947-7467-434b-b3ec-aa7eea039f08: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}"
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:56.886Z",
+      "service": "overlay:project-load",
+      "message": "config reload failed",
+      "error": "channel: API 400 channel?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5C47a99662-115e-4a0c-b495-6b8a7e5106b2: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}"
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:56.886Z",
+      "service": "overlay:ui",
+      "message": "Model configuration unavailable",
+      "diagnosticID": "composer-model:projection",
+      "details": "HTTP GET 400 session/ses_hQ3FfPiEUHmcbvhsNsTE/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5C47a99662-115e-4a0c-b495-6b8a7e5106b2\\x0a\\x0aRequest ID: 9d02e399-1efb-44c1-a400-5080da845c7f\\x0a\\x0aApiError: API 400 session/ses_hQ3FfPiEUHmcbvhsNsTE/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5C47a99662-115e-4a0c-b495-6b8a7e5106b2: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}\\x0a    at Pe (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:67:140669)\\x0a    at async Zoe (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:76:81245)\\x0a    at async Rh (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:76:86247)\\x0a\\x0aresponse body:\\x0a{\\x0a  \"name\": \"ProviderModelNotFoundError\",\\x0a  \"data\": {\\x0a    \"providerID\": \"openai\",\\x0a    \"modelID\": \"gpt-6.1-sol\",\\x0a    \"suggestions\": []\\x0a  }\\x0a}"
+    },
+    {
+      "stage": "after-api",
+      "time": "2026-10-21T19:46:56.886Z",
+      "service": "overlay:ui",
+      "message": "Model configuration unavailable",
+      "diagnosticID": "composer-model:projection",
+      "details": "HTTP GET 400 session/ses_hQ3FfPiEUHmcbvhsNsTE/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5C47a99662-115e-4a0c-b495-6b8a7e5106b2\\x0a\\x0aRequest ID: 37bb2c86-5b48-48a2-a1cb-04035192cfba\\x0a\\x0aApiError: API 400 session/ses_hQ3FfPiEUHmcbvhsNsTE/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5C47a99662-115e-4a0c-b495-6b8a7e5106b2: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}\\x0a    at Pe (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:67:140669)\\x0a    at async Zoe (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:76:81245)\\x0a    at async Rh (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:76:86247)\\x0a\\x0aresponse body:\\x0a{\\x0a  \"name\": \"ProviderModelNotFoundError\",\\x0a  \"data\": {\\x0a    \"providerID\": \"openai\",\\x0a    \"modelID\": \"gpt-6.1-sol\",\\x0a    \"suggestions\": []\\x0a  }\\x0a}"
+    },
+    {
+      "stage": "after-api-restart",
+      "time": "2026-10-21T19:49:12.006Z",
+      "service": "overlay:ui",
+      "message": "Model configuration unavailable",
+      "diagnosticID": "composer-model:projection",
+      "details": "HTTP GET 400 session/ses_hQ3FfPiEUHmcbvhsNsTE/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5C47a99662-115e-4a0c-b495-6b8a7e5106b2\\x0a\\x0aRequest ID: 837e5959-8bd5-4bdb-a2d0-e00e029ba716\\x0a\\x0aApiError: API 400 session/ses_hQ3FfPiEUHmcbvhsNsTE/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5C47a99662-115e-4a0c-b495-6b8a7e5106b2: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}\\x0a    at Pe (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:67:140669)\\x0a    at async Zoe (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:76:81245)\\x0a    at async Rh (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:76:86247)\\x0a\\x0aresponse body:\\x0a{\\x0a  \"name\": \"ProviderModelNotFoundError\",\\x0a  \"data\": {\\x0a    \"providerID\": \"openai\",\\x0a    \"modelID\": \"gpt-6.1-sol\",\\x0a    \"suggestions\": []\\x0a  }\\x0a}"
+    },
+    {
+      "stage": "after-api-restart",
+      "time": "2026-10-21T19:49:14.538Z",
+      "service": "overlay:project-load",
+      "message": "config reload failed",
+      "error": "channel: API 400 channel?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5C47a99662-115e-4a0c-b495-6b8a7e5106b2: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}"
+    },
+    {
+      "stage": "after-api-restart",
+      "time": "2026-10-21T19:49:14.538Z",
+      "service": "overlay:ui",
+      "message": "Model configuration unavailable",
+      "diagnosticID": "composer-model:projection",
+      "details": "HTTP GET 400 session/ses_hQ3FfPiEUHmcbvhsNsTE/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5C47a99662-115e-4a0c-b495-6b8a7e5106b2\\x0a\\x0aRequest ID: b144f661-f3dd-4035-936e-dc7aa7d157be\\x0a\\x0aApiError: API 400 session/ses_hQ3FfPiEUHmcbvhsNsTE/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5C47a99662-115e-4a0c-b495-6b8a7e5106b2: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}\\x0a    at Pe (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:67:140669)\\x0a    at async Zoe (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:76:81245)\\x0a    at async Rh (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:76:86247)\\x0a\\x0aresponse body:\\x0a{\\x0a  \"name\": \"ProviderModelNotFoundError\",\\x0a  \"data\": {\\x0a    \"providerID\": \"openai\",\\x0a    \"modelID\": \"gpt-6.1-sol\",\\x0a    \"suggestions\": []\\x0a  }\\x0a}"
+    },
+    {
+      "stage": "after-api-restart",
+      "time": "2026-10-21T19:49:14.538Z",
+      "service": "overlay:ui",
+      "message": "Model configuration unavailable",
+      "diagnosticID": "composer-model:projection",
+      "details": "HTTP GET 400 session/ses_hQ3FfPiEUHmcbvhsNsTE/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5C47a99662-115e-4a0c-b495-6b8a7e5106b2\\x0a\\x0aRequest ID: 164c2c81-1989-4038-ba61-9d1c3728206c\\x0a\\x0aApiError: API 400 session/ses_hQ3FfPiEUHmcbvhsNsTE/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5C47a99662-115e-4a0c-b495-6b8a7e5106b2: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}\\x0a    at Pe (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:67:140669)\\x0a    at async Zoe (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:76:81245)\\x0a    at async Rh (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:76:86247)\\x0a\\x0aresponse body:\\x0a{\\x0a  \"name\": \"ProviderModelNotFoundError\",\\x0a  \"data\": {\\x0a    \"providerID\": \"openai\",\\x0a    \"modelID\": \"gpt-6.1-sol\",\\x0a    \"suggestions\": []\\x0a  }\\x0a}"
+    },
+    {
+      "stage": "after-api-restart",
+      "time": "2026-10-21T19:49:14.538Z",
+      "service": "overlay:project-load",
+      "message": "config load failed",
+      "error": "channel: API 400 channel?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5C47a99662-115e-4a0c-b495-6b8a7e5106b2: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}"
+    },
+    {
+      "stage": "after-api-session",
+      "time": "2026-10-21T19:50:40.463Z",
+      "service": "overlay:ui",
+      "message": "Model configuration unavailable",
+      "diagnosticID": "composer-model:projection",
+      "details": "HTTP GET 400 session/ses_hQ3FfPiEUHmcbvhsNsTE/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5C47a99662-115e-4a0c-b495-6b8a7e5106b2\\x0a\\x0aRequest ID: 2bd072be-7d59-47aa-92dc-b3d6627ad916\\x0a\\x0aApiError: API 400 session/ses_hQ3FfPiEUHmcbvhsNsTE/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5C47a99662-115e-4a0c-b495-6b8a7e5106b2: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}\\x0a    at Pe (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:67:140669)\\x0a    at async Zoe (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:76:81245)\\x0a    at async Rh (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:76:86247)\\x0a\\x0aresponse body:\\x0a{\\x0a  \"name\": \"ProviderModelNotFoundError\",\\x0a  \"data\": {\\x0a    \"providerID\": \"openai\",\\x0a    \"modelID\": \"gpt-6.1-sol\",\\x0a    \"suggestions\": []\\x0a  }\\x0a}"
+    },
+    {
+      "stage": "after-api-session",
+      "time": "2026-10-21T19:50:40.463Z",
+      "service": "overlay:ui",
+      "message": "Model configuration unavailable",
+      "diagnosticID": "composer-model:projection",
+      "details": "HTTP GET 400 session/ses_hQ3FfPiEUHmcbvhsNsTE/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5C47a99662-115e-4a0c-b495-6b8a7e5106b2\\x0a\\x0aRequest ID: e7a0095c-9ab0-4a14-b563-e7c42f35c060\\x0a\\x0aApiError: API 400 session/ses_hQ3FfPiEUHmcbvhsNsTE/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5C47a99662-115e-4a0c-b495-6b8a7e5106b2: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}\\x0a    at Pe (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:67:140669)\\x0a    at async Zoe (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:76:81245)\\x0a    at async Rh (http://127.0.0.1:18967/ui/assets/main-DhV28lza.js:76:86247)\\x0a\\x0aresponse body:\\x0a{\\x0a  \"name\": \"ProviderModelNotFoundError\",\\x0a  \"data\": {\\x0a    \"providerID\": \"openai\",\\x0a    \"modelID\": \"gpt-6.1-sol\",\\x0a    \"suggestions\": []\\x0a  }\\x0a}"
+    },
+    {
+      "stage": "after-api-session",
+      "time": "2026-10-21T19:50:41.799Z",
+      "service": "overlay:project-load",
+      "message": "config load failed",
+      "error": "channel: API 400 channel?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-member-refresh-511-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5C47a99662-115e-4a0c-b495-6b8a7e5106b2: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}"
+    }
+  ],
+  "other": [],
+  "scope": "All actual error entries;typed server failures and original caller error text;no full runtime log or credentials exported",
+  "qualification": "No model catalog or credentials staged;read-only navigation qualification;Provider availability not qualified"
+}

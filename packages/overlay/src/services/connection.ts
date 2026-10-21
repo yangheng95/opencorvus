@@ -323,7 +323,11 @@ let _monitorGeneration = 0
  * migration phase the () owns the reconnect data-loading
  * side-effects; this function drives the Solid store status signal.
  */
-export function startConnectionMonitor(onReconnect?: () => void | Promise<void>, intervalMs = 10_000): void {
+export function startConnectionMonitor(
+  onReconnect: () => void | Promise<void>,
+  isRecoveryComplete: () => boolean,
+  intervalMs = 10_000,
+): void {
   stopConnectionMonitor()
   const generation = ++_monitorGeneration
   const isCurrent = () => generation === _monitorGeneration
@@ -334,6 +338,7 @@ export function startConnectionMonitor(onReconnect?: () => void | Promise<void>,
     isCurrent,
     isHidden: () => typeof document !== "undefined" && document.hidden,
     isConnected: () => appStore.connected,
+    isRecoveryComplete,
     connectionIdentity: () => appStore.serverPid,
     check: async () => {
       const ok = await checkConnection({ background: true })
@@ -341,7 +346,7 @@ export function startConnectionMonitor(onReconnect?: () => void | Promise<void>,
     },
     onReconnect: async () => {
       if (!isCurrent()) return
-      await onReconnect?.()
+      await onReconnect()
     },
   })
   _monitorTimer = createVisibilityInterval(tick, intervalMs)

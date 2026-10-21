@@ -1,0 +1,27 @@
+{
+  "base": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22",
+  "scope": "offline-location-recovery-515",
+  "ports": {
+    "before-ui": 18963,
+    "before-api": 18965,
+    "after-ui": 18967,
+    "after-api": 18969,
+    "after-api-restart": 18969,
+    "after-api-session": 18969,
+    "after-api-supersede": 18969
+  },
+  "sources": {
+    "before-ui": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/source-entry-navigation-514-after",
+    "before-api": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/source-entry-navigation-514-after",
+    "after-ui": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/offline-location-recovery-515-before-ui",
+    "after-api": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/offline-location-recovery-515-before-api",
+    "after-api-restart": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/offline-location-recovery-515-after-api",
+    "after-api-session": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/offline-location-recovery-515-after-api-restart",
+    "after-api-supersede": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/offline-location-recovery-515-after-api-session"
+  },
+  "models": {
+    "maximum": 0,
+    "actual": 0
+  },
+  "ui": "Formal source CLI /ui;real UI server settings and absent API listener;no fake response or browser hidden state"
+}

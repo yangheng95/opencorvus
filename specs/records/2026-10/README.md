@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [离线启动链接与首次连接恢复](2026-10-22-offline-location-recovery.md)：[十五图与九scope结算](../../artifacts/2026-10-22-offline-location-recovery/README.md)，首次恢复消费原输入，后续重连保留当前选择；七项控制合同、原数据/schema保持，七scope零模型及独立配置完整Sol预检2/8已结算。
+
 - [Sources 导航与权限历史呈现](2026-10-22-source-entry-navigation.md)：[十图与原始权限/物理事实](../../artifacts/2026-10-22-source-entry-navigation/README.md)，历史原决定显示已批准，来源目标/复制/成员重开实测；两scope零模型与原数据保持。
 
 - [Goal 首页信息层级与默认布局](2026-10-22-goal-home-hierarchy.md)：[九图与完整物理/数据结算](../../artifacts/2026-10-22-goal-home-hierarchy/README.md)，独立目标区域、模型/预算说明及自然输入顺序；中英表单、草稿取消和较窄分栏实测。

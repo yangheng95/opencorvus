@@ -1,0 +1,18 @@
+{
+  "scope": "offline-location-recovery-515",
+  "sources": {
+    "qualified-ui": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/offline-location-recovery-515-after-ui",
+    "qualified-api": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/offline-location-recovery-515-after-api-supersede"
+  },
+  "ports": {
+    "qualified-ui": 18971,
+    "qualified-api": 18973
+  },
+  "maximumRequests": 8,
+  "uiRequests": 0,
+  "model": "gpt-6.1-sol",
+  "stream": true,
+  "scopeOfBudget": "One NativeService process,preflight and every auxiliary request;no business Task or product member planned",
+  "surface": "Same formal main-DhV28lza;no network observer or fake response",
+  "authority": "Paired private source and runtime auth/models;source unchanged;retire four copies after original physical chain even on qualification failure"
+}

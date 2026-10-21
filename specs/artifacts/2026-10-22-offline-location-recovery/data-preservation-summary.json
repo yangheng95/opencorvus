@@ -1,0 +1,128 @@
+[
+  {
+    "stage": "before-ui",
+    "source": {
+      "allOriginalRows": "Exact rowid/primary key/all fields/times",
+      "bytes": 73891840,
+      "modifiedAtMs": 1792609790290.9082
+    },
+    "schema": "Same actual application objects and version3;integrity ok",
+    "canonical": "Complete source bytes exact",
+    "tables": 90,
+    "originalRows": 156566,
+    "tableCountChanges": [],
+    "originalRowDifferences": [],
+    "providerActivities": {
+      "original": 391,
+      "current": 391
+    }
+  },
+  {
+    "stage": "before-api",
+    "source": {
+      "allOriginalRows": "Exact rowid/primary key/all fields/times",
+      "bytes": 73891840,
+      "modifiedAtMs": 1792609790290.9082
+    },
+    "schema": "Same actual application objects and version3;integrity ok",
+    "canonical": "Complete source bytes exact",
+    "tables": 90,
+    "originalRows": 156566,
+    "tableCountChanges": [],
+    "originalRowDifferences": [],
+    "providerActivities": {
+      "original": 391,
+      "current": 391
+    }
+  },
+  {
+    "stage": "after-ui",
+    "source": {
+      "allOriginalRows": "Exact rowid/primary key/all fields/times",
+      "bytes": 73891840,
+      "modifiedAtMs": 1792610833126.4866
+    },
+    "schema": "Same actual application objects and version3;integrity ok",
+    "canonical": "Complete source bytes exact",
+    "tables": 90,
+    "originalRows": 156566,
+    "tableCountChanges": [],
+    "originalRowDifferences": [],
+    "providerActivities": {
+      "original": 391,
+      "current": 391
+    }
+  },
+  {
+    "stage": "after-api",
+    "source": {
+      "allOriginalRows": "Exact rowid/primary key/all fields/times",
+      "bytes": 73891840,
+      "modifiedAtMs": 1792610972377.2488
+    },
+    "schema": "Same actual application objects and version3;integrity ok",
+    "canonical": "Complete source bytes exact",
+    "tables": 90,
+    "originalRows": 156566,
+    "tableCountChanges": [],
+    "originalRowDifferences": [],
+    "providerActivities": {
+      "original": 391,
+      "current": 391
+    }
+  },
+  {
+    "stage": "after-api-restart",
+    "source": {
+      "allOriginalRows": "Exact rowid/primary key/all fields/times",
+      "bytes": 73891840,
+      "modifiedAtMs": 1792612015133.7986
+    },
+    "schema": "Same actual application objects and version3;integrity ok",
+    "canonical": "Complete source bytes exact",
+    "tables": 90,
+    "originalRows": 156566,
+    "tableCountChanges": [],
+    "originalRowDifferences": [],
+    "providerActivities": {
+      "original": 391,
+      "current": 391
+    }
+  },
+  {
+    "stage": "after-api-session",
+    "source": {
+      "allOriginalRows": "Exact rowid/primary key/all fields/times",
+      "bytes": 73891840,
+      "modifiedAtMs": 1792612152330.6772
+    },
+    "schema": "Same actual application objects and version3;integrity ok",
+    "canonical": "Complete source bytes exact",
+    "tables": 90,
+    "originalRows": 156566,
+    "tableCountChanges": [],
+    "originalRowDifferences": [],
+    "providerActivities": {
+      "original": 391,
+      "current": 391
+    }
+  },
+  {
+    "stage": "after-api-supersede",
+    "source": {
+      "allOriginalRows": "Exact rowid/primary key/all fields/times",
+      "bytes": 73891840,
+      "modifiedAtMs": 1792612239654.4436
+    },
+    "schema": "Same actual application objects and version3;integrity ok",
+    "canonical": "Complete source bytes exact",
+    "tables": 90,
+    "originalRows": 156566,
+    "tableCountChanges": [],
+    "originalRowDifferences": [],
+    "providerActivities": {
+      "original": 391,
+      "current": 391
+    }
+  }
+]

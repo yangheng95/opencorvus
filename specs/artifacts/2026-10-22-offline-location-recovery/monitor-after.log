@@ -1,0 +1,14 @@
+bun test v1.4.3 (c6da4a4d3)
+
+packages\overlay\test\monitor-tick.test.ts:
+(pass) connection recovery receipts > a pending workspace recovers through real HTTP after another probe published online [16.93ms]
+(pass) connection recovery receipts > an offline owner publishes its successful recovery receipt [0.21ms]
+(pass) connection recovery receipts > a replacement server supplies the new recovery identity [0.14ms]
+(pass) connection recovery receipts > a failed workspace recovery retries to a concrete completed receipt [0.19ms]
+(pass) connection recovery receipts > a probe error reports its cause and a later probe recovers [0.18ms]
+(pass) connection recovery receipts > the recovery receipt precedes the next admitted probe [0.19ms]
+
+ 6 pass
+ 0 fail
+ 10 expect() calls
+Ran 6 tests across 1 file. [916.00ms]

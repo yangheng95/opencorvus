@@ -13,10 +13,17 @@ Session identity and Mission status before using the same explicit navigation
 lifecycle. A global Composer launcher records its product pillar and conversation
 target, so a refresh preserves explicit creation intent over an older saved Task.
 Startup captures the location before workspace initialization can clear it.
-After connection and locale hydration, an explicit location restores through
-its ordinary navigation owner before default-directory discovery. Its actual
-project scope owns subsequent initial data loading. A cold start without a
-locator still discovers its default and restores its existing saved preference.
+After locale hydration, the first healthy connection restores an explicit
+location through its ordinary navigation owner before default-directory
+discovery, including a document which first started offline. A newer selection
+owner supersedes that launch intent. Its actual project scope owns subsequent
+initial data loading. The same initialization owner consumes the launch input
+once; subsequent reconnects hydrate the current workspace. A cold start without
+a locator still discovers its default and restores its existing saved preference.
+The visible-period monitor distinguishes transport health from a completed
+workspace recovery, so a healthy probe by another caller or an initialization
+failure cannot retire pending recovery. It is registered after the initial
+attempt even when that attempt fails, and keeps the existing single-flight probe.
 Launch discovery retains the registered project inventory when its optional
 scan root is missing or is a file: `root` keeps the authored launch path,
 `defaultDirectory` is empty, and no substitute project is selected or created.

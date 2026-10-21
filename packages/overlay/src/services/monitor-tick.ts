@@ -9,6 +9,8 @@ export interface MonitorTickDeps {
   isHidden: () => boolean
   /** True when the overlay considered itself online before this probe. */
   isConnected: () => boolean
+  /** The workspace owner completed its current initialization or recovery. */
+  isRecoveryComplete: () => boolean
   /** Stable managed-server identity, such as the Tauri sidecar process ID. */
   connectionIdentity?: () => string | number | undefined
   /** False when the owning monitor has been stopped or superseded. */
@@ -43,7 +45,7 @@ export function makeMonitorTick(deps: MonitorTickDeps): () => Promise<void> {
     inFlight = true
     try {
       if (!isCurrent()) return
-      const wasConnected = deps.isConnected()
+      const wasConnected = deps.isConnected() && deps.isRecoveryComplete()
       const identityBefore = deps.connectionIdentity?.()
       const ok = await deps.check()
       if (!isCurrent()) return
