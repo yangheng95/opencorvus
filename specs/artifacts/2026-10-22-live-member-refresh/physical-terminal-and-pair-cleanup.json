@@ -1,0 +1,591 @@
+{
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 89436,
+        "processInstanceID": "win32:639282006947190347",
+        "occurrenceID": "c4ba9868-0aca-4320-be8b-4d78d95fba82"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 68080,
+        "processInstanceID": "win32:639282006955583403",
+        "occurrenceID": "363420b9-8855-4b9d-888e-b2e640ac2077"
+      }
+    }
+  ],
+  "providerQualificationPassed": true,
+  "maximumRequests": 32,
+  "pairedCleanupComplete": true,
+  "launcher": {
+    "observedAtUtc": "2026-10-21T17:38:13.8337907Z",
+    "originalChildExit": 0
+  },
+  "occurrence": "live-member-refresh-511-before-a1532fda-3a07-4bad-843c-6b0a130aa94f",
+  "qualificationFailures": [],
+  "copiedPair": [
+    {
+      "outcome": "retired-after-original-physical-output-request-and-exact-birth-settlement",
+      "bytes": 2122,
+      "name": "auth.json"
+    },
+    {
+      "outcome": "retired-after-original-physical-output-request-and-exact-birth-settlement",
+      "bytes": 9155406,
+      "name": "models.json"
+    }
+  ],
+  "provider": [
+    {
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792603903952,
+        "boundAt": 1792603903953,
+        "chunkCount": 18,
+        "byteCount": 36897,
+        "firstByteReadAt": 1792603903955,
+        "lastByteReadAt": 1792603908631,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hQ3FfPiEUHmcbvhsNsTE",
+          "streamRequest": {
+            "requestID": "msg_htTIHKUP46jURm9jVA4o",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYhrI8x006pYGcWwke",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792603908688
+        }
+      },
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792603905688,
+        "boundAt": 1792603905689,
+        "chunkCount": 44,
+        "byteCount": 516035,
+        "firstByteReadAt": 1792603905710,
+        "lastByteReadAt": 1792603907035,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hQ3FfPiEUHmcbvhsNsTE",
+          "streamRequest": {
+            "requestID": "msg_htTIHKUP46jURm9jVA4o",
+            "agentID": "chat",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYhrION004QjIHZ2WQ",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYhrI96002c1x8lCV5"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792603907215
+        }
+      },
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792603912356,
+        "boundAt": 1792603912360,
+        "chunkCount": 142,
+        "byteCount": 332747,
+        "firstByteReadAt": 1792603912364,
+        "lastByteReadAt": 1792603937416,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zURI8flEzz7XOW5XhCo",
+          "streamRequest": {
+            "requestID": "tsk_g00VYhrJxy00qIC54qvM",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYhrKGa00crHS8MfZx",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792603937473
+        }
+      },
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792603917844,
+        "boundAt": 1792603917846,
+        "chunkCount": 203,
+        "byteCount": 1166425,
+        "firstByteReadAt": 1792603917848,
+        "lastByteReadAt": 1792603945011,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zURI8ekpzzskoESwwiP",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hpzHZBzBYaSnxT95r3MB_art_hpzHZBzBYaSnxT95r3MB",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYhrLSi00Fz11jVZmz",
+            "attempt": 0,
+            "assistantMessageID": "msg_hjHgjiEEUhrSYeQqYbW9"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792603945299
+        }
+      },
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792603999450,
+        "boundAt": 1792603999452,
+        "chunkCount": 146,
+        "byteCount": 377777,
+        "firstByteReadAt": 1792603999454,
+        "lastByteReadAt": 1792604020408,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zURI8ekpzzskoESwwiP",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hpzHZBzBYaSnxT95r3MB_art_hpzHZBzBYaSnxT95r3MB",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYhrgxS006PkVeCVf0",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792604020489
+        }
+      },
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792604002920,
+        "boundAt": 1792604002921,
+        "chunkCount": 20,
+        "byteCount": 354106,
+        "firstByteReadAt": 1792604002924,
+        "lastByteReadAt": 1792604005196,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hM7XNBWOoUj94oRFpAmh",
+          "streamRequest": {
+            "requestID": "msg_g0VYhrhGo00EEviKnBol",
+            "agentID": "base-researcher",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYhrhpw00cNto30VrZ",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYhrhKJ00pSz55N2sG"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792604005327
+        }
+      },
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792604003054,
+        "boundAt": 1792604003056,
+        "chunkCount": 23,
+        "byteCount": 352913,
+        "firstByteReadAt": 1792604003078,
+        "lastByteReadAt": 1792604009979,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_h0gcSAerl0lMXEbz1cq3",
+          "streamRequest": {
+            "requestID": "msg_g0VYhrhGi005dl5x6jPw",
+            "agentID": "base-researcher",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYhrhqM008ewTQ1Hd2",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYhrhIx00FJZHmUMhS"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792604010130
+        }
+      },
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792604022902,
+        "boundAt": 1792604022904,
+        "chunkCount": 126,
+        "byteCount": 532521,
+        "firstByteReadAt": 1792604022905,
+        "lastByteReadAt": 1792604044562,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hM7XNBWOoUj94oRFpAmh",
+          "streamRequest": {
+            "requestID": "msg_g0VYhrhGo00EEviKnBol",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYhrn5b00KEynOaFVS",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792604044682
+        }
+      },
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792604024474,
+        "boundAt": 1792604024476,
+        "chunkCount": 371,
+        "byteCount": 1392029,
+        "firstByteReadAt": 1792604024519,
+        "lastByteReadAt": 1792604093088,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hM7XNBWOoUj94oRFpAmh",
+          "streamRequest": {
+            "requestID": "msg_g0VYhrhGo00EEviKnBol",
+            "agentID": "base-researcher",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYhrnSJ00egSL4m77a",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYhrnO900uHx6fx8Me"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792604093254
+        }
+      },
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792604043610,
+        "boundAt": 1792604043612,
+        "chunkCount": 601,
+        "byteCount": 1435705,
+        "firstByteReadAt": 1792604043615,
+        "lastByteReadAt": 1792604136783,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_h0gcSAerl0lMXEbz1cq3",
+          "streamRequest": {
+            "requestID": "msg_g0VYhrhGi005dl5x6jPw",
+            "agentID": "base-researcher",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYhrsSY00Z1QFeY13t",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYhrsOH00hjUPFf8uK"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792604136911
+        }
+      },
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792604045527,
+        "boundAt": 1792604045529,
+        "chunkCount": 161,
+        "byteCount": 589354,
+        "firstByteReadAt": 1792604045530,
+        "lastByteReadAt": 1792604072905,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_h0gcSAerl0lMXEbz1cq3",
+          "streamRequest": {
+            "requestID": "msg_g0VYhrhGi005dl5x6jPw",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYhrt1400lp7LnmSIX",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792604072970
+        }
+      },
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792604139799,
+        "boundAt": 1792604139801,
+        "chunkCount": 23,
+        "byteCount": 860343,
+        "firstByteReadAt": 1792604139802,
+        "lastByteReadAt": 1792604142071,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zURI8ekpzzskoESwwiP",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hr95PzPMBx6P4O3QmAke_art_hr95PzPMBx6P4O3QmAke",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYhsHTB00l7vgYCGw9",
+            "attempt": 0,
+            "assistantMessageID": "msg_hkmMhdvRpzBesxGR2RSm"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792604142255
+        }
+      },
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792604144120,
+        "boundAt": 1792604144122,
+        "chunkCount": 67,
+        "byteCount": 895271,
+        "firstByteReadAt": 1792604144134,
+        "lastByteReadAt": 1792604149257,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zURI8ekpzzskoESwwiP",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hr95PzPMBx6P4O3QmAke_art_hr95PzPMBx6P4O3QmAke",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYhsIV000u147fzc0P",
+            "attempt": 0,
+            "assistantMessageID": "msg_hkmMhdvRpzBesxGR2RSm"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792604149534
+        }
+      },
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792604151499,
+        "boundAt": 1792604151501,
+        "chunkCount": 143,
+        "byteCount": 1025707,
+        "firstByteReadAt": 1792604151513,
+        "lastByteReadAt": 1792604168351,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zURI8ekpzzskoESwwiP",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hr95PzPMBx6P4O3QmAke_art_hr95PzPMBx6P4O3QmAke",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYhsKPF00sYqIMOxue",
+            "attempt": 0,
+            "assistantMessageID": "msg_hkmMhdvRpzBesxGR2RSm"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792604168844
+        }
+      },
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792604184568,
+        "boundAt": 1792604184570,
+        "chunkCount": 342,
+        "byteCount": 702481,
+        "firstByteReadAt": 1792604184682,
+        "lastByteReadAt": 1792604231049,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zURI8ekpzzskoESwwiP",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hr95PzPMBx6P4O3QmAke_art_hr95PzPMBx6P4O3QmAke",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYhsT8f007ff5EGCQU",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792604231134
+        }
+      },
+      "streaming": true,
+      "status": 200,
+      "model": "gpt-6.1-sol"
+    }
+  ],
+  "native": {
+    "occurrence": "live-member-refresh-511-before-a1532fda-3a07-4bad-843c-6b0a130aa94f",
+    "outcome": "settled",
+    "host": {
+      "pid": 89436,
+      "processInstanceID": "win32:639282006947190347",
+      "occurrenceID": "c4ba9868-0aca-4320-be8b-4d78d95fba82"
+    },
+    "target": {
+      "pid": 68080,
+      "processInstanceID": "win32:639282006955583403",
+      "occurrenceID": "363420b9-8855-4b9d-888e-b2e640ac2077"
+    },
+    "observedAtUtc": "2026-10-21T17:38:13.775Z",
+    "deadlineAt": 1792605093903,
+    "terminal": {
+      "occurrenceID": "live-member-refresh-511-before-a1532fda-3a07-4bad-843c-6b0a130aa94f",
+      "pid": 68080,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "requests": 15,
+  "observedAtUtc": "2026-10-21T17:38:44.3643098Z"
+}

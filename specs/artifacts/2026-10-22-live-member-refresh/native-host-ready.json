@@ -1,0 +1,38 @@
+{
+  "occurrence": "live-member-refresh-511-before-a1532fda-3a07-4bad-843c-6b0a130aa94f",
+  "outcome": "ready",
+  "host": {
+    "pid": 89436,
+    "processInstanceID": "win32:639282006947190347",
+    "occurrenceID": "c4ba9868-0aca-4320-be8b-4d78d95fba82"
+  },
+  "parent": {
+    "pid": 47888,
+    "processInstanceID": "win32:639282006921527648",
+    "occurrenceID": "f3cd55f2-c0f1-4458-b569-8bfea534f597"
+  },
+  "target": {
+    "pid": 68080,
+    "processInstanceID": "win32:639282006955583403",
+    "occurrenceID": "363420b9-8855-4b9d-888e-b2e640ac2077"
+  },
+  "targetBirthAtMs": 1792603895558,
+  "deadlineAt": 1792605093903,
+  "observedAtUtc": "2026-10-21T17:31:35.586Z",
+  "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/live-member-refresh-511-before-bundle/bin/bun.exe",
+  "args": [
+    "D:\\myhexin-local\\opencorvus/.tmp-product-iteration/task-member-stream-504/serve.ts",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/live-member-refresh-511-before-authority/auth.json",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/live-member-refresh-511-before/runtime",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/project",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/live-member-refresh-511-before/evidence",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/live-member-refresh-511-before/startup.json",
+    "18945",
+    "live-member-refresh-511-before-a1532fda-3a07-4bad-843c-6b0a130aa94f",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/live-member-refresh-511-before/selection.json",
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/long-source-reading-406/builtin.json",
+    "32",
+    "NativeService"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

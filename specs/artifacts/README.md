@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [成员正文流中刷新与来源恢复](2026-10-22-live-member-refresh/README.md)：十张人工实图、15次真实Sol与原reader时段，B刷新前后同一消息继续输出；修正收尾资格与凭据退休耦合，完整原数据/schema保持。
+
 - [启动链接与失效目录发现](2026-10-22-startup-location-discovery/README.md)：13张精选人工实图、真实500→200及三项后端合同；修复显式链接被默认扫描中断，两个90表152721原行保持，零模型。
 
 - [成员活动导航身份与朗读名称](2026-10-22-agent-rail-identity/README.md)：20张人工图、四scope全部152721原行保持，Rail身份一致、短名称与原生关联描述实测；完整交接原文保留，模型0。

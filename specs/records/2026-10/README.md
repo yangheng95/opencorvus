@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [成员正文流中刷新与来源恢复](2026-10-22-live-member-refresh.md)：[十图及完整配对/物理结算](../../artifacts/2026-10-22-live-member-refresh/README.md)，原B流覆盖整页刷新前后、最终5542字元；15/32真实请求，原数据/schema保持，生产未改。
+
 - [启动链接与失效目录发现](2026-10-22-startup-location-discovery.md)：[13张精选人工图与两轮物理结算](../../artifacts/2026-10-22-startup-location-discovery/README.md)，缺失/文件根保持注册清单，Task显式链接先恢复；Goal/Chat/launcher真实复核，原数据/schema保持。
 
 - [成员活动导航身份与朗读名称](2026-10-22-agent-rail-identity.md)：[20张实图及四轮零模型结算](../../artifacts/2026-10-22-agent-rail-identity/README.md)，修复同角色辨识和超长名称/关联描述；中英导航、原输入及两来源人工复核。
