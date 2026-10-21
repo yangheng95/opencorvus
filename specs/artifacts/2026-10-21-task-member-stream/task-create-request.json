@@ -1,0 +1,14 @@
+{
+  "url": "http://127.0.0.1:18909/global/tasks",
+  "sentAt": "2026-10-21T05:49:09.648Z",
+  "body": {
+    "requestID": "d43347f0-48b9-4898-b21f-4b44a502db9f",
+    "productPillar": "work",
+    "title": "新成员来源与长文阅读 504",
+    "source": "task-member-stream-504",
+    "promptProfile": "base",
+    "request": "这是一次范围有限的产品内成员来源阅读体验任务。请由当前Base任务所有者，把下面的一项只读来源整理责任交给一个真实Base Researcher成员，保留其真实可见会话、工具调用、来源和最终正文。这里的成员是被体验的产品能力，操作者负责观察网页，不要求成员操作或检验UI。不得创建子Task、Mission或持续目标，不执行shell、不读写本项目或其他用户文件，不生成文件、研究计划或额外报告Artifact。最后任务所有者依据实际成员结果总结完成/未达事项并按现有Task结束合同收敛；不声称操作者的人工验收已经通过。\n需交给研究成员的完整责任：分别实际读取https://arxiv.org/abs/2509.11035v1和https://aclanthology.org/2025.naacl-long.475/各一次，仅确认来源入口和材料身份；每次读取后在会话先写一句真实读取状态。随后在同一可见会话输出一篇约5000中文字元、12节的中文“长文与Sources阅读指南”，用于操作者体验排版。这是阅读说明，不是两篇论文的结论，不得虚构实际UI观察、实验、验证或论文内容。正文必须有12个明确节标题、长段落、列表、一张较长Markdown表格和一段纯文本代码栏，说明原文/来源/工具结果/展示建议的区别；文字完整自然，勿仅给提纲。开头单独写MEMBER504BEGIN，最后单独写MEMBER504END。第一节包含[阅读入口][member504-reference]，最后在空行后单独定义[member504-reference]: https://example.com/，再空行和结束标记；该参考地址是排版演示，不需要访问。输出只在成员可见最终assistant正文，不压缩成工具结构化字段。资料读取失败则如实说明，不额外重试或扩大搜索。模型与所有内部请求均使用已配置gpt-6.1-sol流式。",
+    "model": "openai/gpt-6.1-sol"
+  },
+  "maximumProviderRequests": 24
+}

@@ -1,0 +1,316 @@
+{
+  "at": "2026-10-21T06:01:06.250Z",
+  "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+  "owners": [
+    {
+      "owner": 1,
+      "mount": {
+        "kind": "mount",
+        "owner": 1,
+        "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+        "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+        "partID": "prt_g0VYf0Rds00OSS06uF90",
+        "textLength": 808,
+        "streaming": false,
+        "htmlBlocks": 0,
+        "pending": true,
+        "at": 3054.800000190735,
+        "timestamp": "2026-10-21T05:49:22.097Z"
+      },
+      "firstBinding": {
+        "kind": "mount",
+        "owner": 1,
+        "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+        "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+        "partID": "prt_g0VYf0Rds00OSS06uF90",
+        "textLength": 808,
+        "streaming": false,
+        "htmlBlocks": 0,
+        "pending": true,
+        "at": 3054.800000190735,
+        "timestamp": "2026-10-21T05:49:22.097Z"
+      },
+      "dispose": {
+        "kind": "dispose",
+        "owner": 1,
+        "at": 19716.300000190735,
+        "timestamp": "2026-10-21T05:49:38.758Z"
+      }
+    },
+    {
+      "owner": 3,
+      "mount": {
+        "kind": "mount",
+        "owner": 3,
+        "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+        "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+        "partID": "prt_g0VYf0Rds00OSS06uF90",
+        "textLength": 808,
+        "streaming": false,
+        "htmlBlocks": 1,
+        "pending": false,
+        "at": 19895.5,
+        "timestamp": "2026-10-21T05:49:38.937Z"
+      },
+      "firstBinding": {
+        "kind": "mount",
+        "owner": 3,
+        "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+        "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+        "partID": "prt_g0VYf0Rds00OSS06uF90",
+        "textLength": 808,
+        "streaming": false,
+        "htmlBlocks": 1,
+        "pending": false,
+        "at": 19895.5,
+        "timestamp": "2026-10-21T05:49:38.937Z"
+      },
+      "dispose": {
+        "kind": "dispose",
+        "owner": 3,
+        "at": 43254.60000038147,
+        "timestamp": "2026-10-21T05:50:02.298Z"
+      }
+    },
+    {
+      "owner": 4,
+      "mount": {
+        "kind": "mount",
+        "owner": 4,
+        "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+        "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+        "partID": "prt_g0VYf0Rds00OSS06uF90",
+        "textLength": 808,
+        "streaming": false,
+        "htmlBlocks": 1,
+        "pending": false,
+        "at": 43413.60000038147,
+        "timestamp": "2026-10-21T05:50:02.458Z"
+      },
+      "firstBinding": {
+        "kind": "mount",
+        "owner": 4,
+        "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+        "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+        "partID": "prt_g0VYf0Rds00OSS06uF90",
+        "textLength": 808,
+        "streaming": false,
+        "htmlBlocks": 1,
+        "pending": false,
+        "at": 43413.60000038147,
+        "timestamp": "2026-10-21T05:50:02.458Z"
+      },
+      "dispose": {
+        "kind": "dispose",
+        "owner": 4,
+        "at": 43698.2000002861,
+        "timestamp": "2026-10-21T05:50:02.747Z"
+      }
+    },
+    {
+      "owner": 5,
+      "mount": {
+        "kind": "mount",
+        "owner": 5,
+        "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+        "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+        "partID": "prt_g0VYf0Rds00OSS06uF90",
+        "textLength": 808,
+        "streaming": false,
+        "htmlBlocks": 1,
+        "pending": false,
+        "at": 43856.90000009537,
+        "timestamp": "2026-10-21T05:50:02.901Z"
+      },
+      "firstBinding": {
+        "kind": "mount",
+        "owner": 5,
+        "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+        "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+        "partID": "prt_g0VYf0Rds00OSS06uF90",
+        "textLength": 808,
+        "streaming": false,
+        "htmlBlocks": 1,
+        "pending": false,
+        "at": 43856.90000009537,
+        "timestamp": "2026-10-21T05:50:02.901Z"
+      },
+      "dispose": {
+        "kind": "dispose",
+        "owner": 5,
+        "at": 47413.90000009537,
+        "timestamp": "2026-10-21T05:50:06.458Z"
+      }
+    },
+    {
+      "owner": 6,
+      "mount": {
+        "kind": "mount",
+        "owner": 6,
+        "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+        "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+        "partID": "prt_g0VYf0Rds00OSS06uF90",
+        "textLength": 808,
+        "streaming": false,
+        "htmlBlocks": 1,
+        "pending": false,
+        "at": 47582.800000190735,
+        "timestamp": "2026-10-21T05:50:06.627Z"
+      },
+      "firstBinding": {
+        "kind": "mount",
+        "owner": 6,
+        "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+        "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+        "partID": "prt_g0VYf0Rds00OSS06uF90",
+        "textLength": 808,
+        "streaming": false,
+        "htmlBlocks": 1,
+        "pending": false,
+        "at": 47582.800000190735,
+        "timestamp": "2026-10-21T05:50:06.627Z"
+      },
+      "dispose": {
+        "kind": "dispose",
+        "owner": 6,
+        "at": 49147.40000009537,
+        "timestamp": "2026-10-21T05:50:08.191Z"
+      }
+    },
+    {
+      "owner": 7,
+      "mount": {
+        "kind": "mount",
+        "owner": 7,
+        "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+        "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+        "partID": "prt_g0VYf0Rds00OSS06uF90",
+        "textLength": 808,
+        "streaming": false,
+        "htmlBlocks": 1,
+        "pending": false,
+        "at": 49307.800000190735,
+        "timestamp": "2026-10-21T05:50:08.351Z"
+      },
+      "firstBinding": {
+        "kind": "mount",
+        "owner": 7,
+        "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+        "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+        "partID": "prt_g0VYf0Rds00OSS06uF90",
+        "textLength": 808,
+        "streaming": false,
+        "htmlBlocks": 1,
+        "pending": false,
+        "at": 49307.800000190735,
+        "timestamp": "2026-10-21T05:50:08.351Z"
+      },
+      "dispose": {
+        "kind": "dispose",
+        "owner": 7,
+        "at": 59265,
+        "timestamp": "2026-10-21T05:50:18.308Z"
+      }
+    },
+    {
+      "owner": 8,
+      "mount": {
+        "kind": "mount",
+        "owner": 8,
+        "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+        "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+        "partID": "prt_g0VYf0Rds00OSS06uF90",
+        "textLength": 808,
+        "streaming": false,
+        "htmlBlocks": 1,
+        "pending": false,
+        "at": 59423,
+        "timestamp": "2026-10-21T05:50:18.467Z"
+      },
+      "firstBinding": {
+        "kind": "mount",
+        "owner": 8,
+        "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+        "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+        "partID": "prt_g0VYf0Rds00OSS06uF90",
+        "textLength": 808,
+        "streaming": false,
+        "htmlBlocks": 1,
+        "pending": false,
+        "at": 59423,
+        "timestamp": "2026-10-21T05:50:18.467Z"
+      },
+      "dispose": {
+        "kind": "dispose",
+        "owner": 8,
+        "at": 168113.60000038147,
+        "timestamp": "2026-10-21T05:52:07.160Z"
+      }
+    },
+    {
+      "owner": 13,
+      "mount": {
+        "kind": "mount",
+        "owner": 13,
+        "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+        "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+        "partID": "prt_g0VYf0Rds00OSS06uF90",
+        "textLength": 808,
+        "streaming": false,
+        "htmlBlocks": 1,
+        "pending": false,
+        "at": 168275.30000019073,
+        "timestamp": "2026-10-21T05:52:07.322Z"
+      },
+      "firstBinding": {
+        "kind": "mount",
+        "owner": 13,
+        "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+        "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+        "partID": "prt_g0VYf0Rds00OSS06uF90",
+        "textLength": 808,
+        "streaming": false,
+        "htmlBlocks": 1,
+        "pending": false,
+        "at": 168275.30000019073,
+        "timestamp": "2026-10-21T05:52:07.322Z"
+      },
+      "dispose": {
+        "kind": "dispose",
+        "owner": 13,
+        "at": 168417.80000019073,
+        "timestamp": "2026-10-21T05:52:07.465Z"
+      }
+    },
+    {
+      "owner": 14,
+      "mount": {
+        "kind": "mount",
+        "owner": 14,
+        "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+        "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+        "partID": "prt_g0VYf0Rds00OSS06uF90",
+        "textLength": 808,
+        "streaming": false,
+        "htmlBlocks": 1,
+        "pending": false,
+        "at": 168573.30000019073,
+        "timestamp": "2026-10-21T05:52:07.620Z"
+      },
+      "firstBinding": {
+        "kind": "mount",
+        "owner": 14,
+        "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+        "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+        "partID": "prt_g0VYf0Rds00OSS06uF90",
+        "textLength": 808,
+        "streaming": false,
+        "htmlBlocks": 1,
+        "pending": false,
+        "at": 168573.30000019073,
+        "timestamp": "2026-10-21T05:52:07.620Z"
+      }
+    }
+  ],
+  "boundary": "Actual original main request renderer mounts, not member9–12. Main viewport virtualization exists; original exact recycling trigger unproven. Warm accepted HTML on remount is distinguished from a visible Rendering flash. No UI assertions, no continuous-frame claim."
+}

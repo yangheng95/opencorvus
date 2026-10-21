@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [新Task成员来源与正文流](2026-10-21-task-member-stream-review.md)：[真实新worker、12图和15次Sol](../../artifacts/2026-10-21-task-member-stream/README.md)，5836字元自然正文/Task终态与完整原生结算，主区域挂载原因仍待追查。
+
 - [成员实时正文与呈现身份](2026-10-21-member-stream-owner-review.md)：[11图、六次Sol和原物理结算](../../artifacts/2026-10-21-member-stream-owner/README.md)，保留两个错误验收假设及5行隔离副本自然变化，未制造生产补丁。
 
 - [真实交付、变更与只读预览](2026-10-21-deliverable-completion-review.md)：[两次真实Sol交付、30图及42项后端合同](../../artifacts/2026-10-21-deliverable-completion/README.md)，历史无需迁移恢复摘要，保留空scope/拥挤Review/预览400原失败和完整原生结算。

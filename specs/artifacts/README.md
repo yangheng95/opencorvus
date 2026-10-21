@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [新Task成员真实来源与正文](2026-10-21-task-member-stream/README.md)：12张人工图、15次实际Sol、唯一真实worker/两Sources/12节长文/正常终态，源90表141633行保持；采集范围成员身份稳定，生产未改。
+
 - [成员真实流与呈现身份](2026-10-21-member-stream-owner/README.md)：11张人工图、六次实际Sol、旧20个owner的采集稳定记录、待机释放和90表完整源保留；生产未改，不声称连续帧或新Task成员全覆盖。
 
 - [真实文件交付、变更与只读预览](2026-10-21-deliverable-completion/README.md)：30张人工实图、42项/148断言、19/24与21/24真实Sol、四scope完整数据保留与进程结算；修复变更事实丢失、快照审批与离线产物阅读。

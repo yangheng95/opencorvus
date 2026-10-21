@@ -1,0 +1,50 @@
+{
+  "at": "2026-10-21T05:56:42.872Z",
+  "items": [
+    {
+      "height": 976.5521240234376,
+      "id": "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+      "owners": [
+        {
+          "blocks": 1,
+          "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+          "owner": "14",
+          "pending": null
+        }
+      ],
+      "top": 185.33334350585935
+    },
+    {
+      "height": 345.6875,
+      "id": "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+      "owners": [
+        {
+          "blocks": 1,
+          "messageID": "msg_hdshDAXaULnWjcMA6lr5",
+          "owner": "16",
+          "pending": null
+        }
+      ],
+      "top": 1173.875
+    },
+    {
+      "height": 201.33334350585935,
+      "id": "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+      "owners": [],
+      "top": 1523.5625
+    },
+    {
+      "height": 738.8333740234375,
+      "id": "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe",
+      "owners": [
+        {
+          "blocks": 5,
+          "messageID": "msg_hVoMy3wmp4kkJyFcrP8k",
+          "owner": "17",
+          "pending": null
+        }
+      ],
+      "top": 1732.8958740234375
+    }
+  ]
+}

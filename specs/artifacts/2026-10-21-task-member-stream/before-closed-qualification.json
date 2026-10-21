@@ -1,0 +1,106 @@
+{
+  "at": "2026-10-21T06:04:08.111Z",
+  "taskID": "tsk_g00VYf0QVV00zBt1vWF3",
+  "originalTerminalEvent": {
+    "id": "pev_g0VYf1dvf00rpqRdJOHk",
+    "type": "task.completed",
+    "aggregate_id": "tsk_g00VYf0QVV00zBt1vWF3",
+    "emitted_at": 1792562038751,
+    "payload": {
+      "execution_epoch": 1,
+      "summary": "真实研究成员已完成限定的来源阅读与长文正文交付。已读取其最终正文及完整调用记录：两个指定入口各读取一次，两次返回支持成员所述材料身份；读取后分别有真实状态句，无重试、扩展搜索、文件或UI操作。指南正文包含12节、长段落、列表、较长Markdown表格、text代码栏、指定起止标记及引用定义，约5000中文字元的长文要求以完整自然正文满足。最终正文前独立保留第二次读取状态，指南自身以指定标记开头。已向操作者总结完成与未确认事项；未声称人工验收或UI观察通过，也未声称有底层逐次模型与流式配置的独立证明。不生成文件或额外报告，交付保留在成员可见最终assistant正文。"
+    }
+  },
+  "memberFinal": {
+    "id": "msg_g0VYf0p0f00B71Z9CWhB",
+    "finish": "stop",
+    "time": {
+      "created": 1792561845253,
+      "completed": 1792561973515
+    }
+  },
+  "schema": 3,
+  "tables": 90,
+  "originalRows": 141633,
+  "sourcePreservation": {
+    "allOriginalRows": "Exact rowid/primary key/all fields/times",
+    "bytes": 65896448,
+    "modifiedAtMs": 1792560571896.574
+  },
+  "allOriginalChangedRows": [
+    {
+      "table": "runtime_execution_capacity_lease",
+      "identity": "[1]",
+      "fields": [
+        "lease_id",
+        "owner_id",
+        "time_acquired",
+        "expires_at"
+      ]
+    },
+    {
+      "table": "runtime_execution_capacity_lease",
+      "identity": "[2]",
+      "fields": [
+        "lease_id",
+        "owner_id",
+        "time_acquired",
+        "expires_at"
+      ]
+    }
+  ],
+  "actualCapacitySlots": [
+    {
+      "rowid": 1,
+      "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+      "slot": 0,
+      "lease_id": "e1b71811-aa78-4318-aa5e-e3d6482e6b31",
+      "owner_id": "runtime:72240:f98ac9c9-547e-433f-a94a-5c7bd9f438fd",
+      "time_acquired": 1792562038705,
+      "expires_at": 1792562075735
+    },
+    {
+      "rowid": 2,
+      "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+      "slot": 1,
+      "lease_id": "fe37172c-e0e1-4080-bfd7-4d9564f71b0c",
+      "owner_id": "runtime:72240:5a7f2496-53c5-4d5a-9efa-90456d834fe2",
+      "time_acquired": 1792561845563,
+      "expires_at": 1792561973482
+    }
+  ],
+  "native": {
+    "occurrence": "task-member-stream-504-before-db371d10-1171-471a-8749-86a55c72bad2",
+    "outcome": "settled",
+    "host": {
+      "pid": 82024,
+      "processInstanceID": "win32:639281584741049986",
+      "occurrenceID": "58479ca8-0050-4ff6-8eaa-e1b243d68010"
+    },
+    "target": {
+      "pid": 72240,
+      "processInstanceID": "win32:639281584749786306",
+      "occurrenceID": "73fd6385-2fae-4e7a-a21e-a50a731054eb"
+    },
+    "observedAtUtc": "2026-10-21T05:59:32.091Z",
+    "deadlineAt": 1792562874071,
+    "terminal": {
+      "occurrenceID": "task-member-stream-504-before-db371d10-1171-471a-8749-86a55c72bad2",
+      "pid": 72240,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "launcher": {
+    "originalChildExit": 0,
+    "observedAtUtc": "2026-10-21T05:59:32.1625646Z"
+  },
+  "actualRequests": 15,
+  "maximumRequests": 24,
+  "qualification": "Original Task terminal identity and completed member Message retained after own public shutdown; source all original fields/config preserved; only two exact mutable capacity rows changed in clone, both actual owned leases expired before physical closure."
+}

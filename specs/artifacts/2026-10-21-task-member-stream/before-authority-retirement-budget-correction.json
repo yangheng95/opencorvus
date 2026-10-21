@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-21T06:01:42.896Z",
+  "originalConsoleReportedMaximum": 12,
+  "originalRetirementJSONMaximum": 24,
+  "actualScopeMaximum": 24,
+  "actualRequests": 15,
+  "upfrontTotalMaximum": 48,
+  "disposition": [
+    {
+      "name": "auth.json",
+      "runtimeExists": false,
+      "authorityExists": false
+    },
+    {
+      "name": "models.json",
+      "runtimeExists": false,
+      "authorityExists": false
+    }
+  ],
+  "correction": "Original retirement checker correctly asserted24 and cumulative15<=24. Its canonical retirement JSON correctly reported24; only console.log retained the inherited literal maximum12. Actual preflight/native budget and prepared scopes are24/24 total48. No request scope reset or extension occurred. This descriptor corrects the console caption, not the original JSON.",
+  "unusedBudget": {
+    "before": 9,
+    "conditionalAfter": 24,
+    "afterStarted": false,
+    "disposition": "retired; no production root-cause fix established"
+  }
+}
