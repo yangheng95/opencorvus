@@ -1,0 +1,31 @@
+{
+  "owner": {
+    "pid": 32004,
+    "processInstanceID": "win32:639281975961510576",
+    "occurrenceID": "1aa36826-9492-4114-8ac0-973b1b098c43"
+  },
+  "parent": {
+    "pid": 67644,
+    "processInstanceID": "win32:639281975961221261",
+    "occurrenceID": "d61b68fe-1132-4d2f-ae0a-a9f22e1ff757"
+  },
+  "occurrence": "agent-rail-identity-509-final-service-fa535eef-8f60-469c-a832-438d4ed09fd7",
+  "receipt": {
+    "schemaVersion": 1,
+    "occurrenceID": "agent-rail-identity-509-final-service-fa535eef-8f60-469c-a832-438d4ed09fd7",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18939",
+    "pid": 32004
+  },
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\agent-rail-identity-509-final\\runtime\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\agent-rail-identity-509-final\\runtime\\data",
+      "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/agent-rail-identity-509-final/home"
+    }
+  },
+  "observedAt": "2026-10-21T16:40:00.104Z",
+  "qualification": "Real development CLI/UI;zero-model historical read qualification; no Provider credential qualification"
+}

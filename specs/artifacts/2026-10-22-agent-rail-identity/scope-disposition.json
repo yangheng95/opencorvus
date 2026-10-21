@@ -1,0 +1,200 @@
+{
+  "observedAt": "2026-10-21T16:47:55.071Z",
+  "scopes": [
+    {
+      "stage": "before",
+      "originalHandle": 54627,
+      "tab": 90,
+      "tabDisposition": "Closed through CUA after actual screenshots",
+      "native": {
+        "occurrence": "agent-rail-identity-509-before-service-46ea746c-985b-437a-a2b2-5bb855131d68",
+        "outcome": "settled",
+        "host": {
+          "pid": 35112,
+          "processInstanceID": "win32:639281965816100994",
+          "occurrenceID": "a6e2e5df-f5ad-47db-aace-929f084c218f"
+        },
+        "target": {
+          "pid": 91304,
+          "processInstanceID": "win32:639281965826168012",
+          "occurrenceID": "da3f3b5f-2c22-48b1-b23c-b8e6a05988bc"
+        },
+        "observedAtUtc": "2026-10-21T16:26:10.714Z",
+        "deadlineAt": 1792600980785,
+        "terminal": {
+          "occurrenceID": "agent-rail-identity-509-before-service-46ea746c-985b-437a-a2b2-5bb855131d68",
+          "pid": 91304,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-21T16:26:10.7655092Z",
+        "childExitCode": 0
+      },
+      "publicShutdown": 200,
+      "originalExit": 0,
+      "provider": {
+        "at": "2026-10-21T16:23:06.72Z",
+        "maximum": 0,
+        "actual": 0,
+        "exhausted": false,
+        "requests": [],
+        "scope": "Read-only original long transcript mount review; no credentials or model catalog copied"
+      }
+    },
+    {
+      "stage": "after",
+      "originalHandle": 51493,
+      "tab": 91,
+      "tabDisposition": "Closed through CUA after actual screenshots",
+      "native": {
+        "occurrence": "agent-rail-identity-509-after-service-4769deba-c2ab-40dd-98c8-ff0c7374874a",
+        "outcome": "settled",
+        "host": {
+          "pid": 67868,
+          "processInstanceID": "win32:639281969798491758",
+          "occurrenceID": "511e249e-f270-4eda-a71f-714f5080b41f"
+        },
+        "target": {
+          "pid": 91396,
+          "processInstanceID": "win32:639281969810101259",
+          "occurrenceID": "32ff1a66-5e7a-4c6c-87bb-30583c3ec858"
+        },
+        "observedAtUtc": "2026-10-21T16:32:16.128Z",
+        "deadlineAt": 1792601379740,
+        "terminal": {
+          "occurrenceID": "agent-rail-identity-509-after-service-4769deba-c2ab-40dd-98c8-ff0c7374874a",
+          "pid": 91396,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "launcher": {
+        "childExitCode": 0,
+        "observedAtUtc": "2026-10-21T16:32:16.2030478Z"
+      },
+      "publicShutdown": 200,
+      "originalExit": 0,
+      "provider": {
+        "at": "2026-10-21T16:29:44.771Z",
+        "maximum": 0,
+        "actual": 0,
+        "exhausted": false,
+        "requests": [],
+        "scope": "Read-only original long transcript mount review; no credentials or model catalog copied"
+      }
+    },
+    {
+      "stage": "review",
+      "originalHandle": 53525,
+      "tab": 92,
+      "tabDisposition": "Closed through CUA after actual screenshots",
+      "native": {
+        "occurrence": "agent-rail-identity-509-review-service-04287708-11c5-40a3-9da0-8cde7dc6e8b2",
+        "outcome": "settled",
+        "host": {
+          "pid": 74984,
+          "processInstanceID": "win32:639281973021395908",
+          "occurrenceID": "f6c15148-0b6c-4836-a163-4292bd166242"
+        },
+        "target": {
+          "pid": 73068,
+          "processInstanceID": "win32:639281973033421955",
+          "occurrenceID": "a18c36b3-b01e-4c4b-a24d-d02d02379eeb"
+        },
+        "observedAtUtc": "2026-10-21T16:37:07.594Z",
+        "deadlineAt": 1792601702103,
+        "terminal": {
+          "occurrenceID": "agent-rail-identity-509-review-service-04287708-11c5-40a3-9da0-8cde7dc6e8b2",
+          "pid": 73068,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-21T16:37:07.6538601Z",
+        "childExitCode": 0
+      },
+      "publicShutdown": 200,
+      "originalExit": 0,
+      "provider": {
+        "at": "2026-10-21T16:35:07.094Z",
+        "maximum": 0,
+        "actual": 0,
+        "exhausted": false,
+        "requests": [],
+        "scope": "Read-only original long transcript mount review; no credentials or model catalog copied"
+      }
+    },
+    {
+      "stage": "final",
+      "originalHandle": 70991,
+      "tab": 93,
+      "tabDisposition": "Closed through CUA after actual screenshots",
+      "native": {
+        "occurrence": "agent-rail-identity-509-final-service-fa535eef-8f60-469c-a832-438d4ed09fd7",
+        "outcome": "settled",
+        "host": {
+          "pid": 69208,
+          "processInstanceID": "win32:639281975950883176",
+          "occurrenceID": "9d5a50ba-2fcd-4533-84ec-678d4d38fd70"
+        },
+        "target": {
+          "pid": 32004,
+          "processInstanceID": "win32:639281975961510576",
+          "occurrenceID": "b94c11ab-9194-4931-92c8-08c5596e71f9"
+        },
+        "observedAtUtc": "2026-10-21T16:45:24.977Z",
+        "deadlineAt": 1792601995048,
+        "terminal": {
+          "occurrenceID": "agent-rail-identity-509-final-service-fa535eef-8f60-469c-a832-438d4ed09fd7",
+          "pid": 32004,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-21T16:45:25.0425467Z",
+        "childExitCode": 0
+      },
+      "publicShutdown": 200,
+      "originalExit": 0,
+      "provider": {
+        "at": "2026-10-21T16:40:00.103Z",
+        "maximum": 0,
+        "actual": 0,
+        "exhausted": false,
+        "requests": [],
+        "scope": "Read-only original long transcript mount review; no credentials or model catalog copied"
+      }
+    }
+  ],
+  "totalMaximumProviderRequests": 0,
+  "totalActualProviderRequests": 0,
+  "authority": "No auth or model catalog copied;no credential use",
+  "production": "Rail identity,localized concise navigation and concise native tooltip description;original input retained in canonical conversation handoff",
+  "surface": "Actual completed508 Task, two same-role members A/B, English/Chinese,orchestrator navigation",
+  "limits": "No new live stream,same-document reconnect,screen-reader speech or every execution status acceptance",
+  "userResources": "User18571 page/process/database untouched;schema stays3"
+}

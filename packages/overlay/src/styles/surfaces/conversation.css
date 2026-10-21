@@ -682,6 +682,8 @@
 }
 
 .conversation-agent-rail-tooltip__header {
+  display: grid;
+  gap: var(--ui-gap-xs);
   min-width: 0;
   overflow: hidden;
   white-space: nowrap;
@@ -694,28 +696,10 @@
   text-overflow: ellipsis;
 }
 
-.conversation-agent-rail-tooltip__section > span {
+.conversation-agent-rail-tooltip__status {
   color: var(--text-muted);
   font-size: var(--ui-font-caption);
-}
-
-.conversation-agent-rail-tooltip__section {
-  min-width: 0;
-  display: grid;
-  gap: var(--ui-gap-xs);
-}
-
-.conversation-agent-rail-tooltip__section p {
-  margin: 0;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
-  overflow-wrap: anywhere;
-  color: var(--text-strong);
-  font-size: var(--ui-font-body);
-  line-height: var(--ui-line-height-normal);
-  white-space: pre-wrap;
+  font-weight: var(--ui-font-weight-body);
 }
 
 .conversation-agent-target--pulse {

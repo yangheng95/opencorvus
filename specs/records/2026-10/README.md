@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [成员活动导航身份与朗读名称](2026-10-22-agent-rail-identity.md)：[20张实图及四轮零模型结算](../../artifacts/2026-10-22-agent-rail-identity/README.md)，修复同角色辨识和超长名称/关联描述；中英导航、原输入及两来源人工复核。
+
 - [活跃成员并发与来源呈现](2026-10-21-live-member-concurrency.md)：[23张人工图与原始reader](../../artifacts/2026-10-21-live-member-concurrency/README.md)，两次真实并发Task自然结束；修复诊断自身重入，正式页面及修正后活跃切换正常，刷新与传输重连边界分开。
 
 - [正文挂载与Rendering归因](2026-10-21-render-mount-causality.md)：[实际range、16张实图与完整数据保留](../../artifacts/2026-10-21-render-mount-causality/README.md)，区分Main窗口回收与成员侧栏身份，生产未改。

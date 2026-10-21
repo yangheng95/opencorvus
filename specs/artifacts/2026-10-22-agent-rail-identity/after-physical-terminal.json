@@ -1,0 +1,73 @@
+{
+  "chain": [
+    {
+      "identity": {
+        "pid": 67868,
+        "processInstanceID": "win32:639281969798491758",
+        "occurrenceID": "511e249e-f270-4eda-a71f-714f5080b41f"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "identity": {
+        "pid": 91396,
+        "processInstanceID": "win32:639281969810101259",
+        "occurrenceID": "32ff1a66-5e7a-4c6c-87bb-30583c3ec858"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "provider": {
+    "at": "2026-10-21T16:29:44.771Z",
+    "maximum": 0,
+    "actual": 0,
+    "exhausted": false,
+    "requests": [],
+    "scope": "Read-only original long transcript mount review; no credentials or model catalog copied"
+  },
+  "originalHandle": 51493,
+  "native": {
+    "occurrence": "agent-rail-identity-509-after-service-4769deba-c2ab-40dd-98c8-ff0c7374874a",
+    "outcome": "settled",
+    "host": {
+      "pid": 67868,
+      "processInstanceID": "win32:639281969798491758",
+      "occurrenceID": "511e249e-f270-4eda-a71f-714f5080b41f"
+    },
+    "target": {
+      "pid": 91396,
+      "processInstanceID": "win32:639281969810101259",
+      "occurrenceID": "32ff1a66-5e7a-4c6c-87bb-30583c3ec858"
+    },
+    "observedAtUtc": "2026-10-21T16:32:16.128Z",
+    "deadlineAt": 1792601379740,
+    "terminal": {
+      "occurrenceID": "agent-rail-identity-509-after-service-4769deba-c2ab-40dd-98c8-ff0c7374874a",
+      "pid": 91396,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "shutdown": {
+    "observedAtUtc": "2026-10-21T16:32:16.0394626Z",
+    "statusCode": 200,
+    "target": {
+      "pid": 91396,
+      "processInstanceID": "win32:639281969810101259",
+      "occurrenceID": "32ff1a66-5e7a-4c6c-87bb-30583c3ec858"
+    },
+    "occurrence": "agent-rail-identity-509-after-service-4769deba-c2ab-40dd-98c8-ff0c7374874a",
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYhcKD1004ve6NKWeL\"}"
+  },
+  "observedAtUtc": "2026-10-21T16:32:46.5226626Z",
+  "launcher": {
+    "childExitCode": 0,
+    "observedAtUtc": "2026-10-21T16:32:16.2030478Z"
+  },
+  "originalExit": 0
+}

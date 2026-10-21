@@ -1,0 +1,73 @@
+{
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 35112,
+        "processInstanceID": "win32:639281965816100994",
+        "occurrenceID": "a6e2e5df-f5ad-47db-aace-929f084c218f"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 91304,
+        "processInstanceID": "win32:639281965826168012",
+        "occurrenceID": "da3f3b5f-2c22-48b1-b23c-b8e6a05988bc"
+      }
+    }
+  ],
+  "native": {
+    "occurrence": "agent-rail-identity-509-before-service-46ea746c-985b-437a-a2b2-5bb855131d68",
+    "outcome": "settled",
+    "host": {
+      "pid": 35112,
+      "processInstanceID": "win32:639281965816100994",
+      "occurrenceID": "a6e2e5df-f5ad-47db-aace-929f084c218f"
+    },
+    "target": {
+      "pid": 91304,
+      "processInstanceID": "win32:639281965826168012",
+      "occurrenceID": "da3f3b5f-2c22-48b1-b23c-b8e6a05988bc"
+    },
+    "observedAtUtc": "2026-10-21T16:26:10.714Z",
+    "deadlineAt": 1792600980785,
+    "terminal": {
+      "occurrenceID": "agent-rail-identity-509-before-service-46ea746c-985b-437a-a2b2-5bb855131d68",
+      "pid": 91304,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "shutdown": {
+    "statusCode": 200,
+    "observedAtUtc": "2026-10-21T16:26:10.6260144Z",
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYhan9H00Q3vWcd2oX\"}",
+    "target": {
+      "pid": 91304,
+      "processInstanceID": "win32:639281965826168012",
+      "occurrenceID": "da3f3b5f-2c22-48b1-b23c-b8e6a05988bc"
+    },
+    "occurrence": "agent-rail-identity-509-before-service-46ea746c-985b-437a-a2b2-5bb855131d68"
+  },
+  "originalExit": 0,
+  "observedAtUtc": "2026-10-21T16:26:52.2189137Z",
+  "launcher": {
+    "observedAtUtc": "2026-10-21T16:26:10.7655092Z",
+    "childExitCode": 0
+  },
+  "provider": {
+    "at": "2026-10-21T16:23:06.72Z",
+    "maximum": 0,
+    "actual": 0,
+    "exhausted": false,
+    "requests": [],
+    "scope": "Read-only original long transcript mount review; no credentials or model catalog copied"
+  },
+  "originalHandle": 54627
+}

@@ -654,8 +654,13 @@ Parent disposal clears the Map and retires the retained presentation.
 Member selection labels use the real agent role and, when that role belongs to
 multiple distinct Sessions, a short suffix of the actual Session ID. Suffixes
 extend when necessary to distinguish the current peers, and the full identity
-remains available on hover. The selector, member list, progress cards and their
-accessible names share this presentation. Activity updates and later execution
+remains available on hover. The selector, member list, progress cards, activity
+rail and their accessible names share this presentation. Rail navigation names
+contain the localized view action, actual identity and current status. Rail
+tooltips contain identity and status only, keeping their native accessible
+description concise. Original input remains with its canonical Message and
+handoff context in the conversation, without inferring human authorship from
+provider role=user. Activity updates and later execution
 occurrences keep the same Session value; they do not recreate selector options
 when identity labels are unchanged. Conversation targets and reading positions
 remain keyed by the complete canonical target.

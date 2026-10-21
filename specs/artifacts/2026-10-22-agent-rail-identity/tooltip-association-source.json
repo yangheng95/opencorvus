@@ -1,0 +1,35 @@
+{
+  "observedAt": "2026-10-21T16:47:55.070Z",
+  "package": {
+    "name": "@kobalte/core",
+    "version": "0.13.11"
+  },
+  "source": "packages/overlay/node_modules/@kobalte/core/src/tooltip/tooltip-trigger.tsx",
+  "firstLine": 189,
+  "lines": [
+    "",
+    "\t// We purposefully avoid using Kobalte `Button` here because tooltip triggers can be any element",
+    "\t// and should not always be announced as a button to screen readers.",
+    "\treturn (",
+    "\t\t<Polymorphic<TooltipTriggerRenderProps>",
+    "\t\t\tas=\"button\"",
+    "\t\t\tref={mergeRefs((el) => {",
+    "\t\t\t\tcontext.setTriggerRef(el);",
+    "\t\t\t\tref = el;",
+    "\t\t\t}, local.ref)}",
+    "\t\t\taria-describedby={context.isOpen() ? context.contentId() : undefined}",
+    "\t\t\tonPointerEnter={onPointerEnter}",
+    "\t\t\tonPointerLeave={onPointerLeave}",
+    "\t\t\tonPointerDown={onPointerDown}",
+    "\t\t\tonClick={onClick}",
+    "\t\t\tonFocus={onFocus}",
+    "\t\t\tonBlur={onBlur}",
+    "\t\t\t{...context.dataset()}",
+    "\t\t\t{...others}",
+    "\t\t/>",
+    "\t);",
+    "}",
+    ""
+  ],
+  "qualification": "Actual installed primitive source and real DOM association observation;no library change,private state execution or source-text acceptance assertion"
+}

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [成员活动导航身份与朗读名称](2026-10-22-agent-rail-identity/README.md)：20张人工图、四scope全部152721原行保持，Rail身份一致、短名称与原生关联描述实测；完整交接原文保留，模型0。
+
 - [活跃成员并发与来源呈现](2026-10-21-live-member-concurrency/README.md)：23张实图、29/64次Sol流式请求及完整reader/原生/配对结算，真实两成员并发与同目标侧栏保留；正式无诊断辅助区分观察器故障，产品未改。
 
 - [正文挂载与Rendering归因](2026-10-21-render-mount-causality/README.md)：两轮真实Source CLI、16张人工图、144/178事件与26次实际窗口选择，Main15次回收已对上；无新模型输入或生产改动。
