@@ -1,0 +1,78 @@
+# 真实交付体验与 Task 取消审批收敛
+
+## Recall
+
+501持续单agent，不委托；旧Goal三Astra描述被用户后续多次单agent要求覆盖。500为progress：c2f6e8caf7c7b09f1fb0ec1d30ede11a6cd2c8d8已正常推送，fresh HEAD=upstream。持续目标首页顺序/外观、交付面板名称和双语说明、指南当前按钮与草稿取消已有16张实图；原90表131156行/schema3/完整canonical保持。非空交付列表/环境行及旧编辑入口未验收。原74015/41534与自有71/72页、所有构建handle已结束。开始status仅原.bun/与packages/opencorvus/bun/。
+
+用户要求自主持续体验修复、实际端到端、授权复制OpenAI凭据使用GPT-6.1 Sol，禁止Codex子agent，允许内置浏览器调试。单人完成实现与验收，产品内仅运行一个有限Task的原orchestrator，不用模型帮助并行开发、不创建子Task/Worker。沿benchmark-debug-template/computer-use。已读500 Recall、当前continuous-goal与07-panel、GoalGroup/TaskProgressBar/Board、delivery-slice-contract-tools/GoalContractFieldsSchema/DeliverySlice identity、Task公共创建/global分配与Task API（Application Programming Interface，应用程序接口）、497成熟paired authority/audit/native supervisor/结算工具。全仓搜索实际add_goal/modify_goal调用与工具授予；原Base scheduler有直接read/write/edit通用工具，当前真实投影仍须启动前确认。
+
+## 调查、范围与未知
+
+当前完整500源engine_goal实际0行，先前12个有限Task以简单文字结束，不能拿它们证明非空交付的布局或交互。合同要求owned_paths非空且有当前任务证据；不为纯文字测试编造路径、直接插SQL（Structured Query Language，结构化查询语言）行或预造假UI（User Interface，用户界面）数据。通过现有POST /global/tasks创建产品自有隔离Git项目，在该新项目真实生成docs/continuous-goal.md与docs/deliverables.md；明确用户式任务要求两个可验收交付，模型自己用当前工具执行与记录。原ask权限保持，通过真实UI只批准该新Task明确的本地交付操作。禁止外发消息、访问网站、用户目录读写、子Task/Worker/持续目标创建，不伪造acceptance accepted事实。
+
+本轮先做真实体验，不预设生产bug。若发现显示/数据/功能问题，先追加现象、触发、根因与定义/调用/合同/历史/测试/文档/交付风险分析，再修复。调度/恢复/队列/终态异常必须立即按共享机制横审Task/Mission/Session执行轮次、全部生产入口、串并行/多项目/重试重启，不能归因模型或用单场景通过掩盖。现阶段无生产改动、无schema/迁移、模型配置或LLM（Large Language Model，大语言模型）工具/工作流改动。不新增/运行UI自动化。
+
+## 实施前验收计划
+
+1. 验证500-after原native物理/output/request/launcher终态，从其完整真实库只读serialize新的501-before运行根，保留全部90表/131156原行、字段/时间/rowid或主键、schema3/integrity、源bytes/mtime与完整5键canonical。新全局Task/Project/Session/交付/usage允许真实追加，旧数据不清理、不写回真实用户库。已有正式c2f前端复制入独立bundle，不新增单独Vite服务。
+2. 复制当前用户授权的完整OpenAI entry及完整相邻models.json到全新私有authority；目标模型gpt-6.1-sol必须在完整catalog投影。原auth/catalog bytes与mtime保持，凭据不得进prompt/日志/spec/提交，禁止refresh/exchange。复制access须覆盖20分钟资源边界。分别验证凭据可用、目标投影、实际请求模型完全一致后才创建Task。
+3. 用成熟413 native owned host/Source CLI开发/ui，独立18889，固定单scope累计最多12次真实Provider请求（包含preflight与所有主/辅助调用），20分钟资源边界；实际请求全流式，180秒无活动超时。既有启动180秒总时限改为该scope的receipt/日志进展无活动判断，不改共用工具。真实Task通过公开global入口形成独立产品Project，不在当前D仓库另开branch/worktree。
+4. 任务交付两份短说明文件：持续目标创建、确认、预算、暂停/完成与恢复；交付成果、验收、技术身份与持续目标的区别。任务明确单orchestrator、正常本地工具与真实合同/结果、不读写用户文件/不运行命令/不访问网络/不派生agent。模型原始输出/真实工具/审批与结果全部保留可见。若用户式任务未完成，必须保留失败及真实终态；不能为截图造成功。仅对已确认属于新QA（Quality Assurance，质量验收）Task的本地scope实际允许，不修改全局permission_mode或旧审批。
+5. 手动使用内置浏览器2自有页查看中英文非空交付列表、展开目标/验收、环境进度入口/行、长标题和技术编号、真实Source展开/关闭及同一会话阅读稳定性。只用真实页面、截图人工复核，typecheck/build/i18n（Internationalization，国际化）/docs为补充。没有非空数据则仍未达，继续定位实际合同/执行失败。旧交付编辑对话框可达性另核，不新增旁路打开。
+6. 真实Task必须完成原合同或由操作者明确结束本轮已拥有的私有QA Task，并核对Task生命周期、Prompt物理owner、未处理Interaction、Provider原source reader200/EOF（End Of File，流读取结束）。再公开shutdown、原handle/native物理/output/request/launcher与原出生终态；成对退休runtime auth/models，实际值安全扫描后退休源私有authority pair，原用户auth/catalog保持。不关闭/重启用户进程窗口，不留带凭据服务。
+7. 若UI修复需第二服务，先完整结束第一scope；以第一scope已结束真实新Task/交付为完整只读源，第二scope用无凭据0模型输入读取复核，不额外发模型请求制造结果。追加具体方案后实施，依旧实页截图。原失败与未达项完整归档；只归档非秘密证据、真实交付文本/截图/脚本，不归档原全库历史或凭据。
+8. 三索引/当前架构按实际变更同步，docs检查，范围提交、fresh fetch/merge/完整待推送审查、正常hook/push/fresh相等。版本不变，不Release/tag/PR（Pull Request，拉取请求）；无force/rebase/no-verify。长期Goal active，原149目录配置保存10秒/恢复5秒与其他Sources/Rendering体验不因本轮局部通过完成。
+
+## 启动与首个工具输入修正
+
+完整90表131156行已只读复制，原canonical仍ask；完整227 Provider/8423 model catalog与当前OpenAI entry配对暂存，access有效至2026-10-30且未refresh。18889原61410由native监管启动；实际preflight已分别确认credential usable/catalog projected/actualModel gpt-6.1-sol/streaming true，scope12。第一个global Task测试请求把Session API的对象model格式误用于Task API，真实HTTP400 invalid_type明确要求string；没有进入Task创建或模型执行。保留原请求/响应/日志，修复验收脚本使用当前CreateTaskInput声明的provider/model字符串，再以新的requestID请求。此为验收者输入错误，不改生产合同。
+
+## 原固定额度覆盖不足与独立复测计划
+
+修正请求202真实接受新Task tsk_g00VYeMccK0078SroWDw及私有Project prj_h78jkovKe5D20efp76MY。实际模型先读取Base method，再请求manage_task add_goal；仅逐项Allow Once批准当前本地合同。第一真实交付gol_g0VYeNGfl00xg3D4YSUp已持久化，第二合同仍待审批，文件交付未完成。
+
+审计已9/12请求全部gpt-6.1-sol/stream=true/200/原source EOF；逐请求日志显示其中4次是原内部memory helper（preflight、root初始化及审批后的现有上下文处理），并非9次主Task操作或无证据的调度重试。原12额度没有覆盖本次完整ask审批/文件/正常结束链路。该验收设置不足不能当成产品bug，也不能在原活跃scope中重置或扩容额度。操作者将明确取消这个尚未完成的私有Task，保留原9次请求、真实第一合同、失败要求和终态；完整结束18889/原61410并退休runtime配对凭据。
+
+随后对同一个原始两文件任务做独立复测：从原500-after完整源重新复制501-after（不从未完成Task复制或移植目录/Artifact），独立18891/native20分钟、预先固定最多24次真实请求（含preflight、memory及主Task全链）。不更改原before12或其证据，新增复测后的总上限为12+24=36；当前源authority pair继续只读供下一scope使用，全部scope结算并实际值扫描后再退休。复测用相同任务原文与当前ask配置、正常公开global Task创建和实际UI逐项审批，不能用full_access/改旧审批绕开。只有第二次原验收实际满足，才可声明两份文件/两个真实合同及正常结束通过；否则继续保留未达。该补强修复验收运行器的预算覆盖，不是改变原交付目标或生产合同。
+
+## 取消后的真实审批异常与下一步优先级
+
+公开cancel202最初返回cancelling，实际下一快照Task已cancelled；但第二manage_task add_goal Interaction int_g0VYeNJZT003I5AZCoPJ持续pending。不是只依据末条状态猜测：之后IAB实际Task标题Cancelled、侧栏Pending Interactions:1，仍自动弹出带可点击Allow Once/Allow for Task的同一审批，截图03保留。没有批准该已取消Task的第二合同。后端是否拒绝过期决策、持久终态如何投影、重启恢复/Task及Mission/Session全部入口仍待横审；此时不直接用前端隐藏弹窗作修复。
+
+原18889已public shutdown200，原61410 exit0，native物理/output/request/launcher/原出生与9/12真实source EOF全部结算；runtime auth/models成对退休，73页关闭。因共享取消/审批异常优先，推迟24请求独立复测，当前所有私有凭据先安全扫描并退休；后续确需模型再新建完整配对authority、单独准入，不能复用已退休身份。
+
+完整原源库/配置保持，clone全部原用户/历史行字段未变；全量比较明确显示runtime_execution_capacity_lease两个池槽位的lease_id/owner_id/time_acquired/expires_at被本轮真实Provider活动更替，仍需按当前容量租约合同核对原过期与本轮release事实，不能回写旧租约把比较伪装成0差异。Provider activity321→326，实际审计9次含memory。此处不宣称所有90表字段零差异，完整源schema3/bytes/mtime及未改事实仍保留。
+
+## Task取消根因、横审与实施决定（修改前）
+
+只读cancelled-durable-facts.json确认：根Session及唯一orchestrator同属新Project；Task取消请求与task.cancelled相差106ms。两条已执行请求各有allowed_once/start/succeeded及取消时的stale退休；未批准第二合同per_h9Tts9cnzyWtqrAjnwjN仅requested。engine_interaction_request原表0行并非投影丢失：权限Interaction本来就由账本派生。UI显示与真实未决权限一致。replyValidated没有Task取消状态核验，会竞争原decision_slot；后续resumeExactContinuation可能判已终结Tool为unresumable，但这不能替代取消决议。
+
+直接触发是取消发生在ask等待期间。控制流根因是cancelTaskOnce只收敛物理Prompt/Task根ingress和Task终态，没有调用现成PermissionAuthority.cancelPendingForSessions；Message完成只退休已批准continuation，按设计保留未决请求用于进程恢复。旧402修复的是已经写入cancelled/stale决定的Terminated事件投影，明确未改变普通Stop取消策略，因而没有覆盖本次缺少决定的Task取消。bootstrap只重试cancelling，已经cancelled的历史残留永远不会再次收敛。
+
+横向追踪：公开task.cancel、Panel、orchestrator取消、Task archive/delete，以及Mission关闭的子Task统一经过EngineService.cancelTask；同一Task的重复/并发调用经cancellationOperations加入，活跃取消有持久租约、destructive scope及物理barrier，retry/startup调用同一cancelTask。Task Session树由project_id核验，包括root、orchestrator与派生Session，兄弟Task及其他Project不在树内。普通Session.abort/right_sidebar.abort仅停止一次Prompt而不终结Session，Mission自身以opened/closing/closed occurrence控制再运行；process.shutdown保存恢复handoff。不能把所有cancelSessionPromptInScope调用都改成取消所有历史审批，否则进程中断恢复、并发新轮次会丢真实授权等待。上述入口均已查代码，本批不宣称Mission自身与普通Session的审批体验已做真实运行验收。Question有独立持久terminal及abort/abandon路径，本次真实残留为Permission，不伪造Question用户答复。
+
+决定：仅在Task逻辑取消的公共收敛器，在所有物理Prompt及根ingress结束后、写task.cancelled前，用同一账本取消精确已核验的Task Session树未决权限。系统身份和原取消reason保留，不当作用户deny，不新建协议或前端隐藏规则。已经cancelled的公开重放与项目bootstrap同样补收敛这些权限；不重开Task、不重写原终态、不迁移schema、不退休有效进程handoff。保持原取消操作返回与活跃恢复计数合同。失败须可重试，不能写假终态。已批准效果及其结果保持原不可变事实。
+
+验证先增加聚焦正向后端合同：超过64条权限分页、后代Session、真实cancelled决议与Terminated投影、迟到批准返回真实deny、重复取消同一账本赢家；历史cancelled重开Project收敛，以及同Project兄弟/跨Project待审批仍可正常批准执行。使用正式隔离测试运行器，无UI测试。随后对完整501-before只读复制无凭据独立服务，真实GET Board/旧回复验证及同Task截图，原用户库/schema/canonical保持。新Sol两文件任务仍独立有限scope，缺少文件不能宣称通过。交付涉及task-api、当前Task/security架构、聚焦后台测试、此次规格与三索引/证据；前端、公共API形状、模型与数据库结构不变。风险是历史cancelled恢复遍历的成本和旧异常权限的可重试性，需实测并保留失败。
+
+### 首次真实恢复复测修正
+
+3个新合同与6个原取消/epoch合同已通过299项断言，后端typecheck通过。18893/原10773为501-before完整90表132827行/schema3的独立无凭据复制。首次真实Board200仍pending；脚本另有lifecycleStatus字段误用，当前公共字段为status，原响应完整保留。继续读transport-protocol确认GET Task record本来绕过Project初始化（不是普通identity route），而host-recovery仅发现started incomplete Task，不发现已cancelled的未决权限。因此项目bootstrap修复本身不足，不能声称服务重启已自动修复。
+
+补强方案：在现有recoverStartedTaskExecutions启动收敛器读取PermissionAuthority.list同一当前未决事实，按taskID去重，仅当前生命周期cancelled且满足scopeProjectWorktree的Task进入已有cancelTask重放。使用现有独立Project identity，不初始化Provider/专家团/工作流，不启动Task轮次，不增队列/存储状态；正常started/Mission/scheduler恢复不改。失败计入同一startup failures并保留Task具体身份，新增独立取消权限恢复计数，不混成正常执行initialized。CLI serve/ACP同用入口。先完整结束18893，不能刷新正在运行源码或用重启用户进程验收；原失败scope只观察不批准旧权限，再以同一未修复before源新建独立第二恢复scope验证启动自动收敛与真实迟到审批结果。
+
+## 实施结果、最终验收与保留事项
+
+落地统一reconcileCancelledTaskPermissions：事务核对当前Task取消事实并捕获原pending请求身份；按已验证Session树收敛这些精确请求，existing cancelPendingForSessions增加可选requestIDs限定，继续原64页、决议赢家、waiter释放与Terminated outbox。不存在新决策队列或状态源。这样在capture后的显式reopen即使产生新审批，旧取消也只能退休旧身份。启动调用此同一函数，不制造新的user origin；原reason来自真实取消事件。
+
+22项/331断言通过：4个新正向合同含67个请求分页、后代、同Task并发、迟到批准真实deny、原cancelled启动恢复、同项目兄弟与另一Project正常交付回调、epoch2重开后的真实新权限批准、SQLite实际提交故障下保持cancelling并经生产retry变cancelled；12个启动/多项目/停机合同及6个现有取消/epoch合同。正式隔离运行器，未增加/运行UI自动化。backend typecheck、docs:check345操作/26组、api:routes-check6规则/35文件通过。生产UI源码和API形状/schema不变，无须重新编译前端来伪装运行期验收。
+
+第一恢复18893/10773完整结束；最终18895/32950从同一原before未修复数据重新只读复制，作用域明确为原私有QA Project。真实CLI启动attempted=0 initialized=0 mission均0、cancelled_permission_tasks_recovered=1、failures=0，无凭据/模型输入。真实Board200显示原Task原终态不变，第二权限rejected/deny，账本requested→cancelled。HTTP迟到回复与cancel重放因刻意没有auth/catalog而真实400 ProviderModelNotFoundError，已保留原响应，不能称两项HTTP正常配置下端到端已过；核心账本及重放由真实后端合同证明，正常凭据下复验留在下一独立scope。
+
+IAB74实际点击原Task、打开交付tab、展开原gol、切换中英文、打开环境进度，并保存人工查看04–07；01–03原真Sol已查看。原自动批准弹窗消失，真实非空#G1/0/1/尚未验收、目标说明及验收标准清晰。未建造第二交付、文件或accepted事实。04有临时鼠标提示，05–07提供清晰详情。系统取消现仍被通用“拒绝”文案展示，文案语义改进尚未交付；普通Session和Mission自身审批体验仍待独立occurrence验收。
+
+两恢复clone分别完整90表132827原行/字段/rowid或主键0差异，Provider activity326→326，原源bytes/mtime和完整canonical、schema3/integrity保持。原before90表131156行比较中两条容量池新租约均在原30秒期限前release（15.7秒/10秒），且早于取消；与durable-execution-capacity既有可变槽位合同一致，不属于用户历史损坏，不回写旧租约。
+
+三套公开shutdown200，before61410、recovery10773、final32950原handle exit0、native物理/output/request/launcher/原出生终态均完整，runtime/源私有auth+models已成对退休。实际9/12全Sol流式200/EOF，原用户Auth bytes/mtime/access/refresh保持，catalog完整bytes已在退休时校验；两恢复没有模型请求，IAB73/74均关闭。归档81个文件/961919字节实际原凭据值0命中，完整私有历史与凭据未入仓。
+
+[证据索引](../../artifacts/2026-10-21-real-deliverable-review/README.md)。原两文件任务未完成，独立24请求复测未启动，正常配置迟到HTTP、取消文案、Sources/新流Rendering与149目录10秒保存/5秒恢复指标仍不因本批进展完成。版本不变，本批按当前分支正常提交推送；长期Goal保持active。

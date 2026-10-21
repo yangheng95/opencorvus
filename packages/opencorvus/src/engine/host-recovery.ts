@@ -1,4 +1,4 @@
-import { runWithInitializedIndependentProject } from "@/project/independent-project-owner"
+import { runWithIndependentProjectIdentity, runWithInitializedIndependentProject } from "@/project/independent-project-owner"
 import { Instance, reenterActiveInstance } from "@/project/instance"
 import { createInstanceState } from "@/project/instance-state"
 import { Project } from "@/project/project"
@@ -15,6 +15,7 @@ import { TaskControlDriver, type TaskControlScanResult } from "./task-control-dr
 import { settledWork } from "@/util/queue"
 import { Database, desc, eq } from "@/storage/db"
 import { MessageTable } from "@/session/session.sql"
+import { PermissionAuthority } from "@/permission/authority"
 
 const MISSION_RECOVERY_CONCURRENCY = 4
 const MISSION_RECOVERY_PAGE_SIZE = MISSION_RECOVERY_CONCURRENCY
@@ -32,6 +33,7 @@ export type StartedTaskProjectRecoveryResult = {
   missionAttempted: number
   missionWoken: number
   missionCompleted: number
+  cancelledPermissionTasksRecovered: number
   failures: StartedTaskProjectRecoveryFailure[]
 }
 
@@ -259,6 +261,7 @@ export async function recoverStartedTaskProjects(input: {
     missionAttempted: 0,
     missionWoken: 0,
     missionCompleted: 0,
+    cancelledPermissionTasksRecovered: 0,
     failures: outcomes.flatMap((outcome) =>
       outcome.initialized ? [] : [{ directory: outcome.directory, error: outcome.error }],
     ),
@@ -268,6 +271,34 @@ export async function recoverStartedTaskProjects(input: {
 export async function recoverStartedTaskExecutions(input?: {
   scopeProjectWorktree?: string
 }): Promise<StartedTaskProjectRecoveryResult> {
+  // A cancelled Task is intentionally absent from runnable Task discovery.
+  // Older runtimes could leave its Ask-me request undecided, however. Settle
+  // those exact ledger owners without requiring model/runtime initialization.
+  const cancellationFailures: StartedTaskProjectRecoveryFailure[] = []
+  let cancelledPermissionTasksRecovered = 0
+  const pendingTaskIDs = new Set(
+    (await PermissionAuthority.list()).flatMap((request) => request.taskID ? [request.taskID] : []),
+  )
+  for (const taskID of pendingTaskIDs) {
+    const task = findTask(taskID)
+    if (task?.lifecycle_status !== "cancelled") continue
+    const project = Project.get(task.project_id)
+    if (input?.scopeProjectWorktree && project && !Project.samePath(project.worktree, input.scopeProjectWorktree)) continue
+    try {
+      if (!project) throw new Error(`Cancelled Task ${taskID} belongs to missing Project ${task.project_id}`)
+      const { EngineService } = await import("@/task-api")
+      const retired = await runWithIndependentProjectIdentity({
+        directory: taskRootDirectory(task),
+        fn: () => EngineService.reconcileCancelledTaskPermissions(taskID),
+      })
+      if (retired > 0) cancelledPermissionTasksRecovered += 1
+    } catch (error) {
+      cancellationFailures.push({
+        directory: project?.worktree ?? "",
+        error: `Task ${taskID}: ${error instanceof Error ? error.message : String(error)}`,
+      })
+    }
+  }
   const discovery = discoverStartedTaskExecutionDirectories(input)
   const directories = [...discovery.directories]
   let schedulerProjectCursor: string | undefined
@@ -332,7 +363,9 @@ export async function recoverStartedTaskExecutions(input?: {
     missionAttempted,
     missionWoken,
     missionCompleted,
+    cancelledPermissionTasksRecovered,
     failures: [
+      ...cancellationFailures,
       ...discovery.failures.map(({ directory, error }) => ({ directory, error })),
       ...missionFailures,
       ...result.failures,

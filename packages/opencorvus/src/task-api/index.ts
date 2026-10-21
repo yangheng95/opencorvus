@@ -218,7 +218,7 @@ import {
   pendingTaskCancellationProjection,
   taskCancellationProjection,
 } from "@/engine/cancellation-projection"
-import { requestTaskAgentLifecycleCancellation } from "@/engine/task-agent-lifecycle"
+import { collectTaskAgentLifecycleHandles, requestTaskAgentLifecycleCancellation } from "@/engine/task-agent-lifecycle"
 import {
   assertOperatorSteerCoordinationRequestReplay,
   createOperatorSteerCoordinationRequest,
@@ -2817,7 +2817,10 @@ export namespace EngineService {
 
   export async function requestTaskCancellation(taskID: string, options: CancelTaskOptions) {
     const task = requireTaskInCurrentProject(taskID)
-    if (isTaskCancelled(task)) return taskCancellationProjection(taskID)
+    if (isTaskCancelled(task)) {
+      await reconcileCancelledTaskPermissions(task.id)
+      return taskCancellationProjection(taskID)
+    }
     if (isTaskTerminal(task)) {
       const lifecycle = deriveTaskStatus(task) as "completed" | "failed"
       throw new TaskCancellationLifecycleConflictError({
@@ -2867,15 +2870,32 @@ export namespace EngineService {
 
   export async function reconcilePendingTaskCancellations(): Promise<number> {
     const rows = listProjectTasks(Instance.project.id, Number.MAX_SAFE_INTEGER)
-      .filter((task) => isTaskActive(task))
-      .map((task) => ({ id: task.id }))
+      .filter((task) => isTaskActive(task) || isTaskCancelled(task))
     const operations: Promise<void>[] = []
+    let recovered = 0
     for (const row of rows) {
+      if (isTaskCancelled(row)) {
+        // Older runtimes could commit Task cancellation while an Ask-me
+        // decision remained pending. Retire it through the same ledger writer;
+        // the original terminal Task event and completed effects stay intact.
+        operations.push(
+          reconcileCancelledTaskPermissions(row.id).then(() => undefined).catch((error) => {
+            log.error("cancelled Task permission reconciliation failed", {
+              taskID: row.id,
+              error: error instanceof Error ? error.message : String(error),
+            })
+            throw error
+          }),
+        )
+        continue
+      }
       const pending = findPendingTaskCancellationRequestEvent(row.id)
       if (!pending) continue
       operations.push(
         cancelTask(row.id, { origin: pending.request.origin })
-          .then(() => undefined)
+          .then(() => {
+            recovered += 1
+          })
           .catch((error) => {
             log.error("recovered Task cancellation convergence failed", {
               taskID: row.id,
@@ -2897,7 +2917,23 @@ export namespace EngineService {
         attempted: operations.length,
       })
     }
-    return operations.length - failures.length
+    return recovered
+  }
+
+  export async function reconcileCancelledTaskPermissions(taskID: string): Promise<number> {
+    const boundary = Database.immediateTransaction(() => {
+      const task = requireTaskInCurrentProject(taskID)
+      if (!isTaskCancelled(task)) return
+      return {
+        task,
+        cancellation: taskCancellationProjection(taskID),
+        requestIDs: PermissionAuthority.pendingForTask(taskID).map((request) => request.id),
+      }
+    })
+    if (!boundary || boundary.requestIDs.length === 0) return 0
+    const { task, cancellation, requestIDs } = boundary
+    const handles = await collectTaskAgentLifecycleHandles(task)
+    return PermissionAuthority.cancelPendingForSessions(handles.sessionIDs, cancellation.reason, "system", { requestIDs })
   }
 
   export function cancelTask(taskID: string, options: CancelTaskOptions): Promise<boolean> {
@@ -2927,7 +2963,7 @@ export namespace EngineService {
     start: (operationOptions: CancelTaskOptions) => Promise<boolean>,
   ): Promise<boolean> {
     const task = requireTaskInCurrentProject(taskID)
-    if (isTaskCancelled(task)) return Promise.resolve(true)
+    if (isTaskCancelled(task)) return reconcileCancelledTaskPermissions(task.id).then(() => true)
     const existing = cancellationOperations.get(taskID)
     if (existing) {
       if (options.projectDeletionAdmission) existing.options.projectDeletionAdmission = options.projectDeletionAdmission
@@ -3116,6 +3152,9 @@ export namespace EngineService {
       ).catch((err) => onAbortFailure("Task root ingress idle before cancellation terminal write", err, {}))
       logConvergenceStage("task_root_ingress_idle")
       convergenceOwner.assertActive()
+      await PermissionAuthority.cancelPendingForSessions(lifecycle.sessionIDs, cancellationOrigin.reason)
+      convergenceOwner.assertActive()
+      logConvergenceStage("permission_decisions_settled")
       const terminalResult = await ProcessSupervisor.withTaskCancellationBarrier(
         taskID,
         () =>

@@ -1,0 +1,65 @@
+{
+  "originalHandle": 32950,
+  "native": {
+    "occurrence": "real-deliverable-review-501-recovery-final-7028d67c-886f-4ab8-b651-4491028ed0b0",
+    "outcome": "settled",
+    "host": {
+      "pid": 81232,
+      "processInstanceID": "win32:639281512250275570",
+      "occurrenceID": "ef4b605d-1612-430a-80a1-53aed329bcc7"
+    },
+    "target": {
+      "pid": 7476,
+      "processInstanceID": "win32:639281512258339011",
+      "occurrenceID": "1a869e6d-a4c6-4b33-a0ce-b7bb48a6788f"
+    },
+    "observedAtUtc": "2026-10-21T03:52:28.451Z",
+    "deadlineAt": 1792555624656,
+    "terminal": {
+      "occurrenceID": "real-deliverable-review-501-recovery-final-7028d67c-886f-4ab8-b651-4491028ed0b0",
+      "pid": 7476,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "launcher": {
+    "observedAtUtc": "2026-10-21T03:52:28.5025443Z",
+    "childExitCode": 0
+  },
+  "observedAtUtc": "2026-10-21T03:52:42.2047654Z",
+  "originalExit": 0,
+  "shutdown": {
+    "target": {
+      "pid": 7476,
+      "processInstanceID": "win32:639281512258339011",
+      "occurrenceID": "1a869e6d-a4c6-4b33-a0ce-b7bb48a6788f"
+    },
+    "statusCode": 200,
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYeX2m500x8F7ovhhv\"}",
+    "observedAtUtc": "2026-10-21T03:52:28.3736473Z",
+    "occurrence": "real-deliverable-review-501-recovery-final-7028d67c-886f-4ab8-b651-4491028ed0b0"
+  },
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 81232,
+        "processInstanceID": "win32:639281512250275570",
+        "occurrenceID": "ef4b605d-1612-430a-80a1-53aed329bcc7"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 7476,
+        "processInstanceID": "win32:639281512258339011",
+        "occurrenceID": "1a869e6d-a4c6-4b33-a0ce-b7bb48a6788f"
+      }
+    }
+  ]
+}

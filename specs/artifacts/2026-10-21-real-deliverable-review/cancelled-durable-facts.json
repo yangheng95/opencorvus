@@ -1,0 +1,196 @@
+{
+  "observedAt": "2026-10-21T03:32:28.002Z",
+  "taskID": "tsk_g00VYeMccK0078SroWDw",
+  "sessions": [
+    {
+      "id": "ses_-zURLdN8yzzYl6AVFS11",
+      "parent_id": null,
+      "kind": "root",
+      "project_id": "prj_h78jkovKe5D20efp76MY"
+    },
+    {
+      "id": "ses_-zURLdMI8zzyihTDZeVm",
+      "parent_id": "ses_-zURLdN8yzzYl6AVFS11",
+      "kind": "orchestrator",
+      "project_id": "prj_h78jkovKe5D20efp76MY"
+    }
+  ],
+  "permissions": [
+    {
+      "id": "per_g0VYeMfVu00BI3Oj783v",
+      "request_id": "per_hgEGNmHeYQFoV69lMKWK",
+      "event_type": "requested",
+      "decision_slot": null,
+      "session_id": "ses_-zURLdMI8zzyihTDZeVm",
+      "task_id": "tsk_g00VYeMccK0078SroWDw",
+      "message_id": "msg_hVJgmC6k7rnLSZAUZUeH",
+      "tool_name": "skill",
+      "reason": null,
+      "time_created": 1792552275630
+    },
+    {
+      "id": "per_g0VYeMwYU00yuktf3ahj",
+      "request_id": "per_hgEGNmHeYQFoV69lMKWK",
+      "event_type": "allowed_once",
+      "decision_slot": "per_hgEGNmHeYQFoV69lMKWK",
+      "session_id": null,
+      "task_id": null,
+      "message_id": null,
+      "tool_name": null,
+      "reason": null,
+      "time_created": 1792552341138
+    },
+    {
+      "id": "per_g0VYeMwaC00PtecxP348",
+      "request_id": "per_hgEGNmHeYQFoV69lMKWK",
+      "event_type": "execution_started",
+      "decision_slot": null,
+      "session_id": null,
+      "task_id": null,
+      "message_id": null,
+      "tool_name": null,
+      "reason": null,
+      "time_created": 1792552341244
+    },
+    {
+      "id": "per_g0VYeMwct008rKRGz09T",
+      "request_id": "per_hgEGNmHeYQFoV69lMKWK",
+      "event_type": "execution_succeeded",
+      "decision_slot": null,
+      "session_id": null,
+      "task_id": null,
+      "message_id": null,
+      "tool_name": null,
+      "reason": null,
+      "time_created": 1792552341411
+    },
+    {
+      "id": "per_g0VYeN0GI000joJU5UOq",
+      "request_id": "per_hOSmoJaQFHGhX351fL5r",
+      "event_type": "requested",
+      "decision_slot": null,
+      "session_id": "ses_-zURLdMI8zzyihTDZeVm",
+      "task_id": "tsk_g00VYeMccK0078SroWDw",
+      "message_id": "msg_hVJgmC6k7rnLSZAUZUeH",
+      "tool_name": "manage_task",
+      "reason": null,
+      "time_created": 1792552355386
+    },
+    {
+      "id": "per_g0VYeNGeI00uyZHfkmNk",
+      "request_id": "per_hOSmoJaQFHGhX351fL5r",
+      "event_type": "allowed_once",
+      "decision_slot": "per_hOSmoJaQFHGhX351fL5r",
+      "session_id": null,
+      "task_id": null,
+      "message_id": null,
+      "tool_name": null,
+      "reason": null,
+      "time_created": 1792552418378
+    },
+    {
+      "id": "per_g0VYeNGfb00LVHM1SrtF",
+      "request_id": "per_hOSmoJaQFHGhX351fL5r",
+      "event_type": "execution_started",
+      "decision_slot": null,
+      "session_id": null,
+      "task_id": null,
+      "message_id": null,
+      "tool_name": null,
+      "reason": null,
+      "time_created": 1792552418459
+    },
+    {
+      "id": "per_g0VYeNGgb00Db6vDHkAq",
+      "request_id": "per_hOSmoJaQFHGhX351fL5r",
+      "event_type": "execution_succeeded",
+      "decision_slot": null,
+      "session_id": null,
+      "task_id": null,
+      "message_id": null,
+      "tool_name": null,
+      "reason": null,
+      "time_created": 1792552418521
+    },
+    {
+      "id": "per_g0VYeNJZP00sWIqhZ0gA",
+      "request_id": "per_h9Tts9cnzyWtqrAjnwjN",
+      "event_type": "requested",
+      "decision_slot": null,
+      "session_id": "ses_-zURLdMI8zzyihTDZeVm",
+      "task_id": "tsk_g00VYeMccK0078SroWDw",
+      "message_id": "msg_hVJgmC6k7rnLSZAUZUeH",
+      "tool_name": "manage_task",
+      "reason": null,
+      "time_created": 1792552429607
+    },
+    {
+      "id": "per_g0VYeP74h00sk3dfC5OT",
+      "request_id": "per_hgEGNmHeYQFoV69lMKWK",
+      "event_type": "stale",
+      "decision_slot": null,
+      "session_id": null,
+      "task_id": null,
+      "message_id": null,
+      "tool_name": null,
+      "reason": "The continuation reached its persisted conclusion",
+      "time_created": 1792552858231
+    },
+    {
+      "id": "per_g0VYeP74i00AtmOuvhx0",
+      "request_id": "per_hOSmoJaQFHGhX351fL5r",
+      "event_type": "stale",
+      "decision_slot": null,
+      "session_id": null,
+      "task_id": null,
+      "message_id": null,
+      "tool_name": null,
+      "reason": "The continuation reached its persisted conclusion",
+      "time_created": 1792552858232
+    }
+  ],
+  "interactions": [],
+  "events": [
+    {
+      "type": "task.cancellation.requested",
+      "source": "task.cancel",
+      "payload": "{\"execution_epoch\":1,\"actor\":\"user\",\"surface\":\"api\",\"reason\":\"The QA operator ends this incomplete private run before its fixed12-request scope can be exhausted. Four actual internal memory requests made the original test budget insufficient;retain all evidence and repeat the original two-file acceptance in a separately reviewed finite scope.\",\"summary\":\"Cancellation requested: The QA operator ends this incomplete private run before its fixed12-request scope can be exhausted. Four actual internal memory requests made the original test budget insufficient;retain all evidence and repeat the original two-file acceptance in a separately reviewed finite scope.\"}",
+      "emitted_at": 1792552858178
+    },
+    {
+      "type": "task.cancelled",
+      "source": "state.task",
+      "payload": "{\"execution_epoch\":1,\"summary\":\"Task cancelled\",\"error\":\"task cancelled\"}",
+      "emitted_at": 1792552858284
+    }
+  ],
+  "leases": [
+    {
+      "rowid": 1,
+      "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+      "slot": 0,
+      "lease_id": "d89f60a7-dbbd-4efa-abc0-11bcd732ab84",
+      "owner_id": "runtime:30376:63638ed4-4ea1-4ea1-9501-92e46f42c835",
+      "time_acquired": 1792552418423,
+      "expires_at": 1792552434139
+    },
+    {
+      "rowid": 2,
+      "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+      "slot": 1,
+      "lease_id": "d6fc7dd2-1b44-4b3d-a79d-5990594169d4",
+      "owner_id": "runtime:30376:8ddd82b5-7f3d-4da5-ae4e-d4cf54e9cb0f",
+      "time_acquired": 1792552419563,
+      "expires_at": 1792552429601
+    },
+    {
+      "rowid": 3,
+      "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+      "slot": 2,
+      "lease_id": "2c039c9d-e5b2-4618-a205-514feceed16b",
+      "owner_id": "runtime:76344:1c915d44-b744-48f0-9c31-2b9862a1b386",
+      "time_acquired": 1792498620861,
+      "expires_at": 1792498705979
+    }
+  ]
+}

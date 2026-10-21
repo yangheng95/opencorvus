@@ -112,6 +112,17 @@ Session, request and ledger-event identity in the same transaction and owned out
 not an operator reply. Task invalidation validates that fact and its Interaction projection
 before using the existing ephemeral protocol event; it creates no second terminal authority.
 
+Task cancellation settles pending Permission decisions for the exact owned Session tree
+after physical Prompt and root-ingress settlement and before its terminal Task event.
+The canonical cancelled decision and Terminated outbox remain the sole authority;
+completed effects and prior operator approvals keep their original audit facts.
+Host startup also discovers cancelled Tasks through current pending ledger requests,
+using Project identity without Provider initialization to reconcile older residual waits.
+Project recovery and cancellation replay share that writer. Historical reconciliation
+captures the exact request identities in the transaction that confirms current cancellation,
+so a concurrent explicit reopen keeps its next occurrence's requests actionable.
+Process interruption continues to retain undecided requests for recovery.
+
 Denying an invocation persists the denied decision and real Tool error. That error enters the
 next streamed model request through the existing Tool-result projection, so the model chooses
 a permissible next action or a final reply. The former `continue_loop_on_deny` configuration

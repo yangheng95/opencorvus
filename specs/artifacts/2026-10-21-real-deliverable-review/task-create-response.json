@@ -1,0 +1,19 @@
+{
+  "status": 400,
+  "result": {
+    "data": {
+      "message": "Request validation failed"
+    },
+    "error": [
+      {
+        "code": "invalid_type",
+        "path": [
+          "model"
+        ],
+        "message": "Invalid input: expected string, received object"
+      }
+    ],
+    "success": false
+  },
+  "receivedAt": "2026-10-21T03:10:15.326Z"
+}

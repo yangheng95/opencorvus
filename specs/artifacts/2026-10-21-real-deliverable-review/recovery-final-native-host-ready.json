@@ -1,0 +1,33 @@
+{
+  "occurrence": "real-deliverable-review-501-recovery-final-7028d67c-886f-4ab8-b651-4491028ed0b0",
+  "outcome": "ready",
+  "host": {
+    "pid": 81232,
+    "processInstanceID": "win32:639281512250275570",
+    "occurrenceID": "ef4b605d-1612-430a-80a1-53aed329bcc7"
+  },
+  "parent": {
+    "pid": 20384,
+    "processInstanceID": "win32:639281512226169383",
+    "occurrenceID": "efe42125-1680-4ae1-8274-cd75ddbc49eb"
+  },
+  "target": {
+    "pid": 7476,
+    "processInstanceID": "win32:639281512258339011",
+    "occurrenceID": "1a869e6d-a4c6-4b33-a0ce-b7bb48a6788f"
+  },
+  "targetBirthAtMs": 1792554425833,
+  "deadlineAt": 1792555624656,
+  "observedAtUtc": "2026-10-21T03:47:05.860Z",
+  "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/real-deliverable-review-501-recovery-final-bundle/bin/bun.exe",
+  "args": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/real-deliverable-review-501/serve-recovery-final.ts",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/real-deliverable-review-501-recovery-final-data/runtime",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/real-deliverable-review-501-before/runtime/data/projects/2026/10/21/914ad776-f3b7-4073-a514-c2f97c293905",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/real-deliverable-review-501-recovery-final/evidence",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/real-deliverable-review-501-recovery-final/startup.json",
+    "18895",
+    "real-deliverable-review-501-recovery-final-7028d67c-886f-4ab8-b651-4491028ed0b0"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

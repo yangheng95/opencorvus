@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-21T03:20:58.247Z",
+  "taskID": "tsk_g00VYeMccK0078SroWDw",
+  "request": {
+    "surface": "api",
+    "reason": "The QA operator ends this incomplete private run before its fixed12-request scope can be exhausted. Four actual internal memory requests made the original test budget insufficient;retain all evidence and repeat the original two-file acceptance in a separately reviewed finite scope."
+  },
+  "status": 202,
+  "result": {
+    "requestEventID": "pev_g0VYeP73r007mPuiefGt",
+    "requestedAt": 1792552858178,
+    "source": "task.cancel",
+    "requestID": "9dbc099b-ff38-498d-82e7-cc19b8f66930",
+    "actor": "user",
+    "surface": "api",
+    "reason": "The QA operator ends this incomplete private run before its fixed12-request scope can be exhausted. Four actual internal memory requests made the original test budget insufficient;retain all evidence and repeat the original two-file acceptance in a separately reviewed finite scope.",
+    "status": "cancelling"
+  }
+}

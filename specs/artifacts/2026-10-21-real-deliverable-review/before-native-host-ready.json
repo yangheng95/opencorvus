@@ -1,0 +1,38 @@
+{
+  "occurrence": "real-deliverable-review-501-before-2fa68680-5653-44f6-b641-c2b56cbd11ab",
+  "outcome": "ready",
+  "host": {
+    "pid": 81032,
+    "processInstanceID": "win32:639281489746874804",
+    "occurrenceID": "0427c470-454e-4549-afaa-bc9abc2a852d"
+  },
+  "parent": {
+    "pid": 65568,
+    "processInstanceID": "win32:639281489730788551",
+    "occurrenceID": "b0617f03-ed56-4ed0-ab0c-505db24adf1b"
+  },
+  "target": {
+    "pid": 30376,
+    "processInstanceID": "win32:639281489755423114",
+    "occurrenceID": "cf07441e-ecbe-41f9-9db5-6052f1b67bf3"
+  },
+  "targetBirthAtMs": 1792552175542,
+  "deadlineAt": 1792553374604,
+  "observedAtUtc": "2026-10-21T03:09:35.572Z",
+  "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/real-deliverable-review-501-before-bundle/bin/bun.exe",
+  "args": [
+    "D:\\myhexin-local\\opencorvus/.tmp-product-iteration/real-deliverable-review-501/serve.ts",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/real-deliverable-review-501-authority/auth.json",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/real-deliverable-review-501-before/runtime",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/member-live-rendering-412-fresh/project",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/real-deliverable-review-501-before/evidence",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/real-deliverable-review-501-before/startup.json",
+    "18889",
+    "real-deliverable-review-501-before-2fa68680-5653-44f6-b641-c2b56cbd11ab",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/real-deliverable-review-501-before/selection.json",
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/long-source-reading-406/builtin.json",
+    "12",
+    "NativeService"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

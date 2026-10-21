@@ -1,0 +1,63 @@
+$ bun script/run-tests.ts test/task-cancellation-permissions.test.ts test/runtime-startup-recovery.test.ts test/task-control-cancellation-convergence.test.ts test/task-root-cancellation-fence.test.ts
+[1/4] START test/task-cancellation-permissions.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Task cancellation settles all permission pages and descendants through their canonical decisions [3362.59ms]
+(pass) recovered historical cancellation retires its old permission while another Project remains actionable [2516.53ms]
+(pass) historical permission settlement keeps a reopened Task's new occurrence actionable [1356.20ms]
+(pass) a failed permission cancellation remains cancelling and converges through the production retry [1410.87ms]
+
+ 4 pass
+ 0 fail
+ 293 expect() calls
+Ran 4 tests across 1 file. [13.12s]
+[1/4] DONE test/task-cancellation-permissions.test.ts exit=0 duration=13.79s
+[2/4] START test/runtime-startup-recovery.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) runtime startup recovery > projects application environment into a fresh restart process occurrence [1.41ms]
+(pass) runtime startup recovery > binds the ACP listener after preparing the current process occurrence [501.02ms]
+(pass) runtime startup recovery > serves health while the owned application recovery is still running [13.99ms]
+(pass) runtime startup recovery > recovers a ready sibling project while another project remains held [0.50ms]
+(pass) runtime startup recovery > keeps each Project recovery queue independent when one Project exhausts its slots [1.47ms]
+(pass) runtime startup recovery > settles failed foundational preparation and prepares the next attempt [5.66ms]
+(pass) runtime startup recovery > keeps an application recovery failure observable after listener readiness [12.85ms]
+(pass) runtime startup recovery > stops a published listener before propagating required recovery failure [11.62ms]
+(pass) runtime startup recovery > stops a published listener when post-bind poller initialization fails [12.42ms]
+(pass) runtime startup recovery > cancels held application recovery before joining it during settlement [2.45ms]
+(pass) runtime startup recovery > completes one graceful listener stop through a transient settlement cleanup failure [37.03ms]
+(pass) runtime startup recovery > continues the exact graceful-stop receipt after the commit decision [31.96ms]
+
+ 12 pass
+ 0 fail
+ 23 expect() calls
+Ran 12 tests across 1 file. [2.42s]
+[2/4] DONE test/runtime-startup-recovery.test.ts exit=0 duration=2.54s
+[3/4] START test/task-control-cancellation-convergence.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) cancellation convergence from the control-plane scan > a cancellation coalesced after pass zero is converged by the fresh revision [1556.82ms]
+(pass) cancellation convergence from the control-plane scan > re-attempts a stalled cancellation and keeps a finite wake until it converges [1558.38ms]
+(pass) Task completion closure > frees the closure when the terminal transaction refuses [1185.49ms]
+
+ 3 pass
+ 0 fail
+ 4 expect() calls
+Ran 3 tests across 1 file. [5.09s]
+[3/4] DONE test/task-control-cancellation-convergence.test.ts exit=0 duration=5.21s
+[4/4] START test/task-root-cancellation-fence.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) current activation carries the original user cancellation and its peer remains writable [1605.69ms]
+(pass) current activation carries the original mission cancellation and its peer remains writable [1244.61ms]
+(pass) an earlier execution keeps its superseded identity when the reopened Task is cancelled [1319.04ms]
+
+ 3 pass
+ 0 fail
+ 11 expect() calls
+Ran 3 tests across 1 file. [5.52s]
+[4/4] DONE test/task-root-cancellation-fence.test.ts exit=0 duration=5.65s

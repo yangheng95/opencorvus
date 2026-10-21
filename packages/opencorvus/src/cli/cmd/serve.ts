@@ -454,7 +454,7 @@ async function handleServeCommandInner(args: ArgumentsCamelCase<ServeOptions>) {
     })
       .then((result) => {
         console.log(
-          `[serve] runtime project recovery attempted=${result.attempted} initialized=${result.initialized} mission_attempted=${result.missionAttempted} mission_woken=${result.missionWoken} mission_completed=${result.missionCompleted} failures=${result.failures.length}`,
+          `[serve] runtime project recovery attempted=${result.attempted} initialized=${result.initialized} mission_attempted=${result.missionAttempted} mission_woken=${result.missionWoken} mission_completed=${result.missionCompleted} cancelled_permission_tasks_recovered=${result.cancelledPermissionTasksRecovered} failures=${result.failures.length}`,
         )
         for (const failure of result.failures) {
           console.error(

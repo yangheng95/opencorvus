@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [真实交付与取消审批收敛](2026-10-21-real-deliverable-review/README.md)：9次真实Sol、7张人工图、22项后端合同、90表全历史保留与三原native结算；正常凭据回复和两文件完成复测待补。
+
 - [持续目标入口与交付成果命名](2026-10-21-goal-deliverable-interface/README.md)：16张实际中英文页面、指南引用当前按钮、创建取消保留草稿、两套90表保留及原74015/41534完整结算；非空行仍待实测。
 
 - [Goal调度的执行需求探测](2026-10-21-goal-reconciliation-admission/README.md)：真实141次Scheduler运行、60秒前后对照、原输入全局流式恢复、41项合同、90表保留与原5032完整结算。

@@ -1,0 +1,401 @@
+{
+  "at": "2026-10-21T03:22:57.695Z",
+  "schema": 3,
+  "scopes": [
+    {
+      "stage": "before",
+      "source": {
+        "allOriginalRows": "Exact rowid/primary key/all fields/times",
+        "bytes": 60751872,
+        "modifiedAtMs": 1792550719353.0312
+      },
+      "schema": "Same actual application objects and version3;integrity ok",
+      "canonical": "Complete source bytes exact",
+      "counts": {
+        "automation": {
+          "original": 2,
+          "current": 2
+        },
+        "automation_definition_tombstone": {
+          "original": 0,
+          "current": 0
+        },
+        "automation_delay_settlement": {
+          "original": 0,
+          "current": 0
+        },
+        "automation_fire": {
+          "original": 2,
+          "current": 2
+        },
+        "automation_fire_attempt": {
+          "original": 1,
+          "current": 1
+        },
+        "automation_fire_attempt_receipt": {
+          "original": 1,
+          "current": 1
+        },
+        "automation_fire_frontier": {
+          "original": 0,
+          "current": 0
+        },
+        "automation_project_target": {
+          "original": 2,
+          "current": 2
+        },
+        "automation_run": {
+          "original": 1,
+          "current": 1
+        },
+        "automation_run_receipt": {
+          "original": 1,
+          "current": 1
+        },
+        "bus_publication_attempt_receipt": {
+          "original": 0,
+          "current": 0
+        },
+        "bus_publication_delivery": {
+          "original": 26942,
+          "current": 27272
+        },
+        "bus_publication_delivery_receipt": {
+          "original": 26942,
+          "current": 27272
+        },
+        "bus_publication_outbox": {
+          "original": 4068,
+          "current": 4118
+        },
+        "bus_publication_phase_receipt": {
+          "original": 12204,
+          "current": 12354
+        },
+        "channel_ingress_accepted": {
+          "original": 0,
+          "current": 0
+        },
+        "channel_ingress_outcome": {
+          "original": 0,
+          "current": 0
+        },
+        "control_account": {
+          "original": 0,
+          "current": 0
+        },
+        "database_authority": {
+          "original": 1,
+          "current": 1
+        },
+        "decision_log": {
+          "original": 7,
+          "current": 9
+        },
+        "engine_artifact": {
+          "original": 132,
+          "current": 137
+        },
+        "engine_artifact_catalog_revision": {
+          "original": 132,
+          "current": 137
+        },
+        "engine_artifact_version": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_browser_preview_target_identity": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_build_observation_cleanup": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_build_observation_cleanup_receipt": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_channel_binding": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_control_activation_lease": {
+          "original": 27229,
+          "current": 27564
+        },
+        "engine_control_activation_lease_grant": {
+          "original": 27258,
+          "current": 27607
+        },
+        "engine_git_checkpoint_outcome": {
+          "original": 25,
+          "current": 26
+        },
+        "engine_git_checkpoint_request": {
+          "original": 25,
+          "current": 26
+        },
+        "engine_goal": {
+          "original": 0,
+          "current": 1
+        },
+        "engine_interaction_outcome": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_interaction_request": {
+          "original": 8,
+          "current": 11
+        },
+        "engine_metric_result": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_metric_spec": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_progress_snapshot": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_task": {
+          "original": 12,
+          "current": 13
+        },
+        "engine_task_creation_contract": {
+          "original": 12,
+          "current": 13
+        },
+        "engine_task_root_ingress": {
+          "original": 35,
+          "current": 36
+        },
+        "engine_task_root_ingress_policy": {
+          "original": 1,
+          "current": 1
+        },
+        "engine_task_wait_registration": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_task_wait_settlement": {
+          "original": 0,
+          "current": 0
+        },
+        "event_job": {
+          "original": 3,
+          "current": 3
+        },
+        "event_job_definition_tombstone": {
+          "original": 1,
+          "current": 1
+        },
+        "event_job_fire": {
+          "original": 2,
+          "current": 2
+        },
+        "event_job_fire_receipt": {
+          "original": 2,
+          "current": 2
+        },
+        "event_occurrence": {
+          "original": 2,
+          "current": 2
+        },
+        "global_creation_allocation": {
+          "original": 136,
+          "current": 138
+        },
+        "interactive_artifact": {
+          "original": 0,
+          "current": 0
+        },
+        "memory_chunk": {
+          "original": 150,
+          "current": 152
+        },
+        "memory_embedding": {
+          "original": 0,
+          "current": 0
+        },
+        "memory_file": {
+          "original": 150,
+          "current": 152
+        },
+        "memory_fts": {
+          "original": 0,
+          "current": 0
+        },
+        "memory_fts_config": {
+          "original": 1,
+          "current": 1
+        },
+        "memory_fts_content": {
+          "original": 0,
+          "current": 0
+        },
+        "memory_fts_data": {
+          "original": 2,
+          "current": 2
+        },
+        "memory_fts_docsize": {
+          "original": 0,
+          "current": 0
+        },
+        "memory_fts_idx": {
+          "original": 0,
+          "current": 0
+        },
+        "message": {
+          "original": 524,
+          "current": 529
+        },
+        "part": {
+          "original": 1167,
+          "current": 1183
+        },
+        "permission_execution_result": {
+          "original": 75,
+          "current": 77
+        },
+        "permission_ledger": {
+          "original": 375,
+          "current": 386
+        },
+        "permission_policy": {
+          "original": 15,
+          "current": 16
+        },
+        "project": {
+          "original": 150,
+          "current": 152
+        },
+        "project_directory_admission": {
+          "original": 0,
+          "current": 0
+        },
+        "project_maintenance_fence": {
+          "original": 0,
+          "current": 0
+        },
+        "protocol_delivery_receipt": {
+          "original": 0,
+          "current": 0
+        },
+        "protocol_event": {
+          "original": 1418,
+          "current": 1447
+        },
+        "protocol_inbox": {
+          "original": 0,
+          "current": 0
+        },
+        "provider_activity_outcome": {
+          "original": 321,
+          "current": 326
+        },
+        "provider_activity_request": {
+          "original": 321,
+          "current": 326
+        },
+        "provider_usage_event": {
+          "original": 491,
+          "current": 499
+        },
+        "quick_note": {
+          "original": 0,
+          "current": 0
+        },
+        "runtime_execution_capacity_lease": {
+          "original": 3,
+          "current": 3
+        },
+        "session": {
+          "original": 199,
+          "current": 202
+        },
+        "session_control_event": {
+          "original": 154,
+          "current": 155
+        },
+        "session_control_record": {
+          "original": 154,
+          "current": 155
+        },
+        "session_prompt_owner": {
+          "original": 5,
+          "current": 5
+        },
+        "session_share": {
+          "original": 0,
+          "current": 0
+        },
+        "task_plan": {
+          "original": 0,
+          "current": 0
+        },
+        "todo": {
+          "original": 0,
+          "current": 0
+        },
+        "todo_snapshot": {
+          "original": 0,
+          "current": 0
+        },
+        "tool_part_outcome": {
+          "original": 119,
+          "current": 123
+        },
+        "tool_part_progress": {
+          "original": 7,
+          "current": 7
+        },
+        "tool_part_request": {
+          "original": 119,
+          "current": 123
+        },
+        "workbench_brief_snapshot": {
+          "original": 29,
+          "current": 32
+        },
+        "worker_turn_descriptor": {
+          "original": 18,
+          "current": 18
+        },
+        "workspace": {
+          "original": 0,
+          "current": 0
+        },
+        "workspace_lifecycle_admission": {
+          "original": 0,
+          "current": 0
+        }
+      },
+      "originalRowDifferences": [
+        {
+          "table": "runtime_execution_capacity_lease",
+          "identity": "[1]",
+          "fields": [
+            "lease_id",
+            "owner_id",
+            "time_acquired",
+            "expires_at"
+          ]
+        },
+        {
+          "table": "runtime_execution_capacity_lease",
+          "identity": "[2]",
+          "fields": [
+            "lease_id",
+            "owner_id",
+            "time_acquired",
+            "expires_at"
+          ]
+        }
+      ]
+    }
+  ],
+  "modelInputBudget": 0
+}

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [真实交付与取消审批](2026-10-21-real-deliverable-review.md)：[真实Sol取消缺陷、7张实图及22项合同](../../artifacts/2026-10-21-real-deliverable-review/README.md)，单一权限账本与启动恢复收敛；原两文件任务仍未达。
+
 - [持续目标与交付成果界面](2026-10-21-goal-deliverable-interface.md)：[实际命名冲突、首页调整与双语指南/草稿](../../artifacts/2026-10-21-goal-deliverable-interface/README.md)，16图、两原native完整收尾，未伪造非空列表。
 
 - [Goal调度的执行需求探测](2026-10-21-goal-reconciliation-admission.md)：[原60秒失败、实际全局恢复与两张实图](../../artifacts/2026-10-21-goal-reconciliation-admission/README.md)，先身份投影、后按需完整初始化，保留原最终执行校验。

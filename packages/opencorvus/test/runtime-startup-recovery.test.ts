@@ -199,6 +199,7 @@ describe("runtime startup recovery", () => {
       missionAttempted: 0,
       missionWoken: 0,
       missionCompleted: 0,
+      cancelledPermissionTasksRecovered: 0,
       failures: [],
     })
   }, 60_000)
@@ -250,6 +251,7 @@ describe("runtime startup recovery", () => {
       missionAttempted: 0,
       missionWoken: 0,
       missionCompleted: 0,
+      cancelledPermissionTasksRecovered: 0,
       failures: [],
     })
     expect(events).toEqual([

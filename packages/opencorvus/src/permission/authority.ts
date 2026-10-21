@@ -1076,14 +1076,19 @@ export namespace PermissionAuthority {
     return requested.filter((row) => !decisionFor(row.request_id)).map(requestFromRow)
   }
 
+  export function pendingForTask(taskID: string): Request[] {
+    return requestedRows({ taskID }).filter(row => !decisionFor(row.request_id)).map(requestFromRow)
+  }
+
   /** The request identity, not the number of observed ledger events, owns an
    * invocation. Keep its first immutable owner and retain the full audit log. */
-  function requestedRows(input: { projectID?: string; sessionID?: string; messageID?: string } = {}): LedgerRow[] {
+  function requestedRows(input: { projectID?: string; sessionID?: string; messageID?: string; taskID?: string } = {}): LedgerRow[] {
     const rows = Database.use((db) => db.select().from(PermissionLedgerTable).where(and(
       eq(PermissionLedgerTable.event_type, "requested"),
       input.projectID === undefined ? undefined : eq(PermissionLedgerTable.project_id, input.projectID),
       input.sessionID === undefined ? undefined : eq(PermissionLedgerTable.session_id, input.sessionID),
       input.messageID === undefined ? undefined : eq(PermissionLedgerTable.message_id, input.messageID),
+      input.taskID === undefined ? undefined : eq(PermissionLedgerTable.task_id, input.taskID),
     )).orderBy(asc(sql`rowid`)).all())
     const seen = new Set<string>()
     return rows.filter((row) => {
@@ -1432,7 +1437,7 @@ export namespace PermissionAuthority {
     sessionIDs: readonly string[],
     reason: string,
     actorID = "system",
-    options: { maxBatchesPerPage?: number; deadline?: number } = {},
+    options: { maxBatchesPerPage?: number; deadline?: number; requestIDs?: readonly string[] } = {},
   ): Promise<number> {
     const uniqueSessionIDs = [...new Set(sessionIDs)]
     let cancelled = 0
@@ -1453,6 +1458,8 @@ export namespace PermissionAuthority {
               and(
                 eq(PermissionLedgerTable.event_type, "requested"),
                 inArray(PermissionLedgerTable.session_id, sessionPage),
+                options.requestIDs === undefined ? undefined : sql`${PermissionLedgerTable.request_id}
+                  IN (SELECT value FROM json_each(${JSON.stringify(options.requestIDs)}))`,
                 sql`NOT EXISTS (
                   SELECT 1
                   FROM permission_ledger AS decision
