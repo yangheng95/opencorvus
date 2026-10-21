@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [配置全量验证与准入发现](records/2026-10/2026-10-22-config-admitted-discovery.md)：[166目录两轮实测与九原图](artifacts/2026-10-22-config-admitted-discovery/README.md)，保留完整fresh准入，将保存/恢复约21–23秒降至约14秒；读取20秒通过，10/5秒仍未达，16项正向合同及4/8真实Sol结算。
+
 - [Sources键盘与侧栏焦点](records/2026-10/2026-10-22-source-keyboard-dock.md)：[十张实图](artifacts/2026-10-22-source-keyboard-dock/README.md)，来源/Tool原生Tab、Home/End和整栏焦点链；剪贴板工具观测冲突由真实CtrlV复核，两源正确，零模型/原数据保持。
 
 - [成员流中的语言切换与Sources](records/2026-10/2026-10-22-member-locale-stream.md)：[十张实际截图](artifacts/2026-10-22-member-locale-stream/README.md)，原成员24节真实流中语言切换/来源展开/开合与完成态复制，Sol4/8及原物理/授权/数据结算；未确证新生产问题。

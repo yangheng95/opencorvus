@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [配置全量验证与准入发现](2026-10-22-config-admitted-discovery.md)：[166目录两轮与原观察](../../artifacts/2026-10-22-config-admitted-discovery/README.md)，完整Git/物理准入保留，约21–23秒→14秒；读20秒通过、保存10/恢复5仍失败，原数据/物理/授权结算。
+
 - [Sources键盘与侧栏焦点](2026-10-22-source-keyboard-dock.md)：[十图与原焦点](../../artifacts/2026-10-22-source-keyboard-dock/README.md)，成员Source/Tool键盘链、整栏交接与原生粘贴；零模型，原数据/物理链完整。
 
 - [成员流中的语言切换与Sources](2026-10-22-member-locale-stream.md)：[十图与原观察](../../artifacts/2026-10-22-member-locale-stream/README.md)，流中中英语言/来源开合、完成态复制；4/8实际Sol及原物理/配对/自然记忆更新结算，生产未改。

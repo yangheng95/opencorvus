@@ -1,0 +1,60 @@
+{
+  "at": "2026-10-21T22:02:40.066Z",
+  "images": [
+    {
+      "name": "01-before-general.png",
+      "capturedAt": "2026-10-21T21:19:30.661Z",
+      "bytes": 66557,
+      "manualObservation": "Full page inspected manually"
+    },
+    {
+      "name": "02-before-providers-during-write.png",
+      "capturedAt": "2026-10-21T21:20:01.791Z",
+      "bytes": 47255,
+      "manualObservation": "Full page inspected manually"
+    },
+    {
+      "name": "03-before-providers-loaded.png",
+      "capturedAt": "2026-10-21T21:21:04.418Z",
+      "bytes": 63633,
+      "manualObservation": "Full page inspected manually"
+    },
+    {
+      "name": "04-before-complete-restore.png",
+      "capturedAt": "2026-10-21T21:23:11.742Z",
+      "bytes": 66557,
+      "manualObservation": "Full page inspected manually"
+    },
+    {
+      "name": "05-after-general.png",
+      "capturedAt": "2026-10-21T21:40:39.103Z",
+      "bytes": 66557,
+      "manualObservation": "Only header fragment;not full-layout qualification"
+    },
+    {
+      "name": "05b-after-general-ready.png",
+      "capturedAt": "2026-10-21T21:41:23.067Z",
+      "bytes": 66557,
+      "manualObservation": "Full page inspected manually"
+    },
+    {
+      "name": "06-after-providers-during-write.png",
+      "capturedAt": "2026-10-21T21:43:38.787Z",
+      "bytes": 47255,
+      "manualObservation": "Full page inspected manually"
+    },
+    {
+      "name": "07-after-providers-loaded.png",
+      "capturedAt": "2026-10-21T21:45:03.104Z",
+      "bytes": 63633,
+      "manualObservation": "Full page inspected manually"
+    },
+    {
+      "name": "08-after-complete-restore.png",
+      "capturedAt": "2026-10-21T21:50:27.965Z",
+      "bytes": 66557,
+      "manualObservation": "Full page inspected manually"
+    }
+  ],
+  "contract": "Raw image-file metadata and manual classifications;no pixel,DOM,baseline or screenshot assertions"
+}

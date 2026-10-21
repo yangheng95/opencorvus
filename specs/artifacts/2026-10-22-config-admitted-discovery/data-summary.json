@@ -1,0 +1,384 @@
+[
+  {
+    "stage": "before",
+    "source": {
+      "allOriginalRows": "Exact rowid/primary key/all fields/times",
+      "bytes": 73891840,
+      "modifiedAtMs": 1792616158403.9485
+    },
+    "schema": "Same actual application objects and version3;integrity ok",
+    "canonical": {
+      "allParsedFields": "Restored",
+      "rawSourceBytesExact": true
+    },
+    "tables": 90,
+    "originalRows": 156566,
+    "originalRowDifferences": [
+      {
+        "table": "memory_chunk",
+        "identity": "mck_h0TwOCuDIItgGfxTGf6k",
+        "fields": [
+          "content",
+          "time_updated"
+        ]
+      },
+      {
+        "table": "memory_file",
+        "identity": "mem_hBhVOjG2IHNZ58LGhFBJ",
+        "fields": [
+          "time_updated"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "identity": "[1]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "identity": "[2]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      }
+    ],
+    "countChanges": [
+      [
+        "bus_publication_delivery",
+        {
+          "original": 32171,
+          "current": 32258
+        }
+      ],
+      [
+        "bus_publication_delivery_receipt",
+        {
+          "original": 32171,
+          "current": 32258
+        }
+      ],
+      [
+        "bus_publication_outbox",
+        {
+          "original": 4767,
+          "current": 4783
+        }
+      ],
+      [
+        "bus_publication_phase_receipt",
+        {
+          "original": 14301,
+          "current": 14349
+        }
+      ],
+      [
+        "engine_control_activation_lease",
+        {
+          "original": 32522,
+          "current": 32610
+        }
+      ],
+      [
+        "engine_control_activation_lease_grant",
+        {
+          "original": 32586,
+          "current": 32674
+        }
+      ],
+      [
+        "global_creation_allocation",
+        {
+          "original": 151,
+          "current": 152
+        }
+      ],
+      [
+        "memory_chunk",
+        {
+          "original": 165,
+          "current": 166
+        }
+      ],
+      [
+        "memory_file",
+        {
+          "original": 165,
+          "current": 166
+        }
+      ],
+      [
+        "message",
+        {
+          "original": 595,
+          "current": 597
+        }
+      ],
+      [
+        "part",
+        {
+          "original": 1430,
+          "current": 1434
+        }
+      ],
+      [
+        "project",
+        {
+          "original": 165,
+          "current": 166
+        }
+      ],
+      [
+        "protocol_event",
+        {
+          "original": 1725,
+          "current": 1729
+        }
+      ],
+      [
+        "provider_activity_outcome",
+        {
+          "original": 391,
+          "current": 392
+        }
+      ],
+      [
+        "provider_activity_request",
+        {
+          "original": 391,
+          "current": 392
+        }
+      ],
+      [
+        "provider_usage_event",
+        {
+          "original": 604,
+          "current": 606
+        }
+      ],
+      [
+        "session",
+        {
+          "original": 228,
+          "current": 229
+        }
+      ],
+      [
+        "session_control_event",
+        {
+          "original": 162,
+          "current": 163
+        }
+      ],
+      [
+        "session_control_record",
+        {
+          "original": 162,
+          "current": 163
+        }
+      ]
+    ],
+    "providerActivities": {
+      "original": 391,
+      "current": 392
+    }
+  },
+  {
+    "stage": "after",
+    "source": {
+      "allOriginalRows": "Exact rowid/primary key/all fields/times",
+      "bytes": 73891840,
+      "modifiedAtMs": 1792616158403.9485
+    },
+    "schema": "Same actual application objects and version3;integrity ok",
+    "canonical": {
+      "allParsedFields": "Restored",
+      "rawSourceBytesExact": true
+    },
+    "tables": 90,
+    "originalRows": 156566,
+    "originalRowDifferences": [
+      {
+        "table": "memory_chunk",
+        "identity": "mck_h0TwOCuDIItgGfxTGf6k",
+        "fields": [
+          "content",
+          "time_updated"
+        ]
+      },
+      {
+        "table": "memory_file",
+        "identity": "mem_hBhVOjG2IHNZ58LGhFBJ",
+        "fields": [
+          "time_updated"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "identity": "[1]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "identity": "[2]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      }
+    ],
+    "countChanges": [
+      [
+        "bus_publication_delivery",
+        {
+          "original": 32171,
+          "current": 32258
+        }
+      ],
+      [
+        "bus_publication_delivery_receipt",
+        {
+          "original": 32171,
+          "current": 32258
+        }
+      ],
+      [
+        "bus_publication_outbox",
+        {
+          "original": 4767,
+          "current": 4783
+        }
+      ],
+      [
+        "bus_publication_phase_receipt",
+        {
+          "original": 14301,
+          "current": 14349
+        }
+      ],
+      [
+        "engine_control_activation_lease",
+        {
+          "original": 32522,
+          "current": 32610
+        }
+      ],
+      [
+        "engine_control_activation_lease_grant",
+        {
+          "original": 32586,
+          "current": 32674
+        }
+      ],
+      [
+        "global_creation_allocation",
+        {
+          "original": 151,
+          "current": 152
+        }
+      ],
+      [
+        "memory_chunk",
+        {
+          "original": 165,
+          "current": 166
+        }
+      ],
+      [
+        "memory_file",
+        {
+          "original": 165,
+          "current": 166
+        }
+      ],
+      [
+        "message",
+        {
+          "original": 595,
+          "current": 597
+        }
+      ],
+      [
+        "part",
+        {
+          "original": 1430,
+          "current": 1434
+        }
+      ],
+      [
+        "project",
+        {
+          "original": 165,
+          "current": 166
+        }
+      ],
+      [
+        "protocol_event",
+        {
+          "original": 1725,
+          "current": 1729
+        }
+      ],
+      [
+        "provider_activity_outcome",
+        {
+          "original": 391,
+          "current": 392
+        }
+      ],
+      [
+        "provider_activity_request",
+        {
+          "original": 391,
+          "current": 392
+        }
+      ],
+      [
+        "provider_usage_event",
+        {
+          "original": 604,
+          "current": 606
+        }
+      ],
+      [
+        "session",
+        {
+          "original": 228,
+          "current": 229
+        }
+      ],
+      [
+        "session_control_event",
+        {
+          "original": 162,
+          "current": 163
+        }
+      ],
+      [
+        "session_control_record",
+        {
+          "original": 162,
+          "current": 163
+        }
+      ]
+    ],
+    "providerActivities": {
+      "original": 391,
+      "current": 392
+    }
+  }
+]

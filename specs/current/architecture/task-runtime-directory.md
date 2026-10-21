@@ -43,9 +43,16 @@ Ordinary directory resolution is observational. If more than one durable
 returns `ProjectDuplicateWorktreeIdentityError` before writing a marker or a
 domain row. Lookup never chooses a winner and never migrates data.
 
-For an existing local `.git`, discovery obtains the actual Git top-level and
-absolute common directory before proposing identity, then repeats that observation
-under the original durable registration admission. Windows reads both paths in one
+For an exactly registered logical worktree, initial discovery checks the current
+physical registry for duplicates and uses that same durable row only as the
+candidate whose registration admission must be acquired. A changed registry
+owner fails explicitly. This candidate cannot authorize a commit: complete
+current Git top-level/common-directory discovery, physical occurrence and
+registry revalidation still run under the original durable admission and must
+agree before publication. A previously unregistered directory first discovers
+Git identity to determine its admission boundaries, then repeats it under
+admission. Registered sandbox resolution retains its existing owner contract.
+Windows reads both Git paths in one
 `rev-parse` invocation and validates its two-line result; its directory names
 exclude line-control characters. POSIX reads each scalar independently and removes
 only Git's own final LF so path whitespace and embedded newlines remain intact.

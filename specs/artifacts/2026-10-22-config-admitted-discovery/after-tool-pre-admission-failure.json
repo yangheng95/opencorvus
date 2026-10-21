@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-21T21:43:14.181Z",
+  "writer": {
+    "exit": 1,
+    "phase": "before native occurrence assertion;no checker-ready or PATCH",
+    "reason": "Broad after- proof-name replacement also changed native occurrence prefix to run-"
+  },
+  "coordinator": {
+    "exit": 1,
+    "reason": "ENOENT run-checker-ready.json;gate not published"
+  },
+  "reader": {
+    "originalHandle": 98482,
+    "state": "Original admitted reader waiting for same round gate"
+  },
+  "service": {
+    "originalHandle": 78859,
+    "port": 18985,
+    "maximumRequests": 4,
+    "action": "Preserve original occurrence and budget;repair only writer/proof-name generator"
+  },
+  "repair": "Narrow proof-name substitutions;correct both future after writers;retained original generated source snapshots"
+}

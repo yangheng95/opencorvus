@@ -1,0 +1,1286 @@
+{
+  "at": "2026-10-21T21:50:40.821Z",
+  "stage": "after",
+  "originalProjects": 165,
+  "inventory": [
+    {
+      "time": "2026-10-21T21:43:33.856Z",
+      "projects": 166,
+      "loaded": 2
+    },
+    {
+      "time": "2026-10-21T21:43:48.395Z",
+      "projects": 166,
+      "loaded": 4
+    },
+    {
+      "time": "2026-10-21T21:45:20.488Z",
+      "projects": 166,
+      "loaded": 4
+    },
+    {
+      "time": "2026-10-21T21:45:34.386Z",
+      "projects": 166,
+      "loaded": 4
+    }
+  ],
+  "rounds": [
+    {
+      "round": "cold",
+      "write": {
+        "at": "2026-10-21T21:43:33.791Z",
+        "endedAt": "2026-10-21T21:44:01.910Z",
+        "phase": "candidate",
+        "port": 18985,
+        "occurrence": "config-admitted-discovery-518-after-1350b860-a036-4839-91bc-1227610362b0",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 14154.015100000002,
+        "restoreMs": 13955.525899999997,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "read": {
+        "occurrence": "config-admitted-discovery-518-after-1350b860-a036-4839-91bc-1227610362b0",
+        "kind": "Public HTTP positive contracts concurrent with original canonical save; this is not browser or visual acceptance",
+        "results": [
+          {
+            "path": "/config",
+            "startedAt": "2026-10-21T21:43:34.025Z",
+            "endedAt": "2026-10-21T21:43:47.905Z",
+            "ms": 13879.614399999991,
+            "status": 200,
+            "permissionMode": "ask"
+          },
+          {
+            "path": "/provider",
+            "startedAt": "2026-10-21T21:43:34.028Z",
+            "endedAt": "2026-10-21T21:43:48.257Z",
+            "ms": 14228.897400000002,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/global/providers",
+            "startedAt": "2026-10-21T21:43:34.029Z",
+            "endedAt": "2026-10-21T21:43:48.137Z",
+            "ms": 14108.339399999997,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/session/ses_hEwb51L0xiWMaD8ofQzK",
+            "startedAt": "2026-10-21T21:43:34.029Z",
+            "endedAt": "2026-10-21T21:43:34.058Z",
+            "ms": 28.884399999995367,
+            "status": 200,
+            "sessionID": "ses_hEwb51L0xiWMaD8ofQzK"
+          }
+        ]
+      },
+      "admission": {
+        "time": "2026-10-21T21:43:33.862Z",
+        "phase": "config.global.before",
+        "requestID": "88f5312e-439a-44f9-b6bb-f507524f4a84",
+        "occurrence": "config-admitted-discovery-518-after-1350b860-a036-4839-91bc-1227610362b0"
+      },
+      "latency": {
+        "save": false,
+        "restore": false,
+        "reads": [
+          {
+            "path": "/config",
+            "passed": true
+          },
+          {
+            "path": "/provider",
+            "passed": true
+          },
+          {
+            "path": "/global/providers",
+            "passed": true
+          },
+          {
+            "path": "/session/ses_hEwb51L0xiWMaD8ofQzK",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "round": "repeat",
+      "write": {
+        "at": "2026-10-21T21:45:20.424Z",
+        "endedAt": "2026-10-21T21:45:47.754Z",
+        "phase": "candidate",
+        "port": 18985,
+        "occurrence": "config-admitted-discovery-518-after-1350b860-a036-4839-91bc-1227610362b0",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 13624.7267,
+        "restoreMs": 13699.725000000002,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "read": {
+        "occurrence": "config-admitted-discovery-518-after-1350b860-a036-4839-91bc-1227610362b0",
+        "kind": "Public HTTP positive contracts concurrent with original canonical save; this is not browser or visual acceptance",
+        "results": [
+          {
+            "path": "/config",
+            "startedAt": "2026-10-21T21:45:20.635Z",
+            "endedAt": "2026-10-21T21:45:34.020Z",
+            "ms": 13383.7171,
+            "status": 200,
+            "permissionMode": "ask"
+          },
+          {
+            "path": "/provider",
+            "startedAt": "2026-10-21T21:45:20.638Z",
+            "endedAt": "2026-10-21T21:45:34.359Z",
+            "ms": 13720.9231,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/global/providers",
+            "startedAt": "2026-10-21T21:45:20.638Z",
+            "endedAt": "2026-10-21T21:45:34.240Z",
+            "ms": 13601.112099999998,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/session/ses_hEwb51L0xiWMaD8ofQzK",
+            "startedAt": "2026-10-21T21:45:20.639Z",
+            "endedAt": "2026-10-21T21:45:20.647Z",
+            "ms": 8.458499999998821,
+            "status": 200,
+            "sessionID": "ses_hEwb51L0xiWMaD8ofQzK"
+          }
+        ]
+      },
+      "admission": {
+        "time": "2026-10-21T21:45:20.493Z",
+        "phase": "config.global.before",
+        "requestID": "cc585839-0dbe-453e-9cb2-79a1a27bc807",
+        "occurrence": "config-admitted-discovery-518-after-1350b860-a036-4839-91bc-1227610362b0"
+      },
+      "latency": {
+        "save": false,
+        "restore": false,
+        "reads": [
+          {
+            "path": "/config",
+            "passed": true
+          },
+          {
+            "path": "/provider",
+            "passed": true
+          },
+          {
+            "path": "/global/providers",
+            "passed": true
+          },
+          {
+            "path": "/session/ses_hEwb51L0xiWMaD8ofQzK",
+            "passed": true
+          }
+        ]
+      }
+    }
+  ],
+  "requests": [
+    {
+      "requestID": "88f5312e-439a-44f9-b6bb-f507524f4a84",
+      "time": "2026-10-21T21:43:47.945Z",
+      "path": "/global/config",
+      "status": 200,
+      "duration": 14147,
+      "phases": {
+        "request": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 14147,
+          "durationMaxMs": 14147
+        },
+        "config.global.write": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 14145,
+          "durationMaxMs": 14145
+        },
+        "catalog.total": {
+          "started": 168,
+          "completed": 168,
+          "rejected": 0,
+          "durationSumMs": 30082,
+          "durationMaxMs": 14145
+        },
+        "catalog.admission": {
+          "started": 168,
+          "completed": 168,
+          "rejected": 0,
+          "durationSumMs": 543,
+          "durationMaxMs": 32
+        },
+        "catalog.held": {
+          "started": 168,
+          "completed": 168,
+          "rejected": 0,
+          "durationSumMs": 29471,
+          "durationMaxMs": 14100
+        },
+        "catalog.recovery": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 0,
+          "durationMaxMs": 0
+        },
+        "catalog.reentrant": {
+          "started": 167,
+          "completed": 167,
+          "rejected": 0,
+          "durationSumMs": 15361,
+          "durationMaxMs": 14098
+        },
+        "config.global.projects": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 48,
+          "durationMaxMs": 48
+        },
+        "directory.total": {
+          "started": 165,
+          "completed": 165,
+          "rejected": 0,
+          "durationSumMs": 125413,
+          "durationMaxMs": 13225
+        },
+        "directory.admission": {
+          "started": 165,
+          "completed": 165,
+          "rejected": 0,
+          "durationSumMs": 755,
+          "durationMaxMs": 86
+        },
+        "directory.held": {
+          "started": 165,
+          "completed": 165,
+          "rejected": 0,
+          "durationSumMs": 124635,
+          "durationMaxMs": 13221
+        },
+        "config.global.before": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 5075,
+          "durationMaxMs": 167
+        },
+        "config.load": {
+          "started": 826,
+          "completed": 826,
+          "rejected": 0,
+          "durationSumMs": 101405,
+          "durationMaxMs": 290
+        },
+        "project.identity.initial": {
+          "started": 164,
+          "completed": 164,
+          "rejected": 0,
+          "durationSumMs": 19032,
+          "durationMaxMs": 247
+        },
+        "project.identity.lookup": {
+          "started": 328,
+          "completed": 328,
+          "rejected": 0,
+          "durationSumMs": 37551,
+          "durationMaxMs": 420
+        },
+        "config.verify": {
+          "started": 826,
+          "completed": 826,
+          "rejected": 0,
+          "durationSumMs": 7089,
+          "durationMaxMs": 33
+        },
+        "config.global.after": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 3635,
+          "durationMaxMs": 114
+        },
+        "config.validate.models": {
+          "started": 167,
+          "completed": 167,
+          "rejected": 0,
+          "durationSumMs": 8287,
+          "durationMaxMs": 118
+        },
+        "state.read": {
+          "started": 662,
+          "completed": 662,
+          "rejected": 0,
+          "durationSumMs": 51975,
+          "durationMaxMs": 308
+        },
+        "config.validate.profile": {
+          "started": 167,
+          "completed": 167,
+          "rejected": 0,
+          "durationSumMs": 789,
+          "durationMaxMs": 28
+        },
+        "config.validate.capabilities": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 1866,
+          "durationMaxMs": 46
+        },
+        "catalog.revision": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 207,
+          "durationMaxMs": 13
+        },
+        "skill.builtins": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 167,
+          "durationMaxMs": 2
+        },
+        "skill.config-directories": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 21,
+          "durationMaxMs": 1
+        },
+        "skill.explicit-scan": {
+          "started": 331,
+          "completed": 331,
+          "rejected": 0,
+          "durationSumMs": 823,
+          "durationMaxMs": 19
+        },
+        "catalog.release": {
+          "started": 168,
+          "completed": 168,
+          "rejected": 0,
+          "durationSumMs": 46,
+          "durationMaxMs": 43
+        },
+        "project.registry.capture": {
+          "started": 164,
+          "completed": 164,
+          "rejected": 0,
+          "durationSumMs": 3474,
+          "durationMaxMs": 111
+        },
+        "project.registry.acquire": {
+          "started": 164,
+          "completed": 164,
+          "rejected": 0,
+          "durationSumMs": 871,
+          "durationMaxMs": 28
+        },
+        "project.registry.revalidate": {
+          "started": 164,
+          "completed": 164,
+          "rejected": 0,
+          "durationSumMs": 3262,
+          "durationMaxMs": 55
+        },
+        "project.identity.admitted": {
+          "started": 164,
+          "completed": 164,
+          "rejected": 0,
+          "durationSumMs": 106694,
+          "durationMaxMs": 1261
+        },
+        "project.identity.git": {
+          "started": 163,
+          "completed": 163,
+          "rejected": 0,
+          "durationSumMs": 69405,
+          "durationMaxMs": 894
+        },
+        "project.identity.resolve": {
+          "started": 163,
+          "completed": 163,
+          "rejected": 0,
+          "durationSumMs": 18909,
+          "durationMaxMs": 420
+        },
+        "directory.release": {
+          "started": 165,
+          "completed": 165,
+          "rejected": 0,
+          "durationSumMs": 1,
+          "durationMaxMs": 1
+        },
+        "state.initialize": {
+          "started": 330,
+          "completed": 330,
+          "rejected": 0,
+          "durationSumMs": 51936,
+          "durationMaxMs": 308
+        },
+        "config.global.persist": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 3,
+          "durationMaxMs": 3
+        },
+        "config.global.reset": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 5,
+          "durationMaxMs": 5
+        },
+        "config.global.reconcile": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 774,
+          "durationMaxMs": 774
+        }
+      }
+    },
+    {
+      "requestID": "51effc8e-071f-4c4e-a5c1-5fb1d1eb3cbe",
+      "time": "2026-10-21T21:44:01.909Z",
+      "path": "/global/config",
+      "status": 200,
+      "duration": 13955,
+      "phases": {
+        "request": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 13955,
+          "durationMaxMs": 13955
+        },
+        "config.global.write": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 13840,
+          "durationMaxMs": 13840
+        },
+        "catalog.total": {
+          "started": 168,
+          "completed": 168,
+          "rejected": 0,
+          "durationSumMs": 28940,
+          "durationMaxMs": 13840
+        },
+        "catalog.admission": {
+          "started": 168,
+          "completed": 168,
+          "rejected": 0,
+          "durationSumMs": 451,
+          "durationMaxMs": 26
+        },
+        "catalog.held": {
+          "started": 168,
+          "completed": 168,
+          "rejected": 0,
+          "durationSumMs": 28451,
+          "durationMaxMs": 13828
+        },
+        "catalog.recovery": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 220,
+          "durationMaxMs": 220
+        },
+        "catalog.reentrant": {
+          "started": 167,
+          "completed": 167,
+          "rejected": 0,
+          "durationSumMs": 14621,
+          "durationMaxMs": 13581
+        },
+        "config.global.projects": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 57,
+          "durationMaxMs": 57
+        },
+        "directory.total": {
+          "started": 163,
+          "completed": 163,
+          "rejected": 0,
+          "durationSumMs": 120651,
+          "durationMaxMs": 12727
+        },
+        "directory.admission": {
+          "started": 163,
+          "completed": 163,
+          "rejected": 0,
+          "durationSumMs": 444,
+          "durationMaxMs": 26
+        },
+        "directory.held": {
+          "started": 163,
+          "completed": 163,
+          "rejected": 0,
+          "durationSumMs": 120181,
+          "durationMaxMs": 12724
+        },
+        "config.global.before": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 4438,
+          "durationMaxMs": 119
+        },
+        "config.load": {
+          "started": 820,
+          "completed": 820,
+          "rejected": 0,
+          "durationSumMs": 94604,
+          "durationMaxMs": 290
+        },
+        "project.identity.initial": {
+          "started": 162,
+          "completed": 162,
+          "rejected": 0,
+          "durationSumMs": 19240,
+          "durationMaxMs": 287
+        },
+        "project.identity.lookup": {
+          "started": 324,
+          "completed": 324,
+          "rejected": 0,
+          "durationSumMs": 37362,
+          "durationMaxMs": 374
+        },
+        "config.verify": {
+          "started": 820,
+          "completed": 820,
+          "rejected": 0,
+          "durationSumMs": 6933,
+          "durationMaxMs": 32
+        },
+        "config.global.after": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 3625,
+          "durationMaxMs": 116
+        },
+        "config.validate.models": {
+          "started": 167,
+          "completed": 167,
+          "rejected": 0,
+          "durationSumMs": 8538,
+          "durationMaxMs": 130
+        },
+        "state.read": {
+          "started": 658,
+          "completed": 658,
+          "rejected": 0,
+          "durationSumMs": 53932,
+          "durationMaxMs": 322
+        },
+        "config.validate.profile": {
+          "started": 167,
+          "completed": 167,
+          "rejected": 0,
+          "durationSumMs": 646,
+          "durationMaxMs": 23
+        },
+        "config.validate.capabilities": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 1510,
+          "durationMaxMs": 31
+        },
+        "catalog.revision": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 163,
+          "durationMaxMs": 7
+        },
+        "skill.builtins": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 136,
+          "durationMaxMs": 3
+        },
+        "skill.config-directories": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 17,
+          "durationMaxMs": 1
+        },
+        "skill.explicit-scan": {
+          "started": 331,
+          "completed": 331,
+          "rejected": 0,
+          "durationSumMs": 694,
+          "durationMaxMs": 23
+        },
+        "catalog.release": {
+          "started": 168,
+          "completed": 168,
+          "rejected": 0,
+          "durationSumMs": 9,
+          "durationMaxMs": 1
+        },
+        "project.registry.capture": {
+          "started": 162,
+          "completed": 162,
+          "rejected": 0,
+          "durationSumMs": 2908,
+          "durationMaxMs": 65
+        },
+        "project.registry.acquire": {
+          "started": 162,
+          "completed": 162,
+          "rejected": 0,
+          "durationSumMs": 694,
+          "durationMaxMs": 40
+        },
+        "project.registry.revalidate": {
+          "started": 162,
+          "completed": 162,
+          "rejected": 0,
+          "durationSumMs": 2805,
+          "durationMaxMs": 60
+        },
+        "project.identity.admitted": {
+          "started": 162,
+          "completed": 162,
+          "rejected": 0,
+          "durationSumMs": 103414,
+          "durationMaxMs": 986
+        },
+        "project.identity.git": {
+          "started": 161,
+          "completed": 161,
+          "rejected": 0,
+          "durationSumMs": 65892,
+          "durationMaxMs": 892
+        },
+        "project.identity.resolve": {
+          "started": 161,
+          "completed": 161,
+          "rejected": 0,
+          "durationSumMs": 18612,
+          "durationMaxMs": 375
+        },
+        "directory.release": {
+          "started": 163,
+          "completed": 163,
+          "rejected": 0,
+          "durationSumMs": 8,
+          "durationMaxMs": 1
+        },
+        "state.initialize": {
+          "started": 326,
+          "completed": 326,
+          "rejected": 0,
+          "durationSumMs": 53888,
+          "durationMaxMs": 322
+        },
+        "config.global.persist": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 2,
+          "durationMaxMs": 2
+        },
+        "config.global.reset": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 4,
+          "durationMaxMs": 4
+        },
+        "config.global.reconcile": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 772,
+          "durationMaxMs": 772
+        }
+      }
+    },
+    {
+      "requestID": "cc585839-0dbe-453e-9cb2-79a1a27bc807",
+      "time": "2026-10-21T21:45:34.048Z",
+      "path": "/global/config",
+      "status": 200,
+      "duration": 13617,
+      "phases": {
+        "request": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 13617,
+          "durationMaxMs": 13617
+        },
+        "config.global.write": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 13616,
+          "durationMaxMs": 13616
+        },
+        "catalog.total": {
+          "started": 168,
+          "completed": 168,
+          "rejected": 0,
+          "durationSumMs": 28855,
+          "durationMaxMs": 13616
+        },
+        "catalog.admission": {
+          "started": 168,
+          "completed": 168,
+          "rejected": 0,
+          "durationSumMs": 472,
+          "durationMaxMs": 21
+        },
+        "catalog.held": {
+          "started": 168,
+          "completed": 168,
+          "rejected": 0,
+          "durationSumMs": 28334,
+          "durationMaxMs": 13582
+        },
+        "catalog.recovery": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 1,
+          "durationMaxMs": 1
+        },
+        "catalog.reentrant": {
+          "started": 167,
+          "completed": 167,
+          "rejected": 0,
+          "durationSumMs": 14740,
+          "durationMaxMs": 13581
+        },
+        "config.global.projects": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 47,
+          "durationMaxMs": 47
+        },
+        "directory.total": {
+          "started": 163,
+          "completed": 163,
+          "rejected": 0,
+          "durationSumMs": 119068,
+          "durationMaxMs": 12773
+        },
+        "directory.admission": {
+          "started": 163,
+          "completed": 163,
+          "rejected": 0,
+          "durationSumMs": 430,
+          "durationMaxMs": 26
+        },
+        "directory.held": {
+          "started": 163,
+          "completed": 163,
+          "rejected": 0,
+          "durationSumMs": 118614,
+          "durationMaxMs": 12770
+        },
+        "config.global.before": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 4103,
+          "durationMaxMs": 177
+        },
+        "config.load": {
+          "started": 820,
+          "completed": 820,
+          "rejected": 0,
+          "durationSumMs": 97758,
+          "durationMaxMs": 295
+        },
+        "project.identity.initial": {
+          "started": 162,
+          "completed": 162,
+          "rejected": 0,
+          "durationSumMs": 18219,
+          "durationMaxMs": 222
+        },
+        "project.identity.lookup": {
+          "started": 324,
+          "completed": 324,
+          "rejected": 0,
+          "durationSumMs": 35940,
+          "durationMaxMs": 263
+        },
+        "config.verify": {
+          "started": 820,
+          "completed": 820,
+          "rejected": 0,
+          "durationSumMs": 7002,
+          "durationMaxMs": 138
+        },
+        "config.global.after": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 4022,
+          "durationMaxMs": 175
+        },
+        "config.validate.models": {
+          "started": 167,
+          "completed": 167,
+          "rejected": 0,
+          "durationSumMs": 8250,
+          "durationMaxMs": 206
+        },
+        "state.read": {
+          "started": 658,
+          "completed": 658,
+          "rejected": 0,
+          "durationSumMs": 53191,
+          "durationMaxMs": 312
+        },
+        "config.validate.profile": {
+          "started": 167,
+          "completed": 167,
+          "rejected": 0,
+          "durationSumMs": 693,
+          "durationMaxMs": 24
+        },
+        "config.validate.capabilities": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 1677,
+          "durationMaxMs": 45
+        },
+        "catalog.revision": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 211,
+          "durationMaxMs": 25
+        },
+        "skill.builtins": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 121,
+          "durationMaxMs": 3
+        },
+        "skill.config-directories": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 23,
+          "durationMaxMs": 1
+        },
+        "skill.explicit-scan": {
+          "started": 331,
+          "completed": 331,
+          "rejected": 0,
+          "durationSumMs": 759,
+          "durationMaxMs": 19
+        },
+        "catalog.release": {
+          "started": 168,
+          "completed": 168,
+          "rejected": 0,
+          "durationSumMs": 35,
+          "durationMaxMs": 32
+        },
+        "project.registry.capture": {
+          "started": 162,
+          "completed": 162,
+          "rejected": 0,
+          "durationSumMs": 3260,
+          "durationMaxMs": 97
+        },
+        "project.registry.acquire": {
+          "started": 162,
+          "completed": 162,
+          "rejected": 0,
+          "durationSumMs": 811,
+          "durationMaxMs": 56
+        },
+        "project.registry.revalidate": {
+          "started": 162,
+          "completed": 162,
+          "rejected": 0,
+          "durationSumMs": 3173,
+          "durationMaxMs": 57
+        },
+        "project.identity.admitted": {
+          "started": 162,
+          "completed": 162,
+          "rejected": 0,
+          "durationSumMs": 101276,
+          "durationMaxMs": 897
+        },
+        "project.identity.git": {
+          "started": 161,
+          "completed": 161,
+          "rejected": 0,
+          "durationSumMs": 64663,
+          "durationMaxMs": 731
+        },
+        "project.identity.resolve": {
+          "started": 161,
+          "completed": 161,
+          "rejected": 0,
+          "durationSumMs": 18213,
+          "durationMaxMs": 265
+        },
+        "directory.release": {
+          "started": 163,
+          "completed": 163,
+          "rejected": 0,
+          "durationSumMs": 8,
+          "durationMaxMs": 1
+        },
+        "state.initialize": {
+          "started": 326,
+          "completed": 326,
+          "rejected": 0,
+          "durationSumMs": 53149,
+          "durationMaxMs": 312
+        },
+        "config.global.persist": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 2,
+          "durationMaxMs": 2
+        },
+        "config.global.reset": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 5,
+          "durationMaxMs": 5
+        },
+        "config.global.reconcile": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 737,
+          "durationMaxMs": 737
+        }
+      }
+    },
+    {
+      "requestID": "47a5f73c-0279-465c-85d6-6212beb6e037",
+      "time": "2026-10-21T21:45:47.753Z",
+      "path": "/global/config",
+      "status": 200,
+      "duration": 13699,
+      "phases": {
+        "request": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 13699,
+          "durationMaxMs": 13699
+        },
+        "config.global.write": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 13698,
+          "durationMaxMs": 13698
+        },
+        "catalog.total": {
+          "started": 168,
+          "completed": 168,
+          "rejected": 0,
+          "durationSumMs": 28835,
+          "durationMaxMs": 13698
+        },
+        "catalog.admission": {
+          "started": 168,
+          "completed": 168,
+          "rejected": 0,
+          "durationSumMs": 494,
+          "durationMaxMs": 121
+        },
+        "catalog.held": {
+          "started": 168,
+          "completed": 168,
+          "rejected": 0,
+          "durationSumMs": 28317,
+          "durationMaxMs": 13574
+        },
+        "catalog.recovery": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 0,
+          "durationMaxMs": 0
+        },
+        "catalog.reentrant": {
+          "started": 167,
+          "completed": 167,
+          "rejected": 0,
+          "durationSumMs": 14729,
+          "durationMaxMs": 13567
+        },
+        "config.global.projects": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 52,
+          "durationMaxMs": 52
+        },
+        "directory.total": {
+          "started": 163,
+          "completed": 163,
+          "rejected": 0,
+          "durationSumMs": 118903,
+          "durationMaxMs": 12421
+        },
+        "directory.admission": {
+          "started": 163,
+          "completed": 163,
+          "rejected": 0,
+          "durationSumMs": 508,
+          "durationMaxMs": 51
+        },
+        "directory.held": {
+          "started": 163,
+          "completed": 163,
+          "rejected": 0,
+          "durationSumMs": 118362,
+          "durationMaxMs": 12412
+        },
+        "config.global.before": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 4966,
+          "durationMaxMs": 281
+        },
+        "config.load": {
+          "started": 820,
+          "completed": 820,
+          "rejected": 0,
+          "durationSumMs": 107053,
+          "durationMaxMs": 331
+        },
+        "project.identity.initial": {
+          "started": 162,
+          "completed": 162,
+          "rejected": 0,
+          "durationSumMs": 17253,
+          "durationMaxMs": 347
+        },
+        "project.identity.lookup": {
+          "started": 324,
+          "completed": 324,
+          "rejected": 0,
+          "durationSumMs": 32876,
+          "durationMaxMs": 346
+        },
+        "config.verify": {
+          "started": 820,
+          "completed": 820,
+          "rejected": 0,
+          "durationSumMs": 7580,
+          "durationMaxMs": 40
+        },
+        "config.global.after": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 3636,
+          "durationMaxMs": 152
+        },
+        "config.validate.models": {
+          "started": 167,
+          "completed": 167,
+          "rejected": 0,
+          "durationSumMs": 8041,
+          "durationMaxMs": 273
+        },
+        "state.read": {
+          "started": 658,
+          "completed": 658,
+          "rejected": 0,
+          "durationSumMs": 60537,
+          "durationMaxMs": 370
+        },
+        "config.validate.profile": {
+          "started": 167,
+          "completed": 167,
+          "rejected": 0,
+          "durationSumMs": 628,
+          "durationMaxMs": 18
+        },
+        "config.validate.capabilities": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 1578,
+          "durationMaxMs": 54
+        },
+        "catalog.revision": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 194,
+          "durationMaxMs": 42
+        },
+        "skill.builtins": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 125,
+          "durationMaxMs": 2
+        },
+        "skill.config-directories": {
+          "started": 166,
+          "completed": 166,
+          "rejected": 0,
+          "durationSumMs": 15,
+          "durationMaxMs": 1
+        },
+        "skill.explicit-scan": {
+          "started": 331,
+          "completed": 331,
+          "rejected": 0,
+          "durationSumMs": 794,
+          "durationMaxMs": 45
+        },
+        "catalog.release": {
+          "started": 168,
+          "completed": 168,
+          "rejected": 0,
+          "durationSumMs": 7,
+          "durationMaxMs": 3
+        },
+        "project.registry.capture": {
+          "started": 162,
+          "completed": 162,
+          "rejected": 0,
+          "durationSumMs": 3554,
+          "durationMaxMs": 98
+        },
+        "project.registry.acquire": {
+          "started": 162,
+          "completed": 162,
+          "rejected": 0,
+          "durationSumMs": 926,
+          "durationMaxMs": 44
+        },
+        "project.registry.revalidate": {
+          "started": 162,
+          "completed": 162,
+          "rejected": 0,
+          "durationSumMs": 3299,
+          "durationMaxMs": 142
+        },
+        "project.identity.admitted": {
+          "started": 162,
+          "completed": 162,
+          "rejected": 0,
+          "durationSumMs": 101184,
+          "durationMaxMs": 1248
+        },
+        "project.identity.git": {
+          "started": 161,
+          "completed": 161,
+          "rejected": 0,
+          "durationSumMs": 66634,
+          "durationMaxMs": 965
+        },
+        "project.identity.resolve": {
+          "started": 161,
+          "completed": 161,
+          "rejected": 0,
+          "durationSumMs": 16050,
+          "durationMaxMs": 228
+        },
+        "directory.release": {
+          "started": 163,
+          "completed": 163,
+          "rejected": 0,
+          "durationSumMs": 11,
+          "durationMaxMs": 5
+        },
+        "state.initialize": {
+          "started": 326,
+          "completed": 326,
+          "rejected": 0,
+          "durationSumMs": 60486,
+          "durationMaxMs": 370
+        },
+        "config.global.persist": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 2,
+          "durationMaxMs": 2
+        },
+        "config.global.reset": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 4,
+          "durationMaxMs": 4
+        },
+        "config.global.reconcile": {
+          "started": 1,
+          "completed": 1,
+          "rejected": 0,
+          "durationSumMs": 838,
+          "durationMaxMs": 838
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "boundary": "Existing production DEBUG phases;no new probe;duration sums can overlap and are not CPU or exclusive wall time;phase counts explain work and do not substitute real latency/correctness",
+  "schema": 3
+}

@@ -1,0 +1,27 @@
+{
+  "scope": "config-admitted-discovery-518",
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/source-keyboard-dock-517-before",
+  "ports": {
+    "before": 18983,
+    "after": 18985
+  },
+  "scopeBudgets": {
+    "before": 4,
+    "after": 4
+  },
+  "maximumRequests": 8,
+  "model": "gpt-6.1-sol",
+  "stream": true,
+  "thresholdsMs": {
+    "save": 10000,
+    "restore": 5000,
+    "read": 20000
+  },
+  "directories": "All165 original registry worktrees plus real preflight additions;no sampling",
+  "rounds": [
+    "cold",
+    "repeat"
+  ],
+  "transport": "Production Overlay config service/browser HostTransport/real Source CLI HTTP;not UI tests",
+  "authority": "Complete paired auth/models;retire all four after original chain"
+}

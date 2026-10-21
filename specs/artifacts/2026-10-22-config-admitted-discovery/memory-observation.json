@@ -1,0 +1,58 @@
+{
+  "at": "2026-10-21T22:02:40.063Z",
+  "results": [
+    {
+      "stage": "before",
+      "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+      "chunkID": "mck_h0TwOCuDIItgGfxTGf6k",
+      "changedEnvelopeFields": [
+        "availabilityGeneration",
+        "timeUpdated"
+      ],
+      "markdownExact": true,
+      "tokenCount": {
+        "before": 7577,
+        "after": 7577
+      },
+      "availability": {
+        "before": 79,
+        "after": 83
+      },
+      "documentRevision": {
+        "before": 39,
+        "after": 39
+      },
+      "timeUpdated": {
+        "before": 1792559942329,
+        "after": 1792617726777
+      }
+    },
+    {
+      "stage": "after",
+      "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+      "chunkID": "mck_h0TwOCuDIItgGfxTGf6k",
+      "changedEnvelopeFields": [
+        "availabilityGeneration",
+        "timeUpdated"
+      ],
+      "markdownExact": true,
+      "tokenCount": {
+        "before": 7577,
+        "after": 7577
+      },
+      "availability": {
+        "before": 79,
+        "after": 83
+      },
+      "documentRevision": {
+        "before": 39,
+        "after": 39
+      },
+      "timeUpdated": {
+        "before": 1792559942329,
+        "after": 1792619146880
+      }
+    }
+  ],
+  "contract": "Original ProjectMemory availability invalidation;complete semantic document comparison;not model narrative or a source hash"
+}

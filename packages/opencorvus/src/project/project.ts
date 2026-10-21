@@ -690,7 +690,21 @@ export namespace Project {
 
         return resolveNonGitDirectoryIdentity({ directory, dotgit })
       })
-    const data = await SkillReadDiagnostics.phase("project.identity.initial", discoverIdentity)
+    const data = await SkillReadDiagnostics.phase("project.identity.initial", async () => {
+      const registered = list().find((project) => samePath(project.worktree, directory))
+      if (!registered) return discoverIdentity()
+      // A durable worktree supplies only the candidate whose admission is
+      // acquired below. Keep physical duplicate detection before any marker
+      // write; the complete current Git identity is still read under admission.
+      const current = await findExactWorktreeRow(directory)
+      if (!current || current.id !== registered.id) {
+        throw new DirectoryOccurrenceChangedError({
+          directory,
+          message: `Registered Project ownership changed before directory admission: ${directory}`,
+        })
+      }
+      return { id: current.id, sandbox: directory, worktree: directory }
+    })
     const proposedSandbox =
       data.sandbox !== data.worktree && !(await sameFilesystemLocation(data.sandbox, data.worktree))
         ? data.sandbox

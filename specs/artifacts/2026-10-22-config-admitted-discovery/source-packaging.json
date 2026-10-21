@@ -1,0 +1,65 @@
+{
+  "reason": "Preserve exact original checker and failure snapshot bytes including terminal blank lines, without normalizing runtime evidence",
+  "packed": [
+    {
+      "original": "before-cold/config-write.ts",
+      "archive": "before-cold/config-write.ts.gz",
+      "rawBytes": 4161,
+      "gzipBytes": 1518
+    },
+    {
+      "original": "before-cold/prepare-readers.ts",
+      "archive": "before-cold/prepare-readers.ts.gz",
+      "rawBytes": 1236,
+      "gzipBytes": 648
+    },
+    {
+      "original": "before-repeat/config-write.ts",
+      "archive": "before-repeat/config-write.ts.gz",
+      "rawBytes": 4169,
+      "gzipBytes": 1518
+    },
+    {
+      "original": "before-repeat/prepare-readers.ts",
+      "archive": "before-repeat/prepare-readers.ts.gz",
+      "rawBytes": 1236,
+      "gzipBytes": 648
+    },
+    {
+      "original": "after-cold/config-write.ts",
+      "archive": "after-cold/config-write.ts.gz",
+      "rawBytes": 4154,
+      "gzipBytes": 1515
+    },
+    {
+      "original": "after-cold/prepare-readers.ts",
+      "archive": "after-cold/prepare-readers.ts.gz",
+      "rawBytes": 1234,
+      "gzipBytes": 648
+    },
+    {
+      "original": "after-cold/config-write-before-prefix-repair.ts",
+      "archive": "after-cold/config-write-before-prefix-repair.ts.gz",
+      "rawBytes": 4146,
+      "gzipBytes": 1517
+    },
+    {
+      "original": "after-repeat/config-write.ts",
+      "archive": "after-repeat/config-write.ts.gz",
+      "rawBytes": 4162,
+      "gzipBytes": 1517
+    },
+    {
+      "original": "after-repeat/prepare-readers.ts",
+      "archive": "after-repeat/prepare-readers.ts.gz",
+      "rawBytes": 1234,
+      "gzipBytes": 648
+    },
+    {
+      "original": "after-repeat/config-write-before-prefix-repair.ts",
+      "archive": "after-repeat/config-write-before-prefix-repair.ts.gz",
+      "rawBytes": 4154,
+      "gzipBytes": 1519
+    }
+  ]
+}

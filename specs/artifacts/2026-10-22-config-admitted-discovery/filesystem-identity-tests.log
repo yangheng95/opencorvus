@@ -1,0 +1,17 @@
+$ bun script/run-tests.ts test/project-filesystem-identity.test.ts
+[1/1] START test/project-filesystem-identity.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) discovers the exact independent Project while a wide-inode peer is closed for deletion [2478.17ms]
+(pass) recognizes two real hard-link paths as the same filesystem identity [771.58ms]
+(pass) a later physical comparison observes the current replacement and its new hard link [7.72ms]
+(pass) a real directory alias resolves its physical identity when inode metadata is unknown [5.74ms]
+(pass) a required metadata read returns its original filesystem error [4.49ms]
+(pass) unknown metadata preserves the original required physical-path error [5.03ms]
+
+ 6 pass
+ 0 fail
+ 8 expect() calls
+Ran 6 tests across 1 file. [5.74s]
+[1/1] DONE test/project-filesystem-identity.test.ts exit=0 duration=6.31s

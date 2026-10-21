@@ -1,0 +1,41 @@
+$ bun script/run-tests.ts test/project-git-discovery.test.ts
+[1/1] START test/project-git-discovery.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Git availability selects the explicit repository error and the ordinary directory identity [503.49ms]
+(pass) an existing damaged Git directory returns its explicit discovery error [581.04ms]
+(pass) a damaged local Git directory inside a valid parent repository returns its own discovery error [572.78ms]
+(pass) Git discovery resolves an unborn worktree with a separate metadata directory [1581.78ms]
+(skip) POSIX Git discovery preserves newline and trailing whitespace in repository paths
+(pass) Git discovery preserves the exact main, linked and aliased Project occurrence [2164.39ms]
+(pass) a registered worktree reports damaged Git metadata and recovers its original owner [892.55ms]
+(pass) a registered worktree reports unavailable Git and admits its owner after PATH restoration [868.05ms]
+(pass) replacement after a registered candidate returns the physical occurrence error then admits a fresh observation [1410.24ms]
+727 |       if (
+728 |         !inheritedAdmission.occurrence ||
+729 |         !ProjectDirectoryAdmission.sameOccurrence(discoveredOccurrence, inheritedAdmission.occurrence) ||
+730 |         !ProjectDirectoryAdmission.sameOccurrence(inheritedAdmission.occurrence, admittedOccurrence)
+731 |       ) {
+732 |         throw new DirectoryOccurrenceChangedError({
+                    ^
+ProjectDirectoryOccurrenceChangedError: ProjectDirectoryOccurrenceChangedError: Project directory occurrence changed during inherited durable admission: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-ITWHp3\test-79832-eruU2x\fixtures\fixture-Sm0TFd
+ data: {
+  directory: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ITWHp3\\test-79832-eruU2x\\fixtures\\fixture-Sm0TFd",
+  message: "Project directory occurrence changed during inherited durable admission: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ITWHp3\\test-79832-eruU2x\\fixtures\\fixture-Sm0TFd",
+},
+
+      at fromDirectory (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\project.ts:732:15)
+      at async initGit (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\project.ts:1328:24)
+(fail) a registered ordinary directory initializes Git under its inherited physical admission [433.26ms]
+
+ 8 pass
+ 1 skip
+ 1 fail
+ 22 expect() calls
+Ran 10 tests across 1 file. [12.70s]
+[1/1] DONE test/project-git-discovery.test.ts exit=1 duration=13.41s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\project-git-discovery.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\project-git-discovery.test.ts
+error: script "test" exited with code 1

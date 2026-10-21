@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [配置全量验证与准入发现](2026-10-22-config-admitted-discovery/README.md)：166完整目录/两轮保存恢复/并发读、九捕获八完整视图；Git重复发现减半、约14秒，10/5门槛仍失败；16正向合同及原数据/4次Sol/八份配对文件退休。
+
 - [Sources键盘与侧栏焦点](2026-10-22-source-keyboard-dock/README.md)：十图、真实键盘/焦点交接与两来源CtrlV验证；工具剪贴板旧观测完整保留，零模型及原90表全字段/物理链结算。
 
 - [成员流中的语言切换与Sources](2026-10-22-member-locale-stream/README.md)：十张人工图、真实24节流/中英界面/来源开合及复制、Sol4/8全source EOF，原数据与自然记忆更新分别保留，完整物理/四成员授权退休。
