@@ -141,7 +141,7 @@
   row-gap: var(--ui-gap-lg);
   min-width: 0;
   min-height: 0;
-  padding-block: clamp(var(--ui-gap-4xl), 16vh, calc(128px * var(--ui-scale))) var(--ui-gap-4xl);
+  padding-block: clamp(var(--ui-gap-4xl), 8vh, calc(96px * var(--ui-scale))) var(--ui-gap-4xl);
   box-sizing: border-box;
   overflow-y: auto;
   overscroll-behavior-y: contain;

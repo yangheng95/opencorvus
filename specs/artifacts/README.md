@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Goal 首页信息层级与默认布局](2026-10-22-goal-home-hierarchy/README.md)：九张人工图、正式构建与中英交互，输入/示例/持续目标层级清楚；两scope90表156566原行保持、零模型与完整物理结算。
+
 - [同文档事件流断连与恢复](2026-10-22-native-stream-reconnect/README.md)：七张实图、原生/透传故障真实ECONNRESET和最新cursor重开；15次Sol原reader覆盖活跃断流，修复诊断旧指令重复校验，原数据保留。
 
 - [成员正文流中刷新与来源恢复](2026-10-22-live-member-refresh/README.md)：十张人工实图、15次真实Sol与原reader时段，B刷新前后同一消息继续输出；修正收尾资格与凭据退休耦合，完整原数据/schema保持。

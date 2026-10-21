@@ -1,0 +1,73 @@
+{
+  "launcher": {
+    "observedAtUtc": "2026-10-21T18:45:16.9333527Z",
+    "childExitCode": 0
+  },
+  "observedAtUtc": "2026-10-21T18:45:24.5132682Z",
+  "native": {
+    "occurrence": "goal-home-hierarchy-513-before-service-3c55bef5-ce3a-4854-8569-e84e90f41a88",
+    "outcome": "settled",
+    "host": {
+      "pid": 74416,
+      "processInstanceID": "win32:639282049892278361",
+      "occurrenceID": "4927a243-04b0-4f37-8415-056ccb6a3438"
+    },
+    "target": {
+      "pid": 70400,
+      "processInstanceID": "win32:639282049900982172",
+      "occurrenceID": "334ff284-ae18-447f-9a62-ef77f7887024"
+    },
+    "observedAtUtc": "2026-10-21T18:45:16.866Z",
+    "deadlineAt": 1792609388216,
+    "terminal": {
+      "occurrenceID": "goal-home-hierarchy-513-before-service-3c55bef5-ce3a-4854-8569-e84e90f41a88",
+      "pid": 70400,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "provider": {
+    "at": "2026-10-21T18:43:13.878Z",
+    "maximum": 0,
+    "actual": 0,
+    "exhausted": false,
+    "requests": [],
+    "scope": "Goal home hierarchy review; no credentials or model catalog copied"
+  },
+  "originalHandle": 42877,
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 74416,
+        "processInstanceID": "win32:639282049892278361",
+        "occurrenceID": "4927a243-04b0-4f37-8415-056ccb6a3438"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 70400,
+        "processInstanceID": "win32:639282049900982172",
+        "occurrenceID": "334ff284-ae18-447f-9a62-ef77f7887024"
+      }
+    }
+  ],
+  "shutdown": {
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYi9oLc00KM3CSy9m6\"}",
+    "occurrence": "goal-home-hierarchy-513-before-service-3c55bef5-ce3a-4854-8569-e84e90f41a88",
+    "observedAtUtc": "2026-10-21T18:45:16.7171827Z",
+    "statusCode": 200,
+    "target": {
+      "pid": 70400,
+      "processInstanceID": "win32:639282049900982172",
+      "occurrenceID": "334ff284-ae18-447f-9a62-ef77f7887024"
+    }
+  },
+  "originalExit": 0
+}

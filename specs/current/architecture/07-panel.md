@@ -3154,13 +3154,17 @@ real orchestration participants with localized headers and preserved canonical a
 Manual interaction and screenshot review on the formal development `/ui` surface
 provide UI acceptance; API contract checks do not substitute for visual evidence.
 
-The launcher home places the same control's owner-free guide beside the composer,
-with explicit steps to start/open a conversation, create its goal, and manage its
-progress. Its write action only focuses the real composer. It creates no owner,
-Message, or goal. Selected conversations keep the owner-bound strip above their
-transcript; creation is a distinct action and the form explains automatic
-continuation and unspecified budgets. The home composition scrolls as one region
-so the input, starters, and guide remain reachable with a desktop dock open.
+The launcher home keeps ordinary chat starters immediately after the real
+composer, followed by the shared continuous-goal control in its own bounded
+region. Its visible explanation covers success criteria, automatic continuation,
+the conversation-header progress/pause controls, the selected model, and blank
+budgets. The detailed guide uses the same localized control and form. Opening
+the home form preserves the composer draft and creates no owner, Message, or
+goal; confirmation invokes the existing new-conversation/goal launch flow.
+Selected conversations keep the owner-bound strip above their transcript.
+Creation remains an explicit action, with automatic-continuation and budget
+semantics shown before confirmation. The home composition scrolls as one region
+so the input, starters, and goal remain reachable with a desktop dock open.
 
 ## Current diagnostic log viewer
 

@@ -93,20 +93,18 @@
 }
 
 .continuous-goal--home {
-  padding: var(--ui-gap-sm) calc(var(--ui-composer-content-inset) + var(--oc-border-width));
+  padding: var(--ui-gap-xl);
   font-size: var(--ui-font-body);
-  background: transparent;
-  border: 0;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+  background: color-mix(in srgb, var(--surface-inset) 48%, transparent);
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-large);
+  display: grid;
   gap: var(--ui-gap-lg);
 }
 .continuous-goal__welcome {
   display: flex;
   align-items: flex-start;
   gap: var(--ui-gap-md);
-  flex: 1 1 calc(280px * var(--ui-scale));
 }
 .continuous-goal__welcome > div:not(.continuous-goal__welcome-icon) {
   flex: 1;
@@ -132,6 +130,16 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--ui-gap-sm);
+}
+.continuous-goal__home-setup {
+  flex: 1 1 calc(280px * var(--ui-scale));
+  min-width: 0;
+  margin: 0;
+  margin-inline-start: var(--ui-gap-sm);
+  color: var(--text-soft);
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-normal);
+  overflow-wrap: anywhere;
 }
 .continuous-goal__steps {
   list-style: none;

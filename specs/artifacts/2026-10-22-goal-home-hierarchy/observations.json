@@ -1,0 +1,98 @@
+{
+  "sourceCommit": "dade6e2cbc9cd6ec3ea5c2849dad8da45ea12c85",
+  "at": "2026-10-21T18:52:26.241Z",
+  "scope": "Single developer agent;real source CLI /ui;manual screenshots and interactions only",
+  "assets": [
+    {
+      "time": "2026-10-21T18:47:16.973Z",
+      "requestID": "c6c4c79a-84e7-4139-917c-f18ad6dbafd7",
+      "path": "/ui/assets/main-uBAGKTCv.js",
+      "statusCode": 200
+    }
+  ],
+  "validation": [
+    {
+      "command": "bun run --cwd packages/overlay typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "bun run --cwd packages/overlay check:i18n",
+      "exitCode": 0,
+      "observation": "2 locales;2527 top-level keys"
+    },
+    {
+      "command": "bun run --cwd packages/overlay check:css-tokens",
+      "exitCode": 0,
+      "observation": "8879 references;268 global tokens"
+    },
+    {
+      "command": "node .tmp-product-iteration/goal-home-hierarchy-513/build.mjs after",
+      "exitCode": 0,
+      "observation": "7313 modules;84 seconds;formal main-uBAGKTCv.js"
+    },
+    {
+      "command": "bun run docs:check",
+      "exitCode": 0
+    },
+    {
+      "command": "bun run check:architecture-index",
+      "exitCode": 0
+    }
+  ],
+  "manual": {
+    "screenshots": 9,
+    "locale": [
+      "en-US",
+      "zh-CN"
+    ],
+    "sidebarWidths": [
+      280,
+      493
+    ],
+    "flow": [
+      "Home",
+      "Goal form prefilled from real composer",
+      "Close retains composer draft",
+      "How it works",
+      "Real starter fills composer"
+    ],
+    "finalRects": {
+      "prompt": {
+        "y": 94.4,
+        "width": 760
+      },
+      "composer": {
+        "y": 171.2,
+        "width": 760
+      },
+      "starters": {
+        "y": 306.8,
+        "width": 760
+      },
+      "goal": {
+        "y": 352.8,
+        "width": 760,
+        "height": 121.6
+      }
+    }
+  },
+  "provider": {
+    "maximum": 0,
+    "actual": 0,
+    "credentialsOrModelCatalogCopies": "None"
+  },
+  "limits": [
+    "No new Goal model execution qualification",
+    "No right dock, mobile or continuous-frame Rendering qualification",
+    "No authentication transport qualification"
+  ],
+  "resources": {
+    "pages100and101": "Closed",
+    "originalHandles": [
+      42877,
+      99731
+    ],
+    "physical": "Original native/output/request/launcher/birth chains complete;public shutdown200",
+    "data": "Both scopes90 tables156566 original rows retained;schema3/canonical unchanged"
+  }
+}

@@ -435,6 +435,7 @@ export function ContinuousGoalControl(props: {
           <Button type="button" variant="ghost" size="sm" tone="neutral" disabled={busy() || props.starting} onClick={() => open("about")}>
             {t("continuous_goal.home.how")}
           </Button>
+          <p class="continuous-goal__home-setup">{t("continuous_goal.home.setup")}</p>
         </div>
       </Show>
       <Show when={!props.home}>

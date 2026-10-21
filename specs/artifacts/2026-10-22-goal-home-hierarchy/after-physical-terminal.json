@@ -1,0 +1,73 @@
+{
+  "observedAtUtc": "2026-10-21T18:50:21.0218067Z",
+  "chain": [
+    {
+      "identity": {
+        "pid": 76868,
+        "processInstanceID": "win32:639282052254709848",
+        "occurrenceID": "2ac43119-97d1-4019-8155-243458ef5b4d"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "identity": {
+        "pid": 86284,
+        "processInstanceID": "win32:639282052263308512",
+        "occurrenceID": "65cc8f93-cebe-4a5b-aa50-8d9f5e3e8096"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "originalHandle": 99731,
+  "shutdown": {
+    "statusCode": 200,
+    "observedAtUtc": "2026-10-21T18:50:14.5796273Z",
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYiB3ps00xoSzrW5O9\"}",
+    "occurrence": "goal-home-hierarchy-513-after-service-c8d00ad8-6676-42db-9bc8-2d3557a0f825",
+    "target": {
+      "pid": 86284,
+      "processInstanceID": "win32:639282052263308512",
+      "occurrenceID": "65cc8f93-cebe-4a5b-aa50-8d9f5e3e8096"
+    }
+  },
+  "provider": {
+    "at": "2026-10-21T18:47:10.148Z",
+    "maximum": 0,
+    "actual": 0,
+    "exhausted": false,
+    "requests": [],
+    "scope": "Goal home hierarchy review; no credentials or model catalog copied"
+  },
+  "launcher": {
+    "childExitCode": 0,
+    "observedAtUtc": "2026-10-21T18:50:14.7279904Z"
+  },
+  "originalExit": 0,
+  "native": {
+    "occurrence": "goal-home-hierarchy-513-after-service-c8d00ad8-6676-42db-9bc8-2d3557a0f825",
+    "outcome": "settled",
+    "host": {
+      "pid": 76868,
+      "processInstanceID": "win32:639282052254709848",
+      "occurrenceID": "2ac43119-97d1-4019-8155-243458ef5b4d"
+    },
+    "target": {
+      "pid": 86284,
+      "processInstanceID": "win32:639282052263308512",
+      "occurrenceID": "65cc8f93-cebe-4a5b-aa50-8d9f5e3e8096"
+    },
+    "observedAtUtc": "2026-10-21T18:50:14.662Z",
+    "deadlineAt": 1792609625362,
+    "terminal": {
+      "occurrenceID": "goal-home-hierarchy-513-after-service-c8d00ad8-6676-42db-9bc8-2d3557a0f825",
+      "pid": 86284,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  }
+}
