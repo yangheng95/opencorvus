@@ -1,0 +1,40 @@
+$ bun script/run-tests.ts test/task-cancellation-permissions.test.ts test/server/task-board-validator.test.ts
+[1/2] START test/task-cancellation-permissions.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Task cancellation settles all permission pages and descendants through their canonical decisions [4021.09ms]
+(pass) recovered historical cancellation retires its old permission while another Project remains actionable [2951.01ms]
+(pass) historical permission settlement keeps a reopened Task's new occurrence actionable [1288.85ms]
+(pass) a failed permission cancellation remains cancelling and converges through the production retry [1278.47ms]
+
+ 4 pass
+ 0 fail
+ 293 expect() calls
+Ran 4 tests across 1 file. [14.55s]
+[1/2] DONE test/task-cancellation-permissions.test.ts exit=0 duration=15.90s
+[2/2] START test/server/task-board-validator.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Task permission projects the canonical reply when reply-first=true [2671.22ms]
+(pass) Task permission projects the canonical reply when reply-first=false [2060.51ms]
+(pass) Channel Permission confirmation describes the actual winner of its real Task decision race [2141.74ms]
+(pass) real HTTP Board uses its complete weak entity tag for GET lists, wildcard, weak comparison and HEAD [2118.46ms]
+(pass) same-millisecond Task Permission termination refreshes its actual ledger-backed Interaction and HTTP body [2014.17ms]
+(pass) a real denied Permission retains its operator decision in the public Task history [1957.87ms]
+Board non-conditional Project response {
+  status: 200,
+  requestedTaskID: "tsk_g00VYfAs3n00Lyw7sWTE",
+  headerProjectID: "prj_hy5n9PhPqEcDjpBK2UAQ",
+  bodyTaskID: "tsk_g00VYfAs3n00Lyw7sWTE",
+  bodyProjectID: "prj_hvNlsmPmCSbFO7ue4eby",
+}
+(pass) Task-ID record reads retain their owner while an explicit execution Project enforces its authority [3025.74ms]
+(pass) actual Project public fields change the Board response and invalidate its previous HTTP validator [1903.52ms]
+
+ 8 pass
+ 0 fail
+ 38 expect() calls
+Ran 8 tests across 1 file. [19.65s]
+[2/2] DONE test/server/task-board-validator.test.ts exit=0 duration=19.78s

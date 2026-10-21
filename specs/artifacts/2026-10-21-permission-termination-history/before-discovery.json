@@ -1,0 +1,66 @@
+{
+  "at": "2026-10-21T06:23:29.375Z",
+  "stage": "before",
+  "target": {
+    "id": "tsk_g00VYeMccK0078SroWDw",
+    "project_id": "prj_h78jkovKe5D20efp76MY",
+    "session_id": "ses_-zURLdN8yzzYl6AVFS11",
+    "title": "持续目标与交付成果使用说明 501"
+  },
+  "cases": [
+    {
+      "request_id": "per_h9Tts9cnzyWtqrAjnwjN",
+      "task_id": "tsk_g00VYeMccK0078SroWDw",
+      "session_id": "ses_-zURLdMI8zzyihTDZeVm",
+      "ledgerEventID": "per_g0VYeVhyT00XzS04yhz9",
+      "event_type": "cancelled",
+      "reason": "The QA operator ends this incomplete private run before its fixed12-request scope can be exhausted. Four actual internal memory requests made the original test budget insufficient;retain all evidence and repeat the original two-file acceptance in a separately reviewed finite scope.",
+      "actor_id": "system",
+      "time_created": 1792554430041
+    }
+  ],
+  "retiredApprovals": [
+    {
+      "request_id": "per_hh2E0Tgpz8DlDe8Na7xQ",
+      "task_id": "tsk_g00VYf0QVV00zBt1vWF3",
+      "ledgerEventID": "per_g0VYf1dK400EFTUOS2Dl",
+      "event_type": "allowed_once",
+      "time_created": 1792562038656
+    },
+    {
+      "request_id": "per_hhuvStC2uhXV2bDRjbg0",
+      "task_id": "tsk_g00VYf0QVV00zBt1vWF3",
+      "ledgerEventID": "per_g0VYf0od300eb3Q10i5h",
+      "event_type": "allowed_once",
+      "time_created": 1792561843789
+    },
+    {
+      "request_id": "per_hntoTCRjF6heBu66gNTo",
+      "task_id": "tsk_g00VYf0QVV00zBt1vWF3",
+      "ledgerEventID": "per_g0VYf0hBS004nGcCCbQ0",
+      "event_type": "allowed_once",
+      "time_created": 1792561815170
+    },
+    {
+      "request_id": "per_hjRSipR2aabGumCMxeaC",
+      "task_id": "tsk_g00VYf0QVV00zBt1vWF3",
+      "ledgerEventID": "per_g0VYf0dWb0014Fi6aXPV",
+      "event_type": "allowed_once",
+      "time_created": 1792561801105
+    },
+    {
+      "request_id": "per_hJ12mWAZr2zmJCpg05My",
+      "task_id": "tsk_g00VYejR5b00qdJmPgrC",
+      "ledgerEventID": "per_g0VYekLS700oCvyF7wfk",
+      "event_type": "allowed_once",
+      "time_created": 1792557918387
+    },
+    {
+      "request_id": "per_h5H0u3p5nPWV7N66sDI5",
+      "task_id": "tsk_g00VYejR5b00qdJmPgrC",
+      "ledgerEventID": "per_g0VYek8XK008rKQtGY01",
+      "event_type": "allowed_once",
+      "time_created": 1792557868738
+    }
+  ]
+}

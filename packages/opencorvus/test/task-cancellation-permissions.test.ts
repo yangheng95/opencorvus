@@ -120,8 +120,20 @@ test("Task cancellation settles all permission pages and descendants through the
         })
       }
       const interactions = await EngineService.listTaskInteractions(target.id)
-      expect(interactions.map((item) => ({ status: item.status, decision: item.response?.decision }))).toEqual(
-        rows.map(() => ({ status: "rejected", decision: "deny" })),
+      expect(interactions.map((item) => ({ externalID: item.externalID, status: item.status, response: item.response }))
+        .sort((a, b) => a.externalID.localeCompare(b.externalID))).toEqual(
+        rows.map((row) => ({
+          externalID: row.request.id,
+          status: "rejected",
+          response: {
+            decision: "deny",
+            termination: {
+              status: "cancelled",
+              ledgerEventID: Database.use((db) => readPermissionRequestFacts(db, row.request.id))!.authority!.id,
+              reason: origin(target.id).reason,
+            },
+          },
+        })).sort((a, b) => a.externalID.localeCompare(b.externalID)),
       )
       const originalTerminal = ProtocolStore.latestTaskEvent(target.id, "task.cancelled")
       expect(await EngineService.cancelTask(target.id, { origin: origin(target.id) })).toBe(true)

@@ -266,6 +266,14 @@ test("same-millisecond Task Permission termination refreshes its actual ledger-b
           id: old.interactions[0].id,
           externalID: request.id,
           status: "rejected",
+          response: {
+            decision: "deny",
+            termination: {
+              status: "stale",
+              ledgerEventID: decision.eventID,
+              reason: "Task public input changed",
+            },
+          },
           time: { created: pendingFact.timeCreated, resolved: pendingFact.timeCreated },
         })
         expect(board.snapshotVersion).toBe(updated.headers.get("etag"))
@@ -279,6 +287,51 @@ test("same-millisecond Task Permission termination refreshes its actual ledger-b
     },
   })
 }, 60_000)
+
+test("a real denied Permission retains its operator decision in the public Task history", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({ directory: project.path, fn: async () => {
+    await Config.updateProjectPatch({ permission_mode: "ask" })
+    EngineInteraction.subscribe()
+    const { taskID, root } = await taskFixture()
+    let request: PermissionAuthority.Request | undefined
+    const unsubscribe = Bus.subscribe(PermissionAuthority.Event.Asked, async ({ properties }) => {
+      request = properties
+      await PermissionAuthority.reply({
+        requestID: request.id,
+        decision: "deny",
+        actorID: "task-operator",
+        message: "Operator declined this exact request",
+      })
+    })
+    try {
+      const result = await withTimeout(PermissionAuthority.authorizeAndExecute({
+        projectID: Instance.project.id,
+        sessionID: root.id,
+        messageID: Identifier.ascending("message"),
+        toolCallID: Identifier.ascending("part"),
+        providerKind: "builtin",
+        providerID: "builtin",
+        toolName: "webfetch",
+        args: { url: "https://example.test/operator-decision" },
+      }, async () => "authorized result").catch((error) => error), 10000, "Original operator denial")
+      expect(result).toBeInstanceOf(PermissionAuthority.RejectedError)
+      const facts = Database.use((db) => readPermissionRequestFacts(db, request!.id))!
+      expect(facts.authority).toMatchObject({ event_type: "denied", actor_id: "task-operator" })
+      const response = await Server.App().request(`/task/${taskID}/board`, {
+        headers: { "x-opencorvus-directory": project.path },
+      })
+      const board = await response.json() as any
+      expect({ status: response.status, interactions: board.interactions.map((item: any) => ({
+        externalID: item.externalID, status: item.status, response: item.response, resolved: item.time.resolved,
+      })) }).toEqual({ status: 200, interactions: [{
+        externalID: request!.id, status: "rejected", response: { decision: "deny" }, resolved: facts.authority!.time_created,
+      }] })
+    } finally {
+      unsubscribe()
+    }
+  } })
+}, 30000)
 
 test("Task-ID record reads retain their owner while an explicit execution Project enforces its authority", async () => {
   await using owner = await memoryProject("validator-owner")

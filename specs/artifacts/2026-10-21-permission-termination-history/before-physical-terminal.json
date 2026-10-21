@@ -1,0 +1,73 @@
+{
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 87016,
+        "processInstanceID": "win32:639281606324804037",
+        "occurrenceID": "5ed75ad3-efea-4490-9856-a74218df7293"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 77296,
+        "processInstanceID": "win32:639281606333269730",
+        "occurrenceID": "d4964dc0-2692-4059-acaf-a76b90386491"
+      }
+    }
+  ],
+  "originalHandle": 68133,
+  "provider": {
+    "at": "2026-10-21T06:23:57.082Z",
+    "maximum": 0,
+    "actual": 0,
+    "exhausted": false,
+    "requests": [],
+    "scope": "Read-only historical Task UI; no credentials or model catalog copied"
+  },
+  "shutdown": {
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYf9mnr00JQhUNvBhl\"}",
+    "target": {
+      "pid": 77296,
+      "processInstanceID": "win32:639281606333269730",
+      "occurrenceID": "d4964dc0-2692-4059-acaf-a76b90386491"
+    },
+    "occurrence": "permission-termination-history-505-before-service-71156d1a-ff9a-4db6-8e4a-eb45ec374f37",
+    "observedAtUtc": "2026-10-21T06:26:21.7794144Z",
+    "statusCode": 200
+  },
+  "originalExit": 0,
+  "launcher": {
+    "childExitCode": 0,
+    "observedAtUtc": "2026-10-21T06:26:21.9001016Z"
+  },
+  "observedAtUtc": "2026-10-21T06:26:23.9311885Z",
+  "native": {
+    "occurrence": "permission-termination-history-505-before-service-71156d1a-ff9a-4db6-8e4a-eb45ec374f37",
+    "outcome": "settled",
+    "host": {
+      "pid": 87016,
+      "processInstanceID": "win32:639281606324804037",
+      "occurrenceID": "5ed75ad3-efea-4490-9856-a74218df7293"
+    },
+    "target": {
+      "pid": 77296,
+      "processInstanceID": "win32:639281606333269730",
+      "occurrenceID": "d4964dc0-2692-4059-acaf-a76b90386491"
+    },
+    "observedAtUtc": "2026-10-21T06:26:21.848Z",
+    "deadlineAt": 1792565032448,
+    "terminal": {
+      "occurrenceID": "permission-termination-history-505-before-service-71156d1a-ff9a-4db6-8e4a-eb45ec374f37",
+      "pid": 77296,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  }
+}

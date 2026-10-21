@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [权限历史的系统终止语义](records/2026-10/2026-10-21-permission-termination-history.md)：[五张中英文实图、12项合同与完整历史保留](artifacts/2026-10-21-permission-termination-history/README.md)，修复原系统取消显示Reject，原决定/执行/schema不变。
+
 - [新Task成员来源与正文流](records/2026-10/2026-10-21-task-member-stream-review.md)：[12张实图、15次实际Sol和自然Task完成](artifacts/2026-10-21-task-member-stream/README.md)，真实新成员两来源与流中列表/调宽覆盖，生产未改，原141633行源保持。
 
 - [成员真实流与呈现身份](records/2026-10/2026-10-21-member-stream-owner-review.md)：[11张实图、六次实际Sol与精确待机/数据审计](artifacts/2026-10-21-member-stream-owner/README.md)，原20个正文身份观察稳定，生产未改，连续帧/新Task成员仍未完全覆盖。

@@ -751,7 +751,15 @@ export function projectInteractionRowInTransaction(db: Database.TxOrDb, row: Per
     time_created: request.timeCreated,
     status: permissionDecision ? (permissionRejected ? "rejected" : "answered") : (sourcedOutcome?.status ?? outcome?.outcome ?? "pending"),
     response: permissionDecision ? { decision: permissionFacts!.decision,
-      ...(permissionFacts!.autoReply ? { auto_reply: true } : {}) } : (sourcedOutcome?.response ?? outcome?.response ?? null),
+      ...(permissionFacts!.autoReply ? { auto_reply: true } : {}),
+      ...(permissionDecision.event_type === "cancelled" || permissionDecision.event_type === "stale"
+        ? { termination: {
+            status: permissionDecision.event_type,
+            ledgerEventID: permissionDecision.id,
+            reason: permissionDecision.reason,
+          } }
+        : {}),
+    } : (sourcedOutcome?.response ?? outcome?.response ?? null),
     time_resolved: permissionDecision?.time_created ?? sourcedOutcome?.timeResolved ?? outcome?.time_created ?? null,
     time_updated: permissionDecision?.time_created ?? sourcedOutcome?.timeResolved ?? outcome?.time_created ?? request.timeCreated,
   }

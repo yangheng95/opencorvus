@@ -121,6 +121,15 @@ Session, request and ledger-event identity in the same transaction and owned out
 not an operator reply. Task invalidation validates that fact and its Interaction projection
 before using the existing ephemeral protocol event; it creates no second terminal authority.
 
+Task Permission history retains the canonical `rejected`/`deny` execution decision.
+When its decision-slot winner is `cancelled` or `stale`, that same read projection
+also exposes `response.termination` with the winner's `status`, `ledgerEventID`
+and original nullable `reason`. Current-language history labels distinguish that
+termination from an actual denied decision. A later slotless `stale` retirement
+does not replace an earlier approval or produce termination metadata for it.
+The projection applies to retained history without rewriting ledger facts or
+changing response order, resolution time, execution authority or storage schema.
+
 Task cancellation settles pending Permission decisions for the exact owned Session tree
 after physical Prompt and root-ingress settlement and before its terminal Task event.
 The canonical cancelled decision and Terminated outbox remain the sole authority;

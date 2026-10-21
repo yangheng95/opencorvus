@@ -144,6 +144,15 @@ export function interactionResponseText(interaction: any): string {
       (interaction.status === "answered" && decision !== "deny") ||
       (interaction.status === "rejected" && decision === "deny")
     ) {
+      const termination = response?.termination
+      if (termination !== undefined) {
+        if (decision !== "deny" || !record(termination)) {
+          throw new Error(`permission ${interaction.id} termination conflicts with its decision`)
+        }
+        if (termination.status === "cancelled") return prefix + t("permissions.event.cancelled")
+        if (termination.status === "stale") return prefix + t("permissions.event.stale")
+        throw new Error(`permission ${interaction.id} has unknown termination status ${String(termination.status)}`)
+      }
       return prefix + label
     }
     throw new Error(`permission ${interaction.id} status ${interaction.status} conflicts with decision ${String(decision)}`)

@@ -1,0 +1,852 @@
+$ bun script/run-tests.ts test/task-cancellation-permissions.test.ts test/server/task-board-validator.test.ts
+[1/2] START test/task-cancellation-permissions.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+118 |           actor_id: "system",
+119 |           reason: origin(target.id).reason,
+120 |         })
+121 |       }
+122 |       const interactions = await EngineService.listTaskInteractions(target.id)
+123 |       expect(interactions.map((item) => ({ status: item.status, response: item.response }))).toEqual(
+                                                                                                   ^
+error: expect(received).toEqual(expected)
+
+@@ -1,363 +1,363 @@
+  [
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMsf00ArKEI5xqN",
++         "ledgerEventID": "per_g0VYfANAB00rej1dtH06",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMsx00t0w73tfXp",
++         "ledgerEventID": "per_g0VYfAN9x00M9syMAG5C",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMtF000dT3WyX1E",
++         "ledgerEventID": "per_g0VYfAN9k009PeFtNJd2",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMtU0043vkxMQZY",
++         "ledgerEventID": "per_g0VYfAN9V00XmEoDs1hK",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMtk00LEHjjg9r5",
++         "ledgerEventID": "per_g0VYfAN9H00KqCLLJNtf",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMuf00e5txSbiua",
++         "ledgerEventID": "per_g0VYfAN8600aGP13tQ2a",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMuv003mrZisifQ",
++         "ledgerEventID": "per_g0VYfAN7r00K2DqY7Kw3",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMv8001hasw4Uk9",
++         "ledgerEventID": "per_g0VYfAN7d007xPr5h7IA",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMvf00o3Io2k8dd",
++         "ledgerEventID": "per_g0VYfAN7O00My4omzXcM",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMvu00DAKCukh08",
++         "ledgerEventID": "per_g0VYfAN7900VAJpMOnEV",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMw700t8EjwAYwX",
++         "ledgerEventID": "per_g0VYfAN6v00jFX6jRwh0",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMwM007CWyfu1wc",
++         "ledgerEventID": "per_g0VYfAN6h00j8cDQWvxQ",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMwa00IvnGQhcdd",
++         "ledgerEventID": "per_g0VYfAN6S00IrozXiE96",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMwo00zPIi18EHr",
++         "ledgerEventID": "per_g0VYfAN6F00YIx2AF710",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMx4009Evo6xgKU",
++         "ledgerEventID": "per_g0VYfAN6100YiR3IQO2G",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMxI005Bqcqsflj",
++         "ledgerEventID": "per_g0VYfAN5m00fz7bAEkin",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMxV00UWwrnjrNd",
++         "ledgerEventID": "per_g0VYfAN5Y00psER1ASML",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMxi007ABYMGKm8",
++         "ledgerEventID": "per_g0VYfAN5K00gBO6qBWeM",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMxw00hjr8RLQ9q",
++         "ledgerEventID": "per_g0VYfAN5700LpH3k2SZp",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMyA00l6Uhx1uNE",
++         "ledgerEventID": "per_g0VYfAN4s00MjMOtUg88",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMyT00NUmob01eU",
++         "ledgerEventID": "per_g0VYfAN4f00Bxn8fBBF7",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMyj00N978k11K8",
++         "ledgerEventID": "per_g0VYfAN4Q00cAuTFFbGg",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMyy00eKc9J3Bk1",
++         "ledgerEventID": "per_g0VYfAN4C00f1NDG2OC2",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMzC00TN6XG21BO",
++         "ledgerEventID": "per_g0VYfAN3y00ItRS0l9Sw",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMzP00B1JHzUNaj",
++         "ledgerEventID": "per_g0VYfAN3l00UVZSph8Bh",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMzd00Z82yK3hKj",
++         "ledgerEventID": "per_g0VYfAN3X00hA7tuCeOS",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAMzs00gd11Ua2pK",
++         "ledgerEventID": "per_g0VYfAN3I00FE5mDSRO7",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN0700S3wxGGqFs",
++         "ledgerEventID": "per_g0VYfAN3400d1Ovhc2rQ",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN0Q00eAUpqGcIp",
++         "ledgerEventID": "per_g0VYfAN2q00BryrSQKFE",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN0f00cbVgAdS8t",
++         "ledgerEventID": "per_g0VYfAN2b00JcS2ORrG1",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN0t00hsHb7aJSJ",
++         "ledgerEventID": "per_g0VYfAN2M00HJAduHKBI",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN17003UFnHEyWa",
++         "ledgerEventID": "per_g0VYfAN2800B4jJtbmD6",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN1L00vgJ4ljGxv",
++         "ledgerEventID": "per_g0VYfAN1p00leRAYkK1a",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+@@ -375,363 +375,363 @@
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN1p00leRAYkK1a",
++         "ledgerEventID": "per_g0VYfAN1L00vgJ4ljGxv",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN2800B4jJtbmD6",
++         "ledgerEventID": "per_g0VYfAN17003UFnHEyWa",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN2M00HJAduHKBI",
++         "ledgerEventID": "per_g0VYfAN0t00hsHb7aJSJ",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN2b00JcS2ORrG1",
++         "ledgerEventID": "per_g0VYfAN0f00cbVgAdS8t",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN2q00BryrSQKFE",
++         "ledgerEventID": "per_g0VYfAN0Q00eAUpqGcIp",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN3400d1Ovhc2rQ",
++         "ledgerEventID": "per_g0VYfAN0700S3wxGGqFs",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN3I00FE5mDSRO7",
++         "ledgerEventID": "per_g0VYfAMzs00gd11Ua2pK",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN3X00hA7tuCeOS",
++         "ledgerEventID": "per_g0VYfAMzd00Z82yK3hKj",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN3l00UVZSph8Bh",
++         "ledgerEventID": "per_g0VYfAMzP00B1JHzUNaj",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN3y00ItRS0l9Sw",
++         "ledgerEventID": "per_g0VYfAMzC00TN6XG21BO",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN4C00f1NDG2OC2",
++         "ledgerEventID": "per_g0VYfAMyy00eKc9J3Bk1",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN4Q00cAuTFFbGg",
++         "ledgerEventID": "per_g0VYfAMyj00N978k11K8",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN4f00Bxn8fBBF7",
++         "ledgerEventID": "per_g0VYfAMyT00NUmob01eU",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN4s00MjMOtUg88",
++         "ledgerEventID": "per_g0VYfAMyA00l6Uhx1uNE",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN5700LpH3k2SZp",
++         "ledgerEventID": "per_g0VYfAMxw00hjr8RLQ9q",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN5K00gBO6qBWeM",
++         "ledgerEventID": "per_g0VYfAMxi007ABYMGKm8",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN5Y00psER1ASML",
++         "ledgerEventID": "per_g0VYfAMxV00UWwrnjrNd",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN5m00fz7bAEkin",
++         "ledgerEventID": "per_g0VYfAMxI005Bqcqsflj",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN6100YiR3IQO2G",
++         "ledgerEventID": "per_g0VYfAMx4009Evo6xgKU",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN6F00YIx2AF710",
++         "ledgerEventID": "per_g0VYfAMwo00zPIi18EHr",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN6S00IrozXiE96",
++         "ledgerEventID": "per_g0VYfAMwa00IvnGQhcdd",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN6h00j8cDQWvxQ",
++         "ledgerEventID": "per_g0VYfAMwM007CWyfu1wc",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN6v00jFX6jRwh0",
++         "ledgerEventID": "per_g0VYfAMw700t8EjwAYwX",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN7900VAJpMOnEV",
++         "ledgerEventID": "per_g0VYfAMvu00DAKCukh08",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN7O00My4omzXcM",
++         "ledgerEventID": "per_g0VYfAMvf00o3Io2k8dd",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN7d007xPr5h7IA",
++         "ledgerEventID": "per_g0VYfAMv8001hasw4Uk9",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN7r00K2DqY7Kw3",
++         "ledgerEventID": "per_g0VYfAMuv003mrZisifQ",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN8600aGP13tQ2a",
++         "ledgerEventID": "per_g0VYfAMuf00e5txSbiua",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN9H00KqCLLJNtf",
++         "ledgerEventID": "per_g0VYfAMtk00LEHjjg9r5",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN9V00XmEoDs1hK",
++         "ledgerEventID": "per_g0VYfAMtU0043vkxMQZY",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN9k009PeFtNJd2",
++         "ledgerEventID": "per_g0VYfAMtF000dT3WyX1E",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfAN9x00M9syMAG5C",
++         "ledgerEventID": "per_g0VYfAMsx00t0w73tfXp",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+    },
+    {
+      "response": {
+        "decision": "deny",
+        "termination": {
+-         "ledgerEventID": "per_g0VYfANAB00rej1dtH06",
++         "ledgerEventID": "per_g0VYfAMsf00ArKEI5xqN",
+          "reason": "The operator cancelled this Task",
+          "status": "cancelled",
+        },
+      },
+      "status": "rejected",
+
+- Expected  - 66
++ Received  + 66
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\task-cancellation-permissions.test.ts:123:94)
+(fail) Task cancellation settles all permission pages and descendants through their canonical decisions [3167.07ms]
+(pass) recovered historical cancellation retires its old permission while another Project remains actionable [2858.34ms]
+(pass) historical permission settlement keeps a reopened Task's new occurrence actionable [1400.37ms]
+(pass) a failed permission cancellation remains cancelling and converges through the production retry [1583.86ms]
+
+ 3 pass
+ 1 fail
+ 289 expect() calls
+Ran 4 tests across 1 file. [13.92s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\task-cancellation-permissions.test.ts
+[1/2] DONE test/task-cancellation-permissions.test.ts exit=1 duration=14.51s
+[2/2] START test/server/task-board-validator.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Task permission projects the canonical reply when reply-first=true [2628.44ms]
+(pass) Task permission projects the canonical reply when reply-first=false [2173.88ms]
+(pass) Channel Permission confirmation describes the actual winner of its real Task decision race [3116.44ms]
+(pass) real HTTP Board uses its complete weak entity tag for GET lists, wildcard, weak comparison and HEAD [1837.53ms]
+(pass) same-millisecond Task Permission termination refreshes its actual ledger-backed Interaction and HTTP body [2468.44ms]
+(pass) a real denied Permission retains its operator decision in the public Task history [1879.89ms]
+Board non-conditional Project response {
+  status: 200,
+  requestedTaskID: "tsk_g00VYfATPS00Ma516dJP",
+  headerProjectID: "prj_hyOSles30lRYfazy1r36",
+  bodyTaskID: "tsk_g00VYfATPS00Ma516dJP",
+  bodyProjectID: "prj_hq8JPpwWStD1ETnw214q",
+}
+(pass) Task-ID record reads retain their owner while an explicit execution Project enforces its authority [2928.83ms]
+(pass) actual Project public fields change the Board response and invalidate its previous HTTP validator [1732.28ms]
+
+ 8 pass
+ 0 fail
+ 38 expect() calls
+Ran 8 tests across 1 file. [20.54s]
+[2/2] DONE test/server/task-board-validator.test.ts exit=0 duration=20.66s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\task-cancellation-permissions.test.ts
+error: script "test" exited with code 1

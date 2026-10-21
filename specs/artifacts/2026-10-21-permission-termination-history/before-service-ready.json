@@ -1,0 +1,31 @@
+{
+  "owner": {
+    "pid": 77296,
+    "processInstanceID": "win32:639281606333269730",
+    "occurrenceID": "31ea3f68-d7f1-42f3-bd50-94a09a551684"
+  },
+  "parent": {
+    "pid": 67152,
+    "processInstanceID": "win32:639281606332957342",
+    "occurrenceID": "2c7d9cad-e574-41c6-b3bd-6458a901675c"
+  },
+  "occurrence": "permission-termination-history-505-before-service-71156d1a-ff9a-4db6-8e4a-eb45ec374f37",
+  "receipt": {
+    "schemaVersion": 1,
+    "occurrenceID": "permission-termination-history-505-before-service-71156d1a-ff9a-4db6-8e4a-eb45ec374f37",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18913",
+    "pid": 77296
+  },
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\permission-termination-history-505-before\\runtime\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\permission-termination-history-505-before\\runtime\\data",
+      "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/permission-termination-history-505-before/home"
+    }
+  },
+  "observedAt": "2026-10-21T06:23:57.083Z",
+  "qualification": "Real development CLI/UI;zero-model historical read qualification; no Provider credential qualification"
+}

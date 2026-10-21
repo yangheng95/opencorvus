@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-21T06:37:16.388Z",
+  "developerAgents": 1,
+  "sourceRevision": "9d21557be265c2bd9f70f9e41d541e8aa2b3199c",
+  "taskID": "tsk_g00VYeMccK0078SroWDw",
+  "permissionRequestID": "per_h9Tts9cnzyWtqrAjnwjN",
+  "ledgerEventID": "per_g0VYeVhyT00XzS04yhz9",
+  "productionChange": "One ledger-backed Task interaction projection exposes termination status/event/reason;one existing localized response formatter consumes it;storage and execution contracts unchanged",
+  "qualification": {
+    "screenshots": 5,
+    "backendTests": 12,
+    "backendAssertions": 331,
+    "models": 0,
+    "beforePort": 18913,
+    "afterPort": 18915,
+    "beforeOriginalExec": 68133,
+    "afterOriginalExec": 86358,
+    "closedTabs": [
+      81,
+      82
+    ]
+  },
+  "data": "Both scopes preserve all90tables145033 original rows/all fields/schema3/integrity/source bytes/mtime/complete config;Provider activity364→364 in each. Original user18571 process/window/database untouched.",
+  "resources": "Both public shutdown200; original native physical/output/request/launcher/exact-birth closed. Zero model audits0/max0/exhaustedfalse. No credential or catalog copies.",
+  "limits": "Actual retained UI case is cancelled, with two earlier approvals subsequently retired. No retained Task denied/stale winner was found;their backend positive public contracts pass, but no fabricated historical UI case is substituted. Multi-member/reconnect/continuous frames/Main virtualization trigger and149-directory performance remain open.",
+  "firstTestFailure": "New assertion incorrectly paired creation-order requests with newest-first interactions. Original failure retained;corrected positive contract joins/sorts by externalID and compares exact canonical winner ID/status/reason, not a wildcard."
+}

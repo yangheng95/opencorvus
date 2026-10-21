@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [权限历史系统终止语义](2026-10-21-permission-termination-history/README.md)：五张中英文人工图、12项后端合同/331断言、旧ETag→新body与90表145033行原字段保留；系统取消与原拒绝区分，无schema/执行改动。
+
 - [新Task成员真实来源与正文](2026-10-21-task-member-stream/README.md)：12张人工图、15次实际Sol、唯一真实worker/两Sources/12节长文/正常终态，源90表141633行保持；采集范围成员身份稳定，生产未改。
 
 - [成员真实流与呈现身份](2026-10-21-member-stream-owner/README.md)：11张人工图、六次实际Sol、旧20个owner的采集稳定记录、待机释放和90表完整源保留；生产未改，不声称连续帧或新Task成员全覆盖。

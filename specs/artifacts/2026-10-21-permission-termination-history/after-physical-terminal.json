@@ -1,0 +1,73 @@
+{
+  "shutdown": {
+    "target": {
+      "pid": 75012,
+      "processInstanceID": "win32:639281610491703747",
+      "occurrenceID": "d6847e91-6c52-49b3-b8fc-723c383af13c"
+    },
+    "statusCode": 200,
+    "observedAtUtc": "2026-10-21T06:33:50.5486061Z",
+    "occurrence": "permission-termination-history-505-after-service-55ed9242-30f1-4c1e-9558-e6ded77a1966",
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYfBfYD00d0aRhE0ST\"}"
+  },
+  "native": {
+    "occurrence": "permission-termination-history-505-after-service-55ed9242-30f1-4c1e-9558-e6ded77a1966",
+    "outcome": "settled",
+    "host": {
+      "pid": 79276,
+      "processInstanceID": "win32:639281610482431906",
+      "occurrenceID": "54e77f86-c6e0-4cce-ae87-a3040deb2176"
+    },
+    "target": {
+      "pid": 75012,
+      "processInstanceID": "win32:639281610491703747",
+      "occurrenceID": "d6847e91-6c52-49b3-b8fc-723c383af13c"
+    },
+    "observedAtUtc": "2026-10-21T06:33:50.624Z",
+    "deadlineAt": 1792565448210,
+    "terminal": {
+      "occurrenceID": "permission-termination-history-505-after-service-55ed9242-30f1-4c1e-9558-e6ded77a1966",
+      "pid": 75012,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 79276,
+        "processInstanceID": "win32:639281610482431906",
+        "occurrenceID": "54e77f86-c6e0-4cce-ae87-a3040deb2176"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 75012,
+        "processInstanceID": "win32:639281610491703747",
+        "occurrenceID": "d6847e91-6c52-49b3-b8fc-723c383af13c"
+      }
+    }
+  ],
+  "launcher": {
+    "observedAtUtc": "2026-10-21T06:33:50.6890341Z",
+    "childExitCode": 0
+  },
+  "observedAtUtc": "2026-10-21T06:33:52.7020391Z",
+  "provider": {
+    "at": "2026-10-21T06:30:52.877Z",
+    "maximum": 0,
+    "actual": 0,
+    "exhausted": false,
+    "requests": [],
+    "scope": "Read-only historical Task UI; no credentials or model catalog copied"
+  },
+  "originalExit": 0,
+  "originalHandle": 86358
+}

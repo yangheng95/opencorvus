@@ -1,0 +1,31 @@
+{
+  "owner": {
+    "pid": 75012,
+    "processInstanceID": "win32:639281610491703747",
+    "occurrenceID": "06e78670-84c4-4493-9efd-6b66b8f8204f"
+  },
+  "parent": {
+    "pid": 60940,
+    "processInstanceID": "win32:639281610491507091",
+    "occurrenceID": "cea9b0a8-1ab1-4588-a158-17a78c1e622d"
+  },
+  "occurrence": "permission-termination-history-505-after-service-55ed9242-30f1-4c1e-9558-e6ded77a1966",
+  "receipt": {
+    "schemaVersion": 1,
+    "occurrenceID": "permission-termination-history-505-after-service-55ed9242-30f1-4c1e-9558-e6ded77a1966",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18915",
+    "pid": 75012
+  },
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\permission-termination-history-505-after\\runtime\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\permission-termination-history-505-after\\runtime\\data",
+      "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/permission-termination-history-505-after/home"
+    }
+  },
+  "observedAt": "2026-10-21T06:30:52.878Z",
+  "qualification": "Real development CLI/UI;zero-model historical read qualification; no Provider credential qualification"
+}
