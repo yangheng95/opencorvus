@@ -1,0 +1,76 @@
+{
+  "at": "2026-10-21T19:14:07.962Z",
+  "sourceCommit": "8dec671230d273269afe21035af3c8dfef48d3c4",
+  "scope": "Single developer agent;real source CLI /ui;manual screenshots/interactions;zero models",
+  "assets": [
+    {
+      "time": "2026-10-21T19:09:48.387Z",
+      "requestID": "442823b3-eb6f-43f3-a279-e335eb88daaa",
+      "path": "/ui/assets/main-WG2_rq1Y.js",
+      "statusCode": 200
+    }
+  ],
+  "validation": [
+    {
+      "command": "bun run --cwd packages/overlay typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "bun run --cwd packages/overlay check:i18n",
+      "exitCode": 0,
+      "observation": "2 locales;2529 top-level keys"
+    },
+    {
+      "command": "node .tmp-product-iteration/source-entry-navigation-514/build.mjs after",
+      "exitCode": 0,
+      "observation": "7313 modules;60 seconds;formal main-WG2_rq1Y.js;original output archived"
+    },
+    {
+      "command": "bun run docs:check",
+      "exitCode": 0
+    },
+    {
+      "command": "bun run check:architecture-index",
+      "exitCode": 0
+    }
+  ],
+  "manual": {
+    "screenshots": 10,
+    "locale": [
+      "en-US",
+      "zh-CN"
+    ],
+    "taskID": "tsk_g00VYhrJxy00qIC54qvM",
+    "member": "ses_h0gcSAerl0lMXEbz1cq3",
+    "flow": [
+      "Source full title/domain",
+      "Copy success feedback",
+      "Actual source opens exact ACL target in new tab103",
+      "Historical original approval reads Approved once and 已批准本次",
+      "Close/reopen member keeps Source reading segment"
+    ],
+    "clipboard": "Only original public source write;prior clipboard not read",
+    "viewport": "No override set;actual external-tab default UI area changed;no pixel or geometry comparison"
+  },
+  "provider": {
+    "maximum": 0,
+    "actual": 0,
+    "credentialsOrModelCatalogCopies": "None"
+  },
+  "tableCountChanges": [],
+  "limits": [
+    "Only allow_once historical decision has current real-page branch qualification",
+    "Other permission labels reviewed as presentation mapping;no new approval executed",
+    "No new model execution,all Source types/excerpts or continuous-frame Rendering qualification",
+    "No authentication transport qualification"
+  ],
+  "resources": {
+    "pages102103104": "Closed",
+    "originalHandles": [
+      48411,
+      82784
+    ],
+    "physical": "Both original native/output/request/launcher/birth chains complete;public shutdown200",
+    "data": "Both scopes90 tables156566 original rows retained;schema3/canonical unchanged"
+  }
+}

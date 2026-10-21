@@ -3143,6 +3143,14 @@ locale while retaining the selected version. Locale readers subscribe to the
 existing locale-resource sequence so localized formatting also updates without
 requiring unrelated content changes.
 
+## Permission decision presentation
+
+Conversation history labels completed permission decisions as approvals or
+denials, including their original task/project exact scope. It reads the same
+durable interaction response as before; live approval controls keep their
+action labels. Continuation retirement remains separate from the original
+authorization decision and never changes that history into a new request.
+
 ## Continuous-goal presentation
 
 The shared Chat/Task/Mission conversation area and an opened SideChat expose the

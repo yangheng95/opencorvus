@@ -1,0 +1,73 @@
+{
+  "launcher": {
+    "childExitCode": 0,
+    "observedAtUtc": "2026-10-21T19:11:55.6079714Z"
+  },
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 95216,
+        "processInstanceID": "win32:639282065756501395",
+        "occurrenceID": "2399225a-4c4a-448d-9927-53e59a5a8f05"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 66600,
+        "processInstanceID": "win32:639282065768635001",
+        "occurrenceID": "56ecc5e2-536b-4f7e-bd4f-6f5aee96267d"
+      }
+    }
+  ],
+  "shutdown": {
+    "statusCode": 200,
+    "occurrence": "source-entry-navigation-514-after-service-1c8372a3-11a4-4d90-b9f6-1d76a1341ad0",
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYiGWEY00DY8YfL8KZ\"}",
+    "target": {
+      "pid": 66600,
+      "processInstanceID": "win32:639282065768635001",
+      "occurrenceID": "56ecc5e2-536b-4f7e-bd4f-6f5aee96267d"
+    },
+    "observedAtUtc": "2026-10-21T19:11:55.3937078Z"
+  },
+  "observedAtUtc": "2026-10-21T19:11:59.2133936Z",
+  "provider": {
+    "at": "2026-10-21T19:09:42.218Z",
+    "maximum": 0,
+    "actual": 0,
+    "exhausted": false,
+    "requests": [],
+    "scope": "Sources operation and reading review; no credentials or model catalog copied"
+  },
+  "native": {
+    "occurrence": "source-entry-navigation-514-after-service-1c8372a3-11a4-4d90-b9f6-1d76a1341ad0",
+    "outcome": "settled",
+    "host": {
+      "pid": 95216,
+      "processInstanceID": "win32:639282065756501395",
+      "occurrenceID": "2399225a-4c4a-448d-9927-53e59a5a8f05"
+    },
+    "target": {
+      "pid": 66600,
+      "processInstanceID": "win32:639282065768635001",
+      "occurrenceID": "56ecc5e2-536b-4f7e-bd4f-6f5aee96267d"
+    },
+    "observedAtUtc": "2026-10-21T19:11:55.487Z",
+    "deadlineAt": 1792610975612,
+    "terminal": {
+      "occurrenceID": "source-entry-navigation-514-after-service-1c8372a3-11a4-4d90-b9f6-1d76a1341ad0",
+      "pid": 66600,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "originalExit": 0,
+  "originalHandle": 82784
+}

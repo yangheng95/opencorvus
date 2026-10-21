@@ -1,0 +1,433 @@
+{
+  "at": "2026-10-21T19:05:15.809Z",
+  "file": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/source-entry-navigation-514-before/runtime/data/opencorvus.db",
+  "taskID": "tsk_g00VYhrJxy00qIC54qvM",
+  "sessions": [
+    "ses_-zURI8flEzz7XOW5XhCo",
+    "ses_-zURI8ekpzzskoESwwiP",
+    "ses_hM7XNBWOoUj94oRFpAmh",
+    "ses_h0gcSAerl0lMXEbz1cq3"
+  ],
+  "requests": [
+    {
+      "request": {
+        "id": "per_g0VYhrT9r00py6FRuJbB",
+        "request_id": "per_hAYiXm1NpZMuolvbkobR",
+        "session_id": "ses_-zURI8ekpzzskoESwwiP",
+        "task_id": "tsk_g00VYhrJxy00qIC54qvM",
+        "tool_name": "dispatch_agents"
+      },
+      "events": [
+        {
+          "id": "per_g0VYhrT9r00py6FRuJbB",
+          "event_type": "requested",
+          "decision_scope": null,
+          "source_event_id": null,
+          "time_created": 1792603945311
+        },
+        {
+          "id": "per_g0VYhrgwa00DS0zfwfkP",
+          "event_type": "allowed_once",
+          "decision_scope": "invocation",
+          "source_event_id": null,
+          "time_created": 1792603998304
+        },
+        {
+          "id": "per_g0VYhrgyR001uxc0s0C2",
+          "event_type": "execution_started",
+          "decision_scope": null,
+          "source_event_id": "per_g0VYhrgwa00DS0zfwfkP",
+          "time_created": 1792603998419
+        },
+        {
+          "id": "per_g0VYhrhID00Z4fbAwKOP",
+          "event_type": "execution_succeeded",
+          "decision_scope": null,
+          "source_event_id": null,
+          "time_created": 1792603999645
+        },
+        {
+          "id": "per_g0VYhrhMm00Df9yJLdJG",
+          "event_type": "stale",
+          "decision_scope": null,
+          "source_event_id": null,
+          "time_created": 1792603999928
+        }
+      ],
+      "interaction": [
+        {
+          "id": "int_g0VYhrT9y00qqpe72dam",
+          "source_kind": "permission_request",
+          "source_id": "per_g0VYhrT9r00py6FRuJbB"
+        }
+      ]
+    },
+    {
+      "request": {
+        "id": "per_g0VYhrim000vMvpzVTya",
+        "request_id": "per_hDy38yV3XbkQ0NBNX0HX",
+        "session_id": "ses_hM7XNBWOoUj94oRFpAmh",
+        "task_id": "tsk_g00VYhrJxy00qIC54qvM",
+        "tool_name": "webfetch"
+      },
+      "events": [
+        {
+          "id": "per_g0VYhrim000vMvpzVTya",
+          "event_type": "requested",
+          "decision_scope": null,
+          "source_event_id": null,
+          "time_created": 1792604005336
+        },
+        {
+          "id": "per_g0VYhrn4v00sTQPWnJBe",
+          "event_type": "allowed_once",
+          "decision_scope": "invocation",
+          "source_event_id": null,
+          "time_created": 1792604021885
+        },
+        {
+          "id": "per_g0VYhrn6Y00Z3ZIgXGTU",
+          "event_type": "execution_started",
+          "decision_scope": null,
+          "source_event_id": "per_g0VYhrn4v00sTQPWnJBe",
+          "time_created": 1792604021986
+        },
+        {
+          "id": "per_g0VYhrnMP00LDwfFdV32",
+          "event_type": "execution_succeeded",
+          "decision_scope": null,
+          "source_event_id": null,
+          "time_created": 1792604022969
+        },
+        {
+          "id": "per_g0VYhrnNg00AurbJxLuX",
+          "event_type": "stale",
+          "decision_scope": null,
+          "source_event_id": null,
+          "time_created": 1792604023048
+        }
+      ],
+      "interaction": [
+        {
+          "id": "int_g0VYhrim300ioSdNVu32",
+          "source_kind": "permission_request",
+          "source_id": "per_g0VYhrim000vMvpzVTya"
+        }
+      ]
+    },
+    {
+      "request": {
+        "id": "per_g0VYhrk1P00lbk91hzsD",
+        "request_id": "per_hrjIMcozZhTUe00rjybr",
+        "session_id": "ses_h0gcSAerl0lMXEbz1cq3",
+        "task_id": "tsk_g00VYhrJxy00qIC54qvM",
+        "tool_name": "webfetch"
+      },
+      "events": [
+        {
+          "id": "per_g0VYhrk1P00lbk91hzsD",
+          "event_type": "requested",
+          "decision_scope": null,
+          "source_event_id": null,
+          "time_created": 1792604010135
+        },
+        {
+          "id": "per_g0VYhrrx200LaBPITYtq",
+          "event_type": "allowed_once",
+          "decision_scope": "invocation",
+          "source_event_id": null,
+          "time_created": 1792604040616
+        },
+        {
+          "id": "per_g0VYhrryM00gQtvXURil",
+          "event_type": "execution_started",
+          "decision_scope": null,
+          "source_event_id": "per_g0VYhrrx200LaBPITYtq",
+          "time_created": 1792604040698
+        },
+        {
+          "id": "per_g0VYhrsMF00q1u38eKpI",
+          "event_type": "execution_succeeded",
+          "decision_scope": null,
+          "source_event_id": null,
+          "time_created": 1792604042179
+        },
+        {
+          "id": "per_g0VYhrsNa00sX96RGgsK",
+          "event_type": "stale",
+          "decision_scope": null,
+          "source_event_id": null,
+          "time_created": 1792604042262
+        }
+      ],
+      "interaction": [
+        {
+          "id": "int_g0VYhrk1T005YrtiL4u7",
+          "source_kind": "permission_request",
+          "source_id": "per_g0VYhrk1P00lbk91hzsD"
+        }
+      ]
+    },
+    {
+      "request": {
+        "id": "per_g0VYhsPJP003N5esJKnB",
+        "request_id": "per_h7eF5rLZ6S3ZcpfDI3pg",
+        "session_id": "ses_-zURI8ekpzzskoESwwiP",
+        "task_id": "tsk_g00VYhrJxy00qIC54qvM",
+        "tool_name": "manage_task"
+      },
+      "events": [
+        {
+          "id": "per_g0VYhsPJP003N5esJKnB",
+          "event_type": "requested",
+          "decision_scope": null,
+          "source_event_id": null,
+          "time_created": 1792604168855
+        },
+        {
+          "id": "per_g0VYhsT7r002aQANLEjL",
+          "event_type": "allowed_once",
+          "decision_scope": "invocation",
+          "source_event_id": null,
+          "time_created": 1792604183515
+        },
+        {
+          "id": "per_g0VYhsT9b008i7xV9Qjq",
+          "event_type": "execution_started",
+          "decision_scope": null,
+          "source_event_id": "per_g0VYhsT7r002aQANLEjL",
+          "time_created": 1792604183623
+        },
+        {
+          "id": "per_g0VYhsTrS00B00HG616m",
+          "event_type": "execution_succeeded",
+          "decision_scope": null,
+          "source_event_id": null,
+          "time_created": 1792604186342
+        },
+        {
+          "id": "per_g0VYhsTrt003v6Xvy6kZ",
+          "event_type": "stale",
+          "decision_scope": null,
+          "source_event_id": null,
+          "time_created": 1792604186369
+        }
+      ],
+      "interaction": [
+        {
+          "id": "int_g0VYhsPJS00x8nN5NcTE",
+          "source_kind": "permission_request",
+          "source_id": "per_g0VYhsPJP003N5esJKnB"
+        }
+      ]
+    }
+  ],
+  "protocol": [
+    {
+      "type": "artifact.persisted",
+      "seq": 1,
+      "emitted_at": 1792603911041
+    },
+    {
+      "type": "artifact.persisted",
+      "seq": 2,
+      "emitted_at": 1792603911054
+    },
+    {
+      "type": "task.execution.opened",
+      "seq": 3,
+      "emitted_at": 1792603909978
+    },
+    {
+      "type": "task.created",
+      "seq": 4,
+      "emitted_at": 1792603911059
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 5,
+      "emitted_at": 1792603915631
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 6,
+      "emitted_at": 1792603915872
+    },
+    {
+      "type": "interaction.requested",
+      "seq": 7,
+      "emitted_at": 1792603945319
+    },
+    {
+      "type": "artifact.persisted",
+      "seq": 8,
+      "emitted_at": 1792603998459
+    },
+    {
+      "type": "artifact.persisted",
+      "seq": 9,
+      "emitted_at": 1792603998479
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 10,
+      "emitted_at": 1792603999940
+    },
+    {
+      "type": "artifact.persisted",
+      "seq": 11,
+      "emitted_at": 1792603999980
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 12,
+      "emitted_at": 1792604001472
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 13,
+      "emitted_at": 1792604001647
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 14,
+      "emitted_at": 1792604001759
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 15,
+      "emitted_at": 1792604001788
+    },
+    {
+      "type": "interaction.requested",
+      "seq": 16,
+      "emitted_at": 1792604005339
+    },
+    {
+      "type": "interaction.requested",
+      "seq": 17,
+      "emitted_at": 1792604010139
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 18,
+      "emitted_at": 1792604023279
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 19,
+      "emitted_at": 1792604023355
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 20,
+      "emitted_at": 1792604042498
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 21,
+      "emitted_at": 1792604042591
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 22,
+      "emitted_at": 1792604093324
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 23,
+      "emitted_at": 1792604093340
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 24,
+      "emitted_at": 1792604093389
+    },
+    {
+      "type": "artifact.persisted",
+      "seq": 25,
+      "emitted_at": 1792604093417
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 26,
+      "emitted_at": 1792604136974
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 27,
+      "emitted_at": 1792604136993
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 28,
+      "emitted_at": 1792604137025
+    },
+    {
+      "type": "artifact.persisted",
+      "seq": 29,
+      "emitted_at": 1792604137050
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 30,
+      "emitted_at": 1792604138591
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 31,
+      "emitted_at": 1792604138735
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 32,
+      "emitted_at": 1792604142561
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 33,
+      "emitted_at": 1792604142689
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 34,
+      "emitted_at": 1792604149890
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 35,
+      "emitted_at": 1792604150019
+    },
+    {
+      "type": "interaction.requested",
+      "seq": 36,
+      "emitted_at": 1792604168859
+    },
+    {
+      "type": "task.completed",
+      "seq": 37,
+      "emitted_at": 1792604183631
+    },
+    {
+      "type": "artifact.persisted",
+      "seq": 38,
+      "emitted_at": 1792604186256
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 39,
+      "emitted_at": 1792604186378
+    },
+    {
+      "type": "agent.execution.lifecycle",
+      "seq": 40,
+      "emitted_at": 1792604186471
+    },
+    {
+      "type": "artifact.persisted",
+      "seq": 41,
+      "emitted_at": 1792604186525
+    }
+  ],
+  "mode": "Read-only exact owned clone; original immutable facts only; no projection or data mutation"
+}

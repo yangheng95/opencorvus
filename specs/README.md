@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Sources 导航与权限历史呈现](records/2026-10/2026-10-22-source-entry-navigation.md)：[十张真实页面图](artifacts/2026-10-22-source-entry-navigation/README.md)，来源点击/复制/重开正常；修复历史批准仍显示动作措辞，真实决定槽与退休事实核对，原数据保持。
+
 - [Goal 首页信息层级与默认布局](records/2026-10/2026-10-22-goal-home-hierarchy.md)：[九张真实页面图](artifacts/2026-10-22-goal-home-hierarchy/README.md)，聊天示例紧跟输入，独立持续目标区域说明自动续跑、暂停及预算；中英表单/取消/分栏实测，零模型与原数据保持。
 
 - [同文档事件流断连与恢复](records/2026-10/2026-10-22-native-stream-reconnect.md)：[七张实图、真实断流与原reader](artifacts/2026-10-22-native-stream-reconnect/README.md)，历史/活跃同文档约3秒按当前cursor恢复，原B正文/来源保持；诊断指令判定两项合同通过。

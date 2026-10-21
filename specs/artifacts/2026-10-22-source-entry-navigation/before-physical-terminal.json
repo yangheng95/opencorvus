@@ -1,0 +1,73 @@
+{
+  "native": {
+    "occurrence": "source-entry-navigation-514-before-service-495e9767-f2f5-4cb8-a189-c9c919f0e542",
+    "outcome": "settled",
+    "host": {
+      "pid": 73740,
+      "processInstanceID": "win32:639282059484036762",
+      "occurrenceID": "9c02b8f8-b296-45f9-b91d-8b322d674c28"
+    },
+    "target": {
+      "pid": 68248,
+      "processInstanceID": "win32:639282059494530361",
+      "occurrenceID": "c24591e7-6ef8-404c-b95e-57e31aa5db0f"
+    },
+    "observedAtUtc": "2026-10-21T19:07:40.292Z",
+    "deadlineAt": 1792610347571,
+    "terminal": {
+      "occurrenceID": "source-entry-navigation-514-before-service-495e9767-f2f5-4cb8-a189-c9c919f0e542",
+      "pid": 68248,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "shutdown": {
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYiFRqc00ieyA6Pm5c\"}",
+    "statusCode": 200,
+    "occurrence": "source-entry-navigation-514-before-service-495e9767-f2f5-4cb8-a189-c9c919f0e542",
+    "target": {
+      "pid": 68248,
+      "processInstanceID": "win32:639282059494530361",
+      "occurrenceID": "c24591e7-6ef8-404c-b95e-57e31aa5db0f"
+    },
+    "observedAtUtc": "2026-10-21T19:07:40.1986504Z"
+  },
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 73740,
+        "processInstanceID": "win32:639282059484036762",
+        "occurrenceID": "9c02b8f8-b296-45f9-b91d-8b322d674c28"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 68248,
+        "processInstanceID": "win32:639282059494530361",
+        "occurrenceID": "c24591e7-6ef8-404c-b95e-57e31aa5db0f"
+      }
+    }
+  ],
+  "launcher": {
+    "childExitCode": 0,
+    "observedAtUtc": "2026-10-21T19:07:40.355701Z"
+  },
+  "originalHandle": 48411,
+  "originalExit": 0,
+  "observedAtUtc": "2026-10-21T19:07:48.7059149Z",
+  "provider": {
+    "at": "2026-10-21T18:59:13.491Z",
+    "maximum": 0,
+    "actual": 0,
+    "exhausted": false,
+    "requests": [],
+    "scope": "Sources operation and reading review; no credentials or model catalog copied"
+  }
+}

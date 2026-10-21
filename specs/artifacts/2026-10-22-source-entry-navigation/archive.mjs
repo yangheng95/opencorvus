@@ -1,0 +1,26 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+const root=import.meta.dirname,repo=path.resolve(root,'../..'),out=repo+'/specs/artifacts/2026-10-22-source-entry-navigation',base='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/source-entry-navigation-514-'
+const selected=['prepare.mjs','prepare-data.ts','build.mjs','serve.ts','launch.ps1','shutdown.ps1','settle.ps1','preserve.ts','observe-permissions.ts','permission-facts.json','permission-facts-detailed.json','build-after.log','archive.mjs','before-data-preparation.json','after-data-preparation.json','data-preservation-observation.json']
+for(const name of fs.readdirSync(root))if(name.endsWith('.png'))selected.push(name)
+for(const name of selected)fs.copyFileSync(root+'/'+name,out+'/'+name,fs.constants.COPYFILE_EXCL)
+for(const stage of ['before','after'])fs.copyFileSync(base+stage+'-service/evidence/physical-terminal.json',out+'/'+stage+'-physical-terminal.json',fs.constants.COPYFILE_EXCL)
+const log=fs.readFileSync(base+'after/runtime/log/dev.log','utf8').split('\n').filter(Boolean).map(line=>JSON.parse(line))
+const assets=log.filter(row=>row.service==='server'&&row.data?.path==='/ui/assets/main-WG2_rq1Y.js'&&row.data.status==='completed').map(row=>({time:row.time,requestID:row.data.requestID,path:row.data.path,statusCode:row.data.statusCode}))
+const preservation=JSON.parse(fs.readFileSync(root+'/data-preservation-observation.json','utf8'))
+const tableCountChanges=preservation.scopes.flatMap(scope=>Object.entries(scope.counts).filter(([,count])=>count.original!==count.current).map(([table,count])=>({stage:scope.stage,table,...count})))
+fs.writeFileSync(out+'/observations.json',JSON.stringify({at:new Date().toISOString(),sourceCommit:'8dec671230d273269afe21035af3c8dfef48d3c4',scope:'Single developer agent;real source CLI /ui;manual screenshots/interactions;zero models',assets,validation:[{command:'bun run --cwd packages/overlay typecheck',exitCode:0},{command:'bun run --cwd packages/overlay check:i18n',exitCode:0,observation:'2 locales;2529 top-level keys'},{command:'node .tmp-product-iteration/source-entry-navigation-514/build.mjs after',exitCode:0,observation:'7313 modules;60 seconds;formal main-WG2_rq1Y.js;original output archived'},{command:'bun run docs:check',exitCode:0},{command:'bun run check:architecture-index',exitCode:0}],manual:{screenshots:10,locale:['en-US','zh-CN'],taskID:'tsk_g00VYhrJxy00qIC54qvM',member:'ses_h0gcSAerl0lMXEbz1cq3',flow:['Source full title/domain','Copy success feedback','Actual source opens exact ACL target in new tab103','Historical original approval reads Approved once and 已批准本次','Close/reopen member keeps Source reading segment'],clipboard:'Only original public source write;prior clipboard not read',viewport:'No override set;actual external-tab default UI area changed;no pixel or geometry comparison'},provider:{maximum:0,actual:0,credentialsOrModelCatalogCopies:'None'},tableCountChanges,limits:['Only allow_once historical decision has current real-page branch qualification','Other permission labels reviewed as presentation mapping;no new approval executed','No new model execution,all Source types/excerpts or continuous-frame Rendering qualification','No authentication transport qualification'],resources:{pages102103104:'Closed',originalHandles:[48411,82784],physical:'Both original native/output/request/launcher/birth chains complete;public shutdown200',data:'Both scopes90 tables156566 original rows retained;schema3/canonical unchanged'}},null,2)+'\n',{flag:'wx'})
+const authPath='C:/Users/hengu/.codex/auth.json',authBytes=fs.readFileSync(authPath),authStat=fs.statSync(authPath),auth=JSON.parse(authBytes)
+const secrets=[...new Set([auth.OPENAI_API_KEY,auth.tokens?.id_token,auth.tokens?.access_token,auth.tokens?.refresh_token].filter(value=>typeof value==='string'&&value.length>=20))].map(value=>Buffer.from(value))
+assert(secrets.length>=3)
+let files=0,bytes=0,matches=0
+function scan(file){const data=fs.readFileSync(file);files++;bytes+=data.length;matches+=secrets.some(secret=>data.includes(secret))?1:0}
+function walk(dir){for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);assert(!fs.lstatSync(file).isSymbolicLink());if(entry.isDirectory())walk(file);else scan(file)}}
+walk(out)
+for(const file of ['specs/README.md','specs/records/2026-10/README.md','specs/artifacts/README.md','specs/records/2026-10/2026-10-22-source-entry-navigation.md','specs/current/architecture/07-panel.md','packages/overlay/src/utils/transcript.ts','packages/overlay/src/i18n/en-US.json','packages/overlay/src/i18n/zh-CN.json'])scan(repo+'/'+file)
+assert.equal(matches,0,'Actual credentials detected in scoped delivery')
+assert(fs.readFileSync(authPath).equals(authBytes));assert.equal(fs.statSync(authPath).mtimeMs,authStat.mtimeMs)
+const result={at:new Date().toISOString(),files,bytes,actualCredentialValueMatches:matches,scope:'Current scoped artifact bytes including screenshots plus source,record,indexes,architecture;actual original secret values read locally only;source bytes/mtime retained'}
+fs.writeFileSync(out+'/credential-scan.json',JSON.stringify(result,null,2)+'\n',{flag:'wx'})
+console.log(JSON.stringify({...result,tableCountChanges}))

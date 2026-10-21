@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Sources 导航与权限历史呈现](2026-10-22-source-entry-navigation/README.md)：十张人工图、原决定槽与 continuation 退休事实；过去式历史批准修复、中英实页和来源复制/打开/重开验证，零模型/原数据保持。
+
 - [Goal 首页信息层级与默认布局](2026-10-22-goal-home-hierarchy/README.md)：九张人工图、正式构建与中英交互，输入/示例/持续目标层级清楚；两scope90表156566原行保持、零模型与完整物理结算。
 
 - [同文档事件流断连与恢复](2026-10-22-native-stream-reconnect/README.md)：七张实图、原生/透传故障真实ECONNRESET和最新cursor重开；15次Sol原reader覆盖活跃断流，修复诊断旧指令重复校验，原数据保留。

@@ -71,10 +71,10 @@ export function permissionRequestTitle(toolName: unknown): string {
 
 /** Label for a durable permission decision. */
 export function interactionReplyLabel(decision: unknown): string {
-  if (decision === "allow_once") return t("interaction.allow_once")
-  if (decision === "allow_project") return t("interaction.allow_project")
-  if (decision === "allow_task") return t("interaction.allow_task")
-  if (decision === "deny") return t("interaction.reject")
+  if (decision === "allow_once") return t("permissions.event.allowed_once")
+  if (decision === "allow_project") return t("interaction.approved_project")
+  if (decision === "allow_task") return t("interaction.approved_task")
+  if (decision === "deny") return t("permissions.event.denied")
   throw new Error(`permission response has unknown decision ${String(decision)}`)
 }
 
