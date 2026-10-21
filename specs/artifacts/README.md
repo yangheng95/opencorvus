@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [活跃成员并发与来源呈现](2026-10-21-live-member-concurrency/README.md)：23张实图、29/64次Sol流式请求及完整reader/原生/配对结算，真实两成员并发与同目标侧栏保留；正式无诊断辅助区分观察器故障，产品未改。
+
 - [正文挂载与Rendering归因](2026-10-21-render-mount-causality/README.md)：两轮真实Source CLI、16张人工图、144/178事件与26次实际窗口选择，Main15次回收已对上；无新模型输入或生产改动。
 
 - [当前首页与取消工具呈现](2026-10-21-home-goal-current/README.md)：16张人工实图、原始Tool公共读取200、正式构建/类型、零模型和完整90表保留；仅呈现层修复取消误标失败。

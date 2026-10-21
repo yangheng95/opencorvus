@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [活跃成员并发与来源呈现](records/2026-10/2026-10-21-live-member-concurrency.md)：[23张实图与原始读取端](artifacts/2026-10-21-live-member-concurrency/README.md)，29/64次真实流式请求，两成员正文重叠68/66秒；修复私有观察器清理重入，产品未改，同目标侧栏保留实测。
+
 - [正文挂载与Rendering归因](records/2026-10/2026-10-21-render-mount-causality.md)：[16张实图、实际虚拟窗口与成员身份](artifacts/2026-10-21-render-mount-causality/README.md)，15次Main回收对上范围选择，成员正文保留；生产未改，活跃并发/重连仍待验证。
 
 - [当前首页与取消工具呈现](records/2026-10/2026-10-21-home-goal-current-review.md)：[16张人工实图与原始工具事实](artifacts/2026-10-21-home-goal-current/README.md)，修复明确取消被计失败/红色错误，首页Goal与草稿取消实测；90表145033原行保持。

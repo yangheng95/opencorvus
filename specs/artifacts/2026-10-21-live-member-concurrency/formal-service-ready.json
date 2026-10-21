@@ -1,0 +1,31 @@
+{
+  "owner": {
+    "pid": 85104,
+    "processInstanceID": "win32:639281954169502902",
+    "occurrenceID": "13a3202b-65a1-4652-8bb9-aa8ff39294d8"
+  },
+  "parent": {
+    "pid": 89280,
+    "processInstanceID": "win32:639281954169325241",
+    "occurrenceID": "eefcc0f0-d3a0-4c90-9513-62ab960798c3"
+  },
+  "occurrence": "live-member-formal-508-before-service-ba81f8b4-0783-4af4-9322-2fae6749cfaf",
+  "receipt": {
+    "schemaVersion": 1,
+    "occurrenceID": "live-member-formal-508-before-service-ba81f8b4-0783-4af4-9322-2fae6749cfaf",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18929",
+    "pid": 85104
+  },
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\live-member-formal-508-before\\runtime\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\live-member-formal-508-before\\runtime\\data",
+      "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/live-member-formal-508-before/home"
+    }
+  },
+  "observedAt": "2026-10-21T16:03:41.702Z",
+  "qualification": "Real development CLI/UI;zero-model historical read qualification; no Provider credential qualification"
+}

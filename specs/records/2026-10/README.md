@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [活跃成员并发与来源呈现](2026-10-21-live-member-concurrency.md)：[23张人工图与原始reader](../../artifacts/2026-10-21-live-member-concurrency/README.md)，两次真实并发Task自然结束；修复诊断自身重入，正式页面及修正后活跃切换正常，刷新与传输重连边界分开。
+
 - [正文挂载与Rendering归因](2026-10-21-render-mount-causality.md)：[实际range、16张实图与完整数据保留](../../artifacts/2026-10-21-render-mount-causality/README.md)，区分Main窗口回收与成员侧栏身份，生产未改。
 
 - [当前首页与取消工具呈现](2026-10-21-home-goal-current-review.md)：[16张真实中英文页面](../../artifacts/2026-10-21-home-goal-current/README.md)，同一MessageAbortedError由失败汇总/红框改为取消，持久状态/原因/诊断保持。

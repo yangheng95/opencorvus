@@ -1,0 +1,99 @@
+{
+  "at": "2026-10-21T16:13:06.751Z",
+  "stages": [
+    {
+      "stage": "before",
+      "handle": 96658,
+      "tab": 87,
+      "tabDisposition": "Closed by CUA after screenshots",
+      "modelMaximum": 32,
+      "modelActual": 14,
+      "native": {
+        "occurrence": "live-member-concurrency-508-before-f3482a0b-0514-41c8-b66e-fbb7354f9c10",
+        "outcome": "settled",
+        "host": {
+          "pid": 63524,
+          "processInstanceID": "win32:639281948826786096",
+          "occurrenceID": "7ee9a50a-9bea-4e43-8679-db51c8b6835c"
+        },
+        "target": {
+          "pid": 75348,
+          "processInstanceID": "win32:639281948838816833",
+          "occurrenceID": "3267bd17-fc04-4b1c-a65c-02a691fb3e1f"
+        },
+        "observedAtUtc": "2026-10-21T16:02:20.101Z",
+        "deadlineAt": 1792599282647,
+        "terminal": {
+          "occurrenceID": "live-member-concurrency-508-before-f3482a0b-0514-41c8-b66e-fbb7354f9c10",
+          "pid": 75348,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "launcher": {
+        "observedAtUtc": "2026-10-21T16:02:20.1619895Z",
+        "originalChildExit": 0
+      },
+      "runtimePairRetired": true
+    },
+    {
+      "stage": "after",
+      "handle": 45597,
+      "tab": 89,
+      "tabDisposition": "Closed by CUA after screenshots",
+      "modelMaximum": 32,
+      "modelActual": 15,
+      "native": {
+        "occurrence": "live-member-concurrency-508-after-5f68fde8-b446-44e0-b193-e3c261924059",
+        "outcome": "settled",
+        "host": {
+          "pid": 44976,
+          "processInstanceID": "win32:639281955676139580",
+          "occurrenceID": "89fbedd0-032f-4eb7-ae6a-29852073bae3"
+        },
+        "target": {
+          "pid": 86724,
+          "processInstanceID": "win32:639281955685185583",
+          "occurrenceID": "86688b65-d0e5-411c-9bce-2a3c9fa9bc58"
+        },
+        "observedAtUtc": "2026-10-21T16:11:16.512Z",
+        "deadlineAt": 1792599967587,
+        "terminal": {
+          "occurrenceID": "live-member-concurrency-508-after-5f68fde8-b446-44e0-b193-e3c261924059",
+          "pid": 86724,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "launcher": {
+        "originalChildExit": 0,
+        "observedAtUtc": "2026-10-21T16:11:16.5721046Z"
+      },
+      "runtimePairRetired": true
+    }
+  ],
+  "formal": {
+    "handle": 48899,
+    "tab": 88,
+    "closed": true,
+    "modelMaximum": 0,
+    "modelActual": 0,
+    "actualDOMScript": "http://127.0.0.1:18929/ui/assets/main-BZjSJ4zp.js"
+  },
+  "batchMaximum": 64,
+  "actual": 29,
+  "unusedRetired": 35,
+  "production": "Unchanged; private observer cleanup corrected and original live checker rerun",
+  "userResources": "No operation on user18571 windows,process or database",
+  "limits": "Task-active page reload occurred after both member bodies completed; same-document transport reconnect and continuous-frame video remain unqualified"
+}

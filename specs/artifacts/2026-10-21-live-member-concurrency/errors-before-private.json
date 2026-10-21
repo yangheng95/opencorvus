@@ -1,0 +1,14 @@
+[
+  {
+    "level": "error",
+    "message": "TypeError: Cannot read properties of null (reading '0')\n    at cleanNode (http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js:738:66)\n    at cleanNode (http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js:734:50)\n    at http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js:213:60\n    at untrack (http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js:412:33)\n    at Array.<anonymous> (http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js:213:46)\n    at dispose (http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js:799:42)\n    at Array.<anonymous> (http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js:903:19)\n    at cleanNode (http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js:738:69)\n    at cleanNode (http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js:734:50)\n    at http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js:213:60",
+    "timestamp": "2026-10-21T15:57:08.499Z",
+    "url": "http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js"
+  },
+  {
+    "level": "error",
+    "message": "Error: Sub-agent conversation requires its right dock layout owner\n    at http://127.0.0.1:18925/ui/assets/main-C4KqHENz.js:96115:28\n    at http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js:436:34\n    at untrack (http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js:417:12)\n    at Object.fn (http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js:436:20)\n    at runComputation (http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js:575:22)\n    at updateComputation (http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js:567:3)\n    at runTop (http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js:629:7)\n    at runUserEffects (http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js:687:36)\n    at http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js:662:34\n    at runUpdates (http://127.0.0.1:18925/ui/assets/CommandMenuSurface-1uVYFsIb.js:645:17)",
+    "timestamp": "2026-10-21T15:57:08.567Z",
+    "url": "http://127.0.0.1:18925/ui/assets/main-C4KqHENz.js"
+  }
+]
