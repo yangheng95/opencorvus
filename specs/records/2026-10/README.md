@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [同文档事件流断连与恢复](2026-10-22-native-stream-reconnect.md)：[七图与完整物理/配对结算](../../artifacts/2026-10-22-native-stream-reconnect/README.md)，15次Sol、原B reader覆盖实际切断/重开，最新cursor与原正文/来源保持；生产未改。
+
 - [成员正文流中刷新与来源恢复](2026-10-22-live-member-refresh.md)：[十图及完整配对/物理结算](../../artifacts/2026-10-22-live-member-refresh/README.md)，原B流覆盖整页刷新前后、最终5542字元；15/32真实请求，原数据/schema保持，生产未改。
 
 - [启动链接与失效目录发现](2026-10-22-startup-location-discovery.md)：[13张精选人工图与两轮物理结算](../../artifacts/2026-10-22-startup-location-discovery/README.md)，缺失/文件根保持注册清单，Task显式链接先恢复；Goal/Chat/launcher真实复核，原数据/schema保持。

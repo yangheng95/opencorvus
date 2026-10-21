@@ -1,0 +1,2763 @@
+{
+  "at": "2026-10-21T18:23:37.067Z",
+  "scopes": [
+    {
+      "stage": "historical",
+      "networkEvents": [
+        {
+          "at": "2026-10-21T17:59:48.699Z",
+          "pid": 88712,
+          "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+          "kind": "observer-installed",
+          "port": 18949,
+          "taskID": "tsk_g00VYhrJxy00qIC54qvM",
+          "actions": [
+            "calibration",
+            "browser"
+          ],
+          "transport": "Original native Request/Response unchanged;only actual per-request idle timeout is applied"
+        },
+        {
+          "at": "2026-10-21T17:59:59.037Z",
+          "pid": 88712,
+          "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+          "kind": "request",
+          "id": "64e20c21-8afc-4ded-8157-4cfebefca5ec",
+          "path": "/task/tsk_g00VYhrJxy00qIC54qvM/events",
+          "query": {
+            "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/live-member-refresh-511-before/runtime/data/projects/2026/10/22/ebb75947-7467-434b-b3ec-aa7eea039f08",
+            "after": "0"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 63776
+          },
+          "serverPort": 18949
+        },
+        {
+          "at": "2026-10-21T17:59:59.168Z",
+          "pid": 88712,
+          "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+          "kind": "response",
+          "id": "64e20c21-8afc-4ded-8157-4cfebefca5ec",
+          "requestID": "b760c272-4590-4cf4-bd07-8f108be0540a",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T17:59:59.235Z",
+          "pid": 88712,
+          "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+          "kind": "native-idle-timeout-applied",
+          "name": "calibration",
+          "id": "64e20c21-8afc-4ded-8157-4cfebefca5ec",
+          "requestID": "b760c272-4590-4cf4-bd07-8f108be0540a",
+          "seconds": 1
+        },
+        {
+          "at": "2026-10-21T18:00:02.728Z",
+          "pid": 88712,
+          "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+          "kind": "native-request-abort",
+          "id": "64e20c21-8afc-4ded-8157-4cfebefca5ec",
+          "requestID": "b760c272-4590-4cf4-bd07-8f108be0540a"
+        },
+        {
+          "at": "2026-10-21T18:00:20.696Z",
+          "pid": 88712,
+          "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+          "kind": "request",
+          "id": "8b22a6fc-49c7-497b-9ded-a5f6bdf3acab",
+          "path": "/task/tsk_g00VYhrJxy00qIC54qvM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\live-member-refresh-511-before\\runtime\\data\\projects\\2026\\10\\22\\ebb75947-7467-434b-b3ec-aa7eea039f08",
+            "after": "41",
+            "after_live": "0",
+            "opencorvus_stream_instance": "c29299e3-caca-48a1-b019-3ec75aa15dab"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 63886
+          },
+          "serverPort": 18949
+        },
+        {
+          "at": "2026-10-21T18:00:20.700Z",
+          "pid": 88712,
+          "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+          "kind": "response",
+          "id": "8b22a6fc-49c7-497b-9ded-a5f6bdf3acab",
+          "requestID": "057bd3cd-01e8-4a82-8279-181d39ba148d",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:00:54.335Z",
+          "pid": 88712,
+          "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+          "kind": "native-idle-timeout-applied",
+          "name": "browser",
+          "id": "8b22a6fc-49c7-497b-9ded-a5f6bdf3acab",
+          "requestID": "057bd3cd-01e8-4a82-8279-181d39ba148d",
+          "seconds": 1
+        },
+        {
+          "at": "2026-10-21T18:00:54.815Z",
+          "pid": 88712,
+          "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+          "kind": "native-request-abort",
+          "id": "8b22a6fc-49c7-497b-9ded-a5f6bdf3acab",
+          "requestID": "057bd3cd-01e8-4a82-8279-181d39ba148d"
+        },
+        {
+          "at": "2026-10-21T18:00:57.830Z",
+          "pid": 88712,
+          "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+          "kind": "request",
+          "id": "2940b065-6782-452f-9e54-ee530b718a52",
+          "path": "/task/tsk_g00VYhrJxy00qIC54qvM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\live-member-refresh-511-before\\runtime\\data\\projects\\2026\\10\\22\\ebb75947-7467-434b-b3ec-aa7eea039f08",
+            "after": "41",
+            "after_live": "0",
+            "opencorvus_stream_instance": "9dc0e3fe-e000-4214-b1fe-4d9221d651f6"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 52954
+          },
+          "serverPort": 18949
+        },
+        {
+          "at": "2026-10-21T18:00:57.833Z",
+          "pid": 88712,
+          "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+          "kind": "response",
+          "id": "2940b065-6782-452f-9e54-ee530b718a52",
+          "requestID": "e87a187a-00c9-4c1d-be01-11001704eda9",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:04:01.633Z",
+          "pid": 88712,
+          "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+          "kind": "native-request-abort",
+          "id": "2940b065-6782-452f-9e54-ee530b718a52",
+          "requestID": "e87a187a-00c9-4c1d-be01-11001704eda9"
+        }
+      ],
+      "diagnosticControlErrors": {
+        "count": 0,
+        "qualification": "Private control ordering defect;original complete log retained privately;not a product or model error"
+      },
+      "documentRequests": [
+        {
+          "time": "2026-10-21T18:00:17.224Z",
+          "requestID": "87b98ebb-7a1a-4a51-8b81-e29e091390e6",
+          "status": 200
+        }
+      ],
+      "uiModules": [
+        {
+          "time": "2026-10-21T18:00:17.247Z",
+          "path": "/ui/assets/main-B1unUUgO.js",
+          "status": 200
+        }
+      ],
+      "reconnect": {
+        "cut": {
+          "at": "2026-10-21T18:00:54.335Z",
+          "pid": 88712,
+          "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+          "kind": "native-idle-timeout-applied",
+          "name": "browser",
+          "id": "8b22a6fc-49c7-497b-9ded-a5f6bdf3acab",
+          "requestID": "057bd3cd-01e8-4a82-8279-181d39ba148d",
+          "seconds": 1
+        },
+        "prior": {
+          "at": "2026-10-21T18:00:20.696Z",
+          "pid": 88712,
+          "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+          "kind": "request",
+          "id": "8b22a6fc-49c7-497b-9ded-a5f6bdf3acab",
+          "path": "/task/tsk_g00VYhrJxy00qIC54qvM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\live-member-refresh-511-before\\runtime\\data\\projects\\2026\\10\\22\\ebb75947-7467-434b-b3ec-aa7eea039f08",
+            "after": "41",
+            "after_live": "0",
+            "opencorvus_stream_instance": "c29299e3-caca-48a1-b019-3ec75aa15dab"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 63886
+          },
+          "serverPort": 18949
+        },
+        "next": {
+          "at": "2026-10-21T18:00:57.830Z",
+          "pid": 88712,
+          "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+          "kind": "request",
+          "id": "2940b065-6782-452f-9e54-ee530b718a52",
+          "path": "/task/tsk_g00VYhrJxy00qIC54qvM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\live-member-refresh-511-before\\runtime\\data\\projects\\2026\\10\\22\\ebb75947-7467-434b-b3ec-aa7eea039f08",
+            "after": "41",
+            "after_live": "0",
+            "opencorvus_stream_instance": "9dc0e3fe-e000-4214-b1fe-4d9221d651f6"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 52954
+          },
+          "serverPort": 18949
+        },
+        "response": {
+          "at": "2026-10-21T18:00:57.833Z",
+          "pid": 88712,
+          "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+          "kind": "response",
+          "id": "2940b065-6782-452f-9e54-ee530b718a52",
+          "requestID": "e87a187a-00c9-4c1d-be01-11001704eda9",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        "cutToReopenMs": 3495
+      },
+      "preflightShutdown": []
+    },
+    {
+      "stage": "live",
+      "networkEvents": [
+        {
+          "at": "2026-10-21T18:10:00.103Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "observer-installed",
+          "port": 18951,
+          "taskID": "tsk_g00VYhrJxy00qIC54qvM",
+          "actions": [
+            "calibration",
+            "browser"
+          ],
+          "mode": "response-error",
+          "transport": "Original response bytes pass through identity TransformStream;controlled stream error only on finite declared action"
+        },
+        {
+          "at": "2026-10-21T18:10:29.314Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "f1885dc1-7e5e-4c92-a8f8-7601ae7c4281",
+          "path": "/task/tsk_g00VYhrJxy00qIC54qvM/events",
+          "query": {
+            "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/live-member-refresh-511-before/runtime/data/projects/2026/10/22/ebb75947-7467-434b-b3ec-aa7eea039f08",
+            "after": "0"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 63044
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:10:29.343Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "f1885dc1-7e5e-4c92-a8f8-7601ae7c4281",
+          "requestID": "6c8c855b-c1ca-428a-a6ee-e9389001f6fc",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:10:29.372Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response-transport-error-applied",
+          "name": "calibration",
+          "id": "f1885dc1-7e5e-4c92-a8f8-7601ae7c4281",
+          "requestID": "6c8c855b-c1ca-428a-a6ee-e9389001f6fc",
+          "taskID": "tsk_g00VYhrJxy00qIC54qvM"
+        },
+        {
+          "at": "2026-10-21T18:10:29.374Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "f1885dc1-7e5e-4c92-a8f8-7601ae7c4281",
+          "requestID": "6c8c855b-c1ca-428a-a6ee-e9389001f6fc",
+          "type": "Error"
+        },
+        {
+          "at": "2026-10-21T18:11:02.163Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "f96db5b1-ee35-4207-91cf-b234d1d1e9af",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "0",
+            "opencorvus_stream_instance": "51f11dac-cc9d-4103-8b5c-01428159477e"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 59598
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:02.167Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "f96db5b1-ee35-4207-91cf-b234d1d1e9af",
+          "requestID": "ce71bf86-b6db-4218-8843-aa9ad5ff0b7b",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.525Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "f96db5b1-ee35-4207-91cf-b234d1d1e9af",
+          "requestID": "ce71bf86-b6db-4218-8843-aa9ad5ff0b7b"
+        },
+        {
+          "at": "2026-10-21T18:11:04.528Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "f96db5b1-ee35-4207-91cf-b234d1d1e9af",
+          "requestID": "ce71bf86-b6db-4218-8843-aa9ad5ff0b7b",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.529Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "6f2ae5f9-ed2e-472c-afff-72adf8a43961",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "d67b329a-1742-49f8-b6a4-e390f14779fe"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 60130
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.532Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "6f2ae5f9-ed2e-472c-afff-72adf8a43961",
+          "requestID": "f660371b-b591-4ab2-9706-b38ce91b6c00",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.537Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "6f2ae5f9-ed2e-472c-afff-72adf8a43961",
+          "requestID": "f660371b-b591-4ab2-9706-b38ce91b6c00"
+        },
+        {
+          "at": "2026-10-21T18:11:04.539Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "6f2ae5f9-ed2e-472c-afff-72adf8a43961",
+          "requestID": "f660371b-b591-4ab2-9706-b38ce91b6c00",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.541Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "c19097dd-296d-490e-b58a-17f6d282a82e",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "58066b99-da99-4d34-b86b-e5d606814505"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 58125
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.544Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "c19097dd-296d-490e-b58a-17f6d282a82e",
+          "requestID": "bae733ad-3534-49b7-9312-5056dfe5c5e8",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.550Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "c19097dd-296d-490e-b58a-17f6d282a82e",
+          "requestID": "bae733ad-3534-49b7-9312-5056dfe5c5e8"
+        },
+        {
+          "at": "2026-10-21T18:11:04.552Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "c19097dd-296d-490e-b58a-17f6d282a82e",
+          "requestID": "bae733ad-3534-49b7-9312-5056dfe5c5e8",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.553Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "9873947b-4a22-47d7-a9be-ef78975e896b",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "b33c7027-e112-4d5e-848e-25dc4c4423f5"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 59472
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.556Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "9873947b-4a22-47d7-a9be-ef78975e896b",
+          "requestID": "65af1396-7035-4e67-8a78-3de1a520e7cb",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.559Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "9873947b-4a22-47d7-a9be-ef78975e896b",
+          "requestID": "65af1396-7035-4e67-8a78-3de1a520e7cb"
+        },
+        {
+          "at": "2026-10-21T18:11:04.561Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "9873947b-4a22-47d7-a9be-ef78975e896b",
+          "requestID": "65af1396-7035-4e67-8a78-3de1a520e7cb",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.562Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "69c8ebe3-9c85-498c-8264-f6083fcaac30",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "18d1a05f-e8de-4c8d-8116-435d6eac8c4f"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 49403
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.565Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "69c8ebe3-9c85-498c-8264-f6083fcaac30",
+          "requestID": "d67223ef-574d-4ed1-8f0a-010b40ad9212",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.570Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "69c8ebe3-9c85-498c-8264-f6083fcaac30",
+          "requestID": "d67223ef-574d-4ed1-8f0a-010b40ad9212"
+        },
+        {
+          "at": "2026-10-21T18:11:04.571Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "69c8ebe3-9c85-498c-8264-f6083fcaac30",
+          "requestID": "d67223ef-574d-4ed1-8f0a-010b40ad9212",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.574Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "1ae2be4d-574b-47a3-bd88-6af0086d2e70",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "87668848-2197-4acb-858c-846c6c1cbb30"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 61375
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.577Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "1ae2be4d-574b-47a3-bd88-6af0086d2e70",
+          "requestID": "9e3f231a-0d9b-41d0-9dde-ae6d91aead9c",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.582Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "1ae2be4d-574b-47a3-bd88-6af0086d2e70",
+          "requestID": "9e3f231a-0d9b-41d0-9dde-ae6d91aead9c"
+        },
+        {
+          "at": "2026-10-21T18:11:04.584Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "1ae2be4d-574b-47a3-bd88-6af0086d2e70",
+          "requestID": "9e3f231a-0d9b-41d0-9dde-ae6d91aead9c",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.585Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "f34692ba-f42f-48ce-a34e-b1b9c61514b6",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "c33bada3-5417-40aa-b978-062f90e84bbe"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 62517
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.587Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "f34692ba-f42f-48ce-a34e-b1b9c61514b6",
+          "requestID": "77397879-04ae-483e-88a4-9c21c5eeca07",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.591Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "f34692ba-f42f-48ce-a34e-b1b9c61514b6",
+          "requestID": "77397879-04ae-483e-88a4-9c21c5eeca07"
+        },
+        {
+          "at": "2026-10-21T18:11:04.592Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "f34692ba-f42f-48ce-a34e-b1b9c61514b6",
+          "requestID": "77397879-04ae-483e-88a4-9c21c5eeca07",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.593Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "34800b9d-e1de-4892-8969-3bd4555fbd62",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "4e56940a-f22c-4e2f-89c0-d41d16ac4f43"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 61891
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.595Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "34800b9d-e1de-4892-8969-3bd4555fbd62",
+          "requestID": "fa7c80de-4659-4351-9dbb-7b42c439245a",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.598Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "34800b9d-e1de-4892-8969-3bd4555fbd62",
+          "requestID": "fa7c80de-4659-4351-9dbb-7b42c439245a"
+        },
+        {
+          "at": "2026-10-21T18:11:04.599Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "34800b9d-e1de-4892-8969-3bd4555fbd62",
+          "requestID": "fa7c80de-4659-4351-9dbb-7b42c439245a",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.600Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "bb0fa400-ddf9-4ad6-98fe-c562a8214ebe",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "751119b8-1407-4a1e-8b32-44600fd0aca5"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 65256
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.602Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "bb0fa400-ddf9-4ad6-98fe-c562a8214ebe",
+          "requestID": "444ed37a-43f6-4747-9da4-07358a5a68db",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.605Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "bb0fa400-ddf9-4ad6-98fe-c562a8214ebe",
+          "requestID": "444ed37a-43f6-4747-9da4-07358a5a68db"
+        },
+        {
+          "at": "2026-10-21T18:11:04.606Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "bb0fa400-ddf9-4ad6-98fe-c562a8214ebe",
+          "requestID": "444ed37a-43f6-4747-9da4-07358a5a68db",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.607Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "89425d0c-7b8f-4d6f-bbae-8e1171ba3ede",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "30b09ec2-8fc8-442b-a80f-7175216025ea"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 51687
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.610Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "89425d0c-7b8f-4d6f-bbae-8e1171ba3ede",
+          "requestID": "53df0de4-9353-4768-8c45-47852a977986",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.613Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "89425d0c-7b8f-4d6f-bbae-8e1171ba3ede",
+          "requestID": "53df0de4-9353-4768-8c45-47852a977986"
+        },
+        {
+          "at": "2026-10-21T18:11:04.615Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "89425d0c-7b8f-4d6f-bbae-8e1171ba3ede",
+          "requestID": "53df0de4-9353-4768-8c45-47852a977986",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.616Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "26eb4196-b667-4d19-b9ce-33250f662252",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "55464185-b89b-445f-9bbe-58c70fc5a767"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 59928
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.619Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "26eb4196-b667-4d19-b9ce-33250f662252",
+          "requestID": "4f94d2c9-c0fd-499f-8d1b-93e420d8a6b9",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.621Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "26eb4196-b667-4d19-b9ce-33250f662252",
+          "requestID": "4f94d2c9-c0fd-499f-8d1b-93e420d8a6b9"
+        },
+        {
+          "at": "2026-10-21T18:11:04.622Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "26eb4196-b667-4d19-b9ce-33250f662252",
+          "requestID": "4f94d2c9-c0fd-499f-8d1b-93e420d8a6b9",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.623Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "31d3de89-7396-46ab-b78b-115d7139ea68",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "d57cd29a-f137-47a7-a3ac-441ada3344c2"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 60892
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.626Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "31d3de89-7396-46ab-b78b-115d7139ea68",
+          "requestID": "86f8f44d-7ccd-4377-9bf6-ec60cc761c5e",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.629Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "31d3de89-7396-46ab-b78b-115d7139ea68",
+          "requestID": "86f8f44d-7ccd-4377-9bf6-ec60cc761c5e"
+        },
+        {
+          "at": "2026-10-21T18:11:04.630Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "31d3de89-7396-46ab-b78b-115d7139ea68",
+          "requestID": "86f8f44d-7ccd-4377-9bf6-ec60cc761c5e",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.631Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "f7905ece-f6f5-4e66-a3e4-cec3af3ec2ee",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "4a778cb5-eb96-4a20-ac38-4d90c0ba5d8c"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 55335
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.634Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "f7905ece-f6f5-4e66-a3e4-cec3af3ec2ee",
+          "requestID": "2f6b161a-4724-4d0c-a059-3cb22612735a",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.636Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "f7905ece-f6f5-4e66-a3e4-cec3af3ec2ee",
+          "requestID": "2f6b161a-4724-4d0c-a059-3cb22612735a"
+        },
+        {
+          "at": "2026-10-21T18:11:04.637Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "f7905ece-f6f5-4e66-a3e4-cec3af3ec2ee",
+          "requestID": "2f6b161a-4724-4d0c-a059-3cb22612735a",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.639Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "f5fb4bb7-8281-406f-821a-f22b6f221167",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "65079ce0-ea15-4aa1-9236-51f8722d4710"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 59473
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.641Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "f5fb4bb7-8281-406f-821a-f22b6f221167",
+          "requestID": "a05d447c-3f5a-417c-9255-17aff27a214c",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.646Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "f5fb4bb7-8281-406f-821a-f22b6f221167",
+          "requestID": "a05d447c-3f5a-417c-9255-17aff27a214c"
+        },
+        {
+          "at": "2026-10-21T18:11:04.647Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "f5fb4bb7-8281-406f-821a-f22b6f221167",
+          "requestID": "a05d447c-3f5a-417c-9255-17aff27a214c",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.648Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "cdffa19d-d145-4b34-96e8-8fed7ac6e998",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "d313c653-aa76-4d18-89e7-310e063b07fa"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 53031
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.650Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "cdffa19d-d145-4b34-96e8-8fed7ac6e998",
+          "requestID": "027f2c79-8514-446d-80d0-e3d9f3ae3b31",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.653Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "cdffa19d-d145-4b34-96e8-8fed7ac6e998",
+          "requestID": "027f2c79-8514-446d-80d0-e3d9f3ae3b31"
+        },
+        {
+          "at": "2026-10-21T18:11:04.654Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "cdffa19d-d145-4b34-96e8-8fed7ac6e998",
+          "requestID": "027f2c79-8514-446d-80d0-e3d9f3ae3b31",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.655Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "7ac70a2d-0353-41d7-a34d-31a5aaac2e79",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "3a3dc27b-1c11-4693-802e-7630c8c8955d"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 59474
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.657Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "7ac70a2d-0353-41d7-a34d-31a5aaac2e79",
+          "requestID": "c2c7b4d1-61f4-42a6-9986-2ebcaa5fe9ec",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.662Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "7ac70a2d-0353-41d7-a34d-31a5aaac2e79",
+          "requestID": "c2c7b4d1-61f4-42a6-9986-2ebcaa5fe9ec"
+        },
+        {
+          "at": "2026-10-21T18:11:04.663Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "7ac70a2d-0353-41d7-a34d-31a5aaac2e79",
+          "requestID": "c2c7b4d1-61f4-42a6-9986-2ebcaa5fe9ec",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.664Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "4c025886-fa5e-41a6-b526-f5dc96c18853",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "f0bbe0d6-459c-42d1-8894-74ef74f405a2"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 56612
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.666Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "4c025886-fa5e-41a6-b526-f5dc96c18853",
+          "requestID": "f707bbaf-afba-46a3-ae38-9022ca1eafa8",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.669Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "4c025886-fa5e-41a6-b526-f5dc96c18853",
+          "requestID": "f707bbaf-afba-46a3-ae38-9022ca1eafa8"
+        },
+        {
+          "at": "2026-10-21T18:11:04.670Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "4c025886-fa5e-41a6-b526-f5dc96c18853",
+          "requestID": "f707bbaf-afba-46a3-ae38-9022ca1eafa8",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.671Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "0e79fdd8-6d2a-4a6a-83b9-d083ed41bc27",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "a59d9b48-91ee-4b10-8e28-3d6027b705a0"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 65209
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.674Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "0e79fdd8-6d2a-4a6a-83b9-d083ed41bc27",
+          "requestID": "0bb591ab-f22a-43fc-8e5a-fa97e6861b4d",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.677Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "0e79fdd8-6d2a-4a6a-83b9-d083ed41bc27",
+          "requestID": "0bb591ab-f22a-43fc-8e5a-fa97e6861b4d"
+        },
+        {
+          "at": "2026-10-21T18:11:04.678Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "0e79fdd8-6d2a-4a6a-83b9-d083ed41bc27",
+          "requestID": "0bb591ab-f22a-43fc-8e5a-fa97e6861b4d",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.681Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "1ea50ef6-c5a3-49e0-ac9c-0cda20c11d75",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "686b575f-d2f2-4441-84e9-003907f139e5"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 51700
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.684Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "1ea50ef6-c5a3-49e0-ac9c-0cda20c11d75",
+          "requestID": "2b4b0b8e-65fc-4c2c-8f74-d896b12f9e8c",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.709Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "1ea50ef6-c5a3-49e0-ac9c-0cda20c11d75",
+          "requestID": "2b4b0b8e-65fc-4c2c-8f74-d896b12f9e8c"
+        },
+        {
+          "at": "2026-10-21T18:11:04.710Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "1ea50ef6-c5a3-49e0-ac9c-0cda20c11d75",
+          "requestID": "2b4b0b8e-65fc-4c2c-8f74-d896b12f9e8c",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.711Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "f1db90db-2da5-4615-9bcd-9d280610ac47",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "57f7f76f-3ab8-4fa8-90dd-f320e160c6f4"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 54225
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.713Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "f1db90db-2da5-4615-9bcd-9d280610ac47",
+          "requestID": "3ec7bbe5-4b44-42cd-ba85-812201241dc6",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:11:04.725Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "f1db90db-2da5-4615-9bcd-9d280610ac47",
+          "requestID": "3ec7bbe5-4b44-42cd-ba85-812201241dc6"
+        },
+        {
+          "at": "2026-10-21T18:11:04.726Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "f1db90db-2da5-4615-9bcd-9d280610ac47",
+          "requestID": "3ec7bbe5-4b44-42cd-ba85-812201241dc6",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:11:04.727Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "a8594df6-82ca-43de-98b6-c00251346c8f",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "6",
+            "after_live": "10",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "347302dd-6821-4daa-aaca-5cf585ac7bb8"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 59475
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:11:04.729Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "a8594df6-82ca-43de-98b6-c00251346c8f",
+          "requestID": "3a98a1e4-6261-43b8-8d5b-c94122aa13d6",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:12:04.363Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "f2e1ec67-dc06-4b17-b13a-fb39292fa32b",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "11",
+            "after_live": "169",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "10f34ae1-2852-4cb7-8787-15f2758e857a"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 54786
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:12:04.368Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "f2e1ec67-dc06-4b17-b13a-fb39292fa32b",
+          "requestID": "1cffe43d-d39d-49f1-8671-4af60d0492ca",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:12:04.727Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "a8594df6-82ca-43de-98b6-c00251346c8f",
+          "requestID": "3a98a1e4-6261-43b8-8d5b-c94122aa13d6"
+        },
+        {
+          "at": "2026-10-21T18:12:04.728Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "a8594df6-82ca-43de-98b6-c00251346c8f",
+          "requestID": "3a98a1e4-6261-43b8-8d5b-c94122aa13d6",
+          "type": "unknown"
+        },
+        {
+          "at": "2026-10-21T18:14:01.247Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response-transport-error-applied",
+          "name": "browser",
+          "id": "f2e1ec67-dc06-4b17-b13a-fb39292fa32b",
+          "requestID": "1cffe43d-d39d-49f1-8671-4af60d0492ca",
+          "taskID": "tsk_g00VYi18zf00L6NKm1vM"
+        },
+        {
+          "at": "2026-10-21T18:14:01.249Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "f2e1ec67-dc06-4b17-b13a-fb39292fa32b",
+          "requestID": "1cffe43d-d39d-49f1-8671-4af60d0492ca",
+          "type": "Error"
+        },
+        {
+          "at": "2026-10-21T18:14:04.259Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "d1000096-09ae-4fae-a762-57513f2db794",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "21",
+            "after_live": "6915",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "5228e2b7-bdeb-41d7-849a-c62e342e459a"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 52977
+          },
+          "serverPort": 18951
+        },
+        {
+          "at": "2026-10-21T18:14:04.263Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "d1000096-09ae-4fae-a762-57513f2db794",
+          "requestID": "34c579b5-9c49-4711-a993-2242aefa0566",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        {
+          "at": "2026-10-21T18:17:43.058Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "native-request-abort",
+          "id": "d1000096-09ae-4fae-a762-57513f2db794",
+          "requestID": "34c579b5-9c49-4711-a993-2242aefa0566"
+        },
+        {
+          "at": "2026-10-21T18:17:43.060Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "original-response-pipe-cancellation-settled",
+          "id": "d1000096-09ae-4fae-a762-57513f2db794",
+          "requestID": "34c579b5-9c49-4711-a993-2242aefa0566",
+          "type": "unknown"
+        }
+      ],
+      "diagnosticControlErrors": {
+        "count": 726,
+        "first": {
+          "at": "2026-10-21T18:10:52.481Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "control-error",
+          "name": "calibration",
+          "type": "AssertionError",
+          "message": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'tsk_g00VYhrJxy00qIC54qvM'\n- 'tsk_g00VYi18zf00L6NKm1vM'\n            ^\n"
+        },
+        "last": {
+          "at": "2026-10-21T18:14:00.995Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "control-error",
+          "name": "calibration",
+          "type": "AssertionError",
+          "message": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'tsk_g00VYhrJxy00qIC54qvM'\n- 'tsk_g00VYi18zf00L6NKm1vM'\n            ^\n"
+        },
+        "qualification": "Private control ordering defect;original complete log retained privately;not a product or model error"
+      },
+      "documentRequests": [
+        {
+          "time": "2026-10-21T18:10:58.893Z",
+          "requestID": "d8140976-434b-49d8-b137-b70c998536ff",
+          "status": 200
+        }
+      ],
+      "uiModules": [
+        {
+          "time": "2026-10-21T18:10:58.919Z",
+          "path": "/ui/assets/main-B1unUUgO.js",
+          "status": 200
+        }
+      ],
+      "reconnect": {
+        "cut": {
+          "at": "2026-10-21T18:14:01.247Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response-transport-error-applied",
+          "name": "browser",
+          "id": "f2e1ec67-dc06-4b17-b13a-fb39292fa32b",
+          "requestID": "1cffe43d-d39d-49f1-8671-4af60d0492ca",
+          "taskID": "tsk_g00VYi18zf00L6NKm1vM"
+        },
+        "prior": {
+          "at": "2026-10-21T18:12:04.363Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "f2e1ec67-dc06-4b17-b13a-fb39292fa32b",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "11",
+            "after_live": "169",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "10f34ae1-2852-4cb7-8787-15f2758e857a"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 54786
+          },
+          "serverPort": 18951
+        },
+        "next": {
+          "at": "2026-10-21T18:14:04.259Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "request",
+          "id": "d1000096-09ae-4fae-a762-57513f2db794",
+          "path": "/task/tsk_g00VYi18zf00L6NKm1vM/events",
+          "query": {
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\native-stream-reconnect-512-live\\runtime\\data\\projects\\2026\\10\\22\\843504c8-d002-4e9f-9686-802dc761d119",
+            "after": "21",
+            "after_live": "6915",
+            "after_live_epoch": "1792606202150",
+            "opencorvus_stream_instance": "5228e2b7-bdeb-41d7-849a-c62e342e459a"
+          },
+          "peer": {
+            "address": "127.0.0.1",
+            "family": "IPv4",
+            "port": 52977
+          },
+          "serverPort": 18951
+        },
+        "response": {
+          "at": "2026-10-21T18:14:04.263Z",
+          "pid": 81944,
+          "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+          "kind": "response",
+          "id": "d1000096-09ae-4fae-a762-57513f2db794",
+          "requestID": "34c579b5-9c49-4711-a993-2242aefa0566",
+          "status": 200,
+          "contentType": "text/event-stream",
+          "contentEncoding": "gzip"
+        },
+        "cutToReopenMs": 3012
+      },
+      "preflightShutdown": [
+        {
+          "time": "2026-10-21T18:14:15.389Z",
+          "service": "session.prompt",
+          "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+          "message": "cancel"
+        },
+        {
+          "time": "2026-10-21T18:14:17.760Z",
+          "service": "session.prompt",
+          "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+          "message": "cancel"
+        },
+        {
+          "time": "2026-10-21T18:17:52.747Z",
+          "service": "session.prompt",
+          "sessionID": "ses_hJpf0OkY2Gjnl04kSaAj",
+          "message": "cancel"
+        },
+        {
+          "time": "2026-10-21T18:17:52.773Z",
+          "service": "session.wake",
+          "sessionID": "ses_hJpf0OkY2Gjnl04kSaAj",
+          "message": "wake loop cancelled"
+        }
+      ],
+      "task": {
+        "id": "tsk_g00VYi18zf00L6NKm1vM",
+        "status": "completed",
+        "pendingInteractions": 0,
+        "unfinished": 0,
+        "promptOwners": 0
+      },
+      "provider": {
+        "maximum": 32,
+        "actual": 15,
+        "exhausted": false,
+        "entries": [
+          {
+            "request": 1,
+            "model": "gpt-6.1-sol",
+            "status": 200,
+            "streaming": true,
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792606212314,
+            "boundAt": 1792606212316,
+            "chunkCount": 18,
+            "byteCount": 39465,
+            "firstByteReadAt": 1792606212320,
+            "lastByteReadAt": 1792606215303,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hJpf0OkY2Gjnl04kSaAj",
+              "streamRequest": {
+                "requestID": "msg_hqpnHTacShOjZ1G3FgFP",
+                "agentID": "memory",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYi0yNi00157WlrkxW",
+                "attempt": 0
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792606215381
+            }
+          },
+          {
+            "request": 2,
+            "model": "gpt-6.1-sol",
+            "status": 200,
+            "streaming": true,
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792606214340,
+            "boundAt": 1792606214342,
+            "chunkCount": 37,
+            "byteCount": 516059,
+            "firstByteReadAt": 1792606214344,
+            "lastByteReadAt": 1792606215808,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hJpf0OkY2Gjnl04kSaAj",
+              "streamRequest": {
+                "requestID": "msg_hqpnHTacShOjZ1G3FgFP",
+                "agentID": "chat",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYi0z6c002SPlj17qq",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VYi0yNv002a3Iy643m"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792606216032
+            }
+          },
+          {
+            "request": 3,
+            "model": "gpt-6.1-sol",
+            "status": 200,
+            "streaming": true,
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792606253175,
+            "boundAt": 1792606253177,
+            "chunkCount": 133,
+            "byteCount": 317676,
+            "firstByteReadAt": 1792606253178,
+            "lastByteReadAt": 1792606274001,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_-zURHyqilzzYqSHHUF05",
+              "streamRequest": {
+                "requestID": "tsk_g00VYi18zf00L6NKm1vM",
+                "agentID": "memory",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYi19J800my97nAPw1",
+                "attempt": 0
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792606274056
+            }
+          },
+          {
+            "request": 4,
+            "model": "gpt-6.1-sol",
+            "status": 200,
+            "streaming": true,
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792606258563,
+            "boundAt": 1792606258565,
+            "chunkCount": 179,
+            "byteCount": 1181702,
+            "firstByteReadAt": 1792606258573,
+            "lastByteReadAt": 1792606285280,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "streamRequest": {
+                "requestID": "msg_task-root-control_art_h5Ph63THjL0YuCcS7KtY_art_h5Ph63THjL0YuCcS7KtY",
+                "agentID": "orchestrator",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYi1AV100unfkP3OZw",
+                "attempt": 0,
+                "assistantMessageID": "msg_hCSw42POMYQHCStZMfXk"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792606285455
+            }
+          },
+          {
+            "request": 5,
+            "model": "gpt-6.1-sol",
+            "status": 200,
+            "streaming": true,
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792606323307,
+            "boundAt": 1792606323309,
+            "chunkCount": 107,
+            "byteCount": 361850,
+            "firstByteReadAt": 1792606323310,
+            "lastByteReadAt": 1792606345190,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "streamRequest": {
+                "requestID": "msg_task-root-control_art_h5Ph63THjL0YuCcS7KtY_art_h5Ph63THjL0YuCcS7KtY",
+                "agentID": "memory",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYi1RNz0057T973BSd",
+                "attempt": 0
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792606345277
+            }
+          },
+          {
+            "request": 6,
+            "model": "gpt-6.1-sol",
+            "status": 200,
+            "streaming": true,
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792606326754,
+            "boundAt": 1792606326755,
+            "chunkCount": 27,
+            "byteCount": 350270,
+            "firstByteReadAt": 1792606326757,
+            "lastByteReadAt": 1792606329711,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "streamRequest": {
+                "requestID": "msg_g0VYi1RaR004EXB650Za",
+                "agentID": "base-researcher",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYi1SNs009LwegJ1Bq",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VYi1Rjy00wF5saCX0R"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792606329877
+            }
+          },
+          {
+            "request": 7,
+            "model": "gpt-6.1-sol",
+            "status": 200,
+            "streaming": true,
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792606327356,
+            "boundAt": 1792606327358,
+            "chunkCount": 38,
+            "byteCount": 350640,
+            "firstByteReadAt": 1792606327409,
+            "lastByteReadAt": 1792606330143,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "streamRequest": {
+                "requestID": "msg_g0VYi1RZb00JXxRCt4Td",
+                "agentID": "base-researcher",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYi1SNw00McbDr8Yb8",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VYi1RaY00xugECNuGF"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792606330397
+            }
+          },
+          {
+            "request": 8,
+            "model": "gpt-6.1-sol",
+            "status": 200,
+            "streaming": true,
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792606346767,
+            "boundAt": 1792606346769,
+            "chunkCount": 231,
+            "byteCount": 525534,
+            "firstByteReadAt": 1792606346770,
+            "lastByteReadAt": 1792606380246,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "streamRequest": {
+                "requestID": "msg_g0VYi1RaR004EXB650Za",
+                "agentID": "memory",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYi1Xcb00EHkhs0P34",
+                "attempt": 0
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792606380306
+            }
+          },
+          {
+            "request": 9,
+            "model": "gpt-6.1-sol",
+            "status": 200,
+            "streaming": true,
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792606348624,
+            "boundAt": 1792606348625,
+            "chunkCount": 724,
+            "byteCount": 1413294,
+            "firstByteReadAt": 1792606348628,
+            "lastByteReadAt": 1792606457712,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "streamRequest": {
+                "requestID": "msg_g0VYi1RaR004EXB650Za",
+                "agentID": "base-researcher",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYi1Y5A00PWXIna66U",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VYi1Y1X00i6mOc3Trn"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792606457713
+            }
+          },
+          {
+            "request": 10,
+            "model": "gpt-6.1-sol",
+            "status": 200,
+            "streaming": true,
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792606354312,
+            "boundAt": 1792606354314,
+            "chunkCount": 595,
+            "byteCount": 1414691,
+            "firstByteReadAt": 1792606354316,
+            "lastByteReadAt": 1792606455128,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "streamRequest": {
+                "requestID": "msg_g0VYi1RZb00JXxRCt4Td",
+                "agentID": "base-researcher",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYi1ZYR00Xl4RnwV5a",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VYi1ZSJ00qAvDFjDb4"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792606455319
+            }
+          },
+          {
+            "request": 11,
+            "model": "gpt-6.1-sol",
+            "status": 200,
+            "streaming": true,
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792606381238,
+            "boundAt": 1792606381240,
+            "chunkCount": 224,
+            "byteCount": 582867,
+            "firstByteReadAt": 1792606381242,
+            "lastByteReadAt": 1792606412406,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "streamRequest": {
+                "requestID": "msg_g0VYi1RZb00JXxRCt4Td",
+                "agentID": "memory",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYi1gcc00dnENDkdLR",
+                "attempt": 0
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792606412493
+            }
+          },
+          {
+            "request": 12,
+            "model": "gpt-6.1-sol",
+            "status": 200,
+            "streaming": true,
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792606461058,
+            "boundAt": 1792606461060,
+            "chunkCount": 45,
+            "byteCount": 860637,
+            "firstByteReadAt": 1792606461064,
+            "lastByteReadAt": 1792606467088,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "streamRequest": {
+                "requestID": "msg_task-root-control_art_hF3JpaCR3OMoVSUUKrvG_art_hF3JpaCR3OMoVSUUKrvG",
+                "agentID": "orchestrator",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYi21El006dEio9n0q",
+                "attempt": 0,
+                "assistantMessageID": "msg_h8MB96VDR9JGlXp1IiAO"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792606467254
+            }
+          },
+          {
+            "request": 13,
+            "model": "gpt-6.1-sol",
+            "status": 200,
+            "streaming": true,
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792606468887,
+            "boundAt": 1792606468889,
+            "chunkCount": 51,
+            "byteCount": 888874,
+            "firstByteReadAt": 1792606468891,
+            "lastByteReadAt": 1792606475948,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "streamRequest": {
+                "requestID": "msg_task-root-control_art_hF3JpaCR3OMoVSUUKrvG_art_hF3JpaCR3OMoVSUUKrvG",
+                "agentID": "orchestrator",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYi23LN00QBaQ6FH2u",
+                "attempt": 0,
+                "assistantMessageID": "msg_h8MB96VDR9JGlXp1IiAO"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792606476155
+            }
+          },
+          {
+            "request": 14,
+            "model": "gpt-6.1-sol",
+            "status": 200,
+            "streaming": true,
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792606477971,
+            "boundAt": 1792606477973,
+            "chunkCount": 105,
+            "byteCount": 1026090,
+            "firstByteReadAt": 1792606477984,
+            "lastByteReadAt": 1792606494006,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "streamRequest": {
+                "requestID": "msg_task-root-control_art_hF3JpaCR3OMoVSUUKrvG_art_hF3JpaCR3OMoVSUUKrvG",
+                "agentID": "orchestrator",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYi25g100rVP609yPH",
+                "attempt": 0,
+                "assistantMessageID": "msg_h8MB96VDR9JGlXp1IiAO"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792606494331
+            }
+          },
+          {
+            "request": 15,
+            "model": "gpt-6.1-sol",
+            "status": 200,
+            "streaming": true,
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792606540732,
+            "boundAt": 1792606540734,
+            "chunkCount": 211,
+            "byteCount": 694695,
+            "firstByteReadAt": 1792606540736,
+            "lastByteReadAt": 1792606577124,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "streamRequest": {
+                "requestID": "msg_task-root-control_art_hF3JpaCR3OMoVSUUKrvG_art_hF3JpaCR3OMoVSUUKrvG",
+                "agentID": "memory",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYi2M3h00dGjwS7D99",
+                "attempt": 0
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792606577258
+            }
+          }
+        ]
+      },
+      "visible": {
+        "before": {
+          "at": "2026-10-21T18:13:53.222Z",
+          "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+          "textCodeUnits": 4606,
+          "scroll": [
+            {
+              "client": 576,
+              "height": 5347,
+              "top": 4770.39990234375
+            }
+          ]
+        },
+        "after": {
+          "at": "2026-10-21T18:14:21.084Z",
+          "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+          "textCodeUnits": 5700,
+          "scroll": [
+            {
+              "client": 576,
+              "height": 6551,
+              "top": 5974.39990234375
+            }
+          ]
+        },
+        "message": {
+          "id": "msg_g0VYi1Y1X00i6mOc3Trn",
+          "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+          "role": "assistant",
+          "author": "base-researcher",
+          "agent": "base-researcher",
+          "time": {
+            "created": 1792606347295,
+            "completed": 1792606457753
+          },
+          "finish": "stop",
+          "parentID": "msg_g0VYi1RaR004EXB650Za"
+        },
+        "parts": [
+          {
+            "id": "prt_g0VYi1YlT00P0xILGLYC",
+            "messageID": "msg_g0VYi1Y1X00i6mOc3Trn",
+            "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+            "type": "text",
+            "textCodeUnits": 91
+          },
+          {
+            "id": "prt_g0VYi1ZRj00C20b9Msd7",
+            "messageID": "msg_g0VYi1Y1X00i6mOc3Trn",
+            "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+            "type": "text",
+            "textCodeUnits": 5461
+          }
+        ],
+        "completionAfterReopenMilliseconds": 13490,
+        "sourceReadersCoveringCutAndReopen": [
+          {
+            "request": 9,
+            "model": "gpt-6.1-sol",
+            "status": 200,
+            "streaming": true,
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1792606348624,
+            "boundAt": 1792606348625,
+            "chunkCount": 724,
+            "byteCount": 1413294,
+            "firstByteReadAt": 1792606348628,
+            "lastByteReadAt": 1792606457712,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "streamRequest": {
+                "requestID": "msg_g0VYi1RaR004EXB650Za",
+                "agentID": "base-researcher",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VYi1Y5A00PWXIna66U",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VYi1Y1X00i6mOc3Trn"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1792606457713
+            }
+          }
+        ]
+      },
+      "snapshots": [
+        {
+          "file": "task-observation-001.json",
+          "at": "2026-10-21T18:12:12.978Z",
+          "status": "active",
+          "unfinished": [
+            {
+              "id": "msg_g0VYi1RaY00xugECNuGF",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "role": "assistant",
+              "author": "base-researcher",
+              "agent": "base-researcher",
+              "time": {
+                "created": 1792606322558
+              },
+              "parentID": "msg_g0VYi1RZb00JXxRCt4Td"
+            },
+            {
+              "id": "msg_g0VYi1Rjy00wF5saCX0R",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "role": "assistant",
+              "author": "base-researcher",
+              "agent": "base-researcher",
+              "time": {
+                "created": 1792606323142
+              },
+              "parentID": "msg_g0VYi1RaR004EXB650Za"
+            }
+          ],
+          "parts": [
+            {
+              "id": "prt_g0VYi1AIw00Ug2n4TaKP",
+              "messageID": "msg_g0VYi1AJE00n2NV3Jxo1",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "type": "text",
+              "textCodeUnits": 1394
+            },
+            {
+              "id": "prt_task-root-control_art_h5Ph63THjL0YuCcS7KtY_art_h5Ph63THjL0YuCcS7KtY",
+              "messageID": "msg_task-root-control_art_h5Ph63THjL0YuCcS7KtY_art_h5Ph63THjL0YuCcS7KtY",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "type": "text",
+              "textCodeUnits": 725
+            },
+            {
+              "id": "prt_g0VYi1CUB001q4G29Y57",
+              "messageID": "msg_hCSw42POMYQHCStZMfXk",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "type": "text",
+              "textCodeUnits": 97
+            },
+            {
+              "id": "prt_g0VYi1RZb00OcdOUUykW",
+              "messageID": "msg_g0VYi1RZb00JXxRCt4Td",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "type": "text",
+              "textCodeUnits": 3587
+            },
+            {
+              "id": "prt_g0VYi1RZb01Ll6o3XrP4",
+              "messageID": "msg_g0VYi1RZb00JXxRCt4Td",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "type": "text",
+              "textCodeUnits": 329
+            },
+            {
+              "id": "prt_g0VYi1RaR00AdR6IVlI0",
+              "messageID": "msg_g0VYi1RaR004EXB650Za",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "type": "text",
+              "textCodeUnits": 3598
+            },
+            {
+              "id": "prt_g0VYi1RaR01fR93jEW7d",
+              "messageID": "msg_g0VYi1RaR004EXB650Za",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "type": "text",
+              "textCodeUnits": 329
+            },
+            {
+              "id": "prt_g0VYi1SvZ00jS5QxsvWP",
+              "messageID": "msg_g0VYi1Rjy00wF5saCX0R",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "type": "text",
+              "textCodeUnits": 69
+            },
+            {
+              "id": "prt_g0VYi1T9Z00Tdg39luxi",
+              "messageID": "msg_g0VYi1RaY00xugECNuGF",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "type": "text",
+              "textCodeUnits": 80
+            }
+          ],
+          "tools": [
+            {
+              "id": "prt_g0VYi1CuM00JEX2QNgqo",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "tool": "dispatch_agents",
+              "outcome": "completed"
+            },
+            {
+              "id": "prt_g0VYi1THm00dYwTamGy3",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "tool": "webfetch",
+              "input": {
+                "url": "https://aclanthology.org/2025.naacl-long.475/",
+                "format": "markdown"
+              }
+            },
+            {
+              "id": "prt_g0VYi1TSX00KsKKcycmQ",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "tool": "webfetch",
+              "input": {
+                "url": "https://arxiv.org/abs/2509.11035v1",
+                "format": "markdown"
+              }
+            }
+          ]
+        },
+        {
+          "file": "task-observation-002.json",
+          "at": "2026-10-21T18:13:12.889Z",
+          "status": "active",
+          "unfinished": [
+            {
+              "id": "msg_g0VYi1Y1X00i6mOc3Trn",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "role": "assistant",
+              "author": "base-researcher",
+              "agent": "base-researcher",
+              "time": {
+                "created": 1792606347295
+              },
+              "parentID": "msg_g0VYi1RaR004EXB650Za"
+            },
+            {
+              "id": "msg_g0VYi1ZSJ00qAvDFjDb4",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "role": "assistant",
+              "author": "base-researcher",
+              "agent": "base-researcher",
+              "time": {
+                "created": 1792606352799
+              },
+              "parentID": "msg_g0VYi1RZb00JXxRCt4Td"
+            }
+          ],
+          "parts": [
+            {
+              "id": "prt_g0VYi1AIw00Ug2n4TaKP",
+              "messageID": "msg_g0VYi1AJE00n2NV3Jxo1",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "type": "text",
+              "textCodeUnits": 1394
+            },
+            {
+              "id": "prt_task-root-control_art_h5Ph63THjL0YuCcS7KtY_art_h5Ph63THjL0YuCcS7KtY",
+              "messageID": "msg_task-root-control_art_h5Ph63THjL0YuCcS7KtY_art_h5Ph63THjL0YuCcS7KtY",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "type": "text",
+              "textCodeUnits": 725
+            },
+            {
+              "id": "prt_g0VYi1CUB001q4G29Y57",
+              "messageID": "msg_hCSw42POMYQHCStZMfXk",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "type": "text",
+              "textCodeUnits": 97
+            },
+            {
+              "id": "prt_g0VYi1RZb00OcdOUUykW",
+              "messageID": "msg_g0VYi1RZb00JXxRCt4Td",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "type": "text",
+              "textCodeUnits": 3587
+            },
+            {
+              "id": "prt_g0VYi1RZb01Ll6o3XrP4",
+              "messageID": "msg_g0VYi1RZb00JXxRCt4Td",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "type": "text",
+              "textCodeUnits": 329
+            },
+            {
+              "id": "prt_g0VYi1RaR00AdR6IVlI0",
+              "messageID": "msg_g0VYi1RaR004EXB650Za",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "type": "text",
+              "textCodeUnits": 3598
+            },
+            {
+              "id": "prt_g0VYi1RaR01fR93jEW7d",
+              "messageID": "msg_g0VYi1RaR004EXB650Za",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "type": "text",
+              "textCodeUnits": 329
+            },
+            {
+              "id": "prt_g0VYi1SvZ00jS5QxsvWP",
+              "messageID": "msg_g0VYi1Rjy00wF5saCX0R",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "type": "text",
+              "textCodeUnits": 69
+            },
+            {
+              "id": "prt_g0VYi1T9Z00Tdg39luxi",
+              "messageID": "msg_g0VYi1RaY00xugECNuGF",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "type": "text",
+              "textCodeUnits": 80
+            },
+            {
+              "id": "prt_g0VYi1YlT00P0xILGLYC",
+              "messageID": "msg_g0VYi1Y1X00i6mOc3Trn",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "type": "text",
+              "textCodeUnits": 91
+            },
+            {
+              "id": "prt_g0VYi1ZRj00C20b9Msd7",
+              "messageID": "msg_g0VYi1Y1X00i6mOc3Trn",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "type": "text",
+              "textCodeUnits": 2215
+            },
+            {
+              "id": "prt_g0VYi1aAr00T5PSyn5H4",
+              "messageID": "msg_g0VYi1ZSJ00qAvDFjDb4",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "type": "text",
+              "textCodeUnits": 128
+            },
+            {
+              "id": "prt_g0VYi1anV002aJf603br",
+              "messageID": "msg_g0VYi1ZSJ00qAvDFjDb4",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "type": "text",
+              "textCodeUnits": 1950
+            }
+          ],
+          "tools": [
+            {
+              "id": "prt_g0VYi1CuM00JEX2QNgqo",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "tool": "dispatch_agents",
+              "outcome": "completed"
+            },
+            {
+              "id": "prt_g0VYi1THm00dYwTamGy3",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "tool": "webfetch",
+              "outcome": "completed",
+              "input": {
+                "url": "https://aclanthology.org/2025.naacl-long.475/",
+                "format": "markdown"
+              }
+            },
+            {
+              "id": "prt_g0VYi1TSX00KsKKcycmQ",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "tool": "webfetch",
+              "outcome": "completed",
+              "input": {
+                "url": "https://arxiv.org/abs/2509.11035v1",
+                "format": "markdown"
+              }
+            }
+          ]
+        },
+        {
+          "file": "task-observation-003.json",
+          "at": "2026-10-21T18:14:36.165Z",
+          "status": "active",
+          "unfinished": [
+            {
+              "id": "msg_h8MB96VDR9JGlXp1IiAO",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "role": "assistant",
+              "author": "orchestrator",
+              "agent": "orchestrator",
+              "time": {
+                "created": 1792606459032
+              },
+              "finish": "tool-calls",
+              "parentID": "msg_task-root-control_art_hF3JpaCR3OMoVSUUKrvG_art_hF3JpaCR3OMoVSUUKrvG"
+            }
+          ],
+          "parts": [
+            {
+              "id": "prt_g0VYi1AIw00Ug2n4TaKP",
+              "messageID": "msg_g0VYi1AJE00n2NV3Jxo1",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "type": "text",
+              "textCodeUnits": 1394
+            },
+            {
+              "id": "prt_task-root-control_art_h5Ph63THjL0YuCcS7KtY_art_h5Ph63THjL0YuCcS7KtY",
+              "messageID": "msg_task-root-control_art_h5Ph63THjL0YuCcS7KtY_art_h5Ph63THjL0YuCcS7KtY",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "type": "text",
+              "textCodeUnits": 725
+            },
+            {
+              "id": "prt_g0VYi1CUB001q4G29Y57",
+              "messageID": "msg_hCSw42POMYQHCStZMfXk",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "type": "text",
+              "textCodeUnits": 97
+            },
+            {
+              "id": "prt_g0VYi1RZb00OcdOUUykW",
+              "messageID": "msg_g0VYi1RZb00JXxRCt4Td",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "type": "text",
+              "textCodeUnits": 3587
+            },
+            {
+              "id": "prt_g0VYi1RZb01Ll6o3XrP4",
+              "messageID": "msg_g0VYi1RZb00JXxRCt4Td",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "type": "text",
+              "textCodeUnits": 329
+            },
+            {
+              "id": "prt_g0VYi1RaR00AdR6IVlI0",
+              "messageID": "msg_g0VYi1RaR004EXB650Za",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "type": "text",
+              "textCodeUnits": 3598
+            },
+            {
+              "id": "prt_g0VYi1RaR01fR93jEW7d",
+              "messageID": "msg_g0VYi1RaR004EXB650Za",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "type": "text",
+              "textCodeUnits": 329
+            },
+            {
+              "id": "prt_g0VYi1SvZ00jS5QxsvWP",
+              "messageID": "msg_g0VYi1Rjy00wF5saCX0R",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "type": "text",
+              "textCodeUnits": 69
+            },
+            {
+              "id": "prt_g0VYi1T9Z00Tdg39luxi",
+              "messageID": "msg_g0VYi1RaY00xugECNuGF",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "type": "text",
+              "textCodeUnits": 80
+            },
+            {
+              "id": "prt_g0VYi1YlT00P0xILGLYC",
+              "messageID": "msg_g0VYi1Y1X00i6mOc3Trn",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "type": "text",
+              "textCodeUnits": 91
+            },
+            {
+              "id": "prt_g0VYi1ZRj00C20b9Msd7",
+              "messageID": "msg_g0VYi1Y1X00i6mOc3Trn",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "type": "text",
+              "textCodeUnits": 5461
+            },
+            {
+              "id": "prt_g0VYi1aAr00T5PSyn5H4",
+              "messageID": "msg_g0VYi1ZSJ00qAvDFjDb4",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "type": "text",
+              "textCodeUnits": 128
+            },
+            {
+              "id": "prt_g0VYi1anV002aJf603br",
+              "messageID": "msg_g0VYi1ZSJ00qAvDFjDb4",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "type": "text",
+              "textCodeUnits": 5357
+            },
+            {
+              "id": "prt_task-root-control_art_hF3JpaCR3OMoVSUUKrvG_art_hF3JpaCR3OMoVSUUKrvG",
+              "messageID": "msg_task-root-control_art_hF3JpaCR3OMoVSUUKrvG_art_hF3JpaCR3OMoVSUUKrvG",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "type": "text",
+              "textCodeUnits": 1695
+            }
+          ],
+          "tools": [
+            {
+              "id": "prt_g0VYi1CuM00JEX2QNgqo",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "tool": "dispatch_agents",
+              "outcome": "completed"
+            },
+            {
+              "id": "prt_g0VYi1THm00dYwTamGy3",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "tool": "webfetch",
+              "outcome": "completed",
+              "input": {
+                "url": "https://aclanthology.org/2025.naacl-long.475/",
+                "format": "markdown"
+              }
+            },
+            {
+              "id": "prt_g0VYi1TSX00KsKKcycmQ",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "tool": "webfetch",
+              "outcome": "completed",
+              "input": {
+                "url": "https://arxiv.org/abs/2509.11035v1",
+                "format": "markdown"
+              }
+            },
+            {
+              "id": "prt_g0VYi22zB00JERD6nFaq",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "tool": "read_agent_message",
+              "outcome": "completed"
+            },
+            {
+              "id": "prt_g0VYi251C00FiFyJ9oUk",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "tool": "read_agent_message"
+            }
+          ]
+        },
+        {
+          "file": "task-observation-004.json",
+          "at": "2026-10-21T18:15:51.831Z",
+          "status": "completed",
+          "unfinished": [],
+          "parts": [
+            {
+              "id": "prt_g0VYi1AIw00Ug2n4TaKP",
+              "messageID": "msg_g0VYi1AJE00n2NV3Jxo1",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "type": "text",
+              "textCodeUnits": 1394
+            },
+            {
+              "id": "prt_task-root-control_art_h5Ph63THjL0YuCcS7KtY_art_h5Ph63THjL0YuCcS7KtY",
+              "messageID": "msg_task-root-control_art_h5Ph63THjL0YuCcS7KtY_art_h5Ph63THjL0YuCcS7KtY",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "type": "text",
+              "textCodeUnits": 725
+            },
+            {
+              "id": "prt_g0VYi1CUB001q4G29Y57",
+              "messageID": "msg_hCSw42POMYQHCStZMfXk",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "type": "text",
+              "textCodeUnits": 97
+            },
+            {
+              "id": "prt_g0VYi1RZb00OcdOUUykW",
+              "messageID": "msg_g0VYi1RZb00JXxRCt4Td",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "type": "text",
+              "textCodeUnits": 3587
+            },
+            {
+              "id": "prt_g0VYi1RZb01Ll6o3XrP4",
+              "messageID": "msg_g0VYi1RZb00JXxRCt4Td",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "type": "text",
+              "textCodeUnits": 329
+            },
+            {
+              "id": "prt_g0VYi1RaR00AdR6IVlI0",
+              "messageID": "msg_g0VYi1RaR004EXB650Za",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "type": "text",
+              "textCodeUnits": 3598
+            },
+            {
+              "id": "prt_g0VYi1RaR01fR93jEW7d",
+              "messageID": "msg_g0VYi1RaR004EXB650Za",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "type": "text",
+              "textCodeUnits": 329
+            },
+            {
+              "id": "prt_g0VYi1SvZ00jS5QxsvWP",
+              "messageID": "msg_g0VYi1Rjy00wF5saCX0R",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "type": "text",
+              "textCodeUnits": 69
+            },
+            {
+              "id": "prt_g0VYi1T9Z00Tdg39luxi",
+              "messageID": "msg_g0VYi1RaY00xugECNuGF",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "type": "text",
+              "textCodeUnits": 80
+            },
+            {
+              "id": "prt_g0VYi1YlT00P0xILGLYC",
+              "messageID": "msg_g0VYi1Y1X00i6mOc3Trn",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "type": "text",
+              "textCodeUnits": 91
+            },
+            {
+              "id": "prt_g0VYi1ZRj00C20b9Msd7",
+              "messageID": "msg_g0VYi1Y1X00i6mOc3Trn",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "type": "text",
+              "textCodeUnits": 5461
+            },
+            {
+              "id": "prt_g0VYi1aAr00T5PSyn5H4",
+              "messageID": "msg_g0VYi1ZSJ00qAvDFjDb4",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "type": "text",
+              "textCodeUnits": 128
+            },
+            {
+              "id": "prt_g0VYi1anV002aJf603br",
+              "messageID": "msg_g0VYi1ZSJ00qAvDFjDb4",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "type": "text",
+              "textCodeUnits": 5357
+            },
+            {
+              "id": "prt_task-root-control_art_hF3JpaCR3OMoVSUUKrvG_art_hF3JpaCR3OMoVSUUKrvG",
+              "messageID": "msg_task-root-control_art_hF3JpaCR3OMoVSUUKrvG_art_hF3JpaCR3OMoVSUUKrvG",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "type": "text",
+              "textCodeUnits": 1695
+            },
+            {
+              "id": "prt_g0VYi27R100MAw11m7KQ",
+              "messageID": "msg_h8MB96VDR9JGlXp1IiAO",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "type": "text",
+              "textCodeUnits": 321
+            }
+          ],
+          "tools": [
+            {
+              "id": "prt_g0VYi1CuM00JEX2QNgqo",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "tool": "dispatch_agents",
+              "outcome": "completed"
+            },
+            {
+              "id": "prt_g0VYi1THm00dYwTamGy3",
+              "sessionID": "ses_h9O6QslVnv3xNRX0ZbdA",
+              "tool": "webfetch",
+              "outcome": "completed",
+              "input": {
+                "url": "https://aclanthology.org/2025.naacl-long.475/",
+                "format": "markdown"
+              }
+            },
+            {
+              "id": "prt_g0VYi1TSX00KsKKcycmQ",
+              "sessionID": "ses_hPtD0Cq6Vusfjey7Dmq7",
+              "tool": "webfetch",
+              "outcome": "completed",
+              "input": {
+                "url": "https://arxiv.org/abs/2509.11035v1",
+                "format": "markdown"
+              }
+            },
+            {
+              "id": "prt_g0VYi22zB00JERD6nFaq",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "tool": "read_agent_message",
+              "outcome": "completed"
+            },
+            {
+              "id": "prt_g0VYi251C00FiFyJ9oUk",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "tool": "read_agent_message",
+              "outcome": "completed"
+            },
+            {
+              "id": "prt_g0VYi28TR00XRSz2nRg7",
+              "sessionID": "ses_-zURHypjNzzaO6B2D4ns",
+              "tool": "manage_task",
+              "outcome": "completed"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

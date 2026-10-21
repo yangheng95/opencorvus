@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [同文档事件流断连与恢复](2026-10-22-native-stream-reconnect/README.md)：七张实图、原生/透传故障真实ECONNRESET和最新cursor重开；15次Sol原reader覆盖活跃断流，修复诊断旧指令重复校验，原数据保留。
+
 - [成员正文流中刷新与来源恢复](2026-10-22-live-member-refresh/README.md)：十张人工实图、15次真实Sol与原reader时段，B刷新前后同一消息继续输出；修正收尾资格与凭据退休耦合，完整原数据/schema保持。
 
 - [启动链接与失效目录发现](2026-10-22-startup-location-discovery/README.md)：13张精选人工实图、真实500→200及三项后端合同；修复显式链接被默认扫描中断，两个90表152721原行保持，零模型。

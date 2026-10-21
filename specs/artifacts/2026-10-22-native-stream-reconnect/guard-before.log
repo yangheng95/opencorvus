@@ -1,0 +1,25 @@
+bun test v1.4.3 (c6da4a4d3)
+
+.tmp-product-iteration\native-stream-reconnect-512\network-action.test.ts:
+1 | import assert from 'node:assert/strict'
+2 | export function resolveOwnedStreamAction(action:any,input:{selectedTaskID:string;allowedActions:string[];consumed:ReadonlySet<string>;mode:'native-idle'|'response-error'}) {
+3 |  assert.equal(action.taskID,input.selectedTaskID)
+            ^
+AssertionError: Expected values to be strictly equal:
++ actual - expected
+
++ 'task-original'
+- 'task-current'
+        ^
+
+      at innerFail (node:assert:50:32)
+      at strictEqual (node:assert:181:14)
+      at resolveOwnedStreamAction (D:\myhexin-local\opencorvus\.tmp-product-iteration\native-stream-reconnect-512\network-action.ts:3:9)
+      at <anonymous> (D:\myhexin-local\opencorvus\.tmp-product-iteration\native-stream-reconnect-512\network-action.test.ts:4:9)
+(fail) a consumed action maps to its retired receipt after the selected Task changes [2.11ms]
+(pass) a current action maps to the admitted Task and transport mode [0.11ms]
+
+ 1 pass
+ 1 fail
+ 1 expect() calls
+Ran 2 tests across 1 file. [961.00ms]

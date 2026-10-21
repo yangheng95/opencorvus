@@ -1,0 +1,73 @@
+{
+  "shutdown": {
+    "statusCode": 200,
+    "target": {
+      "pid": 88712,
+      "processInstanceID": "win32:639282023885791584",
+      "occurrenceID": "b4955dfe-9266-48f4-b0e0-39fc9357707c"
+    },
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYhzShi00JvQj6jzJA\"}",
+    "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+    "observedAtUtc": "2026-10-21T18:04:10.2392411Z"
+  },
+  "launcher": {
+    "childExitCode": 0,
+    "observedAtUtc": "2026-10-21T18:04:10.3774924Z"
+  },
+  "originalHandle": 5291,
+  "observedAtUtc": "2026-10-21T18:04:12.4752915Z",
+  "originalExit": 0,
+  "native": {
+    "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+    "outcome": "settled",
+    "host": {
+      "pid": 46808,
+      "processInstanceID": "win32:639282023876590123",
+      "occurrenceID": "a0faac2a-c2cf-4015-b766-705fb9c87849"
+    },
+    "target": {
+      "pid": 88712,
+      "processInstanceID": "win32:639282023885791584",
+      "occurrenceID": "b4955dfe-9266-48f4-b0e0-39fc9357707c"
+    },
+    "observedAtUtc": "2026-10-21T18:04:10.324Z",
+    "deadlineAt": 1792606787140,
+    "terminal": {
+      "occurrenceID": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+      "pid": 88712,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "chain": [
+    {
+      "identity": {
+        "pid": 46808,
+        "processInstanceID": "win32:639282023876590123",
+        "occurrenceID": "a0faac2a-c2cf-4015-b766-705fb9c87849"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "identity": {
+        "pid": 88712,
+        "processInstanceID": "win32:639282023885791584",
+        "occurrenceID": "b4955dfe-9266-48f4-b0e0-39fc9357707c"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "provider": {
+    "at": "2026-10-21T17:59:54.735Z",
+    "maximum": 0,
+    "actual": 0,
+    "exhausted": false,
+    "requests": [],
+    "scope": "Native task stream reconnect review; no credentials or model catalog copied"
+  }
+}

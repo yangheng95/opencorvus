@@ -1,0 +1,10 @@
+bun test v1.4.3 (c6da4a4d3)
+
+.tmp-product-iteration\native-stream-reconnect-512\network-action.test.ts:
+(pass) a consumed action maps to its retired receipt after the selected Task changes [0.09ms]
+(pass) a current action maps to the admitted Task and transport mode [0.11ms]
+
+ 2 pass
+ 0 fail
+ 2 expect() calls
+Ran 2 tests across 1 file. [825.00ms]

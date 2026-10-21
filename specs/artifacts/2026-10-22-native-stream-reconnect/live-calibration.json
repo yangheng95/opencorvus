@@ -1,0 +1,33 @@
+{
+  "at": "2026-10-21T18:10:29.375Z",
+  "started": 1792606229308,
+  "status": 200,
+  "bytes": 29635,
+  "chunks": 21,
+  "terminal": {
+    "kind": "read-error",
+    "name": "TypeError",
+    "message": "ECONNRESET: The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to fetch()"
+  },
+  "clientObservationTimeoutReached": false,
+  "transportApplied": {
+    "at": "2026-10-21T18:10:29.372Z",
+    "pid": 81944,
+    "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+    "kind": "response-transport-error-applied",
+    "name": "calibration",
+    "id": "f1885dc1-7e5e-4c92-a8f8-7601ae7c4281",
+    "requestID": "6c8c855b-c1ca-428a-a6ee-e9389001f6fc",
+    "taskID": "tsk_g00VYhrJxy00qIC54qvM"
+  },
+  "upstreamCancellation": {
+    "at": "2026-10-21T18:10:29.374Z",
+    "pid": 81944,
+    "occurrence": "native-stream-reconnect-512-live-a4e3de0c-c6e0-48fd-bdd5-b4aaa4791550",
+    "kind": "original-response-pipe-cancellation-settled",
+    "id": "f1885dc1-7e5e-4c92-a8f8-7601ae7c4281",
+    "requestID": "6c8c855b-c1ca-428a-a6ee-e9389001f6fc",
+    "type": "Error"
+  },
+  "durationMs": 67
+}

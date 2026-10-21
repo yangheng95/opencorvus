@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [同文档事件流断连与恢复](records/2026-10/2026-10-22-native-stream-reconnect.md)：[七张实图、真实断流与原reader](artifacts/2026-10-22-native-stream-reconnect/README.md)，历史/活跃同文档约3秒按当前cursor恢复，原B正文/来源保持；诊断指令判定两项合同通过。
+
 - [成员正文流中刷新与来源恢复](records/2026-10/2026-10-22-live-member-refresh.md)：[十张实图、15次Sol与原reader时段](artifacts/2026-10-22-live-member-refresh/README.md)，B同一消息在整页刷新前后继续流式输出；修正收尾资格与凭据退休耦合，同文档重连仍待验证。
 
 - [启动链接与失效目录发现](records/2026-10/2026-10-22-startup-location-discovery.md)：[13张精选人工图、真实500→200与三项合同](artifacts/2026-10-22-startup-location-discovery/README.md)，修复失效启动根阻断Task链接，复核Goal入口/取消与会话刷新，原152721行保持。

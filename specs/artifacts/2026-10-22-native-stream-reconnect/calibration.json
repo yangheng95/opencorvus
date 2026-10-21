@@ -1,0 +1,32 @@
+{
+  "at": "2026-10-21T18:00:02.729Z",
+  "started": 1792605599032,
+  "status": 200,
+  "bytes": 29635,
+  "chunks": 23,
+  "terminal": {
+    "kind": "read-error",
+    "name": "TypeError",
+    "message": "ECONNRESET: The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to fetch()"
+  },
+  "clientObservationTimeoutReached": false,
+  "nativeApplied": {
+    "at": "2026-10-21T17:59:59.235Z",
+    "pid": 88712,
+    "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+    "kind": "native-idle-timeout-applied",
+    "name": "calibration",
+    "id": "64e20c21-8afc-4ded-8157-4cfebefca5ec",
+    "requestID": "b760c272-4590-4cf4-bd07-8f108be0540a",
+    "seconds": 1
+  },
+  "nativeAbort": {
+    "at": "2026-10-21T18:00:02.728Z",
+    "pid": 88712,
+    "occurrence": "native-stream-reconnect-512-historical-service-9486e75e-1f33-4f6d-8919-60c85d0ed4d1",
+    "kind": "native-request-abort",
+    "id": "64e20c21-8afc-4ded-8157-4cfebefca5ec",
+    "requestID": "b760c272-4590-4cf4-bd07-8f108be0540a"
+  },
+  "durationMs": 3697
+}
