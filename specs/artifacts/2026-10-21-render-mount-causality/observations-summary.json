@@ -1,0 +1,2958 @@
+{
+  "at": "2026-10-21T15:19:42.723Z",
+  "scopes": [
+    {
+      "stage": "before",
+      "samples": [
+        {
+          "index": 1,
+          "count": 34,
+          "first": "2026-10-21T14:56:07.186Z",
+          "last": "2026-10-21T14:56:10.529Z"
+        },
+        {
+          "index": 2,
+          "count": 102,
+          "first": "2026-10-21T14:56:07.186Z",
+          "last": "2026-10-21T14:58:24.197Z"
+        },
+        {
+          "index": 3,
+          "count": 105,
+          "first": "2026-10-21T14:56:07.186Z",
+          "last": "2026-10-21T14:58:24.360Z"
+        },
+        {
+          "index": 4,
+          "count": 105,
+          "first": "2026-10-21T14:56:07.186Z",
+          "last": "2026-10-21T14:58:24.360Z"
+        },
+        {
+          "index": 5,
+          "count": 105,
+          "first": "2026-10-21T14:56:07.186Z",
+          "last": "2026-10-21T14:58:24.360Z"
+        },
+        {
+          "index": 6,
+          "count": 105,
+          "first": "2026-10-21T14:56:07.186Z",
+          "last": "2026-10-21T14:58:24.360Z"
+        },
+        {
+          "index": 7,
+          "count": 105,
+          "first": "2026-10-21T14:56:07.186Z",
+          "last": "2026-10-21T14:58:24.360Z"
+        },
+        {
+          "index": 8,
+          "count": 120,
+          "first": "2026-10-21T14:56:07.186Z",
+          "last": "2026-10-21T15:04:44.573Z"
+        },
+        {
+          "index": 9,
+          "count": 129,
+          "first": "2026-10-21T14:56:07.186Z",
+          "last": "2026-10-21T15:05:16.344Z"
+        },
+        {
+          "index": 10,
+          "count": 144,
+          "first": "2026-10-21T14:56:07.186Z",
+          "last": "2026-10-21T15:06:14.458Z"
+        }
+      ],
+      "eventCount": 144,
+      "replacements": [
+        {
+          "kind": "tree-replaced",
+          "previous": 0,
+          "options": {
+            "scrollIntent": "bottom",
+            "cause": "task-switch"
+          },
+          "at": 2665.800000190735,
+          "timestamp": "2026-10-21T14:56:07.186Z"
+        },
+        {
+          "kind": "tree-replaced",
+          "previous": 1,
+          "options": {
+            "scrollIntent": "bottom",
+            "cause": "task-switch-hydrate"
+          },
+          "at": 5488.300000190735,
+          "timestamp": "2026-10-21T14:56:10.008Z"
+        }
+      ],
+      "rangeCount": 0,
+      "retirements": [
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": -276,
+            "bottom": -163.3333282470703,
+            "height": 112.66667175292969,
+            "viewportTop": 121.33333587646484,
+            "viewportBottom": 720.0000228881836,
+            "scrollTop": 437.3333435058594,
+            "scrollHeight": 1036,
+            "clientHeight": 599,
+            "buffer": 1280,
+            "at": 5608.900000095367,
+            "timestamp": "2026-10-21T14:56:10.130Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": -151.34375,
+            "bottom": 86.14584350585938,
+            "height": 237.48959350585938,
+            "viewportTop": 121.33333587646484,
+            "viewportBottom": 720.0000228881836,
+            "scrollTop": 437.3333435058594,
+            "scrollHeight": 1036,
+            "clientHeight": 599,
+            "buffer": 1280,
+            "at": 5610.400000095367,
+            "timestamp": "2026-10-21T14:56:10.132Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": -292.53125,
+            "bottom": -91.19790649414062,
+            "height": 201.33334350585938,
+            "viewportTop": 121.33333587646484,
+            "viewportBottom": 720.0000228881836,
+            "scrollTop": 820,
+            "scrollHeight": 1419,
+            "clientHeight": 599,
+            "buffer": 1280,
+            "at": 5801.700000286102,
+            "timestamp": "2026-10-21T14:56:10.322Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": -628.6666870117188,
+            "bottom": 136.29168701171875,
+            "height": 764.9583740234375,
+            "viewportTop": 145.33334350585938,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 814,
+            "scrollHeight": 2033,
+            "clientHeight": 575,
+            "buffer": 1280,
+            "at": 139247.30000019073,
+            "timestamp": "2026-10-21T14:58:23.771Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": 493.51043701171875,
+            "bottom": 1185.3229370117188,
+            "height": 691.8125,
+            "viewportTop": 145.33334350585938,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 1145.3333740234375,
+            "scrollHeight": 2462,
+            "clientHeight": 575,
+            "buffer": 1280,
+            "at": 139670.7000002861,
+            "timestamp": "2026-10-21T14:58:24.197Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": 517.03125,
+            "bottom": 1208.84375,
+            "height": 691.8125,
+            "viewportTop": 145.33334350585938,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 1145.3333740234375,
+            "scrollHeight": 2485,
+            "clientHeight": 575,
+            "buffer": 1280,
+            "at": 519196.09999990463,
+            "timestamp": "2026-10-21T15:04:43.733Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": 540.5416870117188,
+            "bottom": 1232.3541870117188,
+            "height": 691.8125,
+            "viewportTop": 145.33334350585938,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 1145.3333740234375,
+            "scrollHeight": 2509,
+            "clientHeight": 575,
+            "buffer": 1280,
+            "at": 519449.2000002861,
+            "timestamp": "2026-10-21T15:04:43.986Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": 587.5625,
+            "bottom": 1326.3958740234375,
+            "height": 738.8333740234375,
+            "viewportTop": 145.33334350585938,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 1145.3333740234375,
+            "scrollHeight": 2603,
+            "clientHeight": 575,
+            "buffer": 1280,
+            "at": 519861.7000002861,
+            "timestamp": "2026-10-21T15:04:44.398Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": 1173.875,
+            "bottom": 1519.5625,
+            "height": 345.6875,
+            "viewportTop": 145.33334350585938,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 0,
+            "scrollHeight": 2624,
+            "clientHeight": 575,
+            "buffer": 1280,
+            "at": 551626.2000002861,
+            "timestamp": "2026-10-21T15:05:16.164Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": 1523.5625,
+            "bottom": 1724.8958435058594,
+            "height": 201.33334350585938,
+            "viewportTop": 145.33334350585938,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 0,
+            "scrollHeight": 2624,
+            "clientHeight": 575,
+            "buffer": 1280,
+            "at": 551626.4000000954,
+            "timestamp": "2026-10-21T15:05:16.164Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": 1732.8958740234375,
+            "bottom": 2471.729248046875,
+            "height": 738.8333740234375,
+            "viewportTop": 145.33334350585938,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 0,
+            "scrollHeight": 2624,
+            "clientHeight": 575,
+            "buffer": 1280,
+            "at": 551626.9000000954,
+            "timestamp": "2026-10-21T15:05:16.164Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": -1864,
+            "bottom": -887.4478759765625,
+            "height": 976.5521240234375,
+            "viewportTop": 145.33334350585938,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 2049.333251953125,
+            "scrollHeight": 2624,
+            "clientHeight": 575,
+            "buffer": 1280,
+            "at": 609706.9000000954,
+            "timestamp": "2026-10-21T15:06:14.248Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": -875.4583740234375,
+            "bottom": -529.7708740234375,
+            "height": 345.6875,
+            "viewportTop": 145.33334350585938,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 2049.333251953125,
+            "scrollHeight": 2624,
+            "clientHeight": 575,
+            "buffer": 1280,
+            "at": 609707.7000002861,
+            "timestamp": "2026-10-21T15:06:14.248Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": -525.7708740234375,
+            "bottom": -324.4375305175781,
+            "height": 201.33334350585938,
+            "viewportTop": 145.33334350585938,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 2049.333251953125,
+            "scrollHeight": 2624,
+            "clientHeight": 575,
+            "buffer": 1280,
+            "at": 609707.9000000954,
+            "timestamp": "2026-10-21T15:06:14.248Z"
+          }
+        }
+      ],
+      "bodies": [
+        {
+          "owner": 1,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+          "partID": "prt_g0VYf0Rds00OSS06uF90",
+          "mounts": [
+            {
+              "at": 5576.800000190735,
+              "timestamp": "2026-10-21T14:56:10.097Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [
+            {
+              "at": 5607.900000095367,
+              "timestamp": "2026-10-21T14:56:10.129Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "stateCount": 1,
+          "firstState": {
+            "at": 5577.099999904633,
+            "timestamp": "2026-10-21T14:56:10.097Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 5577.099999904633,
+            "timestamp": "2026-10-21T14:56:10.097Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          }
+        },
+        {
+          "owner": 2,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_hdshDAXaULnWjcMA6lr5",
+          "partID": "prt_g0VYf0STd00SVrTn6d5d",
+          "mounts": [
+            {
+              "at": 5577.700000286102,
+              "timestamp": "2026-10-21T14:56:10.099Z",
+              "textLength": 103,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [
+            {
+              "at": 5609.700000286102,
+              "timestamp": "2026-10-21T14:56:10.132Z",
+              "textLength": 103,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "stateCount": 1,
+          "firstState": {
+            "at": 5577.800000190735,
+            "timestamp": "2026-10-21T14:56:10.099Z",
+            "textLength": 103,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 5577.800000190735,
+            "timestamp": "2026-10-21T14:56:10.099Z",
+            "textLength": 103,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          }
+        },
+        {
+          "owner": 3,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_hVoMy3wmp4kkJyFcrP8k",
+          "partID": "prt_g0VYf1RHO00EJv8bIbwP",
+          "mounts": [
+            {
+              "at": 5578.599999904633,
+              "timestamp": "2026-10-21T14:56:10.099Z",
+              "textLength": 391,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [
+            {
+              "at": 139670,
+              "timestamp": "2026-10-21T14:58:24.194Z",
+              "textLength": 391,
+              "streaming": false,
+              "htmlBlocks": 5,
+              "pending": false
+            }
+          ],
+          "stateCount": 7,
+          "firstState": {
+            "at": 5578.700000286102,
+            "timestamp": "2026-10-21T14:56:10.099Z",
+            "textLength": 391,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 5736.800000190735,
+            "timestamp": "2026-10-21T14:56:10.257Z",
+            "textLength": 391,
+            "streaming": false,
+            "htmlBlocks": 5,
+            "pending": false
+          }
+        },
+        {
+          "owner": 4,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+          "partID": "prt_g0VYf0Rds00OSS06uF90",
+          "mounts": [
+            {
+              "at": 5977.5,
+              "timestamp": "2026-10-21T14:56:10.499Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [
+            {
+              "at": 139246.90000009537,
+              "timestamp": "2026-10-21T14:58:23.771Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "stateCount": 3,
+          "firstState": {
+            "at": 5977.700000286102,
+            "timestamp": "2026-10-21T14:56:10.499Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 6007.5,
+            "timestamp": "2026-10-21T14:56:10.528Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 5,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_hdshDAXaULnWjcMA6lr5",
+          "partID": "prt_g0VYf0STd00SVrTn6d5d",
+          "mounts": [
+            {
+              "at": 5978.099999904633,
+              "timestamp": "2026-10-21T14:56:10.499Z",
+              "textLength": 103,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [
+            {
+              "at": 551625.9000000954,
+              "timestamp": "2026-10-21T15:05:16.163Z",
+              "textLength": 103,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "stateCount": 3,
+          "firstState": {
+            "at": 5978.200000286102,
+            "timestamp": "2026-10-21T14:56:10.499Z",
+            "textLength": 103,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 6008.800000190735,
+            "timestamp": "2026-10-21T14:56:10.529Z",
+            "textLength": 103,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 6,
+          "sessionID": "ses_h5G4X4aAZ9tXCnm4rR5G",
+          "messageID": "msg_g0VYf0dgi003VeQgIHxr",
+          "partID": "prt_g0VYf0esb00LjpdEaRoi",
+          "mounts": [
+            {
+              "at": 139189,
+              "timestamp": "2026-10-21T14:58:23.713Z",
+              "textLength": 71,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [],
+          "stateCount": 3,
+          "firstState": {
+            "at": 139189.30000019073,
+            "timestamp": "2026-10-21T14:58:23.713Z",
+            "textLength": 71,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 139260.2000002861,
+            "timestamp": "2026-10-21T14:58:23.784Z",
+            "textLength": 71,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 7,
+          "sessionID": "ses_h5G4X4aAZ9tXCnm4rR5G",
+          "messageID": "msg_g0VYf0hOE00VTqZ8XlSv",
+          "partID": "prt_g0VYf0hy800j4ldB6AnX",
+          "mounts": [
+            {
+              "at": 139189.5,
+              "timestamp": "2026-10-21T14:58:23.715Z",
+              "textLength": 117,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [],
+          "stateCount": 3,
+          "firstState": {
+            "at": 139189.59999990463,
+            "timestamp": "2026-10-21T14:58:23.715Z",
+            "textLength": 117,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 139276.40000009537,
+            "timestamp": "2026-10-21T14:58:23.800Z",
+            "textLength": 117,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 8,
+          "sessionID": "ses_h5G4X4aAZ9tXCnm4rR5G",
+          "messageID": "msg_g0VYf0p0f00B71Z9CWhB",
+          "partID": "prt_g0VYf0q5G008NA0GUzHV",
+          "mounts": [
+            {
+              "at": 139189.80000019073,
+              "timestamp": "2026-10-21T14:58:23.715Z",
+              "textLength": 162,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [],
+          "stateCount": 3,
+          "firstState": {
+            "at": 139190,
+            "timestamp": "2026-10-21T14:58:23.715Z",
+            "textLength": 162,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 139293.09999990463,
+            "timestamp": "2026-10-21T14:58:23.817Z",
+            "textLength": 162,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 9,
+          "sessionID": "ses_h5G4X4aAZ9tXCnm4rR5G",
+          "messageID": "msg_g0VYf0p0f00B71Z9CWhB",
+          "partID": "prt_g0VYf0r4n00VP9UOaUUl",
+          "mounts": [
+            {
+              "at": 139190.2000002861,
+              "timestamp": "2026-10-21T14:58:23.715Z",
+              "textLength": 5836,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [],
+          "stateCount": 48,
+          "firstState": {
+            "at": 139190.2000002861,
+            "timestamp": "2026-10-21T14:58:23.715Z",
+            "textLength": 5836,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 139614.59999990463,
+            "timestamp": "2026-10-21T14:58:24.180Z",
+            "textLength": 5836,
+            "streaming": false,
+            "htmlBlocks": 46,
+            "pending": false
+          }
+        },
+        {
+          "owner": 10,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+          "partID": "prt_g0VYf0Rds00OSS06uF90",
+          "mounts": [
+            {
+              "at": 139604,
+              "timestamp": "2026-10-21T14:58:24.180Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "disposals": [
+            {
+              "at": 609706.5,
+              "timestamp": "2026-10-21T15:06:14.245Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "stateCount": 1,
+          "firstState": {
+            "at": 139604.2000002861,
+            "timestamp": "2026-10-21T14:58:24.180Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          },
+          "finalState": {
+            "at": 139604.2000002861,
+            "timestamp": "2026-10-21T14:58:24.180Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 11,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_hVoMy3wmp4kkJyFcrP8k",
+          "partID": "prt_g0VYf1RHO00EJv8bIbwP",
+          "mounts": [
+            {
+              "at": 139835.80000019073,
+              "timestamp": "2026-10-21T14:58:24.360Z",
+              "textLength": 391,
+              "streaming": false,
+              "htmlBlocks": 5,
+              "pending": false
+            }
+          ],
+          "disposals": [
+            {
+              "at": 519195.7000002861,
+              "timestamp": "2026-10-21T15:04:43.733Z",
+              "textLength": 391,
+              "streaming": false,
+              "htmlBlocks": 5,
+              "pending": false
+            }
+          ],
+          "stateCount": 1,
+          "firstState": {
+            "at": 139835.90000009537,
+            "timestamp": "2026-10-21T14:58:24.360Z",
+            "textLength": 391,
+            "streaming": false,
+            "htmlBlocks": 5,
+            "pending": false
+          },
+          "finalState": {
+            "at": 139835.90000009537,
+            "timestamp": "2026-10-21T14:58:24.360Z",
+            "textLength": 391,
+            "streaming": false,
+            "htmlBlocks": 5,
+            "pending": false
+          }
+        },
+        {
+          "owner": 12,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_hVoMy3wmp4kkJyFcrP8k",
+          "partID": "prt_g0VYf1RHO00EJv8bIbwP",
+          "mounts": [
+            {
+              "at": 519367.90000009537,
+              "timestamp": "2026-10-21T15:04:43.905Z",
+              "textLength": 391,
+              "streaming": false,
+              "htmlBlocks": 5,
+              "pending": false
+            }
+          ],
+          "disposals": [
+            {
+              "at": 519448.7000002861,
+              "timestamp": "2026-10-21T15:04:43.986Z",
+              "textLength": 391,
+              "streaming": false,
+              "htmlBlocks": 5,
+              "pending": false
+            }
+          ],
+          "stateCount": 1,
+          "firstState": {
+            "at": 519367.90000009537,
+            "timestamp": "2026-10-21T15:04:43.905Z",
+            "textLength": 391,
+            "streaming": false,
+            "htmlBlocks": 5,
+            "pending": false
+          },
+          "finalState": {
+            "at": 519367.90000009537,
+            "timestamp": "2026-10-21T15:04:43.905Z",
+            "textLength": 391,
+            "streaming": false,
+            "htmlBlocks": 5,
+            "pending": false
+          }
+        },
+        {
+          "owner": 13,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_hVoMy3wmp4kkJyFcrP8k",
+          "partID": "prt_g0VYf1RHO00EJv8bIbwP",
+          "mounts": [
+            {
+              "at": 519623,
+              "timestamp": "2026-10-21T15:04:44.159Z",
+              "textLength": 391,
+              "streaming": false,
+              "htmlBlocks": 5,
+              "pending": false
+            }
+          ],
+          "disposals": [
+            {
+              "at": 519861.30000019073,
+              "timestamp": "2026-10-21T15:04:44.398Z",
+              "textLength": 391,
+              "streaming": false,
+              "htmlBlocks": 5,
+              "pending": false
+            }
+          ],
+          "stateCount": 1,
+          "firstState": {
+            "at": 519623.09999990463,
+            "timestamp": "2026-10-21T15:04:44.159Z",
+            "textLength": 391,
+            "streaming": false,
+            "htmlBlocks": 5,
+            "pending": false
+          },
+          "finalState": {
+            "at": 519623.09999990463,
+            "timestamp": "2026-10-21T15:04:44.159Z",
+            "textLength": 391,
+            "streaming": false,
+            "htmlBlocks": 5,
+            "pending": false
+          }
+        },
+        {
+          "owner": 14,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_hVoMy3wmp4kkJyFcrP8k",
+          "partID": "prt_g0VYf1RHO00EJv8bIbwP",
+          "mounts": [
+            {
+              "at": 520036.2000002861,
+              "timestamp": "2026-10-21T15:04:44.573Z",
+              "textLength": 391,
+              "streaming": false,
+              "htmlBlocks": 5,
+              "pending": false
+            }
+          ],
+          "disposals": [
+            {
+              "at": 551626.7000002861,
+              "timestamp": "2026-10-21T15:05:16.164Z",
+              "textLength": 391,
+              "streaming": false,
+              "htmlBlocks": 5,
+              "pending": false
+            }
+          ],
+          "stateCount": 1,
+          "firstState": {
+            "at": 520036.30000019073,
+            "timestamp": "2026-10-21T15:04:44.573Z",
+            "textLength": 391,
+            "streaming": false,
+            "htmlBlocks": 5,
+            "pending": false
+          },
+          "finalState": {
+            "at": 520036.30000019073,
+            "timestamp": "2026-10-21T15:04:44.573Z",
+            "textLength": 391,
+            "streaming": false,
+            "htmlBlocks": 5,
+            "pending": false
+          }
+        },
+        {
+          "owner": 15,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_hdshDAXaULnWjcMA6lr5",
+          "partID": "prt_g0VYf0STd00SVrTn6d5d",
+          "mounts": [
+            {
+              "at": 551807.2000002861,
+              "timestamp": "2026-10-21T15:05:16.344Z",
+              "textLength": 103,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "disposals": [
+            {
+              "at": 609707.3000001907,
+              "timestamp": "2026-10-21T15:06:14.248Z",
+              "textLength": 103,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "stateCount": 1,
+          "firstState": {
+            "at": 551807.3000001907,
+            "timestamp": "2026-10-21T15:05:16.344Z",
+            "textLength": 103,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          },
+          "finalState": {
+            "at": 551807.3000001907,
+            "timestamp": "2026-10-21T15:05:16.344Z",
+            "textLength": 103,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 16,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_hVoMy3wmp4kkJyFcrP8k",
+          "partID": "prt_g0VYf1RHO00EJv8bIbwP",
+          "mounts": [
+            {
+              "at": 609731.5,
+              "timestamp": "2026-10-21T15:06:14.270Z",
+              "textLength": 391,
+              "streaming": false,
+              "htmlBlocks": 5,
+              "pending": false
+            }
+          ],
+          "disposals": [],
+          "stateCount": 1,
+          "firstState": {
+            "at": 609731.7000002861,
+            "timestamp": "2026-10-21T15:06:14.270Z",
+            "textLength": 391,
+            "streaming": false,
+            "htmlBlocks": 5,
+            "pending": false
+          },
+          "finalState": {
+            "at": 609731.7000002861,
+            "timestamp": "2026-10-21T15:06:14.270Z",
+            "textLength": 391,
+            "streaming": false,
+            "htmlBlocks": 5,
+            "pending": false
+          }
+        },
+        {
+          "owner": 17,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+          "partID": "prt_g0VYf0Rds00OSS06uF90",
+          "mounts": [
+            {
+              "at": 609917.7000002861,
+              "timestamp": "2026-10-21T15:06:14.458Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "disposals": [],
+          "stateCount": 1,
+          "firstState": {
+            "at": 609917.9000000954,
+            "timestamp": "2026-10-21T15:06:14.458Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          },
+          "finalState": {
+            "at": 609917.9000000954,
+            "timestamp": "2026-10-21T15:06:14.458Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 18,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_hdshDAXaULnWjcMA6lr5",
+          "partID": "prt_g0VYf0STd00SVrTn6d5d",
+          "mounts": [
+            {
+              "at": 609918.5,
+              "timestamp": "2026-10-21T15:06:14.458Z",
+              "textLength": 103,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "disposals": [],
+          "stateCount": 1,
+          "firstState": {
+            "at": 609918.5999999046,
+            "timestamp": "2026-10-21T15:06:14.458Z",
+            "textLength": 103,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          },
+          "finalState": {
+            "at": 609918.5999999046,
+            "timestamp": "2026-10-21T15:06:14.458Z",
+            "textLength": 103,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        }
+      ],
+      "memberBodies": [
+        {
+          "owner": 6,
+          "sessionID": "ses_h5G4X4aAZ9tXCnm4rR5G",
+          "messageID": "msg_g0VYf0dgi003VeQgIHxr",
+          "partID": "prt_g0VYf0esb00LjpdEaRoi",
+          "mounts": [
+            {
+              "at": 139189,
+              "timestamp": "2026-10-21T14:58:23.713Z",
+              "textLength": 71,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [],
+          "stateCount": 3,
+          "firstState": {
+            "at": 139189.30000019073,
+            "timestamp": "2026-10-21T14:58:23.713Z",
+            "textLength": 71,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 139260.2000002861,
+            "timestamp": "2026-10-21T14:58:23.784Z",
+            "textLength": 71,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 7,
+          "sessionID": "ses_h5G4X4aAZ9tXCnm4rR5G",
+          "messageID": "msg_g0VYf0hOE00VTqZ8XlSv",
+          "partID": "prt_g0VYf0hy800j4ldB6AnX",
+          "mounts": [
+            {
+              "at": 139189.5,
+              "timestamp": "2026-10-21T14:58:23.715Z",
+              "textLength": 117,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [],
+          "stateCount": 3,
+          "firstState": {
+            "at": 139189.59999990463,
+            "timestamp": "2026-10-21T14:58:23.715Z",
+            "textLength": 117,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 139276.40000009537,
+            "timestamp": "2026-10-21T14:58:23.800Z",
+            "textLength": 117,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 8,
+          "sessionID": "ses_h5G4X4aAZ9tXCnm4rR5G",
+          "messageID": "msg_g0VYf0p0f00B71Z9CWhB",
+          "partID": "prt_g0VYf0q5G008NA0GUzHV",
+          "mounts": [
+            {
+              "at": 139189.80000019073,
+              "timestamp": "2026-10-21T14:58:23.715Z",
+              "textLength": 162,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [],
+          "stateCount": 3,
+          "firstState": {
+            "at": 139190,
+            "timestamp": "2026-10-21T14:58:23.715Z",
+            "textLength": 162,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 139293.09999990463,
+            "timestamp": "2026-10-21T14:58:23.817Z",
+            "textLength": 162,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 9,
+          "sessionID": "ses_h5G4X4aAZ9tXCnm4rR5G",
+          "messageID": "msg_g0VYf0p0f00B71Z9CWhB",
+          "partID": "prt_g0VYf0r4n00VP9UOaUUl",
+          "mounts": [
+            {
+              "at": 139190.2000002861,
+              "timestamp": "2026-10-21T14:58:23.715Z",
+              "textLength": 5836,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [],
+          "stateCount": 48,
+          "firstState": {
+            "at": 139190.2000002861,
+            "timestamp": "2026-10-21T14:58:23.715Z",
+            "textLength": 5836,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 139614.59999990463,
+            "timestamp": "2026-10-21T14:58:24.180Z",
+            "textLength": 5836,
+            "streaming": false,
+            "htmlBlocks": 46,
+            "pending": false
+          }
+        }
+      ],
+      "rawEvidence": "before-console-010.json"
+    },
+    {
+      "stage": "after",
+      "samples": [
+        {
+          "index": 1,
+          "count": 39,
+          "first": "2026-10-21T15:09:53.005Z",
+          "last": "2026-10-21T15:09:55.296Z"
+        },
+        {
+          "index": 2,
+          "count": 112,
+          "first": "2026-10-21T15:09:53.005Z",
+          "last": "2026-10-21T15:10:20.046Z"
+        },
+        {
+          "index": 3,
+          "count": 139,
+          "first": "2026-10-21T15:09:53.005Z",
+          "last": "2026-10-21T15:12:18.799Z"
+        },
+        {
+          "index": 4,
+          "count": 148,
+          "first": "2026-10-21T15:09:53.005Z",
+          "last": "2026-10-21T15:12:19.420Z"
+        },
+        {
+          "index": 5,
+          "count": 163,
+          "first": "2026-10-21T15:09:53.005Z",
+          "last": "2026-10-21T15:13:02.629Z"
+        },
+        {
+          "index": 6,
+          "count": 163,
+          "first": "2026-10-21T15:09:53.005Z",
+          "last": "2026-10-21T15:13:02.629Z"
+        },
+        {
+          "index": 7,
+          "count": 164,
+          "first": "2026-10-21T15:09:53.005Z",
+          "last": "2026-10-21T15:13:20.485Z"
+        },
+        {
+          "index": 8,
+          "count": 178,
+          "first": "2026-10-21T15:09:53.005Z",
+          "last": "2026-10-21T15:13:43.644Z"
+        }
+      ],
+      "eventCount": 178,
+      "replacements": [
+        {
+          "kind": "tree-replaced",
+          "previous": 0,
+          "options": {
+            "scrollIntent": "bottom",
+            "cause": "task-switch"
+          },
+          "at": 2433.9000000953674,
+          "timestamp": "2026-10-21T15:09:53.005Z"
+        },
+        {
+          "kind": "tree-replaced",
+          "previous": 1,
+          "options": {
+            "scrollIntent": "bottom",
+            "cause": "task-switch-hydrate"
+          },
+          "at": 4241.5,
+          "timestamp": "2026-10-21T15:09:54.813Z"
+        }
+      ],
+      "rangeCount": 26,
+      "retirements": [
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": -276,
+            "bottom": -163.3333282470703,
+            "height": 112.66667175292969,
+            "viewportTop": 121.33333587646484,
+            "viewportBottom": 720.0000228881836,
+            "scrollTop": 437.3333435058594,
+            "scrollHeight": 1036,
+            "clientHeight": 599,
+            "buffer": 1280,
+            "at": 4372.900000095367,
+            "timestamp": "2026-10-21T15:09:54.945Z"
+          },
+          "precedingRange": {
+            "kind": "virtual-range",
+            "range": [
+              2,
+              3
+            ],
+            "data": [
+              "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "items": [
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "indexes": [
+              2,
+              3
+            ],
+            "keepMounted": [],
+            "offset": 437.3333435058594,
+            "viewport": 411.328125,
+            "at": 4371.400000095367,
+            "timestamp": "2026-10-21T15:09:54.943Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": -151.34375,
+            "bottom": 86.14584350585938,
+            "height": 237.48959350585938,
+            "viewportTop": 121.33333587646484,
+            "viewportBottom": 720.0000228881836,
+            "scrollTop": 437.3333435058594,
+            "scrollHeight": 1036,
+            "clientHeight": 599,
+            "buffer": 1280,
+            "at": 4374.900000095367,
+            "timestamp": "2026-10-21T15:09:54.947Z"
+          },
+          "precedingRange": {
+            "kind": "virtual-range",
+            "range": [
+              2,
+              3
+            ],
+            "data": [
+              "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "items": [
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "indexes": [
+              2,
+              3
+            ],
+            "keepMounted": [],
+            "offset": 437.3333435058594,
+            "viewport": 411.328125,
+            "at": 4371.400000095367,
+            "timestamp": "2026-10-21T15:09:54.943Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": -292.53125,
+            "bottom": -91.19790649414062,
+            "height": 201.33334350585938,
+            "viewportTop": 121.33333587646484,
+            "viewportBottom": 720.0000228881836,
+            "scrollTop": 820,
+            "scrollHeight": 1419,
+            "clientHeight": 599,
+            "buffer": 1280,
+            "at": 4535.5,
+            "timestamp": "2026-10-21T15:09:55.107Z"
+          },
+          "precedingRange": {
+            "kind": "virtual-range",
+            "range": [
+              3,
+              3
+            ],
+            "data": [
+              "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "items": [
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "indexes": [
+              3
+            ],
+            "keepMounted": [],
+            "offset": 820,
+            "viewport": 315.328125,
+            "at": 4535.099999904633,
+            "timestamp": "2026-10-21T15:09:55.106Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": 493.3645935058594,
+            "bottom": 1088.4895935058594,
+            "height": 595.125,
+            "viewportTop": 145.33334350585938,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 766.6666870117188,
+            "scrollHeight": 1939,
+            "clientHeight": 575,
+            "buffer": 1280,
+            "at": 29029,
+            "timestamp": "2026-10-21T15:10:19.600Z"
+          },
+          "precedingRange": {
+            "kind": "virtual-range",
+            "range": [
+              0,
+              2
+            ],
+            "data": [
+              "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "items": [
+              "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G"
+            ],
+            "indexes": [
+              0,
+              1,
+              2
+            ],
+            "keepMounted": [
+              2
+            ],
+            "offset": 766.6666870117188,
+            "viewport": 270.328125,
+            "at": 29028.199999809265,
+            "timestamp": "2026-10-21T15:10:19.599Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": -675.3333740234375,
+            "bottom": 89.625,
+            "height": 764.9583740234375,
+            "viewportTop": 145.33334350585938,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 860.6666870117188,
+            "scrollHeight": 2057,
+            "clientHeight": 575,
+            "buffer": 1280,
+            "at": 29060,
+            "timestamp": "2026-10-21T15:10:19.632Z"
+          },
+          "precedingRange": {
+            "kind": "virtual-range",
+            "range": [
+              1,
+              3
+            ],
+            "data": [
+              "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "items": [
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "indexes": [
+              1,
+              2,
+              3
+            ],
+            "keepMounted": [
+              2
+            ],
+            "offset": 860.6666870117188,
+            "viewport": 270.328125,
+            "at": 29059.400000095367,
+            "timestamp": "2026-10-21T15:10:19.630Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": -984,
+            "bottom": -406.54998779296875,
+            "height": 577.4500122070312,
+            "viewportTop": 121.5999984741211,
+            "viewportBottom": 864.0000228881836,
+            "scrollTop": 1145.5999755859375,
+            "scrollHeight": 2462,
+            "clientHeight": 742,
+            "buffer": 1280,
+            "at": 56043.09999990463,
+            "timestamp": "2026-10-21T15:10:46.629Z"
+          },
+          "precedingRange": {
+            "kind": "virtual-range",
+            "range": [
+              1,
+              3
+            ],
+            "data": [
+              "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "items": [
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "indexes": [
+              1,
+              2,
+              3
+            ],
+            "keepMounted": [
+              2
+            ],
+            "offset": 1145.5999755859375,
+            "viewport": 270.328125,
+            "at": 56042.199999809265,
+            "timestamp": "2026-10-21T15:10:46.629Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": -1008,
+            "bottom": -77.86248779296875,
+            "height": 930.1375122070312,
+            "viewportTop": 145.60000610351562,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 1193.5999755859375,
+            "scrollHeight": 2510,
+            "clientHeight": 574,
+            "buffer": 1280,
+            "at": 147123.19999980927,
+            "timestamp": "2026-10-21T15:12:17.698Z"
+          },
+          "precedingRange": {
+            "kind": "virtual-range",
+            "range": [
+              1,
+              3
+            ],
+            "data": [
+              "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "items": [
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "indexes": [
+              1,
+              2,
+              3
+            ],
+            "keepMounted": [
+              3,
+              2
+            ],
+            "offset": 1193.5999755859375,
+            "viewport": 269.796875,
+            "at": 147122.59999990463,
+            "timestamp": "2026-10-21T15:12:17.697Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": -1055.2000732421875,
+            "bottom": -78.03753662109375,
+            "height": 977.1625366210938,
+            "viewportTop": 145.60000610351562,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 1240.800048828125,
+            "scrollHeight": 2604,
+            "clientHeight": 574,
+            "buffer": 1280,
+            "at": 147768.09999990463,
+            "timestamp": "2026-10-21T15:12:18.343Z"
+          },
+          "precedingRange": {
+            "kind": "virtual-range",
+            "range": [
+              1,
+              3
+            ],
+            "data": [
+              "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "items": [
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "indexes": [
+              1,
+              2,
+              3
+            ],
+            "keepMounted": [
+              3,
+              2
+            ],
+            "offset": 1240.800048828125,
+            "viewport": 269.796875,
+            "at": 147767.5,
+            "timestamp": "2026-10-21T15:12:18.342Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": 1174.75,
+            "bottom": 1520.7000122070312,
+            "height": 345.95001220703125,
+            "viewportTop": 145.60000610351562,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 0,
+            "scrollHeight": 2625,
+            "clientHeight": 574,
+            "buffer": 1280,
+            "at": 148678.5,
+            "timestamp": "2026-10-21T15:12:19.253Z"
+          },
+          "precedingRange": {
+            "kind": "virtual-range",
+            "range": [
+              0,
+              0
+            ],
+            "data": [
+              "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "items": [
+              "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G"
+            ],
+            "indexes": [
+              0,
+              2
+            ],
+            "keepMounted": [
+              2
+            ],
+            "offset": 0,
+            "viewport": 248.796875,
+            "at": 148677.59999990463,
+            "timestamp": "2026-10-21T15:12:19.252Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": 1734.2874755859375,
+            "bottom": 2473.4124755859375,
+            "height": 739.125,
+            "viewportTop": 145.60000610351562,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 0,
+            "scrollHeight": 2625,
+            "clientHeight": 574,
+            "buffer": 1280,
+            "at": 148679.19999980927,
+            "timestamp": "2026-10-21T15:12:19.254Z"
+          },
+          "precedingRange": {
+            "kind": "virtual-range",
+            "range": [
+              0,
+              0
+            ],
+            "data": [
+              "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "items": [
+              "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G"
+            ],
+            "indexes": [
+              0,
+              2
+            ],
+            "keepMounted": [
+              2
+            ],
+            "offset": 0,
+            "viewport": 248.796875,
+            "at": 148677.59999990463,
+            "timestamp": "2026-10-21T15:12:19.252Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": -1865.5999755859375,
+            "bottom": -888.4374389648438,
+            "height": 977.1625366210938,
+            "viewportTop": 145.60000610351562,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 2051.199951171875,
+            "scrollHeight": 2625,
+            "clientHeight": 574,
+            "buffer": 1280,
+            "at": 191857.40000009537,
+            "timestamp": "2026-10-21T15:13:02.436Z"
+          },
+          "precedingRange": {
+            "kind": "virtual-range",
+            "range": [
+              3,
+              3
+            ],
+            "data": [
+              "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "items": [
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "indexes": [
+              2,
+              3
+            ],
+            "keepMounted": [
+              2
+            ],
+            "offset": 2051.199951171875,
+            "viewport": 248.796875,
+            "at": 191856.80000019073,
+            "timestamp": "2026-10-21T15:13:02.434Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": -876.4500122070312,
+            "bottom": -530.5,
+            "height": 345.95001220703125,
+            "viewportTop": 145.60000610351562,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 2051.199951171875,
+            "scrollHeight": 2625,
+            "clientHeight": 574,
+            "buffer": 1280,
+            "at": 191858.19999980927,
+            "timestamp": "2026-10-21T15:13:02.436Z"
+          },
+          "precedingRange": {
+            "kind": "virtual-range",
+            "range": [
+              3,
+              3
+            ],
+            "data": [
+              "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "items": [
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "indexes": [
+              2,
+              3
+            ],
+            "keepMounted": [
+              2
+            ],
+            "offset": 2051.199951171875,
+            "viewport": 248.796875,
+            "at": 191856.80000019073,
+            "timestamp": "2026-10-21T15:13:02.434Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": -1865.5999755859375,
+            "bottom": -888.4374389648438,
+            "height": 977.1625366210938,
+            "viewportTop": 145.60000610351562,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 2051.199951171875,
+            "scrollHeight": 2625,
+            "clientHeight": 574,
+            "buffer": 1280,
+            "at": 232858.40000009537,
+            "timestamp": "2026-10-21T15:13:43.440Z"
+          },
+          "precedingRange": {
+            "kind": "virtual-range",
+            "range": [
+              3,
+              3
+            ],
+            "data": [
+              "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "items": [
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "indexes": [
+              3
+            ],
+            "keepMounted": [],
+            "offset": 2051.199951171875,
+            "viewport": 248.796875,
+            "at": 232857.69999980927,
+            "timestamp": "2026-10-21T15:13:43.440Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": -876.4500122070312,
+            "bottom": -530.5,
+            "height": 345.95001220703125,
+            "viewportTop": 145.60000610351562,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 2051.199951171875,
+            "scrollHeight": 2625,
+            "clientHeight": 574,
+            "buffer": 1280,
+            "at": 232858.90000009537,
+            "timestamp": "2026-10-21T15:13:43.440Z"
+          },
+          "precedingRange": {
+            "kind": "virtual-range",
+            "range": [
+              3,
+              3
+            ],
+            "data": [
+              "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "items": [
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "indexes": [
+              3
+            ],
+            "keepMounted": [],
+            "offset": 2051.199951171875,
+            "viewport": 248.796875,
+            "at": 232857.69999980927,
+            "timestamp": "2026-10-21T15:13:43.440Z"
+          }
+        },
+        {
+          "retirement": {
+            "kind": "row-dispose",
+            "id": "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+            "treeEpoch": 2,
+            "replaceCause": "task-switch-hydrate",
+            "connected": true,
+            "top": -526.5125122070312,
+            "bottom": -324.9125061035156,
+            "height": 201.60000610351562,
+            "viewportTop": 145.60000610351562,
+            "viewportBottom": 720.0000305175781,
+            "scrollTop": 2051.199951171875,
+            "scrollHeight": 2625,
+            "clientHeight": 574,
+            "buffer": 1280,
+            "at": 232859.09999990463,
+            "timestamp": "2026-10-21T15:13:43.440Z"
+          },
+          "precedingRange": {
+            "kind": "virtual-range",
+            "range": [
+              3,
+              3
+            ],
+            "data": [
+              "user:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_g0VYf0Re800qDS7AJB5z",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_huWtVllXoLfZW3RQD7ZW_art_huWtVllXoLfZW3RQD7ZW",
+              "subagent-grid:ses_h5G4X4aAZ9tXCnm4rR5G",
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "items": [
+              "orchestrator:session:ses_-zURKzYOJzzJ7p5BCKwl:message:msg_task-root-control_art_hytLJlkxLPkAYTgStiDe_art_hytLJlkxLPkAYTgStiDe"
+            ],
+            "indexes": [
+              3
+            ],
+            "keepMounted": [],
+            "offset": 2051.199951171875,
+            "viewport": 248.796875,
+            "at": 232857.69999980927,
+            "timestamp": "2026-10-21T15:13:43.440Z"
+          }
+        }
+      ],
+      "bodies": [
+        {
+          "owner": 1,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+          "partID": "prt_g0VYf0Rds00OSS06uF90",
+          "mounts": [
+            {
+              "at": 4339.400000095367,
+              "timestamp": "2026-10-21T15:09:54.910Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [
+            {
+              "at": 4371.900000095367,
+              "timestamp": "2026-10-21T15:09:54.944Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "stateCount": 1,
+          "firstState": {
+            "at": 4339.699999809265,
+            "timestamp": "2026-10-21T15:09:54.913Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 4339.699999809265,
+            "timestamp": "2026-10-21T15:09:54.913Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          }
+        },
+        {
+          "owner": 2,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_hdshDAXaULnWjcMA6lr5",
+          "partID": "prt_g0VYf0STd00SVrTn6d5d",
+          "mounts": [
+            {
+              "at": 4340.5,
+              "timestamp": "2026-10-21T15:09:54.913Z",
+              "textLength": 103,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [
+            {
+              "at": 4374.199999809265,
+              "timestamp": "2026-10-21T15:09:54.946Z",
+              "textLength": 103,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "stateCount": 1,
+          "firstState": {
+            "at": 4340.599999904633,
+            "timestamp": "2026-10-21T15:09:54.913Z",
+            "textLength": 103,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 4340.599999904633,
+            "timestamp": "2026-10-21T15:09:54.913Z",
+            "textLength": 103,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          }
+        },
+        {
+          "owner": 3,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_hVoMy3wmp4kkJyFcrP8k",
+          "partID": "prt_g0VYf1RHO00EJv8bIbwP",
+          "mounts": [
+            {
+              "at": 4341.199999809265,
+              "timestamp": "2026-10-21T15:09:54.913Z",
+              "textLength": 391,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [
+            {
+              "at": 29028.699999809265,
+              "timestamp": "2026-10-21T15:10:19.600Z",
+              "textLength": 391,
+              "streaming": false,
+              "htmlBlocks": 5,
+              "pending": false
+            }
+          ],
+          "stateCount": 7,
+          "firstState": {
+            "at": 4341.199999809265,
+            "timestamp": "2026-10-21T15:09:54.913Z",
+            "textLength": 391,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 4457.699999809265,
+            "timestamp": "2026-10-21T15:09:55.030Z",
+            "textLength": 391,
+            "streaming": false,
+            "htmlBlocks": 5,
+            "pending": false
+          }
+        },
+        {
+          "owner": 4,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+          "partID": "prt_g0VYf0Rds00OSS06uF90",
+          "mounts": [
+            {
+              "at": 4705.199999809265,
+              "timestamp": "2026-10-21T15:09:55.276Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [
+            {
+              "at": 29059.699999809265,
+              "timestamp": "2026-10-21T15:10:19.632Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "stateCount": 3,
+          "firstState": {
+            "at": 4705.400000095367,
+            "timestamp": "2026-10-21T15:09:55.277Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 4724.300000190735,
+            "timestamp": "2026-10-21T15:09:55.295Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 5,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_hdshDAXaULnWjcMA6lr5",
+          "partID": "prt_g0VYf0STd00SVrTn6d5d",
+          "mounts": [
+            {
+              "at": 4705.900000095367,
+              "timestamp": "2026-10-21T15:09:55.277Z",
+              "textLength": 103,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [
+            {
+              "at": 148678.09999990463,
+              "timestamp": "2026-10-21T15:12:19.253Z",
+              "textLength": 103,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "stateCount": 3,
+          "firstState": {
+            "at": 4706.099999904633,
+            "timestamp": "2026-10-21T15:09:55.277Z",
+            "textLength": 103,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 4725.199999809265,
+            "timestamp": "2026-10-21T15:09:55.296Z",
+            "textLength": 103,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 6,
+          "sessionID": "ses_h5G4X4aAZ9tXCnm4rR5G",
+          "messageID": "msg_g0VYf0dgi003VeQgIHxr",
+          "partID": "prt_g0VYf0esb00LjpdEaRoi",
+          "mounts": [
+            {
+              "at": 28995,
+              "timestamp": "2026-10-21T15:10:19.566Z",
+              "textLength": 71,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [],
+          "stateCount": 3,
+          "firstState": {
+            "at": 28995.199999809265,
+            "timestamp": "2026-10-21T15:10:19.567Z",
+            "textLength": 71,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 29085.800000190735,
+            "timestamp": "2026-10-21T15:10:19.657Z",
+            "textLength": 71,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 7,
+          "sessionID": "ses_h5G4X4aAZ9tXCnm4rR5G",
+          "messageID": "msg_g0VYf0hOE00VTqZ8XlSv",
+          "partID": "prt_g0VYf0hy800j4ldB6AnX",
+          "mounts": [
+            {
+              "at": 28995.5,
+              "timestamp": "2026-10-21T15:10:19.567Z",
+              "textLength": 117,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [],
+          "stateCount": 3,
+          "firstState": {
+            "at": 28995.599999904633,
+            "timestamp": "2026-10-21T15:10:19.567Z",
+            "textLength": 117,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 29096,
+            "timestamp": "2026-10-21T15:10:19.667Z",
+            "textLength": 117,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 8,
+          "sessionID": "ses_h5G4X4aAZ9tXCnm4rR5G",
+          "messageID": "msg_g0VYf0p0f00B71Z9CWhB",
+          "partID": "prt_g0VYf0q5G008NA0GUzHV",
+          "mounts": [
+            {
+              "at": 28995.800000190735,
+              "timestamp": "2026-10-21T15:10:19.567Z",
+              "textLength": 162,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [],
+          "stateCount": 3,
+          "firstState": {
+            "at": 28995.900000095367,
+            "timestamp": "2026-10-21T15:10:19.567Z",
+            "textLength": 162,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 29105.699999809265,
+            "timestamp": "2026-10-21T15:10:19.677Z",
+            "textLength": 162,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 9,
+          "sessionID": "ses_h5G4X4aAZ9tXCnm4rR5G",
+          "messageID": "msg_g0VYf0p0f00B71Z9CWhB",
+          "partID": "prt_g0VYf0r4n00VP9UOaUUl",
+          "mounts": [
+            {
+              "at": 28996.099999904633,
+              "timestamp": "2026-10-21T15:10:19.567Z",
+              "textLength": 5836,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [],
+          "stateCount": 48,
+          "firstState": {
+            "at": 28996.199999809265,
+            "timestamp": "2026-10-21T15:10:19.567Z",
+            "textLength": 5836,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 29327.800000190735,
+            "timestamp": "2026-10-21T15:10:20.046Z",
+            "textLength": 5836,
+            "streaming": false,
+            "htmlBlocks": 46,
+            "pending": false
+          }
+        },
+        {
+          "owner": 10,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_hVoMy3wmp4kkJyFcrP8k",
+          "partID": "prt_g0VYf1RHO00EJv8bIbwP",
+          "mounts": [
+            {
+              "at": 29075.099999904633,
+              "timestamp": "2026-10-21T15:10:19.646Z",
+              "textLength": 391,
+              "streaming": false,
+              "htmlBlocks": 5,
+              "pending": false
+            }
+          ],
+          "disposals": [
+            {
+              "at": 148678.90000009537,
+              "timestamp": "2026-10-21T15:12:19.254Z",
+              "textLength": 391,
+              "streaming": false,
+              "htmlBlocks": 5,
+              "pending": false
+            }
+          ],
+          "stateCount": 1,
+          "firstState": {
+            "at": 29075.300000190735,
+            "timestamp": "2026-10-21T15:10:19.646Z",
+            "textLength": 391,
+            "streaming": false,
+            "htmlBlocks": 5,
+            "pending": false
+          },
+          "finalState": {
+            "at": 29075.300000190735,
+            "timestamp": "2026-10-21T15:10:19.646Z",
+            "textLength": 391,
+            "streaming": false,
+            "htmlBlocks": 5,
+            "pending": false
+          }
+        },
+        {
+          "owner": 11,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+          "partID": "prt_g0VYf0Rds00OSS06uF90",
+          "mounts": [
+            {
+              "at": 29562.699999809265,
+              "timestamp": "2026-10-21T15:10:20.133Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "disposals": [
+            {
+              "at": 56042.800000190735,
+              "timestamp": "2026-10-21T15:10:46.629Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "stateCount": 1,
+          "firstState": {
+            "at": 29562.800000190735,
+            "timestamp": "2026-10-21T15:10:20.134Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          },
+          "finalState": {
+            "at": 29562.800000190735,
+            "timestamp": "2026-10-21T15:10:20.134Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 12,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+          "partID": "prt_g0VYf0Rds00OSS06uF90",
+          "mounts": [
+            {
+              "at": 56514.300000190735,
+              "timestamp": "2026-10-21T15:10:47.103Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "disposals": [
+            {
+              "at": 147122.90000009537,
+              "timestamp": "2026-10-21T15:12:17.698Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "stateCount": 1,
+          "firstState": {
+            "at": 56514.5,
+            "timestamp": "2026-10-21T15:10:47.104Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          },
+          "finalState": {
+            "at": 56514.5,
+            "timestamp": "2026-10-21T15:10:47.104Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 13,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+          "partID": "prt_g0VYf0Rds00OSS06uF90",
+          "mounts": [
+            {
+              "at": 147315.80000019073,
+              "timestamp": "2026-10-21T15:12:17.891Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "disposals": [
+            {
+              "at": 147767.69999980927,
+              "timestamp": "2026-10-21T15:12:18.343Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "stateCount": 1,
+          "firstState": {
+            "at": 147316,
+            "timestamp": "2026-10-21T15:12:17.891Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          },
+          "finalState": {
+            "at": 147316,
+            "timestamp": "2026-10-21T15:12:17.891Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 14,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+          "partID": "prt_g0VYf0Rds00OSS06uF90",
+          "mounts": [
+            {
+              "at": 147952,
+              "timestamp": "2026-10-21T15:12:18.527Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "disposals": [
+            {
+              "at": 191857.09999990463,
+              "timestamp": "2026-10-21T15:13:02.436Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "stateCount": 1,
+          "firstState": {
+            "at": 147952.19999980927,
+            "timestamp": "2026-10-21T15:12:18.528Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          },
+          "finalState": {
+            "at": 147952.19999980927,
+            "timestamp": "2026-10-21T15:12:18.528Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 15,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_hdshDAXaULnWjcMA6lr5",
+          "partID": "prt_g0VYf0STd00SVrTn6d5d",
+          "mounts": [
+            {
+              "at": 148844.80000019073,
+              "timestamp": "2026-10-21T15:12:19.420Z",
+              "textLength": 103,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "disposals": [
+            {
+              "at": 191857.90000009537,
+              "timestamp": "2026-10-21T15:13:02.436Z",
+              "textLength": 103,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "stateCount": 1,
+          "firstState": {
+            "at": 148845,
+            "timestamp": "2026-10-21T15:12:19.420Z",
+            "textLength": 103,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          },
+          "finalState": {
+            "at": 148845,
+            "timestamp": "2026-10-21T15:12:19.420Z",
+            "textLength": 103,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 16,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_hVoMy3wmp4kkJyFcrP8k",
+          "partID": "prt_g0VYf1RHO00EJv8bIbwP",
+          "mounts": [
+            {
+              "at": 191878.5,
+              "timestamp": "2026-10-21T15:13:02.455Z",
+              "textLength": 391,
+              "streaming": false,
+              "htmlBlocks": 5,
+              "pending": false
+            }
+          ],
+          "disposals": [],
+          "stateCount": 1,
+          "firstState": {
+            "at": 191878.69999980927,
+            "timestamp": "2026-10-21T15:13:02.455Z",
+            "textLength": 391,
+            "streaming": false,
+            "htmlBlocks": 5,
+            "pending": false
+          },
+          "finalState": {
+            "at": 191878.69999980927,
+            "timestamp": "2026-10-21T15:13:02.455Z",
+            "textLength": 391,
+            "streaming": false,
+            "htmlBlocks": 5,
+            "pending": false
+          }
+        },
+        {
+          "owner": 17,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+          "partID": "prt_g0VYf0Rds00OSS06uF90",
+          "mounts": [
+            {
+              "at": 192051.30000019073,
+              "timestamp": "2026-10-21T15:13:02.629Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "disposals": [
+            {
+              "at": 232858.09999990463,
+              "timestamp": "2026-10-21T15:13:43.440Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "stateCount": 1,
+          "firstState": {
+            "at": 192051.59999990463,
+            "timestamp": "2026-10-21T15:13:02.629Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          },
+          "finalState": {
+            "at": 192051.59999990463,
+            "timestamp": "2026-10-21T15:13:02.629Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 18,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_hdshDAXaULnWjcMA6lr5",
+          "partID": "prt_g0VYf0STd00SVrTn6d5d",
+          "mounts": [
+            {
+              "at": 192051.90000009537,
+              "timestamp": "2026-10-21T15:13:02.629Z",
+              "textLength": 103,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "disposals": [
+            {
+              "at": 232858.69999980927,
+              "timestamp": "2026-10-21T15:13:43.440Z",
+              "textLength": 103,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "stateCount": 1,
+          "firstState": {
+            "at": 192052,
+            "timestamp": "2026-10-21T15:13:02.629Z",
+            "textLength": 103,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          },
+          "finalState": {
+            "at": 192052,
+            "timestamp": "2026-10-21T15:13:02.629Z",
+            "textLength": 103,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 19,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_g0VYf0Re800qDS7AJB5z",
+          "partID": "prt_g0VYf0Rds00OSS06uF90",
+          "mounts": [
+            {
+              "at": 233038.90000009537,
+              "timestamp": "2026-10-21T15:13:43.644Z",
+              "textLength": 808,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "disposals": [],
+          "stateCount": 1,
+          "firstState": {
+            "at": 233039,
+            "timestamp": "2026-10-21T15:13:43.644Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          },
+          "finalState": {
+            "at": 233039,
+            "timestamp": "2026-10-21T15:13:43.644Z",
+            "textLength": 808,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 20,
+          "sessionID": "ses_-zURKzYOJzzJ7p5BCKwl",
+          "messageID": "msg_hdshDAXaULnWjcMA6lr5",
+          "partID": "prt_g0VYf0STd00SVrTn6d5d",
+          "mounts": [
+            {
+              "at": 233039.40000009537,
+              "timestamp": "2026-10-21T15:13:43.644Z",
+              "textLength": 103,
+              "streaming": false,
+              "htmlBlocks": 1,
+              "pending": false
+            }
+          ],
+          "disposals": [],
+          "stateCount": 1,
+          "firstState": {
+            "at": 233039.5,
+            "timestamp": "2026-10-21T15:13:43.644Z",
+            "textLength": 103,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          },
+          "finalState": {
+            "at": 233039.5,
+            "timestamp": "2026-10-21T15:13:43.644Z",
+            "textLength": 103,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        }
+      ],
+      "memberBodies": [
+        {
+          "owner": 6,
+          "sessionID": "ses_h5G4X4aAZ9tXCnm4rR5G",
+          "messageID": "msg_g0VYf0dgi003VeQgIHxr",
+          "partID": "prt_g0VYf0esb00LjpdEaRoi",
+          "mounts": [
+            {
+              "at": 28995,
+              "timestamp": "2026-10-21T15:10:19.566Z",
+              "textLength": 71,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [],
+          "stateCount": 3,
+          "firstState": {
+            "at": 28995.199999809265,
+            "timestamp": "2026-10-21T15:10:19.567Z",
+            "textLength": 71,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 29085.800000190735,
+            "timestamp": "2026-10-21T15:10:19.657Z",
+            "textLength": 71,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 7,
+          "sessionID": "ses_h5G4X4aAZ9tXCnm4rR5G",
+          "messageID": "msg_g0VYf0hOE00VTqZ8XlSv",
+          "partID": "prt_g0VYf0hy800j4ldB6AnX",
+          "mounts": [
+            {
+              "at": 28995.5,
+              "timestamp": "2026-10-21T15:10:19.567Z",
+              "textLength": 117,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [],
+          "stateCount": 3,
+          "firstState": {
+            "at": 28995.599999904633,
+            "timestamp": "2026-10-21T15:10:19.567Z",
+            "textLength": 117,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 29096,
+            "timestamp": "2026-10-21T15:10:19.667Z",
+            "textLength": 117,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 8,
+          "sessionID": "ses_h5G4X4aAZ9tXCnm4rR5G",
+          "messageID": "msg_g0VYf0p0f00B71Z9CWhB",
+          "partID": "prt_g0VYf0q5G008NA0GUzHV",
+          "mounts": [
+            {
+              "at": 28995.800000190735,
+              "timestamp": "2026-10-21T15:10:19.567Z",
+              "textLength": 162,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [],
+          "stateCount": 3,
+          "firstState": {
+            "at": 28995.900000095367,
+            "timestamp": "2026-10-21T15:10:19.567Z",
+            "textLength": 162,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 29105.699999809265,
+            "timestamp": "2026-10-21T15:10:19.677Z",
+            "textLength": 162,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false
+          }
+        },
+        {
+          "owner": 9,
+          "sessionID": "ses_h5G4X4aAZ9tXCnm4rR5G",
+          "messageID": "msg_g0VYf0p0f00B71Z9CWhB",
+          "partID": "prt_g0VYf0r4n00VP9UOaUUl",
+          "mounts": [
+            {
+              "at": 28996.099999904633,
+              "timestamp": "2026-10-21T15:10:19.567Z",
+              "textLength": 5836,
+              "streaming": false,
+              "htmlBlocks": 0,
+              "pending": true
+            }
+          ],
+          "disposals": [],
+          "stateCount": 48,
+          "firstState": {
+            "at": 28996.199999809265,
+            "timestamp": "2026-10-21T15:10:19.567Z",
+            "textLength": 5836,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true
+          },
+          "finalState": {
+            "at": 29327.800000190735,
+            "timestamp": "2026-10-21T15:10:20.046Z",
+            "textLength": 5836,
+            "streaming": false,
+            "htmlBlocks": 46,
+            "pending": false
+          }
+        }
+      ],
+      "rawEvidence": "after-console-008.json"
+    }
+  ],
+  "qualification": "Descriptive inspection of emitted private lifecycle/range logs; no DOM/visual assertions, pass/fail test or continuous-frame claim. Source console window500."
+}

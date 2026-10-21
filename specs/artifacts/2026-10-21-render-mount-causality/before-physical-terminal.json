@@ -1,0 +1,73 @@
+{
+  "launcher": {
+    "observedAtUtc": "2026-10-21T15:07:33.8165656Z",
+    "childExitCode": 0
+  },
+  "native": {
+    "occurrence": "render-mount-causality-507-before-service-89bd6b0b-fd95-4995-a3eb-fda751813729",
+    "outcome": "settled",
+    "host": {
+      "pid": 73068,
+      "processInstanceID": "win32:639281913468588616",
+      "occurrenceID": "b8b5e9b0-d3f1-42a7-bfff-77e5f1e3efd9"
+    },
+    "target": {
+      "pid": 45528,
+      "processInstanceID": "win32:639281913479734584",
+      "occurrenceID": "ad322773-f633-4df8-8451-66e92f6375df"
+    },
+    "observedAtUtc": "2026-10-21T15:07:33.761Z",
+    "deadlineAt": 1792595746800,
+    "terminal": {
+      "occurrenceID": "render-mount-causality-507-before-service-89bd6b0b-fd95-4995-a3eb-fda751813729",
+      "pid": 45528,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "observedAtUtc": "2026-10-21T15:07:36.0133896Z",
+  "shutdown": {
+    "target": {
+      "pid": 45528,
+      "processInstanceID": "win32:639281913479734584",
+      "occurrenceID": "ad322773-f633-4df8-8451-66e92f6375df"
+    },
+    "occurrence": "render-mount-causality-507-before-service-89bd6b0b-fd95-4995-a3eb-fda751813729",
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYhH03Q00b0eB40Lv4\"}",
+    "observedAtUtc": "2026-10-21T15:07:33.6834636Z",
+    "statusCode": 200
+  },
+  "originalExit": 0,
+  "originalHandle": 41193,
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 73068,
+        "processInstanceID": "win32:639281913468588616",
+        "occurrenceID": "b8b5e9b0-d3f1-42a7-bfff-77e5f1e3efd9"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 45528,
+        "processInstanceID": "win32:639281913479734584",
+        "occurrenceID": "ad322773-f633-4df8-8451-66e92f6375df"
+      }
+    }
+  ],
+  "provider": {
+    "at": "2026-10-21T14:55:53.221Z",
+    "maximum": 0,
+    "actual": 0,
+    "exhausted": false,
+    "requests": [],
+    "scope": "Read-only original long transcript mount review; no credentials or model catalog copied"
+  }
+}

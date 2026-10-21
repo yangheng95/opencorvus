@@ -1,0 +1,4 @@
+$ bun run ./packages/opencorvus/script/docs/render-api-md.ts --check
+docs:check ok (345 ops, 26 groups)
+$ bun run ./packages/opencorvus/script/check/architecture-index.ts
+architecture-index ok — 20 current documents indexed, every link live

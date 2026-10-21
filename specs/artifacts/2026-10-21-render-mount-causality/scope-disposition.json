@@ -1,0 +1,56 @@
+{
+  "at": "2026-10-21T15:24:06.590Z",
+  "stages": [
+    {
+      "stage": "before",
+      "originalHandle": 41193,
+      "originalExit": 0,
+      "tab": 85,
+      "tabDisposition": "Closed through CUA after actual screenshots",
+      "native": {
+        "pid": 45528,
+        "processInstanceID": "win32:639281913479734584",
+        "occurrenceID": "ad322773-f633-4df8-8451-66e92f6375df"
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "launcher": {
+        "observedAtUtc": "2026-10-21T15:07:33.8165656Z",
+        "childExitCode": 0
+      },
+      "publicShutdown": 200,
+      "modelBudget": 0,
+      "modelActual": 0,
+      "exhausted": false
+    },
+    {
+      "stage": "after",
+      "originalHandle": 6851,
+      "originalExit": 0,
+      "tab": 86,
+      "tabDisposition": "Closed through CUA after actual screenshots",
+      "native": {
+        "pid": 19920,
+        "processInstanceID": "win32:639281921780367942",
+        "occurrenceID": "b29cfac8-c1c1-4733-9e7d-91bad82153e7"
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "launcher": {
+        "childExitCode": 0,
+        "observedAtUtc": "2026-10-21T15:15:35.6214597Z"
+      },
+      "publicShutdown": 200,
+      "modelBudget": 0,
+      "modelActual": 0,
+      "exhausted": false
+    }
+  ],
+  "credentials": "No auth or model catalog copied",
+  "userResources": "No operation on user18571 windows/process/database",
+  "newInput": "No Task/Goal/Message or Provider input created",
+  "production": "Unchanged; second stage only adds passive actual Virtualizer range observation",
+  "qualification": "Completed original Task/member history; no active multi-member, new stream, reconnect or continuous-frame qualification"
+}

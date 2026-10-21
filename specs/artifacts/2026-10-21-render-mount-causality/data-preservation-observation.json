@@ -1,0 +1,753 @@
+{
+  "at": "2026-10-21T15:15:37.811Z",
+  "schema": 3,
+  "scopes": [
+    {
+      "stage": "before",
+      "source": {
+        "allOriginalRows": "Exact rowid/primary key/all fields/times",
+        "bytes": 67649536,
+        "modifiedAtMs": 1792566063406.867
+      },
+      "schema": "Same actual application objects and version3;integrity ok",
+      "canonical": "Complete source bytes exact",
+      "counts": {
+        "automation": {
+          "original": 2,
+          "current": 2
+        },
+        "automation_definition_tombstone": {
+          "original": 0,
+          "current": 0
+        },
+        "automation_delay_settlement": {
+          "original": 0,
+          "current": 0
+        },
+        "automation_fire": {
+          "original": 2,
+          "current": 2
+        },
+        "automation_fire_attempt": {
+          "original": 1,
+          "current": 1
+        },
+        "automation_fire_attempt_receipt": {
+          "original": 1,
+          "current": 1
+        },
+        "automation_fire_frontier": {
+          "original": 0,
+          "current": 0
+        },
+        "automation_project_target": {
+          "original": 2,
+          "current": 2
+        },
+        "automation_run": {
+          "original": 1,
+          "current": 1
+        },
+        "automation_run_receipt": {
+          "original": 1,
+          "current": 1
+        },
+        "bus_publication_attempt_receipt": {
+          "original": 0,
+          "current": 0
+        },
+        "bus_publication_delivery": {
+          "original": 29798,
+          "current": 29798
+        },
+        "bus_publication_delivery_receipt": {
+          "original": 29798,
+          "current": 29798
+        },
+        "bus_publication_outbox": {
+          "original": 4440,
+          "current": 4440
+        },
+        "bus_publication_phase_receipt": {
+          "original": 13320,
+          "current": 13320
+        },
+        "channel_ingress_accepted": {
+          "original": 0,
+          "current": 0
+        },
+        "channel_ingress_outcome": {
+          "original": 0,
+          "current": 0
+        },
+        "control_account": {
+          "original": 0,
+          "current": 0
+        },
+        "database_authority": {
+          "original": 1,
+          "current": 1
+        },
+        "decision_log": {
+          "original": 13,
+          "current": 13
+        },
+        "engine_artifact": {
+          "original": 156,
+          "current": 156
+        },
+        "engine_artifact_catalog_revision": {
+          "original": 156,
+          "current": 156
+        },
+        "engine_artifact_version": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_browser_preview_target_identity": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_build_observation_cleanup": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_build_observation_cleanup_receipt": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_channel_binding": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_control_activation_lease": {
+          "original": 30119,
+          "current": 30119
+        },
+        "engine_control_activation_lease_grant": {
+          "original": 30174,
+          "current": 30174
+        },
+        "engine_git_checkpoint_outcome": {
+          "original": 32,
+          "current": 32
+        },
+        "engine_git_checkpoint_request": {
+          "original": 32,
+          "current": 32
+        },
+        "engine_goal": {
+          "original": 5,
+          "current": 5
+        },
+        "engine_interaction_outcome": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_interaction_request": {
+          "original": 26,
+          "current": 26
+        },
+        "engine_metric_result": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_metric_spec": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_progress_snapshot": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_task": {
+          "original": 16,
+          "current": 16
+        },
+        "engine_task_creation_contract": {
+          "original": 16,
+          "current": 16
+        },
+        "engine_task_root_ingress": {
+          "original": 40,
+          "current": 40
+        },
+        "engine_task_root_ingress_policy": {
+          "original": 1,
+          "current": 1
+        },
+        "engine_task_wait_registration": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_task_wait_settlement": {
+          "original": 0,
+          "current": 0
+        },
+        "event_job": {
+          "original": 3,
+          "current": 3
+        },
+        "event_job_definition_tombstone": {
+          "original": 1,
+          "current": 1
+        },
+        "event_job_fire": {
+          "original": 2,
+          "current": 2
+        },
+        "event_job_fire_receipt": {
+          "original": 2,
+          "current": 2
+        },
+        "event_occurrence": {
+          "original": 2,
+          "current": 2
+        },
+        "global_creation_allocation": {
+          "original": 145,
+          "current": 145
+        },
+        "interactive_artifact": {
+          "original": 0,
+          "current": 0
+        },
+        "memory_chunk": {
+          "original": 159,
+          "current": 159
+        },
+        "memory_embedding": {
+          "original": 0,
+          "current": 0
+        },
+        "memory_file": {
+          "original": 159,
+          "current": 159
+        },
+        "memory_fts": {
+          "original": 0,
+          "current": 0
+        },
+        "memory_fts_config": {
+          "original": 1,
+          "current": 1
+        },
+        "memory_fts_content": {
+          "original": 0,
+          "current": 0
+        },
+        "memory_fts_data": {
+          "original": 2,
+          "current": 2
+        },
+        "memory_fts_docsize": {
+          "original": 0,
+          "current": 0
+        },
+        "memory_fts_idx": {
+          "original": 0,
+          "current": 0
+        },
+        "message": {
+          "original": 556,
+          "current": 556
+        },
+        "part": {
+          "original": 1308,
+          "current": 1308
+        },
+        "permission_execution_result": {
+          "original": 94,
+          "current": 94
+        },
+        "permission_ledger": {
+          "original": 472,
+          "current": 472
+        },
+        "permission_policy": {
+          "original": 21,
+          "current": 21
+        },
+        "project": {
+          "original": 159,
+          "current": 159
+        },
+        "project_directory_admission": {
+          "original": 0,
+          "current": 0
+        },
+        "project_maintenance_fence": {
+          "original": 0,
+          "current": 0
+        },
+        "protocol_delivery_receipt": {
+          "original": 0,
+          "current": 0
+        },
+        "protocol_event": {
+          "original": 1590,
+          "current": 1590
+        },
+        "protocol_inbox": {
+          "original": 0,
+          "current": 0
+        },
+        "provider_activity_outcome": {
+          "original": 364,
+          "current": 364
+        },
+        "provider_activity_request": {
+          "original": 364,
+          "current": 364
+        },
+        "provider_usage_event": {
+          "original": 560,
+          "current": 560
+        },
+        "quick_note": {
+          "original": 0,
+          "current": 0
+        },
+        "runtime_execution_capacity_lease": {
+          "original": 3,
+          "current": 3
+        },
+        "session": {
+          "original": 213,
+          "current": 213
+        },
+        "session_control_event": {
+          "original": 159,
+          "current": 159
+        },
+        "session_control_record": {
+          "original": 159,
+          "current": 159
+        },
+        "session_prompt_owner": {
+          "original": 5,
+          "current": 5
+        },
+        "session_share": {
+          "original": 0,
+          "current": 0
+        },
+        "task_plan": {
+          "original": 0,
+          "current": 0
+        },
+        "todo": {
+          "original": 0,
+          "current": 0
+        },
+        "todo_snapshot": {
+          "original": 0,
+          "current": 0
+        },
+        "tool_part_outcome": {
+          "original": 154,
+          "current": 154
+        },
+        "tool_part_progress": {
+          "original": 8,
+          "current": 8
+        },
+        "tool_part_request": {
+          "original": 154,
+          "current": 154
+        },
+        "workbench_brief_snapshot": {
+          "original": 42,
+          "current": 42
+        },
+        "worker_turn_descriptor": {
+          "original": 19,
+          "current": 19
+        },
+        "workspace": {
+          "original": 0,
+          "current": 0
+        },
+        "workspace_lifecycle_admission": {
+          "original": 0,
+          "current": 0
+        }
+      },
+      "originalRowDifferences": []
+    },
+    {
+      "stage": "after",
+      "source": {
+        "allOriginalRows": "Exact rowid/primary key/all fields/times",
+        "bytes": 67649536,
+        "modifiedAtMs": 1792594568594.358
+      },
+      "schema": "Same actual application objects and version3;integrity ok",
+      "canonical": "Complete source bytes exact",
+      "counts": {
+        "automation": {
+          "original": 2,
+          "current": 2
+        },
+        "automation_definition_tombstone": {
+          "original": 0,
+          "current": 0
+        },
+        "automation_delay_settlement": {
+          "original": 0,
+          "current": 0
+        },
+        "automation_fire": {
+          "original": 2,
+          "current": 2
+        },
+        "automation_fire_attempt": {
+          "original": 1,
+          "current": 1
+        },
+        "automation_fire_attempt_receipt": {
+          "original": 1,
+          "current": 1
+        },
+        "automation_fire_frontier": {
+          "original": 0,
+          "current": 0
+        },
+        "automation_project_target": {
+          "original": 2,
+          "current": 2
+        },
+        "automation_run": {
+          "original": 1,
+          "current": 1
+        },
+        "automation_run_receipt": {
+          "original": 1,
+          "current": 1
+        },
+        "bus_publication_attempt_receipt": {
+          "original": 0,
+          "current": 0
+        },
+        "bus_publication_delivery": {
+          "original": 29798,
+          "current": 29798
+        },
+        "bus_publication_delivery_receipt": {
+          "original": 29798,
+          "current": 29798
+        },
+        "bus_publication_outbox": {
+          "original": 4440,
+          "current": 4440
+        },
+        "bus_publication_phase_receipt": {
+          "original": 13320,
+          "current": 13320
+        },
+        "channel_ingress_accepted": {
+          "original": 0,
+          "current": 0
+        },
+        "channel_ingress_outcome": {
+          "original": 0,
+          "current": 0
+        },
+        "control_account": {
+          "original": 0,
+          "current": 0
+        },
+        "database_authority": {
+          "original": 1,
+          "current": 1
+        },
+        "decision_log": {
+          "original": 13,
+          "current": 13
+        },
+        "engine_artifact": {
+          "original": 156,
+          "current": 156
+        },
+        "engine_artifact_catalog_revision": {
+          "original": 156,
+          "current": 156
+        },
+        "engine_artifact_version": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_browser_preview_target_identity": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_build_observation_cleanup": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_build_observation_cleanup_receipt": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_channel_binding": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_control_activation_lease": {
+          "original": 30119,
+          "current": 30119
+        },
+        "engine_control_activation_lease_grant": {
+          "original": 30174,
+          "current": 30174
+        },
+        "engine_git_checkpoint_outcome": {
+          "original": 32,
+          "current": 32
+        },
+        "engine_git_checkpoint_request": {
+          "original": 32,
+          "current": 32
+        },
+        "engine_goal": {
+          "original": 5,
+          "current": 5
+        },
+        "engine_interaction_outcome": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_interaction_request": {
+          "original": 26,
+          "current": 26
+        },
+        "engine_metric_result": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_metric_spec": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_progress_snapshot": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_task": {
+          "original": 16,
+          "current": 16
+        },
+        "engine_task_creation_contract": {
+          "original": 16,
+          "current": 16
+        },
+        "engine_task_root_ingress": {
+          "original": 40,
+          "current": 40
+        },
+        "engine_task_root_ingress_policy": {
+          "original": 1,
+          "current": 1
+        },
+        "engine_task_wait_registration": {
+          "original": 0,
+          "current": 0
+        },
+        "engine_task_wait_settlement": {
+          "original": 0,
+          "current": 0
+        },
+        "event_job": {
+          "original": 3,
+          "current": 3
+        },
+        "event_job_definition_tombstone": {
+          "original": 1,
+          "current": 1
+        },
+        "event_job_fire": {
+          "original": 2,
+          "current": 2
+        },
+        "event_job_fire_receipt": {
+          "original": 2,
+          "current": 2
+        },
+        "event_occurrence": {
+          "original": 2,
+          "current": 2
+        },
+        "global_creation_allocation": {
+          "original": 145,
+          "current": 145
+        },
+        "interactive_artifact": {
+          "original": 0,
+          "current": 0
+        },
+        "memory_chunk": {
+          "original": 159,
+          "current": 159
+        },
+        "memory_embedding": {
+          "original": 0,
+          "current": 0
+        },
+        "memory_file": {
+          "original": 159,
+          "current": 159
+        },
+        "memory_fts": {
+          "original": 0,
+          "current": 0
+        },
+        "memory_fts_config": {
+          "original": 1,
+          "current": 1
+        },
+        "memory_fts_content": {
+          "original": 0,
+          "current": 0
+        },
+        "memory_fts_data": {
+          "original": 2,
+          "current": 2
+        },
+        "memory_fts_docsize": {
+          "original": 0,
+          "current": 0
+        },
+        "memory_fts_idx": {
+          "original": 0,
+          "current": 0
+        },
+        "message": {
+          "original": 556,
+          "current": 556
+        },
+        "part": {
+          "original": 1308,
+          "current": 1308
+        },
+        "permission_execution_result": {
+          "original": 94,
+          "current": 94
+        },
+        "permission_ledger": {
+          "original": 472,
+          "current": 472
+        },
+        "permission_policy": {
+          "original": 21,
+          "current": 21
+        },
+        "project": {
+          "original": 159,
+          "current": 159
+        },
+        "project_directory_admission": {
+          "original": 0,
+          "current": 0
+        },
+        "project_maintenance_fence": {
+          "original": 0,
+          "current": 0
+        },
+        "protocol_delivery_receipt": {
+          "original": 0,
+          "current": 0
+        },
+        "protocol_event": {
+          "original": 1590,
+          "current": 1590
+        },
+        "protocol_inbox": {
+          "original": 0,
+          "current": 0
+        },
+        "provider_activity_outcome": {
+          "original": 364,
+          "current": 364
+        },
+        "provider_activity_request": {
+          "original": 364,
+          "current": 364
+        },
+        "provider_usage_event": {
+          "original": 560,
+          "current": 560
+        },
+        "quick_note": {
+          "original": 0,
+          "current": 0
+        },
+        "runtime_execution_capacity_lease": {
+          "original": 3,
+          "current": 3
+        },
+        "session": {
+          "original": 213,
+          "current": 213
+        },
+        "session_control_event": {
+          "original": 159,
+          "current": 159
+        },
+        "session_control_record": {
+          "original": 159,
+          "current": 159
+        },
+        "session_prompt_owner": {
+          "original": 5,
+          "current": 5
+        },
+        "session_share": {
+          "original": 0,
+          "current": 0
+        },
+        "task_plan": {
+          "original": 0,
+          "current": 0
+        },
+        "todo": {
+          "original": 0,
+          "current": 0
+        },
+        "todo_snapshot": {
+          "original": 0,
+          "current": 0
+        },
+        "tool_part_outcome": {
+          "original": 154,
+          "current": 154
+        },
+        "tool_part_progress": {
+          "original": 8,
+          "current": 8
+        },
+        "tool_part_request": {
+          "original": 154,
+          "current": 154
+        },
+        "workbench_brief_snapshot": {
+          "original": 42,
+          "current": 42
+        },
+        "worker_turn_descriptor": {
+          "original": 19,
+          "current": 19
+        },
+        "workspace": {
+          "original": 0,
+          "current": 0
+        },
+        "workspace_lifecycle_admission": {
+          "original": 0,
+          "current": 0
+        }
+      },
+      "originalRowDifferences": []
+    }
+  ],
+  "modelInputBudget": 0
+}

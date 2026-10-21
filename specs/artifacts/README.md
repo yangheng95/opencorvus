@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [正文挂载与Rendering归因](2026-10-21-render-mount-causality/README.md)：两轮真实Source CLI、16张人工图、144/178事件与26次实际窗口选择，Main15次回收已对上；无新模型输入或生产改动。
+
 - [当前首页与取消工具呈现](2026-10-21-home-goal-current/README.md)：16张人工实图、原始Tool公共读取200、正式构建/类型、零模型和完整90表保留；仅呈现层修复取消误标失败。
 
 - [权限历史系统终止语义](2026-10-21-permission-termination-history/README.md)：五张中英文人工图、12项后端合同/331断言、旧ETag→新body与90表145033行原字段保留；系统取消与原拒绝区分，无schema/执行改动。

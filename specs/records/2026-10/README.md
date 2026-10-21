@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [正文挂载与Rendering归因](2026-10-21-render-mount-causality.md)：[实际range、16张实图与完整数据保留](../../artifacts/2026-10-21-render-mount-causality/README.md)，区分Main窗口回收与成员侧栏身份，生产未改。
+
 - [当前首页与取消工具呈现](2026-10-21-home-goal-current-review.md)：[16张真实中英文页面](../../artifacts/2026-10-21-home-goal-current/README.md)，同一MessageAbortedError由失败汇总/红框改为取消，持久状态/原因/诊断保持。
 
 - [权限历史的系统终止语义](2026-10-21-permission-termination-history.md)：[真实Reject→Cancelled/已取消、五图与12项/331断言](../../artifacts/2026-10-21-permission-termination-history/README.md)，单一账本投影与formatter修复，原90表145033行保持。

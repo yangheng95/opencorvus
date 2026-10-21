@@ -1,0 +1,31 @@
+{
+  "owner": {
+    "pid": 45528,
+    "processInstanceID": "win32:639281913479734584",
+    "occurrenceID": "0d9403ca-477c-4331-9d27-dfdf7c202ed7"
+  },
+  "parent": {
+    "pid": 81344,
+    "processInstanceID": "win32:639281913479429877",
+    "occurrenceID": "ea1fa937-871d-4fd9-be96-aa5f6d62b68a"
+  },
+  "occurrence": "render-mount-causality-507-before-service-89bd6b0b-fd95-4995-a3eb-fda751813729",
+  "receipt": {
+    "schemaVersion": 1,
+    "occurrenceID": "render-mount-causality-507-before-service-89bd6b0b-fd95-4995-a3eb-fda751813729",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18921",
+    "pid": 45528
+  },
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\render-mount-causality-507-before\\runtime\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\render-mount-causality-507-before\\runtime\\data",
+      "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/render-mount-causality-507-before/home"
+    }
+  },
+  "observedAt": "2026-10-21T14:55:53.221Z",
+  "qualification": "Real development CLI/UI;zero-model historical read qualification; no Provider credential qualification"
+}
