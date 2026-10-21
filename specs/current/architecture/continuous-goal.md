@@ -62,7 +62,13 @@ Unspecified budgets remain unspecified.
 The existing Scheduler supplies hints to one reconciler in normal execution and after
 restart. Durable facts, rather than an in-memory queue, determine ownership. Each
 continuation binds goal identity, current intent revision and settled execution frontier.
-It derives exact Message/Part/control identities and commits its receipt with the real,
+The global scan first projects execution candidates under independent Project identity,
+using the same read-only reconciliation plan as delivery. It releases that identity
+lease before initializing runtime capabilities, and initializes only directories with
+an actionable new or previously accepted continuation. Budget-limited goals still
+qualify for recovery of unanswered accepted input. Delivery resolves and plans again
+under the initialized Project; the hint carries no execution or mutation authority.
+Each continuation derives exact Message/Part/control identities and commits its receipt with the real,
 visible goal-controller Message. That participant never impersonates a human.
 Overlay preserves the persisted author separately from transport role. The shared
 conversation display projection presents goal-controller inputs as independent

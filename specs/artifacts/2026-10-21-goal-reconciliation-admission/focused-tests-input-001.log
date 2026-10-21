@@ -1,0 +1,128 @@
+[1/5] START test/continuous-goal.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      "reason"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  }
+]
+(fail) durable continuous goal contracts > chat execution candidates preserve accepted recovery across the budget boundary [1720.87ms]
+(pass) durable continuous goal contracts > chat token usage selects the ready peer under the canonical budget projection [1194.48ms]
+ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      "reason"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  }
+]
+(fail) durable continuous goal contracts > task execution candidates preserve accepted recovery across the budget boundary [1343.51ms]
+(pass) durable continuous goal contracts > task token usage selects the ready peer under the canonical budget projection [1340.28ms]
+ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      "reason"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  }
+]
+(fail) durable continuous goal contracts > mission execution candidates preserve accepted recovery across the budget boundary [1380.99ms]
+(pass) durable continuous goal contracts > mission token usage selects the ready peer under the canonical budget projection [1375.22ms]
+(pass) durable continuous goal contracts > Chat creation, exact replay, pause, resume and completion persist real revisions [1506.72ms]
+(pass) durable continuous goal contracts > one exact continuation reserves one turn and reports the explicit budget terminal [1544.36ms]
+(pass) durable continuous goal contracts > usage references count descendant requests and their late completion exactly once [1195.47ms]
+(pass) durable continuous goal contracts > Task owner identity and cancellation project distinct goal facts [1347.49ms]
+(pass) durable continuous goal contracts > Mission includes its exact child Tasks and returns a typed overlapping-owner error [1258.45ms]
+(pass) durable continuous goal contracts > public route and native Tool share one exact durable goal [1377.50ms]
+(pass) durable continuous goal contracts > explicit blocking wins over quota and resuming preserves settled usage [1269.25ms]
+(pass) durable continuous goal contracts > different Projects retain exact independent owners and metering [2690.23ms]
+(pass) durable continuous goal contracts > a settled assistant batch advances the exact latest input frontier [1776.75ms]
+(pass) durable continuous goal contracts > chat reopening preserves cancellation until an explicit goal revision [1274.68ms]
+(pass) durable continuous goal contracts > mission reopening preserves cancellation until an explicit goal revision [1280.84ms]
+(pass) durable continuous goal contracts > archive and restore retain one paused goal on the exact owner [1316.13ms]
+(pass) durable continuous goal contracts > the production Task archive entry retains pause when a completed Task is restored [1329.49ms]
+
+ 16 pass
+ 3 fail
+ 85 expect() calls
+Ran 19 tests across 1 file. [33.23s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\continuous-goal.test.ts
+[1/5] DONE test/continuous-goal.test.ts exit=1 duration=34.94s
+[2/5] START test/continuous-goal-model-block.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) chat records a missing model as a durable blocker and preserves usage across explicit retries [1333.88ms]
+(pass) task records a missing model as a durable blocker and preserves usage across explicit retries [1359.93ms]
+(pass) mission records a missing model as a durable blocker and preserves usage across explicit retries [1469.02ms]
+(pass) concurrent missing-model admissions replay one durable blocker [1395.91ms]
+(pass) a user pause wins over an earlier model admission attempt [1453.84ms]
+
+ 5 pass
+ 0 fail
+ 27 expect() calls
+Ran 5 tests across 1 file. [8.80s]
+[2/5] DONE test/continuous-goal-model-block.test.ts exit=0 duration=9.07s
+[3/5] START test/continuous-goal-independent.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) independent continuous goal persistence and authority audit > chat: real HTTP mutation, native Tool read, replay and revision error share persisted state [1733.16ms]
+(pass) independent continuous goal persistence and authority audit > chat: late descendant settlement retains its original goal across completion and archive [1238.61ms]
+(pass) independent continuous goal persistence and authority audit > chat: descendant inherits exact accounting scope and gets a typed mutation refusal [1196.33ms]
+(pass) independent continuous goal persistence and authority audit > chat: retained owner deletion returns unavailable while preserving exact late usage [1165.33ms]
+(pass) independent continuous goal persistence and authority audit > task: real HTTP mutation, native Tool read, replay and revision error share persisted state [1223.80ms]
+(pass) independent continuous goal persistence and authority audit > task: late descendant settlement retains its original goal across completion and archive [1127.31ms]
+(pass) independent continuous goal persistence and authority audit > task: descendant inherits exact accounting scope and gets a typed mutation refusal [1446.66ms]
+(pass) independent continuous goal persistence and authority audit > task: retained owner deletion returns unavailable while preserving exact late usage [1318.47ms]
+(pass) independent continuous goal persistence and authority audit > mission: real HTTP mutation, native Tool read, replay and revision error share persisted state [1258.91ms]
+(pass) independent continuous goal persistence and authority audit > mission: late descendant settlement retains its original goal across completion and archive [1557.53ms]
+(pass) independent continuous goal persistence and authority audit > mission: descendant inherits exact accounting scope and gets a typed mutation refusal [1089.20ms]
+(pass) independent continuous goal persistence and authority audit > mission: retained owner deletion returns unavailable while preserving exact late usage [1071.94ms]
+(pass) independent continuous goal persistence and authority audit > archived Mission retains unresolved scope ownership over its child Task [1273.10ms]
+(pass) independent continuous goal persistence and authority audit > archived child Task retains unresolved scope ownership when Mission requests a goal [1139.04ms]
+(pass) independent continuous goal persistence and authority audit > public routes resolve Project ownership before reading or mutating a foreign goal [2376.35ms]
+
+ 15 pass
+ 0 fail
+ 119 expect() calls
+Ran 15 tests across 1 file. [21.66s]
+[3/5] DONE test/continuous-goal-independent.test.ts exit=0 duration=21.89s
+[4/5] START test/continuous-goal-process.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) independent processes converge on one goal reservation and restore the paused revision [12539.31ms]
+
+ 1 pass
+ 0 fail
+ 4 expect() calls
+Ran 1 test across 1 file. [13.37s]
+[4/5] DONE test/continuous-goal-process.test.ts exit=0 duration=13.49s
+[5/5] START test/continuous-goal-runtime.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+[goal-runtime-stage] accepted C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-RMplwQ\test-70588-OsBL8n\goal-stream-restart-xEQLex
+[goal-runtime-stage] owner exited
+[goal-runtime-stage] recovery stream requested
+[goal-runtime-stage] result {"outcome":"recovered","recoveryCandidates":[{"kind":"chat","id":"ses_-zURLqLZvzzQMlviqkR5"}],"goal":{"id":"pev_g0VYe9eQH00D079Drc2I","revision":"pev_g0VYe9eQH00D079Drc2I","owner":{"kind":"chat","id":"ses_-zURLqLZvzzQMlviqkR5"},"objective":"Return one visible streamed response","status":"budget_limited","reason":"turn_budget","turnBudget":1,"tokensUsed":0,"turnsAccepted":1,"createdAt":1792549173173,"updatedAt":1792549173173,"sessionID":"ses_-zURLqLZvzzQMlviqkR5","projectID":"prj_h1gn7HOiQhoc1RCmGTzI","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-RMplwQ\\test-70588-OsBL8n\\fixtures\\memory-buGLhp"},"request":{"id":"pev_hK1NAzsdcIwtjHy4z5yl","goalID":"pev_g0VYe9eQH00D079Drc2I","revision":"pev_g0VYe9eQH00D079Drc2I","frontier":"start","number":1},"controllerInputs":["msg_hWS0mQ1D1DkChi5nWdng"],"replies":[{"id":"msg_g0VYe9fi700NxFnQQrCL","parentID":"msg_hWS0mQ1D1DkChi5nWdng","text":"provider reply 2"}]}
+(pass) a fresh process settles the same accepted goal input after its streamed owner exits [12599.41ms]
+
+ 1 pass
+ 0 fail
+ 4 expect() calls
+Ran 1 test across 1 file. [13.46s]
+[5/5] DONE test/continuous-goal-runtime.test.ts exit=0 duration=13.57s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\continuous-goal.test.ts

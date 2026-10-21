@@ -1,0 +1,81 @@
+{
+  "source": "Original498-after Source CLI actual log,now physically settled",
+  "scope": "same project and unchanged scheduler path at2685cb9ca",
+  "totalGoalProjectFailures": 695,
+  "sample": [
+    {
+      "time": "2026-10-21T01:54:17.357Z",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "errorType": "ProviderModelNotFoundError"
+    },
+    {
+      "time": "2026-10-21T01:54:17.729Z",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "errorType": "ProviderModelNotFoundError"
+    },
+    {
+      "time": "2026-10-21T01:54:18.728Z",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "errorType": "ProviderModelNotFoundError"
+    },
+    {
+      "time": "2026-10-21T01:54:19.729Z",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "errorType": "ProviderModelNotFoundError"
+    },
+    {
+      "time": "2026-10-21T01:54:20.730Z",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "errorType": "ProviderModelNotFoundError"
+    },
+    {
+      "time": "2026-10-21T01:54:21.730Z",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "errorType": "ProviderModelNotFoundError"
+    },
+    {
+      "time": "2026-10-21T01:54:22.734Z",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "errorType": "ProviderModelNotFoundError"
+    },
+    {
+      "time": "2026-10-21T01:54:23.733Z",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "errorType": "ProviderModelNotFoundError"
+    },
+    {
+      "time": "2026-10-21T01:54:24.734Z",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "errorType": "ProviderModelNotFoundError"
+    },
+    {
+      "time": "2026-10-21T01:54:25.735Z",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "errorType": "ProviderModelNotFoundError"
+    },
+    {
+      "time": "2026-10-21T01:54:26.736Z",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "errorType": "ProviderModelNotFoundError"
+    },
+    {
+      "time": "2026-10-21T01:54:27.736Z",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "errorType": "ProviderModelNotFoundError"
+    }
+  ],
+  "sampleIntervalsMs": [
+    372,
+    999,
+    1001,
+    1001,
+    1000,
+    1004,
+    999,
+    1001,
+    1001,
+    1001,
+    1000
+  ],
+  "allConfigFailures": 704
+}

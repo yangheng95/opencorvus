@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Goal调度的执行需求探测](2026-10-21-goal-reconciliation-admission/README.md)：真实141次Scheduler运行、60秒前后对照、原输入全局流式恢复、41项合同、90表保留与原5032完整结算。
+
 - [持续目标读取的项目权限](2026-10-21-goal-read-project-authority/README.md)：五张人工实图、三类真实旧Goal与六项HTTP合同、原90表131156行及两原native完整结算；无模型输入或schema升级。
 
 - [Markdown分批呈现连续性](2026-10-21-markdown-batch-continuity/README.md)：49→1真实截断、当前单一数组修复、15张人工图及10/16实际Sol；源3665行与两原native收尾。

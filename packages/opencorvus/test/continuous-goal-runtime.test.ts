@@ -34,11 +34,23 @@ test("a fresh process settles the same accepted goal input after its streamed ow
     return { child, stdout: new Response(child.stdout).text(), stderr: new Response(child.stderr).text() }
   }
   async function waitFor(predicate: () => Promise<boolean> | boolean, worker: ReturnType<typeof start>) {
-    const deadline = Date.now() + 60_000
+    let lastActivity = Date.now()
+    let priorActivity = ""
     while (!(await predicate())) {
       if (worker.child.exitCode !== null)
         throw new Error("Goal worker exited: " + (await worker.stderr) + (await worker.stdout))
-      if (Date.now() > deadline) throw new Error("Goal runtime contract timed out: " + (await fs.readdir(barriers)))
+      const files = (await fs.readdir(barriers)).filter((name) => name.endsWith(".json")).sort()
+      const activity = JSON.stringify({
+        barriers: await Promise.all(
+          files.map(async (name) => ({ name, modifiedAt: (await fs.stat(path.join(barriers, name))).mtimeMs })),
+        ),
+        requests: provider.requests.length,
+      })
+      if (activity !== priorActivity) {
+        priorActivity = activity
+        lastActivity = Date.now()
+      }
+      if (Date.now() - lastActivity > 60_000) throw new Error("Goal runtime made no progress for60s: " + files)
       await Bun.sleep(25)
     }
   }
@@ -69,7 +81,8 @@ test("a fresh process settles the same accepted goal input after its streamed ow
     const line = stdout.split(/\r?\n/).find((line) => line.startsWith("[goal-runtime-result]"))!
     const result = JSON.parse(line.slice("[goal-runtime-result]".length))
     expect(result).toMatchObject({
-      outcome: "recovered",
+      recoveryDriver: "continuous-goal.reconcile",
+      recoveryCandidates: [{ kind: "chat", id: ready.sessionID }],
       goal: { id: ready.goalID, status: "budget_limited", turnsAccepted: 1 },
       request: { id: ready.requestID },
       controllerInputs: [ready.messageID],

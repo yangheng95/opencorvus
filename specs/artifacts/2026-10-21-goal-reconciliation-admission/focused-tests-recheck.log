@@ -1,0 +1,29 @@
+[1/1] START test/continuous-goal.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) durable continuous goal contracts > chat execution candidates preserve accepted recovery across the budget boundary [1998.94ms]
+(pass) durable continuous goal contracts > chat token usage selects the ready peer under the canonical budget projection [1410.15ms]
+(pass) durable continuous goal contracts > task execution candidates preserve accepted recovery across the budget boundary [1394.14ms]
+(pass) durable continuous goal contracts > task token usage selects the ready peer under the canonical budget projection [1284.34ms]
+(pass) durable continuous goal contracts > mission execution candidates preserve accepted recovery across the budget boundary [1635.81ms]
+(pass) durable continuous goal contracts > mission token usage selects the ready peer under the canonical budget projection [2245.39ms]
+(pass) durable continuous goal contracts > Chat creation, exact replay, pause, resume and completion persist real revisions [1579.22ms]
+(pass) durable continuous goal contracts > one exact continuation reserves one turn and reports the explicit budget terminal [1211.03ms]
+(pass) durable continuous goal contracts > usage references count descendant requests and their late completion exactly once [1374.58ms]
+(pass) durable continuous goal contracts > Task owner identity and cancellation project distinct goal facts [1288.12ms]
+(pass) durable continuous goal contracts > Mission includes its exact child Tasks and returns a typed overlapping-owner error [1202.95ms]
+(pass) durable continuous goal contracts > public route and native Tool share one exact durable goal [1191.92ms]
+(pass) durable continuous goal contracts > explicit blocking wins over quota and resuming preserves settled usage [1221.35ms]
+(pass) durable continuous goal contracts > different Projects retain exact independent owners and metering [2856.38ms]
+(pass) durable continuous goal contracts > a settled assistant batch advances the exact latest input frontier [1140.03ms]
+(pass) durable continuous goal contracts > chat reopening preserves cancellation until an explicit goal revision [1171.01ms]
+(pass) durable continuous goal contracts > mission reopening preserves cancellation until an explicit goal revision [1263.24ms]
+(pass) durable continuous goal contracts > archive and restore retain one paused goal on the exact owner [1235.32ms]
+(pass) durable continuous goal contracts > the production Task archive entry retains pause when a completed Task is restored [1171.33ms]
+
+ 19 pass
+ 0 fail
+ 106 expect() calls
+Ran 19 tests across 1 file. [33.12s]
+[1/1] DONE test/continuous-goal.test.ts exit=0 duration=33.85s

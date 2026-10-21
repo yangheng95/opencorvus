@@ -16,7 +16,12 @@ import {
   readContinuousGoal,
   resolveGoalOwner,
 } from "@/continuous-goal/store"
-import { goalContinuationIdentity, reconcileContinuousGoal } from "@/continuous-goal/controller"
+import {
+  goalContinuationIdentity,
+  initializeContinuousGoals,
+  projectGoalExecutionCandidates,
+  reconcileContinuousGoal,
+} from "@/continuous-goal/controller"
 import { publishJSONBarrier } from "./json-barrier"
 
 const [mode, directory, barriers, apiURL] = process.argv.slice(2)
@@ -24,7 +29,7 @@ if (!mode || !directory || !barriers || !apiURL)
   throw new Error("Goal runtime worker requires mode, project, barriers and provider")
 declareNativeTaskProcessDeployment()
 const model = { providerID: "goal-runtime-contract", modelID: "controlled-stream" }
-const deadline = Date.now() + 90_000
+const holdDeadline = Date.now() + 90_000
 try {
   const result = await Instance.provide({
     directory,
@@ -73,16 +78,24 @@ try {
           messageID: goalContinuationIdentity(request).messageID,
           outcome,
         })
-        while (Date.now() < deadline) await Bun.sleep(50)
+        while (Date.now() < holdDeadline) await Bun.sleep(50)
         throw new Error("Owning test did not interrupt its private process")
       }
       const start = JSON.parse(await fs.readFile(path.join(barriers, "ready.json"), "utf8"))
       const owner = resolveGoalOwner({ kind: "chat", id: start.sessionID })
+      const recoveryCandidates = await projectGoalExecutionCandidates()
       await publishJSONBarrier(path.join(barriers, "recover-entered.json"), { goal: readContinuousGoal(owner) })
-      const outcome = await reconcileContinuousGoal(owner)
-      await publishJSONBarrier(path.join(barriers, "recovering.json"), { outcome })
-      while (Date.now() < deadline) {
+      initializeContinuousGoals()
+      await publishJSONBarrier(path.join(barriers, "recovering.json"), { driver: "continuous-goal.reconcile" })
+      let lastActivity = Date.now()
+      let priorMessages = ""
+      for (;;) {
         const messages = await Session.messages({ sessionID: start.sessionID })
+        const activity = JSON.stringify(messages)
+        if (activity !== priorMessages) {
+          priorMessages = activity
+          lastActivity = Date.now()
+        }
         const replies = messages.filter(
           (message) =>
             message.info.role === "assistant" &&
@@ -93,7 +106,8 @@ try {
         if (replies.length && !SessionPromptOwner.activeExecution(start.sessionID)) {
           await SessionPromptState.release(start.sessionID, directory)
           return {
-            outcome,
+            recoveryDriver: "continuous-goal.reconcile",
+            recoveryCandidates,
             goal: readContinuousGoal(owner),
             request: latestGoalContinuation(owner),
             controllerInputs: messages
@@ -109,13 +123,15 @@ try {
             })),
           }
         }
+        if (Date.now() - lastActivity > 90_000) {
+          await publishJSONBarrier(path.join(barriers, "recover-timeout.json"), {
+            goal: readContinuousGoal(owner),
+            messages: messages.map((message) => message.info),
+          })
+          throw new Error("Goal restart made no message progress for90s")
+        }
         await Bun.sleep(25)
       }
-      await publishJSONBarrier(path.join(barriers, "recover-timeout.json"), {
-        goal: readContinuousGoal(owner),
-        messages: (await Session.messages({ sessionID: start.sessionID })).map((message) => message.info),
-      })
-      throw new Error("Goal restart did not settle the accepted input")
     },
   })
   await publishJSONBarrier(path.join(barriers, "result.json"), result)

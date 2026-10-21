@@ -1,0 +1,64 @@
+{
+  "at": "2026-10-21T02:21:00.910Z",
+  "boundary": "Real Source CLI public HTTP plus original persisted owner identities. Full canonical preserved;no Provider credential/models staging or model input.",
+  "cases": [
+    {
+      "case": "same original empty Chat read",
+      "status": 200,
+      "value": null,
+      "sessionID": "ses_-zUS0X33CzzWEKMgCk98"
+    },
+    {
+      "case": "persisted chat Goal",
+      "kind": "chat",
+      "ownerID": "ses_-zURPRFwZzzTe6qazRhB",
+      "status": 200,
+      "goalID": "pev_g0VYaYkAL00R3JWBJBHG",
+      "goalStatus": "budget_limited",
+      "tokensUsed": 37196,
+      "turnsAccepted": 1,
+      "tokenBudget": 100000,
+      "turnBudget": 1,
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+    },
+    {
+      "case": "persisted task Goal",
+      "kind": "task",
+      "ownerID": "tsk_g00VYZbqeD00cnjpD4Jt",
+      "status": 200,
+      "goalID": "pev_g0VYZpebm00K5RrRMT3S",
+      "goalStatus": "complete",
+      "tokensUsed": 193569,
+      "turnsAccepted": 1,
+      "tokenBudget": 240000,
+      "turnBudget": 2,
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+    },
+    {
+      "case": "persisted mission Goal",
+      "kind": "mission",
+      "ownerID": "ses_-zURQjvQ8zz3y3NgFyVx",
+      "status": 200,
+      "goalID": "pev_g0VYZGNo400wC7tWqfTF",
+      "goalStatus": "complete",
+      "tokensUsed": 41550,
+      "turnsAccepted": 1,
+      "turnBudget": 1,
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\runtime\\data\\projects\\2026\\10\\20\\894b4635-0b80-49f1-850f-5f487731db86"
+    },
+    {
+      "case": "same owner under actual peer Project",
+      "status": 409,
+      "name": "ContinuousGoalError",
+      "code": "owner_unavailable",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\runtime\\data\\projects\\2026\\10\\14\\ab106718-2b7f-4a21-8e4b-7ce0b45830cc"
+    },
+    {
+      "case": "original runtime model resolution",
+      "status": 400,
+      "name": "ProviderModelNotFoundError",
+      "providerID": "openai",
+      "modelID": "gpt-6.1-sol"
+    }
+  ]
+}

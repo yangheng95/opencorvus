@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Goal调度的执行需求探测](records/2026-10/2026-10-21-goal-reconciliation-admission.md)：[真实每分钟60次失败归零与全局流式恢复](artifacts/2026-10-21-goal-reconciliation-admission/README.md)，单一计划保留预算耗尽后的已接收输入恢复，41项合同及完整历史保留。
+
 - [持续目标读取的项目权限](records/2026-10/2026-10-21-goal-read-project-authority.md)：[三类真实Goal、六项HTTP合同与五张人工图](artifacts/2026-10-21-goal-read-project-authority/README.md)，修复模型不可用时的持久Goal读取，原90表131156行保持。
 
 - [Markdown分帧替换连续性](records/2026-10/2026-10-21-markdown-batch-continuity.md)：[真实49→1截断、修复后48→50与15张实图](artifacts/2026-10-21-markdown-batch-continuity/README.md)，保留格式失败样本和后台reader原结算。

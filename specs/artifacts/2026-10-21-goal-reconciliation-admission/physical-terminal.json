@@ -1,0 +1,65 @@
+{
+  "launcher": {
+    "childExitCode": 0,
+    "observedAtUtc": "2026-10-21T02:22:56.0875188Z"
+  },
+  "originalExit": 0,
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 66836,
+        "processInstanceID": "win32:639281460270800813",
+        "occurrenceID": "99958c94-6762-430f-862a-6d3b690a0a94"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 86128,
+        "processInstanceID": "win32:639281460281293043",
+        "occurrenceID": "32fd5c0c-ebee-4180-9913-974ea021d5a1"
+      }
+    }
+  ],
+  "observedAtUtc": "2026-10-21T02:23:19.3902105Z",
+  "shutdown": {
+    "observedAtUtc": "2026-10-21T02:22:55.9624878Z",
+    "occurrence": "goal-reconciliation-admission-499-after-1ca5fe97-086e-4c44-b3e0-58ada7e6dc58",
+    "statusCode": 200,
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYeAVAD00rDzMEhZ5F\"}",
+    "target": {
+      "pid": 86128,
+      "processInstanceID": "win32:639281460281293043",
+      "occurrenceID": "32fd5c0c-ebee-4180-9913-974ea021d5a1"
+    }
+  },
+  "native": {
+    "occurrence": "goal-reconciliation-admission-499-after-1ca5fe97-086e-4c44-b3e0-58ada7e6dc58",
+    "outcome": "settled",
+    "host": {
+      "pid": 66836,
+      "processInstanceID": "win32:639281460270800813",
+      "occurrenceID": "99958c94-6762-430f-862a-6d3b690a0a94"
+    },
+    "target": {
+      "pid": 86128,
+      "processInstanceID": "win32:639281460281293043",
+      "occurrenceID": "32fd5c0c-ebee-4180-9913-974ea021d5a1"
+    },
+    "observedAtUtc": "2026-10-21T02:22:56.034Z",
+    "deadlineAt": 1792550426940,
+    "terminal": {
+      "occurrenceID": "goal-reconciliation-admission-499-after-1ca5fe97-086e-4c44-b3e0-58ada7e6dc58",
+      "pid": 86128,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "originalHandle": 5032
+}

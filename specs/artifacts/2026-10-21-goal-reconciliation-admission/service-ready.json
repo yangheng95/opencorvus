@@ -1,0 +1,31 @@
+{
+  "owner": {
+    "pid": 86128,
+    "processInstanceID": "win32:639281460281293043",
+    "occurrenceID": "f462bb55-cf87-415c-a6f2-02b00a011691"
+  },
+  "parent": {
+    "pid": 45924,
+    "processInstanceID": "win32:639281460280931455",
+    "occurrenceID": "845959cf-8724-47ff-b787-32bbe5ae880c"
+  },
+  "occurrence": "goal-reconciliation-admission-499-after-1ca5fe97-086e-4c44-b3e0-58ada7e6dc58",
+  "receipt": {
+    "schemaVersion": 1,
+    "occurrenceID": "goal-reconciliation-admission-499-after-1ca5fe97-086e-4c44-b3e0-58ada7e6dc58",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18883",
+    "pid": 86128
+  },
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\goal-reconciliation-admission-499-after-data\\runtime\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-21\\goal-reconciliation-admission-499-after-data\\runtime\\data",
+      "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/goal-reconciliation-admission-499-after-data/home"
+    }
+  },
+  "observedAt": "2026-10-21T02:20:31.981Z",
+  "qualification": "Real development CLI and UI only; no credential/Provider qualification"
+}

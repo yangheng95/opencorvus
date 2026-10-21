@@ -7,7 +7,10 @@ import { Identifier } from "@/id/id"
 import { Scheduler } from "@/scheduler"
 import { Log } from "@/util/log"
 import { MissingModelConfigError } from "@/config/model-resolution-error"
-import { runWithInitializedIndependentProject } from "@/project/independent-project-owner"
+import {
+  runWithIndependentProjectIdentity,
+  runWithInitializedIndependentProject,
+} from "@/project/independent-project-owner"
 import { taskLifecycleProjection } from "@/engine/task-lifecycle"
 import { pendingInteractionCounts, listAllMissionTasks } from "@/engine/store"
 import { taskRootIngressDebugProjection } from "@/engine/task-root-ingress-delivery"
@@ -30,7 +33,7 @@ import {
   type GoalOwner,
   type GoalContinuation,
 } from "./store"
-import { ContinuousGoalError, goalError, type ContinuousGoalView } from "./schema"
+import { ContinuousGoalError, goalError, type ContinuousGoalOwner, type ContinuousGoalView } from "./schema"
 
 const log = Log.create({ service: "continuous-goal" })
 
@@ -220,8 +223,17 @@ export async function reconcileContinuousGoal(owner: GoalOwner, signal?: AbortSi
   }
 }
 
-async function reconcileGoal(owner: GoalOwner, goal: ContinuousGoalView, signal?: AbortSignal): Promise<string> {
-  if (goal.status === "complete" || goal.status === "paused" || goal.status === "blocked") return goal.status
+type GoalReconciliationPlan =
+  | { outcome: string; request?: never }
+  | {
+      outcome: "accepted" | "recovered"
+      request: GoalContinuation
+    }
+
+/** A read-only hint. Delivery always plans again under the initialized owner. */
+async function planGoalReconciliation(owner: GoalOwner, goal: ContinuousGoalView): Promise<GoalReconciliationPlan> {
+  if (goal.status === "complete" || goal.status === "paused" || goal.status === "blocked")
+    return { outcome: goal.status }
   const previous = latestGoalContinuation(owner)
   if (previous) {
     const identity = goalContinuationIdentity(previous)
@@ -229,36 +241,52 @@ async function reconcileGoal(owner: GoalOwner, goal: ContinuousGoalView, signal?
       db.select().from(MessageTable).where(eq(MessageTable.id, identity.messageID)).get(),
     )
     if (accepted && latestUser(owner.sessionID)?.id === identity.messageID && !goalContinuationFrontier(owner)) {
-      if (goalScopeSessionIDs(owner).some((id) => SessionPromptOwner.activeExecution(id))) return "running"
-      if (owner.kind === "task") {
-        const { EngineService } = await import("@/task-api")
-        await EngineService.deliverContinuousGoalMessage({
-          owner,
-          goal,
-          request: previous,
-          text: goalPrompt(goal, previous),
-        })
-      } else {
+      if (goalScopeSessionIDs(owner).some((id) => SessionPromptOwner.activeExecution(id))) return { outcome: "running" }
+      if (owner.kind !== "task") {
         // Re-enter only an unanswered accepted wake. A completed wait/error belongs to its original recovery contract.
         const { completedReplyToUserMessage } = await import("@/session/completed-reply")
-        if (await completedReplyToUserMessage(owner.sessionID, identity.messageID, true)) return "settled_control"
-        await deliverConversation(owner, goal, previous, signal)
+        if (await completedReplyToUserMessage(owner.sessionID, identity.messageID, true))
+          return { outcome: "settled_control" }
       }
-      return "recovered"
+      return { outcome: "recovered", request: previous }
     }
   }
-  if (goal.status !== "active") return goal.status
+  if (goal.status !== "active") return { outcome: goal.status }
   const frontier = goalContinuationFrontier(owner)
-  if (!frontier) return "waiting"
-  if (previous?.revision === goal.revision && previous.frontier === frontier) return "accepted"
-  const request = planGoalContinuation(goal, frontier)
+  if (!frontier) return { outcome: "waiting" }
+  if (previous?.revision === goal.revision && previous.frontier === frontier) return { outcome: "accepted" }
+  return { outcome: "accepted", request: planGoalContinuation(goal, frontier) }
+}
+
+async function reconcileGoal(owner: GoalOwner, goal: ContinuousGoalView, signal?: AbortSignal): Promise<string> {
+  const plan = await planGoalReconciliation(owner, goal)
+  if (!plan.request) return plan.outcome
+  const request = plan.request
   if (owner.kind === "task") {
     const { EngineService } = await import("@/task-api")
     await EngineService.deliverContinuousGoalMessage({ owner, goal, request, text: goalPrompt(goal, request) })
   } else {
     await deliverConversation(owner, goal, request, signal)
   }
-  return "accepted"
+  return plan.outcome
+}
+
+/** Exact owner hints from the same plan used at execution; no queue or stored plan. */
+export async function projectGoalExecutionCandidates(): Promise<ContinuousGoalOwner[]> {
+  const candidates = await Promise.all(
+    projectGoalOwners().map(async (candidate) => {
+      try {
+        const owner = resolveGoalOwner(candidate)
+        const goal = readContinuousGoal(owner)
+        return goal && (await planGoalReconciliation(owner, goal)).request ? candidate : undefined
+      } catch (error) {
+        if (!ContinuousGoalError.isInstance(error as Error))
+          log.error("goal reconciliation failed", { owner: candidate, error: String(error) })
+        return undefined
+      }
+    }),
+  )
+  return candidates.filter((candidate): candidate is ContinuousGoalOwner => candidate !== undefined)
 }
 
 export function initializeContinuousGoals() {
@@ -284,12 +312,18 @@ export function initializeContinuousGoals() {
       await Promise.allSettled(
         rows.map(async ({ directory }) => {
           try {
+            const candidates = await runWithIndependentProjectIdentity({
+              directory,
+              fn: projectGoalExecutionCandidates,
+            })
+            if (candidates.length === 0) return
+            signal.throwIfAborted()
             await runWithInitializedIndependentProject({
               directory,
               signal,
               fn: async () => {
                 await Promise.allSettled(
-                  projectGoalOwners().map(async (candidate) => {
+                  candidates.map(async (candidate) => {
                     try {
                       await reconcileContinuousGoal(resolveGoalOwner(candidate), signal)
                     } catch (error) {

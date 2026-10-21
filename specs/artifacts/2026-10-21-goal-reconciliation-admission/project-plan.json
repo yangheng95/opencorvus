@@ -1,0 +1,105 @@
+{
+  "at": "2026-10-21T02:20:32.444Z",
+  "boundary": "Actual production candidate function under same Source CLI process,full cloned facts and Project identity;observation only,no model input",
+  "candidates": [],
+  "goals": [
+    {
+      "owner": {
+        "kind": "chat",
+        "id": "ses_-zURRCRXGzzA7qb8m4pc"
+      },
+      "id": "pev_g0VYYnYTi00tuZuRNFkn",
+      "status": "complete",
+      "reason": "Create, read, pause, exact conflict and resume contracts verified by actual public requests",
+      "turnBudget": 3,
+      "turnsAccepted": 0,
+      "tokensUsed": 0
+    },
+    {
+      "owner": {
+        "kind": "chat",
+        "id": "ses_-zURR8tR9zz4WhqYCwUp"
+      },
+      "id": "pev_g0VYYr6a800LeJIthzSD",
+      "status": "complete",
+      "reason": "Create, read, pause, exact conflict and resume contracts verified by actual public requests",
+      "turnBudget": 3,
+      "turnsAccepted": 0,
+      "tokensUsed": 0
+    },
+    {
+      "owner": {
+        "kind": "chat",
+        "id": "ses_-zURR8MJ2zz4IwORT7Jo"
+      },
+      "id": "pev_g0VYYrdhx00LV5Ivl2OX",
+      "status": "complete",
+      "reason": "Create, read, pause, exact conflict and resume contracts verified by actual public requests",
+      "turnBudget": 3,
+      "turnsAccepted": 0,
+      "tokensUsed": 0
+    },
+    {
+      "owner": {
+        "kind": "chat",
+        "id": "ses_-zURR5ESgzz9bL80N3L2"
+      },
+      "id": "pev_g0VYYus04006G2ZPSE1C",
+      "status": "complete",
+      "reason": "Manual product review: the real automatic turn returned GOALREADY459, the page displayed 1/1 accepted turns and 38,351 cumulative tokens, and the operator now completes this isolated verification goal.",
+      "turnBudget": 1,
+      "turnsAccepted": 1,
+      "tokensUsed": 38351
+    },
+    {
+      "owner": {
+        "kind": "chat",
+        "id": "ses_-zURR01plzzo4CFAVTpg"
+      },
+      "id": "pev_g0VYZ06O800hLmJployd",
+      "status": "complete",
+      "reason": "Operator verification: the conversation adopted the outcome title, the real automatic turn returned TITLE460READY at 1/1 turns and 38,352 tokens, and the manual rename remained after reloading the same session.",
+      "turnBudget": 1,
+      "turnsAccepted": 1,
+      "tokensUsed": 38352
+    },
+    {
+      "owner": {
+        "kind": "chat",
+        "id": "ses_-zURQuLTRzzalZmMI8Az"
+      },
+      "id": "pev_g0VYZ6lNu00j5oEHbk9m",
+      "status": "complete",
+      "reason": "Operator verified the real selected quotation DRAFT461READY and its pending draft remain visible after creating this separate goal. The real automatic turn returned QUOTE461READY at 1/1 turns and 38,534 tokens. The quote was not sent as a fabricated user message.",
+      "turnBudget": 1,
+      "turnsAccepted": 1,
+      "tokensUsed": 38534
+    },
+    {
+      "owner": {
+        "kind": "task",
+        "id": "tsk_g00VYZbqeD00cnjpD4Jt"
+      },
+      "id": "pev_g0VYZpebm00K5RrRMT3S",
+      "status": "complete",
+      "reason": "已实际调用 get_continuous_goal 读取本次目标 pev_g0VYZpebm00K5RrRMT3S；已调用 read_task_message 核对真实 controller 消息 msg_hJ6GFlGymjWtOGncxEVT，返回 source=continuous_goal，正文为 automatic continuation 1，所列目标身份和本轮要求一致；本轮已可见输出 PERMISSION467READY。未读写文件、访问网站、委派其他 agent 或创建子 Task。",
+      "turnBudget": 2,
+      "turnsAccepted": 1,
+      "tokensUsed": 193569,
+      "tokenBudget": 240000
+    },
+    {
+      "owner": {
+        "kind": "chat",
+        "id": "ses_-zURPRFwZzzTe6qazRhB"
+      },
+      "id": "pev_g0VYaYkAL00R3JWBJBHG",
+      "status": "budget_limited",
+      "reason": "turn_budget",
+      "turnBudget": 1,
+      "turnsAccepted": 1,
+      "tokensUsed": 37196,
+      "tokenBudget": 100000
+    }
+  ]
+}

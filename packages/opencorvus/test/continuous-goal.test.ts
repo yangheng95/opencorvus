@@ -3,11 +3,12 @@ import { Hono } from "hono"
 import { randomUUID } from "node:crypto"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
-import { Database } from "@/storage/db"
+import { Database, eq } from "@/storage/db"
 import { ensureMissionSession } from "@/mission/session"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { appendTaskOpenedInTransaction, appendTaskReopenedInTransaction } from "@/engine/task-lifecycle"
 import { ProtocolStore } from "@/protocol/store"
+import { persistTaskRootMessageIngressInTransaction } from "@/engine/task-root-ingress-delivery"
 import { Identifier } from "@/id/id"
 import { SessionStatus } from "@/session/status"
 import { ensureTaskMessageProtocolBridge } from "@/orchestrator/protocol/message-bridge"
@@ -26,7 +27,12 @@ import {
   projectGoalOwners,
 } from "@/continuous-goal/store"
 import { ContinuousGoalRoutes } from "@/server/routes/continuous-goal"
-import { goalContinuationFrontier, reconcileContinuousGoal } from "@/continuous-goal/controller"
+import {
+  goalContinuationFrontier,
+  goalContinuationIdentity,
+  projectGoalExecutionCandidates,
+  reconcileContinuousGoal,
+} from "@/continuous-goal/controller"
 import { serverErrorResponse } from "@/server/error-handler"
 import { ContinuousGoalTools } from "@/tool/continuous-goal"
 import { Tool } from "@/tool/tool"
@@ -106,6 +112,176 @@ async function missionOwner() {
 }
 
 describe("durable continuous goal contracts", () => {
+  for (const kind of ["chat", "task", "mission"] as const) {
+    test(`${kind} execution candidates preserve accepted recovery across the budget boundary`, async () => {
+      await using project = await memoryProject()
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const owner =
+            kind === "task"
+              ? (await taskOwner()).owner
+              : kind === "mission"
+                ? (await missionOwner()).owner
+                : resolveGoalOwner({ kind, id: (await Session.create({ kind: "assistant" })).id })
+          const goal = createContinuousGoal(
+            owner,
+            {
+              requestID: "create",
+              objective: "Finish the already accepted work",
+              turnBudget: 1,
+            },
+            "user",
+          )
+          const anchor = resolveGoalOwner({ kind: "chat", id: (await Session.create({ kind: "assistant" })).id })
+          createContinuousGoal(anchor, { requestID: "anchor", objective: "Another ready owner" }, "user")
+          const selected = async () =>
+            (await projectGoalExecutionCandidates()).map(({ kind, id }) => `${kind}:${id}`).sort()
+          const ready = [`${owner.kind}:${owner.id}`, `${anchor.kind}:${anchor.id}`].sort()
+          expect(await selected()).toEqual(ready)
+          const request = requestGoalContinuation(owner, goal, goalContinuationFrontier(owner)!)
+          expect(readContinuousGoal(owner)).toMatchObject({
+            status: "budget_limited",
+            reason: "turn_budget",
+            turnsAccepted: 1,
+          })
+          expect(await selected()).toEqual([`${anchor.kind}:${anchor.id}`])
+          const identity = goalContinuationIdentity(request)
+          const now = Date.now()
+          await Session.updateMessage({
+            id: identity.messageID,
+            sessionID: owner.sessionID,
+            role: "user",
+            author: "goal-controller",
+            agent: kind === "task" ? "orchestrator" : kind,
+            model: { providerID: "contract-provider", modelID: "contract-model" },
+            time: { created: now },
+          })
+          if (kind === "task")
+            Database.immediateTransaction((db) => {
+              const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, owner.id)).get()!
+              persistTaskRootMessageIngressInTransaction(db, {
+                task,
+                messageID: identity.messageID,
+                kind: "goal-controller",
+                now,
+              })
+            })
+          expect(await selected()).toEqual(ready)
+          if (kind !== "task") {
+            await Session.updateMessage({
+              id: Identifier.ascending("message"),
+              sessionID: owner.sessionID,
+              role: "assistant",
+              author: kind,
+              agent: kind,
+              parentID: identity.messageID,
+              modelID: "contract-model",
+              providerID: "contract-provider",
+              path: { cwd: project.path, root: project.path },
+              cost: 0,
+              tokens: { total: 5, input: 3, output: 2, reasoning: 0, cache: { read: 0, write: 0 } },
+              time: { created: now + 1, completed: now + 2 },
+              finish: "stop",
+            })
+            expect(await reconcileContinuousGoal(owner)).toBe("budget_limited")
+            expect(await selected()).toEqual([`${anchor.kind}:${anchor.id}`])
+          }
+          const paused = updateContinuousGoal(
+            owner,
+            {
+              requestID: "pause",
+              goalID: goal.id,
+              expectedRevision: goal.revision,
+              status: "paused",
+              reason: "Operator pauses while accepted work is retained",
+            },
+            "user",
+          )
+          expect(readContinuousGoal(owner)).toMatchObject({ status: "paused", turnsAccepted: 1 })
+          expect(await selected()).toEqual([`${anchor.kind}:${anchor.id}`])
+          const resumed = updateContinuousGoal(
+            owner,
+            {
+              requestID: "resume",
+              goalID: goal.id,
+              expectedRevision: paused.revision,
+              status: "active",
+              turnBudget: 2,
+              reason: "Operator explicitly raises the allowance and resumes",
+            },
+            "user",
+          )
+          expect(await selected()).toEqual(ready)
+          const blocked = updateContinuousGoal(
+            owner,
+            {
+              requestID: "block",
+              goalID: goal.id,
+              expectedRevision: resumed.revision,
+              status: "blocked",
+              reason: "External contract blocker",
+            },
+            "user",
+          )
+          expect(readContinuousGoal(owner)).toMatchObject({
+            status: "blocked",
+            reason: "External contract blocker",
+            turnsAccepted: 1,
+          })
+          expect(await selected()).toEqual([`${anchor.kind}:${anchor.id}`])
+          updateContinuousGoal(
+            owner,
+            {
+              requestID: "complete",
+              goalID: goal.id,
+              expectedRevision: blocked.revision,
+              status: "complete",
+              reason: "Evidence reviewed",
+            },
+            "user",
+          )
+          expect(readContinuousGoal(owner)).toMatchObject({
+            status: "complete",
+            reason: "Evidence reviewed",
+            turnsAccepted: 1,
+          })
+          expect(await selected()).toEqual([`${anchor.kind}:${anchor.id}`])
+        },
+      })
+    })
+
+    test(`${kind} token usage selects the ready peer under the canonical budget projection`, async () => {
+      await using project = await memoryProject()
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const owner =
+            kind === "task"
+              ? (await taskOwner()).owner
+              : kind === "mission"
+                ? (await missionOwner()).owner
+                : resolveGoalOwner({ kind, id: (await Session.create({ kind: "assistant" })).id })
+          createContinuousGoal(
+            owner,
+            { requestID: "create", objective: "Observe the token allowance", tokenBudget: 20 },
+            "user",
+          )
+          recordUsage(owner.sessionID, 23, captureContinuousGoalUsage(owner.sessionID))
+          const anchor = resolveGoalOwner({ kind: "chat", id: (await Session.create({ kind: "assistant" })).id })
+          createContinuousGoal(anchor, { requestID: "anchor", objective: "Continue the ready peer" }, "user")
+          expect(readContinuousGoal(owner)).toMatchObject({
+            status: "budget_limited",
+            reason: "token_budget",
+            tokensUsed: 23,
+            turnsAccepted: 0,
+          })
+          expect(await projectGoalExecutionCandidates()).toEqual([{ kind: anchor.kind, id: anchor.id }])
+        },
+      })
+    })
+  }
+
   test("Chat creation, exact replay, pause, resume and completion persist real revisions", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -451,6 +627,7 @@ describe("durable continuous goal contracts", () => {
         const owner = resolveGoalOwner({ kind: "chat", id: session.id })
         createContinuousGoal(owner, { requestID: "create", objective: "Same objective" }, "user")
         recordUsage(session.id, 17, captureContinuousGoalUsage(session.id))
+        expect(await projectGoalExecutionCandidates()).toEqual([{ kind: owner.kind, id: owner.id }])
         return owner
       },
     })
@@ -462,6 +639,7 @@ describe("durable continuous goal contracts", () => {
         createContinuousGoal(owner, { requestID: "create", objective: "Same objective" }, "user")
         recordUsage(session.id, 29, captureContinuousGoalUsage(session.id))
         expect(projectGoalOwners()).toEqual([{ kind: "chat", id: session.id }])
+        expect(await projectGoalExecutionCandidates()).toEqual([{ kind: owner.kind, id: owner.id }])
         expect(readContinuousGoal(owner)).toMatchObject({
           status: "active",
           tokensUsed: 29,
@@ -473,6 +651,7 @@ describe("durable continuous goal contracts", () => {
     await Instance.provide({
       directory: first.path,
       fn: async () => {
+        expect(await projectGoalExecutionCandidates()).toEqual([{ kind: firstOwner.kind, id: firstOwner.id }])
         expect(readContinuousGoal(firstOwner)).toMatchObject({
           status: "active",
           tokensUsed: 17,
