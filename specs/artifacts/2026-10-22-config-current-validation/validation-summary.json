@@ -1,0 +1,193 @@
+{
+  "at": "2026-10-21T23:23:57.956Z",
+  "versionSource": "1ce25a68ed9864191a001892819ef636e42636b1",
+  "originalProjects": 167,
+  "allCurrentCandidates": 168,
+  "rounds": [
+    {
+      "round": "cold",
+      "write": {
+        "at": "2026-10-21T23:12:05.787Z",
+        "endedAt": "2026-10-21T23:12:34.157Z",
+        "phase": "candidate",
+        "port": 18993,
+        "occurrence": "config-current-validation-521-before-a00dcc1b-b2fd-47ce-a115-b16e54ad527f",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 14310.7907,
+        "restoreMs": 14027.255099999998,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "read": {
+        "occurrence": "config-current-validation-521-before-a00dcc1b-b2fd-47ce-a115-b16e54ad527f",
+        "kind": "Public HTTP positive contracts concurrent with original canonical save; this is not browser or visual acceptance",
+        "results": [
+          {
+            "path": "/config",
+            "startedAt": "2026-10-21T23:12:06.007Z",
+            "endedAt": "2026-10-21T23:12:20.056Z",
+            "ms": 14047.482199999999,
+            "status": 200,
+            "permissionMode": "ask"
+          },
+          {
+            "path": "/provider",
+            "startedAt": "2026-10-21T23:12:06.010Z",
+            "endedAt": "2026-10-21T23:12:20.417Z",
+            "ms": 14407.118,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/global/providers",
+            "startedAt": "2026-10-21T23:12:06.011Z",
+            "endedAt": "2026-10-21T23:12:20.311Z",
+            "ms": 14300.368799999998,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/session/ses_hdx2XJje10ng0sDcwaHc",
+            "startedAt": "2026-10-21T23:12:06.011Z",
+            "endedAt": "2026-10-21T23:12:06.020Z",
+            "ms": 8.448599999999715,
+            "status": 200,
+            "sessionID": "ses_hdx2XJje10ng0sDcwaHc"
+          }
+        ]
+      },
+      "latency": {
+        "save": false,
+        "restore": false,
+        "reads": [
+          {
+            "path": "/config",
+            "passed": true
+          },
+          {
+            "path": "/provider",
+            "passed": true
+          },
+          {
+            "path": "/global/providers",
+            "passed": true
+          },
+          {
+            "path": "/session/ses_hdx2XJje10ng0sDcwaHc",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "round": "repeat",
+      "write": {
+        "at": "2026-10-21T23:13:28.757Z",
+        "endedAt": "2026-10-21T23:13:55.102Z",
+        "phase": "candidate",
+        "port": 18993,
+        "occurrence": "config-current-validation-521-before-a00dcc1b-b2fd-47ce-a115-b16e54ad527f",
+        "transport": "browser",
+        "boundary": "Production config service -> production browser HostTransport -> original HTTP server -> canonical file; no mocked request, provider body, or UI automation",
+        "accepted": true,
+        "restored": true,
+        "writeMs": 12995.7782,
+        "restoreMs": 13338.335599999999,
+        "failures": [],
+        "permissionMode": "ask",
+        "changedField": "username",
+        "dataRestoration": "Complete parsed canonical source equals the pre-check source"
+      },
+      "read": {
+        "occurrence": "config-current-validation-521-before-a00dcc1b-b2fd-47ce-a115-b16e54ad527f",
+        "kind": "Public HTTP positive contracts concurrent with original canonical save; this is not browser or visual acceptance",
+        "results": [
+          {
+            "path": "/config",
+            "startedAt": "2026-10-21T23:13:28.953Z",
+            "endedAt": "2026-10-21T23:13:41.723Z",
+            "ms": 12769.081000000002,
+            "status": 200,
+            "permissionMode": "ask"
+          },
+          {
+            "path": "/provider",
+            "startedAt": "2026-10-21T23:13:28.955Z",
+            "endedAt": "2026-10-21T23:13:42.053Z",
+            "ms": 13097.1846,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/global/providers",
+            "startedAt": "2026-10-21T23:13:28.956Z",
+            "endedAt": "2026-10-21T23:13:41.936Z",
+            "ms": 12980.6455,
+            "status": 200,
+            "providers": 227,
+            "models": 8133,
+            "selectedModel": "gpt-6.1-sol"
+          },
+          {
+            "path": "/session/ses_hdx2XJje10ng0sDcwaHc",
+            "startedAt": "2026-10-21T23:13:28.956Z",
+            "endedAt": "2026-10-21T23:13:28.975Z",
+            "ms": 19.32630000000063,
+            "status": 200,
+            "sessionID": "ses_hdx2XJje10ng0sDcwaHc"
+          }
+        ]
+      },
+      "latency": {
+        "save": false,
+        "restore": false,
+        "reads": [
+          {
+            "path": "/config",
+            "passed": true
+          },
+          {
+            "path": "/provider",
+            "passed": true
+          },
+          {
+            "path": "/global/providers",
+            "passed": true
+          },
+          {
+            "path": "/session/ses_hdx2XJje10ng0sDcwaHc",
+            "passed": true
+          }
+        ]
+      }
+    }
+  ],
+  "originalHandles": {
+    "cold": {
+      "writer": 9576,
+      "writerExit": 1,
+      "reader": 15727,
+      "readerExit": 0
+    },
+    "repeat": {
+      "writer": 23530,
+      "writerExit": 1,
+      "reader": 29645,
+      "readerExit": 0
+    }
+  },
+  "sourceErrors": [],
+  "ui": "Four original manual screenshots;unchanged formal main-DhV28lza;no UI automated tests or new frontend build",
+  "scope": "Current full production config service/browser HostTransport/real Source CLI HTTP;complete restoration accepted;save10s/restore5s fail/read20s pass;no sampled projects or threshold changes"
+}

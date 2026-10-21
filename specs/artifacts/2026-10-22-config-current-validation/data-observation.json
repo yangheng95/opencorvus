@@ -1,0 +1,35 @@
+{
+  "at": "2026-10-21T23:21:16.235Z",
+  "source": {
+    "database": "Exact original bytes,all fields/size/mtime checked separately",
+    "canonical": "Exact complete original bytes",
+    "originalPhysicalDirectories": 167,
+    "physical": "Every original dev/inode/realpath exact"
+  },
+  "memory": {
+    "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+    "chunkID": "mck_h0TwOCuDIItgGfxTGf6k",
+    "changedEnvelopeFields": [
+      "availabilityGeneration",
+      "timeUpdated"
+    ],
+    "markdownExact": true,
+    "tokenCount": {
+      "before": 7577,
+      "after": 7577
+    },
+    "availability": {
+      "before": 83,
+      "after": 87
+    },
+    "documentRevision": {
+      "before": 39,
+      "after": 39
+    },
+    "timeUpdated": {
+      "before": 1792619146880,
+      "after": 1792624434445
+    }
+  },
+  "boundary": "Actual closed original QA data identity/integrity and semantic envelope comparison;not mutable source hashes or model narrative;no user database"
+}

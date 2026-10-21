@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [当前配置全量验证](2026-10-22-config-current-validation.md)：[168候选/两轮/4图](../../artifacts/2026-10-22-config-current-validation/README.md)，520后完整保存恢复正常但10/5未达，20秒读取通过；Sol2/4/原数据及全部资源结算。
+
 - [配置来源顺序](2026-10-22-config-source-order.md)：[42正向合同/7真图](../../artifacts/2026-10-22-config-source-order/README.md)，global重复合并与Windows别名修复，完整来源/资源职责保持；Sol4/8及最终零模型、原90表/166目录保持。
 
 - [Git 正式入口解析成本](2026-10-22-git-selection-cost.md)：[166目录/660次原查询事实](../../artifacts/2026-10-22-git-selection-cost/README.md)，重复解析候选无稳定吞吐收益而不改生产；六原scope/90表全字段保持，零模型，不替代完整10/5秒验收。

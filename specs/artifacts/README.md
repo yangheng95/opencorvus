@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [当前配置全量验证](2026-10-22-config-current-validation/README.md)：168完整候选/cold与repeat、4真图；保存恢复13–14.3秒，读取20秒通过而10/5未达，2/4 Sol与原数据/资源完整结算。
+
 - [配置来源顺序](2026-10-22-config-source-order/README.md)：global重复合并/custom与Windows别名修复；42正向合同/7真图、原HTTP/失败/数据/全部资源结算，Sol4/8及最终零模型范围。
 
 - [Git 正式入口解析成本](2026-10-22-git-selection-cost/README.md)：166完整目录、660次原查询/零模型，交错结果未支持稳定提速；保留原入口/输出、六原native结算、源90表157001行不变与工具失败事实，生产不改。

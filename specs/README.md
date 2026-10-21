@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [当前配置全量验证](records/2026-10/2026-10-22-config-current-validation.md)：[168候选/两轮与4真图](artifacts/2026-10-22-config-current-validation/README.md)，520后原保存/恢复约13–14.3秒、完整canonical恢复；20秒读取通过、10/5仍失败，2/4 Sol及原90表/167目录保持。
+
 - [配置来源顺序](records/2026-10/2026-10-22-config-source-order.md)：[42正向合同与7张真图](artifacts/2026-10-22-config-source-order/README.md)，修复global重复合并覆盖custom及Windows别名，保留目录资源；Sol4/8/八成员退休、最终零模型、90表原数据/166目录保持。
 
 - [Git 正式入口解析成本](records/2026-10/2026-10-22-git-selection-cost.md)：[166目录/660次零模型组件诊断](artifacts/2026-10-22-git-selection-cost/README.md)，复用正式入口未获稳定吞吐收益，生产不改；六原scope与90表157001原行完整结算/保持。

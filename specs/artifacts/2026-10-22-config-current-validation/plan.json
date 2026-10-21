@@ -1,0 +1,25 @@
+{
+  "scope": "config-current-validation-521",
+  "source": "Closed config-source-order-520-final-read,complete current90tables and all original directories",
+  "port": 18993,
+  "scopeBudgets": {
+    "before": 4
+  },
+  "maximumBatchRequests": 4,
+  "model": "gpt-6.1-sol",
+  "stream": true,
+  "thresholdsMs": {
+    "save": 10000,
+    "restore": 5000,
+    "read": 20000
+  },
+  "rounds": [
+    "cold",
+    "repeat"
+  ],
+  "directories": "All current registered directories plus genuine preflight addition;no sampling",
+  "transport": "Original production Overlay config service/browser HostTransport/real Source CLI public HTTP,plus manual IAB",
+  "ui": "Unchanged formal main-DhV28lza",
+  "authority": "Complete paired private/runtime auth/models;separate credential/catalog/actual-model checks;retire after original full chain",
+  "scopeLabel": "before is existing tool stage name for current baseline;no after allocation"
+}
