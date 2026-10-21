@@ -1,0 +1,185 @@
+{
+  "at": "2026-10-21T21:03:35.444Z",
+  "errors": [
+    {
+      "time": "2026-10-21T20:56:04.351Z",
+      "service": "project.open",
+      "message": "project.open.stage",
+      "data": {
+        "stage": "config.validate",
+        "platform": "win32",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+        "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+        "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+        "status": "failed",
+        "duration": 621,
+        "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+      }
+    },
+    {
+      "time": "2026-10-21T20:56:04.356Z",
+      "service": "server",
+      "message": "request failed",
+      "data": {
+        "requestID": "73583e2c-ed39-4413-ba0a-717613326c24",
+        "method": "GET",
+        "path": "/channel",
+        "statusCode": 400,
+        "error": {
+          "type": "ProviderModelNotFoundError",
+          "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+          "stack": "ProviderModelNotFoundError: ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}\n    at getModelFromCatalog (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:1229:17)\n    at validateConfigModelReferences (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\model-reference-validation.ts:45:14)\n    at async validateConfigCandidate (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\candidate-validation.ts:18:30)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:51:11)\n    at async stage (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\open-lifecycle.ts:38:28)\n    at async validateInstanceConversationCapabilities (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:49:30)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:1131:11)\n    at processTicksAndRejections (native:7:39)",
+          "data": {
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "suggestions": []
+          },
+          "name": "ProviderModelNotFoundError"
+        }
+      }
+    },
+    {
+      "time": "2026-10-21T20:56:06.010Z",
+      "service": "overlay:project-load",
+      "message": "config reload failed",
+      "data": {
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+        "error": "channel: API 400 channel?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cmember-live-rendering-412-fresh%5Cproject: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}"
+      }
+    },
+    {
+      "time": "2026-10-21T20:56:06.019Z",
+      "service": "project.open",
+      "message": "project.open.stage",
+      "data": {
+        "stage": "config.validate",
+        "platform": "win32",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+        "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+        "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+        "status": "failed",
+        "duration": 9,
+        "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+      }
+    },
+    {
+      "time": "2026-10-21T20:56:06.020Z",
+      "service": "server",
+      "message": "request failed",
+      "data": {
+        "requestID": "514cb4b9-04cb-475b-b2d4-bb4b4efef43f",
+        "method": "GET",
+        "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+        "statusCode": 400,
+        "error": {
+          "type": "ProviderModelNotFoundError",
+          "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+          "stack": "ProviderModelNotFoundError: ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}\n    at getModelFromCatalog (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:1229:17)\n    at validateConfigModelReferences (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\model-reference-validation.ts:45:14)\n    at async validateConfigCandidate (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\candidate-validation.ts:18:30)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:51:11)\n    at async stage (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\open-lifecycle.ts:38:28)\n    at async validateInstanceConversationCapabilities (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:49:30)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:1131:11)\n    at processTicksAndRejections (native:7:39)",
+          "data": {
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "suggestions": []
+          },
+          "name": "ProviderModelNotFoundError"
+        }
+      }
+    },
+    {
+      "time": "2026-10-21T20:56:06.093Z",
+      "service": "project.open",
+      "message": "project.open.stage",
+      "data": {
+        "stage": "config.validate",
+        "platform": "win32",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+        "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+        "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+        "status": "failed",
+        "duration": 6,
+        "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+      }
+    },
+    {
+      "time": "2026-10-21T20:56:06.095Z",
+      "service": "server",
+      "message": "request failed",
+      "data": {
+        "requestID": "6f992f96-19b6-437c-ac85-cae473bcfad3",
+        "method": "GET",
+        "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+        "statusCode": 400,
+        "error": {
+          "type": "ProviderModelNotFoundError",
+          "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+          "stack": "ProviderModelNotFoundError: ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}\n    at getModelFromCatalog (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:1229:17)\n    at validateConfigModelReferences (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\model-reference-validation.ts:45:14)\n    at async validateConfigCandidate (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\candidate-validation.ts:18:30)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:51:11)\n    at async stage (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\open-lifecycle.ts:38:28)\n    at async validateInstanceConversationCapabilities (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:49:30)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:1131:11)\n    at processTicksAndRejections (native:7:39)",
+          "data": {
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "suggestions": []
+          },
+          "name": "ProviderModelNotFoundError"
+        }
+      }
+    },
+    {
+      "time": "2026-10-21T20:56:06.706Z",
+      "service": "overlay:ui",
+      "message": "Model configuration unavailable",
+      "data": {
+        "diagnosticID": "composer-model:projection",
+        "message": "API 400 session/ses_-zUS0X33CzzWEKMgCk98/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cmember-live-rendering-412-fresh%5Cproject: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}",
+        "details": "HTTP GET 400 session/ses_-zUS0X33CzzWEKMgCk98/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cmember-live-rendering-412-fresh%5Cproject\\x0a\\x0aRequest ID: 6f992f96-19b6-437c-ac85-cae473bcfad3\\x0a\\x0aApiError: API 400 session/ses_-zUS0X33CzzWEKMgCk98/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cmember-live-rendering-412-fresh%5Cproject: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}\\x0a    at Pe (http://127.0.0.1:18979/ui/assets/main-DhV28lza.js:67:140669)\\x0a    at async Zoe (http://127.0.0.1:18979/ui/assets/main-DhV28lza.js:76:81245)\\x0a    at async Rh (http://127.0.0.1:18979/ui/assets/main-DhV28lza.js:76:86247)\\x0a\\x0aresponse body:\\x0a{\\x0a  \"name\": \"ProviderModelNotFoundError\",\\x0a  \"data\": {\\x0a    \"providerID\": \"openai\",\\x0a    \"modelID\": \"gpt-6.1-sol\",\\x0a    \"suggestions\": []\\x0a  }\\x0a}",
+        "taskID": "",
+        "taskDirectory": "",
+        "taskTitle": ""
+      }
+    },
+    {
+      "time": "2026-10-21T20:56:06.834Z",
+      "service": "project.open",
+      "message": "project.open.stage",
+      "data": {
+        "stage": "config.validate",
+        "platform": "win32",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+        "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+        "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+        "status": "failed",
+        "duration": 6,
+        "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+      }
+    },
+    {
+      "time": "2026-10-21T20:56:06.835Z",
+      "service": "server",
+      "message": "request failed",
+      "data": {
+        "requestID": "1b93a40b-5b27-4af3-a373-247551f61e06",
+        "method": "GET",
+        "path": "/channel",
+        "statusCode": 400,
+        "error": {
+          "type": "ProviderModelNotFoundError",
+          "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+          "stack": "ProviderModelNotFoundError: ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}\n    at getModelFromCatalog (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:1229:17)\n    at validateConfigModelReferences (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\model-reference-validation.ts:45:14)\n    at async validateConfigCandidate (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\candidate-validation.ts:18:30)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:51:11)\n    at async stage (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\open-lifecycle.ts:38:28)\n    at async validateInstanceConversationCapabilities (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:49:30)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:1131:11)\n    at processTicksAndRejections (native:7:39)",
+          "data": {
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "suggestions": []
+          },
+          "name": "ProviderModelNotFoundError"
+        }
+      }
+    },
+    {
+      "time": "2026-10-21T20:56:07.415Z",
+      "service": "overlay:project-load",
+      "message": "config load failed",
+      "data": {
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+        "error": "channel: API 400 channel?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cmember-live-rendering-412-fresh%5Cproject: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}"
+      }
+    }
+  ],
+  "scope": "Original actual error fields;zero credentials/catalog;server ModelNotFound/config.validate propagation;not Provider qualification"
+}

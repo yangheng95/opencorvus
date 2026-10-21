@@ -1,0 +1,316 @@
+{
+  "at": "2026-10-21T21:01:03.176Z",
+  "page": 109,
+  "url": "http://127.0.0.1:18979/ui/?sessionID=ses_-zUS0X33CzzWEKMgCk98&sessionKind=conversation&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cmember-live-rendering-412-fresh%5Cproject&experience=work",
+  "observations": [
+    {
+      "label": "source-a-copy-pointer-setup",
+      "at": "2026-10-21T20:56:44.288Z",
+      "activeLabel": "Copy source location: [2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debate · Copied",
+      "activeRole": null,
+      "activeTag": "BUTTON",
+      "insideDock": true,
+      "insideMember": true,
+      "scrollDataset": {
+        "followLock": "false",
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 58787,
+      "sourceTop": 52617.6015625
+    },
+    {
+      "label": "native-tab-source-a-to-adjacent-tool",
+      "at": "2026-10-21T20:56:52.733Z",
+      "activeLabel": "webfetch · https://aclanthology.org/2025.naacl-long.475/",
+      "activeRole": null,
+      "activeTag": "BUTTON",
+      "insideDock": true,
+      "insideMember": true,
+      "scrollDataset": {
+        "followLock": "false",
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 58787,
+      "sourceTop": 52617.6015625
+    },
+    {
+      "label": "keyboard-enter-adjacent-tool",
+      "at": "2026-10-21T20:56:54.297Z",
+      "activeLabel": "webfetch · https://aclanthology.org/2025.naacl-long.475/",
+      "activeRole": null,
+      "activeTag": "BUTTON",
+      "insideDock": true,
+      "insideMember": true,
+      "scrollDataset": {
+        "followLock": "false",
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 59313,
+      "sourceTop": 52617.6015625
+    },
+    {
+      "label": "native-control-end-from-tool",
+      "at": "2026-10-21T20:57:09.991Z",
+      "activeLabel": "webfetch · https://aclanthology.org/2025.naacl-long.475/",
+      "activeRole": null,
+      "activeTag": "BUTTON",
+      "insideDock": true,
+      "insideMember": true,
+      "scrollDataset": {
+        "followLock": "true",
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 59313,
+      "sourceTop": 58736.80078125
+    },
+    {
+      "label": "native-tab-after-control-end",
+      "at": "2026-10-21T20:57:11.410Z",
+      "activeLabel": "Raw Input",
+      "activeRole": null,
+      "activeTag": "BUTTON",
+      "insideDock": true,
+      "insideMember": true,
+      "scrollDataset": {
+        "followLock": "false",
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 59313,
+      "sourceTop": 52818.3984375
+    },
+    {
+      "label": "native-control-home-from-payload",
+      "at": "2026-10-21T20:57:36.204Z",
+      "activeLabel": "Raw Input",
+      "activeRole": null,
+      "activeTag": "BUTTON",
+      "insideDock": true,
+      "insideMember": true,
+      "scrollDataset": {
+        "followLock": "false",
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 59313,
+      "sourceTop": 0
+    },
+    {
+      "label": "native-tab-after-control-home",
+      "at": "2026-10-21T20:57:37.602Z",
+      "activeLabel": "Expand Input",
+      "activeRole": null,
+      "activeTag": "BUTTON",
+      "insideDock": true,
+      "insideMember": true,
+      "scrollDataset": {
+        "followLock": "false",
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 59313,
+      "sourceTop": 52818.3984375
+    },
+    {
+      "label": "keyboard-expand-input",
+      "at": "2026-10-21T20:57:39.070Z",
+      "activeLabel": "Collapse Input",
+      "activeRole": null,
+      "activeTag": "BUTTON",
+      "insideDock": true,
+      "insideMember": true,
+      "scrollDataset": {
+        "followLock": "false",
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 59448,
+      "sourceTop": 52818.3984375
+    },
+    {
+      "label": "close-panel-with-keyboard",
+      "at": "2026-10-21T20:57:51.610Z",
+      "activeLabel": "Open right dock",
+      "activeRole": null,
+      "activeTag": "BUTTON",
+      "insideDock": false,
+      "insideMember": false,
+      "scrollDataset": {
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 0,
+      "sourceTop": 0
+    },
+    {
+      "label": "header-keyboard-reopen",
+      "at": "2026-10-21T20:57:53.625Z",
+      "activeLabel": "Close right dock",
+      "activeRole": null,
+      "activeTag": "BUTTON",
+      "insideDock": false,
+      "insideMember": false,
+      "scrollDataset": {
+        "followLock": "false",
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 59448,
+      "sourceTop": 52818.3984375
+    },
+    {
+      "label": "next-tab-from-header-reopen",
+      "at": "2026-10-21T20:57:55.069Z",
+      "activeLabel": "Create goal",
+      "activeRole": null,
+      "activeTag": "BUTTON",
+      "insideDock": false,
+      "insideMember": false,
+      "scrollDataset": {
+        "followLock": "false",
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 59448,
+      "sourceTop": 52818.3984375
+    },
+    {
+      "label": "keyboard-space-collapse-input-after-reopen",
+      "at": "2026-10-21T20:59:08.017Z",
+      "activeLabel": "Expand Input",
+      "activeRole": null,
+      "activeTag": "BUTTON",
+      "insideDock": true,
+      "insideMember": true,
+      "scrollDataset": {
+        "followLock": "false",
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 59313,
+      "sourceTop": 52818.3984375
+    },
+    {
+      "label": "shift-tab-to-input-format",
+      "at": "2026-10-21T20:59:09.440Z",
+      "activeLabel": "Raw Input",
+      "activeRole": null,
+      "activeTag": "BUTTON",
+      "insideDock": true,
+      "insideMember": true,
+      "scrollDataset": {
+        "followLock": "false",
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 59313,
+      "sourceTop": 52818.3984375
+    },
+    {
+      "label": "shift-tab-to-original-tool",
+      "at": "2026-10-21T20:59:10.821Z",
+      "activeLabel": "webfetch · https://aclanthology.org/2025.naacl-long.475/",
+      "activeRole": null,
+      "activeTag": "BUTTON",
+      "insideDock": true,
+      "insideMember": true,
+      "scrollDataset": {
+        "followLock": "false",
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 59313,
+      "sourceTop": 52818.3984375
+    },
+    {
+      "label": "keyboard-space-collapse-tool",
+      "at": "2026-10-21T20:59:12.189Z",
+      "activeLabel": "webfetch · https://aclanthology.org/2025.naacl-long.475/",
+      "activeRole": null,
+      "activeTag": "BUTTON",
+      "insideDock": true,
+      "insideMember": true,
+      "scrollDataset": {
+        "followLock": "false",
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 58787,
+      "sourceTop": 52818.3984375
+    },
+    {
+      "label": "native-tab-to-source-b-link",
+      "at": "2026-10-21T20:59:13.575Z",
+      "activeLabel": "Open web source: S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology · aclanthology.org",
+      "activeRole": null,
+      "activeTag": "A",
+      "insideDock": true,
+      "insideMember": true,
+      "scrollDataset": {
+        "followLock": "false",
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 58787,
+      "sourceTop": 52818.3984375
+    },
+    {
+      "label": "native-tab-to-source-b-copy",
+      "at": "2026-10-21T20:59:14.904Z",
+      "activeLabel": "Copy source location: S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology",
+      "activeRole": null,
+      "activeTag": "BUTTON",
+      "insideDock": true,
+      "insideMember": true,
+      "scrollDataset": {
+        "followLock": "false",
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 58787,
+      "sourceTop": 52818.3984375
+    },
+    {
+      "label": "keyboard-space-copy-source-b",
+      "at": "2026-10-21T20:59:16.240Z",
+      "activeLabel": "Copy source location: S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology · Copied",
+      "activeRole": null,
+      "activeTag": "BUTTON",
+      "insideDock": true,
+      "insideMember": true,
+      "scrollDataset": {
+        "followLock": "false",
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 58787,
+      "sourceTop": 52818.3984375
+    },
+    {
+      "label": "keyboard-space-copy-source-a",
+      "at": "2026-10-21T21:01:00.453Z",
+      "activeLabel": "Copy source location: [2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debate · Copied",
+      "activeRole": null,
+      "activeTag": "BUTTON",
+      "insideDock": true,
+      "insideMember": true,
+      "scrollDataset": {
+        "followLock": "false",
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 58787,
+      "sourceTop": 52617.6015625
+    },
+    {
+      "label": "own-paste-draft-cleared",
+      "at": "2026-10-21T21:01:03.176Z",
+      "activeLabel": "",
+      "activeRole": null,
+      "activeTag": "TEXTAREA",
+      "insideDock": false,
+      "insideMember": false,
+      "scrollDataset": {
+        "followLock": "false",
+        "ui": "subagent-conversation-scroll"
+      },
+      "sourceHeight": 58787,
+      "sourceTop": 52617.6015625
+    }
+  ],
+  "clipboardReader": {
+    "observed": "const roles = [\"原文\", \"来源\", \"展示建议\"];\nconst principle = \"各自承担职责，不互相替代\";\nconst boundary = \"让判断与已有证据保持一致\";",
+    "provenance": "CUA clipboard.readText after source B copy;returned prior code;not product clipboard acceptance"
+  },
+  "actualPaste": {
+    "sourceB": "https://aclanthology.org/2025.naacl-long.475/",
+    "sourceA": "https://arxiv.org/abs/2509.11035v1",
+    "provenance": "Real Ctrl+V into owned unsent composer;both drafts cleared"
+  },
+  "limits": "Manual keyboard and screenshots only;no UI assertion,continuity or visual snapshot test"
+}

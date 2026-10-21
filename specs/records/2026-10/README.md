@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Sources键盘与侧栏焦点](2026-10-22-source-keyboard-dock.md)：[十图与原焦点](../../artifacts/2026-10-22-source-keyboard-dock/README.md)，成员Source/Tool键盘链、整栏交接与原生粘贴；零模型，原数据/物理链完整。
+
 - [成员流中的语言切换与Sources](2026-10-22-member-locale-stream.md)：[十图与原观察](../../artifacts/2026-10-22-member-locale-stream/README.md)，流中中英语言/来源开合、完成态复制；4/8实际Sol及原物理/配对/自然记忆更新结算，生产未改。
 
 - [离线启动链接与首次连接恢复](2026-10-22-offline-location-recovery.md)：[十五图与九scope结算](../../artifacts/2026-10-22-offline-location-recovery/README.md)，首次恢复消费原输入，后续重连保留当前选择；七项控制合同、原数据/schema保持，七scope零模型及独立配置完整Sol预检2/8已结算。

@@ -1,0 +1,20 @@
+[
+  {
+    "stage": "before",
+    "source": {
+      "allOriginalRows": "Exact rowid/primary key/all fields/times",
+      "bytes": 73891840,
+      "modifiedAtMs": 1792611940320.7053
+    },
+    "schema": "Same actual application objects and version3;integrity ok",
+    "canonical": "Complete source bytes exact",
+    "tables": 90,
+    "originalRows": 156566,
+    "originalRowDifferences": [],
+    "countChanges": [],
+    "providerActivities": {
+      "original": 391,
+      "current": 391
+    }
+  }
+]

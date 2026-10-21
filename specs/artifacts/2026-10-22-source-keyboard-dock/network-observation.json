@@ -1,0 +1,1366 @@
+{
+  "at": "2026-10-21T21:02:04.198Z",
+  "requests": [
+    {
+      "time": "2026-10-21T20:55:56.764Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:56:02.430Z",
+      "path": "/ui/",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:02.453Z",
+      "path": "/ui/assets/main-DhV28lza.js",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:02.455Z",
+      "path": "/ui/assets/CommandMenuSurface-9Ez69chO.css",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:02.456Z",
+      "path": "/ui/assets/CommandMenuSurface-CN3W_QEU.js",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:02.458Z",
+      "path": "/ui/assets/main-BG2oCMFI.css",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:02.459Z",
+      "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:02.459Z",
+      "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:02.508Z",
+      "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:02.584Z",
+      "path": "/ui/i18n/zh-CN.json",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:02.584Z",
+      "path": "/ui/i18n/en-US.json",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:02.741Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:02.748Z",
+      "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:02.925Z",
+      "path": "/mailbox",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 134
+    },
+    {
+      "time": "2026-10-21T20:56:02.940Z",
+      "path": "/mission-skill/catalog",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 145
+    },
+    {
+      "time": "2026-10-21T20:56:02.942Z",
+      "path": "/global/composer-references",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 182
+    },
+    {
+      "time": "2026-10-21T20:56:02.944Z",
+      "path": "/expert-squad/search",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 150
+    },
+    {
+      "time": "2026-10-21T20:56:02.948Z",
+      "path": "/work-ledger/events",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 4
+    },
+    {
+      "time": "2026-10-21T20:56:03.042Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 93
+    },
+    {
+      "time": "2026-10-21T20:56:03.142Z",
+      "path": "/mission",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 98
+    },
+    {
+      "time": "2026-10-21T20:56:03.153Z",
+      "path": "/mailbox",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 11
+    },
+    {
+      "time": "2026-10-21T20:56:03.272Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 114
+    },
+    {
+      "time": "2026-10-21T20:56:03.279Z",
+      "path": "/mailbox",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 7
+    },
+    {
+      "time": "2026-10-21T20:56:03.375Z",
+      "path": "/mission",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 79
+    },
+    {
+      "time": "2026-10-21T20:56:03.437Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 61
+    },
+    {
+      "time": "2026-10-21T20:56:03.447Z",
+      "path": "/mailbox",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 10
+    },
+    {
+      "time": "2026-10-21T20:56:03.483Z",
+      "path": "/coding/work/session/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 547
+    },
+    {
+      "time": "2026-10-21T20:56:03.610Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 107
+    },
+    {
+      "time": "2026-10-21T20:56:03.612Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:03.669Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 44
+    },
+    {
+      "time": "2026-10-21T20:56:03.695Z",
+      "path": "/config",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 72
+    },
+    {
+      "time": "2026-10-21T20:56:03.725Z",
+      "path": "/chat/capability",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 930
+    },
+    {
+      "time": "2026-10-21T20:56:03.728Z",
+      "path": "/path",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:03.827Z",
+      "path": "/mcp",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 130
+    },
+    {
+      "time": "2026-10-21T20:56:04.149Z",
+      "path": "/global/tasks",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 319
+    },
+    {
+      "time": "2026-10-21T20:56:04.237Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 76
+    },
+    {
+      "time": "2026-10-21T20:56:04.285Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 41
+    },
+    {
+      "time": "2026-10-21T20:56:04.355Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 46
+    },
+    {
+      "time": "2026-10-21T20:56:04.357Z",
+      "path": "/channel",
+      "method": "GET",
+      "statusCode": 400,
+      "duration": 688
+    },
+    {
+      "time": "2026-10-21T20:56:04.414Z",
+      "path": "/ui/assets/noto-sans-sc-119-wght-normal-BfzSEbFz.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:04.414Z",
+      "path": "/ui/assets/noto-sans-sc-118-wght-normal-BPEb0gM9.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:04.417Z",
+      "path": "/ui/assets/noto-sans-sc-117-wght-normal-Dsz3vkzU.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:04.419Z",
+      "path": "/ui/assets/noto-sans-sc-116-wght-normal-vdFVzbO2.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:04.421Z",
+      "path": "/ui/assets/noto-sans-sc-113-wght-normal-OgQXOX6x.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:04.421Z",
+      "path": "/ui/assets/noto-sans-sc-115-wght-normal-BN__2iBG.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:04.426Z",
+      "path": "/ui/assets/noto-sans-sc-114-wght-normal-CRH9SDZu.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:04.426Z",
+      "path": "/ui/assets/noto-sans-sc-112-wght-normal-CiZxJMyY.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:04.555Z",
+      "path": "/expert-squad/catalog",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1762
+    },
+    {
+      "time": "2026-10-21T20:56:04.568Z",
+      "path": "/expert-squad/inspect",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 10
+    },
+    {
+      "time": "2026-10-21T20:56:04.603Z",
+      "path": "/skill/mounts",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 921
+    },
+    {
+      "time": "2026-10-21T20:56:05.205Z",
+      "path": "/vcs",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1376
+    },
+    {
+      "time": "2026-10-21T20:56:05.214Z",
+      "path": "/experimental/project-memory",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 3
+    },
+    {
+      "time": "2026-10-21T20:56:05.379Z",
+      "path": "/session/ses_-zUS0X33CzzWEKMgCk98/conversation",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 164
+    },
+    {
+      "time": "2026-10-21T20:56:05.850Z",
+      "path": "/global/tasks",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 407
+    },
+    {
+      "time": "2026-10-21T20:56:05.876Z",
+      "path": "/ui/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:05.877Z",
+      "path": "/path",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:05.977Z",
+      "path": "/session/ses_-zUS0X33CzzWEKMgCk98/events",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 99
+    },
+    {
+      "time": "2026-10-21T20:56:06.007Z",
+      "path": "/ui/assets/noto-sans-sc-110-wght-normal-D2JBr045.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:06.007Z",
+      "path": "/ui/assets/noto-sans-sc-103-wght-normal-DGHo20nu.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:06.015Z",
+      "path": "/ui/assets/markdown-render.worker-DXg_fqFo.js",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:06.020Z",
+      "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+      "method": "GET",
+      "statusCode": 400,
+      "duration": 578
+    },
+    {
+      "time": "2026-10-21T20:56:06.083Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:56:06.095Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 5
+    },
+    {
+      "time": "2026-10-21T20:56:06.096Z",
+      "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+      "method": "GET",
+      "statusCode": 400,
+      "duration": 16
+    },
+    {
+      "time": "2026-10-21T20:56:06.300Z",
+      "path": "/ui/assets/noto-sans-sc-111-wght-normal-ClFr5QXM.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:06.300Z",
+      "path": "/ui/assets/noto-sans-sc-109-wght-normal-CnjNbNmw.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:06.301Z",
+      "path": "/ui/assets/noto-sans-sc-108-wght-normal-7aXvqIa2.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:06.301Z",
+      "path": "/ui/assets/noto-sans-sc-104-wght-normal-CJT2ioDJ.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:06.414Z",
+      "path": "/ui/assets/noto-sans-sc-106-wght-normal-D6uUHw3w.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:06.501Z",
+      "path": "/ui/assets/noto-sans-sc-107-wght-normal-kFQzJDLH.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:06.815Z",
+      "path": "/vcs",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 937
+    },
+    {
+      "time": "2026-10-21T20:56:06.819Z",
+      "path": "/experimental/project-memory",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:56:06.821Z",
+      "path": "/mcp",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:06.822Z",
+      "path": "/config",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:56:06.835Z",
+      "path": "/channel",
+      "method": "GET",
+      "statusCode": 400,
+      "duration": 13
+    },
+    {
+      "time": "2026-10-21T20:56:06.898Z",
+      "path": "/skill/mounts",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 79
+    },
+    {
+      "time": "2026-10-21T20:56:09.310Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:11.995Z",
+      "path": "/session/ses_-zUS0WzzQzzDOGrIbYwN/conversation",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 134
+    },
+    {
+      "time": "2026-10-21T20:56:12.530Z",
+      "path": "/ui/assets/noto-sans-sc-59-wght-normal-Azv2Ku9_.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:12.829Z",
+      "path": "/ui/assets/noto-sans-sc-82-wght-normal-DcxfR5OJ.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:13.127Z",
+      "path": "/ui/assets/noto-sans-sc-105-wght-normal-BFoiJwz2.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:14.297Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:56:16.826Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:19.299Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:24.304Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:56:26.822Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:29.297Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:32.528Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:56:34.300Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:36.820Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:39.309Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:56:44.300Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:56:46.831Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:49.302Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:52.749Z",
+      "path": "/session/ses_-zUS0WzzQzzDOGrIbYwN/message/msg_g0VYesP3700ZdCWnDQnN/part/prt_g0VYesQHz00o9nfWy8pH",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 3
+    },
+    {
+      "time": "2026-10-21T20:56:52.842Z",
+      "path": "/ui/assets/noto-sans-sc-101-wght-normal-c94LAl5p.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:56:52.843Z",
+      "path": "/ui/assets/noto-sans-sc-87-wght-normal-DYfJ-vGE.woff2",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:54.299Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:56:56.830Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:56:59.297Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:57:04.310Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:57:06.822Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:57:09.308Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:57:14.299Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:57:16.830Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:57:19.304Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:57:24.310Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:57:26.828Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:57:29.311Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:57:34.310Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:57:36.828Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:57:39.579Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:57:44.309Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:57:46.833Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:57:49.309Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:57:51.781Z",
+      "path": "/session/ses_-zUS0WzzQzzDOGrIbYwN/conversation",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 123
+    },
+    {
+      "time": "2026-10-21T20:57:54.299Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:57:56.828Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:57:59.309Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:58:04.300Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:58:06.828Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:58:09.303Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:58:14.304Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:58:16.826Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:58:19.311Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:58:24.306Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:58:26.826Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:58:29.306Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:58:34.310Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:58:36.832Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:58:39.311Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:58:44.309Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:58:46.833Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:58:49.307Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:58:54.588Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:58:56.823Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:58:59.302Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:59:04.311Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:59:06.896Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:59:09.300Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:59:14.306Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:59:16.834Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:59:19.309Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:59:24.305Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:59:26.837Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:59:29.309Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:59:34.302Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:59:36.826Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:59:39.307Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:59:44.300Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:59:46.828Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:59:49.309Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T20:59:54.313Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T20:59:56.825Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T20:59:59.310Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T21:00:04.306Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T21:00:06.835Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T21:00:09.311Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T21:00:14.310Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T21:00:16.825Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T21:00:19.306Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T21:00:24.297Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T21:00:26.826Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T21:00:29.312Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T21:00:34.310Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T21:00:36.822Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T21:00:39.311Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T21:00:44.303Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T21:00:46.829Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T21:00:49.307Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T21:00:54.299Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T21:00:56.825Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-21T21:00:59.379Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T21:01:04.302Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T21:01:06.825Z",
+      "path": "/global/health",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-21T21:01:09.302Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T21:01:14.307Z",
+      "path": "/continuous-goal/chat/ses_-zUS0X33CzzWEKMgCk98",
+      "method": "GET",
+      "statusCode": 200,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-21T21:01:16.465Z",
+      "path": "/shutdown",
+      "method": "POST",
+      "statusCode": 200,
+      "duration": 1
+    }
+  ],
+  "errors": [
+    {
+      "time": "2026-10-21T20:56:04.351Z",
+      "service": "project.open",
+      "message": "project.open.stage",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "time": "2026-10-21T20:56:04.356Z",
+      "service": "server",
+      "message": "request failed",
+      "path": "/channel",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "stack": "ProviderModelNotFoundError: ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}\n    at getModelFromCatalog (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:1229:17)\n    at validateConfigModelReferences (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\model-reference-validation.ts:45:14)\n    at async validateConfigCandidate (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\candidate-validation.ts:18:30)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:51:11)\n    at async stage (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\open-lifecycle.ts:38:28)\n    at async validateInstanceConversationCapabilities (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:49:30)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:1131:11)\n    at processTicksAndRejections (native:7:39)",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        },
+        "name": "ProviderModelNotFoundError"
+      }
+    },
+    {
+      "time": "2026-10-21T20:56:06.010Z",
+      "service": "overlay:project-load",
+      "message": "config reload failed",
+      "error": "channel: API 400 channel?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cmember-live-rendering-412-fresh%5Cproject: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}"
+    },
+    {
+      "time": "2026-10-21T20:56:06.019Z",
+      "service": "project.open",
+      "message": "project.open.stage",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "time": "2026-10-21T20:56:06.020Z",
+      "service": "server",
+      "message": "request failed",
+      "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "stack": "ProviderModelNotFoundError: ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}\n    at getModelFromCatalog (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:1229:17)\n    at validateConfigModelReferences (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\model-reference-validation.ts:45:14)\n    at async validateConfigCandidate (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\candidate-validation.ts:18:30)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:51:11)\n    at async stage (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\open-lifecycle.ts:38:28)\n    at async validateInstanceConversationCapabilities (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:49:30)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:1131:11)\n    at processTicksAndRejections (native:7:39)",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        },
+        "name": "ProviderModelNotFoundError"
+      }
+    },
+    {
+      "time": "2026-10-21T20:56:06.093Z",
+      "service": "project.open",
+      "message": "project.open.stage",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "time": "2026-10-21T20:56:06.095Z",
+      "service": "server",
+      "message": "request failed",
+      "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "stack": "ProviderModelNotFoundError: ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}\n    at getModelFromCatalog (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:1229:17)\n    at validateConfigModelReferences (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\model-reference-validation.ts:45:14)\n    at async validateConfigCandidate (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\candidate-validation.ts:18:30)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:51:11)\n    at async stage (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\open-lifecycle.ts:38:28)\n    at async validateInstanceConversationCapabilities (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:49:30)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:1131:11)\n    at processTicksAndRejections (native:7:39)",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        },
+        "name": "ProviderModelNotFoundError"
+      }
+    },
+    {
+      "time": "2026-10-21T20:56:06.706Z",
+      "service": "overlay:ui",
+      "message": "Model configuration unavailable"
+    },
+    {
+      "time": "2026-10-21T20:56:06.834Z",
+      "service": "project.open",
+      "message": "project.open.stage",
+      "error": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+    },
+    {
+      "time": "2026-10-21T20:56:06.835Z",
+      "service": "server",
+      "message": "request failed",
+      "path": "/channel",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "stack": "ProviderModelNotFoundError: ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}\n    at getModelFromCatalog (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:1229:17)\n    at validateConfigModelReferences (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\model-reference-validation.ts:45:14)\n    at async validateConfigCandidate (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\candidate-validation.ts:18:30)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:51:11)\n    at async stage (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\open-lifecycle.ts:38:28)\n    at async validateInstanceConversationCapabilities (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:49:30)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:1131:11)\n    at processTicksAndRejections (native:7:39)",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        },
+        "name": "ProviderModelNotFoundError"
+      }
+    },
+    {
+      "time": "2026-10-21T20:56:07.415Z",
+      "service": "overlay:project-load",
+      "message": "config load failed",
+      "error": "channel: API 400 channel?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cmember-live-rendering-412-fresh%5Cproject: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}"
+    }
+  ]
+}

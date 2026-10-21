@@ -1,0 +1,78 @@
+{
+  "at": "2026-10-21T21:02:04.183Z",
+  "originalHandle": 5655,
+  "originalExit": 0,
+  "shutdown": {
+    "observedAtUtc": "2026-10-21T21:01:16.5149641Z",
+    "statusCode": 200,
+    "target": {
+      "pid": 82032,
+      "processInstanceID": "win32:639282129529614804",
+      "occurrenceID": "0dcfce18-08de-47da-bc49-1eb4c5ecd965"
+    },
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYii35F001konQiPU7\"}",
+    "occurrence": "source-keyboard-dock-517-before-service-ac8c171e-9f18-4fa5-9662-b1c8213e16f1"
+  },
+  "native": {
+    "occurrence": "source-keyboard-dock-517-before-service-ac8c171e-9f18-4fa5-9662-b1c8213e16f1",
+    "outcome": "settled",
+    "host": {
+      "pid": 95092,
+      "processInstanceID": "win32:639282129520409295",
+      "occurrenceID": "4419489c-d77a-4c97-81c1-1b42712240eb"
+    },
+    "target": {
+      "pid": 82032,
+      "processInstanceID": "win32:639282129529614804",
+      "occurrenceID": "0dcfce18-08de-47da-bc49-1eb4c5ecd965"
+    },
+    "observedAtUtc": "2026-10-21T21:01:16.601Z",
+    "deadlineAt": 1792617351066,
+    "terminal": {
+      "occurrenceID": "source-keyboard-dock-517-before-service-ac8c171e-9f18-4fa5-9662-b1c8213e16f1",
+      "pid": 82032,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "launcher": {
+    "observedAtUtc": "2026-10-21T21:01:16.6570464Z",
+    "childExitCode": 0
+  },
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 95092,
+        "processInstanceID": "win32:639282129520409295",
+        "occurrenceID": "4419489c-d77a-4c97-81c1-1b42712240eb"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 82032,
+        "processInstanceID": "win32:639282129529614804",
+        "occurrenceID": "0dcfce18-08de-47da-bc49-1eb4c5ecd965"
+      }
+    }
+  ],
+  "provider": {
+    "at": "2026-10-21T20:55:56.765Z",
+    "maximum": 0,
+    "actual": 0,
+    "exhausted": false,
+    "requests": [],
+    "scope": "Offline startup location review; no credentials or model catalog copied"
+  },
+  "page": 109,
+  "pageClosed": true,
+  "authority": "No auth/models copied;no new model inputs or messages",
+  "unusedAfter": "No new production root cause;after not prepared or started",
+  "sourceUI": "Same formal main-DhV28lza;no product source change"
+}

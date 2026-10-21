@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Sources键盘与侧栏焦点](records/2026-10/2026-10-22-source-keyboard-dock.md)：[十张实图](artifacts/2026-10-22-source-keyboard-dock/README.md)，来源/Tool原生Tab、Home/End和整栏焦点链；剪贴板工具观测冲突由真实CtrlV复核，两源正确，零模型/原数据保持。
+
 - [成员流中的语言切换与Sources](records/2026-10/2026-10-22-member-locale-stream.md)：[十张实际截图](artifacts/2026-10-22-member-locale-stream/README.md)，原成员24节真实流中语言切换/来源展开/开合与完成态复制，Sol4/8及原物理/授权/数据结算；未确证新生产问题。
 
 - [离线启动链接与首次连接恢复](records/2026-10/2026-10-22-offline-location-recovery.md)：[十五张实图与原请求/结算](artifacts/2026-10-22-offline-location-recovery/README.md)，Task/Chat自动恢复、跨项目重连和新launcher优先实测；七项控制合同及原数据保持，追加模型配置完整的Sol流式预检2/8、四成员授权副本退休。

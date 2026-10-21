@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Sources键盘与侧栏焦点](2026-10-22-source-keyboard-dock/README.md)：十图、真实键盘/焦点交接与两来源CtrlV验证；工具剪贴板旧观测完整保留，零模型及原90表全字段/物理链结算。
+
 - [成员流中的语言切换与Sources](2026-10-22-member-locale-stream/README.md)：十张人工图、真实24节流/中英界面/来源开合及复制、Sol4/8全source EOF，原数据与自然记忆更新分别保留，完整物理/四成员授权退休。
 
 - [离线启动链接与首次连接恢复](2026-10-22-offline-location-recovery/README.md)：十五张人工图、真实前后端离线/上线与PID替换；Task/Chat恢复及新意图优先、七项正向合同，七scope零模型及独立配置完整Sol预检2/8、原数据和四成员授权退休结算。
