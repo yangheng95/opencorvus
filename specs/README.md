@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [原生查询增量输出](records/2026-10/2026-10-22-native-query-stream.md)：[零模型私有资格](artifacts/2026-10-22-native-query-stream/README.md)，补齐旧整包输出原型的真实首字节、双流和每query取消/终态验证。
+
 - [当前配置全量验证](records/2026-10/2026-10-22-config-current-validation.md)：[168候选/两轮与4真图](artifacts/2026-10-22-config-current-validation/README.md)，520后原保存/恢复约13–14.3秒、完整canonical恢复；20秒读取通过、10/5仍失败，2/4 Sol及原90表/167目录保持。
 
 - [配置来源顺序](records/2026-10/2026-10-22-config-source-order.md)：[42正向合同与7张真图](artifacts/2026-10-22-config-source-order/README.md)，修复global重复合并覆盖custom及Windows别名，保留目录资源；Sol4/8/八成员退休、最终零模型、90表原数据/166目录保持。

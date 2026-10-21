@@ -1,0 +1,18 @@
+{
+  "scope": "native-query-stream-522",
+  "modelRequests": 0,
+  "providerAuthority": "None;no catalog/auth copied",
+  "budgets": {
+    "bufferedControl": 1,
+    "contractsA": 14,
+    "lifecycleA": 2,
+    "conditionalContractsB": 13,
+    "correctedBufferedControl": 1
+  },
+  "maximumProcessQueries": 31,
+  "scopeDeadlineMs": 240000,
+  "startupInactivityMs": 180000,
+  "source": "Private490 native copy;only reader/response streaming changed;production untouched",
+  "runtime": "Frozen Bun1.4.0 and original413/446 outer ownership",
+  "publicEligibility": "Output-only private observer/collection;stdin/backpressure/env/general recovery remain unqualified"
+}
