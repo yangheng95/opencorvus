@@ -1,0 +1,4521 @@
+{
+  "observedAt": "2026-10-21T00:19:47.296Z",
+  "startedAt": "2026-10-21T00:19:05.223Z",
+  "run": "after",
+  "mode": "after",
+  "runtime": "1.4.0",
+  "head": "565567a64d27f0e35f5b40d35ec8e2404c79fa25",
+  "owner": {
+    "pid": 89180,
+    "processInstanceID": "win32:639281387419891646",
+    "occurrenceID": "9621c2d2-bc62-4c25-8045-346332f9f8b6"
+  },
+  "indexedFiles": 71787,
+  "wallMs": 42061.876200000006,
+  "parentCpuUserMs": 6985,
+  "parentCpuSystemMs": 4375,
+  "hits": [],
+  "gitCalls": 374,
+  "blobQueries": 36270,
+  "blobOutputBytes": 1497520386,
+  "records": [
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "ls-tree",
+        "-r",
+        "-z",
+        "-l",
+        "565567a64d27f0e35f5b40d35ec8e2404c79fa25"
+      ],
+      "ms": 2219.8817000000004,
+      "status": 0,
+      "inputObjects": 0,
+      "outputBytes": 12732585
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "ls-files",
+        "--stage",
+        "--full-name",
+        "-z"
+      ],
+      "ms": 120.37099999999919,
+      "status": 0,
+      "inputObjects": 0,
+      "outputBytes": 11942923
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 1977.433,
+      "status": 0,
+      "inputObjects": 64223,
+      "outputBytes": 3262951
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "rev-list",
+        "--reverse",
+        "565567a64d27f0e35f5b40d35ec8e2404c79fa25",
+        "^565567a64d27f0e35f5b40d35ec8e2404c79fa25",
+        "--"
+      ],
+      "ms": 49.50529999999981,
+      "status": 0,
+      "inputObjects": 0,
+      "outputBytes": 0
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 60.69460000000072,
+      "status": 0,
+      "inputObjects": 1916,
+      "outputBytes": 97392
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 110.5619000000006,
+      "status": 0,
+      "inputObjects": 1916,
+      "outputBytes": 8408477
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 63.110999999999876,
+      "status": 0,
+      "inputObjects": 809,
+      "outputBytes": 41332
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 110.38619999999992,
+      "status": 0,
+      "inputObjects": 809,
+      "outputBytes": 8424153
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 61.8823999999986,
+      "status": 0,
+      "inputObjects": 784,
+      "outputBytes": 40093
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 114.10949999999866,
+      "status": 0,
+      "inputObjects": 784,
+      "outputBytes": 8422775
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 63.31880000000092,
+      "status": 0,
+      "inputObjects": 615,
+      "outputBytes": 31569
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 116.09389999999985,
+      "status": 0,
+      "inputObjects": 615,
+      "outputBytes": 8237811
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 61.525800000001254,
+      "status": 0,
+      "inputObjects": 832,
+      "outputBytes": 42427
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 109.14279999999962,
+      "status": 0,
+      "inputObjects": 832,
+      "outputBytes": 8424497
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 52.54559999999947,
+      "status": 0,
+      "inputObjects": 479,
+      "outputBytes": 24407
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 74.66539999999986,
+      "status": 0,
+      "inputObjects": 479,
+      "outputBytes": 8369646
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 50.46169999999984,
+      "status": 0,
+      "inputObjects": 452,
+      "outputBytes": 22905
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 125.44369999999981,
+      "status": 0,
+      "inputObjects": 452,
+      "outputBytes": 8404769
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 54.32049999999981,
+      "status": 0,
+      "inputObjects": 1072,
+      "outputBytes": 54126
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 223.28050000000076,
+      "status": 0,
+      "inputObjects": 1072,
+      "outputBytes": 8295193
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 50.40550000000076,
+      "status": 0,
+      "inputObjects": 444,
+      "outputBytes": 22512
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 75.82389999999941,
+      "status": 0,
+      "inputObjects": 444,
+      "outputBytes": 8389031
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 51.91990000000078,
+      "status": 0,
+      "inputObjects": 724,
+      "outputBytes": 36634
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 85.59770000000026,
+      "status": 0,
+      "inputObjects": 724,
+      "outputBytes": 8205106
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 52.16860000000088,
+      "status": 0,
+      "inputObjects": 412,
+      "outputBytes": 20796
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 72.7497999999996,
+      "status": 0,
+      "inputObjects": 412,
+      "outputBytes": 8393399
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.72200000000157,
+      "status": 0,
+      "inputObjects": 48,
+      "outputBytes": 2540
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 124.72859999999855,
+      "status": 0,
+      "inputObjects": 48,
+      "outputBytes": 8269181
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.96150000000125,
+      "status": 0,
+      "inputObjects": 125,
+      "outputBytes": 6511
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 144.30179999999928,
+      "status": 0,
+      "inputObjects": 125,
+      "outputBytes": 8360188
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 42.538800000000265,
+      "status": 0,
+      "inputObjects": 64,
+      "outputBytes": 3386
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 170.65519999999924,
+      "status": 0,
+      "inputObjects": 64,
+      "outputBytes": 8243475
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 42.28199999999924,
+      "status": 0,
+      "inputObjects": 43,
+      "outputBytes": 2275
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 164.8148000000001,
+      "status": 0,
+      "inputObjects": 43,
+      "outputBytes": 8204285
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.5515000000014,
+      "status": 0,
+      "inputObjects": 37,
+      "outputBytes": 1957
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 178.76939999999922,
+      "status": 0,
+      "inputObjects": 37,
+      "outputBytes": 8220458
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.369699999999284,
+      "status": 0,
+      "inputObjects": 32,
+      "outputBytes": 1693
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 150.84989999999925,
+      "status": 0,
+      "inputObjects": 32,
+      "outputBytes": 8279968
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.862600000000384,
+      "status": 0,
+      "inputObjects": 29,
+      "outputBytes": 1534
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 148.15140000000065,
+      "status": 0,
+      "inputObjects": 29,
+      "outputBytes": 8085189
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.98329999999987,
+      "status": 0,
+      "inputObjects": 27,
+      "outputBytes": 1428
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 146.39290000000074,
+      "status": 0,
+      "inputObjects": 27,
+      "outputBytes": 8177178
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.18289999999979,
+      "status": 0,
+      "inputObjects": 26,
+      "outputBytes": 1376
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 146.26660000000084,
+      "status": 0,
+      "inputObjects": 26,
+      "outputBytes": 8286238
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.31640000000152,
+      "status": 0,
+      "inputObjects": 25,
+      "outputBytes": 1323
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 137.5586000000003,
+      "status": 0,
+      "inputObjects": 25,
+      "outputBytes": 8337771
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.99300000000039,
+      "status": 0,
+      "inputObjects": 22,
+      "outputBytes": 1164
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 121.15289999999914,
+      "status": 0,
+      "inputObjects": 22,
+      "outputBytes": 8192048
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.20060000000012,
+      "status": 0,
+      "inputObjects": 22,
+      "outputBytes": 1163
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 124.42929999999978,
+      "status": 0,
+      "inputObjects": 22,
+      "outputBytes": 8224195
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 43.16660000000047,
+      "status": 0,
+      "inputObjects": 21,
+      "outputBytes": 1111
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 137.6855000000014,
+      "status": 0,
+      "inputObjects": 21,
+      "outputBytes": 8256295
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.418900000000576,
+      "status": 0,
+      "inputObjects": 20,
+      "outputBytes": 1058
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 127.96010000000024,
+      "status": 0,
+      "inputObjects": 20,
+      "outputBytes": 8084009
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.01900000000023,
+      "status": 0,
+      "inputObjects": 19,
+      "outputBytes": 1005
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 105.34350000000086,
+      "status": 0,
+      "inputObjects": 19,
+      "outputBytes": 7970714
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 43.655800000000454,
+      "status": 0,
+      "inputObjects": 16,
+      "outputBytes": 847
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 102.32580000000053,
+      "status": 0,
+      "inputObjects": 16,
+      "outputBytes": 8246180
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.47199999999975,
+      "status": 0,
+      "inputObjects": 16,
+      "outputBytes": 846
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 105.2555999999986,
+      "status": 0,
+      "inputObjects": 16,
+      "outputBytes": 8360766
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.679299999999785,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 740
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 97.04060000000027,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 8190782
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.17190000000119,
+      "status": 0,
+      "inputObjects": 13,
+      "outputBytes": 688
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 109.17189999999937,
+      "status": 0,
+      "inputObjects": 13,
+      "outputBytes": 8189377
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.71660000000156,
+      "status": 0,
+      "inputObjects": 13,
+      "outputBytes": 688
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 103.47999999999956,
+      "status": 0,
+      "inputObjects": 13,
+      "outputBytes": 8345499
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.610899999999674,
+      "status": 0,
+      "inputObjects": 12,
+      "outputBytes": 635
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 91.12199999999939,
+      "status": 0,
+      "inputObjects": 12,
+      "outputBytes": 7727621
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 43.93029999999999,
+      "status": 0,
+      "inputObjects": 12,
+      "outputBytes": 635
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 100.98669999999947,
+      "status": 0,
+      "inputObjects": 12,
+      "outputBytes": 7850643
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.089200000000346,
+      "status": 0,
+      "inputObjects": 12,
+      "outputBytes": 635
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 87.86210000000028,
+      "status": 0,
+      "inputObjects": 12,
+      "outputBytes": 7960709
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 39.8190999999988,
+      "status": 0,
+      "inputObjects": 13,
+      "outputBytes": 687
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 97.84580000000096,
+      "status": 0,
+      "inputObjects": 13,
+      "outputBytes": 8092081
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.470400000000154,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 77.27230000000054,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 8277913
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.57729999999901,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 477
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 95.85159999999996,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 7594874
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.054299999999785,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 581
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 101.59989999999925,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 7681336
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 42.01519999999982,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 529
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 96.99200000000019,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 7662391
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 39.76299999999901,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 529
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 91.46700000000055,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 7662391
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 43.35109999999986,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 529
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 86.88130000000092,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 7662391
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.38379999999961,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 529
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 175.39530000000013,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 7662391
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 45.60870000000068,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 529
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 100.94830000000002,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 7662391
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.987700000001496,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 529
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 102.73749999999927,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 7662391
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 43.5412000000033,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 529
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 79.04609999999957,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 7662391
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.94029999999839,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 529
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 92.59519999999975,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 7662391
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.95420000000013,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 477
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 93.79279999999926,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 7877132
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.61249999999927,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 529
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 91.2451000000001,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 7986220
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.767400000000634,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 581
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 89.75859999999739,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 8005165
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.11230000000069,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 529
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 97.47049999999945,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 8059239
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 42.99120000000039,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 529
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 94.34560000000056,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 8352795
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.334500000000844,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 476
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 89.16920000000027,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 7527690
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 39.837100000000646,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 476
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 91.11009999999806,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 7644581
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.638999999999214,
+      "status": 0,
+      "inputObjects": 8,
+      "outputBytes": 424
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 86.3862999999983,
+      "status": 0,
+      "inputObjects": 8,
+      "outputBytes": 7628946
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.13349999999991,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 481
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 91.3553000000029,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 8085544
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.48979999999938,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 484
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 89.24169999999867,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 8302886
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 116.85550000000148,
+      "status": 0,
+      "inputObjects": 8,
+      "outputBytes": 430
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 75.47290000000066,
+      "status": 0,
+      "inputObjects": 8,
+      "outputBytes": 7357942
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 39.66529999999693,
+      "status": 0,
+      "inputObjects": 8,
+      "outputBytes": 432
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 80.32459999999992,
+      "status": 0,
+      "inputObjects": 8,
+      "outputBytes": 8378570
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.04609999999957,
+      "status": 0,
+      "inputObjects": 8,
+      "outputBytes": 430
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 84.7563999999984,
+      "status": 0,
+      "inputObjects": 8,
+      "outputBytes": 7405655
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.987700000001496,
+      "status": 0,
+      "inputObjects": 8,
+      "outputBytes": 430
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 73.27659999999742,
+      "status": 0,
+      "inputObjects": 8,
+      "outputBytes": 7418324
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.92619999999806,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 482
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 75.72450000000026,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 7439322
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 49.72899999999936,
+      "status": 0,
+      "inputObjects": 451,
+      "outputBytes": 22762
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 134.98949999999968,
+      "status": 0,
+      "inputObjects": 451,
+      "outputBytes": 7942547
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 52.385699999998906,
+      "status": 0,
+      "inputObjects": 777,
+      "outputBytes": 39225
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 154.63450000000012,
+      "status": 0,
+      "inputObjects": 777,
+      "outputBytes": 8093228
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 51.402500000000146,
+      "status": 0,
+      "inputObjects": 568,
+      "outputBytes": 28625
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 99.29750000000058,
+      "status": 0,
+      "inputObjects": 568,
+      "outputBytes": 8250909
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.55789999999979,
+      "status": 0,
+      "inputObjects": 60,
+      "outputBytes": 3171
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 58.726699999999255,
+      "status": 0,
+      "inputObjects": 60,
+      "outputBytes": 8240175
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.277900000000955,
+      "status": 0,
+      "inputObjects": 124,
+      "outputBytes": 6452
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 120.35469999999987,
+      "status": 0,
+      "inputObjects": 124,
+      "outputBytes": 8392369
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 42.01550000000134,
+      "status": 0,
+      "inputObjects": 66,
+      "outputBytes": 3492
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 287.47030000000086,
+      "status": 0,
+      "inputObjects": 66,
+      "outputBytes": 8281268
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.59240000000136,
+      "status": 0,
+      "inputObjects": 47,
+      "outputBytes": 2485
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 205.64110000000073,
+      "status": 0,
+      "inputObjects": 47,
+      "outputBytes": 8303584
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.92280000000028,
+      "status": 0,
+      "inputObjects": 39,
+      "outputBytes": 2063
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 190.96919999999955,
+      "status": 0,
+      "inputObjects": 39,
+      "outputBytes": 8222379
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 42.27019999999902,
+      "status": 0,
+      "inputObjects": 34,
+      "outputBytes": 1799
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 173.40120000000024,
+      "status": 0,
+      "inputObjects": 34,
+      "outputBytes": 8213858
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 42.421699999998964,
+      "status": 0,
+      "inputObjects": 33,
+      "outputBytes": 1745
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 174.7456999999995,
+      "status": 0,
+      "inputObjects": 33,
+      "outputBytes": 8193884
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 42.214100000001054,
+      "status": 0,
+      "inputObjects": 28,
+      "outputBytes": 1482
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 229.97470000000249,
+      "status": 0,
+      "inputObjects": 28,
+      "outputBytes": 8237123
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.245200000001205,
+      "status": 0,
+      "inputObjects": 26,
+      "outputBytes": 1375
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 160.15149999999994,
+      "status": 0,
+      "inputObjects": 26,
+      "outputBytes": 8095086
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.73239999999714,
+      "status": 0,
+      "inputObjects": 25,
+      "outputBytes": 1323
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 146.18249999999898,
+      "status": 0,
+      "inputObjects": 25,
+      "outputBytes": 8285597
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 42.15790000000197,
+      "status": 0,
+      "inputObjects": 24,
+      "outputBytes": 1269
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 144.2642999999989,
+      "status": 0,
+      "inputObjects": 24,
+      "outputBytes": 8097121
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.40639999999985,
+      "status": 0,
+      "inputObjects": 19,
+      "outputBytes": 1005
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 172.6469999999972,
+      "status": 0,
+      "inputObjects": 19,
+      "outputBytes": 8063648
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.5593000000008,
+      "status": 0,
+      "inputObjects": 16,
+      "outputBytes": 847
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 123.15610000000015,
+      "status": 0,
+      "inputObjects": 16,
+      "outputBytes": 8210880
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 39.73329999999987,
+      "status": 0,
+      "inputObjects": 15,
+      "outputBytes": 793
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 129.8830999999991,
+      "status": 0,
+      "inputObjects": 15,
+      "outputBytes": 7936441
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.04290000000037,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 741
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 140.27579999999944,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 7966502
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.82980000000316,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 741
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 115.70990000000165,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 8112117
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 42.035799999997835,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 741
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 119.7892000000029,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 8286205
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.31369999999879,
+      "status": 0,
+      "inputObjects": 16,
+      "outputBytes": 845
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 137.18089999999938,
+      "status": 0,
+      "inputObjects": 16,
+      "outputBytes": 8388627
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.71529999999984,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 741
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 121.7570999999989,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 8313279
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 43.81919999999809,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 741
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 118.07300000000032,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 8313279
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.17619999999806,
+      "status": 0,
+      "inputObjects": 15,
+      "outputBytes": 793
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 118.42580000000089,
+      "status": 0,
+      "inputObjects": 15,
+      "outputBytes": 8371350
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.3137999999999,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 741
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 131.89749999999913,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 8313279
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.42629999999917,
+      "status": 0,
+      "inputObjects": 13,
+      "outputBytes": 688
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 118.65940000000046,
+      "status": 0,
+      "inputObjects": 13,
+      "outputBytes": 8012259
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 114.43920000000071,
+      "status": 0,
+      "inputObjects": 13,
+      "outputBytes": 688
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 100.87219999999797,
+      "status": 0,
+      "inputObjects": 13,
+      "outputBytes": 8016039
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.767399999997,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 740
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 107.87100000000282,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 8307226
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.79190000000017,
+      "status": 0,
+      "inputObjects": 13,
+      "outputBytes": 687
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 109.05589999999938,
+      "status": 0,
+      "inputObjects": 13,
+      "outputBytes": 7781104
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.66270000000077,
+      "status": 0,
+      "inputObjects": 12,
+      "outputBytes": 635
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 104.65599999999904,
+      "status": 0,
+      "inputObjects": 12,
+      "outputBytes": 7960523
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.62619999999879,
+      "status": 0,
+      "inputObjects": 12,
+      "outputBytes": 635
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 103.1909999999989,
+      "status": 0,
+      "inputObjects": 12,
+      "outputBytes": 8143707
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.26090000000113,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 106.08559999999852,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 7698427
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.490600000000995,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 98.72699999999895,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 7779037
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.935199999999895,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 107.22820000000138,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 7787661
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.38829999999871,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 100.03499999999985,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 7787661
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 46.953700000001845,
+      "status": 0,
+      "inputObjects": 50,
+      "outputBytes": 2600
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 178.2456999999995,
+      "status": 0,
+      "inputObjects": 50,
+      "outputBytes": 8187540
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 47.802700000000186,
+      "status": 0,
+      "inputObjects": 224,
+      "outputBytes": 11385
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 64.7064999999966,
+      "status": 0,
+      "inputObjects": 224,
+      "outputBytes": 8392243
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.55370000000039,
+      "status": 0,
+      "inputObjects": 81,
+      "outputBytes": 4243
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 56.064399999999296,
+      "status": 0,
+      "inputObjects": 81,
+      "outputBytes": 8368023
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 42.52880000000005,
+      "status": 0,
+      "inputObjects": 97,
+      "outputBytes": 5075
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 178.8081999999995,
+      "status": 0,
+      "inputObjects": 97,
+      "outputBytes": 8271320
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.26800000000003,
+      "status": 0,
+      "inputObjects": 55,
+      "outputBytes": 2910
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 187.46610000000146,
+      "status": 0,
+      "inputObjects": 55,
+      "outputBytes": 8349277
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 45.394500000002154,
+      "status": 0,
+      "inputObjects": 40,
+      "outputBytes": 2115
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 156.19390000000203,
+      "status": 0,
+      "inputObjects": 40,
+      "outputBytes": 8336877
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.84440000000177,
+      "status": 0,
+      "inputObjects": 34,
+      "outputBytes": 1799
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 144.46249999999782,
+      "status": 0,
+      "inputObjects": 34,
+      "outputBytes": 8184648
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 114.22599999999875,
+      "status": 0,
+      "inputObjects": 31,
+      "outputBytes": 1640
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 137.71570000000065,
+      "status": 0,
+      "inputObjects": 31,
+      "outputBytes": 8127871
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.729699999999866,
+      "status": 0,
+      "inputObjects": 30,
+      "outputBytes": 1587
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 155.81619999999748,
+      "status": 0,
+      "inputObjects": 30,
+      "outputBytes": 8356164
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.66790000000037,
+      "status": 0,
+      "inputObjects": 28,
+      "outputBytes": 1481
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 143.77820000000065,
+      "status": 0,
+      "inputObjects": 28,
+      "outputBytes": 8084287
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.5525000000016,
+      "status": 0,
+      "inputObjects": 25,
+      "outputBytes": 1323
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 147.9955000000009,
+      "status": 0,
+      "inputObjects": 25,
+      "outputBytes": 8303108
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.49859999999899,
+      "status": 0,
+      "inputObjects": 23,
+      "outputBytes": 1217
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 128.2377000000015,
+      "status": 0,
+      "inputObjects": 23,
+      "outputBytes": 8194775
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.445199999998295,
+      "status": 0,
+      "inputObjects": 22,
+      "outputBytes": 1164
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 137.3706999999995,
+      "status": 0,
+      "inputObjects": 22,
+      "outputBytes": 8014236
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 42.026200000000244,
+      "status": 0,
+      "inputObjects": 22,
+      "outputBytes": 1163
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 170.66090000000258,
+      "status": 0,
+      "inputObjects": 22,
+      "outputBytes": 8050745
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.87090000000171,
+      "status": 0,
+      "inputObjects": 19,
+      "outputBytes": 1005
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 120.84939999999915,
+      "status": 0,
+      "inputObjects": 19,
+      "outputBytes": 7851564
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 42.11479999999938,
+      "status": 0,
+      "inputObjects": 15,
+      "outputBytes": 794
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 123.8827999999994,
+      "status": 0,
+      "inputObjects": 15,
+      "outputBytes": 7989134
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.1872000000003,
+      "status": 0,
+      "inputObjects": 15,
+      "outputBytes": 793
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 129.7030999999988,
+      "status": 0,
+      "inputObjects": 15,
+      "outputBytes": 7785648
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.46860000000015,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 741
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 108.58550000000105,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 8020360
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.3747000000003,
+      "status": 0,
+      "inputObjects": 13,
+      "outputBytes": 688
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 115.53780000000188,
+      "status": 0,
+      "inputObjects": 13,
+      "outputBytes": 8183060
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.863399999998364,
+      "status": 0,
+      "inputObjects": 12,
+      "outputBytes": 635
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 116.9413999999997,
+      "status": 0,
+      "inputObjects": 12,
+      "outputBytes": 7983697
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.90680000000066,
+      "status": 0,
+      "inputObjects": 12,
+      "outputBytes": 634
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 104.97249999999985,
+      "status": 0,
+      "inputObjects": 12,
+      "outputBytes": 7750106
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.58890000000247,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 93.84879999999976,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 7778116
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 39.92669999999998,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 163.49179999999978,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 7839442
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.48990000000049,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 89.81949999999779,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 7947786
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.12430000000313,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 98.86419999999998,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 8003509
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.20270000000164,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 98.43249999999898,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 8116917
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.84570000000167,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 106.10659999999916,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 8143588
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.366000000001804,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 84.0643999999993,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 8291435
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.772500000002765,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 96.24729999999909,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 8307486
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.31079999999929,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 86.1772000000019,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 8307486
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.072000000000116,
+      "status": 0,
+      "inputObjects": 12,
+      "outputBytes": 634
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 98.2644999999975,
+      "status": 0,
+      "inputObjects": 12,
+      "outputBytes": 8329955
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.340799999998126,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 77.58959999999934,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 8307486
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.505799999999,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 93.08860000000277,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 8307486
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 39.661199999995006,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 83.15290000000095,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 8307486
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.888599999998405,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 91.69290000000183,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 8307486
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.060899999996764,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 91.1440999999977,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 8307486
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.480100000000675,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 100.17399999999907,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 8307486
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 42.12380000000121,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 582
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 87.74879999999393,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 8307486
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 42.12629999999626,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 529
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 156.00559999999678,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 7651293
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 39.948199999998906,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 529
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 74.12229999999545,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 7873192
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.13930000000255,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 581
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 88.47439999999915,
+      "status": 0,
+      "inputObjects": 11,
+      "outputBytes": 7895661
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.417999999997846,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 529
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 93.47519999999349,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 7887583
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.37799999999697,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 529
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 94.35809999999765,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 8100874
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.92740000000049,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 529
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 95.62580000000162,
+      "status": 0,
+      "inputObjects": 10,
+      "outputBytes": 8327631
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.62979999999516,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 476
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 103.92799999999988,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 7569623
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 43.77730000000156,
+      "status": 0,
+      "inputObjects": 8,
+      "outputBytes": 424
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 84.69260000000213,
+      "status": 0,
+      "inputObjects": 8,
+      "outputBytes": 7532952
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.11230000000069,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 479
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 86.66359999999986,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 7972813
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.04819999999745,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 484
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 91.83849999999802,
+      "status": 0,
+      "inputObjects": 9,
+      "outputBytes": 8107976
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 51.00730000000476,
+      "status": 0,
+      "inputObjects": 468,
+      "outputBytes": 23694
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 171.86049999999523,
+      "status": 0,
+      "inputObjects": 468,
+      "outputBytes": 8406626
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 54.46440000000439,
+      "status": 0,
+      "inputObjects": 748,
+      "outputBytes": 37773
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 82.75400000000081,
+      "status": 0,
+      "inputObjects": 748,
+      "outputBytes": 8228491
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 54.47540000000299,
+      "status": 0,
+      "inputObjects": 966,
+      "outputBytes": 48718
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 96.05329999999958,
+      "status": 0,
+      "inputObjects": 966,
+      "outputBytes": 8422066
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 55.410799999997835,
+      "status": 0,
+      "inputObjects": 1195,
+      "outputBytes": 60217
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 147.54550000000017,
+      "status": 0,
+      "inputObjects": 1195,
+      "outputBytes": 8401870
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 50.12380000000121,
+      "status": 0,
+      "inputObjects": 455,
+      "outputBytes": 22924
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 91.1880999999994,
+      "status": 0,
+      "inputObjects": 455,
+      "outputBytes": 7885678
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 54.425600000002305,
+      "status": 0,
+      "inputObjects": 1145,
+      "outputBytes": 57685
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 217.19400000000314,
+      "status": 0,
+      "inputObjects": 1145,
+      "outputBytes": 8220458
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 126.30429999999615,
+      "status": 0,
+      "inputObjects": 484,
+      "outputBytes": 24408
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 91.48790000000008,
+      "status": 0,
+      "inputObjects": 484,
+      "outputBytes": 8334219
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 60.74789999999484,
+      "status": 0,
+      "inputObjects": 1422,
+      "outputBytes": 71614
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 174.4423999999999,
+      "status": 0,
+      "inputObjects": 1422,
+      "outputBytes": 8402657
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 54.315999999998894,
+      "status": 0,
+      "inputObjects": 1148,
+      "outputBytes": 57911
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 87.3862999999983,
+      "status": 0,
+      "inputObjects": 1148,
+      "outputBytes": 8221769
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 54.56719999999768,
+      "status": 0,
+      "inputObjects": 1135,
+      "outputBytes": 57223
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 87.79759999999806,
+      "status": 0,
+      "inputObjects": 1135,
+      "outputBytes": 8430434
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 55.210699999995995,
+      "status": 0,
+      "inputObjects": 1230,
+      "outputBytes": 61962
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 90.0144999999975,
+      "status": 0,
+      "inputObjects": 1230,
+      "outputBytes": 8372149
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 53.80840000000171,
+      "status": 0,
+      "inputObjects": 1024,
+      "outputBytes": 51667
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 84.61200000000099,
+      "status": 0,
+      "inputObjects": 1024,
+      "outputBytes": 8388611
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 54.74239999999554,
+      "status": 0,
+      "inputObjects": 1294,
+      "outputBytes": 65195
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 90.33550000000105,
+      "status": 0,
+      "inputObjects": 1294,
+      "outputBytes": 8238962
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 53.82159999999567,
+      "status": 0,
+      "inputObjects": 1008,
+      "outputBytes": 50735
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 82.99059999999736,
+      "status": 0,
+      "inputObjects": 1008,
+      "outputBytes": 8249455
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 53.962100000004284,
+      "status": 0,
+      "inputObjects": 1100,
+      "outputBytes": 55341
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 84.05550000000221,
+      "status": 0,
+      "inputObjects": 1100,
+      "outputBytes": 8407131
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 54.24919999999838,
+      "status": 0,
+      "inputObjects": 1038,
+      "outputBytes": 52316
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 154.30679999999847,
+      "status": 0,
+      "inputObjects": 1038,
+      "outputBytes": 8088080
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 50.358500000002095,
+      "status": 0,
+      "inputObjects": 331,
+      "outputBytes": 16896
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 126.2271000000037,
+      "status": 0,
+      "inputObjects": 331,
+      "outputBytes": 8398993
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 43.243099999999686,
+      "status": 0,
+      "inputObjects": 92,
+      "outputBytes": 4820
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 189.675900000002,
+      "status": 0,
+      "inputObjects": 92,
+      "outputBytes": 8320377
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 44.65439999999944,
+      "status": 0,
+      "inputObjects": 57,
+      "outputBytes": 3016
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 185.3171000000002,
+      "status": 0,
+      "inputObjects": 57,
+      "outputBytes": 8303302
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 46.28910000000178,
+      "status": 0,
+      "inputObjects": 46,
+      "outputBytes": 2433
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 190.56070000000182,
+      "status": 0,
+      "inputObjects": 46,
+      "outputBytes": 8335926
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 47.297599999998056,
+      "status": 0,
+      "inputObjects": 40,
+      "outputBytes": 2116
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 175.05860000000393,
+      "status": 0,
+      "inputObjects": 40,
+      "outputBytes": 8253769
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 48.07530000000406,
+      "status": 0,
+      "inputObjects": 36,
+      "outputBytes": 1904
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 164.075499999999,
+      "status": 0,
+      "inputObjects": 36,
+      "outputBytes": 8182940
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 113.58860000000277,
+      "status": 0,
+      "inputObjects": 31,
+      "outputBytes": 1640
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 189.11639999999898,
+      "status": 0,
+      "inputObjects": 31,
+      "outputBytes": 8258978
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.16909999999916,
+      "status": 0,
+      "inputObjects": 29,
+      "outputBytes": 1535
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 173.91240000000107,
+      "status": 0,
+      "inputObjects": 29,
+      "outputBytes": 8325962
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 44.73619999999937,
+      "status": 0,
+      "inputObjects": 27,
+      "outputBytes": 1428
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 135.51050000000396,
+      "status": 0,
+      "inputObjects": 27,
+      "outputBytes": 8059248
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.94959999999992,
+      "status": 0,
+      "inputObjects": 23,
+      "outputBytes": 1216
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 142.06360000000132,
+      "status": 0,
+      "inputObjects": 23,
+      "outputBytes": 8071156
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 41.622099999993225,
+      "status": 0,
+      "inputObjects": 18,
+      "outputBytes": 953
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 128.85139999999956,
+      "status": 0,
+      "inputObjects": 18,
+      "outputBytes": 7993558
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 42.4716000000044,
+      "status": 0,
+      "inputObjects": 17,
+      "outputBytes": 899
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 124.98540000000503,
+      "status": 0,
+      "inputObjects": 17,
+      "outputBytes": 8299509
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.85990000000311,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 741
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 101.97439999999915,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 7980662
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 40.589700000004086,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 741
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 118.93619999999646,
+      "status": 0,
+      "inputObjects": 14,
+      "outputBytes": 8119172
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 42.47300000000541,
+      "status": 0,
+      "inputObjects": 104,
+      "outputBytes": 5377
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 220.67169999999896,
+      "status": 0,
+      "inputObjects": 104,
+      "outputBytes": 8373903
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 51.58419999999751,
+      "status": 0,
+      "inputObjects": 656,
+      "outputBytes": 33082
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 91.21210000000428,
+      "status": 0,
+      "inputObjects": 656,
+      "outputBytes": 8168364
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 52.39539999999397,
+      "status": 0,
+      "inputObjects": 749,
+      "outputBytes": 37861
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 83.66510000000562,
+      "status": 0,
+      "inputObjects": 749,
+      "outputBytes": 8383438
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 48.15139999999519,
+      "status": 0,
+      "inputObjects": 275,
+      "outputBytes": 14005
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 64.24250000000029,
+      "status": 0,
+      "inputObjects": 275,
+      "outputBytes": 8395050
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 59.47330000000511,
+      "status": 0,
+      "inputObjects": 374,
+      "outputBytes": 19068
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 103.94400000000314,
+      "status": 0,
+      "inputObjects": 374,
+      "outputBytes": 8305676
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 55.64899999999761,
+      "status": 0,
+      "inputObjects": 1243,
+      "outputBytes": 62719
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 83.2077999999965,
+      "status": 0,
+      "inputObjects": 1243,
+      "outputBytes": 7607307
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 140.59010000000126,
+      "status": 0,
+      "inputObjects": 1022,
+      "outputBytes": 51750
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 321.1261000000013,
+      "status": 0,
+      "inputObjects": 1022,
+      "outputBytes": 8337540
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 108.72699999999895,
+      "status": 0,
+      "inputObjects": 654,
+      "outputBytes": 33096
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 326.3412000000026,
+      "status": 0,
+      "inputObjects": 654,
+      "outputBytes": 8293962
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 91.79759999999806,
+      "status": 0,
+      "inputObjects": 676,
+      "outputBytes": 34556
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 193.0882999999958,
+      "status": 0,
+      "inputObjects": 676,
+      "outputBytes": 8419143
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 47.797700000002806,
+      "status": 0,
+      "inputObjects": 456,
+      "outputBytes": 23396
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 83.89910000000236,
+      "status": 0,
+      "inputObjects": 456,
+      "outputBytes": 8216807
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "ms": 59.82549999999901,
+      "status": 0,
+      "inputObjects": 226,
+      "outputBytes": 11646
+    },
+    {
+      "args": [
+        "-C",
+        "D:\\myhexin-local\\opencorvus",
+        "cat-file",
+        "--batch"
+      ],
+      "ms": 105.96360000000277,
+      "status": 0,
+      "inputObjects": 226,
+      "outputBytes": 3643237
+    }
+  ],
+  "modelRequests": 0,
+  "boundary": "Original real scanner core over same565567a64 tree and exact index bytes. All selected real Git blobs,not file mocks;separate from UI/full Config qualification. Immutable source object identity used for dedup,not a mutable-source hash gate."
+}

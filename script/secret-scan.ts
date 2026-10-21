@@ -112,68 +112,40 @@ export interface ScanOptions {
   patterns?: ReadonlyArray<SecretPattern>
 }
 
-function readUInt32BE(buf: Buffer, offset: number): number {
-  if (offset + 4 > buf.length) throw new Error("git index is truncated")
-  return buf.readUInt32BE(offset)
-}
-
-function gitIndexPath(repoRoot: string): string {
-  if (process.env.GIT_INDEX_FILE) return process.env.GIT_INDEX_FILE
-  const dotGit = path.join(repoRoot, ".git")
-  const stat = fs.statSync(dotGit)
-  if (stat.isDirectory()) return path.join(dotGit, "index")
-  const content = fs.readFileSync(dotGit, "utf8").trim()
-  const match = /^gitdir:\s*(.+)$/i.exec(content)
-  if (!match) throw new Error(`unsupported .git file format at ${dotGit}`)
-  const gitDir = path.isAbsolute(match[1]!) ? match[1]! : path.resolve(repoRoot, match[1]!)
-  return path.join(gitDir, "index")
-}
-
-export function parseGitIndexEntries(data: Buffer): GitIndexEntry[] {
-  if (data.length < 12 || data.toString("ascii", 0, 4) !== "DIRC") {
-    throw new Error("git index header is missing DIRC signature")
-  }
-  const version = readUInt32BE(data, 4)
-  if (version !== 2 && version !== 3) {
-    throw new Error(`unsupported git index version ${version}; secret scan expects v2/v3 index entries`)
-  }
-  const count = readUInt32BE(data, 8)
-  const entries: GitIndexEntry[] = []
-  let offset = 12
-  for (let i = 0; i < count; i++) {
-    const entryStart = offset
-    const fixed = 62
-    if (offset + fixed > data.length) throw new Error(`git index entry ${i} is truncated`)
-    const flags = data.readUInt16BE(offset + 60)
-    const mode = readUInt32BE(data, entryStart + 24)
-    const size = readUInt32BE(data, entryStart + 36)
-    const objectId = data.toString("hex", entryStart + 40, entryStart + 60)
-    const stage = (flags >> 12) & 0x3
-    offset += fixed
-    if (version === 3 && (flags & 0x4000) !== 0) {
-      if (offset + 2 > data.length) throw new Error(`git index entry ${i} extended flags are truncated`)
-      offset += 2
-    }
-    const nul = data.indexOf(0, offset)
-    if (nul < 0) throw new Error(`git index entry ${i} path is not null-byte terminated`)
-    entries.push({ file: data.toString("utf8", offset, nul), objectId, size, mode, stage })
-    offset = nul + 1
-    const padding = (8 - ((offset - entryStart) % 8)) % 8
-    offset += padding
-  }
-  return entries
-}
-
-export function parseGitIndexPaths(data: Buffer): string[] {
-  return parseGitIndexEntries(data).map((entry) => entry.file)
-}
-
-export function listTrackedFiles(repoRoot: string): string[] {
-  return listTrackedEntries(repoRoot).map((entry) => entry.file)
-}
-
 export function listTrackedEntries(repoRoot: string): GitIndexEntry[] {
-  return parseGitIndexEntries(fs.readFileSync(gitIndexPath(repoRoot))).filter((entry) => entry.stage === 0)
+  const result = spawnSync("git", ["-C", repoRoot, "ls-files", "--stage", "--full-name", "-z"], {
+    maxBuffer: 64 * 1024 * 1024,
+  })
+  if (result.error) throw result.error
+  if (result.status !== 0) throw new Error(`git ls-files failed: ${result.stderr.toString("utf8").trim()}`)
+  const entries: GitIndexEntry[] = []
+  for (const record of result.stdout.toString("utf8").split("\0")) {
+    if (!record) continue
+    const tab = record.indexOf("\t")
+    const fields = record.slice(0, tab).split(" ")
+    if (
+      tab < 0 ||
+      fields.length !== 3 ||
+      !/^[0-7]{6}$/.test(fields[0]!) ||
+      !/^(?:[a-f0-9]{40}|[a-f0-9]{64})$/.test(fields[1]!) ||
+      !/^[0-3]$/.test(fields[2]!) ||
+      tab === record.length - 1
+    ) {
+      throw new Error(`invalid git ls-files record: ${record}`)
+    }
+    const stage = Number(fields[2])
+    if (stage !== 0) continue
+    entries.push({
+      file: record.slice(tab + 1),
+      objectId: fields[1]!,
+      size: 0,
+      mode: Number.parseInt(fields[0]!, 8),
+      stage,
+    })
+  }
+  const objectIds = [...new Set(entries.filter((entry) => entry.mode !== GITLINK_MODE).map((entry) => entry.objectId))]
+  const sizes = objectIds.length ? readGitObjectSizes(repoRoot, objectIds) : new Map<string, number>()
+  return entries.map((entry) => ({ ...entry, size: entry.mode === GITLINK_MODE ? 0 : sizes.get(entry.objectId)! }))
 }
 
 export function parseGitTreeEntries(data: Buffer): GitIndexEntry[] {

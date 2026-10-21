@@ -130,6 +130,10 @@ path/blob snapshots share one scan within the invocation; different paths and
 versions retain their own findings. The default Continuous Integration (CI) invocation reads HEAD and
 the index. Extension, size, Gitlink and explicit fixture-line rules apply to
 every selected snapshot. Missing objects or invalid hook input fail explicitly.
+Git supplies index membership, paths, modes and stages through its staged-file
+protocol, and object metadata supplies each immutable blob's size. The size
+boundary applies to that content, including text normalized at staging. Git owns
+v2/v3/v4, split, sparse, object-format and alternate-index storage interpretation.
 Reports contain file, line, rule and description; credential content and
 credential-derived prefixes are not diagnostic fields. Earlier remote publication requires
 maintainer-coordinated cleanup rather than an automatic history rewrite.

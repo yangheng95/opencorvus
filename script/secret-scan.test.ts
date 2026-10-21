@@ -4,18 +4,18 @@ import * as fs from "node:fs"
 import * as os from "node:os"
 import * as path from "node:path"
 import { fileURLToPath } from "node:url"
-import { parsePrePushUpdates, scan, type PrePushUpdate } from "./secret-scan"
+import { listTrackedEntries, parsePrePushUpdates, scan, type PrePushUpdate } from "./secret-scan"
 
 const zero = "0".repeat(40)
 const fakeProvider = "sk-" + "FixtureValue".repeat(3)
 const fakeGithub = "ghp_" + "FixtureValue".repeat(3)
 const fakeSlack = "xoxb-" + "FixtureValue".repeat(3)
 
-function fixture(run: (repo: string) => void) {
+function fixture(run: (repo: string) => void, objectFormat = "sha1") {
   const parent = path.resolve(os.tmpdir())
   const repo = fs.mkdtempSync(path.join(parent, "opencorvus-secret-scan-"))
   try {
-    git(repo, ["init", "--initial-branch=scan-fixture"])
+    git(repo, ["init", "--initial-branch=scan-fixture", `--object-format=${objectFormat}`])
     run(repo)
   } finally {
     if (path.dirname(path.resolve(repo)) !== parent || !path.basename(repo).startsWith("opencorvus-secret-scan-")) {
@@ -26,9 +26,10 @@ function fixture(run: (repo: string) => void) {
   }
 }
 
-function git(repo: string, args: string[], input?: string) {
+function git(repo: string, args: string[], input?: string, extraEnv: NodeJS.ProcessEnv = {}) {
   const env = { ...process.env }
   for (const key of Object.keys(env)) if (key.startsWith("GIT_")) delete env[key]
+  Object.assign(env, extraEnv)
   const result = spawnSync(
     "git",
     [
@@ -52,6 +53,7 @@ function git(repo: string, args: string[], input?: string) {
 }
 
 function write(repo: string, file: string, value: string) {
+  fs.mkdirSync(path.dirname(path.join(repo, file)), { recursive: true })
   fs.writeFileSync(path.join(repo, file), value + "\n")
   git(repo, ["add", "--", file])
 }
@@ -187,5 +189,149 @@ test("the real CLI rejects a pushed intermediate credential with an explicit fil
     expect(result.stderr.split(/\r?\n/).filter((line) => line.startsWith("  "))).toEqual([
       "  transient.ts:1  [provider-key] Model-provider key (sk-...)",
     ])
+  })
+})
+
+for (const format of ["sha1", "sha256"]) {
+  for (const index of ["v2", "v3", "v4", "split"]) {
+    test(`${format} ${index} index returns complete staged metadata and its credential report`, () => {
+      fixture((repo) => {
+        write(repo, "base.ts", "public baseline")
+        commit(repo)
+        const file = "folder with space/凭据.ts"
+        write(repo, file, fakeProvider)
+        const version = index === "split" ? 2 : Number(index.slice(1))
+        if (index === "v3") git(repo, ["update-index", "--skip-worktree", "base.ts"])
+        git(repo, ["update-index", `--index-version=${version}`])
+        if (index === "split") git(repo, ["update-index", "--split-index"])
+        else expect(fs.readFileSync(path.join(repo, ".git", "index")).readUInt32BE(4)).toBe(version)
+        expect(listTrackedEntries(repo)).toEqual([
+          { file: "base.ts", objectId: git(repo, ["rev-parse", ":base.ts"]), mode: 0o100644, stage: 0, size: 16 },
+          {
+            file,
+            objectId: git(repo, ["rev-parse", `:${file}`]),
+            mode: 0o100644,
+            stage: 0,
+            size: fakeProvider.length + 1,
+          },
+        ])
+        expect(report(scan({ repoRoot: repo }))).toEqual([{ file, lineNumber: 1, patternId: "provider-key" }])
+      }, format)
+    })
+  }
+}
+
+test("sparse index supplies the full staged paths and the staged credential report", () => {
+  fixture((repo) => {
+    write(repo, "inside/public.ts", "inside public")
+    write(repo, "outside/public.ts", "outside public")
+    commit(repo)
+    git(repo, ["sparse-checkout", "init", "--cone", "--sparse-index"])
+    git(repo, ["sparse-checkout", "set", "inside"])
+    write(repo, "inside/staged.ts", fakeProvider)
+    const entries = listTrackedEntries(repo)
+    expect(entries.map((entry) => entry.file)).toEqual(["inside/public.ts", "inside/staged.ts", "outside/public.ts"])
+    expect(entries.find((entry) => entry.file === "outside/public.ts")).toEqual({
+      file: "outside/public.ts",
+      objectId: git(repo, ["rev-parse", ":outside/public.ts"]),
+      mode: 0o100644,
+      stage: 0,
+      size: 15,
+    })
+    expect(report(scan({ repoRoot: repo }))).toEqual([
+      { file: "inside/staged.ts", lineNumber: 1, patternId: "provider-key" },
+    ])
+  })
+})
+
+test("cacheinfo entries report the actual immutable blob size", () => {
+  fixture((repo) => {
+    write(repo, "base.ts", "public baseline")
+    commit(repo)
+    const content = fakeProvider + "\n" + "x".repeat(1024 * 1024 + 17)
+    const objectId = git(repo, ["hash-object", "-w", "--stdin"], content)
+    git(repo, ["update-index", "--add", "--cacheinfo", "100644", objectId, "cached.ts"])
+    expect(listTrackedEntries(repo).find((entry) => entry.file === "cached.ts")).toEqual({
+      file: "cached.ts",
+      objectId,
+      mode: 0o100644,
+      stage: 0,
+      size: Buffer.byteLength(content),
+    })
+  })
+})
+
+test("normalized staged content uses its blob size and produces the credential report", () => {
+  fixture((repo) => {
+    git(repo, ["config", "core.autocrlf", "true"])
+    write(repo, "base.ts", "public baseline")
+    commit(repo)
+    const body = fakeProvider + "\r\n" + "x\r\n".repeat(400000)
+    fs.writeFileSync(path.join(repo, "normalized.ts"), body)
+    git(repo, ["add", "normalized.ts"])
+    expect(listTrackedEntries(repo).find((entry) => entry.file === "normalized.ts")).toEqual({
+      file: "normalized.ts",
+      objectId: git(repo, ["rev-parse", ":normalized.ts"]),
+      mode: 0o100644,
+      stage: 0,
+      size: fakeProvider.length + 1 + 800000,
+    })
+    expect(report(scan({ repoRoot: repo }))).toEqual([
+      { file: "normalized.ts", lineNumber: 1, patternId: "provider-key" },
+    ])
+  })
+})
+
+test("relative alternate indexes use Git's repository ownership and staged content", () => {
+  fixture((repo) => {
+    write(repo, "base.ts", "public baseline")
+    commit(repo)
+    const extra = { GIT_INDEX_FILE: "alternate-index" }
+    git(repo, ["read-tree", "HEAD"], undefined, extra)
+    const objectId = git(repo, ["hash-object", "-w", "--stdin"], fakeProvider + "\n")
+    git(repo, ["update-index", "--add", "--cacheinfo", "100644", objectId, "alternate.ts"], undefined, extra)
+    const previous = process.env.GIT_INDEX_FILE
+    process.env.GIT_INDEX_FILE = extra.GIT_INDEX_FILE
+    try {
+      expect(listTrackedEntries(repo).find((entry) => entry.file === "alternate.ts")).toEqual({
+        file: "alternate.ts",
+        objectId,
+        mode: 0o100644,
+        stage: 0,
+        size: fakeProvider.length + 1,
+      })
+      expect(report(scan({ repoRoot: repo }))).toEqual([
+        { file: "alternate.ts", lineNumber: 1, patternId: "provider-key" },
+      ])
+    } finally {
+      if (previous === undefined) delete process.env.GIT_INDEX_FILE
+      else process.env.GIT_INDEX_FILE = previous
+    }
+  })
+})
+
+test("Gitlink metadata and ordinary staged credentials retain their declared types", () => {
+  fixture((repo) => {
+    write(repo, "base.ts", "public baseline")
+    const objectId = commit(repo)
+    git(repo, ["update-index", "--add", "--cacheinfo", "160000", objectId, "subproject"])
+    write(repo, "staged.ts", fakeProvider)
+    expect(listTrackedEntries(repo).find((entry) => entry.file === "subproject")).toEqual({
+      file: "subproject",
+      objectId,
+      mode: 0o160000,
+      stage: 0,
+      size: 0,
+    })
+    expect(report(scan({ repoRoot: repo }))).toEqual([{ file: "staged.ts", lineNumber: 1, patternId: "provider-key" }])
+  })
+})
+
+test("a corrupt index returns the explicit Git read error", () => {
+  fixture((repo) => {
+    write(repo, "base.ts", "public baseline")
+    commit(repo)
+    fs.writeFileSync(path.join(repo, ".git", "index"), "invalid index data")
+    expect(() => listTrackedEntries(repo)).toThrow(/^git ls-files failed:/)
   })
 })

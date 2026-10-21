@@ -1,0 +1,31 @@
+{
+  "observedAt": "2026-10-21T00:14:03.903Z",
+  "repo": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\git-index-authority-495/crlf",
+  "workingBytes": 1200041,
+  "beforeEntry": {
+    "file": "normalized.ts",
+    "objectId": "132a04d9613d341c43988cdce0c2fe91b50c5ea6",
+    "size": 1200041,
+    "mode": 33188,
+    "stage": 0
+  },
+  "afterEntry": {
+    "file": "normalized.ts",
+    "objectId": "132a04d9613d341c43988cdce0c2fe91b50c5ea6",
+    "size": 800040,
+    "mode": 33188,
+    "stage": 0
+  },
+  "actualBlobBytes": 800040,
+  "beforeHits": [],
+  "afterHits": [
+    {
+      "file": "normalized.ts",
+      "lineNumber": 1,
+      "patternId": "provider-key",
+      "description": "Model-provider key (sk-...)"
+    }
+  ],
+  "rootCause": "Working-copy stat exceeds1MiB but actual normalized staged blob is below1MiB;old cached-size filter misses it",
+  "credential": "Generated fake only;no actual authority or Provider"
+}

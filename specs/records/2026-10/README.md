@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Git索引读取权威](2026-10-21-git-index-authority.md)：[六原fixture、CRLF、20正向合同和完整checker](../../artifacts/2026-10-21-git-index-authority/README.md)，SHA-256与有效小blob漏检修复，原失败保留。
+
 - [推送密钥快照检查](2026-10-21-push-secret-snapshots.md)：[真实Git历史/根/合并/rename、CLI错误与大仓库对照](../../artifacts/2026-10-21-push-secret-snapshots/README.md)，安全覆盖与去重均保留原事实。
 
 - [Git启动下限与安装版源码](2026-10-21-git-startup-floor.md)：[六组149输入/1776项实际命令及原scope结算](../../artifacts/2026-10-21-git-startup-floor/README.md)，保留完整配置仍未达事实，不用内部Git路径绕过。

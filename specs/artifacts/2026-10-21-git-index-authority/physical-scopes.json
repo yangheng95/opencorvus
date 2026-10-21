@@ -1,0 +1,164 @@
+[
+  {
+    "launcher": {
+      "originalChildExit": 0,
+      "observedAtUtc": "2026-10-21T00:18:34.8754701Z"
+    },
+    "boundary": "Exact original native host/target birth,not PID/name-only proof;no source initializer or model input",
+    "run": "before",
+    "ready": {
+      "occurrence": "git-index-authority-495-before-7c142fae-da6b-4858-83c0-dda510de5f3d",
+      "outcome": "ready",
+      "host": {
+        "pid": 66388,
+        "processInstanceID": "win32:639281386728028533",
+        "occurrenceID": "2ffb483f-c727-445a-885a-f4d58c09678c"
+      },
+      "parent": {
+        "pid": 74036,
+        "processInstanceID": "win32:639281386722819859",
+        "occurrenceID": "b9d9e2ed-91d8-48e4-8cd4-bc71ba004143"
+      },
+      "target": {
+        "pid": 81712,
+        "processInstanceID": "win32:639281386743035849",
+        "occurrenceID": "4c01df41-1bff-4390-8e86-37e641c463de"
+      },
+      "targetBirthAtMs": 1792541874303,
+      "deadlineAt": 1792542112769,
+      "observedAtUtc": "2026-10-21T00:17:54.335Z",
+      "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/dependency-redirect-hardening-488-after-bundle/bin/bun.exe",
+      "args": [
+        "D:/myhexin-local/opencorvus/.tmp-product-iteration/git-index-authority-495/benchmark.ts"
+      ],
+      "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+    },
+    "native": {
+      "occurrence": "git-index-authority-495-before-7c142fae-da6b-4858-83c0-dda510de5f3d",
+      "outcome": "settled",
+      "host": {
+        "pid": 66388,
+        "processInstanceID": "win32:639281386728028533",
+        "occurrenceID": "2ffb483f-c727-445a-885a-f4d58c09678c"
+      },
+      "target": {
+        "pid": 81712,
+        "processInstanceID": "win32:639281386743035849",
+        "occurrenceID": "4c01df41-1bff-4390-8e86-37e641c463de"
+      },
+      "observedAtUtc": "2026-10-21T00:18:34.829Z",
+      "deadlineAt": 1792542112769,
+      "terminal": {
+        "occurrenceID": "git-index-authority-495-before-7c142fae-da6b-4858-83c0-dda510de5f3d",
+        "pid": 81712,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 66388,
+          "processInstanceID": "win32:639281386728028533",
+          "occurrenceID": "2ffb483f-c727-445a-885a-f4d58c09678c"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 81712,
+          "processInstanceID": "win32:639281386743035849",
+          "occurrenceID": "4c01df41-1bff-4390-8e86-37e641c463de"
+        }
+      }
+    ],
+    "runtimeDataFiles": []
+  },
+  {
+    "launcher": {
+      "observedAtUtc": "2026-10-21T00:19:47.4766708Z",
+      "originalChildExit": 0
+    },
+    "boundary": "Exact original native host/target birth,not PID/name-only proof;no source initializer or model input",
+    "run": "after",
+    "ready": {
+      "occurrence": "git-index-authority-495-after-837bedb7-6226-4568-a683-6fef1586fc45",
+      "outcome": "ready",
+      "host": {
+        "pid": 76796,
+        "processInstanceID": "win32:639281387403336123",
+        "occurrenceID": "ae46b0aa-4c3c-4335-9235-0f5fdcbfc2e6"
+      },
+      "parent": {
+        "pid": 73856,
+        "processInstanceID": "win32:639281387398683105",
+        "occurrenceID": "bbfb4564-a553-4f54-b5bf-953e0a21a6fd"
+      },
+      "target": {
+        "pid": 89180,
+        "processInstanceID": "win32:639281387419891646",
+        "occurrenceID": "16ebd1c2-4bb5-4846-9a69-29d6abd7f759"
+      },
+      "targetBirthAtMs": 1792541941989,
+      "deadlineAt": 1792542180313,
+      "observedAtUtc": "2026-10-21T00:19:02.035Z",
+      "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/dependency-redirect-hardening-488-after-bundle/bin/bun.exe",
+      "args": [
+        "D:/myhexin-local/opencorvus/.tmp-product-iteration/git-index-authority-495/benchmark.ts"
+      ],
+      "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+    },
+    "native": {
+      "occurrence": "git-index-authority-495-after-837bedb7-6226-4568-a683-6fef1586fc45",
+      "outcome": "settled",
+      "host": {
+        "pid": 76796,
+        "processInstanceID": "win32:639281387403336123",
+        "occurrenceID": "ae46b0aa-4c3c-4335-9235-0f5fdcbfc2e6"
+      },
+      "target": {
+        "pid": 89180,
+        "processInstanceID": "win32:639281387419891646",
+        "occurrenceID": "16ebd1c2-4bb5-4846-9a69-29d6abd7f759"
+      },
+      "observedAtUtc": "2026-10-21T00:19:47.422Z",
+      "deadlineAt": 1792542180313,
+      "terminal": {
+        "occurrenceID": "git-index-authority-495-after-837bedb7-6226-4568-a683-6fef1586fc45",
+        "pid": 89180,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 76796,
+          "processInstanceID": "win32:639281387403336123",
+          "occurrenceID": "ae46b0aa-4c3c-4335-9235-0f5fdcbfc2e6"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 89180,
+          "processInstanceID": "win32:639281387419891646",
+          "occurrenceID": "16ebd1c2-4bb5-4846-9a69-29d6abd7f759"
+        }
+      }
+    ],
+    "runtimeDataFiles": []
+  }
+]

@@ -1,0 +1,58 @@
+bun test v1.4.0 (34cbb9a40)
+
+script\secret-scan.test.ts:
+(pass) pre-push input preserves update, creation and deletion object boundaries [0.44ms]
+(pass) malformed hook input returns the explicit protocol error [0.19ms]
+(pass) historical versions, shared content paths and the staged snapshot produce their credential reports [1768.20ms]
+(pass) new refs and merge ancestry expose their changed file snapshots [1545.66ms]
+(pass) default HEAD and index scans retain each path of a committed credential blob [830.48ms]
+(pass) the real CLI rejects a pushed intermediate credential with an explicit file and pattern [1132.38ms]
+(pass) sha1 v2 index returns complete staged metadata and its credential report [778.07ms]
+201 |         const file = "folder with space/凭据.ts"
+202 |         write(repo, file, fakeProvider)
+203 |         const version = index === "split" ? 2 : Number(index.slice(1))
+204 |         git(repo, ["update-index", `--index-version=${version}`])
+205 |         if (index === "split") git(repo, ["update-index", "--split-index"])
+206 |         else expect(fs.readFileSync(path.join(repo, ".git", "index")).readUInt32BE(4)).toBe(version)
+                                                                                             ^
+error: expect(received).toBe(expected)
+
+Expected: 3
+Received: 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\script\secret-scan.test.ts:206:88)
+      at fixture (D:\myhexin-local\opencorvus\script\secret-scan.test.ts:19:5)
+      at <anonymous> (D:\myhexin-local\opencorvus\script\secret-scan.test.ts:198:7)
+(fail) sha1 v3 index returns complete staged metadata and its credential report [491.91ms]
+(pass) sha1 v4 index returns complete staged metadata and its credential report [774.34ms]
+(pass) sha1 split index returns complete staged metadata and its credential report [919.43ms]
+(pass) sha256 v2 index returns complete staged metadata and its credential report [796.52ms]
+201 |         const file = "folder with space/凭据.ts"
+202 |         write(repo, file, fakeProvider)
+203 |         const version = index === "split" ? 2 : Number(index.slice(1))
+204 |         git(repo, ["update-index", `--index-version=${version}`])
+205 |         if (index === "split") git(repo, ["update-index", "--split-index"])
+206 |         else expect(fs.readFileSync(path.join(repo, ".git", "index")).readUInt32BE(4)).toBe(version)
+                                                                                             ^
+error: expect(received).toBe(expected)
+
+Expected: 3
+Received: 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\script\secret-scan.test.ts:206:88)
+      at fixture (D:\myhexin-local\opencorvus\script\secret-scan.test.ts:19:5)
+      at <anonymous> (D:\myhexin-local\opencorvus\script\secret-scan.test.ts:198:7)
+(fail) sha256 v3 index returns complete staged metadata and its credential report [500.60ms]
+(pass) sha256 v4 index returns complete staged metadata and its credential report [786.44ms]
+(pass) sha256 split index returns complete staged metadata and its credential report [938.52ms]
+(pass) sparse index supplies the full staged paths and the staged credential report [978.08ms]
+(pass) cacheinfo entries report the actual immutable blob size [497.00ms]
+(pass) normalized staged content uses its blob size and produces the credential report [871.13ms]
+(pass) relative alternate indexes use Git's repository ownership and staged content [701.69ms]
+(pass) Gitlink metadata and ordinary staged credentials retain their declared types [774.86ms]
+(pass) a corrupt index returns the explicit Git read error [315.50ms]
+
+ 18 pass
+ 2 fail
+ 39 expect() calls
+Ran 20 tests across 1 file. [16.73s]

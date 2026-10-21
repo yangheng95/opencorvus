@@ -1,0 +1,26 @@
+bun test v1.4.0 (34cbb9a40)
+
+script\secret-scan.test.ts:
+(pass) pre-push input preserves update, creation and deletion object boundaries [0.25ms]
+(pass) malformed hook input returns the explicit protocol error [0.11ms]
+(pass) historical versions, shared content paths and the staged snapshot produce their credential reports [2351.43ms]
+(pass) new refs and merge ancestry expose their changed file snapshots [1827.92ms]
+(pass) default HEAD and index scans retain each path of a committed credential blob [808.34ms]
+(pass) the real CLI rejects a pushed intermediate credential with an explicit file and pattern [1074.96ms]
+(pass) sha1 v2 index returns complete staged metadata and its credential report [868.64ms]
+(pass) sha1 v4 index returns complete staged metadata and its credential report [862.30ms]
+(pass) sha1 split index returns complete staged metadata and its credential report [845.75ms]
+(pass) sha256 v2 index returns complete staged metadata and its credential report [875.31ms]
+(pass) sha256 v4 index returns complete staged metadata and its credential report [796.36ms]
+(pass) sha256 split index returns complete staged metadata and its credential report [898.98ms]
+(pass) sparse index supplies the full staged paths and the staged credential report [1020.71ms]
+(pass) cacheinfo entries report the actual immutable blob size [485.64ms]
+(pass) normalized staged content uses its blob size and produces the credential report [910.32ms]
+(pass) relative alternate indexes use Git's repository ownership and staged content [724.00ms]
+(pass) Gitlink metadata and ordinary staged credentials retain their declared types [747.47ms]
+(pass) a corrupt index returns the explicit Git read error [330.78ms]
+
+ 18 pass
+ 0 fail
+ 33 expect() calls
+Ran 18 tests across 1 file. [16.42s]

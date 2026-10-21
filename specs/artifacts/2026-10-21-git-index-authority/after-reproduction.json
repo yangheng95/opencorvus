@@ -1,0 +1,218 @@
+{
+  "observedAt": "2026-10-21T00:15:33.760Z",
+  "rows": [
+    {
+      "name": "sha256",
+      "entries": [
+        {
+          "file": "base.ts",
+          "objectId": "1c341b50b1fd67da0117d8593d3f97bb81f234f6dc9bb2ee2edac12982040c25",
+          "size": 16,
+          "mode": 33188,
+          "stage": 0
+        },
+        {
+          "file": "staged.ts",
+          "objectId": "3b514b9672e80eef2cb1289d6aa075c941081377530e4c1e7fb9c356ef524288",
+          "size": 40,
+          "mode": 33188,
+          "stage": 0
+        }
+      ],
+      "hits": [
+        {
+          "file": "staged.ts",
+          "lineNumber": 1,
+          "patternId": "provider-key",
+          "description": "Model-provider key (sk-...)"
+        }
+      ],
+      "cli": {
+        "status": 1,
+        "stdout": "[secret-scan] Checking HEAD and index file snapshots\n",
+        "stderr": "[secret-scan] FAIL — 1 hit(s):\n  staged.ts:1  [provider-key] Model-provider key (sk-...)\n\nIf the match is a deliberate test fixture, append `// secret-scan: ignore` to the line.\nRevoke any real credential, then remove it from every commit to be pushed and from the index.\nIf it was published earlier, coordinate history cleanup with the maintainers.\n",
+        "cwd": "Original host workspace,not fixture;Git resolves alternate index in its -C repository"
+      },
+      "index": "Original exact bytes/mtime preserved",
+      "boundary": "Same original fixture now returns exact Git authority and explicit credential error"
+    },
+    {
+      "name": "v4",
+      "entries": [
+        {
+          "file": "base.ts",
+          "objectId": "d1477a12adaa3a0dfc281ef71ff56f49c5f3a0d9",
+          "size": 16,
+          "mode": 33188,
+          "stage": 0
+        },
+        {
+          "file": "staged.ts",
+          "objectId": "5fc3938a3b83ec938b469465f8188990a5d37807",
+          "size": 40,
+          "mode": 33188,
+          "stage": 0
+        }
+      ],
+      "hits": [
+        {
+          "file": "staged.ts",
+          "lineNumber": 1,
+          "patternId": "provider-key",
+          "description": "Model-provider key (sk-...)"
+        }
+      ],
+      "cli": {
+        "status": 1,
+        "stdout": "[secret-scan] Checking HEAD and index file snapshots\n",
+        "stderr": "[secret-scan] FAIL — 1 hit(s):\n  staged.ts:1  [provider-key] Model-provider key (sk-...)\n\nIf the match is a deliberate test fixture, append `// secret-scan: ignore` to the line.\nRevoke any real credential, then remove it from every commit to be pushed and from the index.\nIf it was published earlier, coordinate history cleanup with the maintainers.\n",
+        "cwd": "Original host workspace,not fixture;Git resolves alternate index in its -C repository"
+      },
+      "index": "Original exact bytes/mtime preserved",
+      "boundary": "Same original fixture now returns exact Git authority and explicit credential error"
+    },
+    {
+      "name": "split",
+      "entries": [
+        {
+          "file": "base.ts",
+          "objectId": "d1477a12adaa3a0dfc281ef71ff56f49c5f3a0d9",
+          "size": 16,
+          "mode": 33188,
+          "stage": 0
+        },
+        {
+          "file": "staged.ts",
+          "objectId": "5fc3938a3b83ec938b469465f8188990a5d37807",
+          "size": 40,
+          "mode": 33188,
+          "stage": 0
+        }
+      ],
+      "hits": [
+        {
+          "file": "staged.ts",
+          "lineNumber": 1,
+          "patternId": "provider-key",
+          "description": "Model-provider key (sk-...)"
+        }
+      ],
+      "cli": {
+        "status": 1,
+        "stdout": "[secret-scan] Checking HEAD and index file snapshots\n",
+        "stderr": "[secret-scan] FAIL — 1 hit(s):\n  staged.ts:1  [provider-key] Model-provider key (sk-...)\n\nIf the match is a deliberate test fixture, append `// secret-scan: ignore` to the line.\nRevoke any real credential, then remove it from every commit to be pushed and from the index.\nIf it was published earlier, coordinate history cleanup with the maintainers.\n",
+        "cwd": "Original host workspace,not fixture;Git resolves alternate index in its -C repository"
+      },
+      "index": "Original exact bytes/mtime preserved",
+      "boundary": "Same original fixture now returns exact Git authority and explicit credential error"
+    },
+    {
+      "name": "sparse",
+      "entries": [
+        {
+          "file": "base.ts",
+          "objectId": "d1477a12adaa3a0dfc281ef71ff56f49c5f3a0d9",
+          "size": 16,
+          "mode": 33188,
+          "stage": 0
+        },
+        {
+          "file": "inside/public.ts",
+          "objectId": "8b6766df675bca3513c704db270a9442385b7ec0",
+          "size": 14,
+          "mode": 33188,
+          "stage": 0
+        },
+        {
+          "file": "inside/staged.ts",
+          "objectId": "5fc3938a3b83ec938b469465f8188990a5d37807",
+          "size": 40,
+          "mode": 33188,
+          "stage": 0
+        },
+        {
+          "file": "outside/public.ts",
+          "objectId": "071fbdd60542fb73e6a06770972753ecea8e92a5",
+          "size": 15,
+          "mode": 33188,
+          "stage": 0
+        }
+      ],
+      "hits": [
+        {
+          "file": "inside/staged.ts",
+          "lineNumber": 1,
+          "patternId": "provider-key",
+          "description": "Model-provider key (sk-...)"
+        }
+      ],
+      "cli": {
+        "status": 1,
+        "stdout": "[secret-scan] Checking HEAD and index file snapshots\n",
+        "stderr": "[secret-scan] FAIL — 1 hit(s):\n  inside/staged.ts:1  [provider-key] Model-provider key (sk-...)\n\nIf the match is a deliberate test fixture, append `// secret-scan: ignore` to the line.\nRevoke any real credential, then remove it from every commit to be pushed and from the index.\nIf it was published earlier, coordinate history cleanup with the maintainers.\n",
+        "cwd": "Original host workspace,not fixture;Git resolves alternate index in its -C repository"
+      },
+      "index": "Original exact bytes/mtime preserved",
+      "boundary": "Same original fixture now returns exact Git authority and explicit credential error"
+    },
+    {
+      "name": "cacheinfo",
+      "entries": [
+        {
+          "file": "base.ts",
+          "objectId": "d1477a12adaa3a0dfc281ef71ff56f49c5f3a0d9",
+          "size": 16,
+          "mode": 33188,
+          "stage": 0
+        },
+        {
+          "file": "cached.ts",
+          "objectId": "b2cf6989df2486354c5d90ca5d1ca56111b729f3",
+          "size": 1048633,
+          "mode": 33188,
+          "stage": 0
+        }
+      ],
+      "hits": [],
+      "index": "Original exact bytes/mtime preserved",
+      "boundary": "Actual blob1048633 exceeds unchanged1MiB content policy;positive metadata size contract"
+    },
+    {
+      "name": "relative-alternate",
+      "entries": [
+        {
+          "file": "alternate.ts",
+          "objectId": "5fc3938a3b83ec938b469465f8188990a5d37807",
+          "size": 40,
+          "mode": 33188,
+          "stage": 0
+        },
+        {
+          "file": "base.ts",
+          "objectId": "d1477a12adaa3a0dfc281ef71ff56f49c5f3a0d9",
+          "size": 16,
+          "mode": 33188,
+          "stage": 0
+        }
+      ],
+      "hits": [
+        {
+          "file": "alternate.ts",
+          "lineNumber": 1,
+          "patternId": "provider-key",
+          "description": "Model-provider key (sk-...)"
+        }
+      ],
+      "cli": {
+        "status": 1,
+        "stdout": "[secret-scan] Checking HEAD and index file snapshots\n",
+        "stderr": "[secret-scan] FAIL — 1 hit(s):\n  alternate.ts:1  [provider-key] Model-provider key (sk-...)\n\nIf the match is a deliberate test fixture, append `// secret-scan: ignore` to the line.\nRevoke any real credential, then remove it from every commit to be pushed and from the index.\nIf it was published earlier, coordinate history cleanup with the maintainers.\n",
+        "cwd": "Original host workspace,not fixture;Git resolves alternate index in its -C repository"
+      },
+      "index": "Original exact bytes/mtime preserved",
+      "boundary": "Same original fixture now returns exact Git authority and explicit credential error"
+    }
+  ],
+  "modelRequests": 0,
+  "credentialCopies": 0
+}
