@@ -1,0 +1,21 @@
+{
+  "scope": "member-locale-stream-516",
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/offline-location-recovery-515-after-ui",
+  "ports": {
+    "before": 18975,
+    "after": 18977
+  },
+  "maximumRequests": 16,
+  "scopeBudgets": {
+    "before": 8,
+    "after": 8
+  },
+  "model": "gpt-6.1-sol",
+  "stream": true,
+  "after": "Only after proven production fix;otherwise unused quota retired",
+  "sourceUI": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/offline-location-recovery-515-after-ui-bundle/bin/ui",
+  "publication": "main-DhV28lza",
+  "member": "ses_-zUS0WzzQzzDOGrIbYwN",
+  "parent": "ses_-zUS0X33CzzWEKMgCk98",
+  "surface": "Source CLI real manual UI;one existing member prompt;no new delegation"
+}

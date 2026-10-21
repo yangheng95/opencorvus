@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-21T20:44:38.729Z",
+  "page": 108,
+  "reading": {
+    "at": "2026-10-21T20:42:38.099Z",
+    "client": 576,
+    "height": 62881,
+    "top": 60073.6015625,
+    "url": "http://127.0.0.1:18975/ui/?sessionID=ses_-zUS0X33CzzWEKMgCk98&sessionKind=conversation&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cmember-live-rendering-412-fresh%5Cproject&experience=work"
+  },
+  "sourceReading": {
+    "at": "2026-10-21T20:43:10.554Z",
+    "client": 576,
+    "height": 65808,
+    "top": 52775.19921875
+  },
+  "reopen": {
+    "at": "2026-10-21T20:43:23.317Z",
+    "client": 576,
+    "height": 66591,
+    "top": 52775.19921875
+  },
+  "finalRead": {
+    "at": "2026-10-21T20:44:38.728Z",
+    "client": 576,
+    "height": 66980,
+    "top": 66404
+  },
+  "copiedSource": "https://aclanthology.org/2025.naacl-long.475/",
+  "copiedCode": "const roles = [\"原文\", \"来源\", \"展示建议\"];\nconst principle = \"各自承担职责，不互相替代\";\nconst boundary = \"让判断与已有证据保持一致\";"
+}

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [成员流中的语言切换与Sources](2026-10-22-member-locale-stream/README.md)：十张人工图、真实24节流/中英界面/来源开合及复制、Sol4/8全source EOF，原数据与自然记忆更新分别保留，完整物理/四成员授权退休。
+
 - [离线启动链接与首次连接恢复](2026-10-22-offline-location-recovery/README.md)：十五张人工图、真实前后端离线/上线与PID替换；Task/Chat恢复及新意图优先、七项正向合同，七scope零模型及独立配置完整Sol预检2/8、原数据和四成员授权退休结算。
 
 - [Sources 导航与权限历史呈现](2026-10-22-source-entry-navigation/README.md)：十张人工图、原决定槽与 continuation 退休事实；过去式历史批准修复、中英实页和来源复制/打开/重开验证，零模型/原数据保持。

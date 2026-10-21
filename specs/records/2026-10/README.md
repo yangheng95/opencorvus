@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [成员流中的语言切换与Sources](2026-10-22-member-locale-stream.md)：[十图与原观察](../../artifacts/2026-10-22-member-locale-stream/README.md)，流中中英语言/来源开合、完成态复制；4/8实际Sol及原物理/配对/自然记忆更新结算，生产未改。
+
 - [离线启动链接与首次连接恢复](2026-10-22-offline-location-recovery.md)：[十五图与九scope结算](../../artifacts/2026-10-22-offline-location-recovery/README.md)，首次恢复消费原输入，后续重连保留当前选择；七项控制合同、原数据/schema保持，七scope零模型及独立配置完整Sol预检2/8已结算。
 
 - [Sources 导航与权限历史呈现](2026-10-22-source-entry-navigation.md)：[十图与原始权限/物理事实](../../artifacts/2026-10-22-source-entry-navigation/README.md)，历史原决定显示已批准，来源目标/复制/成员重开实测；两scope零模型与原数据保持。
