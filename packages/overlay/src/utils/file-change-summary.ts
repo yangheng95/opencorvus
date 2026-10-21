@@ -1,15 +1,13 @@
 import { cardTreeStore, publishedCardTreeVersion, type CardNode } from "../store/card-tree"
 import { boardStore } from "../store/board"
-import type { FileChange, FileChangeReceipt, FileChangeIncompleteReason } from "../components/DiffView"
-import { changeGroupIdentity, summarizeFileChanges, textComparisonCounts, type ChangeGroup } from "../services/diff"
+import type { FileChangeReceipt, FileChangeIncompleteReason } from "../components/DiffView"
+import { changeGroupIdentity, summarizeFileChanges, type ChangeGroup } from "../services/diff"
+import { textComparisonCounts } from "./text-comparison"
+import { toolFileChangesFromState, type ToolFileChange, type ToolReceiptContext } from "./tool-file-changes"
 import { relativePathFrom } from "./tool"
 import { projectedConversationMessageFacts, type ProjectedMessageFacts } from "../services/tree-writer"
-import { conversationDeferredToolState } from "@opencorvus-ai/transport-protocol"
+import { conversationDeferredToolState, conversationToolFileChanges } from "@opencorvus-ai/transport-protocol"
 
-export interface ToolFileChange extends FileChange {
-  openPath: string
-  displayPath: string
-}
 export interface AgentFileChange extends ToolFileChange {
   agentID: string
   sources: number
@@ -21,11 +19,6 @@ export interface ArtifactFileRow {
   additions: number | null
   deletions: number | null
   isText?: boolean
-}
-export interface ToolReceiptContext {
-  sessionID: string
-  messageID: string
-  partID: string
 }
 export interface FileChangeInput {
   part: unknown
@@ -59,61 +52,16 @@ function unavailable(
     evidence: { kind: "incomplete", reason, receipts: receiptsUnique(receipts) },
   }
 }
-function comparison(
-  raw: Record<string, any>,
-  base: string,
-  kind: "edit" | "patch",
-  receipts: FileChangeReceipt[],
-): ToolFileChange | null {
-  const source = text(kind === "edit" ? raw.file : raw.filePath)
-  if (!source) return null
-  const target = kind === "patch" ? (text(raw.movePath) ?? source) : source
-  const file =
-    target !== source ? `${displayPath(source, base)} -> ${displayPath(target, base)}` : displayPath(target, base)
-  const status =
-    kind === "patch"
-      ? raw.type === "add"
-        ? "added"
-        : raw.type === "delete"
-          ? "deleted"
-          : raw.type === "update" || raw.type === "move"
-            ? "modified"
-            : undefined
-      : undefined
-  const change: ToolFileChange = {
-    file,
-    openPath: target,
-    displayPath: file,
-    status,
-    additions: null,
-    deletions: null,
-    evidence: { kind: "incomplete", reason: "missing_endpoints", receipts },
-  }
-  if (typeof raw.before !== "string" || typeof raw.after !== "string") return change
-  return {
-    ...change,
-    isText: true,
-    before: raw.before,
-    after: raw.after,
-    ...textComparisonCounts(raw.before, raw.after),
-    evidence: { kind: "complete", receipts },
-  }
-}
-export function toolFileChangesFromState(state: unknown, base: string, context?: ToolReceiptContext): ToolFileChange[] {
-  if (!record(state) || state.status !== "completed" || !record(state.metadata)) return []
-  const receipt = (fileIndex: number): FileChangeReceipt[] => (context ? [{ ...context, fileIndex }] : [])
-  const meta = state.metadata
-  if (Array.isArray(meta.files))
-    return meta.files.flatMap((raw, index) => {
-      const change = record(raw) ? comparison(raw, base, "patch", receipt(index)) : null
-      return change ? [change] : []
-    })
-  const change = record(meta.filediff) ? comparison(meta.filediff, base, "edit", receipt(0)) : null
-  return change ? [change] : []
-}
-function context(part: Record<string, any>): ToolReceiptContext | undefined {
+function context(part: Record<string, any>, base: string): ToolReceiptContext | undefined {
+  const deferredState = conversationDeferredToolState(part.state?.metadata)
   return text(part.sessionID) && text(part.messageID) && text(part.id)
-    ? { sessionID: part.sessionID, messageID: part.messageID, partID: part.id }
+    ? {
+        sessionID: part.sessionID,
+        messageID: part.messageID,
+        partID: part.id,
+        directory: base,
+        ...(deferredState ? { deferredState } : {}),
+      }
     : undefined
 }
 function receiptKey(change: ToolFileChange): string | undefined {
@@ -207,7 +155,7 @@ export function reduceToolFileChangeGroups(
     if (part.type === "patch" && Array.isArray(part.files)) {
       for (const [fileIndex, file] of part.files.entries()) {
         if (!text(file)) continue
-        const ctx = context(part)
+        const ctx = context(part, base)
         const receipts: FileChangeReceipt[] = ctx ? [{ ...ctx, fileIndex }] : []
         add(
           {
@@ -226,10 +174,14 @@ export function reduceToolFileChangeGroups(
     if (part.type !== "tool") continue
     if (conversationDeferredToolState(part.state?.metadata)) {
       if (part.tool === "edit" || part.tool === "apply_patch" || part.tool === "write") {
-        const known = toolFileChangesFromState(part.state, base, context(part))
+        const known = toolFileChangesFromState(part.state, base, context(part, base))
+        if (conversationToolFileChanges(part.state?.metadata)) {
+          for (const change of known) add(change, part.tool === "edit", false)
+          continue
+        }
         if (part.tool === "write" && text(part.state.metadata.filepath)) {
           const path = part.state.metadata.filepath,
-            ctx = context(part)
+            ctx = context(part, base)
           known.push({
             file: displayPath(path, base),
             openPath: path,
@@ -241,7 +193,7 @@ export function reduceToolFileChangeGroups(
         }
         for (const change of known) add(unavailable(change, "deferred"), false, true)
         if (!known.length) {
-          const ctx = context(part)
+          const ctx = context(part, base)
           if (ctx) {
             const id = `path_coverage:${sessionID}:${actor}:unavailable`
             const group = unavailableGroups.get(id) ?? {
@@ -260,7 +212,7 @@ export function reduceToolFileChangeGroups(
       }
       continue
     }
-    for (const change of toolFileChangesFromState(part.state, base, context(part)))
+    for (const change of toolFileChangesFromState(part.state, base, context(part, base)))
       add(change, part.tool === "edit", false)
   }
   const originalReceipts = new Map<string, Entry>()
@@ -325,6 +277,14 @@ export function reduceToolFileChangeGroups(
         }
         if (!previous.edit || !next.edit || previous.change.status !== undefined || next.change.status !== undefined) {
           reason = "unsupported_lifecycle"
+          break
+        }
+        if (
+          [previous.change.before, previous.change.after, next.change.before, next.change.after].some(
+            (endpoint) => typeof endpoint !== "string",
+          )
+        ) {
+          reason = "missing_endpoints"
           break
         }
         reason = normalRelation(previous.part, next.part, facts, previous.agentID)

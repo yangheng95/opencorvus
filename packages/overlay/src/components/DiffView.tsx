@@ -6,11 +6,19 @@
 import { diffLines } from "diff"
 import { createMemo, For, Show } from "solid-js"
 import { t, tc } from "../utils/i18n"
+import type { ConversationDeferredToolState } from "@opencorvus-ai/transport-protocol"
 
 // ── Types ──
 
 export type FileChangeReceipt =
-  | { sessionID: string; messageID: string; partID: string; fileIndex?: number }
+  | {
+      sessionID: string
+      messageID: string
+      partID: string
+      fileIndex?: number
+      directory?: string
+      deferredState?: ConversationDeferredToolState
+    }
   | { artifactID: string; fileIndex: number }
   | { sessionID: string; fileIndex: number }
 

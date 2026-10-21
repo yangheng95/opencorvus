@@ -1,0 +1,30 @@
+[
+  {
+    "level": "info",
+    "time": "2026-10-21T04:54:00.687Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "5824d733-ce85-4f2f-9020-7fb6b0fafde9",
+      "method": "POST",
+      "path": "/task/tsk_g00VYejR5b00qdJmPgrC/artifact-read",
+      "status": "started"
+    },
+    "message": "request"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-21T04:54:00.710Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "5824d733-ce85-4f2f-9020-7fb6b0fafde9",
+      "method": "POST",
+      "path": "/task/tsk_g00VYejR5b00qdJmPgrC/artifact-read",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 23
+    },
+    "message": "request"
+  }
+]

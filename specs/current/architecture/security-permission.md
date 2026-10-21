@@ -14,6 +14,15 @@
 
 The invocation descriptor binds provider kind and identity, provider/config digest, Tool identity, effect class, redacted normalized arguments, an exact argument hash, and a scope-schema version. Any material change produces a new fingerprint and therefore a new request.
 
+Local operations use a filesystem descriptor only when their invocation identifies
+actual canonical filesystem paths. Operations with structured resources, including
+Artifact Snapshot files and an optional immutable source commit, use the common
+provider descriptor with the operation and complete redacted arguments. Nested
+snapshot paths are relative to their declared source, not an inferred current
+worker directory. Empty filesystem path lists cannot describe these resources.
+Effect classification and reusable grant eligibility remain independent of this
+presentation. Existing immutable requests retain their original scope.
+
 `Ask me` can offer:
 
 - `allow_once`: the exact invocation;

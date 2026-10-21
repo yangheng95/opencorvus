@@ -1,0 +1,54 @@
+[
+  {
+    "level": "info",
+    "time": "2026-10-21T04:49:10.396Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "14f8662a-9914-4c70-86d9-7cebcb9d9d3f",
+      "method": "POST",
+      "path": "/task/tsk_g00VYejR5b00qdJmPgrC/artifact-read",
+      "status": "started"
+    },
+    "message": "request"
+  },
+  {
+    "level": "error",
+    "time": "2026-10-21T04:49:10.403Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "14f8662a-9914-4c70-86d9-7cebcb9d9d3f",
+      "method": "POST",
+      "path": "/task/tsk_g00VYejR5b00qdJmPgrC/artifact-read",
+      "statusCode": 400,
+      "error": {
+        "type": "ProviderModelNotFoundError",
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}",
+        "stack": "ProviderModelNotFoundError: ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}\n    at getModelFromCatalog (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:1229:17)\n    at validateConfigModelReferences (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\model-reference-validation.ts:45:14)\n    at async validateConfigCandidate (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\candidate-validation.ts:18:30)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:51:11)\n    at async stage (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\open-lifecycle.ts:38:28)\n    at async validateInstanceConversationCapabilities (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:49:30)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:1131:11)\n    at processTicksAndRejections (native:7:39)",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        },
+        "name": "ProviderModelNotFoundError"
+      }
+    },
+    "message": "request failed"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-21T04:49:10.403Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "14f8662a-9914-4c70-86d9-7cebcb9d9d3f",
+      "method": "POST",
+      "path": "/task/tsk_g00VYejR5b00qdJmPgrC/artifact-read",
+      "status": "completed",
+      "statusCode": 400,
+      "duration": 8
+    },
+    "message": "request"
+  }
+]

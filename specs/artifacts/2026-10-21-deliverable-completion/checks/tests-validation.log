@@ -1,0 +1,58 @@
+$ bun script/run-tests.ts test/conversation-transport-projection.test.ts test/permission-resource-description.test.ts test/apply-patch-delete-counts.test.ts
+[1/3] START test/conversation-transport-projection.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) retains bounded exact file observations in historical, updated and moved Tool projections [21.57ms]
+(pass) bounds a complete file observation within the shared metadata budget [0.50ms]
+(pass) preserves actual read result facts through bounded transport: {"readType":"text","offset":24,"lines":2,"totalLines":30} [0.30ms]
+(pass) preserves actual read result facts through bounded transport: {"readType":"directory","offset":2,"lines":2,"totalLines":3} [0.22ms]
+(pass) preserves actual read result facts through bounded transport: {"readType":"binary","lines":0,"totalLines":0} [0.20ms]
+(pass) projects one bounded first-paint transcript while retaining exact persisted identity [7.91ms]
+(pass) projects the same bounded Tool Part through the exact live event envelope [0.47ms]
+(pass) defers a large Tool input while preserving its compact display identity [1.21ms]
+(pass) classifies the complete live Reasoning Part sequence as omitted display transport [0.27ms]
+(pass) retains the exact live Text delta classification [0.04ms]
+(pass) projects a large completed Tool into one explicitly bounded state shape [1.78ms]
+(pass) retains a bounded deferred Tool title with exact byte boundary [0.27ms]
+(pass) retains a bounded deferred Tool title with ASCII prefix [0.43ms]
+(pass) retains a bounded deferred Tool title with Chinese code points [0.23ms]
+(pass) retains a bounded deferred Tool title with emoji code points [0.23ms]
+(pass) retains a bounded deferred Tool title with escaped quotes [0.32ms]
+(pass) retains a bounded deferred Tool title with escaped newlines [0.18ms]
+(pass) retains a bounded deferred Tool title with mixed-width boundary [0.19ms]
+
+ 18 pass
+ 0 fail
+ 54 expect() calls
+Ran 18 tests across 1 file. [3.92s]
+[1/3] DONE test/conversation-transport-projection.test.ts exit=0 duration=4.73s
+[2/3] START test/permission-resource-description.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) describes the complete structured local operation: {"toolName":"artifact_snapshot","args":{"files":[{"path":"docs/goal.md","media_type":"text/markdown"}]}} [3005.59ms]
+(pass) describes the complete structured local operation: {"toolName":"artifact_snapshot","args":{"source_commit":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","files":[{"path":"docs/result.md"}]}} [1971.26ms]
+(pass) describes the complete structured local operation: {"toolName":"memory","args":{"action":"update","content":"Remember the actual result"}} [2185.23ms]
+(pass) describes the complete structured local operation: {"toolName":"work_artifact_validate","args":{"artifact_id":"artifact_actual"}} [2010.87ms]
+(pass) describes an ordinary file write with its actual absolute resource [2777.74ms]
+
+ 5 pass
+ 0 fail
+ 9 expect() calls
+Ran 5 tests across 1 file. [13.57s]
+[2/3] DONE test/permission-resource-description.test.ts exit=0 duration=13.78s
+[3/3] START test/apply-patch-delete-counts.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) reports the actual deleted text lines for "" [3294.90ms]
+(pass) reports the actual deleted text lines for "one" [2229.61ms]
+(pass) reports the actual deleted text lines for "one\n" [2354.88ms]
+(pass) reports the actual deleted text lines for "one\ntwo\n" [2955.11ms]
+
+ 4 pass
+ 0 fail
+ 8 expect() calls
+Ran 4 tests across 1 file. [12.60s]
+[3/3] DONE test/apply-patch-delete-counts.test.ts exit=0 duration=13.05s

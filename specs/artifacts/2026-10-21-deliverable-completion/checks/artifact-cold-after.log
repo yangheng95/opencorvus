@@ -1,0 +1,38 @@
+$ bun script/run-tests.ts test/server/conversation-artifact-read.test.ts test/project-route-context.test.ts
+[1/2] START test/server/conversation-artifact-read.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+{"qualification":"owned artifact checker loopback listener","pid":78932,"url":"http://127.0.0.1:62964/"}
+(pass) Conversation Artifact byte route > cold published resources retain exact bytes and Project authority with an unavailable execution model [4502.57ms]
+(pass) Conversation Artifact byte route > reads the exact Engine Artifact owned by each addressed Task [2301.56ms]
+(pass) Conversation Artifact byte route > reads a snapshot manifest and reconstructs its UTF-8 text resource from exact byte ranges [1977.51ms]
+(pass) Conversation Artifact byte route > preserves large Unicode text and short route ranges at boundary BOM [2264.32ms]
+(pass) Conversation Artifact byte route > preserves large Unicode text and short route ranges at three-byte character [1813.44ms]
+(pass) Conversation Artifact byte route > preserves large Unicode text and short route ranges at four-byte character [2449.17ms]
+(pass) Conversation Artifact byte route > returns a binary resource as exact raw bytes with immutable metadata [3229.80ms]
+{"qualification":"owned artifact listener canonical stop awaited","pid":78932,"url":"http://127.0.0.1:62964/"}
+
+ 7 pass
+ 0 fail
+ 69 expect() calls
+Ran 7 tests across 1 file. [23.49s]
+[1/2] DONE test/server/conversation-artifact-read.test.ts exit=0 duration=24.21s
+[2/2] START test/project-route-context.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Project route context authority > assigns continuous-goal reads to Project identity and mutations to runtime for every owner kind [0.46ms]
+(pass) Project route context authority > uses exact identity metadata reads while memory organization and prompt retain runtime [0.14ms]
+(pass) Project route context authority > classifies ordinary conversation title mutations through exact Project identity [0.09ms]
+(pass) Project route context authority > uses Project identity for persisted Session pages and event subscriptions [0.14ms]
+(pass) Project route context authority > classifies persisted deletions independently from live Project discovery [0.09ms]
+(pass) Project route context authority > keeps identity-only configuration and full runtime routes distinct [0.09ms]
+(pass) Project route context authority > provisions obsolete packages through identity-only routes [0.04ms]
+(pass) Project route context authority > gives project-owned routes on globally-served routers the same runtime authority as their siblings [0.05ms]
+
+ 8 pass
+ 0 fail
+ 8 expect() calls
+Ran 8 tests across 1 file. [1085.00ms]
+[2/2] DONE test/project-route-context.test.ts exit=0 duration=1.22s

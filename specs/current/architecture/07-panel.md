@@ -401,6 +401,12 @@ subjects. The shared summary counts unique known paths and leaves unknown or
 overlapping comparison totals null; all Review, conversation, inline Tool and
 Environment surfaces consume that same derivation.
 
+Published Task Artifact previews and downloads read exact immutable bytes through
+the existing Project-identity context. The POST byte-read request does not require
+an available execution model. Task/Project ownership, original snapshot identity,
+resource integrity and byte ranges remain mandatory; execution configuration and
+prompt routes retain full runtime validation.
+
 Normal multi-Edit composition requires the same real accepted input batch,
 Session/actor, exact endpoint lineage and completed normal step controls with
 unique completed Tool membership. Message placement and clocks do not establish
@@ -410,6 +416,24 @@ comparison remains separately inspectable. Write path coverage supplies no inven
 after text. Canonical deferred mutation receipts remain visible even with no known
 path. Current saved Session Snapshot DTO lacks binary/absence flags and is therefore
 incomplete; current Build nullable object evidence is validated at its sole adapter.
+
+Large completed Edit and Apply Patch results retain bounded per-file observations
+from their producer metadata: original file index, exact path/move path, explicit
+physical status and text-line counts. This shares the existing 1024-byte metadata
+budget; a complete observation that cannot fit remains explicitly unknown. It is
+a projection of the canonical Tool receipt, never a second persisted change store.
+Single-receipt comparisons show those known counts and lazily read the exact
+immutable Part only when Review opens. Inline disclosure and Review share one
+authority-scoped Part reader/cache and verify canonical identity, state integrity
+and observed comparison identity. Multiple Edit receipts still require full text
+endpoints and normal causal evidence before composition. Current working files
+cannot substitute for historical endpoints. Apply Patch deletion counts use the
+same text comparison as additions, updates and Review, including trailing newlines.
+
+Review layout follows its actual panel width through the existing CSS container
+primitive. Narrow panels place the file scope above a full-width wrapping diff,
+retaining independently scrollable panes and original keyboard selection. Wider
+panels retain the side-by-side comparison and file collection.
 
 Tree-writer retains actual qualification/control facts in the existing Message
 owner, with a readonly transient snapshot for the reducer. Full history validates

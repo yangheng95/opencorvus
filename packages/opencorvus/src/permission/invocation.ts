@@ -196,12 +196,7 @@ function filesystemScope(toolName: string, args: unknown): Record<string, unknow
   const input = inputRecord(args)
   const single = canonicalPath(input.filePath ?? input.path)
   const paths = toolName === "apply_patch" ? patchPaths(input.patchText) : single ? [single] : []
-  if (
-    paths.length === 0 &&
-    !["memory", "expert_squad_author", "work_artifact_author", "artifact_snapshot"].includes(toolName)
-  ) {
-    return undefined
-  }
+  if (paths.length === 0) return undefined
   return {
     scope_type: "filesystem",
     operation: toolName,
@@ -276,14 +271,8 @@ async function canonicalResourceScope(
   if (providerKind === "builtin" && toolName === "schedule") return scheduleScope(args)
   if (providerKind === "builtin" && toolName === "skill_market") return skillMarketScope(args)
   if (providerKind === "builtin" && (effectClass === "read_local" || effectClass === "write_local")) {
-    return (
-      filesystemScope(toolName, args) ?? {
-        scope_type: "filesystem",
-        operation: toolName,
-        working_directory: canonicalPath(Instance.directory),
-        payload_sha256: sha256(args),
-      }
-    )
+    const resource = filesystemScope(toolName, args)
+    if (resource) return resource
   }
   if (providerKind === "builtin" && effectClass === "network_read") return networkScope(toolName, args)
   return {

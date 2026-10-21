@@ -1,4 +1,6 @@
 .file-changes-view {
+  container-type: inline-size;
+  container-name: file-review;
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
@@ -112,6 +114,33 @@
 .changes-diff-pane .diff-preview-body--text {
   width: max-content;
   min-width: 100%;
+}
+
+@container file-review (width < 680px) {
+  .changes-review-workspace {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 2fr) minmax(0, 3fr);
+  }
+
+  .changes-file-pane {
+    grid-row: 1;
+    border-left: 0;
+    border-bottom: var(--oc-border-width) solid var(--divider-soft);
+  }
+
+  .changes-diff-pane {
+    grid-row: 2;
+  }
+
+  .changes-diff-pane .diff-preview-body--text {
+    width: 100%;
+  }
+
+  .changes-diff-pane .diff-row {
+    grid-template-columns: calc(20px * var(--ui-scale)) calc(36px * var(--ui-scale)) calc(
+        36px * var(--ui-scale)
+      ) minmax(0, 1fr);
+  }
 }
 
 .changes-total {

@@ -5,7 +5,8 @@ import { exactEngineArtifactLocator } from "../../src/artifact-catalog"
 import { recordEngineArtifact } from "../../src/engine/artifact"
 import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
 import { Identifier } from "../../src/id/id"
-import { Instance } from "../../src/project/instance"
+import { Instance, runOutsideInstanceContext } from "../../src/project/instance"
+import { ConfigPaths } from "../../src/config/paths"
 import { ProjectRuntimePaths } from "../../src/project/runtime-paths"
 import { Server } from "../../src/server/server"
 import { Session } from "../../src/session"
@@ -22,7 +23,13 @@ let listener: ReturnType<typeof Server.listenPrepared> | undefined
 function artifactListener() {
   if (!listener) {
     listener = Server.listenPrepared({ hostname: "127.0.0.1", port: 0, randomPort: true })
-    console.log(JSON.stringify({ qualification: "owned artifact checker loopback listener", pid: process.pid, url: listener.url.toString() }))
+    console.log(
+      JSON.stringify({
+        qualification: "owned artifact checker loopback listener",
+        pid: process.pid,
+        url: listener.url.toString(),
+      }),
+    )
   }
   return listener
 }
@@ -30,7 +37,9 @@ afterAll(async () => {
   if (listener) {
     const url = listener.url.toString()
     await listener.stop(true)
-    console.log(JSON.stringify({ qualification: "owned artifact listener canonical stop awaited", pid: process.pid, url }))
+    console.log(
+      JSON.stringify({ qualification: "owned artifact listener canonical stop awaited", pid: process.pid, url }),
+    )
   }
 })
 
@@ -162,6 +171,64 @@ async function readArtifact(
 }
 
 describe("Conversation Artifact byte route", () => {
+  test("cold published resources retain exact bytes and Project authority with an unavailable execution model", async () => {
+    await using project = await memoryProject("artifact-cold-owner")
+    await using other = await memoryProject("artifact-cold-other")
+    const task = await createTask(project.path, "Cold Artifact resource owner")
+    const expected = "# 已发布成果\n\n真实发布的完整正文。\n"
+    const publication = await publishResources(task.scope, [
+      { path: "result.md", mediaType: "text/markdown", bytes: Buffer.from(expected, "utf8") },
+    ])
+    const config = ConfigPaths.projectFile(project.path)
+    await fs.mkdir(path.dirname(config), { recursive: true })
+    await fs.writeFile(config, JSON.stringify({ model: "artifact-reader-unavailable/model" }))
+    await Instance.disposeAll()
+    await runOutsideInstanceContext(async () => {
+      const manifest = await readArtifact(project.path, task.taskID, {
+        source: "task_artifact_snapshot",
+        snapshot: publication.snapshot,
+      })
+      expect(JSON.parse(await manifest.text())).toEqual(publication.manifest)
+      const resource = publication.artifacts[0]!
+      const locator = { source: "task_artifact_resource", ref: resource }
+      const response = await readArtifact(project.path, task.taskID, locator)
+      expect({
+        status: response.status,
+        text: await response.text(),
+        type: response.headers.get("content-type"),
+        range: response.headers.get("content-range"),
+        etag: response.headers.get("etag"),
+      }).toEqual({
+        status: 200,
+        text: expected,
+        type: "text/markdown",
+        range: `bytes 0-${Buffer.byteLength(expected) - 1}/${Buffer.byteLength(expected)}`,
+        etag: `"sha256:${resource.sha256}"`,
+      })
+      const crossProject = await fetch(new URL(`/task/${task.taskID}/artifact-read`, artifactListener().url), {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-opencorvus-directory": other.path },
+        body: JSON.stringify({ locator, byte_offset: 0, max_bytes: 65536 }),
+        signal: AbortSignal.timeout(15000),
+      })
+      expect({ status: crossProject.status, body: await crossProject.json() }).toEqual({
+        status: 404,
+        body: { name: "NotFoundError", data: { message: `Task not found: ${task.taskID}` } },
+      })
+      const execution = await fetch(new URL(`/session/${task.scope.sessionID}/config`, artifactListener().url), {
+        headers: { "x-opencorvus-directory": project.path },
+        signal: AbortSignal.timeout(15000),
+      })
+      expect({ status: execution.status, body: await execution.json() }).toMatchObject({
+        status: 400,
+        body: {
+          name: "ProviderModelNotFoundError",
+          data: { providerID: "artifact-reader-unavailable", modelID: "model" },
+        },
+      })
+    })
+  })
+
   test("reads the exact Engine Artifact owned by each addressed Task", async () => {
     await using project = await memoryProject()
     const firstTask = await createTask(project.path, "First Artifact owner")
@@ -255,7 +322,8 @@ describe("Conversation Artifact byte route", () => {
     const resource = publication.artifacts[0]!
     const locator = { source: "task_artifact_resource", ref: resource }
     const manifestResponse = await readArtifact(project.path, task.taskID, {
-      source: "task_artifact_snapshot", snapshot: publication.snapshot,
+      source: "task_artifact_snapshot",
+      snapshot: publication.snapshot,
     })
     expect(JSON.parse(await manifestResponse.text())).toEqual(publication.manifest)
 
@@ -275,7 +343,10 @@ describe("Conversation Artifact byte route", () => {
         disposition: response.headers.get("content-disposition"),
         etag: response.headers.get("etag"),
       }).toEqual({
-        status: 200, range: expectedRange, mediaType: "text/plain", disposition: "inline",
+        status: 200,
+        range: expectedRange,
+        mediaType: "text/plain",
+        disposition: "inline",
         etag: `"sha256:${resource.sha256}"`,
       })
       const bytes = new Uint8Array(await response.arrayBuffer())
@@ -298,11 +369,24 @@ describe("Conversation Artifact byte route", () => {
     expect(Buffer.concat(chunks)).toEqual(expectedBytes)
     expect(actualText).toBe(expectedText)
     expect(Buffer.from(actualText, "utf8")).toEqual(expectedBytes)
-    configureArtifactApi({ serverUrl: artifactListener().url.toString(), username: "dummy", password: "", directory: project.path })
+    configureArtifactApi({
+      serverUrl: artifactListener().url.toString(),
+      username: "dummy",
+      password: "",
+      directory: project.path,
+    })
     setSettingsStore("directory", project.path)
     const decoded = await loadConversationArtifactContent({ taskID: task.taskID, locator })
-    expect({ text: decoded.text, bytes: decoded.totalBytes, mediaType: decoded.mediaType, sha256: decoded.sha256 }).toEqual({
-      text: expectedText, bytes: expectedBytes.byteLength, mediaType: "text/plain", sha256: resource.sha256,
+    expect({
+      text: decoded.text,
+      bytes: decoded.totalBytes,
+      mediaType: decoded.mediaType,
+      sha256: decoded.sha256,
+    }).toEqual({
+      text: expectedText,
+      bytes: expectedBytes.byteLength,
+      mediaType: "text/plain",
+      sha256: resource.sha256,
     })
     expect(Buffer.from(decoded.text!, "utf8")).toEqual(expectedBytes)
   })

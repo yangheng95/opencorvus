@@ -148,7 +148,10 @@ export const ApplyPatchTool = Tool.define("apply_patch", {
           })
           const deleteDiff = trimDiff(createTwoFilesPatch(filePath, filePath, contentToDelete, ""))
 
-          const deletions = contentToDelete.split("\n").length
+          let deletions = 0
+          for (const change of diffLines(contentToDelete, "")) {
+            if (change.removed) deletions += change.count || 0
+          }
 
           fileChanges.push({
             filePath,

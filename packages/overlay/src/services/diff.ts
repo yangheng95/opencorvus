@@ -4,7 +4,8 @@ import type { FileChange, FileChangeReceipt } from "../components/DiffView"
 import { apiRequest, ApiError, captureApiAuthority, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { taskScopedPath } from "./task-path"
 import { taskOwningDirectory } from "./task-directory"
-import { diffLines } from "diff"
+import { toolFileChangesFromState } from "../utils/tool-file-changes"
+import { readDeferredToolPart } from "./tool-part"
 const BUILD_OBSERVATION_CONTENT_CHUNK_BYTES = 256 * 1024
 export interface DiffTarget {
   filePath: string
@@ -47,14 +48,6 @@ export function changeGroupIdentity(group: ChangeGroup): string {
     group.commitRef,
     group.publishedCommitRef,
   ])
-}
-export function textComparisonCounts(before: string, after: string): { additions: number; deletions: number } {
-  const counts = { additions: 0, deletions: 0 }
-  for (const change of diffLines(before, after)) {
-    if (change.added) counts.additions += change.count ?? 0
-    if (change.removed) counts.deletions += change.count ?? 0
-  }
-  return counts
 }
 export function summarizeFileChanges(changes: readonly FileChange[]): ChangeSummary {
   const overlapping = new Set(changes.map((change) => change.file)).size !== changes.length
@@ -245,6 +238,36 @@ export async function resolveDiff(
   if (matches.length > 1) throw new DiffSelectionError("ambiguous_path")
   const change = matches[0] ?? null
   if (!change || change.evidence.kind === "incomplete" || hasDiffBody(change) || change.isText !== true) return change
+  if (group?.observationKind === "tool_interval" && change.evidence.receipts.length === 1) {
+    const receipt = change.evidence.receipts[0]
+    if ("partID" in receipt && receipt.directory && receipt.deferredState) {
+      const authority = captureApiAuthority()
+      const loaded = await readDeferredToolPart({
+        ...receipt,
+        ...receipt.deferredState,
+        directory: receipt.directory,
+        authority,
+      })
+      assertApiAuthorityCurrent(authority)
+      const original = toolFileChangesFromState(loaded.state, receipt.directory, {
+        sessionID: receipt.sessionID,
+        messageID: receipt.messageID,
+        partID: receipt.partID,
+      }).find((candidate) =>
+        candidate.evidence.receipts.some((source) => "partID" in source && source.fileIndex === receipt.fileIndex),
+      )
+      if (
+        !original ||
+        original.file !== change.file ||
+        original.status !== change.status ||
+        original.additions !== change.additions ||
+        original.deletions !== change.deletions
+      ) {
+        throw new Error(`Tool comparison ${receipt.partID} differs from its recorded observation`)
+      }
+      return original
+    }
+  }
   if (
     group?.observationKind !== "immutable_build_interval" ||
     !group.artifactID ||

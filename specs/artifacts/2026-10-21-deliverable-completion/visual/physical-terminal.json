@@ -1,0 +1,65 @@
+{
+  "observedAtUtc": "2026-10-21T04:50:41.5866004Z",
+  "originalExit": 0,
+  "launcher": {
+    "observedAtUtc": "2026-10-21T04:50:39.5936432Z",
+    "childExitCode": 0
+  },
+  "chain": [
+    {
+      "identity": {
+        "pid": 58924,
+        "processInstanceID": "win32:639281547727877792",
+        "occurrenceID": "a0223311-8a7e-4a54-a276-44b542ba9161"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "identity": {
+        "pid": 73668,
+        "processInstanceID": "win32:639281547736777635",
+        "occurrenceID": "0ea1f6de-a7f1-4499-97ed-3cc66ebf4f6b"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "native": {
+    "occurrence": "deliverable-completion-502-visual-service-a22bd44a-c23b-493d-bfec-9290d8b85bfa",
+    "outcome": "settled",
+    "host": {
+      "pid": 58924,
+      "processInstanceID": "win32:639281547727877792",
+      "occurrenceID": "a0223311-8a7e-4a54-a276-44b542ba9161"
+    },
+    "target": {
+      "pid": 73668,
+      "processInstanceID": "win32:639281547736777635",
+      "occurrenceID": "0ea1f6de-a7f1-4499-97ed-3cc66ebf4f6b"
+    },
+    "observedAtUtc": "2026-10-21T04:50:39.541Z",
+    "deadlineAt": 1792559172021,
+    "terminal": {
+      "occurrenceID": "deliverable-completion-502-visual-service-a22bd44a-c23b-493d-bfec-9290d8b85bfa",
+      "pid": 73668,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "originalHandle": 85235,
+  "shutdown": {
+    "occurrence": "deliverable-completion-502-visual-service-a22bd44a-c23b-493d-bfec-9290d8b85bfa",
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYelgxx00ZW9BzXG14\"}",
+    "target": {
+      "pid": 73668,
+      "processInstanceID": "win32:639281547736777635",
+      "occurrenceID": "0ea1f6de-a7f1-4499-97ed-3cc66ebf4f6b"
+    },
+    "statusCode": 200,
+    "observedAtUtc": "2026-10-21T04:50:39.4674698Z"
+  }
+}

@@ -1,6 +1,8 @@
 import {
   CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY,
   CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
+  CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY,
+  type ConversationToolFileChange,
 } from "@opencorvus-ai/transport-protocol"
 import { createHash } from "node:crypto"
 import { Message } from "@/session/message"
@@ -13,10 +15,7 @@ function jsonBytes(value: unknown): number {
   return Buffer.byteLength(JSON.stringify(value) ?? "null", "utf8")
 }
 
-function boundedRecord(
-  value: unknown,
-  input: { maxBytes: number; keys: string[] },
-): Record<string, unknown> {
+function boundedRecord(value: unknown, input: { maxBytes: number; keys: string[] }): Record<string, unknown> {
   if (!value || typeof value !== "object" || Array.isArray(value)) return {}
   if (jsonBytes(value) <= input.maxBytes) return value as Record<string, unknown>
   const source = value as Record<string, unknown>
@@ -62,11 +61,71 @@ function boundedToolInput(value: unknown): Record<string, unknown> {
   })
 }
 
-function boundedToolMetadata(value: unknown): Record<string, unknown> {
-  return boundedRecord(value, {
-    maxBytes: 1024,
+function observedFileChanges(part: Message.ToolPart): ConversationToolFileChange[] | undefined {
+  if (part.state.status !== "completed") return undefined
+  const metadata = part.state.metadata
+  const rows =
+    part.tool === "apply_patch" && Array.isArray(metadata.files)
+      ? metadata.files
+      : part.tool === "edit" && metadata.filediff
+        ? [metadata.filediff]
+        : undefined
+  if (!rows?.length) return undefined
+  const changes: ConversationToolFileChange[] = []
+  for (const [fileIndex, raw] of rows.entries()) {
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) return undefined
+    const row = raw as Record<string, unknown>
+    const filePath = part.tool === "edit" ? row.file : row.filePath
+    if (
+      typeof filePath !== "string" ||
+      !filePath.trim() ||
+      typeof row.before !== "string" ||
+      typeof row.after !== "string" ||
+      ![row.additions, row.deletions].every((count) => Number.isSafeInteger(count) && Number(count) >= 0) ||
+      (row.movePath !== undefined && (typeof row.movePath !== "string" || !row.movePath.trim()))
+    )
+      return undefined
+    const status =
+      part.tool === "edit"
+        ? undefined
+        : row.type === "add"
+          ? ("added" as const)
+          : row.type === "delete"
+            ? ("deleted" as const)
+            : row.type === "update" || row.type === "move"
+              ? ("modified" as const)
+              : undefined
+    changes.push({
+      fileIndex,
+      filePath,
+      ...(typeof row.movePath === "string" ? { movePath: row.movePath } : {}),
+      ...(status ? { status } : {}),
+      additions: Number(row.additions),
+      deletions: Number(row.deletions),
+    })
+  }
+  return changes
+}
+
+function boundedToolMetadata(part: Message.ToolPart): Record<string, unknown> {
+  const value = part.state.status === "completed" ? part.state.metadata : {}
+  const changes = observedFileChanges(part)
+  const observation = changes ? { [CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY]: changes } : {}
+  const observationBytes = changes ? jsonBytes(observation) : 0
+  const projected = observationBytes <= 1024 ? observation : {}
+  const remainingBytes = 1024 - (Object.keys(projected).length ? observationBytes : 0)
+  const source = Object.fromEntries(
+    Object.entries(value).filter(
+      ([key]) =>
+        key !== CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY &&
+        (!changes || !["files", "filediff", "diff"].includes(key)),
+    ),
+  )
+  const retained = boundedRecord(source, {
+    maxBytes: Object.keys(projected).length ? Math.max(0, remainingBytes + 1) : 1024,
     keys: ["readType", "offset", "lines", "totalLines", "source", "title", "status", "browser", "computer"],
   })
+  return { ...retained, ...projected }
 }
 
 function boundedToolTitle(title: string): string {
@@ -106,7 +165,7 @@ export function projectConversationTransportPart(part: Message.VisiblePart): Mes
       output: "",
       title: boundedToolTitle(part.state.title),
       metadata: {
-        ...boundedToolMetadata(part.state.metadata),
+        ...boundedToolMetadata(part),
         [CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY]: {
           kind: "deferred",
           outputBytes: outputBytes(part.state.output),
@@ -119,9 +178,7 @@ export function projectConversationTransportPart(part: Message.VisiblePart): Mes
   }
 }
 
-export function projectConversationTransportMessage(
-  message: Message.VisibleWithParts,
-): Message.VisibleWithParts {
+export function projectConversationTransportMessage(message: Message.VisibleWithParts): Message.VisibleWithParts {
   return {
     ...message,
     parts: message.parts.flatMap((part) => {

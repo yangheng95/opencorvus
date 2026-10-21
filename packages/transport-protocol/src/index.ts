@@ -636,6 +636,41 @@ export function conversationMessageDisplayStage(origin: ConversationMessageOrigi
  */
 export const CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY = "opencorvus_conversation_tool_state" as const
 export const CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES = 4 * 1024
+export const CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY = "opencorvus_tool_file_changes" as const
+
+/** Bounded observations of one immutable Tool comparison, not composed worktree totals. */
+export interface ConversationToolFileChange {
+  fileIndex: number
+  filePath: string
+  movePath?: string
+  status?: "added" | "deleted" | "modified"
+  additions: number
+  deletions: number
+}
+
+export function conversationToolFileChanges(value: unknown): ConversationToolFileChange[] | undefined {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return undefined
+  const changes = (value as Record<string, unknown>)[CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY]
+  if (!Array.isArray(changes) || changes.length === 0) return undefined
+  const indices = new Set<number>()
+  for (const change of changes) {
+    if (!change || typeof change !== "object" || Array.isArray(change)) return undefined
+    const row = change as Record<string, unknown>
+    if (
+      !Number.isSafeInteger(row.fileIndex) ||
+      Number(row.fileIndex) < 0 ||
+      indices.has(Number(row.fileIndex)) ||
+      typeof row.filePath !== "string" ||
+      row.filePath.trim().length === 0 ||
+      (row.movePath !== undefined && (typeof row.movePath !== "string" || row.movePath.trim().length === 0)) ||
+      (row.status !== undefined && !["added", "deleted", "modified"].includes(String(row.status))) ||
+      ![row.additions, row.deletions].every((count) => Number.isSafeInteger(count) && Number(count) >= 0)
+    )
+      return undefined
+    indices.add(Number(row.fileIndex))
+  }
+  return changes as ConversationToolFileChange[]
+}
 
 export interface ConversationDeferredToolState {
   kind: "deferred"

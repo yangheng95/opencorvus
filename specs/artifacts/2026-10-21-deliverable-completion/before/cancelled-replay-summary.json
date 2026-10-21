@@ -1,0 +1,63 @@
+{
+  "at": "2026-10-21T04:04:14.295Z",
+  "statuses": [
+    200,
+    200,
+    202,
+    200
+  ],
+  "taskID": "tsk_g00VYeMccK0078SroWDw",
+  "interactionID": "int_g0VYeNJZT003I5AZCoPJ",
+  "requestID": "per_h9Tts9cnzyWtqrAjnwjN",
+  "ledger": [
+    {
+      "id": "per_g0VYeNJZP00sWIqhZ0gA",
+      "event_type": "requested",
+      "decision_slot": null,
+      "actor_id": null,
+      "reason": null
+    },
+    {
+      "id": "per_g0VYeVhyT00XzS04yhz9",
+      "event_type": "cancelled",
+      "decision_slot": "per_h9Tts9cnzyWtqrAjnwjN",
+      "actor_id": "system",
+      "reason": "The QA operator ends this incomplete private run before its fixed12-request scope can be exhausted. Four actual internal memory requests made the original test budget insufficient;retain all evidence and repeat the original two-file acceptance in a separately reviewed finite scope."
+    }
+  ],
+  "originalCancellation": {
+    "requestEventID": "pev_g0VYeP73r007mPuiefGt",
+    "requestedAt": 1792552858178,
+    "source": "task.cancel",
+    "requestID": "9dbc099b-ff38-498d-82e7-cc19b8f66930",
+    "actor": "user",
+    "surface": "api",
+    "reason": "The QA operator ends this incomplete private run before its fixed12-request scope can be exhausted. Four actual internal memory requests made the original test budget insufficient;retain all evidence and repeat the original two-file acceptance in a separately reviewed finite scope.",
+    "status": "cancelled",
+    "terminalEventID": "pev_g0VYeP75Z00rzrGVWH6M",
+    "terminalAt": 1792552858284
+  },
+  "replay": {
+    "requestEventID": "pev_g0VYeP73r007mPuiefGt",
+    "requestedAt": 1792552858178,
+    "source": "task.cancel",
+    "requestID": "9dbc099b-ff38-498d-82e7-cc19b8f66930",
+    "actor": "user",
+    "surface": "api",
+    "reason": "The QA operator ends this incomplete private run before its fixed12-request scope can be exhausted. Four actual internal memory requests made the original test budget insufficient;retain all evidence and repeat the original two-file acceptance in a separately reviewed finite scope.",
+    "status": "cancelled",
+    "terminalEventID": "pev_g0VYeP75Z00rzrGVWH6M",
+    "terminalAt": 1792552858284
+  },
+  "lifecycle": {
+    "taskID": "tsk_g00VYeMccK0078SroWDw",
+    "epoch": 1,
+    "openedEventID": "pev_g0VYeMcra015huqiPbbr",
+    "openedAt": 1792552264496,
+    "status": "cancelled",
+    "terminalEventID": "pev_g0VYeP75Z00rzrGVWH6M",
+    "terminalAt": 1792552858284,
+    "terminalError": "task cancelled"
+  },
+  "qualification": "Actual paired credential/catalog with exact Sol streaming preflight;original public Task/Interaction routes"
+}

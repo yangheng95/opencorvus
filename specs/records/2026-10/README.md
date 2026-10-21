@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [真实交付、变更与只读预览](2026-10-21-deliverable-completion-review.md)：[两次真实Sol交付、30图及42项后端合同](../../artifacts/2026-10-21-deliverable-completion/README.md)，历史无需迁移恢复摘要，保留空scope/拥挤Review/预览400原失败和完整原生结算。
+
 - [真实交付与取消审批](2026-10-21-real-deliverable-review.md)：[真实Sol取消缺陷、7张实图及22项合同](../../artifacts/2026-10-21-real-deliverable-review/README.md)，单一权限账本与启动恢复收敛；原两文件任务仍未达。
 
 - [持续目标与交付成果界面](2026-10-21-goal-deliverable-interface.md)：[实际命名冲突、首页调整与双语指南/草稿](../../artifacts/2026-10-21-goal-deliverable-interface/README.md)，16图、两原native完整收尾，未伪造非空列表。

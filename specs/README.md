@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [真实交付、变更与只读预览](records/2026-10/2026-10-21-deliverable-completion-review.md)：[30张实图、42项合同及两次真实Sol交付](artifacts/2026-10-21-deliverable-completion/README.md)，修复大结果变更丢失、审批空范围、窄栏Review与无模型预览400。
+
 - [真实交付与取消审批](records/2026-10/2026-10-21-real-deliverable-review.md)：[7张实图、22项合同与完整进程结算](artifacts/2026-10-21-real-deliverable-review/README.md)，修复取消后的残留审批和启动发现，保留两文件交付未达事实。
 
 - [持续目标与交付成果界面](records/2026-10/2026-10-21-goal-deliverable-interface.md)：[16张中英文实图与完整历史保留](artifacts/2026-10-21-goal-deliverable-interface/README.md)，首页持续目标移至输入后、侧栏交付名词区分，明确非空行视觉覆盖缺口。

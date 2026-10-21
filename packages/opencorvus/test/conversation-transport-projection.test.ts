@@ -2,6 +2,8 @@ import { expect, test } from "bun:test"
 import {
   CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY,
   CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
+  CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY,
+  conversationToolFileChanges,
 } from "@opencorvus-ai/transport-protocol"
 import {
   conversationTransportEventDisposition,
@@ -30,6 +32,87 @@ function completedTool(input: { id: string; output: string; metadata?: Record<st
   })
 }
 
+test("retains bounded exact file observations in historical, updated and moved Tool projections", () => {
+  const part = completedTool({
+    id: "prt_actual_patch",
+    output: "Two documents written",
+    metadata: {
+      files: [
+        {
+          filePath: "C:/project/docs/goal.md",
+          type: "add",
+          before: "",
+          after: "正文\n".repeat(400),
+          additions: 400,
+          deletions: 0,
+        },
+        {
+          filePath: "C:/project/old.md",
+          movePath: "C:/project/docs/result.md",
+          type: "move",
+          before: "old\n",
+          after: "new\n",
+          additions: 1,
+          deletions: 1,
+        },
+      ],
+      diff: "large diff".repeat(1000),
+      source: "actual-tool",
+    },
+  })
+  part.tool = "apply_patch"
+  const visible = Message.VisiblePart.parse({ ...part, orderKey: "patch-order" })
+  const projections = [
+    projectConversationTransportPart(visible),
+    (projectConversationTransportEventPayload(Message.Event.PartUpdated.type, { part: visible }) as any).part,
+    (projectConversationTransportEventPayload(Message.Event.Moved.type, { parts: [visible] }) as any).parts[0],
+  ] as Message.ToolPart[]
+  const expected = [
+    { fileIndex: 0, filePath: "C:/project/docs/goal.md", status: "added", additions: 400, deletions: 0 },
+    {
+      fileIndex: 1,
+      filePath: "C:/project/old.md",
+      movePath: "C:/project/docs/result.md",
+      status: "modified",
+      additions: 1,
+      deletions: 1,
+    },
+  ]
+  for (const projected of projections) {
+    expect(conversationToolFileChanges(projected.state.metadata)).toEqual(expected)
+    expect(projected.state).toMatchObject({
+      status: "completed",
+      metadata: {
+        source: "actual-tool",
+        [CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY]: { kind: "deferred" },
+      },
+    })
+    expect(Buffer.byteLength(JSON.stringify(projected.state))).toBeLessThanOrEqual(
+      CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
+    )
+  }
+})
+
+test("bounds a complete file observation within the shared metadata budget", () => {
+  const part = completedTool({
+    id: "prt_metadata_budget",
+    output: "x".repeat(5000),
+    metadata: {
+      filediff: { file: "C:/project/result.md", before: "before\n", after: "after\n", additions: 1, deletions: 1 },
+      source: "s".repeat(500),
+      title: "t".repeat(500),
+    },
+  })
+  part.tool = "edit"
+  const projected = projectConversationTransportPart(part) as Message.ToolPart
+  const { [CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY]: marker, ...retained } = projected.state.metadata
+  expect(marker).toMatchObject({ kind: "deferred" })
+  expect(retained[CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY]).toEqual([
+    { fileIndex: 0, filePath: "C:/project/result.md", additions: 1, deletions: 1 },
+  ])
+  expect(Buffer.byteLength(JSON.stringify(retained))).toBeLessThanOrEqual(1024)
+})
+
 test.each([
   { readType: "text", offset: 24, lines: 2, totalLines: 30 },
   { readType: "directory", offset: 2, lines: 2, totalLines: 3 },
@@ -43,7 +126,8 @@ test.each([
   const projected = projectConversationTransportPart(part) as Message.ToolPart
   expect(projected.state).toMatchObject({ status: "completed", metadata: facts })
   expect(projected.state.metadata[CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY]).toMatchObject({
-    kind: "deferred", outputBytes: CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
+    kind: "deferred",
+    outputBytes: CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
   })
 })
 
@@ -313,9 +397,7 @@ test("projects a large completed Tool into one explicitly bounded state shape", 
     },
     time: { start: 10, end: 20 },
   })
-  expect(Buffer.byteLength(JSON.stringify(state), "utf8")).toBeLessThanOrEqual(
-    CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
-  )
+  expect(Buffer.byteLength(JSON.stringify(state), "utf8")).toBeLessThanOrEqual(CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES)
 })
 
 test.each([
@@ -334,6 +416,8 @@ test.each([
 
   expect(projected.state).toMatchObject({ status: "completed", title: expected })
   expect(Buffer.byteLength(JSON.stringify(projected.state.title), "utf8")).toBeLessThanOrEqual(256)
-  expect(Buffer.byteLength(JSON.stringify(projected.state), "utf8")).toBeLessThanOrEqual(CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES)
+  expect(Buffer.byteLength(JSON.stringify(projected.state), "utf8")).toBeLessThanOrEqual(
+    CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
+  )
   expect(part.state.title).toBe(title)
 })

@@ -1,0 +1,29 @@
+$ bun script/run-tests.ts test/server/conversation-artifact-read.test.ts "--test-name-pattern=cold published resources"
+[1/1] START test/server/conversation-artifact-read.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+{"qualification":"owned artifact checker loopback listener","pid":76612,"url":"http://127.0.0.1:62686/"}
+155 |     },
+156 |     body: JSON.stringify({ locator, byte_offset: byteOffset, max_bytes: maxBytes }),
+157 |     signal: AbortSignal.timeout(15_000),
+158 |   })
+159 |   if (response.status !== 200) {
+160 |     throw new Error(`Conversation Artifact read returned ${response.status}: ${await response.text()}`)
+                    ^
+error: Conversation Artifact read returned 400: {"name":"ProviderModelNotFoundError","data":{"providerID":"artifact-reader-unavailable","modelID":"model","suggestions":[]}}
+      at readArtifact (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\conversation-artifact-read.test.ts:160:15)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\conversation-artifact-read.test.ts:179:30)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\conversation-artifact-read.test.ts:178:11)
+(fail) Conversation Artifact byte route > cold published resources retain exact bytes and Project authority with an unavailable execution model [5432.81ms]
+{"qualification":"owned artifact listener canonical stop awaited","pid":76612,"url":"http://127.0.0.1:62686/"}
+
+ 0 pass
+ 6 filtered out
+ 1 fail
+Ran 1 test across 1 file. [10.57s]
+[1/1] DONE test/server/conversation-artifact-read.test.ts exit=1 duration=11.24s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\conversation-artifact-read.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\conversation-artifact-read.test.ts
+error: script "test" exited with code 1
