@@ -2,7 +2,7 @@
 
 Continuous goal mode attaches explicit, revocable user intent to one existing Chat
 Session, Task or Mission Session. It is distinct from the Delivery Slice contracts
-displayed as Goals, and grants no additional capabilities or permissions.
+displayed as Deliverables, and grants no additional capabilities or permissions.
 
 The single implementation is src/continuous-goal. Native Chat and Mission tools and
 the projected Task scheduler expose create_continuous_goal, get_continuous_goal and
@@ -128,7 +128,13 @@ archives affect only goals whose exact owner is that Session.
 
 ## User controls
 
-The home page offers Create goal beside a compact explanation and How it works.
+The home page offers Create continuous goal beside a compact explanation and How it works,
+immediately after the existing composer and before the suggested conversation starters.
+It uses the same Continuous goal title as existing conversations, with an unboxed
+body-sized explanation. The introduction names its action from that same localized
+Home label. Task scope tools, tabs and Environment progress use Deliverables for
+Delivery Slice contracts; their panel explains where to find continuous execution
+controls without creating another goal entry or mutation path.
 It opens the existing goal form before creating a Conversation. The Home form
 binds the original API authority, selection epoch and composer draft scope;
 closing it retains the Home and its draft. Explicit form confirmation uses the

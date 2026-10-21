@@ -173,6 +173,9 @@ export function GoalsBoardPanel() {
         class="task-scope-panel__content task-scope-panel__content--goals"
         data-task-scope-content="goals"
       >
+        <p class="task-scope-panel__description">
+          {t("task_scope.goals_description", { goalControl: t("continuous_goal.title") })}
+        </p>
         <Show
           when={scope.goals().length > 0}
           fallback={<p class="empty-hint empty-hint--card">{t("task_scope.goals_pending")}</p>}

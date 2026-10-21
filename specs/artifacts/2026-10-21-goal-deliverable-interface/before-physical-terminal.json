@@ -1,0 +1,65 @@
+{
+  "originalExit": 0,
+  "originalHandle": 74015,
+  "observedAtUtc": "2026-10-21T02:41:25.7418454Z",
+  "native": {
+    "occurrence": "goal-deliverable-interface-500-before-139d669d-5004-46c3-8de6-60ac8fd71fb7",
+    "outcome": "settled",
+    "host": {
+      "pid": 69744,
+      "processInstanceID": "win32:639281469992884440",
+      "occurrenceID": "32a90dbd-13ca-4cc7-b518-91ea8b769b13"
+    },
+    "target": {
+      "pid": 56376,
+      "processInstanceID": "win32:639281470001963148",
+      "occurrenceID": "5c538fa0-4c3a-4088-8f74-d15c0b2ee475"
+    },
+    "observedAtUtc": "2026-10-21T02:41:12.237Z",
+    "deadlineAt": 1792551399154,
+    "terminal": {
+      "occurrenceID": "goal-deliverable-interface-500-before-139d669d-5004-46c3-8de6-60ac8fd71fb7",
+      "pid": 56376,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "chain": [
+    {
+      "identity": {
+        "pid": 69744,
+        "processInstanceID": "win32:639281469992884440",
+        "occurrenceID": "32a90dbd-13ca-4cc7-b518-91ea8b769b13"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "identity": {
+        "pid": 56376,
+        "processInstanceID": "win32:639281470001963148",
+        "occurrenceID": "5c538fa0-4c3a-4088-8f74-d15c0b2ee475"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "launcher": {
+    "observedAtUtc": "2026-10-21T02:41:12.2908026Z",
+    "childExitCode": 0
+  },
+  "shutdown": {
+    "observedAtUtc": "2026-10-21T02:41:12.1699399Z",
+    "target": {
+      "pid": 56376,
+      "processInstanceID": "win32:639281470001963148",
+      "occurrenceID": "5c538fa0-4c3a-4088-8f74-d15c0b2ee475"
+    },
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYeF6Ku00QB7p6TN9p\"}",
+    "statusCode": 200,
+    "occurrence": "goal-deliverable-interface-500-before-139d669d-5004-46c3-8de6-60ac8fd71fb7"
+  }
+}

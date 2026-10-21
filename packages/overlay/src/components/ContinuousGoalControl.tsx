@@ -51,7 +51,7 @@ function GoalGuideSteps() {
         {(step) => (
           <li>
             <strong>{t(`continuous_goal.guide.${step}.title`)}</strong>
-            <span>{t(`continuous_goal.guide.${step}.body`)}</span>
+            <span>{t(`continuous_goal.guide.${step}.body`, { createLabel: t("continuous_goal.home.create") })}</span>
           </li>
         )}
       </For>
@@ -416,7 +416,7 @@ export function ContinuousGoalControl(props: {
             <Icon name="goals" size="large" />
           </div>
           <div>
-            <h2>{t("continuous_goal.home.title")}</h2>
+            <h2>{t("continuous_goal.title")}</h2>
             <p>{t("continuous_goal.home.body")}</p>
           </div>
         </div>
@@ -430,7 +430,7 @@ export function ContinuousGoalControl(props: {
             onClick={() => open("create")}
           >
             <Icon name="goals" size="compact" />
-            {t(props.starting ? "continuous_goal.home.starting" : "continuous_goal.create")}
+            {t(props.starting ? "continuous_goal.home.starting" : "continuous_goal.home.create")}
           </Button>
           <Button type="button" variant="ghost" size="sm" tone="neutral" disabled={busy() || props.starting} onClick={() => open("about")}>
             {t("continuous_goal.home.how")}

@@ -1849,8 +1849,8 @@ does not rewrite the persisted pane preference or automatically collapse
 navigation. Closed dock width remains zero through its canonical open signal.
 
 Environment Information embeds one compact `TaskProgressBar` projection only
-when the canonical board contains Goals. Its header exposes the Goals shortcut,
-one Completion Decision accepted/total summary, and disclosure. Goals is a peer Environment title
+when the canonical board contains Goals. Its header exposes the Deliverables shortcut,
+one Completion Decision accepted/total summary, and disclosure. Deliverables is a peer Environment title
 and does not sit beneath a presentation-only Task classification. The shortcut
 is text-only and does not repeat a decorative target icon. Its body contains the actionable Goal rows in
 one shared acceptance-icon/identifier/title grid, so every `#G…` identifier and

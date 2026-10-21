@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [持续目标入口与交付成果命名](2026-10-21-goal-deliverable-interface/README.md)：16张实际中英文页面、指南引用当前按钮、创建取消保留草稿、两套90表保留及原74015/41534完整结算；非空行仍待实测。
+
 - [Goal调度的执行需求探测](2026-10-21-goal-reconciliation-admission/README.md)：真实141次Scheduler运行、60秒前后对照、原输入全局流式恢复、41项合同、90表保留与原5032完整结算。
 
 - [持续目标读取的项目权限](2026-10-21-goal-read-project-authority/README.md)：五张人工实图、三类真实旧Goal与六项HTTP合同、原90表131156行及两原native完整结算；无模型输入或schema升级。

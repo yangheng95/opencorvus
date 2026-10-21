@@ -3,7 +3,7 @@
 
 import { For, Show, createMemo, createSignal } from "solid-js"
 import { boardStore } from "../store/board"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
 import { goalCompactLabelForBoardGoal } from "../utils/goal-label"
 import { goalState, goalStateIconName, type GoalState } from "../utils/goal-state"
 import { Icon } from "./ui/Icon"
@@ -33,7 +33,11 @@ export function TaskProgressBar(props: TaskProgressBarProps) {
       (goal: any, index: number): GoalPill => ({
         deliverySliceID: String(goal?.deliverySliceID || goal?.goalID || `goal-${index}`),
         label: goalCompactLabelForBoardGoal(goal, index),
-        title: String(goal?.goalTitle || "").trim() || `Goal ${index + 1}`,
+        title:
+          String(goal?.goalTitle || "").trim() ||
+          t("task_scope.deliverable_untitled", {
+            number: new Intl.NumberFormat(localeTag()).format(index + 1),
+          }),
         state: goalState(goal),
       }),
     )

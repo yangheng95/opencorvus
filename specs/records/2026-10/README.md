@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [持续目标与交付成果界面](2026-10-21-goal-deliverable-interface.md)：[实际命名冲突、首页调整与双语指南/草稿](../../artifacts/2026-10-21-goal-deliverable-interface/README.md)，16图、两原native完整收尾，未伪造非空列表。
+
 - [Goal调度的执行需求探测](2026-10-21-goal-reconciliation-admission.md)：[原60秒失败、实际全局恢复与两张实图](../../artifacts/2026-10-21-goal-reconciliation-admission/README.md)，先身份投影、后按需完整初始化，保留原最终执行校验。
 
 - [持续目标读取的项目权限](2026-10-21-goal-read-project-authority.md)：[真实读取400→200及原90表保留](../../artifacts/2026-10-21-goal-read-project-authority/README.md)，三owner共享身份上下文，执行校验保留，后台重复初始化继续审计。

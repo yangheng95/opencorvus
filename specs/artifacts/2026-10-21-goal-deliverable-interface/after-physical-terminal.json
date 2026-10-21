@@ -1,0 +1,65 @@
+{
+  "originalHandle": 41534,
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 73868,
+        "processInstanceID": "win32:639281475132733595",
+        "occurrenceID": "57b83a56-06fd-447f-ac8b-1dfeaf7a3078"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 2932,
+        "processInstanceID": "win32:639281475141084402",
+        "occurrenceID": "5b53d050-2538-4573-bd77-e3a06f328628"
+      }
+    }
+  ],
+  "launcher": {
+    "childExitCode": 0,
+    "observedAtUtc": "2026-10-21T02:52:30.133189Z"
+  },
+  "shutdown": {
+    "occurrence": "goal-deliverable-interface-500-after-60b89d24-d504-43f1-bd17-3857fce23d5f",
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYeHwf900Ld2VXQ5N5\"}",
+    "target": {
+      "pid": 2932,
+      "processInstanceID": "win32:639281475141084402",
+      "occurrenceID": "5b53d050-2538-4573-bd77-e3a06f328628"
+    },
+    "observedAtUtc": "2026-10-21T02:52:29.9681064Z",
+    "statusCode": 200
+  },
+  "originalExit": 0,
+  "observedAtUtc": "2026-10-21T02:52:33.2709468Z",
+  "native": {
+    "occurrence": "goal-deliverable-interface-500-after-60b89d24-d504-43f1-bd17-3857fce23d5f",
+    "outcome": "settled",
+    "host": {
+      "pid": 73868,
+      "processInstanceID": "win32:639281475132733595",
+      "occurrenceID": "57b83a56-06fd-447f-ac8b-1dfeaf7a3078"
+    },
+    "target": {
+      "pid": 2932,
+      "processInstanceID": "win32:639281475141084402",
+      "occurrenceID": "5b53d050-2538-4573-bd77-e3a06f328628"
+    },
+    "observedAtUtc": "2026-10-21T02:52:30.039Z",
+    "deadlineAt": 1792551912467,
+    "terminal": {
+      "occurrenceID": "goal-deliverable-interface-500-after-60b89d24-d504-43f1-bd17-3857fce23d5f",
+      "pid": 2932,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  }
+}

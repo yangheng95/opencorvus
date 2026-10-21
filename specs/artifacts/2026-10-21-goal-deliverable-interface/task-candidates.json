@@ -1,0 +1,152 @@
+{
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-21/goal-reconciliation-admission-499-after-data/runtime/data/opencorvus.db",
+  "boundary": "Actual persisted artifact kinds and Task identities,readonly;no fixtures or created data",
+  "kinds": [
+    {
+      "kind": "agent_coordination_action",
+      "count": 5
+    },
+    {
+      "kind": "agent_coordination_action_outcome",
+      "count": 5
+    },
+    {
+      "kind": "agent_coordination_request",
+      "count": 5
+    },
+    {
+      "kind": "agent_coordination_response",
+      "count": 5
+    },
+    {
+      "kind": "dispatch_lineage",
+      "count": 18
+    },
+    {
+      "kind": "dispatch_settlement",
+      "count": 18
+    },
+    {
+      "kind": "orchestrator-stream-error",
+      "count": 6
+    },
+    {
+      "kind": "task-infrastructure-error",
+      "count": 3
+    },
+    {
+      "kind": "task_completion_decision",
+      "count": 8
+    },
+    {
+      "kind": "task_execution_capsule_binding",
+      "count": 12
+    },
+    {
+      "kind": "task_package_revision_binding",
+      "count": 12
+    },
+    {
+      "kind": "task_root_ingress_disposition",
+      "count": 35
+    }
+  ],
+  "tasks": [
+    {
+      "id": "tsk_g00VY0PYrU003nBkp2A9",
+      "project_id": "prj_hSQinOa1MIVoNEeARpn5",
+      "session_id": "ses_-zURzaQjIzz58X29gl4s",
+      "time_archived": null,
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "artifactCount": 21
+    },
+    {
+      "id": "tsk_g00VXzaV3900TZX3V9DQ",
+      "project_id": "prj_hSQinOa1MIVoNEeARpn5",
+      "session_id": "ses_-zUS0PUoUzzFg2gkNt5M",
+      "time_archived": null,
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "artifactCount": 17
+    },
+    {
+      "id": "tsk_g00VY0Dhzi00R4lvcuZT",
+      "project_id": "prj_hSQinOa1MIVoNEeARpn5",
+      "session_id": "ses_-zURzmHogzzrBNBFeokK",
+      "time_archived": null,
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "artifactCount": 16
+    },
+    {
+      "id": "tsk_g00VXzxrgf006IiPmdKz",
+      "project_id": "prj_hSQinOa1MIVoNEeARpn5",
+      "session_id": "ses_-zUS027z7zzpM8wckIqG",
+      "time_archived": null,
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "artifactCount": 15
+    },
+    {
+      "id": "tsk_g00VXzrKTb00FHxBs7dV",
+      "project_id": "prj_hSQinOa1MIVoNEeARpn5",
+      "session_id": "ses_-zUS08fJqzz5ndvFqzag",
+      "time_archived": null,
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "artifactCount": 15
+    },
+    {
+      "id": "tsk_g00VXzpdDA00tndVb8tx",
+      "project_id": "prj_hSQinOa1MIVoNEeARpn5",
+      "session_id": "ses_-zUS0AMOjzzJt9XXGTtA",
+      "time_archived": null,
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "artifactCount": 12
+    },
+    {
+      "id": "tsk_g00VYZbqeD00cnjpD4Jt",
+      "project_id": "prj_hSQinOa1MIVoNEeARpn5",
+      "session_id": "ses_-zURQO9DTzzYctM6sm3m",
+      "time_archived": null,
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "artifactCount": 10
+    },
+    {
+      "id": "tsk_g00VY03x7l00hBFRdf8z",
+      "project_id": "prj_hSQinOa1MIVoNEeARpn5",
+      "session_id": "ses_-zURzw2bQzzgzZiOu6A1",
+      "time_archived": null,
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "artifactCount": 10
+    },
+    {
+      "id": "tsk_g00VY2wVPp007jvlKjOJ",
+      "project_id": "prj_hSQinOa1MIVoNEeARpn5",
+      "session_id": "ses_-zURx3UMwzzo2D9HbjOa",
+      "time_archived": null,
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "artifactCount": 4
+    },
+    {
+      "id": "tsk_g00VY2rPuS00esj4xonG",
+      "project_id": "prj_hSQinOa1MIVoNEeARpn5",
+      "session_id": "ses_-zURx8ZrJzzUNYykCySQ",
+      "time_archived": null,
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "artifactCount": 4
+    },
+    {
+      "id": "tsk_g00VY2jUZd007UlLTDM5",
+      "project_id": "prj_hSQinOa1MIVoNEeARpn5",
+      "session_id": "ses_-zURxGUpFzzJXoadGdXg",
+      "time_archived": null,
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "artifactCount": 4
+    },
+    {
+      "id": "tsk_g00VY0OP8S00DdSlsAOf",
+      "project_id": "prj_hSQinOa1MIVoNEeARpn5",
+      "session_id": "ses_-zURzbadAzzepvxximGx",
+      "time_archived": null,
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+      "artifactCount": 4
+    }
+  ]
+}

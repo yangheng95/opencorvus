@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [持续目标与交付成果界面](records/2026-10/2026-10-21-goal-deliverable-interface.md)：[16张中英文实图与完整历史保留](artifacts/2026-10-21-goal-deliverable-interface/README.md)，首页持续目标移至输入后、侧栏交付名词区分，明确非空行视觉覆盖缺口。
+
 - [Goal调度的执行需求探测](records/2026-10/2026-10-21-goal-reconciliation-admission.md)：[真实每分钟60次失败归零与全局流式恢复](artifacts/2026-10-21-goal-reconciliation-admission/README.md)，单一计划保留预算耗尽后的已接收输入恢复，41项合同及完整历史保留。
 
 - [持续目标读取的项目权限](records/2026-10/2026-10-21-goal-read-project-authority.md)：[三类真实Goal、六项HTTP合同与五张人工图](artifacts/2026-10-21-goal-read-project-authority/README.md)，修复模型不可用时的持久Goal读取，原90表131156行保持。

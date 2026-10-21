@@ -581,7 +581,6 @@ export function App(props: AppProps) {
                                     <div class="chat-home-composition" id="chatHomeComposition">
                                       <div id="solidChatHomePromptMount" />
                                       <div id="solidChatComposer">{props.composer}</div>
-                                      <div id="solidChatHomeAfterMount" />
                                       <Show when={props.homeActive}>
                                         <div class="chat-home-goal">
                                           <ContinuousGoalControl
@@ -594,6 +593,7 @@ export function App(props: AppProps) {
                                           />
                                         </div>
                                       </Show>
+                                      <div id="solidChatHomeAfterMount" />
                                     </div>
                                   </div>
                                 </div>

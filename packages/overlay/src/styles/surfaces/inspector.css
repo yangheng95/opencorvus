@@ -129,6 +129,13 @@
   padding-bottom: 0;
 }
 
+.task-scope-panel__description {
+  margin: 0 0 var(--ui-gap-sm);
+  color: var(--text-soft);
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-normal);
+}
+
 /* Section card stack: scrollable body that holds task-scope cards.
    Stack gap + outer padding share `--ui-gap-sm` (6px) so the space
    above the first card matches the gap between siblings — the
