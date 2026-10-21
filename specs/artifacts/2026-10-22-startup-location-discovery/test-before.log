@@ -1,0 +1,86 @@
+$ bun script/run-tests.ts test/project-launch-discovery.test.ts
+[1/1] START test/project-launch-discovery.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) launch discovery returns registered projects together with the launch project and its direct child [583.28ms]
+57 |   await using registered = await tmpdir()
+58 |   await using launch = await tmpdir()
+59 |   const { project } = await Project.fromDirectory(registered.path)
+60 |   const root = path.join(launch.path, kind)
+61 |   if (kind === "file") await fs.writeFile(root, "The authored launch path is now a regular file.")
+62 |   expect(await discover(root)).toEqual({
+                                    ^
+error: expect(received).toEqual(expected)
+
+  {
+    "body": {
+-     "defaultDirectory": "",
+-     "projects": [
+-       {
+-         "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-FGmR0d\test-88420-tjMszy\fixtures\fixture-1tHXsi",
+-         "id": "prj_hm7a1CoJtj25E6ETse5g",
+-         "marker": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-FGmR0d\test-88420-tjMszy\fixtures\fixture-1tHXsi\.opencorvus",
+-         "name": "fixture-1tHXsi",
+-       },
+-     ],
+-     "root": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-FGmR0d\test-88420-tjMszy\fixtures\fixture-sbkYvF\missing",
++     "data": {
++       "message": "Internal server error. See x-opencorvus-request-id for diagnostics.",
++     },
++     "name": "UnknownError",
+    },
+-   "status": 200,
++   "status": 500,
+  }
+
+- Expected  - 11
++ Received  + 5
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\project-launch-discovery.test.ts:62:32)
+(fail) missing launch root returns the registered inventory and a directory-free default [288.38ms]
+57 |   await using registered = await tmpdir()
+58 |   await using launch = await tmpdir()
+59 |   const { project } = await Project.fromDirectory(registered.path)
+60 |   const root = path.join(launch.path, kind)
+61 |   if (kind === "file") await fs.writeFile(root, "The authored launch path is now a regular file.")
+62 |   expect(await discover(root)).toEqual({
+                                    ^
+error: expect(received).toEqual(expected)
+
+  {
+    "body": {
+-     "defaultDirectory": "",
+-     "projects": [
+-       {
+-         "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-FGmR0d\test-88420-tjMszy\fixtures\fixture-WKwahf",
+-         "id": "prj_htUfTRrXyJ8utqGHdMzv",
+-         "marker": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-FGmR0d\test-88420-tjMszy\fixtures\fixture-WKwahf\.opencorvus",
+-         "name": "fixture-WKwahf",
+-       },
+-     ],
+-     "root": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-FGmR0d\test-88420-tjMszy\fixtures\fixture-Ou58Ux\file",
++     "data": {
++       "message": "Internal server error. See x-opencorvus-request-id for diagnostics.",
++     },
++     "name": "UnknownError",
+    },
+-   "status": 200,
++   "status": 500,
+  }
+
+- Expected  - 11
++ Received  + 5
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\project-launch-discovery.test.ts:62:32)
+(fail) file launch root returns the registered inventory and a directory-free default [284.62ms]
+
+ 1 pass
+ 2 fail
+ 3 expect() calls
+Ran 3 tests across 1 file. [7.10s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\project-launch-discovery.test.ts
+[1/1] DONE test/project-launch-discovery.test.ts exit=1 duration=7.77s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\project-launch-discovery.test.ts
+error: script "test" exited with code 1

@@ -1,0 +1,799 @@
+{
+  "observedAt": "2026-10-21T17:18:32.835Z",
+  "stages": [
+    {
+      "stage": "before",
+      "initialRequests": [
+        {
+          "time": "2026-10-21T17:07:56.760Z",
+          "requestID": "314d1c37-cf41-4446-8171-71d8dbbb05b2",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 3
+        },
+        {
+          "time": "2026-10-21T17:08:02.214Z",
+          "requestID": "cc603add-2b72-4ec9-a607-4eac33c97e75",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        },
+        {
+          "time": "2026-10-21T17:08:02.262Z",
+          "requestID": "ff6c9516-ac65-40a1-85dd-1d44970da9df",
+          "method": "GET",
+          "path": "/global/projects/discover",
+          "status": 500,
+          "durationMs": 4
+        },
+        {
+          "time": "2026-10-21T17:08:02.316Z",
+          "requestID": "3b340640-2d19-4053-975d-c0528a463ab1",
+          "method": "GET",
+          "path": "/global/composer-references",
+          "status": 200,
+          "durationMs": 84
+        },
+        {
+          "time": "2026-10-21T17:08:02.377Z",
+          "requestID": "c84ee121-1f3c-49e6-b6a2-77a649908234",
+          "method": "GET",
+          "path": "/work-ledger/events",
+          "status": 200,
+          "durationMs": 118
+        },
+        {
+          "time": "2026-10-21T17:08:02.460Z",
+          "requestID": "c4a74494-1c66-4268-a7da-9b271c3b1ac4",
+          "method": "GET",
+          "path": "/work-ledger",
+          "status": 200,
+          "durationMs": 82
+        },
+        {
+          "time": "2026-10-21T17:08:02.544Z",
+          "requestID": "283e558a-5788-4e60-a2bf-ae8b045b6282",
+          "method": "GET",
+          "path": "/mission",
+          "status": 200,
+          "durationMs": 84
+        },
+        {
+          "time": "2026-10-21T17:08:02.644Z",
+          "requestID": "1847d6a5-c294-4880-bb45-8c195ff7b422",
+          "method": "GET",
+          "path": "/work-ledger",
+          "status": 200,
+          "durationMs": 98
+        },
+        {
+          "time": "2026-10-21T17:08:02.705Z",
+          "requestID": "585375b6-fdbe-4f86-a29d-44d2a11b2e72",
+          "method": "GET",
+          "path": "/work-ledger",
+          "status": 200,
+          "durationMs": 60
+        },
+        {
+          "time": "2026-10-21T17:08:02.774Z",
+          "requestID": "07b74208-c540-4221-bd5b-ab68a9e51d16",
+          "method": "GET",
+          "path": "/mission",
+          "status": 200,
+          "durationMs": 69
+        },
+        {
+          "time": "2026-10-21T17:08:02.884Z",
+          "requestID": "9e1c977f-686f-4794-911e-76844030a7c9",
+          "method": "GET",
+          "path": "/work-ledger",
+          "status": 200,
+          "durationMs": 103
+        },
+        {
+          "time": "2026-10-21T17:08:02.950Z",
+          "requestID": "08e18463-7de1-42a6-81d7-70a6601d4e75",
+          "method": "GET",
+          "path": "/work-ledger",
+          "status": 200,
+          "durationMs": 55
+        },
+        {
+          "time": "2026-10-21T17:08:03.028Z",
+          "requestID": "24a13358-c91b-43a8-bcdd-354e50b65a05",
+          "method": "GET",
+          "path": "/work-ledger",
+          "status": 200,
+          "durationMs": 74
+        },
+        {
+          "time": "2026-10-21T17:08:03.092Z",
+          "requestID": "e938591d-3efe-40aa-8353-3e9e4a241a6d",
+          "method": "GET",
+          "path": "/work-ledger",
+          "status": 200,
+          "durationMs": 39
+        },
+        {
+          "time": "2026-10-21T17:08:13.464Z",
+          "requestID": "d67aeba0-3285-4970-91b1-c8731834fd91",
+          "method": "GET",
+          "path": "/mailbox",
+          "status": 200,
+          "durationMs": 12
+        },
+        {
+          "time": "2026-10-21T17:08:13.481Z",
+          "requestID": "7f86d495-6070-4ab9-b57c-c0a2bb0f356b",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        },
+        {
+          "time": "2026-10-21T17:08:13.602Z",
+          "requestID": "2096b811-3657-48af-a0a6-33a2fed9345d",
+          "method": "GET",
+          "path": "/mailbox",
+          "status": 200,
+          "durationMs": 12
+        },
+        {
+          "time": "2026-10-21T17:08:13.843Z",
+          "requestID": "e8dc9e06-3b5a-41fa-86c5-4c735809ab74",
+          "method": "GET",
+          "path": "/continuous-goal/task/tsk_g00VYhVoHG009opnUqaV",
+          "status": 200,
+          "durationMs": 394
+        },
+        {
+          "time": "2026-10-21T17:08:13.846Z",
+          "requestID": "931c30d4-9138-463e-acda-e06a58500e67",
+          "method": "GET",
+          "path": "/path",
+          "status": 200,
+          "durationMs": 1
+        },
+        {
+          "time": "2026-10-21T17:08:13.872Z",
+          "requestID": "490a3c19-00a4-45d6-9d48-31f68521bfb1",
+          "method": "GET",
+          "path": "/config",
+          "status": 200,
+          "durationMs": 269
+        },
+        {
+          "time": "2026-10-21T17:08:14.304Z",
+          "requestID": "0290fd45-1ed6-4499-847c-e3919e9002cf",
+          "method": "GET",
+          "path": "/global/tasks",
+          "status": 200,
+          "durationMs": 327
+        },
+        {
+          "time": "2026-10-21T17:08:14.328Z",
+          "requestID": "5b20ac7a-1f88-4eab-83a3-2d6e151f7433",
+          "method": "GET",
+          "path": "/mcp",
+          "status": 200,
+          "durationMs": 723
+        },
+        {
+          "time": "2026-10-21T17:08:14.388Z",
+          "requestID": "f7797ffb-54e8-48a5-81c2-e8979d544f6f",
+          "method": "GET",
+          "path": "/channel",
+          "status": 400,
+          "durationMs": 785
+        },
+        {
+          "time": "2026-10-21T17:08:14.579Z",
+          "requestID": "92f14995-440c-4ec1-982d-5a8d4ca92b5f",
+          "method": "GET",
+          "path": "/skill/mounts",
+          "status": 200,
+          "durationMs": 974
+        },
+        {
+          "time": "2026-10-21T17:08:15.193Z",
+          "requestID": "988fbbbf-f921-4ae8-a94e-1100f79e56a7",
+          "method": "GET",
+          "path": "/vcs",
+          "status": 200,
+          "durationMs": 1341
+        },
+        {
+          "time": "2026-10-21T17:08:15.201Z",
+          "requestID": "6538893f-440f-4d2d-9e2f-0860e2274139",
+          "method": "GET",
+          "path": "/experimental/project-memory",
+          "status": 200,
+          "durationMs": 4
+        },
+        {
+          "time": "2026-10-21T17:08:15.373Z",
+          "requestID": "e13c715b-d562-4122-ade0-fb588ecda2e2",
+          "method": "GET",
+          "path": "/task/tsk_g00VYhVoHG009opnUqaV/conversation",
+          "status": 200,
+          "durationMs": 172
+        },
+        {
+          "time": "2026-10-21T17:08:15.442Z",
+          "requestID": "4645b332-156f-4d01-9382-952fb2ecf039",
+          "method": "GET",
+          "path": "/expert-squad/search",
+          "status": 200,
+          "durationMs": 21
+        }
+      ],
+      "discovery": [
+        {
+          "time": "2026-10-21T17:08:02.262Z",
+          "requestID": "ff6c9516-ac65-40a1-85dd-1d44970da9df",
+          "method": "GET",
+          "path": "/global/projects/discover",
+          "status": 500,
+          "durationMs": 4
+        }
+      ],
+      "healthProbes": [
+        {
+          "time": "2026-10-21T17:07:56.760Z",
+          "requestID": "314d1c37-cf41-4446-8171-71d8dbbb05b2",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 3
+        },
+        {
+          "time": "2026-10-21T17:08:02.214Z",
+          "requestID": "cc603add-2b72-4ec9-a607-4eac33c97e75",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        },
+        {
+          "time": "2026-10-21T17:08:13.481Z",
+          "requestID": "7f86d495-6070-4ab9-b57c-c0a2bb0f356b",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        }
+      ],
+      "discoveryErrors": [
+        {
+          "time": "2026-10-21T17:08:02.261Z",
+          "requestID": "ff6c9516-ac65-40a1-85dd-1d44970da9df",
+          "status": 500,
+          "error": {
+            "type": "Error",
+            "message": "ENOENT: no such file or directory, scandir 'C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\startup-location-discovery-510-before\\launch-project-removed'",
+            "stack": "Error: ENOENT: no such file or directory, scandir 'C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\startup-location-discovery-510-before\\launch-project-removed'\n    at async immediateDirectories (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\project.ts:1209:27)\n    at async discoverFromLaunchDirectory (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\project.ts:1218:41)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\global.ts:1126:41)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+ab5901af9106cf08\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async cors (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\middleware\\cors\\index.js:103:9)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\server.ts:873:45)",
+            "code": "ENOENT",
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\startup-location-discovery-510-before\\launch-project-removed",
+            "syscall": "scandir",
+            "errno": -4058
+          }
+        }
+      ],
+      "initErrors": [
+        {
+          "time": "2026-10-21T17:08:02.887Z",
+          "message": "initApp",
+          "data": {
+            "message": "API 500 global/projects/discover: Internal server error. See x-opencorvus-request-id for diagnostics.",
+            "details": "HTTP GET 500 global/projects/discover\\x0a\\x0aRequest ID: ff6c9516-ac65-40a1-85dd-1d44970da9df\\x0a\\x0aApiError: API 500 global/projects/discover: Internal server error. See x-opencorvus-request-id for diagnostics.\\x0a    at Pe (http://127.0.0.1:18941/ui/assets/main-Bv-r8j-J.js:67:140669)\\x0a    at async ice (http://127.0.0.1:18941/ui/assets/main-Bv-r8j-J.js:93:11931)\\x0a    at async fce (http://127.0.0.1:18941/ui/assets/main-Bv-r8j-J.js:93:19063)\\x0a    at async UM (http://127.0.0.1:18941/ui/assets/main-Bv-r8j-J.js:225:30191)\\x0a    at async XOe (http://127.0.0.1:18941/ui/assets/main-Bv-r8j-J.js:225:32974)\\x0a    at async http://127.0.0.1:18941/ui/assets/main-Bv-r8j-J.js:231:5273\\x0a\\x0aresponse body:\\x0a{\\x0a  \"name\": \"UnknownError\",\\x0a  \"data\": {\\x0a    \"message\": \"Internal server error. See x-opencorvus-request-id for diagnostics.\"\\x0a  }\\x0a}",
+            "diagnosticID": "runtime:initApp",
+            "title": "Error",
+            "diagnosticMessage": "API 500 global/projects/discover: Internal server error. See x-opencorvus-request-id for diagnostics.",
+            "diagnosticDetails": "source: initApp\\x0a\\x0aHTTP GET 500 global/projects/discover\\x0a\\x0aRequest ID: ff6c9516-ac65-40a1-85dd-1d44970da9df\\x0a\\x0aApiError: API 500 global/projects/discover: Internal server error. See x-opencorvus-request-id for diagnostics.\\x0a    at Pe (http://127.0.0.1:18941/ui/assets/main-Bv-r8j-J.js:67:140669)\\x0a    at async ice (http://127.0.0.1:18941/ui/assets/main-Bv-r8j-J.js:93:11931)\\x0a    at async fce (http://127.0.0.1:18941/ui/assets/main-Bv-r8j-J.js:93:19063)\\x0a    at async UM (http://127.0.0.1:18941/ui/assets/main-Bv-r8j-J.js:225:30191)\\x0a    at async XOe (http://127.0.0.1:18941/ui/assets/main-Bv-r8j-J.js:225:32974)\\x0a    at async http://127.0.0.1:18941/ui/assets/main-Bv-r8j-J.js:231:5273\\x0a\\x0aresponse body:\\x0a{\\x0a  \"name\": \"UnknownError\",\\x0a  \"data\": {\\x0a    \"message\": \"Internal server error. See x-opencorvus-request-id for diagnostics.\"\\x0a  }\\x0a}"
+          }
+        }
+      ]
+    },
+    {
+      "stage": "after",
+      "initialRequests": [
+        {
+          "time": "2026-10-21T17:12:21.937Z",
+          "requestID": "e504ced0-4a3b-45d0-b46e-85b829d71a24",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 3
+        },
+        {
+          "time": "2026-10-21T17:12:29.585Z",
+          "requestID": "fb51762e-83fe-45e5-b356-c6981a998511",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        },
+        {
+          "time": "2026-10-21T17:12:29.831Z",
+          "requestID": "ec10712e-efd4-4903-8d42-033f0c3bd48f",
+          "method": "GET",
+          "path": "/work-ledger/events",
+          "status": 200,
+          "durationMs": 197
+        },
+        {
+          "time": "2026-10-21T17:12:29.834Z",
+          "requestID": "aa036ce3-5c84-4bc1-a084-c70121530c6b",
+          "method": "GET",
+          "path": "/global/tasks",
+          "status": 200,
+          "durationMs": 201
+        },
+        {
+          "time": "2026-10-21T17:12:29.945Z",
+          "requestID": "e032eea5-f433-4c88-94ae-2eef1c662947",
+          "method": "GET",
+          "path": "/work-ledger",
+          "status": 200,
+          "durationMs": 104
+        },
+        {
+          "time": "2026-10-21T17:12:30.044Z",
+          "requestID": "271d038c-d414-4640-8daf-2e2734ea6f35",
+          "method": "GET",
+          "path": "/mission",
+          "status": 200,
+          "durationMs": 99
+        },
+        {
+          "time": "2026-10-21T17:12:30.048Z",
+          "requestID": "ea252da4-c959-4d2f-aeb6-3ce2a92478d4",
+          "method": "GET",
+          "path": "/global/composer-references",
+          "status": 200,
+          "durationMs": 440
+        },
+        {
+          "time": "2026-10-21T17:12:30.144Z",
+          "requestID": "00987f6e-8f8b-4143-a511-5bbc7515781b",
+          "method": "GET",
+          "path": "/work-ledger",
+          "status": 200,
+          "durationMs": 84
+        },
+        {
+          "time": "2026-10-21T17:12:30.158Z",
+          "requestID": "df079a0b-d587-4e71-8c8c-da9f9cb178f2",
+          "method": "GET",
+          "path": "/mailbox",
+          "status": 200,
+          "durationMs": 12
+        },
+        {
+          "time": "2026-10-21T17:12:30.158Z",
+          "requestID": "22eb2feb-fd89-4e10-99b7-d789709a76e5",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 0
+        },
+        {
+          "time": "2026-10-21T17:12:30.198Z",
+          "requestID": "7c843f27-d09d-4c58-875c-4691be57cbfb",
+          "method": "GET",
+          "path": "/mailbox",
+          "status": 200,
+          "durationMs": 7
+        },
+        {
+          "time": "2026-10-21T17:12:30.267Z",
+          "requestID": "b5f1a756-70b6-49ea-8087-de93fce93d49",
+          "method": "GET",
+          "path": "/mission",
+          "status": 200,
+          "durationMs": 68
+        },
+        {
+          "time": "2026-10-21T17:12:30.334Z",
+          "requestID": "1c97e634-37eb-45fa-9b7a-71dd821c01bf",
+          "method": "GET",
+          "path": "/work-ledger",
+          "status": 200,
+          "durationMs": 66
+        },
+        {
+          "time": "2026-10-21T17:12:30.703Z",
+          "requestID": "e5fc1cea-02d5-4985-a840-7a0e6c58d4a0",
+          "method": "GET",
+          "path": "/path",
+          "status": 200,
+          "durationMs": 362
+        },
+        {
+          "time": "2026-10-21T17:12:30.730Z",
+          "requestID": "3e8c4bc4-9e5d-404b-b6f8-f1132a6c6076",
+          "method": "GET",
+          "path": "/config",
+          "status": 200,
+          "durationMs": 541
+        },
+        {
+          "time": "2026-10-21T17:12:30.829Z",
+          "requestID": "0c0f3f30-7c40-4f72-953a-857ec0d7b6f9",
+          "method": "GET",
+          "path": "/mcp",
+          "status": 200,
+          "durationMs": 489
+        },
+        {
+          "time": "2026-10-21T17:12:31.142Z",
+          "requestID": "1df24414-f9ab-4fb3-a736-3ee50aedfe5c",
+          "method": "GET",
+          "path": "/global/tasks",
+          "status": 200,
+          "durationMs": 308
+        },
+        {
+          "time": "2026-10-21T17:12:31.151Z",
+          "requestID": "ff82a6f7-e1f5-4ba6-b8ca-0e518d984d97",
+          "method": "GET",
+          "path": "/mailbox",
+          "status": 200,
+          "durationMs": 7
+        },
+        {
+          "time": "2026-10-21T17:12:31.232Z",
+          "requestID": "38ec450d-821f-4837-a47e-d9ee23bc8286",
+          "method": "GET",
+          "path": "/work-ledger",
+          "status": 200,
+          "durationMs": 70
+        },
+        {
+          "time": "2026-10-21T17:12:31.298Z",
+          "requestID": "02bd07ff-6e90-4465-8899-3caddc2ffeba",
+          "method": "GET",
+          "path": "/work-ledger",
+          "status": 200,
+          "durationMs": 39
+        },
+        {
+          "time": "2026-10-21T17:12:31.403Z",
+          "requestID": "4acb43ed-85b1-4f60-b7e9-f44dcd23d35a",
+          "method": "GET",
+          "path": "/work-ledger",
+          "status": 200,
+          "durationMs": 72
+        },
+        {
+          "time": "2026-10-21T17:12:31.487Z",
+          "requestID": "b28896d3-a7f8-43b5-bf9e-c929c7159025",
+          "method": "GET",
+          "path": "/work-ledger",
+          "status": 200,
+          "durationMs": 43
+        },
+        {
+          "time": "2026-10-21T17:12:31.503Z",
+          "requestID": "01c25ecc-1647-4819-905f-d4f48c4c4f21",
+          "method": "GET",
+          "path": "/continuous-goal/task/tsk_g00VYhVoHG009opnUqaV",
+          "status": 200,
+          "durationMs": 9
+        },
+        {
+          "time": "2026-10-21T17:12:31.504Z",
+          "requestID": "4ba607e8-9d40-48ca-8b84-51f5fd7cbeab",
+          "method": "GET",
+          "path": "/channel",
+          "status": 400,
+          "durationMs": 1169
+        },
+        {
+          "time": "2026-10-21T17:12:31.661Z",
+          "requestID": "3001b61b-493f-4464-98fe-3f5f68443048",
+          "method": "GET",
+          "path": "/skill/mounts",
+          "status": 200,
+          "durationMs": 1321
+        },
+        {
+          "time": "2026-10-21T17:12:32.327Z",
+          "requestID": "cc278000-1390-41dd-bcc1-0e7d18d00d10",
+          "method": "GET",
+          "path": "/vcs",
+          "status": 200,
+          "durationMs": 1621
+        },
+        {
+          "time": "2026-10-21T17:12:32.334Z",
+          "requestID": "adf5cdd9-8aa6-4bf7-acff-e829bbd9a43c",
+          "method": "GET",
+          "path": "/experimental/project-memory",
+          "status": 200,
+          "durationMs": 3
+        },
+        {
+          "time": "2026-10-21T17:12:32.497Z",
+          "requestID": "84755723-2521-48fa-8626-9398e552c844",
+          "method": "GET",
+          "path": "/task/tsk_g00VYhVoHG009opnUqaV/conversation",
+          "status": 200,
+          "durationMs": 163
+        }
+      ],
+      "discovery": [
+        {
+          "time": "2026-10-21T17:15:53.446Z",
+          "requestID": "7eb93da5-1ae3-418c-b1df-381213cf57e9",
+          "method": "GET",
+          "path": "/global/projects/discover",
+          "status": 200,
+          "durationMs": 4
+        }
+      ],
+      "healthProbes": [
+        {
+          "time": "2026-10-21T17:12:21.937Z",
+          "requestID": "e504ced0-4a3b-45d0-b46e-85b829d71a24",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 3
+        },
+        {
+          "time": "2026-10-21T17:12:29.585Z",
+          "requestID": "fb51762e-83fe-45e5-b356-c6981a998511",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        },
+        {
+          "time": "2026-10-21T17:12:30.158Z",
+          "requestID": "22eb2feb-fd89-4e10-99b7-d789709a76e5",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 0
+        },
+        {
+          "time": "2026-10-21T17:12:43.903Z",
+          "requestID": "1fbfe7bb-a4a5-4827-83b7-7980d245099b",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        },
+        {
+          "time": "2026-10-21T17:12:53.899Z",
+          "requestID": "f6a79c5e-a582-465c-84ce-ea803acae46e",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        },
+        {
+          "time": "2026-10-21T17:13:03.905Z",
+          "requestID": "8a0d948e-ac4e-47c4-9d39-981b817f7b95",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 0
+        },
+        {
+          "time": "2026-10-21T17:13:13.908Z",
+          "requestID": "0bc7cbd6-8799-4216-92a4-3355a9ffd73e",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 0
+        },
+        {
+          "time": "2026-10-21T17:13:23.916Z",
+          "requestID": "d3b8d0cc-2441-4f5f-9b3b-f01d76bcea9d",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        },
+        {
+          "time": "2026-10-21T17:13:33.914Z",
+          "requestID": "36ff21fe-4e21-44b8-814d-1c61aed8cb63",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        },
+        {
+          "time": "2026-10-21T17:13:43.904Z",
+          "requestID": "d865f730-b02c-48a5-a773-be6123da5fe8",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 0
+        },
+        {
+          "time": "2026-10-21T17:13:53.918Z",
+          "requestID": "588f3f67-4af1-4225-a99a-8e6369eff1af",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 0
+        },
+        {
+          "time": "2026-10-21T17:14:03.904Z",
+          "requestID": "2c3db27e-0a28-463a-9619-99744f63dda0",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        },
+        {
+          "time": "2026-10-21T17:14:13.914Z",
+          "requestID": "59b5a58a-6d21-434b-b664-d44fb99948a4",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 0
+        },
+        {
+          "time": "2026-10-21T17:14:23.905Z",
+          "requestID": "2c4353a0-a588-447a-8675-a2d7e8edd3d4",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 0
+        },
+        {
+          "time": "2026-10-21T17:14:33.903Z",
+          "requestID": "ca5390e5-84ae-4fa0-96ae-5467588c430a",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 0
+        },
+        {
+          "time": "2026-10-21T17:14:43.908Z",
+          "requestID": "abef3e18-851f-4c0c-af96-a4323cfc31a5",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        },
+        {
+          "time": "2026-10-21T17:14:44.854Z",
+          "requestID": "93e0248f-6721-45be-9849-c8040ccdada7",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 0
+        },
+        {
+          "time": "2026-10-21T17:14:56.502Z",
+          "requestID": "70a050cd-c06a-464d-a8fe-0cb62f0c3def",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 0
+        },
+        {
+          "time": "2026-10-21T17:15:06.506Z",
+          "requestID": "8638e437-d15b-40b5-8c4e-7eb135ff7a2f",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        },
+        {
+          "time": "2026-10-21T17:15:14.453Z",
+          "requestID": "e3edfcf9-5bf4-4893-9c20-213a9baeaa37",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 0
+        },
+        {
+          "time": "2026-10-21T17:15:16.505Z",
+          "requestID": "da77afe8-96cd-43e5-a32e-b8a1a373a864",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 0
+        },
+        {
+          "time": "2026-10-21T17:15:21.427Z",
+          "requestID": "5c93139c-7d89-42f6-8c8b-10392bec6537",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        },
+        {
+          "time": "2026-10-21T17:15:33.318Z",
+          "requestID": "0799c971-af81-40d6-b053-d2e96f2aa85c",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 0
+        },
+        {
+          "time": "2026-10-21T17:15:43.317Z",
+          "requestID": "3e460965-7b52-417c-952b-ebc6c54b1a1d",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 0
+        },
+        {
+          "time": "2026-10-21T17:15:53.330Z",
+          "requestID": "4bcfff50-4e60-4d2c-8b30-b908b79e70e0",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        },
+        {
+          "time": "2026-10-21T17:16:03.317Z",
+          "requestID": "1fec61ff-add3-4d66-961f-a64816627a15",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        },
+        {
+          "time": "2026-10-21T17:16:13.319Z",
+          "requestID": "2ade3a4c-0d50-48cd-8538-f3dacf013cf8",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        },
+        {
+          "time": "2026-10-21T17:16:23.325Z",
+          "requestID": "430c0995-a6de-4fdd-83ac-b93ab7dbe79a",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        },
+        {
+          "time": "2026-10-21T17:16:27.356Z",
+          "requestID": "7f972d55-4245-46df-91ab-4f2e78407e44",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 0
+        },
+        {
+          "time": "2026-10-21T17:16:37.443Z",
+          "requestID": "6d83e8f7-45ff-4ff0-bed0-b2e7e77af693",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        },
+        {
+          "time": "2026-10-21T17:16:47.443Z",
+          "requestID": "7e456c87-9e70-48e5-9384-67e9e533b1eb",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 0
+        },
+        {
+          "time": "2026-10-21T17:16:57.441Z",
+          "requestID": "b9202525-e78a-4503-878d-4df1a583027e",
+          "method": "GET",
+          "path": "/global/health",
+          "status": 200,
+          "durationMs": 1
+        }
+      ],
+      "discoveryErrors": [],
+      "initErrors": []
+    }
+  ]
+}

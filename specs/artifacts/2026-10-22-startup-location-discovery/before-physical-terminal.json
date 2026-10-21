@@ -1,0 +1,73 @@
+{
+  "originalHandle": 96638,
+  "launcher": {
+    "observedAtUtc": "2026-10-21T17:08:25.8458591Z",
+    "childExitCode": 0
+  },
+  "shutdown": {
+    "target": {
+      "pid": 30544,
+      "processInstanceID": "win32:639281992717913213",
+      "occurrenceID": "4502137c-e78b-420a-a7ef-45573fc98620"
+    },
+    "observedAtUtc": "2026-10-21T17:08:25.6922092Z",
+    "occurrence": "startup-location-discovery-510-before-service-c607a09f-1eaa-4376-bc90-cc2faba9f875",
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYhlQdM00tYbyOeAnR\"}",
+    "statusCode": 200
+  },
+  "native": {
+    "occurrence": "startup-location-discovery-510-before-service-c607a09f-1eaa-4376-bc90-cc2faba9f875",
+    "outcome": "settled",
+    "host": {
+      "pid": 70128,
+      "processInstanceID": "win32:639281992708734128",
+      "occurrenceID": "5261f222-5650-498f-9c33-d8b310ec1189"
+    },
+    "target": {
+      "pid": 30544,
+      "processInstanceID": "win32:639281992717913213",
+      "occurrenceID": "4502137c-e78b-420a-a7ef-45573fc98620"
+    },
+    "observedAtUtc": "2026-10-21T17:08:25.788Z",
+    "deadlineAt": 1792603669891,
+    "terminal": {
+      "occurrenceID": "startup-location-discovery-510-before-service-c607a09f-1eaa-4376-bc90-cc2faba9f875",
+      "pid": 30544,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "observedAtUtc": "2026-10-21T17:08:35.6622020Z",
+  "originalExit": 0,
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 70128,
+        "processInstanceID": "win32:639281992708734128",
+        "occurrenceID": "5261f222-5650-498f-9c33-d8b310ec1189"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 30544,
+        "processInstanceID": "win32:639281992717913213",
+        "occurrenceID": "4502137c-e78b-420a-a7ef-45573fc98620"
+      }
+    }
+  ],
+  "provider": {
+    "at": "2026-10-21T17:07:56.764Z",
+    "maximum": 0,
+    "actual": 0,
+    "exhausted": false,
+    "requests": [],
+    "scope": "Startup location and directory discovery review; no credentials or model catalog copied"
+  }
+}

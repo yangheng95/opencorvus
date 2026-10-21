@@ -1,0 +1,14 @@
+$ bun script/run-tests.ts test/project-launch-discovery.test.ts
+[1/1] START test/project-launch-discovery.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) launch discovery returns registered projects together with the launch project and its direct child [801.29ms]
+(pass) missing launch root returns the registered inventory and a directory-free default [599.54ms]
+(pass) file launch root returns the registered inventory and a directory-free default [803.19ms]
+
+ 3 pass
+ 0 fail
+ 3 expect() calls
+Ran 3 tests across 1 file. [10.05s]
+[1/1] DONE test/project-launch-discovery.test.ts exit=0 duration=10.85s

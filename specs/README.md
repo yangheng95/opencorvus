@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [启动链接与失效目录发现](records/2026-10/2026-10-22-startup-location-discovery.md)：[13张精选人工图、真实500→200与三项合同](artifacts/2026-10-22-startup-location-discovery/README.md)，修复失效启动根阻断Task链接，复核Goal入口/取消与会话刷新，原152721行保持。
+
 - [成员活动导航身份与朗读名称](records/2026-10/2026-10-22-agent-rail-identity.md)：[20张实图与原始关联描述](artifacts/2026-10-22-agent-rail-identity/README.md)，统一Rail成员身份，名称3937/3948→39、关联描述3943→31；完整原输入在原交接详情可读，双语来源导航实测。
 
 - [活跃成员并发与来源呈现](records/2026-10/2026-10-21-live-member-concurrency.md)：[23张实图与原始读取端](artifacts/2026-10-21-live-member-concurrency/README.md)，29/64次真实流式请求，两成员正文重叠68/66秒；修复私有观察器清理重入，产品未改，同目标侧栏保留实测。

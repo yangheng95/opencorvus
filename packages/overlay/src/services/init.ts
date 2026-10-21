@@ -340,10 +340,24 @@ export async function initApp(options: InitOptions = {}): Promise<void> {
 
   if (connected && startupAuthority && isApiAuthorityCurrent(startupAuthority)) {
     startWorkLedgerSSE()
-    // 6. Load initial data
+    // An explicit location owns its directory through the ordinary selector.
+    // Restore it before unrelated launch-directory discovery can fail or
+    // publish a different default workspace.
+    if (initialLocation.kind === "valid" && initialLocation.location) {
+      const authority = startupAuthority
+      const location = initialLocation.location
+      await settleWorkspaceRestore(
+        () => restoreInitialWorkspaceLocation({ authority, location, restoreClientLocation: options.restoreClientLocation }),
+        authority,
+      )
+    }
+    if (!isCurrentInitLifecycle(lifecycleGeneration)) return
+    if (!isApiAuthorityCurrent(startupAuthority)) return
+    // 6. Load the actual workspace; cold starts without a locator discover
+    // their default directory and restore their saved selection below.
     const initialData = await loadInitialData(lifecycleGeneration, resolveInitialDirectory)
     if (!isCurrentInitLifecycle(lifecycleGeneration)) return
-    if (initialLocation.kind === "valid" && (initialData.loaded || initialLocation.location) && isApiAuthorityCurrent(startupAuthority)) {
+    if (initialLocation.kind === "valid" && !initialLocation.location && initialData.loaded && isApiAuthorityCurrent(startupAuthority)) {
       const authority = startupAuthority
       const location = initialLocation.location
       await settleWorkspaceRestore(

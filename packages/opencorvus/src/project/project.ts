@@ -1215,9 +1215,18 @@ export namespace Project {
 
   export async function discoverFromLaunchDirectory(): Promise<Discovery> {
     const root = launchDirectory()
-    const candidates = [root, ...(await immediateDirectories(root))]
+    let candidates: string[]
+    let defaultDirectory = explicitLaunchProjectDirectory()
+    try {
+      candidates = [root, ...(await immediateDirectories(root))]
+    } catch (error) {
+      if (!isMissingPathError(error)) throw error
+      // The launch path is optional discovery input, not the owner of the
+      // registered inventory. A removed directory has no usable default.
+      candidates = []
+      defaultDirectory = ""
+    }
     const projects = new Map<string, DiscoveredProject>()
-    const defaultDirectory = explicitLaunchProjectDirectory()
 
     const add = (project: DiscoveredProject) => {
       const key = comparePath(project.directory)

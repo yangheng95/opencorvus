@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [启动链接与失效目录发现](2026-10-22-startup-location-discovery.md)：[13张精选人工图与两轮物理结算](../../artifacts/2026-10-22-startup-location-discovery/README.md)，缺失/文件根保持注册清单，Task显式链接先恢复；Goal/Chat/launcher真实复核，原数据/schema保持。
+
 - [成员活动导航身份与朗读名称](2026-10-22-agent-rail-identity.md)：[20张实图及四轮零模型结算](../../artifacts/2026-10-22-agent-rail-identity/README.md)，修复同角色辨识和超长名称/关联描述；中英导航、原输入及两来源人工复核。
 
 - [活跃成员并发与来源呈现](2026-10-21-live-member-concurrency.md)：[23张人工图与原始reader](../../artifacts/2026-10-21-live-member-concurrency/README.md)，两次真实并发Task自然结束；修复诊断自身重入，正式页面及修正后活跃切换正常，刷新与传输重连边界分开。
