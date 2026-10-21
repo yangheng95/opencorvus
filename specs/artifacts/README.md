@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Goal入口与默认布局实测](2026-10-21-goal-entry-workspace-review/README.md)：九张人工图、真实Goal完成事实、两原native收敛和3665行保留；没有用验证记录冒充新生产修复。
+
 - [Git索引与真实暂存大小](2026-10-21-git-index-authority/README.md)：多格式/共享/稀疏/相对index实际修复，20合同与71787身份/19741缓存大小校正；增加约2秒成本、未冒充提速。
 
 - [推送历史密钥与快照去重](2026-10-21-push-secret-snapshots/README.md)：旧CLI成功→当前明确拒绝的实际Git复现、6项正向合同、71757输入78.42→40.17秒与原生/数据收尾；错误报告无凭据派生片段。

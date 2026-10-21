@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Goal入口与默认布局实测](records/2026-10/2026-10-21-goal-entry-workspace-review.md)：[九张中英文实图与真实单轮目标](artifacts/2026-10-21-goal-entry-workspace-review/README.md)，7次真实Sol请求完整结算，当前入口/来源通过，生产未改。
+
 - [Git暂存区权威读取](records/2026-10/2026-10-21-git-index-authority.md)：[真实漏检/多索引格式与71787输入对照](artifacts/2026-10-21-git-index-authority/README.md)，删除二进制解码、恢复真实内容大小，保留实测成本。
 
 - [推送密钥检查的历史与快照](records/2026-10/2026-10-21-push-secret-snapshots.md)：[中间提交真实拒绝与71757输入前后对照](artifacts/2026-10-21-push-secret-snapshots/README.md)，覆盖历史版本、去重提速并清除错误中的凭据片段。

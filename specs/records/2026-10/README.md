@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Goal入口与默认布局实际体验](2026-10-21-goal-entry-workspace-review.md)：[九图与真实Home创建/读取/完成](../../artifacts/2026-10-21-goal-entry-workspace-review/README.md)，保留未复现和成员Rendering/完整配置性能未达边界。
+
 - [Git索引读取权威](2026-10-21-git-index-authority.md)：[六原fixture、CRLF、20正向合同和完整checker](../../artifacts/2026-10-21-git-index-authority/README.md)，SHA-256与有效小blob漏检修复，原失败保留。
 
 - [推送密钥快照检查](2026-10-21-push-secret-snapshots.md)：[真实Git历史/根/合并/rename、CLI错误与大仓库对照](../../artifacts/2026-10-21-push-secret-snapshots/README.md)，安全覆盖与去重均保留原事实。

@@ -1,0 +1,139 @@
+{
+  "launcher": {
+    "observedAtUtc": "2026-10-21T00:58:06.3688261Z",
+    "originalChildExit": 0
+  },
+  "provider": [
+    {
+      "model": "gpt-6.1-sol",
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792544027587,
+        "boundAt": 1792544027589,
+        "chunkCount": 17,
+        "byteCount": 40533,
+        "firstByteReadAt": 1792544027591,
+        "lastByteReadAt": 1792544031419,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hdIxvwSzP9CsPxnUgdL2",
+          "streamRequest": {
+            "requestID": "msg_hIthE24eCVIbDzRNURxO",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYdo3Yz0093oJu0x3R",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792544031505
+        }
+      },
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "sourceReader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792544029281,
+        "boundAt": 1792544029283,
+        "chunkCount": 36,
+        "byteCount": 515987,
+        "firstByteReadAt": 1792544029286,
+        "lastByteReadAt": 1792544030235,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hdIxvwSzP9CsPxnUgdL2",
+          "streamRequest": {
+            "requestID": "msg_hIthE24eCVIbDzRNURxO",
+            "agentID": "chat",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYdo3pN005M6K1isLJ",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYdo3Z50025L6fNnzv"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792544030787
+        }
+      },
+      "streaming": true,
+      "status": 200
+    }
+  ],
+  "observedAtUtc": "2026-10-21T00:58:43.0186557Z",
+  "pairedCleanupComplete": true,
+  "native": {
+    "occurrence": "home-goal-entry-496-before-4cfee914-9f3d-4dc6-ac9e-c76d9ca7badd",
+    "outcome": "settled",
+    "host": {
+      "pid": 92760,
+      "processInstanceID": "win32:639281408174104793",
+      "occurrenceID": "fc27c7fc-6d13-4d82-8e51-f7ccbd0e5463"
+    },
+    "target": {
+      "pid": 79432,
+      "processInstanceID": "win32:639281408182795059",
+      "occurrenceID": "2cc64632-9d82-41f2-bc51-91cc264c46d3"
+    },
+    "observedAtUtc": "2026-10-21T00:58:06.313Z",
+    "deadlineAt": 1792545217388,
+    "terminal": {
+      "occurrenceID": "home-goal-entry-496-before-4cfee914-9f3d-4dc6-ac9e-c76d9ca7badd",
+      "pid": 79432,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "maximumRequests": 2,
+  "copiedPair": [
+    {
+      "name": "auth.json",
+      "outcome": "retired-after-original-physical-and-source-EOF",
+      "bytes": 2122
+    },
+    {
+      "name": "models.json",
+      "outcome": "retired-after-original-physical-and-source-EOF",
+      "bytes": 9155406
+    }
+  ],
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 92760,
+        "processInstanceID": "win32:639281408174104793",
+        "occurrenceID": "fc27c7fc-6d13-4d82-8e51-f7ccbd0e5463"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "identity": {
+        "pid": 79432,
+        "processInstanceID": "win32:639281408182795059",
+        "occurrenceID": "2cc64632-9d82-41f2-bc51-91cc264c46d3"
+      }
+    }
+  ],
+  "requests": 2,
+  "occurrence": "home-goal-entry-496-before-4cfee914-9f3d-4dc6-ac9e-c76d9ca7badd"
+}

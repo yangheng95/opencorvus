@@ -1,0 +1,23 @@
+13 |  assert.equal(goal.id,goalID);assert.equal(goal.status,'complete');assert.equal(goal.turnBudget,1);assert.equal(goal.turnsAccepted,1)
+14 |  const events=(db.query("SELECT id,type,seq,payload FROM protocol_event WHERE aggregate_id=? AND type LIKE 'continuous_goal.%' ORDER BY seq").all(sessionID) as any[]).map(e=>({...e,payload:JSON.parse(e.payload)}))
+15 |  assert.equal(events.filter(e=>e.type==='continuous_goal.created').length,1)
+16 |  assert.equal(events.filter(e=>e.type==='continuous_goal.continuation_requested').length,1)
+17 |  const completed=events.findLast(e=>e.type==='continuous_goal.updated')!
+18 |  assert.equal(completed.payload.status,'complete')
+             ^
+AssertionError: Expected values to be strictly equal:
++ actual - expected
+
++ undefined
+- 'complete'
+
+ generatedMessage: true,
+     actual: undefined,
+   expected: "complete",
+   operator: "strictEqual",
+       diff: "simple",
+       code: "ERR_ASSERTION"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\home-goal-entry-496\check-goal.ts:18:9
+
+Bun v1.4.0 (Windows x64)

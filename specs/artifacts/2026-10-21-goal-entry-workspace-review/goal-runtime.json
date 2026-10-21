@@ -1,0 +1,287 @@
+{
+  "observedAt": "2026-10-21T01:02:44.572Z",
+  "http": {
+    "status": 200,
+    "goal": {
+      "id": "pev_g0VYdpb8c00tG1GJp5RS",
+      "revision": "pev_g0VYdpmKs00pTAKugsjk",
+      "owner": {
+        "kind": "chat",
+        "id": "ses_-zURMAPDezzYEZEGiYFw"
+      },
+      "objective": "这是隔离的有限产品验收目标 HOMEGOAL496。只用当前 agent，调用 webfetch 阅读公开 https://example.com/ 一次，用中文简述页面用途并保留该 URL 来源；根据真实阅读结果调用 update_continuous_goal 将本目标标记 completed。不要委派，不读写项目文件，不运行命令，不做其它外部操作。",
+      "status": "complete",
+      "reason": "已由当前 agent 使用 webfetch 对 https://example.com/ 阅读一次。实际返回正文说明该域名供文档示例使用，无需许可；它不是服务，不应依赖其开展测试和监控。已据此完成中文用途概述并保留原 URL 来源；未委派、未读写项目文件、未运行命令或执行其它外部操作。",
+      "turnBudget": 1,
+      "tokensUsed": 80511,
+      "turnsAccepted": 1,
+      "createdAt": 1792544393986,
+      "updatedAt": 1792544437030,
+      "sessionID": "ses_-zURMAPDezzYEZEGiYFw",
+      "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+    }
+  },
+  "owner": {
+    "kind": "assistant"
+  },
+  "events": [
+    {
+      "id": "pev_g0VYdpb8c00tG1GJp5RS",
+      "type": "continuous_goal.created",
+      "seq": 1,
+      "payload": {
+        "owner": {
+          "kind": "chat",
+          "id": "ses_-zURMAPDezzYEZEGiYFw"
+        },
+        "request_id": "216d4021-a304-4518-96c2-f3f79bae0173",
+        "input": {
+          "turnBudget": 1,
+          "requestID": "216d4021-a304-4518-96c2-f3f79bae0173",
+          "objective": "这是隔离的有限产品验收目标 HOMEGOAL496。只用当前 agent，调用 webfetch 阅读公开 https://example.com/ 一次，用中文简述页面用途并保留该 URL 来源；根据真实阅读结果调用 update_continuous_goal 将本目标标记 completed。不要委派，不读写项目文件，不运行命令，不做其它外部操作。"
+        },
+        "author": "user"
+      }
+    },
+    {
+      "id": "pev_hH5bHfNVSxWsMUWFGmU3",
+      "type": "continuous_goal.continuation_requested",
+      "seq": 2,
+      "payload": {
+        "goal_id": "pev_g0VYdpb8c00tG1GJp5RS",
+        "revision": "pev_g0VYdpb8c00tG1GJp5RS",
+        "frontier": "start",
+        "number": 1
+      }
+    },
+    {
+      "id": "pev_g0VYdpmKs00pTAKugsjk",
+      "type": "continuous_goal.updated",
+      "seq": 7,
+      "payload": {
+        "goal_id": "pev_g0VYdpb8c00tG1GJp5RS",
+        "request_id": "msg_g0VYdpfCs004i01xdWBH:call_d502dea5ae4545ccbbf7dac445b1b6a4",
+        "input": {
+          "requestID": "msg_g0VYdpfCs004i01xdWBH:call_d502dea5ae4545ccbbf7dac445b1b6a4",
+          "goalID": "pev_g0VYdpb8c00tG1GJp5RS",
+          "expectedRevision": "pev_g0VYdpb8c00tG1GJp5RS",
+          "status": "complete",
+          "reason": "已由当前 agent 使用 webfetch 对 https://example.com/ 阅读一次。实际返回正文说明该域名供文档示例使用，无需许可；它不是服务，不应依赖其开展测试和监控。已据此完成中文用途概述并保留原 URL 来源；未委派、未读写项目文件、未运行命令或执行其它外部操作。"
+        },
+        "author": "ses_-zURMAPDezzYEZEGiYFw"
+      }
+    }
+  ],
+  "outcomes": [
+    {
+      "tool": "webfetch",
+      "outcome": "completed"
+    },
+    {
+      "tool": "update_continuous_goal",
+      "outcome": "completed"
+    }
+  ],
+  "usage": [
+    {
+      "id": "pvu_g0VYdpfBp00JCV0ZKLsU",
+      "agent_id": "work",
+      "total_tokens": 40160,
+      "scope": "associated"
+    },
+    {
+      "id": "pvu_g0VYdpmL200EnGLAu8Gi",
+      "agent_id": "work",
+      "total_tokens": 40351,
+      "scope": "associated"
+    },
+    {
+      "id": "pvu_g0VYdpnQY00mH8d27FFX",
+      "agent_id": "work",
+      "total_tokens": 40366,
+      "scope": "outside-current-goal-at-request-start"
+    }
+  ],
+  "provider": {
+    "maximum": 10,
+    "actual": 5,
+    "requests": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": {
+          "boundary": "provider-source-reader",
+          "state": "settled",
+          "receivedAt": 1792544340446,
+          "boundAt": 1792544340448,
+          "chunkCount": 20,
+          "byteCount": 38404,
+          "firstByteReadAt": 1792544340450,
+          "lastByteReadAt": 1792544343713,
+          "identityState": "observed",
+          "requestContext": {
+            "sessionID": "ses_hOdbACCPoxhrGXgPJz4o",
+            "streamRequest": {
+              "requestID": "msg_hkELundEcQ0KWNTGwnt1",
+              "agentID": "memory",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VYdpMyj00elh3fYm1N",
+              "attempt": 0
+            }
+          },
+          "terminal": {
+            "kind": "eof",
+            "at": 1792544343790
+          }
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": {
+          "boundary": "provider-source-reader",
+          "state": "settled",
+          "receivedAt": 1792544342695,
+          "boundAt": 1792544342697,
+          "chunkCount": 42,
+          "byteCount": 515975,
+          "firstByteReadAt": 1792544342707,
+          "lastByteReadAt": 1792544343959,
+          "identityState": "observed",
+          "requestContext": {
+            "sessionID": "ses_hOdbACCPoxhrGXgPJz4o",
+            "streamRequest": {
+              "requestID": "msg_hkELundEcQ0KWNTGwnt1",
+              "agentID": "chat",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VYdpNHT00Ou8wi2Dex",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VYdpMyt00zPwjIXwcg"
+            }
+          },
+          "terminal": {
+            "kind": "eof",
+            "at": 1792544344115
+          }
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": {
+          "boundary": "provider-source-reader",
+          "state": "settled",
+          "receivedAt": 1792544396583,
+          "boundAt": 1792544396585,
+          "chunkCount": 77,
+          "byteCount": 647299,
+          "firstByteReadAt": 1792544396604,
+          "lastByteReadAt": 1792544398342,
+          "identityState": "observed",
+          "requestContext": {
+            "sessionID": "ses_-zURMAPDezzYEZEGiYFw",
+            "streamRequest": {
+              "requestID": "msg_h38S2rGugnkufZHFLXyL",
+              "agentID": "work",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VYdpbTc0004csVRHYV",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VYdpbKB008EZm7hizK"
+            }
+          },
+          "terminal": {
+            "kind": "eof",
+            "at": 1792544398501
+          }
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": {
+          "boundary": "provider-source-reader",
+          "state": "settled",
+          "receivedAt": 1792544412118,
+          "boundAt": 1792544412119,
+          "chunkCount": 55,
+          "byteCount": 679859,
+          "firstByteReadAt": 1792544412170,
+          "lastByteReadAt": 1792544416823,
+          "identityState": "observed",
+          "requestContext": {
+            "sessionID": "ses_-zURMAPDezzYEZEGiYFw",
+            "streamRequest": {
+              "requestID": "msg_h38S2rGugnkufZHFLXyL",
+              "agentID": "work",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VYdpfHw00Hb64L9C32",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VYdpfCs004i01xdWBH"
+            }
+          },
+          "terminal": {
+            "kind": "eof",
+            "at": 1792544416906
+          }
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": {
+          "boundary": "provider-source-reader",
+          "state": "settled",
+          "receivedAt": 1792544438677,
+          "boundAt": 1792544438680,
+          "chunkCount": 52,
+          "byteCount": 659830,
+          "firstByteReadAt": 1792544438683,
+          "lastByteReadAt": 1792544441154,
+          "identityState": "observed",
+          "requestContext": {
+            "sessionID": "ses_-zURMAPDezzYEZEGiYFw",
+            "streamRequest": {
+              "requestID": "msg_h38S2rGugnkufZHFLXyL",
+              "agentID": "work",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VYdpmRO007KYZP7tq6",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VYdpmM300FVgnInz27"
+            }
+          },
+          "terminal": {
+            "kind": "eof",
+            "at": 1792544441223
+          }
+        }
+      }
+    ]
+  },
+  "boundary": "Real UI-confirmed isolated goal;read-only public HTTP and persisted production facts. No synthetic messages,model substitutes or UI assertions."
+}
