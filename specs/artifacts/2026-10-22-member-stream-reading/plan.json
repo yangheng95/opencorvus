@@ -1,0 +1,21 @@
+{
+  "scope": "member-stream-reading-524",
+  "model": "gpt-6.1-sol",
+  "stream": true,
+  "maximumBatchRequests": 24,
+  "scopeBudgets": {
+    "before": 12,
+    "after": 12
+  },
+  "ports": {
+    "before": 19005,
+    "after": 19007
+  },
+  "source": "Closed523-after;complete schema3/canonical",
+  "member": "ses_-zUS0WzzQzzDOGrIbYwN",
+  "parent": "ses_-zUS0X33CzzWEKMgCk98",
+  "promptMaximumPerScope": 1,
+  "conditionalAfter": "Only after proven production fix and complete original before settlement",
+  "ui": "Current523 formal main-Dp2CjRPP",
+  "boundary": "Real source CLI/manual UI;new sources and streamed prose;no development or product agent creation"
+}

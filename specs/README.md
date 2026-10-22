@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [新来源与成员正文](records/2026-10/2026-10-22-member-stream-reading.md)：[19张实图与12/24 Sol](artifacts/2026-10-22-member-stream-reading/README.md)，新read/web来源与流中开合，修复共享代码工具条遮挡首行；保留一次流中复制不一致的未明边界。
+
 - [Goal 当前交互复核](records/2026-10/2026-10-22-goal-current-experience.md)：[真实页面与草稿修复](artifacts/2026-10-22-goal-current-experience/README.md)，修复关闭/查看说明后目标和两项预算被重置，按原工作区与composer上下文保留唯一表单。
 
 - [原生查询增量输出](records/2026-10/2026-10-22-native-query-stream.md)：[零模型私有资格](artifacts/2026-10-22-native-query-stream/README.md)，补齐旧整包输出原型的真实首字节、双流和每query取消/终态验证。

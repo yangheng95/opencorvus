@@ -113,7 +113,7 @@ export function extToLang(filePath: string): string {
 marked.setOptions({ async: false, gfm: true, breaks: false })
 
 // Wrap a fenced code block with the language tag + copy affordance the
-// overlay shows on hover. Raw source goes into a data-attribute so the
+// overlay places in its own header row. Raw source goes into a data-attribute so the
 // global click listener (installed in main.tsx) can write it to the
 // clipboard without needing to re-decode the highlighted HTML.
 function wrapCodeBlock(rawText: string, language: string, highlightedHtml: string): string {

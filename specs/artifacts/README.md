@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [新来源与成员正文](2026-10-22-member-stream-reading/README.md)：新工具来源/长文实测，共享代码标题行修复，19图、12/24实际Sol及全部配对结算。
+
 - [Goal 当前交互复核](2026-10-22-goal-current-experience/README.md)：真实首页/表单/指南/窄桌面；保留未提交的目标和预算草稿。
 
 - [原生查询增量输出](2026-10-22-native-query-stream/README.md)：零模型私有原型、真实首字节/双流/取消与物理收尾资格。

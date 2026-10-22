@@ -1,0 +1,11 @@
+import fs from 'node:fs'
+import path from 'node:path'
+const root=import.meta.dirname,prior=path.resolve(root,'../member-locale-stream-516'),scope='member-stream-reading-524'
+for(const file of ['prepare-data.ts','launch.ps1','shutdown.ps1','settle.ps1','prepare-authority.mjs','retire-authority.mjs','preserve.ts','copy-ui.mjs']){
+ let code=fs.readFileSync(prior+'/'+file,'utf8').replaceAll('member-locale-stream-516',scope).replaceAll('18975','19005').replaceAll('18977','19007').replaceAll('2026-10-22-member-locale-stream.md','2026-10-22-member-stream-reading.md')
+ code=code.replaceAll("source='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/offline-location-recovery-515-after-ui'","source='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/goal-current-experience-523-after'").replaceAll('offline-location-recovery-515-after-ui-bundle/bin/ui','goal-current-experience-523-after-bundle/bin/ui').replaceAll('main-DhV28lza','main-Dp2CjRPP')
+ code=code.replaceAll('modelInputBudget:16','modelInputBudget:24').replaceAll('modelInputBudget:8','modelInputBudget:12').replaceAll('maximumBatchRequests:16','maximumBatchRequests:24').replaceAll('scopeBudgets:{before:8,after:8}','scopeBudgets:{before:12,after:12}').replaceAll('$taskBudget=8','$taskBudget=12').replaceAll('$taskMaximum=8','$taskMaximum=12').replaceAll('proof.maximumRequests,8','proof.maximumRequests,12').replaceAll('fixed8 actual','fixed12 actual').replaceAll('proof.requests<=8','proof.requests<=12')
+ fs.writeFileSync(root+'/'+file,code,{flag:'wx'})
+}
+fs.writeFileSync(root+'/plan.json',JSON.stringify({scope,model:'gpt-6.1-sol',stream:true,maximumBatchRequests:24,scopeBudgets:{before:12,after:12},ports:{before:19005,after:19007},source:'Closed523-after;complete schema3/canonical',member:'ses_-zUS0WzzQzzDOGrIbYwN',parent:'ses_-zUS0X33CzzWEKMgCk98',promptMaximumPerScope:1,conditionalAfter:'Only after proven production fix and complete original before settlement',ui:'Current523 formal main-Dp2CjRPP',boundary:'Real source CLI/manual UI;new sources and streamed prose;no development or product agent creation'},null,2)+'\n',{flag:'wx'})
+console.log('Fresh524 helpers prepared;no authority staged or process started;fixed12+12')

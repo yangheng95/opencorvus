@@ -1381,7 +1381,11 @@ accessible status instead of repeating Completed text.
 
 Transcript prose and document artifacts share one module-worker Markdown
 renderer. The existing Marked lexer/renderer retains reference links, lists,
-tables, fences and copy/file-link attributes. Automatic codespan file actions
+tables, fences and copy/file-link attributes. Fenced code has one normal-flow
+header for its language and native copy control, followed by the independently
+horizontal-scrolling code body. Hover or keyboard focus never places that
+header over the first code line; the shared wrapper owns the surface and border.
+The original code and delegated copy payload remain unchanged. Automatic codespan file actions
 require a path prefix or a declared file extension with a directory separator
 or cited line. Unprefixed slash-delimited concepts and MIME types remain code
 prose. Rooted Windows drive paths
