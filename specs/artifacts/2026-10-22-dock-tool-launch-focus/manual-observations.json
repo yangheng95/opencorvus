@@ -1,0 +1,131 @@
+[
+  {
+    "stage": "before",
+    "phase": "empty-files-open",
+    "at": "2026-10-22T01:53:00.100Z",
+    "view": {
+      "activeLabel": null,
+      "activeTag": "BODY",
+      "emptyDisplay": "none",
+      "selectedTab": "Files"
+    }
+  },
+  {
+    "stage": "before",
+    "phase": "empty-requirements-open",
+    "at": "2026-10-22T01:53:10.164Z",
+    "view": {
+      "activeLabel": null,
+      "activeTag": "BODY",
+      "emptyDisplay": "none",
+      "selectedTab": "Requirements"
+    }
+  },
+  {
+    "stage": "before",
+    "phase": "empty-browser-open",
+    "at": "2026-10-22T01:53:50.568Z",
+    "view": {
+      "activeLabel": null,
+      "activeTag": "BODY",
+      "emptyDisplay": "none",
+      "selectedTab": "New tab",
+      "tabID": "browser:419dc59f-13bf-4e07-bc24-54662538a2c3"
+    }
+  },
+  {
+    "stage": "before",
+    "phase": "add-menu-files-control",
+    "at": "2026-10-22T01:54:05.180Z",
+    "view": {
+      "activeLabel": "Add tool",
+      "activeTag": "BUTTON",
+      "selectedTab": "Files"
+    }
+  },
+  {
+    "stage": "after",
+    "phase": "empty-files-open",
+    "at": "2026-10-22T01:58:06.511Z",
+    "view": {
+      "activeLabel": "Files",
+      "activeRole": "tab",
+      "activeTag": "BUTTON",
+      "selectedTab": "Files"
+    }
+  },
+  {
+    "stage": "after",
+    "phase": "files-next-tab",
+    "at": "2026-10-22T01:58:22.491Z",
+    "view": {
+      "activeLabel": "Add tool",
+      "activeTag": "BUTTON",
+      "selectedTab": "Files"
+    }
+  },
+  {
+    "stage": "after",
+    "phase": "empty-requirements-open",
+    "at": "2026-10-22T01:58:38.782Z",
+    "view": {
+      "activeLabel": "Requirements",
+      "activeRole": "tab",
+      "activeTag": "BUTTON",
+      "selectedTab": "Requirements"
+    }
+  },
+  {
+    "stage": "after",
+    "phase": "empty-browser-open",
+    "at": "2026-10-22T01:59:05.444Z",
+    "view": {
+      "activeLabel": "New tab",
+      "activeRole": "tab",
+      "activeTag": "BUTTON",
+      "selectedTab": "New tab",
+      "tabID": "browser:cc800c31-fafd-4f49-a20d-1c6f30c2d7cd"
+    }
+  },
+  {
+    "stage": "after",
+    "phase": "browser-native-tab-sequence",
+    "at": "2026-10-22T01:59:14.607Z",
+    "view": {
+      "activeLabel": null,
+      "activePlaceholder": null,
+      "activeRole": "tabpanel",
+      "activeTag": "DIV"
+    }
+  },
+  {
+    "stage": "after",
+    "phase": "browser-address-tab-entry",
+    "at": "2026-10-22T01:59:27.779Z",
+    "view": {
+      "activeLabel": "Address bar",
+      "activePlaceholder": "Enter a URL to open in your browser",
+      "activeTag": "INPUT"
+    }
+  },
+  {
+    "stage": "after",
+    "phase": "add-menu-files-control",
+    "at": "2026-10-22T01:59:45.348Z",
+    "view": {
+      "activeLabel": "Add tool",
+      "activeTag": "BUTTON",
+      "selectedTab": "Files"
+    }
+  },
+  {
+    "stage": "after",
+    "phase": "panel-close-header",
+    "at": "2026-10-22T01:59:55.179Z",
+    "view": {
+      "activeLabel": "Open right dock",
+      "activeTag": "BUTTON",
+      "dockOpen": "false"
+    }
+  }
+]

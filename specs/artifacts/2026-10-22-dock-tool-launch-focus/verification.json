@@ -1,0 +1,36 @@
+{
+  "at": "2026-10-22T02:02:43.541Z",
+  "typecheck": {
+    "command": "bun run typecheck",
+    "cwd": "packages/overlay",
+    "originalHandle": 23808,
+    "originalExit": 0
+  },
+  "formalNodeBuild": {
+    "command": "node .tmp-product-iteration/dock-tool-launch-focus-527/build.mjs",
+    "originalHandle": 88528,
+    "originalExit": 0,
+    "modules": 7314,
+    "duration": "53.06s",
+    "js": "main-BZBJ5jFW.js",
+    "css": "main-CVd9TkT1.css",
+    "completeStdoutSeparatelySaved": true
+  },
+  "docs": {
+    "command": "bun run docs:check",
+    "exit": 0,
+    "operations": 345,
+    "groups": 26
+  },
+  "architecture": {
+    "command": "bun run check:architecture-index",
+    "exit": 0,
+    "currentDocuments": 20
+  },
+  "diffCheck": {
+    "command": "git diff --check",
+    "exit": 0
+  },
+  "uiQualification": "12 actual displayed screenshots and manual UI interactions,not UI automated tests",
+  "provider": "0 actual/0 maximum;no credentials/catalog staged"
+}

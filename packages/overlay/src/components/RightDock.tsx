@@ -502,11 +502,13 @@ export function RightDock(props: RightDockProps): JSX.Element {
                     tone="neutral"
                     class="right-dock-empty__item"
                     data-ui={`right-dock-empty-${meta.id}`}
-                    onClick={() =>
-                      meta.id === "browser"
-                        ? props.onNewBrowserTab(nextBlankBrowserTab().id)
-                        : props.onOpen(meta.id)
-                    }
+                    onClick={(event) => {
+                      const origin = event.currentTarget
+                      if (meta.id === "browser") props.onNewBrowserTab(nextBlankBrowserTab().id)
+                      else props.onOpen(meta.id)
+                      focusReturnOrigin = origin
+                      scheduleReflow()
+                    }}
                   >
                     <Icon name={meta.icon} />
                     <span>{t(meta.labelKey)}</span>

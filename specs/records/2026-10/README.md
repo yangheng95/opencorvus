@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [空工具页打开焦点](2026-10-22-dock-tool-launch-focus.md)：[12图与共享入口修复](../../artifacts/2026-10-22-dock-tool-launch-focus/README.md)，三真实工具/自然Tab/菜单对照，两个零模型范围完整结算。
+
 - [Main 文件来源往返阅读](2026-10-22-source-main-file-reading.md)：[15图与共同焦点修复](../../artifacts/2026-10-22-source-main-file-reading/README.md)，合法Main精确列/文件往返、取消草稿与标签关闭，零模型。
 
 - [代码复制字面实体](2026-10-22-clipboard-literal.md)：[before/after实页](../../artifacts/2026-10-22-clipboard-literal/README.md)，删除重复解码，保留实体/引号/Unicode，8/16 Sol及原数据结算。

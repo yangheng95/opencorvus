@@ -1,0 +1,73 @@
+{
+  "at": "2026-10-22T02:02:43.658Z",
+  "actualModels": 0,
+  "maximum": 0,
+  "authorityCopies": "None staged",
+  "screenshots": 12,
+  "resources": [
+    {
+      "stage": "before",
+      "originalHandle": 49254,
+      "originalExit": 0,
+      "page": 124,
+      "pageState": "Closed",
+      "provider": {
+        "at": "2026-10-22T01:52:07.814Z",
+        "maximum": 0,
+        "actual": 0,
+        "exhausted": false,
+        "requests": [],
+        "scope": "Dock tool launch focus review; no credentials or model catalog copied"
+      },
+      "assets": [
+        {
+          "time": "2026-10-22T01:52:15.765Z",
+          "path": "/ui/assets/main-7Ue7jCbp.js",
+          "statusCode": 200
+        },
+        {
+          "time": "2026-10-22T01:52:15.771Z",
+          "path": "/ui/assets/main-CVd9TkT1.css",
+          "statusCode": 200
+        }
+      ],
+      "physical": "Original native/output/request/launcher/exact host and target fully settled",
+      "runtimeErrors": 11
+    },
+    {
+      "stage": "after",
+      "originalHandle": 58855,
+      "originalExit": 0,
+      "page": 125,
+      "pageState": "Closed",
+      "provider": {
+        "at": "2026-10-22T01:57:22.408Z",
+        "maximum": 0,
+        "actual": 0,
+        "exhausted": false,
+        "requests": [],
+        "scope": "Dock tool launch focus review; no credentials or model catalog copied"
+      },
+      "assets": [
+        {
+          "time": "2026-10-22T01:57:48.019Z",
+          "path": "/ui/assets/main-BZBJ5jFW.js",
+          "statusCode": 200
+        },
+        {
+          "time": "2026-10-22T01:57:48.022Z",
+          "path": "/ui/assets/main-CVd9TkT1.css",
+          "statusCode": 200
+        }
+      ],
+      "physical": "Original native/output/request/launcher/exact host and target fully settled",
+      "runtimeErrors": 11
+    }
+  ],
+  "qualification": "Actual manual empty-chooser Files/Requirements/Browser launch,Tab/menu/close observations;no UI assertions",
+  "limits": [
+    "Three actual entries cover ordinary and Browser branches;other three catalog tools not independently qualified",
+    "No active stream/Side/Native WebView2/all Rendering qualification",
+    "Zero-model configuration errors are retained;not console-clean qualification"
+  ]
+}

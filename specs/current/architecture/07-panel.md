@@ -2567,6 +2567,11 @@ file resource and connection authority to retire stale focus intent; accepted
 leave decisions hand focus to their destination instead.
 After actual removal, the existing Dock reflow frame restores focus to the
 canonical selected visible tab, or to Add tool when the collection is empty.
+Opening a tool from the empty chooser captures that initiating button before
+the chooser becomes hidden and uses the same reflow frame to focus the newly
+selected visible tab. Ordinary tools and a new Browser tab keep their existing
+creation callbacks and identities. The add menu retains its primitive's own
+focus lifecycle; a tool body that has already acquired focus keeps it.
 The File pane's Close workspace action uses the same focus selection after a
 successful close and its resulting layout frame. Its content-side entry must
 not leave focus on the removed editor; navigation admission keeps its own

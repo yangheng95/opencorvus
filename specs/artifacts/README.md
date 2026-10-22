@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [空工具页打开焦点](2026-10-22-dock-tool-launch-focus/README.md)：12实图，普通工具/Browser新标签复用共同焦点交接，原菜单与关闭合同保持；零模型和完整原数据结算。
+
 - [Main 文件来源往返阅读](2026-10-22-source-main-file-reading/README.md)：15实图/两零模型范围，修复文件工作台关闭后焦点丢失，精确列、取消草稿和标签关闭合同复核。
 
 - [代码复制字面实体](2026-10-22-clipboard-literal/README.md)：重复解码根因/修复，8实际流与8图，两原生范围/8配对成员完整结算。

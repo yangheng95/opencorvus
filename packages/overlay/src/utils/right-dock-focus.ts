@@ -1,4 +1,4 @@
-/** Return a completed close action to the surviving Dock controls. */
+/** Return a completed Dock action to its current visible controls. */
 export function restoreRightDockFocus(dock: HTMLElement, origin: Element): void {
   if (!dock.isConnected || dock.inert || dock.dataset.open !== "true") return
   if (document.activeElement !== origin && document.activeElement !== document.body) return
