@@ -1,17 +1,14 @@
-import { afterEach, expect, test } from "bun:test"
+import { afterEach, expect, spyOn, test } from "bun:test"
 
 import { HOST_CAPABILITIES } from "../src/services/host-transport"
-import type {
-  HostTransport,
-  StreamHandlers,
-  StreamOpenRequest,
-  TransportRequest,
-} from "../src/services/host-transport"
+import type { HostTransport, StreamHandlers, StreamOpenRequest, TransportRequest } from "../src/services/host-transport"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import { startSSE, stopSSE } from "../src/services/sse"
 import { STREAM_RECONNECT_DELAY_MS } from "../src/services/host-transport"
 import { setBoardStore } from "../src/store/board"
 import { messageStore } from "../src/store/messages"
+import * as messages from "../src/store/messages"
+import type { BoardSource } from "../src/store/board"
 
 const TASK_ID = "tsk_live_replay_reopen"
 const CONVERSATION_TAIL_PATH = `task/${TASK_ID}/conversation`
@@ -158,3 +155,67 @@ test("an initial stream close retries as initial connection work", async () => {
 
   expect(messageStore.sseStatus).toBe("connecting")
 })
+
+const retrySources: BoardSource[] = [
+  { kind: "task", id: TASK_ID },
+  { kind: "session", id: "ses_retry_chat", sessionKind: "conversation" },
+  { kind: "session", id: "ses_retry_mission", sessionKind: "mission" },
+]
+
+for (const source of retrySources) {
+  test(`${source.kind === "task" ? "task" : source.sessionKind} retries publish a continuous recovery lifecycle`, async () => {
+    const opens: Array<{ request: StreamOpenRequest; handlers: StreamHandlers }> = []
+    const closed: string[] = []
+    const transport: HostTransport = {
+      kind: "browser",
+      capabilities: HOST_CAPABILITIES.browser,
+      async request() {
+        throw new Error("Unexpected request in stream lifecycle contract")
+      },
+      openStream(request, handlers) {
+        opens.push({ request, handlers })
+        return {
+          close(reason) {
+            closed.push(reason ?? "")
+            handlers.onClose?.(reason)
+          },
+        }
+      },
+      async native() {
+        throw new Error("Unexpected native call in stream lifecycle contract")
+      },
+    }
+    __setHostTransportForTest(transport)
+    setBoardStore("selectedSource", source)
+    setBoardStore("taskSequence", 12)
+    const statuses = spyOn(messages, "setSseStatus")
+    try {
+      startSSE(source, 12, { directory: "/tmp/stream-lifecycle-project" })
+      opens[0]!.handlers.onOpen?.()
+      opens[0]!.handlers.onError(new Error("Established stream interrupted"))
+      await waitFor(() => opens.length === 2, STREAM_RECONNECT_DELAY_MS + 1000)
+      opens[1]!.handlers.onClose?.("retry-interrupted")
+      await waitFor(() => opens.length === 3, STREAM_RECONNECT_DELAY_MS + 1000)
+      opens[2]!.handlers.onOpen?.()
+      stopSSE()
+
+      expect(statuses.mock.calls.map(([status]) => status)).toEqual([
+        "connecting",
+        "connected",
+        "reconnecting",
+        "reconnecting",
+        "reconnecting",
+        "reconnecting",
+        "reconnecting",
+        "connected",
+        "idle",
+      ])
+      expect(opens.map(({ request }) => request.path)).toEqual(Array(3).fill(`${source.kind}/${source.id}/events`))
+      expect(opens[2]!.request.query?.directory).toBe("/tmp/stream-lifecycle-project")
+      expect(closed).toEqual(["transport-error", "consumer-dispose"])
+      expect(messageStore.sseStatus).toBe("idle")
+    } finally {
+      statuses.mockRestore()
+    }
+  })
+}

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [实时流重试状态](2026-10-23-stream-retry-status.md)：551单agent修复共享流重试状态，49秒16轮实际重试提示/来源/阅读位置保持。
+
 - [连接状态统一表达](2026-10-23-connection-status-presentation.md)：单agent统一状态和颜色，保留恢复提示，修正私有工具后完成中英文实页复验。
 
 - [重连模型配置读取](2026-10-23-composer-reconnect-config.md)：单agent修复模型配置误报，真实读取恢复及原35正文/11来源保持。

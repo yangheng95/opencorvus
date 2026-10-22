@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [实时流重试状态](records/2026-10/2026-10-23-stream-retry-status.md)：551修复重试idle瞬态重置提示计时，七张实图、三类流合同与4次Sol闭合。
+
 - [连接状态统一表达](records/2026-10/2026-10-23-connection-status-presentation.md)：550修复Online与不可达提示冲突及恢复提示重建，双语八张实图、10次Sol与五后端/两转发器闭合。
 
 - [重连模型配置读取](records/2026-10/2026-10-23-composer-reconnect-config.md)：549修复SSE先恢复时过期健康状态拦截配置GET；六张实图、9服务合同与8次Sol闭合。

@@ -343,7 +343,7 @@ const selectedTaskRecoveryScheduler = createSelectedTaskRecoveryScheduler(startS
 export function startSSE(source: BoardSource, after = 0, options: SseStartOptions = {}) {
   const authority = options.authority ?? captureApiAuthority()
   assertApiAuthorityCurrent(authority)
-  stopSSE()
+  disposeSelectedStream()
   const streamGeneration = ++selectedTaskStreamGeneration
   const owns = () => isApiAuthorityCurrent(authority) && streamGeneration === selectedTaskStreamGeneration
   setSseStatus(options.connectionStatus ?? "connecting")
@@ -531,7 +531,7 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
   armWatchdog(handle)
 }
 
-export function stopSSE() {
+function disposeSelectedStream() {
   selectedTaskStreamGeneration += 1
   if (sseRetryTimer) {
     clearTimeout(sseRetryTimer)
@@ -545,6 +545,10 @@ export function stopSSE() {
   sseTaskID = ""
   sseSource = null
   if (handle) handle.close("consumer-dispose")
+}
+
+export function stopSSE() {
+  disposeSelectedStream()
   setSseStatus("idle")
 }
 

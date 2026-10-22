@@ -1513,6 +1513,13 @@ that is still connecting, while an online backend with a missing stream is expli
 stream reconnect condition. The SSE owner also publishes whether the selected source currently
 expects such a stream, so an empty New Chat cannot manufacture a reconnect warning.
 
+Replacing a selected stream retires its old handle, timers and generation without
+publishing a stopped subscription. Task, Chat and Mission retries remain in their
+connecting/reconnecting state until the replacement actually opens. Only explicit
+`stopSSE` publishes idle. This keeps the notice grace period tied to the sustained
+interruption rather than resetting it on every retry; source/authority retirement
+still invalidates old callbacks before closing their handles.
+
 The sidebar badge and banner use one stateless presentation of those observations.
 A restored selected stream with backend health still unconfirmed is Connecting,
 with an explicit live-updates-connected message; it is neither an Online claim

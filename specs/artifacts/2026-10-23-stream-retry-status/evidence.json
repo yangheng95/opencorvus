@@ -1,0 +1,2162 @@
+{
+  "batch": 551,
+  "baseCommit": "f10804d2a09b5ccf16fba0eb4755e4cc493b758c",
+  "method": "Manual real Source CLI UI interactions and viewed screenshots; observation data is supporting evidence, not a UI automation test",
+  "observations": [
+    {
+      "phase": "01-before-online",
+      "connection": {
+        "at": "2026-10-22T20:34:23.573Z",
+        "badge": {
+          "label": "Online",
+          "status": "online",
+          "title": "Connection Diagnostics · Online · Port 19127"
+        },
+        "banner": null,
+        "locale": "en-US"
+      },
+      "observedAt": "2026-10-22T20:34:23.546Z",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 64017
+      },
+      "bodies": 35,
+      "sources": 11,
+      "retainedBodyBindings": 35,
+      "retainedSourceBindings": 11,
+      "bodyObservations": [
+        {
+          "owner": "22",
+          "part": "prt_g0VXzT1DL000WBOXfm1A",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "23",
+          "part": "prt_g0VXzT3Gs005zKfhGX2N",
+          "blocks": 2,
+          "rendering": null
+        },
+        {
+          "owner": "24",
+          "part": "prt_g0VXzUz7q00fivpYNBRn",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "25",
+          "part": "prt_g0VXzV2VW00na9YfpQKR",
+          "blocks": 27,
+          "rendering": null
+        },
+        {
+          "owner": "26",
+          "part": "prt_g0VY0iRj9008mwlam6wF",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "27",
+          "part": "prt_g0VY0iVmm00FScjcxxqj",
+          "blocks": 35,
+          "rendering": null
+        },
+        {
+          "owner": "28",
+          "part": "prt_g0VY0lNZe00ZQkp3vHys",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "29",
+          "part": "prt_g0VY0lRNt00O6pzN6EFn",
+          "blocks": 35,
+          "rendering": null
+        },
+        {
+          "owner": "30",
+          "part": "prt_g0VYa9kCa00xJ0qS6AXI",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "31",
+          "part": "prt_g0VYa9l2c00sO4SHI28d",
+          "blocks": 37,
+          "rendering": null
+        },
+        {
+          "owner": "32",
+          "part": "prt_g0VYah8Gh00xughkwCzi",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "33",
+          "part": "prt_g0VYah9j300NmU6XDMaT",
+          "blocks": 92,
+          "rendering": null
+        },
+        {
+          "owner": "34",
+          "part": "prt_g0VYaiFl500Ee7YzzeGX",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "35",
+          "part": "prt_g0VYaiGpV00UBCQk1yLH",
+          "blocks": 90,
+          "rendering": null
+        },
+        {
+          "owner": "36",
+          "part": "prt_g0VYajX8b00EgWU7FyNk",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "37",
+          "part": "prt_g0VYajYCe00XLJTwuEok",
+          "blocks": 90,
+          "rendering": null
+        },
+        {
+          "owner": "38",
+          "part": "prt_g0VYdvAon001DmVMQt3O",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "39",
+          "part": "prt_g0VYdvC3600tMl1PeYuq",
+          "blocks": 49,
+          "rendering": null
+        },
+        {
+          "owner": "40",
+          "part": "prt_g0VYdwPVb004VFV3sUlQ",
+          "blocks": 2,
+          "rendering": null
+        },
+        {
+          "owner": "41",
+          "part": "prt_g0VYdwQx5008pNdPaCbh",
+          "blocks": 50,
+          "rendering": null
+        },
+        {
+          "owner": "42",
+          "part": "prt_g0VYesG1E00Fmnl71BEE",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "43",
+          "part": "prt_g0VYesH2w0006o3ZRwfs",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "44",
+          "part": "prt_g0VYesPzI003w1Eex4Qe",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "45",
+          "part": "prt_g0VYesayI00RufgicsVt",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "46",
+          "part": "prt_g0VYesbDz00dg0zL0ra0",
+          "blocks": 46,
+          "rendering": null
+        },
+        {
+          "owner": "47",
+          "part": "prt_g0VYkNxBA007jEzXWgNR",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "48",
+          "part": "prt_g0VYkNygI00Ey22T1YCQ",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "49",
+          "part": "prt_g0VYkPcG100Rm9U67E04",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "50",
+          "part": "prt_g0VYkPjwS00g0Ga5Wg2x",
+          "blocks": 10,
+          "rendering": null
+        },
+        {
+          "owner": "51",
+          "part": "prt_g0VYkgQ2q00wZOiEpPpZ",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "52",
+          "part": "prt_g0VYkgRLV00kt1ubETcr",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "53",
+          "part": "prt_g0VYkglYL00ZzNKT7UEB",
+          "blocks": 14,
+          "rendering": null
+        },
+        {
+          "owner": "54",
+          "part": "prt_g0VYlVhde009qbGjI9xa",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "55",
+          "part": "prt_g0VYlVik0003TVHLrtoL",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "56",
+          "part": "prt_g0VYlVwN8002kOPK5Uhl",
+          "blocks": 30,
+          "rendering": null
+        }
+      ]
+    },
+    {
+      "phase": "02-before-sustained-retry",
+      "connection": {
+        "at": "2026-10-22T20:34:37.079Z",
+        "badge": {
+          "label": "Connecting",
+          "status": "connecting",
+          "title": "Connection Diagnostics · Connecting"
+        },
+        "banner": null,
+        "locale": "en-US"
+      },
+      "observedAt": "2026-10-22T20:34:37.052Z",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 64017
+      },
+      "bodies": 35,
+      "sources": 11,
+      "retainedBodyBindings": 35,
+      "retainedSourceBindings": 11,
+      "bodyObservations": [
+        {
+          "owner": "22",
+          "part": "prt_g0VXzT1DL000WBOXfm1A",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "23",
+          "part": "prt_g0VXzT3Gs005zKfhGX2N",
+          "blocks": 2,
+          "rendering": null
+        },
+        {
+          "owner": "24",
+          "part": "prt_g0VXzUz7q00fivpYNBRn",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "25",
+          "part": "prt_g0VXzV2VW00na9YfpQKR",
+          "blocks": 27,
+          "rendering": null
+        },
+        {
+          "owner": "26",
+          "part": "prt_g0VY0iRj9008mwlam6wF",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "27",
+          "part": "prt_g0VY0iVmm00FScjcxxqj",
+          "blocks": 35,
+          "rendering": null
+        },
+        {
+          "owner": "28",
+          "part": "prt_g0VY0lNZe00ZQkp3vHys",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "29",
+          "part": "prt_g0VY0lRNt00O6pzN6EFn",
+          "blocks": 35,
+          "rendering": null
+        },
+        {
+          "owner": "30",
+          "part": "prt_g0VYa9kCa00xJ0qS6AXI",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "31",
+          "part": "prt_g0VYa9l2c00sO4SHI28d",
+          "blocks": 37,
+          "rendering": null
+        },
+        {
+          "owner": "32",
+          "part": "prt_g0VYah8Gh00xughkwCzi",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "33",
+          "part": "prt_g0VYah9j300NmU6XDMaT",
+          "blocks": 92,
+          "rendering": null
+        },
+        {
+          "owner": "34",
+          "part": "prt_g0VYaiFl500Ee7YzzeGX",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "35",
+          "part": "prt_g0VYaiGpV00UBCQk1yLH",
+          "blocks": 90,
+          "rendering": null
+        },
+        {
+          "owner": "36",
+          "part": "prt_g0VYajX8b00EgWU7FyNk",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "37",
+          "part": "prt_g0VYajYCe00XLJTwuEok",
+          "blocks": 90,
+          "rendering": null
+        },
+        {
+          "owner": "38",
+          "part": "prt_g0VYdvAon001DmVMQt3O",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "39",
+          "part": "prt_g0VYdvC3600tMl1PeYuq",
+          "blocks": 49,
+          "rendering": null
+        },
+        {
+          "owner": "40",
+          "part": "prt_g0VYdwPVb004VFV3sUlQ",
+          "blocks": 2,
+          "rendering": null
+        },
+        {
+          "owner": "41",
+          "part": "prt_g0VYdwQx5008pNdPaCbh",
+          "blocks": 50,
+          "rendering": null
+        },
+        {
+          "owner": "42",
+          "part": "prt_g0VYesG1E00Fmnl71BEE",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "43",
+          "part": "prt_g0VYesH2w0006o3ZRwfs",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "44",
+          "part": "prt_g0VYesPzI003w1Eex4Qe",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "45",
+          "part": "prt_g0VYesayI00RufgicsVt",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "46",
+          "part": "prt_g0VYesbDz00dg0zL0ra0",
+          "blocks": 46,
+          "rendering": null
+        },
+        {
+          "owner": "47",
+          "part": "prt_g0VYkNxBA007jEzXWgNR",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "48",
+          "part": "prt_g0VYkNygI00Ey22T1YCQ",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "49",
+          "part": "prt_g0VYkPcG100Rm9U67E04",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "50",
+          "part": "prt_g0VYkPjwS00g0Ga5Wg2x",
+          "blocks": 10,
+          "rendering": null
+        },
+        {
+          "owner": "51",
+          "part": "prt_g0VYkgQ2q00wZOiEpPpZ",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "52",
+          "part": "prt_g0VYkgRLV00kt1ubETcr",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "53",
+          "part": "prt_g0VYkglYL00ZzNKT7UEB",
+          "blocks": 14,
+          "rendering": null
+        },
+        {
+          "owner": "54",
+          "part": "prt_g0VYlVhde009qbGjI9xa",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "55",
+          "part": "prt_g0VYlVik0003TVHLrtoL",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "56",
+          "part": "prt_g0VYlVwN8002kOPK5Uhl",
+          "blocks": 30,
+          "rendering": null
+        }
+      ]
+    },
+    {
+      "phase": "03-before-restored",
+      "connection": {
+        "at": "2026-10-22T20:35:20.411Z",
+        "badge": {
+          "label": "Online",
+          "status": "online",
+          "title": "Connection Diagnostics · Online · Port 19127"
+        },
+        "banner": null,
+        "locale": "en-US"
+      },
+      "observedAt": "2026-10-22T20:35:20.382Z",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 64017
+      },
+      "bodies": 35,
+      "sources": 11,
+      "retainedBodyBindings": 35,
+      "retainedSourceBindings": 11,
+      "bodyObservations": [
+        {
+          "owner": "22",
+          "part": "prt_g0VXzT1DL000WBOXfm1A",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "23",
+          "part": "prt_g0VXzT3Gs005zKfhGX2N",
+          "blocks": 2,
+          "rendering": null
+        },
+        {
+          "owner": "24",
+          "part": "prt_g0VXzUz7q00fivpYNBRn",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "25",
+          "part": "prt_g0VXzV2VW00na9YfpQKR",
+          "blocks": 27,
+          "rendering": null
+        },
+        {
+          "owner": "26",
+          "part": "prt_g0VY0iRj9008mwlam6wF",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "27",
+          "part": "prt_g0VY0iVmm00FScjcxxqj",
+          "blocks": 35,
+          "rendering": null
+        },
+        {
+          "owner": "28",
+          "part": "prt_g0VY0lNZe00ZQkp3vHys",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "29",
+          "part": "prt_g0VY0lRNt00O6pzN6EFn",
+          "blocks": 35,
+          "rendering": null
+        },
+        {
+          "owner": "30",
+          "part": "prt_g0VYa9kCa00xJ0qS6AXI",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "31",
+          "part": "prt_g0VYa9l2c00sO4SHI28d",
+          "blocks": 37,
+          "rendering": null
+        },
+        {
+          "owner": "32",
+          "part": "prt_g0VYah8Gh00xughkwCzi",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "33",
+          "part": "prt_g0VYah9j300NmU6XDMaT",
+          "blocks": 92,
+          "rendering": null
+        },
+        {
+          "owner": "34",
+          "part": "prt_g0VYaiFl500Ee7YzzeGX",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "35",
+          "part": "prt_g0VYaiGpV00UBCQk1yLH",
+          "blocks": 90,
+          "rendering": null
+        },
+        {
+          "owner": "36",
+          "part": "prt_g0VYajX8b00EgWU7FyNk",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "37",
+          "part": "prt_g0VYajYCe00XLJTwuEok",
+          "blocks": 90,
+          "rendering": null
+        },
+        {
+          "owner": "38",
+          "part": "prt_g0VYdvAon001DmVMQt3O",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "39",
+          "part": "prt_g0VYdvC3600tMl1PeYuq",
+          "blocks": 49,
+          "rendering": null
+        },
+        {
+          "owner": "40",
+          "part": "prt_g0VYdwPVb004VFV3sUlQ",
+          "blocks": 2,
+          "rendering": null
+        },
+        {
+          "owner": "41",
+          "part": "prt_g0VYdwQx5008pNdPaCbh",
+          "blocks": 50,
+          "rendering": null
+        },
+        {
+          "owner": "42",
+          "part": "prt_g0VYesG1E00Fmnl71BEE",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "43",
+          "part": "prt_g0VYesH2w0006o3ZRwfs",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "44",
+          "part": "prt_g0VYesPzI003w1Eex4Qe",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "45",
+          "part": "prt_g0VYesayI00RufgicsVt",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "46",
+          "part": "prt_g0VYesbDz00dg0zL0ra0",
+          "blocks": 46,
+          "rendering": null
+        },
+        {
+          "owner": "47",
+          "part": "prt_g0VYkNxBA007jEzXWgNR",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "48",
+          "part": "prt_g0VYkNygI00Ey22T1YCQ",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "49",
+          "part": "prt_g0VYkPcG100Rm9U67E04",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "50",
+          "part": "prt_g0VYkPjwS00g0Ga5Wg2x",
+          "blocks": 10,
+          "rendering": null
+        },
+        {
+          "owner": "51",
+          "part": "prt_g0VYkgQ2q00wZOiEpPpZ",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "52",
+          "part": "prt_g0VYkgRLV00kt1ubETcr",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "53",
+          "part": "prt_g0VYkglYL00ZzNKT7UEB",
+          "blocks": 14,
+          "rendering": null
+        },
+        {
+          "owner": "54",
+          "part": "prt_g0VYlVhde009qbGjI9xa",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "55",
+          "part": "prt_g0VYlVik0003TVHLrtoL",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "56",
+          "part": "prt_g0VYlVwN8002kOPK5Uhl",
+          "blocks": 30,
+          "rendering": null
+        }
+      ]
+    },
+    {
+      "phase": "04-after-online",
+      "connection": {
+        "at": "2026-10-22T20:37:30.575Z",
+        "badge": {
+          "label": "Online",
+          "status": "online",
+          "title": "Connection Diagnostics · Online · Port 19131"
+        },
+        "banner": null,
+        "locale": "en-US"
+      },
+      "observedAt": "2026-10-22T20:37:30.544Z",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 64017
+      },
+      "bodies": 35,
+      "sources": 11,
+      "retainedBodyBindings": 35,
+      "retainedSourceBindings": 11,
+      "bodyObservations": [
+        {
+          "owner": "22",
+          "part": "prt_g0VXzT1DL000WBOXfm1A",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "23",
+          "part": "prt_g0VXzT3Gs005zKfhGX2N",
+          "blocks": 2,
+          "rendering": null
+        },
+        {
+          "owner": "24",
+          "part": "prt_g0VXzUz7q00fivpYNBRn",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "25",
+          "part": "prt_g0VXzV2VW00na9YfpQKR",
+          "blocks": 27,
+          "rendering": null
+        },
+        {
+          "owner": "26",
+          "part": "prt_g0VY0iRj9008mwlam6wF",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "27",
+          "part": "prt_g0VY0iVmm00FScjcxxqj",
+          "blocks": 35,
+          "rendering": null
+        },
+        {
+          "owner": "28",
+          "part": "prt_g0VY0lNZe00ZQkp3vHys",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "29",
+          "part": "prt_g0VY0lRNt00O6pzN6EFn",
+          "blocks": 35,
+          "rendering": null
+        },
+        {
+          "owner": "30",
+          "part": "prt_g0VYa9kCa00xJ0qS6AXI",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "31",
+          "part": "prt_g0VYa9l2c00sO4SHI28d",
+          "blocks": 37,
+          "rendering": null
+        },
+        {
+          "owner": "32",
+          "part": "prt_g0VYah8Gh00xughkwCzi",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "33",
+          "part": "prt_g0VYah9j300NmU6XDMaT",
+          "blocks": 92,
+          "rendering": null
+        },
+        {
+          "owner": "34",
+          "part": "prt_g0VYaiFl500Ee7YzzeGX",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "35",
+          "part": "prt_g0VYaiGpV00UBCQk1yLH",
+          "blocks": 90,
+          "rendering": null
+        },
+        {
+          "owner": "36",
+          "part": "prt_g0VYajX8b00EgWU7FyNk",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "37",
+          "part": "prt_g0VYajYCe00XLJTwuEok",
+          "blocks": 90,
+          "rendering": null
+        },
+        {
+          "owner": "38",
+          "part": "prt_g0VYdvAon001DmVMQt3O",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "39",
+          "part": "prt_g0VYdvC3600tMl1PeYuq",
+          "blocks": 49,
+          "rendering": null
+        },
+        {
+          "owner": "40",
+          "part": "prt_g0VYdwPVb004VFV3sUlQ",
+          "blocks": 2,
+          "rendering": null
+        },
+        {
+          "owner": "41",
+          "part": "prt_g0VYdwQx5008pNdPaCbh",
+          "blocks": 50,
+          "rendering": null
+        },
+        {
+          "owner": "42",
+          "part": "prt_g0VYesG1E00Fmnl71BEE",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "43",
+          "part": "prt_g0VYesH2w0006o3ZRwfs",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "44",
+          "part": "prt_g0VYesPzI003w1Eex4Qe",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "45",
+          "part": "prt_g0VYesayI00RufgicsVt",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "46",
+          "part": "prt_g0VYesbDz00dg0zL0ra0",
+          "blocks": 46,
+          "rendering": null
+        },
+        {
+          "owner": "47",
+          "part": "prt_g0VYkNxBA007jEzXWgNR",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "48",
+          "part": "prt_g0VYkNygI00Ey22T1YCQ",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "49",
+          "part": "prt_g0VYkPcG100Rm9U67E04",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "50",
+          "part": "prt_g0VYkPjwS00g0Ga5Wg2x",
+          "blocks": 10,
+          "rendering": null
+        },
+        {
+          "owner": "51",
+          "part": "prt_g0VYkgQ2q00wZOiEpPpZ",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "52",
+          "part": "prt_g0VYkgRLV00kt1ubETcr",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "53",
+          "part": "prt_g0VYkglYL00ZzNKT7UEB",
+          "blocks": 14,
+          "rendering": null
+        },
+        {
+          "owner": "54",
+          "part": "prt_g0VYlVhde009qbGjI9xa",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "55",
+          "part": "prt_g0VYlVik0003TVHLrtoL",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "56",
+          "part": "prt_g0VYlVwN8002kOPK5Uhl",
+          "blocks": 30,
+          "rendering": null
+        }
+      ]
+    },
+    {
+      "phase": "05-after-sustained-retry",
+      "connection": {
+        "at": "2026-10-22T20:37:46.364Z",
+        "badge": {
+          "label": "Connecting",
+          "status": "connecting",
+          "title": "Connection Diagnostics · Connecting"
+        },
+        "banner": {
+          "problem": "stream",
+          "status": "connecting",
+          "text": "Server connected. Restoring live updates…Set upReload"
+        },
+        "locale": "en-US"
+      },
+      "observedAt": "2026-10-22T20:37:46.335Z",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 64017
+      },
+      "bodies": 35,
+      "sources": 11,
+      "retainedBodyBindings": 35,
+      "retainedSourceBindings": 11,
+      "bodyObservations": [
+        {
+          "owner": "22",
+          "part": "prt_g0VXzT1DL000WBOXfm1A",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "23",
+          "part": "prt_g0VXzT3Gs005zKfhGX2N",
+          "blocks": 2,
+          "rendering": null
+        },
+        {
+          "owner": "24",
+          "part": "prt_g0VXzUz7q00fivpYNBRn",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "25",
+          "part": "prt_g0VXzV2VW00na9YfpQKR",
+          "blocks": 27,
+          "rendering": null
+        },
+        {
+          "owner": "26",
+          "part": "prt_g0VY0iRj9008mwlam6wF",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "27",
+          "part": "prt_g0VY0iVmm00FScjcxxqj",
+          "blocks": 35,
+          "rendering": null
+        },
+        {
+          "owner": "28",
+          "part": "prt_g0VY0lNZe00ZQkp3vHys",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "29",
+          "part": "prt_g0VY0lRNt00O6pzN6EFn",
+          "blocks": 35,
+          "rendering": null
+        },
+        {
+          "owner": "30",
+          "part": "prt_g0VYa9kCa00xJ0qS6AXI",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "31",
+          "part": "prt_g0VYa9l2c00sO4SHI28d",
+          "blocks": 37,
+          "rendering": null
+        },
+        {
+          "owner": "32",
+          "part": "prt_g0VYah8Gh00xughkwCzi",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "33",
+          "part": "prt_g0VYah9j300NmU6XDMaT",
+          "blocks": 92,
+          "rendering": null
+        },
+        {
+          "owner": "34",
+          "part": "prt_g0VYaiFl500Ee7YzzeGX",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "35",
+          "part": "prt_g0VYaiGpV00UBCQk1yLH",
+          "blocks": 90,
+          "rendering": null
+        },
+        {
+          "owner": "36",
+          "part": "prt_g0VYajX8b00EgWU7FyNk",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "37",
+          "part": "prt_g0VYajYCe00XLJTwuEok",
+          "blocks": 90,
+          "rendering": null
+        },
+        {
+          "owner": "38",
+          "part": "prt_g0VYdvAon001DmVMQt3O",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "39",
+          "part": "prt_g0VYdvC3600tMl1PeYuq",
+          "blocks": 49,
+          "rendering": null
+        },
+        {
+          "owner": "40",
+          "part": "prt_g0VYdwPVb004VFV3sUlQ",
+          "blocks": 2,
+          "rendering": null
+        },
+        {
+          "owner": "41",
+          "part": "prt_g0VYdwQx5008pNdPaCbh",
+          "blocks": 50,
+          "rendering": null
+        },
+        {
+          "owner": "42",
+          "part": "prt_g0VYesG1E00Fmnl71BEE",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "43",
+          "part": "prt_g0VYesH2w0006o3ZRwfs",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "44",
+          "part": "prt_g0VYesPzI003w1Eex4Qe",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "45",
+          "part": "prt_g0VYesayI00RufgicsVt",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "46",
+          "part": "prt_g0VYesbDz00dg0zL0ra0",
+          "blocks": 46,
+          "rendering": null
+        },
+        {
+          "owner": "47",
+          "part": "prt_g0VYkNxBA007jEzXWgNR",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "48",
+          "part": "prt_g0VYkNygI00Ey22T1YCQ",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "49",
+          "part": "prt_g0VYkPcG100Rm9U67E04",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "50",
+          "part": "prt_g0VYkPjwS00g0Ga5Wg2x",
+          "blocks": 10,
+          "rendering": null
+        },
+        {
+          "owner": "51",
+          "part": "prt_g0VYkgQ2q00wZOiEpPpZ",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "52",
+          "part": "prt_g0VYkgRLV00kt1ubETcr",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "53",
+          "part": "prt_g0VYkglYL00ZzNKT7UEB",
+          "blocks": 14,
+          "rendering": null
+        },
+        {
+          "owner": "54",
+          "part": "prt_g0VYlVhde009qbGjI9xa",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "55",
+          "part": "prt_g0VYlVik0003TVHLrtoL",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "56",
+          "part": "prt_g0VYlVwN8002kOPK5Uhl",
+          "blocks": 30,
+          "rendering": null
+        }
+      ]
+    },
+    {
+      "phase": "06-after-chinese-source-retry",
+      "connection": {
+        "at": "2026-10-22T20:38:19.412Z",
+        "badge": {
+          "label": "连接中",
+          "status": "connecting",
+          "title": "连接诊断 · 连接中"
+        },
+        "banner": {
+          "problem": "stream",
+          "status": "connecting",
+          "text": "服务已连接，正在恢复实时更新…去配置重新加载"
+        },
+        "locale": "zh-CN"
+      },
+      "observedAt": "2026-10-22T20:38:19.385Z",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 62577
+      },
+      "bodies": 35,
+      "sources": 11,
+      "retainedBodyBindings": 35,
+      "retainedSourceBindings": 11,
+      "bodyObservations": [
+        {
+          "owner": "22",
+          "part": "prt_g0VXzT1DL000WBOXfm1A",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "23",
+          "part": "prt_g0VXzT3Gs005zKfhGX2N",
+          "blocks": 2,
+          "rendering": null
+        },
+        {
+          "owner": "24",
+          "part": "prt_g0VXzUz7q00fivpYNBRn",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "25",
+          "part": "prt_g0VXzV2VW00na9YfpQKR",
+          "blocks": 27,
+          "rendering": null
+        },
+        {
+          "owner": "26",
+          "part": "prt_g0VY0iRj9008mwlam6wF",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "27",
+          "part": "prt_g0VY0iVmm00FScjcxxqj",
+          "blocks": 35,
+          "rendering": null
+        },
+        {
+          "owner": "28",
+          "part": "prt_g0VY0lNZe00ZQkp3vHys",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "29",
+          "part": "prt_g0VY0lRNt00O6pzN6EFn",
+          "blocks": 35,
+          "rendering": null
+        },
+        {
+          "owner": "30",
+          "part": "prt_g0VYa9kCa00xJ0qS6AXI",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "31",
+          "part": "prt_g0VYa9l2c00sO4SHI28d",
+          "blocks": 37,
+          "rendering": null
+        },
+        {
+          "owner": "32",
+          "part": "prt_g0VYah8Gh00xughkwCzi",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "33",
+          "part": "prt_g0VYah9j300NmU6XDMaT",
+          "blocks": 92,
+          "rendering": null
+        },
+        {
+          "owner": "34",
+          "part": "prt_g0VYaiFl500Ee7YzzeGX",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "35",
+          "part": "prt_g0VYaiGpV00UBCQk1yLH",
+          "blocks": 90,
+          "rendering": null
+        },
+        {
+          "owner": "36",
+          "part": "prt_g0VYajX8b00EgWU7FyNk",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "37",
+          "part": "prt_g0VYajYCe00XLJTwuEok",
+          "blocks": 90,
+          "rendering": null
+        },
+        {
+          "owner": "38",
+          "part": "prt_g0VYdvAon001DmVMQt3O",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "39",
+          "part": "prt_g0VYdvC3600tMl1PeYuq",
+          "blocks": 49,
+          "rendering": null
+        },
+        {
+          "owner": "40",
+          "part": "prt_g0VYdwPVb004VFV3sUlQ",
+          "blocks": 2,
+          "rendering": null
+        },
+        {
+          "owner": "41",
+          "part": "prt_g0VYdwQx5008pNdPaCbh",
+          "blocks": 50,
+          "rendering": null
+        },
+        {
+          "owner": "42",
+          "part": "prt_g0VYesG1E00Fmnl71BEE",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "43",
+          "part": "prt_g0VYesH2w0006o3ZRwfs",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "44",
+          "part": "prt_g0VYesPzI003w1Eex4Qe",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "45",
+          "part": "prt_g0VYesayI00RufgicsVt",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "46",
+          "part": "prt_g0VYesbDz00dg0zL0ra0",
+          "blocks": 46,
+          "rendering": null
+        },
+        {
+          "owner": "47",
+          "part": "prt_g0VYkNxBA007jEzXWgNR",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "48",
+          "part": "prt_g0VYkNygI00Ey22T1YCQ",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "49",
+          "part": "prt_g0VYkPcG100Rm9U67E04",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "50",
+          "part": "prt_g0VYkPjwS00g0Ga5Wg2x",
+          "blocks": 10,
+          "rendering": null
+        },
+        {
+          "owner": "51",
+          "part": "prt_g0VYkgQ2q00wZOiEpPpZ",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "52",
+          "part": "prt_g0VYkgRLV00kt1ubETcr",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "53",
+          "part": "prt_g0VYkglYL00ZzNKT7UEB",
+          "blocks": 14,
+          "rendering": null
+        },
+        {
+          "owner": "54",
+          "part": "prt_g0VYlVhde009qbGjI9xa",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "55",
+          "part": "prt_g0VYlVik0003TVHLrtoL",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "56",
+          "part": "prt_g0VYlVwN8002kOPK5Uhl",
+          "blocks": 30,
+          "rendering": null
+        }
+      ]
+    },
+    {
+      "phase": "07-after-restored",
+      "connection": {
+        "at": "2026-10-22T20:38:33.863Z",
+        "badge": {
+          "label": "在线",
+          "status": "online",
+          "title": "连接诊断 · 在线 · 端口 19131"
+        },
+        "banner": null,
+        "locale": "zh-CN"
+      },
+      "observedAt": "2026-10-22T20:38:33.837Z",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 62577
+      },
+      "bodies": 35,
+      "sources": 11,
+      "retainedBodyBindings": 35,
+      "retainedSourceBindings": 11,
+      "bodyObservations": [
+        {
+          "owner": "22",
+          "part": "prt_g0VXzT1DL000WBOXfm1A",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "23",
+          "part": "prt_g0VXzT3Gs005zKfhGX2N",
+          "blocks": 2,
+          "rendering": null
+        },
+        {
+          "owner": "24",
+          "part": "prt_g0VXzUz7q00fivpYNBRn",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "25",
+          "part": "prt_g0VXzV2VW00na9YfpQKR",
+          "blocks": 27,
+          "rendering": null
+        },
+        {
+          "owner": "26",
+          "part": "prt_g0VY0iRj9008mwlam6wF",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "27",
+          "part": "prt_g0VY0iVmm00FScjcxxqj",
+          "blocks": 35,
+          "rendering": null
+        },
+        {
+          "owner": "28",
+          "part": "prt_g0VY0lNZe00ZQkp3vHys",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "29",
+          "part": "prt_g0VY0lRNt00O6pzN6EFn",
+          "blocks": 35,
+          "rendering": null
+        },
+        {
+          "owner": "30",
+          "part": "prt_g0VYa9kCa00xJ0qS6AXI",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "31",
+          "part": "prt_g0VYa9l2c00sO4SHI28d",
+          "blocks": 37,
+          "rendering": null
+        },
+        {
+          "owner": "32",
+          "part": "prt_g0VYah8Gh00xughkwCzi",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "33",
+          "part": "prt_g0VYah9j300NmU6XDMaT",
+          "blocks": 92,
+          "rendering": null
+        },
+        {
+          "owner": "34",
+          "part": "prt_g0VYaiFl500Ee7YzzeGX",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "35",
+          "part": "prt_g0VYaiGpV00UBCQk1yLH",
+          "blocks": 90,
+          "rendering": null
+        },
+        {
+          "owner": "36",
+          "part": "prt_g0VYajX8b00EgWU7FyNk",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "37",
+          "part": "prt_g0VYajYCe00XLJTwuEok",
+          "blocks": 90,
+          "rendering": null
+        },
+        {
+          "owner": "38",
+          "part": "prt_g0VYdvAon001DmVMQt3O",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "39",
+          "part": "prt_g0VYdvC3600tMl1PeYuq",
+          "blocks": 49,
+          "rendering": null
+        },
+        {
+          "owner": "40",
+          "part": "prt_g0VYdwPVb004VFV3sUlQ",
+          "blocks": 2,
+          "rendering": null
+        },
+        {
+          "owner": "41",
+          "part": "prt_g0VYdwQx5008pNdPaCbh",
+          "blocks": 50,
+          "rendering": null
+        },
+        {
+          "owner": "42",
+          "part": "prt_g0VYesG1E00Fmnl71BEE",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "43",
+          "part": "prt_g0VYesH2w0006o3ZRwfs",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "44",
+          "part": "prt_g0VYesPzI003w1Eex4Qe",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "45",
+          "part": "prt_g0VYesayI00RufgicsVt",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "46",
+          "part": "prt_g0VYesbDz00dg0zL0ra0",
+          "blocks": 46,
+          "rendering": null
+        },
+        {
+          "owner": "47",
+          "part": "prt_g0VYkNxBA007jEzXWgNR",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "48",
+          "part": "prt_g0VYkNygI00Ey22T1YCQ",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "49",
+          "part": "prt_g0VYkPcG100Rm9U67E04",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "50",
+          "part": "prt_g0VYkPjwS00g0Ga5Wg2x",
+          "blocks": 10,
+          "rendering": null
+        },
+        {
+          "owner": "51",
+          "part": "prt_g0VYkgQ2q00wZOiEpPpZ",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "52",
+          "part": "prt_g0VYkgRLV00kt1ubETcr",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "53",
+          "part": "prt_g0VYkglYL00ZzNKT7UEB",
+          "blocks": 14,
+          "rendering": null
+        },
+        {
+          "owner": "54",
+          "part": "prt_g0VYlVhde009qbGjI9xa",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "55",
+          "part": "prt_g0VYlVik0003TVHLrtoL",
+          "blocks": 1,
+          "rendering": null
+        },
+        {
+          "owner": "56",
+          "part": "prt_g0VYlVwN8002kOPK5Uhl",
+          "blocks": 30,
+          "rendering": null
+        }
+      ]
+    }
+  ],
+  "stages": [
+    {
+      "stage": "before",
+      "interruption": {
+        "held": {
+          "time": "2026-10-22T20:34:27.207Z",
+          "pid": 97932,
+          "kind": "stream-hold",
+          "maximumMs": 120000,
+          "active": 1
+        },
+        "released": {
+          "time": "2026-10-22T20:34:41.290Z",
+          "pid": 97932,
+          "kind": "stream-release",
+          "reason": "operator-release",
+          "pending": 0
+        },
+        "durationMs": 14083,
+        "activeStreamsCut": 1,
+        "retryRequestsCut": 7,
+        "retryInstances": 4,
+        "healthResponses": [
+          {
+            "time": "2026-10-22T20:34:30.398Z",
+            "status": 200
+          },
+          {
+            "time": "2026-10-22T20:34:40.397Z",
+            "status": 200
+          }
+        ]
+      },
+      "states": [
+        {
+          "backend": "online",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "stream",
+          "text": "Server connected. Restoring live updates…",
+          "at": 31707.60000038147
+        },
+        {
+          "backend": "online",
+          "stream": "idle",
+          "status": "online",
+          "at": 34722.90000009537
+        },
+        {
+          "backend": "online",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "stream",
+          "text": "Server connected. Restoring live updates…",
+          "at": 34723.2000002861
+        },
+        {
+          "backend": "online",
+          "stream": "idle",
+          "status": "online",
+          "at": 37741.5
+        },
+        {
+          "backend": "online",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "stream",
+          "text": "Server connected. Restoring live updates…",
+          "at": 37741.800000190735
+        },
+        {
+          "backend": "online",
+          "stream": "idle",
+          "status": "online",
+          "at": 40755.60000038147
+        },
+        {
+          "backend": "online",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "stream",
+          "text": "Server connected. Restoring live updates…",
+          "at": 40755.90000009537
+        },
+        {
+          "backend": "online",
+          "stream": "idle",
+          "status": "online",
+          "at": 43779.2000002861
+        },
+        {
+          "backend": "online",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "stream",
+          "text": "Server connected. Restoring live updates…",
+          "at": 43779.40000009537
+        },
+        {
+          "backend": "online",
+          "stream": "idle",
+          "status": "online",
+          "at": 46803.800000190735
+        },
+        {
+          "backend": "online",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "stream",
+          "text": "Server connected. Restoring live updates…",
+          "at": 46804.10000038147
+        },
+        {
+          "backend": "online",
+          "stream": "connected",
+          "status": "online",
+          "at": 46936.60000038147
+        }
+      ],
+      "relayTerminal": {
+        "pid": 97932,
+        "reason": "operator-stop",
+        "endedAt": "2026-10-22T20:35:26.781Z",
+        "serverClosed": true,
+        "sockets": 0,
+        "upstreamSockets": 0,
+        "pending": 0,
+        "requests": 0,
+        "outputDrained": true
+      },
+      "relayRequests": 108,
+      "socketRegistrations": 11,
+      "socketCloseListenerCounts": [
+        3
+      ],
+      "physical": {
+        "native": {
+          "occurrence": "stream-retry-status-551-before-a5af8a97-3815-49cb-8c6e-3cc90512e50e",
+          "outcome": "settled",
+          "host": {
+            "pid": 89232,
+            "processInstanceID": "win32:639282980011300384",
+            "occurrenceID": "043034b0-2414-47fe-9401-31297061f177"
+          },
+          "target": {
+            "pid": 68776,
+            "processInstanceID": "win32:639282980019122170",
+            "occurrenceID": "3e0bca60-7214-4506-980f-53f24f356dc6"
+          },
+          "observedAtUtc": "2026-10-22T20:35:28.699Z",
+          "deadlineAt": 1792702401083,
+          "terminal": {
+            "occurrenceID": "stream-retry-status-551-before-a5af8a97-3815-49cb-8c6e-3cc90512e50e",
+            "pid": 68776,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-22T20:35:28.7321956Z"
+        },
+        "observedAtUtc": "2026-10-22T20:35:52.9389991Z",
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 89232,
+              "processInstanceID": "win32:639282980011300384",
+              "occurrenceID": "043034b0-2414-47fe-9401-31297061f177"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 68776,
+              "processInstanceID": "win32:639282980019122170",
+              "occurrenceID": "3e0bca60-7214-4506-980f-53f24f356dc6"
+            }
+          }
+        ]
+      },
+      "provider": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof",
+          "apiModel": "gpt-6.1-sol"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof",
+          "apiModel": "gpt-6.1-sol"
+        }
+      ],
+      "retirement": {
+        "members": [
+          {
+            "scope": "runtime",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "runtime",
+            "name": "models.json",
+            "bytes": 9155406
+          },
+          {
+            "scope": "private",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "private",
+            "name": "models.json",
+            "bytes": 9155406
+          }
+        ],
+        "actualSecretValueMatches": 0,
+        "sourceSelectedEntry": "exact original",
+        "sourceCatalog": "exact original"
+      },
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 78098432,
+          "modifiedAtMs": 1792699072138.8257
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 165802,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "stage": "after",
+      "interruption": {
+        "held": {
+          "time": "2026-10-22T20:37:34.641Z",
+          "pid": 97948,
+          "kind": "stream-hold",
+          "maximumMs": 120000,
+          "active": 1
+        },
+        "released": {
+          "time": "2026-10-22T20:38:23.707Z",
+          "pid": 97948,
+          "kind": "stream-release",
+          "reason": "operator-release",
+          "pending": 0
+        },
+        "durationMs": 49066,
+        "activeStreamsCut": 1,
+        "retryRequestsCut": 31,
+        "retryInstances": 16,
+        "healthResponses": [
+          {
+            "time": "2026-10-22T20:37:40.555Z",
+            "status": 200
+          },
+          {
+            "time": "2026-10-22T20:37:50.557Z",
+            "status": 200
+          },
+          {
+            "time": "2026-10-22T20:38:00.544Z",
+            "status": 200
+          },
+          {
+            "time": "2026-10-22T20:38:10.783Z",
+            "status": 200
+          },
+          {
+            "time": "2026-10-22T20:38:20.552Z",
+            "status": 200
+          }
+        ]
+      },
+      "states": [
+        {
+          "backend": "online",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "stream",
+          "text": "Server connected. Restoring live updates…",
+          "at": 19170.800000190735
+        },
+        {
+          "backend": "online",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "stream",
+          "text": "服务已连接，正在恢复实时更新…",
+          "at": 49384.2000002861
+        },
+        {
+          "backend": "online",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "stream",
+          "text": "服务已连接，正在恢复实时更新…",
+          "at": 49475.60000038147
+        },
+        {
+          "backend": "online",
+          "stream": "connected",
+          "status": "online",
+          "at": 70823.2000002861
+        }
+      ],
+      "relayTerminal": {
+        "pid": 97948,
+        "reason": "operator-stop",
+        "endedAt": "2026-10-22T20:38:38.269Z",
+        "serverClosed": true,
+        "sockets": 0,
+        "upstreamSockets": 0,
+        "pending": 0,
+        "requests": 0,
+        "outputDrained": true
+      },
+      "relayRequests": 110,
+      "socketRegistrations": 10,
+      "socketCloseListenerCounts": [
+        3
+      ],
+      "physical": {
+        "native": {
+          "occurrence": "stream-retry-status-551-after-94b7e911-008d-488e-88ec-d3322c44e171",
+          "outcome": "settled",
+          "host": {
+            "pid": 74856,
+            "processInstanceID": "win32:639282982011982101",
+            "occurrenceID": "aeb10adc-4ce0-4a7c-bbbb-f3d8e3a94463"
+          },
+          "target": {
+            "pid": 28812,
+            "processInstanceID": "win32:639282982023112770",
+            "occurrenceID": "a0877c75-483d-488a-a448-3dfd23fd1717"
+          },
+          "observedAtUtc": "2026-10-22T20:38:40.212Z",
+          "deadlineAt": 1792702601160,
+          "terminal": {
+            "occurrenceID": "stream-retry-status-551-after-94b7e911-008d-488e-88ec-d3322c44e171",
+            "pid": 28812,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 74856,
+              "processInstanceID": "win32:639282982011982101",
+              "occurrenceID": "aeb10adc-4ce0-4a7c-bbbb-f3d8e3a94463"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 28812,
+              "processInstanceID": "win32:639282982023112770",
+              "occurrenceID": "a0877c75-483d-488a-a448-3dfd23fd1717"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "observedAtUtc": "2026-10-22T20:38:53.0302151Z",
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-22T20:38:40.2476137Z"
+        }
+      },
+      "provider": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof",
+          "apiModel": "gpt-6.1-sol"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof",
+          "apiModel": "gpt-6.1-sol"
+        }
+      ],
+      "retirement": {
+        "members": [
+          {
+            "scope": "runtime",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "runtime",
+            "name": "models.json",
+            "bytes": 9155406
+          },
+          {
+            "scope": "private",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "private",
+            "name": "models.json",
+            "bytes": 9155406
+          }
+        ],
+        "actualSecretValueMatches": 0,
+        "sourceSelectedEntry": "exact original",
+        "sourceCatalog": "exact original"
+      },
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 78098432,
+          "modifiedAtMs": 1792699072138.8257
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 165802,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "verification": {
+    "serviceTests": {
+      "passed": 7,
+      "failed": 0,
+      "expectations": 24
+    },
+    "overlayTypecheck": "passed",
+    "nodeBuildSeconds": 59.15,
+    "docs": "345 operations,26 groups",
+    "architecture": "20 current documents",
+    "uiAutomationTests": "none added or executed"
+  }
+}
