@@ -207,6 +207,12 @@ limits are exhausted use the same Adjust & resume form as budget_limited goals.
 Pausing admits no new automatic input and leaves accepted work to settle; the existing
 conversation Stop operation retains its own meaning.
 
+The shared dialog also identifies the selected owner by the existing conversation
+title or the SideChat selector's localized name, alongside its scope description.
+Long names wrap inside the dialog. This is presentation from the current owner;
+it does not become request identity, a source key or a second persisted title.
+Home creation retains its explicit new-conversation scope until an owner exists.
+
 Completion requires the operator's evidence. A completed goal remains readable and
 offers a new goal with a new identity. Form drafts survive revision conflicts; the
 operator explicitly reviews the current revision before resubmitting. Owner/service

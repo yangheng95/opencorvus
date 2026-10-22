@@ -3665,3 +3665,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [配置保存与首次能力初始化](records/2026-10/2026-10-20-physical-identity-scan.md)：共享锁序修复与真实保存验收。
 
 - [活跃Sources正文连续性](records/2026-10/2026-10-22-active-source-rendering.md)：真实原成员流与owner调查。
+
+- [Goal与侧边对话体验](records/2026-10/2026-10-22-goal-docked-experience.md)：首页dock与原侧边表单的真实交互。

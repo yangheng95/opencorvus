@@ -694,3 +694,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [配置保存与首次能力初始化](2026-10-20-physical-identity-scan/README.md)：共享锁序与真实页面证据。
 
 - [活跃Sources正文连续性](2026-10-22-active-source-rendering/README.md)：实际截图与结算事实。
+
+- [Goal与侧边对话体验](2026-10-22-goal-docked-experience/README.md)：真实截图与隔离服务事实。

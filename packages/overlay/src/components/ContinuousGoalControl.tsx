@@ -93,6 +93,7 @@ function errorSummary(error: unknown): string {
 /** One HTTP projection and one form lifetime for the exact selected owner. */
 export function ContinuousGoalControl(props: {
   owner?: ContinuousGoalTarget
+  ownerLabel?: string
   compact?: boolean
   home?: boolean
   onStartGoal?: (input: ContinuousGoalCreateInput, context: GoalLaunchContext) => Promise<void>
@@ -641,7 +642,12 @@ export function ContinuousGoalControl(props: {
               save()
             }}
           >
-            <p class="continuous-goal__scope">{t(props.owner ? `continuous_goal.scope.${props.owner.kind}` : "continuous_goal.scope.new_chat")}</p>
+            <p class="continuous-goal__scope">
+              {t(props.owner ? `continuous_goal.scope.${props.owner.kind}` : "continuous_goal.scope.new_chat")}
+              <Show when={props.owner && props.ownerLabel}>
+                <strong class="continuous-goal__scope-owner">{props.ownerLabel}</strong>
+              </Show>
+            </p>
             <Show
               when={mode() === "create"}
               fallback={

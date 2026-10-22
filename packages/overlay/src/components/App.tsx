@@ -537,6 +537,7 @@ export function App(props: AppProps) {
                             </header>
                             <Show when={!props.homeActive}>
                               <ContinuousGoalControl
+                                ownerLabel={props.conversationTitle()}
                                 composerDraftKey={props.composerDraftKey}
                                 hasStagedAttachments={props.hasStagedAttachments}
                                 createRequest={goalFormRequest()}

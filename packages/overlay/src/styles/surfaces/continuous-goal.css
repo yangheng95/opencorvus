@@ -193,6 +193,13 @@
   color: var(--text-soft);
   font-size: var(--ui-font-caption);
 }
+.continuous-goal__scope-owner {
+  display: block;
+  margin-block-start: var(--ui-gap-xs);
+  color: var(--text-strong);
+  font-weight: var(--ui-font-weight-strong);
+  overflow-wrap: anywhere;
+}
 .continuous-goal__definition {
   display: flex;
   flex-direction: column;
