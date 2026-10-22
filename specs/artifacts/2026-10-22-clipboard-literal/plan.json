@@ -1,0 +1,21 @@
+{
+  "scope": "clipboard-literal-525",
+  "model": "gpt-6.1-sol",
+  "stream": true,
+  "maximumBatchRequests": 16,
+  "scopeBudgets": {
+    "before": 8,
+    "after": 8
+  },
+  "ports": {
+    "before": 19009,
+    "after": 19011
+  },
+  "source": "Closed523-after complete schema3/canonical",
+  "promptMaximumPerScope": 1,
+  "member": "ses_-zUS0WzzQzzDOGrIbYwN",
+  "parent": "ses_-zUS0X33CzzWEKMgCk98",
+  "beforeUI": "Current524 main-DJESc7Su",
+  "measurement": "Known native composer clipboard baseline before product Copy;no product warmup path",
+  "boundary": "Actual visible user input and real model stream;no fixture page/synthetic Message/UI assertion"
+}

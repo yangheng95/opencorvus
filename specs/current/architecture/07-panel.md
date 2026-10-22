@@ -1385,7 +1385,11 @@ tables, fences and copy/file-link attributes. Fenced code has one normal-flow
 header for its language and native copy control, followed by the independently
 horizontal-scrolling code body. Hover or keyboard focus never places that
 header over the first code line; the shared wrapper owns the surface and border.
-The original code and delegated copy payload remain unchanged. Automatic codespan file actions
+The delegated copy action reads the raw code from its parsed DOM attribute and
+passes it directly to the single host clipboard writer. Attribute escaping
+protects the HTML representation; it is not a second content-decoding step.
+Literal entity spellings, nested entities, quotes and Unicode remain authored
+code in the copy payload. Automatic codespan file actions
 require a path prefix or a declared file extension with a directory separator
 or cited line. Unprefixed slash-delimited concepts and MIME types remain code
 prose. Rooted Windows drive paths

@@ -1,0 +1,116 @@
+{
+  "at": "2026-10-22T01:16:04.386Z",
+  "actualRequests": 8,
+  "maximum": 16,
+  "unusedRetired": 8,
+  "copiedAuthorityMembersRetired": 8,
+  "resources": [
+    {
+      "stage": "before",
+      "originalServiceHandle": 46545,
+      "originalServiceExit": 0,
+      "originalInputHandle": 7388,
+      "originalInputExit": 0,
+      "page": 120,
+      "pageState": "Closed",
+      "assets": [
+        {
+          "time": "2026-10-22T00:51:07.213Z",
+          "path": "/ui/assets/main-DJESc7Su.js",
+          "statusCode": 200
+        },
+        {
+          "time": "2026-10-22T00:51:07.220Z",
+          "path": "/ui/assets/main-CVd9TkT1.css",
+          "statusCode": 200
+        }
+      ],
+      "sourceEOF": "All4 real Sol streaming requests200/eof",
+      "runtimePairRetired": [
+        {
+          "outcome": "retired-after-original-physical-output-request-and-exact-birth-settlement",
+          "bytes": 2122,
+          "name": "auth.json"
+        },
+        {
+          "outcome": "retired-after-original-physical-output-request-and-exact-birth-settlement",
+          "bytes": 9155406,
+          "name": "models.json"
+        }
+      ],
+      "privatePairRetired": [
+        {
+          "name": "auth.json",
+          "bytes": 2122,
+          "outcome": "Retired after original native,source EOF,runtime pair retirement and actual-value scan"
+        },
+        {
+          "name": "models.json",
+          "bytes": 9155406,
+          "outcome": "Retired after original native,source EOF,runtime pair retirement and actual-value scan"
+        }
+      ]
+    },
+    {
+      "stage": "after",
+      "originalServiceHandle": 19799,
+      "originalServiceExit": 0,
+      "originalInputHandle": 9165,
+      "originalInputExit": 0,
+      "page": 121,
+      "pageState": "Closed",
+      "assets": [
+        {
+          "time": "2026-10-22T00:58:31.688Z",
+          "path": "/ui/assets/main-BTerbwsZ.js",
+          "statusCode": 200
+        },
+        {
+          "time": "2026-10-22T00:58:31.694Z",
+          "path": "/ui/assets/main-CVd9TkT1.css",
+          "statusCode": 200
+        },
+        {
+          "time": "2026-10-22T01:03:01.750Z",
+          "path": "/ui/assets/main-BTerbwsZ.js",
+          "statusCode": 200
+        },
+        {
+          "time": "2026-10-22T01:03:01.752Z",
+          "path": "/ui/assets/main-CVd9TkT1.css",
+          "statusCode": 200
+        }
+      ],
+      "sourceEOF": "All4 real Sol streaming requests200/eof",
+      "runtimePairRetired": [
+        {
+          "bytes": 2122,
+          "name": "auth.json",
+          "outcome": "retired-after-original-physical-output-request-and-exact-birth-settlement"
+        },
+        {
+          "bytes": 9155406,
+          "name": "models.json",
+          "outcome": "retired-after-original-physical-output-request-and-exact-birth-settlement"
+        }
+      ],
+      "privatePairRetired": [
+        {
+          "name": "auth.json",
+          "bytes": 2122,
+          "outcome": "Retired after original native,source EOF,runtime pair retirement and actual-value scan"
+        },
+        {
+          "name": "models.json",
+          "bytes": 9155406,
+          "outcome": "Retired after original native,source EOF,runtime pair retirement and actual-value scan"
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Known-baseline manual UI copy qualification;initial-host handshake remains unqualified",
+    "Main probe rejected delegated identity by current public contract;not Main visual qualification",
+    "No all-entry/Native WebView2/continuous-frame Rendering qualification"
+  ]
+}

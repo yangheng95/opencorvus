@@ -1929,15 +1929,11 @@ document.addEventListener(
         btn.title = prev || t("markdown.copy_code")
       }, 1400)
     }
-    const decoded = source
-      .replace(/&amp;/g, "&")
-      .replace(/&lt;/g, "<")
-      .replace(/&gt;/g, ">")
-      .replace(/&quot;/g, '"')
-      .replace(/&#39;/g, "'")
+    // The HTML parser has already restored the raw attribute value.
+    // Literal entity spellings belong to the authored code.
     runMainAsync("markdown.copy-code", async () => {
       try {
-        await copyText(decoded)
+        await copyText(source)
         flash(t("markdown.copied"))
       } catch (err) {
         console.error("[md-copy] clipboard write failed", err)

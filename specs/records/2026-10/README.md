@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [代码复制字面实体](2026-10-22-clipboard-literal.md)：[before/after实页](../../artifacts/2026-10-22-clipboard-literal/README.md)，删除重复解码，保留实体/引号/Unicode，8/16 Sol及原数据结算。
+
 - [新来源与成员正文](2026-10-22-member-stream-reading.md)：[实页与共享代码标题行](../../artifacts/2026-10-22-member-stream-reading/README.md)，12/24真实Sol、19图；新Sources/流中开合及复制失败边界如实保留。
 
 - [Goal 当前交互复核](2026-10-22-goal-current-experience.md)：[当前页面与修复](../../artifacts/2026-10-22-goal-current-experience/README.md)，关闭/说明视图后目标和两预算保留，新的composer上下文重新初始化。
