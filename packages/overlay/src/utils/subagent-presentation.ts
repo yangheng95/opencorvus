@@ -82,6 +82,8 @@ export function isSubagentActivityRecord(record: AgentActivityRecord): boolean {
  * for it. That is the newest one, matching how the store resolves a Session
  * without an exact occurrence. Order follows each Session's first appearance so
  * the surfaces stay stable as later occurrences arrive.
+ * Recovery may observe an older input later; its canonical timeline key still
+ * precedes the reusable Session's subsequent input occurrences.
  */
 export function subagentSessionRecords(records: readonly AgentActivityRecord[]): AgentActivityRecord[] {
   const bySession = new Map<string, AgentActivityRecord>()
@@ -91,9 +93,7 @@ export function subagentSessionRecords(records: readonly AgentActivityRecord[]):
       bySession.set(record.sessionID, record)
       continue
     }
-    const newer =
-      record.lastObservedAt > current.lastObservedAt ||
-      (record.lastObservedAt === current.lastObservedAt && record.startedAt > current.startedAt)
+    const newer = compareTimelineOrderKeys(record.orderKey, current.orderKey, "subagent session occurrence") > 0
     if (newer) bySession.set(record.sessionID, record)
   }
   return [...bySession.values()]

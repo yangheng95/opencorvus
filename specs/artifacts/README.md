@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [已结算Worker生命周期](2026-10-22-settled-worker-lifecycle/README.md)：540两原Task/四旧input真实恢复，7实图/5次Sol原EOF、最新成员选择与真实deadline失败。
+
 - [Task Rendering与执行轮次](2026-10-22-task-rendering-occurrence/README.md)：539流中快照重复回读修复，7精选实图/29次Sol/两项原reader失败；新Source与复制通过，历史轮次与连续owner仍开放。
 
 - [Task图片处理与中断恢复](2026-10-22-task-image-recovery/README.md)：538零游标漏终态根因修复，7精选实图/29次Sol、两原Task自然完成、真实SSE与非空delta、8配对成员退休；新Source追加仍开放。

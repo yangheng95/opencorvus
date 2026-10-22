@@ -1,4 +1,8 @@
-import { readTaskWorkerTerminalOccurrence } from "./task-worker-terminal-facts"
+import {
+  readTaskWorkerTerminalOccurrence,
+  readSettledTaskWorkerLifecycleInTransaction,
+} from "./task-worker-terminal-facts"
+import { publishSettledSessionTerminalStatusInCurrentProject } from "@/session/status-publication"
 import { MissionAcceptanceGapIntegrityError, readTaskAcceptanceLedgerArtifact } from "@/mission/acceptance-ledger"
 import { readMissionAcceptanceExtensionRequest, readMissionAcceptanceExtensionOutcome } from "@/mission/acceptance-extension"
 /**
@@ -1518,6 +1522,14 @@ async function reconcileAbandonedDispatches(
     }),
   )
   const observeProcess = cachedRuntimeProcessOccurrenceObserver()
+  for (const candidate of page.lifecycleSettlements) {
+    try {
+      await reconcileSettledDispatchLifecycle(candidate)
+    } catch (error) {
+      retryRequired = true
+      log.error("settled dispatch lifecycle reconciliation failed", { taskID, dispatchID: candidate.dispatchID, error })
+    }
+  }
   for (const lineage of page.lineages) {
     const childSessionID = lineage.payload.child_session_id
     try {
@@ -1675,6 +1687,17 @@ async function dispatchDeliveryOwnerRecheckAt(
   return processRecheck(owner)
 }
 
+async function reconcileSettledDispatchLifecycle(input: { taskID: string; sessionID: string; dispatchID: string }) {
+  const candidate = Database.use((db) => readSettledTaskWorkerLifecycleInTransaction(db, input))
+  if (!candidate) return
+  await publishSettledSessionTerminalStatusInCurrentProject({
+    session: candidate.session,
+    taskID: candidate.taskID,
+    inputMessageID: candidate.inputMessageID,
+    status: candidate.status,
+  })
+}
+
 async function recordAbandonedDispatchSettlement(input: {
   taskID: string
   lineage: { artifactID: string; dispatchID: string; payload: { child_session_id: string; target_agent_id: string } }
@@ -1717,7 +1740,17 @@ async function recordAbandonedDispatchSettlement(input: {
   if (outcome.kind !== "infrastructure_failure") {
     throw new Error("Abandoned dispatch recovery constructed a non-infrastructure outcome")
   }
-  return settleDispatchOrReturnExisting({ taskID: input.taskID, dispatchID: input.lineage.dispatchID, outcome })
+  const settlement = settleDispatchOrReturnExisting({
+    taskID: input.taskID,
+    dispatchID: input.lineage.dispatchID,
+    outcome,
+  })
+  await reconcileSettledDispatchLifecycle({
+    taskID: input.taskID,
+    sessionID: childSessionID,
+    dispatchID: input.lineage.dispatchID,
+  })
+  return settlement
 }
 
 /** Record the interruption of one abandoned worker as its durable outcome and

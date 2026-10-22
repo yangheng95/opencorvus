@@ -5,21 +5,20 @@ import type { Session } from "@/session"
 import { publishSettledSessionTerminalStatus } from "@/session/status-publication"
 import type { SelectedWorkflowBinding } from "@/engine/workflow-binding"
 
-/** Real backend authority facts for a manually materialized worker report, without a Provider claim. */
-export async function recordTestSettledWorkerReport(input: {
+/** Actual accepted descriptor facts; report publication is a separate boundary. */
+export function recordTestAcceptedWorkerTurn(input: {
   taskID: string
   rootSessionID: string
   worker: Session.Info
   capability: Awaited<ReturnType<typeof PromptProfileResolver.resolveWorkerCapability>>
   inputMessageID: string
   controlPartID: string
-  finalMessageID: string
   dispatchID: string
   workflowBinding: SelectedWorkflowBinding
   request: string
 }) {
   const cap = input.capability
-  const descriptor = WorkerTurnDescriptor.create({
+  return WorkerTurnDescriptor.create({
     sessionID: input.worker.id,
     payload: {
       identity: cap.identity,
@@ -56,6 +55,13 @@ export async function recordTestSettledWorkerReport(input: {
       },
     },
   })
+}
+
+/** Real backend authority facts for a manually materialized worker report, without a Provider claim. */
+export async function recordTestSettledWorkerReport(
+  input: Parameters<typeof recordTestAcceptedWorkerTurn>[0] & { finalMessageID: string },
+) {
+  const descriptor = recordTestAcceptedWorkerTurn(input)
   const status = await publishSettledSessionTerminalStatus({
     session: input.worker,
     taskID: input.taskID,

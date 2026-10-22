@@ -5,7 +5,10 @@ import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { WorkerTurnDescriptorTable } from "@/session/session.sql"
 import { Database, and, asc, eq, gt, inArray, lt, or, sql } from "@/storage/db"
 import { insertEngineArtifact } from "./artifact"
-import { dispatchRecoveryCandidatesInTransaction } from "./dispatch-delivery-disposition"
+import {
+  dispatchRecoveryCandidatesInTransaction,
+  settledDispatchLifecycleCandidatesInTransaction,
+} from "./dispatch-delivery-disposition"
 import {
   EngineArtifactTable,
   EngineTaskRootIngressTable,
@@ -538,7 +541,8 @@ export function taskControlProjectFrontierSliceInTransaction(
   const dispatches = rawDispatches.filter((row) =>
     currentDispatches.has(`${row.taskID}\0${row.sessionID}\0${row.dispatchID}`),
   )
-  const rows = [...ingress, ...waits, ...cancellations, ...dispatches]
+  const lifecycleSettlements = settledDispatchLifecycleCandidatesInTransaction(db, rawDispatches)
+  const rows = [...ingress, ...waits, ...cancellations, ...dispatches, ...lifecycleSettlements]
   const rawTaskIDs = [...new Set(rows.map((row) => row.taskID))]
   const next = {
     connectionEpoch,

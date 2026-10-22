@@ -169,6 +169,12 @@ admitted Tool results, removals and completed Message edits retain canonical rea
 An unknown Message also requires a read; historical running status alone cannot
 qualify an intermediate update. This rule is shared by Task and Session members.
 
+Session-keyed member surfaces choose their current occurrence by its canonical
+timeline order, including the store's Session-only lookup and pending-Todo
+attribution. A late recovery fact can update an old occurrence's observation
+time without making that input newer than its subsequent continuation. Within
+one exact occurrence, live/hydrated state still converges by observation time.
+
 Artifact downloads and copy actions retain one current operation owner, its
 AbortController, exact source material and component lifetime. API-bound sources
 also retain the original connection authority and existing selection epoch.

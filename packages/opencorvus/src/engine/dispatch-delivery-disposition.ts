@@ -10,6 +10,7 @@ import { parseDispatchSettlementPayload, type DispatchSettlementRow } from "./di
 import { EngineArtifactTable, EngineTaskRootIngressTable, type EngineMetadata } from "./engine.sql"
 import { Identifier } from "@/id/id"
 import { TASK_BOUNDARY_REQUEST_EVENT_TYPES } from "./task-lifecycle"
+import { readSettledTaskWorkerLifecycleInTransaction } from "./task-worker-terminal-facts"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { Database, and, asc, desc, eq, gt, or, sql } from "@/storage/db"
 import {
@@ -134,6 +135,25 @@ export type DispatchRecoveryFrontierCursor = {
 }
 
 export type DispatchRecoveryDescriptor = { taskID: string; sessionID: string; dispatchID: string }
+
+/** The same bounded descriptor page also discovers missing failure lifecycle facts. */
+export function settledDispatchLifecycleCandidatesInTransaction(
+  db: Database.TxOrDb,
+  descriptors: readonly DispatchRecoveryDescriptor[],
+) {
+  if (descriptors.length > MAX_DISPATCH_RECOVERY_PAGE_SIZE) {
+    throw new Error(`Settled lifecycle page exceeds ${MAX_DISPATCH_RECOVERY_PAGE_SIZE} descriptors`)
+  }
+  return descriptors.filter((descriptor) => {
+    try {
+      return readSettledTaskWorkerLifecycleInTransaction(db, descriptor) !== undefined
+    } catch {
+      // Discovery admits the faulted Task to its own strict scan/backoff.
+      // One broken descriptor cannot hide its Project's other source rows.
+      return true
+    }
+  })
+}
 
 export type DispatchCollectionWakeSource =
   | {
@@ -934,6 +954,14 @@ export function unresolvedDispatchRecoveryPageInTransaction(
   const last = descriptors.at(-1)
   return {
     lineages,
+    lifecycleSettlements: settledDispatchLifecycleCandidatesInTransaction(
+      db,
+      descriptors.map((descriptor) => ({
+        taskID: input.taskID,
+        sessionID: descriptor.sessionID,
+        dispatchID: descriptor.dispatchID,
+      })),
+    ),
     scannedCount: descriptors.length,
     next:
       descriptors.length === input.limit && last

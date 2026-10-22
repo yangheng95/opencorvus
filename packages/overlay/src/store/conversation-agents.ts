@@ -95,8 +95,7 @@ function conversationAgentIndexForOccurrence(
     if (record.sessionID !== input.sessionID) continue
     if (
       selected === undefined ||
-      record.lastObservedAt > records[selected]!.lastObservedAt ||
-      (record.lastObservedAt === records[selected]!.lastObservedAt && record.startedAt > records[selected]!.startedAt)
+      compareTimelineOrderKeys(record.orderKey, records[selected]!.orderKey, "conversation agent session occurrence") > 0
     ) {
       selected = index
     }
@@ -1140,7 +1139,9 @@ export function hydrateConversationAgentView(
   }
   for (const [executionID, record] of recordsBySession) {
     const newerSameSession = sessionRecords.some(
-      (candidate) => candidate.sessionID === record.sessionID && candidate.lastObservedAt > record.lastObservedAt,
+      (candidate) =>
+        candidate.sessionID === record.sessionID &&
+        compareTimelineOrderKeys(candidate.orderKey, record.orderKey, "conversation agent pending todos") > 0,
     )
     if (newerSameSession) continue
     const sessionID = record.sessionID

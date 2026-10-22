@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [已结算Worker生命周期](records/2026-10/2026-10-22-settled-worker-lifecycle.md)：[7实图/5次Sol/四旧轮次恢复](artifacts/2026-10-22-settled-worker-lifecycle/README.md)，修复历史终态缺口与最新成员选择，保留真实资源截止失败。
+
 - [Task Rendering与执行轮次](records/2026-10/2026-10-22-task-rendering-occurrence.md)：[7实图/29次Sol与真实失败](artifacts/2026-10-22-task-rendering-occurrence/README.md)，修复流中快照回读风暴，原B新增来源/复制/自然完成；历史轮次及连续owner仍开放。
 
 - [Task图片处理与中断恢复](records/2026-10/2026-10-22-task-image-recovery.md)：[7实图/29次Sol/原Task恢复](artifacts/2026-10-22-task-image-recovery/README.md)，修复已知epoch零游标漏终态，真实snapshot/SSE/非空delta与两个原Task自然完成。

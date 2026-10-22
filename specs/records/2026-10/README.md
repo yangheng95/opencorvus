@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [已结算Worker生命周期](2026-10-22-settled-worker-lifecycle.md)：[7实图/四旧Error与六新完成](../../artifacts/2026-10-22-settled-worker-lifecycle/README.md)，共享分页恢复与canonical成员顺序修复；5原EOF及deadline失败按实保留。
+
 - [Task Rendering与执行轮次](2026-10-22-task-rendering-occurrence.md)：[7实图/29次Sol与实际失败](../../artifacts/2026-10-22-task-rendering-occurrence/README.md)，修复流中快照重复回读，第四来源/复制/正文/自然完成；保留共享恢复与owner边界。
 
 - [Task图片处理与中断恢复](2026-10-22-task-image-recovery.md)：[零游标修复与原Task自然完成](../../artifacts/2026-10-22-task-image-recovery/README.md)，7精选实图/29次Sol，实际过期snapshot/SSE、非空delta与完整资源结算，保留新Source与owner连续性边界。

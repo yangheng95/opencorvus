@@ -503,6 +503,18 @@ An already durable settlement remains eligible for idempotent delivery replay ev
 while its original owner is live. Owner death still permits recovery of the exact
 unsettled occurrence without rewriting any previously committed outcome.
 
+An accepted infrastructure settlement also closes its exact input lifecycle.
+The recovery reader validates its complete Worker Turn snapshot, original
+dispatch/Session/Task/Project ancestry and durable user Message before publishing
+the missing error terminal through the existing Session Bus/protocol owner.
+It adds no final-message authority to interrupted narration. Existing physical
+terminals retain their own outcome; a failed preparation's predecessor snapshot
+cannot close another Turn. The original bounded descriptor pages discover these
+gaps even after delivery, epoch advancement or Task completion. This reconciliation
+publishes only the missing lifecycle fact and creates no new ingress or model
+input. Discovery carries a descriptor integrity fault to that Task's strict scan
+and backoff, so its Project's other source rows remain discoverable.
+
 Descriptor-backed delivery admits ordinary ingress only for the current active
 Task epoch. Its bounded recovery classifier reads the same immutable cancellation
 request boundary as lifecycle admission, so an already cancelling epoch settles
