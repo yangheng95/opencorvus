@@ -1,0 +1,1998 @@
+{
+  "batch": 546,
+  "recordedAt": "2026-10-22T18:13:44.832Z",
+  "target": {
+    "taskID": "tsk_g00VYlyopB00h7w27eIw",
+    "sessionID": "ses_hHpC127wALpwIiSOX86d",
+    "beforeTab": 162,
+    "fixedTab": 163,
+    "browser": 2
+  },
+  "qualification": "Real original complete databases from historical Sol execution, current Source CLI and manual IAB interactions. Same page retained Offline/Online within each pair; no new business input or synthetic transcript.",
+  "builds": {
+    "before": {
+      "asset": "main-D8VOFJfi.js",
+      "seconds": 53.75,
+      "exit": 0
+    },
+    "fixed": {
+      "asset": "main-CZaeEkDv.js",
+      "seconds": 57.58,
+      "exit": 0
+    },
+    "diagnostics": "Read-only low-frequency owner/Part/body/Source observation in private Node Vite builds; no production diagnostic fields"
+  },
+  "validation": {
+    "serviceContracts": {
+      "pass": 28,
+      "fail": 0,
+      "expectCalls": 66,
+      "command": "bun test ./packages/overlay/test/subagent-conversation-service.test.ts"
+    },
+    "overlayTypecheck": {
+      "exit": 0
+    }
+  },
+  "scopes": [
+    {
+      "scope": "before",
+      "port": 19093,
+      "preflight": {
+        "sessionID": "ses_hIQCz2syGpN6JXFg8B6i",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": [
+        {
+          "index": 0,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof",
+          "actualModel": "gpt-6.1-sol"
+        },
+        {
+          "index": 1,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof",
+          "actualModel": "gpt-6.1-sol"
+        }
+      ],
+      "maximumRequests": 4,
+      "originalExec": {
+        "id": 48124,
+        "exit": 0
+      },
+      "shutdown": {
+        "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYnpJUK00mZh028rpT\"}",
+        "target": {
+          "pid": 36744,
+          "processInstanceID": "win32:639282888303569543",
+          "occurrenceID": "4eef2ca2-35bc-43e3-9e09-917a28a8140f"
+        },
+        "occurrence": "member-offline-growth-546-before-1008814b-2722-4f00-a2fc-a8d8ef7c7b8e",
+        "statusCode": 200,
+        "observedAtUtc": "2026-10-22T18:01:29.5495080Z"
+      },
+      "physical": {
+        "observedAtUtc": "2026-10-22T18:01:30.5820465Z",
+        "native": {
+          "occurrence": "member-offline-growth-546-before-1008814b-2722-4f00-a2fc-a8d8ef7c7b8e",
+          "outcome": "settled",
+          "host": {
+            "pid": 77492,
+            "processInstanceID": "win32:639282888296103251",
+            "occurrenceID": "21c14230-5151-4d9f-9f0e-142d018dd4f6"
+          },
+          "target": {
+            "pid": 36744,
+            "processInstanceID": "win32:639282888303569543",
+            "occurrenceID": "4eef2ca2-35bc-43e3-9e09-917a28a8140f"
+          },
+          "observedAtUtc": "2026-10-22T18:01:29.673Z",
+          "deadlineAt": 1792693229574,
+          "terminal": {
+            "occurrenceID": "member-offline-growth-546-before-1008814b-2722-4f00-a2fc-a8d8ef7c7b8e",
+            "pid": 36744,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 77492,
+              "processInstanceID": "win32:639282888296103251",
+              "occurrenceID": "21c14230-5151-4d9f-9f0e-142d018dd4f6"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 36744,
+              "processInstanceID": "win32:639282888303569543",
+              "occurrenceID": "4eef2ca2-35bc-43e3-9e09-917a28a8140f"
+            }
+          }
+        ],
+        "launcher": {
+          "observedAtUtc": "2026-10-22T18:01:29.708404Z",
+          "originalChildExit": 0
+        }
+      },
+      "retirement": {
+        "at": "2026-10-22T18:01:31.289Z",
+        "retired": [
+          {
+            "scope": "runtime",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "runtime",
+            "name": "models.json",
+            "bytes": 9155406
+          },
+          {
+            "scope": "private",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "private",
+            "name": "models.json",
+            "bytes": 9155406
+          }
+        ],
+        "scannedFiles": 49,
+        "scannedBytes": 71120572,
+        "secretValueMatches": 0,
+        "sourceAuth": {
+          "path": "C:/Users/hengu/AppData/Local/opencorvus/data/auth.json",
+          "bytes": 2259,
+          "mtimeMs": 1792683516975.7468,
+          "selectedEntry": "exact original"
+        },
+        "sourceCatalog": {
+          "byteLength": 9155406,
+          "mtimeMs": 1791128890137.9968,
+          "content": "exact original"
+        },
+        "physicalCompletion": true,
+        "preparationMetadata": "App source path, exact selected entry, size, mtime and complete adjacent catalog verified"
+      },
+      "sourceClosure": {
+        "reason": "deadline_exceeded",
+        "exit": 1,
+        "requests": 2,
+        "qualification": false
+      },
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 90603520,
+          "modifiedAtMs": 1792677788521.3662
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 189582,
+        "currentRows": 190018,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ],
+        "providerActivities": {
+          "original": 472,
+          "current": 473
+        }
+      }
+    },
+    {
+      "scope": "after",
+      "port": 19093,
+      "preflight": {
+        "sessionID": "ses_huRTs43I2VBLB9Ye9Jts",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": [
+        {
+          "index": 0,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof",
+          "actualModel": "gpt-6.1-sol"
+        },
+        {
+          "index": 1,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof",
+          "actualModel": "gpt-6.1-sol"
+        }
+      ],
+      "maximumRequests": 4,
+      "originalExec": {
+        "id": 2121,
+        "exit": 0
+      },
+      "shutdown": {
+        "statusCode": 200,
+        "occurrence": "member-offline-growth-546-after-a5bf420d-9493-4c32-ad28-3755eba1b739",
+        "observedAtUtc": "2026-10-22T18:03:23.2843998Z",
+        "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYnpn4l00V6HIbMHe8\"}",
+        "target": {
+          "pid": 89356,
+          "processInstanceID": "win32:639282889128711411",
+          "occurrenceID": "ba347c67-f355-4831-96d9-f3d356389143"
+        }
+      },
+      "physical": {
+        "observedAtUtc": "2026-10-22T18:03:24.3398907Z",
+        "native": {
+          "occurrence": "member-offline-growth-546-after-a5bf420d-9493-4c32-ad28-3755eba1b739",
+          "outcome": "settled",
+          "host": {
+            "pid": 89632,
+            "processInstanceID": "win32:639282889121297795",
+            "occurrenceID": "e3719b1a-cb5d-4154-9c31-8312df44709a"
+          },
+          "target": {
+            "pid": 89356,
+            "processInstanceID": "win32:639282889128711411",
+            "occurrenceID": "ba347c67-f355-4831-96d9-f3d356389143"
+          },
+          "observedAtUtc": "2026-10-22T18:03:23.4Z",
+          "deadlineAt": 1792693312096,
+          "terminal": {
+            "occurrenceID": "member-offline-growth-546-after-a5bf420d-9493-4c32-ad28-3755eba1b739",
+            "pid": 89356,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 89632,
+              "processInstanceID": "win32:639282889121297795",
+              "occurrenceID": "e3719b1a-cb5d-4154-9c31-8312df44709a"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 89356,
+              "processInstanceID": "win32:639282889128711411",
+              "occurrenceID": "ba347c67-f355-4831-96d9-f3d356389143"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "launcher": {
+          "observedAtUtc": "2026-10-22T18:03:23.4348055Z",
+          "originalChildExit": 0
+        }
+      },
+      "retirement": {
+        "at": "2026-10-22T18:03:25.050Z",
+        "retired": [
+          {
+            "scope": "runtime",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "runtime",
+            "name": "models.json",
+            "bytes": 9155406
+          },
+          {
+            "scope": "private",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "private",
+            "name": "models.json",
+            "bytes": 9155406
+          }
+        ],
+        "scannedFiles": 41,
+        "scannedBytes": 72361491,
+        "secretValueMatches": 0,
+        "sourceAuth": {
+          "path": "C:/Users/hengu/AppData/Local/opencorvus/data/auth.json",
+          "bytes": 2259,
+          "mtimeMs": 1792683516975.7468,
+          "selectedEntry": "exact original"
+        },
+        "sourceCatalog": {
+          "byteLength": 9155406,
+          "mtimeMs": 1791128890137.9968,
+          "content": "exact original"
+        },
+        "physicalCompletion": true,
+        "preparationMetadata": "App source path, exact selected entry, size, mtime and complete adjacent catalog verified"
+      },
+      "sourceClosure": {
+        "reason": "exited",
+        "exit": 0,
+        "requests": 13,
+        "qualification": true
+      },
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 92295168,
+          "modifiedAtMs": 1792680701201.259
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 192812,
+        "currentRows": 193276,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ],
+        "providerActivities": {
+          "original": 480,
+          "current": 481
+        }
+      }
+    },
+    {
+      "scope": "fixed-before",
+      "port": 19095,
+      "preflight": {
+        "sessionID": "ses_h7KMoiYeW7cjRaHOJBgw",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": [
+        {
+          "index": 0,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof",
+          "actualModel": "gpt-6.1-sol"
+        },
+        {
+          "index": 1,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof",
+          "actualModel": "gpt-6.1-sol"
+        }
+      ],
+      "maximumRequests": 4,
+      "originalExec": {
+        "id": 43309,
+        "exit": 0
+      },
+      "shutdown": {
+        "target": {
+          "pid": 73036,
+          "processInstanceID": "win32:639282893314079932",
+          "occurrenceID": "fdc5cc10-3224-4859-bac0-afc092bf30c4"
+        },
+        "occurrence": "member-offline-growth-546-fixed-before-6072a45b-45ef-4950-949d-0428bec4acb4",
+        "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYnrTeG00WDRIhcB0t\"}",
+        "statusCode": 200,
+        "observedAtUtc": "2026-10-22T18:10:05.2639095Z"
+      },
+      "physical": {
+        "launcher": {
+          "observedAtUtc": "2026-10-22T18:10:05.4322298Z",
+          "originalChildExit": 0
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 92012,
+              "processInstanceID": "win32:639282893269519260",
+              "occurrenceID": "62ddbea2-2565-4fe3-ac17-a75b8c7cc078"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 73036,
+              "processInstanceID": "win32:639282893314079932",
+              "occurrenceID": "fdc5cc10-3224-4859-bac0-afc092bf30c4"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "native": {
+          "occurrence": "member-offline-growth-546-fixed-before-6072a45b-45ef-4950-949d-0428bec4acb4",
+          "outcome": "settled",
+          "host": {
+            "pid": 92012,
+            "processInstanceID": "win32:639282893269519260",
+            "occurrenceID": "62ddbea2-2565-4fe3-ac17-a75b8c7cc078"
+          },
+          "target": {
+            "pid": 73036,
+            "processInstanceID": "win32:639282893314079932",
+            "occurrenceID": "fdc5cc10-3224-4859-bac0-afc092bf30c4"
+          },
+          "observedAtUtc": "2026-10-22T18:10:05.396Z",
+          "deadlineAt": 1792693726905,
+          "terminal": {
+            "occurrenceID": "member-offline-growth-546-fixed-before-6072a45b-45ef-4950-949d-0428bec4acb4",
+            "pid": 73036,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-22T18:10:06.3437827Z"
+      },
+      "retirement": {
+        "at": "2026-10-22T18:10:07.049Z",
+        "retired": [
+          {
+            "scope": "runtime",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "runtime",
+            "name": "models.json",
+            "bytes": 9155406
+          },
+          {
+            "scope": "private",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "private",
+            "name": "models.json",
+            "bytes": 9155406
+          }
+        ],
+        "scannedFiles": 49,
+        "scannedBytes": 71131898,
+        "secretValueMatches": 0,
+        "sourceAuth": {
+          "path": "C:/Users/hengu/AppData/Local/opencorvus/data/auth.json",
+          "bytes": 2259,
+          "mtimeMs": 1792683516975.7468,
+          "selectedEntry": "exact original"
+        },
+        "sourceCatalog": {
+          "byteLength": 9155406,
+          "mtimeMs": 1791128890137.9968,
+          "content": "exact original"
+        },
+        "physicalCompletion": true,
+        "preparationMetadata": "App source path, exact selected entry, size, mtime and complete adjacent catalog verified"
+      },
+      "sourceClosure": {
+        "reason": "deadline_exceeded",
+        "exit": 1,
+        "requests": 2,
+        "qualification": false
+      },
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 90603520,
+          "modifiedAtMs": 1792677788521.3662
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 189582,
+        "currentRows": 190018,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ],
+        "providerActivities": {
+          "original": 472,
+          "current": 473
+        }
+      }
+    },
+    {
+      "scope": "fixed-after",
+      "port": 19095,
+      "preflight": {
+        "sessionID": "ses_hlpXmCJbTAwhLLpJn70r",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": [
+        {
+          "index": 0,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof",
+          "actualModel": "gpt-6.1-sol"
+        },
+        {
+          "index": 1,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof",
+          "actualModel": "gpt-6.1-sol"
+        }
+      ],
+      "maximumRequests": 4,
+      "originalExec": {
+        "id": 81418,
+        "exit": 0
+      },
+      "shutdown": {
+        "statusCode": 200,
+        "target": {
+          "pid": 96576,
+          "processInstanceID": "win32:639282894289481858",
+          "occurrenceID": "da91101d-9dac-44de-af35-ffc0f5b7947a"
+        },
+        "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYns3OB00PisyuLNG5\"}",
+        "observedAtUtc": "2026-10-22T18:12:22.6461779Z",
+        "occurrence": "member-offline-growth-546-fixed-after-9c608174-28a7-41d8-a1a8-1a73076596b3"
+      },
+      "physical": {
+        "observedAtUtc": "2026-10-22T18:12:23.6920249Z",
+        "native": {
+          "occurrence": "member-offline-growth-546-fixed-after-9c608174-28a7-41d8-a1a8-1a73076596b3",
+          "outcome": "settled",
+          "host": {
+            "pid": 92580,
+            "processInstanceID": "win32:639282894282130237",
+            "occurrenceID": "79cfa183-391e-45e4-8de2-f283f0ec6c76"
+          },
+          "target": {
+            "pid": 96576,
+            "processInstanceID": "win32:639282894289481858",
+            "occurrenceID": "da91101d-9dac-44de-af35-ffc0f5b7947a"
+          },
+          "observedAtUtc": "2026-10-22T18:12:22.775Z",
+          "deadlineAt": 1792693828179,
+          "terminal": {
+            "occurrenceID": "member-offline-growth-546-fixed-after-9c608174-28a7-41d8-a1a8-1a73076596b3",
+            "pid": 96576,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "launcher": {
+          "observedAtUtc": "2026-10-22T18:12:22.8106587Z",
+          "originalChildExit": 0
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 92580,
+              "processInstanceID": "win32:639282894282130237",
+              "occurrenceID": "79cfa183-391e-45e4-8de2-f283f0ec6c76"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 96576,
+              "processInstanceID": "win32:639282894289481858",
+              "occurrenceID": "da91101d-9dac-44de-af35-ffc0f5b7947a"
+            }
+          }
+        ]
+      },
+      "retirement": {
+        "at": "2026-10-22T18:12:24.412Z",
+        "retired": [
+          {
+            "scope": "runtime",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "runtime",
+            "name": "models.json",
+            "bytes": 9155406
+          },
+          {
+            "scope": "private",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "private",
+            "name": "models.json",
+            "bytes": 9155406
+          }
+        ],
+        "scannedFiles": 43,
+        "scannedBytes": 72642663,
+        "secretValueMatches": 0,
+        "sourceAuth": {
+          "path": "C:/Users/hengu/AppData/Local/opencorvus/data/auth.json",
+          "bytes": 2259,
+          "mtimeMs": 1792683516975.7468,
+          "selectedEntry": "exact original"
+        },
+        "sourceCatalog": {
+          "byteLength": 9155406,
+          "mtimeMs": 1791128890137.9968,
+          "content": "exact original"
+        },
+        "physicalCompletion": true,
+        "preparationMetadata": "App source path, exact selected entry, size, mtime and complete adjacent catalog verified"
+      },
+      "sourceClosure": {
+        "reason": "exited",
+        "exit": 0,
+        "requests": 13,
+        "qualification": true
+      },
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 92295168,
+          "modifiedAtMs": 1792680701201.259
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 192812,
+        "currentRows": 193324,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ],
+        "providerActivities": {
+          "original": 480,
+          "current": 481
+        }
+      }
+    }
+  ],
+  "diagnostics": [
+    {
+      "scope": "before",
+      "window": "logs-cold-open.json",
+      "returned": 60,
+      "firstAt": "2026-10-22T18:00:46.268Z",
+      "lastAt": "2026-10-22T18:01:11.763Z",
+      "counts": {
+        "part-binding": 11,
+        "body-mount": 11,
+        "body-state": 22,
+        "source-group-binding": 4,
+        "source-binding": 4,
+        "source-mount": 4
+      }
+    },
+    {
+      "scope": "before",
+      "window": "logs-manual-reopen.json",
+      "returned": 100,
+      "firstAt": "2026-10-22T18:00:46.268Z",
+      "lastAt": "2026-10-22T18:02:51.488Z",
+      "counts": {
+        "part-binding": 14,
+        "body-mount": 14,
+        "body-state": 30,
+        "source-group-binding": 5,
+        "source-binding": 5,
+        "source-mount": 5
+      }
+    },
+    {
+      "scope": "before",
+      "window": "logs-offline.json",
+      "returned": 67,
+      "firstAt": "2026-10-22T18:00:46.268Z",
+      "lastAt": "2026-10-22T18:01:38.566Z",
+      "counts": {
+        "part-binding": 11,
+        "body-mount": 11,
+        "body-state": 22,
+        "source-group-binding": 4,
+        "source-binding": 4,
+        "source-mount": 4
+      }
+    },
+    {
+      "scope": "before",
+      "window": "logs-page-open.json",
+      "returned": 4,
+      "firstAt": "2026-10-22T18:00:46.268Z",
+      "lastAt": "2026-10-22T18:00:49.476Z",
+      "counts": {}
+    },
+    {
+      "scope": "before",
+      "window": "logs-reconnected-settled.json",
+      "returned": 85,
+      "firstAt": "2026-10-22T18:00:46.268Z",
+      "lastAt": "2026-10-22T18:02:00.163Z",
+      "counts": {
+        "part-binding": 11,
+        "body-mount": 11,
+        "body-state": 24,
+        "source-group-binding": 4,
+        "source-binding": 4,
+        "source-mount": 4
+      }
+    },
+    {
+      "scope": "before",
+      "window": "logs-reconnected.json",
+      "returned": 85,
+      "firstAt": "2026-10-22T18:00:46.268Z",
+      "lastAt": "2026-10-22T18:02:00.163Z",
+      "counts": {
+        "part-binding": 11,
+        "body-mount": 11,
+        "body-state": 24,
+        "source-group-binding": 4,
+        "source-binding": 4,
+        "source-mount": 4
+      }
+    },
+    {
+      "scope": "fixed-before",
+      "window": "logs-cold-open.json",
+      "returned": 60,
+      "firstAt": "2026-10-22T18:09:26.090Z",
+      "lastAt": "2026-10-22T18:09:53.085Z",
+      "counts": {
+        "part-binding": 11,
+        "body-mount": 11,
+        "body-state": 22,
+        "source-group-binding": 4,
+        "source-binding": 4,
+        "source-mount": 4
+      }
+    },
+    {
+      "scope": "fixed-before",
+      "window": "logs-first-reconnect.json",
+      "returned": 85,
+      "firstAt": "2026-10-22T18:09:26.090Z",
+      "lastAt": "2026-10-22T18:10:35.744Z",
+      "counts": {
+        "part-binding": 11,
+        "body-mount": 11,
+        "body-state": 24,
+        "source-group-binding": 4,
+        "source-binding": 4,
+        "source-mount": 4
+      }
+    },
+    {
+      "scope": "fixed-before",
+      "window": "logs-new-source-reading.json",
+      "returned": 100,
+      "firstAt": "2026-10-22T18:09:26.090Z",
+      "lastAt": "2026-10-22T18:10:48.243Z",
+      "counts": {
+        "part-binding": 14,
+        "body-mount": 14,
+        "body-state": 30,
+        "source-group-binding": 5,
+        "source-binding": 5,
+        "source-mount": 5
+      }
+    },
+    {
+      "scope": "fixed-before",
+      "window": "logs-offline.json",
+      "returned": 67,
+      "firstAt": "2026-10-22T18:09:26.090Z",
+      "lastAt": "2026-10-22T18:10:14.285Z",
+      "counts": {
+        "part-binding": 11,
+        "body-mount": 11,
+        "body-state": 22,
+        "source-group-binding": 4,
+        "source-binding": 4,
+        "source-mount": 4
+      }
+    },
+    {
+      "scope": "fixed-before",
+      "window": "logs-page-open.json",
+      "returned": 4,
+      "firstAt": "2026-10-22T18:09:26.090Z",
+      "lastAt": "2026-10-22T18:09:29.106Z",
+      "counts": {}
+    },
+    {
+      "scope": "fixed-before",
+      "window": "logs-reconnected.json",
+      "returned": 100,
+      "firstAt": "2026-10-22T18:09:26.090Z",
+      "lastAt": "2026-10-22T18:10:48.243Z",
+      "counts": {
+        "part-binding": 14,
+        "body-mount": 14,
+        "body-state": 30,
+        "source-group-binding": 5,
+        "source-binding": 5,
+        "source-mount": 5
+      }
+    }
+  ],
+  "dom": {
+    "before": {
+      "dom-before.json": {
+        "bodies": [
+          {
+            "blocks": 1,
+            "owner": "11",
+            "part": "prt_g0VYlz8dd00pWcuVkoZF",
+            "rendering": null,
+            "textLength": 80
+          },
+          {
+            "blocks": 1,
+            "owner": "12",
+            "part": "prt_g0VYlzNy200G9j4TgB2N",
+            "rendering": null,
+            "textLength": 210
+          },
+          {
+            "blocks": 1,
+            "owner": "13",
+            "part": "prt_g0VYm1lEs00O2KijUi86",
+            "rendering": null,
+            "textLength": 210
+          },
+          {
+            "blocks": 1,
+            "owner": "14",
+            "part": "prt_g0VYmMab300GY28UWAJt",
+            "rendering": null,
+            "textLength": 136
+          },
+          {
+            "blocks": 32,
+            "owner": "15",
+            "part": "prt_g0VYmMcJU00PFeeyJf7k",
+            "rendering": null,
+            "textLength": 4301
+          },
+          {
+            "blocks": 1,
+            "owner": "16",
+            "part": "prt_g0VYmUNau00ka4jsGLu7",
+            "rendering": null,
+            "textLength": 100
+          },
+          {
+            "blocks": 13,
+            "owner": "17",
+            "part": "prt_g0VYmUPS300JPqmNLo2D",
+            "rendering": null,
+            "textLength": 2158
+          },
+          {
+            "blocks": 22,
+            "owner": "18",
+            "part": "prt_g0VYmUrRH00iG2zOFlhG",
+            "rendering": null,
+            "textLength": 2959
+          },
+          {
+            "blocks": 1,
+            "owner": "19",
+            "part": "prt_g0VYma1AT004jdIyz0bP",
+            "rendering": null,
+            "textLength": 85
+          },
+          {
+            "blocks": 14,
+            "owner": "20",
+            "part": "prt_g0VYma2wD003owRu5m9l",
+            "rendering": null,
+            "textLength": 2106
+          },
+          {
+            "blocks": 21,
+            "owner": "21",
+            "part": "prt_g0VYmaNTs00F3UDN30bC",
+            "rendering": null,
+            "textLength": 2850
+          }
+        ],
+        "scroll": {
+          "full": 18186,
+          "height": 576,
+          "top": 17610
+        },
+        "session": "ses_hHpC127wALpwIiSOX86d",
+        "sources": [
+          {
+            "links": [
+              "https://aclanthology.org/2025.naacl-long.475/"
+            ],
+            "owner": "2",
+            "text": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthologyaclanthology.org"
+          },
+          {
+            "links": [
+              "https://aclanthology.org/2025.acl-long.195/"
+            ],
+            "owner": "4",
+            "text": "Conformity in Large Language Models - ACL Anthologyaclanthology.org"
+          },
+          {
+            "links": [
+              "https://arxiv.org/abs/2509.11035v1"
+            ],
+            "owner": "6",
+            "text": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+          },
+          {
+            "links": [
+              "https://arxiv.org/html/2509.11035v1"
+            ],
+            "owner": "8",
+            "text": "Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+          }
+        ]
+      },
+      "dom-reconnected-settled.json": {
+        "bodies": [
+          {
+            "blocks": 1,
+            "owner": "11",
+            "part": "prt_g0VYlz8dd00pWcuVkoZF",
+            "rendering": null,
+            "textLength": 80
+          },
+          {
+            "blocks": 1,
+            "owner": "12",
+            "part": "prt_g0VYlzNy200G9j4TgB2N",
+            "rendering": null,
+            "textLength": 210
+          },
+          {
+            "blocks": 1,
+            "owner": "13",
+            "part": "prt_g0VYm1lEs00O2KijUi86",
+            "rendering": null,
+            "textLength": 210
+          },
+          {
+            "blocks": 1,
+            "owner": "14",
+            "part": "prt_g0VYmMab300GY28UWAJt",
+            "rendering": null,
+            "textLength": 136
+          },
+          {
+            "blocks": 32,
+            "owner": "15",
+            "part": "prt_g0VYmMcJU00PFeeyJf7k",
+            "rendering": null,
+            "textLength": 4301
+          },
+          {
+            "blocks": 1,
+            "owner": "16",
+            "part": "prt_g0VYmUNau00ka4jsGLu7",
+            "rendering": null,
+            "textLength": 100
+          },
+          {
+            "blocks": 13,
+            "owner": "17",
+            "part": "prt_g0VYmUPS300JPqmNLo2D",
+            "rendering": null,
+            "textLength": 2158
+          },
+          {
+            "blocks": 22,
+            "owner": "18",
+            "part": "prt_g0VYmUrRH00iG2zOFlhG",
+            "rendering": null,
+            "textLength": 2959
+          },
+          {
+            "blocks": 1,
+            "owner": "19",
+            "part": "prt_g0VYma1AT004jdIyz0bP",
+            "rendering": null,
+            "textLength": 85
+          },
+          {
+            "blocks": 14,
+            "owner": "20",
+            "part": "prt_g0VYma2wD003owRu5m9l",
+            "rendering": null,
+            "textLength": 2106
+          },
+          {
+            "blocks": 21,
+            "owner": "21",
+            "part": "prt_g0VYmaNTs00F3UDN30bC",
+            "rendering": null,
+            "textLength": 2850
+          }
+        ],
+        "scroll": {
+          "full": 18186,
+          "height": 576,
+          "top": 17610
+        },
+        "session": "ses_hHpC127wALpwIiSOX86d",
+        "sources": [
+          {
+            "links": [
+              "https://aclanthology.org/2025.naacl-long.475/"
+            ],
+            "owner": "2",
+            "text": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthologyaclanthology.org"
+          },
+          {
+            "links": [
+              "https://aclanthology.org/2025.acl-long.195/"
+            ],
+            "owner": "4",
+            "text": "Conformity in Large Language Models - ACL Anthologyaclanthology.org"
+          },
+          {
+            "links": [
+              "https://arxiv.org/abs/2509.11035v1"
+            ],
+            "owner": "6",
+            "text": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+          },
+          {
+            "links": [
+              "https://arxiv.org/html/2509.11035v1"
+            ],
+            "owner": "8",
+            "text": "Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+          }
+        ]
+      },
+      "dom-manual-reopen.json": {
+        "bodies": [
+          {
+            "blocks": 1,
+            "owner": "11",
+            "part": "prt_g0VYlz8dd00pWcuVkoZF",
+            "rendering": null,
+            "textLength": 80
+          },
+          {
+            "blocks": 1,
+            "owner": "12",
+            "part": "prt_g0VYlzNy200G9j4TgB2N",
+            "rendering": null,
+            "textLength": 210
+          },
+          {
+            "blocks": 1,
+            "owner": "13",
+            "part": "prt_g0VYm1lEs00O2KijUi86",
+            "rendering": null,
+            "textLength": 210
+          },
+          {
+            "blocks": 1,
+            "owner": "14",
+            "part": "prt_g0VYmMab300GY28UWAJt",
+            "rendering": null,
+            "textLength": 136
+          },
+          {
+            "blocks": 32,
+            "owner": "15",
+            "part": "prt_g0VYmMcJU00PFeeyJf7k",
+            "rendering": null,
+            "textLength": 4301
+          },
+          {
+            "blocks": 1,
+            "owner": "16",
+            "part": "prt_g0VYmUNau00ka4jsGLu7",
+            "rendering": null,
+            "textLength": 100
+          },
+          {
+            "blocks": 13,
+            "owner": "17",
+            "part": "prt_g0VYmUPS300JPqmNLo2D",
+            "rendering": null,
+            "textLength": 2158
+          },
+          {
+            "blocks": 22,
+            "owner": "18",
+            "part": "prt_g0VYmUrRH00iG2zOFlhG",
+            "rendering": null,
+            "textLength": 2959
+          },
+          {
+            "blocks": 1,
+            "owner": "19",
+            "part": "prt_g0VYma1AT004jdIyz0bP",
+            "rendering": null,
+            "textLength": 85
+          },
+          {
+            "blocks": 14,
+            "owner": "20",
+            "part": "prt_g0VYma2wD003owRu5m9l",
+            "rendering": null,
+            "textLength": 2106
+          },
+          {
+            "blocks": 21,
+            "owner": "21",
+            "part": "prt_g0VYmaNTs00F3UDN30bC",
+            "rendering": null,
+            "textLength": 2850
+          },
+          {
+            "blocks": 1,
+            "owner": "35",
+            "part": "prt_g0VYn0rha005V1KlZppe",
+            "rendering": null,
+            "textLength": 71
+          },
+          {
+            "blocks": 6,
+            "owner": "36",
+            "part": "prt_g0VYn0tPU00GJfPCOkag",
+            "rendering": null,
+            "textLength": 1639
+          },
+          {
+            "blocks": 8,
+            "owner": "37",
+            "part": "prt_g0VYn1Ezt00aQBqYLfgw",
+            "rendering": null,
+            "textLength": 2271
+          }
+        ],
+        "scroll": {
+          "full": 22643,
+          "height": 576,
+          "top": 19907
+        },
+        "session": "ses_hHpC127wALpwIiSOX86d",
+        "sources": [
+          {
+            "links": [
+              "https://aclanthology.org/2025.naacl-long.475/"
+            ],
+            "owner": "2",
+            "text": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthologyaclanthology.org"
+          },
+          {
+            "links": [
+              "https://aclanthology.org/2025.acl-long.195/"
+            ],
+            "owner": "4",
+            "text": "Conformity in Large Language Models - ACL Anthologyaclanthology.org"
+          },
+          {
+            "links": [
+              "https://arxiv.org/abs/2509.11035v1"
+            ],
+            "owner": "6",
+            "text": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+          },
+          {
+            "links": [
+              "https://arxiv.org/html/2509.11035v1"
+            ],
+            "owner": "8",
+            "text": "Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+          },
+          {
+            "links": [
+              "https://aclanthology.org/2024.acl-long.381/"
+            ],
+            "owner": "10",
+            "text": "ReConcile: Round-Table Conference Improves Reasoning via Consensus among Diverse LLMs - ACL Anthologyaclanthology.org"
+          }
+        ]
+      }
+    },
+    "fixed-before": {
+      "dom-before.json": {
+        "bodies": [
+          {
+            "blocks": 1,
+            "owner": "11",
+            "part": "prt_g0VYlz8dd00pWcuVkoZF",
+            "rendering": null,
+            "textLength": 80
+          },
+          {
+            "blocks": 1,
+            "owner": "12",
+            "part": "prt_g0VYlzNy200G9j4TgB2N",
+            "rendering": null,
+            "textLength": 210
+          },
+          {
+            "blocks": 1,
+            "owner": "13",
+            "part": "prt_g0VYm1lEs00O2KijUi86",
+            "rendering": null,
+            "textLength": 210
+          },
+          {
+            "blocks": 1,
+            "owner": "14",
+            "part": "prt_g0VYmMab300GY28UWAJt",
+            "rendering": null,
+            "textLength": 136
+          },
+          {
+            "blocks": 32,
+            "owner": "15",
+            "part": "prt_g0VYmMcJU00PFeeyJf7k",
+            "rendering": null,
+            "textLength": 4301
+          },
+          {
+            "blocks": 1,
+            "owner": "16",
+            "part": "prt_g0VYmUNau00ka4jsGLu7",
+            "rendering": null,
+            "textLength": 100
+          },
+          {
+            "blocks": 13,
+            "owner": "17",
+            "part": "prt_g0VYmUPS300JPqmNLo2D",
+            "rendering": null,
+            "textLength": 2158
+          },
+          {
+            "blocks": 22,
+            "owner": "18",
+            "part": "prt_g0VYmUrRH00iG2zOFlhG",
+            "rendering": null,
+            "textLength": 2959
+          },
+          {
+            "blocks": 1,
+            "owner": "19",
+            "part": "prt_g0VYma1AT004jdIyz0bP",
+            "rendering": null,
+            "textLength": 85
+          },
+          {
+            "blocks": 14,
+            "owner": "20",
+            "part": "prt_g0VYma2wD003owRu5m9l",
+            "rendering": null,
+            "textLength": 2106
+          },
+          {
+            "blocks": 21,
+            "owner": "21",
+            "part": "prt_g0VYmaNTs00F3UDN30bC",
+            "rendering": null,
+            "textLength": 2850
+          }
+        ],
+        "scroll": {
+          "full": 18186,
+          "height": 576,
+          "top": 17610
+        },
+        "session": "ses_hHpC127wALpwIiSOX86d",
+        "sources": [
+          {
+            "links": [
+              "https://aclanthology.org/2025.naacl-long.475/"
+            ],
+            "owner": "2",
+            "text": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthologyaclanthology.org"
+          },
+          {
+            "links": [
+              "https://aclanthology.org/2025.acl-long.195/"
+            ],
+            "owner": "4",
+            "text": "Conformity in Large Language Models - ACL Anthologyaclanthology.org"
+          },
+          {
+            "links": [
+              "https://arxiv.org/abs/2509.11035v1"
+            ],
+            "owner": "6",
+            "text": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+          },
+          {
+            "links": [
+              "https://arxiv.org/html/2509.11035v1"
+            ],
+            "owner": "8",
+            "text": "Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+          }
+        ]
+      },
+      "dom-reconnected.json": {
+        "bodies": [
+          {
+            "blocks": 1,
+            "owner": "11",
+            "part": "prt_g0VYlz8dd00pWcuVkoZF",
+            "rendering": null,
+            "textLength": 80
+          },
+          {
+            "blocks": 1,
+            "owner": "12",
+            "part": "prt_g0VYlzNy200G9j4TgB2N",
+            "rendering": null,
+            "textLength": 210
+          },
+          {
+            "blocks": 1,
+            "owner": "13",
+            "part": "prt_g0VYm1lEs00O2KijUi86",
+            "rendering": null,
+            "textLength": 210
+          },
+          {
+            "blocks": 1,
+            "owner": "14",
+            "part": "prt_g0VYmMab300GY28UWAJt",
+            "rendering": null,
+            "textLength": 136
+          },
+          {
+            "blocks": 32,
+            "owner": "15",
+            "part": "prt_g0VYmMcJU00PFeeyJf7k",
+            "rendering": null,
+            "textLength": 4301
+          },
+          {
+            "blocks": 1,
+            "owner": "16",
+            "part": "prt_g0VYmUNau00ka4jsGLu7",
+            "rendering": null,
+            "textLength": 100
+          },
+          {
+            "blocks": 13,
+            "owner": "17",
+            "part": "prt_g0VYmUPS300JPqmNLo2D",
+            "rendering": null,
+            "textLength": 2158
+          },
+          {
+            "blocks": 22,
+            "owner": "18",
+            "part": "prt_g0VYmUrRH00iG2zOFlhG",
+            "rendering": null,
+            "textLength": 2959
+          },
+          {
+            "blocks": 1,
+            "owner": "19",
+            "part": "prt_g0VYma1AT004jdIyz0bP",
+            "rendering": null,
+            "textLength": 85
+          },
+          {
+            "blocks": 14,
+            "owner": "20",
+            "part": "prt_g0VYma2wD003owRu5m9l",
+            "rendering": null,
+            "textLength": 2106
+          },
+          {
+            "blocks": 21,
+            "owner": "21",
+            "part": "prt_g0VYmaNTs00F3UDN30bC",
+            "rendering": null,
+            "textLength": 2850
+          },
+          {
+            "blocks": 1,
+            "owner": "37",
+            "part": "prt_g0VYn0rha005V1KlZppe",
+            "rendering": null,
+            "textLength": 71
+          },
+          {
+            "blocks": 6,
+            "owner": "38",
+            "part": "prt_g0VYn0tPU00GJfPCOkag",
+            "rendering": null,
+            "textLength": 1639
+          },
+          {
+            "blocks": 8,
+            "owner": "39",
+            "part": "prt_g0VYn1Ezt00aQBqYLfgw",
+            "rendering": null,
+            "textLength": 2271
+          }
+        ],
+        "scroll": {
+          "full": 22643,
+          "height": 576,
+          "top": 22067
+        },
+        "session": "ses_hHpC127wALpwIiSOX86d",
+        "sources": [
+          {
+            "links": [
+              "https://aclanthology.org/2025.naacl-long.475/"
+            ],
+            "owner": "2",
+            "text": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthologyaclanthology.org"
+          },
+          {
+            "links": [
+              "https://aclanthology.org/2025.acl-long.195/"
+            ],
+            "owner": "4",
+            "text": "Conformity in Large Language Models - ACL Anthologyaclanthology.org"
+          },
+          {
+            "links": [
+              "https://arxiv.org/abs/2509.11035v1"
+            ],
+            "owner": "6",
+            "text": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+          },
+          {
+            "links": [
+              "https://arxiv.org/html/2509.11035v1"
+            ],
+            "owner": "8",
+            "text": "Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+          },
+          {
+            "links": [
+              "https://aclanthology.org/2024.acl-long.381/"
+            ],
+            "owner": "10",
+            "text": "ReConcile: Round-Table Conference Improves Reasoning via Consensus among Diverse LLMs - ACL Anthologyaclanthology.org"
+          }
+        ]
+      }
+    }
+  },
+  "publicReads": [
+    {
+      "scope": "before",
+      "stage": "before",
+      "phase": "baseline",
+      "startedAt": "2026-10-22T18:01:01.157Z",
+      "receivedAt": "2026-10-22T18:01:01.397Z",
+      "status": 200,
+      "prior": null,
+      "received": {
+        "mode": "snapshot",
+        "epoch": 1792692031814,
+        "sequence": 0,
+        "messages": 16
+      },
+      "task": {
+        "status": "completed"
+      },
+      "messageCount": 16,
+      "sources": [
+        {
+          "id": "prt_g0VYlzNFy003mnOrS6Ou",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+          "sourceId": "8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc",
+          "toolPartID": "prt_g0VYlz9DQ009aokcHv1V",
+          "type": "source-url",
+          "url": "https://aclanthology.org/2025.naacl-long.475/",
+          "title": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology"
+        },
+        {
+          "id": "prt_g0VYm1k0j00RrTh2ZAzO",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYlzNHF00KE9pPvzmq",
+          "sourceId": "8a046e21993297bbc58547ee51ee95db16c2667449e2552696ed15addf38d7e7",
+          "toolPartID": "prt_g0VYlzOiH00ATA7a4B7c",
+          "type": "source-url",
+          "url": "https://aclanthology.org/2025.acl-long.195/",
+          "title": "Conformity in Large Language Models - ACL Anthology"
+        },
+        {
+          "id": "prt_g0VYmUqRe00iwQUDpLhe",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYmUOVB0012dG1c1pk",
+          "sourceId": "52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c",
+          "toolPartID": "prt_g0VYmUc6c00U1v3LhnCg",
+          "type": "source-url",
+          "url": "https://arxiv.org/abs/2509.11035v1",
+          "title": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debate"
+        },
+        {
+          "id": "prt_g0VYmaLy10038WK7z7WL",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYma20K00NMix5Hzs1",
+          "sourceId": "9779f0e41fe8fe96dfd1293da0f393cc2c85f41ecd6ad73dedd70a84017c4478",
+          "toolPartID": "prt_g0VYmaILg00lskNxTy35",
+          "type": "source-url",
+          "url": "https://arxiv.org/html/2509.11035v1",
+          "title": "Free-MAD: Consensus-Free Multi-Agent Debate"
+        }
+      ]
+    },
+    {
+      "scope": "before",
+      "stage": "after",
+      "phase": "recovered",
+      "startedAt": "2026-10-22T18:02:22.962Z",
+      "receivedAt": "2026-10-22T18:02:23.303Z",
+      "status": 200,
+      "prior": {
+        "epoch": 1792692031814,
+        "sequence": 0,
+        "messages": 16
+      },
+      "received": {
+        "mode": "snapshot",
+        "epoch": 1792692114330,
+        "sequence": 0,
+        "messages": 20
+      },
+      "task": {
+        "status": "completed"
+      },
+      "messageCount": 20,
+      "sources": [
+        {
+          "id": "prt_g0VYlzNFy003mnOrS6Ou",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+          "sourceId": "8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc",
+          "toolPartID": "prt_g0VYlz9DQ009aokcHv1V",
+          "type": "source-url",
+          "url": "https://aclanthology.org/2025.naacl-long.475/",
+          "title": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology"
+        },
+        {
+          "id": "prt_g0VYm1k0j00RrTh2ZAzO",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYlzNHF00KE9pPvzmq",
+          "sourceId": "8a046e21993297bbc58547ee51ee95db16c2667449e2552696ed15addf38d7e7",
+          "toolPartID": "prt_g0VYlzOiH00ATA7a4B7c",
+          "type": "source-url",
+          "url": "https://aclanthology.org/2025.acl-long.195/",
+          "title": "Conformity in Large Language Models - ACL Anthology"
+        },
+        {
+          "id": "prt_g0VYmUqRe00iwQUDpLhe",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYmUOVB0012dG1c1pk",
+          "sourceId": "52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c",
+          "toolPartID": "prt_g0VYmUc6c00U1v3LhnCg",
+          "type": "source-url",
+          "url": "https://arxiv.org/abs/2509.11035v1",
+          "title": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debate"
+        },
+        {
+          "id": "prt_g0VYmaLy10038WK7z7WL",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYma20K00NMix5Hzs1",
+          "sourceId": "9779f0e41fe8fe96dfd1293da0f393cc2c85f41ecd6ad73dedd70a84017c4478",
+          "toolPartID": "prt_g0VYmaILg00lskNxTy35",
+          "type": "source-url",
+          "url": "https://arxiv.org/html/2509.11035v1",
+          "title": "Free-MAD: Consensus-Free Multi-Agent Debate"
+        },
+        {
+          "id": "prt_g0VYn1Dl600S2Nr76HYh",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYn0sTy00K0FROE4Oh",
+          "sourceId": "068cf6c6d4bad02a20b7cee9ce7b4be31ad88ce4094646d3dae9e99796cba036",
+          "toolPartID": "prt_g0VYn13my00cKqTAZcoY",
+          "type": "source-url",
+          "url": "https://aclanthology.org/2024.acl-long.381/",
+          "title": "ReConcile: Round-Table Conference Improves Reasoning via Consensus among Diverse LLMs - ACL Anthology"
+        }
+      ]
+    },
+    {
+      "scope": "fixed-before",
+      "stage": "before",
+      "phase": "baseline",
+      "startedAt": "2026-10-22T18:09:35.426Z",
+      "receivedAt": "2026-10-22T18:09:35.692Z",
+      "status": 200,
+      "prior": null,
+      "received": {
+        "mode": "snapshot",
+        "epoch": 1792692536538,
+        "sequence": 0,
+        "messages": 16
+      },
+      "task": {
+        "status": "completed"
+      },
+      "messageCount": 16,
+      "sources": [
+        {
+          "id": "prt_g0VYlzNFy003mnOrS6Ou",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+          "sourceId": "8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc",
+          "toolPartID": "prt_g0VYlz9DQ009aokcHv1V",
+          "type": "source-url",
+          "url": "https://aclanthology.org/2025.naacl-long.475/",
+          "title": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology"
+        },
+        {
+          "id": "prt_g0VYm1k0j00RrTh2ZAzO",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYlzNHF00KE9pPvzmq",
+          "sourceId": "8a046e21993297bbc58547ee51ee95db16c2667449e2552696ed15addf38d7e7",
+          "toolPartID": "prt_g0VYlzOiH00ATA7a4B7c",
+          "type": "source-url",
+          "url": "https://aclanthology.org/2025.acl-long.195/",
+          "title": "Conformity in Large Language Models - ACL Anthology"
+        },
+        {
+          "id": "prt_g0VYmUqRe00iwQUDpLhe",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYmUOVB0012dG1c1pk",
+          "sourceId": "52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c",
+          "toolPartID": "prt_g0VYmUc6c00U1v3LhnCg",
+          "type": "source-url",
+          "url": "https://arxiv.org/abs/2509.11035v1",
+          "title": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debate"
+        },
+        {
+          "id": "prt_g0VYmaLy10038WK7z7WL",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYma20K00NMix5Hzs1",
+          "sourceId": "9779f0e41fe8fe96dfd1293da0f393cc2c85f41ecd6ad73dedd70a84017c4478",
+          "toolPartID": "prt_g0VYmaILg00lskNxTy35",
+          "type": "source-url",
+          "url": "https://arxiv.org/html/2509.11035v1",
+          "title": "Free-MAD: Consensus-Free Multi-Agent Debate"
+        }
+      ]
+    },
+    {
+      "scope": "fixed-before",
+      "stage": "after",
+      "phase": "recovered",
+      "startedAt": "2026-10-22T18:11:52.283Z",
+      "receivedAt": "2026-10-22T18:11:52.567Z",
+      "status": 200,
+      "prior": {
+        "epoch": 1792692536538,
+        "sequence": 0,
+        "messages": 16
+      },
+      "received": {
+        "mode": "snapshot",
+        "epoch": 1792692630402,
+        "sequence": 0,
+        "messages": 20
+      },
+      "task": {
+        "status": "completed"
+      },
+      "messageCount": 20,
+      "sources": [
+        {
+          "id": "prt_g0VYlzNFy003mnOrS6Ou",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+          "sourceId": "8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc",
+          "toolPartID": "prt_g0VYlz9DQ009aokcHv1V",
+          "type": "source-url",
+          "url": "https://aclanthology.org/2025.naacl-long.475/",
+          "title": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology"
+        },
+        {
+          "id": "prt_g0VYm1k0j00RrTh2ZAzO",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYlzNHF00KE9pPvzmq",
+          "sourceId": "8a046e21993297bbc58547ee51ee95db16c2667449e2552696ed15addf38d7e7",
+          "toolPartID": "prt_g0VYlzOiH00ATA7a4B7c",
+          "type": "source-url",
+          "url": "https://aclanthology.org/2025.acl-long.195/",
+          "title": "Conformity in Large Language Models - ACL Anthology"
+        },
+        {
+          "id": "prt_g0VYmUqRe00iwQUDpLhe",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYmUOVB0012dG1c1pk",
+          "sourceId": "52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c",
+          "toolPartID": "prt_g0VYmUc6c00U1v3LhnCg",
+          "type": "source-url",
+          "url": "https://arxiv.org/abs/2509.11035v1",
+          "title": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debate"
+        },
+        {
+          "id": "prt_g0VYmaLy10038WK7z7WL",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYma20K00NMix5Hzs1",
+          "sourceId": "9779f0e41fe8fe96dfd1293da0f393cc2c85f41ecd6ad73dedd70a84017c4478",
+          "toolPartID": "prt_g0VYmaILg00lskNxTy35",
+          "type": "source-url",
+          "url": "https://arxiv.org/html/2509.11035v1",
+          "title": "Free-MAD: Consensus-Free Multi-Agent Debate"
+        },
+        {
+          "id": "prt_g0VYn1Dl600S2Nr76HYh",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYn0sTy00K0FROE4Oh",
+          "sourceId": "068cf6c6d4bad02a20b7cee9ce7b4be31ad88ce4094646d3dae9e99796cba036",
+          "toolPartID": "prt_g0VYn13my00cKqTAZcoY",
+          "type": "source-url",
+          "url": "https://aclanthology.org/2024.acl-long.381/",
+          "title": "ReConcile: Round-Table Conference Improves Reasoning via Consensus among Diverse LLMs - ACL Anthology"
+        }
+      ]
+    }
+  ],
+  "backendRequests": [
+    {
+      "scope": "after",
+      "requests": [
+        {
+          "time": "2026-10-22T18:02:08.470Z",
+          "requestID": "7fcd5230-8cc6-445d-9372-9d20ea9847a3",
+          "method": "GET",
+          "path": "/task/tsk_g00VYlyopB00h7w27eIw/conversation",
+          "status": "started"
+        },
+        {
+          "time": "2026-10-22T18:02:08.902Z",
+          "requestID": "7fcd5230-8cc6-445d-9372-9d20ea9847a3",
+          "method": "GET",
+          "path": "/task/tsk_g00VYlyopB00h7w27eIw/conversation",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 432
+        },
+        {
+          "time": "2026-10-22T18:02:22.980Z",
+          "requestID": "4e60e710-46eb-4cd1-8157-f6ef9c5f8278",
+          "method": "GET",
+          "path": "/task/tsk_g00VYlyopB00h7w27eIw/conversation/session/ses_hHpC127wALpwIiSOX86d",
+          "status": "started"
+        },
+        {
+          "time": "2026-10-22T18:02:23.120Z",
+          "requestID": "4e60e710-46eb-4cd1-8157-f6ef9c5f8278",
+          "method": "GET",
+          "path": "/task/tsk_g00VYlyopB00h7w27eIw/conversation/session/ses_hHpC127wALpwIiSOX86d",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 140
+        },
+        {
+          "time": "2026-10-22T18:02:51.216Z",
+          "requestID": "1c014199-1004-4e59-8257-a3e8ea651db8",
+          "method": "GET",
+          "path": "/task/tsk_g00VYlyopB00h7w27eIw/conversation/session/ses_hHpC127wALpwIiSOX86d",
+          "status": "started"
+        },
+        {
+          "time": "2026-10-22T18:02:51.383Z",
+          "requestID": "1c014199-1004-4e59-8257-a3e8ea651db8",
+          "method": "GET",
+          "path": "/task/tsk_g00VYlyopB00h7w27eIw/conversation/session/ses_hHpC127wALpwIiSOX86d",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 167
+        }
+      ]
+    },
+    {
+      "scope": "fixed-after",
+      "requests": [
+        {
+          "time": "2026-10-22T18:10:47.021Z",
+          "requestID": "ae37c33e-9273-4ac8-bc22-2f64a9ce6cbd",
+          "method": "GET",
+          "path": "/task/tsk_g00VYlyopB00h7w27eIw/conversation",
+          "status": "started"
+        },
+        {
+          "time": "2026-10-22T18:10:47.448Z",
+          "requestID": "ae37c33e-9273-4ac8-bc22-2f64a9ce6cbd",
+          "method": "GET",
+          "path": "/task/tsk_g00VYlyopB00h7w27eIw/conversation",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 427
+        },
+        {
+          "time": "2026-10-22T18:10:47.808Z",
+          "requestID": "5059544f-882a-45f7-a38f-8d13f0d82196",
+          "method": "GET",
+          "path": "/task/tsk_g00VYlyopB00h7w27eIw/conversation/session/ses_hHpC127wALpwIiSOX86d",
+          "status": "started"
+        },
+        {
+          "time": "2026-10-22T18:10:47.973Z",
+          "requestID": "5059544f-882a-45f7-a38f-8d13f0d82196",
+          "method": "GET",
+          "path": "/task/tsk_g00VYlyopB00h7w27eIw/conversation/session/ses_hHpC127wALpwIiSOX86d",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 165
+        },
+        {
+          "time": "2026-10-22T18:11:52.288Z",
+          "requestID": "46bfc3fe-fca3-4307-87b6-b253d910803a",
+          "method": "GET",
+          "path": "/task/tsk_g00VYlyopB00h7w27eIw/conversation/session/ses_hHpC127wALpwIiSOX86d",
+          "status": "started"
+        },
+        {
+          "time": "2026-10-22T18:11:52.416Z",
+          "requestID": "46bfc3fe-fca3-4307-87b6-b253d910803a",
+          "method": "GET",
+          "path": "/task/tsk_g00VYlyopB00h7w27eIw/conversation/session/ses_hHpC127wALpwIiSOX86d",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 128
+        }
+      ]
+    }
+  ],
+  "attachment": {
+    "at": "2026-10-22T18:11:52.810Z",
+    "url": "http://127.0.0.1:19095/attachment/prj_hp1ir9XEheMHTOMlkSL8/b4a9ca9e1cfc475c07592c9527eeea28ed6fc0ea38401060d9243a36eb6c845c.png?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-task-source-growth-537-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5Ceaeacbce-3533-49f2-aa4e-e26c79421c59",
+    "status": 200,
+    "mime": "image/png",
+    "bytes": 643,
+    "identity": "Actual public attachment route returned exact original published PNG bytes",
+    "owner": "prj_hp1ir9XEheMHTOMlkSL8",
+    "scope": "after"
+  },
+  "lifecycle": "lifecycle.ndjson",
+  "limits": [
+    "New business content was genuinely produced in the historical 541 run, not generated again in this batch. Eight current actual model calls are admission preflights and their natural follow-up requests.",
+    "Task completed-history reconnect is visually qualified. Active stream reconnect and Session/Mission offline content growth still require their own real page runs.",
+    "Initial new-body Rendering is normal first parsing; the eleven previously displayed bodies retained their owners and block counts.",
+    "Console batches have bounded coverage; repeated timestamp/payload entries are retained once in the derived trace. Raw batches remain private.",
+    "Old 540 data source ended on its historical resource deadline after both original readers EOF. This failure is preserved separately from the four current normally closed scopes."
+  ],
+  "screenshots": [
+    "before-old-end.png",
+    "before-reconnected-stale.png",
+    "before-manual-reopen.png",
+    "fixed-old-end.png",
+    "fixed-offline.png",
+    "fixed-auto-new-end.png",
+    "fixed-auto-new-source.png"
+  ]
+}

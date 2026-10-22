@@ -33,7 +33,7 @@ import {
   isProjectionPrerequisiteError,
 } from "./tree-writer"
 import { refreshConversationTurnArtifacts } from "./conversation"
-import { publishSubagentConversationLiveEvent } from "./subagent-conversation"
+import { publishSubagentConversationUpdate } from "./subagent-conversation"
 import { isBrowserPreviewUpdateEvent, observeBrowserPreviewUpdateEvent } from "./browser-preview"
 import { bumpFileWorkbenchRevision } from "./file-workbench"
 import { conversationEventOwner, isBoardInvalidatingEventType, isRouterConsumedNoopEventType } from "./event-policy"
@@ -51,7 +51,7 @@ function writeSelectedMessageToTree(event: any, sourceEvent: any = event): void 
   writeToTree(event)
   const sourceKey = selectedConversationAgentSourceKey(sourceEvent)
   if (!sourceKey) return
-  publishSubagentConversationLiveEvent(event)
+  publishSubagentConversationUpdate({ kind: "live", event })
   if (event?.type === "message.updated") {
     applyLiveConversationAgentMessageUpdated(sourceKey, event)
   } else if (event?.type === "message.removed") {

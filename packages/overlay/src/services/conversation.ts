@@ -46,6 +46,7 @@ import { conversationHistoryPath } from "./conversation-history-path"
 import { captureMainReadingPosition } from "../store/conversation-ui"
 import { preparePermissionInteractions } from "../utils/permission-interaction"
 import { prepareQuestionInteractions } from "../utils/question-interaction"
+import { publishSubagentConversationUpdate } from "./subagent-conversation"
 
 type EventReplay = {
   cursor: number
@@ -481,6 +482,7 @@ export function mergeSessionConnectionSnapshot(
   })
   historySource = source
   historyState = history
+  publishSubagentConversationUpdate({ kind: "snapshot", source })
 }
 
 function activeSourceMatches(source: BoardSource): boolean {
@@ -756,6 +758,7 @@ export async function hydrateConversation(
     historySource = source
     historyAuthority = authority
     historyState = history
+    publishSubagentConversationUpdate({ kind: "snapshot", source })
     if (source.kind === "task") {
       recordHydratedSelectedTaskActivity({
         board,
@@ -868,6 +871,7 @@ export async function mergeLatestConversationTail(
       transcript,
       taskID: selectedTaskID,
     })
+    publishSubagentConversationUpdate({ kind: "snapshot", source: { kind: "task", id: selectedTaskID } })
   } finally {
     if (tailMergeAbort === controller) tailMergeAbort = null
   }

@@ -51,17 +51,21 @@ export interface SubagentConversationLiveProjection {
   removedMessages: Record<string, unknown>
 }
 
-type SubagentConversationLiveListener = (event: unknown) => void
+export type SubagentConversationUpdate =
+  | { kind: "live"; event: unknown }
+  | { kind: "snapshot"; source: BoardSource }
 
-const subagentConversationLiveListeners = new Set<SubagentConversationLiveListener>()
+type SubagentConversationListener = (update: SubagentConversationUpdate) => void
 
-export function publishSubagentConversationLiveEvent(event: unknown): void {
-  for (const listener of subagentConversationLiveListeners) listener(event)
+const subagentConversationListeners = new Set<SubagentConversationListener>()
+
+export function publishSubagentConversationUpdate(update: SubagentConversationUpdate): void {
+  for (const listener of subagentConversationListeners) listener(update)
 }
 
-export function listenSubagentConversationLiveEvents(listener: SubagentConversationLiveListener): () => void {
-  subagentConversationLiveListeners.add(listener)
-  return () => subagentConversationLiveListeners.delete(listener)
+export function listenSubagentConversationUpdates(listener: SubagentConversationListener): () => void {
+  subagentConversationListeners.add(listener)
+  return () => subagentConversationListeners.delete(listener)
 }
 
 export function createSubagentConversationLiveProjection(sessionID: string): SubagentConversationLiveProjection {
@@ -384,6 +388,7 @@ export const SUBAGENT_TRANSCRIPT_REFRESH_INTERVAL_MS = 120
 
 export interface SubagentTranscriptRefreshController {
   observe(target: string, revision: string, ready?: boolean): void
+  invalidate(target: string, ready?: boolean): void
   dispose(): void
 }
 
@@ -391,7 +396,8 @@ export interface SubagentTranscriptRefreshController {
  * Convert bursty transcript revisions into bounded refresh work. The first
  * observation for a target belongs to the resource's immediate initial load;
  * later revisions share one timer, one in-flight refresh, and at most one
- * trailing refresh when more revisions arrive during that request.
+ * trailing refresh when more revisions arrive during that request. Committed
+ * source snapshots use the same queue even when their live revision is unchanged.
  */
 export function createSubagentTranscriptRefreshController(
   refresh: () => unknown | Promise<unknown>,
@@ -452,6 +458,11 @@ export function createSubagentTranscriptRefreshController(
       }
       if (!pending || !ready || inFlight) return
       schedule()
+    },
+    invalidate(currentTarget, ready = true) {
+      if (disposed || !target || currentTarget !== target) return
+      pending = true
+      if (ready && !inFlight) schedule()
     },
     dispose() {
       disposed = true

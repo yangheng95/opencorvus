@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [成员离线新增内容恢复](2026-10-23-member-offline-growth.md)：[七张实图与 8 次 Sol](../../artifacts/2026-10-23-member-offline-growth/README.md)，546 快照刷新缺口修复，原正文/来源 owner 保持、完整资源结算。
+
 - [Task 成员同页重连](2026-10-23-task-member-reconnect.md)：[四张实图与完整资源结算](../../artifacts/2026-10-23-task-member-reconnect/README.md)，静止成员阅读连续，离线新增内容和活跃流恢复仍待验收。
 
 - [侧聊Goal与完整来源滚动](2026-10-23-side-goal-live-experience.md)：[9实图/8次Sol](../../artifacts/2026-10-23-side-goal-live-experience/README.md)，共享展开输出滚动修复，真实侧Goal两轮与正常资源结算。

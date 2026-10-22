@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [成员离线新增内容恢复](records/2026-10/2026-10-23-member-offline-growth.md)：[七张实图与真实恢复](artifacts/2026-10-23-member-offline-growth/README.md)，修复完整快照未触发成员读取，自动恢复第五来源与新增正文，原 owner 保持。
+
 - [Task 成员同页重连](records/2026-10/2026-10-23-task-member-reconnect.md)：[四张实图与四次 Sol](artifacts/2026-10-23-task-member-reconnect/README.md)，静止成员 14 段正文、5 条来源和阅读位置保持；独立跨 epoch 返回与 UI 请求资格明确区分。
 
 - [侧聊Goal与完整来源滚动](records/2026-10/2026-10-23-side-goal-live-experience.md)：[9张实图/8次Sol](artifacts/2026-10-23-side-goal-live-experience/README.md)，修复完整输出滚轮受阻，真实两轮预算/完成及原来源保留。

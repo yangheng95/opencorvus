@@ -15,7 +15,7 @@ import { conversationAgentRecordsForSource } from "../store/conversation-agents"
 import {
   createSubagentConversationLiveProjection,
   createSubagentTranscriptRefreshController,
-  listenSubagentConversationLiveEvents,
+  listenSubagentConversationUpdates,
   loadSubagentConversation,
   mergeSubagentConversation,
   observeSubagentConversationLiveEvent,
@@ -306,9 +306,17 @@ export function SubagentConversationPanel(props: {
       setLiveProjection(createSubagentConversationLiveProjection(sessionID))
     }),
   )
-  const stopLiveProjection = listenSubagentConversationLiveEvents((event) => {
-    if (!requestKey()) return
-    pendingLiveProjection = observeSubagentConversationLiveEvent(pendingLiveProjection ?? liveProjection(), event)
+  const transcriptRefresh = createSubagentTranscriptRefreshController(() => refetch())
+  const stopConversationUpdates = listenSubagentConversationUpdates((update) => {
+    const target = requestKey()
+    if (!target) return
+    if (update.kind === "snapshot") {
+      const source = boardStore.selectedSource
+      if (source?.kind === update.source.kind && source.id === update.source.id)
+        transcriptRefresh.invalidate(target, !conversation.loading)
+      return
+    }
+    pendingLiveProjection = observeSubagentConversationLiveEvent(pendingLiveProjection ?? liveProjection(), update.event)
     flushLiveProjection.schedule()
   })
   const displayedConversation = createMemo(() => {
@@ -333,7 +341,6 @@ export function SubagentConversationPanel(props: {
     pendingLiveProjection = undefined
     setLiveProjection(next)
   })
-  const transcriptRefresh = createSubagentTranscriptRefreshController(() => refetch())
   createEffect(() => {
     const target = requestKey() ?? ""
     const record = selectedRecord()
@@ -346,7 +353,7 @@ export function SubagentConversationPanel(props: {
   onCleanup(() => {
     navigationFocus.cancel()
     readingPositions.clear()
-    stopLiveProjection()
+    stopConversationUpdates()
     flushLiveProjection.cancel()
     transcriptRefresh.dispose()
     transcriptAbort?.abort()

@@ -169,6 +169,15 @@ admitted Tool results, removals and completed Message edits retain canonical rea
 An unknown Message also requires a read; historical running status alone cannot
 qualify an intermediate update. This rule is shared by Task and Session members.
 
+A successfully committed initial hydration, Task tail recovery or Session
+connection snapshot also invalidates the active member transcript for that same
+source. These read boundaries share the member update bus with live facts;
+they are not synthetic Message events or a second transcript projection.
+The existing refresh controller coalesces invalidations through its pending,
+in-flight and ready states, including snapshots whose live sequence is unchanged.
+The target identity and accepted resource value remain mounted during the read.
+History pagination and intermediate live values retain their existing behavior.
+
 Session-keyed member surfaces choose their current occurrence by its canonical
 timeline order, including the store's Session-only lookup and pending-Todo
 attribution. A late recovery fact can update an old occurrence's observation

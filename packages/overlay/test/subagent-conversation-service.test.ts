@@ -16,6 +16,9 @@ import {
   subagentConversationTargetKey,
   subagentConversationTranscriptRevision,
   parseSubagentConversation,
+  listenSubagentConversationUpdates,
+  publishSubagentConversationUpdate,
+  type SubagentConversationUpdate,
   type SubagentConversationTarget,
 } from "../src/services/subagent-conversation"
 import { setLocaleData } from "../src/utils/i18n"
@@ -581,6 +584,56 @@ test("transcript revision follows only exact selected-session transcript facts",
       transcriptSequence: 201,
     }),
   ).toBe('["child-session",201]')
+})
+
+test("member updates carry live facts and committed Task and Session snapshot ownership", () => {
+  const updates: SubagentConversationUpdate[] = [
+    { kind: "live", event: { type: "message.updated", properties: { info: { id: "message-one" } } } },
+    { kind: "snapshot", source: { kind: "task", id: "task-one" } },
+    { kind: "snapshot", source: { kind: "session", id: "session-one", sessionKind: "mission" } },
+  ]
+  const received: SubagentConversationUpdate[] = []
+  const stop = listenSubagentConversationUpdates((update) => received.push(update))
+  try {
+    for (const update of updates) publishSubagentConversationUpdate(update)
+    expect(received).toEqual(updates)
+  } finally {
+    stop()
+  }
+})
+
+test("a committed snapshot refreshes the same revision after the initial read settles", async () => {
+  let refreshes = 0
+  const controller = createSubagentTranscriptRefreshController(() => { refreshes += 1 }, 5)
+  const target = "task/one/session/child"
+  controller.observe(target, "0", false)
+  controller.invalidate(target, false)
+  controller.invalidate(target, false)
+  controller.observe(target, "0", true)
+  await new Promise((resolve) => setTimeout(resolve, 15))
+  expect(refreshes).toBe(1)
+  controller.dispose()
+})
+
+test("snapshots received during a member read coalesce into one completed trailing read", async () => {
+  const completed: number[] = []
+  let started = 0
+  let releaseFirst: (() => void) | undefined
+  const controller = createSubagentTranscriptRefreshController(async () => {
+    const read = ++started
+    if (read === 1) await new Promise<void>((resolve) => (releaseFirst = resolve))
+    completed.push(read)
+  }, 5)
+  const target = "task/one/session/child"
+  controller.observe(target, "0")
+  controller.invalidate(target)
+  await new Promise((resolve) => setTimeout(resolve, 15))
+  controller.invalidate(target, false)
+  controller.invalidate(target, false)
+  releaseFirst?.()
+  await new Promise((resolve) => setTimeout(resolve, 15))
+  expect(completed).toEqual([1, 2])
+  controller.dispose()
 })
 
 test("bursty transcript revisions coalesce into one refresh", async () => {
