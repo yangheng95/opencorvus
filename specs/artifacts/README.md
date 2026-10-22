@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [成员活跃流重连](2026-10-23-member-live-reconnect/README.md)：547 七张实图、27 次 Sol 原 EOF；同一正文持续增长、原 Task 自然完成、四进程正常关闭与原数据保持。
+
 - [成员离线新增内容恢复](2026-10-23-member-offline-growth/README.md)：546 七张实图，修复重连后成员旧正文/来源停滞；28 服务合同、8 次 Sol、四服务正常退出与完整数据保留。
 
 - [Task 成员同页重连](2026-10-23-task-member-reconnect/README.md)：545 四张实图、4 次 Sol 原 EOF、14 段正文/5 条来源/阅读位置保持，双服务正常退出及完整原数据保留。
