@@ -1,5 +1,6 @@
 import { afterEach, expect, test } from "bun:test"
 import fs from "node:fs/promises"
+import { randomUUID } from "node:crypto"
 import path from "node:path"
 import { Bus } from "@/bus"
 import { createRightSidebarConversationSession, RIGHT_SIDEBAR_CONVERSATION_SOURCE } from "@/chat/session"
@@ -12,6 +13,7 @@ import {
 } from "@/engine/model"
 import { Identifier } from "@/id/id"
 import { listConversationAgentSessionsForSessionTree } from "@/orchestrator/task-event"
+import { ensureMissionSession } from "@/mission/session"
 import { Instance, runOutsideInstanceContext } from "@/project/instance"
 import { ConfigPaths } from "@/config/paths"
 import { Question } from "@/question"
@@ -264,6 +266,150 @@ test("ordinary Session hydrate, history and reconnect retain both idle input occ
   })
 }, 30_000)
 
+for (const kind of ["assistant", "mission"] as const) {
+  test(`${kind} connection snapshot restores the complete latest child occurrence before lifecycle replay`, async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const root =
+          kind === "mission"
+            ? await ensureMissionSession({
+                missionID: randomUUID(),
+                defaultCwd: project.path,
+                productPillar: "work",
+                heldExpertSquadIDs: ["base"],
+              })
+            : await Session.create({ kind, title: "Snapshot root" })
+        const child = await Session.create({ kind: "assistant", parentID: root.id, title: "Snapshot member" })
+        const started = Date.now() - 10_000
+        const occurrences = []
+        for (let index = 0; index < 2; index++) {
+          const created = started + index * 1_000
+          const input = await Session.updateMessage({
+            id: Identifier.ascending("message"),
+            sessionID: child.id,
+            role: "user",
+            author: "user",
+            agent: "work",
+            time: { created },
+            model: { providerID: "test", modelID: "test" },
+          })
+          await Session.updatePart({
+            id: Identifier.ascending("part"),
+            sessionID: child.id,
+            messageID: input.id,
+            type: "text",
+            text: `Member input ${index + 1}`,
+          })
+          const output = await Session.updateMessage({
+            id: Identifier.ascending("message"),
+            sessionID: child.id,
+            parentID: input.id,
+            role: "assistant",
+            author: "work",
+            agent: "work",
+            providerID: "test",
+            modelID: "test",
+            path: { cwd: project.path, root: project.path },
+            cost: 0,
+            tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+            time: { created: created + 100 },
+          })
+          const part = await Session.updatePart({
+            id: Identifier.ascending("part"),
+            sessionID: child.id,
+            messageID: output.id,
+            type: "text",
+            text: `Member result ${index + 1}`,
+            time: { start: created + 100, end: created + 500 },
+          })
+          const sources = []
+          for (const source of [
+            { type: "source-url", sourceId: "public-guide", url: "https://example.com/guide", title: "Public guide" },
+            {
+              type: "source-file",
+              sourceId: "project-guide",
+              path: "README.md",
+              title: "Project guide",
+              range: { startLine: 2, endLine: 3 },
+            },
+            {
+              type: "source-document",
+              sourceId: "document-guide",
+              mediaType: "application/pdf",
+              title: "Document guide",
+              filename: "guide.pdf",
+            },
+          ] as const) {
+            sources.push(
+              await Session.updatePart({
+                ...source,
+                id: Identifier.ascending("part"),
+                sessionID: child.id,
+                messageID: output.id,
+              }),
+            )
+          }
+          if (output.role !== "assistant") throw new Error("Expected the original assistant reply")
+          await Session.updateMessage({ ...output, time: { ...output.time, completed: created + 500 }, finish: "stop" })
+          await publishSessionStatus(child, { type: "terminal", reason: "completed" }, { inputMessageID: input.id })
+          occurrences.push({ input, output, part, sources, created })
+        }
+        const headers = { "x-opencorvus-directory": project.path }
+        const hydrationResponse = await Server.App().request(`/session/${root.id}/conversation`, { headers })
+        expect(hydrationResponse.status).toBe(200)
+        const hydration = await hydrationResponse.json()
+        const abort = new AbortController()
+        const response = await Server.App().request(`/session/${root.id}/events`, { headers, signal: abort.signal })
+        expect(response.status).toBe(200)
+        const reader = sessionEventReader(response)
+        try {
+          const connected = SessionConnectedEvent.parse(await reader.next("session.connected"))
+          const snapshot = connected.payload.conversationSnapshot
+          expect(snapshot.agentView).toEqual(hydration.agentView)
+          expect(snapshot.agentView.sessions.filter((entry) => entry.sessionID === child.id)).toEqual(
+            occurrences.map(({ input, output, part, sources, created }, index) =>
+              expect.objectContaining({
+                inputMessageID: input.id,
+                sessionID: child.id,
+                parentSessionID: root.id,
+                status: "completed",
+                messageIDs: [input.id, output.id],
+                firstObservedAt: created,
+                lastDisplayMessageID: output.id,
+                activity: [
+                  expect.objectContaining({ id: part.id, messageID: output.id, text: `Member result ${index + 1}` }),
+                  ...sources.map((source) =>
+                    expect.objectContaining({
+                      id: source.id,
+                      messageID: output.id,
+                      type: source.type,
+                      sourceId: source.sourceId,
+                    }),
+                  ),
+                ],
+              }),
+            ),
+          )
+          const replay = [
+            await reader.next("agent.execution.lifecycle"),
+            await reader.next("agent.execution.lifecycle"),
+          ]
+          expect(
+            replay.map((event) => ({ input: event.payload.inputMessageID, status: event.payload.status })),
+          ).toEqual(
+            occurrences.map(({ input }) => ({ input: input.id, status: { type: "terminal", reason: "completed" } })),
+          )
+        } finally {
+          await reader.cancel()
+          abort.abort()
+        }
+      },
+    })
+  }, 30_000)
+}
+
 test("Session stream schema classifies connection snapshots and ordinary protocol events by type", () => {
   const envelope = {
     event_id: "event-1",
@@ -284,6 +430,7 @@ test("Session stream schema classifies connection snapshots and ordinary protoco
         pendingQuestions: [],
         transcript: [],
         view: { topLevelSessionIDs: [], sessions: [], messages: [] },
+        agentView: { topLevelExecutionIDs: [], sessions: [], messages: [] },
         history: {
           oldestTimestamp: null,
           oldestOrderKey: null,

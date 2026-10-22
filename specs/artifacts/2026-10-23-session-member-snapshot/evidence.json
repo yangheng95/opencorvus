@@ -1,0 +1,4848 @@
+{
+  "at": "2026-10-22T19:41:37.222Z",
+  "scope": "548 Session snapshot/member occurrence recovery",
+  "authorization": "Single development agent; current OpenCorvus OpenAI OAuth and complete catalog in owned copies",
+  "budget": {
+    "maximumBatchRequests": 16,
+    "actualRequests": 10
+  },
+  "firstFixFailure": {
+    "stage": "fixed-before",
+    "evidence": "Original stderr SessionConnectedEvent.parse invalid discriminator at agentView.sessions[].activity[] for canonical source-file/source-url; independent HTTP SSE reader reached EOF before connection frame",
+    "resolution": "Shared activity contract now includes all three canonical Source variants, with original payload validation; second full real-history pair passed"
+  },
+  "scopes": [
+    {
+      "stage": "before",
+      "exec": 44125,
+      "preflight": {
+        "sessionID": "ses_hXSBh4tWPNPb4I1B7q1a",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": [
+        {
+          "index": 0,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "index": 1,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "physical": {
+        "native": {
+          "occurrenceID": "session-member-snapshot-548-before-8dadcbac-bbf1-4033-81f1-0521cbff38aa",
+          "pid": 91592,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "originalLauncherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chain": [
+          {
+            "identity": {
+              "pid": 42604,
+              "processInstanceID": "win32:639282938714304274",
+              "occurrenceID": "1003b8ec-8ee3-4e2d-a8a6-54ef24f2bfcc"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 91592,
+              "processInstanceID": "win32:639282938724221855",
+              "occurrenceID": "69c88d92-0846-42bb-b234-d0f428500a81"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "settledAt": "2026-10-22T19:26:20.51Z",
+        "resourceReserveMs": 1090871
+      },
+      "retired": [
+        {
+          "scope": "runtime",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "runtime",
+          "name": "models.json",
+          "bytes": 9155406
+        },
+        {
+          "scope": "private",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "private",
+          "name": "models.json",
+          "bytes": 9155406
+        }
+      ],
+      "sourceCredentialAndCatalogRetained": true,
+      "data": {
+        "stage": "before",
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 77152256,
+          "modifiedAtMs": 1792657697080.6233
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "counts": {
+          "automation": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_fire": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_project_target": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1
+          },
+          "bus_publication_attempt_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "bus_publication_delivery": {
+            "original": 33641,
+            "current": 33728
+          },
+          "bus_publication_delivery_receipt": {
+            "original": 33641,
+            "current": 33728
+          },
+          "bus_publication_outbox": {
+            "original": 4983,
+            "current": 4999
+          },
+          "bus_publication_phase_receipt": {
+            "original": 14949,
+            "current": 14997
+          },
+          "channel_ingress_accepted": {
+            "original": 0,
+            "current": 0
+          },
+          "channel_ingress_outcome": {
+            "original": 0,
+            "current": 0
+          },
+          "control_account": {
+            "original": 0,
+            "current": 0
+          },
+          "database_authority": {
+            "original": 1,
+            "current": 1
+          },
+          "decision_log": {
+            "original": 13,
+            "current": 13
+          },
+          "engine_artifact": {
+            "original": 183,
+            "current": 183
+          },
+          "engine_artifact_catalog_revision": {
+            "original": 183,
+            "current": 183
+          },
+          "engine_artifact_version": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_browser_preview_target_identity": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_build_observation_cleanup": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_build_observation_cleanup_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_channel_binding": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_control_activation_lease": {
+            "original": 34001,
+            "current": 34089
+          },
+          "engine_control_activation_lease_grant": {
+            "original": 34065,
+            "current": 34153
+          },
+          "engine_git_checkpoint_outcome": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_git_checkpoint_request": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_goal": {
+            "original": 5,
+            "current": 5
+          },
+          "engine_interaction_outcome": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_interaction_request": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_metric_result": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_metric_spec": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_progress_snapshot": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_task": {
+            "original": 19,
+            "current": 19
+          },
+          "engine_task_creation_contract": {
+            "original": 19,
+            "current": 19
+          },
+          "engine_task_root_ingress": {
+            "original": 46,
+            "current": 46
+          },
+          "engine_task_root_ingress_policy": {
+            "original": 1,
+            "current": 1
+          },
+          "engine_task_wait_registration": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_task_wait_settlement": {
+            "original": 0,
+            "current": 0
+          },
+          "event_job": {
+            "original": 3,
+            "current": 3
+          },
+          "event_job_definition_tombstone": {
+            "original": 1,
+            "current": 1
+          },
+          "event_job_fire": {
+            "original": 2,
+            "current": 2
+          },
+          "event_job_fire_receipt": {
+            "original": 2,
+            "current": 2
+          },
+          "event_occurrence": {
+            "original": 2,
+            "current": 2
+          },
+          "global_creation_allocation": {
+            "original": 156,
+            "current": 157
+          },
+          "interactive_artifact": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_chunk": {
+            "original": 170,
+            "current": 171
+          },
+          "memory_embedding": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_file": {
+            "original": 170,
+            "current": 171
+          },
+          "memory_fts": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_config": {
+            "original": 1,
+            "current": 1
+          },
+          "memory_fts_content": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_data": {
+            "original": 2,
+            "current": 2
+          },
+          "memory_fts_docsize": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_idx": {
+            "original": 0,
+            "current": 0
+          },
+          "message": {
+            "original": 625,
+            "current": 627
+          },
+          "part": {
+            "original": 1497,
+            "current": 1501
+          },
+          "permission_execution_result": {
+            "original": 110,
+            "current": 110
+          },
+          "permission_ledger": {
+            "original": 552,
+            "current": 552
+          },
+          "permission_policy": {
+            "original": 30,
+            "current": 30
+          },
+          "project": {
+            "original": 170,
+            "current": 171
+          },
+          "project_directory_admission": {
+            "original": 0,
+            "current": 0
+          },
+          "project_maintenance_fence": {
+            "original": 0,
+            "current": 0
+          },
+          "protocol_delivery_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "protocol_event": {
+            "original": 1798,
+            "current": 1802
+          },
+          "protocol_inbox": {
+            "original": 0,
+            "current": 0
+          },
+          "provider_activity_outcome": {
+            "original": 408,
+            "current": 409
+          },
+          "provider_activity_request": {
+            "original": 408,
+            "current": 409
+          },
+          "provider_usage_event": {
+            "original": 629,
+            "current": 631
+          },
+          "quick_note": {
+            "original": 0,
+            "current": 0
+          },
+          "runtime_execution_capacity_lease": {
+            "original": 3,
+            "current": 3
+          },
+          "session": {
+            "original": 234,
+            "current": 235
+          },
+          "session_control_event": {
+            "original": 172,
+            "current": 173
+          },
+          "session_control_record": {
+            "original": 172,
+            "current": 173
+          },
+          "session_prompt_owner": {
+            "original": 5,
+            "current": 5
+          },
+          "session_share": {
+            "original": 0,
+            "current": 0
+          },
+          "task_plan": {
+            "original": 0,
+            "current": 0
+          },
+          "todo": {
+            "original": 0,
+            "current": 0
+          },
+          "todo_snapshot": {
+            "original": 0,
+            "current": 0
+          },
+          "tool_part_outcome": {
+            "original": 176,
+            "current": 176
+          },
+          "tool_part_progress": {
+            "original": 14,
+            "current": 14
+          },
+          "tool_part_request": {
+            "original": 176,
+            "current": 176
+          },
+          "workbench_brief_snapshot": {
+            "original": 48,
+            "current": 48
+          },
+          "worker_turn_descriptor": {
+            "original": 25,
+            "current": 25
+          },
+          "workspace": {
+            "original": 0,
+            "current": 0
+          },
+          "workspace_lifecycle_admission": {
+            "original": 0,
+            "current": 0
+          }
+        },
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      },
+      "attachmentInventory": {
+        "at": "2026-10-22T19:24:29.245Z",
+        "sourceDB": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\source-reconnect-history-535-before\\runtime\\data\\opencorvus.db",
+        "targetDB": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-23\\session-member-snapshot-548-before\\runtime\\data\\opencorvus.db",
+        "actualReferences": 0,
+        "copied": [],
+        "boundary": "Inventory of actual published Tool attachment references in selected Session project; original bytes and identity retained"
+      }
+    },
+    {
+      "stage": "after",
+      "exec": 74426,
+      "preflight": {
+        "sessionID": "ses_hgidP5L7BlISTg1pUcQZ",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": [
+        {
+          "index": 0,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "index": 1,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "physical": {
+        "native": {
+          "occurrenceID": "session-member-snapshot-548-after-93cc6a3b-e898-43f1-a678-b0fca6679f62",
+          "pid": 73480,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "originalLauncherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chain": [
+          {
+            "identity": {
+              "pid": 95336,
+              "processInstanceID": "win32:639282940057601445",
+              "occurrenceID": "4893e140-ec48-438f-98eb-903fd044e4b2"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 73480,
+              "processInstanceID": "win32:639282940067873625",
+              "occurrenceID": "aa5673ba-123f-479e-9b33-03489546d802"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "settledAt": "2026-10-22T19:28:27.736Z",
+        "resourceReserveMs": 1097984
+      },
+      "retired": [
+        {
+          "scope": "runtime",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "runtime",
+          "name": "models.json",
+          "bytes": 9155406
+        },
+        {
+          "scope": "private",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "private",
+          "name": "models.json",
+          "bytes": 9155406
+        }
+      ],
+      "sourceCredentialAndCatalogRetained": true,
+      "data": {
+        "stage": "before",
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 77725696,
+          "modifiedAtMs": 1792658339942.9375
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "counts": {
+          "automation": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_fire": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_project_target": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1
+          },
+          "bus_publication_attempt_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "bus_publication_delivery": {
+            "original": 33891,
+            "current": 33985
+          },
+          "bus_publication_delivery_receipt": {
+            "original": 33891,
+            "current": 33985
+          },
+          "bus_publication_outbox": {
+            "original": 5019,
+            "current": 5035
+          },
+          "bus_publication_phase_receipt": {
+            "original": 15057,
+            "current": 15105
+          },
+          "channel_ingress_accepted": {
+            "original": 0,
+            "current": 0
+          },
+          "channel_ingress_outcome": {
+            "original": 0,
+            "current": 0
+          },
+          "control_account": {
+            "original": 0,
+            "current": 0
+          },
+          "database_authority": {
+            "original": 1,
+            "current": 1
+          },
+          "decision_log": {
+            "original": 13,
+            "current": 13
+          },
+          "engine_artifact": {
+            "original": 183,
+            "current": 183
+          },
+          "engine_artifact_catalog_revision": {
+            "original": 183,
+            "current": 183
+          },
+          "engine_artifact_version": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_browser_preview_target_identity": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_build_observation_cleanup": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_build_observation_cleanup_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_channel_binding": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_control_activation_lease": {
+            "original": 34253,
+            "current": 34348
+          },
+          "engine_control_activation_lease_grant": {
+            "original": 34317,
+            "current": 34412
+          },
+          "engine_git_checkpoint_outcome": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_git_checkpoint_request": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_goal": {
+            "original": 5,
+            "current": 5
+          },
+          "engine_interaction_outcome": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_interaction_request": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_metric_result": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_metric_spec": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_progress_snapshot": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_task": {
+            "original": 19,
+            "current": 19
+          },
+          "engine_task_creation_contract": {
+            "original": 19,
+            "current": 19
+          },
+          "engine_task_root_ingress": {
+            "original": 46,
+            "current": 46
+          },
+          "engine_task_root_ingress_policy": {
+            "original": 1,
+            "current": 1
+          },
+          "engine_task_wait_registration": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_task_wait_settlement": {
+            "original": 0,
+            "current": 0
+          },
+          "event_job": {
+            "original": 3,
+            "current": 3
+          },
+          "event_job_definition_tombstone": {
+            "original": 1,
+            "current": 1
+          },
+          "event_job_fire": {
+            "original": 2,
+            "current": 2
+          },
+          "event_job_fire_receipt": {
+            "original": 2,
+            "current": 2
+          },
+          "event_occurrence": {
+            "original": 2,
+            "current": 2
+          },
+          "global_creation_allocation": {
+            "original": 157,
+            "current": 158
+          },
+          "interactive_artifact": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_chunk": {
+            "original": 171,
+            "current": 172
+          },
+          "memory_embedding": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_file": {
+            "original": 171,
+            "current": 172
+          },
+          "memory_fts": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_config": {
+            "original": 1,
+            "current": 1
+          },
+          "memory_fts_content": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_data": {
+            "original": 2,
+            "current": 2
+          },
+          "memory_fts_docsize": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_idx": {
+            "original": 0,
+            "current": 0
+          },
+          "message": {
+            "original": 630,
+            "current": 632
+          },
+          "part": {
+            "original": 1509,
+            "current": 1513
+          },
+          "permission_execution_result": {
+            "original": 111,
+            "current": 111
+          },
+          "permission_ledger": {
+            "original": 557,
+            "current": 557
+          },
+          "permission_policy": {
+            "original": 30,
+            "current": 30
+          },
+          "project": {
+            "original": 171,
+            "current": 172
+          },
+          "project_directory_admission": {
+            "original": 0,
+            "current": 0
+          },
+          "project_maintenance_fence": {
+            "original": 0,
+            "current": 0
+          },
+          "protocol_delivery_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "protocol_event": {
+            "original": 1808,
+            "current": 1812
+          },
+          "protocol_inbox": {
+            "original": 0,
+            "current": 0
+          },
+          "provider_activity_outcome": {
+            "original": 411,
+            "current": 412
+          },
+          "provider_activity_request": {
+            "original": 411,
+            "current": 412
+          },
+          "provider_usage_event": {
+            "original": 634,
+            "current": 636
+          },
+          "quick_note": {
+            "original": 0,
+            "current": 0
+          },
+          "runtime_execution_capacity_lease": {
+            "original": 3,
+            "current": 3
+          },
+          "session": {
+            "original": 235,
+            "current": 236
+          },
+          "session_control_event": {
+            "original": 173,
+            "current": 174
+          },
+          "session_control_record": {
+            "original": 173,
+            "current": 174
+          },
+          "session_prompt_owner": {
+            "original": 5,
+            "current": 5
+          },
+          "session_share": {
+            "original": 0,
+            "current": 0
+          },
+          "task_plan": {
+            "original": 0,
+            "current": 0
+          },
+          "todo": {
+            "original": 0,
+            "current": 0
+          },
+          "todo_snapshot": {
+            "original": 0,
+            "current": 0
+          },
+          "tool_part_outcome": {
+            "original": 177,
+            "current": 177
+          },
+          "tool_part_progress": {
+            "original": 14,
+            "current": 14
+          },
+          "tool_part_request": {
+            "original": 177,
+            "current": 177
+          },
+          "workbench_brief_snapshot": {
+            "original": 48,
+            "current": 48
+          },
+          "worker_turn_descriptor": {
+            "original": 25,
+            "current": 25
+          },
+          "workspace": {
+            "original": 0,
+            "current": 0
+          },
+          "workspace_lifecycle_admission": {
+            "original": 0,
+            "current": 0
+          }
+        },
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      },
+      "attachmentInventory": {
+        "at": "2026-10-22T19:26:30.754Z",
+        "sourceDB": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\source-reconnect-history-535-after\\runtime\\data\\opencorvus.db",
+        "targetDB": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-23\\session-member-snapshot-548-after\\runtime\\data\\opencorvus.db",
+        "actualReferences": 0,
+        "copied": [],
+        "boundary": "Inventory of actual published Tool attachment references in selected Session project; original bytes and identity retained"
+      }
+    },
+    {
+      "stage": "fixed-before",
+      "exec": 64788,
+      "preflight": {
+        "sessionID": "ses_hCNrOGCYf8KCfTzGT4On",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": [
+        {
+          "index": 0,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "index": 1,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "physical": {
+        "native": {
+          "occurrenceID": "session-member-snapshot-548-fixed-before-c8056913-3d22-464d-b54f-415e664dbef4",
+          "pid": 73160,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "originalLauncherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chain": [
+          {
+            "identity": {
+              "pid": 95764,
+              "processInstanceID": "win32:639282943947680572",
+              "occurrenceID": "c1b739dc-18b8-48a9-b2c6-a0f01a6fb689"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 73160,
+              "processInstanceID": "win32:639282943958428175",
+              "occurrenceID": "d75b9566-1e7c-414e-91f3-631cce364dea"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "settledAt": "2026-10-22T19:34:49.442Z",
+        "resourceReserveMs": 1105288
+      },
+      "retired": [
+        {
+          "scope": "runtime",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "runtime",
+          "name": "models.json",
+          "bytes": 9155406
+        },
+        {
+          "scope": "private",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "private",
+          "name": "models.json",
+          "bytes": 9155406
+        }
+      ],
+      "sourceCredentialAndCatalogRetained": true,
+      "data": {
+        "stage": "before",
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 77152256,
+          "modifiedAtMs": 1792657697080.6233
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "counts": {
+          "automation": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_fire": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_project_target": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1
+          },
+          "bus_publication_attempt_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "bus_publication_delivery": {
+            "original": 33641,
+            "current": 33728
+          },
+          "bus_publication_delivery_receipt": {
+            "original": 33641,
+            "current": 33728
+          },
+          "bus_publication_outbox": {
+            "original": 4983,
+            "current": 4999
+          },
+          "bus_publication_phase_receipt": {
+            "original": 14949,
+            "current": 14997
+          },
+          "channel_ingress_accepted": {
+            "original": 0,
+            "current": 0
+          },
+          "channel_ingress_outcome": {
+            "original": 0,
+            "current": 0
+          },
+          "control_account": {
+            "original": 0,
+            "current": 0
+          },
+          "database_authority": {
+            "original": 1,
+            "current": 1
+          },
+          "decision_log": {
+            "original": 13,
+            "current": 13
+          },
+          "engine_artifact": {
+            "original": 183,
+            "current": 183
+          },
+          "engine_artifact_catalog_revision": {
+            "original": 183,
+            "current": 183
+          },
+          "engine_artifact_version": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_browser_preview_target_identity": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_build_observation_cleanup": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_build_observation_cleanup_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_channel_binding": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_control_activation_lease": {
+            "original": 34001,
+            "current": 34089
+          },
+          "engine_control_activation_lease_grant": {
+            "original": 34065,
+            "current": 34153
+          },
+          "engine_git_checkpoint_outcome": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_git_checkpoint_request": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_goal": {
+            "original": 5,
+            "current": 5
+          },
+          "engine_interaction_outcome": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_interaction_request": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_metric_result": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_metric_spec": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_progress_snapshot": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_task": {
+            "original": 19,
+            "current": 19
+          },
+          "engine_task_creation_contract": {
+            "original": 19,
+            "current": 19
+          },
+          "engine_task_root_ingress": {
+            "original": 46,
+            "current": 46
+          },
+          "engine_task_root_ingress_policy": {
+            "original": 1,
+            "current": 1
+          },
+          "engine_task_wait_registration": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_task_wait_settlement": {
+            "original": 0,
+            "current": 0
+          },
+          "event_job": {
+            "original": 3,
+            "current": 3
+          },
+          "event_job_definition_tombstone": {
+            "original": 1,
+            "current": 1
+          },
+          "event_job_fire": {
+            "original": 2,
+            "current": 2
+          },
+          "event_job_fire_receipt": {
+            "original": 2,
+            "current": 2
+          },
+          "event_occurrence": {
+            "original": 2,
+            "current": 2
+          },
+          "global_creation_allocation": {
+            "original": 156,
+            "current": 157
+          },
+          "interactive_artifact": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_chunk": {
+            "original": 170,
+            "current": 171
+          },
+          "memory_embedding": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_file": {
+            "original": 170,
+            "current": 171
+          },
+          "memory_fts": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_config": {
+            "original": 1,
+            "current": 1
+          },
+          "memory_fts_content": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_data": {
+            "original": 2,
+            "current": 2
+          },
+          "memory_fts_docsize": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_idx": {
+            "original": 0,
+            "current": 0
+          },
+          "message": {
+            "original": 625,
+            "current": 627
+          },
+          "part": {
+            "original": 1497,
+            "current": 1501
+          },
+          "permission_execution_result": {
+            "original": 110,
+            "current": 110
+          },
+          "permission_ledger": {
+            "original": 552,
+            "current": 552
+          },
+          "permission_policy": {
+            "original": 30,
+            "current": 30
+          },
+          "project": {
+            "original": 170,
+            "current": 171
+          },
+          "project_directory_admission": {
+            "original": 0,
+            "current": 0
+          },
+          "project_maintenance_fence": {
+            "original": 0,
+            "current": 0
+          },
+          "protocol_delivery_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "protocol_event": {
+            "original": 1798,
+            "current": 1802
+          },
+          "protocol_inbox": {
+            "original": 0,
+            "current": 0
+          },
+          "provider_activity_outcome": {
+            "original": 408,
+            "current": 409
+          },
+          "provider_activity_request": {
+            "original": 408,
+            "current": 409
+          },
+          "provider_usage_event": {
+            "original": 629,
+            "current": 631
+          },
+          "quick_note": {
+            "original": 0,
+            "current": 0
+          },
+          "runtime_execution_capacity_lease": {
+            "original": 3,
+            "current": 3
+          },
+          "session": {
+            "original": 234,
+            "current": 235
+          },
+          "session_control_event": {
+            "original": 172,
+            "current": 173
+          },
+          "session_control_record": {
+            "original": 172,
+            "current": 173
+          },
+          "session_prompt_owner": {
+            "original": 5,
+            "current": 5
+          },
+          "session_share": {
+            "original": 0,
+            "current": 0
+          },
+          "task_plan": {
+            "original": 0,
+            "current": 0
+          },
+          "todo": {
+            "original": 0,
+            "current": 0
+          },
+          "todo_snapshot": {
+            "original": 0,
+            "current": 0
+          },
+          "tool_part_outcome": {
+            "original": 176,
+            "current": 176
+          },
+          "tool_part_progress": {
+            "original": 14,
+            "current": 14
+          },
+          "tool_part_request": {
+            "original": 176,
+            "current": 176
+          },
+          "workbench_brief_snapshot": {
+            "original": 48,
+            "current": 48
+          },
+          "worker_turn_descriptor": {
+            "original": 25,
+            "current": 25
+          },
+          "workspace": {
+            "original": 0,
+            "current": 0
+          },
+          "workspace_lifecycle_admission": {
+            "original": 0,
+            "current": 0
+          }
+        },
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      },
+      "attachmentInventory": {
+        "at": "2026-10-22T19:33:12.942Z",
+        "sourceDB": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\source-reconnect-history-535-before\\runtime\\data\\opencorvus.db",
+        "targetDB": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-23\\session-member-snapshot-548-fixed-before\\runtime\\data\\opencorvus.db",
+        "actualReferences": 0,
+        "copied": [],
+        "boundary": "Inventory of actual published Tool attachment references in selected Session project; original bytes and identity retained"
+      }
+    },
+    {
+      "stage": "verified-before",
+      "exec": 17870,
+      "preflight": {
+        "sessionID": "ses_h7DpMQxg8Vws7JoQbeA6",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": [
+        {
+          "index": 0,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "index": 1,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "physical": {
+        "native": {
+          "occurrenceID": "session-member-snapshot-548-verified-before-bd889424-cfef-4af2-b032-84ae22621102",
+          "pid": 45268,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "originalLauncherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chain": [
+          {
+            "identity": {
+              "pid": 76076,
+              "processInstanceID": "win32:639282946525006420",
+              "occurrenceID": "5f986a6b-1956-4545-ba77-fdb00bdc4925"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 45268,
+              "processInstanceID": "win32:639282946535091287",
+              "occurrenceID": "41b22c5a-7cdd-47ab-b141-b7760fb41b6c"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "settledAt": "2026-10-22T19:38:25.375Z",
+        "resourceReserveMs": 1147008
+      },
+      "retired": [
+        {
+          "scope": "runtime",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "runtime",
+          "name": "models.json",
+          "bytes": 9155406
+        },
+        {
+          "scope": "private",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "private",
+          "name": "models.json",
+          "bytes": 9155406
+        }
+      ],
+      "sourceCredentialAndCatalogRetained": true,
+      "data": {
+        "stage": "before",
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 77152256,
+          "modifiedAtMs": 1792657697080.6233
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "counts": {
+          "automation": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_fire": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_project_target": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1
+          },
+          "bus_publication_attempt_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "bus_publication_delivery": {
+            "original": 33641,
+            "current": 33728
+          },
+          "bus_publication_delivery_receipt": {
+            "original": 33641,
+            "current": 33728
+          },
+          "bus_publication_outbox": {
+            "original": 4983,
+            "current": 4999
+          },
+          "bus_publication_phase_receipt": {
+            "original": 14949,
+            "current": 14997
+          },
+          "channel_ingress_accepted": {
+            "original": 0,
+            "current": 0
+          },
+          "channel_ingress_outcome": {
+            "original": 0,
+            "current": 0
+          },
+          "control_account": {
+            "original": 0,
+            "current": 0
+          },
+          "database_authority": {
+            "original": 1,
+            "current": 1
+          },
+          "decision_log": {
+            "original": 13,
+            "current": 13
+          },
+          "engine_artifact": {
+            "original": 183,
+            "current": 183
+          },
+          "engine_artifact_catalog_revision": {
+            "original": 183,
+            "current": 183
+          },
+          "engine_artifact_version": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_browser_preview_target_identity": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_build_observation_cleanup": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_build_observation_cleanup_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_channel_binding": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_control_activation_lease": {
+            "original": 34001,
+            "current": 34089
+          },
+          "engine_control_activation_lease_grant": {
+            "original": 34065,
+            "current": 34153
+          },
+          "engine_git_checkpoint_outcome": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_git_checkpoint_request": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_goal": {
+            "original": 5,
+            "current": 5
+          },
+          "engine_interaction_outcome": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_interaction_request": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_metric_result": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_metric_spec": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_progress_snapshot": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_task": {
+            "original": 19,
+            "current": 19
+          },
+          "engine_task_creation_contract": {
+            "original": 19,
+            "current": 19
+          },
+          "engine_task_root_ingress": {
+            "original": 46,
+            "current": 46
+          },
+          "engine_task_root_ingress_policy": {
+            "original": 1,
+            "current": 1
+          },
+          "engine_task_wait_registration": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_task_wait_settlement": {
+            "original": 0,
+            "current": 0
+          },
+          "event_job": {
+            "original": 3,
+            "current": 3
+          },
+          "event_job_definition_tombstone": {
+            "original": 1,
+            "current": 1
+          },
+          "event_job_fire": {
+            "original": 2,
+            "current": 2
+          },
+          "event_job_fire_receipt": {
+            "original": 2,
+            "current": 2
+          },
+          "event_occurrence": {
+            "original": 2,
+            "current": 2
+          },
+          "global_creation_allocation": {
+            "original": 156,
+            "current": 157
+          },
+          "interactive_artifact": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_chunk": {
+            "original": 170,
+            "current": 171
+          },
+          "memory_embedding": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_file": {
+            "original": 170,
+            "current": 171
+          },
+          "memory_fts": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_config": {
+            "original": 1,
+            "current": 1
+          },
+          "memory_fts_content": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_data": {
+            "original": 2,
+            "current": 2
+          },
+          "memory_fts_docsize": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_idx": {
+            "original": 0,
+            "current": 0
+          },
+          "message": {
+            "original": 625,
+            "current": 627
+          },
+          "part": {
+            "original": 1497,
+            "current": 1501
+          },
+          "permission_execution_result": {
+            "original": 110,
+            "current": 110
+          },
+          "permission_ledger": {
+            "original": 552,
+            "current": 552
+          },
+          "permission_policy": {
+            "original": 30,
+            "current": 30
+          },
+          "project": {
+            "original": 170,
+            "current": 171
+          },
+          "project_directory_admission": {
+            "original": 0,
+            "current": 0
+          },
+          "project_maintenance_fence": {
+            "original": 0,
+            "current": 0
+          },
+          "protocol_delivery_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "protocol_event": {
+            "original": 1798,
+            "current": 1802
+          },
+          "protocol_inbox": {
+            "original": 0,
+            "current": 0
+          },
+          "provider_activity_outcome": {
+            "original": 408,
+            "current": 409
+          },
+          "provider_activity_request": {
+            "original": 408,
+            "current": 409
+          },
+          "provider_usage_event": {
+            "original": 629,
+            "current": 631
+          },
+          "quick_note": {
+            "original": 0,
+            "current": 0
+          },
+          "runtime_execution_capacity_lease": {
+            "original": 3,
+            "current": 3
+          },
+          "session": {
+            "original": 234,
+            "current": 235
+          },
+          "session_control_event": {
+            "original": 172,
+            "current": 173
+          },
+          "session_control_record": {
+            "original": 172,
+            "current": 173
+          },
+          "session_prompt_owner": {
+            "original": 5,
+            "current": 5
+          },
+          "session_share": {
+            "original": 0,
+            "current": 0
+          },
+          "task_plan": {
+            "original": 0,
+            "current": 0
+          },
+          "todo": {
+            "original": 0,
+            "current": 0
+          },
+          "todo_snapshot": {
+            "original": 0,
+            "current": 0
+          },
+          "tool_part_outcome": {
+            "original": 176,
+            "current": 176
+          },
+          "tool_part_progress": {
+            "original": 14,
+            "current": 14
+          },
+          "tool_part_request": {
+            "original": 176,
+            "current": 176
+          },
+          "workbench_brief_snapshot": {
+            "original": 48,
+            "current": 48
+          },
+          "worker_turn_descriptor": {
+            "original": 25,
+            "current": 25
+          },
+          "workspace": {
+            "original": 0,
+            "current": 0
+          },
+          "workspace_lifecycle_admission": {
+            "original": 0,
+            "current": 0
+          }
+        },
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      },
+      "attachmentInventory": {
+        "at": "2026-10-22T19:37:30.623Z",
+        "sourceDB": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\source-reconnect-history-535-before\\runtime\\data\\opencorvus.db",
+        "targetDB": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-23\\session-member-snapshot-548-verified-before\\runtime\\data\\opencorvus.db",
+        "actualReferences": 0,
+        "copied": [],
+        "boundary": "Inventory of actual published Tool attachment references in selected Session project; original bytes and identity retained"
+      }
+    },
+    {
+      "stage": "verified-after",
+      "exec": 65279,
+      "preflight": {
+        "sessionID": "ses_hvQ95OqoPgjxz1APFadP",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": [
+        {
+          "index": 0,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "index": 1,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "physical": {
+        "native": {
+          "occurrenceID": "session-member-snapshot-548-verified-after-e7f38445-d25b-4cc6-9eca-5fca1f303b1a",
+          "pid": 97316,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "originalLauncherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 89712,
+              "processInstanceID": "win32:639282947262933698",
+              "occurrenceID": "745091cb-210d-4cb5-b3d8-cd53f41c39e3"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 97316,
+              "processInstanceID": "win32:639282947275106760",
+              "occurrenceID": "16dc8112-782c-42e0-abdc-39824d271674"
+            }
+          }
+        ],
+        "settledAt": "2026-10-22T19:39:52.107Z",
+        "resourceReserveMs": 1134143
+      },
+      "retired": [
+        {
+          "scope": "runtime",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "runtime",
+          "name": "models.json",
+          "bytes": 9155406
+        },
+        {
+          "scope": "private",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "private",
+          "name": "models.json",
+          "bytes": 9155406
+        }
+      ],
+      "sourceCredentialAndCatalogRetained": true,
+      "data": {
+        "stage": "before",
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 77725696,
+          "modifiedAtMs": 1792658339942.9375
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "counts": {
+          "automation": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_fire": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_project_target": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1
+          },
+          "bus_publication_attempt_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "bus_publication_delivery": {
+            "original": 33891,
+            "current": 33994
+          },
+          "bus_publication_delivery_receipt": {
+            "original": 33891,
+            "current": 33994
+          },
+          "bus_publication_outbox": {
+            "original": 5019,
+            "current": 5035
+          },
+          "bus_publication_phase_receipt": {
+            "original": 15057,
+            "current": 15105
+          },
+          "channel_ingress_accepted": {
+            "original": 0,
+            "current": 0
+          },
+          "channel_ingress_outcome": {
+            "original": 0,
+            "current": 0
+          },
+          "control_account": {
+            "original": 0,
+            "current": 0
+          },
+          "database_authority": {
+            "original": 1,
+            "current": 1
+          },
+          "decision_log": {
+            "original": 13,
+            "current": 13
+          },
+          "engine_artifact": {
+            "original": 183,
+            "current": 183
+          },
+          "engine_artifact_catalog_revision": {
+            "original": 183,
+            "current": 183
+          },
+          "engine_artifact_version": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_browser_preview_target_identity": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_build_observation_cleanup": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_build_observation_cleanup_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_channel_binding": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_control_activation_lease": {
+            "original": 34253,
+            "current": 34357
+          },
+          "engine_control_activation_lease_grant": {
+            "original": 34317,
+            "current": 34421
+          },
+          "engine_git_checkpoint_outcome": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_git_checkpoint_request": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_goal": {
+            "original": 5,
+            "current": 5
+          },
+          "engine_interaction_outcome": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_interaction_request": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_metric_result": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_metric_spec": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_progress_snapshot": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_task": {
+            "original": 19,
+            "current": 19
+          },
+          "engine_task_creation_contract": {
+            "original": 19,
+            "current": 19
+          },
+          "engine_task_root_ingress": {
+            "original": 46,
+            "current": 46
+          },
+          "engine_task_root_ingress_policy": {
+            "original": 1,
+            "current": 1
+          },
+          "engine_task_wait_registration": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_task_wait_settlement": {
+            "original": 0,
+            "current": 0
+          },
+          "event_job": {
+            "original": 3,
+            "current": 3
+          },
+          "event_job_definition_tombstone": {
+            "original": 1,
+            "current": 1
+          },
+          "event_job_fire": {
+            "original": 2,
+            "current": 2
+          },
+          "event_job_fire_receipt": {
+            "original": 2,
+            "current": 2
+          },
+          "event_occurrence": {
+            "original": 2,
+            "current": 2
+          },
+          "global_creation_allocation": {
+            "original": 157,
+            "current": 158
+          },
+          "interactive_artifact": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_chunk": {
+            "original": 171,
+            "current": 172
+          },
+          "memory_embedding": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_file": {
+            "original": 171,
+            "current": 172
+          },
+          "memory_fts": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_config": {
+            "original": 1,
+            "current": 1
+          },
+          "memory_fts_content": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_data": {
+            "original": 2,
+            "current": 2
+          },
+          "memory_fts_docsize": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_idx": {
+            "original": 0,
+            "current": 0
+          },
+          "message": {
+            "original": 630,
+            "current": 632
+          },
+          "part": {
+            "original": 1509,
+            "current": 1513
+          },
+          "permission_execution_result": {
+            "original": 111,
+            "current": 111
+          },
+          "permission_ledger": {
+            "original": 557,
+            "current": 557
+          },
+          "permission_policy": {
+            "original": 30,
+            "current": 30
+          },
+          "project": {
+            "original": 171,
+            "current": 172
+          },
+          "project_directory_admission": {
+            "original": 0,
+            "current": 0
+          },
+          "project_maintenance_fence": {
+            "original": 0,
+            "current": 0
+          },
+          "protocol_delivery_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "protocol_event": {
+            "original": 1808,
+            "current": 1812
+          },
+          "protocol_inbox": {
+            "original": 0,
+            "current": 0
+          },
+          "provider_activity_outcome": {
+            "original": 411,
+            "current": 412
+          },
+          "provider_activity_request": {
+            "original": 411,
+            "current": 412
+          },
+          "provider_usage_event": {
+            "original": 634,
+            "current": 636
+          },
+          "quick_note": {
+            "original": 0,
+            "current": 0
+          },
+          "runtime_execution_capacity_lease": {
+            "original": 3,
+            "current": 3
+          },
+          "session": {
+            "original": 235,
+            "current": 236
+          },
+          "session_control_event": {
+            "original": 173,
+            "current": 174
+          },
+          "session_control_record": {
+            "original": 173,
+            "current": 174
+          },
+          "session_prompt_owner": {
+            "original": 5,
+            "current": 5
+          },
+          "session_share": {
+            "original": 0,
+            "current": 0
+          },
+          "task_plan": {
+            "original": 0,
+            "current": 0
+          },
+          "todo": {
+            "original": 0,
+            "current": 0
+          },
+          "todo_snapshot": {
+            "original": 0,
+            "current": 0
+          },
+          "tool_part_outcome": {
+            "original": 177,
+            "current": 177
+          },
+          "tool_part_progress": {
+            "original": 14,
+            "current": 14
+          },
+          "tool_part_request": {
+            "original": 177,
+            "current": 177
+          },
+          "workbench_brief_snapshot": {
+            "original": 48,
+            "current": 48
+          },
+          "worker_turn_descriptor": {
+            "original": 25,
+            "current": 25
+          },
+          "workspace": {
+            "original": 0,
+            "current": 0
+          },
+          "workspace_lifecycle_admission": {
+            "original": 0,
+            "current": 0
+          }
+        },
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      },
+      "attachmentInventory": {
+        "at": "2026-10-22T19:38:43.472Z",
+        "sourceDB": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\source-reconnect-history-535-after\\runtime\\data\\opencorvus.db",
+        "targetDB": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-23\\session-member-snapshot-548-verified-after\\runtime\\data\\opencorvus.db",
+        "actualReferences": 0,
+        "copied": [],
+        "boundary": "Inventory of actual published Tool attachment references in selected Session project; original bytes and identity retained"
+      }
+    }
+  ],
+  "observations": [
+    {
+      "stage": "before",
+      "phase": "02-before-baseline",
+      "at": "2026-10-22T19:26:12.256Z",
+      "bodies": [
+        {
+          "blocks": 1,
+          "owner": "21",
+          "part": "prt_g0VXzT1DL000WBOXfm1A",
+          "rendering": null,
+          "textLength": 53
+        },
+        {
+          "blocks": 2,
+          "owner": "22",
+          "part": "prt_g0VXzT3Gs005zKfhGX2N",
+          "rendering": null,
+          "textLength": 228
+        },
+        {
+          "blocks": 1,
+          "owner": "23",
+          "part": "prt_g0VXzUz7q00fivpYNBRn",
+          "rendering": null,
+          "textLength": 205
+        },
+        {
+          "blocks": 27,
+          "owner": "24",
+          "part": "prt_g0VXzV2VW00na9YfpQKR",
+          "rendering": null,
+          "textLength": 2078
+        },
+        {
+          "blocks": 1,
+          "owner": "25",
+          "part": "prt_g0VY0iRj9008mwlam6wF",
+          "rendering": null,
+          "textLength": 204
+        },
+        {
+          "blocks": 35,
+          "owner": "26",
+          "part": "prt_g0VY0iVmm00FScjcxxqj",
+          "rendering": null,
+          "textLength": 2791
+        },
+        {
+          "blocks": 1,
+          "owner": "27",
+          "part": "prt_g0VY0lNZe00ZQkp3vHys",
+          "rendering": null,
+          "textLength": 204
+        },
+        {
+          "blocks": 35,
+          "owner": "28",
+          "part": "prt_g0VY0lRNt00O6pzN6EFn",
+          "rendering": null,
+          "textLength": 2689
+        },
+        {
+          "blocks": 1,
+          "owner": "29",
+          "part": "prt_g0VYa9kCa00xJ0qS6AXI",
+          "rendering": null,
+          "textLength": 303
+        },
+        {
+          "blocks": 37,
+          "owner": "30",
+          "part": "prt_g0VYa9l2c00sO4SHI28d",
+          "rendering": null,
+          "textLength": 3976
+        },
+        {
+          "blocks": 1,
+          "owner": "31",
+          "part": "prt_g0VYah8Gh00xughkwCzi",
+          "rendering": null,
+          "textLength": 293
+        },
+        {
+          "blocks": 92,
+          "owner": "32",
+          "part": "prt_g0VYah9j300NmU6XDMaT",
+          "rendering": null,
+          "textLength": 5886
+        },
+        {
+          "blocks": 1,
+          "owner": "33",
+          "part": "prt_g0VYaiFl500Ee7YzzeGX",
+          "rendering": null,
+          "textLength": 305
+        },
+        {
+          "blocks": 90,
+          "owner": "34",
+          "part": "prt_g0VYaiGpV00UBCQk1yLH",
+          "rendering": null,
+          "textLength": 5681
+        },
+        {
+          "blocks": 1,
+          "owner": "35",
+          "part": "prt_g0VYajX8b00EgWU7FyNk",
+          "rendering": null,
+          "textLength": 309
+        },
+        {
+          "blocks": 90,
+          "owner": "36",
+          "part": "prt_g0VYajYCe00XLJTwuEok",
+          "rendering": null,
+          "textLength": 5885
+        },
+        {
+          "blocks": 1,
+          "owner": "37",
+          "part": "prt_g0VYdvAon001DmVMQt3O",
+          "rendering": null,
+          "textLength": 373
+        },
+        {
+          "blocks": 49,
+          "owner": "38",
+          "part": "prt_g0VYdvC3600tMl1PeYuq",
+          "rendering": null,
+          "textLength": 4863
+        },
+        {
+          "blocks": 2,
+          "owner": "39",
+          "part": "prt_g0VYdwPVb004VFV3sUlQ",
+          "rendering": null,
+          "textLength": 610
+        },
+        {
+          "blocks": 50,
+          "owner": "40",
+          "part": "prt_g0VYdwQx5008pNdPaCbh",
+          "rendering": null,
+          "textLength": 4752
+        },
+        {
+          "blocks": 1,
+          "owner": "41",
+          "part": "prt_g0VYesG1E00Fmnl71BEE",
+          "rendering": null,
+          "textLength": 604
+        },
+        {
+          "blocks": 1,
+          "owner": "42",
+          "part": "prt_g0VYesH2w0006o3ZRwfs",
+          "rendering": null,
+          "textLength": 38
+        },
+        {
+          "blocks": 1,
+          "owner": "43",
+          "part": "prt_g0VYesPzI003w1Eex4Qe",
+          "rendering": null,
+          "textLength": 54
+        },
+        {
+          "blocks": 1,
+          "owner": "44",
+          "part": "prt_g0VYesayI00RufgicsVt",
+          "rendering": null,
+          "textLength": 66
+        },
+        {
+          "blocks": 46,
+          "owner": "45",
+          "part": "prt_g0VYesbDz00dg0zL0ra0",
+          "rendering": null,
+          "textLength": 4670
+        },
+        {
+          "blocks": 1,
+          "owner": "46",
+          "part": "prt_g0VYkNxBA007jEzXWgNR",
+          "rendering": null,
+          "textLength": 377
+        },
+        {
+          "blocks": 1,
+          "owner": "47",
+          "part": "prt_g0VYkNygI00Ey22T1YCQ",
+          "rendering": null,
+          "textLength": 47
+        },
+        {
+          "blocks": 1,
+          "owner": "48",
+          "part": "prt_g0VYkPcG100Rm9U67E04",
+          "rendering": null,
+          "textLength": 65
+        },
+        {
+          "blocks": 10,
+          "owner": "49",
+          "part": "prt_g0VYkPjwS00g0Ga5Wg2x",
+          "rendering": null,
+          "textLength": 701
+        },
+        {
+          "blocks": 1,
+          "owner": "50",
+          "part": "prt_g0VYkgQ2q00wZOiEpPpZ",
+          "rendering": null,
+          "textLength": 359
+        },
+        {
+          "blocks": 1,
+          "owner": "51",
+          "part": "prt_g0VYkgRLV00kt1ubETcr",
+          "rendering": null,
+          "textLength": 47
+        },
+        {
+          "blocks": 14,
+          "owner": "52",
+          "part": "prt_g0VYkglYL00ZzNKT7UEB",
+          "rendering": null,
+          "textLength": 993
+        }
+      ],
+      "scroll": {
+        "full": 62166,
+        "height": 576,
+        "top": 61590
+      },
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "sources": [
+        {
+          "links": [],
+          "owner": "6",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "8",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "10",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "12",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [
+            "https://arxiv.org/abs/2509.11035v1"
+          ],
+          "owner": "14",
+          "text": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+        },
+        {
+          "links": [
+            "https://aclanthology.org/2025.naacl-long.475/"
+          ],
+          "owner": "16",
+          "text": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthologyaclanthology.org"
+        },
+        {
+          "links": [
+            "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+          ],
+          "owner": "18",
+          "text": "Tabs Pattern | APG | WAI | W3Cwww.w3.org"
+        },
+        {
+          "links": [
+            "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+          ],
+          "owner": "20",
+          "text": "Clipboard: writeText() method - Web APIs | MDNdeveloper.mozilla.org"
+        },
+        {
+          "links": [
+            "https://www.w3.org/TR/wai-aria-1.2/"
+          ],
+          "owner": "22",
+          "text": "Accessible Rich Internet Applications (WAI-ARIA) 1.2www.w3.org"
+        },
+        {
+          "links": [
+            "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+          ],
+          "owner": "24",
+          "text": "Clipboard: writeText() method - Web APIs | MDNdeveloper.mozilla.org"
+        }
+      ]
+    },
+    {
+      "stage": "after",
+      "phase": "04-reconnected",
+      "at": "2026-10-22T19:27:00.751Z",
+      "bodies": [
+        {
+          "blocks": 1,
+          "owner": "21",
+          "part": "prt_g0VXzT1DL000WBOXfm1A",
+          "rendering": null,
+          "textLength": 53
+        },
+        {
+          "blocks": 2,
+          "owner": "22",
+          "part": "prt_g0VXzT3Gs005zKfhGX2N",
+          "rendering": null,
+          "textLength": 228
+        },
+        {
+          "blocks": 1,
+          "owner": "23",
+          "part": "prt_g0VXzUz7q00fivpYNBRn",
+          "rendering": null,
+          "textLength": 205
+        },
+        {
+          "blocks": 27,
+          "owner": "24",
+          "part": "prt_g0VXzV2VW00na9YfpQKR",
+          "rendering": null,
+          "textLength": 2078
+        },
+        {
+          "blocks": 1,
+          "owner": "25",
+          "part": "prt_g0VY0iRj9008mwlam6wF",
+          "rendering": null,
+          "textLength": 204
+        },
+        {
+          "blocks": 35,
+          "owner": "26",
+          "part": "prt_g0VY0iVmm00FScjcxxqj",
+          "rendering": null,
+          "textLength": 2791
+        },
+        {
+          "blocks": 1,
+          "owner": "27",
+          "part": "prt_g0VY0lNZe00ZQkp3vHys",
+          "rendering": null,
+          "textLength": 204
+        },
+        {
+          "blocks": 35,
+          "owner": "28",
+          "part": "prt_g0VY0lRNt00O6pzN6EFn",
+          "rendering": null,
+          "textLength": 2689
+        },
+        {
+          "blocks": 1,
+          "owner": "29",
+          "part": "prt_g0VYa9kCa00xJ0qS6AXI",
+          "rendering": null,
+          "textLength": 303
+        },
+        {
+          "blocks": 37,
+          "owner": "30",
+          "part": "prt_g0VYa9l2c00sO4SHI28d",
+          "rendering": null,
+          "textLength": 3976
+        },
+        {
+          "blocks": 1,
+          "owner": "31",
+          "part": "prt_g0VYah8Gh00xughkwCzi",
+          "rendering": null,
+          "textLength": 293
+        },
+        {
+          "blocks": 92,
+          "owner": "32",
+          "part": "prt_g0VYah9j300NmU6XDMaT",
+          "rendering": null,
+          "textLength": 5886
+        },
+        {
+          "blocks": 1,
+          "owner": "33",
+          "part": "prt_g0VYaiFl500Ee7YzzeGX",
+          "rendering": null,
+          "textLength": 305
+        },
+        {
+          "blocks": 90,
+          "owner": "34",
+          "part": "prt_g0VYaiGpV00UBCQk1yLH",
+          "rendering": null,
+          "textLength": 5681
+        },
+        {
+          "blocks": 1,
+          "owner": "35",
+          "part": "prt_g0VYajX8b00EgWU7FyNk",
+          "rendering": null,
+          "textLength": 309
+        },
+        {
+          "blocks": 90,
+          "owner": "36",
+          "part": "prt_g0VYajYCe00XLJTwuEok",
+          "rendering": null,
+          "textLength": 5885
+        },
+        {
+          "blocks": 1,
+          "owner": "37",
+          "part": "prt_g0VYdvAon001DmVMQt3O",
+          "rendering": null,
+          "textLength": 373
+        },
+        {
+          "blocks": 49,
+          "owner": "38",
+          "part": "prt_g0VYdvC3600tMl1PeYuq",
+          "rendering": null,
+          "textLength": 4863
+        },
+        {
+          "blocks": 2,
+          "owner": "39",
+          "part": "prt_g0VYdwPVb004VFV3sUlQ",
+          "rendering": null,
+          "textLength": 610
+        },
+        {
+          "blocks": 50,
+          "owner": "40",
+          "part": "prt_g0VYdwQx5008pNdPaCbh",
+          "rendering": null,
+          "textLength": 4752
+        },
+        {
+          "blocks": 1,
+          "owner": "41",
+          "part": "prt_g0VYesG1E00Fmnl71BEE",
+          "rendering": null,
+          "textLength": 604
+        },
+        {
+          "blocks": 1,
+          "owner": "42",
+          "part": "prt_g0VYesH2w0006o3ZRwfs",
+          "rendering": null,
+          "textLength": 38
+        },
+        {
+          "blocks": 1,
+          "owner": "43",
+          "part": "prt_g0VYesPzI003w1Eex4Qe",
+          "rendering": null,
+          "textLength": 54
+        },
+        {
+          "blocks": 1,
+          "owner": "44",
+          "part": "prt_g0VYesayI00RufgicsVt",
+          "rendering": null,
+          "textLength": 66
+        },
+        {
+          "blocks": 46,
+          "owner": "45",
+          "part": "prt_g0VYesbDz00dg0zL0ra0",
+          "rendering": null,
+          "textLength": 4670
+        },
+        {
+          "blocks": 1,
+          "owner": "46",
+          "part": "prt_g0VYkNxBA007jEzXWgNR",
+          "rendering": null,
+          "textLength": 377
+        },
+        {
+          "blocks": 1,
+          "owner": "47",
+          "part": "prt_g0VYkNygI00Ey22T1YCQ",
+          "rendering": null,
+          "textLength": 47
+        },
+        {
+          "blocks": 1,
+          "owner": "48",
+          "part": "prt_g0VYkPcG100Rm9U67E04",
+          "rendering": null,
+          "textLength": 65
+        },
+        {
+          "blocks": 10,
+          "owner": "49",
+          "part": "prt_g0VYkPjwS00g0Ga5Wg2x",
+          "rendering": null,
+          "textLength": 701
+        },
+        {
+          "blocks": 1,
+          "owner": "50",
+          "part": "prt_g0VYkgQ2q00wZOiEpPpZ",
+          "rendering": null,
+          "textLength": 359
+        },
+        {
+          "blocks": 1,
+          "owner": "51",
+          "part": "prt_g0VYkgRLV00kt1ubETcr",
+          "rendering": null,
+          "textLength": 47
+        },
+        {
+          "blocks": 14,
+          "owner": "52",
+          "part": "prt_g0VYkglYL00ZzNKT7UEB",
+          "rendering": null,
+          "textLength": 993
+        },
+        {
+          "blocks": 1,
+          "owner": "53",
+          "part": "prt_g0VYlVhde009qbGjI9xa",
+          "rendering": null,
+          "textLength": 341
+        },
+        {
+          "blocks": 1,
+          "owner": "54",
+          "part": "prt_g0VYlVik0003TVHLrtoL",
+          "rendering": null,
+          "textLength": 50
+        },
+        {
+          "blocks": 30,
+          "owner": "55",
+          "part": "prt_g0VYlVwN8002kOPK5Uhl",
+          "rendering": null,
+          "textLength": 1345
+        }
+      ],
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 64017
+      },
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "sources": [
+        {
+          "links": [],
+          "owner": "6",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "8",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "10",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "12",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [
+            "https://arxiv.org/abs/2509.11035v1"
+          ],
+          "owner": "14",
+          "text": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+        },
+        {
+          "links": [
+            "https://aclanthology.org/2025.naacl-long.475/"
+          ],
+          "owner": "16",
+          "text": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthologyaclanthology.org"
+        },
+        {
+          "links": [
+            "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+          ],
+          "owner": "18",
+          "text": "Tabs Pattern | APG | WAI | W3Cwww.w3.org"
+        },
+        {
+          "links": [
+            "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+          ],
+          "owner": "20",
+          "text": "Clipboard: writeText() method - Web APIs | MDNdeveloper.mozilla.org"
+        },
+        {
+          "links": [
+            "https://www.w3.org/TR/wai-aria-1.2/"
+          ],
+          "owner": "22",
+          "text": "Accessible Rich Internet Applications (WAI-ARIA) 1.2www.w3.org"
+        },
+        {
+          "links": [
+            "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+          ],
+          "owner": "24",
+          "text": "Clipboard: writeText() method - Web APIs | MDNdeveloper.mozilla.org"
+        },
+        {
+          "links": [
+            "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+          ],
+          "owner": "26",
+          "text": "Disclosure (Show/Hide) Pattern | APG | WAI | W3Cwww.w3.org"
+        }
+      ]
+    },
+    {
+      "stage": "after",
+      "phase": "06-source-visible",
+      "at": "2026-10-22T19:27:57.539Z",
+      "bodies": [
+        {
+          "blocks": 1,
+          "owner": "21",
+          "part": "prt_g0VXzT1DL000WBOXfm1A",
+          "rendering": null,
+          "textLength": 53
+        },
+        {
+          "blocks": 2,
+          "owner": "22",
+          "part": "prt_g0VXzT3Gs005zKfhGX2N",
+          "rendering": null,
+          "textLength": 228
+        },
+        {
+          "blocks": 1,
+          "owner": "23",
+          "part": "prt_g0VXzUz7q00fivpYNBRn",
+          "rendering": null,
+          "textLength": 205
+        },
+        {
+          "blocks": 27,
+          "owner": "24",
+          "part": "prt_g0VXzV2VW00na9YfpQKR",
+          "rendering": null,
+          "textLength": 2078
+        },
+        {
+          "blocks": 1,
+          "owner": "25",
+          "part": "prt_g0VY0iRj9008mwlam6wF",
+          "rendering": null,
+          "textLength": 204
+        },
+        {
+          "blocks": 35,
+          "owner": "26",
+          "part": "prt_g0VY0iVmm00FScjcxxqj",
+          "rendering": null,
+          "textLength": 2791
+        },
+        {
+          "blocks": 1,
+          "owner": "27",
+          "part": "prt_g0VY0lNZe00ZQkp3vHys",
+          "rendering": null,
+          "textLength": 204
+        },
+        {
+          "blocks": 35,
+          "owner": "28",
+          "part": "prt_g0VY0lRNt00O6pzN6EFn",
+          "rendering": null,
+          "textLength": 2689
+        },
+        {
+          "blocks": 1,
+          "owner": "29",
+          "part": "prt_g0VYa9kCa00xJ0qS6AXI",
+          "rendering": null,
+          "textLength": 303
+        },
+        {
+          "blocks": 37,
+          "owner": "30",
+          "part": "prt_g0VYa9l2c00sO4SHI28d",
+          "rendering": null,
+          "textLength": 3976
+        },
+        {
+          "blocks": 1,
+          "owner": "31",
+          "part": "prt_g0VYah8Gh00xughkwCzi",
+          "rendering": null,
+          "textLength": 293
+        },
+        {
+          "blocks": 92,
+          "owner": "32",
+          "part": "prt_g0VYah9j300NmU6XDMaT",
+          "rendering": null,
+          "textLength": 5886
+        },
+        {
+          "blocks": 1,
+          "owner": "33",
+          "part": "prt_g0VYaiFl500Ee7YzzeGX",
+          "rendering": null,
+          "textLength": 305
+        },
+        {
+          "blocks": 90,
+          "owner": "34",
+          "part": "prt_g0VYaiGpV00UBCQk1yLH",
+          "rendering": null,
+          "textLength": 5681
+        },
+        {
+          "blocks": 1,
+          "owner": "35",
+          "part": "prt_g0VYajX8b00EgWU7FyNk",
+          "rendering": null,
+          "textLength": 309
+        },
+        {
+          "blocks": 90,
+          "owner": "36",
+          "part": "prt_g0VYajYCe00XLJTwuEok",
+          "rendering": null,
+          "textLength": 5885
+        },
+        {
+          "blocks": 1,
+          "owner": "37",
+          "part": "prt_g0VYdvAon001DmVMQt3O",
+          "rendering": null,
+          "textLength": 373
+        },
+        {
+          "blocks": 49,
+          "owner": "38",
+          "part": "prt_g0VYdvC3600tMl1PeYuq",
+          "rendering": null,
+          "textLength": 4863
+        },
+        {
+          "blocks": 2,
+          "owner": "39",
+          "part": "prt_g0VYdwPVb004VFV3sUlQ",
+          "rendering": null,
+          "textLength": 610
+        },
+        {
+          "blocks": 50,
+          "owner": "40",
+          "part": "prt_g0VYdwQx5008pNdPaCbh",
+          "rendering": null,
+          "textLength": 4752
+        },
+        {
+          "blocks": 1,
+          "owner": "41",
+          "part": "prt_g0VYesG1E00Fmnl71BEE",
+          "rendering": null,
+          "textLength": 604
+        },
+        {
+          "blocks": 1,
+          "owner": "42",
+          "part": "prt_g0VYesH2w0006o3ZRwfs",
+          "rendering": null,
+          "textLength": 38
+        },
+        {
+          "blocks": 1,
+          "owner": "43",
+          "part": "prt_g0VYesPzI003w1Eex4Qe",
+          "rendering": null,
+          "textLength": 54
+        },
+        {
+          "blocks": 1,
+          "owner": "44",
+          "part": "prt_g0VYesayI00RufgicsVt",
+          "rendering": null,
+          "textLength": 66
+        },
+        {
+          "blocks": 46,
+          "owner": "45",
+          "part": "prt_g0VYesbDz00dg0zL0ra0",
+          "rendering": null,
+          "textLength": 4670
+        },
+        {
+          "blocks": 1,
+          "owner": "46",
+          "part": "prt_g0VYkNxBA007jEzXWgNR",
+          "rendering": null,
+          "textLength": 377
+        },
+        {
+          "blocks": 1,
+          "owner": "47",
+          "part": "prt_g0VYkNygI00Ey22T1YCQ",
+          "rendering": null,
+          "textLength": 47
+        },
+        {
+          "blocks": 1,
+          "owner": "48",
+          "part": "prt_g0VYkPcG100Rm9U67E04",
+          "rendering": null,
+          "textLength": 65
+        },
+        {
+          "blocks": 10,
+          "owner": "49",
+          "part": "prt_g0VYkPjwS00g0Ga5Wg2x",
+          "rendering": null,
+          "textLength": 701
+        },
+        {
+          "blocks": 1,
+          "owner": "50",
+          "part": "prt_g0VYkgQ2q00wZOiEpPpZ",
+          "rendering": null,
+          "textLength": 359
+        },
+        {
+          "blocks": 1,
+          "owner": "51",
+          "part": "prt_g0VYkgRLV00kt1ubETcr",
+          "rendering": null,
+          "textLength": 47
+        },
+        {
+          "blocks": 14,
+          "owner": "52",
+          "part": "prt_g0VYkglYL00ZzNKT7UEB",
+          "rendering": null,
+          "textLength": 993
+        },
+        {
+          "blocks": 1,
+          "owner": "53",
+          "part": "prt_g0VYlVhde009qbGjI9xa",
+          "rendering": null,
+          "textLength": 341
+        },
+        {
+          "blocks": 1,
+          "owner": "54",
+          "part": "prt_g0VYlVik0003TVHLrtoL",
+          "rendering": null,
+          "textLength": 50
+        },
+        {
+          "blocks": 30,
+          "owner": "55",
+          "part": "prt_g0VYlVwN8002kOPK5Uhl",
+          "rendering": null,
+          "textLength": 1345
+        }
+      ],
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 62577
+      },
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "sources": [
+        {
+          "links": [],
+          "owner": "6",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "8",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "10",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "12",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [
+            "https://arxiv.org/abs/2509.11035v1"
+          ],
+          "owner": "14",
+          "text": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+        },
+        {
+          "links": [
+            "https://aclanthology.org/2025.naacl-long.475/"
+          ],
+          "owner": "16",
+          "text": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthologyaclanthology.org"
+        },
+        {
+          "links": [
+            "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+          ],
+          "owner": "18",
+          "text": "Tabs Pattern | APG | WAI | W3Cwww.w3.org"
+        },
+        {
+          "links": [
+            "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+          ],
+          "owner": "20",
+          "text": "Clipboard: writeText() method - Web APIs | MDNdeveloper.mozilla.org"
+        },
+        {
+          "links": [
+            "https://www.w3.org/TR/wai-aria-1.2/"
+          ],
+          "owner": "22",
+          "text": "Accessible Rich Internet Applications (WAI-ARIA) 1.2www.w3.org"
+        },
+        {
+          "links": [
+            "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+          ],
+          "owner": "24",
+          "text": "Clipboard: writeText() method - Web APIs | MDNdeveloper.mozilla.org"
+        },
+        {
+          "links": [
+            "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+          ],
+          "owner": "26",
+          "text": "Disclosure (Show/Hide) Pattern | APG | WAI | W3Cwww.w3.org"
+        }
+      ]
+    },
+    {
+      "stage": "verified-before",
+      "phase": "08-before-verified",
+      "at": "2026-10-22T19:38:15.857Z",
+      "bodies": [
+        {
+          "blocks": 1,
+          "owner": "21",
+          "part": "prt_g0VXzT1DL000WBOXfm1A",
+          "rendering": null,
+          "textLength": 53
+        },
+        {
+          "blocks": 2,
+          "owner": "22",
+          "part": "prt_g0VXzT3Gs005zKfhGX2N",
+          "rendering": null,
+          "textLength": 228
+        },
+        {
+          "blocks": 1,
+          "owner": "23",
+          "part": "prt_g0VXzUz7q00fivpYNBRn",
+          "rendering": null,
+          "textLength": 205
+        },
+        {
+          "blocks": 27,
+          "owner": "24",
+          "part": "prt_g0VXzV2VW00na9YfpQKR",
+          "rendering": null,
+          "textLength": 2078
+        },
+        {
+          "blocks": 1,
+          "owner": "25",
+          "part": "prt_g0VY0iRj9008mwlam6wF",
+          "rendering": null,
+          "textLength": 204
+        },
+        {
+          "blocks": 35,
+          "owner": "26",
+          "part": "prt_g0VY0iVmm00FScjcxxqj",
+          "rendering": null,
+          "textLength": 2791
+        },
+        {
+          "blocks": 1,
+          "owner": "27",
+          "part": "prt_g0VY0lNZe00ZQkp3vHys",
+          "rendering": null,
+          "textLength": 204
+        },
+        {
+          "blocks": 35,
+          "owner": "28",
+          "part": "prt_g0VY0lRNt00O6pzN6EFn",
+          "rendering": null,
+          "textLength": 2689
+        },
+        {
+          "blocks": 1,
+          "owner": "29",
+          "part": "prt_g0VYa9kCa00xJ0qS6AXI",
+          "rendering": null,
+          "textLength": 303
+        },
+        {
+          "blocks": 37,
+          "owner": "30",
+          "part": "prt_g0VYa9l2c00sO4SHI28d",
+          "rendering": null,
+          "textLength": 3976
+        },
+        {
+          "blocks": 1,
+          "owner": "31",
+          "part": "prt_g0VYah8Gh00xughkwCzi",
+          "rendering": null,
+          "textLength": 293
+        },
+        {
+          "blocks": 92,
+          "owner": "32",
+          "part": "prt_g0VYah9j300NmU6XDMaT",
+          "rendering": null,
+          "textLength": 5886
+        },
+        {
+          "blocks": 1,
+          "owner": "33",
+          "part": "prt_g0VYaiFl500Ee7YzzeGX",
+          "rendering": null,
+          "textLength": 305
+        },
+        {
+          "blocks": 90,
+          "owner": "34",
+          "part": "prt_g0VYaiGpV00UBCQk1yLH",
+          "rendering": null,
+          "textLength": 5681
+        },
+        {
+          "blocks": 1,
+          "owner": "35",
+          "part": "prt_g0VYajX8b00EgWU7FyNk",
+          "rendering": null,
+          "textLength": 309
+        },
+        {
+          "blocks": 90,
+          "owner": "36",
+          "part": "prt_g0VYajYCe00XLJTwuEok",
+          "rendering": null,
+          "textLength": 5885
+        },
+        {
+          "blocks": 1,
+          "owner": "37",
+          "part": "prt_g0VYdvAon001DmVMQt3O",
+          "rendering": null,
+          "textLength": 373
+        },
+        {
+          "blocks": 49,
+          "owner": "38",
+          "part": "prt_g0VYdvC3600tMl1PeYuq",
+          "rendering": null,
+          "textLength": 4863
+        },
+        {
+          "blocks": 2,
+          "owner": "39",
+          "part": "prt_g0VYdwPVb004VFV3sUlQ",
+          "rendering": null,
+          "textLength": 610
+        },
+        {
+          "blocks": 50,
+          "owner": "40",
+          "part": "prt_g0VYdwQx5008pNdPaCbh",
+          "rendering": null,
+          "textLength": 4752
+        },
+        {
+          "blocks": 1,
+          "owner": "41",
+          "part": "prt_g0VYesG1E00Fmnl71BEE",
+          "rendering": null,
+          "textLength": 604
+        },
+        {
+          "blocks": 1,
+          "owner": "42",
+          "part": "prt_g0VYesH2w0006o3ZRwfs",
+          "rendering": null,
+          "textLength": 38
+        },
+        {
+          "blocks": 1,
+          "owner": "43",
+          "part": "prt_g0VYesPzI003w1Eex4Qe",
+          "rendering": null,
+          "textLength": 54
+        },
+        {
+          "blocks": 1,
+          "owner": "44",
+          "part": "prt_g0VYesayI00RufgicsVt",
+          "rendering": null,
+          "textLength": 66
+        },
+        {
+          "blocks": 46,
+          "owner": "45",
+          "part": "prt_g0VYesbDz00dg0zL0ra0",
+          "rendering": null,
+          "textLength": 4670
+        },
+        {
+          "blocks": 1,
+          "owner": "46",
+          "part": "prt_g0VYkNxBA007jEzXWgNR",
+          "rendering": null,
+          "textLength": 377
+        },
+        {
+          "blocks": 1,
+          "owner": "47",
+          "part": "prt_g0VYkNygI00Ey22T1YCQ",
+          "rendering": null,
+          "textLength": 47
+        },
+        {
+          "blocks": 1,
+          "owner": "48",
+          "part": "prt_g0VYkPcG100Rm9U67E04",
+          "rendering": null,
+          "textLength": 65
+        },
+        {
+          "blocks": 10,
+          "owner": "49",
+          "part": "prt_g0VYkPjwS00g0Ga5Wg2x",
+          "rendering": null,
+          "textLength": 701
+        },
+        {
+          "blocks": 1,
+          "owner": "50",
+          "part": "prt_g0VYkgQ2q00wZOiEpPpZ",
+          "rendering": null,
+          "textLength": 359
+        },
+        {
+          "blocks": 1,
+          "owner": "51",
+          "part": "prt_g0VYkgRLV00kt1ubETcr",
+          "rendering": null,
+          "textLength": 47
+        },
+        {
+          "blocks": 14,
+          "owner": "52",
+          "part": "prt_g0VYkglYL00ZzNKT7UEB",
+          "rendering": null,
+          "textLength": 993
+        }
+      ],
+      "scroll": {
+        "full": 62166,
+        "height": 576,
+        "top": 61590
+      },
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "sources": [
+        {
+          "links": [],
+          "owner": "6",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "8",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "10",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "12",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [
+            "https://arxiv.org/abs/2509.11035v1"
+          ],
+          "owner": "14",
+          "text": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+        },
+        {
+          "links": [
+            "https://aclanthology.org/2025.naacl-long.475/"
+          ],
+          "owner": "16",
+          "text": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthologyaclanthology.org"
+        },
+        {
+          "links": [
+            "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+          ],
+          "owner": "18",
+          "text": "Tabs Pattern | APG | WAI | W3Cwww.w3.org"
+        },
+        {
+          "links": [
+            "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+          ],
+          "owner": "20",
+          "text": "Clipboard: writeText() method - Web APIs | MDNdeveloper.mozilla.org"
+        },
+        {
+          "links": [
+            "https://www.w3.org/TR/wai-aria-1.2/"
+          ],
+          "owner": "22",
+          "text": "Accessible Rich Internet Applications (WAI-ARIA) 1.2www.w3.org"
+        },
+        {
+          "links": [
+            "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+          ],
+          "owner": "24",
+          "text": "Clipboard: writeText() method - Web APIs | MDNdeveloper.mozilla.org"
+        }
+      ]
+    },
+    {
+      "stage": "verified-before",
+      "phase": "09-offline-verified",
+      "at": "2026-10-22T19:38:33.908Z",
+      "bodies": [
+        {
+          "blocks": 1,
+          "owner": "21",
+          "part": "prt_g0VXzT1DL000WBOXfm1A",
+          "rendering": null,
+          "textLength": 53
+        },
+        {
+          "blocks": 2,
+          "owner": "22",
+          "part": "prt_g0VXzT3Gs005zKfhGX2N",
+          "rendering": null,
+          "textLength": 228
+        },
+        {
+          "blocks": 1,
+          "owner": "23",
+          "part": "prt_g0VXzUz7q00fivpYNBRn",
+          "rendering": null,
+          "textLength": 205
+        },
+        {
+          "blocks": 27,
+          "owner": "24",
+          "part": "prt_g0VXzV2VW00na9YfpQKR",
+          "rendering": null,
+          "textLength": 2078
+        },
+        {
+          "blocks": 1,
+          "owner": "25",
+          "part": "prt_g0VY0iRj9008mwlam6wF",
+          "rendering": null,
+          "textLength": 204
+        },
+        {
+          "blocks": 35,
+          "owner": "26",
+          "part": "prt_g0VY0iVmm00FScjcxxqj",
+          "rendering": null,
+          "textLength": 2791
+        },
+        {
+          "blocks": 1,
+          "owner": "27",
+          "part": "prt_g0VY0lNZe00ZQkp3vHys",
+          "rendering": null,
+          "textLength": 204
+        },
+        {
+          "blocks": 35,
+          "owner": "28",
+          "part": "prt_g0VY0lRNt00O6pzN6EFn",
+          "rendering": null,
+          "textLength": 2689
+        },
+        {
+          "blocks": 1,
+          "owner": "29",
+          "part": "prt_g0VYa9kCa00xJ0qS6AXI",
+          "rendering": null,
+          "textLength": 303
+        },
+        {
+          "blocks": 37,
+          "owner": "30",
+          "part": "prt_g0VYa9l2c00sO4SHI28d",
+          "rendering": null,
+          "textLength": 3976
+        },
+        {
+          "blocks": 1,
+          "owner": "31",
+          "part": "prt_g0VYah8Gh00xughkwCzi",
+          "rendering": null,
+          "textLength": 293
+        },
+        {
+          "blocks": 92,
+          "owner": "32",
+          "part": "prt_g0VYah9j300NmU6XDMaT",
+          "rendering": null,
+          "textLength": 5886
+        },
+        {
+          "blocks": 1,
+          "owner": "33",
+          "part": "prt_g0VYaiFl500Ee7YzzeGX",
+          "rendering": null,
+          "textLength": 305
+        },
+        {
+          "blocks": 90,
+          "owner": "34",
+          "part": "prt_g0VYaiGpV00UBCQk1yLH",
+          "rendering": null,
+          "textLength": 5681
+        },
+        {
+          "blocks": 1,
+          "owner": "35",
+          "part": "prt_g0VYajX8b00EgWU7FyNk",
+          "rendering": null,
+          "textLength": 309
+        },
+        {
+          "blocks": 90,
+          "owner": "36",
+          "part": "prt_g0VYajYCe00XLJTwuEok",
+          "rendering": null,
+          "textLength": 5885
+        },
+        {
+          "blocks": 1,
+          "owner": "37",
+          "part": "prt_g0VYdvAon001DmVMQt3O",
+          "rendering": null,
+          "textLength": 373
+        },
+        {
+          "blocks": 49,
+          "owner": "38",
+          "part": "prt_g0VYdvC3600tMl1PeYuq",
+          "rendering": null,
+          "textLength": 4863
+        },
+        {
+          "blocks": 2,
+          "owner": "39",
+          "part": "prt_g0VYdwPVb004VFV3sUlQ",
+          "rendering": null,
+          "textLength": 610
+        },
+        {
+          "blocks": 50,
+          "owner": "40",
+          "part": "prt_g0VYdwQx5008pNdPaCbh",
+          "rendering": null,
+          "textLength": 4752
+        },
+        {
+          "blocks": 1,
+          "owner": "41",
+          "part": "prt_g0VYesG1E00Fmnl71BEE",
+          "rendering": null,
+          "textLength": 604
+        },
+        {
+          "blocks": 1,
+          "owner": "42",
+          "part": "prt_g0VYesH2w0006o3ZRwfs",
+          "rendering": null,
+          "textLength": 38
+        },
+        {
+          "blocks": 1,
+          "owner": "43",
+          "part": "prt_g0VYesPzI003w1Eex4Qe",
+          "rendering": null,
+          "textLength": 54
+        },
+        {
+          "blocks": 1,
+          "owner": "44",
+          "part": "prt_g0VYesayI00RufgicsVt",
+          "rendering": null,
+          "textLength": 66
+        },
+        {
+          "blocks": 46,
+          "owner": "45",
+          "part": "prt_g0VYesbDz00dg0zL0ra0",
+          "rendering": null,
+          "textLength": 4670
+        },
+        {
+          "blocks": 1,
+          "owner": "46",
+          "part": "prt_g0VYkNxBA007jEzXWgNR",
+          "rendering": null,
+          "textLength": 377
+        },
+        {
+          "blocks": 1,
+          "owner": "47",
+          "part": "prt_g0VYkNygI00Ey22T1YCQ",
+          "rendering": null,
+          "textLength": 47
+        },
+        {
+          "blocks": 1,
+          "owner": "48",
+          "part": "prt_g0VYkPcG100Rm9U67E04",
+          "rendering": null,
+          "textLength": 65
+        },
+        {
+          "blocks": 10,
+          "owner": "49",
+          "part": "prt_g0VYkPjwS00g0Ga5Wg2x",
+          "rendering": null,
+          "textLength": 701
+        },
+        {
+          "blocks": 1,
+          "owner": "50",
+          "part": "prt_g0VYkgQ2q00wZOiEpPpZ",
+          "rendering": null,
+          "textLength": 359
+        },
+        {
+          "blocks": 1,
+          "owner": "51",
+          "part": "prt_g0VYkgRLV00kt1ubETcr",
+          "rendering": null,
+          "textLength": 47
+        },
+        {
+          "blocks": 14,
+          "owner": "52",
+          "part": "prt_g0VYkglYL00ZzNKT7UEB",
+          "rendering": null,
+          "textLength": 993
+        }
+      ],
+      "scroll": {
+        "full": 62166,
+        "height": 576,
+        "top": 61590
+      },
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "sources": [
+        {
+          "links": [],
+          "owner": "6",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "8",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "10",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "12",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [
+            "https://arxiv.org/abs/2509.11035v1"
+          ],
+          "owner": "14",
+          "text": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+        },
+        {
+          "links": [
+            "https://aclanthology.org/2025.naacl-long.475/"
+          ],
+          "owner": "16",
+          "text": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthologyaclanthology.org"
+        },
+        {
+          "links": [
+            "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+          ],
+          "owner": "18",
+          "text": "Tabs Pattern | APG | WAI | W3Cwww.w3.org"
+        },
+        {
+          "links": [
+            "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+          ],
+          "owner": "20",
+          "text": "Clipboard: writeText() method - Web APIs | MDNdeveloper.mozilla.org"
+        },
+        {
+          "links": [
+            "https://www.w3.org/TR/wai-aria-1.2/"
+          ],
+          "owner": "22",
+          "text": "Accessible Rich Internet Applications (WAI-ARIA) 1.2www.w3.org"
+        },
+        {
+          "links": [
+            "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+          ],
+          "owner": "24",
+          "text": "Clipboard: writeText() method - Web APIs | MDNdeveloper.mozilla.org"
+        }
+      ]
+    },
+    {
+      "stage": "verified-after",
+      "phase": "10-restored-verified",
+      "at": "2026-10-22T19:39:02.012Z",
+      "bodies": [
+        {
+          "blocks": 1,
+          "owner": "21",
+          "part": "prt_g0VXzT1DL000WBOXfm1A",
+          "rendering": null,
+          "textLength": 53
+        },
+        {
+          "blocks": 2,
+          "owner": "22",
+          "part": "prt_g0VXzT3Gs005zKfhGX2N",
+          "rendering": null,
+          "textLength": 228
+        },
+        {
+          "blocks": 1,
+          "owner": "23",
+          "part": "prt_g0VXzUz7q00fivpYNBRn",
+          "rendering": null,
+          "textLength": 205
+        },
+        {
+          "blocks": 27,
+          "owner": "24",
+          "part": "prt_g0VXzV2VW00na9YfpQKR",
+          "rendering": null,
+          "textLength": 2078
+        },
+        {
+          "blocks": 1,
+          "owner": "25",
+          "part": "prt_g0VY0iRj9008mwlam6wF",
+          "rendering": null,
+          "textLength": 204
+        },
+        {
+          "blocks": 35,
+          "owner": "26",
+          "part": "prt_g0VY0iVmm00FScjcxxqj",
+          "rendering": null,
+          "textLength": 2791
+        },
+        {
+          "blocks": 1,
+          "owner": "27",
+          "part": "prt_g0VY0lNZe00ZQkp3vHys",
+          "rendering": null,
+          "textLength": 204
+        },
+        {
+          "blocks": 35,
+          "owner": "28",
+          "part": "prt_g0VY0lRNt00O6pzN6EFn",
+          "rendering": null,
+          "textLength": 2689
+        },
+        {
+          "blocks": 1,
+          "owner": "29",
+          "part": "prt_g0VYa9kCa00xJ0qS6AXI",
+          "rendering": null,
+          "textLength": 303
+        },
+        {
+          "blocks": 37,
+          "owner": "30",
+          "part": "prt_g0VYa9l2c00sO4SHI28d",
+          "rendering": null,
+          "textLength": 3976
+        },
+        {
+          "blocks": 1,
+          "owner": "31",
+          "part": "prt_g0VYah8Gh00xughkwCzi",
+          "rendering": null,
+          "textLength": 293
+        },
+        {
+          "blocks": 92,
+          "owner": "32",
+          "part": "prt_g0VYah9j300NmU6XDMaT",
+          "rendering": null,
+          "textLength": 5886
+        },
+        {
+          "blocks": 1,
+          "owner": "33",
+          "part": "prt_g0VYaiFl500Ee7YzzeGX",
+          "rendering": null,
+          "textLength": 305
+        },
+        {
+          "blocks": 90,
+          "owner": "34",
+          "part": "prt_g0VYaiGpV00UBCQk1yLH",
+          "rendering": null,
+          "textLength": 5681
+        },
+        {
+          "blocks": 1,
+          "owner": "35",
+          "part": "prt_g0VYajX8b00EgWU7FyNk",
+          "rendering": null,
+          "textLength": 309
+        },
+        {
+          "blocks": 90,
+          "owner": "36",
+          "part": "prt_g0VYajYCe00XLJTwuEok",
+          "rendering": null,
+          "textLength": 5885
+        },
+        {
+          "blocks": 1,
+          "owner": "37",
+          "part": "prt_g0VYdvAon001DmVMQt3O",
+          "rendering": null,
+          "textLength": 373
+        },
+        {
+          "blocks": 49,
+          "owner": "38",
+          "part": "prt_g0VYdvC3600tMl1PeYuq",
+          "rendering": null,
+          "textLength": 4863
+        },
+        {
+          "blocks": 2,
+          "owner": "39",
+          "part": "prt_g0VYdwPVb004VFV3sUlQ",
+          "rendering": null,
+          "textLength": 610
+        },
+        {
+          "blocks": 50,
+          "owner": "40",
+          "part": "prt_g0VYdwQx5008pNdPaCbh",
+          "rendering": null,
+          "textLength": 4752
+        },
+        {
+          "blocks": 1,
+          "owner": "41",
+          "part": "prt_g0VYesG1E00Fmnl71BEE",
+          "rendering": null,
+          "textLength": 604
+        },
+        {
+          "blocks": 1,
+          "owner": "42",
+          "part": "prt_g0VYesH2w0006o3ZRwfs",
+          "rendering": null,
+          "textLength": 38
+        },
+        {
+          "blocks": 1,
+          "owner": "43",
+          "part": "prt_g0VYesPzI003w1Eex4Qe",
+          "rendering": null,
+          "textLength": 54
+        },
+        {
+          "blocks": 1,
+          "owner": "44",
+          "part": "prt_g0VYesayI00RufgicsVt",
+          "rendering": null,
+          "textLength": 66
+        },
+        {
+          "blocks": 46,
+          "owner": "45",
+          "part": "prt_g0VYesbDz00dg0zL0ra0",
+          "rendering": null,
+          "textLength": 4670
+        },
+        {
+          "blocks": 1,
+          "owner": "46",
+          "part": "prt_g0VYkNxBA007jEzXWgNR",
+          "rendering": null,
+          "textLength": 377
+        },
+        {
+          "blocks": 1,
+          "owner": "47",
+          "part": "prt_g0VYkNygI00Ey22T1YCQ",
+          "rendering": null,
+          "textLength": 47
+        },
+        {
+          "blocks": 1,
+          "owner": "48",
+          "part": "prt_g0VYkPcG100Rm9U67E04",
+          "rendering": null,
+          "textLength": 65
+        },
+        {
+          "blocks": 10,
+          "owner": "49",
+          "part": "prt_g0VYkPjwS00g0Ga5Wg2x",
+          "rendering": null,
+          "textLength": 701
+        },
+        {
+          "blocks": 1,
+          "owner": "50",
+          "part": "prt_g0VYkgQ2q00wZOiEpPpZ",
+          "rendering": null,
+          "textLength": 359
+        },
+        {
+          "blocks": 1,
+          "owner": "51",
+          "part": "prt_g0VYkgRLV00kt1ubETcr",
+          "rendering": null,
+          "textLength": 47
+        },
+        {
+          "blocks": 14,
+          "owner": "52",
+          "part": "prt_g0VYkglYL00ZzNKT7UEB",
+          "rendering": null,
+          "textLength": 993
+        },
+        {
+          "blocks": 1,
+          "owner": "53",
+          "part": "prt_g0VYlVhde009qbGjI9xa",
+          "rendering": null,
+          "textLength": 341
+        },
+        {
+          "blocks": 1,
+          "owner": "54",
+          "part": "prt_g0VYlVik0003TVHLrtoL",
+          "rendering": null,
+          "textLength": 50
+        },
+        {
+          "blocks": 30,
+          "owner": "55",
+          "part": "prt_g0VYlVwN8002kOPK5Uhl",
+          "rendering": null,
+          "textLength": 1345
+        }
+      ],
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 64017
+      },
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "sources": [
+        {
+          "links": [],
+          "owner": "6",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "8",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "10",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "12",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [
+            "https://arxiv.org/abs/2509.11035v1"
+          ],
+          "owner": "14",
+          "text": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+        },
+        {
+          "links": [
+            "https://aclanthology.org/2025.naacl-long.475/"
+          ],
+          "owner": "16",
+          "text": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthologyaclanthology.org"
+        },
+        {
+          "links": [
+            "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+          ],
+          "owner": "18",
+          "text": "Tabs Pattern | APG | WAI | W3Cwww.w3.org"
+        },
+        {
+          "links": [
+            "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+          ],
+          "owner": "20",
+          "text": "Clipboard: writeText() method - Web APIs | MDNdeveloper.mozilla.org"
+        },
+        {
+          "links": [
+            "https://www.w3.org/TR/wai-aria-1.2/"
+          ],
+          "owner": "22",
+          "text": "Accessible Rich Internet Applications (WAI-ARIA) 1.2www.w3.org"
+        },
+        {
+          "links": [
+            "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+          ],
+          "owner": "24",
+          "text": "Clipboard: writeText() method - Web APIs | MDNdeveloper.mozilla.org"
+        },
+        {
+          "links": [
+            "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+          ],
+          "owner": "26",
+          "text": "Disclosure (Show/Hide) Pattern | APG | WAI | W3Cwww.w3.org"
+        }
+      ]
+    },
+    {
+      "stage": "verified-after",
+      "phase": "11-source-and-member-verified",
+      "at": "2026-10-22T19:39:28.126Z",
+      "bodies": [
+        {
+          "blocks": 1,
+          "owner": "21",
+          "part": "prt_g0VXzT1DL000WBOXfm1A",
+          "rendering": null,
+          "textLength": 53
+        },
+        {
+          "blocks": 2,
+          "owner": "22",
+          "part": "prt_g0VXzT3Gs005zKfhGX2N",
+          "rendering": null,
+          "textLength": 228
+        },
+        {
+          "blocks": 1,
+          "owner": "23",
+          "part": "prt_g0VXzUz7q00fivpYNBRn",
+          "rendering": null,
+          "textLength": 205
+        },
+        {
+          "blocks": 27,
+          "owner": "24",
+          "part": "prt_g0VXzV2VW00na9YfpQKR",
+          "rendering": null,
+          "textLength": 2078
+        },
+        {
+          "blocks": 1,
+          "owner": "25",
+          "part": "prt_g0VY0iRj9008mwlam6wF",
+          "rendering": null,
+          "textLength": 204
+        },
+        {
+          "blocks": 35,
+          "owner": "26",
+          "part": "prt_g0VY0iVmm00FScjcxxqj",
+          "rendering": null,
+          "textLength": 2791
+        },
+        {
+          "blocks": 1,
+          "owner": "27",
+          "part": "prt_g0VY0lNZe00ZQkp3vHys",
+          "rendering": null,
+          "textLength": 204
+        },
+        {
+          "blocks": 35,
+          "owner": "28",
+          "part": "prt_g0VY0lRNt00O6pzN6EFn",
+          "rendering": null,
+          "textLength": 2689
+        },
+        {
+          "blocks": 1,
+          "owner": "29",
+          "part": "prt_g0VYa9kCa00xJ0qS6AXI",
+          "rendering": null,
+          "textLength": 303
+        },
+        {
+          "blocks": 37,
+          "owner": "30",
+          "part": "prt_g0VYa9l2c00sO4SHI28d",
+          "rendering": null,
+          "textLength": 3976
+        },
+        {
+          "blocks": 1,
+          "owner": "31",
+          "part": "prt_g0VYah8Gh00xughkwCzi",
+          "rendering": null,
+          "textLength": 293
+        },
+        {
+          "blocks": 92,
+          "owner": "32",
+          "part": "prt_g0VYah9j300NmU6XDMaT",
+          "rendering": null,
+          "textLength": 5886
+        },
+        {
+          "blocks": 1,
+          "owner": "33",
+          "part": "prt_g0VYaiFl500Ee7YzzeGX",
+          "rendering": null,
+          "textLength": 305
+        },
+        {
+          "blocks": 90,
+          "owner": "34",
+          "part": "prt_g0VYaiGpV00UBCQk1yLH",
+          "rendering": null,
+          "textLength": 5681
+        },
+        {
+          "blocks": 1,
+          "owner": "35",
+          "part": "prt_g0VYajX8b00EgWU7FyNk",
+          "rendering": null,
+          "textLength": 309
+        },
+        {
+          "blocks": 90,
+          "owner": "36",
+          "part": "prt_g0VYajYCe00XLJTwuEok",
+          "rendering": null,
+          "textLength": 5885
+        },
+        {
+          "blocks": 1,
+          "owner": "37",
+          "part": "prt_g0VYdvAon001DmVMQt3O",
+          "rendering": null,
+          "textLength": 373
+        },
+        {
+          "blocks": 49,
+          "owner": "38",
+          "part": "prt_g0VYdvC3600tMl1PeYuq",
+          "rendering": null,
+          "textLength": 4863
+        },
+        {
+          "blocks": 2,
+          "owner": "39",
+          "part": "prt_g0VYdwPVb004VFV3sUlQ",
+          "rendering": null,
+          "textLength": 610
+        },
+        {
+          "blocks": 50,
+          "owner": "40",
+          "part": "prt_g0VYdwQx5008pNdPaCbh",
+          "rendering": null,
+          "textLength": 4752
+        },
+        {
+          "blocks": 1,
+          "owner": "41",
+          "part": "prt_g0VYesG1E00Fmnl71BEE",
+          "rendering": null,
+          "textLength": 604
+        },
+        {
+          "blocks": 1,
+          "owner": "42",
+          "part": "prt_g0VYesH2w0006o3ZRwfs",
+          "rendering": null,
+          "textLength": 38
+        },
+        {
+          "blocks": 1,
+          "owner": "43",
+          "part": "prt_g0VYesPzI003w1Eex4Qe",
+          "rendering": null,
+          "textLength": 54
+        },
+        {
+          "blocks": 1,
+          "owner": "44",
+          "part": "prt_g0VYesayI00RufgicsVt",
+          "rendering": null,
+          "textLength": 66
+        },
+        {
+          "blocks": 46,
+          "owner": "45",
+          "part": "prt_g0VYesbDz00dg0zL0ra0",
+          "rendering": null,
+          "textLength": 4670
+        },
+        {
+          "blocks": 1,
+          "owner": "46",
+          "part": "prt_g0VYkNxBA007jEzXWgNR",
+          "rendering": null,
+          "textLength": 377
+        },
+        {
+          "blocks": 1,
+          "owner": "47",
+          "part": "prt_g0VYkNygI00Ey22T1YCQ",
+          "rendering": null,
+          "textLength": 47
+        },
+        {
+          "blocks": 1,
+          "owner": "48",
+          "part": "prt_g0VYkPcG100Rm9U67E04",
+          "rendering": null,
+          "textLength": 65
+        },
+        {
+          "blocks": 10,
+          "owner": "49",
+          "part": "prt_g0VYkPjwS00g0Ga5Wg2x",
+          "rendering": null,
+          "textLength": 701
+        },
+        {
+          "blocks": 1,
+          "owner": "50",
+          "part": "prt_g0VYkgQ2q00wZOiEpPpZ",
+          "rendering": null,
+          "textLength": 359
+        },
+        {
+          "blocks": 1,
+          "owner": "51",
+          "part": "prt_g0VYkgRLV00kt1ubETcr",
+          "rendering": null,
+          "textLength": 47
+        },
+        {
+          "blocks": 14,
+          "owner": "52",
+          "part": "prt_g0VYkglYL00ZzNKT7UEB",
+          "rendering": null,
+          "textLength": 993
+        },
+        {
+          "blocks": 1,
+          "owner": "53",
+          "part": "prt_g0VYlVhde009qbGjI9xa",
+          "rendering": null,
+          "textLength": 341
+        },
+        {
+          "blocks": 1,
+          "owner": "54",
+          "part": "prt_g0VYlVik0003TVHLrtoL",
+          "rendering": null,
+          "textLength": 50
+        },
+        {
+          "blocks": 30,
+          "owner": "55",
+          "part": "prt_g0VYlVwN8002kOPK5Uhl",
+          "rendering": null,
+          "textLength": 1345
+        }
+      ],
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 62577
+      },
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "sources": [
+        {
+          "links": [],
+          "owner": "6",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "8",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "10",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [],
+          "owner": "12",
+          "text": "README.mdL2–3"
+        },
+        {
+          "links": [
+            "https://arxiv.org/abs/2509.11035v1"
+          ],
+          "owner": "14",
+          "text": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+        },
+        {
+          "links": [
+            "https://aclanthology.org/2025.naacl-long.475/"
+          ],
+          "owner": "16",
+          "text": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthologyaclanthology.org"
+        },
+        {
+          "links": [
+            "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+          ],
+          "owner": "18",
+          "text": "Tabs Pattern | APG | WAI | W3Cwww.w3.org"
+        },
+        {
+          "links": [
+            "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+          ],
+          "owner": "20",
+          "text": "Clipboard: writeText() method - Web APIs | MDNdeveloper.mozilla.org"
+        },
+        {
+          "links": [
+            "https://www.w3.org/TR/wai-aria-1.2/"
+          ],
+          "owner": "22",
+          "text": "Accessible Rich Internet Applications (WAI-ARIA) 1.2www.w3.org"
+        },
+        {
+          "links": [
+            "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+          ],
+          "owner": "24",
+          "text": "Clipboard: writeText() method - Web APIs | MDNdeveloper.mozilla.org"
+        },
+        {
+          "links": [
+            "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+          ],
+          "owner": "26",
+          "text": "Disclosure (Show/Hide) Pattern | APG | WAI | W3Cwww.w3.org"
+        }
+      ]
+    }
+  ],
+  "protocol": [
+    {
+      "stage": "verified-before",
+      "checker": "Independent public HTTP and SSE reads, distinct from browser",
+      "connectedAt": "2026-10-22T19:37:46.833Z",
+      "agentViewAgreement": "Exact public schema-parsed connection and HTTP hydrate values",
+      "latest": {
+        "input": "msg_g0VYkgQ2X00zE5KO60AW",
+        "messageIDs": [
+          "msg_g0VYkgQ2X00zE5KO60AW",
+          "msg_g0VYkgQ4K0066I3ow00W",
+          "msg_g0VYkgavH00ecylsB0TX",
+          "msg_g0VYkgkr700nwVCYXLhY"
+        ],
+        "target": "msg_g0VYkgkr700nwVCYXLhY",
+        "start": 1792645640744,
+        "last": 1792645990973,
+        "activityCount": 6
+      },
+      "memberMessages": 36,
+      "memberSources": [
+        {
+          "id": "prt_g0VXzT1aI00JO1cB0C6R",
+          "type": "source-file",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project\\README.md",
+          "title": "README.md"
+        },
+        {
+          "id": "prt_g0VXzV1D300qq21kRblf",
+          "type": "source-file",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project\\README.md",
+          "title": "README.md"
+        },
+        {
+          "id": "prt_g0VY0iTr900p7kbl6xLm",
+          "type": "source-file",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project\\README.md",
+          "title": "README.md"
+        },
+        {
+          "id": "prt_g0VY0lQEO00k2yLEY7jO",
+          "type": "source-file",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project\\README.md",
+          "title": "README.md"
+        },
+        {
+          "id": "prt_g0VYesP1z00wnrSPbpDo",
+          "type": "source-url",
+          "url": "https://arxiv.org/abs/2509.11035v1",
+          "title": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debate"
+        },
+        {
+          "id": "prt_g0VYesZdX00nveef4fkf",
+          "type": "source-url",
+          "url": "https://aclanthology.org/2025.naacl-long.475/",
+          "title": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology"
+        },
+        {
+          "id": "prt_g0VYkPabx001D4V2ORT4",
+          "type": "source-url",
+          "url": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+          "title": "Tabs Pattern | APG | WAI | W3C"
+        },
+        {
+          "id": "prt_g0VYkPidz00EtVHPq2tf",
+          "type": "source-url",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText",
+          "title": "Clipboard: writeText() method - Web APIs | MDN"
+        },
+        {
+          "id": "prt_g0VYkgatl00yg3eLhBmM",
+          "type": "source-url",
+          "url": "https://www.w3.org/TR/wai-aria-1.2/",
+          "title": "Accessible Rich Internet Applications (WAI-ARIA) 1.2"
+        },
+        {
+          "id": "prt_g0VYkgkpp00mOVBBrblj",
+          "type": "source-url",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText",
+          "title": "Clipboard: writeText() method - Web APIs | MDN"
+        }
+      ]
+    },
+    {
+      "stage": "verified-after",
+      "checker": "Independent public HTTP and SSE reads, distinct from browser",
+      "connectedAt": "2026-10-22T19:39:11.897Z",
+      "agentViewAgreement": "Exact public schema-parsed connection and HTTP hydrate values",
+      "latest": {
+        "input": "msg_g0VYlVhdH009nBNe7inj",
+        "messageIDs": [
+          "msg_g0VYlVhdH009nBNe7inj",
+          "msg_g0VYlVhfM005zhqSOQwN",
+          "msg_g0VYlVvNx00Uq6gDAjqh"
+        ],
+        "target": "msg_g0VYlVvNx00Uq6gDAjqh",
+        "start": 1792657863102,
+        "last": 1792658339899,
+        "activityCount": 4
+      },
+      "memberMessages": 39,
+      "memberSources": [
+        {
+          "id": "prt_g0VXzT1aI00JO1cB0C6R",
+          "type": "source-file",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project\\README.md",
+          "title": "README.md"
+        },
+        {
+          "id": "prt_g0VXzV1D300qq21kRblf",
+          "type": "source-file",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project\\README.md",
+          "title": "README.md"
+        },
+        {
+          "id": "prt_g0VY0iTr900p7kbl6xLm",
+          "type": "source-file",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project\\README.md",
+          "title": "README.md"
+        },
+        {
+          "id": "prt_g0VY0lQEO00k2yLEY7jO",
+          "type": "source-file",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project\\README.md",
+          "title": "README.md"
+        },
+        {
+          "id": "prt_g0VYesP1z00wnrSPbpDo",
+          "type": "source-url",
+          "url": "https://arxiv.org/abs/2509.11035v1",
+          "title": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debate"
+        },
+        {
+          "id": "prt_g0VYesZdX00nveef4fkf",
+          "type": "source-url",
+          "url": "https://aclanthology.org/2025.naacl-long.475/",
+          "title": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology"
+        },
+        {
+          "id": "prt_g0VYkPabx001D4V2ORT4",
+          "type": "source-url",
+          "url": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+          "title": "Tabs Pattern | APG | WAI | W3C"
+        },
+        {
+          "id": "prt_g0VYkPidz00EtVHPq2tf",
+          "type": "source-url",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText",
+          "title": "Clipboard: writeText() method - Web APIs | MDN"
+        },
+        {
+          "id": "prt_g0VYkgatl00yg3eLhBmM",
+          "type": "source-url",
+          "url": "https://www.w3.org/TR/wai-aria-1.2/",
+          "title": "Accessible Rich Internet Applications (WAI-ARIA) 1.2"
+        },
+        {
+          "id": "prt_g0VYkgkpp00mOVBBrblj",
+          "type": "source-url",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText",
+          "title": "Clipboard: writeText() method - Web APIs | MDN"
+        },
+        {
+          "id": "prt_g0VYlVvMQ00aotNZw5BQ",
+          "type": "source-url",
+          "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/",
+          "title": "Disclosure (Show/Hide) Pattern | APG | WAI | W3C"
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Mission covered by real backend route contracts; no Mission browser history pair in this batch",
+    "No new model-authored business messages; the history growth is the complete original535 real run",
+    "Transient model configuration feedback and ResizeObserver notifications remain separate investigation targets"
+  ]
+}

@@ -4779,6 +4779,215 @@ export type SessionConnectedEvent = {
 }
 
 export type SessionConversationConnectionSnapshot = {
+  agentView: {
+    messages: Array<{
+      agentID: string
+      inputMessageID: string
+      messageID: string
+      orderKey: string
+      parentSessionID?: string
+      placement: "top_level"
+      sessionAgentID: string
+      sessionID: string
+      stage: string
+      time: number
+    }>
+    sessions: Array<
+      | {
+          activity: Array<
+            | {
+                id: string
+                messageID: string
+                orderKey: string
+                text: string
+                type: "text"
+              }
+            | {
+                callID?: string
+                id: string
+                messageID: string
+                orderKey: string
+                state: {
+                  [key: string]: unknown
+                }
+                tool: string
+                type: "tool"
+              }
+            | {
+                files: Array<unknown>
+                id: string
+                messageID: string
+                orderKey: string
+                type: "patch"
+              }
+            | {
+                filename: string
+                id: string
+                messageID: string
+                orderKey: string
+                type: "file"
+              }
+            | {
+                id: string
+                message: string
+                messageID: string
+                orderKey: string
+                title?: string
+                type: "part-error"
+              }
+            | {
+                id: string
+                messageID: string
+                orderKey: string
+                sourceId: string
+                title?: string
+                type: "source-url"
+                url: string
+              }
+            | {
+                filename?: string
+                id: string
+                mediaType: string
+                messageID: string
+                orderKey: string
+                sourceId: string
+                title: string
+                type: "source-document"
+              }
+            | {
+                id: string
+                messageID: string
+                orderKey: string
+                path: string
+                range?: SourceFileRange
+                sourceId: string
+                title: string
+                type: "source-file"
+              }
+          >
+          agentID: string
+          errorReason?: string
+          executionID: string
+          firstMessageTime: number
+          firstObservedAt?: number
+          inputMessageID: string
+          inputPreview?: {
+            messageID: string
+            observedAt: number
+            source: "user_message"
+            text: string
+          }
+          lastDisplayMessageID?: string
+          lastMessageTime: number
+          lastObservedAt?: number
+          messageIDs: Array<string>
+          orderKey: string
+          parentSessionID?: string
+          placement: "top_level"
+          sessionID: string
+          stage: string
+          status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+          todoUpdatedAt: number
+          todos: Array<Todo>
+        }
+      | {
+          activity: Array<
+            | {
+                id: string
+                messageID: string
+                orderKey: string
+                text: string
+                type: "text"
+              }
+            | {
+                callID?: string
+                id: string
+                messageID: string
+                orderKey: string
+                state: {
+                  [key: string]: unknown
+                }
+                tool: string
+                type: "tool"
+              }
+            | {
+                files: Array<unknown>
+                id: string
+                messageID: string
+                orderKey: string
+                type: "patch"
+              }
+            | {
+                filename: string
+                id: string
+                messageID: string
+                orderKey: string
+                type: "file"
+              }
+            | {
+                id: string
+                message: string
+                messageID: string
+                orderKey: string
+                title?: string
+                type: "part-error"
+              }
+            | {
+                id: string
+                messageID: string
+                orderKey: string
+                sourceId: string
+                title?: string
+                type: "source-url"
+                url: string
+              }
+            | {
+                filename?: string
+                id: string
+                mediaType: string
+                messageID: string
+                orderKey: string
+                sourceId: string
+                title: string
+                type: "source-document"
+              }
+            | {
+                id: string
+                messageID: string
+                orderKey: string
+                path: string
+                range?: SourceFileRange
+                sourceId: string
+                title: string
+                type: "source-file"
+              }
+          >
+          agentID: string
+          errorReason?: string
+          firstMessageTime: number
+          firstObservedAt?: number
+          inputPreview?: {
+            messageID: string
+            observedAt: number
+            source: "user_message"
+            text: string
+          }
+          lastDisplayMessageID?: string
+          lastMessageTime: number
+          lastObservedAt?: number
+          messageIDs: Array<string>
+          orderKey: string
+          parentSessionID?: string
+          placement: "top_level"
+          sessionID: string
+          stage: string
+          status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+          todoUpdatedAt: number
+          todos: Array<Todo>
+        }
+    >
+    topLevelExecutionIDs: Array<string>
+  }
   history: {
     hasMore: boolean
     limit: number
@@ -4921,6 +5130,35 @@ export type SessionConversationConnectionSnapshot = {
                 title?: string
                 type: "part-error"
               }
+            | {
+                id: string
+                messageID: string
+                orderKey: string
+                sourceId: string
+                title?: string
+                type: "source-url"
+                url: string
+              }
+            | {
+                filename?: string
+                id: string
+                mediaType: string
+                messageID: string
+                orderKey: string
+                sourceId: string
+                title: string
+                type: "source-document"
+              }
+            | {
+                id: string
+                messageID: string
+                orderKey: string
+                path: string
+                range?: SourceFileRange
+                sourceId: string
+                title: string
+                type: "source-file"
+              }
           >
           agentID: string
           errorReason?: string
@@ -4988,6 +5226,35 @@ export type SessionConversationConnectionSnapshot = {
                 orderKey: string
                 title?: string
                 type: "part-error"
+              }
+            | {
+                id: string
+                messageID: string
+                orderKey: string
+                sourceId: string
+                title?: string
+                type: "source-url"
+                url: string
+              }
+            | {
+                filename?: string
+                id: string
+                mediaType: string
+                messageID: string
+                orderKey: string
+                sourceId: string
+                title: string
+                type: "source-document"
+              }
+            | {
+                id: string
+                messageID: string
+                orderKey: string
+                path: string
+                range?: SourceFileRange
+                sourceId: string
+                title: string
+                type: "source-file"
               }
           >
           agentID: string
@@ -28821,6 +29088,35 @@ export type SessionConversationResponses = {
                   title?: string
                   type: "part-error"
                 }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title?: string
+                  type: "source-url"
+                  url: string
+                }
+              | {
+                  filename?: string
+                  id: string
+                  mediaType: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title: string
+                  type: "source-document"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  path: string
+                  range?: SourceFileRange
+                  sourceId: string
+                  title: string
+                  type: "source-file"
+                }
             >
             agentID: string
             errorReason?: string
@@ -28888,6 +29184,35 @@ export type SessionConversationResponses = {
                   orderKey: string
                   title?: string
                   type: "part-error"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title?: string
+                  type: "source-url"
+                  url: string
+                }
+              | {
+                  filename?: string
+                  id: string
+                  mediaType: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title: string
+                  type: "source-document"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  path: string
+                  range?: SourceFileRange
+                  sourceId: string
+                  title: string
+                  type: "source-file"
                 }
             >
             agentID: string
@@ -29292,6 +29617,35 @@ export type SessionConversationResponses = {
                   title?: string
                   type: "part-error"
                 }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title?: string
+                  type: "source-url"
+                  url: string
+                }
+              | {
+                  filename?: string
+                  id: string
+                  mediaType: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title: string
+                  type: "source-document"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  path: string
+                  range?: SourceFileRange
+                  sourceId: string
+                  title: string
+                  type: "source-file"
+                }
             >
             agentID: string
             errorReason?: string
@@ -29359,6 +29713,35 @@ export type SessionConversationResponses = {
                   orderKey: string
                   title?: string
                   type: "part-error"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title?: string
+                  type: "source-url"
+                  url: string
+                }
+              | {
+                  filename?: string
+                  id: string
+                  mediaType: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title: string
+                  type: "source-document"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  path: string
+                  range?: SourceFileRange
+                  sourceId: string
+                  title: string
+                  type: "source-file"
                 }
             >
             agentID: string
@@ -29517,6 +29900,35 @@ export type SessionConversationHistoryResponses = {
                   title?: string
                   type: "part-error"
                 }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title?: string
+                  type: "source-url"
+                  url: string
+                }
+              | {
+                  filename?: string
+                  id: string
+                  mediaType: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title: string
+                  type: "source-document"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  path: string
+                  range?: SourceFileRange
+                  sourceId: string
+                  title: string
+                  type: "source-file"
+                }
             >
             agentID: string
             errorReason?: string
@@ -29584,6 +29996,35 @@ export type SessionConversationHistoryResponses = {
                   orderKey: string
                   title?: string
                   type: "part-error"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title?: string
+                  type: "source-url"
+                  url: string
+                }
+              | {
+                  filename?: string
+                  id: string
+                  mediaType: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title: string
+                  type: "source-document"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  path: string
+                  range?: SourceFileRange
+                  sourceId: string
+                  title: string
+                  type: "source-file"
                 }
             >
             agentID: string
@@ -34944,6 +35385,35 @@ export type TaskConversationResponses = {
                   title?: string
                   type: "part-error"
                 }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title?: string
+                  type: "source-url"
+                  url: string
+                }
+              | {
+                  filename?: string
+                  id: string
+                  mediaType: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title: string
+                  type: "source-document"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  path: string
+                  range?: SourceFileRange
+                  sourceId: string
+                  title: string
+                  type: "source-file"
+                }
             >
             agentID: string
             errorReason?: string
@@ -35011,6 +35481,35 @@ export type TaskConversationResponses = {
                   orderKey: string
                   title?: string
                   type: "part-error"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title?: string
+                  type: "source-url"
+                  url: string
+                }
+              | {
+                  filename?: string
+                  id: string
+                  mediaType: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title: string
+                  type: "source-document"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  path: string
+                  range?: SourceFileRange
+                  sourceId: string
+                  title: string
+                  type: "source-file"
                 }
             >
             agentID: string
@@ -36113,6 +36612,35 @@ export type TaskConversationResponses = {
                   title?: string
                   type: "part-error"
                 }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title?: string
+                  type: "source-url"
+                  url: string
+                }
+              | {
+                  filename?: string
+                  id: string
+                  mediaType: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title: string
+                  type: "source-document"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  path: string
+                  range?: SourceFileRange
+                  sourceId: string
+                  title: string
+                  type: "source-file"
+                }
             >
             agentID: string
             errorReason?: string
@@ -36180,6 +36708,35 @@ export type TaskConversationResponses = {
                   orderKey: string
                   title?: string
                   type: "part-error"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title?: string
+                  type: "source-url"
+                  url: string
+                }
+              | {
+                  filename?: string
+                  id: string
+                  mediaType: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title: string
+                  type: "source-document"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  path: string
+                  range?: SourceFileRange
+                  sourceId: string
+                  title: string
+                  type: "source-file"
                 }
             >
             agentID: string
@@ -36415,6 +36972,35 @@ export type TaskConversationHistoryResponses = {
                   title?: string
                   type: "part-error"
                 }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title?: string
+                  type: "source-url"
+                  url: string
+                }
+              | {
+                  filename?: string
+                  id: string
+                  mediaType: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title: string
+                  type: "source-document"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  path: string
+                  range?: SourceFileRange
+                  sourceId: string
+                  title: string
+                  type: "source-file"
+                }
             >
             agentID: string
             errorReason?: string
@@ -36482,6 +37068,35 @@ export type TaskConversationHistoryResponses = {
                   orderKey: string
                   title?: string
                   type: "part-error"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title?: string
+                  type: "source-url"
+                  url: string
+                }
+              | {
+                  filename?: string
+                  id: string
+                  mediaType: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title: string
+                  type: "source-document"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  path: string
+                  range?: SourceFileRange
+                  sourceId: string
+                  title: string
+                  type: "source-file"
                 }
             >
             agentID: string
@@ -36651,6 +37266,35 @@ export type TaskConversationSessionResponses = {
                   title?: string
                   type: "part-error"
                 }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title?: string
+                  type: "source-url"
+                  url: string
+                }
+              | {
+                  filename?: string
+                  id: string
+                  mediaType: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title: string
+                  type: "source-document"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  path: string
+                  range?: SourceFileRange
+                  sourceId: string
+                  title: string
+                  type: "source-file"
+                }
             >
             agentID: string
             errorReason?: string
@@ -36718,6 +37362,35 @@ export type TaskConversationSessionResponses = {
                   orderKey: string
                   title?: string
                   type: "part-error"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title?: string
+                  type: "source-url"
+                  url: string
+                }
+              | {
+                  filename?: string
+                  id: string
+                  mediaType: string
+                  messageID: string
+                  orderKey: string
+                  sourceId: string
+                  title: string
+                  type: "source-document"
+                }
+              | {
+                  id: string
+                  messageID: string
+                  orderKey: string
+                  path: string
+                  range?: SourceFileRange
+                  sourceId: string
+                  title: string
+                  type: "source-file"
                 }
             >
             agentID: string

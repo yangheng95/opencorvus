@@ -207,13 +207,35 @@ async function sessionConversationTailProjection(session: ActiveProjectSession, 
     transcript: historyWindow.transcript,
     ledgerSessions: hydratedAgentSessions,
   })
+  const executionEvents = sessionConversationExecutionEvents(view)
+  const selectedTaskID = isRightSidebarConversationSession(session)
+    ? await validatedRightSidebarConversationTaskID(session)
+    : undefined
+  const executionProjection = selectedTaskID ? taskExecutionProjectionForTask(selectedTaskID) : undefined
+  const occurrenceEventIDs = new Set(executionEvents.map((event) => event.id))
+  const agentView = projectConversationAgentView(
+    historyWindow.transcript,
+    [
+      ...(executionProjection
+        ? executionProjectionLifecycleEvents(executionProjection).filter(
+            (event) => !occurrenceEventIDs.has(String(event.payload?.eventID)),
+          )
+        : []),
+      ...executionEvents.map(protocolSessionEvent),
+    ],
+    hydratedAgentSessions,
+    new Map(),
+    TodoStore.getBySessionIDs(hydratedAgentSessions.map((entry) => entry.sessionID)),
+    executionProjection?.occurrences ?? [],
+  )
   return {
     sessionIDs,
     transcript: historyWindow.transcript,
     history,
     view,
-    hydratedAgentSessions,
-    executionEvents: sessionConversationExecutionEvents(view),
+    selectedTaskID,
+    agentView,
+    executionEvents,
   }
 }
 
@@ -1070,7 +1092,7 @@ export const SessionRoutes = lazy(() =>
         const session = await getActiveProjectSession(sessionID)
         const tailLimit = query.tail_limit ?? CONVERSATION_TAIL_MESSAGE_LIMIT
         const conversation = await sessionConversationTailProjection(session, tailLimit)
-        const { sessionIDs, transcript, history, view, hydratedAgentSessions, executionEvents } = conversation
+        const { sessionIDs, transcript, history, view, agentView, selectedTaskID, executionEvents } = conversation
         const rootMessages = await MessageStore.earliestInSession({ sessionID, limit: 20 })
         const sessionIDSet = new Set(sessionIDs)
         const pendingQuestions = pendingQuestionsForConversation(await Question.list(), session.projectID, sessionIDSet)
@@ -1084,7 +1106,7 @@ export const SessionRoutes = lazy(() =>
           changes: await SessionSummary.diff({ sessionID }),
           ...(isRightSidebarConversationSession(session)
             ? {
-                selectedTaskID: (await validatedRightSidebarConversationTaskID(session)) ?? null,
+                selectedTaskID: selectedTaskID ?? null,
                 experience: rightSidebarConversationExperience(session),
               }
             : {}),
@@ -1096,26 +1118,6 @@ export const SessionRoutes = lazy(() =>
                 view,
               })
             : []
-        const executionProjection =
-          "selectedTaskID" in board && typeof board.selectedTaskID === "string"
-            ? taskExecutionProjectionForTask(board.selectedTaskID)
-            : undefined
-        const occurrenceEventIDs = new Set(executionEvents.map((event) => event.id))
-        const agentView = projectConversationAgentView(
-          transcript,
-          [
-            ...(executionProjection
-              ? executionProjectionLifecycleEvents(executionProjection).filter(
-                  (event) => !occurrenceEventIDs.has(String(event.payload?.eventID)),
-                )
-              : []),
-            ...executionEvents.map(protocolSessionEvent),
-          ],
-          hydratedAgentSessions,
-          new Map(),
-          TodoStore.getBySessionIDs(hydratedAgentSessions.map((entry) => entry.sessionID)),
-          executionProjection?.occurrences ?? [],
-        )
         return c.json({
           board,
           pendingQuestions,
@@ -1290,6 +1292,7 @@ export const SessionRoutes = lazy(() =>
           const conversationSnapshot = {
             transcript: projectConversationTransportTranscript(connectionConversation.transcript),
             view: connectionConversation.view,
+            agentView: connectionConversation.agentView,
             history: connectionConversation.history,
             pendingPermissions: await pendingPermissionsForConversation(session.projectID, sessionTreeIDs),
             pendingQuestions: pendingQuestionsForConversation(

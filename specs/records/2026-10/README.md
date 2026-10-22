@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Session 成员快照恢复](2026-10-23-session-member-snapshot.md)：单 agent 修复完整成员重连快照及Source契约，真实历史复验与54项聚焦合同。
+
 - [成员活跃流重连](2026-10-23-member-live-reconnect.md)：[七张实图及完整结算](../../artifacts/2026-10-23-member-live-reconnect/README.md)，547 修正测量后真实断流/恢复通过，保留首轮未执行中断的事实。
 
 - [成员离线新增内容恢复](2026-10-23-member-offline-growth.md)：[七张实图与 8 次 Sol](../../artifacts/2026-10-23-member-offline-growth/README.md)，546 快照刷新缺口修复，原正文/来源 owner 保持、完整资源结算。

@@ -460,6 +460,11 @@ export function mergeSessionConnectionSnapshot(
   const snapshot = requireObject(envelope.conversationSnapshot, "session.connected conversationSnapshot")
   const transcript = requireArray(snapshot.transcript, "session.connected conversationSnapshot.transcript")
   const view = requireObject(snapshot.view, "session.connected conversationSnapshot.view")
+  const agentView = requireObject(
+    snapshot.agentView,
+    "session.connected conversationSnapshot.agentView",
+  ) as unknown as ConversationAgentView
+  validateConversationAgentView(agentView, { rootSessionID: source.id })
   const history = parseHistoryState(snapshot.history)
   const preparedConversation = prepareConversationView(view, transcript)
   const preparedQuestions = prepareQuestionInteractions(
@@ -478,6 +483,7 @@ export function mergeSessionConnectionSnapshot(
     deferConversationTreeProjection(() => {
       replaceStandalonePendingInteractions(preparedQuestions, preparedPermissions)
       commitPreparedConversationView(preparedConversation)
+      hydrateConversationAgentView(sourceKey(source), agentView, { validated: true })
     })
   })
   historySource = source

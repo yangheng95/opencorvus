@@ -138,6 +138,7 @@ function publicQuestion(id = "que_side") {
 function connectionSnapshot(pendingQuestions: unknown[], pendingPermissions: unknown[] = []) {
   return { type: "session.connected", payload: { sessionID: "ses_side", conversationSnapshot: {
     transcript: [], view: { topLevelSessionIDs: [], messages: [], sessions: [] },
+    agentView: { topLevelExecutionIDs: [], messages: [], sessions: [] },
     history: { oldestTimestamp: null, oldestOrderKey: null, oldestMessageID: null, hasMore: false, limit: 80 }, pendingQuestions, pendingPermissions,
   } } }
 }
@@ -316,6 +317,7 @@ test("a connection response missing mandatory pendingQuestions produces the curr
   try {
     connection.send({ type: "session.connected", payload: { sessionID: "ses_side", conversationSnapshot: {
       transcript: [], view: { topLevelSessionIDs: [], messages: [], sessions: [] },
+      agentView: { topLevelExecutionIDs: [], messages: [], sessions: [] },
       history: { oldestTimestamp: null, oldestOrderKey: null, oldestMessageID: null, hasMore: false, limit: 80 }, pendingPermissions: [],
     } } })
     expect(connection.errors[0]).toBeInstanceOf(Error)

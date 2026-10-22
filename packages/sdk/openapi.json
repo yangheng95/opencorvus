@@ -16316,6 +16316,948 @@
       },
       "SessionConversationConnectionSnapshot": {
         "properties": {
+          "agentView": {
+            "properties": {
+              "messages": {
+                "items": {
+                  "properties": {
+                    "agentID": {
+                      "type": "string"
+                    },
+                    "inputMessageID": {
+                      "pattern": "^msg.*",
+                      "type": "string"
+                    },
+                    "messageID": {
+                      "type": "string"
+                    },
+                    "orderKey": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "parentSessionID": {
+                      "type": "string"
+                    },
+                    "placement": {
+                      "const": "top_level",
+                      "type": "string"
+                    },
+                    "sessionAgentID": {
+                      "type": "string"
+                    },
+                    "sessionID": {
+                      "type": "string"
+                    },
+                    "stage": {
+                      "type": "string"
+                    },
+                    "time": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "messageID",
+                    "inputMessageID",
+                    "orderKey",
+                    "sessionID",
+                    "sessionAgentID",
+                    "agentID",
+                    "stage",
+                    "time",
+                    "placement"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "sessions": {
+                "items": {
+                  "anyOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "activity": {
+                          "items": {
+                            "oneOf": [
+                              {
+                                "properties": {
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "text": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "text",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "messageID",
+                                  "orderKey",
+                                  "type",
+                                  "text"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "properties": {
+                                  "callID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "state": {
+                                    "additionalProperties": {},
+                                    "propertyNames": {
+                                      "type": "string"
+                                    },
+                                    "type": "object"
+                                  },
+                                  "tool": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "tool",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "messageID",
+                                  "orderKey",
+                                  "type",
+                                  "tool",
+                                  "state"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "properties": {
+                                  "files": {
+                                    "items": {},
+                                    "type": "array"
+                                  },
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "patch",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "messageID",
+                                  "orderKey",
+                                  "type",
+                                  "files"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "properties": {
+                                  "filename": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "file",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "messageID",
+                                  "orderKey",
+                                  "type",
+                                  "filename"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "properties": {
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "message": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "part-error",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "messageID",
+                                  "orderKey",
+                                  "type",
+                                  "message"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "sourceId": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "source-url",
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "format": "uri",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "sourceId",
+                                  "url",
+                                  "id",
+                                  "messageID",
+                                  "orderKey"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "filename": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "mediaType": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "sourceId": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "source-document",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "sourceId",
+                                  "mediaType",
+                                  "title",
+                                  "id",
+                                  "messageID",
+                                  "orderKey"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "path": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "range": {
+                                    "$ref": "#/components/schemas/SourceFileRange"
+                                  },
+                                  "sourceId": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "source-file",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "sourceId",
+                                  "path",
+                                  "title",
+                                  "id",
+                                  "messageID",
+                                  "orderKey"
+                                ],
+                                "type": "object"
+                              }
+                            ]
+                          },
+                          "type": "array"
+                        },
+                        "agentID": {
+                          "type": "string"
+                        },
+                        "errorReason": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "executionID": {
+                          "pattern": "^msg.*",
+                          "type": "string"
+                        },
+                        "firstMessageTime": {
+                          "type": "number"
+                        },
+                        "firstObservedAt": {
+                          "type": "number"
+                        },
+                        "inputMessageID": {
+                          "pattern": "^msg.*",
+                          "type": "string"
+                        },
+                        "inputPreview": {
+                          "properties": {
+                            "messageID": {
+                              "type": "string"
+                            },
+                            "observedAt": {
+                              "type": "number"
+                            },
+                            "source": {
+                              "const": "user_message",
+                              "type": "string"
+                            },
+                            "text": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "text",
+                            "messageID",
+                            "observedAt",
+                            "source"
+                          ],
+                          "type": "object"
+                        },
+                        "lastDisplayMessageID": {
+                          "type": "string"
+                        },
+                        "lastMessageTime": {
+                          "type": "number"
+                        },
+                        "lastObservedAt": {
+                          "type": "number"
+                        },
+                        "messageIDs": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        "orderKey": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "parentSessionID": {
+                          "type": "string"
+                        },
+                        "placement": {
+                          "const": "top_level",
+                          "type": "string"
+                        },
+                        "sessionID": {
+                          "type": "string"
+                        },
+                        "stage": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "enum": [
+                            "pending",
+                            "running",
+                            "idle",
+                            "completed",
+                            "error",
+                            "skipped"
+                          ],
+                          "type": "string"
+                        },
+                        "todoUpdatedAt": {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "todos": {
+                          "items": {
+                            "$ref": "#/components/schemas/Todo"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "required": [
+                        "sessionID",
+                        "agentID",
+                        "orderKey",
+                        "stage",
+                        "messageIDs",
+                        "firstMessageTime",
+                        "lastMessageTime",
+                        "activity",
+                        "todos",
+                        "todoUpdatedAt",
+                        "placement",
+                        "executionID",
+                        "inputMessageID"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "activity": {
+                          "items": {
+                            "oneOf": [
+                              {
+                                "properties": {
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "text": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "text",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "messageID",
+                                  "orderKey",
+                                  "type",
+                                  "text"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "properties": {
+                                  "callID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "state": {
+                                    "additionalProperties": {},
+                                    "propertyNames": {
+                                      "type": "string"
+                                    },
+                                    "type": "object"
+                                  },
+                                  "tool": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "tool",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "messageID",
+                                  "orderKey",
+                                  "type",
+                                  "tool",
+                                  "state"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "properties": {
+                                  "files": {
+                                    "items": {},
+                                    "type": "array"
+                                  },
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "patch",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "messageID",
+                                  "orderKey",
+                                  "type",
+                                  "files"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "properties": {
+                                  "filename": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "file",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "messageID",
+                                  "orderKey",
+                                  "type",
+                                  "filename"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "properties": {
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "message": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "part-error",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "messageID",
+                                  "orderKey",
+                                  "type",
+                                  "message"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "sourceId": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "source-url",
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "format": "uri",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "sourceId",
+                                  "url",
+                                  "id",
+                                  "messageID",
+                                  "orderKey"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "filename": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "mediaType": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "sourceId": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "source-document",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "sourceId",
+                                  "mediaType",
+                                  "title",
+                                  "id",
+                                  "messageID",
+                                  "orderKey"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "path": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "range": {
+                                    "$ref": "#/components/schemas/SourceFileRange"
+                                  },
+                                  "sourceId": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "source-file",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "sourceId",
+                                  "path",
+                                  "title",
+                                  "id",
+                                  "messageID",
+                                  "orderKey"
+                                ],
+                                "type": "object"
+                              }
+                            ]
+                          },
+                          "type": "array"
+                        },
+                        "agentID": {
+                          "type": "string"
+                        },
+                        "errorReason": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "firstMessageTime": {
+                          "type": "number"
+                        },
+                        "firstObservedAt": {
+                          "type": "number"
+                        },
+                        "inputPreview": {
+                          "properties": {
+                            "messageID": {
+                              "type": "string"
+                            },
+                            "observedAt": {
+                              "type": "number"
+                            },
+                            "source": {
+                              "const": "user_message",
+                              "type": "string"
+                            },
+                            "text": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "text",
+                            "messageID",
+                            "observedAt",
+                            "source"
+                          ],
+                          "type": "object"
+                        },
+                        "lastDisplayMessageID": {
+                          "type": "string"
+                        },
+                        "lastMessageTime": {
+                          "type": "number"
+                        },
+                        "lastObservedAt": {
+                          "type": "number"
+                        },
+                        "messageIDs": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        "orderKey": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "parentSessionID": {
+                          "type": "string"
+                        },
+                        "placement": {
+                          "const": "top_level",
+                          "type": "string"
+                        },
+                        "sessionID": {
+                          "type": "string"
+                        },
+                        "stage": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "enum": [
+                            "pending",
+                            "running",
+                            "idle",
+                            "completed",
+                            "error",
+                            "skipped"
+                          ],
+                          "type": "string"
+                        },
+                        "todoUpdatedAt": {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "todos": {
+                          "items": {
+                            "$ref": "#/components/schemas/Todo"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "required": [
+                        "sessionID",
+                        "agentID",
+                        "orderKey",
+                        "stage",
+                        "messageIDs",
+                        "firstMessageTime",
+                        "lastMessageTime",
+                        "activity",
+                        "todos",
+                        "todoUpdatedAt",
+                        "placement"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              "topLevelExecutionIDs": {
+                "items": {
+                  "pattern": "^msg.*",
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "topLevelExecutionIDs",
+              "sessions",
+              "messages"
+            ],
+            "type": "object"
+          },
           "history": {
             "properties": {
               "hasMore": {
@@ -16874,6 +17816,141 @@
                                   "message"
                                 ],
                                 "type": "object"
+                              },
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "sourceId": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "source-url",
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "format": "uri",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "sourceId",
+                                  "url",
+                                  "id",
+                                  "messageID",
+                                  "orderKey"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "filename": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "mediaType": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "sourceId": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "source-document",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "sourceId",
+                                  "mediaType",
+                                  "title",
+                                  "id",
+                                  "messageID",
+                                  "orderKey"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "path": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "range": {
+                                    "$ref": "#/components/schemas/SourceFileRange"
+                                  },
+                                  "sourceId": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "source-file",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "sourceId",
+                                  "path",
+                                  "title",
+                                  "id",
+                                  "messageID",
+                                  "orderKey"
+                                ],
+                                "type": "object"
                               }
                             ]
                           },
@@ -17177,6 +18254,141 @@
                                   "message"
                                 ],
                                 "type": "object"
+                              },
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "sourceId": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "source-url",
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "format": "uri",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "sourceId",
+                                  "url",
+                                  "id",
+                                  "messageID",
+                                  "orderKey"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "filename": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "mediaType": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "sourceId": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "source-document",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "sourceId",
+                                  "mediaType",
+                                  "title",
+                                  "id",
+                                  "messageID",
+                                  "orderKey"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "path": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "range": {
+                                    "$ref": "#/components/schemas/SourceFileRange"
+                                  },
+                                  "sourceId": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "const": "source-file",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "sourceId",
+                                  "path",
+                                  "title",
+                                  "id",
+                                  "messageID",
+                                  "orderKey"
+                                ],
+                                "type": "object"
                               }
                             ]
                           },
@@ -17313,6 +18525,7 @@
           "pendingQuestions",
           "transcript",
           "view",
+          "agentView",
           "history"
         ],
         "type": "object"
@@ -100840,6 +102053,141 @@
                                             "message"
                                           ],
                                           "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-url",
+                                              "type": "string"
+                                            },
+                                            "url": {
+                                              "format": "uri",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "url",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "filename": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "mediaType": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-document",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "mediaType",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "path": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "range": {
+                                              "$ref": "#/components/schemas/SourceFileRange"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-file",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "path",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
                                         }
                                       ]
                                     },
@@ -101141,6 +102489,141 @@
                                             "orderKey",
                                             "type",
                                             "message"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-url",
+                                              "type": "string"
+                                            },
+                                            "url": {
+                                              "format": "uri",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "url",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "filename": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "mediaType": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-document",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "mediaType",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "path": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "range": {
+                                              "$ref": "#/components/schemas/SourceFileRange"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-file",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "path",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
                                           ],
                                           "type": "object"
                                         }
@@ -103059,6 +104542,141 @@
                                             "message"
                                           ],
                                           "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-url",
+                                              "type": "string"
+                                            },
+                                            "url": {
+                                              "format": "uri",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "url",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "filename": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "mediaType": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-document",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "mediaType",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "path": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "range": {
+                                              "$ref": "#/components/schemas/SourceFileRange"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-file",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "path",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
                                         }
                                       ]
                                     },
@@ -103360,6 +104978,141 @@
                                             "orderKey",
                                             "type",
                                             "message"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-url",
+                                              "type": "string"
+                                            },
+                                            "url": {
+                                              "format": "uri",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "url",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "filename": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "mediaType": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-document",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "mediaType",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "path": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "range": {
+                                              "$ref": "#/components/schemas/SourceFileRange"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-file",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "path",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
                                           ],
                                           "type": "object"
                                         }
@@ -104010,6 +105763,141 @@
                                             "message"
                                           ],
                                           "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-url",
+                                              "type": "string"
+                                            },
+                                            "url": {
+                                              "format": "uri",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "url",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "filename": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "mediaType": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-document",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "mediaType",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "path": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "range": {
+                                              "$ref": "#/components/schemas/SourceFileRange"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-file",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "path",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
                                         }
                                       ]
                                     },
@@ -104311,6 +106199,141 @@
                                             "orderKey",
                                             "type",
                                             "message"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-url",
+                                              "type": "string"
+                                            },
+                                            "url": {
+                                              "format": "uri",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "url",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "filename": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "mediaType": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-document",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "mediaType",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "path": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "range": {
+                                              "$ref": "#/components/schemas/SourceFileRange"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-file",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "path",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
                                           ],
                                           "type": "object"
                                         }
@@ -121594,6 +123617,141 @@
                                             "message"
                                           ],
                                           "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-url",
+                                              "type": "string"
+                                            },
+                                            "url": {
+                                              "format": "uri",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "url",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "filename": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "mediaType": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-document",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "mediaType",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "path": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "range": {
+                                              "$ref": "#/components/schemas/SourceFileRange"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-file",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "path",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
                                         }
                                       ]
                                     },
@@ -121895,6 +124053,141 @@
                                             "orderKey",
                                             "type",
                                             "message"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-url",
+                                              "type": "string"
+                                            },
+                                            "url": {
+                                              "format": "uri",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "url",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "filename": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "mediaType": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-document",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "mediaType",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "path": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "range": {
+                                              "$ref": "#/components/schemas/SourceFileRange"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-file",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "path",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
                                           ],
                                           "type": "object"
                                         }
@@ -126309,6 +128602,141 @@
                                             "message"
                                           ],
                                           "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-url",
+                                              "type": "string"
+                                            },
+                                            "url": {
+                                              "format": "uri",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "url",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "filename": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "mediaType": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-document",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "mediaType",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "path": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "range": {
+                                              "$ref": "#/components/schemas/SourceFileRange"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-file",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "path",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
                                         }
                                       ]
                                     },
@@ -126610,6 +129038,141 @@
                                             "orderKey",
                                             "type",
                                             "message"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-url",
+                                              "type": "string"
+                                            },
+                                            "url": {
+                                              "format": "uri",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "url",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "filename": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "mediaType": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-document",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "mediaType",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "path": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "range": {
+                                              "$ref": "#/components/schemas/SourceFileRange"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-file",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "path",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
                                           ],
                                           "type": "object"
                                         }
@@ -127559,6 +130122,141 @@
                                             "message"
                                           ],
                                           "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-url",
+                                              "type": "string"
+                                            },
+                                            "url": {
+                                              "format": "uri",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "url",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "filename": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "mediaType": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-document",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "mediaType",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "path": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "range": {
+                                              "$ref": "#/components/schemas/SourceFileRange"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-file",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "path",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
                                         }
                                       ]
                                     },
@@ -127860,6 +130558,141 @@
                                             "orderKey",
                                             "type",
                                             "message"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-url",
+                                              "type": "string"
+                                            },
+                                            "url": {
+                                              "format": "uri",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "url",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "filename": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "mediaType": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-document",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "mediaType",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "path": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "range": {
+                                              "$ref": "#/components/schemas/SourceFileRange"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-file",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "path",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
                                           ],
                                           "type": "object"
                                         }
@@ -128539,6 +131372,141 @@
                                             "message"
                                           ],
                                           "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-url",
+                                              "type": "string"
+                                            },
+                                            "url": {
+                                              "format": "uri",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "url",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "filename": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "mediaType": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-document",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "mediaType",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "path": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "range": {
+                                              "$ref": "#/components/schemas/SourceFileRange"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-file",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "path",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
                                         }
                                       ]
                                     },
@@ -128840,6 +131808,141 @@
                                             "orderKey",
                                             "type",
                                             "message"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-url",
+                                              "type": "string"
+                                            },
+                                            "url": {
+                                              "format": "uri",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "url",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "filename": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "mediaType": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-document",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "mediaType",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "path": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "range": {
+                                              "$ref": "#/components/schemas/SourceFileRange"
+                                            },
+                                            "sourceId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "source-file",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "type",
+                                            "sourceId",
+                                            "path",
+                                            "title",
+                                            "id",
+                                            "messageID",
+                                            "orderKey"
                                           ],
                                           "type": "object"
                                         }

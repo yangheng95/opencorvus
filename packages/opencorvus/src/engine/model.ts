@@ -845,6 +845,12 @@ export const TaskEvent = z.object({
   notify: BusEvent.NotifyDescriptorSchema.optional(),
 })
 
+const ConversationSourceActivityIdentity = {
+  id: z.string().min(1),
+  messageID: z.string().min(1),
+  orderKey: z.string().min(1),
+}
+
 export const TaskConversationAgentActivityItem = z.discriminatedUnion("type", [
   z.object({
     id: z.string().min(1),
@@ -884,6 +890,15 @@ export const TaskConversationAgentActivityItem = z.discriminatedUnion("type", [
     title: z.string().min(1).optional(),
     message: z.string().min(1),
   }),
+  Message.SourceUrlPayload.pick({ type: true, sourceId: true, url: true, title: true }).extend(
+    ConversationSourceActivityIdentity,
+  ),
+  Message.SourceDocumentPayload.pick({ type: true, sourceId: true, mediaType: true, title: true, filename: true }).extend(
+    ConversationSourceActivityIdentity,
+  ),
+  Message.SourceFilePayload.pick({ type: true, sourceId: true, path: true, title: true, range: true }).extend(
+    ConversationSourceActivityIdentity,
+  ),
 ])
 
 const TaskConversationSessionViewBase = z.object({
@@ -1073,6 +1088,7 @@ export const SessionConversationConnectionSnapshot = z
       }),
     ),
     view: TaskConversationView,
+    agentView: TaskConversationAgentView,
     history: TaskConversationHistoryState,
   })
   .meta({ ref: "SessionConversationConnectionSnapshot" })

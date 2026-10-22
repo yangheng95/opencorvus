@@ -343,6 +343,19 @@ admission authority, and global subscriptions cannot cross Project boundaries.
 `SessionStreamEvent` are the production Zod schemas and the generated
 OpenAPI/Software Development Kit contract for this handshake.
 
+The connection snapshot also carries the required `agentView` from the same
+Session tail projection used by HTTP hydration, including canonical input
+occurrences, activity, message identities, times, targets, Todos and any bound
+Task execution facts. The frontend validates it before mutation and hydrates
+the existing agent store in the same batch as the transcript. Subsequent real
+lifecycle events update these complete records; a reconnect does not first
+create partial records from their final status timestamps. Ordinary Session
+and Mission streams share this contract and preserve the current member reader.
+The shared activity schema includes the URL, document and file Source variants
+already produced by the canonical activity projector, reusing Message source
+payload validation. Source identity, URL/path, title and file range survive both
+HTTP hydration and the schema-validated connection frame.
+
 Session HTTP hydration and the ordered connection snapshot require both
 `pendingPermissions` and `pendingQuestions`. Each is a complete current pending
 set for the admitted conversation tree, distinct from the bounded additive

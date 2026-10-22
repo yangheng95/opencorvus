@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Session 成员快照恢复](records/2026-10/2026-10-23-session-member-snapshot.md)：548 修复重连时成员摘要/导航/时间的8.624秒缺口，补齐三类来源公开契约；七张实图与10次Sol闭合。
+
 - [成员活跃流重连](records/2026-10/2026-10-23-member-live-reconnect.md)：[七张实图与原 reader 证明](artifacts/2026-10-23-member-live-reconnect/README.md)，3.062 秒真实恢复、原正文继续增长；修正私有测量工具，27 次 Sol 完整结算。
 
 - [成员离线新增内容恢复](records/2026-10/2026-10-23-member-offline-growth.md)：[七张实图与真实恢复](artifacts/2026-10-23-member-offline-growth/README.md)，修复完整快照未触发成员读取，自动恢复第五来源与新增正文，原 owner 保持。
