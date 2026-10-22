@@ -1,0 +1,750 @@
+{
+  "at": "2026-10-22T10:10:12.501Z",
+  "screenshots": 17,
+  "requests": 10,
+  "startedMaximum": 20,
+  "declaredConditionalMaximum": 24,
+  "unstartedScope": "536c-after;4 request allowance retired",
+  "retiredAuthorityMembers": 20,
+  "scopes": [
+    {
+      "name": "task-source-epoch-536",
+      "stage": "before",
+      "kind": "Initial observer;post-reconnect lifecycle qualification invalidated",
+      "originalHandle": 62728,
+      "exit": 0,
+      "pages": [
+        141
+      ],
+      "pageState": "Closed",
+      "shutdown": 200,
+      "native": {
+        "occurrence": "task-source-epoch-536-before-f88f6063-5474-49cc-987a-5442b238c21f",
+        "outcome": "settled",
+        "host": {
+          "pid": 47888,
+          "processInstanceID": "win32:639282588033400717",
+          "occurrenceID": "53acbfeb-2869-4f9f-af5a-0a87cb1ab93a"
+        },
+        "target": {
+          "pid": 98124,
+          "processInstanceID": "win32:639282588044953431",
+          "occurrenceID": "82efc5bd-f235-4e88-b837-2c9484c95f3c"
+        },
+        "observedAtUtc": "2026-10-22T09:42:54.445Z",
+        "deadlineAt": 1792663203306,
+        "terminal": {
+          "occurrenceID": "task-source-epoch-536-before-f88f6063-5474-49cc-987a-5442b238c21f",
+          "pid": 98124,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "identity": {
+            "pid": 47888,
+            "processInstanceID": "win32:639282588033400717",
+            "occurrenceID": "53acbfeb-2869-4f9f-af5a-0a87cb1ab93a"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "identity": {
+            "pid": 98124,
+            "processInstanceID": "win32:639282588044953431",
+            "occurrenceID": "82efc5bd-f235-4e88-b837-2c9484c95f3c"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "requests": 2,
+      "maximum": 4,
+      "authorityRetired": 4,
+      "runtimeErrors": [],
+      "data": {
+        "tables": 90,
+        "originalRows": 165770,
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 78123008,
+          "modifiedAtMs": 1792659555873.4478
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ],
+        "providerActivities": {
+          "original": 413,
+          "current": 414
+        }
+      },
+      "provider": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792662019287
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_hURR7vj7lpdgUmZv1Lpg",
+                "agentID": "memory",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792662015667
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_hURR7vj7lpdgUmZv1Lpg",
+                "agentID": "chat",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        }
+      ],
+      "taskHttpRequests": 55
+    },
+    {
+      "name": "task-source-epoch-536",
+      "stage": "after",
+      "kind": "Initial observer;post-reconnect lifecycle qualification invalidated",
+      "originalHandle": 60952,
+      "exit": 0,
+      "pages": [
+        141
+      ],
+      "pageState": "Closed",
+      "shutdown": 200,
+      "native": {
+        "occurrence": "task-source-epoch-536-after-446760bf-5dce-49c9-b10d-43e68dfc2d39",
+        "outcome": "settled",
+        "host": {
+          "pid": 91828,
+          "processInstanceID": "win32:639282590285334672",
+          "occurrenceID": "32832565-28f1-424c-9d08-bf57c7e044dc"
+        },
+        "target": {
+          "pid": 51968,
+          "processInstanceID": "win32:639282590293882516",
+          "occurrenceID": "e84d2282-7567-4e9d-a58a-0ffbb936ea7e"
+        },
+        "observedAtUtc": "2026-10-22T09:48:11.937Z",
+        "deadlineAt": 1792663428346,
+        "terminal": {
+          "occurrenceID": "task-source-epoch-536-after-446760bf-5dce-49c9-b10d-43e68dfc2d39",
+          "pid": 51968,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "identity": {
+            "pid": 91828,
+            "processInstanceID": "win32:639282590285334672",
+            "occurrenceID": "32832565-28f1-424c-9d08-bf57c7e044dc"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "identity": {
+            "pid": 51968,
+            "processInstanceID": "win32:639282590293882516",
+            "occurrenceID": "e84d2282-7567-4e9d-a58a-0ffbb936ea7e"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "requests": 2,
+      "maximum": 4,
+      "authorityRetired": 4,
+      "runtimeErrors": [
+        {
+          "at": "2026-10-22T09:44:00.469Z",
+          "service": "overlay:ui",
+          "message": "Could not open this workspace link"
+        }
+      ],
+      "data": {
+        "tables": 90,
+        "originalRows": 166205,
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 78262272,
+          "modifiedAtMs": 1792662174339.902
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ],
+        "providerActivities": {
+          "original": 414,
+          "current": 415
+        }
+      },
+      "provider": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792662244623
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_hyKIPLwNsiVyRYcoGKht",
+                "agentID": "memory",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792662242230
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_hyKIPLwNsiVyRYcoGKht",
+                "agentID": "chat",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        }
+      ],
+      "taskHttpRequests": 60
+    },
+    {
+      "name": "task-source-cleanup-536c",
+      "stage": "before",
+      "kind": "Actual private cleanup reentry diagnosis",
+      "originalHandle": 44229,
+      "exit": 0,
+      "pages": [
+        142
+      ],
+      "pageState": "Closed",
+      "shutdown": 200,
+      "native": {
+        "occurrence": "task-source-cleanup-536c-before-36f0c34e-d633-4a8b-95d1-835a8fba66fa",
+        "outcome": "settled",
+        "host": {
+          "pid": 98200,
+          "processInstanceID": "win32:639282595269853189",
+          "occurrenceID": "ecb55b07-6c37-44bf-90b0-ba180d7bb070"
+        },
+        "target": {
+          "pid": 89552,
+          "processInstanceID": "win32:639282595280614572",
+          "occurrenceID": "43cf7657-f9a0-4cae-a992-a62a8ff498d5"
+        },
+        "observedAtUtc": "2026-10-22T09:55:06.754Z",
+        "deadlineAt": 1792663926886,
+        "terminal": {
+          "occurrenceID": "task-source-cleanup-536c-before-36f0c34e-d633-4a8b-95d1-835a8fba66fa",
+          "pid": 89552,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 98200,
+            "processInstanceID": "win32:639282595269853189",
+            "occurrenceID": "ecb55b07-6c37-44bf-90b0-ba180d7bb070"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 89552,
+            "processInstanceID": "win32:639282595280614572",
+            "occurrenceID": "43cf7657-f9a0-4cae-a992-a62a8ff498d5"
+          }
+        }
+      ],
+      "requests": 2,
+      "maximum": 4,
+      "authorityRetired": 4,
+      "runtimeErrors": [
+        {
+          "at": "2026-10-22T09:53:42.938Z",
+          "service": "overlay:ui",
+          "message": "Error"
+        }
+      ],
+      "data": {
+        "tables": 90,
+        "originalRows": 166716,
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 78491648,
+          "modifiedAtMs": 1792662491828.878
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ],
+        "providerActivities": {
+          "original": 415,
+          "current": 416
+        }
+      },
+      "provider": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792662743460
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_hb5dsQFvz9I1mccM0RmO",
+                "agentID": "memory",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792662739701
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_hb5dsQFvz9I1mccM0RmO",
+                "agentID": "chat",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        }
+      ],
+      "taskHttpRequests": 39
+    },
+    {
+      "name": "task-source-clean-536d",
+      "stage": "before",
+      "kind": "Corrected passive observer and formal final UI",
+      "originalHandle": 74480,
+      "exit": 0,
+      "pages": [
+        143,
+        144,
+        145
+      ],
+      "pageState": "Closed",
+      "shutdown": 200,
+      "native": {
+        "occurrence": "task-source-clean-536d-before-ff0f1431-d1c1-40f6-af03-acc4fb375e2c",
+        "outcome": "settled",
+        "host": {
+          "pid": 97944,
+          "processInstanceID": "win32:639282599001292662",
+          "occurrenceID": "8c411a04-16ed-46be-85b2-e9d7475c5588"
+        },
+        "target": {
+          "pid": 96868,
+          "processInstanceID": "win32:639282599012099982",
+          "occurrenceID": "77d2b0e0-c011-46e8-8653-4f6508568184"
+        },
+        "observedAtUtc": "2026-10-22T10:01:46.186Z",
+        "deadlineAt": 1792664300105,
+        "terminal": {
+          "occurrenceID": "task-source-clean-536d-before-ff0f1431-d1c1-40f6-af03-acc4fb375e2c",
+          "pid": 96868,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 97944,
+            "processInstanceID": "win32:639282599001292662",
+            "occurrenceID": "8c411a04-16ed-46be-85b2-e9d7475c5588"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 96868,
+            "processInstanceID": "win32:639282599012099982",
+            "occurrenceID": "77d2b0e0-c011-46e8-8653-4f6508568184"
+          }
+        }
+      ],
+      "requests": 2,
+      "maximum": 4,
+      "authorityRetired": 4,
+      "runtimeErrors": [],
+      "data": {
+        "tables": 90,
+        "originalRows": 167151,
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 78704640,
+          "modifiedAtMs": 1792662906570.8677
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ],
+        "providerActivities": {
+          "original": 416,
+          "current": 417
+        }
+      },
+      "provider": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792663115609
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_hoz6Cq8HdRQfLbeiNMtW",
+                "agentID": "memory",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792663112388
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_hoz6Cq8HdRQfLbeiNMtW",
+                "agentID": "chat",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        }
+      ],
+      "taskHttpRequests": 99
+    },
+    {
+      "name": "task-source-clean-536d",
+      "stage": "after",
+      "kind": "Corrected passive observer and formal final UI",
+      "originalHandle": 80218,
+      "exit": 0,
+      "pages": [
+        143,
+        144,
+        145
+      ],
+      "pageState": "Closed",
+      "shutdown": 200,
+      "native": {
+        "occurrence": "task-source-clean-536d-after-761542f2-61a3-4f81-a4ad-e8d46ebeb6bf",
+        "outcome": "settled",
+        "host": {
+          "pid": 81872,
+          "processInstanceID": "win32:639282602349048040",
+          "occurrenceID": "74eb7094-381e-4d7c-95f6-22d2ab3c0cfa"
+        },
+        "target": {
+          "pid": 68696,
+          "processInstanceID": "win32:639282602360907299",
+          "occurrenceID": "b673d6f9-3f2c-4b6c-8840-5129feb176c5"
+        },
+        "observedAtUtc": "2026-10-22T10:07:55.94Z",
+        "deadlineAt": 1792664634879,
+        "terminal": {
+          "occurrenceID": "task-source-clean-536d-after-761542f2-61a3-4f81-a4ad-e8d46ebeb6bf",
+          "pid": 68696,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "identity": {
+            "pid": 81872,
+            "processInstanceID": "win32:639282602349048040",
+            "occurrenceID": "74eb7094-381e-4d7c-95f6-22d2ab3c0cfa"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "identity": {
+            "pid": 68696,
+            "processInstanceID": "win32:639282602360907299",
+            "occurrenceID": "b673d6f9-3f2c-4b6c-8840-5129feb176c5"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "requests": 2,
+      "maximum": 4,
+      "authorityRetired": 4,
+      "runtimeErrors": [],
+      "data": {
+        "tables": 90,
+        "originalRows": 167586,
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 78917632,
+          "modifiedAtMs": 1792663306079.0183
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ],
+        "providerActivities": {
+          "original": 417,
+          "current": 418
+        }
+      },
+      "provider": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792663452410
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_hyq2whpRzGVC5U3VdD5a",
+                "agentID": "memory",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792663446559
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_hyq2whpRzGVC5U3VdD5a",
+                "agentID": "chat",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        }
+      ],
+      "taskHttpRequests": 94
+    }
+  ],
+  "limits": [
+    "Quiet completed Task historical member;natural delta is empty,not live nonempty insertion",
+    "Natural reconnect kept selected member;actual old-epoch member read occurred on explicit list/detail return,not automatically on the Online badge",
+    "Final page144 was created from Home URL but startup restored the saved Task while search was opening;this is not the exact no-saved-preference startup branch of141",
+    "Private observers are not production UI;final independent page145 uses uninstrumented formal build and was manually reviewed",
+    "No business input,new Tasks,delegation or new Goal;real Sol requests only preflight/memory;Goal creation/help inspected without submitting",
+    "Discrete screenshots and manual review;no UI automated tests;no claim every live Rendering combination is resolved"
+  ]
+}

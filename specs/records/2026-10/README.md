@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Task成员来源与live epoch](2026-10-22-task-source-epoch.md)：[原成员读取与同页恢复](../../artifacts/2026-10-22-task-source-epoch/README.md)，真实delta/snapshot/epoch接管，排除并修复私有cleanup读取自扰。
+
 - [Sources与成员重连历史](2026-10-22-source-reconnect-history.md)：[13实图/11次Sol](../../artifacts/2026-10-22-source-reconnect-history/README.md)，190事件完整保留的quiet重连、实际新Source/正向checker及16配对成员退休，Task分支仍未覆盖。
 
 - [Sources与成员历史首开](2026-10-22-source-cold-history.md)：[10实图/300事件](../../artifacts/2026-10-22-source-cold-history/README.md)，首开最长822ms首批正文，列表/dock/工具开合owner与阅读保持；双实例0模型/完整原数据闭合。
