@@ -13,6 +13,7 @@ import {
 import { projectScopedPath } from "../services/project-directory"
 import { t } from "../utils/i18n"
 import { formatErrorDetails } from "../utils/error-details"
+import { restoreRightDockFocus } from "../utils/right-dock-focus"
 import { Icon } from "./ui/Icon"
 // CodeMirror and its Lezer grammars are only needed once a file is actually
 // open. This pane stays mounted to keep its state, so the editor itself is what
@@ -302,8 +303,15 @@ export function FileEditorPane() {
     const file = target()
     const authority = captureApiAuthority()
     const generation = loadGeneration
+    const origin = document.activeElement
+    const dock = origin?.closest<HTMLElement>("#rightDock")
     try {
-      await closeFileEditor()
+      const closed = await closeFileEditor()
+      if (closed && origin && dock) {
+        requestAnimationFrame(() => {
+          if (isApiAuthorityCurrent(authority)) restoreRightDockFocus(dock, origin)
+        })
+      }
     } catch (cause) {
       if (generation === loadGeneration && isApiAuthorityCurrent(authority) && (!file || ownsFileTarget(file))) {
         setError({ message: errorMessage(cause), cause })

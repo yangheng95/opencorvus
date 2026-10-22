@@ -2567,8 +2567,14 @@ file resource and connection authority to retire stale focus intent; accepted
 leave decisions hand focus to their destination instead.
 After actual removal, the existing Dock reflow frame restores focus to the
 canonical selected visible tab, or to Add tool when the collection is empty.
-It retains only the initiating element as a short-lived focus intent and respects
-an operator who has already moved focus. Disposing the Dock cancels that frame.
+The File pane's Close workspace action uses the same focus selection after a
+successful close and its resulting layout frame. Its content-side entry must
+not leave focus on the removed editor; navigation admission keeps its own
+destination focus. Both presentation entries preserve focus already moved by
+the operator and retire the intent when the captured Dock is hidden or gone.
+The tab strip retains only the initiating element as a short-lived focus intent
+and respects an operator who has already moved focus. Disposing the Dock cancels
+that reflow frame.
 The same main UI operation reporter exposes its handled completion promise so
 this interaction can observe completion without another close/error path.
 Closing the whole Dock restores its focused descendant or resizer to the

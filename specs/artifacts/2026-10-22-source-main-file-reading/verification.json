@@ -1,0 +1,36 @@
+{
+  "at": "2026-10-22T01:43:48.613Z",
+  "typecheck": {
+    "command": "bun run typecheck",
+    "cwd": "packages/overlay",
+    "originalHandle": 14819,
+    "originalExit": 0
+  },
+  "formalNodeBuild": {
+    "command": "node .tmp-product-iteration/source-main-file-reading-526/build.mjs",
+    "originalHandle": 65456,
+    "originalExit": 0,
+    "modules": 7314,
+    "duration": "1m2s",
+    "js": "main-7Ue7jCbp.js",
+    "css": "main-CVd9TkT1.css",
+    "completeStdoutSeparatelySaved": false
+  },
+  "uiQualification": "15 actual displayed screenshots/manual interactions,not UI automated tests",
+  "provider": "0 actual/0 maximum;no credentials or catalog staged",
+  "docs": {
+    "command": "bun run docs:check",
+    "exit": 0,
+    "operations": 345,
+    "groups": 26
+  },
+  "architecture": {
+    "command": "bun run check:architecture-index",
+    "exit": 0,
+    "currentDocuments": 20
+  },
+  "diffCheck": {
+    "command": "git diff --check",
+    "exit": 0
+  }
+}

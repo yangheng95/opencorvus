@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Main 文件来源往返阅读](records/2026-10/2026-10-22-source-main-file-reading.md)：[15张真实页面](artifacts/2026-10-22-source-main-file-reading/README.md)，修复文件工作台关闭后焦点丢失，两列来源、取消草稿及标签关闭实测。
+
 - [代码复制字面实体](records/2026-10/2026-10-22-clipboard-literal.md)：[8图与8/16 Sol](artifacts/2026-10-22-clipboard-literal/README.md)，修复属性重复解码，真实流中复制完整保留原实体/引号/Unicode；首用交接边界保持。
 
 - [新来源与成员正文](records/2026-10/2026-10-22-member-stream-reading.md)：[19张实图与12/24 Sol](artifacts/2026-10-22-member-stream-reading/README.md)，新read/web来源与流中开合，修复共享代码工具条遮挡首行；保留一次流中复制不一致的未明边界。

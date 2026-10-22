@@ -6,6 +6,7 @@ import { DropdownMenu } from "./ui/DropdownMenu"
 import { Tab, TabList, Tabs } from "./ui/Tabs"
 import { randomUUID } from "../utils/random-id"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
+import { restoreRightDockFocus } from "../utils/right-dock-focus"
 
 export type RightDockPanel =
   | "requirements"
@@ -118,7 +119,6 @@ export interface RightDockProps {
 export function RightDock(props: RightDockProps): JSX.Element {
   let stripEl!: HTMLDivElement
   let moreBtnEl!: HTMLButtonElement
-  let addBtnEl!: HTMLButtonElement
   let disposed = false
   let focusReturnOrigin: Element | undefined
   const [hidden, setHidden] = createSignal<Set<string>>(new Set())
@@ -199,15 +199,8 @@ export function RightDock(props: RightDockProps): JSX.Element {
     const origin = focusReturnOrigin
     focusReturnOrigin = undefined
     if (!origin || disposed || !props.open()) return
-    if (document.activeElement !== origin && document.activeElement !== document.body) return
-    if (props.tabs().length === 0) {
-      addBtnEl.focus({ preventScroll: true })
-      return
-    }
-    const selected = Array.from(stripEl.querySelectorAll<HTMLButtonElement>(".right-dock-tab")).find(
-      (tab) => !tab.disabled && tab.dataset.tab === props.active(),
-    )
-    selected?.focus({ preventScroll: true })
+    const dock = stripEl.closest<HTMLElement>("#rightDock")
+    if (dock) restoreRightDockFocus(dock, origin)
   })
   const scheduleReflow = reflowScheduler.schedule
   onCleanup(() => {
@@ -435,7 +428,6 @@ export function RightDock(props: RightDockProps): JSX.Element {
               tone="neutral"
               data-chrome="icon-action"
               class="right-dock-add"
-              ref={addBtnEl}
               title={t("right_dock.add")}
               aria-label={t("right_dock.add")}
             >

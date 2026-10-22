@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Main 文件来源往返阅读](2026-10-22-source-main-file-reading/README.md)：15实图/两零模型范围，修复文件工作台关闭后焦点丢失，精确列、取消草稿和标签关闭合同复核。
+
 - [代码复制字面实体](2026-10-22-clipboard-literal/README.md)：重复解码根因/修复，8实际流与8图，两原生范围/8配对成员完整结算。
 
 - [新来源与成员正文](2026-10-22-member-stream-reading/README.md)：新工具来源/长文实测，共享代码标题行修复，19图、12/24实际Sol及全部配对结算。

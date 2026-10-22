@@ -1,0 +1,73 @@
+{
+  "at": "2026-10-22T01:44:46.457Z",
+  "actualModels": 0,
+  "maximum": 0,
+  "authorityCopies": "None staged",
+  "screenshots": 15,
+  "resources": [
+    {
+      "stage": "before",
+      "originalHandle": 93310,
+      "originalExit": 0,
+      "page": 122,
+      "pageState": "Closed",
+      "provider": {
+        "at": "2026-10-22T01:27:15.363Z",
+        "maximum": 0,
+        "actual": 0,
+        "exhausted": false,
+        "requests": [],
+        "scope": "Main Source file reading review; no credentials or model catalog copied"
+      },
+      "assets": [
+        {
+          "time": "2026-10-22T01:27:22.786Z",
+          "path": "/ui/assets/main-BTerbwsZ.js",
+          "statusCode": 200
+        },
+        {
+          "time": "2026-10-22T01:27:22.788Z",
+          "path": "/ui/assets/main-CVd9TkT1.css",
+          "statusCode": 200
+        }
+      ],
+      "physical": "Original native/output/request/launcher/exact host and target fully settled",
+      "runtimeErrors": 11
+    },
+    {
+      "stage": "after",
+      "originalHandle": 3656,
+      "originalExit": 0,
+      "page": 123,
+      "pageState": "Closed",
+      "provider": {
+        "at": "2026-10-22T01:37:10.425Z",
+        "maximum": 0,
+        "actual": 0,
+        "exhausted": false,
+        "requests": [],
+        "scope": "Main Source file reading review; no credentials or model catalog copied"
+      },
+      "assets": [
+        {
+          "time": "2026-10-22T01:37:19.884Z",
+          "path": "/ui/assets/main-7Ue7jCbp.js",
+          "statusCode": 200
+        },
+        {
+          "time": "2026-10-22T01:37:19.891Z",
+          "path": "/ui/assets/main-CVd9TkT1.css",
+          "statusCode": 200
+        }
+      ],
+      "physical": "Original native/output/request/launcher/exact host and target fully settled",
+      "runtimeErrors": 11
+    }
+  ],
+  "qualification": "Actual manual Main file citation/close/cancel/Discard/Delete/panel-focus observations;no UI assertions",
+  "limits": [
+    "Empty chooser opening focus remains a separate observed issue",
+    "No active stream/Side/Native WebView2/all Rendering qualification",
+    "Zero-model configuration errors are retained;not console-clean qualification"
+  ]
+}

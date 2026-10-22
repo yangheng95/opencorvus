@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Main 文件来源往返阅读](2026-10-22-source-main-file-reading.md)：[15图与共同焦点修复](../../artifacts/2026-10-22-source-main-file-reading/README.md)，合法Main精确列/文件往返、取消草稿与标签关闭，零模型。
+
 - [代码复制字面实体](2026-10-22-clipboard-literal.md)：[before/after实页](../../artifacts/2026-10-22-clipboard-literal/README.md)，删除重复解码，保留实体/引号/Unicode，8/16 Sol及原数据结算。
 
 - [新来源与成员正文](2026-10-22-member-stream-reading.md)：[实页与共享代码标题行](../../artifacts/2026-10-22-member-stream-reading/README.md)，12/24真实Sol、19图；新Sources/流中开合及复制失败边界如实保留。

@@ -1,0 +1,181 @@
+[
+  {
+    "phase": "second-source",
+    "at": "2026-10-22T01:28:40.378Z",
+    "view": {
+      "active": "Editor",
+      "anchorNode": "交付：确认需求后5个工作日，仅用于界面测试。",
+      "anchorOffset": 14,
+      "cursors": [
+        {
+          "height": 17.587499618530273,
+          "left": 1124.800048828125,
+          "top": 172.60000610351562
+        }
+      ],
+      "focusOffset": 14,
+      "lines": [
+        {
+          "left": 942.6000366210938,
+          "text": "# 来源阅读材料",
+          "top": 132.8000030517578
+        },
+        {
+          "left": 942.6000366210938,
+          "text": "价格：CNY 99，仅用于界面测试。",
+          "top": 152.3000030517578
+        },
+        {
+          "left": 942.6000366210938,
+          "text": "交付：确认需求后5个工作日，仅用于界面测试。",
+          "top": 171.8000030517578
+        },
+        {
+          "left": 942.6000366210938,
+          "text": "",
+          "top": 191.3000030517578
+        }
+      ],
+      "selection": ""
+    }
+  },
+  {
+    "phase": "first-source",
+    "at": "2026-10-22T01:29:00.942Z",
+    "view": {
+      "active": "Editor",
+      "anchorNode": "价格：CNY 99，仅用于界面测试。",
+      "anchorOffset": 10,
+      "chatTop": 2749.60009765625,
+      "focusOffset": 10,
+      "sourceCount": 7
+    }
+  },
+  {
+    "phase": "close-workspace-before-tab",
+    "at": "2026-10-22T01:29:19.916Z",
+    "view": {
+      "activeID": "",
+      "activeLabel": null,
+      "activeTag": "BODY",
+      "chatTop": 2749.60009765625,
+      "dockOpen": "true"
+    }
+  },
+  {
+    "phase": "close-workspace-next-tab",
+    "at": "2026-10-22T01:29:27.762Z",
+    "view": {
+      "activeID": "",
+      "activeLabel": null,
+      "activeTag": "BODY",
+      "activeText": "\n    FileFEditEViewVHelpHChatsMission BoardScheduledExpert SquadsMoreSettingsOCOpenCorvusv0.1.26OpenCorvusProjectsNew chatProjectsAnonymous 039f08.../10/221双成员正"
+    }
+  },
+  {
+    "phase": "close-file-with-neighbor",
+    "at": "2026-10-22T01:32:47.195Z",
+    "view": {
+      "activeLabel": null,
+      "activeTag": "BODY",
+      "chatTop": 2823.199951171875,
+      "selectedTab": "Files"
+    }
+  },
+  {
+    "phase": "existing-tab-close-control",
+    "at": "2026-10-22T01:33:01.536Z",
+    "view": {
+      "activeLabel": "Add tool",
+      "activeTag": "BUTTON",
+      "chatTop": 2823.199951171875
+    }
+  },
+  {
+    "phase": "after-second-source",
+    "at": "2026-10-22T01:37:49.390Z",
+    "view": {
+      "active": "Editor",
+      "anchorNode": "交付：确认需求后5个工作日，仅用于界面测试。",
+      "anchorOffset": 14,
+      "chatTop": 2800.800048828125
+    }
+  },
+  {
+    "phase": "after-last-file-close",
+    "at": "2026-10-22T01:37:57.513Z",
+    "view": {
+      "activeLabel": "Add tool",
+      "activeTag": "BUTTON",
+      "chatTop": 2800.800048828125,
+      "dockOpen": "true"
+    }
+  },
+  {
+    "phase": "after-next-tab",
+    "at": "2026-10-22T01:38:06.607Z",
+    "view": {
+      "activeLabel": "Close panel",
+      "activeTag": "BUTTON"
+    }
+  },
+  {
+    "phase": "after-first-source",
+    "at": "2026-10-22T01:39:06.220Z",
+    "view": {
+      "active": "Editor",
+      "anchorNode": "价格：CNY 99，仅用于界面测试。",
+      "anchorOffset": 10
+    }
+  },
+  {
+    "phase": "after-neighbor-file-close",
+    "at": "2026-10-22T01:39:06.595Z",
+    "view": {
+      "activeLabel": "Files",
+      "activeRole": "tab",
+      "activeTag": "BUTTON",
+      "chatTop": 2749.60009765625,
+      "selectedTab": "Files"
+    }
+  },
+  {
+    "phase": "after-cancel-draft",
+    "at": "2026-10-22T01:39:55.798Z",
+    "view": {
+      "activeLabel": "Close workspace",
+      "activeTag": "BUTTON",
+      "editorDraft": "# 来源阅读材料价格：CNY 99，仅用于界面测试。交付：确认需求后5个工作日，仅用于界面测试。QA526_DRAFT_ONLY",
+      "selectedTab": "File"
+    }
+  },
+  {
+    "phase": "after-discard-draft",
+    "at": "2026-10-22T01:40:07.911Z",
+    "view": {
+      "activeLabel": "Files",
+      "activeTag": "BUTTON",
+      "chatTop": 2823.199951171875,
+      "selectedTab": "Files"
+    }
+  },
+  {
+    "phase": "after-delete-last-tab",
+    "at": "2026-10-22T01:40:21.335Z",
+    "view": {
+      "activeLabel": "Add tool",
+      "activeTag": "BUTTON"
+    }
+  },
+  {
+    "phase": "after-panel-close-main",
+    "at": "2026-10-22T01:40:31.840Z",
+    "view": {
+      "activeLabel": "Open right dock",
+      "activeRole": null,
+      "activeTag": "BUTTON",
+      "chatTop": 2319.199951171875,
+      "dockOpen": "false"
+    }
+  }
+]
