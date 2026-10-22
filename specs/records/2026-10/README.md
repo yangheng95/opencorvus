@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Task 成员同页重连](2026-10-23-task-member-reconnect.md)：[四张实图与完整资源结算](../../artifacts/2026-10-23-task-member-reconnect/README.md)，静止成员阅读连续，离线新增内容和活跃流恢复仍待验收。
+
 - [侧聊Goal与完整来源滚动](2026-10-23-side-goal-live-experience.md)：[9实图/8次Sol](../../artifacts/2026-10-23-side-goal-live-experience/README.md)，共享展开输出滚动修复，真实侧Goal两轮与正常资源结算。
 
 - [OpenCorvus热认证实际验收](2026-10-23-openai-hot-auth-verification.md)：[2次Sol与完整资源结算](../../artifacts/2026-10-23-openai-hot-auth-verification/README.md)，App当前认证、真实流式回复、源保持与四成员退休。

@@ -1,0 +1,3224 @@
+{
+  "batch": 545,
+  "recordedAt": "2026-10-22T17:50:07.851Z",
+  "qualification": "Actual unchanged completed Task, same owned page retained across sequential services; private read-only diagnostic build, manual screenshots. Public epoch checker is separate from browser traffic.",
+  "target": {
+    "taskID": "tsk_g00VYlyopB00h7w27eIw",
+    "sessionID": "ses_hHpC127wALpwIiSOX86d",
+    "browser": "IAB 2",
+    "tab": "161",
+    "url": "http://localhost:19089/ui/?taskID=tsk_g00VYlyopB00h7w27eIw"
+  },
+  "diagnostics": {
+    "build": "Node Vite production build, same prepared main-D0sv16dX.js in both scopes; business renderer unchanged",
+    "baseline": "Own-page reload before cold baseline, followed by opening original member B; no reload across Offline/Online",
+    "logScope": "Captured bounded returned batches; cold logs are not assumed to remain a prefix of later API results. Intentional switch positively demonstrates post-reconnect disposal capture.",
+    "windows": [
+      {
+        "phase": "cold-open",
+        "totalReturned": 62,
+        "firstReturnedAt": "2026-10-22T17:34:14.643Z",
+        "lastReturnedAt": "2026-10-22T17:34:14.875Z",
+        "counts": {
+          "part-binding": 14,
+          "body-mount": 14,
+          "body-state": 19,
+          "source-group-binding": 5,
+          "source-binding": 5,
+          "source-mount": 5
+        },
+        "events": [
+          {
+            "timestamp": "2026-10-22T17:34:14.643Z",
+            "kind": "part-binding",
+            "owner": 42,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYlz8dd00pWcuVkoZF\",\"msg_g0VYlz7Ip00T8hfkxlJc\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 85688.30000019073
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.653Z",
+            "owner": 10,
+            "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYlz8dd00pWcuVkoZF",
+            "textLength": 79,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85688.80000019073,
+            "kind": "body-mount",
+            "at": 85688.80000019073
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.653Z",
+            "owner": 10,
+            "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYlz8dd00pWcuVkoZF",
+            "textLength": 79,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85689,
+            "kind": "body-state",
+            "at": 85689
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.653Z",
+            "kind": "source-group-binding",
+            "owner": 1,
+            "previous": "",
+            "current": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYlz7Ip00T8hfkxlJc\\\",\\\"8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc\\\"]\"]",
+            "at": 85689.19999980927
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.653Z",
+            "kind": "source-binding",
+            "owner": 2,
+            "previous": "",
+            "current": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYlz7Ip00T8hfkxlJc\",\"8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc\"]",
+            "at": 85689.40000009537
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.653Z",
+            "kind": "source-mount",
+            "owner": 2,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYlz7Ip00T8hfkxlJc\",\"8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc\"]",
+            "at": 85689.5
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.653Z",
+            "kind": "part-binding",
+            "owner": 43,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYlzNy200G9j4TgB2N\",\"msg_g0VYlzNHF00KE9pPvzmq\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 85689.69999980927
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.653Z",
+            "owner": 11,
+            "messageID": "msg_g0VYlzNHF00KE9pPvzmq",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYlzNy200G9j4TgB2N",
+            "textLength": 209,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85690.09999990463,
+            "kind": "body-mount",
+            "at": 85690.09999990463
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.653Z",
+            "owner": 11,
+            "messageID": "msg_g0VYlzNHF00KE9pPvzmq",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYlzNy200G9j4TgB2N",
+            "textLength": 209,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85690.19999980927,
+            "kind": "body-state",
+            "at": 85690.19999980927
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.653Z",
+            "kind": "source-group-binding",
+            "owner": 3,
+            "previous": "",
+            "current": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYlzNHF00KE9pPvzmq\\\",\\\"8a046e21993297bbc58547ee51ee95db16c2667449e2552696ed15addf38d7e7\\\"]\"]",
+            "at": 85690.19999980927
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.653Z",
+            "kind": "source-binding",
+            "owner": 4,
+            "previous": "",
+            "current": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYlzNHF00KE9pPvzmq\",\"8a046e21993297bbc58547ee51ee95db16c2667449e2552696ed15addf38d7e7\"]",
+            "at": 85690.40000009537
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "kind": "source-mount",
+            "owner": 4,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYlzNHF00KE9pPvzmq\",\"8a046e21993297bbc58547ee51ee95db16c2667449e2552696ed15addf38d7e7\"]",
+            "at": 85690.40000009537
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "kind": "part-binding",
+            "owner": 44,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYm1lEs00O2KijUi86\",\"msg_g0VYm1k2300mHdtrLYyw\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 85690.5
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "owner": 12,
+            "messageID": "msg_g0VYm1k2300mHdtrLYyw",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYm1lEs00O2KijUi86",
+            "textLength": 209,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85690.80000019073,
+            "kind": "body-mount",
+            "at": 85690.80000019073
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "owner": 12,
+            "messageID": "msg_g0VYm1k2300mHdtrLYyw",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYm1lEs00O2KijUi86",
+            "textLength": 209,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85690.90000009537,
+            "kind": "body-state",
+            "at": 85690.90000009537
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "kind": "part-binding",
+            "owner": 45,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYmMab300GY28UWAJt\",\"msg_g0VYmMZ4H00k2M4LXePB\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 85691
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "owner": 13,
+            "messageID": "msg_g0VYmMZ4H00k2M4LXePB",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmMab300GY28UWAJt",
+            "textLength": 135,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85691.30000019073,
+            "kind": "body-mount",
+            "at": 85691.30000019073
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "owner": 13,
+            "messageID": "msg_g0VYmMZ4H00k2M4LXePB",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmMab300GY28UWAJt",
+            "textLength": 135,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85691.40000009537,
+            "kind": "body-state",
+            "at": 85691.40000009537
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "kind": "part-binding",
+            "owner": 46,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYmMcJU00PFeeyJf7k\",\"msg_g0VYmMbPE00dysER56z0\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 85691.5
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "owner": 14,
+            "messageID": "msg_g0VYmMbPE00dysER56z0",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmMcJU00PFeeyJf7k",
+            "textLength": 4529,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85691.69999980927,
+            "kind": "body-mount",
+            "at": 85691.69999980927
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "owner": 14,
+            "messageID": "msg_g0VYmMbPE00dysER56z0",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmMcJU00PFeeyJf7k",
+            "textLength": 4529,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85691.80000019073,
+            "kind": "body-state",
+            "at": 85691.80000019073
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "kind": "part-binding",
+            "owner": 47,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYmUNau00ka4jsGLu7\",\"msg_g0VYmULtS00eCE1XQTs4\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 85692
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "owner": 15,
+            "messageID": "msg_g0VYmULtS00eCE1XQTs4",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmUNau00ka4jsGLu7",
+            "textLength": 99,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85692.09999990463,
+            "kind": "body-mount",
+            "at": 85692.09999990463
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "owner": 15,
+            "messageID": "msg_g0VYmULtS00eCE1XQTs4",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmUNau00ka4jsGLu7",
+            "textLength": 99,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85692.30000019073,
+            "kind": "body-state",
+            "at": 85692.30000019073
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "kind": "part-binding",
+            "owner": 48,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYmUPS300JPqmNLo2D\",\"msg_g0VYmUOVB0012dG1c1pk\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 85692.40000009537
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "owner": 16,
+            "messageID": "msg_g0VYmUOVB0012dG1c1pk",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmUPS300JPqmNLo2D",
+            "textLength": 2171,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85692.59999990463,
+            "kind": "body-mount",
+            "at": 85692.59999990463
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "owner": 16,
+            "messageID": "msg_g0VYmUOVB0012dG1c1pk",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmUPS300JPqmNLo2D",
+            "textLength": 2171,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85692.69999980927,
+            "kind": "body-state",
+            "at": 85692.69999980927
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "kind": "source-group-binding",
+            "owner": 5,
+            "previous": "",
+            "current": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYmUOVB0012dG1c1pk\\\",\\\"52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c\\\"]\"]",
+            "at": 85692.80000019073
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "kind": "source-binding",
+            "owner": 6,
+            "previous": "",
+            "current": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYmUOVB0012dG1c1pk\",\"52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c\"]",
+            "at": 85692.90000009537
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "kind": "source-mount",
+            "owner": 6,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYmUOVB0012dG1c1pk\",\"52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c\"]",
+            "at": 85693
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "kind": "part-binding",
+            "owner": 49,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYmUrRH00iG2zOFlhG\",\"msg_g0VYmUqhk00EpT8PKb3j\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 85693.09999990463
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "owner": 17,
+            "messageID": "msg_g0VYmUqhk00EpT8PKb3j",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmUrRH00iG2zOFlhG",
+            "textLength": 3090,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85693.40000009537,
+            "kind": "body-mount",
+            "at": 85693.40000009537
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "owner": 17,
+            "messageID": "msg_g0VYmUqhk00EpT8PKb3j",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmUrRH00iG2zOFlhG",
+            "textLength": 3090,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85693.5,
+            "kind": "body-state",
+            "at": 85693.5
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "kind": "part-binding",
+            "owner": 50,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYma1AT004jdIyz0bP\",\"msg_g0VYmZzrh002aaO3I7Gb\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 85693.59999990463
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "owner": 18,
+            "messageID": "msg_g0VYmZzrh002aaO3I7Gb",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYma1AT004jdIyz0bP",
+            "textLength": 84,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85693.90000009537,
+            "kind": "body-mount",
+            "at": 85693.90000009537
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "owner": 18,
+            "messageID": "msg_g0VYmZzrh002aaO3I7Gb",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYma1AT004jdIyz0bP",
+            "textLength": 84,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85693.90000009537,
+            "kind": "body-state",
+            "at": 85693.90000009537
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "kind": "part-binding",
+            "owner": 51,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYma2wD003owRu5m9l\",\"msg_g0VYma20K00NMix5Hzs1\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 85694
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "owner": 19,
+            "messageID": "msg_g0VYma20K00NMix5Hzs1",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYma2wD003owRu5m9l",
+            "textLength": 2120,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85694.30000019073,
+            "kind": "body-mount",
+            "at": 85694.30000019073
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "owner": 19,
+            "messageID": "msg_g0VYma20K00NMix5Hzs1",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYma2wD003owRu5m9l",
+            "textLength": 2120,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85694.40000009537,
+            "kind": "body-state",
+            "at": 85694.40000009537
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "kind": "source-group-binding",
+            "owner": 7,
+            "previous": "",
+            "current": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYma20K00NMix5Hzs1\\\",\\\"9779f0e41fe8fe96dfd1293da0f393cc2c85f41ecd6ad73dedd70a84017c4478\\\"]\"]",
+            "at": 85694.5
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "kind": "source-binding",
+            "owner": 8,
+            "previous": "",
+            "current": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYma20K00NMix5Hzs1\",\"9779f0e41fe8fe96dfd1293da0f393cc2c85f41ecd6ad73dedd70a84017c4478\"]",
+            "at": 85694.59999990463
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "kind": "source-mount",
+            "owner": 8,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYma20K00NMix5Hzs1\",\"9779f0e41fe8fe96dfd1293da0f393cc2c85f41ecd6ad73dedd70a84017c4478\"]",
+            "at": 85694.69999980927
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.654Z",
+            "kind": "part-binding",
+            "owner": 52,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYmaNTs00F3UDN30bC\",\"msg_g0VYmaLzr00YbB7uU14g\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 85694.80000019073
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.655Z",
+            "owner": 20,
+            "messageID": "msg_g0VYmaLzr00YbB7uU14g",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmaNTs00F3UDN30bC",
+            "textLength": 2980,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85695,
+            "kind": "body-mount",
+            "at": 85695
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.655Z",
+            "owner": 20,
+            "messageID": "msg_g0VYmaLzr00YbB7uU14g",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmaNTs00F3UDN30bC",
+            "textLength": 2980,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85695.09999990463,
+            "kind": "body-state",
+            "at": 85695.09999990463
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.655Z",
+            "kind": "part-binding",
+            "owner": 53,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYn0rha005V1KlZppe\",\"msg_g0VYn0qE200VQT2dc3zP\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 85695.30000019073
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.655Z",
+            "owner": 21,
+            "messageID": "msg_g0VYn0qE200VQT2dc3zP",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYn0rha005V1KlZppe",
+            "textLength": 70,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85695.5,
+            "kind": "body-mount",
+            "at": 85695.5
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.655Z",
+            "owner": 21,
+            "messageID": "msg_g0VYn0qE200VQT2dc3zP",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYn0rha005V1KlZppe",
+            "textLength": 70,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85695.59999990463,
+            "kind": "body-state",
+            "at": 85695.59999990463
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.656Z",
+            "kind": "part-binding",
+            "owner": 54,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYn0tPU00GJfPCOkag\",\"msg_g0VYn0sTy00K0FROE4Oh\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 85695.59999990463
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.656Z",
+            "owner": 22,
+            "messageID": "msg_g0VYn0sTy00K0FROE4Oh",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYn0tPU00GJfPCOkag",
+            "textLength": 1643,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85695.90000009537,
+            "kind": "body-mount",
+            "at": 85695.90000009537
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.656Z",
+            "owner": 22,
+            "messageID": "msg_g0VYn0sTy00K0FROE4Oh",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYn0tPU00GJfPCOkag",
+            "textLength": 1643,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85696.09999990463,
+            "kind": "body-state",
+            "at": 85696.09999990463
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.656Z",
+            "kind": "source-group-binding",
+            "owner": 9,
+            "previous": "",
+            "current": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYn0sTy00K0FROE4Oh\\\",\\\"068cf6c6d4bad02a20b7cee9ce7b4be31ad88ce4094646d3dae9e99796cba036\\\"]\"]",
+            "at": 85696.09999990463
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.656Z",
+            "kind": "source-binding",
+            "owner": 10,
+            "previous": "",
+            "current": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYn0sTy00K0FROE4Oh\",\"068cf6c6d4bad02a20b7cee9ce7b4be31ad88ce4094646d3dae9e99796cba036\"]",
+            "at": 85696.19999980927
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.656Z",
+            "kind": "source-mount",
+            "owner": 10,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYn0sTy00K0FROE4Oh\",\"068cf6c6d4bad02a20b7cee9ce7b4be31ad88ce4094646d3dae9e99796cba036\"]",
+            "at": 85696.19999980927
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.656Z",
+            "kind": "part-binding",
+            "owner": 55,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYn1Ezt00aQBqYLfgw\",\"msg_g0VYn1Dr400aVXO3GoJ3\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 85696.40000009537
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.656Z",
+            "owner": 23,
+            "messageID": "msg_g0VYn1Dr400aVXO3GoJ3",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYn1Ezt00aQBqYLfgw",
+            "textLength": 2358,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85696.59999990463,
+            "kind": "body-mount",
+            "at": 85696.59999990463
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.656Z",
+            "owner": 23,
+            "messageID": "msg_g0VYn1Dr400aVXO3GoJ3",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYn1Ezt00aQBqYLfgw",
+            "textLength": 2358,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 85696.69999980927,
+            "kind": "body-state",
+            "at": 85696.69999980927
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.766Z",
+            "owner": 10,
+            "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYlz8dd00pWcuVkoZF",
+            "textLength": 79,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 85763.40000009537,
+            "kind": "body-state",
+            "at": 85763.40000009537
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.766Z",
+            "owner": 11,
+            "messageID": "msg_g0VYlzNHF00KE9pPvzmq",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYlzNy200G9j4TgB2N",
+            "textLength": 209,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 85782.90000009537,
+            "kind": "body-state",
+            "at": 85782.90000009537
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.766Z",
+            "owner": 12,
+            "messageID": "msg_g0VYm1k2300mHdtrLYyw",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYm1lEs00O2KijUi86",
+            "textLength": 209,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 85800.90000009537,
+            "kind": "body-state",
+            "at": 85800.90000009537
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.875Z",
+            "owner": 13,
+            "messageID": "msg_g0VYmMZ4H00k2M4LXePB",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmMab300GY28UWAJt",
+            "textLength": 135,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 85821.80000019073,
+            "kind": "body-state",
+            "at": 85821.80000019073
+          },
+          {
+            "timestamp": "2026-10-22T17:34:14.875Z",
+            "owner": 14,
+            "messageID": "msg_g0VYmMbPE00dysER56z0",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmMcJU00PFeeyJf7k",
+            "textLength": 4529,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 85839.80000019073,
+            "kind": "body-state",
+            "at": 85839.90000009537
+          }
+        ]
+      },
+      {
+        "phase": "before-shutdown",
+        "totalReturned": 0,
+        "firstReturnedAt": null,
+        "lastReturnedAt": null,
+        "counts": {},
+        "events": []
+      },
+      {
+        "phase": "offline",
+        "totalReturned": 30,
+        "firstReturnedAt": "2026-10-22T17:40:22.266Z",
+        "lastReturnedAt": "2026-10-22T17:40:58.405Z",
+        "counts": {},
+        "events": []
+      },
+      {
+        "phase": "reconnected",
+        "totalReturned": 145,
+        "firstReturnedAt": "2026-10-22T17:40:22.266Z",
+        "lastReturnedAt": "2026-10-22T17:43:29.028Z",
+        "counts": {},
+        "events": []
+      },
+      {
+        "phase": "intentional-close",
+        "totalReturned": 145,
+        "firstReturnedAt": "2026-10-22T17:40:22.266Z",
+        "lastReturnedAt": "2026-10-22T17:43:29.028Z",
+        "counts": {},
+        "events": []
+      },
+      {
+        "phase": "intentional-switch",
+        "totalReturned": 183,
+        "firstReturnedAt": "2026-10-22T17:40:22.266Z",
+        "lastReturnedAt": "2026-10-22T17:48:02.948Z",
+        "counts": {
+          "body-dispose": 14,
+          "part-dispose": 14,
+          "source-dispose": 5,
+          "source-group-dispose": 5
+        },
+        "events": [
+          {
+            "timestamp": "2026-10-22T17:48:02.927Z",
+            "owner": 10,
+            "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYlz8dd00pWcuVkoZF",
+            "textLength": 79,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 85763.40000009537,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913950.0999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.944Z",
+            "kind": "part-dispose",
+            "owner": 42,
+            "signature": "[\"text\",\"prt_g0VYlz8dd00pWcuVkoZF\",\"msg_g0VYlz7Ip00T8hfkxlJc\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913950.4000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.945Z",
+            "kind": "source-dispose",
+            "owner": 2,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYlz7Ip00T8hfkxlJc\",\"8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc\"]",
+            "at": 913950.5999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.945Z",
+            "kind": "source-group-dispose",
+            "owner": 1,
+            "identity": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYlz7Ip00T8hfkxlJc\\\",\\\"8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc\\\"]\"]",
+            "at": 913950.9000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.945Z",
+            "owner": 11,
+            "messageID": "msg_g0VYlzNHF00KE9pPvzmq",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYlzNy200G9j4TgB2N",
+            "textLength": 209,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 85782.90000009537,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913951.0999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.945Z",
+            "kind": "part-dispose",
+            "owner": 43,
+            "signature": "[\"text\",\"prt_g0VYlzNy200G9j4TgB2N\",\"msg_g0VYlzNHF00KE9pPvzmq\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913951.1999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.945Z",
+            "kind": "source-dispose",
+            "owner": 4,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYlzNHF00KE9pPvzmq\",\"8a046e21993297bbc58547ee51ee95db16c2667449e2552696ed15addf38d7e7\"]",
+            "at": 913951.4000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.945Z",
+            "kind": "source-group-dispose",
+            "owner": 3,
+            "identity": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYlzNHF00KE9pPvzmq\\\",\\\"8a046e21993297bbc58547ee51ee95db16c2667449e2552696ed15addf38d7e7\\\"]\"]",
+            "at": 913951.5
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.946Z",
+            "owner": 12,
+            "messageID": "msg_g0VYm1k2300mHdtrLYyw",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYm1lEs00O2KijUi86",
+            "textLength": 209,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 85800.90000009537,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913951.6999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.946Z",
+            "kind": "part-dispose",
+            "owner": 44,
+            "signature": "[\"text\",\"prt_g0VYm1lEs00O2KijUi86\",\"msg_g0VYm1k2300mHdtrLYyw\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913951.8000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.946Z",
+            "owner": 13,
+            "messageID": "msg_g0VYmMZ4H00k2M4LXePB",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmMab300GY28UWAJt",
+            "textLength": 135,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 85821.80000019073,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913952.0999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.946Z",
+            "kind": "part-dispose",
+            "owner": 45,
+            "signature": "[\"text\",\"prt_g0VYmMab300GY28UWAJt\",\"msg_g0VYmMZ4H00k2M4LXePB\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913952.1999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.946Z",
+            "owner": 14,
+            "messageID": "msg_g0VYmMbPE00dysER56z0",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmMcJU00PFeeyJf7k",
+            "textLength": 4529,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 85839.80000019073,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913952.4000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.946Z",
+            "kind": "part-dispose",
+            "owner": 46,
+            "signature": "[\"text\",\"prt_g0VYmMcJU00PFeeyJf7k\",\"msg_g0VYmMbPE00dysER56z0\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913952.5999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.946Z",
+            "owner": 15,
+            "messageID": "msg_g0VYmULtS00eCE1XQTs4",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmUNau00ka4jsGLu7",
+            "textLength": 99,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 85961.30000019073,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913952.6999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.946Z",
+            "kind": "part-dispose",
+            "owner": 47,
+            "signature": "[\"text\",\"prt_g0VYmUNau00ka4jsGLu7\",\"msg_g0VYmULtS00eCE1XQTs4\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913952.9000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.947Z",
+            "owner": 16,
+            "messageID": "msg_g0VYmUOVB0012dG1c1pk",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmUPS300JPqmNLo2D",
+            "textLength": 2171,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 85976.59999990463,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913953
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.947Z",
+            "kind": "part-dispose",
+            "owner": 48,
+            "signature": "[\"text\",\"prt_g0VYmUPS300JPqmNLo2D\",\"msg_g0VYmUOVB0012dG1c1pk\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913953.1999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.947Z",
+            "kind": "source-dispose",
+            "owner": 6,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYmUOVB0012dG1c1pk\",\"52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c\"]",
+            "at": 913953.4000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.947Z",
+            "kind": "source-group-dispose",
+            "owner": 5,
+            "identity": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYmUOVB0012dG1c1pk\\\",\\\"52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c\\\"]\"]",
+            "at": 913953.5999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.947Z",
+            "owner": 17,
+            "messageID": "msg_g0VYmUqhk00EpT8PKb3j",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmUrRH00iG2zOFlhG",
+            "textLength": 3090,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 86005,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913953.5999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.947Z",
+            "kind": "part-dispose",
+            "owner": 49,
+            "signature": "[\"text\",\"prt_g0VYmUrRH00iG2zOFlhG\",\"msg_g0VYmUqhk00EpT8PKb3j\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913953.8000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.947Z",
+            "owner": 18,
+            "messageID": "msg_g0VYmZzrh002aaO3I7Gb",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYma1AT004jdIyz0bP",
+            "textLength": 84,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 86038.5,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.947Z",
+            "kind": "part-dispose",
+            "owner": 50,
+            "signature": "[\"text\",\"prt_g0VYma1AT004jdIyz0bP\",\"msg_g0VYmZzrh002aaO3I7Gb\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913954.0999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.947Z",
+            "owner": 19,
+            "messageID": "msg_g0VYma20K00NMix5Hzs1",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYma2wD003owRu5m9l",
+            "textLength": 2120,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 86049.19999980927,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913954.3000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "kind": "part-dispose",
+            "owner": 51,
+            "signature": "[\"text\",\"prt_g0VYma2wD003owRu5m9l\",\"msg_g0VYma20K00NMix5Hzs1\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913954.4000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "kind": "source-dispose",
+            "owner": 8,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYma20K00NMix5Hzs1\",\"9779f0e41fe8fe96dfd1293da0f393cc2c85f41ecd6ad73dedd70a84017c4478\"]",
+            "at": 913954.5999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "kind": "source-group-dispose",
+            "owner": 7,
+            "identity": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYma20K00NMix5Hzs1\\\",\\\"9779f0e41fe8fe96dfd1293da0f393cc2c85f41ecd6ad73dedd70a84017c4478\\\"]\"]",
+            "at": 913954.6999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "owner": 20,
+            "messageID": "msg_g0VYmaLzr00YbB7uU14g",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmaNTs00F3UDN30bC",
+            "textLength": 2980,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 86067.59999990463,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913954.8000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "kind": "part-dispose",
+            "owner": 52,
+            "signature": "[\"text\",\"prt_g0VYmaNTs00F3UDN30bC\",\"msg_g0VYmaLzr00YbB7uU14g\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913955
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "owner": 21,
+            "messageID": "msg_g0VYn0qE200VQT2dc3zP",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYn0rha005V1KlZppe",
+            "textLength": 70,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 86092.19999980927,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913955.1999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "kind": "part-dispose",
+            "owner": 53,
+            "signature": "[\"text\",\"prt_g0VYn0rha005V1KlZppe\",\"msg_g0VYn0qE200VQT2dc3zP\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913955.3000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "owner": 22,
+            "messageID": "msg_g0VYn0sTy00K0FROE4Oh",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYn0tPU00GJfPCOkag",
+            "textLength": 1643,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 86103.5,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913955.5
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "kind": "part-dispose",
+            "owner": 54,
+            "signature": "[\"text\",\"prt_g0VYn0tPU00GJfPCOkag\",\"msg_g0VYn0sTy00K0FROE4Oh\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913955.6999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "kind": "source-dispose",
+            "owner": 10,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYn0sTy00K0FROE4Oh\",\"068cf6c6d4bad02a20b7cee9ce7b4be31ad88ce4094646d3dae9e99796cba036\"]",
+            "at": 913955.9000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "kind": "source-group-dispose",
+            "owner": 9,
+            "identity": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYn0sTy00K0FROE4Oh\\\",\\\"068cf6c6d4bad02a20b7cee9ce7b4be31ad88ce4094646d3dae9e99796cba036\\\"]\"]",
+            "at": 913956
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "owner": 23,
+            "messageID": "msg_g0VYn1Dr400aVXO3GoJ3",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYn1Ezt00aQBqYLfgw",
+            "textLength": 2358,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 86117.30000019073,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913956.0999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "kind": "part-dispose",
+            "owner": 55,
+            "signature": "[\"text\",\"prt_g0VYn1Ezt00aQBqYLfgw\",\"msg_g0VYn1Dr400aVXO3GoJ3\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913956.1999998093
+          }
+        ]
+      },
+      {
+        "phase": "intentional-return",
+        "totalReturned": 240,
+        "firstReturnedAt": "2026-10-22T17:40:22.266Z",
+        "lastReturnedAt": "2026-10-22T17:48:30.711Z",
+        "counts": {
+          "body-dispose": 14,
+          "part-dispose": 14,
+          "source-dispose": 5,
+          "source-group-dispose": 5,
+          "part-binding": 14,
+          "body-mount": 14,
+          "body-state": 14,
+          "source-group-binding": 5,
+          "source-binding": 5,
+          "source-mount": 5
+        },
+        "events": [
+          {
+            "timestamp": "2026-10-22T17:48:02.927Z",
+            "owner": 10,
+            "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYlz8dd00pWcuVkoZF",
+            "textLength": 79,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 85763.40000009537,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913950.0999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.944Z",
+            "kind": "part-dispose",
+            "owner": 42,
+            "signature": "[\"text\",\"prt_g0VYlz8dd00pWcuVkoZF\",\"msg_g0VYlz7Ip00T8hfkxlJc\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913950.4000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.945Z",
+            "kind": "source-dispose",
+            "owner": 2,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYlz7Ip00T8hfkxlJc\",\"8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc\"]",
+            "at": 913950.5999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.945Z",
+            "kind": "source-group-dispose",
+            "owner": 1,
+            "identity": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYlz7Ip00T8hfkxlJc\\\",\\\"8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc\\\"]\"]",
+            "at": 913950.9000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.945Z",
+            "owner": 11,
+            "messageID": "msg_g0VYlzNHF00KE9pPvzmq",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYlzNy200G9j4TgB2N",
+            "textLength": 209,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 85782.90000009537,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913951.0999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.945Z",
+            "kind": "part-dispose",
+            "owner": 43,
+            "signature": "[\"text\",\"prt_g0VYlzNy200G9j4TgB2N\",\"msg_g0VYlzNHF00KE9pPvzmq\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913951.1999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.945Z",
+            "kind": "source-dispose",
+            "owner": 4,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYlzNHF00KE9pPvzmq\",\"8a046e21993297bbc58547ee51ee95db16c2667449e2552696ed15addf38d7e7\"]",
+            "at": 913951.4000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.945Z",
+            "kind": "source-group-dispose",
+            "owner": 3,
+            "identity": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYlzNHF00KE9pPvzmq\\\",\\\"8a046e21993297bbc58547ee51ee95db16c2667449e2552696ed15addf38d7e7\\\"]\"]",
+            "at": 913951.5
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.946Z",
+            "owner": 12,
+            "messageID": "msg_g0VYm1k2300mHdtrLYyw",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYm1lEs00O2KijUi86",
+            "textLength": 209,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 85800.90000009537,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913951.6999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.946Z",
+            "kind": "part-dispose",
+            "owner": 44,
+            "signature": "[\"text\",\"prt_g0VYm1lEs00O2KijUi86\",\"msg_g0VYm1k2300mHdtrLYyw\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913951.8000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.946Z",
+            "owner": 13,
+            "messageID": "msg_g0VYmMZ4H00k2M4LXePB",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmMab300GY28UWAJt",
+            "textLength": 135,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 85821.80000019073,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913952.0999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.946Z",
+            "kind": "part-dispose",
+            "owner": 45,
+            "signature": "[\"text\",\"prt_g0VYmMab300GY28UWAJt\",\"msg_g0VYmMZ4H00k2M4LXePB\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913952.1999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.946Z",
+            "owner": 14,
+            "messageID": "msg_g0VYmMbPE00dysER56z0",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmMcJU00PFeeyJf7k",
+            "textLength": 4529,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 85839.80000019073,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913952.4000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.946Z",
+            "kind": "part-dispose",
+            "owner": 46,
+            "signature": "[\"text\",\"prt_g0VYmMcJU00PFeeyJf7k\",\"msg_g0VYmMbPE00dysER56z0\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913952.5999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.946Z",
+            "owner": 15,
+            "messageID": "msg_g0VYmULtS00eCE1XQTs4",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmUNau00ka4jsGLu7",
+            "textLength": 99,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 85961.30000019073,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913952.6999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.946Z",
+            "kind": "part-dispose",
+            "owner": 47,
+            "signature": "[\"text\",\"prt_g0VYmUNau00ka4jsGLu7\",\"msg_g0VYmULtS00eCE1XQTs4\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913952.9000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.947Z",
+            "owner": 16,
+            "messageID": "msg_g0VYmUOVB0012dG1c1pk",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmUPS300JPqmNLo2D",
+            "textLength": 2171,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 85976.59999990463,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913953
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.947Z",
+            "kind": "part-dispose",
+            "owner": 48,
+            "signature": "[\"text\",\"prt_g0VYmUPS300JPqmNLo2D\",\"msg_g0VYmUOVB0012dG1c1pk\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913953.1999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.947Z",
+            "kind": "source-dispose",
+            "owner": 6,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYmUOVB0012dG1c1pk\",\"52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c\"]",
+            "at": 913953.4000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.947Z",
+            "kind": "source-group-dispose",
+            "owner": 5,
+            "identity": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYmUOVB0012dG1c1pk\\\",\\\"52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c\\\"]\"]",
+            "at": 913953.5999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.947Z",
+            "owner": 17,
+            "messageID": "msg_g0VYmUqhk00EpT8PKb3j",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmUrRH00iG2zOFlhG",
+            "textLength": 3090,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 86005,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913953.5999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.947Z",
+            "kind": "part-dispose",
+            "owner": 49,
+            "signature": "[\"text\",\"prt_g0VYmUrRH00iG2zOFlhG\",\"msg_g0VYmUqhk00EpT8PKb3j\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913953.8000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.947Z",
+            "owner": 18,
+            "messageID": "msg_g0VYmZzrh002aaO3I7Gb",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYma1AT004jdIyz0bP",
+            "textLength": 84,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 86038.5,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.947Z",
+            "kind": "part-dispose",
+            "owner": 50,
+            "signature": "[\"text\",\"prt_g0VYma1AT004jdIyz0bP\",\"msg_g0VYmZzrh002aaO3I7Gb\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913954.0999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.947Z",
+            "owner": 19,
+            "messageID": "msg_g0VYma20K00NMix5Hzs1",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYma2wD003owRu5m9l",
+            "textLength": 2120,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 86049.19999980927,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913954.3000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "kind": "part-dispose",
+            "owner": 51,
+            "signature": "[\"text\",\"prt_g0VYma2wD003owRu5m9l\",\"msg_g0VYma20K00NMix5Hzs1\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913954.4000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "kind": "source-dispose",
+            "owner": 8,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYma20K00NMix5Hzs1\",\"9779f0e41fe8fe96dfd1293da0f393cc2c85f41ecd6ad73dedd70a84017c4478\"]",
+            "at": 913954.5999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "kind": "source-group-dispose",
+            "owner": 7,
+            "identity": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYma20K00NMix5Hzs1\\\",\\\"9779f0e41fe8fe96dfd1293da0f393cc2c85f41ecd6ad73dedd70a84017c4478\\\"]\"]",
+            "at": 913954.6999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "owner": 20,
+            "messageID": "msg_g0VYmaLzr00YbB7uU14g",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmaNTs00F3UDN30bC",
+            "textLength": 2980,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 86067.59999990463,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913954.8000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "kind": "part-dispose",
+            "owner": 52,
+            "signature": "[\"text\",\"prt_g0VYmaNTs00F3UDN30bC\",\"msg_g0VYmaLzr00YbB7uU14g\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913955
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "owner": 21,
+            "messageID": "msg_g0VYn0qE200VQT2dc3zP",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYn0rha005V1KlZppe",
+            "textLength": 70,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 86092.19999980927,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913955.1999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "kind": "part-dispose",
+            "owner": 53,
+            "signature": "[\"text\",\"prt_g0VYn0rha005V1KlZppe\",\"msg_g0VYn0qE200VQT2dc3zP\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913955.3000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "owner": 22,
+            "messageID": "msg_g0VYn0sTy00K0FROE4Oh",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYn0tPU00GJfPCOkag",
+            "textLength": 1643,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 86103.5,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913955.5
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "kind": "part-dispose",
+            "owner": 54,
+            "signature": "[\"text\",\"prt_g0VYn0tPU00GJfPCOkag\",\"msg_g0VYn0sTy00K0FROE4Oh\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913955.6999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "kind": "source-dispose",
+            "owner": 10,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYn0sTy00K0FROE4Oh\",\"068cf6c6d4bad02a20b7cee9ce7b4be31ad88ce4094646d3dae9e99796cba036\"]",
+            "at": 913955.9000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "kind": "source-group-dispose",
+            "owner": 9,
+            "identity": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYn0sTy00K0FROE4Oh\\\",\\\"068cf6c6d4bad02a20b7cee9ce7b4be31ad88ce4094646d3dae9e99796cba036\\\"]\"]",
+            "at": 913956
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "owner": 23,
+            "messageID": "msg_g0VYn1Dr400aVXO3GoJ3",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYn1Ezt00aQBqYLfgw",
+            "textLength": 2358,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 86117.30000019073,
+            "kind": "body-dispose",
+            "snapshot": "last-normal-observation",
+            "at": 913956.0999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:02.948Z",
+            "kind": "part-dispose",
+            "owner": 55,
+            "signature": "[\"text\",\"prt_g0VYn1Ezt00aQBqYLfgw\",\"msg_g0VYn1Dr400aVXO3GoJ3\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 913956.1999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.696Z",
+            "kind": "part-binding",
+            "owner": 99,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYlz8dd00pWcuVkoZF\",\"msg_g0VYlz7Ip00T8hfkxlJc\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 941717.5
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.697Z",
+            "owner": 37,
+            "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYlz8dd00pWcuVkoZF",
+            "textLength": 79,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false,
+            "observedAt": 941719.1999998093,
+            "kind": "body-mount",
+            "at": 941719.1999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.705Z",
+            "owner": 37,
+            "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYlz8dd00pWcuVkoZF",
+            "textLength": 79,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false,
+            "observedAt": 941719.3000001907,
+            "kind": "body-state",
+            "at": 941719.3000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.705Z",
+            "kind": "source-group-binding",
+            "owner": 15,
+            "previous": "",
+            "current": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYlz7Ip00T8hfkxlJc\\\",\\\"8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc\\\"]\"]",
+            "at": 941719.5
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.705Z",
+            "kind": "source-binding",
+            "owner": 16,
+            "previous": "",
+            "current": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYlz7Ip00T8hfkxlJc\",\"8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc\"]",
+            "at": 941719.6999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.705Z",
+            "kind": "source-mount",
+            "owner": 16,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYlz7Ip00T8hfkxlJc\",\"8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc\"]",
+            "at": 941719.8000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.705Z",
+            "kind": "part-binding",
+            "owner": 100,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYlzNy200G9j4TgB2N\",\"msg_g0VYlzNHF00KE9pPvzmq\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 941719.9000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.705Z",
+            "owner": 38,
+            "messageID": "msg_g0VYlzNHF00KE9pPvzmq",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYlzNy200G9j4TgB2N",
+            "textLength": 209,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false,
+            "observedAt": 941720.1999998093,
+            "kind": "body-mount",
+            "at": 941720.1999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.705Z",
+            "owner": 38,
+            "messageID": "msg_g0VYlzNHF00KE9pPvzmq",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYlzNy200G9j4TgB2N",
+            "textLength": 209,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false,
+            "observedAt": 941720.4000000954,
+            "kind": "body-state",
+            "at": 941720.4000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "kind": "source-group-binding",
+            "owner": 17,
+            "previous": "",
+            "current": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYlzNHF00KE9pPvzmq\\\",\\\"8a046e21993297bbc58547ee51ee95db16c2667449e2552696ed15addf38d7e7\\\"]\"]",
+            "at": 941720.5
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "kind": "source-binding",
+            "owner": 18,
+            "previous": "",
+            "current": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYlzNHF00KE9pPvzmq\",\"8a046e21993297bbc58547ee51ee95db16c2667449e2552696ed15addf38d7e7\"]",
+            "at": 941720.5
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "kind": "source-mount",
+            "owner": 18,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYlzNHF00KE9pPvzmq\",\"8a046e21993297bbc58547ee51ee95db16c2667449e2552696ed15addf38d7e7\"]",
+            "at": 941720.5999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "kind": "part-binding",
+            "owner": 101,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYm1lEs00O2KijUi86\",\"msg_g0VYm1k2300mHdtrLYyw\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 941720.6999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "owner": 39,
+            "messageID": "msg_g0VYm1k2300mHdtrLYyw",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYm1lEs00O2KijUi86",
+            "textLength": 209,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false,
+            "observedAt": 941721,
+            "kind": "body-mount",
+            "at": 941721
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "owner": 39,
+            "messageID": "msg_g0VYm1k2300mHdtrLYyw",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYm1lEs00O2KijUi86",
+            "textLength": 209,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false,
+            "observedAt": 941721.0999999046,
+            "kind": "body-state",
+            "at": 941721.0999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "kind": "part-binding",
+            "owner": 102,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYmMab300GY28UWAJt\",\"msg_g0VYmMZ4H00k2M4LXePB\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 941721.1999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "owner": 40,
+            "messageID": "msg_g0VYmMZ4H00k2M4LXePB",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmMab300GY28UWAJt",
+            "textLength": 135,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false,
+            "observedAt": 941721.4000000954,
+            "kind": "body-mount",
+            "at": 941721.4000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "owner": 40,
+            "messageID": "msg_g0VYmMZ4H00k2M4LXePB",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmMab300GY28UWAJt",
+            "textLength": 135,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false,
+            "observedAt": 941721.5999999046,
+            "kind": "body-state",
+            "at": 941721.5999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "kind": "part-binding",
+            "owner": 103,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYmMcJU00PFeeyJf7k\",\"msg_g0VYmMbPE00dysER56z0\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 941721.5999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "owner": 41,
+            "messageID": "msg_g0VYmMbPE00dysER56z0",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmMcJU00PFeeyJf7k",
+            "textLength": 4529,
+            "streaming": false,
+            "htmlBlocks": 32,
+            "pending": false,
+            "observedAt": 941722.4000000954,
+            "kind": "body-mount",
+            "at": 941722.4000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "owner": 41,
+            "messageID": "msg_g0VYmMbPE00dysER56z0",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmMcJU00PFeeyJf7k",
+            "textLength": 4529,
+            "streaming": false,
+            "htmlBlocks": 32,
+            "pending": false,
+            "observedAt": 941722.5,
+            "kind": "body-state",
+            "at": 941722.5
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "kind": "part-binding",
+            "owner": 104,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYmUNau00ka4jsGLu7\",\"msg_g0VYmULtS00eCE1XQTs4\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 941722.5999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "owner": 42,
+            "messageID": "msg_g0VYmULtS00eCE1XQTs4",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmUNau00ka4jsGLu7",
+            "textLength": 99,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false,
+            "observedAt": 941723.0999999046,
+            "kind": "body-mount",
+            "at": 941723.0999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "owner": 42,
+            "messageID": "msg_g0VYmULtS00eCE1XQTs4",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmUNau00ka4jsGLu7",
+            "textLength": 99,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false,
+            "observedAt": 941723.3000001907,
+            "kind": "body-state",
+            "at": 941723.3000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "kind": "part-binding",
+            "owner": 105,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYmUPS300JPqmNLo2D\",\"msg_g0VYmUOVB0012dG1c1pk\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 941723.3000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "owner": 43,
+            "messageID": "msg_g0VYmUOVB0012dG1c1pk",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmUPS300JPqmNLo2D",
+            "textLength": 2171,
+            "streaming": false,
+            "htmlBlocks": 13,
+            "pending": false,
+            "observedAt": 941723.6999998093,
+            "kind": "body-mount",
+            "at": 941723.6999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "owner": 43,
+            "messageID": "msg_g0VYmUOVB0012dG1c1pk",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmUPS300JPqmNLo2D",
+            "textLength": 2171,
+            "streaming": false,
+            "htmlBlocks": 13,
+            "pending": false,
+            "observedAt": 941723.8000001907,
+            "kind": "body-state",
+            "at": 941723.8000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "kind": "source-group-binding",
+            "owner": 19,
+            "previous": "",
+            "current": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYmUOVB0012dG1c1pk\\\",\\\"52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c\\\"]\"]",
+            "at": 941724
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "kind": "source-binding",
+            "owner": 20,
+            "previous": "",
+            "current": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYmUOVB0012dG1c1pk\",\"52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c\"]",
+            "at": 941724.0999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "kind": "source-mount",
+            "owner": 20,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYmUOVB0012dG1c1pk\",\"52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c\"]",
+            "at": 941724.1999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "kind": "part-binding",
+            "owner": 106,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYmUrRH00iG2zOFlhG\",\"msg_g0VYmUqhk00EpT8PKb3j\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 941725.5999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.706Z",
+            "owner": 44,
+            "messageID": "msg_g0VYmUqhk00EpT8PKb3j",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmUrRH00iG2zOFlhG",
+            "textLength": 3090,
+            "streaming": false,
+            "htmlBlocks": 22,
+            "pending": false,
+            "observedAt": 941726.1999998093,
+            "kind": "body-mount",
+            "at": 941726.1999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.707Z",
+            "owner": 44,
+            "messageID": "msg_g0VYmUqhk00EpT8PKb3j",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmUrRH00iG2zOFlhG",
+            "textLength": 3090,
+            "streaming": false,
+            "htmlBlocks": 22,
+            "pending": false,
+            "observedAt": 941726.3000001907,
+            "kind": "body-state",
+            "at": 941726.3000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.707Z",
+            "kind": "part-binding",
+            "owner": 107,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYma1AT004jdIyz0bP\",\"msg_g0VYmZzrh002aaO3I7Gb\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 941726.4000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.710Z",
+            "owner": 45,
+            "messageID": "msg_g0VYmZzrh002aaO3I7Gb",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYma1AT004jdIyz0bP",
+            "textLength": 84,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false,
+            "observedAt": 941727.3000001907,
+            "kind": "body-mount",
+            "at": 941727.3000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "owner": 45,
+            "messageID": "msg_g0VYmZzrh002aaO3I7Gb",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYma1AT004jdIyz0bP",
+            "textLength": 84,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false,
+            "observedAt": 941727.4000000954,
+            "kind": "body-state",
+            "at": 941727.4000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "kind": "part-binding",
+            "owner": 108,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYma2wD003owRu5m9l\",\"msg_g0VYma20K00NMix5Hzs1\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 941727.5999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "owner": 46,
+            "messageID": "msg_g0VYma20K00NMix5Hzs1",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYma2wD003owRu5m9l",
+            "textLength": 2120,
+            "streaming": false,
+            "htmlBlocks": 14,
+            "pending": false,
+            "observedAt": 941728,
+            "kind": "body-mount",
+            "at": 941728
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "owner": 46,
+            "messageID": "msg_g0VYma20K00NMix5Hzs1",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYma2wD003owRu5m9l",
+            "textLength": 2120,
+            "streaming": false,
+            "htmlBlocks": 14,
+            "pending": false,
+            "observedAt": 941728.0999999046,
+            "kind": "body-state",
+            "at": 941728.0999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "kind": "source-group-binding",
+            "owner": 21,
+            "previous": "",
+            "current": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYma20K00NMix5Hzs1\\\",\\\"9779f0e41fe8fe96dfd1293da0f393cc2c85f41ecd6ad73dedd70a84017c4478\\\"]\"]",
+            "at": 941728.1999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "kind": "source-binding",
+            "owner": 22,
+            "previous": "",
+            "current": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYma20K00NMix5Hzs1\",\"9779f0e41fe8fe96dfd1293da0f393cc2c85f41ecd6ad73dedd70a84017c4478\"]",
+            "at": 941728.3000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "kind": "source-mount",
+            "owner": 22,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYma20K00NMix5Hzs1\",\"9779f0e41fe8fe96dfd1293da0f393cc2c85f41ecd6ad73dedd70a84017c4478\"]",
+            "at": 941728.3000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "kind": "part-binding",
+            "owner": 109,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYmaNTs00F3UDN30bC\",\"msg_g0VYmaLzr00YbB7uU14g\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 941728.5
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "owner": 47,
+            "messageID": "msg_g0VYmaLzr00YbB7uU14g",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmaNTs00F3UDN30bC",
+            "textLength": 2980,
+            "streaming": false,
+            "htmlBlocks": 21,
+            "pending": false,
+            "observedAt": 941729.1999998093,
+            "kind": "body-mount",
+            "at": 941729.1999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "owner": 47,
+            "messageID": "msg_g0VYmaLzr00YbB7uU14g",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYmaNTs00F3UDN30bC",
+            "textLength": 2980,
+            "streaming": false,
+            "htmlBlocks": 21,
+            "pending": false,
+            "observedAt": 941729.5,
+            "kind": "body-state",
+            "at": 941729.5
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "kind": "part-binding",
+            "owner": 110,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYn0rha005V1KlZppe\",\"msg_g0VYn0qE200VQT2dc3zP\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 941729.5
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "owner": 48,
+            "messageID": "msg_g0VYn0qE200VQT2dc3zP",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYn0rha005V1KlZppe",
+            "textLength": 70,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false,
+            "observedAt": 941729.8000001907,
+            "kind": "body-mount",
+            "at": 941729.8000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "owner": 48,
+            "messageID": "msg_g0VYn0qE200VQT2dc3zP",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYn0rha005V1KlZppe",
+            "textLength": 70,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false,
+            "observedAt": 941730,
+            "kind": "body-state",
+            "at": 941730
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "kind": "part-binding",
+            "owner": 111,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYn0tPU00GJfPCOkag\",\"msg_g0VYn0sTy00K0FROE4Oh\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 941730
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "owner": 49,
+            "messageID": "msg_g0VYn0sTy00K0FROE4Oh",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYn0tPU00GJfPCOkag",
+            "textLength": 1643,
+            "streaming": false,
+            "htmlBlocks": 6,
+            "pending": false,
+            "observedAt": 941730.4000000954,
+            "kind": "body-mount",
+            "at": 941730.4000000954
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "owner": 49,
+            "messageID": "msg_g0VYn0sTy00K0FROE4Oh",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYn0tPU00GJfPCOkag",
+            "textLength": 1643,
+            "streaming": false,
+            "htmlBlocks": 6,
+            "pending": false,
+            "observedAt": 941730.5,
+            "kind": "body-state",
+            "at": 941730.5
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "kind": "source-group-binding",
+            "owner": 23,
+            "previous": "",
+            "current": "[\"[\\\"source-url\\\",\\\"ses_hHpC127wALpwIiSOX86d\\\",\\\"msg_g0VYn0sTy00K0FROE4Oh\\\",\\\"068cf6c6d4bad02a20b7cee9ce7b4be31ad88ce4094646d3dae9e99796cba036\\\"]\"]",
+            "at": 941730.5999999046
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "kind": "source-binding",
+            "owner": 24,
+            "previous": "",
+            "current": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYn0sTy00K0FROE4Oh\",\"068cf6c6d4bad02a20b7cee9ce7b4be31ad88ce4094646d3dae9e99796cba036\"]",
+            "at": 941730.6999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "kind": "source-mount",
+            "owner": 24,
+            "identity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYn0sTy00K0FROE4Oh\",\"068cf6c6d4bad02a20b7cee9ce7b4be31ad88ce4094646d3dae9e99796cba036\"]",
+            "at": 941730.6999998093
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "kind": "part-binding",
+            "owner": 112,
+            "previous": "",
+            "current": "[\"text\",\"prt_g0VYn1Ezt00aQBqYLfgw\",\"msg_g0VYn1Dr400aVXO3GoJ3\",\"ses_hHpC127wALpwIiSOX86d\"]",
+            "at": 941730.8000001907
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "owner": 50,
+            "messageID": "msg_g0VYn1Dr400aVXO3GoJ3",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYn1Ezt00aQBqYLfgw",
+            "textLength": 2358,
+            "streaming": false,
+            "htmlBlocks": 8,
+            "pending": false,
+            "observedAt": 941731,
+            "kind": "body-mount",
+            "at": 941731
+          },
+          {
+            "timestamp": "2026-10-22T17:48:30.711Z",
+            "owner": 50,
+            "messageID": "msg_g0VYn1Dr400aVXO3GoJ3",
+            "sessionID": "ses_hHpC127wALpwIiSOX86d",
+            "partID": "prt_g0VYn1Ezt00aQBqYLfgw",
+            "textLength": 2358,
+            "streaming": false,
+            "htmlBlocks": 8,
+            "pending": false,
+            "observedAt": 941731.1999998093,
+            "kind": "body-state",
+            "at": 941731.1999998093
+          }
+        ]
+      }
+    ]
+  },
+  "domObservations": {
+    "before": {
+      "bodies": [
+        {
+          "blocks": 1,
+          "owner": "10",
+          "part": "prt_g0VYlz8dd00pWcuVkoZF",
+          "rendering": null,
+          "textLength": 80
+        },
+        {
+          "blocks": 1,
+          "owner": "11",
+          "part": "prt_g0VYlzNy200G9j4TgB2N",
+          "rendering": null,
+          "textLength": 210
+        },
+        {
+          "blocks": 1,
+          "owner": "12",
+          "part": "prt_g0VYm1lEs00O2KijUi86",
+          "rendering": null,
+          "textLength": 210
+        },
+        {
+          "blocks": 1,
+          "owner": "13",
+          "part": "prt_g0VYmMab300GY28UWAJt",
+          "rendering": null,
+          "textLength": 136
+        },
+        {
+          "blocks": 32,
+          "owner": "14",
+          "part": "prt_g0VYmMcJU00PFeeyJf7k",
+          "rendering": null,
+          "textLength": 4301
+        },
+        {
+          "blocks": 1,
+          "owner": "15",
+          "part": "prt_g0VYmUNau00ka4jsGLu7",
+          "rendering": null,
+          "textLength": 100
+        },
+        {
+          "blocks": 13,
+          "owner": "16",
+          "part": "prt_g0VYmUPS300JPqmNLo2D",
+          "rendering": null,
+          "textLength": 2158
+        },
+        {
+          "blocks": 22,
+          "owner": "17",
+          "part": "prt_g0VYmUrRH00iG2zOFlhG",
+          "rendering": null,
+          "textLength": 2959
+        },
+        {
+          "blocks": 1,
+          "owner": "18",
+          "part": "prt_g0VYma1AT004jdIyz0bP",
+          "rendering": null,
+          "textLength": 85
+        },
+        {
+          "blocks": 14,
+          "owner": "19",
+          "part": "prt_g0VYma2wD003owRu5m9l",
+          "rendering": null,
+          "textLength": 2106
+        },
+        {
+          "blocks": 21,
+          "owner": "20",
+          "part": "prt_g0VYmaNTs00F3UDN30bC",
+          "rendering": null,
+          "textLength": 2850
+        },
+        {
+          "blocks": 1,
+          "owner": "21",
+          "part": "prt_g0VYn0rha005V1KlZppe",
+          "rendering": null,
+          "textLength": 71
+        },
+        {
+          "blocks": 6,
+          "owner": "22",
+          "part": "prt_g0VYn0tPU00GJfPCOkag",
+          "rendering": null,
+          "textLength": 1639
+        },
+        {
+          "blocks": 8,
+          "owner": "23",
+          "part": "prt_g0VYn1Ezt00aQBqYLfgw",
+          "rendering": null,
+          "textLength": 2271
+        }
+      ],
+      "scroll": {
+        "full": 22643,
+        "height": 576,
+        "top": 19907
+      },
+      "session": "ses_hHpC127wALpwIiSOX86d",
+      "sources": [
+        {
+          "links": [
+            "https://aclanthology.org/2025.naacl-long.475/"
+          ],
+          "owner": "2",
+          "text": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthologyaclanthology.org"
+        },
+        {
+          "links": [
+            "https://aclanthology.org/2025.acl-long.195/"
+          ],
+          "owner": "4",
+          "text": "Conformity in Large Language Models - ACL Anthologyaclanthology.org"
+        },
+        {
+          "links": [
+            "https://arxiv.org/abs/2509.11035v1"
+          ],
+          "owner": "6",
+          "text": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+        },
+        {
+          "links": [
+            "https://arxiv.org/html/2509.11035v1"
+          ],
+          "owner": "8",
+          "text": "Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+        },
+        {
+          "links": [
+            "https://aclanthology.org/2024.acl-long.381/"
+          ],
+          "owner": "10",
+          "text": "ReConcile: Round-Table Conference Improves Reasoning via Consensus among Diverse LLMs - ACL Anthologyaclanthology.org"
+        }
+      ]
+    },
+    "offline": {
+      "bodies": [
+        {
+          "blocks": 1,
+          "owner": "10",
+          "part": "prt_g0VYlz8dd00pWcuVkoZF",
+          "rendering": null,
+          "textLength": 80
+        },
+        {
+          "blocks": 1,
+          "owner": "11",
+          "part": "prt_g0VYlzNy200G9j4TgB2N",
+          "rendering": null,
+          "textLength": 210
+        },
+        {
+          "blocks": 1,
+          "owner": "12",
+          "part": "prt_g0VYm1lEs00O2KijUi86",
+          "rendering": null,
+          "textLength": 210
+        },
+        {
+          "blocks": 1,
+          "owner": "13",
+          "part": "prt_g0VYmMab300GY28UWAJt",
+          "rendering": null,
+          "textLength": 136
+        },
+        {
+          "blocks": 32,
+          "owner": "14",
+          "part": "prt_g0VYmMcJU00PFeeyJf7k",
+          "rendering": null,
+          "textLength": 4301
+        },
+        {
+          "blocks": 1,
+          "owner": "15",
+          "part": "prt_g0VYmUNau00ka4jsGLu7",
+          "rendering": null,
+          "textLength": 100
+        },
+        {
+          "blocks": 13,
+          "owner": "16",
+          "part": "prt_g0VYmUPS300JPqmNLo2D",
+          "rendering": null,
+          "textLength": 2158
+        },
+        {
+          "blocks": 22,
+          "owner": "17",
+          "part": "prt_g0VYmUrRH00iG2zOFlhG",
+          "rendering": null,
+          "textLength": 2959
+        },
+        {
+          "blocks": 1,
+          "owner": "18",
+          "part": "prt_g0VYma1AT004jdIyz0bP",
+          "rendering": null,
+          "textLength": 85
+        },
+        {
+          "blocks": 14,
+          "owner": "19",
+          "part": "prt_g0VYma2wD003owRu5m9l",
+          "rendering": null,
+          "textLength": 2106
+        },
+        {
+          "blocks": 21,
+          "owner": "20",
+          "part": "prt_g0VYmaNTs00F3UDN30bC",
+          "rendering": null,
+          "textLength": 2850
+        },
+        {
+          "blocks": 1,
+          "owner": "21",
+          "part": "prt_g0VYn0rha005V1KlZppe",
+          "rendering": null,
+          "textLength": 71
+        },
+        {
+          "blocks": 6,
+          "owner": "22",
+          "part": "prt_g0VYn0tPU00GJfPCOkag",
+          "rendering": null,
+          "textLength": 1639
+        },
+        {
+          "blocks": 8,
+          "owner": "23",
+          "part": "prt_g0VYn1Ezt00aQBqYLfgw",
+          "rendering": null,
+          "textLength": 2271
+        }
+      ],
+      "scroll": {
+        "full": 22643,
+        "height": 576,
+        "top": 19907
+      },
+      "session": "ses_hHpC127wALpwIiSOX86d",
+      "sources": [
+        {
+          "links": [
+            "https://aclanthology.org/2025.naacl-long.475/"
+          ],
+          "owner": "2",
+          "text": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthologyaclanthology.org"
+        },
+        {
+          "links": [
+            "https://aclanthology.org/2025.acl-long.195/"
+          ],
+          "owner": "4",
+          "text": "Conformity in Large Language Models - ACL Anthologyaclanthology.org"
+        },
+        {
+          "links": [
+            "https://arxiv.org/abs/2509.11035v1"
+          ],
+          "owner": "6",
+          "text": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+        },
+        {
+          "links": [
+            "https://arxiv.org/html/2509.11035v1"
+          ],
+          "owner": "8",
+          "text": "Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+        },
+        {
+          "links": [
+            "https://aclanthology.org/2024.acl-long.381/"
+          ],
+          "owner": "10",
+          "text": "ReConcile: Round-Table Conference Improves Reasoning via Consensus among Diverse LLMs - ACL Anthologyaclanthology.org"
+        }
+      ]
+    },
+    "reconnected": {
+      "bodies": [
+        {
+          "blocks": 1,
+          "owner": "10",
+          "part": "prt_g0VYlz8dd00pWcuVkoZF",
+          "rendering": null,
+          "textLength": 80
+        },
+        {
+          "blocks": 1,
+          "owner": "11",
+          "part": "prt_g0VYlzNy200G9j4TgB2N",
+          "rendering": null,
+          "textLength": 210
+        },
+        {
+          "blocks": 1,
+          "owner": "12",
+          "part": "prt_g0VYm1lEs00O2KijUi86",
+          "rendering": null,
+          "textLength": 210
+        },
+        {
+          "blocks": 1,
+          "owner": "13",
+          "part": "prt_g0VYmMab300GY28UWAJt",
+          "rendering": null,
+          "textLength": 136
+        },
+        {
+          "blocks": 32,
+          "owner": "14",
+          "part": "prt_g0VYmMcJU00PFeeyJf7k",
+          "rendering": null,
+          "textLength": 4301
+        },
+        {
+          "blocks": 1,
+          "owner": "15",
+          "part": "prt_g0VYmUNau00ka4jsGLu7",
+          "rendering": null,
+          "textLength": 100
+        },
+        {
+          "blocks": 13,
+          "owner": "16",
+          "part": "prt_g0VYmUPS300JPqmNLo2D",
+          "rendering": null,
+          "textLength": 2158
+        },
+        {
+          "blocks": 22,
+          "owner": "17",
+          "part": "prt_g0VYmUrRH00iG2zOFlhG",
+          "rendering": null,
+          "textLength": 2959
+        },
+        {
+          "blocks": 1,
+          "owner": "18",
+          "part": "prt_g0VYma1AT004jdIyz0bP",
+          "rendering": null,
+          "textLength": 85
+        },
+        {
+          "blocks": 14,
+          "owner": "19",
+          "part": "prt_g0VYma2wD003owRu5m9l",
+          "rendering": null,
+          "textLength": 2106
+        },
+        {
+          "blocks": 21,
+          "owner": "20",
+          "part": "prt_g0VYmaNTs00F3UDN30bC",
+          "rendering": null,
+          "textLength": 2850
+        },
+        {
+          "blocks": 1,
+          "owner": "21",
+          "part": "prt_g0VYn0rha005V1KlZppe",
+          "rendering": null,
+          "textLength": 71
+        },
+        {
+          "blocks": 6,
+          "owner": "22",
+          "part": "prt_g0VYn0tPU00GJfPCOkag",
+          "rendering": null,
+          "textLength": 1639
+        },
+        {
+          "blocks": 8,
+          "owner": "23",
+          "part": "prt_g0VYn1Ezt00aQBqYLfgw",
+          "rendering": null,
+          "textLength": 2271
+        }
+      ],
+      "scroll": {
+        "full": 22643,
+        "height": 576,
+        "top": 19907
+      },
+      "session": "ses_hHpC127wALpwIiSOX86d",
+      "sources": [
+        {
+          "links": [
+            "https://aclanthology.org/2025.naacl-long.475/"
+          ],
+          "owner": "2",
+          "text": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthologyaclanthology.org"
+        },
+        {
+          "links": [
+            "https://aclanthology.org/2025.acl-long.195/"
+          ],
+          "owner": "4",
+          "text": "Conformity in Large Language Models - ACL Anthologyaclanthology.org"
+        },
+        {
+          "links": [
+            "https://arxiv.org/abs/2509.11035v1"
+          ],
+          "owner": "6",
+          "text": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+        },
+        {
+          "links": [
+            "https://arxiv.org/html/2509.11035v1"
+          ],
+          "owner": "8",
+          "text": "Free-MAD: Consensus-Free Multi-Agent Debatearxiv.org"
+        },
+        {
+          "links": [
+            "https://aclanthology.org/2024.acl-long.381/"
+          ],
+          "owner": "10",
+          "text": "ReConcile: Round-Table Conference Improves Reasoning via Consensus among Diverse LLMs - ACL Anthologyaclanthology.org"
+        }
+      ]
+    }
+  },
+  "publicEpoch": [
+    {
+      "stage": "before",
+      "phase": "baseline",
+      "startedAt": "2026-10-22T17:29:03.988Z",
+      "receivedAt": "2026-10-22T17:29:04.331Z",
+      "status": 200,
+      "task": {
+        "status": "completed"
+      },
+      "prior": null,
+      "received": {
+        "mode": "snapshot",
+        "epoch": 1792690117183,
+        "sequence": 0,
+        "messages": 20
+      },
+      "messageCount": 20,
+      "sources": [
+        {
+          "id": "prt_g0VYlzNFy003mnOrS6Ou",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+          "sourceId": "8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc",
+          "toolPartID": "prt_g0VYlz9DQ009aokcHv1V",
+          "type": "source-url",
+          "url": "https://aclanthology.org/2025.naacl-long.475/",
+          "title": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology"
+        },
+        {
+          "id": "prt_g0VYm1k0j00RrTh2ZAzO",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYlzNHF00KE9pPvzmq",
+          "sourceId": "8a046e21993297bbc58547ee51ee95db16c2667449e2552696ed15addf38d7e7",
+          "toolPartID": "prt_g0VYlzOiH00ATA7a4B7c",
+          "type": "source-url",
+          "url": "https://aclanthology.org/2025.acl-long.195/",
+          "title": "Conformity in Large Language Models - ACL Anthology"
+        },
+        {
+          "id": "prt_g0VYmUqRe00iwQUDpLhe",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYmUOVB0012dG1c1pk",
+          "sourceId": "52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c",
+          "toolPartID": "prt_g0VYmUc6c00U1v3LhnCg",
+          "type": "source-url",
+          "url": "https://arxiv.org/abs/2509.11035v1",
+          "title": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debate"
+        },
+        {
+          "id": "prt_g0VYmaLy10038WK7z7WL",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYma20K00NMix5Hzs1",
+          "sourceId": "9779f0e41fe8fe96dfd1293da0f393cc2c85f41ecd6ad73dedd70a84017c4478",
+          "toolPartID": "prt_g0VYmaILg00lskNxTy35",
+          "type": "source-url",
+          "url": "https://arxiv.org/html/2509.11035v1",
+          "title": "Free-MAD: Consensus-Free Multi-Agent Debate"
+        },
+        {
+          "id": "prt_g0VYn1Dl600S2Nr76HYh",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYn0sTy00K0FROE4Oh",
+          "sourceId": "068cf6c6d4bad02a20b7cee9ce7b4be31ad88ce4094646d3dae9e99796cba036",
+          "toolPartID": "prt_g0VYn13my00cKqTAZcoY",
+          "type": "source-url",
+          "url": "https://aclanthology.org/2024.acl-long.381/",
+          "title": "ReConcile: Round-Table Conference Improves Reasoning via Consensus among Diverse LLMs - ACL Anthology"
+        }
+      ]
+    },
+    {
+      "stage": "after",
+      "phase": "recovered",
+      "startedAt": "2026-10-22T17:46:47.373Z",
+      "receivedAt": "2026-10-22T17:46:47.645Z",
+      "status": 200,
+      "task": {
+        "status": "completed"
+      },
+      "prior": {
+        "epoch": 1792690117183,
+        "sequence": 0,
+        "messages": 20
+      },
+      "received": {
+        "mode": "snapshot",
+        "epoch": 1792691004450,
+        "sequence": 0,
+        "messages": 20
+      },
+      "messageCount": 20,
+      "sources": [
+        {
+          "id": "prt_g0VYlzNFy003mnOrS6Ou",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+          "sourceId": "8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc",
+          "toolPartID": "prt_g0VYlz9DQ009aokcHv1V",
+          "type": "source-url",
+          "url": "https://aclanthology.org/2025.naacl-long.475/",
+          "title": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology"
+        },
+        {
+          "id": "prt_g0VYm1k0j00RrTh2ZAzO",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYlzNHF00KE9pPvzmq",
+          "sourceId": "8a046e21993297bbc58547ee51ee95db16c2667449e2552696ed15addf38d7e7",
+          "toolPartID": "prt_g0VYlzOiH00ATA7a4B7c",
+          "type": "source-url",
+          "url": "https://aclanthology.org/2025.acl-long.195/",
+          "title": "Conformity in Large Language Models - ACL Anthology"
+        },
+        {
+          "id": "prt_g0VYmUqRe00iwQUDpLhe",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYmUOVB0012dG1c1pk",
+          "sourceId": "52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c",
+          "toolPartID": "prt_g0VYmUc6c00U1v3LhnCg",
+          "type": "source-url",
+          "url": "https://arxiv.org/abs/2509.11035v1",
+          "title": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debate"
+        },
+        {
+          "id": "prt_g0VYmaLy10038WK7z7WL",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYma20K00NMix5Hzs1",
+          "sourceId": "9779f0e41fe8fe96dfd1293da0f393cc2c85f41ecd6ad73dedd70a84017c4478",
+          "toolPartID": "prt_g0VYmaILg00lskNxTy35",
+          "type": "source-url",
+          "url": "https://arxiv.org/html/2509.11035v1",
+          "title": "Free-MAD: Consensus-Free Multi-Agent Debate"
+        },
+        {
+          "id": "prt_g0VYn1Dl600S2Nr76HYh",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "messageID": "msg_g0VYn0sTy00K0FROE4Oh",
+          "sourceId": "068cf6c6d4bad02a20b7cee9ce7b4be31ad88ce4094646d3dae9e99796cba036",
+          "toolPartID": "prt_g0VYn13my00cKqTAZcoY",
+          "type": "source-url",
+          "url": "https://aclanthology.org/2024.acl-long.381/",
+          "title": "ReConcile: Round-Table Conference Improves Reasoning via Consensus among Diverse LLMs - ACL Anthology"
+        }
+      ]
+    }
+  ],
+  "backendRequests": [
+    {
+      "time": "2026-10-22T17:43:29.186Z",
+      "requestID": "dcdb4fad-b135-4d8b-9286-2a703a97b8d1",
+      "method": "GET",
+      "path": "/task/tsk_g00VYlyopB00h7w27eIw/events",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-22T17:43:29.330Z",
+      "requestID": "dcdb4fad-b135-4d8b-9286-2a703a97b8d1",
+      "method": "GET",
+      "path": "/task/tsk_g00VYlyopB00h7w27eIw/events",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 144
+    },
+    {
+      "time": "2026-10-22T17:43:40.591Z",
+      "requestID": "f04b89fd-a716-461d-9a08-f8cd24738ed2",
+      "method": "GET",
+      "path": "/task/tsk_g00VYlyopB00h7w27eIw/events",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-22T17:43:40.594Z",
+      "requestID": "f04b89fd-a716-461d-9a08-f8cd24738ed2",
+      "method": "GET",
+      "path": "/task/tsk_g00VYlyopB00h7w27eIw/events",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 3
+    },
+    {
+      "time": "2026-10-22T17:46:47.377Z",
+      "requestID": "269de910-91e7-4a6b-a1c3-e37027e19312",
+      "method": "GET",
+      "path": "/task/tsk_g00VYlyopB00h7w27eIw/conversation/session/ses_hHpC127wALpwIiSOX86d",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-22T17:46:47.508Z",
+      "requestID": "269de910-91e7-4a6b-a1c3-e37027e19312",
+      "method": "GET",
+      "path": "/task/tsk_g00VYlyopB00h7w27eIw/conversation/session/ses_hHpC127wALpwIiSOX86d",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 131
+    },
+    {
+      "time": "2026-10-22T17:48:30.521Z",
+      "requestID": "70306957-2977-4856-9abe-b5bf6424143c",
+      "method": "GET",
+      "path": "/task/tsk_g00VYlyopB00h7w27eIw/conversation/session/ses_hHpC127wALpwIiSOX86d",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-22T17:48:30.663Z",
+      "requestID": "70306957-2977-4856-9abe-b5bf6424143c",
+      "method": "GET",
+      "path": "/task/tsk_g00VYlyopB00h7w27eIw/conversation/session/ses_hHpC127wALpwIiSOX86d",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 142
+    }
+  ],
+  "attachment": {
+    "at": "2026-10-22T17:48:19.664Z",
+    "url": "http://127.0.0.1:19089/attachment/prj_hp1ir9XEheMHTOMlkSL8/b4a9ca9e1cfc475c07592c9527eeea28ed6fc0ea38401060d9243a36eb6c845c.png?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-task-source-growth-537-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5Ceaeacbce-3533-49f2-aa4e-e26c79421c59",
+    "status": 200,
+    "mime": "image/png",
+    "bytes": 643,
+    "identity": "Actual public attachment route returned exact original published PNG bytes",
+    "owner": "prj_hp1ir9XEheMHTOMlkSL8",
+    "scope": "after"
+  },
+  "scopes": [
+    {
+      "stage": "before",
+      "port": 19089,
+      "preflight": {
+        "owner": {
+          "pid": 81576,
+          "processInstanceID": "win32:639282869156809529",
+          "occurrenceID": "dfa3bb65-73a6-4c1e-ad8f-2bd2a5a61ec6"
+        },
+        "parent": {
+          "pid": 25416,
+          "processInstanceID": "win32:639282869155761799",
+          "occurrenceID": "14e815cf-f282-440c-93f1-70b07ecd572f"
+        },
+        "occurrence": "task-member-reconnect-545-before-26dd812d-f009-4946-bed1-ac91981cb746",
+        "preflight": {
+          "sessionID": "ses_hLDaUP8WI1wQYGRybrFa",
+          "credential": "usable",
+          "catalog": "projected",
+          "actualModel": "gpt-6.1-sol",
+          "streaming": true
+        },
+        "maxRequests": 4,
+        "observedAt": "2026-10-22T17:28:47.378Z"
+      },
+      "requests": [
+        {
+          "index": 0,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof",
+          "actualApiModel": "gpt-6.1-sol"
+        },
+        {
+          "index": 1,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof",
+          "actualApiModel": "gpt-6.1-sol"
+        }
+      ],
+      "maximumRequests": 4,
+      "publicShutdown": {
+        "target": {
+          "pid": 81576,
+          "processInstanceID": "win32:639282869156809529",
+          "occurrenceID": "938300dd-a155-46e6-8d59-d54100c23b2c"
+        },
+        "statusCode": 200,
+        "observedAtUtc": "2026-10-22T17:40:19.2830461Z",
+        "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYnjz2700fN2qhPaaL\"}",
+        "occurrence": "task-member-reconnect-545-before-26dd812d-f009-4946-bed1-ac91981cb746"
+      },
+      "physical": {
+        "chain": [
+          {
+            "identity": {
+              "pid": 95252,
+              "processInstanceID": "win32:639282869147871117",
+              "occurrenceID": "57832a60-133d-402e-99bb-17f0999185f0"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 81576,
+              "processInstanceID": "win32:639282869156809529",
+              "occurrenceID": "938300dd-a155-46e6-8d59-d54100c23b2c"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-22T17:40:19.4429261Z"
+        },
+        "observedAtUtc": "2026-10-22T17:40:29.9333709Z",
+        "native": {
+          "occurrence": "task-member-reconnect-545-before-26dd812d-f009-4946-bed1-ac91981cb746",
+          "outcome": "settled",
+          "host": {
+            "pid": 95252,
+            "processInstanceID": "win32:639282869147871117",
+            "occurrenceID": "57832a60-133d-402e-99bb-17f0999185f0"
+          },
+          "target": {
+            "pid": 81576,
+            "processInstanceID": "win32:639282869156809529",
+            "occurrenceID": "938300dd-a155-46e6-8d59-d54100c23b2c"
+          },
+          "observedAtUtc": "2026-10-22T17:40:19.407Z",
+          "deadlineAt": 1792691314751,
+          "terminal": {
+            "occurrenceID": "task-member-reconnect-545-before-26dd812d-f009-4946-bed1-ac91981cb746",
+            "pid": 81576,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        }
+      },
+      "originalExec": {
+        "session": 90795,
+        "exitCode": 0
+      },
+      "retirement": {
+        "at": "2026-10-22T17:40:30.677Z",
+        "retired": [
+          {
+            "scope": "runtime",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "runtime",
+            "name": "models.json",
+            "bytes": 9155406
+          },
+          {
+            "scope": "private",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "private",
+            "name": "models.json",
+            "bytes": 9155406
+          }
+        ],
+        "scannedFiles": 55,
+        "scannedBytes": 79905876,
+        "secretValueMatches": 0,
+        "sourceAuth": {
+          "path": "C:/Users/hengu/AppData/Local/opencorvus/data/auth.json",
+          "bytes": 2259,
+          "mtimeMs": 1792683516975.7468,
+          "selectedEntry": "exact original"
+        },
+        "sourceCatalog": {
+          "byteLength": 9155406,
+          "mtimeMs": 1791128890137.9968,
+          "content": "exact original"
+        },
+        "physicalCompletion": true,
+        "preparationMetadata": "App source path, exact selected entry, size, mtime and complete adjacent catalog verified"
+      },
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 92295168,
+          "modifiedAtMs": 1792680701201.259
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 192812,
+        "currentRows": 193248,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ],
+        "providerActivityRequests": {
+          "original": 480,
+          "current": 481
+        }
+      }
+    },
+    {
+      "stage": "after",
+      "port": 19089,
+      "preflight": {
+        "owner": {
+          "pid": 73272,
+          "processInstanceID": "win32:639282878029706657",
+          "occurrenceID": "e6625aad-da27-49ca-9f50-ed6b929e263d"
+        },
+        "parent": {
+          "pid": 73672,
+          "processInstanceID": "win32:639282878029507847",
+          "occurrenceID": "06986b95-84f1-4bc0-8f09-2ca8787161af"
+        },
+        "occurrence": "task-member-reconnect-545-after-ede636c1-816c-418b-aabd-31378002472e",
+        "preflight": {
+          "sessionID": "ses_hZko647Xj5FRJjV08xsT",
+          "credential": "usable",
+          "catalog": "projected",
+          "actualModel": "gpt-6.1-sol",
+          "streaming": true
+        },
+        "maxRequests": 4,
+        "observedAt": "2026-10-22T17:43:36.178Z"
+      },
+      "requests": [
+        {
+          "index": 0,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof",
+          "actualApiModel": "gpt-6.1-sol"
+        },
+        {
+          "index": 1,
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof",
+          "actualApiModel": "gpt-6.1-sol"
+        }
+      ],
+      "maximumRequests": 4,
+      "publicShutdown": {
+        "target": {
+          "pid": 73272,
+          "processInstanceID": "win32:639282878029706657",
+          "occurrenceID": "ebe69e8e-2eff-4fb7-bb61-498f3d2f595e"
+        },
+        "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYnm5Jn003WDO7Xn55\"}",
+        "statusCode": 200,
+        "occurrence": "task-member-reconnect-545-after-ede636c1-816c-418b-aabd-31378002472e",
+        "observedAtUtc": "2026-10-22T17:48:40.0935409Z"
+      },
+      "physical": {
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 96924,
+              "processInstanceID": "win32:639282878022064650",
+              "occurrenceID": "eab83dca-3792-4df3-9792-bf31243d16f7"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 73272,
+              "processInstanceID": "win32:639282878029706657",
+              "occurrenceID": "ebe69e8e-2eff-4fb7-bb61-498f3d2f595e"
+            }
+          }
+        ],
+        "native": {
+          "occurrence": "task-member-reconnect-545-after-ede636c1-816c-418b-aabd-31378002472e",
+          "outcome": "settled",
+          "host": {
+            "pid": 96924,
+            "processInstanceID": "win32:639282878022064650",
+            "occurrenceID": "eab83dca-3792-4df3-9792-bf31243d16f7"
+          },
+          "target": {
+            "pid": 73272,
+            "processInstanceID": "win32:639282878029706657",
+            "occurrenceID": "ebe69e8e-2eff-4fb7-bb61-498f3d2f595e"
+          },
+          "observedAtUtc": "2026-10-22T17:48:40.204Z",
+          "deadlineAt": 1792692202169,
+          "terminal": {
+            "occurrenceID": "task-member-reconnect-545-after-ede636c1-816c-418b-aabd-31378002472e",
+            "pid": 73272,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-22T17:48:40.2378267Z"
+        },
+        "observedAtUtc": "2026-10-22T17:48:48.2513516Z"
+      },
+      "originalExec": {
+        "session": 73974,
+        "exitCode": 0
+      },
+      "retirement": {
+        "at": "2026-10-22T17:48:48.972Z",
+        "retired": [
+          {
+            "scope": "runtime",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "runtime",
+            "name": "models.json",
+            "bytes": 9155406
+          },
+          {
+            "scope": "private",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "private",
+            "name": "models.json",
+            "bytes": 9155406
+          }
+        ],
+        "scannedFiles": 44,
+        "scannedBytes": 75130955,
+        "secretValueMatches": 0,
+        "sourceAuth": {
+          "path": "C:/Users/hengu/AppData/Local/opencorvus/data/auth.json",
+          "bytes": 2259,
+          "mtimeMs": 1792683516975.7468,
+          "selectedEntry": "exact original"
+        },
+        "sourceCatalog": {
+          "byteLength": 9155406,
+          "mtimeMs": 1791128890137.9968,
+          "content": "exact original"
+        },
+        "physicalCompletion": true,
+        "preparationMetadata": "App source path, exact selected entry, size, mtime and complete adjacent catalog verified"
+      },
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 92450816,
+          "modifiedAtMs": 1792690819313.2727
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 193248,
+        "currentRows": 193748,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ],
+        "providerActivityRequests": {
+          "original": 481,
+          "current": 482
+        }
+      }
+    }
+  ],
+  "limits": [
+    "No new business input, new Task/member/Goal or production change in this batch.",
+    "Unchanged revision retains current member transcript during reconnect; first B request after restart is the separately labelled checker, later actual member navigation reloads it.",
+    "Does not qualify offline content growth or active stream reconnect, nor prove every reported Rendering scenario resolved.",
+    "Before attachment pairing was verified; the actual public PNG route was checked in after only."
+  ],
+  "screenshots": [
+    "before-source-reading.png",
+    "offline-same-page.png",
+    "reconnected-same-page.png",
+    "member-return-reading.png"
+  ]
+}

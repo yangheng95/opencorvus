@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Task 成员同页重连](2026-10-23-task-member-reconnect/README.md)：545 四张实图、4 次 Sol 原 EOF、14 段正文/5 条来源/阅读位置保持，双服务正常退出及完整原数据保留。
+
 - [侧聊Goal与完整来源滚动](2026-10-23-side-goal-live-experience/README.md)：544九张实图、两轮真实Goal/8次Sol原EOF、来源滚轮修复与90表原数据保持。
 
 - [OpenCorvus热认证实际验收](2026-10-23-openai-hot-auth-verification/README.md)：543实际App OAuth配对目录、2/4 Sol流式200/EOF、回复OK、正常shutdown与四成员退休；无新UI或Goal执行资格。
