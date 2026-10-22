@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Task Rendering与执行轮次](records/2026-10/2026-10-22-task-rendering-occurrence.md)：[7实图/29次Sol与真实失败](artifacts/2026-10-22-task-rendering-occurrence/README.md)，修复流中快照回读风暴，原B新增来源/复制/自然完成；历史轮次及连续owner仍开放。
+
 - [Task图片处理与中断恢复](records/2026-10/2026-10-22-task-image-recovery.md)：[7实图/29次Sol/原Task恢复](artifacts/2026-10-22-task-image-recovery/README.md)，修复已知epoch零游标漏终态，真实snapshot/SSE/非空delta与两个原Task自然完成。
 
 - [活跃Task来源与正文追加](records/2026-10/2026-10-22-live-task-source-growth.md)：[9实图/26次Sol与原生栈](artifacts/2026-10-22-live-task-source-growth/README.md)，修复成员权限卡丢失，修复本地sharp依赖缺件；保留流式与Task终态未达事实。

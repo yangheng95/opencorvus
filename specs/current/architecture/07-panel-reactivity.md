@@ -160,6 +160,15 @@ receive that original authority. Delta reuse requires the exact same key and
 current resource owner. Side Chat supplies its existing captured stream token to
 that shared parser. This retires a GET projection, not a child execution.
 
+The member transcript's read revision follows canonical boundaries. Intermediate
+text/reasoning snapshots with an actual start and no end, and pending Tool drafts,
+remain in the existing live projection while the canonical writer proves that
+exact assistant Message is unfinished. Their periodic persistence does not issue
+another transcript read. Ended Parts, Message boundaries, Source/file updates,
+admitted Tool results, removals and completed Message edits retain canonical reads.
+An unknown Message also requires a read; historical running status alone cannot
+qualify an intermediate update. This rule is shared by Task and Session members.
+
 Artifact downloads and copy actions retain one current operation owner, its
 AbortController, exact source material and component lifetime. API-bound sources
 also retain the original connection authority and existing selection epoch.

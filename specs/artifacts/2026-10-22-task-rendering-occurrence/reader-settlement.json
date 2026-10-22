@@ -1,0 +1,42 @@
+{
+  "at": "2026-10-22T13:04:32.993Z",
+  "qualification": "Actual saved pre-shutdown and original final provider observations;not a new live-provider acceptance",
+  "preShutdown": {
+    "at": "2026-10-22T12:58:20.510Z",
+    "task": "completed",
+    "promptOwners": 0,
+    "readerState": "reading",
+    "active": [
+      {
+        "index": 14,
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "reading",
+        "sessionID": "ses_-zURE19wozzlTmx3ixXd",
+        "agentID": "memory",
+        "requestID": "msg_task-root-control_art_hcmKxd4hjzV9t4B5boKN_art_hcmKxd4hjzV9t4B5boKN",
+        "apiModelID": "gpt-6.1-sol"
+      }
+    ]
+  },
+  "postShutdown": {
+    "state": "settled",
+    "lastReader": {
+      "index": 14,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": {
+        "kind": "aborted",
+        "at": 1792673931530
+      },
+      "sessionID": "ses_-zURE19wozzlTmx3ixXd",
+      "agentID": "memory",
+      "requestID": "msg_task-root-control_art_hcmKxd4hjzV9t4B5boKN_art_hcmKxd4hjzV9t4B5boKN",
+      "apiModelID": "gpt-6.1-sol"
+    }
+  },
+  "correction": "Snapshot checker now prints every actual source-reader state;wait for actual settlement before owned shutdown within resource deadline;EOF qualification remains independent"
+}

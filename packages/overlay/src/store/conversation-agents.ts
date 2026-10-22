@@ -5,6 +5,7 @@ import { normalizeAgentRole } from "../utils/message"
 import type { BoardSource } from "./board"
 import {
   conversationUserInputTextForMessage,
+  projectedConversationMessageFacts,
   projectedConversationPartSnapshot,
   renderedConversationCardTargetForMessage,
 } from "../services/tree-writer"
@@ -1331,6 +1332,19 @@ export function advanceLiveConversationAgentTranscriptSequence(sourceKeyInput: s
       "",
   )
   if (!messageID) return
+  if (event?.type === "message.part.updated" && part && typeof part === "object") {
+    const time = part.time
+    const streamingText =
+      (part.type === "text" || part.type === "reasoning") &&
+      typeof time?.start === "number" && time.end === undefined
+    const toolDraft = part.type === "tool" && part.state?.status === "pending"
+    if (streamingText || toolDraft) {
+      const message = projectedConversationMessageFacts([sessionID]).find((item) => item.id === messageID)
+      // The live projection already owns these complete intermediate values.
+      // Ended Parts and completed Message edits still request canonical reads.
+      if (message?.role === "assistant" && message.completed === undefined) return
+    }
+  }
   const index = conversationAgentIndexForOccurrence(conversationAgentStore.records, { sessionID, messageID })
   if (index === undefined) return
   setConversationAgentStore("records", index, "transcriptSequence", (current) =>
