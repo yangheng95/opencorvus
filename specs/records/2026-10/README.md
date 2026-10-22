@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [停止后待批准许可收敛](2026-10-23-stopped-permission-convergence.md)：553规范Message退休、唯一决定槽及启动恢复，共享取消链横向审计。
+
 - [Sources与侧栏布局阅读](2026-10-23-source-layout-reading.md)：552单agent修复真实阅读锚点与共享宽度恢复，成员及Side真实输出实页复验。
 
 - [实时流重试状态](2026-10-23-stream-retry-status.md)：551单agent修复共享流重试状态，49秒16轮实际重试提示/来源/阅读位置保持。

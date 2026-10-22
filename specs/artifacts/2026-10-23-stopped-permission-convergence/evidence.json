@@ -1,0 +1,797 @@
+{
+  "at": "2026-10-22T21:43:17.105Z",
+  "commitBase": "fd148abe1ed624e861b5cf5a41f1cb3e5dcce819",
+  "actualCLI": "Source CLI /ui",
+  "ui": "Final552 main-i1jR4B4Z.js unchanged UI",
+  "port": 19145,
+  "originalExec": {
+    "sessionID": 56445,
+    "exit": 0
+  },
+  "provider": {
+    "count": 4,
+    "cap": 8,
+    "batchCap": 16,
+    "requests": [
+      {
+        "index": 0,
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof",
+        "apiModel": "gpt-6.1-sol"
+      },
+      {
+        "index": 1,
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof",
+        "apiModel": "gpt-6.1-sol"
+      },
+      {
+        "index": 2,
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof",
+        "apiModel": "gpt-6.1-sol"
+      },
+      {
+        "index": 3,
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof",
+        "apiModel": "gpt-6.1-sol"
+      }
+    ]
+  },
+  "shutdown": {
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYoimD800g3epQz16B\"}",
+    "statusCode": 200,
+    "occurrence": "stopped-permission-553-05716c1b-843d-4567-9f14-8e19e36fd2ef",
+    "target": {
+      "pid": 86336,
+      "processInstanceID": "win32:639283019311942922",
+      "occurrenceID": "0cfecff4-28b0-4aff-a984-1a41c66581f3"
+    },
+    "observedAtUtc": "2026-10-22T21:41:47.9986231Z"
+  },
+  "physical": {
+    "launcher": {
+      "observedAtUtc": "2026-10-22T21:41:48.1506345Z",
+      "originalChildExit": 0
+    },
+    "native": {
+      "occurrence": "stopped-permission-553-05716c1b-843d-4567-9f14-8e19e36fd2ef",
+      "outcome": "settled",
+      "host": {
+        "pid": 82564,
+        "processInstanceID": "win32:639283019302272312",
+        "occurrenceID": "09cd304e-5199-4e06-ba25-f9e1ed0ed66a"
+      },
+      "target": {
+        "pid": 86336,
+        "processInstanceID": "win32:639283019311942922",
+        "occurrenceID": "0cfecff4-28b0-4aff-a984-1a41c66581f3"
+      },
+      "observedAtUtc": "2026-10-22T21:41:48.114Z",
+      "deadlineAt": 1792706330147,
+      "terminal": {
+        "occurrenceID": "stopped-permission-553-05716c1b-843d-4567-9f14-8e19e36fd2ef",
+        "pid": 86336,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "chain": [
+      {
+        "identity": {
+          "pid": 82564,
+          "processInstanceID": "win32:639283019302272312",
+          "occurrenceID": "09cd304e-5199-4e06-ba25-f9e1ed0ed66a"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "identity": {
+          "pid": 86336,
+          "processInstanceID": "win32:639283019311942922",
+          "occurrenceID": "0cfecff4-28b0-4aff-a984-1a41c66581f3"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "observedAtUtc": "2026-10-22T21:42:07.3632024Z"
+  },
+  "shutdownReserveMs": 1022149,
+  "credentialRetirement": {
+    "at": "2026-10-22T21:42:07.658Z",
+    "retired": [
+      {
+        "scope": "runtime",
+        "name": "auth.json",
+        "bytes": 2194
+      },
+      {
+        "scope": "runtime",
+        "name": "models.json",
+        "bytes": 9155406
+      },
+      {
+        "scope": "private",
+        "name": "auth.json",
+        "bytes": 2194
+      },
+      {
+        "scope": "private",
+        "name": "models.json",
+        "bytes": 9155406
+      }
+    ],
+    "scannedFiles": 41,
+    "scannedBytes": 64187929,
+    "secretValueMatches": 0,
+    "sourceAuth": {
+      "path": "C:/Users/hengu/AppData/Local/opencorvus/data/auth.json",
+      "bytes": 2259,
+      "mtimeMs": 1792683516975.7468,
+      "selectedEntry": "exact original"
+    },
+    "sourceCatalog": {
+      "byteLength": 9155406,
+      "mtimeMs": 1791128890137.9968,
+      "content": "exact original"
+    },
+    "physicalCompletion": true,
+    "preparationMetadata": "App source path, exact selected entry, size, mtime and complete adjacent catalog verified"
+  },
+  "data": {
+    "at": "2026-10-22T21:42:07.719Z",
+    "schema": 3,
+    "scopes": [
+      {
+        "stage": "before",
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 78512128,
+          "modifiedAtMs": 1792703170278.7559
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "counts": {
+          "automation": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_fire": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_project_target": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1
+          },
+          "bus_publication_attempt_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "bus_publication_delivery": {
+            "original": 34262,
+            "current": 34454
+          },
+          "bus_publication_delivery_receipt": {
+            "original": 34262,
+            "current": 34454
+          },
+          "bus_publication_outbox": {
+            "original": 5077,
+            "current": 5105
+          },
+          "bus_publication_phase_receipt": {
+            "original": 15231,
+            "current": 15315
+          },
+          "channel_ingress_accepted": {
+            "original": 0,
+            "current": 0
+          },
+          "channel_ingress_outcome": {
+            "original": 0,
+            "current": 0
+          },
+          "control_account": {
+            "original": 0,
+            "current": 0
+          },
+          "database_authority": {
+            "original": 1,
+            "current": 1
+          },
+          "decision_log": {
+            "original": 13,
+            "current": 13
+          },
+          "engine_artifact": {
+            "original": 183,
+            "current": 183
+          },
+          "engine_artifact_catalog_revision": {
+            "original": 183,
+            "current": 183
+          },
+          "engine_artifact_version": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_browser_preview_target_identity": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_build_observation_cleanup": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_build_observation_cleanup_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_channel_binding": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_control_activation_lease": {
+            "original": 34627,
+            "current": 34820
+          },
+          "engine_control_activation_lease_grant": {
+            "original": 34691,
+            "current": 34884
+          },
+          "engine_git_checkpoint_outcome": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_git_checkpoint_request": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_goal": {
+            "original": 5,
+            "current": 5
+          },
+          "engine_interaction_outcome": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_interaction_request": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_metric_result": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_metric_spec": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_progress_snapshot": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_task": {
+            "original": 19,
+            "current": 19
+          },
+          "engine_task_creation_contract": {
+            "original": 19,
+            "current": 19
+          },
+          "engine_task_root_ingress": {
+            "original": 46,
+            "current": 46
+          },
+          "engine_task_root_ingress_policy": {
+            "original": 1,
+            "current": 1
+          },
+          "engine_task_wait_registration": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_task_wait_settlement": {
+            "original": 0,
+            "current": 0
+          },
+          "event_job": {
+            "original": 3,
+            "current": 3
+          },
+          "event_job_definition_tombstone": {
+            "original": 1,
+            "current": 1
+          },
+          "event_job_fire": {
+            "original": 2,
+            "current": 2
+          },
+          "event_job_fire_receipt": {
+            "original": 2,
+            "current": 2
+          },
+          "event_occurrence": {
+            "original": 2,
+            "current": 2
+          },
+          "global_creation_allocation": {
+            "original": 160,
+            "current": 161
+          },
+          "interactive_artifact": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_chunk": {
+            "original": 174,
+            "current": 175
+          },
+          "memory_embedding": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_file": {
+            "original": 174,
+            "current": 175
+          },
+          "memory_fts": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_config": {
+            "original": 1,
+            "current": 1
+          },
+          "memory_fts_content": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_data": {
+            "original": 2,
+            "current": 2
+          },
+          "memory_fts_docsize": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_idx": {
+            "original": 0,
+            "current": 0
+          },
+          "message": {
+            "original": 638,
+            "current": 642
+          },
+          "part": {
+            "original": 1523,
+            "current": 1529
+          },
+          "permission_execution_result": {
+            "original": 111,
+            "current": 111
+          },
+          "permission_ledger": {
+            "original": 558,
+            "current": 561
+          },
+          "permission_policy": {
+            "original": 31,
+            "current": 31
+          },
+          "project": {
+            "original": 174,
+            "current": 175
+          },
+          "project_directory_admission": {
+            "original": 0,
+            "current": 0
+          },
+          "project_maintenance_fence": {
+            "original": 0,
+            "current": 0
+          },
+          "protocol_delivery_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "protocol_event": {
+            "original": 1826,
+            "current": 1836
+          },
+          "protocol_inbox": {
+            "original": 0,
+            "current": 0
+          },
+          "provider_activity_outcome": {
+            "original": 415,
+            "current": 417
+          },
+          "provider_activity_request": {
+            "original": 415,
+            "current": 417
+          },
+          "provider_usage_event": {
+            "original": 641,
+            "current": 644
+          },
+          "quick_note": {
+            "original": 0,
+            "current": 0
+          },
+          "runtime_execution_capacity_lease": {
+            "original": 3,
+            "current": 3
+          },
+          "session": {
+            "original": 238,
+            "current": 239
+          },
+          "session_control_event": {
+            "original": 176,
+            "current": 177
+          },
+          "session_control_record": {
+            "original": 176,
+            "current": 177
+          },
+          "session_prompt_owner": {
+            "original": 5,
+            "current": 5
+          },
+          "session_share": {
+            "original": 0,
+            "current": 0
+          },
+          "task_plan": {
+            "original": 0,
+            "current": 0
+          },
+          "todo": {
+            "original": 0,
+            "current": 0
+          },
+          "todo_snapshot": {
+            "original": 0,
+            "current": 0
+          },
+          "tool_part_outcome": {
+            "original": 178,
+            "current": 179
+          },
+          "tool_part_progress": {
+            "original": 14,
+            "current": 14
+          },
+          "tool_part_request": {
+            "original": 178,
+            "current": 179
+          },
+          "workbench_brief_snapshot": {
+            "original": 48,
+            "current": 48
+          },
+          "worker_turn_descriptor": {
+            "original": 25,
+            "current": 25
+          },
+          "workspace": {
+            "original": 0,
+            "current": 0
+          },
+          "workspace_lifecycle_admission": {
+            "original": 0,
+            "current": 0
+          }
+        },
+        "originalRowDifferences": [
+          {
+            "table": "memory_chunk",
+            "identity": "mck_hm0hmT6Zrey4NVcHN6u1",
+            "fields": [
+              "content",
+              "token_count",
+              "time_updated"
+            ]
+          },
+          {
+            "table": "memory_file",
+            "identity": "mem_hWiG5UT35AEOLfdgsFbk",
+            "fields": [
+              "time_updated"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "session",
+            "identity": "ses_-zURQsHHDzzntY8gGKW8",
+            "fields": [
+              "time_updated"
+            ]
+          }
+        ]
+      }
+    ],
+    "maximumRequestsPerStartedScope": 8,
+    "maximumBatchRequests": 16
+  },
+  "permissions": {
+    "at": "2026-10-22T21:41:00.867Z",
+    "sessionID": "ses_-zURQsHHDzzntY8gGKW8",
+    "session": {
+      "project_id": "prj_hVe28Wc9EsW7X4qEMDz4",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\runtime\\data\\projects\\2026\\10\\20\\8630733e-7ed0-4749-b134-b0f455fabcc9"
+    },
+    "ledger": [
+      {
+        "id": "per_g0VYoZMht00pIenx819M",
+        "request_id": "per_hXbjERkxfRGkMrzw23VL",
+        "event_type": "requested",
+        "decision_slot": null,
+        "reason": null,
+        "time_created": 1792703064961
+      },
+      {
+        "id": "per_g0VYoiJBR0001VZNbLIM",
+        "request_id": "per_hXbjERkxfRGkMrzw23VL",
+        "event_type": "cancelled",
+        "decision_slot": "per_hXbjERkxfRGkMrzw23VL",
+        "reason": "session aborted",
+        "time_created": 1792705196369
+      },
+      {
+        "id": "per_g0VYoiOmy00O6SuzjlIj",
+        "request_id": "per_hODM24GQLWblaGSuS3Ea",
+        "event_type": "requested",
+        "decision_slot": null,
+        "reason": null,
+        "time_created": 1792705217916
+      },
+      {
+        "id": "per_g0VYoiVWy00l5psQA0AQ",
+        "request_id": "per_hODM24GQLWblaGSuS3Ea",
+        "event_type": "cancelled",
+        "decision_slot": "per_hODM24GQLWblaGSuS3Ea",
+        "reason": "session aborted",
+        "time_created": 1792705243832
+      }
+    ],
+    "messages": [
+      {
+        "id": "msg_695fc69f-bd49-453e-85a0-abe760fbe903",
+        "role": "user",
+        "time": {
+          "created": 1792703060914
+        }
+      },
+      {
+        "id": "msg_g0VYoZLge001Z19kfMqX",
+        "role": "assistant",
+        "time": {
+          "created": 1792703061040,
+          "completed": 1792703146688
+        },
+        "error": {
+          "name": "MessageAbortedError",
+          "data": {
+            "message": "session aborted",
+            "cancellation": {
+              "actor": "user",
+              "source": "session.abort",
+              "surface": "session",
+              "requestID": "3aa06a43-8440-4e58-84d4-972779f4cb7b",
+              "reason": "session aborted",
+              "targetSessionID": "ses_-zURQsHHDzzntY8gGKW8"
+            }
+          }
+        }
+      },
+      {
+        "id": "msg_296b9e8f-732b-40a1-b7a0-57da8d32d350",
+        "role": "user",
+        "time": {
+          "created": 1792705214292
+        }
+      },
+      {
+        "id": "msg_g0VYoiNsB00zBpcg0Cog",
+        "role": "assistant",
+        "time": {
+          "created": 1792705214395,
+          "completed": 1792705243828
+        },
+        "error": {
+          "name": "MessageAbortedError",
+          "data": {
+            "message": "session aborted",
+            "cancellation": {
+              "actor": "user",
+              "source": "session.abort",
+              "surface": "session",
+              "requestID": "c8dc9cf2-b205-454e-9bc0-21a99bf88341",
+              "reason": "session aborted",
+              "targetSessionID": "ses_-zURQsHHDzzntY8gGKW8"
+            }
+          }
+        }
+      }
+    ],
+    "tools": [
+      {
+        "id": "prt_g0VYoZMVj00qj8FpE3ee",
+        "message_id": "msg_g0VYoZLge001Z19kfMqX",
+        "data": {
+          "outcome": "failed",
+          "failure": {
+            "kind": "MessageAbortedError",
+            "name": "MessageAbortedError",
+            "message": "session aborted",
+            "originSite": "session.processor.catch",
+            "classification": "llm-activity",
+            "data": {
+              "sessionID": "ses_-zURQsHHDzzntY8gGKW8",
+              "canonical_error_metadata": {
+                "cancellation": {
+                  "actor": "user",
+                  "source": "session.abort",
+                  "surface": "session",
+                  "requestID": "3aa06a43-8440-4e58-84d4-972779f4cb7b",
+                  "reason": "session aborted",
+                  "targetSessionID": "ses_-zURQsHHDzzntY8gGKW8"
+                }
+              },
+              "failure_occurrence": {
+                "session_id": "ses_-zURQsHHDzzntY8gGKW8",
+                "assistant_message_id": "msg_g0VYoZLge001Z19kfMqX",
+                "error_name": "MessageAbortedError"
+              }
+            }
+          },
+          "time": {
+            "end": 1792703146675
+          }
+        }
+      },
+      {
+        "id": "prt_g0VYoiObt00INJNf4xdy",
+        "message_id": "msg_g0VYoiNsB00zBpcg0Cog",
+        "data": {
+          "outcome": "failed",
+          "failure": {
+            "kind": "MessageAbortedError",
+            "name": "MessageAbortedError",
+            "message": "session aborted",
+            "originSite": "session.processor.catch",
+            "classification": "llm-activity",
+            "data": {
+              "sessionID": "ses_-zURQsHHDzzntY8gGKW8",
+              "canonical_error_metadata": {
+                "cancellation": {
+                  "actor": "user",
+                  "source": "session.abort",
+                  "surface": "session",
+                  "requestID": "c8dc9cf2-b205-454e-9bc0-21a99bf88341",
+                  "reason": "session aborted",
+                  "targetSessionID": "ses_-zURQsHHDzzntY8gGKW8"
+                }
+              },
+              "failure_occurrence": {
+                "session_id": "ses_-zURQsHHDzzntY8gGKW8",
+                "assistant_message_id": "msg_g0VYoiNsB00zBpcg0Cog",
+                "error_name": "MessageAbortedError"
+              }
+            }
+          },
+          "time": {
+            "end": 1792705243818
+          }
+        }
+      }
+    ],
+    "outbox": [
+      {
+        "occurrence_id": "bus-occurrence:50b5d929-aed9-4a11-8dcd-aa49b6e77610",
+        "project_id": "prj_hVe28Wc9EsW7X4qEMDz4",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\runtime\\data\\projects\\2026\\10\\20\\8630733e-7ed0-4749-b134-b0f455fabcc9",
+        "event_type": "permission.terminated",
+        "properties": {
+          "projectID": "prj_hVe28Wc9EsW7X4qEMDz4",
+          "sessionID": "ses_-zURQsHHDzzntY8gGKW8",
+          "requestID": "per_hXbjERkxfRGkMrzw23VL",
+          "ledgerEventID": "per_g0VYoiJBR0001VZNbLIM",
+          "status": "cancelled"
+        }
+      },
+      {
+        "occurrence_id": "bus-occurrence:29b4ace3-0d93-4cec-bb5a-0322c0550ffd",
+        "project_id": "prj_hVe28Wc9EsW7X4qEMDz4",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\runtime\\data\\projects\\2026\\10\\20\\8630733e-7ed0-4749-b134-b0f455fabcc9",
+        "event_type": "permission.terminated",
+        "properties": {
+          "projectID": "prj_hVe28Wc9EsW7X4qEMDz4",
+          "sessionID": "ses_-zURQsHHDzzntY8gGKW8",
+          "requestID": "per_hODM24GQLWblaGSuS3Ea",
+          "ledgerEventID": "per_g0VYoiVWy00l5psQA0AQ",
+          "status": "cancelled"
+        }
+      }
+    ],
+    "pendingResponse": {
+      "status": 200,
+      "body": []
+    }
+  },
+  "screenshots": [
+    "01-recovered-history.png",
+    "02-permission-awaiting-stop.png",
+    "03-stopped-and-retired.png",
+    "04-reopened-stopped-state.png"
+  ],
+  "limits": "Real UI Side only; HTTP restart is controlled streaming provider contract, not another Sol process. Other production entrypoints audited and focused contracts, not all real-model end-to-end scenarios."
+}

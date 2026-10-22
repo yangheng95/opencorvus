@@ -9,7 +9,6 @@ import { Instance } from "../../src/project/instance"
 import { Server } from "../../src/server/server"
 import { Session } from "../../src/session"
 import { MessageStore } from "../../src/session/message-store"
-import { SessionLoop } from "../../src/session/loop"
 import { Database, asc, eq, sql } from "../../src/storage/db"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import { startControlledStreamingProvider } from "../fixture/controlled-streaming-provider"
@@ -22,7 +21,7 @@ import { Log } from "../../src/util/log"
 
 afterEach(async () => { await Instance.disposeAll(); await resetMemoryDatabase() })
 
-test("a public no-waiter reply reports real retirement failure after its durable operator decision", async () => {
+test("public shutdown retires pending permission and a later operator reply returns the original cancellation", async () => {
   const startedAt = Date.now(), originalDeadline = startedAt + 90000, closeBy = originalDeadline - 15000
   const root = process.env.OPENCORVUS_TEST_PROCESS_ROOT
   if (!root) throw Error("Formal isolated test process required")
@@ -35,8 +34,7 @@ test("a public no-waiter reply reports real retirement failure after its durable
     providerCreated: false, providerClosed: "not_started", providerResponsesJoined: "not_started",
     originalListenerCreated: false, originalListenerClosed: "not_started",
     replyListenerCreated: false, replyListenerClosed: "not_started", instanceCreated: false, instanceClosed: "not_started",
-    originalExecutionStarted: false, originalExecutionJoined: "not_started",
-    continuationStarted: false, continuationJoined: "not_started" }
+    originalExecutionStarted: false, originalExecutionJoined: "not_started" }
   const write = (name: string, value: unknown) => fs.writeFile(path.join(evidence, name), JSON.stringify(value, null, 2))
   await write("scope-start.json", facts)
   const within = <T>(operation: Promise<T>, label: string, closing = false) =>
@@ -52,11 +50,9 @@ test("a public no-waiter reply reports real retirement failure after its durable
   let originalServer: ReturnType<typeof Server.listen> | undefined
   let server: ReturnType<typeof Server.listen> | undefined
   let execution: Promise<unknown> | undefined
-  let triggerInstalled = false
   let primaryError: unknown
   let originalRequest: PermissionAuthority.Request | undefined
   let session: Session.Info | undefined
-  let continuation: Promise<unknown> | undefined
   const signal = () => AbortSignal.timeout(Math.max(1, Math.min(30000, closeBy - Date.now())))
   const release = setInterval(() => { for (const request of provider.requests) request.release() }, 5)
   async function captureFacts(name: string) {
@@ -168,7 +164,13 @@ test("a public no-waiter reply reports real retirement failure after its durable
     await within(execution, "Original public HTTP settlement")
     const interrupted = await captureFacts("after-original-shutdown.json")
     if (!interrupted) throw Error("Original public invocation facts required")
-    expect(interrupted.ledger.map(row => row.event_type)).toEqual(["requested"])
+    expect(interrupted.ledger.map(row => row.event_type)).toEqual(["requested", "cancelled"])
+    const cancelled = interrupted.ledger[1]!
+    expect(cancelled).toMatchObject({ decision_slot: request.id, decision_scope: "invocation" })
+    expect(interrupted.outbox.filter(row => row.event_type === "permission.terminated")).toMatchObject([{
+      project_id: session.projectID, directory: project.path, properties: { requestID: request.id,
+        sessionID: session.id, ledgerEventID: cancelled.id, status: "cancelled" },
+    }])
     expect(structuredClone(interrupted.message.info)).toMatchObject({ id: request.messageID, role: "assistant",
       parentID: input.messageID, finish: "error", error: { name: "MessageAbortedError" }, time: { completed: expect.any(Number) } })
     const interruptedTool = interrupted.message.parts.find(part => part.type === "tool" && part.callID === request.toolCallID)
@@ -181,65 +183,21 @@ test("a public no-waiter reply reports real retirement failure after its durable
     facts.replyListenerURL = server.url.toString()
     facts.replyListenerCreatedAt = Date.now()
     facts.instanceClosed = false
-    const pending = await api("/permission")
-    await captureFacts("before-pending-assertion.json")
-    expect(pending.status).toBe(200)
-    expect(pending.body).toEqual([request])
-    await within(Instance.provide({ directory: project.path, fn: async () => {
-      await captureFacts("before-tool-assertion.json")
-      expect(await MessageStore.get({ sessionID: request.sessionID, messageID: request.messageID })).toEqual(interrupted.message)
-      Database.use(db => db.run(sql.raw(`CREATE TEMP TRIGGER public_retirement_cut BEFORE INSERT ON permission_ledger
-        WHEN NEW.request_id = '${request.id}' AND NEW.event_type = 'stale'
-        BEGIN SELECT RAISE(ABORT, 'PUBLIC_MESSAGE_RETIREMENT_COMMIT_CUT'); END`)))
-      triggerInstalled = true
-    } }), "Observe original Tool and install exact SQLite fault")
-    const operatorText = "Approve this original public read once."
-    const reply = await api(`/permission/${request.id}/reply`, { decision: "allow_once", message: operatorText })
-    await within(captureLog("server-log-after-reply.jsonl"), "Preserve actual reply error log")
-    await within(captureFacts("after-reply-before-assertions.json"), "Preserve actual reply canonical facts")
-    expect(reply.status).toBe(500)
-    expect(reply.requestID).toEqual(expect.any(String))
-    expect(reply.body).toMatchObject({ name: "UnknownError" })
-    const serverLog = (await fs.readFile(path.join(evidence, "server-log-after-reply.jsonl"), "utf8"))
-      .split(/\r?\n/u).filter(Boolean).map(line => JSON.parse(line))
-    const replyFailure = serverLog.find(entry => entry.message === "request failed" && entry.data?.requestID === reply.requestID)
-    await write("actual-reply-server-error.json", replyFailure ?? null)
-    expect(structuredClone(replyFailure)).toMatchObject({ data: { statusCode: 500,
-      error: { type: "Error", code: "SQLITE_CONSTRAINT_TRIGGER", errno: 1811,
-        message: "PUBLIC_MESSAGE_RETIREMENT_COMMIT_CUT" } } })
-    continuation = Instance.provide({ directory: project.path, fn: async () => {
-      const ledger = Database.use(db => db.select().from(PermissionLedgerTable)
-        .where(eq(PermissionLedgerTable.request_id, request.id)).orderBy(asc(sql`rowid`)).all())
-      await captureFacts("before-continuation-assertions.json")
-      expect(ledger.map(row => row.event_type)).toEqual(["requested", "allowed_once"])
-      const decision = ledger[1]!
-      expect(decision).toMatchObject({ request_id: request.id, decision_slot: request.id })
-      const publication = Database.use(db => db.select().from(BusPublicationOutboxTable).where(sql`
-        ${BusPublicationOutboxTable.event_type} = 'permission.replied'
-        AND json_extract(${BusPublicationOutboxTable.properties}, '$.requestID') = ${request.id}
-      `).all())
-      expect(structuredClone(publication)).toMatchObject([{ properties: { requestID: request.id,
-        decision: "allow_once", userInput: { text: operatorText, surface: "http.permission" } } }])
-      expect(await MessageStore.get({ sessionID: request.sessionID, messageID: request.messageID })).toEqual(interrupted.message)
-      Database.use(db => db.run(sql.raw("DROP TRIGGER public_retirement_cut")))
-      triggerInstalled = false
-      await write("decision-before-recovery.json", { request, ledger, publication, reply })
-      expect(await SessionLoop.resumePermissionContinuation(request)).toBe("unresumable")
-      const after = await MessageStore.get({ sessionID: request.sessionID, messageID: request.messageID })
-      expect(after).toEqual(interrupted.message)
-      const history = await PermissionAuthority.history()
-      expect(history.filter(row => row.request_id === request.id).map(row => row.event_type))
-        .toEqual(["stale", "allowed_once", "requested"])
-      expect((await Session.messages({ sessionID: request.sessionID })).map(message => message.info.id))
-        .toContain(request.messageID)
-      await write("recovered.json", { request, after, history })
-    } })
-    facts.continuationStarted = true
-    facts.continuationJoined = false
-    void continuation.then(() => { facts.continuationJoined = true; facts.continuationOutcome = "fulfilled" },
-      error => { facts.continuationJoined = true; facts.continuationOutcome = "rejected"; facts.continuationError = String(error) })
-    await within(continuation, "Original exact continuation")
-    facts.continuationJoined = true
+    const history = await api("/permission/history")
+    expect(history.status).toBe(200)
+    expect(PermissionAuthority.LedgerEvent.array().parse(history.body)
+      .filter(row => row.request_id === request.id).map(row => row.event_type)).toEqual(["cancelled", "requested"])
+    const reply = await api(`/permission/${request.id}/reply`, {
+      decision: "allow_once", message: "Approve this original public read once.",
+    })
+    expect(reply.status).toBe(200)
+    expect(reply.body).toMatchObject({ request: { id: request.id }, decision: "deny", eventID: cancelled.id })
+    const recovered = await captureFacts("after-restart-and-late-reply.json")
+    expect(recovered?.ledger).toEqual(interrupted.ledger)
+    expect(recovered?.message).toEqual(interrupted.message)
+    expect(recovered?.outbox.filter(row => row.event_type === "permission.terminated"))
+      .toEqual(interrupted.outbox.filter(row => row.event_type === "permission.terminated"))
+
   } catch (error) {
     primaryError = error
     throw error
@@ -250,7 +208,6 @@ test("a public no-waiter reply reports real retirement failure after its durable
       catch (error) { cleanupErrors.push(error) }
     }
     await clean("Preserve actual failure facts before cleanup", () => captureFacts("before-cleanup.json"))
-    await clean("Remove owned SQLite fault", () => { if (triggerInstalled) Database.use(db => db.run(sql.raw("DROP TRIGGER public_retirement_cut"))) })
     for (const request of provider.requests) request.release()
     clearInterval(release)
     await clean("Cancel exact owned Prompt", async () => {
@@ -274,9 +231,6 @@ test("a public no-waiter reply reports real retirement failure after its durable
     }, "replyListenerClosed")
     if (facts.instanceCreated) await clean("Original Instance shutdown", () => Instance.disposeAll(), "instanceClosed")
     if (execution) await clean("Original read operation join", () => execution!, "originalExecutionJoined")
-    if (continuation) await clean("Original continuation observation", () => continuation!.then(
-      value => ({ kind: "fulfilled", value }), error => ({ kind: "rejected", error: String(error) }),
-    ), "continuationJoined")
     facts.providerResponseCount = provider.requests.length
     if (provider.requests.length) {
       facts.providerResponsesJoined = false

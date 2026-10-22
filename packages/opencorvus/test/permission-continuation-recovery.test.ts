@@ -370,6 +370,7 @@ describe("Permission continuation recovery", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
+        await Config.updateProjectPatch({ permission_mode: "full_access" })
         const session = await Session.create({ kind: "assistant", title: "Full access inline retirement" })
         await PermissionAuthority.authorizeAndExecute(
           {

@@ -1,0 +1,51 @@
+# 停止后待批准许可收敛
+
+## Recall
+
+553继续用户要求：单agent自主排查，真实OpenCorvus认证+相邻完整models目录、gpt-6.1-sol流式验收，修复后提交并正常推送。禁止子agent、UI自动化、操作用户服务/数据库。552已提交推送fd148abe1，原两个缓存目录保留；所有自有服务关闭。Goal保持active，早期多agent文字已被后续用户指令覆盖。
+
+已读552 Recall/真实停止观察、security-permission当前架构、PermissionAuthority完整决定/等待/取消/退休/恢复路径、ledger-facts、Message规范写入、Bus事务outbox/项目所有权、Instance state、取消scope/Prompt轮次、Task取消、Mission执行关闭、进程关闭及Session/右侧对话路由；全仓搜索全部35个共享取消/结算调用点、退休/启动恢复调用、许可相关测试。已读message-retirement/settlement、Task cancellation、continuation recovery与真实Read fixture。未触及UI自动化路径。
+
+验收：完成的Message及对应Tool实际终态必须令尚待批准的许可产生唯一决定槽终态、对应真实permission.terminated事件和等待者错误；晚到批准读取同一决定。未完成许可保持可批准；已批准许可保留原批准/实际执行结果。恢复旧终态残留，隔离其他Message/Project与失败。实际侧聊Stop前后截图及持久账本；真实历史复制启动修复；完整原运行资源/Provider/凭据退休。支持验证不替代真实网页。
+
+## 修改前根因和影响
+
+552-final真实侧聊ses_-zURQsHHDzzntY8gGKW8的msg_g0VYoZLge001Z19kfMqX已completed+MessageAbortedError，带真实session.abort取消来源；prt_g0VYoZMVj00qj8FpE3ee有failed终态；per_hXbjERkxfRGkMrzw23VL只有requested、decision_slot=null。参见552 artifact stopped-permission-observation.json。前端已有permission.terminated订阅，列表依据账本无决定返回，因此不是界面刷新猜测。
+
+规范Message writer在完成/等值重放时同步调用retireMessageContinuations，但它先continuationReady，直接排除未批准请求。原修复保证已批准执行恢复收敛，却漏掉终止前仍待审批的分支。resumeApprovedContinuations同样只扫描已批准请求，所以重启无法修复。不能在Side隐藏卡片或每个abort路由另建清理实现。
+
+横向审计：普通Session、Side、右侧Chat/Work、control stream disconnect、agent父信号、orchestrator级联、Task agent生命周期、项目删除和process.shutdown均收敛共享Prompt取消及规范Message/Tool写入；Task API额外按冻结requestIDs取消许可，可提前解决本例，不能据此认定其他入口安全。Mission执行关闭使用同一取消scope并对失联owner运行真实恢复终结器，保留其wake/closure合同。按Message+callID+tool匹配真实Tool outcome并读取其Session所属Project，隔离旧/新轮次、同项目并行会话和其他项目。进程释放而Message未完结的待审批是合法恢复前沿，不能Session级全量拒绝。持久化终态才授权此清理；对上述所有入口的独立真实模型运行仍未知，本批以共享写入合同测试及实际Side停止/旧残留恢复验证，不泛称全场景端到端通过。
+
+## 实施方案
+
+复用settlePendingTermination现有compare-and-set（比较并设置）决定槽/事务outbox，抽取同步事务实现，异步现有调用继续等待publication。规范Message退休在真实完成+Tool outcome时，对无决定请求写cancelled（有效持久取消origin）或stale（其他确定终结），actor/reason来自真实事实；已批准请求保留原retireContinuation路径。outbox用实际Session projectID/directory，支持外部项目上下文的import。失败回滚同一Message事务。
+
+Permission现有实例state注册真实Terminated订阅，以规范决定ID/状态核实事件后释放自身waiters，复用原释放函数；dispose清理订阅和原waiters。不增加等待注册表、轮询或执行路径。恢复扫描先按Message调用同一退休writer并按Message隔离故障，再执行原批准恢复；未结束Message原样保留。无schema、API、模型策略、版本或配置变更。
+
+风险验证：晚批准与先批准保留唯一决定槽；等待者释放/outbox重放幂等；事务失败原Message/账本/outbox可重试；不同Message/Project/外部ambient保持所有权；重复启动收敛，未完成可正常批准。新增正向后台合同测试及现有规范退休、Task取消、Prompt occurrence、恢复相关聚焦测试。测试故障注入仅证明局部事务，不冒充端到端。
+
+实际运行计划：fresh source CLI /ui、现有最终552 UI资产；从已闭合552-final复制真实历史以验证旧残留，保留原90表/所有原字段时间及canonical，新增许可终态为明确目标差异。读取当前App完整OpenAI+models，启动前验证目录投影/API模型一致；每scope最多8次实际请求，批次最多16，20分钟原生边界、180秒无活动、至少5分钟收尾。只发送一次有界只读webfetch请求并在许可卡出现后真实Stop，不批准网页读取。允许自然memory请求并计数。结束公开shutdown、原exec/native/launcher/reader全部闭合、4份配对退休；仅非秘密证据入库。必要第二fresh服务验收已修复数据重启幂等，不重启用户实例。
+
+文档/证据/索引、当前文档检查、类型/API和正常hook后范围提交；fresh fetch/merge/audit/push再fresh0/0。未完成项如实列出。
+
+## 验证发现的公开账本声明错误
+
+新增8项合同修正fixture的failure.classification为已有llm-activity后通过。现有18项规范写入/Task取消/Prompt轮次通过。公开shutdown测试原先明确要求已完成消息的许可仍requested，再晚批准触发退休故障，正是本次修复的旧行为，已改为实际shutdown→restart→晚批准返回原cancelled/deny。
+
+该真实HTTP测试进一步证明permission.history的JSON包含规范nullable delta字段，而PermissionAuthority.LedgerEvent仍将15个仅requested拥有的字段声明为必填非null。Schema解析失败；数据库permission.sql的owner-shape check及ledger-facts明确要求delta这些字段为null，PermissionsPanel已按null读取，SDK生成类型继承错误声明。全仓搜索只有history/grants两路由使用该声明；不应修改账本或复制owner以满足旧Schema。将声明对应字段改为nullable，同步生成OpenAPI及SDK，保留原事实与数据库完整性检查。用同一公开HTTP测试解析真实取消历史及晚批准响应证明契约。此为本批实际遇到的直接公开契约缺陷，无数据库迁移或UI变更。
+
+组合运行的最后一项旧full_access测试afterEach达到10秒时限；独立原8项曾13.95秒全部通过。暂未判为偶发，需重跑精确组合/读取清理证据后确认是否有共享订阅清理问题，不以旧结果覆盖失败。
+
+## 实施与验收结果
+
+公共Message退休现在对尚无决定的真实完成调用提交唯一cancelled/stale决定及Terminated outbox；事务、原Session项目和目录、既有等待注册表及已批准执行路径保持单一来源。实例真实事件订阅核实决定ID和状态再释放等待者。启动仅对无决定请求按Message回收，故障隔离于该Message，其余批准恢复保留原顺序。公开账本15个owner字段按现有nullable delta修正，SDK/OpenAPI从源生成成功，实际HTTP历史解析通过。
+
+组合失败根因为测试配置泄漏：公开服务合同在隔离全局配置写ask；memory数据库清理不删除该配置，旧full_access用例未设置模式，因而实际进入等待审批。该用例显式配置full_access后，相同三文件17项/107断言30.37秒全部通过，不增加时限、不绕过等待。另18项规范退休/Task取消/公开Prompt停止/轮次合同、10项Message结算及3项ledger-facts通过，共48项不同聚焦合同。首次错误fixture分类与旧行为断言、公开Schema失败、两次组合超时均如实保留于本记录并修正复验。
+
+[四张实际截图及闭合证据](../../artifacts/2026-10-23-stopped-permission-convergence/README.md)。自有19145首次打开真实旧Side项目时，把原per_hXbjERkxfRGkMrzw23VL回收到cancelled，不改原Message/Tool事实；实际发送一次有界请求，Sol产生per_hODM24GQLWblaGSuS3Ea，看到许可卡后点击Stop，卡片随真实终态消失、输入恢复。重新加载自有页并打开侧聊保持。两个请求均只有requested→cancelled和各自唯一事务outbox，pending GET200/[]。未批准webfetch，未创建成员/Task/Mission/Goal。
+
+4次Sol为预检memory/chat与业务memory/chat，均200/实际模型一致/原reader EOF。自有页185关闭，公开shutdown200，原exec56445/native/launcher0，精确出生dead_or_reused、输出/request闭合，1022149ms收尾余量；4份配对退休。源90表166638原行字段/时间/源大小mtime/canonical保持，目标schema3/实际对象/integrity一致；目标原行仅真实Side更新时间、memory两行及运行租约两行变化。原App认证及全catalog内容mtime保持；用户数据未操作。
+
+最终后端类型检查、SDK生成及其类型构建、docs:check（345 ops/26 groups）、api:routes-check（6规则/35文件）已通过。没有UI自动化，无schema/迁移/版本改动；继承552最终UI，页面实际交互截图支持本次后台收敛。HTTP重启为受控流式Provider合同；未对全部Task/Mission/跨进程入口各跑真实Sol，不泛称全覆盖。
+
+后续观察：用户主动停止仍被侧聊现有展示归为红色attention/error，与已取消工具事实一起出现，需下一批进一步核对共享错误/取消展示语义。当前修复不隐藏这些原事实。Goal保持active、单agent继续。

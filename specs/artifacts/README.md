@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [停止后待批准许可收敛](2026-10-23-stopped-permission-convergence/README.md)：553四张实图，旧残留恢复、新许可Stop与重新打开；4次Sol、服务与凭据全部闭合。
+
 - [Sources与侧栏布局阅读](2026-10-23-source-layout-reading/README.md)：552十九张实图，修复工具文字锚点、持续改宽及display:contents尺寸通知；17次Sol/六服务闭合，保留两次验收修正与停止许可缺口。
 
 - [实时流重试状态](2026-10-23-stream-retry-status/README.md)：551七张实图，49秒16轮重试保持提示与来源阅读，4次Sol及全部自有资源闭合。

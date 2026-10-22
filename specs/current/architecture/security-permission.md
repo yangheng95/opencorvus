@@ -56,7 +56,7 @@ The canonical `requested` row is the only owner of the complete Project, Session
 
 The ledger stores redacted scope plus hashes; it must not store tokens, cookies, passwords, authorization headers, OAuth secrets, secret environment values, or complete sensitive content.
 
-Pending requests survive process release and project restart. A later client can settle the same durable request. New execution admission commits the exact attempt's `execution_started` and effect lease in one immediate writer transaction. The lease owner is the original runtime process occurrence, whose physical liveness reference remains held through execution, serialization, result settlement or explicit MCP handback.
+Pending requests whose Message remains unfinished survive process release and project restart. A later client can settle the same durable request. New execution admission commits the exact attempt's `execution_started` and effect lease in one immediate writer transaction. The lease owner is the original runtime process occurrence, whose physical liveness reference remains held through execution, serialization, result settlement or explicit MCP handback.
 
 Recovery selects starts through their canonical requested Project owner. It observes the original physical receipt outside the writer, then rechecks the same start, lease, owner, latest immutable lease grant, MCP task and terminal winner in one immediate transaction. Only proven physical death admits `outcome_unknown` for an ordinary unfinished attempt. A live or unproven owner retains its original facts; natural lease expiry is not proof of process death. Dead expired leases retain their original expiry, while a still-valid dead lease is released with its unknown outcome. Missing or opaque physical evidence remains explicitly unproven. The same attempt is not blindly replayed.
 
@@ -102,6 +102,16 @@ Mission interruption uses its existing process-recovery owner, frontier and wake
 retiring the original Tool request; generic Prompt acquisition cannot consume Mission's dead-owner
 evidence. This adds no permission queue, schema migration or second Mission recovery protocol.
 
+The same canonical writer settles an undecided request when its exact assistant Message is
+completed and its matching Tool has a persisted outcome. A validated cancellation origin
+produces `cancelled`; another persisted conclusion produces `stale`. The winning decision
+slot and Terminated outbox commit with the Message, using the Session's actual Project and
+directory even during a foreign-ambient import. Existing approvals retain their original
+decision and separate continuation retirement. Instance waiters consume the canonical
+Terminated occurrence after checking its ledger identity and status. Startup repairs historical
+undecided terminal Messages through this writer, isolates each Message's retirement failure,
+then continues ordinary approved recovery. Open Messages retain their actionable requests.
+
 ## Transport contract
 
 The Overlay, Agent Client Protocol (ACP), command-line interface, channel runtime, protocol mirror, server routes, and generated Software Development Kit share the same request identity and decisions. Presentation adapters may translate labels, but they cannot invent approval scopes or settle outside the canonical reply/revoke APIs.
@@ -139,7 +149,8 @@ using Project identity without Provider initialization to reconcile older residu
 Project recovery and cancellation replay share that writer. Historical reconciliation
 captures the exact request identities in the transaction that confirms current cancellation,
 so a concurrent explicit reopen keeps its next occurrence's requests actionable.
-Process interruption continues to retain undecided requests for recovery.
+Process interruption retains undecided requests for recovery while their Message is unfinished;
+a graceful cancellation that commits Message and Tool termination settles them as described above.
 
 Denying an invocation persists the denied decision and real Tool error. That error enters the
 next streamed model request through the existing Tool-result projection, so the model chooses

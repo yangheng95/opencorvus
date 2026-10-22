@@ -24,6 +24,7 @@ import {
 import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicyTable } from "./permission.sql"
 import { durableExecutionResult, resultFromDurable } from "./execution-result"
 import { SessionTable, MessageTable, ToolPartRequestTable, ToolPartOutcomeTable } from "@/session/session.sql"
+import { ExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import {
   acquireControlLeaseInTransaction,
   assertControlLeaseInTransaction,
@@ -75,24 +76,24 @@ export namespace PermissionAuthority {
     .object({
       id: Identity,
       request_id: Identity,
-      project_id: z.string(),
-      session_id: z.string(),
+      project_id: z.string().nullable(),
+      session_id: z.string().nullable(),
       task_id: z.string().nullable(),
-      message_id: z.string(),
-      tool_call_id: z.string(),
+      message_id: z.string().nullable(),
+      tool_call_id: z.string().nullable(),
       attempt_id: Identity.nullable(),
       event_type: z.string(),
-      mode: Mode,
-      policy_revision: z.string(),
-      provider_kind: z.string(),
-      provider_id: z.string(),
-      provider_digest: z.string(),
-      tool_name: z.string(),
-      effect_class: z.string(),
-      scope_version: z.string(),
-      scope: z.record(z.string(), z.unknown()),
-      fingerprint: z.string(),
-      summary: z.string(),
+      mode: Mode.nullable(),
+      policy_revision: z.string().nullable(),
+      provider_kind: z.string().nullable(),
+      provider_id: z.string().nullable(),
+      provider_digest: z.string().nullable(),
+      tool_name: z.string().nullable(),
+      effect_class: z.string().nullable(),
+      scope_version: z.string().nullable(),
+      scope: z.record(z.string(), z.unknown()).nullable(),
+      fingerprint: z.string().nullable(),
+      summary: z.string().nullable(),
       decision_scope: z.string().nullable(),
       source_event_id: Identity.nullable(),
       decision_slot: Identity.nullable(),
@@ -166,9 +167,18 @@ export namespace PermissionAuthority {
   const state = createInstanceState(
     async () => {
       reconcileInterruptedAttempts()
-      return { waiters: new Map<string, Waiter[]>() }
+      const waiters = new Map<string, Waiter[]>()
+      const projectID = Instance.project.id
+      const unsubscribe = Bus.subscribe(Event.Terminated, ({ properties }) => {
+        if (properties.projectID !== projectID || !waiters.has(properties.requestID)) return
+        const settled = decisionFor(properties.requestID)
+        if (settled?.id !== properties.ledgerEventID || settled.event_type !== properties.status) return
+        releaseWaiters(waiters, properties.requestID, settled)
+      })
+      return { waiters, unsubscribe }
     },
     async (current) => {
+      current.unsubscribe()
       for (const [requestID, waiters] of current.waiters) {
         for (const waiter of waiters) waiter.reject(new PermissionPausedError(requestID))
       }
@@ -581,41 +591,53 @@ export namespace PermissionAuthority {
     return { settled: facts.authority, won: Boolean(inserted) }
   }
 
-  async function settlePendingTermination(
+  function settlePendingTerminationInTransaction(
+    db: Database.TxOrDb,
     request: Request,
     status: "cancelled" | "stale",
     extra: Partial<typeof PermissionLedgerTable.$inferInsert>,
-  ): Promise<{ settled: LedgerRow; won: boolean }> {
-    let publication: Bus.Publication | undefined
-    const result = Database.immediateTransaction((db) => {
-      const decision = settleDecisionInTransaction(db, request, status, extra)
-      if (decision.won) {
-        publication = Bus.publishOwnedInTransaction(Event.Terminated, {
+    owner: { projectID: string; directory: string },
+  ) {
+    const decision = settleDecisionInTransaction(db, request, status, extra)
+    const publication = decision.won
+      ? Bus.publishProjectOwnedInTransaction(Event.Terminated, {
           projectID: request.projectID,
           sessionID: request.sessionID,
           requestID: request.id,
           ledgerEventID: decision.settled.id,
           status,
-        })
-      }
-      return decision
-    })
-    if (publication) await publication.retry()
-    return result
+        }, owner)
+      : undefined
+    return { ...decision, publication }
   }
 
-  async function releaseDecisionWaiters(request: Request, settled: LedgerRow): Promise<number> {
-    const current = await state()
-    const waiters = current.waiters.get(request.id) ?? []
-    current.waiters.delete(request.id)
+  async function settlePendingTermination(
+    request: Request,
+    status: "cancelled" | "stale",
+    extra: Partial<typeof PermissionLedgerTable.$inferInsert>,
+  ): Promise<{ settled: LedgerRow; won: boolean }> {
+    const result = Database.immediateTransaction((db) => settlePendingTerminationInTransaction(
+      db, request, status, extra, { projectID: Instance.project.id, directory: Instance.directory },
+    ))
+    if (result.publication) await result.publication.retry()
+    return { settled: result.settled, won: result.won }
+  }
+
+  function releaseWaiters(registry: Map<string, Waiter[]>, requestID: string, settled: LedgerRow): number {
+    const waiters = registry.get(requestID) ?? []
+    registry.delete(requestID)
     for (const waiter of waiters) {
       if (["denied", "cancelled", "stale"].includes(settled.event_type)) {
-        waiter.reject(new RejectedError(request.id, settled.reason ?? undefined))
+        waiter.reject(new RejectedError(requestID, settled.reason ?? undefined))
       } else {
         waiter.resolve()
       }
     }
     return waiters.length
+  }
+
+  async function releaseDecisionWaiters(request: Request, settled: LedgerRow): Promise<number> {
+    return releaseWaiters((await state()).waiters, request.id, settled)
   }
 
   function assertSessionDeletionDeadline(deadline: number | undefined, label: string): void {
@@ -1142,21 +1164,34 @@ export namespace PermissionAuthority {
 
   export function retireMessageContinuations(input: { sessionID: string; messageID: string }): void {
     Database.immediateTransaction((db) => {
-      const message = db.select({ data: MessageTable.data, projectID: SessionTable.project_id }).from(MessageTable)
+      const message = db.select({ data: MessageTable.data, projectID: SessionTable.project_id,
+        directory: SessionTable.directory }).from(MessageTable)
         .innerJoin(SessionTable, eq(SessionTable.id, MessageTable.session_id)).where(and(
         eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID),
       )).get()
       if (!message) return
-      const data = message.data as { role?: string; time?: { completed?: number } }
+      const data = message.data as { role?: string; time?: { completed?: number }; error?: { data?: { cancellation?: unknown } } }
       if (data.role !== "assistant" || data.time?.completed === undefined) return
+      const cancellation = ExecutionCancellationOrigin.safeParse(data.error?.data?.cancellation)
       for (const row of requestedRows({ ...input, projectID: message.projectID })) {
-        if (!continuationReady(row)) continue
+        const decision = decisionFor(row.request_id)
+        if (decision && !continuationReady(row)) continue
         const outcome = db.select({ data: ToolPartOutcomeTable.data }).from(ToolPartRequestTable)
           .innerJoin(ToolPartOutcomeTable, eq(ToolPartOutcomeTable.request_part_id, ToolPartRequestTable.id))
           .where(and(eq(ToolPartRequestTable.message_id, input.messageID),
             eq(sql<string>`json_extract(${ToolPartRequestTable.data}, '$.callID')`, row.tool_call_id!),
             eq(sql<string>`json_extract(${ToolPartRequestTable.data}, '$.tool')`, row.tool_name!))).get()
-        if (outcome) retireContinuation(requestFromRow(row), "The continuation reached its persisted conclusion")
+        if (!outcome) continue
+        const request = requestFromRow(row)
+        if (decision) {
+          retireContinuation(request, "The continuation reached its persisted conclusion")
+        } else {
+          settlePendingTerminationInTransaction(db, request, cancellation.success ? "cancelled" : "stale", {
+            decision_scope: "invocation",
+            actor_id: cancellation.success ? cancellation.data.actor : "system",
+            reason: cancellation.success ? cancellation.data.reason : "The continuation reached its persisted conclusion",
+          }, message)
+        }
       }
     })
   }
@@ -1256,6 +1291,7 @@ export namespace PermissionAuthority {
     let resumed = 0
     let replayed = 0
     let live = 0
+    const retiredMessages = new Map<string, boolean>()
     const replay = async (row: LedgerRow) => {
       replayed += 1
       const outcome = await recoverContinuation(requestFromRow(row))
@@ -1263,6 +1299,16 @@ export namespace PermissionAuthority {
       if (outcome === "live") live += 1
     }
     for (const row of requested) {
+      if (!decisionFor(row.request_id) && !retiredMessages.has(row.message_id!)) {
+        try {
+          retireMessageContinuations({ sessionID: row.session_id!, messageID: row.message_id! })
+          retiredMessages.set(row.message_id!, true)
+        } catch (error) {
+          retiredMessages.set(row.message_id!, false)
+          log.error("permission message retirement failed", { projectID, messageID: row.message_id, error })
+        }
+      }
+      if (retiredMessages.get(row.message_id!) === false) continue
       if (continuationReady(row)) await replay(row)
     }
     log.info("permission continuation recovery", {

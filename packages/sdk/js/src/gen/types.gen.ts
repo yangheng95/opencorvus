@@ -26250,31 +26250,31 @@ export type PermissionGrantsResponses = {
     attempt_id: PermissionIdentity | null
     decision_scope: string | null
     decision_slot: PermissionIdentity | null
-    effect_class: string
+    effect_class: string | null
     event_type: string
-    fingerprint: string
+    fingerprint: string | null
     id: PermissionIdentity
-    message_id: string
-    mode: PermissionMode
+    message_id: string | null
+    mode: PermissionMode | null
     outcome_slot: PermissionIdentity | null
-    policy_revision: string
-    project_id: string
-    provider_digest: string
-    provider_id: string
-    provider_kind: string
+    policy_revision: string | null
+    project_id: string | null
+    provider_digest: string | null
+    provider_id: string | null
+    provider_kind: string | null
     reason: string | null
     request_id: PermissionIdentity
     scope: {
       [key: string]: unknown
-    }
-    scope_version: string
-    session_id: string
+    } | null
+    scope_version: string | null
+    session_id: string | null
     source_event_id: PermissionIdentity | null
-    summary: string
+    summary: string | null
     task_id: string | null
     time_created: number
-    tool_call_id: string
-    tool_name: string
+    tool_call_id: string | null
+    tool_name: string | null
     [key: string]: unknown
   }>
 }
@@ -26346,31 +26346,31 @@ export type PermissionHistoryResponses = {
     attempt_id: PermissionIdentity | null
     decision_scope: string | null
     decision_slot: PermissionIdentity | null
-    effect_class: string
+    effect_class: string | null
     event_type: string
-    fingerprint: string
+    fingerprint: string | null
     id: PermissionIdentity
-    message_id: string
-    mode: PermissionMode
+    message_id: string | null
+    mode: PermissionMode | null
     outcome_slot: PermissionIdentity | null
-    policy_revision: string
-    project_id: string
-    provider_digest: string
-    provider_id: string
-    provider_kind: string
+    policy_revision: string | null
+    project_id: string | null
+    provider_digest: string | null
+    provider_id: string | null
+    provider_kind: string | null
     reason: string | null
     request_id: PermissionIdentity
     scope: {
       [key: string]: unknown
-    }
-    scope_version: string
-    session_id: string
+    } | null
+    scope_version: string | null
+    session_id: string | null
     source_event_id: PermissionIdentity | null
-    summary: string
+    summary: string | null
     task_id: string | null
     time_created: number
-    tool_call_id: string
-    tool_name: string
+    tool_call_id: string | null
+    tool_name: string | null
     [key: string]: unknown
   }>
 }

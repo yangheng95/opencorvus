@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [停止后待批准许可收敛](records/2026-10/2026-10-23-stopped-permission-convergence.md)：553修复共享Message退休及启动恢复、公开账本声明；四实图、4次Sol及完整闭合。
+
 - [Sources与侧栏布局阅读](records/2026-10/2026-10-23-source-layout-reading.md)：552修复工具输出阅读跳转、连续改宽及Side尺寸通知，十九实图/17次Sol/六服务闭合。
 
 - [实时流重试状态](records/2026-10/2026-10-23-stream-retry-status.md)：551修复重试idle瞬态重置提示计时，七张实图、三类流合同与4次Sol闭合。

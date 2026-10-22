@@ -94324,22 +94324,50 @@
                         ]
                       },
                       "effect_class": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "event_type": {
                         "type": "string"
                       },
                       "fingerprint": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "id": {
                         "$ref": "#/components/schemas/PermissionIdentity"
                       },
                       "message_id": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "mode": {
-                        "$ref": "#/components/schemas/PermissionMode"
+                        "anyOf": [
+                          {
+                            "$ref": "#/components/schemas/PermissionMode"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "outcome_slot": {
                         "anyOf": [
@@ -94352,19 +94380,54 @@
                         ]
                       },
                       "policy_revision": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "project_id": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "provider_digest": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "provider_id": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "provider_kind": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "reason": {
                         "anyOf": [
@@ -94380,17 +94443,38 @@
                         "$ref": "#/components/schemas/PermissionIdentity"
                       },
                       "scope": {
-                        "additionalProperties": {},
-                        "propertyNames": {
-                          "type": "string"
-                        },
-                        "type": "object"
+                        "anyOf": [
+                          {
+                            "additionalProperties": {},
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "type": "object"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "scope_version": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "session_id": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "source_event_id": {
                         "anyOf": [
@@ -94403,7 +94487,14 @@
                         ]
                       },
                       "summary": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "task_id": {
                         "anyOf": [
@@ -94419,10 +94510,24 @@
                         "type": "number"
                       },
                       "tool_call_id": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "tool_name": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       }
                     },
                     "required": [
@@ -94629,22 +94734,50 @@
                         ]
                       },
                       "effect_class": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "event_type": {
                         "type": "string"
                       },
                       "fingerprint": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "id": {
                         "$ref": "#/components/schemas/PermissionIdentity"
                       },
                       "message_id": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "mode": {
-                        "$ref": "#/components/schemas/PermissionMode"
+                        "anyOf": [
+                          {
+                            "$ref": "#/components/schemas/PermissionMode"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "outcome_slot": {
                         "anyOf": [
@@ -94657,19 +94790,54 @@
                         ]
                       },
                       "policy_revision": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "project_id": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "provider_digest": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "provider_id": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "provider_kind": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "reason": {
                         "anyOf": [
@@ -94685,17 +94853,38 @@
                         "$ref": "#/components/schemas/PermissionIdentity"
                       },
                       "scope": {
-                        "additionalProperties": {},
-                        "propertyNames": {
-                          "type": "string"
-                        },
-                        "type": "object"
+                        "anyOf": [
+                          {
+                            "additionalProperties": {},
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "type": "object"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "scope_version": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "session_id": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "source_event_id": {
                         "anyOf": [
@@ -94708,7 +94897,14 @@
                         ]
                       },
                       "summary": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "task_id": {
                         "anyOf": [
@@ -94724,10 +94920,24 @@
                         "type": "number"
                       },
                       "tool_call_id": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "tool_name": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       }
                     },
                     "required": [
