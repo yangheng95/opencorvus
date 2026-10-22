@@ -1,0 +1,19 @@
+{
+  "url": "http://127.0.0.1:19025/session/ses_-zUS0WzzQzzDOGrIbYwN/message?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-14%2Fmember-live-rendering-412-fresh%2Fproject",
+  "body": {
+    "messageID": "msg_g0VYkBCZr00zuE3gv4TZ",
+    "agent": "work",
+    "model": {
+      "providerID": "openai",
+      "modelID": "gpt-6.1-sol"
+    },
+    "parts": [
+      {
+        "type": "text",
+        "text": "SOURCE529START。本次是既有普通成员的一次有限来源阅读输入，不是新委派。请用webfetch各读取一次https://www.w3.org/WAI/ARIA/apg/patterns/tabs/和https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText，按实际工具结果说明两项来源能支持的结论；若失败如实说明，不重试其他URL。不读写项目文件、不运行命令、不创建或委派成员/Task/Mission/Goal。随后连续输出24节中文，三级标题依次“来源阅读第01节”至“来源阅读第24节”，每节约180字，具体解释来源身份、原文与推断、字符编码和长文阅读。第1节和第12节后各附一个三行JavaScript代码围栏，仅局部字符串示例。不省略中间节、不只列提纲、不人为等待、不声称实际操作或验收任何界面，最后另起一段SOURCE529END。工具结果与正文正常可见。"
+      }
+    ]
+  },
+  "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+  "at": "2026-10-22T03:03:20.807Z"
+}

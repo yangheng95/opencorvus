@@ -214,6 +214,24 @@ export function SubagentConversationPanel(props: {
     props.onSessionSelect(sessionID)
     setShowAgentList(false)
   }
+  let panelElement: HTMLElement | undefined
+  let backButton: HTMLButtonElement | undefined
+  let navigationFocusOrigin: HTMLButtonElement | undefined
+  const navigationFocus = createAnimationFrameScheduler(() => {
+    const origin = navigationFocusOrigin
+    navigationFocusOrigin = undefined
+    if (!props.active() || !panelElement?.isConnected || !panelElement.getClientRects().length) return
+    if (document.activeElement !== origin && document.activeElement !== document.body) return
+    const target = showingList()
+      ? panelElement.querySelector<HTMLButtonElement>(".subagent-conversation-panel__agent-row[data-active='true']")
+      : backButton
+    if (target && !target.disabled && !target.closest("[hidden], [inert]") && target.getClientRects().length)
+      target.focus({ preventScroll: true })
+  })
+  const focusAfterNavigation = (origin: HTMLButtonElement) => {
+    navigationFocusOrigin = origin
+    navigationFocus.schedule()
+  }
   const targetKey = createMemo(() => {
     const source = boardStore.selectedSource
     const sessionID = props.sessionID().trim()
@@ -326,6 +344,7 @@ export function SubagentConversationPanel(props: {
     )
   })
   onCleanup(() => {
+    navigationFocus.cancel()
     readingPositions.clear()
     stopLiveProjection()
     flushLiveProjection.cancel()
@@ -334,9 +353,20 @@ export function SubagentConversationPanel(props: {
   })
 
   return (
-    <section class="subagent-conversation-panel" data-session-id={props.sessionID()}>
+    <section ref={panelElement} class="subagent-conversation-panel" data-session-id={props.sessionID()}>
       <div class="subagent-conversation-panel__agent-selector" hidden={showingList()}>
-        <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => setShowAgentList(true)}>
+        <Button
+          ref={backButton}
+          type="button"
+          variant="ghost"
+          size="sm"
+          tone="neutral"
+          onClick={(event) => {
+            const origin = event.currentTarget
+            setShowAgentList(true)
+            focusAfterNavigation(origin)
+          }}
+        >
           <Icon name="nav-back" size="compact" />
           {t("subagent.conversation.all_agents", { count: sessionRecords().length })}
         </Button>
@@ -425,7 +455,11 @@ export function SubagentConversationPanel(props: {
                   tone="neutral"
                   class="oc-navigation-row subagent-conversation-panel__agent-row"
                   data-active={String(sessionID === props.sessionID())}
-                  onClick={() => selectAgent(sessionID)}
+                  onClick={(event) => {
+                    const origin = event.currentTarget
+                    selectAgent(sessionID)
+                    focusAfterNavigation(origin)
+                  }}
                 >
                   <StatusIndicator
                     status={candidate().status}

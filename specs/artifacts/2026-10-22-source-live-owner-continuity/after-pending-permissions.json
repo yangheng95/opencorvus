@@ -1,0 +1,43 @@
+{
+  "id": "per_hLaaE6MxVYCS7oK1nfaW",
+  "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+  "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+  "messageID": "msg_g0VYkDvnY00xx0HweHMx",
+  "toolCallID": "call_4bf1106f10ac4f73a0d8db460e89076d",
+  "mode": "ask",
+  "policyRevision": "146e73c4fe365d04148832ff29e4cf1d0a7c0a23b083b80269d598ac2c1de6ca",
+  "providerKind": "builtin",
+  "providerID": "webfetch",
+  "providerDigest": "e04e09eb47db876b16e6a476f960101a0e41eaec7834f5baed393fe3d3bac634",
+  "toolName": "webfetch",
+  "effectClass": "network_read",
+  "scopeVersion": "2",
+  "scope": {
+    "provider_kind": "builtin",
+    "provider_id": "webfetch",
+    "provider_digest": "e04e09eb47db876b16e6a476f960101a0e41eaec7834f5baed393fe3d3bac634",
+    "tool_name": "webfetch",
+    "effect_class": "network_read",
+    "resource": {
+      "scope_type": "network",
+      "operation": "webfetch",
+      "endpoint": {
+        "scheme": "https",
+        "hostname": "developer.mozilla.org",
+        "port": "443",
+        "pathname": "/en-US/docs/Web/API/Clipboard/writeText",
+        "fragment_present": false
+      },
+      "request_sha256": "717623d5a516202e6738d8b52b77a44e1fcbd715a5256bd45735d925310d44dc"
+    }
+  },
+  "fingerprint": "fa2d947bcf68b4bc782c3c7cc8af95de890e406ac611977b57983794c5bfb9d9",
+  "summary": "webfetch (network_read)",
+  "projectGrantEligible": true,
+  "choices": [
+    "allow_once",
+    "allow_project",
+    "deny"
+  ],
+  "timeCreated": 1792638855874
+}

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Sources 与成员正文连续性](2026-10-22-source-live-owner-continuity.md)：[23实图与导航焦点修复](../../artifacts/2026-10-22-source-live-owner-continuity/README.md)，12/16 Sol、198被动事件、权限恢复和原输入超时核验。
+
 - [任务面板空状态](2026-10-22-task-scope-empty-state.md)：[13图与真实状态修复](../../artifacts/2026-10-22-task-scope-empty-state/README.md)，普通会话/已完成Task、中英文及公开Board，零模型。
 
 - [空工具页打开焦点](2026-10-22-dock-tool-launch-focus.md)：[12图与共享入口修复](../../artifacts/2026-10-22-dock-tool-launch-focus/README.md)，三真实工具/自然Tab/菜单对照，两个零模型范围完整结算。

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Sources 与成员正文连续性](2026-10-22-source-live-owner-continuity/README.md)：23实图/12真流，成员导航焦点修复与正文身份；两原生范围和8配对成员结算，原POST超时单独核验。
+
 - [任务面板空状态](2026-10-22-task-scope-empty-state/README.md)：13实图/中英文，未选Task指引与中性空需求；公开Board和90表原行保持，零模型。
 
 - [空工具页打开焦点](2026-10-22-dock-tool-launch-focus/README.md)：12实图，普通工具/Browser新标签复用共同焦点交接，原菜单与关闭合同保持；零模型和完整原数据结算。

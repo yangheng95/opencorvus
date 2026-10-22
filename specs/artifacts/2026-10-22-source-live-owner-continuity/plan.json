@@ -1,0 +1,15 @@
+{
+  "name": "source-live-owner-continuity-529",
+  "model": "gpt-6.1-sol",
+  "stream": true,
+  "maximumBatchRequests": 16,
+  "before": 8,
+  "conditionalAfter": 8,
+  "ports": [
+    19025,
+    19027
+  ],
+  "source": "Closed528-after complete 90 tables/schema3/canonical",
+  "oneVisibleInputPerScope": true,
+  "diagnostic": "Passive owner/identity/HTML-state observations,not UI test or fix comparison"
+}

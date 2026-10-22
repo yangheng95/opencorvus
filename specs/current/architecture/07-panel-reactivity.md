@@ -1,5 +1,12 @@
 # 07-panel-reactivity — Overlay Reactive Projection
 
+Member list/detail navigation retains keyboard context in the same panel.
+Opening All agents focuses the currently selected Session row; opening that row
+focuses the detail view's All agents control. The original click or BODY must
+still own focus when the next frame commits, and the panel and destination must
+be active, visible and connected. SelectControl retains its popup focus owner;
+navigation does not replace transcript owners, reading anchors or request state.
+
 > Current sources: `packages/overlay/src/store/card-tree.ts`,
 > `packages/overlay/src/store/messages.ts`,
 > `packages/overlay/src/services/tree-writer.ts`,

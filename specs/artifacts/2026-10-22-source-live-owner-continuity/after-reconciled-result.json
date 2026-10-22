@@ -1,0 +1,126 @@
+{
+  "at": "2026-10-22T03:23:50.227Z",
+  "status": 200,
+  "input": {
+    "messageID": "msg_g0VYkDoko00jKC9nIO0p",
+    "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+    "role": "user"
+  },
+  "replies": [
+    {
+      "messageID": "msg_g0VYkDomY00f5kYApVMD",
+      "parentID": "msg_g0VYkDoko00jKC9nIO0p",
+      "finish": "tool-calls",
+      "time": {
+        "created": 1792638824322,
+        "completed": 1792638851248
+      },
+      "parts": [
+        {
+          "id": "prt_g0VYkDovM00VALHPKX1q",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VYkDptK00i9BQmdcXc",
+          "type": "text"
+        },
+        {
+          "id": "prt_g0VYkDqFd00wpeuH1VVq",
+          "type": "tool",
+          "tool": "webfetch",
+          "state": {
+            "status": "completed",
+            "time": {
+              "start": 1792638829969,
+              "end": 1792638851199
+            }
+          }
+        },
+        {
+          "id": "prt_g0VYkDvm600iJLX67a1h",
+          "type": "source-url",
+          "url": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        },
+        {
+          "id": "prt_g0VYkDvm9004t9YFeaIK",
+          "type": "step-finish"
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VYkDvnY00xx0HweHMx",
+      "parentID": "msg_g0VYkDoko00jKC9nIO0p",
+      "finish": "tool-calls",
+      "time": {
+        "created": 1792638851292,
+        "completed": 1792639189006
+      },
+      "parts": [
+        {
+          "id": "prt_g0VYkDvsb00B0FJB4y2M",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VYkDwmL00caglJNfxi",
+          "type": "tool",
+          "tool": "webfetch",
+          "state": {
+            "status": "completed",
+            "time": {
+              "start": 1792638855061,
+              "end": 1792639188956
+            }
+          }
+        },
+        {
+          "id": "prt_g0VYkFLdm00XZwXHZcWt",
+          "type": "source-url",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        },
+        {
+          "id": "prt_g0VYkFLdq00FeWV2g571",
+          "type": "step-finish"
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VYkFLf400IIYah4YUM",
+      "parentID": "msg_g0VYkDoko00jKC9nIO0p",
+      "finish": "stop",
+      "time": {
+        "created": 1792639189038,
+        "completed": 1792639295038
+      },
+      "parts": [
+        {
+          "id": "prt_g0VYkFLkG00Tw9Sv5Ik7",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VYkFMoN00DPU1Jh7Vv",
+          "type": "text"
+        },
+        {
+          "id": "prt_g0VYkFnEB00u1O17nLwd",
+          "type": "step-finish"
+        }
+      ]
+    }
+  ],
+  "final": {
+    "messageID": "msg_g0VYkFLf400IIYah4YUM",
+    "finish": "stop",
+    "textLength": 5096,
+    "headings": 24,
+    "starts": "SOURCE529START\n\n### 来源阅读第01节\n\n两个",
+    "ends": "边界内，让真实来源、解释与展示建议各自保持清楚身份。\n\nSOURCE529END"
+  },
+  "pendingPermissions": [],
+  "originalPost": {
+    "handle": 63551,
+    "exit": 1,
+    "outcome": "Bun default socket idle TimeoutError during real pending permission;not redispatched",
+    "preservation": "Original input identity accepted once,real persisted final message read by public checker"
+  },
+  "transport": "Same bounded ownedJSON implementation for public GETs;POST idle option repaired for future runs,original POST not rerun"
+}

@@ -1,0 +1,48 @@
+[
+  {
+    "stage": "live-keyboard-list",
+    "at": "2026-10-22T03:14:24.047Z",
+    "dom": {
+      "active": "true",
+      "label": null,
+      "tag": "BUTTON",
+      "text": "workRunning"
+    }
+  },
+  {
+    "stage": "live-keyboard-detail",
+    "at": "2026-10-22T03:14:32.249Z",
+    "dom": {
+      "label": null,
+      "tag": "BUTTON",
+      "text": "All agents (1)"
+    }
+  },
+  {
+    "stage": "live-selector-selected",
+    "at": "2026-10-22T03:16:09.042Z",
+    "dom": {
+      "expanded": "false",
+      "label": "Agents",
+      "tag": "BUTTON",
+      "text": "work"
+    }
+  },
+  {
+    "stage": "eof-keyboard-list",
+    "at": "2026-10-22T03:24:07.041Z",
+    "dom": {
+      "active": "true",
+      "tag": "BUTTON",
+      "text": "workIdle"
+    }
+  },
+  {
+    "stage": "eof-keyboard-detail",
+    "at": "2026-10-22T03:24:16.646Z",
+    "dom": {
+      "tag": "BUTTON",
+      "text": "All agents (1)"
+    }
+  }
+]
