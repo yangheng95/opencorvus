@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Goal默认页与真实执行](2026-10-22-goal-home-run.md)：[26实图/11次真实Sol](../../artifacts/2026-10-22-goal-home-run/README.md)，5次自动续跑，修复控制消息宽度与原地表单焦点；普通聊天/用量及8配对成员退休核验。
+
 - [来源落点与Rendering](2026-10-22-source-parallel-owner.md)：[6实图/6次Sol](../../artifacts/2026-10-22-source-parallel-owner/README.md)，native策略使输入实际串行，正文/Source owner保持；并行与其他更新入口仍未覆盖。
 
 - [Dialog归还焦点](2026-10-22-dialog-opener-focus.md)：[20实图](../../artifacts/2026-10-22-dialog-opener-focus/README.md)，唯一modal opener实现修复Goal关闭BODY，命令面板专用hook保留，两副本全原行保持且闭合。

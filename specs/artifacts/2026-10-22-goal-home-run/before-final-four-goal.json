@@ -1,0 +1,372 @@
+{
+  "at": "2026-10-22T05:43:12.238Z",
+  "stage": "before",
+  "label": "final-four",
+  "measurement": "Readonly public HTTP and actual SQLite Goal/Session/events/messages;not UI assertions or a mutation driver",
+  "url": "http://127.0.0.1:19041/continuous-goal/chat/ses_-zURFCJeHzzs038OSSf3?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cmember-live-rendering-412-fresh%5Cproject",
+  "status": 200,
+  "goal": {
+    "id": "pev_g0VYkngpg00scSr1bMdZ",
+    "revision": "pev_g0VYkpHof00QDRMJfxHv",
+    "owner": {
+      "kind": "chat",
+      "id": "ses_-zURFCJeHzzs038OSSf3"
+    },
+    "objective": "GOAL533START：隔离连续目标使用流程验收。\n每次自动续跑只输出六行简短中文：第一行 GOAL533ROUND，接着用四行说明本轮收到持续目标、保持原权限、等待操作员检查，以及本轮正常结束，最后一行 GOAL533ROUNDEND。\n不调用工具，不读取或修改文件，不联网，不创建成员、Task 或 Mission。每轮正常结束，保留此 Goal 供下一轮继续；操作员会通过界面暂停、恢复并填写验收证据结束本专项测试，不要自行把 Goal 标记为完成或阻塞。执行次数由表单中明确设置的自动轮次预算约束。",
+    "status": "budget_limited",
+    "reason": "turn_budget",
+    "turnBudget": 4,
+    "tokensUsed": 164593,
+    "turnsAccepted": 4,
+    "createdAt": 1792647373572,
+    "updatedAt": 1792647754064,
+    "sessionID": "ses_-zURFCJeHzzs038OSSf3",
+    "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+  },
+  "session": {
+    "id": "ses_-zURFCJeHzzs038OSSf3",
+    "project_id": "prj_hSQinOa1MIVoNEeARpn5",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project",
+    "title": "GOAL533START：隔离连续目标使用流程验收。"
+  },
+  "messages": [
+    {
+      "id": "msg_hvw7xv7aRpHyqAWEby1Z",
+      "created": 1792647374479,
+      "role": "user",
+      "author": "goal-controller",
+      "parts": [
+        {
+          "id": "prt_hVbymRc7hFt6iko4ahzq",
+          "type": "text",
+          "text": "Continuous goal controller — automatic continuation 1.\nThe user authorized this ongoing objective: GOAL533START：隔离连续目标使用流程验收。\n每次自动续跑只输出六行简短中文：第一行 GOAL533ROUND，接着用四行说明本轮收到持续目标、保持原权限、等待操作员检查，以及本轮正常结束，最后一行 GOAL533ROUNDEND。\n不调用工具，不读取或修改文件，不联网，不创建成员、Task 或 Mission。每轮正常结束，保留此 Goal 供下一轮继续；操作员会通过界面暂停、恢复并填写验收证据结束本专项测试，不要自行把 Goal 标记为完成或阻塞。执行次数由表单中明确设置的自动轮次预算约束。\nGoal: pev_g0VYkngpg00scSr1bMdZ; prior settled frontier: start.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 0; token budget: unspecified.\nThis message is authored by the goal controller, not a new user instruction."
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VYknh5300Z1F5YBmZ2",
+      "created": 1792647374525,
+      "role": "assistant",
+      "author": "work",
+      "parentID": "msg_hvw7xv7aRpHyqAWEby1Z",
+      "finish": "stop",
+      "completed": 1792647379858,
+      "parts": [
+        {
+          "id": "prt_g0VYknhMC00gajwQzYFE",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VYkniHW00gsObv1LsV",
+          "type": "text",
+          "text": "GOAL533ROUND\n本轮已收到持续目标。\n保持原有权限不变。\n等待操作员检查。\n本轮正常结束。\nGOAL533ROUNDEND"
+        },
+        {
+          "id": "prt_g0VYkniSh00HFzdbI0og",
+          "type": "step-finish"
+        }
+      ]
+    },
+    {
+      "id": "msg_hEEQdZJ6Enp2r1r5nlVR",
+      "created": 1792647380535,
+      "role": "user",
+      "author": "goal-controller",
+      "parts": [
+        {
+          "id": "prt_hnULikJKKXG5lsqxFQOO",
+          "type": "text",
+          "text": "Continuous goal controller — automatic continuation 2.\nThe user authorized this ongoing objective: GOAL533START：隔离连续目标使用流程验收。\n每次自动续跑只输出六行简短中文：第一行 GOAL533ROUND，接着用四行说明本轮收到持续目标、保持原权限、等待操作员检查，以及本轮正常结束，最后一行 GOAL533ROUNDEND。\n不调用工具，不读取或修改文件，不联网，不创建成员、Task 或 Mission。每轮正常结束，保留此 Goal 供下一轮继续；操作员会通过界面暂停、恢复并填写验收证据结束本专项测试，不要自行把 Goal 标记为完成或阻塞。执行次数由表单中明确设置的自动轮次预算约束。\nGoal: pev_g0VYkngpg00scSr1bMdZ; prior settled frontier: msg_g0VYknh5300Z1F5YBmZ2.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 40647; token budget: unspecified.\nThis message is authored by the goal controller, not a new user instruction."
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VYknif800uAqD4y29H",
+      "created": 1792647380606,
+      "role": "assistant",
+      "author": "work",
+      "parentID": "msg_hEEQdZJ6Enp2r1r5nlVR",
+      "finish": "stop",
+      "completed": 1792647385311,
+      "parts": [
+        {
+          "id": "prt_g0VYknis600RD68RG5um",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VYknjgp00uUjEEioHC",
+          "type": "text",
+          "text": "GOAL533ROUND\n本轮已收到持续目标。\n保持原有权限不变。\n等待操作员检查。\n本轮正常结束。\nGOAL533ROUNDEND"
+        },
+        {
+          "id": "prt_g0VYknjsh00vptGQe82J",
+          "type": "step-finish"
+        }
+      ]
+    },
+    {
+      "id": "msg_hX39RFpbsvIf1ecNT6d0",
+      "created": 1792647505824,
+      "role": "user",
+      "author": "goal-controller",
+      "parts": [
+        {
+          "id": "prt_hlO5MtYIE1V1rcpwLuBo",
+          "type": "text",
+          "text": "Continuous goal controller — automatic continuation 3.\nThe user authorized this ongoing objective: GOAL533START：隔离连续目标使用流程验收。\n每次自动续跑只输出六行简短中文：第一行 GOAL533ROUND，接着用四行说明本轮收到持续目标、保持原权限、等待操作员检查，以及本轮正常结束，最后一行 GOAL533ROUNDEND。\n不调用工具，不读取或修改文件，不联网，不创建成员、Task 或 Mission。每轮正常结束，保留此 Goal 供下一轮继续；操作员会通过界面暂停、恢复并填写验收证据结束本专项测试，不要自行把 Goal 标记为完成或阻塞。执行次数由表单中明确设置的自动轮次预算约束。\nGoal: pev_g0VYkngpg00scSr1bMdZ; prior settled frontier: msg_g0VYknif800uAqD4y29H.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 81632; token budget: unspecified.\nThis message is authored by the goal controller, not a new user instruction."
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VYkoFFu00WHH0MRFaH",
+      "created": 1792647505894,
+      "role": "assistant",
+      "author": "work",
+      "parentID": "msg_hX39RFpbsvIf1ecNT6d0",
+      "finish": "stop",
+      "completed": 1792647509893,
+      "parts": [
+        {
+          "id": "prt_g0VYkoFVq00P2vrH7Mfi",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VYkoG5800PxBIFfULJ",
+          "type": "text",
+          "text": "GOAL533ROUND\n本轮已收到持续目标。\n保持原有权限不变。\n等待操作员检查。\n本轮正常结束。\nGOAL533ROUNDEND"
+        },
+        {
+          "id": "prt_g0VYkoGI100B4LjY5OK6",
+          "type": "step-finish"
+        }
+      ]
+    },
+    {
+      "id": "msg_h9P8KL5rtWzWHjl0oewM",
+      "created": 1792647754340,
+      "role": "user",
+      "author": "goal-controller",
+      "parts": [
+        {
+          "id": "prt_hD8VxmDkKBahb6mxFuXh",
+          "type": "text",
+          "text": "Continuous goal controller — automatic continuation 4.\nThe user authorized this ongoing objective: GOAL533START：隔离连续目标使用流程验收。\n每次自动续跑只输出六行简短中文：第一行 GOAL533ROUND，接着用四行说明本轮收到持续目标、保持原权限、等待操作员检查，以及本轮正常结束，最后一行 GOAL533ROUNDEND。\n不调用工具，不读取或修改文件，不联网，不创建成员、Task 或 Mission。每轮正常结束，保留此 Goal 供下一轮继续；操作员会通过界面暂停、恢复并填写验收证据结束本专项测试，不要自行把 Goal 标记为完成或阻塞。执行次数由表单中明确设置的自动轮次预算约束。\nGoal: pev_g0VYkngpg00scSr1bMdZ; prior settled frontier: msg_g0VYkoFFu00WHH0MRFaH.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 122952; token budget: unspecified.\nThis message is authored by the goal controller, not a new user instruction."
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VYkpHuB00iN4z60Oo8",
+      "created": 1792647754407,
+      "role": "assistant",
+      "author": "work",
+      "parentID": "msg_h9P8KL5rtWzWHjl0oewM",
+      "finish": "stop",
+      "completed": 1792647758781,
+      "parts": [
+        {
+          "id": "prt_g0VYkpIAL00vkQ5PNr06",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VYkpIqm00iyuLrW3m2",
+          "type": "text",
+          "text": "GOAL533ROUND\n本轮已收到持续目标。\n保持原有权限不变。\n等待操作员检查。\n本轮正常结束。\nGOAL533ROUNDEND"
+        },
+        {
+          "id": "prt_g0VYkpJ2M00g35o8FGxW",
+          "type": "step-finish"
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "pev_g0VYkngpg00scSr1bMdZ",
+      "type": "continuous_goal.created",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zURFCJeHzzs038OSSf3",
+      "seq": 1,
+      "emitted_at": 1792647373572,
+      "payload": {
+        "owner": {
+          "kind": "chat",
+          "id": "ses_-zURFCJeHzzs038OSSf3"
+        },
+        "request_id": "9cdb2969-a7fe-4644-8e2c-b44cd00ef56f",
+        "input": {
+          "turnBudget": 2,
+          "requestID": "9cdb2969-a7fe-4644-8e2c-b44cd00ef56f",
+          "objective": "GOAL533START：隔离连续目标使用流程验收。\n每次自动续跑只输出六行简短中文：第一行 GOAL533ROUND，接着用四行说明本轮收到持续目标、保持原权限、等待操作员检查，以及本轮正常结束，最后一行 GOAL533ROUNDEND。\n不调用工具，不读取或修改文件，不联网，不创建成员、Task 或 Mission。每轮正常结束，保留此 Goal 供下一轮继续；操作员会通过界面暂停、恢复并填写验收证据结束本专项测试，不要自行把 Goal 标记为完成或阻塞。执行次数由表单中明确设置的自动轮次预算约束。"
+        },
+        "author": "user"
+      }
+    },
+    {
+      "id": "pev_hvq5uJDv6J62xUgD3Z9c",
+      "type": "continuous_goal.continuation_requested",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zURFCJeHzzs038OSSf3",
+      "seq": 2,
+      "emitted_at": 1792647374483,
+      "payload": {
+        "goal_id": "pev_g0VYkngpg00scSr1bMdZ",
+        "revision": "pev_g0VYkngpg00scSr1bMdZ",
+        "frontier": "start",
+        "number": 1
+      }
+    },
+    {
+      "id": "pev_hlrHlBEQL7mJUlaUCYLc",
+      "type": "continuous_goal.usage",
+      "aggregate_type": "stream",
+      "aggregate_id": "pev_g0VYkngpg00scSr1bMdZ",
+      "seq": 1,
+      "emitted_at": 1792647379835,
+      "payload": {
+        "goal_id": "pev_g0VYkngpg00scSr1bMdZ",
+        "usage_id": "pvu_g0VYkniSh00vkXJoTxf7"
+      }
+    },
+    {
+      "id": "pev_hiZAysTa69qNUeRg8oF7",
+      "type": "continuous_goal.continuation_requested",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zURFCJeHzzs038OSSf3",
+      "seq": 6,
+      "emitted_at": 1792647380539,
+      "payload": {
+        "goal_id": "pev_g0VYkngpg00scSr1bMdZ",
+        "revision": "pev_g0VYkngpg00scSr1bMdZ",
+        "frontier": "msg_g0VYknh5300Z1F5YBmZ2",
+        "number": 2
+      }
+    },
+    {
+      "id": "pev_hO40yPTeaQLDsRME2T0k",
+      "type": "continuous_goal.usage",
+      "aggregate_type": "stream",
+      "aggregate_id": "pev_g0VYkngpg00scSr1bMdZ",
+      "seq": 2,
+      "emitted_at": 1792647385292,
+      "payload": {
+        "goal_id": "pev_g0VYkngpg00scSr1bMdZ",
+        "usage_id": "pvu_g0VYknjsi00oHVkBtCQR"
+      }
+    },
+    {
+      "id": "pev_g0VYkoEzL001euWFXdcJ",
+      "type": "continuous_goal.updated",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zURFCJeHzzs038OSSf3",
+      "seq": 10,
+      "emitted_at": 1792647504867,
+      "payload": {
+        "goal_id": "pev_g0VYkngpg00scSr1bMdZ",
+        "request_id": "0b9db7dc-7e7b-4e69-8d75-ae55e985fc49",
+        "input": {
+          "turnBudget": 4,
+          "requestID": "0b9db7dc-7e7b-4e69-8d75-ae55e985fc49",
+          "goalID": "pev_g0VYkngpg00scSr1bMdZ",
+          "expectedRevision": "pev_g0VYkngpg00scSr1bMdZ",
+          "status": "active",
+          "reason": "The user adjusted the budget and explicitly resumed the continuous goal."
+        },
+        "author": "user"
+      }
+    },
+    {
+      "id": "pev_hjIIkHnF3hrqEfUn3W2t",
+      "type": "continuous_goal.continuation_requested",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zURFCJeHzzs038OSSf3",
+      "seq": 11,
+      "emitted_at": 1792647505827,
+      "payload": {
+        "goal_id": "pev_g0VYkngpg00scSr1bMdZ",
+        "revision": "pev_g0VYkoEzL001euWFXdcJ",
+        "frontier": "msg_g0VYknif800uAqD4y29H",
+        "number": 3
+      }
+    },
+    {
+      "id": "pev_hol244HNHwzFygEUxor1",
+      "type": "continuous_goal.usage",
+      "aggregate_type": "stream",
+      "aggregate_id": "pev_g0VYkngpg00scSr1bMdZ",
+      "seq": 3,
+      "emitted_at": 1792647509870,
+      "payload": {
+        "goal_id": "pev_g0VYkngpg00scSr1bMdZ",
+        "usage_id": "pvu_g0VYkoGI100ukloo7j6N"
+      }
+    },
+    {
+      "id": "pev_g0VYkoGW800onCMu0s1Q",
+      "type": "continuous_goal.updated",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zURFCJeHzzs038OSSf3",
+      "seq": 15,
+      "emitted_at": 1792647510744,
+      "payload": {
+        "goal_id": "pev_g0VYkngpg00scSr1bMdZ",
+        "request_id": "5ecce15f-6226-42d4-b880-8a8e30ff7fb2",
+        "input": {
+          "requestID": "5ecce15f-6226-42d4-b880-8a8e30ff7fb2",
+          "goalID": "pev_g0VYkngpg00scSr1bMdZ",
+          "expectedRevision": "pev_g0VYkoEzL001euWFXdcJ",
+          "status": "paused",
+          "reason": "The user paused the continuous goal from its controls."
+        },
+        "author": "user"
+      }
+    },
+    {
+      "id": "pev_g0VYkpHof00QDRMJfxHv",
+      "type": "continuous_goal.updated",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zURFCJeHzzs038OSSf3",
+      "seq": 16,
+      "emitted_at": 1792647754064,
+      "payload": {
+        "goal_id": "pev_g0VYkngpg00scSr1bMdZ",
+        "request_id": "6746a55b-58e2-47ef-baeb-088c8310f9df",
+        "input": {
+          "requestID": "6746a55b-58e2-47ef-baeb-088c8310f9df",
+          "goalID": "pev_g0VYkngpg00scSr1bMdZ",
+          "expectedRevision": "pev_g0VYkoGW800onCMu0s1Q",
+          "status": "active",
+          "reason": "The user resumed the continuous goal from its controls."
+        },
+        "author": "user"
+      }
+    },
+    {
+      "id": "pev_hdGxnubvXRhjJbTyZdTK",
+      "type": "continuous_goal.continuation_requested",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zURFCJeHzzs038OSSf3",
+      "seq": 17,
+      "emitted_at": 1792647754344,
+      "payload": {
+        "goal_id": "pev_g0VYkngpg00scSr1bMdZ",
+        "revision": "pev_g0VYkpHof00QDRMJfxHv",
+        "frontier": "msg_g0VYkoFFu00WHH0MRFaH",
+        "number": 4
+      }
+    },
+    {
+      "id": "pev_hJuLkoKYCB9KQ59WAEUj",
+      "type": "continuous_goal.usage",
+      "aggregate_type": "stream",
+      "aggregate_id": "pev_g0VYkngpg00scSr1bMdZ",
+      "seq": 4,
+      "emitted_at": 1792647758758,
+      "payload": {
+        "goal_id": "pev_g0VYkngpg00scSr1bMdZ",
+        "usage_id": "pvu_g0VYkpJ2M00qR97XwViR"
+      }
+    }
+  ],
+  "archiveProjection": "Actual Goal/Session/events/visible text and part identities;non-text runtime payload omitted"
+}

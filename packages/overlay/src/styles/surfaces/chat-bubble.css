@@ -19,7 +19,7 @@
   --conversation-card-edge: transparent;
 }
 
-.chat-bubble-row[data-role="user"] {
+.chat-bubble-row[data-role="user"]:not([data-participant-author]) {
   --conversation-card-background: color-mix(in srgb, var(--surface-inset) 78%, transparent);
   --conversation-card-edge: color-mix(in srgb, var(--text-muted) 10%, transparent);
 }
@@ -38,13 +38,13 @@
   align-self: stretch;
 }
 
-.chat-bubble-row[data-role="user"] .chat-bubble-shell {
+.chat-bubble-row[data-role="user"]:not([data-participant-author]) .chat-bubble-shell {
   width: var(--conversation-user-card-inline-size);
   margin-inline-start: auto;
   align-items: flex-start;
 }
 
-.chat-bubble-row[data-role="user"] .chat-bubble {
+.chat-bubble-row[data-role="user"]:not([data-participant-author]) .chat-bubble {
   flex: 1 1 auto;
 }
 
@@ -73,7 +73,7 @@
   transform: none;
 }
 
-.chat-bubble-row[data-role="user"] .chat-bubble {
+.chat-bubble-row[data-role="user"]:not([data-participant-author]) .chat-bubble {
   overflow: hidden;
   padding: var(--ui-gap-xl) var(--ui-gap-xl) var(--ui-gap-xl);
   border: var(--oc-border-width) solid var(--conversation-card-edge);

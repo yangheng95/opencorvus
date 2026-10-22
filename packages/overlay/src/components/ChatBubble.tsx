@@ -32,9 +32,14 @@ function UnsupportedChatBubbleChild(props: { child: CardNode; parentID: string }
   throw new Error(`ChatBubble: unsupported child kind "${props.child.kind}" for ${props.parentID}`)
 }
 
+function messageParticipant(node: CardNode): string | undefined {
+  const role = normalizeAgentRole(node.role || node.stage || "")
+  return role === "user" && node.author !== "user" ? node.author : undefined
+}
+
 function ChatBubbleIdentity(props: { node: CardNode; compact?: boolean; hideDuration?: boolean }) {
   const role = () => normalizeAgentRole(props.node.role || props.node.stage || "")
-  const participant = () => (role() === "user" && props.node.author !== "user" ? props.node.author : undefined)
+  const participant = () => messageParticipant(props.node)
   const identityLabel = () =>
     participant() === "goal-controller"
       ? t("continuous_goal.controller")
@@ -263,6 +268,7 @@ export function ChatBubble(props: { node: CardNode; depth: number; collapsible?:
       data-card-id={props.node.id}
       data-kind={props.node.kind}
       data-role={normalizedRole()}
+      data-participant-author={messageParticipant(props.node)}
       data-stage={normalizedRole()}
       data-align={align()}
       data-status={props.node.status || "none"}

@@ -1,0 +1,16 @@
+{
+  "scope": "goal-home-run-533",
+  "source": "Closed532-before with complete original data/schema3/canonical and real6/8 qualification/paired retirement",
+  "ports": {
+    "before": 19041,
+    "after": 19043
+  },
+  "maximumRequestsPerStartedScope": 16,
+  "initiallyStartedScopes": [
+    "before"
+  ],
+  "model": "gpt-6.1-sol",
+  "goalBudgets": {"before":{"initial":2,"adjusted":4},"after":{"initial":1}},
+  "flow": "Actual Home composer/form -> new Chat Goal -> running -> pause -> resume/budget -> operator evidence complete",
+  "ui": "Only real native page interactions,screenshots,manual review;backend observer is readonly"
+}

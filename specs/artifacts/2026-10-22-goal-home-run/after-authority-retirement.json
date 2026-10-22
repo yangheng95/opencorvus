@@ -1,0 +1,37 @@
+{
+  "at": "2026-10-22T07:11:59.481Z",
+  "scannedFiles": 98,
+  "scannedBytes": 117256740,
+  "secretValueMatches": 0,
+  "sourceAuth": {
+    "bytes": 3929,
+    "modifiedAtMs": 1792460418696.2107,
+    "access": "exact original",
+    "refresh": "exact original"
+  },
+  "sourceCatalog": {
+    "bytes": 9155406,
+    "currentModifiedAtMs": 1791128890137.9968,
+    "bytesExact": true,
+    "modifiedBeforePreparation": true,
+    "boundary": "Original catalog mtime exactly matches preparation;complete bytes equal captured pair"
+  },
+  "runtimePair": "Both members retired by original physical/source-EOF settlement",
+  "retired": [
+    {
+      "name": "auth.json",
+      "bytes": 2122,
+      "outcome": "Retired after original native,source EOF,runtime pair retirement and actual-value scan"
+    },
+    {
+      "name": "models.json",
+      "bytes": 9155406,
+      "outcome": "Retired after original native,source EOF,runtime pair retirement and actual-value scan"
+    }
+  ],
+  "requests": 5,
+  "maximumRequests": 16,
+  "allActualRequests": "gpt-6.1-sol,stream=true,200,original source EOF",
+  "status": "Configured workspace review source/runtime pairs physically retired; actual Task outcome retained separately; no credential-bearing service remains",
+  "qualificationVerifiedAtUtc": "2026-10-22T07:28:38.9281285Z"
+}

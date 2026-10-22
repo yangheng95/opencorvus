@@ -1,0 +1,652 @@
+{
+  "at": "2026-10-22T07:38:53.125Z",
+  "screenshots": 26,
+  "actualRequests": 11,
+  "maximumRequests": 32,
+  "unusedScopeRequestsRetired": 21,
+  "totalAuthorityMembersRetired": 8,
+  "scopes": [
+    {
+      "stage": "before",
+      "originalServiceHandle": 20121,
+      "originalServiceExit": 0,
+      "page": 135,
+      "pageState": "Closed",
+      "maximum": 16,
+      "requests": 6,
+      "providerQualificationPassed": true,
+      "privateRetiredMembers": 2,
+      "runtimeRetiredMembers": 2,
+      "native": {
+        "occurrence": "goal-home-run-533-before-b86e743b-ea52-4578-a053-6b0222ed4978",
+        "outcome": "settled",
+        "host": {
+          "pid": 65912,
+          "processInstanceID": "win32:639282439701718530",
+          "occurrenceID": "cc6de7fc-ee8f-4265-b756-b195e20d7385"
+        },
+        "target": {
+          "pid": 94372,
+          "processInstanceID": "win32:639282439712247479",
+          "occurrenceID": "949bcc2a-d39c-43ff-9901-d16d3962ea48"
+        },
+        "observedAtUtc": "2026-10-22T05:48:41.241Z",
+        "deadlineAt": 1792648370146,
+        "terminal": {
+          "occurrenceID": "goal-home-run-533-before-b86e743b-ea52-4578-a053-6b0222ed4978",
+          "pid": 94372,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "identity": {
+            "pid": 65912,
+            "processInstanceID": "win32:639282439701718530",
+            "occurrenceID": "cc6de7fc-ee8f-4265-b756-b195e20d7385"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "identity": {
+            "pid": 94372,
+            "processInstanceID": "win32:639282439712247479",
+            "occurrenceID": "949bcc2a-d39c-43ff-9901-d16d3962ea48"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "launcher": {
+        "originalChildExit": 0,
+        "observedAtUtc": "2026-10-22T05:48:41.3035917Z"
+      },
+      "snapshots": [
+        {
+          "label": "budget-first",
+          "at": "2026-10-22T05:37:34.421Z",
+          "status": 200,
+          "goal": {
+            "id": "pev_g0VYkngpg00scSr1bMdZ",
+            "revision": "pev_g0VYkngpg00scSr1bMdZ",
+            "owner": {
+              "kind": "chat",
+              "id": "ses_-zURFCJeHzzs038OSSf3"
+            },
+            "objective": "GOAL533START：隔离连续目标使用流程验收。\n每次自动续跑只输出六行简短中文：第一行 GOAL533ROUND，接着用四行说明本轮收到持续目标、保持原权限、等待操作员检查，以及本轮正常结束，最后一行 GOAL533ROUNDEND。\n不调用工具，不读取或修改文件，不联网，不创建成员、Task 或 Mission。每轮正常结束，保留此 Goal 供下一轮继续；操作员会通过界面暂停、恢复并填写验收证据结束本专项测试，不要自行把 Goal 标记为完成或阻塞。执行次数由表单中明确设置的自动轮次预算约束。",
+            "status": "budget_limited",
+            "reason": "turn_budget",
+            "turnBudget": 2,
+            "tokensUsed": 81632,
+            "turnsAccepted": 2,
+            "createdAt": 1792647373572,
+            "updatedAt": 1792647373572,
+            "sessionID": "ses_-zURFCJeHzzs038OSSf3",
+            "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+          }
+        },
+        {
+          "label": "paused-three",
+          "at": "2026-10-22T05:41:06.861Z",
+          "status": 200,
+          "goal": {
+            "id": "pev_g0VYkngpg00scSr1bMdZ",
+            "revision": "pev_g0VYkoGW800onCMu0s1Q",
+            "owner": {
+              "kind": "chat",
+              "id": "ses_-zURFCJeHzzs038OSSf3"
+            },
+            "objective": "GOAL533START：隔离连续目标使用流程验收。\n每次自动续跑只输出六行简短中文：第一行 GOAL533ROUND，接着用四行说明本轮收到持续目标、保持原权限、等待操作员检查，以及本轮正常结束，最后一行 GOAL533ROUNDEND。\n不调用工具，不读取或修改文件，不联网，不创建成员、Task 或 Mission。每轮正常结束，保留此 Goal 供下一轮继续；操作员会通过界面暂停、恢复并填写验收证据结束本专项测试，不要自行把 Goal 标记为完成或阻塞。执行次数由表单中明确设置的自动轮次预算约束。",
+            "status": "paused",
+            "reason": "The user paused the continuous goal from its controls.",
+            "turnBudget": 4,
+            "tokensUsed": 122952,
+            "turnsAccepted": 3,
+            "createdAt": 1792647373572,
+            "updatedAt": 1792647510744,
+            "sessionID": "ses_-zURFCJeHzzs038OSSf3",
+            "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+          }
+        },
+        {
+          "label": "final-four",
+          "at": "2026-10-22T05:43:12.238Z",
+          "status": 200,
+          "goal": {
+            "id": "pev_g0VYkngpg00scSr1bMdZ",
+            "revision": "pev_g0VYkpHof00QDRMJfxHv",
+            "owner": {
+              "kind": "chat",
+              "id": "ses_-zURFCJeHzzs038OSSf3"
+            },
+            "objective": "GOAL533START：隔离连续目标使用流程验收。\n每次自动续跑只输出六行简短中文：第一行 GOAL533ROUND，接着用四行说明本轮收到持续目标、保持原权限、等待操作员检查，以及本轮正常结束，最后一行 GOAL533ROUNDEND。\n不调用工具，不读取或修改文件，不联网，不创建成员、Task 或 Mission。每轮正常结束，保留此 Goal 供下一轮继续；操作员会通过界面暂停、恢复并填写验收证据结束本专项测试，不要自行把 Goal 标记为完成或阻塞。执行次数由表单中明确设置的自动轮次预算约束。",
+            "status": "budget_limited",
+            "reason": "turn_budget",
+            "turnBudget": 4,
+            "tokensUsed": 164593,
+            "turnsAccepted": 4,
+            "createdAt": 1792647373572,
+            "updatedAt": 1792647754064,
+            "sessionID": "ses_-zURFCJeHzzs038OSSf3",
+            "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+          }
+        },
+        {
+          "label": "complete-first",
+          "at": "2026-10-22T05:47:43.979Z",
+          "status": 200,
+          "goal": {
+            "id": "pev_g0VYkngpg00scSr1bMdZ",
+            "revision": "pev_g0VYkqRAr006P8Fmtwa2",
+            "owner": {
+              "kind": "chat",
+              "id": "ses_-zURFCJeHzzs038OSSf3"
+            },
+            "objective": "GOAL533START：隔离连续目标使用流程验收。\n每次自动续跑只输出六行简短中文：第一行 GOAL533ROUND，接着用四行说明本轮收到持续目标、保持原权限、等待操作员检查，以及本轮正常结束，最后一行 GOAL533ROUNDEND。\n不调用工具，不读取或修改文件，不联网，不创建成员、Task 或 Mission。每轮正常结束，保留此 Goal 供下一轮继续；操作员会通过界面暂停、恢复并填写验收证据结束本专项测试，不要自行把 Goal 标记为完成或阻塞。执行次数由表单中明确设置的自动轮次预算约束。",
+            "status": "complete",
+            "reason": "GOAL533 专项流程验收：从默认 Home 原表单创建了同一 Chat Goal；真实 Goal controller 已接受并完成四轮，预算从 2 调整为 4，3/4 轮时通过界面暂停并恢复；累计用量保留为 164593 tokens。此记录仅结束隔离的 Goal 流程测试，不代表整个产品或本线程长期目标完成。",
+            "turnBudget": 4,
+            "tokensUsed": 164593,
+            "turnsAccepted": 4,
+            "createdAt": 1792647373572,
+            "updatedAt": 1792648028365,
+            "sessionID": "ses_-zURFCJeHzzs038OSSf3",
+            "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+          }
+        }
+      ],
+      "assets": [
+        {
+          "time": "2026-10-22T05:33:23.204Z",
+          "path": "/ui/assets/main-DwFFu1Lg.js",
+          "statusCode": 200
+        },
+        {
+          "time": "2026-10-22T05:33:23.208Z",
+          "path": "/ui/assets/main-CVd9TkT1.css",
+          "statusCode": 200
+        }
+      ],
+      "runtimeErrors": [],
+      "browserErrors": []
+    },
+    {
+      "stage": "after",
+      "originalServiceHandle": 23560,
+      "originalServiceExit": 0,
+      "page": 136,
+      "pageState": "Closed",
+      "maximum": 16,
+      "requests": 5,
+      "providerQualificationPassed": true,
+      "privateRetiredMembers": 2,
+      "runtimeRetiredMembers": 2,
+      "native": {
+        "occurrence": "goal-home-run-533-after-e520e1f3-6447-4d5e-9b2f-5ac9fb5dbe66",
+        "outcome": "settled",
+        "host": {
+          "pid": 97316,
+          "processInstanceID": "win32:639282488111927780",
+          "occurrenceID": "b62474c0-f81d-4512-88c1-2bdf6dd2770c"
+        },
+        "target": {
+          "pid": 4924,
+          "processInstanceID": "win32:639282488123335865",
+          "occurrenceID": "a970787f-bec7-4de2-ade2-9d46df5ea60a"
+        },
+        "observedAtUtc": "2026-10-22T07:08:28.629Z",
+        "deadlineAt": 1792653211167,
+        "terminal": {
+          "occurrenceID": "goal-home-run-533-after-e520e1f3-6447-4d5e-9b2f-5ac9fb5dbe66",
+          "pid": 4924,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 97316,
+            "processInstanceID": "win32:639282488111927780",
+            "occurrenceID": "b62474c0-f81d-4512-88c1-2bdf6dd2770c"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 4924,
+            "processInstanceID": "win32:639282488123335865",
+            "occurrenceID": "a970787f-bec7-4de2-ade2-9d46df5ea60a"
+          }
+        }
+      ],
+      "launcher": {
+        "observedAtUtc": "2026-10-22T07:08:28.6963004Z",
+        "originalChildExit": 0
+      },
+      "snapshots": [
+        {
+          "label": "one-settled",
+          "at": "2026-10-22T06:57:44.718Z",
+          "status": 200,
+          "goal": {
+            "id": "pev_g0VYl82HT00UtQlc2t1X",
+            "revision": "pev_g0VYl82HT00UtQlc2t1X",
+            "owner": {
+              "kind": "chat",
+              "id": "ses_-zURFCJeHzzs038OSSf3"
+            },
+            "objective": "GOAL533START：隔离连续目标使用流程验收。\n每次自动续跑只输出六行简短中文：第一行 GOAL533ROUND，接着用四行说明本轮收到持续目标、保持原权限、等待操作员检查，以及本轮正常结束，最后一行 GOAL533ROUNDEND。\n不调用工具，不读取或修改文件，不联网，不创建成员、Task 或 Mission。每轮正常结束，保留此 Goal 供下一轮继续；操作员会通过界面暂停、恢复并填写验收证据结束本专项测试，不要自行把 Goal 标记为完成或阻塞。执行次数由表单中明确设置的自动轮次预算约束。",
+            "status": "budget_limited",
+            "reason": "turn_budget",
+            "turnBudget": 1,
+            "tokensUsed": 41972,
+            "turnsAccepted": 1,
+            "createdAt": 1792652222579,
+            "updatedAt": 1792652222579,
+            "sessionID": "ses_-zURFCJeHzzs038OSSf3",
+            "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+          },
+          "currentGoalMessages": {
+            "controllerIDs": [
+              "msg_hNL5wZSfkvjpnvnNRXX9"
+            ],
+            "replyIDs": [
+              "msg_g0VYl82P300mGRQ5IhKp"
+            ]
+          },
+          "settledCheck": true
+        },
+        {
+          "label": "complete-keyboard",
+          "at": "2026-10-22T07:00:39.870Z",
+          "status": 200,
+          "goal": {
+            "id": "pev_g0VYl82HT00UtQlc2t1X",
+            "revision": "pev_g0VYl8eB100qI48boOOE",
+            "owner": {
+              "kind": "chat",
+              "id": "ses_-zURFCJeHzzs038OSSf3"
+            },
+            "objective": "GOAL533START：隔离连续目标使用流程验收。\n每次自动续跑只输出六行简短中文：第一行 GOAL533ROUND，接着用四行说明本轮收到持续目标、保持原权限、等待操作员检查，以及本轮正常结束，最后一行 GOAL533ROUNDEND。\n不调用工具，不读取或修改文件，不联网，不创建成员、Task 或 Mission。每轮正常结束，保留此 Goal 供下一轮继续；操作员会通过界面暂停、恢复并填写验收证据结束本专项测试，不要自行把 Goal 标记为完成或阻塞。执行次数由表单中明确设置的自动轮次预算约束。",
+            "status": "complete",
+            "reason": "GOAL533 after 专项验收：创建新 Goal 与完成证据视图均自动聚焦正确输入框；证据从原焦点用原生键盘录入。新 Goal 的一次真实自动续跑已完成，41972 tokens 与 1/1 轮预算保留；原四轮 Goal 和原文仍可读取。此完成决定只结束本隔离 Goal。",
+            "turnBudget": 1,
+            "tokensUsed": 41972,
+            "turnsAccepted": 1,
+            "createdAt": 1792652222579,
+            "updatedAt": 1792652368250,
+            "sessionID": "ses_-zURFCJeHzzs038OSSf3",
+            "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+          },
+          "currentGoalMessages": {
+            "controllerIDs": [
+              "msg_hNL5wZSfkvjpnvnNRXX9"
+            ],
+            "replyIDs": [
+              "msg_g0VYl82P300mGRQ5IhKp"
+            ]
+          },
+          "settledCheck": true
+        },
+        {
+          "label": "manual-complete",
+          "at": "2026-10-22T07:03:48.368Z",
+          "status": 200,
+          "goal": {
+            "id": "pev_g0VYl82HT00UtQlc2t1X",
+            "revision": "pev_g0VYl8eB100qI48boOOE",
+            "owner": {
+              "kind": "chat",
+              "id": "ses_-zURFCJeHzzs038OSSf3"
+            },
+            "objective": "GOAL533START：隔离连续目标使用流程验收。\n每次自动续跑只输出六行简短中文：第一行 GOAL533ROUND，接着用四行说明本轮收到持续目标、保持原权限、等待操作员检查，以及本轮正常结束，最后一行 GOAL533ROUNDEND。\n不调用工具，不读取或修改文件，不联网，不创建成员、Task 或 Mission。每轮正常结束，保留此 Goal 供下一轮继续；操作员会通过界面暂停、恢复并填写验收证据结束本专项测试，不要自行把 Goal 标记为完成或阻塞。执行次数由表单中明确设置的自动轮次预算约束。",
+            "status": "complete",
+            "reason": "GOAL533 after 专项验收：创建新 Goal 与完成证据视图均自动聚焦正确输入框；证据从原焦点用原生键盘录入。新 Goal 的一次真实自动续跑已完成，41972 tokens 与 1/1 轮预算保留；原四轮 Goal 和原文仍可读取。此完成决定只结束本隔离 Goal。",
+            "turnBudget": 1,
+            "tokensUsed": 41972,
+            "turnsAccepted": 1,
+            "createdAt": 1792652222579,
+            "updatedAt": 1792652368250,
+            "sessionID": "ses_-zURFCJeHzzs038OSSf3",
+            "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+          },
+          "currentGoalMessages": {
+            "controllerIDs": [
+              "msg_hNL5wZSfkvjpnvnNRXX9"
+            ],
+            "replyIDs": [
+              "msg_g0VYl82P300mGRQ5IhKp"
+            ]
+          },
+          "settledCheck": true,
+          "usagePreservedFrom": "complete-keyboard"
+        },
+        {
+          "label": "final-home",
+          "at": "2026-10-22T07:08:26.000Z",
+          "status": 200,
+          "goal": {
+            "id": "pev_g0VYl82HT00UtQlc2t1X",
+            "revision": "pev_g0VYl8eB100qI48boOOE",
+            "owner": {
+              "kind": "chat",
+              "id": "ses_-zURFCJeHzzs038OSSf3"
+            },
+            "objective": "GOAL533START：隔离连续目标使用流程验收。\n每次自动续跑只输出六行简短中文：第一行 GOAL533ROUND，接着用四行说明本轮收到持续目标、保持原权限、等待操作员检查，以及本轮正常结束，最后一行 GOAL533ROUNDEND。\n不调用工具，不读取或修改文件，不联网，不创建成员、Task 或 Mission。每轮正常结束，保留此 Goal 供下一轮继续；操作员会通过界面暂停、恢复并填写验收证据结束本专项测试，不要自行把 Goal 标记为完成或阻塞。执行次数由表单中明确设置的自动轮次预算约束。",
+            "status": "complete",
+            "reason": "GOAL533 after 专项验收：创建新 Goal 与完成证据视图均自动聚焦正确输入框；证据从原焦点用原生键盘录入。新 Goal 的一次真实自动续跑已完成，41972 tokens 与 1/1 轮预算保留；原四轮 Goal 和原文仍可读取。此完成决定只结束本隔离 Goal。",
+            "turnBudget": 1,
+            "tokensUsed": 41972,
+            "turnsAccepted": 1,
+            "createdAt": 1792652222579,
+            "updatedAt": 1792652368250,
+            "sessionID": "ses_-zURFCJeHzzs038OSSf3",
+            "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project"
+          },
+          "currentGoalMessages": {
+            "controllerIDs": [
+              "msg_hNL5wZSfkvjpnvnNRXX9"
+            ],
+            "replyIDs": [
+              "msg_g0VYl82P300mGRQ5IhKp"
+            ]
+          },
+          "settledCheck": true,
+          "usagePreservedFrom": "complete-keyboard"
+        }
+      ],
+      "assets": [
+        {
+          "time": "2026-10-22T06:54:45.597Z",
+          "path": "/ui/assets/main-Z57QblQm.js",
+          "statusCode": 200
+        },
+        {
+          "time": "2026-10-22T06:54:45.603Z",
+          "path": "/ui/assets/main-CZNy5wdP.css",
+          "statusCode": 200
+        }
+      ],
+      "runtimeErrors": [],
+      "browserErrors": []
+    }
+  ],
+  "provider": [
+    {
+      "stage": "before",
+      "requests": 6,
+      "maximum": 16,
+      "provider": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792647181281
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_hzocfj40VPa4ZIl3R79Q",
+                "agentID": "memory",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792647182185
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_hzocfj40VPa4ZIl3R79Q",
+                "agentID": "chat",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792647379832
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_hvw7xv7aRpHyqAWEby1Z",
+                "agentID": "work",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792647385289
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_hEEQdZJ6Enp2r1r5nlVR",
+                "agentID": "work",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792647509866
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_hX39RFpbsvIf1ecNT6d0",
+                "agentID": "work",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792647758755
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_h9P8KL5rtWzWHjl0oewM",
+                "agentID": "work",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stage": "after",
+      "requests": 5,
+      "maximum": 16,
+      "provider": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792652026572
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_hPSbXpv72a6MzwFxLPOO",
+                "agentID": "memory",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792652027833
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_hPSbXpv72a6MzwFxLPOO",
+                "agentID": "chat",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792652228242
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_hNL5wZSfkvjpnvnNRXX9",
+                "agentID": "work",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792652626854
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_a228af1a-7744-408a-b263-a204eda52b43",
+                "agentID": "memory",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sourceReader": {
+            "state": "settled",
+            "terminal": {
+              "kind": "eof",
+              "at": 1792652464716
+            },
+            "requestContext": {
+              "streamRequest": {
+                "requestID": "msg_a228af1a-7744-408a-b263-a204eda52b43",
+                "agentID": "work",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "First two turns finished before the operator could pause;actual pause followed the third settled reply by851ms,so in-flight pause is not newly qualified",
+    "Before Home creation and after same-Session new Goal/keyboard completion were real UI operations;after Home initial-open/Esc is unsubmitted",
+    "Task/Mission and other participant kinds share code but have no new runtime/visual qualification in this batch",
+    "Mode/source/authority/disabled/new-focus guard branches are code-reviewed,not manufactured with UI fixtures",
+    "26 screenshots are discrete real captures and manual reviews;04 is an intermediate navigation frame,22 shows retained earlier reading position;23 uses actual Ctrl+End to view the human card",
+    "Old four controller messages and their original IDs/bodies remain readable;independent UI navigation to prior completed Goal definitions/evidence is not qualified",
+    "The observed manual-send reading-position behavior needs a separate contract audit;it is not claimed fixed",
+    "Before settlement and after private retirement each exposed a copied fixed8 budget check;the declared/runtime budget was16 throughout,original failed receipts are retained and the same actual source audits were rechecked without restart or credential recreation",
+    "Sources/Rendering primary requirement remains open;both QA Goals complete is distinct from the active thread Goal"
+  ]
+}

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Goal默认页与真实执行](records/2026-10/2026-10-22-goal-home-run.md)：[26实图/11次真实Sol](artifacts/2026-10-22-goal-home-run/README.md)，5次自动续跑及轮次间暂停/恢复，修复控制消息排版与弹窗换页焦点，完整资源结算。
+
 - [来源落点与Rendering](records/2026-10/2026-10-22-source-parallel-owner.md)：[6实图/6次真实Sol](artifacts/2026-10-22-source-parallel-owner/README.md)，确证native单步串行策略与自然追加owner，未达到同消息并行资格。
 
 - [Dialog归还焦点](records/2026-10/2026-10-22-dialog-opener-focus.md)：[20张Goal与命令面板实图](artifacts/2026-10-22-dialog-opener-focus/README.md)，三条Goal关闭回原按钮，保留专用focus所有权，零模型/完整数据保持。

@@ -1,5 +1,12 @@
 # 07-panel-reactivity — Overlay Reactive Projection
 
+Authored participants with user transport role retain their actual author and
+full original body. ChatBubble shares one participant classification between its
+identity and presentation marker. Human input card width, trailing placement and
+surface apply to human input; Goal controller and other authored participants
+use the existing full narrative column. Transport role, message identity, Parts,
+ordering, expansion and the shared text renderer remain unchanged.
+
 Modal Dialogs capture their actual external opener before the open autofocus
 hook. On close, caller autofocus hooks run first and may prevent the default.
 Otherwise an available, visible, enabled opener receives focus only while BODY

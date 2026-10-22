@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Goal默认页与真实执行](2026-10-22-goal-home-run/README.md)：26实图、11次Sol/5自动续跑，控制消息排版与弹窗焦点修复，键盘完成及原用量保持，双scope/8配对成员结算。
+
 - [来源落点与Rendering](2026-10-22-source-parallel-owner/README.md)：6实图/6次Sol、真实Source顺序和owner、native串行策略、完整源保持与4凭据成员退休；不宣称并行或根因已修复。
 
 - [Dialog归还焦点](2026-10-22-dialog-opener-focus/README.md)：20实图、真实modal生命周期与正式构建、90表158027原行保持、零模型/双服务物理闭合。

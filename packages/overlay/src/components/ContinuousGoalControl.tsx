@@ -143,6 +143,11 @@ export function ContinuousGoalControl(props: {
   let launchOwner: GoalLaunchContext | undefined
   let disposed = false
   let root: HTMLElement | undefined
+  let dialog: HTMLElement | undefined
+  let objectiveField: HTMLTextAreaElement | undefined
+  let completionField: HTMLTextAreaElement | undefined
+  let detailsObjective: HTMLParagraphElement | undefined
+  let closeControl: HTMLButtonElement | undefined
   let noticeState = ""
   const number = (value: number) => new Intl.NumberFormat(localeTag()).format(value)
   const currentReason = () => {
@@ -225,6 +230,10 @@ export function ContinuousGoalControl(props: {
   })
 
   function open(next: "details" | "create" | "complete" | "about") {
+    const focusOwner = document.activeElement
+    const transfer = mode() !== null && mode() !== next && dialog?.contains(focusOwner)
+      ? { sourceKey: source()?.key, epoch: props.selectionEpoch, authority: captureApiAuthority() }
+      : undefined
     if (props.home && next === "create") {
       if (props.selectionEpoch === undefined) throw new Error("Home Goal form requires its workspace selection epoch")
       launchOwner = {
@@ -256,6 +265,23 @@ export function ContinuousGoalControl(props: {
     setValidation("")
     attempt = undefined
     setMode(next)
+    if (!transfer) return
+    queueMicrotask(() => {
+      if (
+        disposed || mode() !== next || source()?.key !== transfer.sourceKey ||
+        props.selectionEpoch !== transfer.epoch || !isApiAuthorityCurrent(transfer.authority) || !dialog?.isConnected
+      ) return
+      const active = document.activeElement
+      if (active !== document.body && active !== focusOwner) return
+      const target = next === "create" ? objectiveField
+        : next === "complete" ? completionField
+          : next === "details" ? detailsObjective : closeControl
+      if (
+        !target?.isConnected || !dialog.contains(target) || !target.getClientRects().length ||
+        target.closest('[hidden], [inert], [aria-hidden="true"]') || target.matches(':disabled, [aria-disabled="true"]')
+      ) return
+      target.focus()
+    })
   }
   createEffect(() => {
     const requested = props.createRequest
@@ -548,6 +574,7 @@ export function ContinuousGoalControl(props: {
       </Show>
       <Dialog
         wide
+        ref={(element) => { dialog = element }}
         open={mode() !== null}
         title={t(
           !hasForm()
@@ -573,6 +600,7 @@ export function ContinuousGoalControl(props: {
               tone="neutral"
               disabled={busy()}
               onClick={() => setMode(null)}
+              ref={(element) => { closeControl = element }}
             >
               {t("common.close")}
             </Button>
@@ -621,7 +649,7 @@ export function ContinuousGoalControl(props: {
                   <Badge tone={tones[goal()?.status ?? editing()?.status ?? "paused"]}>
                     {t(`continuous_goal.status.${goal()?.status ?? editing()?.status ?? "paused"}`)}
                   </Badge>
-                  <p tabIndex={0} aria-label={t("continuous_goal.objective")}>
+                  <p ref={(element) => { detailsObjective = element }} tabIndex={0} aria-label={t("continuous_goal.objective")}>
                     {objective()}
                   </p>
                   <Show when={currentReason()}>
@@ -647,6 +675,7 @@ export function ContinuousGoalControl(props: {
               <TextField.Root as="label" variant="multiline">
                 <TextField.Label>{t("continuous_goal.objective")}</TextField.Label>
                 <TextField.TextArea
+                  ref={(element) => { objectiveField = element }}
                   value={objective()}
                   onInvalid={(e) => e.currentTarget.setCustomValidity(t("continuous_goal.validation.objective"))}
                   onInput={(e) => {
@@ -748,6 +777,7 @@ export function ContinuousGoalControl(props: {
               <TextField.Root as="label" variant="multiline">
                 <TextField.Label>{t("continuous_goal.evidence")}</TextField.Label>
                 <TextField.TextArea
+                  ref={(element) => { completionField = element }}
                   value={reason()}
                   onInvalid={(e) => e.currentTarget.setCustomValidity(t("continuous_goal.validation.reason"))}
                   onInput={(e) => {

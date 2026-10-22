@@ -225,6 +225,13 @@ remain complete inside that body. A revision-conflict review displays the latest
 saved limits from the same HTTP projection alongside the retained form draft;
 reviewing the revision does not silently replace the draft's budget values.
 
+In-place Goal dialog view changes preserve keyboard context. After the current
+render commits, the next view's explicit Objective, completion evidence, saved
+Objective or Close control receives focus only while the same mode, API authority,
+selection and source still own the dialog and its old control or BODY still owns
+focus. A newer focus owner is respected. The existing Dialog retains initial and
+close autofocus; this handoff adds no global target search or retry.
+
 ## Verification
 
 Database/process tests verify identity, state, replay and usage separately from real

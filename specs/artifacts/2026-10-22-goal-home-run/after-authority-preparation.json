@@ -1,0 +1,20 @@
+{
+  "observedAt": "2026-10-22T06:47:29.698Z",
+  "authority": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/goal-home-run-533-after-authority",
+  "source": "C:/Users/hengu/.codex/auth.json",
+  "sourceBytes": 3929,
+  "sourceModifiedAtMs": 1792460418696.2107,
+  "copiedAccessExpiresAt": "2026-10-30T01:40:18.000Z",
+  "catalogSource": "C:/Users/hengu/AppData/Local/opencorvus/data/models.json",
+  "catalogSourceModifiedAtMs": 1791128890137.9968,
+  "catalogBytes": 9155406,
+  "catalogProviders": 227,
+  "catalogModels": 8423,
+  "targetModel": "gpt-6.1-sol",
+  "maximumBatchRequests": 32,
+  "scopeBudgets": {
+    "before": 16,
+    "after": 16
+  },
+  "operation": "Fresh selected complete OpenAI entry plus exact full adjacent catalog;source unchanged;no refresh/exchange or model request"
+}
