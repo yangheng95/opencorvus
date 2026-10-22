@@ -1513,6 +1513,19 @@ that is still connecting, while an online backend with a missing stream is expli
 stream reconnect condition. The SSE owner also publishes whether the selected source currently
 expects such a stream, so an empty New Chat cannot manufacture a reconnect warning.
 
+The sidebar badge and banner use one stateless presentation of those observations.
+A restored selected stream with backend health still unconfirmed is Connecting,
+with an explicit live-updates-connected message; it is neither an Online claim
+nor an unreachable-backend warning. An online backend with an established stream
+reconnecting likewise presents Connecting and identifies live updates as the
+remaining boundary. Ordinary initial stream setup retains its loading contract.
+The banner's data-status uses the same online/connecting/offline vocabulary as
+the existing color styles; its data-problem names the observed boundary. An
+already visible notice changes text and tone as recovery progresses without
+closing and starting another grace period. Initial grace and complete recovery
+cleanup retain their original owners. This presentation changes no health signal,
+stream state, workspace recovery, send admission or configuration-write condition.
+
 The banner's configuration action opens the canonical Network settings section,
 where the existing server URL and authentication form are immediately available.
 Navigation retains the configured API address; the saved settings and connection

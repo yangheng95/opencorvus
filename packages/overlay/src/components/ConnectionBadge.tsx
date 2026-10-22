@@ -1,17 +1,13 @@
 // ── ConnectionBadge Component ──
 // Displays the current connection status (online / connecting / offline) as a
-// titlebar diagnostics button.
+// sidebar connection indicator.
 
 import { createMemo } from "solid-js"
 import { messageStore } from "../store/messages"
-import { appStore } from "../store/app"
+import { appStore, type ConnectionStatus } from "../store/app"
 import { settingsStore } from "../store/settings"
 import { t } from "../utils/i18n"
-
-// ── Types ──
-
-/** Connection status values mirroring app.js setConnStatus / checkConnection. */
-export type ConnectionStatus = "online" | "connecting" | "offline"
+import { connectionPresentation } from "../utils/connection-presentation"
 
 // ── Helpers ──
 
@@ -24,19 +20,14 @@ function statusLabel(status: ConnectionStatus): string {
 // ── Component ──
 
 export interface ConnectionBadgeProps {
-  /** Override the displayed status. Falls back to appStore.connectionStatus. */
+  /** Override the shared connection presentation for an explicit status display. */
   status?: ConnectionStatus
 }
 
 export function ConnectionBadge(props: ConnectionBadgeProps) {
-  // Derive status: prefer explicit prop, otherwise use the app store which is
-  // kept in sync by the ( setConnectionStatus).
-  const status = createMemo<ConnectionStatus>(() => {
-    if (props.status) return props.status
-    // A live event stream is direct evidence that the backend is online.
-    if (messageStore.sseStatus === "connected") return "online"
-    return appStore.connectionStatus as ConnectionStatus
-  })
+  const status = createMemo(() =>
+    props.status ?? connectionPresentation(appStore.connectionStatus, messageStore.sseStatus).status,
+  )
 
   const label = createMemo(() => statusLabel(status()))
 

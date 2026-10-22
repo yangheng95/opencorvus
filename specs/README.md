@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [连接状态统一表达](records/2026-10/2026-10-23-connection-status-presentation.md)：550修复Online与不可达提示冲突及恢复提示重建，双语八张实图、10次Sol与五后端/两转发器闭合。
+
 - [重连模型配置读取](records/2026-10/2026-10-23-composer-reconnect-config.md)：549修复SSE先恢复时过期健康状态拦截配置GET；六张实图、9服务合同与8次Sol闭合。
 
 - [Session 成员快照恢复](records/2026-10/2026-10-23-session-member-snapshot.md)：548 修复重连时成员摘要/导航/时间的8.624秒缺口，补齐三类来源公开契约；七张实图与10次Sol闭合。

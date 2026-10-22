@@ -1,0 +1,3568 @@
+{
+  "at": "2026-10-22T20:27:46.533Z",
+  "scope": "550 one connection presentation and continuous visible recovery notice",
+  "maximumBatchRequests": 12,
+  "actualRequests": 10,
+  "scopes": [
+    {
+      "stage": "before",
+      "exec": 56161,
+      "requests": 2,
+      "qualification": "Current OpenCorvus OAuth and complete model catalog; actual gpt-6.1-sol streaming 200/EOF",
+      "preflight": {
+        "sessionID": "ses_hbhNOCO1sgSgSSoKWnVC",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "physical": {
+        "native": {
+          "occurrenceID": "connection-status-presentation-550-before-b75a1173-7f03-4e05-ae7e-40cc8abf8fb7",
+          "pid": 68628,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "originalLauncherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 21792,
+              "processInstanceID": "win32:639282965274018084",
+              "occurrenceID": "cb4ba353-8ea4-4fb4-a802-90b1572ad6e9"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 68628,
+              "processInstanceID": "win32:639282965282999710",
+              "occurrenceID": "df5d51f5-d4de-4359-9ca4-5024dff65ef1"
+            }
+          }
+        ],
+        "reserveMs": 1138614
+      },
+      "retired": [
+        {
+          "scope": "runtime",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "runtime",
+          "name": "models.json",
+          "bytes": 9155406
+        },
+        {
+          "scope": "private",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "private",
+          "name": "models.json",
+          "bytes": 9155406
+        }
+      ],
+      "sourceCredentialAndCatalogRetained": true,
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 78098432,
+          "modifiedAtMs": 1792699072138.8257
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 165802,
+        "currentRows": 166237,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      },
+      "publishedAttachments": 0
+    },
+    {
+      "stage": "after",
+      "exec": 46152,
+      "requests": 2,
+      "qualification": "Current OpenCorvus OAuth and complete model catalog; actual gpt-6.1-sol streaming 200/EOF",
+      "preflight": {
+        "sessionID": "ses_hnrrLqXhKqejPYh4EhNP",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "physical": {
+        "native": {
+          "occurrenceID": "connection-status-presentation-550-after-2b5e1581-fcc8-4cdf-93a6-5e18bd91d818",
+          "pid": 88828,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "originalLauncherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 97016,
+              "processInstanceID": "win32:639282966349643889",
+              "occurrenceID": "4e791ba3-afea-41d0-9ef6-5ee97b91101f"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 88828,
+              "processInstanceID": "win32:639282966357399161",
+              "occurrenceID": "ed4f5b01-b4e1-4f1e-85a1-8ad1a3e21c0f"
+            }
+          }
+        ],
+        "reserveMs": 1049378
+      },
+      "retired": [
+        {
+          "scope": "runtime",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "runtime",
+          "name": "models.json",
+          "bytes": 9155406
+        },
+        {
+          "scope": "private",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "private",
+          "name": "models.json",
+          "bytes": 9155406
+        }
+      ],
+      "sourceCredentialAndCatalogRetained": true,
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 78098432,
+          "modifiedAtMs": 1792699072138.8257
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 165802,
+        "currentRows": 166281,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      },
+      "publishedAttachments": 0
+    },
+    {
+      "stage": "verified-before",
+      "exec": 62247,
+      "requests": 2,
+      "qualification": "Current OpenCorvus OAuth and complete model catalog; actual gpt-6.1-sol streaming 200/EOF",
+      "preflight": {
+        "sessionID": "ses_hm1QTFJolQAj9WCuZeLt",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "physical": {
+        "native": {
+          "occurrenceID": "connection-status-presentation-550-verified-before-2463b42c-5a00-48ca-bebf-cac3c6ddcc54",
+          "pid": 44044,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "originalLauncherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chain": [
+          {
+            "identity": {
+              "pid": 41888,
+              "processInstanceID": "win32:639282969753304817",
+              "occurrenceID": "c3fa0996-1418-4a41-a819-7d0cc1cb5145"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 44044,
+              "processInstanceID": "win32:639282969763390629",
+              "occurrenceID": "30722464-850f-4e75-bf93-06933bb4c077"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "reserveMs": 1127116
+      },
+      "retired": [
+        {
+          "scope": "runtime",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "runtime",
+          "name": "models.json",
+          "bytes": 9155406
+        },
+        {
+          "scope": "private",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "private",
+          "name": "models.json",
+          "bytes": 9155406
+        }
+      ],
+      "sourceCredentialAndCatalogRetained": true,
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 78098432,
+          "modifiedAtMs": 1792699072138.8257
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 165802,
+        "currentRows": 166237,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      },
+      "publishedAttachments": 0
+    },
+    {
+      "stage": "verified-after",
+      "exec": 12982,
+      "requests": 2,
+      "qualification": "Current OpenCorvus OAuth and complete model catalog; actual gpt-6.1-sol streaming 200/EOF",
+      "preflight": {
+        "sessionID": "ses_hYJunl6PliQHt2uLmgkC",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "physical": {
+        "native": {
+          "occurrenceID": "connection-status-presentation-550-verified-after-ecc6d367-2fd9-4662-b3c5-c78acd80ed47",
+          "pid": 55508,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "originalLauncherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 72024,
+              "processInstanceID": "win32:639282970828203493",
+              "occurrenceID": "289f13f1-c941-41df-ba0d-12f306d93c31"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 55508,
+              "processInstanceID": "win32:639282970838064314",
+              "occurrenceID": "612818aa-dcf2-4961-aea6-bcf1cd8aca46"
+            }
+          }
+        ],
+        "reserveMs": 1046654
+      },
+      "retired": [
+        {
+          "scope": "runtime",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "runtime",
+          "name": "models.json",
+          "bytes": 9155406
+        },
+        {
+          "scope": "private",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "private",
+          "name": "models.json",
+          "bytes": 9155406
+        }
+      ],
+      "sourceCredentialAndCatalogRetained": true,
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 78098432,
+          "modifiedAtMs": 1792699072138.8257
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 165802,
+        "currentRows": 166321,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      },
+      "publishedAttachments": 0
+    },
+    {
+      "stage": "final",
+      "exec": 63513,
+      "requests": 2,
+      "qualification": "Current OpenCorvus OAuth and complete model catalog; actual gpt-6.1-sol streaming 200/EOF",
+      "preflight": {
+        "sessionID": "ses_hJyV4LrOhNZoZ03sbVMk",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "physical": {
+        "native": {
+          "occurrenceID": "connection-status-presentation-550-final-e2af28c9-71eb-470c-b199-08f03edaebd9",
+          "pid": 96772,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "originalLauncherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 97768,
+              "processInstanceID": "win32:639282973329178321",
+              "occurrenceID": "cabf9681-f14b-49a8-aa35-9ac2937eedca"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 96772,
+              "processInstanceID": "win32:639282973337868736",
+              "occurrenceID": "4f5ed3a0-de3e-49c5-9227-8b0bf8d1434c"
+            }
+          }
+        ],
+        "reserveMs": 1015557
+      },
+      "retired": [
+        {
+          "scope": "runtime",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "runtime",
+          "name": "models.json",
+          "bytes": 9155406
+        },
+        {
+          "scope": "private",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "private",
+          "name": "models.json",
+          "bytes": 9155406
+        }
+      ],
+      "sourceCredentialAndCatalogRetained": true,
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 78098432,
+          "modifiedAtMs": 1792699072138.8257
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 165802,
+        "currentRows": 166237,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      },
+      "publishedAttachments": 0
+    }
+  ],
+  "relays": [
+    {
+      "folder": "relay",
+      "exec": 73294,
+      "terminal": {
+        "pid": 96060,
+        "reason": "operator-stop",
+        "endedAt": "2026-10-22T20:20:33.729Z",
+        "serverClosed": true,
+        "sockets": 0,
+        "upstreamSockets": 0,
+        "pending": 0,
+        "requests": 0,
+        "outputDrained": true
+      },
+      "forwardedRequests": 193,
+      "physicalSocketRegistrations": null,
+      "registrationCloseListenerCounts": null,
+      "health": [
+        {
+          "time": "2026-10-22T20:16:45.858Z",
+          "pid": 96060,
+          "kind": "forward",
+          "id": 11,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:16:45.859Z",
+          "pid": 96060,
+          "kind": "response",
+          "id": 11,
+          "path": "/global/health",
+          "status": 200
+        },
+        {
+          "time": "2026-10-22T20:16:46.063Z",
+          "pid": 96060,
+          "kind": "forward",
+          "id": 22,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:16:46.065Z",
+          "pid": 96060,
+          "kind": "response",
+          "id": 22,
+          "path": "/global/health",
+          "status": 200
+        },
+        {
+          "time": "2026-10-22T20:17:00.377Z",
+          "pid": 96060,
+          "kind": "forward",
+          "id": 77,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:17:00.378Z",
+          "pid": 96060,
+          "kind": "response",
+          "id": 77,
+          "path": "/global/health",
+          "status": 200
+        },
+        {
+          "time": "2026-10-22T20:17:10.370Z",
+          "pid": 96060,
+          "kind": "forward",
+          "id": 85,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:17:10.371Z",
+          "pid": 96060,
+          "kind": "response",
+          "id": 85,
+          "path": "/global/health",
+          "status": 200
+        },
+        {
+          "time": "2026-10-22T20:17:20.381Z",
+          "pid": 96060,
+          "kind": "forward",
+          "id": 88,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:17:20.384Z",
+          "pid": 96060,
+          "kind": "response",
+          "id": 88,
+          "path": "/global/health",
+          "status": 200
+        },
+        {
+          "time": "2026-10-22T20:17:30.374Z",
+          "pid": 96060,
+          "kind": "forward",
+          "id": 91,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:17:30.377Z",
+          "pid": 96060,
+          "kind": "forward",
+          "id": 92,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:17:40.375Z",
+          "pid": 96060,
+          "kind": "forward",
+          "id": 101,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:17:50.375Z",
+          "pid": 96060,
+          "kind": "forward",
+          "id": 108,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:18:00.387Z",
+          "pid": 96060,
+          "kind": "forward",
+          "id": 115,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:18:00.936Z",
+          "pid": 96060,
+          "kind": "health-hold",
+          "maximumMs": 120000
+        },
+        {
+          "time": "2026-10-22T20:18:10.386Z",
+          "pid": 96060,
+          "kind": "health-request-held",
+          "id": 124,
+          "path": "/global/health"
+        },
+        {
+          "time": "2026-10-22T20:18:20.377Z",
+          "pid": 96060,
+          "kind": "health-request-held",
+          "id": 127,
+          "path": "/global/health"
+        },
+        {
+          "time": "2026-10-22T20:18:30.380Z",
+          "pid": 96060,
+          "kind": "health-request-held",
+          "id": 128,
+          "path": "/global/health"
+        },
+        {
+          "time": "2026-10-22T20:18:40.376Z",
+          "pid": 96060,
+          "kind": "health-request-held",
+          "id": 131,
+          "path": "/global/health"
+        },
+        {
+          "time": "2026-10-22T20:18:50.377Z",
+          "pid": 96060,
+          "kind": "health-request-held",
+          "id": 134,
+          "path": "/global/health"
+        },
+        {
+          "time": "2026-10-22T20:19:00.385Z",
+          "pid": 96060,
+          "kind": "health-request-held",
+          "id": 135,
+          "path": "/global/health"
+        },
+        {
+          "time": "2026-10-22T20:19:10.374Z",
+          "pid": 96060,
+          "kind": "health-request-held",
+          "id": 136,
+          "path": "/global/health"
+        },
+        {
+          "time": "2026-10-22T20:19:20.389Z",
+          "pid": 96060,
+          "kind": "health-request-held",
+          "id": 137,
+          "path": "/global/health"
+        },
+        {
+          "time": "2026-10-22T20:19:30.379Z",
+          "pid": 96060,
+          "kind": "health-request-held",
+          "id": 138,
+          "path": "/global/health"
+        },
+        {
+          "time": "2026-10-22T20:19:40.385Z",
+          "pid": 96060,
+          "kind": "health-request-held",
+          "id": 139,
+          "path": "/global/health"
+        },
+        {
+          "time": "2026-10-22T20:19:45.353Z",
+          "pid": 96060,
+          "kind": "health-release",
+          "reason": "operator-release",
+          "pending": 1
+        },
+        {
+          "time": "2026-10-22T20:19:45.353Z",
+          "pid": 96060,
+          "kind": "forward",
+          "id": 139,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:19:45.356Z",
+          "pid": 96060,
+          "kind": "response",
+          "id": 139,
+          "path": "/global/health",
+          "status": 200
+        },
+        {
+          "time": "2026-10-22T20:19:50.374Z",
+          "pid": 96060,
+          "kind": "forward",
+          "id": 193,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:19:50.375Z",
+          "pid": 96060,
+          "kind": "response",
+          "id": 193,
+          "path": "/global/health",
+          "status": 200
+        },
+        {
+          "time": "2026-10-22T20:20:00.386Z",
+          "pid": 96060,
+          "kind": "forward",
+          "id": 196,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:20:00.388Z",
+          "pid": 96060,
+          "kind": "response",
+          "id": 196,
+          "path": "/global/health",
+          "status": 200
+        },
+        {
+          "time": "2026-10-22T20:20:10.379Z",
+          "pid": 96060,
+          "kind": "forward",
+          "id": 199,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:20:10.382Z",
+          "pid": 96060,
+          "kind": "response",
+          "id": 199,
+          "path": "/global/health",
+          "status": 200
+        },
+        {
+          "time": "2026-10-22T20:20:20.376Z",
+          "pid": 96060,
+          "kind": "forward",
+          "id": 202,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:20:20.379Z",
+          "pid": 96060,
+          "kind": "response",
+          "id": 202,
+          "path": "/global/health",
+          "status": 200
+        }
+      ],
+      "originalWarning": "Repeated close listener registration on reused upstream sockets; terminal remained complete; corrected and rerun in relay-final"
+    },
+    {
+      "folder": "relay-final",
+      "exec": 94785,
+      "terminal": {
+        "pid": 72384,
+        "reason": "operator-stop",
+        "endedAt": "2026-10-22T20:25:14.753Z",
+        "serverClosed": true,
+        "sockets": 0,
+        "upstreamSockets": 0,
+        "pending": 0,
+        "requests": 0,
+        "outputDrained": true
+      },
+      "forwardedRequests": 152,
+      "physicalSocketRegistrations": 19,
+      "registrationCloseListenerCounts": [
+        3
+      ],
+      "health": [
+        {
+          "time": "2026-10-22T20:22:41.342Z",
+          "pid": 72384,
+          "kind": "forward",
+          "id": 11,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:22:41.343Z",
+          "pid": 72384,
+          "kind": "response",
+          "id": 11,
+          "path": "/global/health",
+          "status": 200
+        },
+        {
+          "time": "2026-10-22T20:22:41.551Z",
+          "pid": 72384,
+          "kind": "forward",
+          "id": 22,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:22:41.553Z",
+          "pid": 72384,
+          "kind": "response",
+          "id": 22,
+          "path": "/global/health",
+          "status": 200
+        },
+        {
+          "time": "2026-10-22T20:22:56.222Z",
+          "pid": 72384,
+          "kind": "forward",
+          "id": 77,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:22:56.223Z",
+          "pid": 72384,
+          "kind": "response",
+          "id": 77,
+          "path": "/global/health",
+          "status": 200
+        },
+        {
+          "time": "2026-10-22T20:23:06.217Z",
+          "pid": 72384,
+          "kind": "forward",
+          "id": 85,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:23:06.218Z",
+          "pid": 72384,
+          "kind": "response",
+          "id": 85,
+          "path": "/global/health",
+          "status": 200
+        },
+        {
+          "time": "2026-10-22T20:23:16.225Z",
+          "pid": 72384,
+          "kind": "forward",
+          "id": 88,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:23:16.226Z",
+          "pid": 72384,
+          "kind": "response",
+          "id": 88,
+          "path": "/global/health",
+          "status": 200
+        },
+        {
+          "time": "2026-10-22T20:23:19.207Z",
+          "pid": 72384,
+          "kind": "health-hold",
+          "maximumMs": 120000
+        },
+        {
+          "time": "2026-10-22T20:23:26.217Z",
+          "pid": 72384,
+          "kind": "health-request-held",
+          "id": 91,
+          "path": "/global/health"
+        },
+        {
+          "time": "2026-10-22T20:23:36.218Z",
+          "pid": 72384,
+          "kind": "health-request-held",
+          "id": 93,
+          "path": "/global/health"
+        },
+        {
+          "time": "2026-10-22T20:23:46.224Z",
+          "pid": 72384,
+          "kind": "health-request-held",
+          "id": 94,
+          "path": "/global/health"
+        },
+        {
+          "time": "2026-10-22T20:23:56.220Z",
+          "pid": 72384,
+          "kind": "health-request-held",
+          "id": 97,
+          "path": "/global/health"
+        },
+        {
+          "time": "2026-10-22T20:24:06.228Z",
+          "pid": 72384,
+          "kind": "health-request-held",
+          "id": 100,
+          "path": "/global/health"
+        },
+        {
+          "time": "2026-10-22T20:24:16.218Z",
+          "pid": 72384,
+          "kind": "health-request-held",
+          "id": 101,
+          "path": "/global/health"
+        },
+        {
+          "time": "2026-10-22T20:24:26.223Z",
+          "pid": 72384,
+          "kind": "health-request-held",
+          "id": 102,
+          "path": "/global/health"
+        },
+        {
+          "time": "2026-10-22T20:24:36.221Z",
+          "pid": 72384,
+          "kind": "health-request-held",
+          "id": 103,
+          "path": "/global/health"
+        },
+        {
+          "time": "2026-10-22T20:24:43.341Z",
+          "pid": 72384,
+          "kind": "health-release",
+          "reason": "operator-release",
+          "pending": 0
+        },
+        {
+          "time": "2026-10-22T20:24:46.228Z",
+          "pid": 72384,
+          "kind": "forward",
+          "id": 104,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:24:46.230Z",
+          "pid": 72384,
+          "kind": "response",
+          "id": 104,
+          "path": "/global/health",
+          "status": 200
+        },
+        {
+          "time": "2026-10-22T20:24:56.224Z",
+          "pid": 72384,
+          "kind": "forward",
+          "id": 158,
+          "path": "/global/health",
+          "method": "GET"
+        },
+        {
+          "time": "2026-10-22T20:24:56.225Z",
+          "pid": 72384,
+          "kind": "response",
+          "id": 158,
+          "path": "/global/health",
+          "status": 200
+        }
+      ]
+    }
+  ],
+  "traces": [
+    {
+      "page": "natural",
+      "events": [
+        {
+          "capturedAt": "2026-10-22T20:09:03.225Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 341.80000019073486
+        },
+        {
+          "capturedAt": "2026-10-22T20:09:03.252Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 369.40000009536743
+        },
+        {
+          "capturedAt": "2026-10-22T20:09:03.286Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 402.80000019073486
+        },
+        {
+          "capturedAt": "2026-10-22T20:09:03.287Z",
+          "backend": "connecting",
+          "stream": "idle",
+          "status": "connecting",
+          "problem": "backend",
+          "text": "OpenCorvus backend is not responding yet — live data is unavailable.",
+          "at": 404.30000019073486
+        },
+        {
+          "capturedAt": "2026-10-22T20:09:03.314Z",
+          "backend": "online",
+          "stream": "idle",
+          "status": "online",
+          "at": 430.7000002861023
+        },
+        {
+          "capturedAt": "2026-10-22T20:09:06.503Z",
+          "backend": "online",
+          "stream": "connecting",
+          "status": "online",
+          "at": 3620
+        },
+        {
+          "capturedAt": "2026-10-22T20:09:07.174Z",
+          "backend": "online",
+          "stream": "connected",
+          "status": "online",
+          "at": 4291.300000190735
+        },
+        {
+          "capturedAt": "2026-10-22T20:09:48.605Z",
+          "backend": "online",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "stream",
+          "text": "Server connected. Restoring live updates…",
+          "at": 45719.90000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:09:51.613Z",
+          "backend": "online",
+          "stream": "idle",
+          "status": "online",
+          "at": 48727.60000038147
+        },
+        {
+          "capturedAt": "2026-10-22T20:09:51.613Z",
+          "backend": "online",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "stream",
+          "text": "Server connected. Restoring live updates…",
+          "at": 48727.90000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:09:54.631Z",
+          "backend": "online",
+          "stream": "idle",
+          "status": "online",
+          "at": 51746.10000038147
+        },
+        {
+          "capturedAt": "2026-10-22T20:09:54.631Z",
+          "backend": "online",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "stream",
+          "text": "Server connected. Restoring live updates…",
+          "at": 51746.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:09:57.640Z",
+          "backend": "online",
+          "stream": "idle",
+          "status": "online",
+          "at": 54755.2000002861
+        },
+        {
+          "capturedAt": "2026-10-22T20:09:57.640Z",
+          "backend": "online",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "stream",
+          "text": "Server connected. Restoring live updates…",
+          "at": 54755.5
+        },
+        {
+          "capturedAt": "2026-10-22T20:09:58.068Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 55183.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:00.660Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 57774.7000002861
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:00.661Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 57774.90000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:03.669Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 60784.2000002861
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:03.670Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 60784.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:06.676Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 63791.300000190735
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:06.677Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 63791.5
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:08.060Z",
+          "backend": "connecting",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "backend",
+          "text": "OpenCorvus backend is not responding yet — live data is unavailable.",
+          "at": 65175.2000002861
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:08.089Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 65204.2000002861
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:09.694Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 66808.60000038147
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:09.694Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 66808.80000019073
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:12.706Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 69820.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:12.706Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 69820.7000002861
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:15.722Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 72837.30000019073
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:15.723Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 72837.60000038147
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:18.061Z",
+          "backend": "connecting",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "backend",
+          "text": "OpenCorvus backend is not responding yet — live data is unavailable.",
+          "at": 75175.60000038147
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:18.089Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 75204
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:18.736Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 75850.80000019073
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:18.737Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 75851.10000038147
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:21.753Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 78868.2000002861
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:21.754Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 78868.5
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:24.769Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 81882.10000038147
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:24.770Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 81882.30000019073
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:27.786Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 84898.2000002861
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:27.786Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 84898.5
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:28.054Z",
+          "backend": "connecting",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "backend",
+          "text": "OpenCorvus backend is not responding yet — live data is unavailable.",
+          "at": 85167.2000002861
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:28.089Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 85202.2000002861
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:30.802Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 87914.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:30.802Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 87914.80000019073
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:33.820Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 90932.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:33.821Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 90932.7000002861
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:36.828Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 93940
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:36.828Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 93940.30000019073
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:38.060Z",
+          "backend": "connecting",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "backend",
+          "text": "OpenCorvus backend is not responding yet — live data is unavailable.",
+          "at": 95172
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:38.110Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 95222.30000019073
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:39.837Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 96949.80000019073
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:39.838Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 96950.10000038147
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:42.842Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 99954.7000002861
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:42.843Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 99954.90000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:43.084Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 100196.60000038147
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:48.058Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 105170.30000019073
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:48.124Z",
+          "backend": "online",
+          "stream": "connected",
+          "status": "online",
+          "at": 105237
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:52.659Z",
+          "backend": "online",
+          "stream": "idle",
+          "status": "online",
+          "at": 109772
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:52.661Z",
+          "backend": "online",
+          "stream": "connecting",
+          "status": "online",
+          "at": 109772.30000019073
+        },
+        {
+          "capturedAt": "2026-10-22T20:10:53.045Z",
+          "backend": "online",
+          "stream": "connected",
+          "status": "online",
+          "at": 110158.5
+        },
+        {
+          "capturedAt": "2026-10-22T20:13:05.418Z",
+          "backend": "online",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "stream",
+          "text": "Server connected. Restoring live updates…",
+          "at": 242526.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:13:08.063Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 245171.30000019073
+        },
+        {
+          "capturedAt": "2026-10-22T20:13:08.419Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 245527.80000019073
+        },
+        {
+          "capturedAt": "2026-10-22T20:13:08.420Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 245528.10000038147
+        },
+        {
+          "capturedAt": "2026-10-22T20:13:11.437Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 248545.7000002861
+        },
+        {
+          "capturedAt": "2026-10-22T20:13:11.438Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 248545.90000009537
+        }
+      ]
+    },
+    {
+      "page": "controlled",
+      "events": [
+        {
+          "capturedAt": "2026-10-22T20:16:45.791Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 362.09999990463257
+        },
+        {
+          "capturedAt": "2026-10-22T20:16:45.822Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 392.69999980926514
+        },
+        {
+          "capturedAt": "2026-10-22T20:16:45.854Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 425
+        },
+        {
+          "capturedAt": "2026-10-22T20:16:45.855Z",
+          "backend": "connecting",
+          "stream": "idle",
+          "status": "connecting",
+          "problem": "backend",
+          "text": "OpenCorvus backend is not responding yet — live data is unavailable.",
+          "at": 426.40000009536743
+        },
+        {
+          "capturedAt": "2026-10-22T20:16:45.877Z",
+          "backend": "online",
+          "stream": "idle",
+          "status": "online",
+          "at": 447.5
+        },
+        {
+          "capturedAt": "2026-10-22T20:16:48.627Z",
+          "backend": "online",
+          "stream": "connecting",
+          "status": "online",
+          "at": 3198
+        },
+        {
+          "capturedAt": "2026-10-22T20:16:49.362Z",
+          "backend": "online",
+          "stream": "connected",
+          "status": "online",
+          "at": 3933.2999997138977
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:28.044Z",
+          "backend": "online",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "stream",
+          "text": "Server connected. Restoring live updates…",
+          "at": 42612.90000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:30.383Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 44952.09999990463
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:31.047Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 45615.5
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:31.047Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 45615.7999997139
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:34.065Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 48634.699999809265
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:34.066Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 48634.90000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:37.078Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 51647.199999809265
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:37.079Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 51647.5
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:40.093Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 54662.199999809265
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:40.094Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 54662.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:40.374Z",
+          "backend": "connecting",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "backend",
+          "text": "OpenCorvus backend is not responding yet — live data is unavailable.",
+          "at": 54942.699999809265
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:40.401Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 54970.59999990463
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:43.497Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 57676
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:43.497Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 57676.2999997139
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:46.118Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 60687.2999997139
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:46.119Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 60687.59999990463
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:49.124Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 63692.90000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:49.124Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 63693
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:50.374Z",
+          "backend": "connecting",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "backend",
+          "text": "OpenCorvus backend is not responding yet — live data is unavailable.",
+          "at": 64943
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:50.410Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 64979.59999990463
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:52.136Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 66705.59999990463
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:52.137Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 66705.7999997139
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:55.145Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 69714.09999990463
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:55.146Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 69714.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:58.156Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 72725.59999990463
+        },
+        {
+          "capturedAt": "2026-10-22T20:17:58.157Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 72725.7999997139
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:00.385Z",
+          "backend": "connecting",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "backend",
+          "text": "OpenCorvus backend is not responding yet — live data is unavailable.",
+          "at": 74954.09999990463
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:00.416Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 74985.5
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:01.162Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 75730.69999980927
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:01.162Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 75730.90000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:04.167Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 78736.19999980927
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:04.168Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 78736.5
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:07.177Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 81746.2999997139
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:07.178Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 81746.5
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:10.198Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 84766.5
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:10.199Z",
+          "backend": "offline",
+          "stream": "reconnecting",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 84766.7999997139
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:10.384Z",
+          "backend": "connecting",
+          "stream": "reconnecting",
+          "status": "connecting",
+          "problem": "backend",
+          "text": "OpenCorvus backend is not responding yet — live data is unavailable.",
+          "at": 84953.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:10.550Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 85118.7999997139
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:15.397Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 89965.59999990463
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:20.378Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 94943.5
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:25.394Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 99960.69999980927
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:30.378Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 104944.59999990463
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:35.391Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 109957.90000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:40.374Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 114941.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:45.376Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 119943.2999997139
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:50.375Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 124941.69999980927
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:55.386Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 129953.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:57.939Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "实时更新已连接，正在确认服务连接…",
+          "at": 132506
+        },
+        {
+          "capturedAt": "2026-10-22T20:18:58.067Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "实时更新已连接，正在确认服务连接…",
+          "at": 132633.90000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:19:00.383Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "实时更新已连接，正在确认服务连接…",
+          "at": 134950.09999990463
+        },
+        {
+          "capturedAt": "2026-10-22T20:19:05.475Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "实时更新已连接，正在确认服务连接…",
+          "at": 140042.19999980927
+        },
+        {
+          "capturedAt": "2026-10-22T20:19:10.372Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "实时更新已连接，正在确认服务连接…",
+          "at": 144939.2999997139
+        },
+        {
+          "capturedAt": "2026-10-22T20:19:15.378Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "实时更新已连接，正在确认服务连接…",
+          "at": 149945.19999980927
+        },
+        {
+          "capturedAt": "2026-10-22T20:19:20.386Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "实时更新已连接，正在确认服务连接…",
+          "at": 154953.5
+        },
+        {
+          "capturedAt": "2026-10-22T20:19:25.400Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "实时更新已连接，正在确认服务连接…",
+          "at": 159965.5
+        },
+        {
+          "capturedAt": "2026-10-22T20:19:30.379Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "实时更新已连接，正在确认服务连接…",
+          "at": 164944
+        },
+        {
+          "capturedAt": "2026-10-22T20:19:35.384Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "实时更新已连接，正在确认服务连接…",
+          "at": 169948.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:19:40.384Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "实时更新已连接，正在确认服务连接…",
+          "at": 174948.59999990463
+        },
+        {
+          "capturedAt": "2026-10-22T20:19:45.365Z",
+          "backend": "online",
+          "stream": "connected",
+          "status": "online",
+          "at": 179930.2999997139
+        },
+        {
+          "capturedAt": "2026-10-22T20:19:49.096Z",
+          "backend": "online",
+          "stream": "idle",
+          "status": "online",
+          "at": 183661.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:19:49.098Z",
+          "backend": "online",
+          "stream": "connecting",
+          "status": "online",
+          "at": 183661.59999990463
+        },
+        {
+          "capturedAt": "2026-10-22T20:19:49.355Z",
+          "backend": "online",
+          "stream": "connected",
+          "status": "online",
+          "at": 183920.59999990463
+        }
+      ]
+    },
+    {
+      "page": "final",
+      "events": [
+        {
+          "capturedAt": "2026-10-22T20:22:41.276Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 392.40000009536743
+        },
+        {
+          "capturedAt": "2026-10-22T20:22:41.304Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 420
+        },
+        {
+          "capturedAt": "2026-10-22T20:22:41.338Z",
+          "backend": "offline",
+          "stream": "idle",
+          "status": "offline",
+          "problem": "backend",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.",
+          "at": 454.09999990463257
+        },
+        {
+          "capturedAt": "2026-10-22T20:22:41.339Z",
+          "backend": "connecting",
+          "stream": "idle",
+          "status": "connecting",
+          "problem": "backend",
+          "text": "OpenCorvus backend is not responding yet — live data is unavailable.",
+          "at": 455.5
+        },
+        {
+          "capturedAt": "2026-10-22T20:22:41.372Z",
+          "backend": "online",
+          "stream": "idle",
+          "status": "online",
+          "at": 488.09999990463257
+        },
+        {
+          "capturedAt": "2026-10-22T20:22:44.278Z",
+          "backend": "online",
+          "stream": "connecting",
+          "status": "online",
+          "at": 3394.0999999046326
+        },
+        {
+          "capturedAt": "2026-10-22T20:22:45.015Z",
+          "backend": "online",
+          "stream": "connected",
+          "status": "online",
+          "at": 4131.5
+        },
+        {
+          "capturedAt": "2026-10-22T20:23:31.231Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 50345.800000190735
+        },
+        {
+          "capturedAt": "2026-10-22T20:23:36.216Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 55330.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:23:41.228Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 60342.5
+        },
+        {
+          "capturedAt": "2026-10-22T20:23:46.223Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 65336.800000190735
+        },
+        {
+          "capturedAt": "2026-10-22T20:23:51.235Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 70349
+        },
+        {
+          "capturedAt": "2026-10-22T20:23:56.219Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 75333.7000002861
+        },
+        {
+          "capturedAt": "2026-10-22T20:24:01.235Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 80349
+        },
+        {
+          "capturedAt": "2026-10-22T20:24:06.227Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 85341.30000019073
+        },
+        {
+          "capturedAt": "2026-10-22T20:24:11.235Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 90349
+        },
+        {
+          "capturedAt": "2026-10-22T20:24:16.216Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "Live updates are connected. Confirming the server connection…",
+          "at": 95330.2000002861
+        },
+        {
+          "capturedAt": "2026-10-22T20:24:19.189Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "实时更新已连接，正在确认服务连接…",
+          "at": 98303.2000002861
+        },
+        {
+          "capturedAt": "2026-10-22T20:24:19.267Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "实时更新已连接，正在确认服务连接…",
+          "at": 98381.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:24:21.229Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "实时更新已连接，正在确认服务连接…",
+          "at": 100343
+        },
+        {
+          "capturedAt": "2026-10-22T20:24:26.219Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "实时更新已连接，正在确认服务连接…",
+          "at": 105330.59999990463
+        },
+        {
+          "capturedAt": "2026-10-22T20:24:31.220Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "实时更新已连接，正在确认服务连接…",
+          "at": 110332.30000019073
+        },
+        {
+          "capturedAt": "2026-10-22T20:24:36.219Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "实时更新已连接，正在确认服务连接…",
+          "at": 115330.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:24:41.232Z",
+          "backend": "offline",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "实时更新已连接，正在确认服务连接…",
+          "at": 120344
+        },
+        {
+          "capturedAt": "2026-10-22T20:24:46.226Z",
+          "backend": "connecting",
+          "stream": "connected",
+          "status": "connecting",
+          "problem": "health",
+          "text": "实时更新已连接，正在确认服务连接…",
+          "at": 125338.09999990463
+        },
+        {
+          "capturedAt": "2026-10-22T20:24:46.260Z",
+          "backend": "online",
+          "stream": "connected",
+          "status": "online",
+          "at": 125372.80000019073
+        },
+        {
+          "capturedAt": "2026-10-22T20:24:50.061Z",
+          "backend": "online",
+          "stream": "idle",
+          "status": "online",
+          "at": 129173.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T20:24:50.062Z",
+          "backend": "online",
+          "stream": "connecting",
+          "status": "online",
+          "at": 129173.59999990463
+        },
+        {
+          "capturedAt": "2026-10-22T20:24:50.332Z",
+          "backend": "online",
+          "stream": "connected",
+          "status": "online",
+          "at": 129444.7000002861
+        }
+      ]
+    }
+  ],
+  "observations": [
+    {
+      "stage": "verified-before",
+      "phase": "06-verified-online",
+      "connection": {
+        "at": "2026-10-22T20:17:04.500Z",
+        "badge": {
+          "label": "Online",
+          "status": "online",
+          "title": "Connection Diagnostics · Online · Port 19117"
+        },
+        "banner": null,
+        "locale": "en-US"
+      },
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 64017
+      },
+      "bodyOwners": [
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56"
+      ],
+      "bodyBlocks": [
+        1,
+        2,
+        1,
+        27,
+        1,
+        35,
+        1,
+        35,
+        1,
+        37,
+        1,
+        92,
+        1,
+        90,
+        1,
+        90,
+        1,
+        49,
+        2,
+        50,
+        1,
+        1,
+        1,
+        1,
+        46,
+        1,
+        1,
+        1,
+        10,
+        1,
+        1,
+        14,
+        1,
+        1,
+        30
+      ],
+      "sourceOwners": [
+        "6",
+        "8",
+        "10",
+        "12",
+        "14",
+        "16",
+        "18",
+        "20",
+        "22",
+        "24",
+        "26"
+      ],
+      "sourceLinks": [
+        [],
+        [],
+        [],
+        [],
+        [
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "stage": "verified-before",
+      "phase": "07-verified-offline",
+      "connection": {
+        "at": "2026-10-22T20:17:43.605Z",
+        "badge": {
+          "label": "Offline",
+          "status": "offline",
+          "title": "Connection Diagnostics · Offline"
+        },
+        "banner": {
+          "problem": "backend",
+          "status": "offline",
+          "text": "OpenCorvus backend is unreachable — live data is unavailable.Set upReload"
+        },
+        "locale": "en-US"
+      },
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 64017
+      },
+      "bodyOwners": [
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56"
+      ],
+      "bodyBlocks": [
+        1,
+        2,
+        1,
+        27,
+        1,
+        35,
+        1,
+        35,
+        1,
+        37,
+        1,
+        92,
+        1,
+        90,
+        1,
+        90,
+        1,
+        49,
+        2,
+        50,
+        1,
+        1,
+        1,
+        1,
+        46,
+        1,
+        1,
+        1,
+        10,
+        1,
+        1,
+        14,
+        1,
+        1,
+        30
+      ],
+      "sourceOwners": [
+        "6",
+        "8",
+        "10",
+        "12",
+        "14",
+        "16",
+        "18",
+        "20",
+        "22",
+        "24",
+        "26"
+      ],
+      "sourceLinks": [
+        [],
+        [],
+        [],
+        [],
+        [
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "stage": "verified-after",
+      "phase": "08-english-recovering",
+      "connection": {
+        "at": "2026-10-22T20:18:20.501Z",
+        "badge": {
+          "label": "Connecting",
+          "status": "connecting",
+          "title": "Connection Diagnostics · Connecting"
+        },
+        "banner": {
+          "problem": "health",
+          "status": "connecting",
+          "text": "Live updates are connected. Confirming the server connection…Set upReload"
+        },
+        "locale": "en-US"
+      },
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 64017
+      },
+      "bodyOwners": [
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56"
+      ],
+      "bodyBlocks": [
+        1,
+        2,
+        1,
+        27,
+        1,
+        35,
+        1,
+        35,
+        1,
+        37,
+        1,
+        92,
+        1,
+        90,
+        1,
+        90,
+        1,
+        49,
+        2,
+        50,
+        1,
+        1,
+        1,
+        1,
+        46,
+        1,
+        1,
+        1,
+        10,
+        1,
+        1,
+        14,
+        1,
+        1,
+        30
+      ],
+      "sourceOwners": [
+        "6",
+        "8",
+        "10",
+        "12",
+        "14",
+        "16",
+        "18",
+        "20",
+        "22",
+        "24",
+        "26"
+      ],
+      "sourceLinks": [
+        [],
+        [],
+        [],
+        [],
+        [
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "stage": "verified-after",
+      "phase": "10-chinese-source-recovering",
+      "connection": {
+        "at": "2026-10-22T20:19:35.496Z",
+        "badge": {
+          "label": "连接中",
+          "status": "connecting",
+          "title": "连接诊断 · 连接中"
+        },
+        "banner": {
+          "problem": "health",
+          "status": "connecting",
+          "text": "实时更新已连接，正在确认服务连接…去配置重新加载"
+        },
+        "locale": "zh-CN"
+      },
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 62577
+      },
+      "bodyOwners": [
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56"
+      ],
+      "bodyBlocks": [
+        1,
+        2,
+        1,
+        27,
+        1,
+        35,
+        1,
+        35,
+        1,
+        37,
+        1,
+        92,
+        1,
+        90,
+        1,
+        90,
+        1,
+        49,
+        2,
+        50,
+        1,
+        1,
+        1,
+        1,
+        46,
+        1,
+        1,
+        1,
+        10,
+        1,
+        1,
+        14,
+        1,
+        1,
+        30
+      ],
+      "sourceOwners": [
+        "6",
+        "8",
+        "10",
+        "12",
+        "14",
+        "16",
+        "18",
+        "20",
+        "22",
+        "24",
+        "26"
+      ],
+      "sourceLinks": [
+        [],
+        [],
+        [],
+        [],
+        [
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "stage": "verified-after",
+      "phase": "11-chinese-online",
+      "connection": {
+        "at": "2026-10-22T20:20:23.563Z",
+        "badge": {
+          "label": "在线",
+          "status": "online",
+          "title": "连接诊断 · 在线 · 端口 19117"
+        },
+        "banner": null,
+        "locale": "zh-CN"
+      },
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 62577
+      },
+      "bodyOwners": [
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56"
+      ],
+      "bodyBlocks": [
+        1,
+        2,
+        1,
+        27,
+        1,
+        35,
+        1,
+        35,
+        1,
+        37,
+        1,
+        92,
+        1,
+        90,
+        1,
+        90,
+        1,
+        49,
+        2,
+        50,
+        1,
+        1,
+        1,
+        1,
+        46,
+        1,
+        1,
+        1,
+        10,
+        1,
+        1,
+        14,
+        1,
+        1,
+        30
+      ],
+      "sourceOwners": [
+        "6",
+        "8",
+        "10",
+        "12",
+        "14",
+        "16",
+        "18",
+        "20",
+        "22",
+        "24",
+        "26"
+      ],
+      "sourceLinks": [
+        [],
+        [],
+        [],
+        [],
+        [
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "stage": "final",
+      "phase": "14-final-english-banner",
+      "connection": {
+        "at": "2026-10-22T20:23:55.005Z",
+        "badge": {
+          "label": "Connecting",
+          "status": "connecting",
+          "title": "Connection Diagnostics · Connecting"
+        },
+        "banner": {
+          "problem": "health",
+          "status": "connecting",
+          "text": "Live updates are connected. Confirming the server connection…Set upReload"
+        },
+        "locale": "en-US"
+      },
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 62577
+      },
+      "bodyOwners": [
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56"
+      ],
+      "bodyBlocks": [
+        1,
+        2,
+        1,
+        27,
+        1,
+        35,
+        1,
+        35,
+        1,
+        37,
+        1,
+        92,
+        1,
+        90,
+        1,
+        90,
+        1,
+        49,
+        2,
+        50,
+        1,
+        1,
+        1,
+        1,
+        46,
+        1,
+        1,
+        1,
+        10,
+        1,
+        1,
+        14,
+        1,
+        1,
+        30
+      ],
+      "sourceOwners": [
+        "6",
+        "8",
+        "10",
+        "12",
+        "14",
+        "16",
+        "18",
+        "20",
+        "22",
+        "24",
+        "26"
+      ],
+      "sourceLinks": [
+        [],
+        [],
+        [],
+        [],
+        [
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "stage": "final",
+      "phase": "15-final-chinese-banner",
+      "connection": {
+        "at": "2026-10-22T20:24:30.997Z",
+        "badge": {
+          "label": "连接中",
+          "status": "connecting",
+          "title": "连接诊断 · 连接中"
+        },
+        "banner": {
+          "problem": "health",
+          "status": "connecting",
+          "text": "实时更新已连接，正在确认服务连接…去配置重新加载"
+        },
+        "locale": "zh-CN"
+      },
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 62577
+      },
+      "bodyOwners": [
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56"
+      ],
+      "bodyBlocks": [
+        1,
+        2,
+        1,
+        27,
+        1,
+        35,
+        1,
+        35,
+        1,
+        37,
+        1,
+        92,
+        1,
+        90,
+        1,
+        90,
+        1,
+        49,
+        2,
+        50,
+        1,
+        1,
+        1,
+        1,
+        46,
+        1,
+        1,
+        1,
+        10,
+        1,
+        1,
+        14,
+        1,
+        1,
+        30
+      ],
+      "sourceOwners": [
+        "6",
+        "8",
+        "10",
+        "12",
+        "14",
+        "16",
+        "18",
+        "20",
+        "22",
+        "24",
+        "26"
+      ],
+      "sourceLinks": [
+        [],
+        [],
+        [],
+        [],
+        [
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "stage": "final",
+      "phase": "16-final-online",
+      "connection": {
+        "at": "2026-10-22T20:25:05.114Z",
+        "badge": {
+          "label": "在线",
+          "status": "online",
+          "title": "连接诊断 · 在线 · 端口 19123"
+        },
+        "banner": null,
+        "locale": "zh-CN"
+      },
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 62577
+      },
+      "bodyOwners": [
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56"
+      ],
+      "bodyBlocks": [
+        1,
+        2,
+        1,
+        27,
+        1,
+        35,
+        1,
+        35,
+        1,
+        37,
+        1,
+        92,
+        1,
+        90,
+        1,
+        90,
+        1,
+        49,
+        2,
+        50,
+        1,
+        1,
+        1,
+        1,
+        46,
+        1,
+        1,
+        1,
+        10,
+        1,
+        1,
+        14,
+        1,
+        1,
+        30
+      ],
+      "sourceOwners": [
+        "6",
+        "8",
+        "10",
+        "12",
+        "14",
+        "16",
+        "18",
+        "20",
+        "22",
+        "24",
+        "26"
+      ],
+      "sourceLinks": [
+        [],
+        [],
+        [],
+        [],
+        [
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    }
+  ],
+  "limits": [
+    "UI validated by actual interaction and viewed screenshots; no UI automated tests",
+    "Natural first pair captured offline and online; intermediate health stage lasted5.040s and its first-build banner grace left about40ms theoretical visibility, not a captured flicker",
+    "Controlled pair preserved real backend restart recovery, exact HTTP forwarding and displayed English/Chinese health boundary; final rerun repaired private socket-listener bookkeeping",
+    "Sustained selected-stream-only interruption and ResizeObserver notifications remain separate work"
+  ]
+}

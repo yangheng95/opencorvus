@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [连接状态统一表达](2026-10-23-connection-status-presentation/README.md)：550八张实图，统一角标/恢复提示/颜色与双语；10次Sol EOF，私有转发器修正复验与完整结算。
+
 - [重连模型配置读取](2026-10-23-composer-reconnect-config/README.md)：549六张实图，修复过期健康状态制造的配置错误，8次Sol EOF、四服务闭合与原数据保持。
 
 - [Session 成员快照恢复](2026-10-23-session-member-snapshot/README.md)：548 七张实图、10次Sol EOF；正文/成员同步恢复、三类Source契约、五服务闭合与完整数据保留。

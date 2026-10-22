@@ -14,29 +14,20 @@ import { STREAM_RECONNECT_DELAY_MS } from "../services/host-transport"
 import { t } from "../utils/i18n"
 import { useDisclosure } from "../solid/disclosure"
 import { Button } from "./ui/Button"
+import { connectionPresentation, type ConnectionProblemKind } from "../utils/connection-presentation"
 
 const OFFLINE_GRACE_MS = STREAM_RECONNECT_DELAY_MS + 2000
 
 export function ConnectionBanner() {
+  const presentation = createMemo(() => connectionPresentation(appStore.connectionStatus, messageStore.sseStatus))
   const problem = createMemo(() => {
-    if (appStore.connectionStatus !== "online") {
-      return {
-        kind: "backend",
-        text:
-          appStore.connectionStatus === "connecting"
-            ? t("connection.banner_backend_connecting")
-            : t("connection.banner_backend_offline"),
-      } as const
-    }
-    if (messageStore.sseStatus === "reconnecting") {
-      return { kind: "stream", text: t("connection.banner_stream_connecting") } as const
-    }
-    return undefined
+    const current = presentation().problem
+    return current ? { kind: current.kind, text: t(current.messageKey) } : undefined
   })
 
   const banner = useDisclosure()
   let timer: any = null
-  let problemKind: "backend" | "stream" | undefined
+  let problemKind: ConnectionProblemKind | undefined
 
   createEffect(() => {
     const current = problem()
@@ -51,7 +42,8 @@ export function ConnectionBanner() {
       if (timer) clearTimeout(timer)
       timer = null
       problemKind = current.kind
-      banner.close()
+      // An already visible notice follows recovery without disappearing and
+      // starting another grace period for the same connection interruption.
     }
     if (banner.open() || timer) return
     timer = setTimeout(() => {
@@ -70,7 +62,13 @@ export function ConnectionBanner() {
 
   return (
     <Show when={banner.open()}>
-      <div class="conn-banner" role="status" aria-live="polite" data-status={problem()?.kind}>
+      <div
+        class="conn-banner"
+        role="status"
+        aria-live="polite"
+        data-status={presentation().status}
+        data-problem={problem()?.kind}
+      >
         <span class="conn-banner__dot" aria-hidden="true" />
         <span class="conn-banner__text">{problem()?.text}</span>
         <Button
