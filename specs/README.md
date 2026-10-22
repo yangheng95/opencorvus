@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Sources与成员重连历史](records/2026-10/2026-10-22-source-reconnect-history.md)：[13实图/11次Sol/重连补验](artifacts/2026-10-22-source-reconnect-history/README.md)，一次新来源和35正文/11Source自然恢复；观测工具修复并重跑，Task live delta仍开放。
+
 - [Sources与成员历史首开](records/2026-10/2026-10-22-source-cold-history.md)：[10实图/300事件/零模型](artifacts/2026-10-22-source-cold-history/README.md)，32正文与10来源owner保持，确证首开等待与dock阅读连续性，重连边界仍开放。
 
 - [Goal默认页与真实执行](records/2026-10/2026-10-22-goal-home-run.md)：[26实图/11次真实Sol](artifacts/2026-10-22-goal-home-run/README.md)，5次自动续跑及轮次间暂停/恢复，修复控制消息排版与弹窗换页焦点，完整资源结算。

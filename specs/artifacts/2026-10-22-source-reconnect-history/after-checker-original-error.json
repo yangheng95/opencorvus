@@ -1,0 +1,20 @@
+{
+  "at": "2026-10-22T08:37:12.545Z",
+  "url": "http://127.0.0.1:19049/session/ses_-zUS0WzzQzzDOGrIbYwN/message?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-14%2Fmember-live-rendering-412-fresh%2Fproject&limit=1000",
+  "status": 400,
+  "result": {
+    "data": {
+      "message": "Request validation failed"
+    },
+    "error": [
+      {
+        "code": "too_big",
+        "path": [
+          "limit"
+        ],
+        "message": "Too big: expected number to be <=200"
+      }
+    ],
+    "success": false
+  }
+}

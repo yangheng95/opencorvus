@@ -1,0 +1,16 @@
+{
+  "scope": "source-reconnect-observation-535",
+  "phase": "535b diagnostic requalification",
+  "ports": {
+    "before": 19051,
+    "after": 19051
+  },
+  "maximumRequestsPerStartedScope": 4,
+  "model": "gpt-6.1-sol",
+  "source": "Closed535-after;after copies fully closed535b-before",
+  "targetParent": "ses_-zUS0X33CzzWEKMgCk98",
+  "targetMember": "ses_-zUS0WzzQzzDOGrIbYwN",
+  "flow": "One original page;quiet same-URL disconnect/recovery;no repeated business input",
+  "diagnostics": "Lifecycle,zero/decrease/streaming and panel state only;collect immediately at each connection boundary",
+  "ui": "Real manual screenshots;no UI automated tests"
+}

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Sources与成员重连历史](2026-10-22-source-reconnect-history/README.md)：13实图、11真实Sol、一次新Source及同URL自然恢复；日志窗口工具修复后重跑190事件，四服务/16配对成员完整结算。
+
 - [Sources与成员历史首开](2026-10-22-source-cold-history/README.md)：10实图/300事件，32正文与10来源owner、首开/列表/dock/工具disclosure及完整90表原数据保持；诊断修正，未宣称整体Rendering修复。
 
 - [Goal默认页与真实执行](2026-10-22-goal-home-run/README.md)：26实图、11次Sol/5自动续跑，控制消息排版与弹窗焦点修复，键盘完成及原用量保持，双scope/8配对成员结算。

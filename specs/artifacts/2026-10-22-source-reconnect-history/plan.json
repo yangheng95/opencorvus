@@ -1,0 +1,14 @@
+{
+  "scope": "source-reconnect-history-535",
+  "ports": {
+    "before": 19049,
+    "after": 19049
+  },
+  "maximumRequestsPerStartedScope": 8,
+  "model": "gpt-6.1-sol",
+  "source": "Closed534-after;after copies fully settled535-before",
+  "targetParent": "ses_-zUS0X33CzzWEKMgCk98",
+  "targetMember": "ses_-zUS0WzzQzzDOGrIbYwN",
+  "flow": "Same original page;owned before shutdown then fresh after same URL;one bounded after input to existing member;no new delegation",
+  "ui": "Real manual page/screenshot review;passive warning diagnostics;no UI tests"
+}

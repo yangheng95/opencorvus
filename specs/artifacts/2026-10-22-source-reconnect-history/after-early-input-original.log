@@ -1,0 +1,16 @@
+4 | import {ownedJSON} from './http-json'
+5 | const stage=process.argv[2];assert(['before','after'].includes(stage))
+6 | const root=import.meta.dir,run='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/source-reconnect-history-535-'+stage
+7 | assert.equal(stage,'after','One explicit after input only')
+8 | const plan=JSON.parse(fs.readFileSync(root+'/plan.json','utf8'))
+9 | const preflight=JSON.parse(fs.readFileSync(run+'/evidence/preflight-ready.json','utf8'))
+                                  ^
+ENOENT: no such file or directory, open 'C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/source-reconnect-history-535-after/evidence/preflight-ready.json'
+    path: "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/source-reconnect-history-535-after/evidence/preflight-ready.json",
+ syscall: "open",
+   errno: -4058,
+    code: "ENOENT"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\source-reconnect-history-535\send.ts:9:31
+
+Bun v1.4.3 (Windows x64)

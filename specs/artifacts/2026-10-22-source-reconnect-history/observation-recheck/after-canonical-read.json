@@ -1,0 +1,45 @@
+{
+  "at": "2026-10-22T08:58:26.258Z",
+  "scope": "Real public canonical conversation reads under the new process;not a claim these checker calls were UI recovery calls",
+  "parent": "ses_-zUS0X33CzzWEKMgCk98",
+  "member": "ses_-zUS0WzzQzzDOGrIbYwN",
+  "reads": [
+    {
+      "id": "ses_-zUS0X33CzzWEKMgCk98",
+      "status": 200,
+      "messageCount": 51,
+      "sessions": [
+        {
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "messageCount": 12
+        },
+        {
+          "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+          "messageCount": 39
+        }
+      ]
+    },
+    {
+      "id": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "status": 200,
+      "messageCount": 39,
+      "sessions": [
+        {
+          "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+          "messageCount": 39
+        }
+      ]
+    }
+  ],
+  "retainedFinal": {
+    "id": "msg_g0VYlVvNx00Uq6gDAjqh",
+    "finish": "stop",
+    "completed": 1792657945215
+  },
+  "retainedSource": {
+    "id": "prt_g0VYlVvMQ00aotNZw5BQ",
+    "sourceId": "4bf9be4b80027e063dabfb9354226580ff38049d91a4d6343f379c104d43e719",
+    "toolPartID": "prt_g0VYlVj3T00FCj2Mrdqn",
+    "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+  }
+}
