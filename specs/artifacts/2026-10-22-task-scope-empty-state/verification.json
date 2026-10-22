@@ -1,0 +1,45 @@
+{
+  "at": "2026-10-22T02:35:14.135Z",
+  "typecheck": {
+    "command": "bun run typecheck",
+    "cwd": "packages/overlay",
+    "originalHandle": 62029,
+    "originalExit": 0
+  },
+  "i18n": {
+    "command": "bun run check:i18n",
+    "sameOriginalHandle": 62029,
+    "exit": 0,
+    "locales": 2,
+    "topLevelKeys": 2533,
+    "qualification": "Catalog structure/types/placeholders,not UI content assertions"
+  },
+  "formalNodeBuild": {
+    "command": "node .tmp-product-iteration/task-scope-empty-state-528/build.mjs",
+    "originalHandle": 91900,
+    "originalExit": 0,
+    "modules": 7314,
+    "duration": "58.92s",
+    "js": "main-BmEZdO0X.js",
+    "css": "main-CVd9TkT1.css",
+    "completeStdoutSeparatelySaved": true
+  },
+  "docs": {
+    "command": "bun run docs:check",
+    "exit": 0,
+    "operations": 345,
+    "groups": 26
+  },
+  "architecture": {
+    "command": "bun run check:architecture-index",
+    "exit": 0,
+    "currentDocuments": 20
+  },
+  "diffCheck": {
+    "command": "git diff --check",
+    "exit": 0
+  },
+  "uiQualification": "13 actual displayed screenshots/manual interactions,not UI automated tests",
+  "provider": "0 actual/0 maximum;no credentials/catalog staged",
+  "locale": "English to Chinese to English through actual isolated UI controls"
+}

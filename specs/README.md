@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [任务面板空状态](records/2026-10/2026-10-22-task-scope-empty-state.md)：[13张中英文实图](artifacts/2026-10-22-task-scope-empty-state/README.md)，修复未选Task/已完成任务空需求的虚假分析提示，指向持续目标。
+
 - [空工具页打开焦点](records/2026-10/2026-10-22-dock-tool-launch-focus.md)：[12张真实页面](artifacts/2026-10-22-dock-tool-launch-focus/README.md)，修复Files/Requirements/Browser空页打开后BODY失焦，保留原菜单焦点生命周期。
 
 - [Main 文件来源往返阅读](records/2026-10/2026-10-22-source-main-file-reading.md)：[15张真实页面](artifacts/2026-10-22-source-main-file-reading/README.md)，修复文件工作台关闭后焦点丢失，两列来源、取消草稿及标签关闭实测。

@@ -1,13 +1,14 @@
 /**
  * RequirementsPanel — structured requirements list from Requirements Agent output.
  *
- * Two states: structured requirements or an explicit pending hint.
+ * Structured requirements or a neutral empty projection.
  */
 import { Show } from "solid-js"
 import { cardExpanded, setCardExpanded } from "../store/conversation-ui"
 import { t } from "../utils/i18n"
 import { Disclosure } from "./ui/Disclosure"
 import { ProgressiveList } from "./ui/ProgressiveList"
+import { Feedback } from "./ui/Feedback"
 
 interface Requirement {
   id: string
@@ -110,7 +111,9 @@ export function RequirementsPanel(props: RequirementsPanelProps) {
       </Show>
 
       <Show when={!hasData()}>
-        <p class="empty-hint empty-hint--card">{t("task_scope.requirements_pending")}</p>
+        <Feedback tone="neutral" title={t("task_scope.requirements_empty")}>
+          {t("task_scope.requirements_empty_hint")}
+        </Feedback>
       </Show>
     </div>
   )

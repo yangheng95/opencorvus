@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [任务面板空状态](2026-10-22-task-scope-empty-state/README.md)：13实图/中英文，未选Task指引与中性空需求；公开Board和90表原行保持，零模型。
+
 - [空工具页打开焦点](2026-10-22-dock-tool-launch-focus/README.md)：12实图，普通工具/Browser新标签复用共同焦点交接，原菜单与关闭合同保持；零模型和完整原数据结算。
 
 - [Main 文件来源往返阅读](2026-10-22-source-main-file-reading/README.md)：15实图/两零模型范围，修复文件工作台关闭后焦点丢失，精确列、取消草稿和标签关闭合同复核。

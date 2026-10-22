@@ -4,7 +4,7 @@
 // Data is read from boardStore (store/board.ts); no direct DOM manipulation.
 
 import { createMemo, Show } from "solid-js"
-import { boardStore } from "../store/board"
+import { activeTaskID, boardStore } from "../store/board"
 import { t } from "../utils/i18n"
 import { taskLifecycleStatusOrIdleLabel } from "../utils/status-labels"
 import { activeTone, verdictTone } from "../utils/verdict-tone"
@@ -13,6 +13,7 @@ import { RequirementsPanel } from "./RequirementsPanel"
 import { ArchitectPanel } from "./ArchitectPanel"
 import { SurfaceHeader } from "./ui/SurfaceHeader"
 import { StatusIndicator } from "./ui/StatusIndicator"
+import { Feedback } from "./ui/Feedback"
 
 // ── StatusBadge ──
 // General-purpose status badge with an icon + label.
@@ -68,7 +69,7 @@ function TaskScopePanelShell(props: TaskScopePanelShellProps) {
 
   return (
     <div class="task-scope-panel" data-task-scope-panel={props.panelID}>
-      <Show when={props.badgeText}>
+      <Show when={activeTaskID() && props.badgeText}>
         <SurfaceHeader variant="panel" data-ui="task-scope-toolbar" title={badge()} />
       </Show>
       <div
@@ -77,7 +78,17 @@ function TaskScopePanelShell(props: TaskScopePanelShellProps) {
         data-active="true"
       >
         <div class="sections-stack task-scope-section-stack task-scope-panel__stack" data-ui="task-scope-section-stack">
-          {props.children}
+          <Show
+            when={activeTaskID()}
+            fallback={
+              <Feedback tone="neutral" title={t("task_scope.choose_task_title")}>
+                <p>{t("task_scope.choose_task_body")}</p>
+                <p>{t("task_scope.continuous_goal_hint", { goalControl: t("continuous_goal.title") })}</p>
+              </Feedback>
+            }
+          >
+            {props.children}
+          </Show>
         </div>
       </div>
     </div>

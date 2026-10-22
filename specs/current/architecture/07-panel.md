@@ -1581,6 +1581,13 @@ a server response status or request ID.
 
 Requirements and Goals are independent Right Dock panels that read one
 `boardStore.board` projection. They do not keep local copies of task scope data.
+They use the existing selected Task identity for their context: without a Task,
+the shared shell explains how to open one and distinguishes these records from
+Continuous goal in the conversation. A Session's linked Task identifier does
+not turn its Session board into a TaskBoard. An empty requirement projection
+uses neutral text about what can be displayed; it never implies that analysis
+is running. Structured lists and acceptance facts retain their original data
+projection, and Main keeps ownership of Task selection progress and failures.
 The same Board may retain Architect facts, but the production Right Dock
 catalog, Environment shortcuts, workbench panel domain, and mounted view set do
 not project an Architecture page.

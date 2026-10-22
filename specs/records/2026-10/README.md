@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [任务面板空状态](2026-10-22-task-scope-empty-state.md)：[13图与真实状态修复](../../artifacts/2026-10-22-task-scope-empty-state/README.md)，普通会话/已完成Task、中英文及公开Board，零模型。
+
 - [空工具页打开焦点](2026-10-22-dock-tool-launch-focus.md)：[12图与共享入口修复](../../artifacts/2026-10-22-dock-tool-launch-focus/README.md)，三真实工具/自然Tab/菜单对照，两个零模型范围完整结算。
 
 - [Main 文件来源往返阅读](2026-10-22-source-main-file-reading.md)：[15图与共同焦点修复](../../artifacts/2026-10-22-source-main-file-reading/README.md)，合法Main精确列/文件往返、取消草稿与标签关闭，零模型。
