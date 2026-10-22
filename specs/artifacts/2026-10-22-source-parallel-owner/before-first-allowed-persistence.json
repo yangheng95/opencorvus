@@ -1,0 +1,89 @@
+{
+  "at": "2026-10-22T05:08:08.063Z",
+  "label": "first-allowed",
+  "scope": "Actual readonly SQLite rows for exact parent user input;request admission times are not execution concurrency proof",
+  "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+  "inputMessageID": "msg_g0VYkgQ2X00zE5KO60AW",
+  "messages": [
+    {
+      "messageID": "msg_g0VYkgQ4K0066I3ow00W",
+      "created": 1792645640836,
+      "finish": "tool-calls",
+      "completed": 1792645682519,
+      "parts": [
+        {
+          "id": "prt_g0VYkgQBs004h5DOipSU",
+          "created": 1792645641304,
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VYkgRLV00kt1ubETcr",
+          "created": 1792645645746,
+          "type": "text",
+          "textLength": 46
+        },
+        {
+          "id": "prt_g0VYkgatl00yg3eLhBmM",
+          "created": 1792645682465,
+          "type": "source-url",
+          "toolPartID": "prt_g0VYkgRYD00gjK1hvBHT",
+          "sourceId": "8fe7678a35f3ccc6ff7a296ab367eb4f41f328262fad453a91523e2b64ff6fc9",
+          "url": "https://www.w3.org/TR/wai-aria-1.2/"
+        },
+        {
+          "id": "prt_g0VYkgatp00ziFuijKa5",
+          "created": 1792645682471,
+          "type": "step-finish"
+        }
+      ],
+      "tools": [
+        {
+          "id": "prt_g0VYkgRYD00gjK1hvBHT",
+          "created": 1792645647038,
+          "tool": "webfetch",
+          "input": {
+            "url": "https://www.w3.org/TR/wai-aria-1.2/",
+            "format": "text"
+          },
+          "time": {
+            "start": 1792645646533
+          },
+          "outcome": {
+            "kind": "completed",
+            "time": {
+              "end": 1792645682462
+            },
+            "resultAttemptID": "per_hGM2u7W4CXXJuZ6mfge7",
+            "created": 1792645682463
+          }
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VYkgavH00ecylsB0TX",
+      "created": 1792645682559,
+      "parts": [
+        {
+          "id": "prt_g0VYkgb0j00fB52ioqd2",
+          "created": 1792645682897,
+          "type": "step-start"
+        }
+      ],
+      "tools": [
+        {
+          "id": "prt_g0VYkgblT00Re3Ehilq8",
+          "created": 1792645686223,
+          "tool": "webfetch",
+          "input": {
+            "url": "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText",
+            "format": "text"
+          },
+          "time": {
+            "start": 1792645685795
+          },
+          "outcome": null
+        }
+      ]
+    }
+  ]
+}

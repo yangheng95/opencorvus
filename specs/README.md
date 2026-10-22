@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [来源落点与Rendering](records/2026-10/2026-10-22-source-parallel-owner.md)：[6实图/6次真实Sol](artifacts/2026-10-22-source-parallel-owner/README.md)，确证native单步串行策略与自然追加owner，未达到同消息并行资格。
+
 - [Dialog归还焦点](records/2026-10/2026-10-22-dialog-opener-focus.md)：[20张Goal与命令面板实图](artifacts/2026-10-22-dialog-opener-focus/README.md)，三条Goal关闭回原按钮，保留专用focus所有权，零模型/完整数据保持。
 
 - [权限提示焦点关闭](records/2026-10/2026-10-22-permission-focus-dismissal.md)：[24实图与12/16 Sol](artifacts/2026-10-22-permission-focus-dismissal/README.md)，修复Tab离开使待决提示消失，保留Esc/pointer；原POST跨五分钟完成。

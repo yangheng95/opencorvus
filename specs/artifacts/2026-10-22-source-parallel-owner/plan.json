@@ -1,0 +1,15 @@
+{
+  "scope": "source-parallel-owner-532",
+  "source": "Closed531-after complete90 tables158027 original rows/schema3/canonical",
+  "ports": {
+    "before": 19037,
+    "after": 19039
+  },
+  "maximumRequestsPerStartedScope": 8,
+  "initiallyStartedScopes": [
+    "before"
+  ],
+  "model": "gpt-6.1-sol",
+  "qualification": "Actual same-message Tool overlap/completion/Source order;manual UI and passive owner observations;no production edits before evidence",
+  "sourceRevision": "bbcdcbc0b65f939a444b14a21a046f45256af7bc"
+}

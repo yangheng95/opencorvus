@@ -1,0 +1,27 @@
+  if(file.endsWith('/components/SourceParts.tsx')){
+   source='import { createEffect as traceSourceEffect532 } from "solid-js"\nlet traceNextSource532=0\n'+source
+   source=replace(source,'  const expandableExcerpt = () => props.source.type !== "source-file" && Boolean(props.source.snippet)',`  const sourceOwner532=++traceNextSource532
+  let lastSource532=""
+  traceSourceEffect532(() => {
+    const current=sourceIdentity(props.source)
+    if(current!==lastSource532){
+      if(props.source.sessionID==="ses_-zUS0WzzQzzDOGrIbYwN") untrack(() => console.debug("MT532",JSON.stringify({kind:"source-binding",owner:sourceOwner532,previous:lastSource532,current,at:performance.now()})))
+      lastSource532=current
+    }
+  })
+  onMount(() => {if(props.source.sessionID==="ses_-zUS0WzzQzzDOGrIbYwN")console.debug("MT532",JSON.stringify({kind:"source-mount",owner:sourceOwner532,identity:lastSource532,at:performance.now()}))})
+  onCleanup(() => {if(props.source.sessionID==="ses_-zUS0WzzQzzDOGrIbYwN")console.debug("MT532",JSON.stringify({kind:"source-dispose",owner:sourceOwner532,identity:lastSource532,at:performance.now()}))})
+  const expandableExcerpt = () => props.source.type !== "source-file" && Boolean(props.source.snippet)`)
+   source=replace(source,'<div class="msg-source-entry" data-has-excerpt=','<div data-observed-source={sourceOwner532} class="msg-source-entry" data-has-excerpt=')
+   return replace(source,'  let group!: HTMLDivElement',`  const groupOwner532=++traceNextSource532
+  let lastGroup532=""
+  traceSourceEffect532(() => {
+    const current=JSON.stringify(props.sources.map(sourceIdentity))
+    if(current!==lastGroup532){
+      if(props.sources.some(s=>s.sessionID==="ses_-zUS0WzzQzzDOGrIbYwN")) untrack(() => console.debug("MT532",JSON.stringify({kind:"source-group-binding",owner:groupOwner532,previous:lastGroup532,current,at:performance.now()})))
+      lastGroup532=current
+    }
+  })
+  onCleanup(() => {if(props.sources.some(s=>s.sessionID==="ses_-zUS0WzzQzzDOGrIbYwN"))console.debug("MT532",JSON.stringify({kind:"source-group-dispose",owner:groupOwner532,identity:lastGroup532,at:performance.now()}))})
+  let group!: HTMLDivElement`)
+  }

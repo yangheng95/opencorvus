@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [来源落点与Rendering](2026-10-22-source-parallel-owner.md)：[6实图/6次Sol](../../artifacts/2026-10-22-source-parallel-owner/README.md)，native策略使输入实际串行，正文/Source owner保持；并行与其他更新入口仍未覆盖。
+
 - [Dialog归还焦点](2026-10-22-dialog-opener-focus.md)：[20实图](../../artifacts/2026-10-22-dialog-opener-focus/README.md)，唯一modal opener实现修复Goal关闭BODY，命令面板专用hook保留，两副本全原行保持且闭合。
 
 - [权限提示焦点关闭](2026-10-22-permission-focus-dismissal.md)：[24实图与共享Dialog修复](../../artifacts/2026-10-22-permission-focus-dismissal/README.md)，直接focusin关闭链、12/16 Sol及7分19秒原POST完成。
