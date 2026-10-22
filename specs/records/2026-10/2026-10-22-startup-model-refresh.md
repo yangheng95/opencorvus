@@ -46,3 +46,9 @@
 - 最终新增4项正向合同通过；原5项live模型刷新合同通过，合计9项。后台和Overlay typecheck通过，Overlay i18n（2语言2538键）、CSS token（8881引用）、renderer公开面、正式Node Vite构建（53.72s）通过。docs:check（345操作/26组）、architecture-index（20文档）通过。构建既有第三方directive/大chunk提示不作为视觉通过依据。
 - 单独19161 before、19165中间预览已通过公开shutdown返回200并以原exec exit0结算。19163预览出现用户输入，保留该页面/服务；19167最终预览保留供用户查看。未重启、关闭或更新用户安装中的应用。最终服务全新数据根、清除catalog声明的Provider环境变量，不填凭据、不调用模型。模型真实跨轮执行不在本次展示修复资格中。
 - 没有数据库结构或持久格式变更，没有版本/安装包/Release交付。本轮只提交明确代码、合同与spec/截图；初始其他任务的Goal owner改动由其自己的提交完成，本次保留其结果。
+
+### 推送检查的接口同步
+
+首次正常pre-push在全仓typecheck（8/8）通过后，被api:routes-check的generated-openapi-differs-tracked-openapi拒绝：ModelsDev成本声明同时进入公开目录response，新增可选字段尚未反映到受跟踪OpenAPI与客户端生成类型。此前范围分析遗漏了生成契约消费者；不能绕过hook。已读routes checker及SDK（Software Development Kit，软件开发工具包）build/generation transaction，确认生成文件无未提交差异，使用唯一 `bun run --cwd packages/sdk/js build` 更新，再审查只包含新增成本字段、重跑原checker并单独提交。此为公共元数据字段同步，不引入新接口、数据版本或模型执行流程。
+
+正式SDK构建exit0，仅生成types.gen.ts的9个可选字段和openapi.json的27行对应声明，基础、长上下文和实验模式一致。原api:routes-check重跑通过（35文件/6规则与完整路由清单），docs:check也通过。

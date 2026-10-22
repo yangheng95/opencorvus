@@ -4260,10 +4260,16 @@ export type ProviderConfig = {
           cache_read?: number
           cache_write?: number
           input: number
+          input_audio?: number
           output: number
+          output_audio?: number
+          reasoning?: number
         }
         input: number
+        input_audio?: number
         output: number
+        output_audio?: number
+        reasoning?: number
       }
       experimental?: {
         modes: {
@@ -4272,7 +4278,10 @@ export type ProviderConfig = {
               cache_read?: number
               cache_write?: number
               input: number
+              input_audio?: number
               output: number
+              output_audio?: number
+              reasoning?: number
             }
             provider: {
               body: {

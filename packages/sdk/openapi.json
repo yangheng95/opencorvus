@@ -14965,7 +14965,16 @@
                         "input": {
                           "type": "number"
                         },
+                        "input_audio": {
+                          "type": "number"
+                        },
                         "output": {
+                          "type": "number"
+                        },
+                        "output_audio": {
+                          "type": "number"
+                        },
+                        "reasoning": {
                           "type": "number"
                         }
                       },
@@ -14978,7 +14987,16 @@
                     "input": {
                       "type": "number"
                     },
+                    "input_audio": {
+                      "type": "number"
+                    },
                     "output": {
+                      "type": "number"
+                    },
+                    "output_audio": {
+                      "type": "number"
+                    },
+                    "reasoning": {
                       "type": "number"
                     }
                   },
@@ -15007,7 +15025,16 @@
                               "input": {
                                 "type": "number"
                               },
+                              "input_audio": {
+                                "type": "number"
+                              },
                               "output": {
+                                "type": "number"
+                              },
+                              "output_audio": {
+                                "type": "number"
+                              },
+                              "reasoning": {
                                 "type": "number"
                               }
                             },
