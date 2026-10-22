@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [侧聊Goal与完整来源滚动](2026-10-23-side-goal-live-experience/README.md)：544九张实图、两轮真实Goal/8次Sol原EOF、来源滚轮修复与90表原数据保持。
+
 - [OpenCorvus热认证实际验收](2026-10-23-openai-hot-auth-verification/README.md)：543实际App OAuth配对目录、2/4 Sol流式200/EOF、回复OK、正常shutdown与四成员退休；无新UI或Goal执行资格。
 
 - [已结算Worker生命周期](2026-10-22-settled-worker-lifecycle/README.md)：540两原Task/四旧input真实恢复，7实图/5次Sol原EOF、最新成员选择与真实deadline失败。

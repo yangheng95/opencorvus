@@ -168,6 +168,7 @@
 }
 .msg-tool-payload[data-expanded="true"]:not([data-live="true"]) > .msg-tool-payload__content {
   max-height: none;
+  overflow: visible;
 }
 .msg-tool-payload__content pre {
   margin: 0;

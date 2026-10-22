@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [侧聊Goal与完整来源滚动](2026-10-23-side-goal-live-experience.md)：[9实图/8次Sol](../../artifacts/2026-10-23-side-goal-live-experience/README.md)，共享展开输出滚动修复，真实侧Goal两轮与正常资源结算。
+
 - [OpenCorvus热认证实际验收](2026-10-23-openai-hot-auth-verification.md)：[2次Sol与完整资源结算](../../artifacts/2026-10-23-openai-hot-auth-verification/README.md)，App当前认证、真实流式回复、源保持与四成员退休。
 
 - [已结算Worker生命周期](2026-10-22-settled-worker-lifecycle.md)：[7实图/四旧Error与六新完成](../../artifacts/2026-10-22-settled-worker-lifecycle/README.md)，共享分页恢复与canonical成员顺序修复；5原EOF及deadline失败按实保留。

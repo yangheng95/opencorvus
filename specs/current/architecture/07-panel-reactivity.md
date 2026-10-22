@@ -576,6 +576,10 @@ bytes and a state SHA-256. The canonical Part remains unchanged in persistence.
 Only mounting an expanded Tool body may read that exact project-scoped
 Session/Message/Part; the renderer verifies identity, byte counts and digest and
 keeps a bounded identity/digest cache for collapse/reopen.
+Completed, expanded Tool payloads participate in the outer conversation's scroll
+flow and do not establish an internal scroll container. Bounded and live payloads
+retain their own scrolling and reading-position restoration; expansion keeps the
+complete source text, wrapping and copy value intact.
 The existing canonical message-list/message/Part GET readers use Project
 identity admission, independently of the current execution-model configuration.
 Their Session lineage and exact parent membership checks remain authoritative;
