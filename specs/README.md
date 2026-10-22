@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Dialog归还焦点](records/2026-10/2026-10-22-dialog-opener-focus.md)：[20张Goal与命令面板实图](artifacts/2026-10-22-dialog-opener-focus/README.md)，三条Goal关闭回原按钮，保留专用focus所有权，零模型/完整数据保持。
+
 - [权限提示焦点关闭](records/2026-10/2026-10-22-permission-focus-dismissal.md)：[24实图与12/16 Sol](artifacts/2026-10-22-permission-focus-dismissal/README.md)，修复Tab离开使待决提示消失，保留Esc/pointer；原POST跨五分钟完成。
 
 - [Sources 与成员正文连续性](records/2026-10/2026-10-22-source-live-owner-continuity.md)：[23实图与12/16 Sol](artifacts/2026-10-22-source-live-owner-continuity/README.md)，修复成员总览/详情焦点丢失；正文身份保持，权限关闭归因和原输入超时边界如实保留。

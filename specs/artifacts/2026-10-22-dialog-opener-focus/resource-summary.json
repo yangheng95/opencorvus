@@ -1,0 +1,424 @@
+{
+  "at": "2026-10-22T04:53:43.594Z",
+  "screenshots": 20,
+  "actualRequests": 0,
+  "maximumRequests": 0,
+  "authority": "No auth/catalog copy or Provider preflight",
+  "scopes": [
+    {
+      "stage": "before",
+      "page": 132,
+      "pageState": "Closed",
+      "originalServiceHandle": 53032,
+      "originalServiceExit": 0,
+      "shutdownStatus": 200,
+      "native": {
+        "occurrence": "dialog-opener-focus-531-before-service-d97777fc-ee98-4ff3-8eef-06253be8d585",
+        "outcome": "settled",
+        "host": {
+          "pid": 82896,
+          "processInstanceID": "win32:639282400983519860",
+          "occurrenceID": "ad0df669-cd36-49f6-bff0-c04b559adbb6"
+        },
+        "target": {
+          "pid": 97404,
+          "processInstanceID": "win32:639282400994378948",
+          "occurrenceID": "9c4d4869-6631-476e-b0f1-06ca73819e08"
+        },
+        "observedAtUtc": "2026-10-22T04:34:02.356Z",
+        "deadlineAt": 1792644498317,
+        "terminal": {
+          "occurrenceID": "dialog-opener-focus-531-before-service-d97777fc-ee98-4ff3-8eef-06253be8d585",
+          "pid": 97404,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 82896,
+            "processInstanceID": "win32:639282400983519860",
+            "occurrenceID": "ad0df669-cd36-49f6-bff0-c04b559adbb6"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 97404,
+            "processInstanceID": "win32:639282400994378948",
+            "occurrenceID": "9c4d4869-6631-476e-b0f1-06ca73819e08"
+          }
+        }
+      ],
+      "launcher": {
+        "observedAtUtc": "2026-10-22T04:34:02.4558628Z",
+        "childExitCode": 0
+      },
+      "provider": {
+        "at": "2026-10-22T04:28:23.184Z",
+        "maximum": 0,
+        "actual": 0,
+        "exhausted": false,
+        "requests": [],
+        "scope": "Dialog opener focus review; no credentials or model catalog copied"
+      },
+      "assets": [
+        {
+          "time": "2026-10-22T04:28:50.138Z",
+          "path": "/ui/assets/main-CL6mQ9jH.js",
+          "statusCode": 200
+        },
+        {
+          "time": "2026-10-22T04:28:50.142Z",
+          "path": "/ui/assets/main-CVd9TkT1.css",
+          "statusCode": 200
+        }
+      ],
+      "runtimeErrors": [
+        {
+          "time": "2026-10-22T04:28:51.932Z",
+          "service": "project.open",
+          "message": "project.open.stage"
+        },
+        {
+          "time": "2026-10-22T04:28:51.947Z",
+          "service": "server",
+          "message": "request failed",
+          "errorName": "ProviderModelNotFoundError"
+        },
+        {
+          "time": "2026-10-22T04:28:53.445Z",
+          "service": "overlay:project-load",
+          "message": "config reload failed"
+        },
+        {
+          "time": "2026-10-22T04:28:53.456Z",
+          "service": "project.open",
+          "message": "project.open.stage"
+        },
+        {
+          "time": "2026-10-22T04:28:53.457Z",
+          "service": "server",
+          "message": "request failed",
+          "errorName": "ProviderModelNotFoundError"
+        },
+        {
+          "time": "2026-10-22T04:28:53.522Z",
+          "service": "project.open",
+          "message": "project.open.stage"
+        },
+        {
+          "time": "2026-10-22T04:28:53.523Z",
+          "service": "server",
+          "message": "request failed",
+          "errorName": "ProviderModelNotFoundError"
+        },
+        {
+          "time": "2026-10-22T04:28:54.128Z",
+          "service": "overlay:ui",
+          "message": "Model configuration unavailable"
+        },
+        {
+          "time": "2026-10-22T04:28:54.230Z",
+          "service": "project.open",
+          "message": "project.open.stage"
+        },
+        {
+          "time": "2026-10-22T04:28:54.231Z",
+          "service": "server",
+          "message": "request failed",
+          "errorName": "ProviderModelNotFoundError"
+        },
+        {
+          "time": "2026-10-22T04:28:54.802Z",
+          "service": "overlay:project-load",
+          "message": "config load failed"
+        }
+      ],
+      "data": {
+        "tables": 90,
+        "originalRows": 158027,
+        "originalRowDifferences": [],
+        "providerActivities": {
+          "original": 395,
+          "current": 395
+        },
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 74579968,
+          "modifiedAtMs": 1792641917906.975
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact"
+      },
+      "manualObservations": [
+        {
+          "stage": "goal-mouse-escape",
+          "at": "2026-10-22T04:29:25.760Z",
+          "dom": {
+            "activeTag": "BODY",
+            "dialogs": 0,
+            "label": null
+          }
+        },
+        {
+          "stage": "goal-keyboard-close-button",
+          "at": "2026-10-22T04:30:56.263Z",
+          "dom": {
+            "activeTag": "BODY",
+            "dialogs": 0,
+            "label": null
+          }
+        },
+        {
+          "stage": "goal-outside-pointer",
+          "at": "2026-10-22T04:31:14.780Z",
+          "dom": {
+            "activeTag": "BODY",
+            "dialogs": 0,
+            "label": null
+          }
+        },
+        {
+          "stage": "palette-button-escape",
+          "at": "2026-10-22T04:31:27.627Z",
+          "dom": {
+            "activeTag": "BUTTON",
+            "id": "",
+            "label": "Search chats or run a command"
+          }
+        },
+        {
+          "stage": "palette-composer-hotkey-escape",
+          "at": "2026-10-22T04:31:43.582Z",
+          "dom": {
+            "activeTag": "TEXTAREA",
+            "id": "chatTextarea",
+            "label": null
+          }
+        }
+      ],
+      "browserErrors": []
+    },
+    {
+      "stage": "after",
+      "page": 133,
+      "pageState": "Closed",
+      "originalServiceHandle": 66127,
+      "originalServiceExit": 0,
+      "shutdownStatus": 200,
+      "native": {
+        "occurrence": "dialog-opener-focus-531-after-service-db13c36e-d97a-4ce9-8ec7-34b162eb19dd",
+        "outcome": "settled",
+        "host": {
+          "pid": 59940,
+          "processInstanceID": "win32:639282406674766684",
+          "occurrenceID": "a29bdd4f-d465-4655-9fa1-1462f17dfef1"
+        },
+        "target": {
+          "pid": 53832,
+          "processInstanceID": "win32:639282406686190560",
+          "occurrenceID": "a1e0c68d-6a4f-4a1c-a818-77cb79f91892"
+        },
+        "observedAtUtc": "2026-10-22T04:48:35.3Z",
+        "deadlineAt": 1792645067443,
+        "terminal": {
+          "occurrenceID": "dialog-opener-focus-531-after-service-db13c36e-d97a-4ce9-8ec7-34b162eb19dd",
+          "pid": 53832,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 59940,
+            "processInstanceID": "win32:639282406674766684",
+            "occurrenceID": "a29bdd4f-d465-4655-9fa1-1462f17dfef1"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 53832,
+            "processInstanceID": "win32:639282406686190560",
+            "occurrenceID": "a1e0c68d-6a4f-4a1c-a818-77cb79f91892"
+          }
+        }
+      ],
+      "launcher": {
+        "observedAtUtc": "2026-10-22T04:48:35.355032Z",
+        "childExitCode": 0
+      },
+      "provider": {
+        "at": "2026-10-22T04:37:52.21Z",
+        "maximum": 0,
+        "actual": 0,
+        "exhausted": false,
+        "requests": [],
+        "scope": "Dialog opener focus review; no credentials or model catalog copied"
+      },
+      "assets": [
+        {
+          "time": "2026-10-22T04:38:09.625Z",
+          "path": "/ui/assets/main-DwFFu1Lg.js",
+          "statusCode": 200
+        },
+        {
+          "time": "2026-10-22T04:38:09.627Z",
+          "path": "/ui/assets/main-CVd9TkT1.css",
+          "statusCode": 200
+        }
+      ],
+      "runtimeErrors": [
+        {
+          "time": "2026-10-22T04:38:11.463Z",
+          "service": "project.open",
+          "message": "project.open.stage"
+        },
+        {
+          "time": "2026-10-22T04:38:11.466Z",
+          "service": "server",
+          "message": "request failed",
+          "errorName": "ProviderModelNotFoundError"
+        },
+        {
+          "time": "2026-10-22T04:38:12.936Z",
+          "service": "overlay:project-load",
+          "message": "config reload failed"
+        },
+        {
+          "time": "2026-10-22T04:38:12.946Z",
+          "service": "project.open",
+          "message": "project.open.stage"
+        },
+        {
+          "time": "2026-10-22T04:38:12.947Z",
+          "service": "server",
+          "message": "request failed",
+          "errorName": "ProviderModelNotFoundError"
+        },
+        {
+          "time": "2026-10-22T04:38:12.999Z",
+          "service": "project.open",
+          "message": "project.open.stage"
+        },
+        {
+          "time": "2026-10-22T04:38:13.001Z",
+          "service": "server",
+          "message": "request failed",
+          "errorName": "ProviderModelNotFoundError"
+        },
+        {
+          "time": "2026-10-22T04:38:13.637Z",
+          "service": "overlay:ui",
+          "message": "Model configuration unavailable"
+        },
+        {
+          "time": "2026-10-22T04:38:13.744Z",
+          "service": "project.open",
+          "message": "project.open.stage"
+        },
+        {
+          "time": "2026-10-22T04:38:13.744Z",
+          "service": "server",
+          "message": "request failed",
+          "errorName": "ProviderModelNotFoundError"
+        },
+        {
+          "time": "2026-10-22T04:38:14.330Z",
+          "service": "overlay:project-load",
+          "message": "config load failed"
+        }
+      ],
+      "data": {
+        "tables": 90,
+        "originalRows": 158027,
+        "originalRowDifferences": [],
+        "providerActivities": {
+          "original": 395,
+          "current": 395
+        },
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 74579968,
+          "modifiedAtMs": 1792643304698.7615
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact"
+      },
+      "manualObservations": [
+        {
+          "stage": "goal-mouse-escape",
+          "at": "2026-10-22T04:38:39.132Z",
+          "dom": {
+            "activeTag": "BUTTON",
+            "dialogs": 0,
+            "label": null,
+            "text": "Create goal"
+          }
+        },
+        {
+          "stage": "goal-keyboard-close-button",
+          "at": "2026-10-22T04:39:05.396Z",
+          "dom": {
+            "activeTag": "BUTTON",
+            "dialogs": 0,
+            "label": null,
+            "text": "Create goal"
+          }
+        },
+        {
+          "stage": "goal-outside-pointer",
+          "at": "2026-10-22T04:39:19.071Z",
+          "dom": {
+            "activeTag": "BUTTON",
+            "dialogs": 0,
+            "label": null,
+            "text": "Create goal"
+          }
+        },
+        {
+          "stage": "palette-button-escape",
+          "at": "2026-10-22T04:41:05.296Z",
+          "dom": {
+            "activeTag": "BUTTON",
+            "id": "",
+            "label": "Search chats or run a command"
+          }
+        },
+        {
+          "stage": "palette-composer-hotkey-escape",
+          "at": "2026-10-22T04:41:18.310Z",
+          "dom": {
+            "activeTag": "TEXTAREA",
+            "id": "chatTextarea",
+            "label": null
+          }
+        }
+      ],
+      "browserErrors": []
+    }
+  ],
+  "limits": [
+    "No Goal creation, mutation, run or LLM qualification; no new Session/message/Task/Mission",
+    "CommandPalette custom close owner checked with mouse and composer hotkey; FileEditor dirty owner reviewed in code only",
+    "No new live qualification of disconnected/hidden/disabled opener or newer focus owner branches",
+    "The before passive diagnostic builder targets parent b161e40d0; do not apply it to the changed callback split",
+    "Zero-model page model-configuration banner is expected isolation context; browser/runtime logs are classified separately",
+    "User page/process/database at18571 untouched; sources are fully settled QA copies; no blanket Sources/Rendering completion claim"
+  ]
+}

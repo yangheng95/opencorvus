@@ -65,10 +65,13 @@ export function Dialog(rawProps: DialogProps) {
     "formClass",
     "ref",
     "onClose",
+    "onOpenAutoFocus",
+    "onCloseAutoFocus",
     "children",
   ])
 
   let dialogRef: HTMLElement | undefined
+  let focusReturnTarget: HTMLElement | undefined
   let formRef: HTMLDivElement | undefined
   let removeDragListeners: (() => void) | undefined
   let dialogDragFrame = 0
@@ -185,6 +188,31 @@ export function Dialog(rawProps: DialogProps) {
     if (dialogRef) local.onClose?.(dialogRef)
   }
 
+  function handleOpenAutoFocus(event: Event) {
+    const active = document.activeElement
+    focusReturnTarget =
+      local.modal && active instanceof HTMLElement && active !== document.body && !dialogRef?.contains(active)
+        ? active
+        : undefined
+    local.onOpenAutoFocus?.(event)
+  }
+
+  function handleCloseAutoFocus(event: Event) {
+    const target = focusReturnTarget
+    focusReturnTarget = undefined
+    local.onCloseAutoFocus?.(event)
+    if (event.defaultPrevented || local.open || !local.modal || !target?.isConnected) return
+    if (
+      target.closest('[hidden], [inert], [aria-hidden="true"]') ||
+      target.matches(':disabled, [aria-disabled="true"]') ||
+      !target.getClientRects().length
+    ) return
+    const active = document.activeElement
+    if (active !== document.body && !dialogRef?.contains(active)) return
+    event.preventDefault()
+    target.focus({ preventScroll: true })
+  }
+
   function handleInteractOutside(event: Event) {
     if (local.backdropClose === false) event.preventDefault()
   }
@@ -261,6 +289,8 @@ export function Dialog(rawProps: DialogProps) {
             dialogRef = el
             if (typeof local.ref === "function") local.ref(el)
           }}
+          onOpenAutoFocus={handleOpenAutoFocus}
+          onCloseAutoFocus={handleCloseAutoFocus}
           onInteractOutside={handleInteractOutside}
           onFocusOutside={(event) => event.preventDefault()}
           onPointerDown={handleBackdropPointerDown}

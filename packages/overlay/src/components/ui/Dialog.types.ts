@@ -33,9 +33,9 @@ export interface DialogProps {
   formClass?: string
   /** Forwarded ref for imperative focus or metrics. */
   ref?: ((el: HTMLElement) => void) | HTMLElement
-  /** Kobalte autofocus hook forwarded to dialog content. */
+  /** Kobalte autofocus hook, called after capturing the modal opener. */
   onOpenAutoFocus?: (event: Event) => void
-  /** Kobalte close autofocus hook forwarded to dialog content. */
+  /** Close hook; preventDefault retains caller ownership instead of restoring the modal opener. */
   onCloseAutoFocus?: (event: Event) => void
   /** Close callback fired after Kobalte requests the controlled dialog to close. */
   onClose?: (dialog: HTMLElement) => void

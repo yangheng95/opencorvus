@@ -1,0 +1,50 @@
+[
+  {
+    "stage": "goal-mouse-escape",
+    "at": "2026-10-22T04:38:39.132Z",
+    "dom": {
+      "activeTag": "BUTTON",
+      "dialogs": 0,
+      "label": null,
+      "text": "Create goal"
+    }
+  },
+  {
+    "stage": "goal-keyboard-close-button",
+    "at": "2026-10-22T04:39:05.396Z",
+    "dom": {
+      "activeTag": "BUTTON",
+      "dialogs": 0,
+      "label": null,
+      "text": "Create goal"
+    }
+  },
+  {
+    "stage": "goal-outside-pointer",
+    "at": "2026-10-22T04:39:19.071Z",
+    "dom": {
+      "activeTag": "BUTTON",
+      "dialogs": 0,
+      "label": null,
+      "text": "Create goal"
+    }
+  },
+  {
+    "stage": "palette-button-escape",
+    "at": "2026-10-22T04:41:05.296Z",
+    "dom": {
+      "activeTag": "BUTTON",
+      "id": "",
+      "label": "Search chats or run a command"
+    }
+  },
+  {
+    "stage": "palette-composer-hotkey-escape",
+    "at": "2026-10-22T04:41:18.310Z",
+    "dom": {
+      "activeTag": "TEXTAREA",
+      "id": "chatTextarea",
+      "label": null
+    }
+  }
+]

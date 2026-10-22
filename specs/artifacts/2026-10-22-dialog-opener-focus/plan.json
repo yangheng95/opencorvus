@@ -1,0 +1,13 @@
+{
+  "scope": "dialog-opener-focus-531",
+  "ports": {
+    "before": 19033,
+    "after": 19035
+  },
+  "maximumRequests": 0,
+  "actualRequests": 0,
+  "authority": "No auth/catalog copies or Provider preflight",
+  "source": "Closed530-after complete90 tables/schema3/canonical;after uses closed531-before",
+  "before": "Passive open/close callback observations on parent b161e40d0",
+  "qualification": "Real manual Goal/CommandPalette mouse,keyboard,close focus;no UI tests/messages/new owners"
+}

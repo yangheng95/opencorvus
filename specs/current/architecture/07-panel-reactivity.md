@@ -1,5 +1,12 @@
 # 07-panel-reactivity — Overlay Reactive Projection
 
+Modal Dialogs capture their actual external opener before the open autofocus
+hook. On close, caller autofocus hooks run first and may prevent the default.
+Otherwise an available, visible, enabled opener receives focus only while BODY
+or the retiring Dialog still owns it. A reopened dialog or a new focus owner is
+respected. Non-modal prompts retain their existing close focus behavior; missing
+or detached openers do not cause a search for another target or delayed retries.
+
 Dialog dismissal separates pointer intent from keyboard focus movement. A
 non-modal interaction prompt stays visible when Tab moves focus outside its
 content, while retaining its original pending interaction and reply authority.
