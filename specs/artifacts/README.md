@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [重连模型配置读取](2026-10-23-composer-reconnect-config/README.md)：549六张实图，修复过期健康状态制造的配置错误，8次Sol EOF、四服务闭合与原数据保持。
+
 - [Session 成员快照恢复](2026-10-23-session-member-snapshot/README.md)：548 七张实图、10次Sol EOF；正文/成员同步恢复、三类Source契约、五服务闭合与完整数据保留。
 
 - [成员活跃流重连](2026-10-23-member-live-reconnect/README.md)：547 七张实图、27 次 Sol 原 EOF；同一正文持续增长、原 Task 自然完成、四进程正常关闭与原数据保持。

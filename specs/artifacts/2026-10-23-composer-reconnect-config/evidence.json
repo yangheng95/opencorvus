@@ -1,0 +1,1526 @@
+{
+  "at": "2026-10-22T19:59:00.599Z",
+  "scope": "549 canonical model read after reconnect",
+  "maximumBatchRequests": 16,
+  "actualRequests": 8,
+  "scopes": [
+    {
+      "stage": "before",
+      "exec": 36070,
+      "requests": 2,
+      "qualification": "Current OpenCorvus OAuth and complete catalog; actual gpt-6.1-sol streaming 200/EOF",
+      "preflight": {
+        "sessionID": "ses_h5gkUIE9QEKANSQwEdCz",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "serverReads": [
+        {
+          "at": "2026-10-22T19:50:49.416Z",
+          "requestID": "bfcf42f4-2175-4ec1-8a27-c7adc2d1eb03",
+          "method": "GET",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": "started"
+        },
+        {
+          "at": "2026-10-22T19:50:49.903Z",
+          "requestID": "bfcf42f4-2175-4ec1-8a27-c7adc2d1eb03",
+          "method": "GET",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 487
+        },
+        {
+          "at": "2026-10-22T19:50:50.248Z",
+          "requestID": "756d5e67-b6a6-4bfb-915e-c8f29bd938a5",
+          "method": "GET",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": "started"
+        },
+        {
+          "at": "2026-10-22T19:50:50.252Z",
+          "requestID": "756d5e67-b6a6-4bfb-915e-c8f29bd938a5",
+          "method": "GET",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 5
+        }
+      ],
+      "physical": {
+        "native": {
+          "occurrenceID": "composer-reconnect-config-549-before-e2b4d15e-8c64-421f-83c6-41e749750742",
+          "pid": 95164,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "originalLauncherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 91224,
+              "processInstanceID": "win32:639282954301718908",
+              "occurrenceID": "ba99712b-39bc-4588-9ece-97c8610cc790"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 95164,
+              "processInstanceID": "win32:639282954312457690",
+              "occurrenceID": "bc759f47-5589-4027-9516-857f643e5daf"
+            }
+          }
+        ],
+        "settledAt": "2026-10-22T19:51:17.107Z",
+        "reserveMs": 1153026
+      },
+      "retired": [
+        {
+          "scope": "runtime",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "runtime",
+          "name": "models.json",
+          "bytes": 9155406
+        },
+        {
+          "scope": "private",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "private",
+          "name": "models.json",
+          "bytes": 9155406
+        }
+      ],
+      "sourceCredentialAndCatalogRetained": true,
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 77905920,
+          "modifiedAtMs": 1792697992017.1045
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 165335,
+        "currentRows": 165770,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      },
+      "publishedAttachments": 0
+    },
+    {
+      "stage": "after",
+      "exec": 32081,
+      "requests": 2,
+      "qualification": "Current OpenCorvus OAuth and complete catalog; actual gpt-6.1-sol streaming 200/EOF",
+      "preflight": {
+        "sessionID": "ses_hEhIq3ZFk9hypcub29Da",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "serverReads": [
+        {
+          "at": "2026-10-22T19:51:56.405Z",
+          "requestID": "8508a37d-f782-45e7-822d-12d2065c4d43",
+          "method": "GET",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": "started"
+        },
+        {
+          "at": "2026-10-22T19:51:56.410Z",
+          "requestID": "8508a37d-f782-45e7-822d-12d2065c4d43",
+          "method": "GET",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 5
+        },
+        {
+          "at": "2026-10-22T19:51:56.959Z",
+          "requestID": "1208086f-60e9-4fdc-bf3e-3c84e818f346",
+          "method": "GET",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": "started"
+        },
+        {
+          "at": "2026-10-22T19:51:56.966Z",
+          "requestID": "1208086f-60e9-4fdc-bf3e-3c84e818f346",
+          "method": "GET",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 7
+        }
+      ],
+      "physical": {
+        "native": {
+          "occurrenceID": "composer-reconnect-config-549-after-16e50bfb-2595-44ae-b7f6-7aca00b79251",
+          "pid": 91896,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "originalLauncherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chain": [
+          {
+            "identity": {
+              "pid": 44852,
+              "processInstanceID": "win32:639282955008671486",
+              "occurrenceID": "0c928ded-713d-45d6-83b7-04420a1145b6"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 91896,
+              "processInstanceID": "win32:639282955020318592",
+              "occurrenceID": "8904e47a-2858-43b0-a790-6dcce273b03a"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "settledAt": "2026-10-22T19:52:48.877Z",
+        "reserveMs": 1131950
+      },
+      "retired": [
+        {
+          "scope": "runtime",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "runtime",
+          "name": "models.json",
+          "bytes": 9155406
+        },
+        {
+          "scope": "private",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "private",
+          "name": "models.json",
+          "bytes": 9155406
+        }
+      ],
+      "sourceCredentialAndCatalogRetained": true,
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 77905920,
+          "modifiedAtMs": 1792697992017.1045
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 165335,
+        "currentRows": 165834,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      },
+      "publishedAttachments": 0
+    },
+    {
+      "stage": "fixed-before",
+      "exec": 16702,
+      "requests": 2,
+      "qualification": "Current OpenCorvus OAuth and complete catalog; actual gpt-6.1-sol streaming 200/EOF",
+      "preflight": {
+        "sessionID": "ses_hwtcGr2Jrlyc6eL5HWUZ",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "serverReads": [
+        {
+          "at": "2026-10-22T19:55:18.589Z",
+          "requestID": "2b21d0a8-d064-4b04-b50d-9e6d4480b3d9",
+          "method": "GET",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": "started"
+        },
+        {
+          "at": "2026-10-22T19:55:19.052Z",
+          "requestID": "2b21d0a8-d064-4b04-b50d-9e6d4480b3d9",
+          "method": "GET",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 463
+        },
+        {
+          "at": "2026-10-22T19:55:19.341Z",
+          "requestID": "4c176eac-c631-4e3a-a6bb-f84a159d58f2",
+          "method": "GET",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": "started"
+        },
+        {
+          "at": "2026-10-22T19:55:19.351Z",
+          "requestID": "4c176eac-c631-4e3a-a6bb-f84a159d58f2",
+          "method": "GET",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 10
+        }
+      ],
+      "physical": {
+        "native": {
+          "occurrenceID": "composer-reconnect-config-549-fixed-before-7163bfcd-794d-41b6-bb9b-dc462d90d8db",
+          "pid": 69484,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "originalLauncherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chain": [
+          {
+            "identity": {
+              "pid": 90244,
+              "processInstanceID": "win32:639282957008086753",
+              "occurrenceID": "e1662ef1-fdd5-4044-b95e-2e94c8611f07"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 69484,
+              "processInstanceID": "win32:639282957018774976",
+              "occurrenceID": "0e428aad-501a-45ad-ac9b-061fa85dbfcd"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "settledAt": "2026-10-22T19:55:49.396Z",
+        "reserveMs": 1151373
+      },
+      "retired": [
+        {
+          "scope": "runtime",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "runtime",
+          "name": "models.json",
+          "bytes": 9155406
+        },
+        {
+          "scope": "private",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "private",
+          "name": "models.json",
+          "bytes": 9155406
+        }
+      ],
+      "sourceCredentialAndCatalogRetained": true,
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 77905920,
+          "modifiedAtMs": 1792697992017.1045
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 165335,
+        "currentRows": 165770,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      },
+      "publishedAttachments": 0
+    },
+    {
+      "stage": "fixed-after",
+      "exec": 25782,
+      "requests": 2,
+      "qualification": "Current OpenCorvus OAuth and complete catalog; actual gpt-6.1-sol streaming 200/EOF",
+      "preflight": {
+        "sessionID": "ses_hKMWdVSk43presJp8xNX",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "serverReads": [
+        {
+          "at": "2026-10-22T19:56:19.763Z",
+          "requestID": "834178a2-33c3-4223-a61c-6ea63797a091",
+          "method": "GET",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": "started"
+        },
+        {
+          "at": "2026-10-22T19:56:21.498Z",
+          "requestID": "834178a2-33c3-4223-a61c-6ea63797a091",
+          "method": "GET",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 1735
+        },
+        {
+          "at": "2026-10-22T19:56:26.972Z",
+          "requestID": "31351dee-8ea4-44a3-aca8-9cbff5e6fb67",
+          "method": "GET",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": "started"
+        },
+        {
+          "at": "2026-10-22T19:56:26.978Z",
+          "requestID": "31351dee-8ea4-44a3-aca8-9cbff5e6fb67",
+          "method": "GET",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 6
+        },
+        {
+          "at": "2026-10-22T19:56:27.455Z",
+          "requestID": "ddabb034-5fb8-4954-94e4-a67f2d0a1cfb",
+          "method": "GET",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": "started"
+        },
+        {
+          "at": "2026-10-22T19:56:27.460Z",
+          "requestID": "ddabb034-5fb8-4954-94e4-a67f2d0a1cfb",
+          "method": "GET",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 5
+        }
+      ],
+      "physical": {
+        "native": {
+          "occurrenceID": "composer-reconnect-config-549-fixed-after-f052dc08-90d7-4d88-b2ea-79e3d3e311f5",
+          "pid": 83872,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "originalLauncherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "chain": [
+          {
+            "identity": {
+              "pid": 64348,
+              "processInstanceID": "win32:639282957711492568",
+              "occurrenceID": "6dfbee2a-cef3-4c7f-a47f-0701aaeac896"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 83872,
+              "processInstanceID": "win32:639282957721113934",
+              "occurrenceID": "78727c29-09f0-4c53-9aa2-cb5aaa136853"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "settledAt": "2026-10-22T19:57:52.234Z",
+        "reserveMs": 1098877
+      },
+      "retired": [
+        {
+          "scope": "runtime",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "runtime",
+          "name": "models.json",
+          "bytes": 9155406
+        },
+        {
+          "scope": "private",
+          "name": "auth.json",
+          "bytes": 2194
+        },
+        {
+          "scope": "private",
+          "name": "models.json",
+          "bytes": 9155406
+        }
+      ],
+      "sourceCredentialAndCatalogRetained": true,
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 77905920,
+          "modifiedAtMs": 1792697992017.1045
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 165335,
+        "currentRows": 165802,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      },
+      "publishedAttachments": 0
+    }
+  ],
+  "modelTraces": [
+    {
+      "page": "original",
+      "events": [
+        {
+          "capturedAt": "2026-10-22T19:50:49.414Z",
+          "kind": "model-read-start",
+          "generation": 3,
+          "connected": true,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "at": 3353.199999809265
+        },
+        {
+          "capturedAt": "2026-10-22T19:50:49.905Z",
+          "kind": "model-read-settled",
+          "generation": 3,
+          "connected": true,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "status": "ready",
+          "model": "openai/gpt-6.1-sol",
+          "at": 3844.5
+        },
+        {
+          "capturedAt": "2026-10-22T19:50:50.245Z",
+          "kind": "model-read-start",
+          "generation": 4,
+          "connected": true,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "at": 4184.699999809265
+        },
+        {
+          "capturedAt": "2026-10-22T19:50:50.678Z",
+          "kind": "model-read-settled",
+          "generation": 4,
+          "connected": true,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "status": "ready",
+          "model": "openai/gpt-6.1-sol",
+          "at": 4617.400000095367
+        },
+        {
+          "capturedAt": "2026-10-22T19:51:48.896Z",
+          "kind": "model-read-start",
+          "generation": 5,
+          "connected": false,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "at": 62228.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T19:51:48.896Z",
+          "kind": "model-read-settled",
+          "generation": 5,
+          "connected": false,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "status": "failed",
+          "error": "Error: Cannot load session config while disconnected",
+          "at": 62264.699999809265
+        },
+        {
+          "capturedAt": "2026-10-22T19:51:56.402Z",
+          "kind": "model-read-start",
+          "generation": 6,
+          "connected": true,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "at": 70339.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T19:51:56.814Z",
+          "kind": "model-read-settled",
+          "generation": 6,
+          "connected": true,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "status": "ready",
+          "model": "openai/gpt-6.1-sol",
+          "at": 70751.30000019073
+        },
+        {
+          "capturedAt": "2026-10-22T19:51:56.957Z",
+          "kind": "model-read-start",
+          "generation": 7,
+          "connected": true,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "at": 70893.90000009537
+        },
+        {
+          "capturedAt": "2026-10-22T19:51:57.387Z",
+          "kind": "model-read-settled",
+          "generation": 7,
+          "connected": true,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "status": "ready",
+          "model": "openai/gpt-6.1-sol",
+          "at": 71324.19999980927
+        }
+      ]
+    },
+    {
+      "page": "fixed",
+      "events": [
+        {
+          "capturedAt": "2026-10-22T19:55:18.585Z",
+          "kind": "model-read-start",
+          "generation": 3,
+          "connected": true,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "at": 3407.5
+        },
+        {
+          "capturedAt": "2026-10-22T19:55:19.053Z",
+          "kind": "model-read-settled",
+          "generation": 3,
+          "connected": true,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "status": "ready",
+          "model": "openai/gpt-6.1-sol",
+          "at": 3875.7000002861023
+        },
+        {
+          "capturedAt": "2026-10-22T19:55:19.338Z",
+          "kind": "model-read-start",
+          "generation": 4,
+          "connected": true,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "at": 4160
+        },
+        {
+          "capturedAt": "2026-10-22T19:55:19.688Z",
+          "kind": "model-read-settled",
+          "generation": 4,
+          "connected": true,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "status": "ready",
+          "model": "openai/gpt-6.1-sol",
+          "at": 4510.599999904633
+        },
+        {
+          "capturedAt": "2026-10-22T19:56:20.330Z",
+          "kind": "model-read-start",
+          "generation": 5,
+          "connected": false,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "at": 64499.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T19:56:21.498Z",
+          "kind": "model-read-settled",
+          "generation": 5,
+          "connected": true,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "status": "ready",
+          "model": "openai/gpt-6.1-sol",
+          "at": 66318.59999990463
+        },
+        {
+          "capturedAt": "2026-10-22T19:56:26.970Z",
+          "kind": "model-read-start",
+          "generation": 6,
+          "connected": true,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "at": 71788.40000009537
+        },
+        {
+          "capturedAt": "2026-10-22T19:56:27.300Z",
+          "kind": "model-read-settled",
+          "generation": 6,
+          "connected": true,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "status": "ready",
+          "model": "openai/gpt-6.1-sol",
+          "at": 72118.5
+        },
+        {
+          "capturedAt": "2026-10-22T19:56:27.356Z",
+          "kind": "model-read-start",
+          "generation": 7,
+          "connected": true,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "at": 72173.59999990463
+        },
+        {
+          "capturedAt": "2026-10-22T19:56:27.886Z",
+          "kind": "model-read-settled",
+          "generation": 7,
+          "connected": true,
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "status": "ready",
+          "model": "openai/gpt-6.1-sol",
+          "at": 72704.2000002861
+        }
+      ]
+    }
+  ],
+  "observations": [
+    {
+      "stage": "before",
+      "phase": "01-model-ready",
+      "at": "2026-10-22T19:51:03.255Z",
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 64017
+      },
+      "bodyOwners": [
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56"
+      ],
+      "bodyBlocks": [
+        1,
+        2,
+        1,
+        27,
+        1,
+        35,
+        1,
+        35,
+        1,
+        37,
+        1,
+        92,
+        1,
+        90,
+        1,
+        90,
+        1,
+        49,
+        2,
+        50,
+        1,
+        1,
+        1,
+        1,
+        46,
+        1,
+        1,
+        1,
+        10,
+        1,
+        1,
+        14,
+        1,
+        1,
+        30
+      ],
+      "sourceOwners": [
+        "6",
+        "8",
+        "10",
+        "12",
+        "14",
+        "16",
+        "18",
+        "20",
+        "22",
+        "24",
+        "26"
+      ],
+      "sourceLinks": [
+        [],
+        [],
+        [],
+        [],
+        [
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "stage": "after",
+      "phase": "03-first-reconnect",
+      "at": "2026-10-22T19:51:48.984Z",
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 64017
+      },
+      "bodyOwners": [
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56"
+      ],
+      "bodyBlocks": [
+        1,
+        2,
+        1,
+        27,
+        1,
+        35,
+        1,
+        35,
+        1,
+        37,
+        1,
+        92,
+        1,
+        90,
+        1,
+        90,
+        1,
+        49,
+        2,
+        50,
+        1,
+        1,
+        1,
+        1,
+        46,
+        1,
+        1,
+        1,
+        10,
+        1,
+        1,
+        14,
+        1,
+        1,
+        30
+      ],
+      "sourceOwners": [
+        "6",
+        "8",
+        "10",
+        "12",
+        "14",
+        "16",
+        "18",
+        "20",
+        "22",
+        "24",
+        "26"
+      ],
+      "sourceLinks": [
+        [],
+        [],
+        [],
+        [],
+        [
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "stage": "after",
+      "phase": "05-later-recovery",
+      "at": "2026-10-22T19:52:13.290Z",
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 64017
+      },
+      "bodyOwners": [
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56"
+      ],
+      "bodyBlocks": [
+        1,
+        2,
+        1,
+        27,
+        1,
+        35,
+        1,
+        35,
+        1,
+        37,
+        1,
+        92,
+        1,
+        90,
+        1,
+        90,
+        1,
+        49,
+        2,
+        50,
+        1,
+        1,
+        1,
+        1,
+        46,
+        1,
+        1,
+        1,
+        10,
+        1,
+        1,
+        14,
+        1,
+        1,
+        30
+      ],
+      "sourceOwners": [
+        "6",
+        "8",
+        "10",
+        "12",
+        "14",
+        "16",
+        "18",
+        "20",
+        "22",
+        "24",
+        "26"
+      ],
+      "sourceLinks": [
+        [],
+        [],
+        [],
+        [],
+        [
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "stage": "fixed-before",
+      "phase": "06-fixed-ready",
+      "at": "2026-10-22T19:55:33.086Z",
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 64017
+      },
+      "bodyOwners": [
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56"
+      ],
+      "bodyBlocks": [
+        1,
+        2,
+        1,
+        27,
+        1,
+        35,
+        1,
+        35,
+        1,
+        37,
+        1,
+        92,
+        1,
+        90,
+        1,
+        90,
+        1,
+        49,
+        2,
+        50,
+        1,
+        1,
+        1,
+        1,
+        46,
+        1,
+        1,
+        1,
+        10,
+        1,
+        1,
+        14,
+        1,
+        1,
+        30
+      ],
+      "sourceOwners": [
+        "6",
+        "8",
+        "10",
+        "12",
+        "14",
+        "16",
+        "18",
+        "20",
+        "22",
+        "24",
+        "26"
+      ],
+      "sourceLinks": [
+        [],
+        [],
+        [],
+        [],
+        [
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "stage": "fixed-before",
+      "phase": "07-fixed-offline",
+      "at": "2026-10-22T19:56:02.669Z",
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 64017
+      },
+      "bodyOwners": [
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56"
+      ],
+      "bodyBlocks": [
+        1,
+        2,
+        1,
+        27,
+        1,
+        35,
+        1,
+        35,
+        1,
+        37,
+        1,
+        92,
+        1,
+        90,
+        1,
+        90,
+        1,
+        49,
+        2,
+        50,
+        1,
+        1,
+        1,
+        1,
+        46,
+        1,
+        1,
+        1,
+        10,
+        1,
+        1,
+        14,
+        1,
+        1,
+        30
+      ],
+      "sourceOwners": [
+        "6",
+        "8",
+        "10",
+        "12",
+        "14",
+        "16",
+        "18",
+        "20",
+        "22",
+        "24",
+        "26"
+      ],
+      "sourceLinks": [
+        [],
+        [],
+        [],
+        [],
+        [
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "stage": "fixed-after",
+      "phase": "09-fixed-restored",
+      "at": "2026-10-22T19:56:35.921Z",
+      "session": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "scroll": {
+        "full": 64593,
+        "height": 576,
+        "top": 64017
+      },
+      "bodyOwners": [
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56"
+      ],
+      "bodyBlocks": [
+        1,
+        2,
+        1,
+        27,
+        1,
+        35,
+        1,
+        35,
+        1,
+        37,
+        1,
+        92,
+        1,
+        90,
+        1,
+        90,
+        1,
+        49,
+        2,
+        50,
+        1,
+        1,
+        1,
+        1,
+        46,
+        1,
+        1,
+        1,
+        10,
+        1,
+        1,
+        14,
+        1,
+        1,
+        30
+      ],
+      "sourceOwners": [
+        "6",
+        "8",
+        "10",
+        "12",
+        "14",
+        "16",
+        "18",
+        "20",
+        "22",
+        "24",
+        "26"
+      ],
+      "sourceLinks": [
+        [],
+        [],
+        [],
+        [],
+        [
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    }
+  ],
+  "notes": [
+    "Only read-only diagnostic hooks and manual browser interaction; no UI automation tests",
+    "Console capturedAt may lag the original console emission; at is the original performance.now monotonic time",
+    "Actual model dropdown opened and filtered to selected GPT-6.1 Sol; no selection mutation",
+    "Global health confirmation retains its separate presentation and write/send admission contract"
+  ]
+}

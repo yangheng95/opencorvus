@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [重连模型配置读取](records/2026-10/2026-10-23-composer-reconnect-config.md)：549修复SSE先恢复时过期健康状态拦截配置GET；六张实图、9服务合同与8次Sol闭合。
+
 - [Session 成员快照恢复](records/2026-10/2026-10-23-session-member-snapshot.md)：548 修复重连时成员摘要/导航/时间的8.624秒缺口，补齐三类来源公开契约；七张实图与10次Sol闭合。
 
 - [成员活跃流重连](records/2026-10/2026-10-23-member-live-reconnect.md)：[七张实图与原 reader 证明](artifacts/2026-10-23-member-live-reconnect/README.md)，3.062 秒真实恢复、原正文继续增长；修正私有测量工具，27 次 Sol 完整结算。

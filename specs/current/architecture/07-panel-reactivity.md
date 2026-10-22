@@ -48,6 +48,13 @@ item before looking up a member grid or an enclosing transcript turn.
 
 ### Applied connection ownership
 
+Canonical Session configuration GETs use the actual transport outcome and
+captured API authority even while the last periodic health observation is
+offline. A selected Task or Session stream may reconnect before that observation
+updates. Composer reads retain their projection generation and selection owner,
+and publish the returned model or original request error. This read neither
+changes global connection status nor admits configuration writes or message sends.
+
 API-state owns one reactive authority revision for the applied URL and credentials.
 Logical reads, mutations, pagination, batches, streams and compound operations
 capture it once; their existing request/selection owners additionally fence values,

@@ -311,9 +311,8 @@ function directoryScopedPath(path: string, directory: string, label: string): st
 }
 
 export async function getSessionConfig(input: SessionConfigRequest): Promise<SessionConfigResponse> {
-  if (!appStore.connected) {
-    throw new Error("Cannot load session config while disconnected")
-  }
+  // A Session stream may reconnect before the periodic health observation.
+  // This read resolves through its actual transport and captured authority.
   const sessionID = input.sessionID.trim()
   if (!sessionID) throw new Error("getSessionConfig: sessionID is required")
   return await apiJson(

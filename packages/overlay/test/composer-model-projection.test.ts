@@ -105,6 +105,31 @@ test("canonical ready configuration publishes its model and clears the issue", a
   expect(appStore.composerModelIssue).toBeNull()
 })
 
+test("reconnected configuration reads its actual transport while the health observation is still offline", async () => {
+  setAppStore("connected", false)
+  const requests: TransportRequest[] = []
+  responder = async (request) => {
+    requests.push(request)
+    return ready("openai/reconnected")
+  }
+  expect(await refreshActiveComposerModelFromSession()).toEqual({ status: "ready", model: "openai/reconnected" })
+  expect(requests.map((request) => ({ path: request.path, directory: request.query?.directory }))).toEqual([
+    { path: "session/session-a/config", directory },
+  ])
+  expect(appStore.composerModel).toBe("openai/reconnected")
+  expect(appStore.composerModelIssue).toBeNull()
+})
+
+test("offline health observations retain the original error from the transport attempt", async () => {
+  setAppStore("connected", false)
+  const failure = new TypeError("Connection was closed during configuration read")
+  responder = async () => {
+    throw failure
+  }
+  expect(await project()).toEqual({ status: "failed", error: failure })
+  expect(appStore.composerModelIssue).toEqual({ error: failure, retrying: false })
+})
+
 test("typed config failure clears the current model and retry settles the same owner", async () => {
   expect(await project()).toEqual({ status: "ready", model: "openai/ready" })
   expect(appStore.composerModel).toBe("openai/ready")
