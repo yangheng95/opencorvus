@@ -1,0 +1,28 @@
+{
+  "at": "2026-10-22T11:22:13.701Z",
+  "runtime": "1.4.0",
+  "revision": "34cbb9a40b4bd1bd767d134a7065e66c2432a676",
+  "source": "Original persisted 537 arXiv PNG;input bytes and mtime retained",
+  "input": {
+    "bytes": 643,
+    "dimensions": {
+      "format": "png",
+      "width": 11,
+      "height": 14
+    }
+  },
+  "output": {
+    "bytes": 643,
+    "mime": "image/png",
+    "dimensions": {
+      "format": "png",
+      "width": 11,
+      "height": 14
+    }
+  },
+  "nativeModules": [
+    "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\@img+sharp-win32-x64@0.35.5\\node_modules\\@img\\sharp-win32-x64\\lib\\sharp-win32-x64-0.35.5.node"
+  ],
+  "elapsedMs": 15,
+  "contract": "Actual production prepareModelImageInput including sharp trim/encode;positive output;no Provider or UI automation"
+}

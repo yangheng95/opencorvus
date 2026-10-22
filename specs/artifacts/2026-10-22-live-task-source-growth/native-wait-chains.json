@@ -1,0 +1,632 @@
+{
+  "at": "2026-10-22T11:04:21.0566871Z",
+  "owner": {
+    "pid": 77252,
+    "processInstanceID": "win32:639282634545857139",
+    "occurrenceID": "1b7167f7-6c80-4f3c-a7b7-8c91d887d653"
+  },
+  "processCPU": 94.125,
+  "threads": [
+    {
+      "cpuSeconds": 54.59375,
+      "cycle": false,
+      "error": 0,
+      "threadID": 86024,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223030136,
+          "contextSwitches": 176646,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 86024
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 0.59375,
+      "cycle": false,
+      "error": 0,
+      "threadID": 7096,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223033987,
+          "contextSwitches": 6536,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 7096
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 1.203125,
+      "cycle": false,
+      "error": 0,
+      "threadID": 20408,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223029452,
+          "contextSwitches": 31616,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 20408
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 1.3125,
+      "cycle": false,
+      "error": 0,
+      "threadID": 86632,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223029444,
+          "contextSwitches": 31520,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 86632
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 1.578125,
+      "cycle": false,
+      "error": 0,
+      "threadID": 93188,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223029444,
+          "contextSwitches": 31432,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 93188
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 0.0,
+      "cycle": false,
+      "error": 0,
+      "threadID": 94784,
+      "waitReason": "EventPairLow",
+      "nodes": [
+        {
+          "status": 2,
+          "waitTime": 223019395,
+          "contextSwitches": 456,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 94784
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 1.265625,
+      "cycle": false,
+      "error": 0,
+      "threadID": 94492,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223029444,
+          "contextSwitches": 30992,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 94492
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 0.59375,
+      "cycle": false,
+      "error": 0,
+      "threadID": 70976,
+      "waitReason": "EventPairLow",
+      "nodes": [
+        {
+          "status": 2,
+          "waitTime": 223035397,
+          "contextSwitches": 1178,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 70976
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 1.421875,
+      "cycle": false,
+      "error": 0,
+      "threadID": 71424,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223029444,
+          "contextSwitches": 31437,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 71424
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 1.125,
+      "cycle": false,
+      "error": 0,
+      "threadID": 94732,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223029444,
+          "contextSwitches": 31537,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 94732
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 1.640625,
+      "cycle": false,
+      "error": 0,
+      "threadID": 85724,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223029444,
+          "contextSwitches": 31037,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 85724
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 1.4375,
+      "cycle": false,
+      "error": 0,
+      "threadID": 64992,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223029444,
+          "contextSwitches": 31102,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 64992
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 1.203125,
+      "cycle": false,
+      "error": 0,
+      "threadID": 97376,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223029444,
+          "contextSwitches": 31143,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 97376
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 1.3125,
+      "cycle": false,
+      "error": 0,
+      "threadID": 82392,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223029444,
+          "contextSwitches": 30951,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 82392
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 1.515625,
+      "cycle": false,
+      "error": 0,
+      "threadID": 97484,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223029444,
+          "contextSwitches": 31531,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 97484
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 1.25,
+      "cycle": false,
+      "error": 0,
+      "threadID": 94872,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223029444,
+          "contextSwitches": 31754,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 94872
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 0.109375,
+      "cycle": false,
+      "error": 0,
+      "threadID": 73912,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223029431,
+          "contextSwitches": 2781,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 73912
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 0.171875,
+      "cycle": false,
+      "error": 0,
+      "threadID": 76232,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223029430,
+          "contextSwitches": 2802,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 76232
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 0.03125,
+      "cycle": false,
+      "error": 0,
+      "threadID": 94628,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223029430,
+          "contextSwitches": 2774,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 94628
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 0.125,
+      "cycle": false,
+      "error": 0,
+      "threadID": 86184,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223029430,
+          "contextSwitches": 2768,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 86184
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 0.203125,
+      "cycle": false,
+      "error": 0,
+      "threadID": 2156,
+      "waitReason": "EventPairLow",
+      "nodes": [
+        {
+          "status": 2,
+          "waitTime": 223035574,
+          "contextSwitches": 2376,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 2156
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 0.0,
+      "cycle": false,
+      "error": 0,
+      "threadID": 98204,
+      "waitReason": "EventPairLow",
+      "nodes": [
+        {
+          "status": 2,
+          "waitTime": 223026145,
+          "contextSwitches": 12,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 98204
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 0.0,
+      "cycle": false,
+      "error": 0,
+      "threadID": 49556,
+      "waitReason": "EventPairLow",
+      "nodes": [
+        {
+          "status": 2,
+          "waitTime": 223034270,
+          "contextSwitches": 17,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 49556
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 0.078125,
+      "cycle": false,
+      "error": 0,
+      "threadID": 23804,
+      "waitReason": "EventPairLow",
+      "nodes": [
+        {
+          "status": 2,
+          "waitTime": 223035265,
+          "contextSwitches": 215,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 23804
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 0.0,
+      "cycle": false,
+      "error": 0,
+      "threadID": 97476,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223035259,
+          "contextSwitches": 4,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 97476
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 0.0,
+      "cycle": false,
+      "error": 0,
+      "threadID": 87400,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223035259,
+          "contextSwitches": 4,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 87400
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 0.0,
+      "cycle": false,
+      "error": 0,
+      "threadID": 95500,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223035259,
+          "contextSwitches": 3,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 95500
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 0.0,
+      "cycle": false,
+      "error": 0,
+      "threadID": 94824,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223035259,
+          "contextSwitches": 3,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 94824
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 0.0,
+      "cycle": false,
+      "error": 0,
+      "threadID": 61444,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223035259,
+          "contextSwitches": 3,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 61444
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 0.0,
+      "cycle": false,
+      "error": 0,
+      "threadID": 96876,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223035259,
+          "contextSwitches": 3,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 96876
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    },
+    {
+      "cpuSeconds": 0.0,
+      "cycle": false,
+      "error": 0,
+      "threadID": 95884,
+      "waitReason": "Unknown",
+      "nodes": [
+        {
+          "status": 3,
+          "waitTime": 223035259,
+          "contextSwitches": 3,
+          "processID": 77252,
+          "type": 8,
+          "threadID": 95884
+        }
+      ],
+      "success": true,
+      "count": 1,
+      "state": "Wait"
+    }
+  ],
+  "method": "Read-only synchronous Windows WCT,flags=0;no process suspension,memory,credentials,or external-chain traversal"
+}

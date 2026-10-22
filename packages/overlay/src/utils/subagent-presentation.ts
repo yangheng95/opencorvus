@@ -151,15 +151,25 @@ export function buildSubagentConversationItems(input: {
   const records = subagentSessionRecords(input.records.filter(isSubagentActivityRecord))
   const recordsBySession = new Map(records.map((record) => [record.sessionID, record]))
   const timeline: TimelineEntry[] = []
-  for (const cardID of input.order) {
+  const appendCard = (cardID: string) => {
     const card = input.cards[cardID]
     if (!card) throw new Error(`subagent conversation projection references missing card ${cardID}`)
-    if (card.sessionID && recordsBySession.has(card.sessionID)) continue
     timeline.push({
       id: cardID,
       kind: "card",
       orderKey: requireTimelineOrderKey(card.orderKey, `conversation card ${cardID}`),
     })
+  }
+  for (const cardID of input.order) {
+    const card = input.cards[cardID]
+    if (!card) throw new Error(`subagent conversation projection references missing card ${cardID}`)
+    if (card.sessionID && recordsBySession.has(card.sessionID)) {
+      // The progress tile replaces the member's transcript, while its real
+      // interaction children retain their own timeline and reply surface.
+      for (const childID of card.childIDs) appendCard(childID)
+      continue
+    }
+    appendCard(cardID)
   }
   for (const record of records) {
     timeline.push({

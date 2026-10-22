@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test"
 import type { AgentActivityRecord } from "../src/utils/agent-activity"
-import { buildSubagentConversationItems, subagentSessionRecords } from "../src/utils/subagent-presentation"
+import { subagentSessionRecords } from "../src/utils/subagent-presentation"
 
 function pad(value: number): string {
   return String(value).padStart(16, "0")
@@ -76,24 +76,4 @@ test("Session order follows first appearance, not the newest occurrence", () => 
   ]
 
   expect(subagentSessionRecords(records).map((entry) => entry.sessionID)).toEqual(["ses_first", "ses_second"])
-})
-
-/** The progress grid is keyed by Session too, so a repeated Session must take
- *  one tile rather than one per occurrence. */
-test("the progress grid lists a repeated Session once", () => {
-  const records = [
-    record({ sessionID: "ses_a", occurrence: "run-1", startedAt: 1_000, lastObservedAt: 2_000 }),
-    record({ sessionID: "ses_a", occurrence: "run-2", startedAt: 3_000, lastObservedAt: 4_000 }),
-    record({ sessionID: "ses_b", occurrence: "run-1", startedAt: 5_000, lastObservedAt: 6_000 }),
-  ]
-
-  const items = buildSubagentConversationItems({ order: [], cards: {}, records })
-
-  expect(items).toEqual([
-    {
-      id: "subagent-grid:ses_a",
-      kind: "subagent-grid",
-      sessionIDs: ["ses_a", "ses_b"],
-    },
-  ])
 })

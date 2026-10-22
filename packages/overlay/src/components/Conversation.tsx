@@ -212,6 +212,10 @@ function VirtualizedConversationCards(props: {
     sessionID?: string
     transcriptTarget: boolean
   } | null {
+    const directItem = itemByID().get(cardID)
+    if (directItem?.kind === "card") {
+      return { itemID: directItem.id, cardID, transcriptTarget: false }
+    }
     const sessionID = subagentSessionForCard(cardID)
     if (sessionID) {
       const item = subagentGridItemForSession(items(), sessionID)

@@ -1,0 +1,138 @@
+{
+  "at": "2026-10-22T11:28:16.701Z",
+  "messages": [
+    {
+      "id": "msg_g0VYlzS0o00hw95ax6fk",
+      "sessionID": "ses_h33yzvtiYmW1UEyocSXB",
+      "prior": {
+        "time": {
+          "created": 1792664952874
+        },
+        "finish": "tool-calls"
+      },
+      "current": {
+        "time": {
+          "created": 1792664952874,
+          "completed": 1792666720767
+        },
+        "finish": "error",
+        "error": {
+          "name": "ProcessExecutionInterruptedError",
+          "data": {
+            "message": "Previous Prompt owner ended before Provider activity for Message msg_g0VYlzS0o00hw95ax6fk completed"
+          }
+        }
+      }
+    },
+    {
+      "id": "msg_g0VYm1mFw007S5Hh2wBH",
+      "sessionID": "ses_hHpC127wALpwIiSOX86d",
+      "prior": {
+        "time": {
+          "created": 1792665507348
+        }
+      },
+      "current": {
+        "time": {
+          "created": 1792665507348,
+          "completed": 1792666720795
+        },
+        "finish": "error",
+        "error": {
+          "name": "ProcessExecutionInterruptedError",
+          "data": {
+            "message": "Previous process ended before Session ses_hHpC127wALpwIiSOX86d completed assistant message msg_g0VYm1mFw007S5Hh2wBH"
+          }
+        }
+      }
+    }
+  ],
+  "owners": [
+    {
+      "session_id": "ses_-zURE19wozzlTmx3ixXd",
+      "project_id": "prj_hp1ir9XEheMHTOMlkSL8",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\live-task-source-growth-537-before\\runtime\\data\\projects\\2026\\10\\22\\eaeacbce-3533-49f2-aa4e-e26c79421c59",
+      "generation": "cal_g0VYlyq6X00UwMFrxG5c",
+      "owner_pid": 36424,
+      "owner_process_instance_id": "win32:639282615691484416",
+      "owner_occurrence_id": "2070eea6-4f53-48e1-9fd7-302d5f1bad82",
+      "time_acquired": 1792664807157
+    },
+    {
+      "session_id": "ses_hHpC127wALpwIiSOX86d",
+      "project_id": "prj_hp1ir9XEheMHTOMlkSL8",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\live-task-source-growth-537-before\\runtime\\data\\projects\\2026\\10\\22\\eaeacbce-3533-49f2-aa4e-e26c79421c59",
+      "generation": "cal_g0VYlz7Go00jzxGlU3fT",
+      "owner_pid": 36424,
+      "owner_process_instance_id": "win32:639282615691484416",
+      "owner_occurrence_id": "2070eea6-4f53-48e1-9fd7-302d5f1bad82",
+      "time_acquired": 1792664873142
+    },
+    {
+      "session_id": "ses_h33yzvtiYmW1UEyocSXB",
+      "project_id": "prj_hp1ir9XEheMHTOMlkSL8",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\live-task-source-growth-537-before\\runtime\\data\\projects\\2026\\10\\22\\eaeacbce-3533-49f2-aa4e-e26c79421c59",
+      "generation": "cal_g0VYm6rv700cJlv9EB7g",
+      "owner_pid": 77252,
+      "owner_process_instance_id": "win32:639282634545857139",
+      "owner_occurrence_id": "674f41c5-b517-4b45-9d18-000576f5c6ab",
+      "time_acquired": 1792666720761
+    },
+    {
+      "session_id": "ses_-zURDsnRmzzDV226os6f",
+      "project_id": "prj_hqstF38LMYVEi0PQVcXc",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\live-task-source-growth-537-after\\runtime\\data\\projects\\2026\\10\\22\\7f6e95df-9037-456b-a2f2-d67cf237dfe5",
+      "generation": "cal_g0VYm7CbQ00PH0JRFKvi",
+      "owner_pid": 77252,
+      "owner_process_instance_id": "win32:639282634545857139",
+      "owner_occurrence_id": "674f41c5-b517-4b45-9d18-000576f5c6ab",
+      "time_acquired": 1792666800264
+    },
+    {
+      "session_id": "ses_haX6S4abz02IT2cJkx49",
+      "project_id": "prj_hqstF38LMYVEi0PQVcXc",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\live-task-source-growth-537-after\\runtime\\data\\projects\\2026\\10\\22\\7f6e95df-9037-456b-a2f2-d67cf237dfe5",
+      "generation": "cal_g0VYm7Qw500RkoPGUTWF",
+      "owner_pid": 77252,
+      "owner_process_instance_id": "win32:639282634545857139",
+      "owner_occurrence_id": "674f41c5-b517-4b45-9d18-000576f5c6ab",
+      "time_acquired": 1792666855361
+    },
+    {
+      "session_id": "ses_hLTW0YS2gJyafQEZG2iM",
+      "project_id": "prj_hqstF38LMYVEi0PQVcXc",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\live-task-source-growth-537-after\\runtime\\data\\projects\\2026\\10\\22\\7f6e95df-9037-456b-a2f2-d67cf237dfe5",
+      "generation": "cal_g0VYm7R46008ThajnhpS",
+      "owner_pid": 77252,
+      "owner_process_instance_id": "win32:639282634545857139",
+      "owner_occurrence_id": "674f41c5-b517-4b45-9d18-000576f5c6ab",
+      "time_acquired": 1792666855858
+    }
+  ],
+  "memory": [
+    {
+      "id": "mem_h6r23eQkVxF8ppMaNuxh",
+      "projectID": "prj_hp1ir9XEheMHTOMlkSL8",
+      "kind": "project_context",
+      "source": "reflection",
+      "key": "project-memory-document",
+      "retained": true
+    },
+    {
+      "id": "mem_hHejPV6qWDfwx9DqBbzt",
+      "projectID": "prj_hp1ir9XEheMHTOMlkSL8",
+      "kind": "user_message",
+      "source": "user",
+      "key": "interaction_reply:int_g0VYlzOro00qHQEo5CLl",
+      "retained": false
+    },
+    {
+      "id": "mem_hzsR2SHhfvmqd3ZLHXeg",
+      "projectID": "prj_hp1ir9XEheMHTOMlkSL8",
+      "kind": "user_message",
+      "source": "user",
+      "key": "interaction_reply:int_g0VYlzTkE00i8ZZk7y0m",
+      "retained": false
+    }
+  ]
+}

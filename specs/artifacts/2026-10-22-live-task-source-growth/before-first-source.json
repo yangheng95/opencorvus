@@ -1,0 +1,162 @@
+{
+  "phase": "first-source",
+  "startedAt": "2026-10-22T10:29:35.070Z",
+  "receivedAt": "2026-10-22T10:29:35.103Z",
+  "sessionID": "ses_hHpC127wALpwIiSOX86d",
+  "url": "/task/tsk_g00VYlyopB00h7w27eIw/conversation/session/ses_hHpC127wALpwIiSOX86d?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-task-source-growth-537-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5Ceaeacbce-3533-49f2-aa4e-e26c79421c59",
+  "status": 200,
+  "prior": null,
+  "received": {
+    "mode": "snapshot",
+    "epoch": 1792664770709,
+    "sequence": 565,
+    "messages": [
+      {
+        "messageID": "msg_g0VYlz7FR00zwCfGgFr1",
+        "parts": [
+          {
+            "id": "prt_g0VYlz7FR00HODqEl8F7",
+            "type": "text",
+            "textLength": 3620
+          },
+          {
+            "id": "prt_g0VYlz7FR01tKhsgBKNj",
+            "type": "text",
+            "textLength": 329
+          }
+        ]
+      },
+      {
+        "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+        "parts": [
+          {
+            "id": "prt_g0VYlz7mx00s9lWyvEMX",
+            "type": "step-start"
+          },
+          {
+            "id": "prt_g0VYlz8dd00pWcuVkoZF",
+            "type": "text",
+            "textLength": 79
+          },
+          {
+            "id": "prt_g0VYlz9DQ009aokcHv1V",
+            "type": "tool"
+          },
+          {
+            "id": "prt_g0VYlzNFy003mnOrS6Ou",
+            "type": "source-url"
+          },
+          {
+            "id": "prt_g0VYlzNG200jlm01Z3RE",
+            "type": "step-finish"
+          }
+        ]
+      },
+      {
+        "messageID": "msg_g0VYlzNHF00KE9pPvzmq",
+        "parts": [
+          {
+            "id": "prt_g0VYlzNL000FG0gLTzZM",
+            "type": "step-start"
+          },
+          {
+            "id": "prt_g0VYlzNy200G9j4TgB2N",
+            "type": "text",
+            "textLength": 209
+          },
+          {
+            "id": "prt_g0VYlzOiH00ATA7a4B7c",
+            "type": "tool"
+          }
+        ]
+      }
+    ]
+  },
+  "merged": {
+    "messages": [
+      {
+        "messageID": "msg_g0VYlz7FR00zwCfGgFr1",
+        "time": {
+          "created": 1792664873115
+        },
+        "parts": [
+          {
+            "id": "prt_g0VYlz7FR00HODqEl8F7",
+            "type": "text",
+            "textLength": 3620
+          },
+          {
+            "id": "prt_g0VYlz7FR01tKhsgBKNj",
+            "type": "text",
+            "textLength": 329
+          }
+        ]
+      },
+      {
+        "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+        "finish": "tool-calls",
+        "time": {
+          "created": 1792664873267,
+          "completed": 1792664934643
+        },
+        "parts": [
+          {
+            "id": "prt_g0VYlz7mx00s9lWyvEMX",
+            "type": "step-start"
+          },
+          {
+            "id": "prt_g0VYlz8dd00pWcuVkoZF",
+            "type": "text",
+            "textLength": 79
+          },
+          {
+            "id": "prt_g0VYlz9DQ009aokcHv1V",
+            "type": "tool"
+          },
+          {
+            "id": "prt_g0VYlzNFy003mnOrS6Ou",
+            "type": "source-url"
+          },
+          {
+            "id": "prt_g0VYlzNG200jlm01Z3RE",
+            "type": "step-finish"
+          }
+        ]
+      },
+      {
+        "messageID": "msg_g0VYlzNHF00KE9pPvzmq",
+        "time": {
+          "created": 1792664934673
+        },
+        "parts": [
+          {
+            "id": "prt_g0VYlzNL000FG0gLTzZM",
+            "type": "step-start"
+          },
+          {
+            "id": "prt_g0VYlzNy200G9j4TgB2N",
+            "type": "text",
+            "textLength": 209
+          },
+          {
+            "id": "prt_g0VYlzOiH00ATA7a4B7c",
+            "type": "tool"
+          }
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VYlzNFy003mnOrS6Ou",
+        "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+        "sessionID": "ses_hHpC127wALpwIiSOX86d",
+        "type": "source-url",
+        "sourceId": "8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc",
+        "toolPartID": "prt_g0VYlz9DQ009aokcHv1V",
+        "url": "https://aclanthology.org/2025.naacl-long.475/",
+        "title": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology"
+      }
+    ]
+  },
+  "qualification": "Actual public backend payload parsed/merged by current production contract;prior immutable Source facts retained;not a UI test"
+}

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [活跃Task来源与正文追加](2026-10-22-live-task-source-growth.md)：[真实卡片、失败scope与原生栈](../../artifacts/2026-10-22-live-task-source-growth/README.md)，修复成员权限入口和本地sharp缺件，9实图/26次Sol；非空delta/自然终态仍未达。
+
 - [Task成员来源与live epoch](2026-10-22-task-source-epoch.md)：[原成员读取与同页恢复](../../artifacts/2026-10-22-task-source-epoch/README.md)，真实delta/snapshot/epoch接管，排除并修复私有cleanup读取自扰。
 
 - [Sources与成员重连历史](2026-10-22-source-reconnect-history.md)：[13实图/11次Sol](../../artifacts/2026-10-22-source-reconnect-history/README.md)，190事件完整保留的quiet重连、实际新Source/正向checker及16配对成员退休，Task分支仍未覆盖。

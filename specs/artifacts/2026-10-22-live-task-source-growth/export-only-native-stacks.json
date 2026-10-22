@@ -1,0 +1,1384 @@
+{
+  "method": "Own process only;brief balanced suspension for context;resume before StackWalk64;code modules/offsets/symbols only;no arguments or memory dump",
+  "stacks": [
+    {
+      "thread": 86024,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x5FC6E",
+          "symbol": "RtlSleepConditionVariableSRW",
+          "displacement": 478
+        },
+        {
+          "module": "KERNELBASE.dll",
+          "offset": "0x22CD8",
+          "symbol": "SleepConditionVariableSRW",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x329704",
+          "symbol": "uv_poll_init_socket",
+          "displacement": 39508
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x32CC54",
+          "symbol": "uv_poll_init_socket",
+          "displacement": 53156
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x201C82D",
+          "symbol": "v8::internal::Internals::GetCurrentIsolate",
+          "displacement": 14316509
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x2A9D381",
+          "symbol": "v8::internal::Internals::GetCurrentIsolate",
+          "displacement": 25329457
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3717B30",
+          "symbol": "llhttp_should_keep_alive",
+          "displacement": 1787744
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x2D43653",
+          "symbol": "v8::internal::Internals::GetCurrentIsolate",
+          "displacement": 28107267
+        },
+        {
+          "module": null,
+          "offset": null,
+          "symbol": null,
+          "displacement": 0
+        },
+        {
+          "module": null,
+          "offset": null,
+          "symbol": null,
+          "displacement": 0
+        },
+        {
+          "module": null,
+          "offset": null,
+          "symbol": null,
+          "displacement": 0
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x2D56A80",
+          "symbol": "v8::internal::Internals::GetCurrentIsolate",
+          "displacement": 28186160
+        },
+        {
+          "module": null,
+          "offset": null,
+          "symbol": null,
+          "displacement": 0
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x2D5715C",
+          "symbol": "v8::internal::Internals::GetCurrentIsolate",
+          "displacement": 28187916
+        },
+        {
+          "module": null,
+          "offset": null,
+          "symbol": null,
+          "displacement": 0
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 7096,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "KERNELBASE.dll",
+          "offset": "0xDE348",
+          "symbol": "WaitOnAddress",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x68B1",
+          "symbol": null,
+          "displacement": 0
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 20408,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bmalloc::Mutex::lockSlowCase",
+          "displacement": 6229759
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "uv_run",
+          "displacement": 14455
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "uv_run",
+          "displacement": 8877
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "uv_run",
+          "displacement": 4104
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "uv_run",
+          "displacement": 2872
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "uv_poll_init_socket",
+          "displacement": 308663
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 86632,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bmalloc::Mutex::lockSlowCase",
+          "displacement": 6229759
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "uv_run",
+          "displacement": 14455
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "uv_run",
+          "displacement": 8877
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "uv_run",
+          "displacement": 4104
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "uv_run",
+          "displacement": 2872
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "uv_poll_init_socket",
+          "displacement": 308663
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 93188,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bmalloc::Mutex::lockSlowCase",
+          "displacement": 6229759
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "uv_run",
+          "displacement": 14455
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "uv_run",
+          "displacement": 8877
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "uv_run",
+          "displacement": 4104
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "uv_run",
+          "displacement": 2872
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "uv_poll_init_socket",
+          "displacement": 308663
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 94784,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x164034",
+          "symbol": "ZwWaitForWorkViaWorkerFactory",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x5064E",
+          "symbol": "RtlSetThreadSubProcessTag",
+          "displacement": 6894
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 94492,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bmalloc::Mutex::lockSlowCase",
+          "displacement": 6229759
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "uv_run",
+          "displacement": 14455
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "uv_run",
+          "displacement": 8877
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "uv_run",
+          "displacement": 4104
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "uv_run",
+          "displacement": 2872
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "uv_poll_init_socket",
+          "displacement": 308663
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 70976,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x164034",
+          "symbol": "ZwWaitForWorkViaWorkerFactory",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x5064E",
+          "symbol": "RtlSetThreadSubProcessTag",
+          "displacement": 6894
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 71424,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bmalloc::Mutex::lockSlowCase",
+          "displacement": 6229759
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "uv_run",
+          "displacement": 14455
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "uv_run",
+          "displacement": 8877
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "uv_run",
+          "displacement": 4104
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "uv_run",
+          "displacement": 2872
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "uv_poll_init_socket",
+          "displacement": 308663
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 94732,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bmalloc::Mutex::lockSlowCase",
+          "displacement": 6229759
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "uv_run",
+          "displacement": 14455
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "uv_run",
+          "displacement": 8877
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "uv_run",
+          "displacement": 4104
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "uv_run",
+          "displacement": 2872
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "uv_poll_init_socket",
+          "displacement": 308663
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 85724,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bmalloc::Mutex::lockSlowCase",
+          "displacement": 6229759
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "uv_run",
+          "displacement": 14455
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "uv_run",
+          "displacement": 8877
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "uv_run",
+          "displacement": 4104
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "uv_run",
+          "displacement": 2872
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "uv_poll_init_socket",
+          "displacement": 308663
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 64992,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bmalloc::Mutex::lockSlowCase",
+          "displacement": 6229759
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "uv_run",
+          "displacement": 14455
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "uv_run",
+          "displacement": 8877
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "uv_run",
+          "displacement": 4104
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "uv_run",
+          "displacement": 2872
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "uv_poll_init_socket",
+          "displacement": 308663
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 97376,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bmalloc::Mutex::lockSlowCase",
+          "displacement": 6229759
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "uv_run",
+          "displacement": 14455
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "uv_run",
+          "displacement": 8877
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "uv_run",
+          "displacement": 4104
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "uv_run",
+          "displacement": 2872
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "uv_poll_init_socket",
+          "displacement": 308663
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 82392,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bmalloc::Mutex::lockSlowCase",
+          "displacement": 6229759
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "uv_run",
+          "displacement": 14455
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "uv_run",
+          "displacement": 8877
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "uv_run",
+          "displacement": 4104
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "uv_run",
+          "displacement": 2872
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "uv_poll_init_socket",
+          "displacement": 308663
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 97484,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bmalloc::Mutex::lockSlowCase",
+          "displacement": 6229759
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "uv_run",
+          "displacement": 14455
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "uv_run",
+          "displacement": 8877
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "uv_run",
+          "displacement": 4104
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "uv_run",
+          "displacement": 2872
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "uv_poll_init_socket",
+          "displacement": 308663
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 94872,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bmalloc::Mutex::lockSlowCase",
+          "displacement": 6229759
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "uv_run",
+          "displacement": 14455
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "uv_run",
+          "displacement": 8877
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "uv_run",
+          "displacement": 4104
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "uv_run",
+          "displacement": 2872
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "uv_poll_init_socket",
+          "displacement": 308663
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 73912,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x3FE7B",
+          "symbol": "RtlSleepConditionVariableCS",
+          "displacement": 331
+        },
+        {
+          "module": "KERNELBASE.dll",
+          "offset": "0x23D48",
+          "symbol": "SleepConditionVariableCS",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0xBA57EC",
+          "symbol": "uv_cancel",
+          "displacement": 1180
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0xBA3DFF",
+          "symbol": "uv_thread_create_ex",
+          "displacement": 463
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3C8F547",
+          "symbol": "bmalloc::Mutex::lockSlowCase",
+          "displacement": 5722839
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 76232,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x3FE7B",
+          "symbol": "RtlSleepConditionVariableCS",
+          "displacement": 331
+        },
+        {
+          "module": "KERNELBASE.dll",
+          "offset": "0x23D48",
+          "symbol": "SleepConditionVariableCS",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0xBA57EC",
+          "symbol": "uv_cancel",
+          "displacement": 1180
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0xBA3DFF",
+          "symbol": "uv_thread_create_ex",
+          "displacement": 463
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3C8F547",
+          "symbol": "bmalloc::Mutex::lockSlowCase",
+          "displacement": 5722839
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 94628,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x3FE7B",
+          "symbol": "RtlSleepConditionVariableCS",
+          "displacement": 331
+        },
+        {
+          "module": "KERNELBASE.dll",
+          "offset": "0x23D48",
+          "symbol": "SleepConditionVariableCS",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0xBA57EC",
+          "symbol": "uv_cancel",
+          "displacement": 1180
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0xBA3DFF",
+          "symbol": "uv_thread_create_ex",
+          "displacement": 463
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3C8F547",
+          "symbol": "bmalloc::Mutex::lockSlowCase",
+          "displacement": 5722839
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 86184,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x3FE7B",
+          "symbol": "RtlSleepConditionVariableCS",
+          "displacement": 331
+        },
+        {
+          "module": "KERNELBASE.dll",
+          "offset": "0x23D48",
+          "symbol": "SleepConditionVariableCS",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0xBA57EC",
+          "symbol": "uv_cancel",
+          "displacement": 1180
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0xBA3DFF",
+          "symbol": "uv_thread_create_ex",
+          "displacement": 463
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3C8F547",
+          "symbol": "bmalloc::Mutex::lockSlowCase",
+          "displacement": 5722839
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 2156,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163354",
+          "symbol": "ZwRemoveIoCompletionEx",
+          "displacement": 20
+        },
+        {
+          "module": "KERNELBASE.dll",
+          "offset": "0xBEB2F",
+          "symbol": "GetQueuedCompletionStatusEx",
+          "displacement": 207
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378072",
+          "symbol": "uv_run",
+          "displacement": 898
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36DF19",
+          "symbol": "uv_poll_init_socket",
+          "displacement": 320105
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36BE7D",
+          "symbol": "uv_poll_init_socket",
+          "displacement": 311757
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "uv_poll_init_socket",
+          "displacement": 308663
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 98204,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x1604A4",
+          "symbol": "NtRemoveIoCompletion",
+          "displacement": 20
+        },
+        {
+          "module": "mswsock.dll",
+          "offset": "0x16B1F",
+          "symbol": "Tcpip6_WSHGetSockaddrType",
+          "displacement": 415
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 23804,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163354",
+          "symbol": "ZwRemoveIoCompletionEx",
+          "displacement": 20
+        },
+        {
+          "module": "KERNELBASE.dll",
+          "offset": "0xBEB2F",
+          "symbol": "GetQueuedCompletionStatusEx",
+          "displacement": 207
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378072",
+          "symbol": "uv_run",
+          "displacement": 898
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x413794",
+          "symbol": "uv_close",
+          "displacement": 611764
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x1212CE8",
+          "symbol": "napi_remove_async_cleanup_hook",
+          "displacement": 237096
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "uv_poll_init_socket",
+          "displacement": 308663
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    }
+  ],
+  "owner": {
+    "pid": 77252,
+    "processInstanceID": "win32:639282634545857139",
+    "occurrenceID": "1b7167f7-6c80-4f3c-a7b7-8c91d887d653"
+  },
+  "at": "2026-10-22T11:06:39.3453791Z"
+}

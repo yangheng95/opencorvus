@@ -1,0 +1,76 @@
+{
+  "at": "2026-10-22T11:19:25.882Z",
+  "scannedFiles": 158,
+  "scannedBytes": 119903532,
+  "secretValueMatches": 0,
+  "sourceAuth": {
+    "bytes": 3929,
+    "modifiedAtMs": 1792460418696.2107,
+    "access": "exact original",
+    "refresh": "exact original"
+  },
+  "sourceCatalog": {
+    "bytes": 9155406,
+    "currentModifiedAtMs": 1791128890137.9968,
+    "bytesExact": true,
+    "modifiedBeforePreparation": true,
+    "boundary": "Original catalog mtime exactly matches preparation;complete bytes equal captured pair"
+  },
+  "runtimePair": "Both members retired after exact physical/output/request settlement; model reader success is separate",
+  "retired": [
+    {
+      "name": "auth.json",
+      "bytes": 2122,
+      "outcome": "Retired after original native physical/output/request completion, runtime pair retirement and actual-value scan; reader qualification retained separately"
+    },
+    {
+      "name": "models.json",
+      "bytes": 9155406,
+      "outcome": "Retired after original native physical/output/request completion, runtime pair retirement and actual-value scan; reader qualification retained separately"
+    }
+  ],
+  "requests": 12,
+  "maximumRequests": 32,
+  "allActualRequests": {
+    "qualification": "failed",
+    "originalFailures": [
+      {
+        "launcher": 1,
+        "kind": "service-exit",
+        "native": 1
+      },
+      {
+        "reader": {
+          "boundary": "provider-source-reader",
+          "state": "reading",
+          "receivedAt": 1792666941097,
+          "boundAt": 1792666941099,
+          "chunkCount": 0,
+          "byteCount": 0,
+          "firstByteReadAt": null,
+          "lastByteReadAt": null,
+          "identityState": "observed",
+          "requestContext": {
+            "sessionID": "ses_haX6S4abz02IT2cJkx49",
+            "streamRequest": {
+              "requestID": "msg_g0VYm7QvS005pcRw6UD6",
+              "agentID": "memory",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VYm7n1k007MsxbkvIh",
+              "attempt": 0
+            }
+          }
+        },
+        "kind": "source-reader",
+        "status": 200,
+        "model": "gpt-6.1-sol",
+        "streaming": true
+      }
+    ]
+  },
+  "status": "Configured workspace review source/runtime pairs physically retired; actual Task outcome retained separately; no credential-bearing service remains"
+}

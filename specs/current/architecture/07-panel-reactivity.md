@@ -28,6 +28,14 @@ still own focus when the next frame commits, and the panel and destination must
 be active, visible and connected. SelectControl retains its popup focus owner;
 navigation does not replace transcript owners, reading anchors or request state.
 
+The member progress grid replaces member transcript turns while retaining their
+canonical child cards as ordinary timeline items at each child's own orderKey.
+Permission and question controls therefore remain actionable after their
+non-modal prompt is dismissed, and their resolved history keeps its real card
+identity. This presentation does not move ownership in the card tree or create
+another interaction projection. Navigation resolves a directly rendered card
+item before looking up a member grid or an enclosing transcript turn.
+
 > Current sources: `packages/overlay/src/store/card-tree.ts`,
 > `packages/overlay/src/store/messages.ts`,
 > `packages/overlay/src/services/tree-writer.ts`,

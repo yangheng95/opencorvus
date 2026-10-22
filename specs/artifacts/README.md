@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [活跃Task来源与正文追加](2026-10-22-live-task-source-growth/README.md)：537成员权限原卡恢复、9实图/26次Sol、全服务停顿原生栈与sharp缺件修复；两个原失败scope按实结算。
+
 - [Task成员来源与live epoch](2026-10-22-task-source-epoch/README.md)：真实Task同epoch delta、进程epoch接管与Sources阅读，17实图/10实际Sol/完整资源数据结算；观测器修复与生产契约区分。
 
 - [Sources与成员重连历史](2026-10-22-source-reconnect-history/README.md)：13实图、11真实Sol、一次新Source及同URL自然恢复；日志窗口工具修复后重跑190事件，四服务/16配对成员完整结算。

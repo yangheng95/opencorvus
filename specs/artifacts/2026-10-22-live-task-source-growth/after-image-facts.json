@@ -1,0 +1,102 @@
+{
+  "at": "2026-10-22T11:15:48.283Z",
+  "stage": "after",
+  "images": [],
+  "tools": [
+    {
+      "id": "prt_g0VYm7EM300RYVcvpetv",
+      "messageID": "msg_hmIXBPdtlFiu9WIU8o19",
+      "sessionID": "ses_-zURDsnRmzzDV226os6f",
+      "outcome": "completed",
+      "metadata": {
+        "frontier_size": 2,
+        "completed_count": 2,
+        "member_names": [
+          "A来源阅读成员",
+          "B来源阅读成员"
+        ],
+        "targets": [
+          "base-researcher",
+          "base-researcher"
+        ],
+        "members": [
+          {
+            "member_index": 0,
+            "name": "A来源阅读成员",
+            "target": "base-researcher",
+            "status": "completed",
+            "outcome": {
+              "kind": "accepted",
+              "session_id": "ses_haX6S4abz02IT2cJkx49",
+              "dispatch_lineage_id": "art_g0VYm7QkH00nGGsQqp1W"
+            }
+          },
+          {
+            "member_index": 1,
+            "name": "B来源阅读成员",
+            "target": "base-researcher",
+            "status": "completed",
+            "outcome": {
+              "kind": "accepted",
+              "session_id": "ses_hLTW0YS2gJyafQEZG2iM",
+              "dispatch_lineage_id": "art_g0VYm7Qkb00gFRYclcKX"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "prt_g0VYm7T2p00FjEP3I8lt",
+      "messageID": "msg_g0VYm7R4j00X5oc4FbIE",
+      "sessionID": "ses_haX6S4abz02IT2cJkx49",
+      "outcome": "completed",
+      "metadata": {
+        "originalBytes": 9114,
+        "shownBytes": 9114,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      }
+    },
+    {
+      "id": "prt_g0VYm7hc400FSxDQqapi",
+      "messageID": "msg_g0VYm7gGQ0038MrQbnzW",
+      "sessionID": "ses_haX6S4abz02IT2cJkx49",
+      "outcome": "completed",
+      "metadata": {
+        "originalBytes": 101177,
+        "shownBytes": 50506,
+        "omittedBytes": 50671,
+        "webfetchOutputClipped": true,
+        "webfetchEmbeddedAttachmentCount": 1,
+        "truncated": false
+      },
+      "attachments": [
+        {
+          "type": "file",
+          "mime": "image/png",
+          "urlKind": "/attachment/prj_hqstF38LMYVEi0PQVcXc/b4a9ca9e1cfc475c07592c9527eeea28ed6fc0ea38401060d9243a36eb6c845c.png",
+          "dataCodeUnits": 105
+        }
+      ]
+    },
+    {
+      "id": "prt_g0VYm7T2V00ayJcNkhH2",
+      "messageID": "msg_g0VYm7R6F00ErfFvYdly",
+      "sessionID": "ses_hLTW0YS2gJyafQEZG2iM",
+      "outcome": "completed",
+      "metadata": {
+        "originalBytes": 20415,
+        "shownBytes": 20415,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      }
+    },
+    {
+      "id": "prt_g0VYm7fTv00EKgDUsbSc",
+      "messageID": "msg_g0VYm7eD500ZHZhDNOTy",
+      "sessionID": "ses_hLTW0YS2gJyafQEZG2iM"
+    }
+  ]
+}

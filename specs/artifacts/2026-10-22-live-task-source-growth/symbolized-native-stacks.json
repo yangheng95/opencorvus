@@ -1,0 +1,1353 @@
+{
+  "at": "2026-10-22T11:10:30.5643820Z",
+  "stacks": [
+    {
+      "thread": 86024,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x5FC6E",
+          "symbol": "RtlSleepConditionVariableSRW",
+          "displacement": 478
+        },
+        {
+          "module": "KERNELBASE.dll",
+          "offset": "0x22CD8",
+          "symbol": "SleepConditionVariableSRW",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x329704",
+          "symbol": "WTF::ParkingLot::parkConditionallyImpl",
+          "displacement": 4244
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x32CC54",
+          "symbol": "WTF::Condition::waitUntilUnchecked<WTF::Lock>",
+          "displacement": 196
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x201C82D",
+          "symbol": "JSC::WaiterListManager::waitSyncImpl<int>",
+          "displacement": 733
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x2A9D381",
+          "symbol": "JSC::Wasm::memoryAtomicWait32",
+          "displacement": 369
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3717B30",
+          "symbol": "ipint_extern_memory_atomic_wait32",
+          "displacement": 32
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x2D43653",
+          "symbol": "ipint_memory_atomic_wait32_atomic_validate",
+          "displacement": 83
+        },
+        {
+          "module": null,
+          "offset": null,
+          "symbol": null,
+          "displacement": 0
+        },
+        {
+          "module": null,
+          "offset": null,
+          "symbol": null,
+          "displacement": 0
+        },
+        {
+          "module": null,
+          "offset": null,
+          "symbol": null,
+          "displacement": 0
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x2D56A80",
+          "symbol": "ipint_mint_a0_validate",
+          "displacement": 0
+        },
+        {
+          "module": null,
+          "offset": null,
+          "symbol": null,
+          "displacement": 0
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x2D5715C",
+          "symbol": "ipint_mint_call_validate",
+          "displacement": 28
+        },
+        {
+          "module": null,
+          "offset": null,
+          "symbol": null,
+          "displacement": 0
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 7096,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "KERNELBASE.dll",
+          "offset": "0xDE348",
+          "symbol": "WaitOnAddress",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x68B1",
+          "symbol": "mi_scavenger_thread_main",
+          "displacement": 1217
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 20408,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bun_threading::futex::wait",
+          "displacement": 95
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "bun_threading::thread_pool::Event::wait",
+          "displacement": 87
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "bun_threading::thread_pool::ThreadPool::wait",
+          "displacement": 445
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "bun_threading::thread_pool::Thread::run",
+          "displacement": 1128
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "core::ops::function::FnOnce::call_once<std::thread::lifecycle::spawn_unchecked::closure_env$1<bun_threading::thread_pool::impl$15::warm::closure_env$0,tuple$<> >,tuple$<> >",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "std::sys::thread::windows::impl$0::new::thread_start",
+          "displacement": 359
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 86632,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bun_threading::futex::wait",
+          "displacement": 95
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "bun_threading::thread_pool::Event::wait",
+          "displacement": 87
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "bun_threading::thread_pool::ThreadPool::wait",
+          "displacement": 445
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "bun_threading::thread_pool::Thread::run",
+          "displacement": 1128
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "core::ops::function::FnOnce::call_once<std::thread::lifecycle::spawn_unchecked::closure_env$1<bun_threading::thread_pool::impl$15::warm::closure_env$0,tuple$<> >,tuple$<> >",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "std::sys::thread::windows::impl$0::new::thread_start",
+          "displacement": 359
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 93188,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bun_threading::futex::wait",
+          "displacement": 95
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "bun_threading::thread_pool::Event::wait",
+          "displacement": 87
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "bun_threading::thread_pool::ThreadPool::wait",
+          "displacement": 445
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "bun_threading::thread_pool::Thread::run",
+          "displacement": 1128
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "core::ops::function::FnOnce::call_once<std::thread::lifecycle::spawn_unchecked::closure_env$1<bun_threading::thread_pool::impl$15::warm::closure_env$0,tuple$<> >,tuple$<> >",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "std::sys::thread::windows::impl$0::new::thread_start",
+          "displacement": 359
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 94784,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x164034",
+          "symbol": "ZwWaitForWorkViaWorkerFactory",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x5064E",
+          "symbol": "RtlSetThreadSubProcessTag",
+          "displacement": 6894
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 94492,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bun_threading::futex::wait",
+          "displacement": 95
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "bun_threading::thread_pool::Event::wait",
+          "displacement": 87
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "bun_threading::thread_pool::ThreadPool::wait",
+          "displacement": 445
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "bun_threading::thread_pool::Thread::run",
+          "displacement": 1128
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "core::ops::function::FnOnce::call_once<std::thread::lifecycle::spawn_unchecked::closure_env$1<bun_threading::thread_pool::impl$15::warm::closure_env$0,tuple$<> >,tuple$<> >",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "std::sys::thread::windows::impl$0::new::thread_start",
+          "displacement": 359
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 70976,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x164034",
+          "symbol": "ZwWaitForWorkViaWorkerFactory",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x5064E",
+          "symbol": "RtlSetThreadSubProcessTag",
+          "displacement": 6894
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 71424,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bun_threading::futex::wait",
+          "displacement": 95
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "bun_threading::thread_pool::Event::wait",
+          "displacement": 87
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "bun_threading::thread_pool::ThreadPool::wait",
+          "displacement": 445
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "bun_threading::thread_pool::Thread::run",
+          "displacement": 1128
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "core::ops::function::FnOnce::call_once<std::thread::lifecycle::spawn_unchecked::closure_env$1<bun_threading::thread_pool::impl$15::warm::closure_env$0,tuple$<> >,tuple$<> >",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "std::sys::thread::windows::impl$0::new::thread_start",
+          "displacement": 359
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 94732,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bun_threading::futex::wait",
+          "displacement": 95
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "bun_threading::thread_pool::Event::wait",
+          "displacement": 87
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "bun_threading::thread_pool::ThreadPool::wait",
+          "displacement": 445
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "bun_threading::thread_pool::Thread::run",
+          "displacement": 1128
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "core::ops::function::FnOnce::call_once<std::thread::lifecycle::spawn_unchecked::closure_env$1<bun_threading::thread_pool::impl$15::warm::closure_env$0,tuple$<> >,tuple$<> >",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "std::sys::thread::windows::impl$0::new::thread_start",
+          "displacement": 359
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 85724,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bun_threading::futex::wait",
+          "displacement": 95
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "bun_threading::thread_pool::Event::wait",
+          "displacement": 87
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "bun_threading::thread_pool::ThreadPool::wait",
+          "displacement": 445
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "bun_threading::thread_pool::Thread::run",
+          "displacement": 1128
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "core::ops::function::FnOnce::call_once<std::thread::lifecycle::spawn_unchecked::closure_env$1<bun_threading::thread_pool::impl$15::warm::closure_env$0,tuple$<> >,tuple$<> >",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "std::sys::thread::windows::impl$0::new::thread_start",
+          "displacement": 359
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 64992,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bun_threading::futex::wait",
+          "displacement": 95
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "bun_threading::thread_pool::Event::wait",
+          "displacement": 87
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "bun_threading::thread_pool::ThreadPool::wait",
+          "displacement": 445
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "bun_threading::thread_pool::Thread::run",
+          "displacement": 1128
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "core::ops::function::FnOnce::call_once<std::thread::lifecycle::spawn_unchecked::closure_env$1<bun_threading::thread_pool::impl$15::warm::closure_env$0,tuple$<> >,tuple$<> >",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "std::sys::thread::windows::impl$0::new::thread_start",
+          "displacement": 359
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 97376,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bun_threading::futex::wait",
+          "displacement": 95
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "bun_threading::thread_pool::Event::wait",
+          "displacement": 87
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "bun_threading::thread_pool::ThreadPool::wait",
+          "displacement": 445
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "bun_threading::thread_pool::Thread::run",
+          "displacement": 1128
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "core::ops::function::FnOnce::call_once<std::thread::lifecycle::spawn_unchecked::closure_env$1<bun_threading::thread_pool::impl$15::warm::closure_env$0,tuple$<> >,tuple$<> >",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "std::sys::thread::windows::impl$0::new::thread_start",
+          "displacement": 359
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 82392,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bun_threading::futex::wait",
+          "displacement": 95
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "bun_threading::thread_pool::Event::wait",
+          "displacement": 87
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "bun_threading::thread_pool::ThreadPool::wait",
+          "displacement": 445
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "bun_threading::thread_pool::Thread::run",
+          "displacement": 1128
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "core::ops::function::FnOnce::call_once<std::thread::lifecycle::spawn_unchecked::closure_env$1<bun_threading::thread_pool::impl$15::warm::closure_env$0,tuple$<> >,tuple$<> >",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "std::sys::thread::windows::impl$0::new::thread_start",
+          "displacement": 359
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 97484,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bun_threading::futex::wait",
+          "displacement": 95
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "bun_threading::thread_pool::Event::wait",
+          "displacement": 87
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "bun_threading::thread_pool::ThreadPool::wait",
+          "displacement": 445
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "bun_threading::thread_pool::Thread::run",
+          "displacement": 1128
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "core::ops::function::FnOnce::call_once<std::thread::lifecycle::spawn_unchecked::closure_env$1<bun_threading::thread_pool::impl$15::warm::closure_env$0,tuple$<> >,tuple$<> >",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "std::sys::thread::windows::impl$0::new::thread_start",
+          "displacement": 359
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 94872,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x30543",
+          "symbol": "RtlWaitOnAddress",
+          "displacement": 531
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3D0B16F",
+          "symbol": "bun_threading::futex::wait",
+          "displacement": 95
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x37B567",
+          "symbol": "bun_threading::thread_pool::Event::wait",
+          "displacement": 87
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x379F9D",
+          "symbol": "bun_threading::thread_pool::ThreadPool::wait",
+          "displacement": 445
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378CF8",
+          "symbol": "bun_threading::thread_pool::Thread::run",
+          "displacement": 1128
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378828",
+          "symbol": "core::ops::function::FnOnce::call_once<std::thread::lifecycle::spawn_unchecked::closure_env$1<bun_threading::thread_pool::impl$15::warm::closure_env$0,tuple$<> >,tuple$<> >",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "std::sys::thread::windows::impl$0::new::thread_start",
+          "displacement": 359
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 73912,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x3FE7B",
+          "symbol": "RtlSleepConditionVariableCS",
+          "displacement": 331
+        },
+        {
+          "module": "KERNELBASE.dll",
+          "offset": "0x23D48",
+          "symbol": "SleepConditionVariableCS",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0xBA57EC",
+          "symbol": "worker",
+          "displacement": 700
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0xBA3DFF",
+          "symbol": "uv__thread_start",
+          "displacement": 127
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3C8F547",
+          "symbol": "thread_start<unsigned int (__cdecl*)(void *),1>",
+          "displacement": 79
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 76232,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x3FE7B",
+          "symbol": "RtlSleepConditionVariableCS",
+          "displacement": 331
+        },
+        {
+          "module": "KERNELBASE.dll",
+          "offset": "0x23D48",
+          "symbol": "SleepConditionVariableCS",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0xBA57EC",
+          "symbol": "worker",
+          "displacement": 700
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0xBA3DFF",
+          "symbol": "uv__thread_start",
+          "displacement": 127
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3C8F547",
+          "symbol": "thread_start<unsigned int (__cdecl*)(void *),1>",
+          "displacement": 79
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 94628,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x3FE7B",
+          "symbol": "RtlSleepConditionVariableCS",
+          "displacement": 331
+        },
+        {
+          "module": "KERNELBASE.dll",
+          "offset": "0x23D48",
+          "symbol": "SleepConditionVariableCS",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0xBA57EC",
+          "symbol": "worker",
+          "displacement": 700
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0xBA3DFF",
+          "symbol": "uv__thread_start",
+          "displacement": 127
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3C8F547",
+          "symbol": "thread_start<unsigned int (__cdecl*)(void *),1>",
+          "displacement": 79
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 86184,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163FD4",
+          "symbol": "ZwWaitForAlertByThreadId",
+          "displacement": 20
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0x3FE7B",
+          "symbol": "RtlSleepConditionVariableCS",
+          "displacement": 331
+        },
+        {
+          "module": "KERNELBASE.dll",
+          "offset": "0x23D48",
+          "symbol": "SleepConditionVariableCS",
+          "displacement": 56
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0xBA57EC",
+          "symbol": "worker",
+          "displacement": 700
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0xBA3DFF",
+          "symbol": "uv__thread_start",
+          "displacement": 127
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x3C8F547",
+          "symbol": "thread_start<unsigned int (__cdecl*)(void *),1>",
+          "displacement": 79
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 2156,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163354",
+          "symbol": "ZwRemoveIoCompletionEx",
+          "displacement": 20
+        },
+        {
+          "module": "KERNELBASE.dll",
+          "offset": "0xBEB2F",
+          "symbol": "GetQueuedCompletionStatusEx",
+          "displacement": 207
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378072",
+          "symbol": "uv_run",
+          "displacement": 898
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36DF19",
+          "symbol": "bun_http::http_thread::HttpThread::process_events",
+          "displacement": 1449
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36BE7D",
+          "symbol": "core::ops::function::FnOnce::call_once<std::thread::lifecycle::spawn_unchecked::closure_env$1<bun_http::http_thread::_event_loop_draft::init_once::closure_env$0,tuple$<> >,tuple$<> >",
+          "displacement": 637
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "std::sys::thread::windows::impl$0::new::thread_start",
+          "displacement": 359
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    },
+    {
+      "thread": 23804,
+      "frames": [
+        {
+          "module": "ntdll.dll",
+          "offset": "0x163354",
+          "symbol": "ZwRemoveIoCompletionEx",
+          "displacement": 20
+        },
+        {
+          "module": "KERNELBASE.dll",
+          "offset": "0xBEB2F",
+          "symbol": "GetQueuedCompletionStatusEx",
+          "displacement": 207
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x378072",
+          "symbol": "uv_run",
+          "displacement": 898
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x413794",
+          "symbol": "bun_runtime::jsc_hooks::auto_tick_active",
+          "displacement": 772
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x1212CE8",
+          "symbol": "core::ops::function::FnOnce::call_once<std::thread::lifecycle::spawn_unchecked::closure_env$1<bun_jsc::web_worker::impl$1::create::closure_env$2,tuple$<> >,tuple$<> >",
+          "displacement": 4152
+        },
+        {
+          "module": "bun.exe",
+          "offset": "0x36B267",
+          "symbol": "std::sys::thread::windows::impl$0::new::thread_start",
+          "displacement": 359
+        },
+        {
+          "module": "KERNEL32.DLL",
+          "offset": "0x2CCB7",
+          "symbol": "BaseThreadInitThunk",
+          "displacement": 23
+        },
+        {
+          "module": "ntdll.dll",
+          "offset": "0xAAD6C",
+          "symbol": "RtlUserThreadStart",
+          "displacement": 44
+        }
+      ],
+      "error": null,
+      "priorSuspendCount": 0
+    }
+  ],
+  "method": "Own process only;brief balanced suspension for context;resume before StackWalk64;code modules/offsets/symbols only;no arguments or memory dump",
+  "owner": {
+    "pid": 77252,
+    "processInstanceID": "win32:639282634545857139",
+    "occurrenceID": "1b7167f7-6c80-4f3c-a7b7-8c91d887d653"
+  }
+}
