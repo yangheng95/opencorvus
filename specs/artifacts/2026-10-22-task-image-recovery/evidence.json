@@ -1,0 +1,1357 @@
+{
+  "observedAt": "2026-10-22T12:07:08.711Z",
+  "scope": "538 single development agent;existing product Task members only;no new business Task/Goal/member",
+  "beforeFailure": {
+    "at": "2026-10-22T11:46:12.359Z",
+    "messageID": "msg_g0VYm7eD500ZHZhDNOTy",
+    "sessionID": "ses_hLTW0YS2gJyafQEZG2iM",
+    "fresh": {
+      "epoch": 1792669270209,
+      "sequence": 6433,
+      "info": {
+        "orderKey": "v1:0001792666906387:0000000000000030:0000000000000000:message:msg_g0VYm7eD500ZHZhDNOTy",
+        "author": "base-researcher",
+        "role": "assistant",
+        "time": {
+          "created": 1792666906387,
+          "completed": 1792669348763
+        },
+        "error": {
+          "name": "ProcessExecutionInterruptedError",
+          "data": {
+            "message": "Previous process ended before Session ses_hLTW0YS2gJyafQEZG2iM completed assistant message msg_g0VYm7eD500ZHZhDNOTy"
+          }
+        },
+        "parentID": "msg_g0VYm7QvV00bNEsGvAGf",
+        "acceptedInputMessageIDs": [
+          "msg_g0VYm7QvV00bNEsGvAGf"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "base-researcher",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\live-task-source-growth-537-after\\runtime\\data\\projects\\2026\\10\\22\\7f6e95df-9037-456b-a2f2-d67cf237dfe5",
+          "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\live-task-source-growth-537-after\\runtime\\data\\projects\\2026\\10\\22\\7f6e95df-9037-456b-a2f2-d67cf237dfe5"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 0,
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "finish": "error",
+        "id": "msg_g0VYm7eD500ZHZhDNOTy",
+        "sessionID": "ses_hLTW0YS2gJyafQEZG2iM",
+        "resolvedRole": "base-researcher",
+        "channel": "explore",
+        "agentID": "base-researcher",
+        "sessionAgentID": "base-researcher",
+        "originSource": "",
+        "parentSessionID": "ses_-zURDsnRmzzDV226os6f"
+      }
+    },
+    "merged": {
+      "epoch": 1792669270209,
+      "sequence": 1749,
+      "info": {
+        "author": "base-researcher",
+        "role": "assistant",
+        "time": {
+          "created": 1792666906387
+        },
+        "parentID": "msg_g0VYm7QvV00bNEsGvAGf",
+        "acceptedInputMessageIDs": [
+          "msg_g0VYm7QvV00bNEsGvAGf"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "base-researcher",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\live-task-source-growth-537-after\\runtime\\data\\projects\\2026\\10\\22\\7f6e95df-9037-456b-a2f2-d67cf237dfe5",
+          "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-22\\live-task-source-growth-537-after\\runtime\\data\\projects\\2026\\10\\22\\7f6e95df-9037-456b-a2f2-d67cf237dfe5"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 0,
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "orderKey": "v1:0001792666906387:0000000000000030:0000000000000000:message:msg_g0VYm7eD500ZHZhDNOTy",
+        "id": "msg_g0VYm7eD500ZHZhDNOTy",
+        "sessionID": "ses_hLTW0YS2gJyafQEZG2iM",
+        "resolvedRole": "base-researcher",
+        "channel": "explore",
+        "agentID": "base-researcher",
+        "sessionAgentID": "base-researcher",
+        "originSource": "",
+        "parentSessionID": "ses_-zURDsnRmzzDV226os6f"
+      }
+    },
+    "contract": "Same original terminal assistant identity must converge through the original public cursor delta/production merge and fresh snapshot"
+  },
+  "afterReplay": {
+    "startedAt": "2026-10-22T12:02:15.770Z",
+    "settledAt": "2026-10-22T12:02:15.824Z",
+    "taskID": "tsk_g00VYlyopB00h7w27eIw",
+    "sessionID": "ses_hHpC127wALpwIiSOX86d",
+    "zeroCursor": {
+      "epoch": 1792670338615,
+      "sequence": 0,
+      "elapsedMs": 58534,
+      "responseMode": "snapshot",
+      "responseSequence": 150
+    },
+    "sse": {
+      "status": 200,
+      "reader": "Natural HTTP EOF after actual replay-expired event",
+      "bytes": 501,
+      "eventTypes": [
+        "task.live_replay_expired"
+      ],
+      "expired": {
+        "event_id": "pev_g0VYmMsNd00eqAzU3NQe",
+        "task_id": "tsk_g00VYlyopB00h7w27eIw",
+        "orderKey": "v1:0001792670535777:0000000000000040:0000000000000000:protocol:pev_g0VYmMsNd00eqAzU3NQe",
+        "source": "protocol.live-replay",
+        "type": "task.live_replay_expired",
+        "emittedAt": 1792670535777,
+        "timestamp": 1792670535777,
+        "sequence": 0,
+        "summary": "selected task live replay retention expired",
+        "payload": {
+          "taskID": "tsk_g00VYlyopB00h7w27eIw",
+          "reason": "selected task live replay retention expired",
+          "liveEpoch": 1792670338615
+        }
+      }
+    },
+    "originalMessageInfo": {
+      "exactFreshEquality": 5,
+      "messageIDs": [
+        "msg_g0VYlz7FR00zwCfGgFr1",
+        "msg_g0VYlz7Ip00T8hfkxlJc",
+        "msg_g0VYlzNHF00KE9pPvzmq",
+        "msg_g0VYm1k2300mHdtrLYyw",
+        "msg_g0VYm1mFw007S5Hh2wBH"
+      ]
+    },
+    "sources": [
+      {
+        "id": "prt_g0VYlzNFy003mnOrS6Ou",
+        "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+        "sessionID": "ses_hHpC127wALpwIiSOX86d",
+        "type": "source-url",
+        "sourceId": "8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc",
+        "toolPartID": "prt_g0VYlz9DQ009aokcHv1V",
+        "url": "https://aclanthology.org/2025.naacl-long.475/",
+        "title": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology"
+      },
+      {
+        "id": "prt_g0VYm1k0j00RrTh2ZAzO",
+        "messageID": "msg_g0VYlzNHF00KE9pPvzmq",
+        "sessionID": "ses_hHpC127wALpwIiSOX86d",
+        "type": "source-url",
+        "sourceId": "8a046e21993297bbc58547ee51ee95db16c2667449e2552696ed15addf38d7e7",
+        "toolPartID": "prt_g0VYlzOiH00ATA7a4B7c",
+        "url": "https://aclanthology.org/2025.acl-long.195/",
+        "title": "Conformity in Large Language Models - ACL Anthology"
+      }
+    ],
+    "boundary": "Actual public backend transports and production parse/merge;not a UI test;original messages were already terminal in this after baseline,so this does not claim a repeated old-message terminalization transition"
+  },
+  "actualLiveDelta": {
+    "phase": "retained-live-delta",
+    "startedAt": "2026-10-22T12:02:25.952Z",
+    "receivedAt": "2026-10-22T12:02:25.978Z",
+    "sessionID": "ses_hHpC127wALpwIiSOX86d",
+    "url": "/task/tsk_g00VYlyopB00h7w27eIw/conversation/session/ses_hHpC127wALpwIiSOX86d?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-task-source-growth-537-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5Ceaeacbce-3533-49f2-aa4e-e26c79421c59&after_live_sequence=4752&after_live_epoch=1792670338615",
+    "status": 200,
+    "prior": {
+      "epoch": 1792670338615,
+      "sequence": 4752,
+      "messages": 8
+    },
+    "received": {
+      "mode": "delta",
+      "epoch": 1792670338615,
+      "sequence": 5380,
+      "messages": [
+        {
+          "messageID": "msg_g0VYmMbPE00dysER56z0",
+          "parts": [
+            {
+              "id": "prt_g0VYmMbT700r8EfN0i6H",
+              "type": "step-start"
+            },
+            {
+              "id": "prt_g0VYmMcJU00PFeeyJf7k",
+              "type": "text",
+              "textLength": 3731
+            }
+          ]
+        }
+      ]
+    },
+    "merged": {
+      "messages": [
+        {
+          "messageID": "msg_g0VYlz7FR00zwCfGgFr1",
+          "role": "user",
+          "time": {
+            "created": 1792664873115
+          },
+          "parts": [
+            {
+              "id": "prt_g0VYlz7FR00HODqEl8F7",
+              "type": "text",
+              "textLength": 3620
+            },
+            {
+              "id": "prt_g0VYlz7FR01tKhsgBKNj",
+              "type": "text",
+              "textLength": 329
+            }
+          ]
+        },
+        {
+          "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+          "role": "assistant",
+          "finish": "tool-calls",
+          "time": {
+            "created": 1792664873267,
+            "completed": 1792664934643
+          },
+          "parts": [
+            {
+              "id": "prt_g0VYlz7mx00s9lWyvEMX",
+              "type": "step-start"
+            },
+            {
+              "id": "prt_g0VYlz8dd00pWcuVkoZF",
+              "type": "text",
+              "textLength": 79
+            },
+            {
+              "id": "prt_g0VYlz9DQ009aokcHv1V",
+              "type": "tool"
+            },
+            {
+              "id": "prt_g0VYlzNFy003mnOrS6Ou",
+              "type": "source-url"
+            },
+            {
+              "id": "prt_g0VYlzNG200jlm01Z3RE",
+              "type": "step-finish"
+            }
+          ]
+        },
+        {
+          "messageID": "msg_g0VYlzNHF00KE9pPvzmq",
+          "role": "assistant",
+          "finish": "tool-calls",
+          "time": {
+            "created": 1792664934673,
+            "completed": 1792665498766
+          },
+          "parts": [
+            {
+              "id": "prt_g0VYlzNL000FG0gLTzZM",
+              "type": "step-start"
+            },
+            {
+              "id": "prt_g0VYlzNy200G9j4TgB2N",
+              "type": "text",
+              "textLength": 209
+            },
+            {
+              "id": "prt_g0VYlzOiH00ATA7a4B7c",
+              "type": "tool"
+            },
+            {
+              "id": "prt_g0VYm1k0j00RrTh2ZAzO",
+              "type": "source-url"
+            },
+            {
+              "id": "prt_g0VYm1k0m00i2GT6Wmww",
+              "type": "step-finish"
+            }
+          ]
+        },
+        {
+          "messageID": "msg_g0VYm1k2300mHdtrLYyw",
+          "role": "assistant",
+          "finish": "tool-calls",
+          "time": {
+            "created": 1792665498799,
+            "completed": 1792665507318
+          },
+          "parts": [
+            {
+              "id": "prt_g0VYm1k6100WNMhd6b1K",
+              "type": "step-start"
+            },
+            {
+              "id": "prt_g0VYm1lEs00O2KijUi86",
+              "type": "text",
+              "textLength": 209
+            },
+            {
+              "id": "prt_g0VYm1m3e001SUtIG7Bp",
+              "type": "tool"
+            },
+            {
+              "id": "prt_g0VYm1mEo00YA3Mk13Qu",
+              "type": "step-finish"
+            }
+          ]
+        },
+        {
+          "messageID": "msg_g0VYm1mFw007S5Hh2wBH",
+          "role": "assistant",
+          "finish": "error",
+          "time": {
+            "created": 1792665507348,
+            "completed": 1792666720795
+          },
+          "parts": [
+            {
+              "id": "prt_g0VYm1mK100XARD4Iip0",
+              "type": "step-start"
+            }
+          ]
+        },
+        {
+          "messageID": "msg_g0VYmMZ1w00MCbWc5S0t",
+          "role": "user",
+          "time": {
+            "created": 1792670461419
+          },
+          "parts": [
+            {
+              "id": "prt_g0VYmMZ1w00fTdQSfE4S",
+              "type": "text",
+              "textLength": 3080
+            }
+          ]
+        },
+        {
+          "messageID": "msg_g0VYmMZ4H00k2M4LXePB",
+          "role": "assistant",
+          "finish": "tool-calls",
+          "time": {
+            "created": 1792670461541,
+            "completed": 1792670470494
+          },
+          "parts": [
+            {
+              "id": "prt_g0VYmMZuv00RLDAOFQMF",
+              "type": "step-start"
+            },
+            {
+              "id": "prt_g0VYmMab300GY28UWAJt",
+              "type": "text",
+              "textLength": 135
+            },
+            {
+              "id": "prt_g0VYmMbBk00caPO5sfIS",
+              "type": "tool"
+            },
+            {
+              "id": "prt_g0VYmMbNt00BrLpUrM4K",
+              "type": "step-finish"
+            }
+          ]
+        },
+        {
+          "messageID": "msg_g0VYmMbPE00dysER56z0",
+          "role": "assistant",
+          "time": {
+            "created": 1792670470528
+          },
+          "parts": [
+            {
+              "id": "prt_g0VYmMbT700r8EfN0i6H",
+              "type": "step-start"
+            },
+            {
+              "id": "prt_g0VYmMcJU00PFeeyJf7k",
+              "type": "text",
+              "textLength": 3731
+            }
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "prt_g0VYlzNFy003mnOrS6Ou",
+          "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "type": "source-url",
+          "sourceId": "8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc",
+          "toolPartID": "prt_g0VYlz9DQ009aokcHv1V",
+          "url": "https://aclanthology.org/2025.naacl-long.475/",
+          "title": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology"
+        },
+        {
+          "id": "prt_g0VYm1k0j00RrTh2ZAzO",
+          "messageID": "msg_g0VYlzNHF00KE9pPvzmq",
+          "sessionID": "ses_hHpC127wALpwIiSOX86d",
+          "type": "source-url",
+          "sourceId": "8a046e21993297bbc58547ee51ee95db16c2667449e2552696ed15addf38d7e7",
+          "toolPartID": "prt_g0VYlzOiH00ATA7a4B7c",
+          "url": "https://aclanthology.org/2025.acl-long.195/",
+          "title": "Conformity in Large Language Models - ACL Anthology"
+        }
+      ]
+    },
+    "qualification": "Actual public backend payload parsed/merged by current production contract;prior immutable Source facts retained;not a UI test"
+  },
+  "scopes": [
+    {
+      "stage": "before",
+      "taskID": "tsk_g00VYm7BEt003EK3o91d",
+      "status": "completed",
+      "pendingInteractions": 0,
+      "promptOwners": 0,
+      "unfinishedAssistants": 0,
+      "requests": 15,
+      "maximum": 32,
+      "providerQualificationPassed": true,
+      "qualificationFailures": [],
+      "actualRequests": [
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792669282154
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792669281010
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792669388834
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792669385960
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792669393678
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792669419109
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792669439785
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792669498351
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792669539443
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792669457536
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792669549356
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792669556622
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792669564527
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792669598187
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792669799664
+          }
+        }
+      ],
+      "physical": {
+        "occurrence": "task-image-recovery-538-before-e515ce9c-c3d0-4bd1-a7bc-624e83b09388",
+        "reason": "exited",
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "originalChildExit": 0,
+        "chain": [
+          {
+            "identity": {
+              "pid": 96548,
+              "processInstanceID": "win32:639282660678061190",
+              "occurrenceID": "bda59b40-4fb5-44ed-a6f4-39769067cba1"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 41828,
+              "processInstanceID": "win32:639282660687933141",
+              "occurrenceID": "cefd3f64-49c1-4859-9a40-3c79bfeb5820"
+            },
+            "state": "dead_or_reused"
+          }
+        ]
+      },
+      "retired": {
+        "runtimeMembers": 2,
+        "privateMembers": 2
+      },
+      "attachment": {
+        "at": "2026-10-22T11:42:15.616Z",
+        "url": "http://127.0.0.1:19063/attachment/prj_hqstF38LMYVEi0PQVcXc/b4a9ca9e1cfc475c07592c9527eeea28ed6fc0ea38401060d9243a36eb6c845c.png?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-task-source-growth-537-after%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5C7f6e95df-9037-456b-a2f2-d67cf237dfe5",
+        "status": 200,
+        "mime": "image/png",
+        "bytes": 643,
+        "identity": "Actual public attachment route returned exact original published PNG bytes",
+        "owner": "prj_hqstF38LMYVEi0PQVcXc",
+        "scope": "before"
+      }
+    },
+    {
+      "stage": "after",
+      "taskID": "tsk_g00VYlyopB00h7w27eIw",
+      "status": "completed",
+      "pendingInteractions": 0,
+      "promptOwners": 0,
+      "unfinishedAssistants": 0,
+      "requests": 14,
+      "maximum": 32,
+      "providerQualificationPassed": true,
+      "qualificationFailures": [],
+      "actualRequests": [
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792670351492
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792670348113
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792670388060
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792670394295
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792670415751
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792670511518
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792670470420
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792670472088
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792670563161
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792670557917
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792670569409
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792670577977
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792670610542
+          }
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "apiModel": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792670701989
+          }
+        }
+      ],
+      "physical": {
+        "occurrence": "task-image-recovery-538-after-6abd436c-2e5c-4a6a-aea9-72dd8fb10bab",
+        "reason": "exited",
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "originalChildExit": 0,
+        "chain": [
+          {
+            "identity": {
+              "pid": 63804,
+              "processInstanceID": "win32:639282671361189313",
+              "occurrenceID": "b7d4181c-3775-455c-8d31-d3714575e36b"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 67576,
+              "processInstanceID": "win32:639282671371424435",
+              "occurrenceID": "a9d91dca-071b-49cd-a3c0-736bd09a1ec9"
+            },
+            "state": "dead_or_reused"
+          }
+        ]
+      },
+      "retired": {
+        "runtimeMembers": 2,
+        "privateMembers": 2
+      },
+      "attachment": {
+        "at": "2026-10-22T11:59:31.219Z",
+        "url": "http://127.0.0.1:19065/attachment/prj_hp1ir9XEheMHTOMlkSL8/b4a9ca9e1cfc475c07592c9527eeea28ed6fc0ea38401060d9243a36eb6c845c.png?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-22%5Clive-task-source-growth-537-before%5Cruntime%5Cdata%5Cprojects%5C2026%5C10%5C22%5Ceaeacbce-3533-49f2-aa4e-e26c79421c59",
+        "status": 200,
+        "mime": "image/png",
+        "bytes": 643,
+        "identity": "Actual public attachment route returned exact original published PNG bytes",
+        "owner": "prj_hp1ir9XEheMHTOMlkSL8",
+        "scope": "after"
+      }
+    }
+  ],
+  "data": {
+    "at": "2026-10-22T12:06:01.987Z",
+    "schema": 3,
+    "scopes": [
+      {
+        "stage": "after",
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 84877312,
+          "modifiedAtMs": 1792670088853.9436
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "counts": {
+          "automation": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_fire": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_project_target": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1
+          },
+          "bus_publication_attempt_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "bus_publication_delivery": {
+            "original": 36731,
+            "current": 37448
+          },
+          "bus_publication_delivery_receipt": {
+            "original": 36731,
+            "current": 37448
+          },
+          "bus_publication_outbox": {
+            "original": 5417,
+            "current": 5514
+          },
+          "bus_publication_phase_receipt": {
+            "original": 16251,
+            "current": 16542
+          },
+          "channel_ingress_accepted": {
+            "original": 0,
+            "current": 0
+          },
+          "channel_ingress_outcome": {
+            "original": 0,
+            "current": 0
+          },
+          "control_account": {
+            "original": 0,
+            "current": 0
+          },
+          "database_authority": {
+            "original": 1,
+            "current": 1
+          },
+          "decision_log": {
+            "original": 13,
+            "current": 13
+          },
+          "engine_artifact": {
+            "original": 207,
+            "current": 217
+          },
+          "engine_artifact_catalog_revision": {
+            "original": 207,
+            "current": 217
+          },
+          "engine_artifact_version": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_browser_preview_target_identity": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_build_observation_cleanup": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_build_observation_cleanup_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_channel_binding": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_control_activation_lease": {
+            "original": 37117,
+            "current": 37842
+          },
+          "engine_control_activation_lease_grant": {
+            "original": 37188,
+            "current": 37915
+          },
+          "engine_git_checkpoint_outcome": {
+            "original": 41,
+            "current": 42
+          },
+          "engine_git_checkpoint_request": {
+            "original": 41,
+            "current": 42
+          },
+          "engine_goal": {
+            "original": 5,
+            "current": 5
+          },
+          "engine_interaction_outcome": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_interaction_request": {
+            "original": 50,
+            "current": 52
+          },
+          "engine_metric_result": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_metric_spec": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_progress_snapshot": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_task": {
+            "original": 21,
+            "current": 21
+          },
+          "engine_task_creation_contract": {
+            "original": 21,
+            "current": 21
+          },
+          "engine_task_root_ingress": {
+            "original": 50,
+            "current": 52
+          },
+          "engine_task_root_ingress_policy": {
+            "original": 1,
+            "current": 1
+          },
+          "engine_task_wait_registration": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_task_wait_settlement": {
+            "original": 0,
+            "current": 0
+          },
+          "event_job": {
+            "original": 3,
+            "current": 3
+          },
+          "event_job_definition_tombstone": {
+            "original": 1,
+            "current": 1
+          },
+          "event_job_fire": {
+            "original": 2,
+            "current": 2
+          },
+          "event_job_fire_receipt": {
+            "original": 2,
+            "current": 2
+          },
+          "event_occurrence": {
+            "original": 2,
+            "current": 2
+          },
+          "global_creation_allocation": {
+            "original": 169,
+            "current": 170
+          },
+          "interactive_artifact": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_chunk": {
+            "original": 183,
+            "current": 184
+          },
+          "memory_embedding": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_file": {
+            "original": 183,
+            "current": 184
+          },
+          "memory_fts": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_config": {
+            "original": 1,
+            "current": 1
+          },
+          "memory_fts_content": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_data": {
+            "original": 2,
+            "current": 2
+          },
+          "memory_fts_docsize": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_idx": {
+            "original": 0,
+            "current": 0
+          },
+          "message": {
+            "original": 679,
+            "current": 691
+          },
+          "part": {
+            "original": 1636,
+            "current": 1673
+          },
+          "permission_execution_result": {
+            "original": 122,
+            "current": 124
+          },
+          "permission_ledger": {
+            "original": 615,
+            "current": 625
+          },
+          "permission_policy": {
+            "original": 36,
+            "current": 36
+          },
+          "project": {
+            "original": 183,
+            "current": 184
+          },
+          "project_directory_admission": {
+            "original": 0,
+            "current": 0
+          },
+          "project_maintenance_fence": {
+            "original": 0,
+            "current": 0
+          },
+          "protocol_delivery_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "protocol_event": {
+            "original": 1944,
+            "current": 1991
+          },
+          "protocol_inbox": {
+            "original": 0,
+            "current": 0
+          },
+          "provider_activity_outcome": {
+            "original": 442,
+            "current": 453
+          },
+          "provider_activity_request": {
+            "original": 442,
+            "current": 453
+          },
+          "provider_usage_event": {
+            "original": 683,
+            "current": 697
+          },
+          "quick_note": {
+            "original": 0,
+            "current": 0
+          },
+          "runtime_execution_capacity_lease": {
+            "original": 3,
+            "current": 3
+          },
+          "session": {
+            "original": 253,
+            "current": 254
+          },
+          "session_control_event": {
+            "original": 183,
+            "current": 184
+          },
+          "session_control_record": {
+            "original": 183,
+            "current": 184
+          },
+          "session_prompt_owner": {
+            "original": 10,
+            "current": 7
+          },
+          "session_share": {
+            "original": 0,
+            "current": 0
+          },
+          "task_plan": {
+            "original": 0,
+            "current": 0
+          },
+          "todo": {
+            "original": 0,
+            "current": 0
+          },
+          "todo_snapshot": {
+            "original": 0,
+            "current": 0
+          },
+          "tool_part_outcome": {
+            "original": 195,
+            "current": 203
+          },
+          "tool_part_progress": {
+            "original": 20,
+            "current": 22
+          },
+          "tool_part_request": {
+            "original": 195,
+            "current": 203
+          },
+          "workbench_brief_snapshot": {
+            "original": 51,
+            "current": 52
+          },
+          "worker_turn_descriptor": {
+            "original": 31,
+            "current": 33
+          },
+          "workspace": {
+            "original": 0,
+            "current": 0
+          },
+          "workspace_lifecycle_admission": {
+            "original": 0,
+            "current": 0
+          }
+        },
+        "originalRowDifferences": [
+          {
+            "table": "memory_chunk",
+            "identity": "mck_hd2PLf49sorereyDu9w0",
+            "fields": [
+              "content",
+              "token_count",
+              "time_updated"
+            ]
+          },
+          {
+            "table": "memory_file",
+            "identity": "mem_h6r23eQkVxF8ppMaNuxh",
+            "fields": [
+              "time_updated"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[3]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "session",
+            "identity": "ses_-zURE19wozzlTmx3ixXd",
+            "fields": [
+              "time_updated"
+            ]
+          },
+          {
+            "table": "session",
+            "identity": "ses_h33yzvtiYmW1UEyocSXB",
+            "fields": [
+              "time_updated"
+            ]
+          },
+          {
+            "table": "session",
+            "identity": "ses_hHpC127wALpwIiSOX86d",
+            "fields": [
+              "time_updated"
+            ]
+          },
+          {
+            "table": "session_prompt_owner",
+            "identity": "[8]",
+            "fields": [
+              "rowid",
+              "session_id",
+              "project_id",
+              "directory",
+              "generation",
+              "owner_pid",
+              "owner_process_instance_id",
+              "owner_occurrence_id",
+              "time_acquired"
+            ]
+          },
+          {
+            "table": "session_prompt_owner",
+            "identity": "[10]",
+            "fields": [
+              "rowid",
+              "session_id",
+              "project_id",
+              "directory",
+              "generation",
+              "owner_pid",
+              "owner_process_instance_id",
+              "owner_occurrence_id",
+              "time_acquired"
+            ]
+          },
+          {
+            "table": "session_prompt_owner",
+            "identity": "[12]",
+            "fields": [
+              "rowid",
+              "session_id",
+              "project_id",
+              "directory",
+              "generation",
+              "owner_pid",
+              "owner_process_instance_id",
+              "owner_occurrence_id",
+              "time_acquired"
+            ]
+          }
+        ]
+      }
+    ],
+    "maximumRequestsPerStartedScope": 32,
+    "maximumBatchRequests": 64
+  },
+  "checks": {
+    "backendRetention": {
+      "red": "4 pass/4 fail before Store fix",
+      "green": "8 pass/0 fail/38 expectations on Bun1.4.3 and pinned1.4.0"
+    },
+    "docs": "345 operations/26 groups",
+    "formalUI": "Node Vite production builds served by normal source CLI /ui;before and after build exit0",
+    "ui": "Manual interaction and actual screenshots only;no UI automated tests"
+  },
+  "boundaries": [
+    "No new Source was appended in this original once-per-URL recovery scenario",
+    "After baseline original messages were already terminal;zero-expiry response and equality qualified,not a repeated original terminalization transition",
+    "Observed manual frames do not prove uninterrupted mounted owner lifetime or all Rendering causes",
+    "Task read_agent_message attempts against old interrupted messages returned typed TaskEvidenceSourceError;actual new final messages were read successfully"
+  ]
+}

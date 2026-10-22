@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Task图片处理与中断恢复](2026-10-22-task-image-recovery/README.md)：538零游标漏终态根因修复，7精选实图/29次Sol、两原Task自然完成、真实SSE与非空delta、8配对成员退休；新Source追加仍开放。
+
 - [活跃Task来源与正文追加](2026-10-22-live-task-source-growth/README.md)：537成员权限原卡恢复、9实图/26次Sol、全服务停顿原生栈与sharp缺件修复；两个原失败scope按实结算。
 
 - [Task成员来源与live epoch](2026-10-22-task-source-epoch/README.md)：真实Task同epoch delta、进程epoch接管与Sources阅读，17实图/10实际Sol/完整资源数据结算；观测器修复与生产契约区分。

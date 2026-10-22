@@ -31,6 +31,9 @@ for (const terminalType of ["task.completed", "task.failed", "task.cancelled"]) 
         payload: { execution_epoch: 1 } })
       expect(ProtocolStore.currentTaskLiveSequence(taskID)).toBe(cursor)
       expect(ProtocolStore.listTaskLiveEventsAfter(taskID, cursor - 1, { liveEpoch })).toMatchObject({ expired: true })
+      expect(ProtocolStore.listTaskLiveEventsAfter(taskID, 0, { liveEpoch })).toMatchObject({
+        expired: true, event: { type: "task.live_replay_expired", payload: { taskID, liveEpoch } },
+      })
       Database.immediateTransaction((db) => appendTaskReopenedInTransaction({
         db, taskID, sessionID, now: Date.now(), source: "test.reopened-live-replay",
       }))
@@ -72,14 +75,32 @@ test("live replay retention reports an expired resume and returns the current wi
   dispatchDelta(taskID, 2)
   dispatchDelta(taskID, 3)
   expect(ProtocolStore.currentTaskLiveSequence(taskID)).toBe(3)
+  const epoch = ProtocolStore.currentTaskLiveEpoch()
+  expect(ProtocolStore.listTaskLiveEventsAfter(taskID, 0, { liveEpoch: epoch })).toMatchObject({
+    expired: false,
+    events: [1, 2, 3].map((liveSequence) => ({ taskID, liveEpoch: epoch, liveSequence })),
+  })
 
   // Age every retained delta out of the window so the retention floor rises.
   ProtocolStore.compactLiveReplay(Date.now() + RETENTION_WINDOW_MS * 2)
 
-  const epoch = ProtocolStore.currentTaskLiveEpoch()
   // A subscriber resuming from a cursor below the floor genuinely missed
   // events; telling it to re-hydrate is the whole point of the floor.
   expect(ProtocolStore.listTaskLiveEventsAfter(taskID, 1, { liveEpoch: epoch })).toMatchObject({ expired: true })
+  expect(ProtocolStore.listTaskLiveEventsAfter(taskID, 0, { liveEpoch: epoch })).toMatchObject({
+    expired: true,
+    event: {
+      type: "task.live_replay_expired",
+      payload: { taskID, liveEpoch: epoch, reason: "selected task live replay retention expired" },
+    },
+  })
+  expect(ProtocolStore.listTaskLiveEventsAfter(taskID, 0, { liveEpoch: epoch - 1 })).toMatchObject({
+    expired: true,
+    event: {
+      type: "task.live_replay_expired",
+      payload: { taskID, liveEpoch: epoch, reason: "selected task live replay epoch changed" },
+    },
+  })
 
   // A freshly selected task presents no live cursor at all. It has consumed
   // nothing, so it cannot have fallen behind: expiring it closed the stream

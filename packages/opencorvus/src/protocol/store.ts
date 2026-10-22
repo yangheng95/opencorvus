@@ -670,17 +670,13 @@ export namespace ProtocolStore {
         event: taskLiveReplayExpiredEvent(taskID, "selected task live replay epoch changed"),
       }
     }
-    // The retention floor only expires a *resuming* subscriber. `after === 0`
-    // means the subscriber presents no live cursor at all: it has consumed
-    // nothing, so it cannot have fallen behind the trimmed window — it just
-    // hydrated the persisted conversation over HTTP and is asking for whatever
-    // live deltas are still retained. Expiring that case closed the stream on
-    // every task switch (the floor is raised the first time a task's live
-    // events age past TASK_LIVE_REPLAY_MAX_AGE_MS and is never lowered), which
-    // cost the overlay a full reconnect backoff and a visible disconnected
-    // banner for a handshake nothing was wrong with.
+    // Zero without an epoch is a fresh subscription after conversation hydration.
+    // A snapshot can also issue a valid zero cursor before the first live event:
+    // its known epoch makes it a resume, subject to the same retention floor as
+    // a positive cursor. Otherwise trimmed updates silently become a partial delta.
     const floor = taskLiveRetentionFloors.get(taskID) ?? 0
-    if (after > 0 && after < floor) {
+    const resuming = after > 0 || typeof opts?.liveEpoch === "number"
+    if (resuming && after < floor) {
       return {
         expired: true,
         event: taskLiveReplayExpiredEvent(taskID, "selected task live replay retention expired"),

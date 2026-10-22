@@ -272,6 +272,14 @@ empty text over an already hydrated body. Connected subscribers still receive
 every original live event. Compaction does not advance the retention floor;
 the existing expiration, terminal retirement and epoch rules remain authoritative.
 
+A zero Task live sequence paired with its snapshot's known epoch is a resume
+cursor, including before the first live event. Retention expiry applies to that
+cursor as well as positive sequences: child Session reads return the canonical
+snapshot, and the selected Task stream emits the existing replay-expired event
+for tail recovery. Only zero without an epoch denotes a fresh subscription after
+hydration. Task completion, failure and cancellation preserve this distinction
+when retiring their retained payloads; reopening preserves the live cursor domain.
+
 Text and reasoning `message.part.delta` events require `field: "text"`, the
 original `delta` fragment and the complete current `value` from the processor's
 existing accumulator. Command-line and Agent Client Protocol consumers output

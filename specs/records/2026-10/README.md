@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Task图片处理与中断恢复](2026-10-22-task-image-recovery.md)：[零游标修复与原Task自然完成](../../artifacts/2026-10-22-task-image-recovery/README.md)，7精选实图/29次Sol，实际过期snapshot/SSE、非空delta与完整资源结算，保留新Source与owner连续性边界。
+
 - [活跃Task来源与正文追加](2026-10-22-live-task-source-growth.md)：[真实卡片、失败scope与原生栈](../../artifacts/2026-10-22-live-task-source-growth/README.md)，修复成员权限入口和本地sharp缺件，9实图/26次Sol；非空delta/自然终态仍未达。
 
 - [Task成员来源与live epoch](2026-10-22-task-source-epoch.md)：[原成员读取与同页恢复](../../artifacts/2026-10-22-task-source-epoch/README.md)，真实delta/snapshot/epoch接管，排除并修复私有cleanup读取自扰。

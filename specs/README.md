@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Task图片处理与中断恢复](records/2026-10/2026-10-22-task-image-recovery.md)：[7实图/29次Sol/原Task恢复](artifacts/2026-10-22-task-image-recovery/README.md)，修复已知epoch零游标漏终态，真实snapshot/SSE/非空delta与两个原Task自然完成。
+
 - [活跃Task来源与正文追加](records/2026-10/2026-10-22-live-task-source-growth.md)：[9实图/26次Sol与原生栈](artifacts/2026-10-22-live-task-source-growth/README.md)，修复成员权限卡丢失，修复本地sharp依赖缺件；保留流式与Task终态未达事实。
 
 - [Task成员来源与live epoch](records/2026-10/2026-10-22-task-source-epoch.md)：[真实Task增量与epoch接管](artifacts/2026-10-22-task-source-epoch/README.md)，修复观测器清理自扰，17实图/10实际Sol，保留活跃流式边界。
