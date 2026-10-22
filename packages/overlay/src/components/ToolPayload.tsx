@@ -55,7 +55,7 @@ function PayloadValue(props: { value: unknown; depth: number; stateKey: string; 
 
 /** Lossless output disclosure: JSON values preserve multiline strings; raw
  * bytes remain available for copying and inspection. Nested bodies mount on demand. */
-export function ToolPayload(props: { stateKey: string; label: string; value: string; live?: boolean; collapsed?: boolean }) {
+export function ToolPayload(props: { stateKey: string; messageID: string; label: string; value: string; live?: boolean; collapsed?: boolean }) {
   const id = createUniqueId()
   const raw = () => toolPayloadDisplayState(props.stateKey)?.raw ?? false
   const expanded = () => toolPayloadDisplayState(props.stateKey)?.expanded ?? false
@@ -168,7 +168,13 @@ export function ToolPayload(props: { stateKey: string; label: string; value: str
         {(failure) => <Feedback tone="error" title={t("clipboard.copy_failed")} details={failure().details}>{failure().message}</Feedback>}
       </Show>
       <Show when={contentVisible()}>
-        <div ref={setContent} id={`${id}-content`} class="msg-tool-payload__content">
+        <div
+          ref={setContent}
+          id={`${id}-content`}
+          class="msg-tool-payload__content"
+          data-tool-payload-identity={props.stateKey}
+          data-tool-message-id={props.messageID}
+        >
           <Show when={parsed() && !raw()} fallback={<pre>{props.value}</pre>}>
             <PayloadValue value={parsed()!.value} depth={0} stateKey={props.stateKey} path={[]} />
           </Show>

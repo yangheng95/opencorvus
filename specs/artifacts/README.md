@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Sources与侧栏布局阅读](2026-10-23-source-layout-reading/README.md)：552十九张实图，修复工具文字锚点、持续改宽及display:contents尺寸通知；17次Sol/六服务闭合，保留两次验收修正与停止许可缺口。
+
 - [实时流重试状态](2026-10-23-stream-retry-status/README.md)：551七张实图，49秒16轮重试保持提示与来源阅读，4次Sol及全部自有资源闭合。
 
 - [连接状态统一表达](2026-10-23-connection-status-presentation/README.md)：550八张实图，统一角标/恢复提示/颜色与双语；10次Sol EOF，私有转发器修正复验与完整结算。

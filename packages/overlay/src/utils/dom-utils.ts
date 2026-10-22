@@ -63,14 +63,17 @@ export function pauseAutoScrollForReading(element: HTMLElement): void {
   element.dispatchEvent(new Event(TRANSCRIPT_READING_EVENT, { bubbles: true }))
 }
 
+export type AutoScrollRestorePosition = {
+  kind: "position"
+  top: number
+  layoutRoot: HTMLElement
+  resolveTop?: () => number | null
+  onRestoreSettled?: (restored: boolean) => void
+}
+
 export interface AutoScrollOptions {
-  initialPosition: { kind: "bottom" } | {
-    kind: "position"
-    top: number
-    layoutRoot: HTMLElement
-    resolveTop?: () => number | null
-    onRestoreSettled?: (restored: boolean) => void
-  }
+  initialPosition: { kind: "bottom" } | AutoScrollRestorePosition
+  onViewportResize?: () => AutoScrollRestorePosition | undefined
   isTracking: () => boolean
   onUserScrollUp: () => void
   onFollowRequested: () => void
@@ -79,6 +82,7 @@ export interface AutoScrollOptions {
 export interface AutoScrollController {
   readingPosition: () => { top: number; following: boolean }
   hasScrollInput: () => boolean
+  hasViewportResize: () => boolean
   cleanup: () => void
   contentChanged: () => void
   scrollToBottom: () => void
@@ -93,7 +97,9 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   let pointerScrollIntent = false
   let inputIntent: { direction: "up" | "down"; expiresAt: number } | null = null
   let touchStartY: number | null = null
-  let restoreTop = opts.initialPosition.kind === "position" ? opts.initialPosition.top : null
+  let restoration = opts.initialPosition.kind === "position" ? opts.initialPosition : undefined
+  let restoreTop = restoration?.top ?? null
+  let viewportWidth = el.clientWidth
   let restoreGeometry = ""
   let stableRestoreFrames = 0
   let observedContentElements = new Set<Element>()
@@ -103,7 +109,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   function retirePositionRestore(restored = false) {
     if (restoreTop === null) return
     restoreTop = null
-    if (opts.initialPosition.kind === "position") opts.initialPosition.onRestoreSettled?.(restored)
+    restoration?.onRestoreSettled?.(restored)
   }
 
   function onReadingIntent(event: Event) {
@@ -127,6 +133,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
 
   function syncObservedContentElements() {
     const nextElements = new Set<Element>([
+      el,
       ...Array.from(el.children),
       ...(opts.initialPosition.kind === "position" ? [opts.initialPosition.layoutRoot] : []),
     ])
@@ -263,8 +270,8 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
 
   function restoreReadingPosition() {
     if (restoreTop === null) return
-    if (opts.initialPosition.kind === "position" && opts.initialPosition.resolveTop) {
-      const currentTop = opts.initialPosition.resolveTop()
+    if (restoration?.resolveTop) {
+      const currentTop = restoration.resolveTop()
       if (currentTop === null) return
       restoreTop = currentTop
     }
@@ -272,8 +279,8 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
     el.scrollTop = Math.min(restoreTop, availableTop)
     programScrollTarget = el.scrollTop
     expectedTop = el.scrollTop
-    if (opts.initialPosition.kind !== "position") return
-    const layout = opts.initialPosition.layoutRoot.getBoundingClientRect()
+    if (!restoration) return
+    const layout = restoration.layoutRoot.getBoundingClientRect()
     const geometry = `${layout.width}:${layout.height}:${el.clientHeight}:${el.scrollHeight}:${restoreTop}`
     stableRestoreFrames = geometry === restoreGeometry ? stableRestoreFrames + 1 : 0
     restoreGeometry = geometry
@@ -282,6 +289,17 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
 
   function scheduleFollowScroll() {
     if (disposed) return
+    const width = el.clientWidth
+    if (width > 0 && width !== viewportWidth) {
+      viewportWidth = width
+      const position = !opts.isTracking() ? opts.onViewportResize?.() : undefined
+      if (position) {
+        restoration = position
+        restoreTop = position.top
+        restoreGeometry = ""
+        stableRestoreFrames = 0
+      }
+    }
     syncFollowLockAttribute()
     if (!opts.isTracking() && restoreTop === null) return
     // A caller reports content after Solid has replaced or resized the
@@ -353,6 +371,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   return {
     readingPosition: () => ({ top: restoreTop ?? el.scrollTop, following: opts.isTracking() }),
     hasScrollInput: () => pointerScrollIntent || Boolean(inputIntent && performance.now() <= inputIntent.expiresAt),
+    hasViewportResize: () => el.clientWidth !== viewportWidth,
     cleanup: () => {
       disposed = true
       retirePositionRestore()

@@ -1370,6 +1370,19 @@ Bounded payload bodies retain their scroll position in that same record, separat
 for raw and readable formats. Restoration waits for the visible content box and
 yields to user input. Full-height expansion keeps the bounded preview's reading
 position; hidden or retired content cannot overwrite another conversation's state.
+Full-height Tool payloads participate in the shared transcript reading anchor using
+their existing Session/Message/Part/slot identity. The anchor retains the rendered
+text position and its viewport offset, so hiding a reader and changing Dock width
+restores the same output text after wrapping changes. Main, Side Chat and member
+readers consume this same in-memory anchor; Main retains the producing Message for
+virtual-history lookup. Native Range geometry observes text without replacing its
+content or introducing another scroll owner. Bounded payload scroll and original
+copy bytes remain owned by the existing ToolPayload presentation record.
+Visible member and Side Chat width changes reuse the same position-restoration
+path. Layout-driven scroll events retain the prior reading record until that
+restore settles; new operator scroll input may take over normally. The controller
+measures the actual viewport width and asks its current reader for the saved
+anchor, without keeping another anchor store or creating a second observer.
 Tool-payload and delivery-name copying share one mounted copy-action owner over
 the canonical host clipboard writer. Only a fulfilled host write shows the brief
 checkmark and contextual copied label. The busy action retains keyboard focus;
@@ -1684,9 +1697,11 @@ chronological placement. Main and Side Chat retain their existing gap defaults.
 
 Both the main Conversation and selected Agent transcript use the same explicit
 content-change follow controller. A canonical transcript revision and the
-controller's one native `ResizeObserver` over its current direct content boxes
+controller's one native `ResizeObserver` over the scrollport and its current direct content boxes
 schedule the same bounded bottom pin; the observer covers descendant Markdown,
 code, media, and disclosure layout that settles after the data notification.
+Observing the scrollport also covers content wrappers using `display: contents`,
+whose own zero-size boxes cannot report a changed viewport width.
 Browser layout may change `scrollTop` before or after either notification, so
 movement alone never releases follow mode. Upward wheel, keyboard, touch, or
 an active native-scrollbar gesture owns subsequent upward movement. Once that

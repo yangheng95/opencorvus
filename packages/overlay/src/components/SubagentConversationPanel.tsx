@@ -90,6 +90,7 @@ function SubagentConversationScroll(props: {
   const saveReadingPosition = () => {
     // Hiding the pane can clamp its geometry before Solid retires this owner.
     // The last visible observation remains the reader's intended position.
+    if (scrollController?.hasViewportResize() && !scrollController.hasScrollInput()) return
     if (props.active() && !restoringPosition && scrollController && scrollElement && scrollElement.clientHeight > 0)
       props.saveReadingPosition({
         ...scrollController.readingPosition(),
@@ -110,22 +111,25 @@ function SubagentConversationScroll(props: {
       const position = props.readingPosition()
       restoringPosition = Boolean(position && !position.following)
       setTracking(position?.following ?? true)
+      const restorePosition = (position: ConversationReadingPosition) => {
+        restoringPosition = true
+        return {
+          kind: "position" as const,
+          top: position.top,
+          layoutRoot,
+          resolveTop: position.anchor ? () => resolveConversationReadingTop(scrollElement!, position.anchor!) : undefined,
+          onRestoreSettled: () => {
+            restoringPosition = false
+            saveReadingPosition()
+          },
+        }
+      }
       scrollController = setupAutoScroll(scrollElement, {
-        initialPosition:
-          position && !position.following
-            ? {
-                kind: "position",
-                top: position.top,
-                layoutRoot,
-                resolveTop: position.anchor
-                  ? () => resolveConversationReadingTop(scrollElement!, position.anchor!)
-                  : undefined,
-                onRestoreSettled: () => {
-                  restoringPosition = false
-                  saveReadingPosition()
-                },
-              }
-            : { kind: "bottom" },
+        initialPosition: position && !position.following ? restorePosition(position) : { kind: "bottom" },
+        onViewportResize: () => {
+          const position = props.readingPosition()
+          return position && !position.following ? restorePosition(position) : undefined
+        },
         isTracking: tracking,
         onUserScrollUp: () => changeTracking(false),
         onFollowRequested: () => changeTracking(true),

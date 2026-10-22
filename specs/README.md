@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Sources与侧栏布局阅读](records/2026-10/2026-10-23-source-layout-reading.md)：552修复工具输出阅读跳转、连续改宽及Side尺寸通知，十九实图/17次Sol/六服务闭合。
+
 - [实时流重试状态](records/2026-10/2026-10-23-stream-retry-status.md)：551修复重试idle瞬态重置提示计时，七张实图、三类流合同与4次Sol闭合。
 
 - [连接状态统一表达](records/2026-10/2026-10-23-connection-status-presentation.md)：550修复Online与不可达提示冲突及恢复提示重建，双语八张实图、10次Sol与五后端/两转发器闭合。

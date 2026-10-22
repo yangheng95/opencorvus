@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Sources与侧栏布局阅读](2026-10-23-source-layout-reading.md)：552单agent修复真实阅读锚点与共享宽度恢复，成员及Side真实输出实页复验。
+
 - [实时流重试状态](2026-10-23-stream-retry-status.md)：551单agent修复共享流重试状态，49秒16轮实际重试提示/来源/阅读位置保持。
 
 - [连接状态统一表达](2026-10-23-connection-status-presentation.md)：单agent统一状态和颜色，保留恢复提示，修正私有工具后完成中英文实页复验。

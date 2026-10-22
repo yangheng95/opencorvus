@@ -457,6 +457,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
           >
             <ToolPayload
               stateKey={payloadStateKey("input")}
+              messageID={part().messageID}
               label={t("tool.input")}
               value={inputPayload()}
               live={status() === "pending"}
@@ -480,6 +481,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
             <Show when={hasToolPayloadValue(state().metadata)}>
               <ToolPayload
                 stateKey={payloadStateKey("metadata")}
+                messageID={part().messageID}
                 label={t("tool.metadata")}
                 value={toolPayloadText(state().metadata)}
                 collapsed
@@ -558,7 +560,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
                   </section>
                 </Show>
                 <Show when={showPlainOutput()}>
-                  <ToolPayload stateKey={payloadStateKey("output")} label={t("tool.output")} value={output()} />
+                  <ToolPayload stateKey={payloadStateKey("output")} messageID={part().messageID} label={t("tool.output")} value={output()} />
                 </Show>
               </>
             }

@@ -7,6 +7,7 @@ import {
   setConversationDisclosureExpanded,
   sideChatReadingPosition,
   setSideChatReadingPosition,
+  type ConversationReadingPosition,
 } from "../store/conversation-ui"
 import { fileEditorReserved } from "../services/file-workbench"
 import {
@@ -139,6 +140,7 @@ export function SideChatPanel(props: {
     const owner = reader
     if (!owner || owner.restoring || !isApiAuthorityCurrent(owner.authority) || boardStore.selectEpoch !== owner.epoch || selected() !== owner.sessionID || sourceKey() !== owner.sourceKey) return
     if (!scroll?.isConnected || scroll.clientHeight <= 0 || scroll.closest("[inert], [hidden]")) return
+    if (owner.controller.hasViewportResize() && !owner.controller.hasScrollInput()) return
     setSideChatReadingPosition(owner.key, { ...owner.controller.readingPosition(), anchor: captureConversationReadingAnchor(scroll, sideChatReadingPosition(owner.key)?.anchor) })
   }
   onCleanup(() => {
@@ -244,16 +246,24 @@ export function SideChatPanel(props: {
         setTracking(position?.following ?? true)
         const layoutRoot = scroll.closest<HTMLElement>(".right-dock")
         if (!layoutRoot) throw new Error("Side Chat requires its right dock layout owner")
+        const restorePosition = (position: ConversationReadingPosition) => ({
+          kind: "position" as const, top: position.top, layoutRoot,
+          resolveTop: position.anchor ? () => resolveConversationReadingTop(scroll, position.anchor!) : undefined,
+          onRestoreSettled: () => {
+            if (reader?.controller !== controller) return
+            reader.restoring = false
+            rememberReadingPosition()
+          },
+        })
         const controller = setupAutoScroll(scroll, {
-          initialPosition: position && !position.following ? {
-            kind: "position", top: position.top, layoutRoot,
-            resolveTop: position.anchor ? () => resolveConversationReadingTop(scroll, position.anchor!) : undefined,
-            onRestoreSettled: () => {
-              if (reader?.controller !== controller) return
-              reader.restoring = false
-              rememberReadingPosition()
-            },
-          } : { kind: "bottom" },
+          initialPosition: position && !position.following ? restorePosition(position) : { kind: "bottom" },
+          onViewportResize: () => {
+            if (reader?.controller !== controller) return
+            const position = sideChatReadingPosition(readingKey)
+            if (!position || position.following) return
+            reader.restoring = true
+            return restorePosition(position)
+          },
           isTracking: tracking,
           onUserScrollUp: () => { setTracking(false); rememberReadingPosition() },
           onFollowRequested: () => { setTracking(true); rememberReadingPosition() },

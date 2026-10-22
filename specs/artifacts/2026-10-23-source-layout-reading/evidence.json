@@ -1,0 +1,5024 @@
+{
+  "batch": 552,
+  "baseCommit": "3e1a369505f311f7306d95e4a609f088ccfab880",
+  "method": "Real Source CLI pages, manual CUA interactions, displayed and visually reviewed screenshots. DOM/anchor observations support the images; no UI automation tests.",
+  "observations": [
+    {
+      "phase": "01-source-reading",
+      "kind": "member",
+      "at": "2026-10-22T20:45:56.298Z",
+      "layout": {
+        "at": "2026-10-22T20:45:56.354Z",
+        "dockWidth": 380,
+        "follow": "false",
+        "scrollHeight": 64593,
+        "scrollTop": 62577,
+        "visible": [
+          {
+            "height": 55.96875,
+            "source": "[\"source-url\",\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"4bf9be4b80027e063dabfb9354226580ff38049d91a4d6343f379c104d43e719\"]",
+            "text": "Disclosure (Show/Hide) Pattern | APG | WAI | W3Cwww.w3.org",
+            "top": 5.84375
+          },
+          {
+            "height": 23.515625,
+            "message": "msg_g0VYlVvNx00Uq6gDAjqh",
+            "source": null,
+            "text": "RECONNECT535START\n",
+            "top": 84.8125
+          },
+          {
+            "height": 18.890625,
+            "message": "msg_g0VYlVvNx00Uq6gDAjqh",
+            "source": null,
+            "text": "重连来源第01节\n",
+            "top": 120.328125
+          },
+          {
+            "height": 94.0625,
+            "message": "msg_g0VYlVvNx00Uq6gDAjqh",
+            "source": null,
+            "text": "指定页面本次读取成功，仅调用一次，未重试或更换地址。来源为 W3C APG 的 Disclosure 模式说明。建议将文档描述与产品状态分开：读取成功不代表产品行为已经核实。\n",
+            "top": 145.21875
+          },
+          {
+            "height": 18.890625,
+            "message": "msg_g0VYlVvNx00Uq6gDAjqh",
+            "source": null,
+            "text": "重连来源第02节\n",
+            "top": 251.28125
+          }
+        ]
+      },
+      "bodies": 35,
+      "sources": 11,
+      "bodyBindings": [
+        [
+          "22",
+          "prt_g0VXzT1DL000WBOXfm1A",
+          1,
+          null
+        ],
+        [
+          "23",
+          "prt_g0VXzT3Gs005zKfhGX2N",
+          2,
+          null
+        ],
+        [
+          "24",
+          "prt_g0VXzUz7q00fivpYNBRn",
+          1,
+          null
+        ],
+        [
+          "25",
+          "prt_g0VXzV2VW00na9YfpQKR",
+          27,
+          null
+        ],
+        [
+          "26",
+          "prt_g0VY0iRj9008mwlam6wF",
+          1,
+          null
+        ],
+        [
+          "27",
+          "prt_g0VY0iVmm00FScjcxxqj",
+          35,
+          null
+        ],
+        [
+          "28",
+          "prt_g0VY0lNZe00ZQkp3vHys",
+          1,
+          null
+        ],
+        [
+          "29",
+          "prt_g0VY0lRNt00O6pzN6EFn",
+          35,
+          null
+        ],
+        [
+          "30",
+          "prt_g0VYa9kCa00xJ0qS6AXI",
+          1,
+          null
+        ],
+        [
+          "31",
+          "prt_g0VYa9l2c00sO4SHI28d",
+          37,
+          null
+        ],
+        [
+          "32",
+          "prt_g0VYah8Gh00xughkwCzi",
+          1,
+          null
+        ],
+        [
+          "33",
+          "prt_g0VYah9j300NmU6XDMaT",
+          92,
+          null
+        ],
+        [
+          "34",
+          "prt_g0VYaiFl500Ee7YzzeGX",
+          1,
+          null
+        ],
+        [
+          "35",
+          "prt_g0VYaiGpV00UBCQk1yLH",
+          90,
+          null
+        ],
+        [
+          "36",
+          "prt_g0VYajX8b00EgWU7FyNk",
+          1,
+          null
+        ],
+        [
+          "37",
+          "prt_g0VYajYCe00XLJTwuEok",
+          90,
+          null
+        ],
+        [
+          "38",
+          "prt_g0VYdvAon001DmVMQt3O",
+          1,
+          null
+        ],
+        [
+          "39",
+          "prt_g0VYdvC3600tMl1PeYuq",
+          49,
+          null
+        ],
+        [
+          "40",
+          "prt_g0VYdwPVb004VFV3sUlQ",
+          2,
+          null
+        ],
+        [
+          "41",
+          "prt_g0VYdwQx5008pNdPaCbh",
+          50,
+          null
+        ],
+        [
+          "42",
+          "prt_g0VYesG1E00Fmnl71BEE",
+          1,
+          null
+        ],
+        [
+          "43",
+          "prt_g0VYesH2w0006o3ZRwfs",
+          1,
+          null
+        ],
+        [
+          "44",
+          "prt_g0VYesPzI003w1Eex4Qe",
+          1,
+          null
+        ],
+        [
+          "45",
+          "prt_g0VYesayI00RufgicsVt",
+          1,
+          null
+        ],
+        [
+          "46",
+          "prt_g0VYesbDz00dg0zL0ra0",
+          46,
+          null
+        ],
+        [
+          "47",
+          "prt_g0VYkNxBA007jEzXWgNR",
+          1,
+          null
+        ],
+        [
+          "48",
+          "prt_g0VYkNygI00Ey22T1YCQ",
+          1,
+          null
+        ],
+        [
+          "49",
+          "prt_g0VYkPcG100Rm9U67E04",
+          1,
+          null
+        ],
+        [
+          "50",
+          "prt_g0VYkPjwS00g0Ga5Wg2x",
+          10,
+          null
+        ],
+        [
+          "51",
+          "prt_g0VYkgQ2q00wZOiEpPpZ",
+          1,
+          null
+        ],
+        [
+          "52",
+          "prt_g0VYkgRLV00kt1ubETcr",
+          1,
+          null
+        ],
+        [
+          "53",
+          "prt_g0VYkglYL00ZzNKT7UEB",
+          14,
+          null
+        ],
+        [
+          "54",
+          "prt_g0VYlVhde009qbGjI9xa",
+          1,
+          null
+        ],
+        [
+          "55",
+          "prt_g0VYlVik0003TVHLrtoL",
+          1,
+          null
+        ],
+        [
+          "56",
+          "prt_g0VYlVwN8002kOPK5Uhl",
+          30,
+          null
+        ]
+      ],
+      "sourceBindings": [
+        [
+          "6"
+        ],
+        [
+          "8"
+        ],
+        [
+          "10"
+        ],
+        [
+          "12"
+        ],
+        [
+          "14",
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "16",
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "18",
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "20",
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "22",
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "24",
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "26",
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "phase": "03-source-narrow",
+      "kind": "member",
+      "at": "2026-10-22T20:46:15.990Z",
+      "layout": {
+        "at": "2026-10-22T20:46:16.026Z",
+        "dockWidth": 280,
+        "follow": "false",
+        "scrollHeight": 83582,
+        "scrollTop": 81260,
+        "visible": [
+          {
+            "height": 55.96875,
+            "source": "[\"source-url\",\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"4bf9be4b80027e063dabfb9354226580ff38049d91a4d6343f379c104d43e719\"]",
+            "text": "Disclosure (Show/Hide) Pattern | APG | WAI | W3Cwww.w3.org",
+            "top": 6.4375
+          },
+          {
+            "height": 23.515625,
+            "message": "msg_g0VYlVvNx00Uq6gDAjqh",
+            "source": null,
+            "text": "RECONNECT535START\n",
+            "top": 85.40625
+          },
+          {
+            "height": 18.890625,
+            "message": "msg_g0VYlVvNx00Uq6gDAjqh",
+            "source": null,
+            "text": "重连来源第01节\n",
+            "top": 120.921875
+          },
+          {
+            "height": 117.578125,
+            "message": "msg_g0VYlVvNx00Uq6gDAjqh",
+            "source": null,
+            "text": "指定页面本次读取成功，仅调用一次，未重试或更换地址。来源为 W3C APG 的 Disclosure 模式说明。建议将文档描述与产品状态分开：读取成功不代表产品行为已经核实。\n",
+            "top": 145.8125
+          },
+          {
+            "height": 18.890625,
+            "message": "msg_g0VYlVvNx00Uq6gDAjqh",
+            "source": null,
+            "text": "重连来源第02节\n",
+            "top": 275.390625
+          }
+        ]
+      },
+      "bodies": 35,
+      "sources": 11,
+      "bodyBindings": [
+        [
+          "22",
+          "prt_g0VXzT1DL000WBOXfm1A",
+          1,
+          null
+        ],
+        [
+          "23",
+          "prt_g0VXzT3Gs005zKfhGX2N",
+          2,
+          null
+        ],
+        [
+          "24",
+          "prt_g0VXzUz7q00fivpYNBRn",
+          1,
+          null
+        ],
+        [
+          "25",
+          "prt_g0VXzV2VW00na9YfpQKR",
+          27,
+          null
+        ],
+        [
+          "26",
+          "prt_g0VY0iRj9008mwlam6wF",
+          1,
+          null
+        ],
+        [
+          "27",
+          "prt_g0VY0iVmm00FScjcxxqj",
+          35,
+          null
+        ],
+        [
+          "28",
+          "prt_g0VY0lNZe00ZQkp3vHys",
+          1,
+          null
+        ],
+        [
+          "29",
+          "prt_g0VY0lRNt00O6pzN6EFn",
+          35,
+          null
+        ],
+        [
+          "30",
+          "prt_g0VYa9kCa00xJ0qS6AXI",
+          1,
+          null
+        ],
+        [
+          "31",
+          "prt_g0VYa9l2c00sO4SHI28d",
+          37,
+          null
+        ],
+        [
+          "32",
+          "prt_g0VYah8Gh00xughkwCzi",
+          1,
+          null
+        ],
+        [
+          "33",
+          "prt_g0VYah9j300NmU6XDMaT",
+          92,
+          null
+        ],
+        [
+          "34",
+          "prt_g0VYaiFl500Ee7YzzeGX",
+          1,
+          null
+        ],
+        [
+          "35",
+          "prt_g0VYaiGpV00UBCQk1yLH",
+          90,
+          null
+        ],
+        [
+          "36",
+          "prt_g0VYajX8b00EgWU7FyNk",
+          1,
+          null
+        ],
+        [
+          "37",
+          "prt_g0VYajYCe00XLJTwuEok",
+          90,
+          null
+        ],
+        [
+          "38",
+          "prt_g0VYdvAon001DmVMQt3O",
+          1,
+          null
+        ],
+        [
+          "39",
+          "prt_g0VYdvC3600tMl1PeYuq",
+          49,
+          null
+        ],
+        [
+          "40",
+          "prt_g0VYdwPVb004VFV3sUlQ",
+          2,
+          null
+        ],
+        [
+          "41",
+          "prt_g0VYdwQx5008pNdPaCbh",
+          50,
+          null
+        ],
+        [
+          "42",
+          "prt_g0VYesG1E00Fmnl71BEE",
+          1,
+          null
+        ],
+        [
+          "43",
+          "prt_g0VYesH2w0006o3ZRwfs",
+          1,
+          null
+        ],
+        [
+          "44",
+          "prt_g0VYesPzI003w1Eex4Qe",
+          1,
+          null
+        ],
+        [
+          "45",
+          "prt_g0VYesayI00RufgicsVt",
+          1,
+          null
+        ],
+        [
+          "46",
+          "prt_g0VYesbDz00dg0zL0ra0",
+          46,
+          null
+        ],
+        [
+          "47",
+          "prt_g0VYkNxBA007jEzXWgNR",
+          1,
+          null
+        ],
+        [
+          "48",
+          "prt_g0VYkNygI00Ey22T1YCQ",
+          1,
+          null
+        ],
+        [
+          "49",
+          "prt_g0VYkPcG100Rm9U67E04",
+          1,
+          null
+        ],
+        [
+          "50",
+          "prt_g0VYkPjwS00g0Ga5Wg2x",
+          10,
+          null
+        ],
+        [
+          "51",
+          "prt_g0VYkgQ2q00wZOiEpPpZ",
+          1,
+          null
+        ],
+        [
+          "52",
+          "prt_g0VYkgRLV00kt1ubETcr",
+          1,
+          null
+        ],
+        [
+          "53",
+          "prt_g0VYkglYL00ZzNKT7UEB",
+          14,
+          null
+        ],
+        [
+          "54",
+          "prt_g0VYlVhde009qbGjI9xa",
+          1,
+          null
+        ],
+        [
+          "55",
+          "prt_g0VYlVik0003TVHLrtoL",
+          1,
+          null
+        ],
+        [
+          "56",
+          "prt_g0VYlVwN8002kOPK5Uhl",
+          30,
+          null
+        ]
+      ],
+      "sourceBindings": [
+        [
+          "6"
+        ],
+        [
+          "8"
+        ],
+        [
+          "10"
+        ],
+        [
+          "12"
+        ],
+        [
+          "14",
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "16",
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "18",
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "20",
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "22",
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "24",
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "26",
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "phase": "07-output-reading",
+      "kind": "member",
+      "at": "2026-10-22T20:47:27.152Z",
+      "layout": {
+        "at": "2026-10-22T20:47:27.188Z",
+        "dockWidth": 441,
+        "follow": "false",
+        "scrollHeight": 60785,
+        "scrollTop": 57168,
+        "visible": []
+      },
+      "bodies": 35,
+      "sources": 11,
+      "bodyBindings": [
+        [
+          "22",
+          "prt_g0VXzT1DL000WBOXfm1A",
+          1,
+          null
+        ],
+        [
+          "23",
+          "prt_g0VXzT3Gs005zKfhGX2N",
+          2,
+          null
+        ],
+        [
+          "24",
+          "prt_g0VXzUz7q00fivpYNBRn",
+          1,
+          null
+        ],
+        [
+          "25",
+          "prt_g0VXzV2VW00na9YfpQKR",
+          27,
+          null
+        ],
+        [
+          "26",
+          "prt_g0VY0iRj9008mwlam6wF",
+          1,
+          null
+        ],
+        [
+          "27",
+          "prt_g0VY0iVmm00FScjcxxqj",
+          35,
+          null
+        ],
+        [
+          "28",
+          "prt_g0VY0lNZe00ZQkp3vHys",
+          1,
+          null
+        ],
+        [
+          "29",
+          "prt_g0VY0lRNt00O6pzN6EFn",
+          35,
+          null
+        ],
+        [
+          "30",
+          "prt_g0VYa9kCa00xJ0qS6AXI",
+          1,
+          null
+        ],
+        [
+          "31",
+          "prt_g0VYa9l2c00sO4SHI28d",
+          37,
+          null
+        ],
+        [
+          "32",
+          "prt_g0VYah8Gh00xughkwCzi",
+          1,
+          null
+        ],
+        [
+          "33",
+          "prt_g0VYah9j300NmU6XDMaT",
+          92,
+          null
+        ],
+        [
+          "34",
+          "prt_g0VYaiFl500Ee7YzzeGX",
+          1,
+          null
+        ],
+        [
+          "35",
+          "prt_g0VYaiGpV00UBCQk1yLH",
+          90,
+          null
+        ],
+        [
+          "36",
+          "prt_g0VYajX8b00EgWU7FyNk",
+          1,
+          null
+        ],
+        [
+          "37",
+          "prt_g0VYajYCe00XLJTwuEok",
+          90,
+          null
+        ],
+        [
+          "38",
+          "prt_g0VYdvAon001DmVMQt3O",
+          1,
+          null
+        ],
+        [
+          "39",
+          "prt_g0VYdvC3600tMl1PeYuq",
+          49,
+          null
+        ],
+        [
+          "40",
+          "prt_g0VYdwPVb004VFV3sUlQ",
+          2,
+          null
+        ],
+        [
+          "41",
+          "prt_g0VYdwQx5008pNdPaCbh",
+          50,
+          null
+        ],
+        [
+          "42",
+          "prt_g0VYesG1E00Fmnl71BEE",
+          1,
+          null
+        ],
+        [
+          "43",
+          "prt_g0VYesH2w0006o3ZRwfs",
+          1,
+          null
+        ],
+        [
+          "44",
+          "prt_g0VYesPzI003w1Eex4Qe",
+          1,
+          null
+        ],
+        [
+          "45",
+          "prt_g0VYesayI00RufgicsVt",
+          1,
+          null
+        ],
+        [
+          "46",
+          "prt_g0VYesbDz00dg0zL0ra0",
+          46,
+          null
+        ],
+        [
+          "47",
+          "prt_g0VYkNxBA007jEzXWgNR",
+          1,
+          null
+        ],
+        [
+          "48",
+          "prt_g0VYkNygI00Ey22T1YCQ",
+          1,
+          null
+        ],
+        [
+          "49",
+          "prt_g0VYkPcG100Rm9U67E04",
+          1,
+          null
+        ],
+        [
+          "50",
+          "prt_g0VYkPjwS00g0Ga5Wg2x",
+          10,
+          null
+        ],
+        [
+          "51",
+          "prt_g0VYkgQ2q00wZOiEpPpZ",
+          1,
+          null
+        ],
+        [
+          "52",
+          "prt_g0VYkgRLV00kt1ubETcr",
+          1,
+          null
+        ],
+        [
+          "53",
+          "prt_g0VYkglYL00ZzNKT7UEB",
+          14,
+          null
+        ],
+        [
+          "54",
+          "prt_g0VYlVhde009qbGjI9xa",
+          1,
+          null
+        ],
+        [
+          "55",
+          "prt_g0VYlVik0003TVHLrtoL",
+          1,
+          null
+        ],
+        [
+          "56",
+          "prt_g0VYlVwN8002kOPK5Uhl",
+          30,
+          null
+        ]
+      ],
+      "sourceBindings": [
+        [
+          "6"
+        ],
+        [
+          "8"
+        ],
+        [
+          "10"
+        ],
+        [
+          "12"
+        ],
+        [
+          "14",
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "16",
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "18",
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "20",
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "22",
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "24",
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "26",
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "phase": "08-output-return-narrow",
+      "kind": "member",
+      "at": "2026-10-22T20:47:48.970Z",
+      "layout": {
+        "at": "2026-10-22T20:47:49.009Z",
+        "dockWidth": 280,
+        "follow": "false",
+        "scrollHeight": 86730,
+        "scrollTop": 57168,
+        "visible": [
+          {
+            "height": 141.09375,
+            "message": "msg_g0VYdvApy00OT0zAmME0",
+            "source": null,
+            "text": "第33段 原文中的问题句不等于作者已经给出答案。有些长文通过提问引出讨论，也可能保留开放问题。展示时若把问题改成肯定标题，便可能提前确定结论。阅读者应辨认提问、假设和断言，避免在句式转换中误解立场。\n",
+            "top": -72.046875
+          },
+          {
+            "height": 141.09375,
+            "message": "msg_g0VYdvApy00OT0zAmME0",
+            "source": null,
+            "text": "第34段 对因果关系应保持特别谨慎。两件事同时出现，不代表一件导致另一件；前后发生，也不必然形成因果。原文若只是描述关联，展示建议和摘要就不应改写为原因说明，否则会增加原材料没有提供的解释力度。\n",
+            "top": 75.046875
+          },
+          {
+            "height": 141.09375,
+            "message": "msg_g0VYdvApy00OT0zAmME0",
+            "source": null,
+            "text": "第35段 引用的准确性不仅涉及文字是否相同，也涉及使用位置是否合适。把一句话放进不相关的讨论，可能使它承担原本没有的含义。阅读时应关注引用与当前结论之间的关系，而不仅检查句子是否带有引号或出处说明。\n",
+            "top": 222.140625
+          },
+          {
+            "height": 141.09375,
+            "message": "msg_g0VYdvApy00OT0zAmME0",
+            "source": null,
+            "text": "第36段 对“通常”“经常”等频率词，应避免自行理解成固定比例。它们可能只是概括表达，未必来自统计。展示建议可以提醒读者寻找依据，但不应替作者添加数字，让模糊概括看起来具有并不存在的精确测量结果。\n",
+            "top": 369.234375
+          },
+          {
+            "height": 141.09375,
+            "message": "msg_g0VYdvApy00OT0zAmME0",
+            "source": null,
+            "text": "第37段 当文章提出建议时，可以区分建议目标与实现效果。作者希望提高可读性，不代表某种排版必然改善所有人的理解。阅读指南应说明建议解决什么问题，并保留适用条件，而不是把意图直接描述成已经发生的结果。\n",
+            "top": 516.328125
+          }
+        ]
+      },
+      "bodies": 35,
+      "sources": 11,
+      "bodyBindings": [
+        [
+          "22",
+          "prt_g0VXzT1DL000WBOXfm1A",
+          1,
+          null
+        ],
+        [
+          "23",
+          "prt_g0VXzT3Gs005zKfhGX2N",
+          2,
+          null
+        ],
+        [
+          "24",
+          "prt_g0VXzUz7q00fivpYNBRn",
+          1,
+          null
+        ],
+        [
+          "25",
+          "prt_g0VXzV2VW00na9YfpQKR",
+          27,
+          null
+        ],
+        [
+          "26",
+          "prt_g0VY0iRj9008mwlam6wF",
+          1,
+          null
+        ],
+        [
+          "27",
+          "prt_g0VY0iVmm00FScjcxxqj",
+          35,
+          null
+        ],
+        [
+          "28",
+          "prt_g0VY0lNZe00ZQkp3vHys",
+          1,
+          null
+        ],
+        [
+          "29",
+          "prt_g0VY0lRNt00O6pzN6EFn",
+          35,
+          null
+        ],
+        [
+          "30",
+          "prt_g0VYa9kCa00xJ0qS6AXI",
+          1,
+          null
+        ],
+        [
+          "31",
+          "prt_g0VYa9l2c00sO4SHI28d",
+          37,
+          null
+        ],
+        [
+          "32",
+          "prt_g0VYah8Gh00xughkwCzi",
+          1,
+          null
+        ],
+        [
+          "33",
+          "prt_g0VYah9j300NmU6XDMaT",
+          92,
+          null
+        ],
+        [
+          "34",
+          "prt_g0VYaiFl500Ee7YzzeGX",
+          1,
+          null
+        ],
+        [
+          "35",
+          "prt_g0VYaiGpV00UBCQk1yLH",
+          90,
+          null
+        ],
+        [
+          "36",
+          "prt_g0VYajX8b00EgWU7FyNk",
+          1,
+          null
+        ],
+        [
+          "37",
+          "prt_g0VYajYCe00XLJTwuEok",
+          90,
+          null
+        ],
+        [
+          "38",
+          "prt_g0VYdvAon001DmVMQt3O",
+          1,
+          null
+        ],
+        [
+          "39",
+          "prt_g0VYdvC3600tMl1PeYuq",
+          49,
+          null
+        ],
+        [
+          "40",
+          "prt_g0VYdwPVb004VFV3sUlQ",
+          2,
+          null
+        ],
+        [
+          "41",
+          "prt_g0VYdwQx5008pNdPaCbh",
+          50,
+          null
+        ],
+        [
+          "42",
+          "prt_g0VYesG1E00Fmnl71BEE",
+          1,
+          null
+        ],
+        [
+          "43",
+          "prt_g0VYesH2w0006o3ZRwfs",
+          1,
+          null
+        ],
+        [
+          "44",
+          "prt_g0VYesPzI003w1Eex4Qe",
+          1,
+          null
+        ],
+        [
+          "45",
+          "prt_g0VYesayI00RufgicsVt",
+          1,
+          null
+        ],
+        [
+          "46",
+          "prt_g0VYesbDz00dg0zL0ra0",
+          46,
+          null
+        ],
+        [
+          "47",
+          "prt_g0VYkNxBA007jEzXWgNR",
+          1,
+          null
+        ],
+        [
+          "48",
+          "prt_g0VYkNygI00Ey22T1YCQ",
+          1,
+          null
+        ],
+        [
+          "49",
+          "prt_g0VYkPcG100Rm9U67E04",
+          1,
+          null
+        ],
+        [
+          "50",
+          "prt_g0VYkPjwS00g0Ga5Wg2x",
+          10,
+          null
+        ],
+        [
+          "51",
+          "prt_g0VYkgQ2q00wZOiEpPpZ",
+          1,
+          null
+        ],
+        [
+          "52",
+          "prt_g0VYkgRLV00kt1ubETcr",
+          1,
+          null
+        ],
+        [
+          "53",
+          "prt_g0VYkglYL00ZzNKT7UEB",
+          14,
+          null
+        ],
+        [
+          "54",
+          "prt_g0VYlVhde009qbGjI9xa",
+          1,
+          null
+        ],
+        [
+          "55",
+          "prt_g0VYlVik0003TVHLrtoL",
+          1,
+          null
+        ],
+        [
+          "56",
+          "prt_g0VYlVwN8002kOPK5Uhl",
+          30,
+          null
+        ]
+      ],
+      "sourceBindings": [
+        [
+          "6"
+        ],
+        [
+          "8"
+        ],
+        [
+          "10"
+        ],
+        [
+          "12"
+        ],
+        [
+          "14",
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "16",
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "18",
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "20",
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "22",
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "24",
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "26",
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "phase": "11-fixed-output-visible-widen",
+      "kind": "member",
+      "at": "2026-10-22T20:55:41.786Z",
+      "layout": {
+        "at": "2026-10-22T20:55:41.825Z",
+        "dockWidth": 441,
+        "follow": "false",
+        "scrollHeight": 60785,
+        "scrollTop": 57356,
+        "visible": []
+      },
+      "bodies": 35,
+      "sources": 11,
+      "bodyBindings": [
+        [
+          "22",
+          "prt_g0VXzT1DL000WBOXfm1A",
+          1,
+          null
+        ],
+        [
+          "23",
+          "prt_g0VXzT3Gs005zKfhGX2N",
+          2,
+          null
+        ],
+        [
+          "24",
+          "prt_g0VXzUz7q00fivpYNBRn",
+          1,
+          null
+        ],
+        [
+          "25",
+          "prt_g0VXzV2VW00na9YfpQKR",
+          27,
+          null
+        ],
+        [
+          "26",
+          "prt_g0VY0iRj9008mwlam6wF",
+          1,
+          null
+        ],
+        [
+          "27",
+          "prt_g0VY0iVmm00FScjcxxqj",
+          35,
+          null
+        ],
+        [
+          "28",
+          "prt_g0VY0lNZe00ZQkp3vHys",
+          1,
+          null
+        ],
+        [
+          "29",
+          "prt_g0VY0lRNt00O6pzN6EFn",
+          35,
+          null
+        ],
+        [
+          "30",
+          "prt_g0VYa9kCa00xJ0qS6AXI",
+          1,
+          null
+        ],
+        [
+          "31",
+          "prt_g0VYa9l2c00sO4SHI28d",
+          37,
+          null
+        ],
+        [
+          "32",
+          "prt_g0VYah8Gh00xughkwCzi",
+          1,
+          null
+        ],
+        [
+          "33",
+          "prt_g0VYah9j300NmU6XDMaT",
+          92,
+          null
+        ],
+        [
+          "34",
+          "prt_g0VYaiFl500Ee7YzzeGX",
+          1,
+          null
+        ],
+        [
+          "35",
+          "prt_g0VYaiGpV00UBCQk1yLH",
+          90,
+          null
+        ],
+        [
+          "36",
+          "prt_g0VYajX8b00EgWU7FyNk",
+          1,
+          null
+        ],
+        [
+          "37",
+          "prt_g0VYajYCe00XLJTwuEok",
+          90,
+          null
+        ],
+        [
+          "38",
+          "prt_g0VYdvAon001DmVMQt3O",
+          1,
+          null
+        ],
+        [
+          "39",
+          "prt_g0VYdvC3600tMl1PeYuq",
+          49,
+          null
+        ],
+        [
+          "40",
+          "prt_g0VYdwPVb004VFV3sUlQ",
+          2,
+          null
+        ],
+        [
+          "41",
+          "prt_g0VYdwQx5008pNdPaCbh",
+          50,
+          null
+        ],
+        [
+          "42",
+          "prt_g0VYesG1E00Fmnl71BEE",
+          1,
+          null
+        ],
+        [
+          "43",
+          "prt_g0VYesH2w0006o3ZRwfs",
+          1,
+          null
+        ],
+        [
+          "44",
+          "prt_g0VYesPzI003w1Eex4Qe",
+          1,
+          null
+        ],
+        [
+          "45",
+          "prt_g0VYesayI00RufgicsVt",
+          1,
+          null
+        ],
+        [
+          "46",
+          "prt_g0VYesbDz00dg0zL0ra0",
+          46,
+          null
+        ],
+        [
+          "47",
+          "prt_g0VYkNxBA007jEzXWgNR",
+          1,
+          null
+        ],
+        [
+          "48",
+          "prt_g0VYkNygI00Ey22T1YCQ",
+          1,
+          null
+        ],
+        [
+          "49",
+          "prt_g0VYkPcG100Rm9U67E04",
+          1,
+          null
+        ],
+        [
+          "50",
+          "prt_g0VYkPjwS00g0Ga5Wg2x",
+          10,
+          null
+        ],
+        [
+          "51",
+          "prt_g0VYkgQ2q00wZOiEpPpZ",
+          1,
+          null
+        ],
+        [
+          "52",
+          "prt_g0VYkgRLV00kt1ubETcr",
+          1,
+          null
+        ],
+        [
+          "53",
+          "prt_g0VYkglYL00ZzNKT7UEB",
+          14,
+          null
+        ],
+        [
+          "54",
+          "prt_g0VYlVhde009qbGjI9xa",
+          1,
+          null
+        ],
+        [
+          "55",
+          "prt_g0VYlVik0003TVHLrtoL",
+          1,
+          null
+        ],
+        [
+          "56",
+          "prt_g0VYlVwN8002kOPK5Uhl",
+          30,
+          null
+        ]
+      ],
+      "sourceBindings": [
+        [
+          "6"
+        ],
+        [
+          "8"
+        ],
+        [
+          "10"
+        ],
+        [
+          "12"
+        ],
+        [
+          "14",
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "16",
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "18",
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "20",
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "22",
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "24",
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "26",
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "phase": "16-final-new-reading-return",
+      "kind": "member",
+      "at": "2026-10-22T21:03:16.091Z",
+      "layout": {
+        "at": "2026-10-22T21:03:16.128Z",
+        "dockWidth": 280,
+        "follow": "false",
+        "scrollHeight": 86730,
+        "scrollTop": 82323,
+        "visible": []
+      },
+      "bodies": 35,
+      "sources": 11,
+      "bodyBindings": [
+        [
+          "22",
+          "prt_g0VXzT1DL000WBOXfm1A",
+          1,
+          null
+        ],
+        [
+          "23",
+          "prt_g0VXzT3Gs005zKfhGX2N",
+          2,
+          null
+        ],
+        [
+          "24",
+          "prt_g0VXzUz7q00fivpYNBRn",
+          1,
+          null
+        ],
+        [
+          "25",
+          "prt_g0VXzV2VW00na9YfpQKR",
+          27,
+          null
+        ],
+        [
+          "26",
+          "prt_g0VY0iRj9008mwlam6wF",
+          1,
+          null
+        ],
+        [
+          "27",
+          "prt_g0VY0iVmm00FScjcxxqj",
+          35,
+          null
+        ],
+        [
+          "28",
+          "prt_g0VY0lNZe00ZQkp3vHys",
+          1,
+          null
+        ],
+        [
+          "29",
+          "prt_g0VY0lRNt00O6pzN6EFn",
+          35,
+          null
+        ],
+        [
+          "30",
+          "prt_g0VYa9kCa00xJ0qS6AXI",
+          1,
+          null
+        ],
+        [
+          "31",
+          "prt_g0VYa9l2c00sO4SHI28d",
+          37,
+          null
+        ],
+        [
+          "32",
+          "prt_g0VYah8Gh00xughkwCzi",
+          1,
+          null
+        ],
+        [
+          "33",
+          "prt_g0VYah9j300NmU6XDMaT",
+          92,
+          null
+        ],
+        [
+          "34",
+          "prt_g0VYaiFl500Ee7YzzeGX",
+          1,
+          null
+        ],
+        [
+          "35",
+          "prt_g0VYaiGpV00UBCQk1yLH",
+          90,
+          null
+        ],
+        [
+          "36",
+          "prt_g0VYajX8b00EgWU7FyNk",
+          1,
+          null
+        ],
+        [
+          "37",
+          "prt_g0VYajYCe00XLJTwuEok",
+          90,
+          null
+        ],
+        [
+          "38",
+          "prt_g0VYdvAon001DmVMQt3O",
+          1,
+          null
+        ],
+        [
+          "39",
+          "prt_g0VYdvC3600tMl1PeYuq",
+          49,
+          null
+        ],
+        [
+          "40",
+          "prt_g0VYdwPVb004VFV3sUlQ",
+          2,
+          null
+        ],
+        [
+          "41",
+          "prt_g0VYdwQx5008pNdPaCbh",
+          50,
+          null
+        ],
+        [
+          "42",
+          "prt_g0VYesG1E00Fmnl71BEE",
+          1,
+          null
+        ],
+        [
+          "43",
+          "prt_g0VYesH2w0006o3ZRwfs",
+          1,
+          null
+        ],
+        [
+          "44",
+          "prt_g0VYesPzI003w1Eex4Qe",
+          1,
+          null
+        ],
+        [
+          "45",
+          "prt_g0VYesayI00RufgicsVt",
+          1,
+          null
+        ],
+        [
+          "46",
+          "prt_g0VYesbDz00dg0zL0ra0",
+          46,
+          null
+        ],
+        [
+          "47",
+          "prt_g0VYkNxBA007jEzXWgNR",
+          1,
+          null
+        ],
+        [
+          "48",
+          "prt_g0VYkNygI00Ey22T1YCQ",
+          1,
+          null
+        ],
+        [
+          "49",
+          "prt_g0VYkPcG100Rm9U67E04",
+          1,
+          null
+        ],
+        [
+          "50",
+          "prt_g0VYkPjwS00g0Ga5Wg2x",
+          10,
+          null
+        ],
+        [
+          "51",
+          "prt_g0VYkgQ2q00wZOiEpPpZ",
+          1,
+          null
+        ],
+        [
+          "52",
+          "prt_g0VYkgRLV00kt1ubETcr",
+          1,
+          null
+        ],
+        [
+          "53",
+          "prt_g0VYkglYL00ZzNKT7UEB",
+          14,
+          null
+        ],
+        [
+          "54",
+          "prt_g0VYlVhde009qbGjI9xa",
+          1,
+          null
+        ],
+        [
+          "55",
+          "prt_g0VYlVik0003TVHLrtoL",
+          1,
+          null
+        ],
+        [
+          "56",
+          "prt_g0VYlVwN8002kOPK5Uhl",
+          30,
+          null
+        ]
+      ],
+      "sourceBindings": [
+        [
+          "6"
+        ],
+        [
+          "8"
+        ],
+        [
+          "10"
+        ],
+        [
+          "12"
+        ],
+        [
+          "14",
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "16",
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "18",
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "20",
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "22",
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "24",
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "26",
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "phase": "17-side-budget-stop",
+      "kind": "operator-stop",
+      "note": "Actual captured intermediate cancellation frame, not proof of permission-ledger convergence"
+    },
+    {
+      "phase": "20-side-source-card",
+      "kind": "side",
+      "at": "2026-10-22T21:08:52.711Z",
+      "bodies": [
+        {
+          "blocks": 1,
+          "message": "msg_79f35848-d92e-4f69-865a-2c560a15848e",
+          "owner": "1",
+          "rendering": null
+        },
+        {
+          "blocks": 1,
+          "message": "msg_g0VYoaDU100kqhJ9MNv9",
+          "owner": "2",
+          "rendering": null
+        }
+      ],
+      "follow": "false",
+      "payloads": [],
+      "scroll": {
+        "full": 767,
+        "height": 326,
+        "top": 189
+      },
+      "sources": [
+        {
+          "id": "[\"source-url\",\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"a4ed552dcfb720907009fd9576f8261e55c21289422faafec1d4b93d2db52f5f\"]",
+          "links": [
+            "https://www.rfc-editor.org/rfc/rfc2606.txt"
+          ],
+          "text": "/rfc/rfc2606.txtwww.rfc-editor.org"
+        }
+      ],
+      "width": 380
+    },
+    {
+      "phase": "21-side-output-reading",
+      "kind": "side",
+      "at": "2026-10-22T21:09:08.123Z",
+      "bodies": [
+        {
+          "blocks": 1,
+          "message": "msg_79f35848-d92e-4f69-865a-2c560a15848e",
+          "owner": "1",
+          "rendering": null
+        },
+        {
+          "blocks": 1,
+          "message": "msg_g0VYoaDU100kqhJ9MNv9",
+          "owner": "2",
+          "rendering": null
+        }
+      ],
+      "follow": "false",
+      "payloads": [
+        {
+          "expanded": "true",
+          "id": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+          "message": "msg_g0VYoa88R00yPO3mSkM4",
+          "textLength": 8008,
+          "top": -421.90625,
+          "visible": true
+        }
+      ],
+      "scroll": {
+        "full": 8634,
+        "height": 326,
+        "top": 909
+      },
+      "sources": [
+        {
+          "id": "[\"source-url\",\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"a4ed552dcfb720907009fd9576f8261e55c21289422faafec1d4b93d2db52f5f\"]",
+          "links": [
+            "https://www.rfc-editor.org/rfc/rfc2606.txt"
+          ],
+          "text": "/rfc/rfc2606.txtwww.rfc-editor.org"
+        }
+      ],
+      "width": 380
+    },
+    {
+      "phase": "22-side-output-narrow",
+      "kind": "side",
+      "at": "2026-10-22T21:09:19.970Z",
+      "bodies": [
+        {
+          "blocks": 1,
+          "message": "msg_79f35848-d92e-4f69-865a-2c560a15848e",
+          "owner": "1",
+          "rendering": null
+        },
+        {
+          "blocks": 1,
+          "message": "msg_g0VYoaDU100kqhJ9MNv9",
+          "owner": "2",
+          "rendering": null
+        }
+      ],
+      "follow": "false",
+      "payloads": [
+        {
+          "expanded": "true",
+          "id": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+          "message": "msg_g0VYoa88R00yPO3mSkM4",
+          "textLength": 8008,
+          "top": -422.359375,
+          "visible": true
+        }
+      ],
+      "scroll": {
+        "full": 11023,
+        "height": 280,
+        "top": 1001
+      },
+      "sources": [
+        {
+          "id": "[\"source-url\",\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"a4ed552dcfb720907009fd9576f8261e55c21289422faafec1d4b93d2db52f5f\"]",
+          "links": [
+            "https://www.rfc-editor.org/rfc/rfc2606.txt"
+          ],
+          "text": "/rfc/rfc2606.txtwww.rfc-editor.org"
+        }
+      ],
+      "width": 280
+    },
+    {
+      "phase": "23-verified-side-reading",
+      "kind": "side",
+      "at": "2026-10-22T21:13:05.949Z",
+      "bodies": [
+        {
+          "blocks": 1,
+          "message": "msg_79f35848-d92e-4f69-865a-2c560a15848e",
+          "owner": "1",
+          "rendering": null
+        },
+        {
+          "blocks": 1,
+          "message": "msg_g0VYoaDU100kqhJ9MNv9",
+          "owner": "2",
+          "rendering": null
+        }
+      ],
+      "follow": "false",
+      "payloads": [
+        {
+          "expanded": "true",
+          "id": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+          "message": "msg_g0VYoa88R00yPO3mSkM4",
+          "textLength": 8008,
+          "top": -509.90625,
+          "visible": true
+        }
+      ],
+      "scroll": {
+        "full": 8634,
+        "height": 326,
+        "top": 997
+      },
+      "sources": [
+        {
+          "id": "[\"source-url\",\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"a4ed552dcfb720907009fd9576f8261e55c21289422faafec1d4b93d2db52f5f\"]",
+          "links": [
+            "https://www.rfc-editor.org/rfc/rfc2606.txt"
+          ],
+          "text": "/rfc/rfc2606.txtwww.rfc-editor.org"
+        }
+      ],
+      "width": 380
+    },
+    {
+      "phase": "24-verified-side-narrow",
+      "kind": "side",
+      "at": "2026-10-22T21:13:15.464Z",
+      "bodies": [
+        {
+          "blocks": 1,
+          "message": "msg_79f35848-d92e-4f69-865a-2c560a15848e",
+          "owner": "1",
+          "rendering": null
+        },
+        {
+          "blocks": 1,
+          "message": "msg_g0VYoaDU100kqhJ9MNv9",
+          "owner": "2",
+          "rendering": null
+        }
+      ],
+      "follow": "false",
+      "payloads": [
+        {
+          "expanded": "true",
+          "id": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+          "message": "msg_g0VYoa88R00yPO3mSkM4",
+          "textLength": 8008,
+          "top": -588.359375,
+          "visible": true
+        }
+      ],
+      "scroll": {
+        "full": 11023,
+        "height": 280,
+        "top": 1167
+      },
+      "sources": [
+        {
+          "id": "[\"source-url\",\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"a4ed552dcfb720907009fd9576f8261e55c21289422faafec1d4b93d2db52f5f\"]",
+          "links": [
+            "https://www.rfc-editor.org/rfc/rfc2606.txt"
+          ],
+          "text": "/rfc/rfc2606.txtwww.rfc-editor.org"
+        }
+      ],
+      "width": 280
+    },
+    {
+      "phase": "27-final-asset-side-wide",
+      "kind": "side",
+      "at": "2026-10-22T21:19:18.857Z",
+      "bodies": [
+        {
+          "blocks": 1,
+          "message": "msg_79f35848-d92e-4f69-865a-2c560a15848e",
+          "owner": "1",
+          "rendering": null
+        },
+        {
+          "blocks": 1,
+          "message": "msg_g0VYoaDU100kqhJ9MNv9",
+          "owner": "2",
+          "rendering": null
+        }
+      ],
+      "follow": "false",
+      "payloads": [
+        {
+          "expanded": "true",
+          "id": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+          "message": "msg_g0VYoa88R00yPO3mSkM4",
+          "textLength": 8008,
+          "top": -395.421875,
+          "visible": true
+        }
+      ],
+      "scroll": {
+        "full": 8408,
+        "height": 326,
+        "top": 859
+      },
+      "sources": [
+        {
+          "id": "[\"source-url\",\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"a4ed552dcfb720907009fd9576f8261e55c21289422faafec1d4b93d2db52f5f\"]",
+          "links": [
+            "https://www.rfc-editor.org/rfc/rfc2606.txt"
+          ],
+          "text": "/rfc/rfc2606.txtwww.rfc-editor.org"
+        }
+      ],
+      "width": 441
+    },
+    {
+      "phase": "28-final-asset-side-narrow",
+      "kind": "side",
+      "at": "2026-10-22T21:19:29.969Z",
+      "bodies": [
+        {
+          "blocks": 1,
+          "message": "msg_79f35848-d92e-4f69-865a-2c560a15848e",
+          "owner": "1",
+          "rendering": null
+        },
+        {
+          "blocks": 1,
+          "message": "msg_g0VYoaDU100kqhJ9MNv9",
+          "owner": "2",
+          "rendering": null
+        }
+      ],
+      "follow": "false",
+      "payloads": [
+        {
+          "expanded": "true",
+          "id": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+          "message": "msg_g0VYoa88R00yPO3mSkM4",
+          "textLength": 8008,
+          "top": -434.359375,
+          "visible": true
+        }
+      ],
+      "scroll": {
+        "full": 11023,
+        "height": 280,
+        "top": 1013
+      },
+      "sources": [
+        {
+          "id": "[\"source-url\",\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"a4ed552dcfb720907009fd9576f8261e55c21289422faafec1d4b93d2db52f5f\"]",
+          "links": [
+            "https://www.rfc-editor.org/rfc/rfc2606.txt"
+          ],
+          "text": "/rfc/rfc2606.txtwww.rfc-editor.org"
+        }
+      ],
+      "width": 280
+    },
+    {
+      "phase": "29-final-asset-side-wide-return",
+      "kind": "side",
+      "at": "2026-10-22T21:19:39.907Z",
+      "bodies": [
+        {
+          "blocks": 1,
+          "message": "msg_79f35848-d92e-4f69-865a-2c560a15848e",
+          "owner": "1",
+          "rendering": null
+        },
+        {
+          "blocks": 1,
+          "message": "msg_g0VYoaDU100kqhJ9MNv9",
+          "owner": "2",
+          "rendering": null
+        }
+      ],
+      "follow": "false",
+      "payloads": [
+        {
+          "expanded": "true",
+          "id": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+          "message": "msg_g0VYoa88R00yPO3mSkM4",
+          "textLength": 8008,
+          "top": -395.421875,
+          "visible": true
+        }
+      ],
+      "scroll": {
+        "full": 8408,
+        "height": 326,
+        "top": 859
+      },
+      "sources": [
+        {
+          "id": "[\"source-url\",\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"a4ed552dcfb720907009fd9576f8261e55c21289422faafec1d4b93d2db52f5f\"]",
+          "links": [
+            "https://www.rfc-editor.org/rfc/rfc2606.txt"
+          ],
+          "text": "/rfc/rfc2606.txtwww.rfc-editor.org"
+        }
+      ],
+      "width": 441
+    },
+    {
+      "phase": "30-final-asset-side-hidden-return",
+      "kind": "side",
+      "at": "2026-10-22T21:20:18.901Z",
+      "bodies": [
+        {
+          "blocks": 1,
+          "message": "msg_79f35848-d92e-4f69-865a-2c560a15848e",
+          "owner": "3",
+          "rendering": null
+        },
+        {
+          "blocks": 1,
+          "message": "msg_g0VYoaDU100kqhJ9MNv9",
+          "owner": "4",
+          "rendering": null
+        }
+      ],
+      "follow": "false",
+      "payloads": [
+        {
+          "expanded": "true",
+          "id": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+          "message": "msg_g0VYoa88R00yPO3mSkM4",
+          "textLength": 8008,
+          "top": -434.359375,
+          "visible": true
+        }
+      ],
+      "scroll": {
+        "full": 11023,
+        "height": 280,
+        "top": 1013
+      },
+      "sources": [
+        {
+          "id": "[\"source-url\",\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"a4ed552dcfb720907009fd9576f8261e55c21289422faafec1d4b93d2db52f5f\"]",
+          "links": [
+            "https://www.rfc-editor.org/rfc/rfc2606.txt"
+          ],
+          "text": "/rfc/rfc2606.txtwww.rfc-editor.org"
+        }
+      ],
+      "width": 280
+    },
+    {
+      "phase": "32-final-asset-member-wide",
+      "kind": "member",
+      "at": "2026-10-22T21:21:51.247Z",
+      "layout": {
+        "at": "2026-10-22T21:21:51.287Z",
+        "dockWidth": 441,
+        "follow": "false",
+        "scrollHeight": 60785,
+        "scrollTop": 57297,
+        "visible": []
+      },
+      "bodies": 35,
+      "sources": 11,
+      "bodyBindings": [
+        [
+          "22",
+          "prt_g0VXzT1DL000WBOXfm1A",
+          1,
+          null
+        ],
+        [
+          "23",
+          "prt_g0VXzT3Gs005zKfhGX2N",
+          2,
+          null
+        ],
+        [
+          "24",
+          "prt_g0VXzUz7q00fivpYNBRn",
+          1,
+          null
+        ],
+        [
+          "25",
+          "prt_g0VXzV2VW00na9YfpQKR",
+          27,
+          null
+        ],
+        [
+          "26",
+          "prt_g0VY0iRj9008mwlam6wF",
+          1,
+          null
+        ],
+        [
+          "27",
+          "prt_g0VY0iVmm00FScjcxxqj",
+          35,
+          null
+        ],
+        [
+          "28",
+          "prt_g0VY0lNZe00ZQkp3vHys",
+          1,
+          null
+        ],
+        [
+          "29",
+          "prt_g0VY0lRNt00O6pzN6EFn",
+          35,
+          null
+        ],
+        [
+          "30",
+          "prt_g0VYa9kCa00xJ0qS6AXI",
+          1,
+          null
+        ],
+        [
+          "31",
+          "prt_g0VYa9l2c00sO4SHI28d",
+          37,
+          null
+        ],
+        [
+          "32",
+          "prt_g0VYah8Gh00xughkwCzi",
+          1,
+          null
+        ],
+        [
+          "33",
+          "prt_g0VYah9j300NmU6XDMaT",
+          92,
+          null
+        ],
+        [
+          "34",
+          "prt_g0VYaiFl500Ee7YzzeGX",
+          1,
+          null
+        ],
+        [
+          "35",
+          "prt_g0VYaiGpV00UBCQk1yLH",
+          90,
+          null
+        ],
+        [
+          "36",
+          "prt_g0VYajX8b00EgWU7FyNk",
+          1,
+          null
+        ],
+        [
+          "37",
+          "prt_g0VYajYCe00XLJTwuEok",
+          90,
+          null
+        ],
+        [
+          "38",
+          "prt_g0VYdvAon001DmVMQt3O",
+          1,
+          null
+        ],
+        [
+          "39",
+          "prt_g0VYdvC3600tMl1PeYuq",
+          49,
+          null
+        ],
+        [
+          "40",
+          "prt_g0VYdwPVb004VFV3sUlQ",
+          2,
+          null
+        ],
+        [
+          "41",
+          "prt_g0VYdwQx5008pNdPaCbh",
+          50,
+          null
+        ],
+        [
+          "42",
+          "prt_g0VYesG1E00Fmnl71BEE",
+          1,
+          null
+        ],
+        [
+          "43",
+          "prt_g0VYesH2w0006o3ZRwfs",
+          1,
+          null
+        ],
+        [
+          "44",
+          "prt_g0VYesPzI003w1Eex4Qe",
+          1,
+          null
+        ],
+        [
+          "45",
+          "prt_g0VYesayI00RufgicsVt",
+          1,
+          null
+        ],
+        [
+          "46",
+          "prt_g0VYesbDz00dg0zL0ra0",
+          46,
+          null
+        ],
+        [
+          "47",
+          "prt_g0VYkNxBA007jEzXWgNR",
+          1,
+          null
+        ],
+        [
+          "48",
+          "prt_g0VYkNygI00Ey22T1YCQ",
+          1,
+          null
+        ],
+        [
+          "49",
+          "prt_g0VYkPcG100Rm9U67E04",
+          1,
+          null
+        ],
+        [
+          "50",
+          "prt_g0VYkPjwS00g0Ga5Wg2x",
+          10,
+          null
+        ],
+        [
+          "51",
+          "prt_g0VYkgQ2q00wZOiEpPpZ",
+          1,
+          null
+        ],
+        [
+          "52",
+          "prt_g0VYkgRLV00kt1ubETcr",
+          1,
+          null
+        ],
+        [
+          "53",
+          "prt_g0VYkglYL00ZzNKT7UEB",
+          14,
+          null
+        ],
+        [
+          "54",
+          "prt_g0VYlVhde009qbGjI9xa",
+          1,
+          null
+        ],
+        [
+          "55",
+          "prt_g0VYlVik0003TVHLrtoL",
+          1,
+          null
+        ],
+        [
+          "56",
+          "prt_g0VYlVwN8002kOPK5Uhl",
+          30,
+          null
+        ]
+      ],
+      "sourceBindings": [
+        [
+          "6"
+        ],
+        [
+          "8"
+        ],
+        [
+          "10"
+        ],
+        [
+          "12"
+        ],
+        [
+          "14",
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "16",
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "18",
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "20",
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "22",
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "24",
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "26",
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "phase": "33-final-asset-member-narrow",
+      "kind": "member",
+      "at": "2026-10-22T21:22:00.867Z",
+      "layout": {
+        "at": "2026-10-22T21:22:00.909Z",
+        "dockWidth": 280,
+        "follow": "false",
+        "scrollHeight": 86730,
+        "scrollTop": 81879,
+        "visible": []
+      },
+      "bodies": 35,
+      "sources": 11,
+      "bodyBindings": [
+        [
+          "22",
+          "prt_g0VXzT1DL000WBOXfm1A",
+          1,
+          null
+        ],
+        [
+          "23",
+          "prt_g0VXzT3Gs005zKfhGX2N",
+          2,
+          null
+        ],
+        [
+          "24",
+          "prt_g0VXzUz7q00fivpYNBRn",
+          1,
+          null
+        ],
+        [
+          "25",
+          "prt_g0VXzV2VW00na9YfpQKR",
+          27,
+          null
+        ],
+        [
+          "26",
+          "prt_g0VY0iRj9008mwlam6wF",
+          1,
+          null
+        ],
+        [
+          "27",
+          "prt_g0VY0iVmm00FScjcxxqj",
+          35,
+          null
+        ],
+        [
+          "28",
+          "prt_g0VY0lNZe00ZQkp3vHys",
+          1,
+          null
+        ],
+        [
+          "29",
+          "prt_g0VY0lRNt00O6pzN6EFn",
+          35,
+          null
+        ],
+        [
+          "30",
+          "prt_g0VYa9kCa00xJ0qS6AXI",
+          1,
+          null
+        ],
+        [
+          "31",
+          "prt_g0VYa9l2c00sO4SHI28d",
+          37,
+          null
+        ],
+        [
+          "32",
+          "prt_g0VYah8Gh00xughkwCzi",
+          1,
+          null
+        ],
+        [
+          "33",
+          "prt_g0VYah9j300NmU6XDMaT",
+          92,
+          null
+        ],
+        [
+          "34",
+          "prt_g0VYaiFl500Ee7YzzeGX",
+          1,
+          null
+        ],
+        [
+          "35",
+          "prt_g0VYaiGpV00UBCQk1yLH",
+          90,
+          null
+        ],
+        [
+          "36",
+          "prt_g0VYajX8b00EgWU7FyNk",
+          1,
+          null
+        ],
+        [
+          "37",
+          "prt_g0VYajYCe00XLJTwuEok",
+          90,
+          null
+        ],
+        [
+          "38",
+          "prt_g0VYdvAon001DmVMQt3O",
+          1,
+          null
+        ],
+        [
+          "39",
+          "prt_g0VYdvC3600tMl1PeYuq",
+          49,
+          null
+        ],
+        [
+          "40",
+          "prt_g0VYdwPVb004VFV3sUlQ",
+          2,
+          null
+        ],
+        [
+          "41",
+          "prt_g0VYdwQx5008pNdPaCbh",
+          50,
+          null
+        ],
+        [
+          "42",
+          "prt_g0VYesG1E00Fmnl71BEE",
+          1,
+          null
+        ],
+        [
+          "43",
+          "prt_g0VYesH2w0006o3ZRwfs",
+          1,
+          null
+        ],
+        [
+          "44",
+          "prt_g0VYesPzI003w1Eex4Qe",
+          1,
+          null
+        ],
+        [
+          "45",
+          "prt_g0VYesayI00RufgicsVt",
+          1,
+          null
+        ],
+        [
+          "46",
+          "prt_g0VYesbDz00dg0zL0ra0",
+          46,
+          null
+        ],
+        [
+          "47",
+          "prt_g0VYkNxBA007jEzXWgNR",
+          1,
+          null
+        ],
+        [
+          "48",
+          "prt_g0VYkNygI00Ey22T1YCQ",
+          1,
+          null
+        ],
+        [
+          "49",
+          "prt_g0VYkPcG100Rm9U67E04",
+          1,
+          null
+        ],
+        [
+          "50",
+          "prt_g0VYkPjwS00g0Ga5Wg2x",
+          10,
+          null
+        ],
+        [
+          "51",
+          "prt_g0VYkgQ2q00wZOiEpPpZ",
+          1,
+          null
+        ],
+        [
+          "52",
+          "prt_g0VYkgRLV00kt1ubETcr",
+          1,
+          null
+        ],
+        [
+          "53",
+          "prt_g0VYkglYL00ZzNKT7UEB",
+          14,
+          null
+        ],
+        [
+          "54",
+          "prt_g0VYlVhde009qbGjI9xa",
+          1,
+          null
+        ],
+        [
+          "55",
+          "prt_g0VYlVik0003TVHLrtoL",
+          1,
+          null
+        ],
+        [
+          "56",
+          "prt_g0VYlVwN8002kOPK5Uhl",
+          30,
+          null
+        ]
+      ],
+      "sourceBindings": [
+        [
+          "6"
+        ],
+        [
+          "8"
+        ],
+        [
+          "10"
+        ],
+        [
+          "12"
+        ],
+        [
+          "14",
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "16",
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "18",
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "20",
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "22",
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "24",
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "26",
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    },
+    {
+      "phase": "34-final-asset-member-return",
+      "kind": "member",
+      "at": "2026-10-22T21:22:12.395Z",
+      "layout": {
+        "at": "2026-10-22T21:22:12.437Z",
+        "dockWidth": 441,
+        "follow": "false",
+        "scrollHeight": 60785,
+        "scrollTop": 57297,
+        "visible": []
+      },
+      "bodies": 35,
+      "sources": 11,
+      "bodyBindings": [
+        [
+          "22",
+          "prt_g0VXzT1DL000WBOXfm1A",
+          1,
+          null
+        ],
+        [
+          "23",
+          "prt_g0VXzT3Gs005zKfhGX2N",
+          2,
+          null
+        ],
+        [
+          "24",
+          "prt_g0VXzUz7q00fivpYNBRn",
+          1,
+          null
+        ],
+        [
+          "25",
+          "prt_g0VXzV2VW00na9YfpQKR",
+          27,
+          null
+        ],
+        [
+          "26",
+          "prt_g0VY0iRj9008mwlam6wF",
+          1,
+          null
+        ],
+        [
+          "27",
+          "prt_g0VY0iVmm00FScjcxxqj",
+          35,
+          null
+        ],
+        [
+          "28",
+          "prt_g0VY0lNZe00ZQkp3vHys",
+          1,
+          null
+        ],
+        [
+          "29",
+          "prt_g0VY0lRNt00O6pzN6EFn",
+          35,
+          null
+        ],
+        [
+          "30",
+          "prt_g0VYa9kCa00xJ0qS6AXI",
+          1,
+          null
+        ],
+        [
+          "31",
+          "prt_g0VYa9l2c00sO4SHI28d",
+          37,
+          null
+        ],
+        [
+          "32",
+          "prt_g0VYah8Gh00xughkwCzi",
+          1,
+          null
+        ],
+        [
+          "33",
+          "prt_g0VYah9j300NmU6XDMaT",
+          92,
+          null
+        ],
+        [
+          "34",
+          "prt_g0VYaiFl500Ee7YzzeGX",
+          1,
+          null
+        ],
+        [
+          "35",
+          "prt_g0VYaiGpV00UBCQk1yLH",
+          90,
+          null
+        ],
+        [
+          "36",
+          "prt_g0VYajX8b00EgWU7FyNk",
+          1,
+          null
+        ],
+        [
+          "37",
+          "prt_g0VYajYCe00XLJTwuEok",
+          90,
+          null
+        ],
+        [
+          "38",
+          "prt_g0VYdvAon001DmVMQt3O",
+          1,
+          null
+        ],
+        [
+          "39",
+          "prt_g0VYdvC3600tMl1PeYuq",
+          49,
+          null
+        ],
+        [
+          "40",
+          "prt_g0VYdwPVb004VFV3sUlQ",
+          2,
+          null
+        ],
+        [
+          "41",
+          "prt_g0VYdwQx5008pNdPaCbh",
+          50,
+          null
+        ],
+        [
+          "42",
+          "prt_g0VYesG1E00Fmnl71BEE",
+          1,
+          null
+        ],
+        [
+          "43",
+          "prt_g0VYesH2w0006o3ZRwfs",
+          1,
+          null
+        ],
+        [
+          "44",
+          "prt_g0VYesPzI003w1Eex4Qe",
+          1,
+          null
+        ],
+        [
+          "45",
+          "prt_g0VYesayI00RufgicsVt",
+          1,
+          null
+        ],
+        [
+          "46",
+          "prt_g0VYesbDz00dg0zL0ra0",
+          46,
+          null
+        ],
+        [
+          "47",
+          "prt_g0VYkNxBA007jEzXWgNR",
+          1,
+          null
+        ],
+        [
+          "48",
+          "prt_g0VYkNygI00Ey22T1YCQ",
+          1,
+          null
+        ],
+        [
+          "49",
+          "prt_g0VYkPcG100Rm9U67E04",
+          1,
+          null
+        ],
+        [
+          "50",
+          "prt_g0VYkPjwS00g0Ga5Wg2x",
+          10,
+          null
+        ],
+        [
+          "51",
+          "prt_g0VYkgQ2q00wZOiEpPpZ",
+          1,
+          null
+        ],
+        [
+          "52",
+          "prt_g0VYkgRLV00kt1ubETcr",
+          1,
+          null
+        ],
+        [
+          "53",
+          "prt_g0VYkglYL00ZzNKT7UEB",
+          14,
+          null
+        ],
+        [
+          "54",
+          "prt_g0VYlVhde009qbGjI9xa",
+          1,
+          null
+        ],
+        [
+          "55",
+          "prt_g0VYlVik0003TVHLrtoL",
+          1,
+          null
+        ],
+        [
+          "56",
+          "prt_g0VYlVwN8002kOPK5Uhl",
+          30,
+          null
+        ]
+      ],
+      "sourceBindings": [
+        [
+          "6"
+        ],
+        [
+          "8"
+        ],
+        [
+          "10"
+        ],
+        [
+          "12"
+        ],
+        [
+          "14",
+          "https://arxiv.org/abs/2509.11035v1"
+        ],
+        [
+          "16",
+          "https://aclanthology.org/2025.naacl-long.475/"
+        ],
+        [
+          "18",
+          "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+        ],
+        [
+          "20",
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "22",
+          "https://www.w3.org/TR/wai-aria-1.2/"
+        ],
+        [
+          "24",
+          "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText"
+        ],
+        [
+          "26",
+          "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+        ]
+      ]
+    }
+  ],
+  "anchors": {
+    "01-source-reading": [],
+    "03-source-narrow": [],
+    "07-output-reading": [],
+    "08-output-return-narrow": [],
+    "11-fixed-output-visible-widen": [
+      {
+        "kind": "capture",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "textOffset": 276,
+        "offset": -10.40625,
+        "excerpt": " * WAI-ARIA Roles, States, and Properties\n\n\nDisclosure (Show/Hide) Pattern\n\n\nAbout This Pattern\n\nA d",
+        "at": 55151.800000190735
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.40625,
+        "rectTop": 24747.9375,
+        "viewportTop": 176,
+        "scrollTop": 57297,
+        "resolvedTop": 81879.34375,
+        "at": 106716.80000019073
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.40625,
+        "rectTop": 165.9375,
+        "viewportTop": 176,
+        "scrollTop": 81879,
+        "resolvedTop": 81879.34375,
+        "at": 106788.40000009537
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.40625,
+        "rectTop": 165.9375,
+        "viewportTop": 176,
+        "scrollTop": 81879,
+        "resolvedTop": 81879.34375,
+        "at": 106833.09999990463
+      },
+      {
+        "kind": "capture",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "textOffset": 276,
+        "offset": -10.0625,
+        "excerpt": " * WAI-ARIA Roles, States, and Properties\n\n\nDisclosure (Show/Hide) Pattern\n\n\nAbout This Pattern\n\nA d",
+        "at": 106834.90000009537
+      },
+      {
+        "kind": "capture",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "textOffset": 320,
+        "offset": -10.296875,
+        "excerpt": "Disclosure (Show/Hide) Pattern\n\n\nAbout This Pattern\n\nA disclosure is a widget that enables content t",
+        "at": 140206.19999980927
+      },
+      {
+        "kind": "capture",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "textOffset": 320,
+        "offset": -10.90625,
+        "excerpt": "Disclosure (Show/Hide) Pattern\n\n\nAbout This Pattern\n\nA disclosure is a widget that enables content t",
+        "at": 140443.40000009537
+      }
+    ],
+    "16-final-new-reading-return": [
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.0625,
+        "rectTop": 75.28125,
+        "viewportTop": 144,
+        "scrollTop": 59617,
+        "resolvedTop": 59558.34375,
+        "at": 74023.7000002861
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.0625,
+        "rectTop": 134.203125,
+        "viewportTop": 144,
+        "scrollTop": 57461,
+        "resolvedTop": 57461.265625,
+        "at": 74079.30000019073
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.0625,
+        "rectTop": 133.59375,
+        "viewportTop": 144,
+        "scrollTop": 57297,
+        "resolvedTop": 57296.65625,
+        "at": 74179.80000019073
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.0625,
+        "rectTop": 133.59375,
+        "viewportTop": 144,
+        "scrollTop": 57297,
+        "resolvedTop": 57296.65625,
+        "at": 74285.5
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.0625,
+        "rectTop": 133.59375,
+        "viewportTop": 144,
+        "scrollTop": 57297,
+        "resolvedTop": 57296.65625,
+        "at": 74303.80000019073
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.0625,
+        "rectTop": 133.59375,
+        "viewportTop": 144,
+        "scrollTop": 57297,
+        "resolvedTop": 57296.65625,
+        "at": 74304.90000009537
+      },
+      {
+        "kind": "capture",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "textOffset": 276,
+        "offset": -10.40625,
+        "excerpt": " * WAI-ARIA Roles, States, and Properties\n\n\nDisclosure (Show/Hide) Pattern\n\n\nAbout This Pattern\n\nA d",
+        "at": 74306.60000038147
+      },
+      {
+        "kind": "capture",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "textOffset": 682,
+        "offset": -5.90625,
+        "excerpt": "a right-pointing arrow or triangle to hint that activating the button will display additional conten",
+        "at": 117936.80000019073
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 682,
+        "offset": -5.90625,
+        "rectTop": 24908.4375,
+        "viewportTop": 176,
+        "scrollTop": 57585,
+        "resolvedTop": 82323.34375,
+        "at": 153684.10000038147
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 682,
+        "offset": -5.90625,
+        "rectTop": 170.4375,
+        "viewportTop": 176,
+        "scrollTop": 82323,
+        "resolvedTop": 82323.34375,
+        "at": 153692.7000002861
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 682,
+        "offset": -5.90625,
+        "rectTop": 170.4375,
+        "viewportTop": 176,
+        "scrollTop": 82323,
+        "resolvedTop": 82323.34375,
+        "at": 153700.30000019073
+      },
+      {
+        "kind": "capture",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "textOffset": 665,
+        "offset": -5.5625,
+        "excerpt": "push button with a right-pointing arrow or triangle to hint that activating the button will display ",
+        "at": 153702.80000019073
+      }
+    ],
+    "17-side-budget-stop": [],
+    "20-side-source-card": [],
+    "21-side-output-reading": [
+      {
+        "kind": "capture",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 362,
+        "offset": -2.40625,
+        "excerpt": "Best Current Practices for the\n   Internet Community, and requests discussion and suggestions for\n  ",
+        "at": 114001.80000019073
+      }
+    ],
+    "22-side-output-narrow": [
+      {
+        "kind": "capture",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 362,
+        "offset": -2.40625,
+        "excerpt": "Best Current Practices for the\n   Internet Community, and requests discussion and suggestions for\n  ",
+        "at": 114001.80000019073
+      }
+    ],
+    "23-verified-side-reading": [
+      {
+        "kind": "capture",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 499,
+        "offset": -12.40625,
+        "excerpt": "memo is unlimited.\n\nCopyright Notice\n\n   Copyright (C) The Internet Society (1999).  All Rights Rese",
+        "at": 24055.200000286102
+      }
+    ],
+    "24-verified-side-narrow": [
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "textOffset": 499,
+        "offset": -12.40625,
+        "rectTop": 263.625,
+        "viewportTop": 276,
+        "scrollTop": 1083,
+        "resolvedTop": 1083.03125,
+        "at": 33601.800000190735
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "textOffset": 499,
+        "offset": -12.40625,
+        "rectTop": 283.125,
+        "viewportTop": 276,
+        "scrollTop": 1104,
+        "resolvedTop": 1123.53125,
+        "at": 33621.60000038147
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "textOffset": 499,
+        "offset": -12.40625,
+        "rectTop": 262.640625,
+        "viewportTop": 276,
+        "scrollTop": 1148,
+        "resolvedTop": 1147.046875,
+        "at": 33642
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "textOffset": 499,
+        "offset": -12.40625,
+        "rectTop": 283.140625,
+        "viewportTop": 276,
+        "scrollTop": 1147,
+        "resolvedTop": 1166.546875,
+        "at": 33656
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "textOffset": 499,
+        "offset": -12.40625,
+        "rectTop": 263.140625,
+        "viewportTop": 276,
+        "scrollTop": 1167,
+        "resolvedTop": 1166.546875,
+        "at": 33667.40000009537
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "textOffset": 499,
+        "offset": -12.40625,
+        "rectTop": 263.140625,
+        "viewportTop": 276,
+        "scrollTop": 1167,
+        "resolvedTop": 1166.546875,
+        "at": 33682.40000009537
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "textOffset": 499,
+        "offset": -12.40625,
+        "rectTop": 263.140625,
+        "viewportTop": 276,
+        "scrollTop": 1167,
+        "resolvedTop": 1166.546875,
+        "at": 33707.800000190735
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "textOffset": 499,
+        "offset": -12.40625,
+        "rectTop": 263.140625,
+        "viewportTop": 276,
+        "scrollTop": 1167,
+        "resolvedTop": 1166.546875,
+        "at": 33720.7000002861
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "textOffset": 499,
+        "offset": -12.40625,
+        "rectTop": 263.140625,
+        "viewportTop": 276,
+        "scrollTop": 1167,
+        "resolvedTop": 1166.546875,
+        "at": 33733.90000009537
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "textOffset": 499,
+        "offset": -12.40625,
+        "rectTop": 263.140625,
+        "viewportTop": 276,
+        "scrollTop": 1167,
+        "resolvedTop": 1166.546875,
+        "at": 33773
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "textOffset": 499,
+        "offset": -12.40625,
+        "rectTop": 263.140625,
+        "viewportTop": 276,
+        "scrollTop": 1167,
+        "resolvedTop": 1166.546875,
+        "at": 33775.60000038147
+      },
+      {
+        "kind": "capture",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 478,
+        "offset": -12.859375,
+        "excerpt": "Distribution of this memo is unlimited.\n\nCopyright Notice\n\n   Copyright (C) The Internet Society (19",
+        "at": 33778.800000190735
+      }
+    ],
+    "27-final-asset-side-wide": [
+      {
+        "kind": "capture",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "offset": 4.578125,
+        "excerpt": "   This document specifies an Internet Best Current Practices for the\n   Internet Community, and req",
+        "at": 38006.09999990463
+      }
+    ],
+    "28-final-asset-side-narrow": [
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.578125,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 280.125,
+        "viewportTop": 276,
+        "scrollTop": 930,
+        "resolvedTop": 929.546875,
+        "at": 49103.90000009537
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.578125,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 280.125,
+        "viewportTop": 276,
+        "scrollTop": 951,
+        "resolvedTop": 950.546875,
+        "at": 49117.40000009537
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.578125,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 299.140625,
+        "viewportTop": 276,
+        "scrollTop": 975,
+        "resolvedTop": 993.5625,
+        "at": 49135.2999997139
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.578125,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 280.140625,
+        "viewportTop": 276,
+        "scrollTop": 994,
+        "resolvedTop": 993.5625,
+        "at": 49146.90000009537
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.578125,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 299.640625,
+        "viewportTop": 276,
+        "scrollTop": 994,
+        "resolvedTop": 1013.0625,
+        "at": 49159.90000009537
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.578125,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 280.640625,
+        "viewportTop": 276,
+        "scrollTop": 1013,
+        "resolvedTop": 1013.0625,
+        "at": 49171.699999809265
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.578125,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 280.640625,
+        "viewportTop": 276,
+        "scrollTop": 1013,
+        "resolvedTop": 1013.0625,
+        "at": 49181.40000009537
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.578125,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 280.640625,
+        "viewportTop": 276,
+        "scrollTop": 1013,
+        "resolvedTop": 1013.0625,
+        "at": 49192.40000009537
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.578125,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 280.640625,
+        "viewportTop": 276,
+        "scrollTop": 1013,
+        "resolvedTop": 1013.0625,
+        "at": 49214.2999997139
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.578125,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 280.640625,
+        "viewportTop": 276,
+        "scrollTop": 1013,
+        "resolvedTop": 1013.0625,
+        "at": 49227
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.578125,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 280.640625,
+        "viewportTop": 276,
+        "scrollTop": 1013,
+        "resolvedTop": 1013.0625,
+        "at": 49251.5
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.578125,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 280.640625,
+        "viewportTop": 276,
+        "scrollTop": 1013,
+        "resolvedTop": 1013.0625,
+        "at": 49252.09999990463
+      }
+    ],
+    "29-final-asset-side-wide-return": [
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.640625,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 239.09375,
+        "viewportTop": 234,
+        "scrollTop": 882,
+        "resolvedTop": 882.453125,
+        "at": 59101.7999997139
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.640625,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 239.09375,
+        "viewportTop": 234,
+        "scrollTop": 882,
+        "resolvedTop": 882.453125,
+        "at": 59114.699999809265
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.640625,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 239.09375,
+        "viewportTop": 234,
+        "scrollTop": 882,
+        "resolvedTop": 882.453125,
+        "at": 59126.90000009537
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.640625,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 239.09375,
+        "viewportTop": 234,
+        "scrollTop": 882,
+        "resolvedTop": 882.453125,
+        "at": 59143.90000009537
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.640625,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 238.578125,
+        "viewportTop": 234,
+        "scrollTop": 859,
+        "resolvedTop": 858.9375,
+        "at": 59157.7999997139
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.640625,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 238.578125,
+        "viewportTop": 234,
+        "scrollTop": 859,
+        "resolvedTop": 858.9375,
+        "at": 59170.199999809265
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.640625,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 238.578125,
+        "viewportTop": 234,
+        "scrollTop": 859,
+        "resolvedTop": 858.9375,
+        "at": 59182.199999809265
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.640625,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 238.578125,
+        "viewportTop": 234,
+        "scrollTop": 859,
+        "resolvedTop": 858.9375,
+        "at": 59204.5
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.640625,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 238.578125,
+        "viewportTop": 234,
+        "scrollTop": 859,
+        "resolvedTop": 858.9375,
+        "at": 59267.90000009537
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.640625,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 238.578125,
+        "viewportTop": 234,
+        "scrollTop": 859,
+        "resolvedTop": 858.9375,
+        "at": 59278
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.640625,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 238.578125,
+        "viewportTop": 234,
+        "scrollTop": 859,
+        "resolvedTop": 858.9375,
+        "at": 59280.59999990463
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.640625,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 238.578125,
+        "viewportTop": 234,
+        "scrollTop": 859,
+        "resolvedTop": 858.9375,
+        "at": 59287.7999997139
+      }
+    ],
+    "30-final-asset-side-hidden-return": [
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.640625,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 238.578125,
+        "viewportTop": 234,
+        "scrollTop": 859,
+        "resolvedTop": 858.9375,
+        "at": 59182.199999809265
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.640625,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 238.578125,
+        "viewportTop": 234,
+        "scrollTop": 859,
+        "resolvedTop": 858.9375,
+        "at": 59204.5
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.640625,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 238.578125,
+        "viewportTop": 234,
+        "scrollTop": 859,
+        "resolvedTop": 858.9375,
+        "at": 59267.90000009537
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.640625,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 238.578125,
+        "viewportTop": 234,
+        "scrollTop": 859,
+        "resolvedTop": 858.9375,
+        "at": 59278
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.640625,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 238.578125,
+        "viewportTop": 234,
+        "scrollTop": 859,
+        "resolvedTop": 858.9375,
+        "at": 59280.59999990463
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.640625,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 238.578125,
+        "viewportTop": 234,
+        "scrollTop": 859,
+        "resolvedTop": 858.9375,
+        "at": 59287.7999997139
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.578125,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "viewportTop": 252,
+        "scrollTop": 0,
+        "resolvedTop": null,
+        "at": 97992.2999997139
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.578125,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "viewportTop": 252,
+        "scrollTop": 0,
+        "resolvedTop": null,
+        "at": 98004.09999990463
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.578125,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "viewportTop": 276,
+        "scrollTop": 0,
+        "resolvedTop": null,
+        "at": 98017.90000009537
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.578125,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 1293.640625,
+        "viewportTop": 276,
+        "scrollTop": 0,
+        "resolvedTop": 1013.0625,
+        "at": 98167.90000009537
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.578125,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 280.640625,
+        "viewportTop": 276,
+        "scrollTop": 1013,
+        "resolvedTop": 1013.0625,
+        "at": 98190.2999997139
+      },
+      {
+        "kind": "tool-payload",
+        "messageID": "msg_g0VYoa88R00yPO3mSkM4",
+        "offset": 4.578125,
+        "payloadIdentity": "[\"ses_-zURQsHHDzzntY8gGKW8\",\"msg_g0VYoa88R00yPO3mSkM4\",\"prt_g0VYoa8pT00YCl62q48k\",\"output\"]",
+        "textOffset": 323,
+        "rectTop": 280.640625,
+        "viewportTop": 276,
+        "scrollTop": 1013,
+        "resolvedTop": 1013.0625,
+        "at": 98191.40000009537
+      }
+    ],
+    "32-final-asset-member-wide": [
+      {
+        "kind": "capture",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "textOffset": 276,
+        "offset": -10.40625,
+        "excerpt": " * WAI-ARIA Roles, States, and Properties\n\n\nDisclosure (Show/Hide) Pattern\n\n\nAbout This Pattern\n\nA d",
+        "at": 68485.69999980927
+      }
+    ],
+    "33-final-asset-member-narrow": [
+      {
+        "kind": "capture",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "textOffset": 276,
+        "offset": -10.40625,
+        "excerpt": " * WAI-ARIA Roles, States, and Properties\n\n\nDisclosure (Show/Hide) Pattern\n\n\nAbout This Pattern\n\nA d",
+        "at": 68485.69999980927
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.40625,
+        "rectTop": 204.796875,
+        "viewportTop": 176,
+        "scrollTop": 77695,
+        "resolvedTop": 77734.203125,
+        "at": 77962.69999980927
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.40625,
+        "rectTop": 185.9375,
+        "viewportTop": 176,
+        "scrollTop": 81859,
+        "resolvedTop": 81879.34375,
+        "at": 78050
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.40625,
+        "rectTop": 165.9375,
+        "viewportTop": 176,
+        "scrollTop": 81879,
+        "resolvedTop": 81879.34375,
+        "at": 78143.5
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.40625,
+        "rectTop": 165.9375,
+        "viewportTop": 176,
+        "scrollTop": 81879,
+        "resolvedTop": 81879.34375,
+        "at": 78170.59999990463
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.40625,
+        "rectTop": 165.9375,
+        "viewportTop": 176,
+        "scrollTop": 81879,
+        "resolvedTop": 81879.34375,
+        "at": 78184.09999990463
+      }
+    ],
+    "34-final-asset-member-return": [
+      {
+        "kind": "capture",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "textOffset": 276,
+        "offset": -10.40625,
+        "excerpt": " * WAI-ARIA Roles, States, and Properties\n\n\nDisclosure (Show/Hide) Pattern\n\n\nAbout This Pattern\n\nA d",
+        "at": 68485.69999980927
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.40625,
+        "rectTop": 204.796875,
+        "viewportTop": 176,
+        "scrollTop": 77695,
+        "resolvedTop": 77734.203125,
+        "at": 77962.69999980927
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.40625,
+        "rectTop": 185.9375,
+        "viewportTop": 176,
+        "scrollTop": 81859,
+        "resolvedTop": 81879.34375,
+        "at": 78050
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.40625,
+        "rectTop": 165.9375,
+        "viewportTop": 176,
+        "scrollTop": 81879,
+        "resolvedTop": 81879.34375,
+        "at": 78143.5
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.40625,
+        "rectTop": 165.9375,
+        "viewportTop": 176,
+        "scrollTop": 81879,
+        "resolvedTop": 81879.34375,
+        "at": 78170.59999990463
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.40625,
+        "rectTop": 165.9375,
+        "viewportTop": 176,
+        "scrollTop": 81879,
+        "resolvedTop": 81879.34375,
+        "at": 78184.09999990463
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.0625,
+        "rectTop": 75.203125,
+        "viewportTop": 144,
+        "scrollTop": 57520,
+        "resolvedTop": 57461.265625,
+        "at": 89647.09999990463
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.0625,
+        "rectTop": 133.59375,
+        "viewportTop": 144,
+        "scrollTop": 57297,
+        "resolvedTop": 57296.65625,
+        "at": 89752.2999997139
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.0625,
+        "rectTop": 133.59375,
+        "viewportTop": 144,
+        "scrollTop": 57297,
+        "resolvedTop": 57296.65625,
+        "at": 89862.7999997139
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.0625,
+        "rectTop": 133.59375,
+        "viewportTop": 144,
+        "scrollTop": 57297,
+        "resolvedTop": 57296.65625,
+        "at": 89879.69999980927
+      },
+      {
+        "kind": "tool-payload",
+        "payloadIdentity": "[\"ses_-zUS0WzzQzzDOGrIbYwN\",\"msg_g0VYlVhfM005zhqSOQwN\",\"prt_g0VYlVj3T00FCj2Mrdqn\",\"output\"]",
+        "messageID": "msg_g0VYlVhfM005zhqSOQwN",
+        "textOffset": 276,
+        "offset": -10.0625,
+        "rectTop": 133.59375,
+        "viewportTop": 144,
+        "scrollTop": 57297,
+        "resolvedTop": 57296.65625,
+        "at": 89880.89999961853
+      }
+    ]
+  },
+  "stages": [
+    {
+      "stage": "before",
+      "provider": {
+        "maximum": 4,
+        "exhausted": false,
+        "requests": [
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": "settled",
+            "terminal": "eof",
+            "context": {
+              "requestID": "msg_hmgQV2MyVsgzLftowPLp",
+              "agentID": "memory",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": "settled",
+            "terminal": "eof",
+            "context": {
+              "requestID": "msg_hmgQV2MyVsgzLftowPLp",
+              "agentID": "chat",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          }
+        ]
+      },
+      "physical": {
+        "observedAtUtc": "2026-10-22T20:48:15.0996738Z",
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-22T20:48:14.0799542Z"
+        },
+        "native": {
+          "occurrence": "source-layout-reading-552-before-ce6850b9-0936-45b0-bb4f-c10c8c2f8f3f",
+          "outcome": "settled",
+          "host": {
+            "pid": 97464,
+            "processInstanceID": "win32:639282987090782005",
+            "occurrenceID": "f0a69267-2511-47fe-9a7f-14fa9a410226"
+          },
+          "target": {
+            "pid": 67520,
+            "processInstanceID": "win32:639282987098684170",
+            "occurrenceID": "e5c3ce71-bee0-4128-86e8-103f96ee2288"
+          },
+          "observedAtUtc": "2026-10-22T20:48:14.047Z",
+          "deadlineAt": 1792703108472,
+          "terminal": {
+            "occurrenceID": "source-layout-reading-552-before-ce6850b9-0936-45b0-bb4f-c10c8c2f8f3f",
+            "pid": 67520,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 97464,
+              "processInstanceID": "win32:639282987090782005",
+              "occurrenceID": "f0a69267-2511-47fe-9a7f-14fa9a410226"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 67520,
+              "processInstanceID": "win32:639282987098684170",
+              "occurrenceID": "e5c3ce71-bee0-4128-86e8-103f96ee2288"
+            }
+          }
+        ]
+      },
+      "retirement": {
+        "members": [
+          {
+            "scope": "runtime",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "runtime",
+            "name": "models.json",
+            "bytes": 9155406
+          },
+          {
+            "scope": "private",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "private",
+            "name": "models.json",
+            "bytes": 9155406
+          }
+        ],
+        "actualSecretValueMatches": 0,
+        "sourceEntry": "exact original",
+        "sourceCatalog": "exact original"
+      },
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 78098432,
+          "modifiedAtMs": 1792699072138.8257
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 165802,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "stage": "after",
+      "provider": {
+        "maximum": 4,
+        "exhausted": false,
+        "requests": [
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": "settled",
+            "terminal": "eof",
+            "context": {
+              "requestID": "msg_hJE2yl63sW8nnHBeqr4X",
+              "agentID": "memory",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": "settled",
+            "terminal": "eof",
+            "context": {
+              "requestID": "msg_hJE2yl63sW8nnHBeqr4X",
+              "agentID": "chat",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          }
+        ]
+      },
+      "physical": {
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 97016,
+              "processInstanceID": "win32:639282991789663890",
+              "occurrenceID": "31c644d9-d957-45a6-a319-a4ae4d6f8874"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 97260,
+              "processInstanceID": "win32:639282991799390922",
+              "occurrenceID": "95763cec-9e26-4bf8-99f2-b09cbcb007c3"
+            }
+          }
+        ],
+        "observedAtUtc": "2026-10-22T20:57:04.4189665Z",
+        "native": {
+          "occurrence": "source-layout-reading-552-after-536e56fe-59e9-4ebb-845a-23682bc22efe",
+          "outcome": "settled",
+          "host": {
+            "pid": 97016,
+            "processInstanceID": "win32:639282991789663890",
+            "occurrenceID": "31c644d9-d957-45a6-a319-a4ae4d6f8874"
+          },
+          "target": {
+            "pid": 97260,
+            "processInstanceID": "win32:639282991799390922",
+            "occurrenceID": "95763cec-9e26-4bf8-99f2-b09cbcb007c3"
+          },
+          "observedAtUtc": "2026-10-22T20:57:03.451Z",
+          "deadlineAt": 1792703578923,
+          "terminal": {
+            "occurrenceID": "source-layout-reading-552-after-536e56fe-59e9-4ebb-845a-23682bc22efe",
+            "pid": 97260,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "launcher": {
+          "observedAtUtc": "2026-10-22T20:57:03.4857247Z",
+          "originalChildExit": 0
+        }
+      },
+      "retirement": {
+        "members": [
+          {
+            "scope": "runtime",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "runtime",
+            "name": "models.json",
+            "bytes": 9155406
+          },
+          {
+            "scope": "private",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "private",
+            "name": "models.json",
+            "bytes": 9155406
+          }
+        ],
+        "actualSecretValueMatches": 0,
+        "sourceEntry": "exact original",
+        "sourceCatalog": "exact original"
+      },
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 78098432,
+          "modifiedAtMs": 1792699072138.8257
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 165802,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "stage": "final",
+      "provider": {
+        "maximum": 4,
+        "exhausted": false,
+        "requests": [
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": "settled",
+            "terminal": "eof",
+            "context": {
+              "requestID": "msg_hkzOy7Xh2CBM0ChLPxUZ",
+              "agentID": "memory",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": "settled",
+            "terminal": "eof",
+            "context": {
+              "requestID": "msg_hkzOy7Xh2CBM0ChLPxUZ",
+              "agentID": "chat",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": "settled",
+            "terminal": "eof",
+            "context": {
+              "requestID": "msg_695fc69f-bd49-453e-85a0-abe760fbe903",
+              "agentID": "memory",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": "settled",
+            "terminal": "eof",
+            "context": {
+              "requestID": "msg_695fc69f-bd49-453e-85a0-abe760fbe903",
+              "agentID": "chat",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          }
+        ]
+      },
+      "physical": {
+        "observedAtUtc": "2026-10-22T21:06:11.3365831Z",
+        "native": {
+          "occurrence": "source-layout-reading-552-final-ffc1e503-ba0e-4e06-a0b4-2c769553c87d",
+          "outcome": "settled",
+          "host": {
+            "pid": 85076,
+            "processInstanceID": "win32:639282996163749149",
+            "occurrenceID": "c65791a8-6f61-4a39-81cc-73350a6ec456"
+          },
+          "target": {
+            "pid": 70896,
+            "processInstanceID": "win32:639282996173498872",
+            "occurrenceID": "0f2b06b0-da58-40f8-aa6e-318cde223257"
+          },
+          "observedAtUtc": "2026-10-22T21:06:10.37Z",
+          "deadlineAt": 1792704016336,
+          "terminal": {
+            "occurrenceID": "source-layout-reading-552-final-ffc1e503-ba0e-4e06-a0b4-2c769553c87d",
+            "pid": 70896,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "launcher": {
+          "observedAtUtc": "2026-10-22T21:06:10.4077148Z",
+          "originalChildExit": 0
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 85076,
+              "processInstanceID": "win32:639282996163749149",
+              "occurrenceID": "c65791a8-6f61-4a39-81cc-73350a6ec456"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 70896,
+              "processInstanceID": "win32:639282996173498872",
+              "occurrenceID": "0f2b06b0-da58-40f8-aa6e-318cde223257"
+            }
+          }
+        ]
+      },
+      "retirement": {
+        "members": [
+          {
+            "scope": "runtime",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "runtime",
+            "name": "models.json",
+            "bytes": 9155406
+          },
+          {
+            "scope": "private",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "private",
+            "name": "models.json",
+            "bytes": 9155406
+          }
+        ],
+        "actualSecretValueMatches": 0,
+        "sourceEntry": "exact original",
+        "sourceCatalog": "exact original"
+      },
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 78098432,
+          "modifiedAtMs": 1792699072138.8257
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 165802,
+        "originalRowDifferences": [
+          {
+            "table": "memory_chunk",
+            "identity": "mck_hm0hmT6Zrey4NVcHN6u1",
+            "fields": [
+              "content",
+              "token_count",
+              "time_updated"
+            ]
+          },
+          {
+            "table": "memory_file",
+            "identity": "mem_hWiG5UT35AEOLfdgsFbk",
+            "fields": [
+              "time_updated"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "session",
+            "identity": "ses_-zURQsHHDzzntY8gGKW8",
+            "fields": [
+              "summary_additions",
+              "summary_deletions",
+              "summary_files",
+              "time_updated"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "stage": "side",
+      "provider": {
+        "maximum": 8,
+        "exhausted": false,
+        "requests": [
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": "settled",
+            "terminal": "eof",
+            "context": {
+              "requestID": "msg_hiS9oUu1eDf0f7RzfUh2",
+              "agentID": "memory",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": "settled",
+            "terminal": "eof",
+            "context": {
+              "requestID": "msg_hiS9oUu1eDf0f7RzfUh2",
+              "agentID": "chat",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": "settled",
+            "terminal": "eof",
+            "context": {
+              "requestID": "msg_79f35848-d92e-4f69-865a-2c560a15848e",
+              "agentID": "memory",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": "settled",
+            "terminal": "eof",
+            "context": {
+              "requestID": "msg_79f35848-d92e-4f69-865a-2c560a15848e",
+              "agentID": "chat",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": "settled",
+            "terminal": "eof",
+            "context": {
+              "requestID": "msg_79f35848-d92e-4f69-865a-2c560a15848e",
+              "agentID": "chat",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          }
+        ]
+      },
+      "physical": {
+        "launcher": {
+          "observedAtUtc": "2026-10-22T21:10:19.9105623Z",
+          "originalChildExit": 0
+        },
+        "native": {
+          "occurrence": "source-layout-reading-552-side-d0cfe9af-6e0e-48ef-a228-c85e537651fb",
+          "outcome": "settled",
+          "host": {
+            "pid": 95292,
+            "processInstanceID": "win32:639283000096101847",
+            "occurrenceID": "d7c04af6-c72c-4809-a0ca-937e64cb6e40"
+          },
+          "target": {
+            "pid": 96236,
+            "processInstanceID": "win32:639283000103754562",
+            "occurrenceID": "191e6ae1-e2c5-42c2-a029-7b7fb76dcd4d"
+          },
+          "observedAtUtc": "2026-10-22T21:10:19.878Z",
+          "deadlineAt": 1792704408832,
+          "terminal": {
+            "occurrenceID": "source-layout-reading-552-side-d0cfe9af-6e0e-48ef-a228-c85e537651fb",
+            "pid": 96236,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-22T21:10:20.8501427Z",
+        "chain": [
+          {
+            "identity": {
+              "pid": 95292,
+              "processInstanceID": "win32:639283000096101847",
+              "occurrenceID": "d7c04af6-c72c-4809-a0ca-937e64cb6e40"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 96236,
+              "processInstanceID": "win32:639283000103754562",
+              "occurrenceID": "191e6ae1-e2c5-42c2-a029-7b7fb76dcd4d"
+            },
+            "state": "dead_or_reused"
+          }
+        ]
+      },
+      "retirement": {
+        "members": [
+          {
+            "scope": "runtime",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "runtime",
+            "name": "models.json",
+            "bytes": 9155406
+          },
+          {
+            "scope": "private",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "private",
+            "name": "models.json",
+            "bytes": 9155406
+          }
+        ],
+        "actualSecretValueMatches": 0,
+        "sourceEntry": "exact original",
+        "sourceCatalog": "exact original"
+      },
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 78098432,
+          "modifiedAtMs": 1792699072138.8257
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 165802,
+        "originalRowDifferences": [
+          {
+            "table": "memory_chunk",
+            "identity": "mck_hm0hmT6Zrey4NVcHN6u1",
+            "fields": [
+              "content",
+              "token_count",
+              "time_updated"
+            ]
+          },
+          {
+            "table": "memory_file",
+            "identity": "mem_hWiG5UT35AEOLfdgsFbk",
+            "fields": [
+              "time_updated"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "session",
+            "identity": "ses_-zURQsHHDzzntY8gGKW8",
+            "fields": [
+              "summary_additions",
+              "summary_deletions",
+              "summary_files",
+              "time_updated"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "stage": "verified",
+      "provider": {
+        "maximum": 3,
+        "exhausted": false,
+        "requests": [
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": "settled",
+            "terminal": "eof",
+            "context": {
+              "requestID": "msg_hXjL44hY6B3ycBb3iLr2",
+              "agentID": "memory",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": "settled",
+            "terminal": "eof",
+            "context": {
+              "requestID": "msg_hXjL44hY6B3ycBb3iLr2",
+              "agentID": "chat",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          }
+        ]
+      },
+      "physical": {
+        "launcher": {
+          "observedAtUtc": "2026-10-22T21:17:43.4204166Z",
+          "originalChildExit": 0
+        },
+        "observedAtUtc": "2026-10-22T21:17:44.3619100Z",
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 96600,
+              "processInstanceID": "win32:639283003380302257",
+              "occurrenceID": "c63757c1-21c5-4b0d-b76f-6020cf7d90a4"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 19472,
+              "processInstanceID": "win32:639283003391194539",
+              "occurrenceID": "b9ee9051-d764-4621-9906-80ed66626b59"
+            }
+          }
+        ],
+        "native": {
+          "occurrence": "source-layout-reading-552-verified-1a90063c-58b6-49e9-baae-fc2f4cf20500",
+          "outcome": "settled",
+          "host": {
+            "pid": 96600,
+            "processInstanceID": "win32:639283003380302257",
+            "occurrenceID": "c63757c1-21c5-4b0d-b76f-6020cf7d90a4"
+          },
+          "target": {
+            "pid": 19472,
+            "processInstanceID": "win32:639283003391194539",
+            "occurrenceID": "b9ee9051-d764-4621-9906-80ed66626b59"
+          },
+          "observedAtUtc": "2026-10-22T21:17:43.385Z",
+          "deadlineAt": 1792704737992,
+          "terminal": {
+            "occurrenceID": "source-layout-reading-552-verified-1a90063c-58b6-49e9-baae-fc2f4cf20500",
+            "pid": 19472,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        }
+      },
+      "retirement": {
+        "members": [
+          {
+            "scope": "runtime",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "runtime",
+            "name": "models.json",
+            "bytes": 9155406
+          },
+          {
+            "scope": "private",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "private",
+            "name": "models.json",
+            "bytes": 9155406
+          }
+        ],
+        "actualSecretValueMatches": 0,
+        "sourceEntry": "exact original",
+        "sourceCatalog": "exact original"
+      },
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 78671872,
+          "modifiedAtMs": 1792703419789.395
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 166963,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "stage": "stable",
+      "provider": {
+        "maximum": 3,
+        "exhausted": false,
+        "requests": [
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": "settled",
+            "terminal": "eof",
+            "context": {
+              "requestID": "msg_heFM54TFGT4gP47ExaLc",
+              "agentID": "memory",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": "settled",
+            "terminal": "eof",
+            "context": {
+              "requestID": "msg_heFM54TFGT4gP47ExaLc",
+              "agentID": "chat",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          }
+        ]
+      },
+      "physical": {
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-22T21:22:25.1812103Z"
+        },
+        "observedAtUtc": "2026-10-22T21:22:26.1025673Z",
+        "native": {
+          "occurrence": "source-layout-reading-552-stable-4da59b6b-49e6-4d5a-a928-e13fdac84b90",
+          "outcome": "settled",
+          "host": {
+            "pid": 63404,
+            "processInstanceID": "win32:639283006975550203",
+            "occurrenceID": "35fecaea-96c9-47bb-91fc-f7a7c393f220"
+          },
+          "target": {
+            "pid": 76972,
+            "processInstanceID": "win32:639283006983488211",
+            "occurrenceID": "d84af667-c190-479c-b946-2e9d42f7571e"
+          },
+          "observedAtUtc": "2026-10-22T21:22:25.148Z",
+          "deadlineAt": 1792705096696,
+          "terminal": {
+            "occurrenceID": "source-layout-reading-552-stable-4da59b6b-49e6-4d5a-a928-e13fdac84b90",
+            "pid": 76972,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 63404,
+              "processInstanceID": "win32:639283006975550203",
+              "occurrenceID": "35fecaea-96c9-47bb-91fc-f7a7c393f220"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 76972,
+              "processInstanceID": "win32:639283006983488211",
+              "occurrenceID": "d84af667-c190-479c-b946-2e9d42f7571e"
+            }
+          }
+        ]
+      },
+      "retirement": {
+        "members": [
+          {
+            "scope": "runtime",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "runtime",
+            "name": "models.json",
+            "bytes": 9155406
+          },
+          {
+            "scope": "private",
+            "name": "auth.json",
+            "bytes": 2194
+          },
+          {
+            "scope": "private",
+            "name": "models.json",
+            "bytes": 9155406
+          }
+        ],
+        "actualSecretValueMatches": 0,
+        "sourceEntry": "exact original",
+        "sourceCatalog": "exact original"
+      },
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 78671872,
+          "modifiedAtMs": 1792703419789.395
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 166963,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "totals": {
+    "modelRequests": 17,
+    "retiredCredentialAndCatalogFiles": 24,
+    "finalBatchMaximum": 20
+  },
+  "verification": {
+    "types": "passed after correction of an intermediate self-referential type annotation",
+    "finalNodeBuildSeconds": 58.62,
+    "uiAssetActuallyLoaded": "main-i1jR4B4Z.js",
+    "priorFrozenAsset": "main-qim-clqU.js",
+    "uiTests": "none added or executed"
+  },
+  "limitations": [
+    "Independent Main/Mission viewport behavior not requalified by these Side/member images",
+    "Specialized code/diff outputs and JSON format changes are outside the demonstrated text-payload path",
+    "Stopped Side permission has only a requested ledger row after the Tool and Message are aborted; shared cancellation audit continues separately"
+  ]
+}

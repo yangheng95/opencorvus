@@ -1,0 +1,85 @@
+{
+  "observedAt": "2026-10-22T21:15:37.343Z",
+  "sessionID": "ses_-zURQsHHDzzntY8gGKW8",
+  "ledger": [
+    {
+      "id": "per_g0VYoZMht00pIenx819M",
+      "request_id": "per_hXbjERkxfRGkMrzw23VL",
+      "event_type": "requested",
+      "reason": null,
+      "tool_name": "webfetch",
+      "decision_slot": null,
+      "time_created": 1792703064961
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VYoZMVj00qj8FpE3ee",
+      "messageID": "msg_g0VYoZLge001Z19kfMqX",
+      "outcome": {
+        "outcome": "failed",
+        "failure": {
+          "kind": "MessageAbortedError",
+          "name": "MessageAbortedError",
+          "message": "session aborted",
+          "originSite": "session.processor.catch",
+          "classification": "llm-activity",
+          "data": {
+            "sessionID": "ses_-zURQsHHDzzntY8gGKW8",
+            "canonical_error_metadata": {
+              "cancellation": {
+                "actor": "user",
+                "source": "session.abort",
+                "surface": "session",
+                "requestID": "3aa06a43-8440-4e58-84d4-972779f4cb7b",
+                "reason": "session aborted",
+                "targetSessionID": "ses_-zURQsHHDzzntY8gGKW8"
+              }
+            },
+            "failure_occurrence": {
+              "session_id": "ses_-zURQsHHDzzntY8gGKW8",
+              "assistant_message_id": "msg_g0VYoZLge001Z19kfMqX",
+              "error_name": "MessageAbortedError"
+            }
+          }
+        },
+        "time": {
+          "end": 1792703146675
+        }
+      }
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_695fc69f-bd49-453e-85a0-abe760fbe903",
+      "role": "user",
+      "time": {
+        "created": 1792703060914
+      }
+    },
+    {
+      "id": "msg_g0VYoZLge001Z19kfMqX",
+      "role": "assistant",
+      "time": {
+        "created": 1792703061040,
+        "completed": 1792703146688
+      },
+      "error": {
+        "name": "MessageAbortedError",
+        "data": {
+          "message": "session aborted",
+          "cancellation": {
+            "actor": "user",
+            "source": "session.abort",
+            "surface": "session",
+            "requestID": "3aa06a43-8440-4e58-84d4-972779f4cb7b",
+            "reason": "session aborted",
+            "targetSessionID": "ses_-zURQsHHDzzntY8gGKW8"
+          }
+        }
+      }
+    }
+  ],
+  "source": "Closed final scope after real UI Stop and public shutdown; read-only",
+  "followup": "Shared cancellation audit required across Task/Mission/Session, live/terminal/restart/concurrent/project scopes; no permission lifecycle patch in layout delivery"
+}
