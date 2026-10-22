@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [权限提示焦点关闭](records/2026-10/2026-10-22-permission-focus-dismissal.md)：[24实图与12/16 Sol](artifacts/2026-10-22-permission-focus-dismissal/README.md)，修复Tab离开使待决提示消失，保留Esc/pointer；原POST跨五分钟完成。
+
 - [Sources 与成员正文连续性](records/2026-10/2026-10-22-source-live-owner-continuity.md)：[23实图与12/16 Sol](artifacts/2026-10-22-source-live-owner-continuity/README.md)，修复成员总览/详情焦点丢失；正文身份保持，权限关闭归因和原输入超时边界如实保留。
 
 - [任务面板空状态](records/2026-10/2026-10-22-task-scope-empty-state.md)：[13张中英文实图](artifacts/2026-10-22-task-scope-empty-state/README.md)，修复未选Task/已完成任务空需求的虚假分析提示，指向持续目标。

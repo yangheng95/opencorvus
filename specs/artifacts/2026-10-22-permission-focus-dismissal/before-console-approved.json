@@ -1,0 +1,62 @@
+[
+  {
+    "level": "debug",
+    "message": "DL530 {\"kind\":\"focus-outside\",\"id\":\"interactionDialog\",\"originalEvent\":\"focusin\",\"defaultPrevented\":false,\"at\":114018.09999990463}",
+    "timestamp": "2026-10-22T03:45:23.487Z",
+    "url": "http://localhost:19029/ui/assets/main-95KA8fEn.js"
+  },
+  {
+    "level": "debug",
+    "message": "DL530 {\"kind\":\"interact-outside\",\"id\":\"interactionDialog\",\"event\":\"interactOutside.focusOutside\",\"originalEvent\":\"focusin\",\"modal\":false,\"backdropClose\":true,\"defaultPrevented\":false,\"focusTag\":\"BUTTON\",\"at\":114018.2999997139}",
+    "timestamp": "2026-10-22T03:45:23.488Z",
+    "url": "http://localhost:19029/ui/assets/main-95KA8fEn.js"
+  },
+  {
+    "level": "debug",
+    "message": "DL530 {\"kind\":\"close-request\",\"id\":\"interactionDialog\",\"nextOpen\":false,\"modal\":false,\"focusTag\":\"BUTTON\",\"at\":114018.39999961853}",
+    "timestamp": "2026-10-22T03:45:23.488Z",
+    "url": "http://localhost:19029/ui/assets/main-95KA8fEn.js"
+  },
+  {
+    "level": "debug",
+    "message": "DL530 {\"kind\":\"interaction-dismiss\",\"requestID\":\"per_hYaWWVU9ELIAhzbBoAx0\",\"interactionType\":\"permission\",\"at\":114018.59999990463}",
+    "timestamp": "2026-10-22T03:45:23.488Z",
+    "url": "http://localhost:19029/ui/assets/main-95KA8fEn.js"
+  },
+  {
+    "level": "debug",
+    "message": "DL530 {\"kind\":\"escape-key\",\"id\":\"interactionDialog\",\"at\":35203.300000190735}",
+    "timestamp": "2026-10-22T03:46:13.907Z",
+    "url": "http://localhost:19029/ui/assets/main-95KA8fEn.js"
+  },
+  {
+    "level": "debug",
+    "message": "DL530 {\"kind\":\"close-request\",\"id\":\"interactionDialog\",\"nextOpen\":false,\"modal\":false,\"focusTag\":\"PRE\",\"at\":35203.40000009537}",
+    "timestamp": "2026-10-22T03:46:13.909Z",
+    "url": "http://localhost:19029/ui/assets/main-95KA8fEn.js"
+  },
+  {
+    "level": "debug",
+    "message": "DL530 {\"kind\":\"interaction-dismiss\",\"requestID\":\"per_hYaWWVU9ELIAhzbBoAx0\",\"interactionType\":\"permission\",\"at\":35203.5}",
+    "timestamp": "2026-10-22T03:46:13.909Z",
+    "url": "http://localhost:19029/ui/assets/main-95KA8fEn.js"
+  },
+  {
+    "level": "debug",
+    "message": "DL530 {\"kind\":\"interact-outside\",\"id\":\"interactionDialog\",\"event\":\"interactOutside.pointerDownOutside\",\"originalEvent\":\"pointerdown\",\"modal\":false,\"backdropClose\":true,\"defaultPrevented\":false,\"focusTag\":\"PRE\",\"at\":17410}",
+    "timestamp": "2026-10-22T03:46:44.687Z",
+    "url": "http://localhost:19029/ui/assets/main-95KA8fEn.js"
+  },
+  {
+    "level": "debug",
+    "message": "DL530 {\"kind\":\"close-request\",\"id\":\"interactionDialog\",\"nextOpen\":false,\"modal\":false,\"focusTag\":\"PRE\",\"at\":17410.099999904633}",
+    "timestamp": "2026-10-22T03:46:44.687Z",
+    "url": "http://localhost:19029/ui/assets/main-95KA8fEn.js"
+  },
+  {
+    "level": "debug",
+    "message": "DL530 {\"kind\":\"interaction-dismiss\",\"requestID\":\"per_hYaWWVU9ELIAhzbBoAx0\",\"interactionType\":\"permission\",\"at\":17410.199999809265}",
+    "timestamp": "2026-10-22T03:46:44.687Z",
+    "url": "http://localhost:19029/ui/assets/main-95KA8fEn.js"
+  }
+]

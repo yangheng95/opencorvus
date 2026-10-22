@@ -14,10 +14,11 @@
 //     renders an interaction (rule 8 / rule 9). Replies update the shared
 //     current interaction projection, which closes the dialog once its
 //     interaction leaves "pending".
-//   • Esc / backdrop click marks the current interaction id as dismissed for
-//     the lifetime of the host (until status changes or a fresh id arrives),
+//   • Esc / outside pointer interaction marks the current interaction id as
+//     dismissed for the lifetime of the host (until status changes or a fresh id arrives),
 //     letting the user fall back to the inline card without the popup
 //     re-asserting itself for the same prompt.
+//     Moving focus outside this non-modal dialog keeps the pending prompt visible.
 
 import { createMemo, createSignal, Show } from "solid-js"
 import { cardTreeStore } from "../store/card-tree"

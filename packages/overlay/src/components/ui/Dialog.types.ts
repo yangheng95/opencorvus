@@ -19,7 +19,7 @@ export interface DialogProps {
   fullscreen?: boolean
   /** Render title as `h2` by default, override only when semantics require it. */
   titleAs?: "div" | "h1" | "h2" | "span"
-  /** Whether clicking outside the content closes the dialog. */
+  /** Whether an outside pointer interaction closes the dialog. Focus movement keeps it open. */
   backdropClose?: boolean
   /** Whether Kobalte traps focus and disables outside pointer events. */
   modal?: boolean

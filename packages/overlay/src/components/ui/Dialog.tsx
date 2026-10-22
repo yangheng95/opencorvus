@@ -262,6 +262,7 @@ export function Dialog(rawProps: DialogProps) {
             if (typeof local.ref === "function") local.ref(el)
           }}
           onInteractOutside={handleInteractOutside}
+          onFocusOutside={(event) => event.preventDefault()}
           onPointerDown={handleBackdropPointerDown}
           style={dialogContentStyle()}
         >

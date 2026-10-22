@@ -1,5 +1,12 @@
 # 07-panel-reactivity — Overlay Reactive Projection
 
+Dialog dismissal separates pointer intent from keyboard focus movement. A
+non-modal interaction prompt stays visible when Tab moves focus outside its
+content, while retaining its original pending interaction and reply authority.
+Escape and configured outside pointer interactions still dismiss it. This does
+not turn non-modal prompts into focus traps or change modal dialogs' existing
+focus boundary, authorization decisions or continuation state.
+
 Member list/detail navigation retains keyboard context in the same panel.
 Opening All agents focuses the currently selected Session row; opening that row
 focuses the detail view's All agents control. The original click or BODY must

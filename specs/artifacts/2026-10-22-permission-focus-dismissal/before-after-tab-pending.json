@@ -1,0 +1,50 @@
+{
+  "at": "2026-10-22T03:45:33.997Z",
+  "status": 200,
+  "inputMessageID": "msg_g0VYkLNzb00jSy0opBJK",
+  "pending": [
+    {
+      "id": "per_hYaWWVU9ELIAhzbBoAx0",
+      "projectID": "prj_hSQinOa1MIVoNEeARpn5",
+      "sessionID": "ses_-zUS0WzzQzzDOGrIbYwN",
+      "messageID": "msg_g0VYkLO1e00lJRdZrf6y",
+      "toolCallID": "call_ba4c646da18e44a4903dcc7c2aee578a",
+      "mode": "ask",
+      "policyRevision": "146e73c4fe365d04148832ff29e4cf1d0a7c0a23b083b80269d598ac2c1de6ca",
+      "providerKind": "builtin",
+      "providerID": "webfetch",
+      "providerDigest": "2815eba87c57e33a8f05cd02e5ab2e9f5e31e61e6f19c5082456ee783b7ccd02",
+      "toolName": "webfetch",
+      "effectClass": "network_read",
+      "scopeVersion": "2",
+      "scope": {
+        "provider_kind": "builtin",
+        "provider_id": "webfetch",
+        "provider_digest": "2815eba87c57e33a8f05cd02e5ab2e9f5e31e61e6f19c5082456ee783b7ccd02",
+        "tool_name": "webfetch",
+        "effect_class": "network_read",
+        "resource": {
+          "scope_type": "network",
+          "operation": "webfetch",
+          "endpoint": {
+            "scheme": "https",
+            "hostname": "www.w3.org",
+            "port": "443",
+            "pathname": "/WAI/ARIA/apg/patterns/tabs/",
+            "fragment_present": false
+          },
+          "request_sha256": "775e88a625bc3132f58698c148caea8d9315ffb9707794983110bd24aeeffe0b"
+        }
+      },
+      "fingerprint": "39611e45d507a2a2f9c87e46f5bd88e5eccffa20190cd1c22365ed529467f990",
+      "summary": "webfetch (network_read)",
+      "projectGrantEligible": true,
+      "choices": [
+        "allow_once",
+        "allow_project",
+        "deny"
+      ],
+      "timeCreated": 1792640635542
+    }
+  ]
+}

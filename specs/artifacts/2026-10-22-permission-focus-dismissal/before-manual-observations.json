@@ -1,0 +1,52 @@
+[
+  {
+    "stage": "initial-dialog",
+    "at": "2026-10-22T03:44:18.924Z",
+    "dom": {
+      "dialog": [
+        {
+          "id": "interactionDialog",
+          "modal": null
+        }
+      ],
+      "focused": {
+        "label": "Requested operation",
+        "role": null,
+        "tag": "PRE"
+      }
+    }
+  },
+  {
+    "stage": "tab-after-reject",
+    "at": "2026-10-22T03:44:56.370Z",
+    "dom": {
+      "dialogCount": 1,
+      "focused": {
+        "label": null,
+        "tag": "BODY"
+      }
+    }
+  },
+  {
+    "stage": "tab-into-page-start",
+    "at": "2026-10-22T03:45:24.794Z",
+    "dom": {
+      "dialogCount": 0,
+      "focused": {
+        "label": "Hide sidebar",
+        "tag": "BUTTON"
+      }
+    }
+  },
+  {
+    "stage": "outside-pointer-closed",
+    "at": "2026-10-22T03:47:03.879Z",
+    "dom": {
+      "dialogCount": 0,
+      "focused": {
+        "label": null,
+        "tag": "BODY"
+      }
+    }
+  }
+]

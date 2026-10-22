@@ -1,0 +1,91 @@
+[
+  {
+    "stage": "initial-dialog",
+    "at": "2026-10-22T03:54:18.934Z",
+    "dom": {
+      "dialogCount": 1,
+      "focused": {
+        "label": "Requested operation",
+        "tag": "PRE"
+      }
+    }
+  },
+  {
+    "stage": "tab-after-reject",
+    "at": "2026-10-22T03:55:09.218Z",
+    "dom": {
+      "dialogCount": 1,
+      "focused": {
+        "label": null,
+        "tag": "BODY"
+      }
+    }
+  },
+  {
+    "stage": "tab-into-page-start",
+    "at": "2026-10-22T03:55:18.557Z",
+    "dom": {
+      "dialogCount": 1,
+      "dialogModal": null,
+      "focused": {
+        "label": "Hide sidebar",
+        "tag": "BUTTON"
+      }
+    }
+  },
+  {
+    "stage": "escape-closed",
+    "at": "2026-10-22T03:56:03.573Z",
+    "dom": {
+      "dialogCount": 0,
+      "focusedTag": "BUTTON"
+    }
+  },
+  {
+    "stage": "outside-pointer-closed",
+    "at": "2026-10-22T03:56:16.494Z",
+    "dom": {
+      "dialogCount": 0,
+      "focusedTag": "BODY"
+    }
+  },
+  {
+    "stage": "long-wait-before-approval",
+    "at": "2026-10-22T04:00:29.195Z",
+    "dom": {
+      "dialogCount": 1,
+      "focusedTag": "PRE"
+    }
+  },
+  {
+    "stage": "goal-modal-open",
+    "at": "2026-10-22T04:02:40.526Z",
+    "dom": {
+      "dialogs": [
+        {
+          "id": "dialog-cl-182-content",
+          "modal": "true"
+        }
+      ],
+      "focusedDialog": "true",
+      "focusedTag": "TEXTAREA"
+    }
+  },
+  {
+    "stage": "goal-modal-wrap-back",
+    "at": "2026-10-22T04:03:03.864Z",
+    "dom": {
+      "focusedDialogModal": "true",
+      "focusedTag": "BUTTON",
+      "text": "Create goal"
+    }
+  },
+  {
+    "stage": "goal-modal-escape-closed",
+    "at": "2026-10-22T04:03:16.904Z",
+    "dom": {
+      "dialogs": [],
+      "focusedTag": "BODY"
+    }
+  }
+]

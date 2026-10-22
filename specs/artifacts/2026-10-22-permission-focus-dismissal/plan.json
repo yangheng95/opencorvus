@@ -1,0 +1,17 @@
+{
+  "name": "permission-focus-dismissal-530",
+  "maximumBatchRequests": 16,
+  "scopeBudgets": {
+    "before": 8,
+    "conditionalAfter": 8
+  },
+  "ports": {
+    "before": 19029,
+    "after": 19031
+  },
+  "model": "gpt-6.1-sol",
+  "stream": true,
+  "source": "Closed528-after complete90 tables/schema3/canonical",
+  "oneVisibleMemberInputPerScope": true,
+  "ui": "Real ordinary Tab/Escape/outside click;no UI tests;passive before close-cause observation"
+}

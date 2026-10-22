@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [权限提示焦点关闭](2026-10-22-permission-focus-dismissal/README.md)：24真图/12真流，Tab焦点移出仍显示待决提示，保留主动关闭；7分19秒原输入及完整资源/原数据结算。
+
 - [Sources 与成员正文连续性](2026-10-22-source-live-owner-continuity/README.md)：23实图/12真流，成员导航焦点修复与正文身份；两原生范围和8配对成员结算，原POST超时单独核验。
 
 - [任务面板空状态](2026-10-22-task-scope-empty-state/README.md)：13实图/中英文，未选Task指引与中性空需求；公开Board和90表原行保持，零模型。
