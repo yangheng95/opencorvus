@@ -1,0 +1,21 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+import {gzipSync,gunzipSync} from 'node:zlib'
+const root=import.meta.dirname,repo=path.resolve(root,'../..'),out=repo+'/specs/artifacts/2026-10-22-goal-current-experience',base='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-22/goal-current-experience-523-'
+const selected=['prepare.mjs','prepare-data.ts','build.mjs','serve.ts','launch.ps1','shutdown.ps1','settle.ps1','preserve.ts','archive.mjs','before-data-preparation.json','after-data-preparation.json','data-preservation-observation.json']
+for(const name of fs.readdirSync(root))if(name.endsWith('.png'))selected.push(name)
+for(const name of selected)fs.copyFileSync(root+'/'+name,out+'/'+name,fs.constants.COPYFILE_EXCL)
+const resources=[]
+for(const [stage,handle,page] of [['before',36568,116],['after',92769,117]]){
+ const terminal=JSON.parse(fs.readFileSync(base+stage+'-service/evidence/physical-terminal.json','utf8'))
+ for(const field of ['physicalCompletion','outputDrainComplete','requestCleanupComplete'])assert.equal(terminal.native[field],true)
+ assert.equal(terminal.originalHandle,handle);assert.equal(terminal.originalExit,0);assert.equal(terminal.launcher.childExitCode,0);assert.equal(terminal.shutdown.statusCode,200);assert.equal(terminal.provider.maximum,0);assert.equal(terminal.provider.actual,0);assert.equal(terminal.provider.exhausted,false)
+ fs.copyFileSync(base+stage+'-service/evidence/physical-terminal.json',out+'/'+stage+'-physical-terminal.json',fs.constants.COPYFILE_EXCL)
+ const log=fs.readFileSync(base+stage+'/runtime/log/dev.log','utf8').split('\n').filter(Boolean).map(line=>JSON.parse(line)),main=stage==='after'?'main-Dp2CjRPP.js':'main-DhV28lza.js'
+ const assets=log.filter(row=>row.service==='server'&&row.data?.path==='/ui/assets/'+main&&row.data.status==='completed').map(row=>({time:row.time,requestID:row.data.requestID,path:row.data.path,statusCode:row.data.statusCode}))
+ assert(assets.some(row=>row.statusCode===200));resources.push({stage,originalHandle:handle,page,pageState:'Closed',assets})
+}
+const build=fs.readFileSync(root+'/after-build.log'),z=gzipSync(build);assert(gunzipSync(z).equals(build));fs.writeFileSync(out+'/after-build.log.gz',z,{flag:'wx'})
+const observations={at:new Date().toISOString(),sourceCommit:'4676cd0b4011a896fd1b4e2fb3d41691a1b10bf2',scope:'Single agent;actual development /ui;manual interactions and screenshots only',resources,manual:{screenshots:14,locales:['en-US','zh-CN'],sidebarWidths:[280,493],before:'Actual Goal modal objective and10000/3 lost after Close/reopen',after:['Home Close/reopen retains objective/10000/3','How it works/Escape/reopen retains same fields','New composer text initializes new Goal draft','Chinese Escape/reopen retains objective/12000/4','Existing Chat independent draft/9000/2 retained','Return Home initializes current empty composer','Final clean Chinese default page']},commands:[{command:'node build.mjs after',originalHandle:20561,exitCode:0,modules:7313,seconds:70},{command:'Overlay typecheck/check:i18n/check:css-tokens',originalHandle:11857,exitCode:0,localeKeys:2529,cssReferences:8879,globalTokens:268},{command:'bun preserve.ts before after',exitCode:0,tables:90,originalRows:156566,sourceAndTargetOriginalRows:'Exact all original fields/identities/times;schema3;complete canonical',providerActivities:391}],provider:{maximum:0,actual:0,authorityCopies:'None'},limits:['No new Goal submission/model execution or scheduler qualification','No SideChat UI, authentication faults, continuous-frame Rendering or Native WebView2 qualification','Draft held by existing component fields;no persistence across component disposal/page reload'],retainedFailure:'After preparation first attempted while before was still active;physical-terminal prerequisite rejected before any after creation;original before shutdown/join/settlement then fresh after preparation completed'}
+fs.writeFileSync(out+'/observations.json',JSON.stringify(observations,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify({selected:selected.length,actualAssets:resources.map(r=>({stage:r.stage,requests:r.assets.length})),screenshots:14,modelRequests:0}))

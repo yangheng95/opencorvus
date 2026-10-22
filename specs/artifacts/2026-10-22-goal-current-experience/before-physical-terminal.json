@@ -1,0 +1,73 @@
+{
+  "shutdown": {
+    "occurrence": "goal-current-experience-523-before-service-50e79b4e-5ee7-4c62-b3b8-616ad810f1b2",
+    "statusCode": 200,
+    "target": {
+      "pid": 67340,
+      "processInstanceID": "win32:639282237576862880",
+      "occurrenceID": "3218ed01-e68a-47db-9b46-d6f8c5b4c706"
+    },
+    "observedAtUtc": "2026-10-21T23:58:38.2959869Z",
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYjQhUs00QPDaE7Dq9\"}"
+  },
+  "provider": {
+    "at": "2026-10-21T23:56:02.256Z",
+    "maximum": 0,
+    "actual": 0,
+    "exhausted": false,
+    "requests": [],
+    "scope": "Current Goal experience review; no credentials or model catalog copied"
+  },
+  "observedAtUtc": "2026-10-21T23:58:45.2059080Z",
+  "originalExit": 0,
+  "native": {
+    "occurrence": "goal-current-experience-523-before-service-50e79b4e-5ee7-4c62-b3b8-616ad810f1b2",
+    "outcome": "settled",
+    "host": {
+      "pid": 92992,
+      "processInstanceID": "win32:639282237565171470",
+      "occurrenceID": "cc204fc2-3b77-4f9b-99ed-9cb6652d617b"
+    },
+    "target": {
+      "pid": 67340,
+      "processInstanceID": "win32:639282237576862880",
+      "occurrenceID": "3218ed01-e68a-47db-9b46-d6f8c5b4c706"
+    },
+    "observedAtUtc": "2026-10-21T23:58:38.369Z",
+    "deadlineAt": 1792628155490,
+    "terminal": {
+      "occurrenceID": "goal-current-experience-523-before-service-50e79b4e-5ee7-4c62-b3b8-616ad810f1b2",
+      "pid": 67340,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "originalHandle": 36568,
+  "chain": [
+    {
+      "identity": {
+        "pid": 92992,
+        "processInstanceID": "win32:639282237565171470",
+        "occurrenceID": "cc204fc2-3b77-4f9b-99ed-9cb6652d617b"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "identity": {
+        "pid": 67340,
+        "processInstanceID": "win32:639282237576862880",
+        "occurrenceID": "3218ed01-e68a-47db-9b46-d6f8c5b4c706"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "launcher": {
+    "observedAtUtc": "2026-10-21T23:58:38.4221749Z",
+    "childExitCode": 0
+  }
+}

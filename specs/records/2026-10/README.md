@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Goal 当前交互复核](2026-10-22-goal-current-experience.md)：[当前页面与修复](../../artifacts/2026-10-22-goal-current-experience/README.md)，关闭/说明视图后目标和两预算保留，新的composer上下文重新初始化。
+
 - [原生查询增量输出](2026-10-22-native-query-stream.md)：[原型资格与边界](../../artifacts/2026-10-22-native-query-stream/README.md)，保留原物理/输出/request合同，零模型验证增量交付。
 
 - [当前配置全量验证](2026-10-22-config-current-validation.md)：[168候选/两轮/4图](../../artifacts/2026-10-22-config-current-validation/README.md)，520后完整保存恢复正常但10/5未达，20秒读取通过；Sol2/4/原数据及全部资源结算。

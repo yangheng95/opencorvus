@@ -1,0 +1,92 @@
+{
+  "at": "2026-10-22T00:06:21.836Z",
+  "sourceCommit": "4676cd0b4011a896fd1b4e2fb3d41691a1b10bf2",
+  "scope": "Single agent;actual development /ui;manual interactions and screenshots only",
+  "resources": [
+    {
+      "stage": "before",
+      "originalHandle": 36568,
+      "page": 116,
+      "pageState": "Closed",
+      "assets": [
+        {
+          "time": "2026-10-21T23:56:11.134Z",
+          "requestID": "617a4b94-1d66-4205-90a3-2fcb0b408615",
+          "path": "/ui/assets/main-DhV28lza.js",
+          "statusCode": 200
+        }
+      ]
+    },
+    {
+      "stage": "after",
+      "originalHandle": 92769,
+      "page": 117,
+      "pageState": "Closed",
+      "assets": [
+        {
+          "time": "2026-10-22T00:00:31.761Z",
+          "requestID": "0f99f00d-b88a-4239-a147-541dd7c8c8a2",
+          "path": "/ui/assets/main-Dp2CjRPP.js",
+          "statusCode": 200
+        }
+      ]
+    }
+  ],
+  "manual": {
+    "screenshots": 14,
+    "locales": [
+      "en-US",
+      "zh-CN"
+    ],
+    "sidebarWidths": [
+      280,
+      493
+    ],
+    "before": "Actual Goal modal objective and10000/3 lost after Close/reopen",
+    "after": [
+      "Home Close/reopen retains objective/10000/3",
+      "How it works/Escape/reopen retains same fields",
+      "New composer text initializes new Goal draft",
+      "Chinese Escape/reopen retains objective/12000/4",
+      "Existing Chat independent draft/9000/2 retained",
+      "Return Home initializes current empty composer",
+      "Final clean Chinese default page"
+    ]
+  },
+  "commands": [
+    {
+      "command": "node build.mjs after",
+      "originalHandle": 20561,
+      "exitCode": 0,
+      "modules": 7313,
+      "seconds": 70
+    },
+    {
+      "command": "Overlay typecheck/check:i18n/check:css-tokens",
+      "originalHandle": 11857,
+      "exitCode": 0,
+      "localeKeys": 2529,
+      "cssReferences": 8879,
+      "globalTokens": 268
+    },
+    {
+      "command": "bun preserve.ts before after",
+      "exitCode": 0,
+      "tables": 90,
+      "originalRows": 156566,
+      "sourceAndTargetOriginalRows": "Exact all original fields/identities/times;schema3;complete canonical",
+      "providerActivities": 391
+    }
+  ],
+  "provider": {
+    "maximum": 0,
+    "actual": 0,
+    "authorityCopies": "None"
+  },
+  "limits": [
+    "No new Goal submission/model execution or scheduler qualification",
+    "No SideChat UI, authentication faults, continuous-frame Rendering or Native WebView2 qualification",
+    "Draft held by existing component fields;no persistence across component disposal/page reload"
+  ],
+  "retainedFailure": "After preparation first attempted while before was still active;physical-terminal prerequisite rejected before any after creation;original before shutdown/join/settlement then fresh after preparation completed"
+}

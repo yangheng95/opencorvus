@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Goal 当前交互复核](2026-10-22-goal-current-experience/README.md)：真实首页/表单/指南/窄桌面；保留未提交的目标和预算草稿。
+
 - [原生查询增量输出](2026-10-22-native-query-stream/README.md)：零模型私有原型、真实首字节/双流/取消与物理收尾资格。
 
 - [当前配置全量验证](2026-10-22-config-current-validation/README.md)：168完整候选/cold与repeat、4真图；保存恢复13–14.3秒，读取20秒通过而10/5未达，2/4 Sol与原数据/资源完整结算。

@@ -139,7 +139,7 @@ export function ContinuousGoalControl(props: {
   const [validation, setValidation] = createSignal("")
   const [notice, setNotice] = createSignal("")
   let attempt: { key: string; requestID: string } | undefined
-  let createDraft: { key: string; text: string } | undefined
+  let createDraft: { scope: string; key?: string; text: string } | undefined
   let launchOwner: GoalLaunchContext | undefined
   let disposed = false
   let root: HTMLElement | undefined
@@ -232,13 +232,24 @@ export function ContinuousGoalControl(props: {
       }
     } else launchOwner = undefined
     const current = goal()
-    createDraft = next === "create" && props.composerDraftKey
-      ? { key: props.composerDraftKey, text: composerDraftText(props.composerDraftKey) }
-      : undefined
-    setEditing(next === "create" ? undefined : current)
-    setObjective(next === "create" ? (createDraft?.text ?? "") : (current?.objective ?? ""))
-    setTokens(next === "create" ? "" : current?.tokenBudget === undefined ? "" : String(current.tokenBudget))
-    setTurns(next === "create" ? "" : current?.turnBudget === undefined ? "" : String(current.turnBudget))
+    if (next === "create") {
+      const key = props.composerDraftKey
+      const text = key ? composerDraftText(key) : ""
+      const scope = JSON.stringify([captureApiAuthority().revision, props.selectionEpoch, source()?.key, key, text])
+      setEditing(undefined)
+      if (createDraft?.scope !== scope) {
+        createDraft = { scope, key, text }
+        setObjective(text)
+        setTokens("")
+        setTurns("")
+      }
+    } else if (next !== "about") {
+      createDraft = undefined
+      setEditing(current)
+      setObjective(current?.objective ?? "")
+      setTokens(current?.tokenBudget === undefined ? "" : String(current.tokenBudget))
+      setTurns(current?.turnBudget === undefined ? "" : String(current.turnBudget))
+    }
     setReason("")
     setResume(false)
     setFailure(undefined)
@@ -302,7 +313,7 @@ export function ContinuousGoalControl(props: {
           ? await updateContinuousGoal(current.target, body, current.authority)
           : await createContinuousGoal(current.target, body, current.authority)
       if (!owns(current.key)) return
-      if ("objective" in body && createDraft && !pendingComposerContext() && composerDraftText(createDraft.key) === createDraft.text) {
+      if ("objective" in body && createDraft?.key && !pendingComposerContext() && composerDraftText(createDraft.key) === createDraft.text) {
         setComposerDraft(createDraft.key, "")
       }
       createDraft = undefined

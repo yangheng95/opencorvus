@@ -128,16 +128,22 @@ archives affect only goals whose exact owner is that Session.
 
 ## User controls
 
-The home page offers Create continuous goal beside a compact explanation and How it works,
-immediately after the existing composer and before the suggested conversation starters.
-It uses the same Continuous goal title as existing conversations, with an unboxed
-body-sized explanation. The introduction names its action from that same localized
+The home page places the heading, existing composer and suggested conversation
+starters before a bounded Continuous goal section. That section offers Create
+continuous goal beside a body-sized explanation, How it works and model/budget
+guidance. It uses the same Continuous goal title as existing conversations.
+The introduction names its action from that same localized
 Home label. Task scope tools, tabs and Environment progress use Deliverables for
 Delivery Slice contracts; their panel explains where to find continuous execution
 controls without creating another goal entry or mutation path.
 It opens the existing goal form before creating a Conversation. The Home form
 binds the original API authority, selection epoch and composer draft scope;
-closing it retains the Home and its draft. Explicit form confirmation uses the
+closing it retains the Home and its draft. Objective and budget fields remain in
+the same unsubmitted form when it is reopened, including after How it works.
+The form's existing field signals own that draft; its source snapshot binds API
+revision, selection epoch, owner, composer key and initial text. A changed scope
+or composer text initializes a new draft, and successful creation retires it.
+No modal edits are written back into the composer. Explicit form confirmation uses the
 existing project/global Conversation creation and selection authority to create
 one real Chat. The one-time form request then carries the confirmed input and
 the same requestID to that exact Session's existing goal mutation. The handoff
