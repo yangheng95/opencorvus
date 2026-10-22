@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Sources与成员历史首开](records/2026-10/2026-10-22-source-cold-history.md)：[10实图/300事件/零模型](artifacts/2026-10-22-source-cold-history/README.md)，32正文与10来源owner保持，确证首开等待与dock阅读连续性，重连边界仍开放。
+
 - [Goal默认页与真实执行](records/2026-10/2026-10-22-goal-home-run.md)：[26实图/11次真实Sol](artifacts/2026-10-22-goal-home-run/README.md)，5次自动续跑及轮次间暂停/恢复，修复控制消息排版与弹窗换页焦点，完整资源结算。
 
 - [来源落点与Rendering](records/2026-10/2026-10-22-source-parallel-owner.md)：[6实图/6次真实Sol](artifacts/2026-10-22-source-parallel-owner/README.md)，确证native单步串行策略与自然追加owner，未达到同消息并行资格。

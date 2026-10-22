@@ -1,0 +1,406 @@
+{
+  "at": "2026-10-22T08:08:47.590Z",
+  "screenshots": 10,
+  "actualProviderRequests": 0,
+  "maximumProviderRequests": 0,
+  "credentialOrCatalogCopies": 0,
+  "scopes": [
+    {
+      "stage": "before",
+      "observationVariant": "debug",
+      "page": 137,
+      "pageState": "Closed",
+      "originalServiceHandle": 74665,
+      "originalServiceExit": 0,
+      "shutdown": 200,
+      "native": {
+        "occurrence": "source-cold-history-534-before-service-d8bfab0c-54c0-426d-b576-61e4a2a5b1fd",
+        "outcome": "settled",
+        "host": {
+          "pid": 66188,
+          "processInstanceID": "win32:639282524658725328",
+          "occurrenceID": "1603aaeb-8ab1-46df-a25b-b48c2729359b"
+        },
+        "target": {
+          "pid": 97332,
+          "processInstanceID": "win32:639282524669466530",
+          "occurrenceID": "608f1811-0fdf-4285-a00f-8d2101813fad"
+        },
+        "observedAtUtc": "2026-10-22T07:59:23.625Z",
+        "deadlineAt": 1792656865839,
+        "terminal": {
+          "occurrenceID": "source-cold-history-534-before-service-d8bfab0c-54c0-426d-b576-61e4a2a5b1fd",
+          "pid": 97332,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 66188,
+            "processInstanceID": "win32:639282524658725328",
+            "occurrenceID": "1603aaeb-8ab1-46df-a25b-b48c2729359b"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "identity": {
+            "pid": 97332,
+            "processInstanceID": "win32:639282524669466530",
+            "occurrenceID": "608f1811-0fdf-4285-a00f-8d2101813fad"
+          }
+        }
+      ],
+      "launcher": {
+        "observedAtUtc": "2026-10-22T07:59:23.6781984Z",
+        "childExitCode": 0
+      },
+      "provider": {
+        "at": "2026-10-22T07:54:31.825Z",
+        "maximum": 0,
+        "actual": 0,
+        "exhausted": false,
+        "requests": [],
+        "scope": "Source cold history review; no credentials or model catalog copied"
+      },
+      "assets": [
+        {
+          "time": "2026-10-22T07:54:46.118Z",
+          "path": "/ui/assets/main-CTpky2aj.js",
+          "status": 200
+        },
+        {
+          "time": "2026-10-22T07:54:46.131Z",
+          "path": "/ui/assets/main-CZNy5wdP.css",
+          "status": 200
+        }
+      ],
+      "runtimeErrors": [
+        {
+          "time": "2026-10-22T07:55:29.613Z",
+          "service": "project.open",
+          "message": "project.open.stage",
+          "stage": "config.validate",
+          "diagnostic": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+        },
+        {
+          "time": "2026-10-22T07:55:29.633Z",
+          "service": "server",
+          "message": "request failed",
+          "path": "/channel",
+          "status": 400,
+          "errorType": "ProviderModelNotFoundError",
+          "diagnostic": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+        },
+        {
+          "time": "2026-10-22T07:55:30.584Z",
+          "service": "project.open",
+          "message": "project.open.stage",
+          "stage": "config.validate",
+          "diagnostic": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+        },
+        {
+          "time": "2026-10-22T07:55:30.585Z",
+          "service": "server",
+          "message": "request failed",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": 400,
+          "errorType": "ProviderModelNotFoundError",
+          "diagnostic": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+        },
+        {
+          "time": "2026-10-22T07:55:30.838Z",
+          "service": "project.open",
+          "message": "project.open.stage",
+          "stage": "config.validate",
+          "diagnostic": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+        },
+        {
+          "time": "2026-10-22T07:55:30.841Z",
+          "service": "server",
+          "message": "request failed",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": 400,
+          "errorType": "ProviderModelNotFoundError",
+          "diagnostic": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+        },
+        {
+          "time": "2026-10-22T07:55:30.994Z",
+          "service": "overlay:project-load",
+          "message": "config reload failed",
+          "diagnostic": "channel: API 400 channel?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cmember-live-rendering-412-fresh%5Cproject: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}"
+        },
+        {
+          "time": "2026-10-22T07:55:30.994Z",
+          "service": "overlay:ui",
+          "message": "Model configuration unavailable",
+          "diagnostic": "API 400 session/ses_-zUS0X33CzzWEKMgCk98/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cmember-live-rendering-412-fresh%5Cproject: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}"
+        },
+        {
+          "time": "2026-10-22T07:55:31.491Z",
+          "service": "overlay:ui",
+          "message": "Model configuration unavailable",
+          "diagnostic": "API 400 session/ses_-zUS0X33CzzWEKMgCk98/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cmember-live-rendering-412-fresh%5Cproject: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}"
+        }
+      ],
+      "runtimeErrorScope": "Inspected original nine errors per scope:missing unprojected Sol catalog in deliberate zero-authority isolation,not credential qualification;original public ProviderModelNotFoundError preserved",
+      "browserErrors": [],
+      "data": {
+        "tables": 90,
+        "originalRows": 163200,
+        "differences": [],
+        "providerActivities": {
+          "original": 407,
+          "current": 407
+        },
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 77008896,
+          "modifiedAtMs": 1792652908500.497
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact"
+      }
+    },
+    {
+      "stage": "after",
+      "observationVariant": "warning",
+      "page": 138,
+      "pageState": "Closed",
+      "originalServiceHandle": 62275,
+      "originalServiceExit": 0,
+      "shutdown": 200,
+      "native": {
+        "occurrence": "source-cold-history-534-after-service-a9d66956-961f-4e6c-b29b-b2c13db497e3",
+        "outcome": "settled",
+        "host": {
+          "pid": 91948,
+          "processInstanceID": "win32:639282528374651111",
+          "occurrenceID": "c9573668-61a3-408e-a0bd-ec068ef5360c"
+        },
+        "target": {
+          "pid": 95504,
+          "processInstanceID": "win32:639282528383720930",
+          "occurrenceID": "68e9aa92-7ea6-445b-a17f-199ebb3a6e70"
+        },
+        "observedAtUtc": "2026-10-22T08:05:40.834Z",
+        "deadlineAt": 1792657237107,
+        "terminal": {
+          "occurrenceID": "source-cold-history-534-after-service-a9d66956-961f-4e6c-b29b-b2c13db497e3",
+          "pid": 95504,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "identity": {
+            "pid": 91948,
+            "processInstanceID": "win32:639282528374651111",
+            "occurrenceID": "c9573668-61a3-408e-a0bd-ec068ef5360c"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "identity": {
+            "pid": 95504,
+            "processInstanceID": "win32:639282528383720930",
+            "occurrenceID": "68e9aa92-7ea6-445b-a17f-199ebb3a6e70"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "launcher": {
+        "childExitCode": 0,
+        "observedAtUtc": "2026-10-22T08:05:40.8903289Z"
+      },
+      "provider": {
+        "at": "2026-10-22T08:00:42.052Z",
+        "maximum": 0,
+        "actual": 0,
+        "exhausted": false,
+        "requests": [],
+        "scope": "Source cold history review; no credentials or model catalog copied"
+      },
+      "assets": [
+        {
+          "time": "2026-10-22T08:00:52.412Z",
+          "path": "/ui/assets/main-x2RfaWHp.js",
+          "status": 200
+        },
+        {
+          "time": "2026-10-22T08:00:52.418Z",
+          "path": "/ui/assets/main-CZNy5wdP.css",
+          "status": 200
+        }
+      ],
+      "runtimeErrors": [
+        {
+          "time": "2026-10-22T08:01:04.162Z",
+          "service": "project.open",
+          "message": "project.open.stage",
+          "stage": "config.validate",
+          "diagnostic": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+        },
+        {
+          "time": "2026-10-22T08:01:04.176Z",
+          "service": "server",
+          "message": "request failed",
+          "path": "/channel",
+          "status": 400,
+          "errorType": "ProviderModelNotFoundError",
+          "diagnostic": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+        },
+        {
+          "time": "2026-10-22T08:01:05.254Z",
+          "service": "project.open",
+          "message": "project.open.stage",
+          "stage": "config.validate",
+          "diagnostic": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+        },
+        {
+          "time": "2026-10-22T08:01:05.255Z",
+          "service": "server",
+          "message": "request failed",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": 400,
+          "errorType": "ProviderModelNotFoundError",
+          "diagnostic": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+        },
+        {
+          "time": "2026-10-22T08:01:05.500Z",
+          "service": "project.open",
+          "message": "project.open.stage",
+          "stage": "config.validate",
+          "diagnostic": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+        },
+        {
+          "time": "2026-10-22T08:01:05.502Z",
+          "service": "server",
+          "message": "request failed",
+          "path": "/session/ses_-zUS0X33CzzWEKMgCk98/config",
+          "status": 400,
+          "errorType": "ProviderModelNotFoundError",
+          "diagnostic": "ProviderModelNotFoundError: {\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}"
+        },
+        {
+          "time": "2026-10-22T08:01:05.621Z",
+          "service": "overlay:project-load",
+          "message": "config reload failed",
+          "diagnostic": "channel: API 400 channel?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cmember-live-rendering-412-fresh%5Cproject: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}"
+        },
+        {
+          "time": "2026-10-22T08:01:05.621Z",
+          "service": "overlay:ui",
+          "message": "Model configuration unavailable",
+          "diagnostic": "API 400 session/ses_-zUS0X33CzzWEKMgCk98/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cmember-live-rendering-412-fresh%5Cproject: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}"
+        },
+        {
+          "time": "2026-10-22T08:01:06.129Z",
+          "service": "overlay:ui",
+          "message": "Model configuration unavailable",
+          "diagnostic": "API 400 session/ses_-zUS0X33CzzWEKMgCk98/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cmember-live-rendering-412-fresh%5Cproject: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}"
+        }
+      ],
+      "runtimeErrorScope": "Inspected original nine errors per scope:missing unprojected Sol catalog in deliberate zero-authority isolation,not credential qualification;original public ProviderModelNotFoundError preserved",
+      "browserErrors": [],
+      "data": {
+        "tables": 90,
+        "originalRows": 163200,
+        "differences": [],
+        "providerActivities": {
+          "original": 407,
+          "current": 407
+        },
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 77008896,
+          "modifiedAtMs": 1792655673281.7605
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact"
+      }
+    }
+  ],
+  "warningTimeline": {
+    "events": 300,
+    "counts": {
+      "renderer-send": 43,
+      "renderer-reply": 67,
+      "part-binding": 32,
+      "body-mount": 32,
+      "body-state": 96,
+      "source-group-binding": 10,
+      "source-binding": 10,
+      "source-mount": 10
+    },
+    "longestFirstHtmlWaitMs": 822.1999998092651,
+    "lastBodySettlementAfterFirstMountMs": 1553.0999999046326,
+    "phases": [
+      {
+        "phase": "first",
+        "observedSnapshotAt": "2026-10-22T08:01:24.196Z",
+        "events": 294,
+        "firstEventAt": "2026-10-22T08:01:05.336Z",
+        "lastEventAt": "2026-10-22T08:01:23.932Z"
+      },
+      {
+        "phase": "list",
+        "observedSnapshotAt": "2026-10-22T08:01:45.284Z",
+        "events": 300,
+        "firstEventAt": "2026-10-22T08:01:05.336Z",
+        "lastEventAt": "2026-10-22T08:01:24.575Z"
+      },
+      {
+        "phase": "detail",
+        "observedSnapshotAt": "2026-10-22T08:01:58.319Z",
+        "events": 300,
+        "firstEventAt": "2026-10-22T08:01:05.336Z",
+        "lastEventAt": "2026-10-22T08:01:24.575Z"
+      },
+      {
+        "phase": "reopen",
+        "observedSnapshotAt": "2026-10-22T08:04:33.370Z",
+        "events": 300,
+        "firstEventAt": "2026-10-22T08:01:05.336Z",
+        "lastEventAt": "2026-10-22T08:01:24.575Z"
+      },
+      {
+        "phase": "tool",
+        "observedSnapshotAt": "2026-10-22T08:05:09.585Z",
+        "events": 300,
+        "firstEventAt": "2026-10-22T08:01:05.336Z",
+        "lastEventAt": "2026-10-22T08:01:24.575Z"
+      },
+      {
+        "phase": "final",
+        "observedSnapshotAt": "2026-10-22T08:05:26.818Z",
+        "events": 300,
+        "firstEventAt": "2026-10-22T08:01:05.336Z",
+        "lastEventAt": "2026-10-22T08:01:24.575Z"
+      }
+    ]
+  },
+  "limits": [
+    "Both scopes run the same production source;after is only warning-level diagnostic qualification,not a product fix",
+    "Debug events were unavailable despite DOM diagnostic markers;only warning scope has an early event timeline",
+    "Rendering labels in initial AX and subsequent complete screenshots do not establish frame-by-frame flash duration",
+    "Member32 body/10 source owners remain through the observed list/detail,dock and tool disclosures;this does not cover reconnect,replay,history prepending,large-window virtualization or other production entry points",
+    "Source excerpt/multiple-source disclosure variants are not present in this selected history;tool output disclosure is distinct",
+    "A Playwright checkbox locator did not match the native AX checkbox;fresh AX native click completed the actual dock actions",
+    "Model-unavailable banner is expected zero-authority isolation,not a Provider credential qualification failure",
+    "All raw QA histories/full database/private snapshots remain outside the scoped archive;no new LLM or business messages were sent"
+  ]
+}
