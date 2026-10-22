@@ -129,9 +129,9 @@ archives affect only goals whose exact owner is that Session.
 ## User controls
 
 The home page places the heading, existing composer and suggested conversation
-starters before a bounded Continuous goal section. That section offers Create
-continuous goal beside a body-sized explanation, How it works and model/budget
-guidance. It uses the same Continuous goal title as existing conversations.
+starters before a compact Continuous goal section, separated by a rule. That
+section offers Create continuous goal beside a short body-sized explanation and
+How it works. It uses the same Continuous goal title as existing conversations.
 The introduction names its action from that same localized
 Home label. Task scope tools, tabs and Environment progress use Deliverables for
 Delivery Slice contracts; their panel explains where to find continuous execution
@@ -171,8 +171,12 @@ menu's Configure Provider action for an empty connected-model list. Configured
 defaults may still be inherited; this guidance adds no model-selection policy.
 The home explanation uses body text and a regular primary control size; compact
 status-strip sizing belongs to existing conversation controls.
-The home copy states that budgets are optional, matching the form's unlimited
-default and the existing unspecified-budget execution contract.
+The creation dialog uses a bounded 560px width, one concise execution explanation
+and the original objective field. Optional budgets use the shared native Disclosure;
+its summary states No limit or Custom limits. Existing draft values reopen expanded,
+and invalid budget fields reveal themselves. Detailed cost, pause and immutable
+objective guidance stays in that section and the existing guide. No disclosure
+changes the single form draft, unlimited default or execution contract.
 
 Creating a Chat or Mission goal names a still-default conversation from the
 structured objective, using the existing first-line title derivation in the

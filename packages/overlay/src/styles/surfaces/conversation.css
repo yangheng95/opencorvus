@@ -138,10 +138,10 @@
   grid-template-rows: auto auto auto auto;
   align-content: start;
   justify-items: stretch;
-  row-gap: var(--ui-gap-lg);
+  row-gap: var(--ui-gap-2xl);
   min-width: 0;
   min-height: 0;
-  padding-block: clamp(var(--ui-gap-4xl), 8vh, calc(96px * var(--ui-scale))) var(--ui-gap-4xl);
+  padding-block: clamp(var(--ui-gap-4xl), 18vh, calc(180px * var(--ui-scale))) var(--ui-gap-4xl);
   box-sizing: border-box;
   overflow-y: auto;
   overscroll-behavior-y: contain;
@@ -168,7 +168,7 @@
   max-width: 100%;
   margin: 0;
   padding-inline: calc(var(--ui-composer-content-inset) + var(--oc-border-width));
-  text-align: left;
+  text-align: center;
   font-size: var(--ui-font-page);
   line-height: var(--ui-line-height-tight);
   font-weight: var(--ui-font-weight-strong);
@@ -176,8 +176,9 @@
 }
 
 .chat-home-prompt__subtitle {
-  justify-self: start;
-  margin: var(--ui-gap-sm) 0 0;
+  justify-self: center;
+  text-align: center;
+  margin: var(--ui-gap-md) 0 var(--ui-gap-md);
   padding-inline: calc(var(--ui-composer-content-inset) + var(--oc-border-width));
   font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-normal);
@@ -185,14 +186,14 @@
 }
 
 .chat-home-goal {
-  margin-block-start: 0;
+  margin-block-start: var(--ui-gap-lg);
 }
 
 .chat-home-after {
   width: 100%;
   max-width: 100%;
   margin-inline: auto;
-  padding-inline: calc(var(--ui-composer-content-inset) + var(--oc-border-width));
+  padding-inline: 0;
   display: grid;
   gap: var(--ui-gap-lg);
   color: var(--text-soft);
@@ -202,13 +203,15 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--ui-gap-sm) var(--ui-gap-xl);
+  justify-content: center;
+  gap: var(--ui-gap-md);
 }
 
 .chat-home-suggestion.oc-button {
   --oc-button-height: var(--oc-density-control-height);
-  --oc-button-padding-x: 0;
-  --oc-button-border: 0 solid transparent;
+  --oc-button-padding-x: var(--ui-gap-lg);
+  --oc-button-border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-pill);
   --oc-button-color: var(--text-soft);
   justify-content: flex-start;
   min-width: 0;

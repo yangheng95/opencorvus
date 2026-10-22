@@ -1,0 +1,164 @@
+[
+  {
+    "level": "info",
+    "time": "2026-10-22T16:04:55.737Z",
+    "service": "models.dev",
+    "logDomain": "non-session",
+    "data": {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-startup-refresh\\delivery\\runtime\\data\\models.json"
+    },
+    "message": "provisioned bundled model catalog"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-22T16:05:02.919Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "b8e8b8bb-36f4-4ae1-9958-07f6fac23794",
+      "method": "POST",
+      "path": "/global/providers/refresh",
+      "status": "started"
+    },
+    "message": "request"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-22T16:05:04.439Z",
+    "service": "models.dev",
+    "logDomain": "non-session",
+    "data": {
+      "fetchedAt": 1792685104439
+    },
+    "message": "registry refreshed"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-22T16:05:04.44Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "b8e8b8bb-36f4-4ae1-9958-07f6fac23794",
+      "method": "POST",
+      "path": "/global/providers/refresh",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 1521
+    },
+    "message": "request"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-22T16:06:03.146Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "7c02836d-af4e-49f8-a0b4-1cac045d40d6",
+      "method": "POST",
+      "path": "/global/providers/refresh",
+      "status": "started"
+    },
+    "message": "request"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-22T16:06:05.782Z",
+    "service": "models.dev",
+    "logDomain": "non-session",
+    "data": {
+      "fetchedAt": 1792685165782
+    },
+    "message": "registry refreshed"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-22T16:06:05.782Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "7c02836d-af4e-49f8-a0b4-1cac045d40d6",
+      "method": "POST",
+      "path": "/global/providers/refresh",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 2636
+    },
+    "message": "request"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-22T16:06:05.85Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "86bf20f2-6c57-4b04-9790-315f683fb257",
+      "method": "POST",
+      "path": "/provider/refresh",
+      "status": "started"
+    },
+    "message": "request"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-22T16:06:07.03Z",
+    "service": "models.dev",
+    "logDomain": "non-session",
+    "data": {
+      "fetchedAt": 1792685167030
+    },
+    "message": "registry refreshed"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-22T16:06:07.032Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "86bf20f2-6c57-4b04-9790-315f683fb257",
+      "method": "POST",
+      "path": "/provider/refresh",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 1182
+    },
+    "message": "request"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-22T16:08:22.743Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "ffc514e4-f67e-4e60-a833-d80dcf7b6790",
+      "method": "POST",
+      "path": "/global/providers/refresh",
+      "status": "started"
+    },
+    "message": "request"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-22T16:08:23.695Z",
+    "service": "models.dev",
+    "logDomain": "non-session",
+    "data": {
+      "fetchedAt": 1792685303695
+    },
+    "message": "registry refreshed"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-22T16:08:23.7Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "ffc514e4-f67e-4e60-a833-d80dcf7b6790",
+      "method": "POST",
+      "path": "/global/providers/refresh",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 957
+    },
+    "message": "request"
+  }
+]

@@ -3667,3 +3667,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [活跃Sources正文连续性](records/2026-10/2026-10-22-active-source-rendering.md)：真实原成员流与owner调查。
 
 - [Goal与侧边对话体验](records/2026-10/2026-10-22-goal-docked-experience.md)：首页dock与原侧边表单的真实交互。
+
+- [启动页与模型目录刷新](records/2026-10/2026-10-22-startup-model-refresh.md)：首页布局、上游成本契约与真实刷新验收。

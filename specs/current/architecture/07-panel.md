@@ -3196,10 +3196,12 @@ Manual interaction and screenshot review on the formal development `/ui` surface
 provide UI acceptance; API contract checks do not substitute for visual evidence.
 
 The launcher home keeps ordinary chat starters immediately after the real
-composer, followed by the shared continuous-goal control in its own bounded
-region. Its visible explanation covers success criteria, automatic continuation,
-the conversation-header progress/pause controls, the selected model, and blank
-budgets. The detailed guide uses the same localized control and form. Opening
+composer, followed by the shared continuous-goal control in a compact region
+separated by a rule. The centered heading and suggested starter pills retain the
+real composer as the primary action. The goal explanation covers automatic
+continuation and progress/pause; selected-model guidance appears when creating,
+and optional budgets expand within the original form. The detailed guide uses
+the same localized control and form. Opening
 the home form preserves the composer draft and creates no owner, Message, or
 goal; confirmation invokes the existing new-conversation/goal launch flow.
 Selected conversations keep the owner-bound strip above their transcript.

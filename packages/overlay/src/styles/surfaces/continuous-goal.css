@@ -86,6 +86,7 @@
   scrollbar-gutter: stable;
 }
 .dialog-form.continuous-goal-dialog__frame {
+  max-width: calc(560px * var(--ui-scale));
   overflow: hidden;
 }
 .dialog-form.continuous-goal-dialog__frame > .dialog-actions {
@@ -93,13 +94,15 @@
 }
 
 .continuous-goal--home {
-  padding: var(--ui-gap-xl);
+  padding: var(--ui-gap-2xl) 0 0;
   font-size: var(--ui-font-body);
-  background: color-mix(in srgb, var(--surface-inset) 48%, transparent);
-  border: var(--oc-border-width) solid var(--border);
-  border-radius: var(--oc-radius-large);
+  background: transparent;
+  border: 0;
+  border-top: var(--oc-border-width) solid var(--border);
   display: grid;
-  gap: var(--ui-gap-lg);
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--ui-gap-xl);
 }
 .continuous-goal__welcome {
   display: flex;
@@ -111,7 +114,7 @@
   min-width: 0;
 }
 .continuous-goal__welcome-icon {
-  color: var(--accent);
+  color: var(--text-muted);
   padding-block-start: var(--ui-gap-xs);
 }
 .continuous-goal__welcome h2 {
@@ -127,19 +130,19 @@
 }
 .continuous-goal__home-actions {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
   gap: var(--ui-gap-sm);
 }
-.continuous-goal__home-setup {
-  flex: 1 1 calc(280px * var(--ui-scale));
-  min-width: 0;
-  margin: 0;
-  margin-inline-start: var(--ui-gap-sm);
-  color: var(--text-soft);
-  font-size: var(--ui-font-caption);
-  line-height: var(--ui-line-height-normal);
-  overflow-wrap: anywhere;
+@container chat-workbench (width < 760px) {
+  .continuous-goal--home {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .continuous-goal__home-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-inline-start: var(--ui-gap-4xl);
+  }
 }
 .continuous-goal__steps {
   list-style: none;
@@ -231,6 +234,20 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--ui-gap-lg);
+}
+.continuous-goal__create-intro {
+  color: var(--text-soft);
+  line-height: var(--ui-line-height-normal);
+}
+.continuous-goal__budget-options .oc-disclosure__content {
+  display: grid;
+  gap: var(--ui-gap-lg);
+  padding-block-start: var(--ui-gap-md);
+}
+.continuous-goal__budget-summary {
+  margin-inline-start: auto;
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
 }
 .continuous-goal__secondary {
   display: flex;

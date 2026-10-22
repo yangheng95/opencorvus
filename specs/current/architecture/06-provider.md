@@ -527,10 +527,18 @@ saved Auth authority 与 callback 一样投影 typed `AuthReadError` 503；Proje
 - Overlay 的 catalog、Auth method 和 global config 请求独立 settle、独立校验、独立提交；失败 owner 保留旧值并显示 resource-tagged 错误，成功 sibling 必须立即可用。禁止 `Promise.all` 让单个请求拒绝阻止全部 Provider 数据落库。
 
 `models.dev` 的模型级 `experimental` 是可选对象，不是布尔开关。当前唯一合法结构是
-`{ modes: Record<string, { cost?: { input, output, cache_read?, cache_write? }, provider: { body, headers? } }> }`。
+`{ modes: Record<string, { cost?: { input, output, cache_read?, cache_write?, reasoning?, input_audio?, output_audio? }, provider: { body, headers? } }> }`。
+基础、长上下文和实验模式成本复用同一组数值字段，保留音频与推理价格；实验模式仍严格拒绝未知字段及错误类型。
 普通读取与显式刷新复用同一个严格 Zod schema；历史布尔结构、未知字段或不完整 mode 都直接失败，刷新失败时不得改写现有 catalog。
 
 ## 设置页数据所有权
+
+Provider 设置页直接展示无需凭据的“刷新模型目录”，通过原 catalog writer 更新全部 Provider 和模型声明。
+更多菜单中的 OpenCorvus 专用实时刷新复用 canonical `apiKeyConfigured`：明确未配置时展开原 Provider 密钥配置区，
+未知时等待目录可读，已配置时进入原 live writer。该专用入口不是所有 Provider 的通用模型刷新。
+
+目录请求使用 Installation 的唯一 HTTP product/version User-Agent，channel/client 放入独立 comment；
+保持真实产品身份和同一远端 URL，不以更换身份或备用目录绕过网络错误。
 
 - `config` 与 `channel` 属于基础配置 owner，并在同一 owner 内原子提交。
 - `provider` 与 `provider/auth` 是 Provider 设置面的两个独立只读资源；每个成功响应独立提交，失败资源保留旧值并进入同一 Provider diagnostics 列表。

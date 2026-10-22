@@ -29,6 +29,7 @@ import { Badge, type BadgeTone } from "./ui/Badge"
 import { Button } from "./ui/Button"
 import { Checkbox } from "./ui/Checkbox"
 import { Dialog } from "./ui/Dialog"
+import { Disclosure } from "./ui/Disclosure"
 import { Feedback } from "./ui/Feedback"
 import { Icon } from "./ui/Icon"
 import { TextField } from "./ui/TextField"
@@ -133,6 +134,7 @@ export function ContinuousGoalControl(props: {
   const [objective, setObjective] = createSignal("")
   const [tokens, setTokens] = createSignal("")
   const [turns, setTurns] = createSignal("")
+  const [budgetOptionsOpen, setBudgetOptionsOpen] = createSignal(false)
   const [reason, setReason] = createSignal("")
   const [resume, setResume] = createSignal(false)
   const [busy, setBusy] = createSignal(false)
@@ -261,6 +263,7 @@ export function ContinuousGoalControl(props: {
       setTurns(current?.turnBudget === undefined ? "" : String(current.turnBudget))
     }
     setReason("")
+    setBudgetOptionsOpen(next !== "create" || Boolean(tokens() || turns()))
     setResume(false)
     setFailure(undefined)
     setValidation("")
@@ -461,19 +464,18 @@ export function ContinuousGoalControl(props: {
         <div class="continuous-goal__home-actions">
           <Button
             type="button"
-            variant="solid"
+            variant="outline"
             size="md"
-            tone="accent"
+            tone="neutral"
             disabled={!appStore.connected || props.starting || busy()}
             onClick={() => open("create")}
           >
-            <Icon name="goals" size="compact" />
             {t(props.starting ? "continuous_goal.home.starting" : "continuous_goal.home.create")}
+            <Icon name="chevron" size="compact" />
           </Button>
           <Button type="button" variant="ghost" size="sm" tone="neutral" disabled={busy() || props.starting} onClick={() => open("about")}>
             {t("continuous_goal.home.how")}
           </Button>
-          <p class="continuous-goal__home-setup">{t("continuous_goal.home.setup")}</p>
         </div>
       </Show>
       <Show when={!props.home}>
@@ -574,7 +576,6 @@ export function ContinuousGoalControl(props: {
         </Feedback>
       </Show>
       <Dialog
-        wide
         ref={(element) => { dialog = element }}
         open={mode() !== null}
         title={t(
@@ -612,7 +613,7 @@ export function ContinuousGoalControl(props: {
                   busy()
                     ? "continuous_goal.saving"
                     : mode() === "create"
-                      ? "continuous_goal.create"
+                      ? "continuous_goal.start"
                       : mode() === "complete"
                         ? "continuous_goal.mark_complete"
                         : resume() || editing()?.status === "budget_limited"
@@ -642,12 +643,14 @@ export function ContinuousGoalControl(props: {
               save()
             }}
           >
-            <p class="continuous-goal__scope">
-              {t(props.owner ? `continuous_goal.scope.${props.owner.kind}` : "continuous_goal.scope.new_chat")}
-              <Show when={props.owner && props.ownerLabel}>
-                <strong class="continuous-goal__scope-owner">{props.ownerLabel}</strong>
-              </Show>
-            </p>
+            <Show when={props.owner}>
+              <p class="continuous-goal__scope">
+                {t(props.owner ? `continuous_goal.scope.${props.owner.kind}` : "continuous_goal.scope.new_chat")}
+                <Show when={props.owner && props.ownerLabel}>
+                  <strong class="continuous-goal__scope-owner">{props.ownerLabel}</strong>
+                </Show>
+              </p>
+            </Show>
             <Show
               when={mode() === "create"}
               fallback={
@@ -673,8 +676,7 @@ export function ContinuousGoalControl(props: {
                 </div>
               }
             >
-              <p>{t("continuous_goal.about")}</p>
-              <p class="continuous-goal__hint">{t("continuous_goal.activation_hint")}</p>
+              <p class="continuous-goal__create-intro">{t(props.home ? "continuous_goal.home_intro" : "continuous_goal.create_intro")}</p>
               <Show when={pendingComposerContext()}>
                 <p class="continuous-goal__hint">{t("continuous_goal.pending_context_hint")}</p>
               </Show>
@@ -691,11 +693,10 @@ export function ContinuousGoalControl(props: {
                   }}
                   required
                   maxLength={16000}
-                  rows={4}
+                  rows={3}
                   disabled={busy()}
                   placeholder={t("continuous_goal.objective_placeholder")}
                 />
-                <TextField.Description>{t("continuous_goal.objective_hint")}</TextField.Description>
               </TextField.Root>
             </Show>
             <Show
@@ -716,52 +717,74 @@ export function ContinuousGoalControl(props: {
                       </span>
                     </div>
                   </Show>
-                  <div class="continuous-goal__budgets">
-                    <TextField.Root as="label">
-                      <TextField.Label>{t("continuous_goal.token_budget")}</TextField.Label>
-                      <TextField.Input
-                        type="number"
-                        min="1"
-                        step="1"
-                        value={tokens()}
-                        disabled={busy() || editing()?.status === "complete"}
-                        onInvalid={(e) => e.currentTarget.setCustomValidity(t("continuous_goal.validation.budget"))}
-                        onInput={(e) => {
-                          e.currentTarget.setCustomValidity("")
-                          setValidation("")
-                          setTokens(e.currentTarget.value)
-                        }}
-                        placeholder={t("continuous_goal.unlimited")}
-                      />
-                      <TextField.Description>{t("continuous_goal.token_hint")}</TextField.Description>
-                    </TextField.Root>
-                    <TextField.Root as="label">
-                      <TextField.Label>{t("continuous_goal.turn_budget")}</TextField.Label>
-                      <TextField.Input
-                        type="number"
-                        min="1"
-                        step="1"
-                        value={turns()}
-                        disabled={busy() || editing()?.status === "complete"}
-                        onInvalid={(e) => e.currentTarget.setCustomValidity(t("continuous_goal.validation.budget"))}
-                        onInput={(e) => {
-                          e.currentTarget.setCustomValidity("")
-                          setValidation("")
-                          setTurns(e.currentTarget.value)
-                        }}
-                        placeholder={t("continuous_goal.unlimited")}
-                      />
-                      <TextField.Description>{t("continuous_goal.turn_hint")}</TextField.Description>
-                    </TextField.Root>
-                  </div>
-                  <p class="continuous-goal__hint">{t("continuous_goal.budget_hint")}</p>
+                  <Disclosure.Root
+                    class="continuous-goal__budget-options"
+                    open={budgetOptionsOpen()}
+                    onOpenChange={setBudgetOptionsOpen}
+                    size="md"
+                  >
+                    <Disclosure.Trigger>
+                      {t("continuous_goal.budget_options")}
+                      <span class="continuous-goal__budget-summary">
+                        {t(tokens() || turns() ? "continuous_goal.budget_configured" : "continuous_goal.unlimited")}
+                      </span>
+                    </Disclosure.Trigger>
+                    <Disclosure.Content>
+                      <div class="continuous-goal__budgets">
+                        <TextField.Root as="label">
+                          <TextField.Label>{t("continuous_goal.token_budget")}</TextField.Label>
+                          <TextField.Input
+                            type="number"
+                            min="1"
+                            step="1"
+                            value={tokens()}
+                            disabled={busy() || editing()?.status === "complete"}
+                            onInvalid={(e) => {
+                              setBudgetOptionsOpen(true)
+                              e.currentTarget.setCustomValidity(t("continuous_goal.validation.budget"))
+                            }}
+                            onInput={(e) => {
+                              e.currentTarget.setCustomValidity("")
+                              setValidation("")
+                              setTokens(e.currentTarget.value)
+                            }}
+                            placeholder={t("continuous_goal.unlimited")}
+                          />
+                          <TextField.Description>{t("continuous_goal.token_hint")}</TextField.Description>
+                        </TextField.Root>
+                        <TextField.Root as="label">
+                          <TextField.Label>{t("continuous_goal.turn_budget")}</TextField.Label>
+                          <TextField.Input
+                            type="number"
+                            min="1"
+                            step="1"
+                            value={turns()}
+                            disabled={busy() || editing()?.status === "complete"}
+                            onInvalid={(e) => {
+                              setBudgetOptionsOpen(true)
+                              e.currentTarget.setCustomValidity(t("continuous_goal.validation.budget"))
+                            }}
+                            onInput={(e) => {
+                              e.currentTarget.setCustomValidity("")
+                              setValidation("")
+                              setTurns(e.currentTarget.value)
+                            }}
+                            placeholder={t("continuous_goal.unlimited")}
+                          />
+                          <TextField.Description>{t("continuous_goal.turn_hint")}</TextField.Description>
+                        </TextField.Root>
+                      </div>
+                      <p class="continuous-goal__hint">{t(mode() === "create" ? "continuous_goal.create_budget_hint" : "continuous_goal.budget_hint")}</p>
+                      <Show when={mode() === "create"}>
+                        <p class="continuous-goal__hint">{t("continuous_goal.objective_hint")}</p>
+                      </Show>
+                      <p class="continuous-goal__hint">{t("continuous_goal.pause_hint")}</p>
+                    </Disclosure.Content>
+                  </Disclosure.Root>
                   <Show when={editing() && ["paused", "blocked"].includes(editing()!.status)}>
                     <Checkbox checked={resume()} onChange={setResume} disabled={busy()}>
                       {t("continuous_goal.resume_on_save")}
                     </Checkbox>
-                  </Show>
-                  <Show when={editing()?.status !== "complete"}>
-                    <p class="continuous-goal__hint">{t("continuous_goal.pause_hint")}</p>
                   </Show>
                   <Show when={editing()}>
                     <div class="continuous-goal__secondary">

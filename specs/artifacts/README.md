@@ -696,3 +696,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [活跃Sources正文连续性](2026-10-22-active-source-rendering/README.md)：实际截图与结算事实。
 
 - [Goal与侧边对话体验](2026-10-22-goal-docked-experience/README.md)：真实截图与隔离服务事实。
+
+- [启动页、Goal 与模型目录刷新](2026-10-22-startup-model-refresh/README.md)：真实目录刷新、草稿预算与中英文视觉复核。

@@ -1127,6 +1127,18 @@ export default function ProvidersPanel() {
             </div>
           </div>
           <div class="provider-head-actions">
+            <Button
+              type="button"
+              variant="outline"
+              size="md"
+              tone="neutral"
+              title={t("provider.catalog_refresh.title")}
+              disabled={refreshingProviders()}
+              onClick={() => void handleRefreshCatalog()}
+            >
+              <Icon name="refresh" />
+              {t(refreshingProviders() ? "provider.catalog_refresh.refreshing" : "provider.catalog_refresh.button")}
+            </Button>
             <DropdownMenu.Root placement="bottom-end" fitViewport>
               <DropdownMenu.Trigger
                 as={Button}
@@ -1143,24 +1155,22 @@ export default function ProvidersPanel() {
                   <DropdownMenu.Item
                     as="button"
                     type="button"
-                    title={t("provider.catalog_refresh.title")}
-                    disabled={refreshingProviders()}
-                    onSelect={() => void handleRefreshCatalog()}
-                  >
-                    <Icon name="refresh" />
-                    {refreshingProviders()
-                      ? t("provider.catalog_refresh.refreshing")
-                      : t("provider.catalog_refresh.button")}
-                  </DropdownMenu.Item>
-                  <DropdownMenu.Item
-                    as="button"
-                    type="button"
                     title={t("provider.model_refresh.title")}
-                    disabled={refreshingModels()}
-                    onSelect={() => void handleRefreshModels()}
+                    disabled={refreshingModels() || providerApiKeyConfigured("opencorvus") === undefined}
+                    onSelect={() => {
+                      if (providerApiKeyConfigured("opencorvus")) void handleRefreshModels()
+                      else {
+                        setProviderSearch("opencorvus")
+                        setExpandedCatalogProviderID("opencorvus")
+                      }
+                    }}
                   >
                     <Icon name="refresh" />
-                    {refreshingModels() ? t("provider.model_refresh.refreshing") : t("provider.model_refresh.button")}
+                    {t(refreshingModels()
+                      ? "provider.model_refresh.refreshing"
+                      : providerApiKeyConfigured("opencorvus")
+                        ? "provider.model_refresh.button"
+                        : "provider.model_refresh.connect")}
                   </DropdownMenu.Item>
                 </DropdownMenu.Content>
               </DropdownMenu.Portal>

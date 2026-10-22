@@ -289,7 +289,7 @@ export namespace Installation {
     process.env.OPENCORVUS_VERSION?.trim() || (typeof OPENCORVUS_VERSION === "string" ? OPENCORVUS_VERSION : "local")
   export const CHANNEL =
     process.env.OPENCORVUS_CHANNEL?.trim() || (typeof OPENCORVUS_CHANNEL === "string" ? OPENCORVUS_CHANNEL : "local")
-  export const USER_AGENT = `opencorvus/${CHANNEL}/${VERSION}/${Flag.OPENCORVUS_CLIENT}`
+  export const USER_AGENT = `opencorvus/${VERSION} (${CHANNEL}; ${Flag.OPENCORVUS_CLIENT})`
 
   export async function latest() {
     return fetch("https://api.github.com/repos/yangheng95/opencorvus/releases/latest")

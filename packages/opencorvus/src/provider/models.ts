@@ -15,18 +15,21 @@ export namespace ModelsDev {
   const log = Log.create({ service: "models.dev" })
   const KILO_API_URL = "https://api.kilo.ai/api/gateway"
 
-  const ExperimentalModeCost = z
+  const Cost = z
     .object({
       input: z.number(),
       output: z.number(),
       cache_read: z.number().optional(),
       cache_write: z.number().optional(),
+      reasoning: z.number().optional(),
+      input_audio: z.number().optional(),
+      output_audio: z.number().optional(),
     })
     .strict()
 
   const ExperimentalMode = z
     .object({
-      cost: ExperimentalModeCost.optional(),
+      cost: Cost.optional(),
       provider: z
         .object({
           body: z.record(z.string(), z.unknown()),
@@ -62,21 +65,11 @@ export namespace ModelsDev {
             .strict(),
         ])
         .optional(),
-      cost: z
-        .object({
-          input: z.number(),
-          output: z.number(),
-          cache_read: z.number().optional(),
-          cache_write: z.number().optional(),
-          context_over_200k: z
-            .object({
-              input: z.number(),
-              output: z.number(),
-              cache_read: z.number().optional(),
-              cache_write: z.number().optional(),
-            })
-            .optional(),
+      cost: Cost
+        .extend({
+          context_over_200k: Cost.strip().optional(),
         })
+        .strip()
         .optional(),
       limit: z.object({
         context: z.number(),

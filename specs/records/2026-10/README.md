@@ -1216,3 +1216,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [活跃Sources正文连续性](2026-10-22-active-source-rendering.md)：低频owner证据与真实页面验收。
 
 - [Goal与侧边对话体验](2026-10-22-goal-docked-experience.md)：当前入口、草稿和布局复核。
+
+- [启动页与模型目录刷新](2026-10-22-startup-model-refresh.md)：首页布局、模型目录契约与真实页面验收。
