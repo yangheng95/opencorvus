@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [OpenCorvus热认证实际验收](records/2026-10/2026-10-23-openai-hot-auth-verification.md)：[2次Sol原EOF与正常关闭](artifacts/2026-10-23-openai-hot-auth-verification/README.md)，直接使用App认证和完整相邻目录，真实回复OK、四配对成员退休。
+
 - [已结算Worker生命周期](records/2026-10/2026-10-22-settled-worker-lifecycle.md)：[7实图/5次Sol/四旧轮次恢复](artifacts/2026-10-22-settled-worker-lifecycle/README.md)，修复历史终态缺口与最新成员选择，保留真实资源截止失败。
 
 - [Task Rendering与执行轮次](records/2026-10/2026-10-22-task-rendering-occurrence.md)：[7实图/29次Sol与真实失败](artifacts/2026-10-22-task-rendering-occurrence/README.md)，修复流中快照回读风暴，原B新增来源/复制/自然完成；历史轮次及连续owner仍开放。

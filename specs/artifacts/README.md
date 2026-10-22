@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [OpenCorvus热认证实际验收](2026-10-23-openai-hot-auth-verification/README.md)：543实际App OAuth配对目录、2/4 Sol流式200/EOF、回复OK、正常shutdown与四成员退休；无新UI或Goal执行资格。
+
 - [已结算Worker生命周期](2026-10-22-settled-worker-lifecycle/README.md)：540两原Task/四旧input真实恢复，7实图/5次Sol原EOF、最新成员选择与真实deadline失败。
 
 - [Task Rendering与执行轮次](2026-10-22-task-rendering-occurrence/README.md)：539流中快照重复回读修复，7精选实图/29次Sol/两项原reader失败；新Source与复制通过，历史轮次与连续owner仍开放。

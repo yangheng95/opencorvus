@@ -1,0 +1,236 @@
+{
+  "scope": "openai-hot-auth-543",
+  "observedAt": "2026-10-22T16:27:15.162Z",
+  "qualificationPassed": true,
+  "qualification": "Current OpenCorvus registered OpenAI OAuth and adjacent complete catalog through actual global Chat route; no UI or Goal execution qualification",
+  "model": "gpt-6.1-sol",
+  "maximumRequests": 4,
+  "actualRequests": 2,
+  "credentialSource": "OpenCorvus registered selected complete OAuth entry; no Codex conversion",
+  "sourceAuth": {
+    "bytes": 2259,
+    "mtimeMs": 1792683516975.7468,
+    "selectedEntry": "exact original retained"
+  },
+  "sourceCatalog": {
+    "byteLength": 9155406,
+    "mtimeMs": 1791128890137.9968,
+    "content": "exact complete original retained"
+  },
+  "preflight": {
+    "sessionID": "ses_he2vPxgcUXqBHSwbC5Sh",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "persistedChat": {
+    "sessionID": "ses_he2vPxgcUXqBHSwbC5Sh",
+    "messages": [
+      {
+        "id": "msg_hJ39tl41mOtfPx2iU6HG",
+        "role": "user",
+        "modelID": null,
+        "providerID": null,
+        "completedAt": null
+      },
+      {
+        "id": "msg_g0VYnQnN500Cz8a2xaTG",
+        "role": "assistant",
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "completedAt": 1792686249859
+      }
+    ],
+    "reply": "OK",
+    "schemaVersion": {
+      "user_version": 3
+    }
+  },
+  "requests": [
+    {
+      "index": 0,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792686247722,
+        "boundAt": 1792686247724,
+        "chunkCount": 14,
+        "byteCount": 42206,
+        "firstByteReadAt": 1792686247726,
+        "lastByteReadAt": 1792686252493,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_he2vPxgcUXqBHSwbC5Sh",
+          "streamRequest": {
+            "requestID": "msg_hJ39tl41mOtfPx2iU6HG",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYnQnMl00gniHbAG0r",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792686252510
+        }
+      }
+    },
+    {
+      "index": 1,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792686248569,
+        "boundAt": 1792686248570,
+        "chunkCount": 34,
+        "byteCount": 515903,
+        "firstByteReadAt": 1792686248570,
+        "lastByteReadAt": 1792686249627,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_he2vPxgcUXqBHSwbC5Sh",
+          "streamRequest": {
+            "requestID": "msg_hJ39tl41mOtfPx2iU6HG",
+            "agentID": "chat",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYnQngf00P3n2AAOGp",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYnQnN500Cz8a2xaTG"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792686249832
+        }
+      }
+    }
+  ],
+  "shutdown": {
+    "occurrence": "openai-hot-auth-543-c55db96c-41ec-4690-81ad-f50a4e2e0c04",
+    "target": {
+      "pid": 96300,
+      "processInstanceID": "win32:639282830394519415",
+      "occurrenceID": "c6895047-4f11-4d99-a98c-283918e75701"
+    },
+    "statusCode": 200,
+    "content": "{\"ok\":true,\"occurrenceID\":\"cal_g0VYnQqrt00aXLMXYXPq\"}",
+    "observedAtUtc": "2026-10-22T16:24:19.6732327Z"
+  },
+  "physical": {
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 94644,
+          "processInstanceID": "win32:639282830386220837",
+          "occurrenceID": "74318c21-f20e-45e1-b1d0-d1f8a74d2387"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "identity": {
+          "pid": 96300,
+          "processInstanceID": "win32:639282830394519415",
+          "occurrenceID": "c6895047-4f11-4d99-a98c-283918e75701"
+        }
+      }
+    ],
+    "native": {
+      "occurrence": "openai-hot-auth-543-c55db96c-41ec-4690-81ad-f50a4e2e0c04",
+      "outcome": "settled",
+      "host": {
+        "pid": 94644,
+        "processInstanceID": "win32:639282830386220837",
+        "occurrenceID": "74318c21-f20e-45e1-b1d0-d1f8a74d2387"
+      },
+      "target": {
+        "pid": 96300,
+        "processInstanceID": "win32:639282830394519415",
+        "occurrenceID": "c6895047-4f11-4d99-a98c-283918e75701"
+      },
+      "observedAtUtc": "2026-10-22T16:24:19.777Z",
+      "deadlineAt": 1792687438577,
+      "terminal": {
+        "occurrenceID": "openai-hot-auth-543-c55db96c-41ec-4690-81ad-f50a4e2e0c04",
+        "pid": 96300,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "observedAtUtc": "2026-10-22T16:24:30.2209208Z",
+    "launcher": {
+      "observedAtUtc": "2026-10-22T16:24:19.8127814Z",
+      "originalChildExit": 0
+    }
+  },
+  "retirement": {
+    "at": "2026-10-22T16:25:44.304Z",
+    "retired": [
+      {
+        "scope": "runtime",
+        "name": "auth.json",
+        "bytes": 2194
+      },
+      {
+        "scope": "runtime",
+        "name": "models.json",
+        "bytes": 9155406
+      },
+      {
+        "scope": "private",
+        "name": "auth.json",
+        "bytes": 2194
+      },
+      {
+        "scope": "private",
+        "name": "models.json",
+        "bytes": 9155406
+      }
+    ],
+    "scannedFiles": 26,
+    "scannedBytes": 9746753,
+    "secretValueMatches": 0,
+    "sourceAuth": {
+      "path": "C:/Users/hengu/AppData/Local/opencorvus/data/auth.json",
+      "bytes": 2259,
+      "mtimeMs": 1792683516975.7468,
+      "selectedEntry": "exact original"
+    },
+    "sourceCatalog": {
+      "bytes": "exact original",
+      "mtimeMs": 1791128890137.9968
+    },
+    "physicalCompletion": true,
+    "preparationMetadataCorrection": "Original preparation.source descriptor overwrote path; original retained; exact source path from reviewed preparation code is verified here against selected entry, size, mtime and adjacent catalog"
+  },
+  "originalExec": {
+    "sessionID": 63762,
+    "exitCode": 0
+  },
+  "toolCorrections": [
+    "Original preparation.source descriptor overwrote path; original private metadata retained. Retirement used the exact source path from the reviewed preparation code and verified the selected entry, size, mtime and adjacent catalog.",
+    "Initial raw slash comparison scanned the intended credential storage file itself. Observed match was exactly runtime/data/auth.json; normalized exact path exclusion restored diagnostic-output scan. Original observation retained.",
+    "Pure PowerShell settle did not set LASTEXITCODE; a chained native-exit guard skipped retirement once. Retirement was run explicitly after verified settlement.",
+    "Original retirement.sourceCatalog.bytes descriptor overwrote byte count. Numeric byteLength here comes from original preparation and both matching retired model member sizes."
+  ]
+}

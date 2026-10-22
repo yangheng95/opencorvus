@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [OpenCorvus热认证实际验收](2026-10-23-openai-hot-auth-verification.md)：[2次Sol与完整资源结算](../../artifacts/2026-10-23-openai-hot-auth-verification/README.md)，App当前认证、真实流式回复、源保持与四成员退休。
+
 - [已结算Worker生命周期](2026-10-22-settled-worker-lifecycle.md)：[7实图/四旧Error与六新完成](../../artifacts/2026-10-22-settled-worker-lifecycle/README.md)，共享分页恢复与canonical成员顺序修复；5原EOF及deadline失败按实保留。
 
 - [Task Rendering与执行轮次](2026-10-22-task-rendering-occurrence.md)：[7实图/29次Sol与实际失败](../../artifacts/2026-10-22-task-rendering-occurrence/README.md)，修复流中快照重复回读，第四来源/复制/正文/自然完成；保留共享恢复与owner边界。
