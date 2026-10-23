@@ -325,6 +325,13 @@ export function SideChatPanel(props: {
       if (current === generation && isApiAuthorityCurrent(authority)) textarea?.focus()
     })
   }
+  function scrollToLatest() {
+    const owner = reader
+    if (!owner || owner.controller !== follow || !isApiAuthorityCurrent(owner.authority) || boardStore.selectEpoch !== owner.epoch || selected() !== owner.sessionID || sourceKey() !== owner.sourceKey) return
+    setTracking(true)
+    owner.controller.scrollToBottom()
+    rememberReadingPosition()
+  }
   async function send() {
     if (fileEditorReserved()) return
     const source = props.source
@@ -340,6 +347,7 @@ export function SideChatPanel(props: {
     setSending(true)
     setError("")
     try {
+      scrollToLatest()
       await apiJson(sideChatPath(target, "/message"), {
         authority,
         method: "POST",
@@ -559,6 +567,21 @@ export function SideChatPanel(props: {
             void send()
           }}
         >
+          <Show when={!tracking() && displayedMessages().length}>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              tone="neutral"
+              class="side-chat-scroll-bottom"
+              title={t("chat.scroll_bottom")}
+              aria-label={t("chat.scroll_bottom")}
+              disabled={fileEditorReserved()}
+              onClick={scrollToLatest}
+            >
+              <Icon name="chevron-down" size="medium" />
+            </Button>
+          </Show>
           <Show when={!submittedDraftAccepted()}>
             <Show when={composerQuotation(key())}>
               {(value) => (

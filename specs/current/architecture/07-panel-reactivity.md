@@ -513,6 +513,13 @@ the same original Source identity or Message/block offset in its current layout;
 intermediate restore geometry cannot replace the saved anchor. Explicit reader
 input and a return to the bottom retain the controller's existing semantics.
 
+Side Chat exposes the same explicit scroll-to-bottom action while its reader is
+paused. Its current authority/source/Session reader owns that action: it enables
+the existing tracking intent, jumps through the shared controller and saves the
+result in the same bounded store. Sending a new side question performs that action
+once at dispatch. Later output and completion retain any reading intent the user
+expresses during the reply; expanding reference history still pauses following.
+
 The primary conversation keeps at most 50 reading positions in that same UI
 store, keyed by captured API authority revision and actual source kind/ID.
 Selection clears transient primary disclosures without clearing this bounded

@@ -126,11 +126,20 @@
   color: var(--text-muted);
 }
 .side-chat-composer {
+  position: relative;
   margin: var(--ui-gap-lg);
   padding: var(--ui-gap-lg);
   border: 1px solid var(--border);
   border-radius: var(--oc-radius-large);
   background: var(--surface-inset);
+}
+.side-chat-scroll-bottom {
+  position: absolute;
+  inset-inline-start: 50%;
+  inset-block-start: calc(-20px * var(--ui-scale));
+  z-index: var(--ui-z-sticky);
+  transform: translateX(-50%);
+  background: var(--surface-strong);
 }
 .side-chat-composer textarea {
   width: 100%;

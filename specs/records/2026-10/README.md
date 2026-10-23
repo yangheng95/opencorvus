@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [侧聊的主动回到底部与发送跟随](2026-10-24-side-chat-explicit-follow.md)：563复用共享controller和既有读位，真实侧聊视觉验收。
+
 - [记忆输入的真实来源与首次登记](2026-10-24-memory-input-provenance.md)：562保留canonical历史，验证复制上下文、真实新输入和首次原子登记。
 
 - [首页启动与项目归属复核](2026-10-24-home-launcher-scope.md)：561中英文Home/Chat/Side指南、六次真实Sol与四服务闭合，保留中间失败及后端来源发现。

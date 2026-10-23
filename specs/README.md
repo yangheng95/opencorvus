@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [侧聊的主动回到底部与发送跟随](records/2026-10/2026-10-24-side-chat-explicit-follow.md)：563补齐暂停阅读后的明确恢复与主动发送跟随。
+
 - [记忆输入的真实来源与首次登记](records/2026-10/2026-10-24-memory-input-provenance.md)：562共享历史复制与消息重放的来源修复及实际侧聊验收。
 
 - [首页启动与项目归属复核](records/2026-10/2026-10-24-home-launcher-scope.md)：561统一Goal帮助与开始按钮，23实图、真实新对话归属和侧聊复核；共享记忆复制来源待续。
