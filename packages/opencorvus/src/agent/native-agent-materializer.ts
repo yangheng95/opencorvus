@@ -1,4 +1,4 @@
-import { Provider } from "@/provider/provider"
+import { parseModelReference } from "@/provider/model-ref"
 import { CapabilityRules } from "@/capability/rules"
 import { mergeDeep } from "remeda"
 import type { Config } from "@/config/config"
@@ -19,7 +19,7 @@ export function materializeNativeAgentDefinitions(input: {
     const role = AgentRoleContract.get(key)
     const item = result[key]
     if (!item) throw new Error(`Native agent override ${key} has no fixed registry definition`)
-    if ("model" in value && value.model) item.model = Provider.parseModel(value.model)
+    if ("model" in value && value.model) item.model = parseModelReference(value.model)
     item.variant = value.variant ?? item.variant
     const promptConfigMode = role.promptConfigMode
     if (promptConfigMode === "append" && value.prompt !== undefined) {

@@ -256,3 +256,12 @@
 
 - 独立交付复核发现04-extensions仍把公开调度Schema固定写成单个dispatch_agent。横向搜索当前架构后，03-control的调度与continuation说明也有同义残留；task-control-plane及expert-squad-scheduling已经准确区分真实单调用与collection member，并复用同一执行器。
 - 已核dispatch-agent-tool、dispatch-agents-contract、dispatch-agents-tool与tools的真实投影：每个条目都是dispatch对象，初次派发的隔离选择实际位于dispatch.turn.use_worktree。决定只将两份架构中的旧固定工具文案对齐当前投影的委派条目/Schema，明确每个真实调用或collection member对应原不可变lineage；不改生产工具、权限、执行或历史身份。完成后重跑文档与架构检查，并交独立裁定者复核。
+
+## 正常推送发现的角色物化依赖环（生产修改前）
+
+- 首次正常push的类型、路由、文档、租约、架构、包及发布权限拓扑通过；原module-topology对提交树7c92fd33d判定五模块环，阻止推送：helper-agent-registry→native-agent-materializer→provider→plugin→session/index→helper-agent-registry。旁聊复用真实helper分类增加最后一条边，使旧物化器的宽依赖闭环；不能放宽检查器、动态import隐藏依赖或复制helper名单。
+- 已全仓查三个物化器消费者（host/primary/helper）、角色契约、注册表缓存、Provider.parseModel与model-ref。materializer对Provider唯一用途是模型引用解析，原Provider.parseModel函数体恰为return parseModelReference(model)。成熟纯叶model-ref已拥有相同返回结构、内部slash保留及ProviderInvalidModelReferenceError，是唯一解析实现；物化配置不需要Provider目录、凭据或plugin/Session启动。此前行为测试与类型检查不验证提交树的静态依赖拓扑，因此未排除该关联缺陷。
+- 决定直接从同一model-ref引用parseModelReference，删掉materializer对整个Provider的导入。三个注册表共享修复，无新增抽象/副本/兼容层，Session复制选择、原消息和权限不变，不改持久格式、模型配置或请求。独立裁定者已确认方案为最小根因修复。
+- 验证先覆盖三族角色合法模型覆盖（含modelID内部slash）、无覆盖保留原model、非法格式映射原typed error，再跑真实注册表缓存、原旁聊35与后端HTTP7、原提交树module-topology和完整正常push。纯依赖替换不改变先前真实Sol案例数据流，不重复消耗凭据。风险为误换解析语义或初始化顺序，分别由原parser契约、实际注册表/Session入口与clean-import检查验证。首次失败原样保留，不记作已推送。
+- 修复后真实index拓扑通过：1178 modules、6028 runtime edges、4 clean imports；文档检查346 ops/26 groups通过。最终正确选择的七文件组合共55项通过（9+4+14+3+12+6+7），全部原runner退出0，见私有provider-leaf-regressions-verified.log。首次组合将原子复制文件误写成不存在的test/session-fork-atomic-copy.test.ts，runner明确报错并退出1；正确test/session/fork-atomic-transcript.test.ts先单跑3项通过，随后纠正完整命令再跑七文件，原错误日志保留，不能把选择文件错误计作产品缺陷。
+- 独立裁定者已只读确认两行生产替换、新增9项正向契约与实际拓扑结果，角色分类仍沿原注册表唯一事实；此次运行无新机制缺陷。正常提交后的完整hook及push结算继续以实际Git和最后交付事实为准。
