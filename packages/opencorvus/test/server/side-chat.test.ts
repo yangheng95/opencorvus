@@ -12,7 +12,6 @@ import { EffectiveConfig } from "../../src/config/effective"
 import { ensureMissionSession } from "../../src/mission/session"
 import { LLM } from "../../src/session/llm"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
-import { parseSubagentConversation } from "../../../overlay/src/services/subagent-conversation"
 
 afterEach(async () => {
   Server.resetProjectRoutesAppForTest()
@@ -89,7 +88,7 @@ describe("source-scoped side conversations", () => {
       for (const record of saved) SessionStatus.release(record.sessionID)
     }
   })
-  test("side history reads preserve Work reference owners and a later Chat reply through the shared parser", async () => {
+  test("side history returns original Work authors and later Chat messages through the real route", async () => {
     await using project = await memoryProject("side-history-message-owner")
     await Instance.provide({
       directory: project.path,
@@ -103,14 +102,12 @@ describe("source-scoped side conversations", () => {
         const response = await Server.App().request(`/session/${side.id}/conversation`, { headers: { "x-opencorvus-directory": project.path } })
         expect(response.status).toBe(200)
         const body = await response.json()
-        const parsed = parseSubagentConversation({ source: { kind: "session", id: side.id }, sessionID: side.id, directory: project.path }, body)
-        expect(parsed.messages.map((message) => ({ participant: message.agentID, owner: message.info.sessionAgentID, text: message.parts.find((part) => part.type === "text")?.text }))).toEqual([
-          { participant: "work", owner: "work", text: "Original Work question" },
-          { participant: "work", owner: "work", text: "Original Work answer" },
-          { participant: "chat", owner: "chat", text: "Independent Chat question" },
-          { participant: "chat", owner: "chat", text: "Independent Chat answer" },
+        expect(body.transcript.map((message: any) => ({ author: message.info.author, agent: message.info.agent, text: message.parts.find((part: any) => part.type === "text")?.text }))).toEqual([
+          { author: "user", agent: "work", text: "Original Work question" },
+          { author: "work", agent: "work", text: "Original Work answer" },
+          { author: "user", agent: "chat", text: "Independent Chat question" },
+          { author: "chat", agent: "chat", text: "Independent Chat answer" },
         ])
-        expect(body.view.sessions.map((session: any) => ({ id: session.sessionID, actor: session.agentID }))).toEqual([{ id: side.id, actor: "chat" }])
       },
     })
   })

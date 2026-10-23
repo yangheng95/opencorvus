@@ -30,6 +30,9 @@ Codex provider auth 与 `.claude` / `.codex` Skill discovery 也仍存在，但�
 ```
 Orchestrator 从当前 `dispatch_agent` schema 选择
 `capability_projection.agents.<agentID>` 声明的动态 Agent ID → 已解析投影的
+`base_role` 同时选择模板 core prompt 及其必需领域输出，不能仅按独立性或名称推断模板。
+需要完整 ResearchBrief 的研究角色使用 `deep-research`；普通代码取证与因果调查使用
+`delegated-worker` 并保留明确只读职责，避免额外建立另一套研究交付。
 `base_role` 由 `RuntimeTemplateRegistry.get(baseRole)` 取得 runtime template →
 template 的 `dispatchAdapterID` 由 `DispatchAdapterContractRegistry.get(...)`
 取得 core-owned adapter contract → build adapter 进入 `build/agent.ts`
@@ -992,7 +995,12 @@ Artifact transport 可用不等于当前任务必须先枚举目录：明确授�
 Artifact discovery 优先使用已知精确筛选并完整遍历该查询的分页；只有明确证据缺口仍未解决时才扩大为完整目录枚举。
 consumer 必须先完整精确读取，再明确选择 typed output 的语义来源。需要独立选择回执的消费者使用 `artifact_select`；通用发布直接在本次请求中选择已完整读取的来源。完整但未选择的读取只进入
 `observed_artifact_locators`，成功选择的来源进入 `source_artifact_locators`，且 source 必须是 observed 的子集；
-零选择与缺省可选字段均合法。即时 `artifact_publish` 显式提交本次发布专属的
+零选择与缺省可选字段均合法。固定阶段依赖的包发布器通过 `predecessor_artifact_locators`
+接收精确 Engine Artifact 前驱；初始阶段使用空数组。此参数只验证阶段依赖，不重复提交输出的
+完整语义来源。原始文件资源等附加证据仍沿真实完整读取/选择，由 Plugin ToolHost 的同 Turn
+事实与发布器选择的前驱合并为 envelope 的 `source_artifact_locators`。包工具的输入 schema
+必须与实际可执行的前驱类型一致，不把宽泛资源 locator 声明为固定 Engine 前驱。
+即时 `artifact_publish` 显式提交本次发布专属的
 `source_read_refs`；该字段是本次输出的显式语义选择，省去单独的选择 Tool 往返。Host 只从同一 Session、同一物理 Turn 中更早、完整覆盖字节范围的持久化读取恢复完整 canonical
 `source_artifact_locators`，因此一个 Turn 的多次发布不会互相污染。模型 transport 不重复提交 locator 结构。
 `artifact_search` 的 opaque pagination cursor 由当前 runtime 使用进程随机 HMAC-SHA-256 authority 签发；cursor

@@ -67,6 +67,13 @@ facade joins all three original branches before publishing its settlement
 receipt or error. An earlier output failure therefore cannot retire the public
 barrier while the original supervisor settlement is still pending.
 
+Strict `disposeAndWaitForExit` observes disposal, original exit, output and full
+settlement under one absolute deadline: the caller's existing `deadlineAt`, or
+the existing cleanup budget measured once at entry. A shorter parallel exit
+clock cannot reject a still-valid disposal. Every original failure remains in
+the combined error. Physical-only cancellation keeps its separate contract and
+does not acquire a dependency on auxiliary request cleanup.
+
 For a Windows supervisor request, the original `exited` promise validates its
 correlated native physical-settlement marker before it fulfills. Request cleanup
 depends on that same fulfilled promise; it does not rediscover the completed

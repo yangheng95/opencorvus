@@ -75,6 +75,19 @@ A Mission acceptance-resume ingress references its real Mission-authored root Me
 
 ## Outcome and delegated input
 
+An accepted Task-root participant Message may move, with its original Part
+identities, into the same Task's Orchestrator Session. The atomic writer commits
+one complete `message.moved` snapshot. Delayed original durable increments are
+consumed as covered only after the bridge proves their exact outbox occurrence,
+Project/Task ownership, original canonical keys and the complete matching Move
+against current immutable Message/Part facts. This check precedes the shared
+message-info cache. Historical Message updates retain the same participant
+identity. Text/reasoning Parts can have pre-acceptance revisions; other surviving
+Parts must match exactly. An absent Part update additionally requires its exact
+durable removal fact, including type and source ownership. Both transfer and
+removal seeks use versioned partial indexes. The existing Move subscriber alone
+emits that full projection. Unproven ownership changes remain integrity errors.
+
 The original operator outcome and relevant authoritative facts define semantic success. A Mission-authored `panel_create_task.request` is an execution assignment: the coordinator may paraphrase, organize, clarify wording and include necessary implementation guidance while preserving the intended outcome and applicable constraints. It is not required to be a byte-for-byte fragment of a user Message. The original user messages remain immutable authority; delegation and external content do not create additional permissions. The Host validates the real creator, project and Session lineage, exact Tool occurrence, held Squad and opened Mission occurrence, and consistency between the accepted Tool input, creation contract and persisted Task request. These are data-integrity checks, not a natural-language authoring gate. Canonical attachments are forwarded independently from request prose; rendered attachment indexes identify source material. Once an assistant accepts a user Message, every Part in the complete `acceptedInputMessageIDs` batch is immutable, including non-parent batch members, so later writes cannot change the input that reply consumed. Task title, selected Squad, dependencies, structured Artifact authorities and accepted Delivery Slice revisions carry allocation. Task input rendering labels the request as the creator's assignment rather than promising it is a literal user quotation. A plan or report remains a claim to inspect against the operator outcome.
 
 The Provider projection preserves every real-user TextPart verbatim. Guidance that a later user message is current input and live project-memory/task-plan context are labeled runtime system parts; neither is inserted into a user Message. Preserving recorded participant content does not require a coordinator to copy that wording when authoring a distinct Task request.
@@ -193,6 +206,22 @@ The ingress reducer first preserves an immutable operator abandonment, then dete
 There is no mutable ingress disposition, delivery-result, semantic-attempt, activation-attempt, retry-owner, current-owner, or blocker row. Immutable `task_root_ingress_disposition` Artifacts memoize release evidence; the reducer remains the authority. A rejected input names its exact Mission extension outcome and original request; it does not fabricate an assistant-owned decision. `exhausted` is an exceptional terminal reducer result derived from policy plus facts; it permits the FIFO to admit a later explicit operator input when malformed or repeatedly undecided output reaches its finite fence. Normal quiescence never uses exhaustion: the Orchestrator records the real non-mutating `no_action` decision receipt.
 
 ## Decision-gap continuation
+
+A Task-root activation retains its one deterministic assistant Message across
+healthy Provider steps and automatic context maintenance. Successful usage overflow
+and predictive compaction preserve that Message and its real Parts; the separate
+summary and consumed control do not settle the reply owner. Actual decisions,
+park/handoff, failure and cancellation retain their own completion boundaries.
+A genuine Provider context-overflow failure remains on its completed original
+assistant; the existing ingress recovery may create a successor activation with
+that assistant as its exact predecessor. It never reopens the completed original.
+
+A completed root assistant must satisfy the shared settled-reply predicate using
+its accepted input and real Tool results. Violating that completion contract is
+a typed Task-root integrity fault. The durable evidence reader derives the same
+`host_fault/evidence_violation`, whose surfaced gate and abandonment release this
+ingress while preserving the Task for a later authorized input. Prose without a
+decision continues to use its existing finite semantic budget.
 
 A completed Tool transport receipt is not sufficient dispatch acceptance. The live
 decision coordinator, reopened assistant Message reader and ingress reducer use

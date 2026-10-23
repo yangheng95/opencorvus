@@ -1,0 +1,6 @@
+{
+  "name": "local-invoice-case",
+  "private": true,
+  "type": "module",
+  "scripts": { "check": "node check.mjs" }
+}

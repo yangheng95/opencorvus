@@ -16,6 +16,13 @@ Project memory has three explicitly scoped authorities:
    Skill and attachment references are historical locators, not current tool
    grants, desktop focus or permission authority.
 
+   Recent-tail settings are maximum retention budgets. When no valid boundary
+   leaves an earlier nonempty prefix, compaction snapshots the complete
+   post-anchor material instead of treating that material as unavailable.
+   This applies equally to a first completed step and a still-open execution;
+   it preserves the existing Message and activation identities. A small recent
+   tail remains verbatim when an earlier prefix can actually be replaced.
+
    A long-lived assistant can continue appending Parts after a checkpoint.
    Its checkpoint `covered_parts` binds the exact captured Part payloads and
    assistant diagnostics, carrying coverage through subsequent checkpoints.
@@ -264,6 +271,20 @@ Project memory has three explicitly scoped authorities:
    descriptor or Task occurrence. An explicit independent side-chat still uses
    the same copier and retains source locators as historical evidence. Actual
    Task execution continues through its canonical dispatch/runtime contracts.
+
+   Mission ownership uses the same existing public authority check inside the
+   copier, both before preparation and under its write transaction. Independent
+   side history stops at a settled owner reply under the shared reply predicate;
+   registered helper authors cannot advance this boundary, including failed
+   compactors whose result is not a valid checkpoint. A completed typed Tool
+   control can settle a reply. Current open executions and their later Parts
+   remain owned by the original Session instead of entering the side copy.
+   A completed helper can still represent that history when its parent,
+   accepted inputs and every checkpoint anchor, tail and covered Message are
+   already selected. This dependency closure retains checkpoints created after
+   a long-lived owner Message without allowing maintenance to prove owner
+   completion. Checkpoint coverage is copied unchanged in meaning; later
+   owner Parts remain the original uncovered suffix.
 
    Copied Messages expose `copySources` as exact Part ancestry and Message
    diagnostics ancestry, including earlier copy generations. The latter stores

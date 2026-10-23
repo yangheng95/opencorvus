@@ -14,6 +14,8 @@
 
 - [结构化工具输出阅读](2026-10-24-structured-payload-reading/README.md)：556十八实图、前态字符跳转与修复后原文保持；保留复制未通过与独立页面限制。
 
+- [专家团机制案例](2026-10-24-expert-squad-mechanism-cases/README.md)：三个原包的受控输入、真实端到端证据与机制修复记录。
+
 - [已授权能力执行闭合](2026-10-24-authorized-capability-execution/README.md)：Explore 自主加载、通用报告和联合发布的真实工具事实、三张人工实图及完整资源结算；保留原预算失败。
 
 - [剪贴板路径对照](2026-10-24-clipboard-path/README.md)：555三实图、已知键盘/API对照及完整停止详情，0模型/原90表数据保持与正常闭合。
