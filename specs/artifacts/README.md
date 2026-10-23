@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [复制完成与读取初始化](2026-10-24-clipboard-completion/README.md)：557七实图，新页reader初始化A/B及短长原文真实粘贴，完整关闭和原数据保持。
+
 - [持续目标加号入口](2026-10-24-goal-composer-menu/README.md)：12张真实桌面截图，中英菜单、表单、取消草稿和主/侧归属；0模型与正常结算。
 
 - [结构化工具输出阅读](2026-10-24-structured-payload-reading/README.md)：556十八实图、前态字符跳转与修复后原文保持；保留复制未通过与独立页面限制。

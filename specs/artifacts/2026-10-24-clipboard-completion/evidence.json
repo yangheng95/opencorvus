@@ -1,0 +1,177 @@
+{
+  "batch": 557,
+  "date": "2026-10-24",
+  "surface": "Source CLI /ui; manual CUA observations and native paste; no UI automated tests",
+  "productionCodeChanges": 0,
+  "identity": {
+    "taskID": "tsk_g00VYhrJxy00qIC54qvM",
+    "sessionID": "ses_-zURI8ekpzzskoESwwiP",
+    "messageID": "msg_hkmMhdvRpzBesxGR2RSm",
+    "requestPartID": "prt_g0VYhsJQw00UlPV31v8w",
+    "outputCharacters": 51840,
+    "inputCharacters": 574
+  },
+  "assets": [
+    "http://127.0.0.1:19159/ui/assets/main-DapVWEPi.js"
+  ],
+  "observations": [
+    {
+      "step": "initial-product-completion",
+      "confirmedInAX": true
+    },
+    {
+      "step": "initial-after-observed-completion",
+      "characters": 361,
+      "equalsOriginal": false,
+      "equalsKnownPrior": true
+    },
+    {
+      "step": "initial-real-keyboard-paste",
+      "characters": 361,
+      "equalsOriginal": false,
+      "equalsKnownPrior": true
+    },
+    {
+      "step": "keyboard-control",
+      "readCharacters": 23,
+      "readEqualsMarker": true,
+      "pastedCharacters": 23,
+      "pasteEqualsMarker": true
+    },
+    {
+      "step": "product-after-keyboard-control-and-completion",
+      "readCharacters": 51840,
+      "readEqualsOriginal": true,
+      "readEqualsMarker": false,
+      "pastedCharacters": 51840,
+      "pasteEqualsOriginal": true,
+      "pasteEqualsMarker": false
+    },
+    {
+      "step": "fresh-tab-native-AX-product-copy",
+      "confirmedInAX": true,
+      "readCharacters": 51840,
+      "readEqualsInput": false,
+      "readEqualsPriorOutput": true,
+      "pastedCharacters": 51840,
+      "pasteEqualsInput": false,
+      "pasteEqualsPriorOutput": true
+    },
+    {
+      "step": "retry-after-real-paste-only",
+      "confirmedInAX": true,
+      "readCharacters": 574,
+      "readEqualsInput": true,
+      "readEqualsPriorOutput": false
+    },
+    {
+      "step": "dedicated-api-control",
+      "characters": 19,
+      "equalsMarker": true
+    },
+    {
+      "step": "product-after-api-control",
+      "confirmedInAX": true,
+      "readCharacters": 574,
+      "readEqualsInput": true,
+      "readEqualsMarker": false
+    },
+    {
+      "step": "fresh-tab-reader-before-product-action",
+      "characters": 574,
+      "equalsKnownInput": true
+    },
+    {
+      "step": "reader-initialized-first-copy-before-paste",
+      "confirmedInAX": true,
+      "readCharacters": 51840,
+      "readEqualsOriginal": true,
+      "readEqualsPreviousInput": false,
+      "paste": "not executed; composer temporarily disabled"
+    },
+    {
+      "step": "reader-initialized-first-copy-real-paste",
+      "characters": 51840,
+      "equalsOriginal": true,
+      "connection": "Online after closing two completed owned tabs"
+    },
+    {
+      "step": "fresh-repeat-initial-control",
+      "copiedObserved": false,
+      "qualification": "Initial control changed during hydration; no content qualification from that action"
+    },
+    {
+      "step": "fresh-repeat-first-reader-after-confirmed-copy",
+      "confirmedInAX": true,
+      "characters": 51840,
+      "equalsInput": false,
+      "equalsPreviousOutput": true
+    },
+    {
+      "step": "fresh-repeat-second-copy-after-reader-only",
+      "confirmedInAX": true,
+      "characters": 574,
+      "equalsInput": true,
+      "equalsPreviousOutput": false,
+      "interveningKeyboard": false,
+      "interveningClipboardWrite": false
+    },
+    {
+      "step": "reader-initialized-input-real-paste",
+      "characters": 574,
+      "equalsInput": true
+    }
+  ],
+  "qualifiedMethod": [
+    "Initialize this target tab clipboard reader before the product action; do not retain unknown clipboard contents",
+    "Perform actual product action and observe its contextual Copied state",
+    "Read contents and paste into an unsent original input; compare full known original text",
+    "Clear draft and close owned pages; no arbitrary delay, clipboard cache or alternate writer"
+  ],
+  "closure": {
+    "at": "2026-10-23T19:04:10.478Z",
+    "catalogRetired": 1,
+    "authCopied": false,
+    "modelRequests": 0,
+    "sourceCatalog": {
+      "bytes": 9155406,
+      "mtimeMs": 1791128890137.9968,
+      "content": "exact original"
+    },
+    "publicShutdown": 200,
+    "reserveMs": 586332,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "exactProcessChain": "dead_or_reused"
+  },
+  "data": {
+    "source": {
+      "allOriginalRows": "Exact rowid/primary key/all fields/times",
+      "bytes": 79699968,
+      "modifiedAtMs": 1792780749764.4436
+    },
+    "schema": "Same actual application objects and version3;integrity ok",
+    "canonical": "Complete source bytes exact",
+    "tables": 90,
+    "originalRows": 169304,
+    "originalRowDifferences": [],
+    "providerActivities": {
+      "original": 421,
+      "current": 421
+    }
+  },
+  "limits": [
+    "Observed initialization boundary of external browser clipboard API; its internal implementation is not inspectable here",
+    "Corrected sampling time alone did not fix stale reads; explicit Copied had already been observed",
+    "No production clipboard defect supported by these comparisons; no production patch made",
+    "Historical unmatched 43 characters were not retained and cannot be retrospectively classified",
+    "Desktop Tauri clipboard not independently exercised",
+    "Three simultaneous owned same-origin tabs temporarily showed Connecting/disabled composer; closing two restored Online without server restart; backend health 200; connection root still unproven",
+    "First native AX target shifted during hydration: screenshot03 excluded from copy qualification; retried on stable current control in screenshot04",
+    "document.hasFocus was unavailable in the read-only DOM scope; no focus claim based on that probe",
+    "No auth copied or Provider request; visible missing-model notice belongs to isolated no-auth scope, not user authentication"
+  ]
+}
