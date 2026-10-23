@@ -10,6 +10,12 @@ import { Database, eq } from "@/storage/db"
 import { deliverTaskRootMessageToOrchestratorSession } from "@/task-api/task-root-message"
 import { requireTask } from "@/engine/store"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { Bus } from "@/bus"
+import { BusPublicationOutboxTable, BusPublicationPhaseReceiptTable } from "@/bus/bus.sql"
+import { Message } from "@/session/message"
+import { MessageStore } from "@/session/message-store"
+import { ProtocolStore } from "@/protocol/store"
+import { ensureTaskMessageProtocolBridge } from "@/orchestrator/protocol/message-bridge"
 
 afterEach(async () => {
   await Instance.disposeAll()
@@ -28,7 +34,7 @@ afterEach(async () => {
  * 09:49:02, taking the orchestrator loop down with it.
  */
 describe("accepted Task-root Message delivery", () => {
-  async function acceptedRootMessage(title: string, author = "mission") {
+  async function acceptedRootMessage(title: string, author = "mission", reviseDraft = false) {
     const taskID = Identifier.ascending("task")
     const root = await Session.create({ kind: "root", title })
     const now = Date.now()
@@ -49,6 +55,7 @@ describe("accepted Task-root Message delivery", () => {
     })
     const orchestrator = await Session.create({ kind: "orchestrator", title: `Agent: ${title}`, parentID: root.id })
     const messageID = Identifier.ascending("message")
+    const textPartID = Identifier.ascending("part")
     await Session.persistMessage({
       info: {
         id: messageID,
@@ -59,8 +66,45 @@ describe("accepted Task-root Message delivery", () => {
         agent: "orchestrator",
         model: { providerID: "openai", modelID: "gpt-5.6-terra" },
       },
-      parts: [{ id: Identifier.ascending("part"), sessionID: root.id, messageID, type: "text", text: title }],
+      parts: [{ id: textPartID, sessionID: root.id, messageID, type: "text", text: title }],
     })
+    if (reviseDraft) {
+      Database.immediateTransaction((db) => {
+        Session.writePartInTransaction(db, {
+          id: textPartID,
+          sessionID: root.id,
+          messageID,
+          type: "text",
+          text: "Earlier revision before acceptance",
+        })
+        Session.writePartInTransaction(db, { id: textPartID, sessionID: root.id, messageID, type: "text", text: title })
+      })
+      const draftPartID = Identifier.ascending("part")
+      Database.immediateTransaction((db) =>
+        Session.writePartInTransaction(db, {
+          id: draftPartID,
+          sessionID: root.id,
+          messageID,
+          type: "text",
+          text: "Superseded draft before acceptance",
+        }),
+      )
+      await Session.removePart({ sessionID: root.id, messageID, partID: draftPartID })
+      Database.immediateTransaction((db) =>
+        Session.writePartInTransaction(db, {
+          id: Identifier.ascending("part"),
+          sessionID: root.id,
+          messageID,
+          type: "source-url",
+          sourceId: "accepted-reference",
+          url: "https://example.test/original-evidence",
+          title: "Original user reference",
+        }),
+      )
+      const before = await MessageStore.get({ sessionID: root.id, messageID })
+      if (before.info.role !== "user") throw Error("Expected actual input participant")
+      await Session.updateMessage({ ...before.info, summary: { title: "Prepared input before acceptance" } })
+    }
     Database.immediateTransaction((db) =>
       acceptTaskRootIngressInTransaction(db, {
         taskID,
@@ -74,6 +118,138 @@ describe("accepted Task-root Message delivery", () => {
     )
     return { taskID, root, orchestrator, messageID }
   }
+
+  test.each(["user", "mission", "orchestrator", "goal-controller"])(
+    "projects the complete %s transfer while consuming delayed original durable increments",
+    async (author) => {
+      await using project = await memoryProject()
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          ensureTaskMessageProtocolBridge()
+          const suspended = Bus.TestHooks.suppressAutomaticDurableDrain()
+          const events: any[] = []
+          const stop = ProtocolStore.subscribeEvents((event) => {
+            if (event.source === "session.bridge") events.push(event)
+          })
+          try {
+            const accepted = await acceptedRootMessage(`${author} delayed original input`, author, true)
+            await deliverTaskRootMessageToOrchestratorSession({
+              task: requireTask(accepted.taskID),
+              messageID: accepted.messageID,
+              orchestratorSessionID: accepted.orchestrator.id,
+            })
+            const originals = Database.use((db) => db.select().from(BusPublicationOutboxTable).all()).filter(
+              (row) =>
+                [
+                  Message.Event.Updated.type,
+                  Message.Event.PartUpdated.type,
+                  Message.Event.PartRemoved.type,
+                  Message.Event.Moved.type,
+                ].includes(row.event_type) && JSON.stringify(row.properties).includes(accepted.messageID),
+            )
+            suspended[Symbol.dispose]()
+            Bus.resumeDurablePublications()
+            const deadline = Date.now() + 10000
+            let phases: (typeof BusPublicationPhaseReceiptTable.$inferSelect)[] = []
+            do {
+              phases = Database.use((db) => db.select().from(BusPublicationPhaseReceiptTable).all()).filter((row) =>
+                originals.some((original) => original.occurrence_id === row.occurrence_id),
+              )
+              if (phases.length === originals.length * 3) break
+              if (Date.now() > deadline) throw Error("Original durable increments and Move must settle")
+              await Bun.sleep(10)
+            } while (true)
+            await stop.drain()
+            const observed = events.filter(
+              (event) =>
+                (event.payload?.info?.id ?? event.payload?.part?.messageID ?? event.payload?.messageID) ===
+                  accepted.messageID || event.type === "session.bridge.persist_failed",
+            )
+            expect(observed.map((event) => event.type)).toEqual([Message.Event.Moved.type])
+            expect(observed[0].payload).toMatchObject({
+              sourceSessionID: accepted.root.id,
+              info: { id: accepted.messageID, sessionID: accepted.orchestrator.id, author },
+              parts: [
+                {
+                  messageID: accepted.messageID,
+                  sessionID: accepted.orchestrator.id,
+                  text: `${author} delayed original input`,
+                },
+                { type: "source-url", sourceId: "accepted-reference", url: "https://example.test/original-evidence" },
+              ],
+            })
+            expect(
+              originals.map((row) => ({
+                type: row.event_type,
+                phases: phases
+                  .filter((p) => p.occurrence_id === row.occurrence_id)
+                  .map((p) => p.phase)
+                  .sort(),
+              })),
+            ).toEqual(
+              expect.arrayContaining([
+                { type: Message.Event.Updated.type, phases: ["exact", "global", "wildcard"] },
+                { type: Message.Event.PartUpdated.type, phases: ["exact", "global", "wildcard"] },
+                { type: Message.Event.PartRemoved.type, phases: ["exact", "global", "wildcard"] },
+                { type: Message.Event.Moved.type, phases: ["exact", "global", "wildcard"] },
+              ]),
+            )
+            const actual = await MessageStore.get({
+              sessionID: accepted.orchestrator.id,
+              messageID: accepted.messageID,
+            })
+            expect(actual.parts.map((part) => ({ id: part.id, type: part.type }))).toEqual(
+              observed[0].payload.parts.map((part: any) => ({ id: part.id, type: part.type })),
+            )
+            const priorPart = originals.find((row) => row.event_type === Message.Event.PartUpdated.type)!
+              .properties as { orderKey: string; part: Message.VisiblePart }
+            const priorReference = originals.find(
+              (row) =>
+                row.event_type === Message.Event.PartUpdated.type &&
+                (row.properties as { part?: { type?: string } }).part?.type === "source-url",
+            )!.properties as { orderKey: string; part: Message.VisiblePart }
+            for (const { properties, error } of [
+              {
+                properties: { ...priorPart, part: { ...priorPart.part, orderKey: "invalid-original-part-key" } },
+                error: "key is not canonical",
+              },
+              {
+                properties: {
+                  ...priorReference,
+                  part: { ...priorReference.part, url: "https://example.test/changed-immutable-evidence" },
+                },
+                error: "has no exact durable Move covering",
+              },
+            ]) {
+              const malformed = Bus.publishOwned(Message.Event.PartUpdated, properties)
+              await malformed
+              const errorDeadline = Date.now() + 10000
+              while (
+                Database.use((db) => db.select().from(BusPublicationPhaseReceiptTable).all()).filter(
+                  (row) => row.occurrence_id === malformed.occurrenceID,
+                ).length !== 3
+              ) {
+                if (Date.now() > errorDeadline)
+                  throw Error("The exact malformed occurrence must settle before checking its error contract")
+                await Bun.sleep(10)
+              }
+              await stop.drain()
+              expect(events.findLast((event) => event.type === "session.bridge.persist_failed")?.payload).toMatchObject(
+                {
+                  failed_type: Message.Event.PartUpdated.type,
+                  error: expect.stringContaining(error),
+                },
+              )
+            }
+          } finally {
+            suspended[Symbol.dispose]()
+            stop()
+          }
+        },
+      })
+    },
+  )
 
   test.each(["user", "mission", "orchestrator", "goal-controller"])(
     "delivers an accepted %s Message with its original identity and author",
@@ -110,7 +286,7 @@ describe("accepted Task-root Message delivery", () => {
     },
   )
 
-  test("still refuses to rewrite what an accepted Message said, or to touch it in place", async () => {
+  test("maps accepted Message fact edits to the SQLite immutable-fact error contract", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,

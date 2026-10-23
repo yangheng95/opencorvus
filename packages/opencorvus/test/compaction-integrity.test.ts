@@ -21,6 +21,7 @@ import { LLM } from "@/session/llm"
 import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
 import { sessionRuntimeFromNativeAgent } from "@/agent/session-agent-runtime"
 import { Database } from "@/storage/db"
+import { ensureMissionSession } from "@/mission/session"
 import path from "node:path"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
@@ -30,6 +31,54 @@ const limitModel = (limit: { context: number; input?: number; output: number }) 
 afterEach(resetMemoryDatabase)
 
 describe("compaction request and continuation contracts", () => {
+  for (const kind of ["assistant", "mission"] as const) {
+    for (const completed of [false, true]) {
+      for (const preserve of [4000, undefined]) {
+        test(`${kind} selects its entire first ${completed ? "completed" : "open"} execution with default tail and preserve=${preserve ?? "default"}`, async () => {
+          await using project = await memoryProject()
+          await Instance.provide({
+            directory: project.path,
+            fn: async () => {
+              const session =
+                kind === "mission"
+                  ? await ensureMissionSession({
+                      missionID: `first-execution-${completed}-${preserve ?? "default"}`,
+                      defaultCwd: project.path,
+                      productPillar: "work",
+                      heldExpertSquadIDs: ["base"],
+                    })
+                  : await Session.create({ kind, title: "First execution compaction" })
+              const source = await user(
+                session.id,
+                "Preserve the current accepted input and every committed observation.",
+              )
+              const active = await assistant(
+                session.id,
+                source.id,
+                "Observed transaction evidence. ".repeat(1000),
+                true,
+                false,
+                "Verified result",
+                completed,
+              )
+              const messages = await Session.messages({ sessionID: session.id })
+              const selected = await SessionCompaction.TestHooks.selectCompactionInput({
+                messages,
+                config: Config.Info.parse({
+                  compaction: preserve === undefined ? {} : { preserve_recent_tokens: preserve },
+                }),
+                model: limitModel({ context: 128000, output: 16000 }),
+                overflow: false,
+              })
+              expect(selected).toEqual({ anchor_id: source.id, head: messages.slice(1) })
+              expect(selected.head[0]!.info).toMatchObject({ id: active.id, time: { created: active.time.created } })
+            },
+          })
+        })
+      }
+    }
+  }
+
   test("intersects input capacity with the actual combined-window output reservation", () => {
     const model = limitModel({ context: 400_000, input: 272_000, output: 128_000 })
     expect(ContextBudget.capacity({ config: Config.Info.parse({}), model })).toEqual({
@@ -339,6 +388,7 @@ async function assistant(
   step = false,
   summary = false,
   toolOutput = "Verified result",
+  completed = true,
 ) {
   const info = Message.Assistant.parse(
     await Session.updateMessage({
@@ -379,7 +429,7 @@ async function assistant(
     })
   await Session.updatePart({ id: Identifier.ascending("part"), sessionID, messageID: info.id, type: "text", text })
   return Message.Assistant.parse(
-    await Session.updateMessage({ ...info, time: { ...info.time, completed: Date.now() } }),
+    completed ? await Session.updateMessage({ ...info, time: { ...info.time, completed: Date.now() } }) : info,
   )
 }
 

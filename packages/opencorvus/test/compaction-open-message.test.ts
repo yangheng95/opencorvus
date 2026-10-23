@@ -11,13 +11,16 @@ import { SessionLoop } from "@/session/loop"
 import { SessionControl } from "@/session/control"
 import { Identifier } from "@/id/id"
 import { Database } from "@/storage/db"
+import { ensureMissionSession } from "@/mission/session"
 import { CompactionPolicyCase } from "../script/compaction-policy-case"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(resetMemoryDatabase)
 
-for (const completed of [false, true]) {
-  test(`a ${completed ? "completed" : "still-open"} execution Message retains Parts appended after its compaction`, async () => {
+for (const { kind, completed } of (["assistant", "mission"] as const).flatMap((kind) =>
+  [false, true].map((completed) => ({ kind, completed })),
+)) {
+  test(`a ${kind} ${completed ? "completed" : "still-open"} execution Message retains Parts appended after its compaction`, async () => {
     const target = { providerID: "open-message-local", modelID: "checkpoint" }
     const requests: any[] = []
     const server = Bun.serve({
@@ -52,7 +55,7 @@ for (const completed of [false, true]) {
             model: `${target.providerID}/${target.modelID}`,
             small_model: `${target.providerID}/${target.modelID}`,
             enabled_providers: [target.providerID],
-            compaction: { tail_turns: 0 },
+            compaction: { preserve_recent_tokens: 4000 },
             provider: {
               [target.providerID]: {
                 name: "Open Message transport",
@@ -69,7 +72,15 @@ for (const completed of [false, true]) {
               },
             },
           })
-          const session = await Session.create({ kind: "assistant", title: "Open execution projection" })
+          const session =
+            kind === "mission"
+              ? await ensureMissionSession({
+                  missionID: `open-message-${completed}`,
+                  defaultCwd: project.path,
+                  productPillar: "work",
+                  heldExpertSquadIDs: ["base"],
+                })
+              : await Session.create({ kind, title: "Open execution projection" })
           const history = await CompactionPolicyCase.history({ target, project: project.path })
           const source = await history.user(
             session.id,
@@ -104,7 +115,7 @@ for (const completed of [false, true]) {
               sessionID: session.id,
               source,
               auto: true,
-              overflow: true,
+              overflow: false,
               model: target,
             })
             await SessionLoop.TestHooks.executeCompactionControl({
@@ -118,7 +129,7 @@ for (const completed of [false, true]) {
                     messages: await Message.filterCompacted(MessageStore.stream(session.id)),
                     abort: new AbortController().signal,
                     auto: true,
-                    overflow: true,
+                    overflow: false,
                     model: target,
                   },
                   { prepareProviderTool: SessionLoop.prepareProviderTool },
@@ -242,8 +253,18 @@ for (const completed of [false, true]) {
           const originalText = before.parts.find((part) => part.type === "text")!
           const changedText = originalText.text + " Late streaming text TRACE-UPDATED-TEXT-812."
           await Session.updatePart({ ...originalText, text: changedText })
-          const editedCopy = await Session.fork({ sessionID: session.id })
-          const editedProjection = await Message.filterCompacted(MessageStore.stream(editedCopy.id))
+          if (kind === "mission")
+            await expect(Session.fork({ sessionID: session.id })).rejects.toMatchObject({
+              name: "MissionSessionAuthorityError",
+              data: {
+                operation: "session.fork",
+                canonicalOperation: "mission.wake",
+                sessionID: session.id,
+                missionID: `open-message-${completed}`,
+              },
+            })
+          const editedSession = kind === "assistant" ? await Session.fork({ sessionID: session.id }) : session
+          const editedProjection = await Message.filterCompacted(MessageStore.stream(editedSession.id))
           expect(editedProjection.at(-1)!.parts.map((part) => part.type)).toEqual(["text", "tool", "tool"])
           expect(editedProjection.at(-1)!.parts[0]).toMatchObject({ text: changedText })
 
@@ -442,9 +463,27 @@ test("prune coverage preserves a large late result while replacing the captured 
     { ...captured, state: { ...captured.state, time: { ...captured.state.time, compacted: 3 } } },
     late,
   ])
-  expect(SessionLoop.hasPostCompactionMaterialForSource([
-    projected[0]!, projected[2]!, { info: base, parts: [{ id: Identifier.ascending("part"),
-      sessionID, messageID: assistantID, type: "source-url", sourceId: "late-only-source",
-      url: "https://example.test/late-only", title: "Late independent source evidence" }] },
-  ], userID)).toBe(true)
+  expect(
+    SessionLoop.hasPostCompactionMaterialForSource(
+      [
+        projected[0]!,
+        projected[2]!,
+        {
+          info: base,
+          parts: [
+            {
+              id: Identifier.ascending("part"),
+              sessionID,
+              messageID: assistantID,
+              type: "source-url",
+              sourceId: "late-only-source",
+              url: "https://example.test/late-only",
+              title: "Late independent source evidence",
+            },
+          ],
+        },
+      ],
+      userID,
+    ),
+  ).toBe(true)
 })

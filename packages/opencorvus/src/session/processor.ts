@@ -1724,7 +1724,6 @@ export namespace SessionProcessor {
           input.assistantMessage.finish ??= "stop"
           const continuationIsSafe =
             !failureOccurrence &&
-            !needsCompaction &&
             !parkAfterToolResult &&
             !coordinationHandoff &&
             !input.assistantMessage.error

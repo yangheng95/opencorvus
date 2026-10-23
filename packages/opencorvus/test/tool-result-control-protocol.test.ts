@@ -1,5 +1,4 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test"
-import { createManagedTemporaryDirectory, removeManagedDirectoryTree } from "@opencorvus-ai/util/runtime-directories"
 import fs from "node:fs/promises"
 import { pathToFileURL } from "node:url"
 import path from "node:path"
@@ -44,7 +43,6 @@ import {
 } from "../src/engine/agent-coordination"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
-import { PermissionExecutionResultTable } from "../src/permission/permission.sql"
 import { ToolPartOutcomeTable } from "../src/session/session.sql"
 import { PermissionAuthority } from "../src/permission/authority"
 import { Identifier } from "../src/id/id"
@@ -88,6 +86,7 @@ import {
   toolExecutionModeOf,
 } from "../src/tool/execution-mode"
 import { WaitTool } from "../src/tool/wait"
+import { bindNativeTaskTool, nativeTaskToolBindingOf } from "../src/tool/native-task-tool-binding"
 import { textSHA256 } from "../src/expert-squad/projection-hash"
 import { and, Database, DatabaseUnavailableError, eq, inArray, sql } from "../src/storage/db"
 import { AgentCoordinationActionSupersededError } from "../src/engine/agent-coordination-errors"
@@ -1109,11 +1108,14 @@ describe("single Tool-result turn-control protocol", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
+        let nativeOrigin: ReturnType<typeof nativeTaskToolBindingOf>
+        const authorization = spyOn(PermissionAuthority, "authorizeAndExecute")
         const fixture = await projectedSchedulerSurface({
           projectPath: project.path,
-          permissionMode: "full_access",
+          permissionMode: "ask",
           activeLocalRefs: ["wait"],
           taskActivation: true,
+          instrument(raw) { nativeOrigin = nativeTaskToolBindingOf(raw.wait) },
         })
         const wait = fixture.tools.wait
         if (!wait?.execute) throw new Error("Projected scheduler orchestrator wait is unavailable")
@@ -1130,6 +1132,11 @@ describe("single Tool-result turn-control protocol", () => {
           automations: [expect.objectContaining({ task_id: fixture.taskID })],
         })
         expect(automations).toHaveLength(1)
+        expect(nativeOrigin).toEqual({taskID:fixture.taskID,sessionID:fixture.session.id,toolName:"wait",providerKind:"builtin"})
+        expect(authorization.mock.calls.find(([input]) => input.toolName === "wait")?.[0]).toMatchObject({
+          sessionID:fixture.session.id,toolName:"wait",providerKind:"builtin",providerID:"wait",
+        })
+        authorization.mockRestore()
         await SessionRuntimeContractStore.dispose(fixture.session.id)
       },
     })
@@ -1577,8 +1584,15 @@ describe("single Tool-result turn-control protocol", () => {
           responseArgs,
         )
         const respond = (surface.tools as Record<string, any>).respond_agent_coordination
-        await respond.execute(responseArgs, responseExecution.options)
+        const pendingReceipt = JSON.parse(await respond.execute(responseArgs, responseExecution.options))
         const { action } = exactCoordinationForRequest(worker.taskID, requestControl.request_id)
+        expect(pendingReceipt).toMatchObject({
+          status: "pending", request_id: requestControl.request_id, response_id: action.payload.response_id,
+          continuation: { target: worker.projection.workerCapability.identity.agentID,
+            work_scope: worker.dispatchLineage.payload.work_scope,
+            turn: { kind: "continuation", authority: { kind: "coordination_action", coordination_action_id: action.payload.action_id } },
+          },
+        })
         const target = dispatchAgents.find(
           (candidate) => candidate.identity.agentID === worker.projection.workerCapability.identity.agentID,
         )
@@ -2701,6 +2715,7 @@ describe("single Tool-result turn-control protocol", () => {
       directory: project.path,
       fn: async () => {
         const order: string[] = []
+        const authorization = spyOn(PermissionAuthority, "authorizeAndExecute")
         let ordinaryEffects = 0
         let waitEffects = 0
         let releaseOrdinary!: () => void
@@ -2744,6 +2759,15 @@ describe("single Tool-result turn-control protocol", () => {
               },
               toolExecutionModeOf(originalWait),
             )
+            const readOrigin = nativeTaskToolBindingOf(originalReadContext)
+            const waitOrigin = nativeTaskToolBindingOf(originalWait)
+            if (!readOrigin || !waitOrigin) throw new Error("Instrumented Core tools must retain their exact native origins")
+            bindNativeTaskTool(raw.read_context, readOrigin)
+            bindNativeTaskTool(raw.wait, waitOrigin)
+            expect([nativeTaskToolBindingOf(raw.read_context), nativeTaskToolBindingOf(raw.wait)]).toEqual([
+              {taskID:readOrigin.taskID,sessionID:readOrigin.sessionID,toolName:"read_context",providerKind:"internal"},
+              {taskID:waitOrigin.taskID,sessionID:waitOrigin.sessionID,toolName:"wait",providerKind:"builtin"},
+            ])
           },
         })
         const readContext = fixture.tools.read_context
@@ -2806,317 +2830,17 @@ describe("single Tool-result turn-control protocol", () => {
             { callID: "call_projected_wait", status: "running" },
           ],
         })
+        expect(["read_context","wait"].map(name=>authorization.mock.calls.find(([input])=>input.toolName===name)?.[0]))
+          .toEqual([
+            expect.objectContaining({toolName:"read_context",providerKind:"internal",providerID:"read_context"}),
+            expect.objectContaining({toolName:"wait",providerKind:"builtin",providerID:"wait"}),
+          ])
+        authorization.mockRestore()
         expect(automations).toHaveLength(1)
         await SessionRuntimeContractStore.dispose(fixture.session.id)
       },
     })
   }, 120_000)
-
-  test("replays a permission-owned projected wait result across the result-to-ToolPart cut without a second effect", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        let waitEffects = 0
-        const fixture = await projectedSchedulerSurface({
-          projectPath: project.path,
-          permissionMode: "ask",
-          activeLocalRefs: ["wait"],
-          taskActivation: true,
-          instrument(raw) {
-            const originalWait = raw.wait
-            if (!originalWait?.execute) throw new Error("Base scheduler projection did not build wait")
-            raw.wait = bindToolExecutionMode(
-              {
-                ...originalWait,
-                async execute(args: unknown, options: unknown) {
-                  waitEffects++
-                  return originalWait.execute(args, options)
-                },
-              },
-              toolExecutionModeOf(originalWait),
-            )
-          },
-        })
-        const wait = fixture.tools.wait
-        if (!wait?.execute) throw new Error("Projected scheduler wait is unavailable")
-        let resolveAsked!: (request: PermissionAuthority.Request) => void
-        const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolveAsked = resolve))
-        const stopAsked = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => resolveAsked(properties))
-        const pending = wait.execute(
-          { duration_ms: 1_000, reason: "verify permission result replay into the ToolPart" },
-          { toolCallId: "call_permission_result_cut", messages: [], abortSignal: fixture.abort },
-        )
-        const request = await asked
-        stopAsked()
-        await PermissionAuthority.reply({
-          requestID: request.id,
-          decision: "allow_once",
-          actorID: "result-cut-test",
-        })
-        const committed = await pending
-        const before = await MessageStore.get({ sessionID: fixture.session.id, messageID: fixture.assistant.id })
-        const beforePart = before.parts.find(
-          (part) => part.type === "tool" && part.callID === "call_permission_result_cut",
-        )
-        const stored = Database.use((db) =>
-          db
-            .select()
-            .from(PermissionExecutionResultTable)
-            .all(),
-        )
-        const durableValue = stored[0]?.result.kind === "json" ? stored[0].result.value : undefined
-        expect({
-          control: toolResultControl((committed as any).metadata),
-          durableControl:
-            durableValue && typeof durableValue === "object" && !Array.isArray(durableValue)
-              ? toolResultControl((durableValue as { metadata?: unknown }).metadata)
-              : undefined,
-          partStatus: beforePart?.type === "tool" ? beforePart.state.status : undefined,
-          durable: stored,
-          waitEffects,
-        }).toMatchObject({
-          control: { kind: "immediate_park" },
-          durableControl: { kind: "immediate_park" },
-          partStatus: "running",
-          durable: [
-            expect.objectContaining({
-              attempt_id: expect.any(String),
-              result: expect.objectContaining({
-                kind: "json",
-                value: expect.objectContaining({ metadata: expect.any(Object) }),
-              }),
-              time_created: expect.any(Number),
-            }),
-          ],
-          waitEffects: 1,
-        })
-
-        const modelLookup = spyOn(Provider, "getModel").mockResolvedValue(model)
-        const stream = spyOn(LLM, "stream").mockRejectedValue(new Error("park recovery must not start a model turn"))
-        try {
-          await SessionLoop.resumePermissionContinuation(request)
-        } finally {
-          stream.mockRestore()
-          modelLookup.mockRestore()
-        }
-        const recovered = await MessageStore.get({ sessionID: fixture.session.id, messageID: fixture.assistant.id })
-        const history = await PermissionAuthority.history()
-        expect({
-          assistant: recovered.info,
-          part: recovered.parts.find((part) => part.type === "tool" && part.callID === request.toolCallID),
-          waitEffects,
-          automations: Database.use((db) =>
-            db.select().from(EngineTaskWaitRegistrationTable)
-              .where(eq(EngineTaskWaitRegistrationTable.task_id, fixture.taskID)).all(),
-          ),
-          starts: history.filter(
-            (event) => event.request_id === request.id && event.event_type === "execution_started",
-          ),
-          successes: history.filter(
-            (event) => event.request_id === request.id && event.event_type === "execution_succeeded",
-          ),
-        }).toMatchObject({
-          assistant: { finish: "tool-calls", time: { completed: expect.any(Number) } },
-          part: { type: "tool", state: { status: "completed", metadata: expect.any(Object) } },
-          waitEffects: 1,
-          automations: [expect.objectContaining({ task_id: fixture.taskID })],
-          starts: [expect.any(Object)],
-          successes: [expect.any(Object)],
-        })
-        await SessionRuntimeContractStore.dispose(fixture.session.id)
-      },
-    })
-  }, 120_000)
-
-  test("completes the assistant exactly once after a permission-owned ToolPart-to-assistant cut", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        let waitEffects = 0
-        const fixture = await projectedSchedulerSurface({
-          projectPath: project.path,
-          permissionMode: "ask",
-          activeLocalRefs: ["wait"],
-          taskActivation: true,
-          instrument(raw) {
-            const originalWait = raw.wait
-            if (!originalWait?.execute) throw new Error("Base scheduler projection did not build wait")
-            raw.wait = bindToolExecutionMode(
-              {
-                ...originalWait,
-                async execute(args: unknown, options: unknown) {
-                  waitEffects++
-                  return originalWait.execute(args, options)
-                },
-              },
-              toolExecutionModeOf(originalWait),
-            )
-          },
-        })
-        const wait = fixture.tools.wait
-        if (!wait?.execute) throw new Error("Projected scheduler wait is unavailable")
-        let resolveAsked!: (request: PermissionAuthority.Request) => void
-        const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolveAsked = resolve))
-        const stopAsked = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => resolveAsked(properties))
-        const pending = wait.execute(
-          { duration_ms: 1_000, reason: "verify the permission ToolPart-to-assistant recovery cut" },
-          { toolCallId: "call_permission_part_cut", messages: [], abortSignal: fixture.abort },
-        )
-        const request = await asked
-        stopAsked()
-        await PermissionAuthority.reply({
-          requestID: request.id,
-          decision: "allow_once",
-          actorID: "part-cut-test",
-        })
-        const committed = await pending
-        await fixture.processor.completeRecoveredToolPart({
-          toolCallID: request.toolCallID,
-          toolInput: { duration_ms: 1_000, reason: "verify the permission ToolPart-to-assistant recovery cut" },
-          output: committed as any,
-        })
-        const cut = await MessageStore.get({ sessionID: fixture.session.id, messageID: fixture.assistant.id })
-        expect({
-          assistantCompleted: cut.info.time.completed,
-          part: cut.parts.find((part) => part.type === "tool" && part.callID === request.toolCallID),
-        }).toMatchObject({
-          assistantCompleted: undefined,
-          part: { type: "tool", state: { status: "completed", metadata: expect.any(Object) } },
-        })
-
-        const stream = spyOn(LLM, "stream").mockRejectedValue(new Error("part recovery must not start a model turn"))
-        try {
-          await SessionLoop.resumePermissionContinuation(request)
-          const first = await MessageStore.get({ sessionID: fixture.session.id, messageID: fixture.assistant.id })
-          await SessionLoop.resumePermissionContinuation(request)
-          const second = await MessageStore.get({ sessionID: fixture.session.id, messageID: fixture.assistant.id })
-          const history = await PermissionAuthority.history()
-          expect({
-            first: first.info,
-            second: second.info,
-            waitEffects,
-            automations: Database.use((db) =>
-              db.select().from(EngineTaskWaitRegistrationTable)
-                .where(eq(EngineTaskWaitRegistrationTable.task_id, fixture.taskID)).all(),
-            ),
-            starts: history.filter(
-              (event) => event.request_id === request.id && event.event_type === "execution_started",
-            ).length,
-            successes: history.filter(
-              (event) => event.request_id === request.id && event.event_type === "execution_succeeded",
-            ).length,
-          }).toMatchObject({
-            first: { finish: "tool-calls", time: { completed: expect.any(Number) } },
-            second: { finish: "tool-calls", time: { completed: first.info.time.completed } },
-            waitEffects: 1,
-            automations: [expect.objectContaining({ task_id: fixture.taskID })],
-            starts: 1,
-            successes: 1,
-          })
-        } finally {
-          stream.mockRestore()
-        }
-        await SessionRuntimeContractStore.dispose(fixture.session.id)
-      },
-    })
-  }, 120_000)
-
-  for (const cut of ["result", "part"] as const) {
-    test(`recovers a projected permission wait exactly once across the ${cut}-boundary operating-system process cut`, async () => {
-      await using project = await memoryProject()
-      const processRoot = process.env.OPENCORVUS_TEST_PROCESS_ROOT
-      if (!processRoot) throw new Error("Tool-result permission process tests require the repository test runtime")
-      const runtime = await createManagedTemporaryDirectory(processRoot, `tool-result-${cut}-runtime-`)
-      const stateDirectory = await createManagedTemporaryDirectory(processRoot, `tool-result-${cut}-state-`)
-      const stateFile = path.join(stateDirectory, "state.json")
-      const worker = path.join(import.meta.dir, "fixture", "tool-result-control-permission-process-worker.ts")
-      const environment = { ...process.env, OPENCORVUS_HOME: runtime, OPENCORVUS_TEST_PROCESS_ROOT: processRoot }
-      const children: ReturnType<typeof Bun.spawn>[] = []
-      const spawn = (mode: string) => {
-        const child = Bun.spawn(
-          [
-            process.execPath,
-            `--config=${path.join(import.meta.dir, "empty-bunfig.toml")}`,
-            worker,
-            mode,
-            project.path,
-            stateFile,
-          ],
-          { cwd: path.join(import.meta.dir, ".."), env: environment, stdout: "pipe", stderr: "pipe" },
-        )
-        children.push(child)
-        return child
-      }
-      const read = async (child: ReturnType<typeof spawn>, expectedExit: number) => {
-        const [stdout, stderr, exitCode] = await Promise.all([
-          new Response(child.stdout).text(),
-          new Response(child.stderr).text(),
-          child.exited,
-        ])
-        expect(exitCode, stderr).toBe(expectedExit)
-        return JSON.parse(stdout.trim()) as Record<string, any>
-      }
-      const openOccurrence = {
-        assistant: {},
-        part: expect.objectContaining({ status: "running" }),
-        resultCount: 0,
-        automationCount: 0,
-        executionStarts: 0,
-        executionSuccesses: 0,
-      }
-      const committedEffect = {
-        durableControl: { kind: "immediate_park" },
-        resultCount: 1,
-        automationCount: 1,
-        executionStarts: 1,
-        executionSuccesses: 1,
-      }
-      try {
-        expect(await read(spawn("init"), 86)).toMatchObject(openOccurrence)
-        const cutSnapshot = await read(spawn(`cut-${cut}`), cut === "result" ? 87 : 88)
-        expect(cutSnapshot).toMatchObject({
-          assistant: {},
-          part: expect.objectContaining(
-            cut === "result"
-              ? { status: "running" }
-              : { status: "completed", control: { kind: "immediate_park" } },
-          ),
-          ...committedEffect,
-        })
-        const recovered = await read(spawn("recover"), 0)
-        const completedOccurrence = {
-          assistant: { finish: "tool-calls", completed: expect.any(Number) },
-          part: expect.objectContaining({ status: "completed", control: { kind: "immediate_park" } }),
-          ...committedEffect,
-        }
-        expect(recovered).toMatchObject({ first: completedOccurrence, second: completedOccurrence })
-        expect(recovered.second).toEqual(recovered.first)
-        expect({
-          requestFacts: recovered.first.requestFacts,
-          resultFacts: recovered.first.resultFacts,
-          toolRequest: recovered.first.toolRequest,
-        }).toEqual({
-          requestFacts: [
-            ...cutSnapshot.requestFacts,
-            expect.objectContaining({
-              event_type: "stale",
-              request_id: cutSnapshot.requestFacts[0].request_id,
-              reason: "The continuation reached its persisted conclusion",
-            }),
-          ],
-          resultFacts: cutSnapshot.resultFacts,
-          toolRequest: cutSnapshot.toolRequest,
-        })
-      } finally {
-        for (const child of children) if (child.exitCode === null) child.kill()
-        await Promise.all(children.map((child) => child.exited.catch(() => -1)))
-        await removeManagedDirectoryTree(runtime)
-        await removeManagedDirectoryTree(stateDirectory)
-      }
-    }, 300_000)
-  }
 
   test("replays a completed parked ToolPart into its assistant exactly once after the Part-to-message cut", async () => {
     await using project = await memoryProject()

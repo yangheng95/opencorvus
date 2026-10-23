@@ -118,6 +118,18 @@ export function requireTimelineOrderKeyDomain(
   return key
 }
 
+/** Validate the complete canonical key and its entity, including the encoded rank. */
+export function requireTimelineEntityOrderKey(value: unknown, domain: "message" | "part", id: string): string {
+  if (typeof value !== "string") throw new Error(`timeline order ${domain}/${id} key is required`)
+  const fields = value.split(":")
+  if (fields.length !== 6 || fields[4] !== domain || fields[5] !== entityID(id) ||
+    value !== timelineOrderKey({domain,id,time:Number(fields[1]),sequence:Number(fields[3])}) ||
+    Number(fields[3]) !== 0) {
+    throw new Error(`timeline order ${domain}/${id} key is not canonical: ${value}`)
+  }
+  return value
+}
+
 export function compareTimelineOrderedItems(left: { orderKey?: unknown }, right: { orderKey?: unknown }): number {
   const leftKey = typeof left?.orderKey === "string" ? left.orderKey : ""
   const rightKey = typeof right?.orderKey === "string" ? right.orderKey : ""

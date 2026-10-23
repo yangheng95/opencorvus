@@ -25,7 +25,7 @@ import { SessionCompaction } from "./compaction"
 import { CompactionOverflow } from "./compaction-overflow"
 import { CompactionHandoff } from "./compaction-handoff"
 import { SessionControl } from "./control"
-import { acquireControlLease, releaseControlLeaseOnErrorPath, renewControlLease } from "@/engine/control-lease"
+import { acquireControlLease, currentControlLease, releaseControlLeaseOnErrorPath, renewControlLease } from "@/engine/control-lease"
 import { controlPromptProjection, controlToolContext } from "@/control/prompt"
 import { resolveSessionExecutionAuthority, taskIDForSession } from "@/engine/task-session-lineage"
 import { findDispatchLineageByToolExecution } from "@/engine/dispatch-lineage"
@@ -58,6 +58,7 @@ import { mcpToolProviderKind } from "@/mcp/provider-kind"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { fn } from "@/util/fn"
 import { SessionProcessor } from "./processor"
+import { TaskRootIngressIntegrityError } from "@/engine/task-root-ingress-integrity"
 import { MissionSkillTool, SkillTool } from "@/tool/skill"
 import { Tool } from "@/tool/tool"
 import {
@@ -1747,6 +1748,7 @@ export namespace SessionLoop {
     abort: AbortSignal
     afterOrderKey: string
     ignoredActionableControlID?: string
+    observedRuntimeContract?: RuntimeContract
     wakeAt?: number
   }) {
     await SessionCompaction.prune({ sessionID: input.sessionID })
@@ -1754,6 +1756,7 @@ export namespace SessionLoop {
     touch(input.sessionID)
     const waitForWake = waitForUserMessage(input.sessionID, input.abort, input.afterOrderKey, {
       ignoredActionableControlID: input.ignoredActionableControlID,
+      observedRuntimeContract: input.observedRuntimeContract,
       wakeAt: input.wakeAt,
     })
     await SessionStatus.set(input.sessionID, { type: "idle" }, { promptGenerationOwner: input.abort })
@@ -2433,10 +2436,15 @@ export namespace SessionLoop {
             }),
           })
         }
-        await Session.removeMessage({
-          sessionID: input.sessionID,
-          messageID: processor.message.id,
-        })
+        // A Task activation already owns this durable Message, including any
+        // previous Provider steps. Compaction maintains that same occurrence.
+        // Only the ordinary Session's newly prepared empty reply is disposable.
+        if (!taskRootActivation) {
+          await Session.removeMessage({
+            sessionID: input.sessionID,
+            messageID: processor.message.id,
+          })
+        }
         await SessionCompaction.create({
           sessionID: input.sessionID,
           source: input.lastUser,
@@ -3088,6 +3096,28 @@ export namespace SessionLoop {
       if (replyToMessageID) {
         const reply = await completedReplyToUserMessage(sessionID, replyToMessageID, true)
         if (!reply) {
+          const identity = SessionRuntimeContractStore.get(sessionID)?.identity
+          if (identity?.identityKind === "projected-scheduler" && identity.taskIngressID) {
+            const assistant = await MessageStore.get({
+              sessionID,
+              messageID: Identifier.deterministic("message", `task-root-assistant-v1\0${replyToMessageID}`),
+            }).catch((error) => {
+              if (NotFoundError.isInstance(error as Error)) return undefined
+              throw error
+            })
+            if (
+              assistant?.info.role === "assistant" &&
+              assistant.info.activationID === identity.taskIngressActivationID &&
+              assistant.info.parentID === replyToMessageID &&
+              assistant.info.time.completed !== undefined &&
+              !isSettledReplyToUserMessage(assistant, replyToMessageID)
+            ) {
+              throw new TaskRootIngressIntegrityError(
+                identity.taskIngressID,
+                `Completed Task-root assistant ${assistant.info.id} has no durable reply to ${replyToMessageID}`,
+              )
+            }
+          }
           throw new Error(`Session ${sessionID} completed without a durable reply to ${replyToMessageID}`)
         }
         return publishTerminalResult(reply, "reply")
@@ -3266,12 +3296,16 @@ export namespace SessionLoop {
                     ),
                 })
                 if (typeof result === "object") {
-                  const standbyAfter = lastAssistant ?? lastUser
+                  const observedOrderKey = msgs.reduce((latest, message) => {
+                    const key = timelineMessageOrderKey(message)
+                    return compareTimelineOrderKeys(key, latest) > 0 ? key : latest
+                  }, timelineMessageOrderKey({ info: lastUser }))
                   const { waitForWake } = await beginStandby({
                     sessionID,
                     abort,
-                    afterOrderKey: timelineMessageOrderKey({ info: standbyAfter }),
+                    afterOrderKey: observedOrderKey,
                     ignoredActionableControlID: compactionControl.id,
+                    observedRuntimeContract: runRuntimeContractTurn ? currentRuntimeContract : undefined,
                     wakeAt: result.expiresAt,
                   })
                   return { type: "standby" as const, waitForWake }
@@ -3513,7 +3547,7 @@ export namespace SessionLoop {
     sessionID: string,
     abort: AbortSignal,
     afterOrderKey: string,
-    options?: { ignoredActionableControlID?: string; wakeAt?: number },
+    options?: { ignoredActionableControlID?: string; observedRuntimeContract?: RuntimeContract; wakeAt?: number },
   ): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       if (abort.aborted) {
@@ -3527,6 +3561,11 @@ export namespace SessionLoop {
       let unsubscribeControlWake = () => {}
       let wakeTimer: ReturnType<typeof setTimeout> | undefined
       let durablePollTimer: ReturnType<typeof setTimeout> | undefined
+      const observedRuntimeWake =
+        shouldRunRuntimeContractTurn(sessionID) &&
+        SessionRuntimeContractStore.get(sessionID) === options?.observedRuntimeContract
+          ? options?.observedRuntimeContract
+          : undefined
       const onAbort = () => settle()
       const settle = (error?: unknown) => {
         if (settled) return
@@ -3550,7 +3589,12 @@ export namespace SessionLoop {
           settle()
         }
       })
-      unsubscribeRuntimeWake = SessionRuntimeContractStore.subscribeWake(sessionID, settle)
+      const hasUnobservedRuntimeWake = () =>
+        shouldRunRuntimeContractTurn(sessionID) &&
+        SessionRuntimeContractStore.get(sessionID) !== observedRuntimeWake
+      unsubscribeRuntimeWake = SessionRuntimeContractStore.subscribeWake(sessionID, () => {
+        if (hasUnobservedRuntimeWake()) settle()
+      })
       unsubscribeControlWake = SessionControl.subscribeWake(sessionID, settle)
       abort.addEventListener("abort", onAbort, { once: true })
       if (options?.wakeAt !== undefined) {
@@ -3561,7 +3605,10 @@ export namespace SessionLoop {
         if (settled) return
         try {
           if (
-            shouldRunRuntimeContractTurn(sessionID) ||
+            hasUnobservedRuntimeWake() ||
+            (options?.ignoredActionableControlID !== undefined &&
+              (SessionControl.get(options.ignoredActionableControlID)?.status !== "pending" ||
+                (currentControlLease("session_control", options.ignoredActionableControlID)?.expires_at ?? 0) <= Date.now())) ||
             (options?.ignoredActionableControlID === undefined && MessageStore.hasPendingInput(sessionID)) ||
             SessionControl.pending(sessionID).some(
               (control) => isActionableSessionControl(control) && control.id !== options?.ignoredActionableControlID,
@@ -5778,6 +5825,7 @@ export namespace SessionLoop {
     continuedUserInputSystem,
     providerInputProjection,
     waitForUserMessage,
+    beginStandby,
     resolveToolExecutionAuthority,
     installStandbyObserver(observer: (sessionID: string) => void | Promise<void>): Disposable {
       if (standbyObserverForTest) throw new Error("Session standby test observer is already installed")

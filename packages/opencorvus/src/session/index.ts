@@ -32,8 +32,11 @@ import { Log } from "../util/log"
 import { Message } from "./message"
 import { MessageCopyEvidence } from "./copy-evidence"
 import { AssistantDiagnostics } from "./assistant-diagnostics"
+import { isSettledReplyToUserMessage } from "./completed-reply"
+import { HelperAgentRegistry } from "@/agent/helper-agent-registry"
 import { MessageStore } from "./message-store"
 import { PermissionAuthority } from "@/permission/authority"
+import { assertPublicSessionOperationAuthority } from "@/mission/public-session-authority"
 import { SessionEvents } from "./events"
 import { Instance } from "../project/instance"
 import path from "path"
@@ -409,6 +412,7 @@ export namespace Session {
       const { taskIDForSession } = await import("@/engine/task-session-lineage")
       const assertCopyOwnership = () => {
         if (side) return
+        assertPublicSessionOperationAuthority(original, "session.fork")
         const taskID = taskIDForSession(original.id)
         if (taskID) {
           throw new TaskBoundSessionForkError({
@@ -453,10 +457,9 @@ export namespace Session {
         const lastComplete = msgs.findLastIndex(
           (message) =>
             message.info.role === "assistant" &&
-            !!message.info.time.completed &&
-            !!message.info.finish &&
-            message.info.finish !== "tool-calls" &&
-            message.info.finish !== "unknown",
+            !HelperAgentRegistry.isID(message.info.agent) &&
+            message.info.finish !== "unknown" &&
+            isSettledReplyToUserMessage(message, message.info.parentID),
         )
         const acceptedInputs = new Set(
           msgs.slice(0, lastComplete + 1).flatMap((msg) =>
@@ -466,9 +469,27 @@ export namespace Session {
         // A steering input can be created after the assistant Message starts
         // and still belong to its completed reply. Preserve that exact accepted
         // batch, rather than cutting it off at the assistant's creation order.
-        msgs = msgs.filter(
+        const completedHistory = msgs.filter(
           (msg, index) => index <= lastComplete || (msg.info.role === "user" && acceptedInputs.has(msg.info.id)),
         )
+        const selectedIDs = new Set(completedHistory.map((message) => message.info.id))
+        // A checkpoint can be created after the owner Message that later completes.
+        // Keep its original representation only when all local dependencies are already completed history.
+        for (const message of msgs) {
+          if (selectedIDs.has(message.info.id) || message.info.role !== "assistant" ||
+              !HelperAgentRegistry.isID(message.info.agent) || message.info.time.completed === undefined ||
+              message.info.finish === "unknown") continue
+          const markers = message.parts.filter((part): part is Message.CompactionPart => part.type === "compaction")
+          const settled = message.info.summary === true
+            ? CompactionHandoff.isValidSummaryMessage(message.info) && markers.length > 0
+            : isSettledReplyToUserMessage(message, message.info.parentID)
+          if (!settled) continue
+          const dependencies = [message.info.parentID, ...Message.acceptedInputMessageIDs(message.info),
+            ...markers.flatMap(marker => [marker.anchor_id, marker.tail_start_id,
+              ...(marker.covered_parts ?? []).map(entry => entry.messageID)].filter((id): id is string => id !== undefined))]
+          if (dependencies.every(id => selectedIDs.has(id))) selectedIDs.add(message.info.id)
+        }
+        msgs = msgs.filter(message => selectedIDs.has(message.info.id))
       }
       const cutoff = input.messageID ? msgs.findIndex((msg) => msg.info.id >= input.messageID!) : -1
       if (cutoff >= 0) msgs = msgs.slice(0, cutoff)

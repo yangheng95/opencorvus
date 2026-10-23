@@ -1,5 +1,7 @@
 import { Bus } from "@/bus"
 import { GlobalBus } from "@/bus/global"
+import { BusPublicationOutboxTable } from "@/bus/bus.sql"
+import { isDeepStrictEqual } from "node:util"
 import { Instance, runOutsideInstanceContext, type ProjectDeletionAdmission } from "@/project/instance"
 import { runWithProjectDeletionIdentity } from "@/project/independent-project-owner"
 import { ProtocolStore } from "@/protocol/store"
@@ -9,7 +11,7 @@ import { Message } from "@/session/message"
 import { Todo } from "@/session/todo"
 import { executionLifecycleOrderKey, SessionStatus, sessionLifecycleOrderKey } from "@/session/status"
 import { Log } from "@/util/log"
-import { Database, and, eq } from "@/storage/db"
+import { Database, and, eq, sql } from "@/storage/db"
 import { MessageTable, PartTable, SessionTable, ToolPartRequestTable, type SessionKind } from "@/session/session.sql"
 import {
   taskIDForSession,
@@ -18,7 +20,12 @@ import {
   sessionParentID,
   sessionLineageIdentity,
 } from "@/engine/task-session-lineage"
-import { timelineMessageOrderKey, timelineOrderKey, timelinePartOrderKey } from "@/timeline/order"
+import {
+  timelineMessageOrderKey,
+  timelineOrderKey,
+  timelinePartOrderKey,
+  requireTimelineEntityOrderKey,
+} from "@/timeline/order"
 import { persistedSessionAgentID } from "@/agent/persisted-session-identity"
 import { persistedExecutionIdentity } from "@/agent/persisted-execution-identity"
 import { HelperAgentRegistry } from "@/agent/helper-agent-registry"
@@ -993,7 +1000,147 @@ async function bridgeSessionError(type: string, properties: Record<string, unkno
   await appendBridgeEvent(event)
 }
 
-async function bridgeEvent(type: string, properties: Record<string, unknown>, signal?: AbortSignal) {
+/** A complete, immutable transfer supersedes its delayed original increments. */
+function messageEventSupersededByMove(
+  type: string,
+  properties: Record<string, unknown>,
+  occurrenceID?: string,
+): boolean {
+  const sourceSessionID = sessionFromProperties(properties)
+  const info = properties.info as Record<string, unknown> | undefined
+  const part = properties.part as Record<string, unknown> | undefined
+  const messageID = String(info?.id ?? part?.messageID ?? properties.messageID ?? "")
+  if (!messageID) return false
+  return Database.use((db) => {
+    const current = db.select().from(MessageTable).where(eq(MessageTable.id, messageID)).get()
+    if (!current || current.session_id === sourceSessionID) return false
+    const invalid = () =>
+      new Error(`bridge: message ${messageID} has no exact durable Move covering ${type}/${occurrenceID ?? "unowned"}`)
+    if (
+      type !== Message.Event.Updated.type &&
+      type !== Message.Event.PartUpdated.type &&
+      type !== Message.Event.PartRemoved.type
+    )
+      throw invalid()
+    const sourceLineage = sessionLineageIdentity(sourceSessionID)
+    const targetLineage = sessionLineageIdentity(current.session_id)
+    const taskID = taskIDForSession(sourceSessionID)
+    if (
+      !taskID ||
+      taskIDForSession(current.session_id) !== taskID ||
+      sourceLineage?.projectID !== Instance.project.id ||
+      targetLineage?.projectID !== Instance.project.id ||
+      sourceLineage.rootSessionID !== sourceSessionID ||
+      targetLineage.rootSessionID !== sourceSessionID ||
+      sessionRole(sourceSessionID) !== "root" ||
+      sessionRole(current.session_id) !== "orchestrator"
+    )
+      throw invalid()
+    const original = occurrenceID
+      ? db
+          .select()
+          .from(BusPublicationOutboxTable)
+          .where(eq(BusPublicationOutboxTable.occurrence_id, occurrenceID))
+          .get()
+      : undefined
+    if (
+      !original ||
+      original.project_id !== Instance.project.id ||
+      original.event_type !== type ||
+      !isDeepStrictEqual(original.properties, properties)
+    )
+      throw invalid()
+    const moves = db
+      .select()
+      .from(BusPublicationOutboxTable)
+      .where(
+        and(
+          eq(BusPublicationOutboxTable.project_id, Instance.project.id),
+          sql`${BusPublicationOutboxTable.event_type} = 'message.moved'`,
+          sql`json_extract(${BusPublicationOutboxTable.properties}, '$.info.id') = ${messageID}`,
+          sql`json_extract(${BusPublicationOutboxTable.properties}, '$.sourceSessionID') = ${sourceSessionID}`,
+          sql`json_extract(${BusPublicationOutboxTable.properties}, '$.info.sessionID') = ${current.session_id}`,
+        ),
+      )
+      .limit(2)
+      .all()
+    if (moves.length !== 1) throw invalid()
+    const moved = Message.Event.Moved.properties.parse(moves[0]!.properties)
+    const currentInfo = Message.VisibleInfo.parse({ ...current.data, id: current.id, sessionID: current.session_id })
+    if (currentInfo.role !== "user" || !isDeepStrictEqual(moved.info, currentInfo)) throw invalid()
+    if (
+      moved.info.orderKey !== timelineMessageOrderKey({ info: moved.info }) ||
+      new Set(moved.parts.map((item) => item.id)).size !== moved.parts.length ||
+      moved.parts.some(
+        (item) =>
+          item.messageID !== messageID ||
+          item.sessionID !== current.session_id ||
+          item.orderKey !== timelinePartOrderKey({ id: item.id, timeCreated: moved.info.time.created }),
+      )
+    )
+      throw invalid()
+    const currentParts = db
+      .select()
+      .from(PartTable)
+      .where(eq(PartTable.message_id, messageID))
+      .all()
+      .map((row) =>
+        Message.VisiblePart.parse({
+          ...row.data,
+          id: row.id,
+          messageID: row.message_id,
+          sessionID: current.session_id,
+          orderKey: timelinePartOrderKey({ id: row.id, timeCreated: row.time_created }),
+        }),
+      )
+    const byID = (a: { id: string }, b: { id: string }) => a.id.localeCompare(b.id)
+    if (!isDeepStrictEqual([...moved.parts].sort(byID), currentParts.sort(byID))) throw invalid()
+    if (info) {
+      if (info.orderKey !== timelineMessageOrderKey({ info: Message.VisibleInfo.parse(info) })) throw invalid()
+      const semanticInfo = (value: typeof moved.info) => {
+        const { id, role, author, agent } = value
+        return { id, role, author, agent }
+      }
+      if (!isDeepStrictEqual(semanticInfo(Message.VisibleInfo.parse(info)), semanticInfo(moved.info))) throw invalid()
+    } else if (type === Message.Event.PartRemoved.type) {
+      const partID = properties.partID
+      if (typeof partID !== "string" || typeof properties.partType !== "string" || moved.parts.some((item) => item.id === partID)) throw invalid()
+    } else {
+      const prior = Message.VisiblePart.parse(part)
+      requireTimelineEntityOrderKey(properties.orderKey, "message", messageID)
+      requireTimelineEntityOrderKey(prior.orderKey, "part", prior.id)
+      const next = moved.parts.find((item) => item.id === prior.id)
+      const semanticPart = (value: Message.VisiblePart) => {
+        const { sessionID, orderKey, ...body } = value
+        return body
+      }
+      if (next) {
+        if (prior.type !== next.type) throw invalid()
+        // The writer permits revisions of streaming text/reasoning before the input is accepted.
+        if (prior.type !== "text" && prior.type !== "reasoning" && !isDeepStrictEqual(semanticPart(prior), semanticPart(next))) throw invalid()
+      } else {
+        const removal = db.select().from(BusPublicationOutboxTable).where(and(
+          eq(BusPublicationOutboxTable.project_id, Instance.project.id),
+          sql`${BusPublicationOutboxTable.event_type} = 'message.part.removed'`,
+          sql`json_extract(${BusPublicationOutboxTable.properties}, '$.messageID') = ${messageID}`,
+          sql`json_extract(${BusPublicationOutboxTable.properties}, '$.sessionID') = ${sourceSessionID}`,
+          sql`json_extract(${BusPublicationOutboxTable.properties}, '$.partID') = ${prior.id}`,
+          sql`json_extract(${BusPublicationOutboxTable.properties}, '$.partType') = ${prior.type}`,
+        )).limit(1).get()
+        if (!removal) throw invalid()
+        Message.Event.PartRemoved.properties.parse(removal.properties)
+      }
+    }
+    return true
+  })
+}
+
+async function bridgeEvent(
+  type: string,
+  properties: Record<string, unknown>,
+  signal?: AbortSignal,
+  occurrenceID?: string,
+) {
   signal?.throwIfAborted()
   // Top-level guard: subscribers run synchronously inside Bus.dispatch's for-loop;
   // a sync throw here would abort dispatch for sibling subscribers. Old code hid
@@ -1002,6 +1149,8 @@ async function bridgeEvent(type: string, properties: Record<string, unknown>, si
   try {
     const sessionID = sessionFromProperties(properties)
     if (!sessionID) return
+    if (messageEventSupersededByMove(type, properties, occurrenceID)) return
+    if (type === Message.Event.Updated.type) cacheMessageInfo(properties)
     const taskID = taskIDForSession(sessionID)
     const enriched = enrichMessageEventProperties(type, properties, sessionID, taskID)
     const lineage = sessionLineageIdentity(sessionID)
@@ -1182,21 +1331,20 @@ function enqueueCrossInstanceBridge(
 // touching dispatch logic — register the type → handler here.
 const CROSS_INSTANCE_HANDLERS: Record<
   string,
-  (props: Record<string, unknown>, signal?: AbortSignal) => Promise<void>
+  (props: Record<string, unknown>, signal?: AbortSignal, occurrenceID?: string) => Promise<void>
 > = {
-  [Message.Event.Updated.type]: async (props, signal) => {
+  [Message.Event.Updated.type]: async (props, signal, occurrenceID) => {
     signal?.throwIfAborted()
-    cacheMessageInfo(props)
-    await bridgeEvent(Message.Event.Updated.type, props, signal)
+    await bridgeEvent(Message.Event.Updated.type, props, signal, occurrenceID)
   },
-  [Message.Event.PartUpdated.type]: async (props, signal) => {
-    await bridgeEvent(Message.Event.PartUpdated.type, props, signal)
+  [Message.Event.PartUpdated.type]: async (props, signal, occurrenceID) => {
+    await bridgeEvent(Message.Event.PartUpdated.type, props, signal, occurrenceID)
   },
   [Message.Event.Removed.type]: async (props, signal) => {
     await bridgeEvent(Message.Event.Removed.type, props, signal)
   },
-  [Message.Event.PartRemoved.type]: async (props, signal) => {
-    await bridgeEvent(Message.Event.PartRemoved.type, props, signal)
+  [Message.Event.PartRemoved.type]: async (props, signal, occurrenceID) => {
+    await bridgeEvent(Message.Event.PartRemoved.type, props, signal, occurrenceID)
   },
   [Message.Event.PartDelta.type]: async (props, signal) => {
     await bridgeEvent(Message.Event.PartDelta.type, props, signal)
@@ -1226,17 +1374,16 @@ export function ensureTaskMessageProtocolBridge() {
     )
     Bus.subscribe(Message.Event.Updated, async (event) => {
       event.signal?.throwIfAborted()
-      cacheMessageInfo(event.properties)
-      await bridgeEvent(Message.Event.Updated.type, event.properties, event.signal)
+      await bridgeEvent(Message.Event.Updated.type, event.properties, event.signal, event.occurrenceID)
     })
     Bus.subscribe(Message.Event.PartUpdated, async (event) => {
-      await bridgeEvent(Message.Event.PartUpdated.type, event.properties, event.signal)
+      await bridgeEvent(Message.Event.PartUpdated.type, event.properties, event.signal, event.occurrenceID)
     })
     Bus.subscribe(Message.Event.Removed, async (event) => {
       await bridgeEvent(Message.Event.Removed.type, event.properties, event.signal)
     })
     Bus.subscribe(Message.Event.PartRemoved, async (event) => {
-      await bridgeEvent(Message.Event.PartRemoved.type, event.properties, event.signal)
+      await bridgeEvent(Message.Event.PartRemoved.type, event.properties, event.signal, event.occurrenceID)
     })
     Bus.subscribe(Message.Event.PartDelta, async (event) => {
       await bridgeEvent(Message.Event.PartDelta.type, event.properties, event.signal)
@@ -1281,7 +1428,7 @@ export function ensureTaskMessageProtocolBridge() {
       props,
       hostDirectory,
       envelope.directory,
-      handler,
+      (properties, signal) => handler(properties, signal, envelope.payload.occurrenceID),
       envelope.payload.signal,
     )
   })

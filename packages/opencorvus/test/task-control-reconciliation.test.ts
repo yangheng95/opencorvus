@@ -1104,6 +1104,7 @@ describe("Task-control reconciliation", () => {
             })
             assistant = await Session.updateMessage({
               ...assistant,
+              finish: "stop",
               time: { ...assistant.time, completed: Date.now() },
             })
             return { finalMessageID: assistant.id }
@@ -1279,6 +1280,7 @@ describe("Task-control reconciliation", () => {
             })
             assistant = await Session.updateMessage({
               ...assistant,
+              finish: "stop",
               time: { ...assistant.time, completed: Date.now() },
             })
             return { finalMessageID: assistant.id }
@@ -1394,6 +1396,7 @@ describe("Task-control reconciliation", () => {
             })
             assistant = await Session.updateMessage({
               ...assistant,
+              finish: "stop",
               time: { ...assistant.time, completed: Date.now() },
             })
             successor = { activationID, predecessorID, controlID: control.messageID, assistantID }
@@ -1794,6 +1797,7 @@ describe("Task-control reconciliation", () => {
         })
         assistant = await Session.updateMessage({
           ...assistant,
+          finish: "stop",
           time: { ...assistant.time, completed: now + 10 },
         })
         const evidence = Database.use((db) => readTaskRootIngressEvidence(db, ingress))

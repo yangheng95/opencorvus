@@ -64,6 +64,49 @@ test("the immutable migration target constructs the current application schema",
   }
 })
 
+test("version four preserves exact historical Move facts and indexes the ownership seek", () => {
+  using value = fixture(DATABASE_MIGRATIONS[2]!.ddl, 3)
+  const properties = JSON.stringify({
+    sourceSessionID: "source",
+    info: { id: "message", sessionID: "target" },
+    parts: [],
+  })
+  value.sqlite.run(
+    "INSERT INTO bus_publication_outbox(occurrence_id,project_id,directory,event_type,properties,time_created) VALUES(?,?,?,?,?,?)",
+    ["move", "project", "directory", "message.moved", properties, 123],
+  )
+  const removed = JSON.stringify({ sessionID: "source", messageID: "message", partID: "part", partType: "text" })
+  value.sqlite.run(
+    "INSERT INTO bus_publication_outbox(occurrence_id,project_id,directory,event_type,properties,time_created) VALUES(?,?,?,?,?,?)",
+    ["remove", "project", "directory", "message.part.removed", removed, 122],
+  )
+  const result = run(value, [...DATABASE_MIGRATIONS])
+  const query = `SELECT occurrence_id,properties FROM bus_publication_outbox WHERE project_id='project' AND event_type='message.moved' AND json_extract(properties,'$.info.id')='message' AND json_extract(properties,'$.sourceSessionID')='source' AND json_extract(properties,'$.info.sessionID')='target'`
+  expect({
+    from: result.from,
+    to: result.to,
+    version: schemaVersion(value.sqlite),
+    facts: read(value.sqlite, query),
+  }).toEqual({
+    from: 3,
+    to: 4,
+    version: 4,
+    facts: [{ occurrence_id: "move", properties }],
+  })
+  expect(read(value.sqlite, `EXPLAIN QUERY PLAN ${query}`)).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({ detail: expect.stringContaining("bus_publication_outbox_message_move_idx") }),
+    ]),
+  )
+  const removalQuery = `SELECT occurrence_id,properties FROM bus_publication_outbox WHERE project_id='project' AND event_type='message.part.removed' AND json_extract(properties,'$.messageID')='message' AND json_extract(properties,'$.sessionID')='source' AND json_extract(properties,'$.partID')='part' AND json_extract(properties,'$.partType')='text'`
+  expect(read(value.sqlite, removalQuery)).toEqual([{ occurrence_id: "remove", properties: removed }])
+  expect(read(value.sqlite, `EXPLAIN QUERY PLAN ${removalQuery}`)).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({ detail: expect.stringContaining("bus_publication_outbox_part_removal_idx") }),
+    ]),
+  )
+})
+
 test("the production opener creates and reopens the current database version and identity", async () => {
   await createTestDatabase()
   const identity = Database.Identity()
@@ -78,27 +121,44 @@ test("a cached WAL reader keeps the original version until its real close permit
   const reader = new SQLite(value.databasePath, { readonly: true })
   try {
     expect({ version: schemaVersion(reader), rows: read(reader, "SELECT id,body FROM note") }).toEqual({
-      version: 1, rows: [{ id: "owner", body: "original" }],
+      version: 1,
+      rows: [{ id: "owner", body: "original" }],
     })
     value.sqlite.exec("PRAGMA busy_timeout=20")
-    expect(() => run(value, [
-      { version: 1, name: "baseline", ddl: first }, { version: 2, name: "priority", ddl: second },
-    ])).toThrow(expect.objectContaining({ code: "SQLITE_BUSY" }))
-    expect({ version: schemaVersion(value.sqlite), mode: read(value.sqlite, "PRAGMA main.locking_mode"),
-      rows: read(reader, "SELECT id,body FROM note") }).toEqual({
-      version: 1, mode: [{ locking_mode: "normal" }], rows: [{ id: "owner", body: "original" }],
+    expect(() =>
+      run(value, [
+        { version: 1, name: "baseline", ddl: first },
+        { version: 2, name: "priority", ddl: second },
+      ]),
+    ).toThrow(expect.objectContaining({ code: "SQLITE_BUSY" }))
+    expect({
+      version: schemaVersion(value.sqlite),
+      mode: read(value.sqlite, "PRAGMA main.locking_mode"),
+      rows: read(reader, "SELECT id,body FROM note"),
+    }).toEqual({
+      version: 1,
+      mode: [{ locking_mode: "normal" }],
+      rows: [{ id: "owner", body: "original" }],
     })
   } finally {
     reader.close(true)
   }
   const result = run(value, [
-    { version: 1, name: "baseline", ddl: first }, { version: 2, name: "priority", ddl: second },
+    { version: 1, name: "baseline", ddl: first },
+    { version: 2, name: "priority", ddl: second },
   ])
   const reopened = new SQLite(value.databasePath, { readonly: true })
   try {
-    expect({ from: result.from, to: result.to, version: schemaVersion(reopened),
-      rows: read(reopened, "SELECT id,body,priority FROM note") }).toEqual({
-      from: 1, to: 2, version: 2, rows: [{ id: "owner", body: "original", priority: 3 }],
+    expect({
+      from: result.from,
+      to: result.to,
+      version: schemaVersion(reopened),
+      rows: read(reopened, "SELECT id,body,priority FROM note"),
+    }).toEqual({
+      from: 1,
+      to: 2,
+      version: 2,
+      rows: [{ id: "owner", body: "original", priority: 3 }],
     })
     expect(read(value.sqlite, "PRAGMA main.locking_mode")).toEqual([{ locking_mode: "normal" }])
   } finally {
@@ -109,12 +169,20 @@ test("a cached WAL reader keeps the original version until its real close permit
 test("a file in rollback journal mode returns the precise migration maintenance contract", () => {
   using value = fixture()
   value.sqlite.exec("PRAGMA journal_mode=DELETE; INSERT INTO note(id,body) VALUES('rollback','retained')")
-  expect(() => run(value, [
-    { version: 1, name: "baseline", ddl: first }, { version: 2, name: "priority", ddl: second },
-  ])).toThrow(expect.objectContaining({ code: "SCHEMA_MIGRATION_REQUIRED" }))
-  expect({ version: schemaVersion(value.sqlite), journal: read(value.sqlite, "PRAGMA journal_mode"),
-    rows: read(value.sqlite, "SELECT id,body FROM note") }).toEqual({
-    version: 1, journal: [{ journal_mode: "delete" }], rows: [{ id: "rollback", body: "retained" }],
+  expect(() =>
+    run(value, [
+      { version: 1, name: "baseline", ddl: first },
+      { version: 2, name: "priority", ddl: second },
+    ]),
+  ).toThrow(expect.objectContaining({ code: "SCHEMA_MIGRATION_REQUIRED" }))
+  expect({
+    version: schemaVersion(value.sqlite),
+    journal: read(value.sqlite, "PRAGMA journal_mode"),
+    rows: read(value.sqlite, "SELECT id,body FROM note"),
+  }).toEqual({
+    version: 1,
+    journal: [{ journal_mode: "delete" }],
+    rows: [{ id: "rollback", body: "retained" }],
   })
 })
 
@@ -230,7 +298,11 @@ test("the complete current baseline advances to a declared revision with its rea
         ])
       },
     })
-    expect({ from: result.from, to: result.to, version: schemaVersion(sqlite) }).toEqual({ from: fromVersion, to: nextVersion, version: nextVersion })
+    expect({ from: result.from, to: result.to, version: schemaVersion(sqlite) }).toEqual({
+      from: fromVersion,
+      to: nextVersion,
+      version: nextVersion,
+    })
     const backup = new SQLite(result.backupPath!, { readonly: true })
     try {
       expect(read(sqlite, "SELECT * FROM database_authority")).toEqual(read(backup, "SELECT * FROM database_authority"))
@@ -597,7 +669,10 @@ test("two independent writer processes upgrade a versioned database once and pre
     expect(code, stderr).toBe(0)
     receipts.push(JSON.parse(stdout.trim()))
   }
-  const signature = receipts.map(({ outcome }) => outcome).sort().join("+")
+  const signature = receipts
+    .map(({ outcome }) => outcome)
+    .sort()
+    .join("+")
   expect(["busy+busy", "busy+upgraded", "current+upgraded"]).toContain(signature)
   value.sqlite = new SQLite(value.databasePath)
   const reopened = run(value, [
@@ -605,13 +680,16 @@ test("two independent writer processes upgrade a versioned database once and pre
     { version: 2, name: "priority", ddl: second },
   ])
   expect({ from: reopened.from, to: reopened.to, version: schemaVersion(value.sqlite) }).toEqual({
-    from: signature === "busy+busy" ? 1 : 2, to: 2, version: 2,
+    from: signature === "busy+busy" ? 1 : 2,
+    to: 2,
+    version: 2,
   })
   const applied = signature === "busy+busy" ? reopened : receipts.find((receipt) => receipt.outcome === "upgraded")!
   const backup = new SQLite(applied.backupPath!, { readonly: true })
   try {
     expect({ version: schemaVersion(backup), rows: read(backup, "SELECT rowid,id,body FROM note") }).toEqual({
-      version: 1, rows: [{ rowid: 29, id: "concurrent", body: "retained" }],
+      version: 1,
+      rows: [{ rowid: 29, id: "concurrent", body: "retained" }],
     })
   } finally {
     backup.close(true)

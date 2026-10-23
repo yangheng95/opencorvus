@@ -786,7 +786,10 @@ try {
   backend = launch("recover")
   children.push(backend)
   await ready(backend)
-  for (const item of cases) await json(backend, item.project, "/session")
+  for (const item of cases) {
+    const opened = await json(backend, item.project, "/project/current") as Row
+    assert.equal(path.resolve(opened.worktree), path.resolve(item.project), "Open this exact Project runtime")
+  }
   const after = await waitFor("both recovered ingress receipts", backend, () => {
     const snapshots = cases.map(facts)
     const complete = cases.every((item, index) => {

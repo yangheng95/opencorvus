@@ -1271,12 +1271,12 @@ process.stdin.resume()
   export async function disposeAndWaitForExit(
     handle: Handle,
     label: string,
-    opts: { cleanupTimeoutMs?: number; exitTimeoutMs?: number; deadlineAt?: number } = {},
+    opts: { cleanupTimeoutMs?: number; deadlineAt?: number } = {},
   ): Promise<number> {
-    const remaining = (fallback: number) =>
-      opts.deadlineAt === undefined ? fallback : Math.max(1, opts.deadlineAt - Date.now())
-    const cleanupTimeoutMs = remaining(opts.cleanupTimeoutMs ?? TERMINATION_CLEANUP_TIMEOUT_MS)
-    const exitTimeoutMs = remaining(opts.exitTimeoutMs ?? TERMINATION_EXIT_TIMEOUT_MS)
+    // Exit includes the native physical-settlement receipt; output and request
+    // cleanup are parts of that same disposal, not earlier independent deadlines.
+    const deadlineAt = opts.deadlineAt ?? Date.now() + (opts.cleanupTimeoutMs ?? TERMINATION_CLEANUP_TIMEOUT_MS)
+    const cleanupTimeoutMs = Math.max(1, deadlineAt - Date.now())
     const [cleanup, exit, output, settlement] = await Promise.allSettled([
       awaitWithTimeout(
         handle.dispose(),
@@ -1285,13 +1285,13 @@ process.stdin.resume()
       ),
       awaitWithTimeout(
         handle.exited,
-        exitTimeoutMs,
-        `${label} process did not exit within ${exitTimeoutMs}ms after disposal was requested`,
+        cleanupTimeoutMs,
+        `${label} process did not exit within ${cleanupTimeoutMs}ms after disposal was requested`,
       ),
       awaitWithTimeout(
         handle.outputSettled,
-        exitTimeoutMs,
-        `${label} output did not settle within ${exitTimeoutMs}ms after disposal was requested`,
+        cleanupTimeoutMs,
+        `${label} output did not settle within ${cleanupTimeoutMs}ms after disposal was requested`,
       ),
       awaitWithTimeout(
         handle.settled,

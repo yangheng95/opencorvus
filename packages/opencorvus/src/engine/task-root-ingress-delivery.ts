@@ -36,6 +36,7 @@ import {
 } from "@/runtime/process-occurrence"
 import { RuntimeExecutionSettlement, type RuntimeExecutionReservation } from "@/runtime/execution-settlement"
 import { Message } from "@/session/message"
+import { isSettledReplyToUserMessage } from "@/session/completed-reply"
 import { SessionStatus } from "@/session/status"
 import {
   MessageTable,
@@ -835,6 +836,12 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
       })
     }
     if (!assistant.time.completed) continue
+    if (!isSettledReplyToUserMessage({ info: assistant, parts: toolParts }, assistant.parentID)) {
+      throw new TaskRootIngressIntegrityError(
+        ingress.id,
+        `Completed Task-root assistant ${assistant.id} has no durable reply to ${assistant.parentID}`,
+      )
+    }
     const predecessorID = control.predecessor_id
     const outstanding = toolParts.some((part) => part.state.status === "running")
     const boundary: AssistantTurnFact["boundary"] = assistant.error

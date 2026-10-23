@@ -26,6 +26,15 @@ export const BusPublicationOutboxTable = sqliteTable(
   (table) => [
     check("bus_publication_outbox_task_status_is_projection", sql`${table.event_type} <> 'task.updated' OR json_type(${table.properties}, '$.status') IS NULL`),
     index("bus_publication_outbox_project_idx").on(table.project_id, table.time_created),
+    index("bus_publication_outbox_message_move_idx")
+      .on(table.project_id, sql`json_extract(${table.properties}, '$.info.id')`,
+        sql`json_extract(${table.properties}, '$.sourceSessionID')`, sql`json_extract(${table.properties}, '$.info.sessionID')`)
+      .where(sql`${table.event_type} = 'message.moved'`),
+    index("bus_publication_outbox_part_removal_idx")
+      .on(table.project_id, sql`json_extract(${table.properties}, '$.messageID')`,
+        sql`json_extract(${table.properties}, '$.sessionID')`, sql`json_extract(${table.properties}, '$.partID')`,
+        sql`json_extract(${table.properties}, '$.partType')`)
+      .where(sql`${table.event_type} = 'message.part.removed'`),
   ],
 )
 

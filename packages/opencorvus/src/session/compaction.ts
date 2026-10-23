@@ -762,17 +762,12 @@ export namespace SessionCompaction {
     const firstUserIdx = input.messages.findIndex((msg) => msg.info.role === "user")
     if (firstUserIdx < 0) return { head: [] }
     const anchor_id = input.messages[firstUserIdx].info.id
-    if (input.overflow) {
-      const head = input.messages.slice(firstUserIdx + 1)
-      return head.length ? { anchor_id, head } : { head: [] }
-    }
-    if (limit <= 0) {
-      const head = input.messages.slice(firstUserIdx + 1)
-      return head.length ? { anchor_id, head } : { head: [] }
-    }
+    const head = input.messages.slice(firstUserIdx + 1)
+    const complete: SelectedCompactionInput = head.length ? { anchor_id, head } : { head: [] }
+    if (input.overflow || limit <= 0) return complete
     const budget = ContextBudget.preserveRecent({ config: input.config, model: input.model })
     const all = turns(input.messages)
-    if (!all.length) return { head: [] }
+    if (!all.length) return complete
     const recent = all.slice(-limit)
     const sizes = [] as number[]
     for (const turn of recent) {
@@ -801,12 +796,8 @@ export namespace SessionCompaction {
       break
     }
 
-    if (!keep) {
-      if (recent[0] && recent[0].start <= firstUserIdx + 1) return { head: [] }
-      const head = input.messages.slice(firstUserIdx + 1)
-      return head.length ? { anchor_id, head } : { head: [] }
-    }
-    if (keep.start <= firstUserIdx + 1) return { head: [] }
+    // Retention is bounded by the available prefix; it cannot consume all material selected for maintenance.
+    if (!keep || keep.start <= firstUserIdx + 1) return complete
     return {
       anchor_id,
       head: input.messages.slice(firstUserIdx + 1, keep.start),
