@@ -1,0 +1,665 @@
+{
+  "iteration": 559,
+  "entry": "main-C7aBtTu6.js",
+  "ui": "source CLI /ui; manual CUA only",
+  "tabs": [
+    "205",
+    "206",
+    "207",
+    "208",
+    "209"
+  ],
+  "provider": {
+    "maximumRequests": 6,
+    "exhausted": false,
+    "requests": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": {
+          "state": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792786325520
+          },
+          "byteCount": 42781,
+          "chunkCount": 16
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": {
+          "state": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792786321523
+          },
+          "byteCount": 515879,
+          "chunkCount": 40
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": {
+          "state": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792786508267
+          },
+          "byteCount": 55475,
+          "chunkCount": 18
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": {
+          "state": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792786511073
+          },
+          "byteCount": 559294,
+          "chunkCount": 6
+        }
+      }
+    ]
+  },
+  "preflight": {
+    "sessionID": "ses_hsqvo7QF4uqXx3M36QaT",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "concurrency": {
+    "at": "2026-10-23T20:15:57.338Z",
+    "activeCanonicalStreams": [
+      {
+        "id": 33,
+        "path": "/work-ledger/events",
+        "streamID": "27c624c4-325b-4d42-823b-3b9f3b03db07",
+        "at": "2026-10-23T20:12:12.807Z"
+      },
+      {
+        "id": 68,
+        "path": "/task/tsk_g00VYhrJxy00qIC54qvM/events",
+        "streamID": "641d0eda-83aa-4e98-bc52-f781e653b833",
+        "at": "2026-10-23T20:12:16.489Z"
+      },
+      {
+        "id": 109,
+        "path": "/work-ledger/events",
+        "streamID": "db35c028-7fa4-42c4-aea7-7e58860489ee",
+        "at": "2026-10-23T20:12:18.214Z"
+      },
+      {
+        "id": 133,
+        "path": "/task/tsk_g00VYhrJxy00qIC54qvM/events",
+        "streamID": "4e27a1f7-6cc3-4314-8241-aaed89d63670",
+        "at": "2026-10-23T20:12:20.316Z"
+      },
+      {
+        "id": 154,
+        "path": "/work-ledger/events",
+        "streamID": "9738911c-5ab9-4c95-bcdb-b3b979505c4e",
+        "at": "2026-10-23T20:12:22.306Z"
+      },
+      {
+        "id": 190,
+        "path": "/work-ledger/events",
+        "streamID": "acfd7b6d-5a00-4e26-8b8c-8ebe4978f1b5",
+        "at": "2026-10-23T20:12:23.999Z"
+      },
+      {
+        "id": 212,
+        "path": "/task/tsk_g00VYhrJxy00qIC54qvM/events",
+        "streamID": "c0e7c510-98cf-4137-a6f6-05a1eababf0a",
+        "at": "2026-10-23T20:12:25.264Z"
+      },
+      {
+        "id": 320,
+        "path": "/work-ledger/events",
+        "streamID": "e5225871-e4d6-4513-8e54-bd3e87b4ce84",
+        "at": "2026-10-23T20:13:24.332Z"
+      },
+      {
+        "id": 366,
+        "path": "/session/ses_-zURQjvQ8zz3y3NgFyVx/events",
+        "streamID": "d17febde-3bd9-4642-881b-060d7f5c5311",
+        "at": "2026-10-23T20:13:27.672Z"
+      },
+      {
+        "id": 413,
+        "path": "/work-ledger/events",
+        "streamID": "175d07c6-25aa-4ace-b80b-af0f2fd06db2",
+        "at": "2026-10-23T20:13:35.065Z"
+      },
+      {
+        "id": 578,
+        "path": "/session/ses_-zUR5mXqjzz1QoHNYqg6/events",
+        "streamID": "ce289d93-fb8e-4f33-a064-4046081c1e25",
+        "at": "2026-10-23T20:15:01.913Z"
+      },
+      {
+        "id": 825,
+        "path": "/session/ses_-zUR5mMm2zzeLYhR8jkT/events",
+        "streamID": "bc2106a0-fbdf-4ed8-8877-fb7c4b93f810",
+        "at": "2026-10-23T20:15:43.452Z"
+      }
+    ],
+    "panelRequests": [],
+    "lastRequests": [
+      {
+        "id": 839,
+        "at": "2026-10-23T20:15:49.768Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/chat/ses_-zUR5mXqjzz1QoHNYqg6",
+        "diagnostic": false
+      },
+      {
+        "id": 840,
+        "at": "2026-10-23T20:15:50.515Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/mission/ses_-zURQjvQ8zz3y3NgFyVx",
+        "diagnostic": false
+      },
+      {
+        "id": 841,
+        "at": "2026-10-23T20:15:50.733Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/task/tsk_g00VYhrJxy00qIC54qvM",
+        "diagnostic": false
+      },
+      {
+        "id": 842,
+        "at": "2026-10-23T20:15:51.043Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/task/tsk_g00VYhrJxy00qIC54qvM",
+        "diagnostic": false
+      },
+      {
+        "id": 843,
+        "at": "2026-10-23T20:15:51.804Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/global/health",
+        "diagnostic": false
+      },
+      {
+        "id": 844,
+        "at": "2026-10-23T20:15:52.299Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/global/health",
+        "diagnostic": false
+      },
+      {
+        "id": 845,
+        "at": "2026-10-23T20:15:53.387Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/chat/ses_-zUR5mMm2zzeLYhR8jkT",
+        "diagnostic": false
+      },
+      {
+        "id": 846,
+        "at": "2026-10-23T20:15:54.659Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/task/tsk_g00VYhrJxy00qIC54qvM",
+        "diagnostic": false
+      },
+      {
+        "id": 847,
+        "at": "2026-10-23T20:15:54.769Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/chat/ses_-zUR5mXqjzz1QoHNYqg6",
+        "diagnostic": false
+      },
+      {
+        "id": 848,
+        "at": "2026-10-23T20:15:55.528Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/mission/ses_-zURQjvQ8zz3y3NgFyVx",
+        "diagnostic": false
+      },
+      {
+        "id": 849,
+        "at": "2026-10-23T20:15:55.732Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/task/tsk_g00VYhrJxy00qIC54qvM",
+        "diagnostic": false
+      },
+      {
+        "id": 850,
+        "at": "2026-10-23T20:15:56.043Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/task/tsk_g00VYhrJxy00qIC54qvM",
+        "diagnostic": false
+      },
+      {
+        "id": 851,
+        "at": "2026-10-23T20:15:56.881Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/global/health",
+        "diagnostic": false
+      },
+      {
+        "id": 852,
+        "at": "2026-10-23T20:15:56.913Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/global/health",
+        "diagnostic": false
+      }
+    ]
+  },
+  "afterClosingTwoPages": {
+    "at": "2026-10-23T20:16:56.893Z",
+    "activeCanonicalStreams": [
+      {
+        "id": 154,
+        "path": "/work-ledger/events",
+        "streamID": "9738911c-5ab9-4c95-bcdb-b3b979505c4e",
+        "at": "2026-10-23T20:12:22.306Z"
+      },
+      {
+        "id": 190,
+        "path": "/work-ledger/events",
+        "streamID": "acfd7b6d-5a00-4e26-8b8c-8ebe4978f1b5",
+        "at": "2026-10-23T20:12:23.999Z"
+      },
+      {
+        "id": 212,
+        "path": "/task/tsk_g00VYhrJxy00qIC54qvM/events",
+        "streamID": "c0e7c510-98cf-4137-a6f6-05a1eababf0a",
+        "at": "2026-10-23T20:12:25.264Z"
+      },
+      {
+        "id": 320,
+        "path": "/work-ledger/events",
+        "streamID": "e5225871-e4d6-4513-8e54-bd3e87b4ce84",
+        "at": "2026-10-23T20:13:24.332Z"
+      },
+      {
+        "id": 366,
+        "path": "/session/ses_-zURQjvQ8zz3y3NgFyVx/events",
+        "streamID": "d17febde-3bd9-4642-881b-060d7f5c5311",
+        "at": "2026-10-23T20:13:27.672Z"
+      },
+      {
+        "id": 413,
+        "path": "/work-ledger/events",
+        "streamID": "175d07c6-25aa-4ace-b80b-af0f2fd06db2",
+        "at": "2026-10-23T20:13:35.065Z"
+      },
+      {
+        "id": 578,
+        "path": "/session/ses_-zUR5mXqjzz1QoHNYqg6/events",
+        "streamID": "ce289d93-fb8e-4f33-a064-4046081c1e25",
+        "at": "2026-10-23T20:15:01.913Z"
+      },
+      {
+        "id": 825,
+        "path": "/session/ses_-zUR5mMm2zzeLYhR8jkT/events",
+        "streamID": "bc2106a0-fbdf-4ed8-8877-fb7c4b93f810",
+        "at": "2026-10-23T20:15:43.452Z"
+      }
+    ],
+    "lastRequests": [
+      {
+        "id": 109,
+        "at": "2026-10-23T20:16:47.015Z",
+        "phase": "aborted",
+        "path": "/work-ledger/events"
+      },
+      {
+        "id": 944,
+        "at": "2026-10-23T20:16:48.400Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/chat/ses_-zUR5mMm2zzeLYhR8jkT",
+        "diagnostic": false
+      },
+      {
+        "id": 945,
+        "at": "2026-10-23T20:16:48.618Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/global/health",
+        "diagnostic": false
+      },
+      {
+        "id": 946,
+        "at": "2026-10-23T20:16:49.768Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/chat/ses_-zUR5mXqjzz1QoHNYqg6",
+        "diagnostic": false
+      },
+      {
+        "id": 947,
+        "at": "2026-10-23T20:16:50.527Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/mission/ses_-zURQjvQ8zz3y3NgFyVx",
+        "diagnostic": false
+      },
+      {
+        "id": 948,
+        "at": "2026-10-23T20:16:51.042Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/task/tsk_g00VYhrJxy00qIC54qvM",
+        "diagnostic": false
+      },
+      {
+        "id": 949,
+        "at": "2026-10-23T20:16:52.301Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/global/health",
+        "diagnostic": false
+      },
+      {
+        "id": 950,
+        "at": "2026-10-23T20:16:53.401Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/chat/ses_-zUR5mMm2zzeLYhR8jkT",
+        "diagnostic": false
+      },
+      {
+        "id": 951,
+        "at": "2026-10-23T20:16:54.765Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/chat/ses_-zUR5mXqjzz1QoHNYqg6",
+        "diagnostic": false
+      },
+      {
+        "id": 952,
+        "at": "2026-10-23T20:16:55.528Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/mission/ses_-zURQjvQ8zz3y3NgFyVx",
+        "diagnostic": false
+      },
+      {
+        "id": 953,
+        "at": "2026-10-23T20:16:56.042Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/task/tsk_g00VYhrJxy00qIC54qvM",
+        "diagnostic": false
+      },
+      {
+        "id": 954,
+        "at": "2026-10-23T20:16:56.885Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/global/health",
+        "diagnostic": false
+      }
+    ]
+  },
+  "afterClosingOwnedPages": {
+    "at": "2026-10-23T20:18:45.384Z",
+    "activeCanonicalStreams": [
+      {
+        "id": 154,
+        "at": "2026-10-23T20:12:22.306Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/work-ledger/events",
+        "diagnostic": false,
+        "streamID": "9738911c-5ab9-4c95-bcdb-b3b979505c4e"
+      }
+    ],
+    "lastRequests": [
+      {
+        "id": 1067,
+        "at": "2026-10-23T20:18:28.623Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/global/health",
+        "diagnostic": false
+      },
+      {
+        "id": 1068,
+        "at": "2026-10-23T20:18:29.763Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/chat/ses_-zUR5mXqjzz1QoHNYqg6",
+        "diagnostic": false
+      },
+      {
+        "id": 1069,
+        "at": "2026-10-23T20:18:30.528Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/mission/ses_-zURQjvQ8zz3y3NgFyVx",
+        "diagnostic": false
+      },
+      {
+        "id": 1070,
+        "at": "2026-10-23T20:18:31.041Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/task/tsk_g00VYhrJxy00qIC54qvM",
+        "diagnostic": false
+      },
+      {
+        "id": 1071,
+        "at": "2026-10-23T20:18:32.303Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/global/health",
+        "diagnostic": false
+      },
+      {
+        "id": 1072,
+        "at": "2026-10-23T20:18:33.391Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/chat/ses_-zUR5mMm2zzeLYhR8jkT",
+        "diagnostic": false
+      },
+      {
+        "id": 1073,
+        "at": "2026-10-23T20:18:34.759Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/chat/ses_-zUR5mXqjzz1QoHNYqg6",
+        "diagnostic": false
+      },
+      {
+        "id": 1074,
+        "at": "2026-10-23T20:18:35.520Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/mission/ses_-zURQjvQ8zz3y3NgFyVx",
+        "diagnostic": false
+      },
+      {
+        "id": 1075,
+        "at": "2026-10-23T20:18:36.048Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/continuous-goal/task/tsk_g00VYhrJxy00qIC54qvM",
+        "diagnostic": false
+      },
+      {
+        "id": 1076,
+        "at": "2026-10-23T20:18:36.875Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/global/health",
+        "diagnostic": false
+      },
+      {
+        "id": 1077,
+        "at": "2026-10-23T20:18:36.922Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/global/health",
+        "diagnostic": false
+      },
+      {
+        "id": 190,
+        "at": "2026-10-23T20:18:38.141Z",
+        "phase": "aborted",
+        "path": "/work-ledger/events"
+      },
+      {
+        "id": 825,
+        "at": "2026-10-23T20:18:38.142Z",
+        "phase": "aborted",
+        "path": "/session/ses_-zUR5mMm2zzeLYhR8jkT/events"
+      },
+      {
+        "id": 212,
+        "at": "2026-10-23T20:18:38.143Z",
+        "phase": "aborted",
+        "path": "/task/tsk_g00VYhrJxy00qIC54qvM/events"
+      },
+      {
+        "id": 320,
+        "at": "2026-10-23T20:18:38.172Z",
+        "phase": "aborted",
+        "path": "/work-ledger/events"
+      },
+      {
+        "id": 366,
+        "at": "2026-10-23T20:18:38.173Z",
+        "phase": "aborted",
+        "path": "/session/ses_-zURQjvQ8zz3y3NgFyVx/events"
+      },
+      {
+        "id": 413,
+        "at": "2026-10-23T20:18:38.211Z",
+        "phase": "aborted",
+        "path": "/work-ledger/events"
+      },
+      {
+        "id": 578,
+        "at": "2026-10-23T20:18:38.211Z",
+        "phase": "aborted",
+        "path": "/session/ses_-zUR5mXqjzz1QoHNYqg6/events"
+      }
+    ]
+  },
+  "retirement": {
+    "at": "2026-10-23T20:21:36.356Z",
+    "catalogRetired": 1,
+    "authRetired": 1,
+    "authCopied": true,
+    "modelRequests": 4,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "allProviderReaders": "eof",
+    "sourceCatalog": {
+      "bytes": 9155406,
+      "mtimeMs": 1791128890137.9968,
+      "content": "exact original"
+    },
+    "publicShutdown": 200,
+    "reserveMs": 661913,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "exactProcessChain": "dead_or_reused",
+    "remainingCanonicalStreams": []
+  },
+  "preservation": [
+    {
+      "stage": "before",
+      "schema": "Same actual application objects and version3;integrity ok",
+      "canonical": "Complete source bytes exact",
+      "source": {
+        "allOriginalRows": "Exact rowid/primary key/all fields/times",
+        "bytes": 79699968,
+        "modifiedAtMs": 1792784646539.7861
+      },
+      "tables": 90,
+      "originalRows": 169304,
+      "originalRowDifferences": [
+        {
+          "table": "memory_chunk",
+          "identity": "mck_hrnhtqblBLV1Glw3bbWe",
+          "fields": [
+            "content",
+            "token_count",
+            "time_updated"
+          ]
+        },
+        {
+          "table": "memory_file",
+          "identity": "mem_hFs2SHQA9DxpweVwd5yx",
+          "fields": [
+            "time_updated"
+          ]
+        },
+        {
+          "table": "runtime_execution_capacity_lease",
+          "identity": "[1]",
+          "fields": [
+            "lease_id",
+            "owner_id",
+            "time_acquired",
+            "expires_at"
+          ]
+        },
+        {
+          "table": "runtime_execution_capacity_lease",
+          "identity": "[2]",
+          "fields": [
+            "lease_id",
+            "owner_id",
+            "time_acquired",
+            "expires_at"
+          ]
+        }
+      ],
+      "providerActivities": {
+        "original": 421,
+        "current": 423
+      }
+    }
+  ],
+  "qualificationLimits": [
+    "Native desktop window not launched; shared host implementation and existing CSP inspected",
+    "VCS/MCP real stream requests and server-restart reconnect not manually qualified",
+    "Actual UI message uses canonical conversation stream; panel POST transport has focused network contracts, not a real-model panel POST qualification",
+    "One direct HTTP stream predates first test-page request and has no ticket admission; owner unknown, all owned service streams retired at normal shutdown"
+  ],
+  "verification": {
+    "focusedTests": 20,
+    "assertions": 156,
+    "backendTypecheck": 0,
+    "overlayTypecheck": 0,
+    "nodeViteBuild": 0,
+    "apiRouteRules": 6,
+    "apiRouteFiles": 36,
+    "documentedOperations": 346,
+    "documentedGroups": 26
+  }
+}

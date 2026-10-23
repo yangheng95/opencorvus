@@ -6,14 +6,15 @@ import { cors } from "hono/cors"
 import { basicAuth } from "hono/basic-auth"
 import { HTTPException } from "hono/http-exception"
 import { NamedError } from "@opencorvus-ai/util/error"
-import { routeRequiresProjectDirectory } from "@opencorvus-ai/transport-protocol"
+import { routeRequiresProjectDirectory, STREAM_SOCKET_PATH } from "@opencorvus-ai/transport-protocol"
 import { requireServerUrl, setServerUrl } from "./runtime-url"
 import { Flag } from "../flag/flag"
 import { lazy } from "../util/lazy"
 import { InstanceBootstrap } from "../project/bootstrap"
 import { Instance, InstanceProcessAdmissionClosedError, runOutsideInstanceContext } from "../project/instance"
 import { Project } from "../project/project"
-import { websocket } from "hono/bun"
+import { createStreamSocketTransport, streamSocketWebSocketHandler, type StreamSocketOwner } from "./stream-socket"
+import { StreamTransportRoutes } from "./routes/transport"
 import z from "zod"
 import { mkdir } from "node:fs/promises"
 import { AuthRoutes } from "./routes/auth"
@@ -633,6 +634,7 @@ export namespace Server {
     GlobalRoutes.reset()
     AuthRoutes.reset()
     const documented = AppRoutes()
+      .route("/global/transport", StreamTransportRoutes())
       .route("/global", GlobalRoutes())
       .route("/auth", AuthRoutes())
       .route("/ui", OverlayUI.routes(Object.freeze({ kind: "missing", identity: "missing" })))
@@ -914,6 +916,7 @@ export namespace Server {
             exposeHeaders: ["Content-Disposition", "Content-Range", "ETag", "x-opencorvus-request-id"],
           }),
         )
+        .route("/global/transport", StreamTransportRoutes())
         .route("/global", GlobalRoutes())
         .route("/auth", AuthRoutes())
         .route("/ui", OverlayUI.routes(bindOverlayUiSource()))
@@ -1006,11 +1009,16 @@ export namespace Server {
         SchedulerMessageDeliveryService.initGlobal()
       }
 
+      const streamSockets = createStreamSocketTransport((request) => App().fetch(request))
       const args = {
         hostname: opts.hostname,
         idleTimeout: 0,
-        fetch: App().fetch,
-        websocket: websocket,
+        fetch(request: Request, server: Bun.Server<StreamSocketOwner>) {
+          if (request.method === "GET" && new URL(request.url).pathname === STREAM_SOCKET_PATH)
+            return streamSockets.upgrade(request, server)
+          return App().fetch(request, { streamSockets })
+        },
+        websocket: streamSocketWebSocketHandler,
       } as const
       let failure: unknown
       const tryServe = (port: number) => {
@@ -1088,6 +1096,7 @@ export namespace Server {
               listenerStopFailuresForTest -= 1
               throw new Error("injected server listener stop failure")
             }
+            streamSockets.dispose()
             await originalStop(closeActiveConnections)
             listenerStopped = true
           } catch (error) {

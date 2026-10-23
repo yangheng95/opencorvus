@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [共享流传输修复](2026-10-24-stream-socket-transport.md)：559一次性鉴权ticket、原SSE字节桥接、真实五页/侧栏/Sol及完整资源结算。
+
 - [多页面连接与持久历史读取](2026-10-24-multiple-page-connection.md)：558跨项目连接证据及共享读取准入修复；保留中间失败与未完成传输修复。
 
 - [复制完成与读取初始化](2026-10-24-clipboard-completion-observation.md)：557排除纯时序与单一点击方式，七实图/0模型，保留多页连接关联现象待查。

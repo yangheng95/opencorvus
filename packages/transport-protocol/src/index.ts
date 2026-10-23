@@ -4,6 +4,7 @@
  * lifecycle, settings, and native-command validation from drifting.
  */
 import { z } from "zod"
+export * from "./stream-socket"
 import { ProductPillarSchema } from "@opencorvus-ai/util/product-pillar"
 export { decodeProviderStreamError } from "./provider-stream-error"
 

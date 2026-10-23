@@ -1,13 +1,13 @@
 /**
  * HostTransport — single cross-host abstraction for everything the
- * overlay UI needs to talk to: HTTP requests, server-sent events, and
+ * overlay UI needs to talk to: HTTP requests, streamed events, and
  * native (host-specific) commands.
  *
  * Runtime implementations:
- *   - tauri-transport.ts: forwards to direct fetch / EventSource / Tauri
+ *   - tauri-transport.ts: forwards to direct fetch / WebSocket / Tauri
  *     invoke. Default for the desktop overlay window.
- *   - browser mode: reuses tauri-transport HTTP/SSE and stores overlay
- *     settings in browser storage for standalone Vite development.
+ *   - browser mode: reuses the same HTTP/socket transport and stores overlay
+ *     settings in browser storage.
  *
  * Selection happens exactly once, at app boot, in `createHostTransport()`.
  * Business code MUST NOT reach for `window.__TAURI__` directly: everything

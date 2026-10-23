@@ -22919,6 +22919,46 @@ export type TaskGlobalCreateResponses = {
 
 export type TaskGlobalCreateResponse = TaskGlobalCreateResponses[keyof TaskGlobalCreateResponses]
 
+export type GlobalPrepareStreamData = {
+  body?: unknown
+  headers: {
+    "x-opencorvus-stream-method": "GET" | "POST"
+    /**
+     * Server-relative target path and query
+     */
+    "x-opencorvus-stream-target": string
+  }
+  path?: never
+  query?: never
+  url: "/global/transport/stream"
+}
+
+export type GlobalPrepareStreamErrors = {
+  /**
+   * Invalid stream target or method
+   */
+  400: unknown
+  /**
+   * Server authentication required
+   */
+  401: unknown
+  /**
+   * This host has no WebSocket listener
+   */
+  503: unknown
+}
+
+export type GlobalPrepareStreamResponses = {
+  /**
+   * Ticket, consumed through the ticket.<value> WebSocket subprotocol within ten seconds
+   */
+  200: {
+    ticket: string
+  }
+}
+
+export type GlobalPrepareStreamResponse = GlobalPrepareStreamResponses[keyof GlobalPrepareStreamResponses]
+
 export type GlobalUsageData = {
   body?: never
   path?: never

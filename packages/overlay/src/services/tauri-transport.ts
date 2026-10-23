@@ -5,18 +5,19 @@ import {
 
 /**
  * tauri-transport — HostTransport implementation for the Tauri overlay
- * window. This is essentially the historical direct-fetch + EventSource
- * + Tauri invoke logic, refactored behind the HostTransport interface so
- * the overlay's services layer never sees the host details.
- *
- * Reads URL / auth state from `services/api.ts` to keep behaviour
- * identical to the pre-M3 codebase. The api module remains the single
- * configuration surface (configure(), getServerUrl(), apiHeaders()),
- * which lets settings panels keep working unchanged in M3.A.
+ * window and browser. HTTP requests, ticket-authenticated WebSocket streams
+ * and native invocations share the existing API authority configuration.
  */
 
 import {
   STREAM_INSTANCE_QUERY_KEY,
+  STREAM_SOCKET_PATH,
+  STREAM_SOCKET_PROTOCOL,
+  STREAM_SOCKET_TICKET_PREFIX,
+  STREAM_SOCKET_TARGET_HEADER,
+  STREAM_SOCKET_METHOD_HEADER,
+  STREAM_SOCKET_OPEN_TIMEOUT_MS,
+  type StreamSocketControl,
   STREAM_FAILURE_PROVENANCE,
   STREAM_LIFECYCLE_EVENT_NAME,
   STREAM_LIFECYCLE_PROTOCOL,
@@ -221,151 +222,135 @@ async function readErrorResponse<T>(res: Response): Promise<T> {
   }
 }
 
-/**
- * POST-stream support: routes like /panel/message/stream send a JSON
- * body and stream the response as text/event-stream. EventSource cannot
- * do POST, so this path uses fetch + ReadableStream + manual SSE block
- * parsing. The Tauri WebView2 buffering issue does NOT apply here
- * because POST body upload triggers HTTP/1.1 (not HTTP/2), and our
- * server emits double-newline boundaries that flush per-block.
- */
-function openPostStream(input: StreamOpenRequest, handlers: StreamHandlers): StreamHandle {
+/** UI GET and POST streams share one socket; business owners retain reconnect. */
+function openSocketStream(input: StreamOpenRequest, handlers: StreamHandlers): StreamHandle {
+  const streamID = randomUUID()
+  const url = buildUrl(input.path, input.query)
+  url.searchParams.set(STREAM_INSTANCE_QUERY_KEY, streamID)
   const controller = new AbortController()
-  const signal = input.signal ? mergeAbort(input.signal, controller.signal) : controller.signal
+  let socket: WebSocket | undefined
   let closed = false
-  let reader: ReadableStreamDefaultReader<Uint8Array> | undefined
-  const closeWithReason = (reason: string): void => {
+  let opened = false
+  let buffer = ""
+  const decoder = new TextDecoder()
+  const lifecycle = (event: StreamLifecycleDetail) => {
+    emitStreamLifecycle({
+      ...event,
+      protocol: STREAM_LIFECYCLE_PROTOCOL,
+      streamID,
+      timestampMilliseconds: performance.timeOrigin + performance.now(),
+      requestURL: url.toString(),
+    })
+  }
+  const close = (reason: string, initiator: StreamCloseInitiator | "transport" = "transport") => {
     if (closed) return
     closed = true
+    clearTimeout(timer)
     activeStreamForceClose.delete(forceClose)
-    try {
-      controller.abort()
-    } catch {}
-    void reader?.cancel().catch(() => undefined)
+    input.signal?.removeEventListener("abort", abort)
+    controller.abort()
+    socket?.close()
+    lifecycle({ phase: "closing", initiator, reason })
     try {
       handlers.onClose?.(reason)
     } catch {}
   }
-  const forceClose = () => closeWithReason("auth-changed")
-  activeStreamForceClose.add(forceClose)
-  const url = buildUrl(input.path, input.query)
-  // audit-2026-04-29 overlay F4 — also serves authed GET-SSE: when
-  // input.method is "GET" we still go through fetch (instead of
-  // EventSource) because the only reason to be here under GET is that
-  // the caller needs Authorization headers, which EventSource refuses.
-  const method = input.method ?? "POST"
-  const init: RequestInit = applyBody(
-    {
-      method,
-      headers: {
-        ...apiHeadersFromState(),
-        ...(input.headers ?? {}),
-      },
-      signal,
-    },
-    input.body,
-  )
-
-  // Fire-and-forget: the close handle returns synchronously.
-  void (async () => {
-    let res: Response
+  const fail = (error: unknown) => {
+    if (closed) return
+    const cause = error instanceof Error ? error : new Error(String(error))
+    lifecycle({ phase: "failed", failureProvenance: STREAM_FAILURE_PROVENANCE, reason: cause.message })
     try {
-      res = await fetch(url.toString(), init)
-    } catch (err) {
-      if (closed) return
-      const error = err instanceof Error ? err : new Error(String(err))
-      try {
-        handlers.onError?.(error)
-      } catch {}
-      closeWithReason("post-stream-fetch-error")
-      return
-    }
-    if (closed) {
-      await res.body?.cancel()
-      return
-    }
-    if (!res.ok || !res.body) {
-      try {
-        handlers.onError?.(new Error(`POST stream ${res.status}: ${res.statusText}`))
-      } catch {}
-      closeWithReason("post-stream-bad-response")
-      return
-    }
-    try {
-      handlers.onOpen?.()
+      handlers.onError?.(cause)
     } catch {}
-    if (closed) {
-      await res.body.cancel()
-      return
-    }
-    reader = res.body.getReader()
-    const decoder = new TextDecoder()
-    let buf = ""
-    const consume = (chunk: string, flush = false) => {
-      buf += chunk
-      const blocks = buf.split(/\r?\n\r?\n/)
-      buf = flush ? "" : blocks.pop() || ""
-      for (const block of blocks) {
-        if (closed) return
-        const data = block
-          .split(/\r?\n/)
-          .filter((line) => line.startsWith("data:"))
-          .map((line) => line.slice(5).trim())
-          .join("\n")
-        if (!data) continue
+    close("stream-socket-error")
+  }
+  const forceClose = () => close("auth-changed")
+  const abort = () => close("aborted")
+  const timer = setTimeout(() => fail(new Error("stream socket open timeout")), STREAM_SOCKET_OPEN_TIMEOUT_MS)
+  ;(timer as { unref?: () => void }).unref?.()
+  activeStreamForceClose.add(forceClose)
+  const consume = (chunk: string, flush = false) => {
+    buffer += chunk
+    const blocks = buffer.split(/\r?\n\r?\n/)
+    buffer = flush ? "" : blocks.pop() || ""
+    for (const block of blocks) {
+      if (closed) return
+      const data = block
+        .split(/\r?\n/)
+        .filter((line) => line.startsWith("data:"))
+        .map((line) => line.slice(5).replace(/^ /, ""))
+        .join("\n")
+      if (data) {
         try {
           handlers.onEvent(data)
         } catch {}
       }
     }
-
-    try {
-      // eslint-disable-next-line no-constant-condition
-      while (true) {
-        const { done, value } = await reader.read()
-        if (closed) break
-        if (done) {
-          consume(decoder.decode(), true)
-          break
-        }
-        consume(decoder.decode(value, { stream: true }))
+  }
+  if (input.signal?.aborted) abort()
+  else input.signal?.addEventListener("abort", abort, { once: true })
+  if (!closed)
+    void (async () => {
+      const init = applyBody(
+        {
+          method: "POST",
+          headers: {
+            ...apiHeadersFromState(),
+            ...(input.headers ?? {}),
+            [STREAM_SOCKET_METHOD_HEADER]: input.method ?? "GET",
+            [STREAM_SOCKET_TARGET_HEADER]: url.pathname + url.search,
+          },
+          signal: controller.signal,
+        },
+        input.body,
+      )
+      const response = await fetch(buildUrl(STREAM_SOCKET_PATH).toString(), init)
+      if (closed) {
+        await response.body?.cancel()
+        return
       }
-    } catch (err) {
-      if (!closed) {
-        const error = err instanceof Error ? err : new Error(String(err))
+      if (!response.ok) throw new Error("Stream admission " + response.status + ": " + (await response.text()))
+      const { ticket } = (await response.json()) as { ticket: string }
+      if (closed) return
+      const endpoint = buildUrl(STREAM_SOCKET_PATH)
+      endpoint.protocol = endpoint.protocol === "https:" ? "wss:" : "ws:"
+      socket = new WebSocket(endpoint.toString(), [STREAM_SOCKET_PROTOCOL, STREAM_SOCKET_TICKET_PREFIX + ticket])
+      socket.binaryType = "arraybuffer"
+      socket.addEventListener("message", (event) => {
+        if (closed) return
         try {
-          handlers.onError?.(error)
-        } catch {}
-      }
-    } finally {
-      reader.releaseLock()
-      closeWithReason("post-stream-done")
-    }
-  })().catch((err) => {
-    if (closed) return
-    const error = err instanceof Error ? err : new Error(String(err))
-    try {
-      handlers.onError?.(error)
-    } catch {}
-    closeWithReason("post-stream-unhandled-error")
-  })
-
+          if (event.data instanceof ArrayBuffer) {
+            consume(decoder.decode(event.data, { stream: true }))
+            return
+          }
+          const control = JSON.parse(event.data) as StreamSocketControl
+          if (control.type === "response") {
+            if (!control.streaming) return
+            opened = true
+            clearTimeout(timer)
+            lifecycle({ phase: "opened" })
+            try {
+              handlers.onOpen?.()
+            } catch {}
+          } else if (control.type === "error") fail(new Error(control.message))
+          else if (control.type === "end") {
+            consume(decoder.decode(), true)
+            close("stream-done")
+          }
+        } catch (error) {
+          fail(error)
+        }
+      })
+      socket.addEventListener("error", () => fail(new Error("stream socket connection error")))
+      socket.addEventListener("close", () => {
+        if (!closed) fail(new Error(opened ? "stream socket disconnected" : "stream socket closed before response"))
+      })
+    })().catch(fail)
   return {
-    close(initiator: StreamCloseInitiator) {
-      closeWithReason(initiator)
+    close(initiator) {
+      close(initiator, initiator)
     },
   }
-}
-
-function mergeAbort(a: AbortSignal, b: AbortSignal): AbortSignal {
-  if (a.aborted) return a
-  if (b.aborted) return b
-  const c = new AbortController()
-  const onA = () => c.abort()
-  const onB = () => c.abort()
-  a.addEventListener("abort", onA, { once: true })
-  b.addEventListener("abort", onB, { once: true })
-  return c.signal
 }
 
 function headersToObject(headers: Headers): Record<string, string> {
@@ -384,9 +369,8 @@ function headersToObject(headers: Headers): Record<string, string> {
  * its auth-change event and we drain the set. Close delivers the retired
  * authority to the original owner; only a current business owner may reconnect.
  *
- * Without this, the browser's native EventSource keeps its original
- * URL + (lack of) headers forever; the only way to pick up a new
- * password was to navigate or reload the webview.
+ * Each socket admission and canonical request belong to that captured
+ * authority, so retired readers settle before business owners reconnect.
  */
 const activeStreamForceClose = new Set<() => void>()
 let streamLifecycleSequence = 0
@@ -394,6 +378,12 @@ let streamLifecycleSequence = 0
 type UnsequencedStreamLifecycleEvent = StreamLifecycleEvent extends infer Event
   ? Event extends StreamLifecycleEvent
     ? Omit<Event, "sequence">
+    : never
+  : never
+
+type StreamLifecycleDetail = UnsequencedStreamLifecycleEvent extends infer Event
+  ? Event extends UnsequencedStreamLifecycleEvent
+    ? Omit<Event, "protocol" | "streamID" | "timestampMilliseconds" | "requestURL">
     : never
   : never
 
@@ -479,121 +469,7 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
         // Close settles the original owner even when its UI/retry authority retired.
         onClose: (reason) => consumer.onClose?.(reason, { authority, current: isApiAuthorityCurrent(authority) }),
       }
-      const method = input.method ?? "GET"
-      if (method === "POST") {
-        return openPostStream(input, handlers)
-      }
-      // audit-2026-04-29 overlay F4 — when an Authorization header is
-      // configured, the native EventSource cannot carry it (no API for
-      // custom headers in the browser/WebView2). Falling through to
-      // EventSource produces silent 401s. Switch to fetch-based SSE
-      // parsing in that case so Basic Auth rides along; tradeoff is
-      // we lose EventSource's auto-reconnect, but the business layer
-      // (services/sse.ts) owns reconnect anyway (plan §5.5).
-      const headers: Record<string, string> = { ...apiHeadersFromState(), ...(input.headers ?? {}) }
-      if (headers.Authorization || headers.authorization) {
-        return openPostStream({ ...input, method: "GET" } as StreamOpenRequest, handlers)
-      }
-      // Native EventSource: WebView2 (Tauri's webview backend) is known
-      // to buffer ReadableStream chunks from fetch(), so SSE must NOT
-      // be polyfilled on top of fetch in this transport for unauthed
-      // streams. The note in services/sse.ts documents the original
-      // incident.
-      const streamID = randomUUID()
-      const url = buildUrl(input.path, input.query)
-      url.searchParams.set(STREAM_INSTANCE_QUERY_KEY, streamID)
-      const source = new EventSource(url.toString())
-      let closed = false
-      // audit-2026-04-29 overlay F3 — EventSource can stay in
-      // CONNECTING forever on a hard-down server, never firing
-      // CLOSED. After OPEN_TIMEOUT_MS without an `open` event we
-      // synthesise onClose so the business reconnect timer fires.
-      const OPEN_TIMEOUT_MS = 10_000
-      let opened = false
-      const closeWithReason = (reason: string, initiator: StreamCloseInitiator | "transport"): void => {
-        if (closed) return
-        closed = true
-        emitStreamLifecycle({
-          protocol: STREAM_LIFECYCLE_PROTOCOL,
-          streamID,
-          timestampMilliseconds: performance.timeOrigin + performance.now(),
-          phase: "closing",
-          requestURL: url.toString(),
-          initiator,
-          reason,
-        })
-        clearTimeout(stuckTimer)
-        activeStreamForceClose.delete(forceClose)
-        try {
-          source.close()
-        } catch {}
-        try {
-          handlers.onClose?.(reason)
-        } catch {}
-      }
-      const forceClose = () => {
-        if (closed) return
-        closeWithReason("auth-changed", "transport")
-      }
-      activeStreamForceClose.add(forceClose)
-      const stuckTimer: ReturnType<typeof setTimeout> = setTimeout(() => {
-        if (opened || closed) return
-        try {
-          handlers.onError?.(new Error("event-source open timeout"))
-        } catch {}
-        closeWithReason("event-source-stuck", "transport")
-      }, OPEN_TIMEOUT_MS)
-      if (typeof (stuckTimer as { unref?: () => void }).unref === "function") {
-        ;(stuckTimer as { unref?: () => void }).unref!()
-      }
-      source.addEventListener("open", () => {
-        if (closed) return
-        opened = true
-        clearTimeout(stuckTimer)
-        emitStreamLifecycle({
-          protocol: STREAM_LIFECYCLE_PROTOCOL,
-          streamID,
-          timestampMilliseconds: performance.timeOrigin + performance.now(),
-          phase: "opened",
-          requestURL: url.toString(),
-        })
-        try {
-          handlers.onOpen?.()
-        } catch {}
-      })
-      source.addEventListener("message", (e) => {
-        if (closed) return
-        try {
-          handlers.onEvent((e as MessageEvent).data as string)
-        } catch {}
-      })
-      source.addEventListener("error", () => {
-        // Native EventSource automatically reconnects while CONNECTING. That
-        // behavior violates HostTransport's single reconnect owner and can
-        // repeatedly reopen a replay-expired URL before services/sse.ts has
-        // reset its cursor. Close the native source on the first error; the
-        // business layer owns the visible disconnected state, backoff, and
-        // exact cursor used by the next stream.
-        if (closed) return
-        emitStreamLifecycle({
-          protocol: STREAM_LIFECYCLE_PROTOCOL,
-          streamID,
-          timestampMilliseconds: performance.timeOrigin + performance.now(),
-          phase: "failed",
-          requestURL: url.toString(),
-          failureProvenance: STREAM_FAILURE_PROVENANCE,
-          reason: "event-source-error",
-        })
-        try {
-          handlers.onError?.(new Error("event-source error"))
-        } catch {}
-        closeWithReason("event-source-error", "transport")
-      })
-      return {
-        close(initiator: StreamCloseInitiator) {
-          closeWithReason(initiator, initiator)
-        },
-      }
+      return openSocketStream(input, handlers)
     },
     async native(command: NativeCommand): Promise<unknown> {
       if (kind === "browser") {

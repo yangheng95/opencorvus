@@ -84779,6 +84779,92 @@
         ]
       }
     },
+    "/global/transport/stream": {
+      "post": {
+        "description": "Authenticate a short-lived, single-use WebSocket ticket. The target GET or POST executes only after the socket opens, through its original HTTP route. The request body and Content-Type are forwarded unchanged. This is a physical transport adapter; public SSE routes remain canonical.",
+        "operationId": "global.prepareStream",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-opencorvus-stream-method",
+            "required": true,
+            "schema": {
+              "enum": [
+                "GET",
+                "POST"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Server-relative target path and query",
+            "in": "header",
+            "name": "x-opencorvus-stream-target",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {}
+            },
+            "application/octet-stream": {
+              "schema": {
+                "format": "binary",
+                "type": "string"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "ticket": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "ticket"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Ticket, consumed through the ticket.<value> WebSocket subprotocol within ten seconds"
+          },
+          "400": {
+            "description": "Invalid stream target or method"
+          },
+          "401": {
+            "description": "Server authentication required"
+          },
+          "503": {
+            "description": "This host has no WebSocket listener"
+          }
+        },
+        "summary": "Prepare a UI event stream",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.global.prepareStream({\n  ...\n})"
+          }
+        ]
+      }
+    },
     "/global/usage": {
       "get": {
         "description": "Aggregate persisted streamed Provider calls across all projects by their event time for one IANA calendar period.",

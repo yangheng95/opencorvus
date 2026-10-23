@@ -332,6 +332,26 @@ creates a new compressor. The packageManager-pinned Bun 1.4 runtime is required
 for immediate decoding of compressed fetch streams; Bun 1.3.14 buffered them.
 Compression reduces wire bytes, not the decoded JSON or field-value allocation.
 
+The browser and desktop HostTransport use the same WebSocket adapter for all six
+UI stream callers: selected Task/Mission/Session, global Work Ledger/Mailbox,
+Side Session, panel message POST, VCS commit message POST and MCP App. Each stream
+first sends a short POST to `/global/transport/stream`, through the existing
+Basic Auth and Origin middleware, preserving its target method, relative path,
+query, headers and body. The single-use ticket expires after ten seconds and is
+bound to the admitting Origin. Upgrade consumes it through a subprotocol; user
+credentials never enter the socket URL. The target executes only after upgrade
+through the same complete App.fetch pipeline, which revalidates authentication,
+project lineage and runtime authority. Public HTTP/SSE routes remain the sole
+business handlers; this adapter forwards their identity-encoded response bytes.
+
+No UI long-lived request occupies the browser HTTP connection pool. Response
+status precedes raw byte frames; EOF and original errors settle the same logical
+owner. Native send backpressure waits for drain before reading another chunk.
+Socket close, request abort, authority change and listener shutdown cancel the
+original request and reader; shutdown retires unconsumed tickets. The existing
+business layer alone owns reconnect, replay and cursors. There is no EventSource
+or fetch-stream fallback, polling, source deduplication cache or second publisher.
+
 The transcript snapshot is additive and bounded. It repairs creation events
 missed before stream attachment or during disconnection and supplies the
 history cursor for the returned tail. It is not a deletion manifest and does
@@ -871,7 +891,7 @@ introduce a separate transcript renderer or focus-restoration path.
 The left-sidebar Mailbox hydrates from the global registered-project `/mailbox`
 projection and subscribes in memory to `mailbox.changed` on the page-global
 `/work-ledger/events` notification stream. Work Ledger and Mailbox share that
-single physical Server-Sent Events (SSE) connection; a selected Task or Session
+single physical WebSocket connection carrying canonical SSE bytes; a selected Task or Session
 may own one additional replay stream. Every Mailbox change causes a fresh
 canonical page read, so the notification stream is not a second payload/history
 source. Project directory changes abort the previous

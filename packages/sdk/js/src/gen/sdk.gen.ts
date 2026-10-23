@@ -246,6 +246,8 @@ import type {
   GlobalEventResponse,
   GlobalEventResponses,
   GlobalHealthResponses,
+  GlobalPrepareStreamErrors,
+  GlobalPrepareStreamResponses,
   GlobalProjectsAnonymousResponses,
   GlobalProjectsDiscoverErrors,
   GlobalProjectsDiscoverResponses,
@@ -7200,6 +7202,45 @@ export class Global extends HeyApiClient {
       url: "/global/health",
       ...options,
     })
+  }
+
+  /**
+   * Prepare a UI event stream
+   *
+   * Authenticate a short-lived, single-use WebSocket ticket. The target GET or POST executes only after the socket opens, through its original HTTP route. The request body and Content-Type are forwarded unchanged. This is a physical transport adapter; public SSE routes remain canonical.
+   */
+  public prepareStream<ThrowOnError extends boolean = false>(
+    parameters: {
+      "x-opencorvus-stream-method": "GET" | "POST"
+      "x-opencorvus-stream-target": string
+      body?: unknown
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "headers", key: "x-opencorvus-stream-method" },
+            { in: "headers", key: "x-opencorvus-stream-target" },
+            { key: "body", map: "body" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).post<GlobalPrepareStreamResponses, GlobalPrepareStreamErrors, ThrowOnError>(
+      {
+        url: "/global/transport/stream",
+        ...options,
+        ...params,
+        headers: {
+          "Content-Type": "application/json",
+          ...options?.headers,
+          ...params.headers,
+        },
+      },
+    )
   }
 
   /**
