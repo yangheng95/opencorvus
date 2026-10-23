@@ -129,11 +129,12 @@ archives affect only goals whose exact owner is that Session.
 ## User controls
 
 The home page places the heading, existing composer and suggested conversation
-starters before a compact Continuous goal section, separated by a rule. That
-section offers Create continuous goal beside a short body-sized explanation and
-How it works. It uses the same Continuous goal title as existing conversations.
-The introduction names its action from that same localized
-Home label. Task scope tools, tabs and Environment progress use Deliverables for
+starters together. The composer's + menu offers Continuous goal and opens the
+same goal form in Home, Chat, Task and Mission. SideChat's own composer + menu
+opens that form for its independent Session. No goal creation section or empty
+goal strip occupies the conversation surface. Existing goals retain their status,
+usage, pause and details controls. The introduction names the same localized
+menu action. Task scope tools, tabs and Environment progress use Deliverables for
 Delivery Slice contracts; their panel explains where to find continuous execution
 controls without creating another goal entry or mutation path.
 It opens the existing goal form before creating a Conversation. The Home form
@@ -152,7 +153,7 @@ follow a later selection. A submitted creation failure retains any real Chat
 already committed; cancellation never needs a compensating deletion.
 No user Message is fabricated. Submission uses the same continuous-goal endpoint,
 budgets and visible controller Messages; existing-owner and SideChat controls
-retain their current mutation path. How it works is a separate introduction mode.
+retain their current mutation path. Help in that dialog opens its introduction mode.
 Starting from the composer moves its text and quotation through one write to the
 existing draft store, after creation authority is rechecked and before selecting
 the newly published Session. That creation preserves staged attachments; ordinary
@@ -169,8 +170,9 @@ use the current interface language and the actual localized Resume label.
 Its first step identifies the model menu below the Home message input and that
 menu's Configure Provider action for an empty connected-model list. Configured
 defaults may still be inherited; this guidance adds no model-selection policy.
-The home explanation uses body text and a regular primary control size; compact
-status-strip sizing belongs to existing conversation controls.
+The form opens only after an explicit menu request. That request waits for the
+initial owner projection before choosing creation or existing-goal details, and
+does not carry a goal value or mutation authority across a selection.
 The creation dialog uses a bounded 560px width, one concise execution explanation
 and the original objective field. Optional budgets use the shared native Disclosure;
 its summary states No limit or Custom limits. Existing draft values reopen expanded,
@@ -185,11 +187,11 @@ retain their own authority. Replaying the creation request does not rename a
 conversation again. The controller's technical Message remains complete and
 visible; its transport role does not make it a human-authored naming input.
 
-The common conversation surface and an opened SideChat expose one continuous-goal
-control. Task binds its Task ID; Chat and Mission bind their canonical Session ID.
+The common conversation surface and an opened SideChat each own one continuous-goal
+projection and form. Task binds its Task ID; Chat and Mission bind their canonical Session ID.
 Every request also binds project directory, current API authority and selection lifetime.
 The single HTTP projection carries its request source key; a different owner cannot
-temporarily display the previous owner's goal. Visible controls refresh read-only data
+temporarily display the previous owner's goal. Visible conversation containers refresh read-only data
 every five seconds and on focus, and re-read after explicit mutations. They do not
 schedule execution or maintain a second goal store.
 

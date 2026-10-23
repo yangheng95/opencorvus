@@ -46,6 +46,7 @@ import { Disclosure } from "./ui/Disclosure"
 import { SelectControl } from "./ui/SelectControl"
 import { InteractionCard, type InteractionData } from "./InteractionCard"
 import { ContinuousGoalControl } from "./ContinuousGoalControl"
+import { DropdownMenu } from "./ui/DropdownMenu"
 
 export interface SideChatRequest {
   source: SideChatSource
@@ -97,6 +98,7 @@ export function SideChatPanel(props: {
 }) {
   const [sessions, setSessions] = createSignal<SideChatSession[]>([])
   const [selected, setSelected] = createSignal("")
+  const [goalOpenRequest, setGoalOpenRequest] = createSignal(0)
   const [transcript, setTranscript] = createSignal<SubagentConversationTranscript>()
   const [connected, setConnected] = createSignal(false)
   const [creating, setCreating] = createSignal(false)
@@ -417,6 +419,7 @@ export function SideChatPanel(props: {
       <Show when={selected() && props.source}>
         <ContinuousGoalControl
           compact
+          openRequest={goalOpenRequest()}
           ownerLabel={session() && sessionLabel(session()!)}
           composerDraftKey={key()}
           selectionEpoch={boardStore.selectEpoch}
@@ -586,6 +589,33 @@ export function SideChatPanel(props: {
             />
           </Show>
           <div class="side-chat-composer__actions">
+            <DropdownMenu.Root placement="top-start" gutter={6} fitViewport>
+              <DropdownMenu.Trigger
+                as={Button}
+                type="button"
+                variant="ghost"
+                size="icon"
+                tone="neutral"
+                disabled={fileEditorReserved() || !connected()}
+                aria-label={t("chat.composer_more")}
+                title={t("chat.composer_more")}
+              >
+                <Icon name="plus" />
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Portal>
+                <DropdownMenu.Content class="composer-attachment-menu">
+                  <DropdownMenu.Item
+                    as="button"
+                    type="button"
+                    class="composer-attachment-menu-item"
+                    onSelect={() => setGoalOpenRequest((value) => value + 1)}
+                  >
+                    <Icon name="goals" size="medium" />
+                    <span>{t("continuous_goal.title")}</span>
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Portal>
+            </DropdownMenu.Root>
             <span role="status" class="side-chat-status" data-connected={connected()} data-running={running()}>
               <span class="side-chat-status__dot" />
               {!connected() ? t("side_chat.connecting") : running() ? t("side_chat.running") : t("side_chat.private")}

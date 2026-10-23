@@ -197,7 +197,7 @@ export interface AppProps {
   primarySurface: () => "conversation" | "mission-board"
   missionBoard: JSX.Element
   conversation: (container: HTMLDivElement) => JSX.Element
-  composer: JSX.Element
+  composer: (onGoal: () => void) => JSX.Element
   homeActive: boolean
   rightDock: JSX.Element
   logViewer: JSX.Element
@@ -222,6 +222,7 @@ export interface AppProps {
 }
 
 export function App(props: AppProps) {
+  const [goalOpenRequest, setGoalOpenRequest] = createSignal(0)
   const [goalFormRequest, setGoalFormRequest] = createSignal<GoalFormRequest>()
   const [startingGoal, setStartingGoal] = createSignal(false)
   async function startGoal(input: ContinuousGoalCreateInput, context: GoalLaunchContext) {
@@ -537,6 +538,7 @@ export function App(props: AppProps) {
                             </header>
                             <Show when={!props.homeActive}>
                               <ContinuousGoalControl
+                                openRequest={goalOpenRequest()}
                                 ownerLabel={props.conversationTitle()}
                                 composerDraftKey={props.composerDraftKey}
                                 hasStagedAttachments={props.hasStagedAttachments}
@@ -581,19 +583,20 @@ export function App(props: AppProps) {
                                     </div>
                                     <div class="chat-home-composition" id="chatHomeComposition">
                                       <div id="solidChatHomePromptMount" />
-                                      <div id="solidChatComposer">{props.composer}</div>
+                                      <div id="solidChatComposer">
+                                        {props.composer(() => setGoalOpenRequest((value) => value + 1))}
+                                      </div>
                                       <div id="solidChatHomeAfterMount" />
                                       <Show when={props.homeActive}>
-                                        <div class="chat-home-goal">
-                                          <ContinuousGoalControl
-                                            home
-                                            selectionEpoch={boardStore.selectEpoch}
-                                            composerDraftKey={props.composerDraftKey}
-                                            hasStagedAttachments={props.hasStagedAttachments}
-                                            starting={startingGoal()}
-                                            onStartGoal={startGoal}
-                                          />
-                                        </div>
+                                        <ContinuousGoalControl
+                                          home
+                                          openRequest={goalOpenRequest()}
+                                          selectionEpoch={boardStore.selectEpoch}
+                                          composerDraftKey={props.composerDraftKey}
+                                          hasStagedAttachments={props.hasStagedAttachments}
+                                          starting={startingGoal()}
+                                          onStartGoal={startGoal}
+                                        />
                                       </Show>
                                     </div>
                                   </div>

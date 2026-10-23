@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [持续目标加号入口](2026-10-24-goal-composer-menu/README.md)：12张真实桌面截图，中英菜单、表单、取消草稿和主/侧归属；0模型与正常结算。
+
 - [结构化工具输出阅读](2026-10-24-structured-payload-reading/README.md)：556十八实图、前态字符跳转与修复后原文保持；保留复制未通过与独立页面限制。
 
 - [已授权能力执行闭合](2026-10-24-authorized-capability-execution/README.md)：Explore 自主加载、通用报告和联合发布的真实工具事实、三张人工实图及完整资源结算；保留原预算失败。

@@ -2596,8 +2596,9 @@ function OverlayRoot() {
         </QuotationSelection>
       )}
       homeActive={homeActive()}
-      composer={
+      composer={(onGoal) => (
         <ChatComposer
+          onGoal={onGoal}
           onSideChat={async (prompt) => requestSideChat(undefined, prompt)}
           availability={
             !canComposeChat()
@@ -2831,7 +2832,7 @@ function OverlayRoot() {
             })
           }}
         />
-      }
+      )}
       rightDock={
         <RightDock
           addMenuOpen={rightDockAddMenuOpen}

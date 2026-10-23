@@ -7,6 +7,11 @@
   border-bottom: var(--oc-border-width) solid var(--border);
   font-size: var(--ui-font-caption);
 }
+.continuous-goal--idle {
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
 .continuous-goal__row {
   display: flex;
   align-items: center;
@@ -17,8 +22,7 @@
   flex-shrink: 0;
   font-weight: 600;
 }
-.continuous-goal__objective,
-.continuous-goal__empty {
+.continuous-goal__objective {
   flex: 1 1 auto;
   min-width: 0;
   overflow: hidden;
@@ -59,8 +63,7 @@
   .continuous-goal__row {
     flex-wrap: wrap;
   }
-  .continuous-goal__objective,
-  .continuous-goal__empty {
+  .continuous-goal__objective {
     order: 1;
     flex-basis: 100%;
   }
@@ -70,10 +73,6 @@
   }
   .continuous-goal__row > .oc-button {
     order: 2;
-  }
-  .continuous-goal__empty + .oc-button {
-    order: 0;
-    margin-left: auto;
   }
 }
 .continuous-goal__form,
@@ -93,57 +92,6 @@
   flex-shrink: 0;
 }
 
-.continuous-goal--home {
-  padding: var(--ui-gap-2xl) 0 0;
-  font-size: var(--ui-font-body);
-  background: transparent;
-  border: 0;
-  border-top: var(--oc-border-width) solid var(--border);
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: var(--ui-gap-xl);
-}
-.continuous-goal__welcome {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--ui-gap-md);
-}
-.continuous-goal__welcome > div:not(.continuous-goal__welcome-icon) {
-  flex: 1;
-  min-width: 0;
-}
-.continuous-goal__welcome-icon {
-  color: var(--text-muted);
-  padding-block-start: var(--ui-gap-xs);
-}
-.continuous-goal__welcome h2 {
-  margin: 0;
-  font-size: var(--ui-font-body);
-  font-weight: var(--ui-font-weight-strong);
-  color: var(--text-strong);
-}
-.continuous-goal__welcome p {
-  margin: var(--ui-gap-xs) 0 0;
-  color: var(--text-soft);
-  line-height: var(--ui-line-height-normal);
-}
-.continuous-goal__home-actions {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--ui-gap-sm);
-}
-@container chat-workbench (width < 760px) {
-  .continuous-goal--home {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .continuous-goal__home-actions {
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding-inline-start: var(--ui-gap-4xl);
-  }
-}
 .continuous-goal__steps {
   list-style: none;
   counter-reset: goal-step;

@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-24",
+  "mode": "Manual real-page desktop interactions and screenshots; no UI automated tests",
+  "runs": [
+    {
+      "name": "goal-composer-menu",
+      "shutdown": {
+        "pid": 1296,
+        "status": 200
+      },
+      "modelRequests": 0,
+      "maximumRequests": 0,
+      "processExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "launcherExit": 0
+    },
+    {
+      "name": "goal-composer-menu-after",
+      "shutdown": {
+        "status": 200,
+        "pid": 93152
+      },
+      "modelRequests": 0,
+      "maximumRequests": 0,
+      "processExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "launcherExit": 0
+    }
+  ],
+  "readOnlyData": {
+    "sessions": [
+      {
+        "id": "ses_-zUR67YXkzzICoqcPW3v",
+        "kind": "assistant",
+        "title": "Work",
+        "metadata": "{\"conversation\":{\"experience\":\"work\",\"surface\":\"right-sidebar\"}}"
+      },
+      {
+        "id": "ses_-zUR67SbjzzHDKUyK8NH",
+        "kind": "assistant",
+        "title": "Side chat · Work",
+        "metadata": "{\"configOverlay\":{},\"sideChat\":{\"sourceSessionID\":\"ses_-zUR67YXkzzICoqcPW3v\",\"inheritedMessageIDs\":[]}}"
+      }
+    ],
+    "messages": {
+      "count": 0
+    },
+    "goalEvents": {
+      "count": 0
+    }
+  },
+  "ui": {
+    "before": "Pinned executable's adjacent old UI bundle",
+    "after": "Current workspace dist-vite main-CpLITCN5.js",
+    "desktop": "1280x720"
+  },
+  "limitations": [
+    "No new goal execution or model acceptance; unchanged runtime",
+    "Task/Mission and existing-goal pause/status were not separately exercised"
+  ]
+}

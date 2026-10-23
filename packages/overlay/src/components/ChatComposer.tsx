@@ -179,6 +179,7 @@ export interface ChatComposerProps {
   /** Called when the user clicks the stop button while busy. */
   onStop?: () => void
   onSideChat?: (prompt: string) => Promise<void>
+  onGoal: () => void
   formID?: string
   textareaID?: string
   sendID?: string
@@ -338,6 +339,7 @@ interface ComposerAttachmentLoadersProps {
   onFolder: () => void | Promise<void>
   onParallelismChange: (value: number) => void
   onUnattendedChange: (enabled: boolean) => void
+  onGoal: () => void
 }
 
 function ComposerAttachmentLoaders(props: ComposerAttachmentLoadersProps): JSX.Element {
@@ -386,8 +388,8 @@ function ComposerAttachmentLoaders(props: ComposerAttachmentLoadersProps): JSX.E
           class="composer-attachment-loader-trigger"
           data-ui="composer-attachment-menu-trigger"
           disabled={props.disabled}
-          title={t("chat.attachment_loader.file_title")}
-          aria-label={t("chat.attachment_loader.file_title")}
+          title={t("chat.composer_more")}
+          aria-label={t("chat.composer_more")}
         >
           <Icon name="plus" size="medium" />
         </DropdownMenu.Trigger>
@@ -416,6 +418,17 @@ function ComposerAttachmentLoaders(props: ComposerAttachmentLoadersProps): JSX.E
               <span>
                 {t(canPickFolder ? "chat.attachment_loader.folder_title" : "chat.attachment_loader.folder_desktop_title")}
               </span>
+            </DropdownMenu.Item>
+            <DropdownMenu.Separator />
+            <DropdownMenu.Item
+              as="button"
+              type="button"
+              class="composer-attachment-menu-item"
+              data-ui="composer-goal-trigger"
+              onSelect={props.onGoal}
+            >
+              <Icon name="goals" size="medium" />
+              <span>{t("continuous_goal.title")}</span>
             </DropdownMenu.Item>
             <DropdownMenu.Separator />
             <DropdownMenu.Sub gutter={6}>
@@ -1696,6 +1709,7 @@ export function ChatComposer(props: ChatComposerProps) {
               onFolder={addFolder}
               onParallelismChange={setParallelism}
               onUnattendedChange={setUnattended}
+              onGoal={props.onGoal}
             />
             <Show when={toolbarLayout() === "overflow"} fallback={renderToolbarOptions()}>
               <Popover.Root
