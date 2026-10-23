@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [剪贴板路径对照](2026-10-24-clipboard-path/README.md)：555三实图、已知键盘/API对照及完整停止详情，0模型/原90表数据保持与正常闭合。
+
 - [取消事实与当前提示归属](2026-10-23-cancellation-presentation/README.md)：554十五实图、10次Sol，修复取消红色误报和旧提示覆盖成功；保留一次资源截止失败与复制核验限制，最终服务正常闭合。
 
 - [停止后待批准许可收敛](2026-10-23-stopped-permission-convergence/README.md)：553四张实图，旧残留恢复、新许可Stop与重新打开；4次Sol、服务与凭据全部闭合。

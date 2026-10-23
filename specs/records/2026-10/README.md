@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [剪贴板路径对照](2026-10-24-clipboard-path-investigation.md)：555隔离实页三次复制、重载及未发送草稿复核，不把未复现当作根因已修复。
+
 - [取消事实的统一展示](2026-10-23-cancellation-presentation.md)：554共享Message取消分类和历史提示归属；十五实图、15合同/10次Sol，完整结算并保留验收边界。
 
 - [停止后待批准许可收敛](2026-10-23-stopped-permission-convergence.md)：553规范Message退休、唯一决定槽及启动恢复，共享取消链横向审计。

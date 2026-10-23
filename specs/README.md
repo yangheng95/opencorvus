@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [剪贴板路径对照](records/2026-10/2026-10-24-clipboard-path-investigation.md)：555已知标记校准、三次真实复制粘贴通过；旧43字符异常未复现，0模型/原数据保持。
+
 - [取消事实的统一展示](records/2026-10/2026-10-23-cancellation-presentation.md)：554修复取消语义及历史提示覆盖成功，十五实图/10次Sol；保留资源失败与复制核验限制，最终正常闭合。
 
 - [停止后待批准许可收敛](records/2026-10/2026-10-23-stopped-permission-convergence.md)：553修复共享Message退休及启动恢复、公开账本声明；四实图、4次Sol及完整闭合。

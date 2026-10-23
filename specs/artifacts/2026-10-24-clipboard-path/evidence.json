@@ -1,0 +1,471 @@
+{
+  "batch": 555,
+  "date": "2026-10-24",
+  "productionCommit": "c3f75a2f9386fb42f6061ffc9e6a27b294c7db7e",
+  "surface": "Source CLI /ui; published frozen assets; manual browser interaction",
+  "assets": [
+    "http://127.0.0.1:19153/ui/assets/main-_-Beyuq8.js"
+  ],
+  "observations": [
+    {
+      "step": "keyboard-copy",
+      "characters": 23,
+      "equalsKnownMarker": true
+    },
+    {
+      "step": "keyboard-copy-keyboard-paste",
+      "characters": 23,
+      "equalsKnownMarker": true
+    },
+    {
+      "step": "dedicated-api-write-keyboard-paste",
+      "characters": 26,
+      "equalsKnownMarker": true
+    },
+    {
+      "step": "app-copy-stop-dedicated-read",
+      "characters": 361,
+      "hasOriginalRequestID": true,
+      "isControl": false,
+      "prefixIsReason": true
+    },
+    {
+      "step": "app-copy-stop-keyboard-paste",
+      "characters": 361,
+      "hasOriginalRequestID": true,
+      "isControl": false
+    },
+    {
+      "step": "second-app-copy-actual-paste",
+      "characters": 361,
+      "equalsFirstCopy": true
+    },
+    {
+      "step": "reload-app-copy-actual-paste",
+      "characters": 361,
+      "equalsFirstCopy": true
+    }
+  ],
+  "persistedCopyIdentity": {
+    "sessionID": "ses_-zURQsHHDzzntY8gGKW8",
+    "messageID": "msg_g0VYomLjI00SBFbkR1DW",
+    "requestID": "20688a79-e973-4dec-bcf9-3a2e6156a324",
+    "copiedCharacters": 361,
+    "equalsCompletePersistedReasonAndError": true
+  },
+  "closure": {
+    "at": "2026-10-23T18:16:28.051Z",
+    "catalogRetired": 1,
+    "authCopied": false,
+    "modelRequests": 0,
+    "sourceCatalog": {
+      "bytes": 9155406,
+      "mtimeMs": 1791128890137.9968,
+      "content": "exact original"
+    },
+    "publicShutdown": 200,
+    "reserveMs": 1048404,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "exactProcessChain": "dead_or_reused"
+  },
+  "data": {
+    "at": "2026-10-23T18:15:57.740Z",
+    "schema": 3,
+    "scopes": [
+      {
+        "stage": "before",
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 79699968,
+          "modifiedAtMs": 1792777979579.7139
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "counts": {
+          "automation": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_definition_tombstone": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_delay_settlement": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_fire": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_fire_attempt": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_fire_attempt_receipt": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_fire_frontier": {
+            "original": 0,
+            "current": 0
+          },
+          "automation_project_target": {
+            "original": 2,
+            "current": 2
+          },
+          "automation_run": {
+            "original": 1,
+            "current": 1
+          },
+          "automation_run_receipt": {
+            "original": 1,
+            "current": 1
+          },
+          "bus_publication_attempt_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "bus_publication_delivery": {
+            "original": 34816,
+            "current": 34816
+          },
+          "bus_publication_delivery_receipt": {
+            "original": 34816,
+            "current": 34816
+          },
+          "bus_publication_outbox": {
+            "original": 5160,
+            "current": 5160
+          },
+          "bus_publication_phase_receipt": {
+            "original": 15480,
+            "current": 15480
+          },
+          "channel_ingress_accepted": {
+            "original": 0,
+            "current": 0
+          },
+          "channel_ingress_outcome": {
+            "original": 0,
+            "current": 0
+          },
+          "control_account": {
+            "original": 0,
+            "current": 0
+          },
+          "database_authority": {
+            "original": 1,
+            "current": 1
+          },
+          "decision_log": {
+            "original": 13,
+            "current": 13
+          },
+          "engine_artifact": {
+            "original": 183,
+            "current": 183
+          },
+          "engine_artifact_catalog_revision": {
+            "original": 183,
+            "current": 183
+          },
+          "engine_artifact_version": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_browser_preview_target_identity": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_build_observation_cleanup": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_build_observation_cleanup_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_channel_binding": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_control_activation_lease": {
+            "original": 35184,
+            "current": 35184
+          },
+          "engine_control_activation_lease_grant": {
+            "original": 35248,
+            "current": 35248
+          },
+          "engine_git_checkpoint_outcome": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_git_checkpoint_request": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_goal": {
+            "original": 5,
+            "current": 5
+          },
+          "engine_interaction_outcome": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_interaction_request": {
+            "original": 38,
+            "current": 38
+          },
+          "engine_metric_result": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_metric_spec": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_progress_snapshot": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_task": {
+            "original": 19,
+            "current": 19
+          },
+          "engine_task_creation_contract": {
+            "original": 19,
+            "current": 19
+          },
+          "engine_task_root_ingress": {
+            "original": 46,
+            "current": 46
+          },
+          "engine_task_root_ingress_policy": {
+            "original": 1,
+            "current": 1
+          },
+          "engine_task_wait_registration": {
+            "original": 0,
+            "current": 0
+          },
+          "engine_task_wait_settlement": {
+            "original": 0,
+            "current": 0
+          },
+          "event_job": {
+            "original": 3,
+            "current": 3
+          },
+          "event_job_definition_tombstone": {
+            "original": 1,
+            "current": 1
+          },
+          "event_job_fire": {
+            "original": 2,
+            "current": 2
+          },
+          "event_job_fire_receipt": {
+            "original": 2,
+            "current": 2
+          },
+          "event_occurrence": {
+            "original": 2,
+            "current": 2
+          },
+          "global_creation_allocation": {
+            "original": 163,
+            "current": 163
+          },
+          "interactive_artifact": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_chunk": {
+            "original": 177,
+            "current": 177
+          },
+          "memory_embedding": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_file": {
+            "original": 177,
+            "current": 177
+          },
+          "memory_fts": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_config": {
+            "original": 1,
+            "current": 1
+          },
+          "memory_fts_content": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_data": {
+            "original": 2,
+            "current": 2
+          },
+          "memory_fts_docsize": {
+            "original": 0,
+            "current": 0
+          },
+          "memory_fts_idx": {
+            "original": 0,
+            "current": 0
+          },
+          "message": {
+            "original": 650,
+            "current": 650
+          },
+          "part": {
+            "original": 1543,
+            "current": 1543
+          },
+          "permission_execution_result": {
+            "original": 111,
+            "current": 111
+          },
+          "permission_ledger": {
+            "original": 563,
+            "current": 563
+          },
+          "permission_policy": {
+            "original": 31,
+            "current": 31
+          },
+          "project": {
+            "original": 177,
+            "current": 177
+          },
+          "project_directory_admission": {
+            "original": 0,
+            "current": 0
+          },
+          "project_maintenance_fence": {
+            "original": 0,
+            "current": 0
+          },
+          "protocol_delivery_receipt": {
+            "original": 0,
+            "current": 0
+          },
+          "protocol_event": {
+            "original": 1854,
+            "current": 1854
+          },
+          "protocol_inbox": {
+            "original": 0,
+            "current": 0
+          },
+          "provider_activity_outcome": {
+            "original": 421,
+            "current": 421
+          },
+          "provider_activity_request": {
+            "original": 421,
+            "current": 421
+          },
+          "provider_usage_event": {
+            "original": 651,
+            "current": 651
+          },
+          "quick_note": {
+            "original": 0,
+            "current": 0
+          },
+          "runtime_execution_capacity_lease": {
+            "original": 3,
+            "current": 3
+          },
+          "session": {
+            "original": 241,
+            "current": 241
+          },
+          "session_control_event": {
+            "original": 179,
+            "current": 179
+          },
+          "session_control_record": {
+            "original": 179,
+            "current": 179
+          },
+          "session_prompt_owner": {
+            "original": 5,
+            "current": 5
+          },
+          "session_share": {
+            "original": 0,
+            "current": 0
+          },
+          "task_plan": {
+            "original": 0,
+            "current": 0
+          },
+          "todo": {
+            "original": 0,
+            "current": 0
+          },
+          "todo_snapshot": {
+            "original": 0,
+            "current": 0
+          },
+          "tool_part_outcome": {
+            "original": 180,
+            "current": 180
+          },
+          "tool_part_progress": {
+            "original": 14,
+            "current": 14
+          },
+          "tool_part_request": {
+            "original": 180,
+            "current": 180
+          },
+          "workbench_brief_snapshot": {
+            "original": 48,
+            "current": 48
+          },
+          "worker_turn_descriptor": {
+            "original": 25,
+            "current": 25
+          },
+          "workspace": {
+            "original": 0,
+            "current": 0
+          },
+          "workspace_lifecycle_admission": {
+            "original": 0,
+            "current": 0
+          }
+        },
+        "originalRowDifferences": []
+      }
+    ],
+    "maximumRequestsPerStartedScope": 0,
+    "maximumBatchRequests": 0
+  },
+  "scope": {
+    "productionChanges": 0,
+    "authCopied": false,
+    "modelRequests": 0,
+    "uiAutomatedTests": 0,
+    "draft": "cleared; no send action",
+    "sideHistory": "original message/part rows retained exactly"
+  },
+  "limits": [
+    "554 unmatched 43-character observation was not reproduced; its root cause remains unknown",
+    "No production clipboard patch; current product copy passed three manual attempts including reload",
+    "Browser clipboard only; desktop Tauri command not exercised",
+    "No provider credential qualification in this read-only scope; missing-model notice expected because no auth was copied",
+    "Current uncommitted backend capability changes belong to another task; this scope does not qualify them"
+  ]
+}
