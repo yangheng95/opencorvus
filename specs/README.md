@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [首页启动与项目归属复核](records/2026-10/2026-10-24-home-launcher-scope.md)：561统一Goal帮助与开始按钮，23实图、真实新对话归属和侧聊复核；共享记忆复制来源待续。
+
 - [服务替换后的流恢复](records/2026-10/2026-10-24-stream-reconnect.md)：560修复恢复时全局流重复重建，Sources/草稿真实重连、20实图及六服务完整结算。
 
 - [共享流传输修复](records/2026-10/2026-10-24-stream-socket-transport.md)：559统一WebSocket流，五页/Sources/Goal实图与真实Sol；保留原HTTP客户端归属及未验范围。

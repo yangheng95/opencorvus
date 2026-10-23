@@ -1,0 +1,1134 @@
+{
+  "iteration": 561,
+  "mode": "Manual source CLI /ui; no UI automation tests",
+  "pages": [
+    "217",
+    "218",
+    "219",
+    "220"
+  ],
+  "images": 23,
+  "root": "Guide hardcoded obsolete Create goal; all create forms use Start goal. One shared localized key now feeds footer and guide.",
+  "entries": {
+    "before": "main-HBKlRKaR.js",
+    "intermediate": "main-p5w1SQyE.js",
+    "final": "main-DXPgQK57.js"
+  },
+  "realGlobalCreation": {
+    "sessionID": "ses_-zUR5OmbOzzRR2yKQtE2",
+    "projectID": "prj_hNGT4wsmwC7GHqHckukD",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-24\\home-launcher-scope-561-before\\runtime\\data\\projects\\2026\\10\\24\\88c6df47-400b-4d06-bf40-644cde205cb8",
+    "workLedgerRead": {
+      "at": "2026-10-23T21:51:42.136Z",
+      "status": 200,
+      "nextCursor": {
+        "pinned": false,
+        "updated": 1792500043397,
+        "rowKey": "chat:ses_hs21zPjdCe02kK4ukBdo"
+      },
+      "rows": [
+        {
+          "kind": "chat",
+          "experience": "work",
+          "id": "ses_-zUR5OmbOzzRR2yKQtE2",
+          "sessionID": "ses_-zUR5OmbOzzRR2yKQtE2",
+          "title": "这是一条隔离产品验收消息，只验证全局新对话的项目归属和流式回复。请只回复“首页新对话归属正常。”，不要调用工具，不修改文件，不创建持续目标、Task、Mi...",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-24\\home-launcher-scope-561-before\\runtime\\data\\projects\\2026\\10\\24\\88c6df47-400b-4d06-bf40-644cde205cb8",
+          "created": 1792792163841,
+          "started": 1792792163841,
+          "updated": 1792792170155,
+          "pinned": false,
+          "status": "idle"
+        },
+        {
+          "kind": "project",
+          "id": "prj_hNGT4wsmwC7GHqHckukD",
+          "title": "",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-24\\home-launcher-scope-561-before\\runtime\\data\\projects\\2026\\10\\24\\88c6df47-400b-4d06-bf40-644cde205cb8",
+          "created": 1792792162513,
+          "updated": 1792792162513,
+          "pinned": false
+        }
+      ]
+    }
+  },
+  "duplicateProjectionExcluded": {
+    "at": "2026-10-23T21:54:03.155Z",
+    "rows": [
+      {
+        "rect": {
+          "h": 22.890625,
+          "w": 167,
+          "x": 129,
+          "y": 221.546875
+        },
+        "row": "chat:ses_-zUR5OmbOzzRR2yKQtE2",
+        "sectionClass": "project-group",
+        "sectionLabel": null,
+        "text": "这是一条隔离产品验收消息，只验证全局新对话的项目归属和流式回复。请只回复“首页新对话归属正常。”，不要调用工具，不修改文件，不创建持续目标、Task、Mi..."
+      },
+      {
+        "rect": {
+          "h": 22.890625,
+          "w": 187,
+          "x": 109,
+          "y": 1070.4375
+        },
+        "row": "chat:ses_-zUR5OmbOzzRR2yKQtE2",
+        "sectionClass": "work-ledger-recents",
+        "sectionLabel": "Recents",
+        "text": "这是一条隔离产品验收消息，只验证全局新对话的项目归属和流式回复。请只回复“首页新对话归属正常。”，不要调用工具，不修改文件，不创建持续目标、Task、Mi..."
+      }
+    ]
+  },
+  "modelBoundary": {
+    "batchMaximum": 8,
+    "actualStreaming200OriginalEOF": 6,
+    "verifiedZeroBoundary": {
+      "maximum": 0,
+      "exhausted": true,
+      "actualRequests": 0,
+      "followup": "Side rerun with max4 completed2 actual requests"
+    }
+  },
+  "validation": {
+    "finalBuild": {
+      "command": "bun run build:vite; official Node runner",
+      "originalExec": 4521,
+      "exit": 0,
+      "entry": "main-DXPgQK57.js"
+    },
+    "catalogParity": "check:i18n passed;2locales2535keys",
+    "documentation": "docs:check346operations26groups",
+    "visual": "Final12–19,21–23 manually viewed; intermediate08–11 retained,11 failed;20 checker budget failure retained"
+  },
+  "scopes": [
+    {
+      "stage": "before",
+      "entry": "main-HBKlRKaR.js",
+      "originalExec": 16649,
+      "qualification": "Baseline and real global creation",
+      "ready": {
+        "owner": {
+          "pid": 17200,
+          "processInstanceID": "win32:639283887762082114",
+          "occurrenceID": "85f2defc-f1f3-4506-a729-87d66da2ec21"
+        },
+        "parent": {
+          "pid": 73084,
+          "processInstanceID": "win32:639283887761859815",
+          "occurrenceID": "36b2ae74-0cd0-438c-8939-b620aea6461d"
+        },
+        "occurrence": "home-launcher-scope-561-before-4e28b7c6-c88a-4520-93d4-8338e7859185",
+        "preflight": {
+          "sessionID": "ses_h0bInuyPqVpxC6xjPQiO",
+          "credential": "usable",
+          "catalog": "projected",
+          "actualModel": "gpt-6.1-sol",
+          "streaming": true
+        },
+        "maxRequests": 6,
+        "observedAt": "2026-10-23T21:46:27.259Z"
+      },
+      "physical": {
+        "chain": [
+          {
+            "identity": {
+              "pid": 88120,
+              "processInstanceID": "win32:639283887753190119",
+              "occurrenceID": "193fbf0c-f196-4ade-90cf-d7afef6a5532"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 17200,
+              "processInstanceID": "win32:639283887762082114",
+              "occurrenceID": "6767223a-2b44-49b3-9a9d-b9d9d3cc0e6a"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "native": {
+          "occurrence": "home-launcher-scope-561-before-4e28b7c6-c88a-4520-93d4-8338e7859185",
+          "outcome": "settled",
+          "host": {
+            "pid": 88120,
+            "processInstanceID": "win32:639283887753190119",
+            "occurrenceID": "193fbf0c-f196-4ade-90cf-d7afef6a5532"
+          },
+          "target": {
+            "pid": 17200,
+            "processInstanceID": "win32:639283887762082114",
+            "occurrenceID": "6767223a-2b44-49b3-9a9d-b9d9d3cc0e6a"
+          },
+          "observedAtUtc": "2026-10-23T21:55:29.838Z",
+          "deadlineAt": 1792793174617,
+          "terminal": {
+            "occurrenceID": "home-launcher-scope-561-before-4e28b7c6-c88a-4520-93d4-8338e7859185",
+            "pid": 17200,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-23T21:55:31.5095725Z",
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-23T21:55:29.893672Z"
+        }
+      },
+      "provider": {
+        "maximum": 6,
+        "exhausted": false,
+        "requests": [
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": {
+              "boundary": "provider-source-reader",
+              "state": "settled",
+              "receivedAt": 1792791983865,
+              "boundAt": 1792791983867,
+              "chunkCount": 17,
+              "byteCount": 32259,
+              "firstByteReadAt": 1792791983869,
+              "lastByteReadAt": 1792791985827,
+              "identityState": "observed",
+              "requestContext": {
+                "sessionID": "ses_h0bInuyPqVpxC6xjPQiO",
+                "streamRequest": {
+                  "requestID": "msg_hcy1ceCsK9y4muBzalLE",
+                  "agentID": "memory",
+                  "providerID": "openai",
+                  "modelID": "gpt-6.1-sol",
+                  "apiModelID": "gpt-6.1-sol"
+                },
+                "activity": {
+                  "id": "act_g0VYuaSOr00IjGwxTKk4",
+                  "attempt": 0
+                }
+              },
+              "terminal": {
+                "kind": "eof",
+                "at": 1792791985867
+              }
+            }
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": {
+              "boundary": "provider-source-reader",
+              "state": "settled",
+              "receivedAt": 1792791985200,
+              "boundAt": 1792791985201,
+              "chunkCount": 33,
+              "byteCount": 516035,
+              "firstByteReadAt": 1792791985202,
+              "lastByteReadAt": 1792791986845,
+              "identityState": "observed",
+              "requestContext": {
+                "sessionID": "ses_h0bInuyPqVpxC6xjPQiO",
+                "streamRequest": {
+                  "requestID": "msg_hcy1ceCsK9y4muBzalLE",
+                  "agentID": "chat",
+                  "providerID": "openai",
+                  "modelID": "gpt-6.1-sol",
+                  "apiModelID": "gpt-6.1-sol"
+                },
+                "activity": {
+                  "id": "act_g0VYuaSfV00hFaQYC0zM",
+                  "attempt": 0,
+                  "assistantMessageID": "msg_g0VYuaSP400aZ0M7liK9"
+                }
+              },
+              "terminal": {
+                "kind": "eof",
+                "at": 1792791986846
+              }
+            }
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": {
+              "boundary": "provider-source-reader",
+              "state": "settled",
+              "receivedAt": 1792792167133,
+              "boundAt": 1792792167134,
+              "chunkCount": 28,
+              "byteCount": 52154,
+              "firstByteReadAt": 1792792167135,
+              "lastByteReadAt": 1792792170355,
+              "identityState": "observed",
+              "requestContext": {
+                "sessionID": "ses_-zUR5OmbOzzRR2yKQtE2",
+                "streamRequest": {
+                  "requestID": "msg_3a73fda6-9739-4d3d-b108-3bcde2fd3638",
+                  "agentID": "memory",
+                  "providerID": "openai",
+                  "modelID": "gpt-6.1-sol",
+                  "apiModelID": "gpt-6.1-sol"
+                },
+                "activity": {
+                  "id": "act_g0VYubE5600G9xZe578J",
+                  "attempt": 0
+                }
+              },
+              "terminal": {
+                "kind": "eof",
+                "at": 1792792170455
+              }
+            }
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": {
+              "boundary": "provider-source-reader",
+              "state": "settled",
+              "receivedAt": 1792792168896,
+              "boundAt": 1792792168898,
+              "chunkCount": 33,
+              "byteCount": 557821,
+              "firstByteReadAt": 1792792168918,
+              "lastByteReadAt": 1792792169990,
+              "identityState": "observed",
+              "requestContext": {
+                "sessionID": "ses_-zUR5OmbOzzRR2yKQtE2",
+                "streamRequest": {
+                  "requestID": "msg_3a73fda6-9739-4d3d-b108-3bcde2fd3638",
+                  "agentID": "work",
+                  "providerID": "openai",
+                  "modelID": "gpt-6.1-sol",
+                  "apiModelID": "gpt-6.1-sol"
+                },
+                "activity": {
+                  "id": "act_g0VYubEPM004gmwQnxZz",
+                  "attempt": 0,
+                  "assistantMessageID": "msg_g0VYubE5G00XcrGaobIk"
+                }
+              },
+              "terminal": {
+                "kind": "eof",
+                "at": 1792792170140
+              }
+            }
+          }
+        ]
+      },
+      "preservation": {
+        "stage": "before",
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 81195008,
+          "modifiedAtMs": 1792791179339.2349
+        },
+        "schema": {
+          "sourceVersion": 4,
+          "targetVersion": 4,
+          "extraObjects": [],
+          "integrity": "ok"
+        },
+        "canonical": "Complete source bytes exact",
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ],
+        "tables": 90,
+        "originalRows": 172483,
+        "providerActivities": {
+          "original": 425,
+          "current": 427
+        }
+      },
+      "requests": {
+        "observed": 231,
+        "posts": [
+          {
+            "at": "2026-10-23T21:46:20.887Z",
+            "path": "/global/chat/start"
+          },
+          {
+            "at": "2026-10-23T21:49:21.890Z",
+            "path": "/global/work"
+          },
+          {
+            "at": "2026-10-23T21:49:26.243Z",
+            "path": "/session/ses_-zUR5OmbOzzRR2yKQtE2/message"
+          },
+          {
+            "at": "2026-10-23T21:55:29.561Z",
+            "path": "/shutdown"
+          }
+        ],
+        "canonical": [
+          {
+            "id": 27,
+            "at": "2026-10-23T21:46:43.770Z",
+            "path": "/work-ledger/events"
+          },
+          {
+            "id": 94,
+            "at": "2026-10-23T21:49:26.306Z",
+            "path": "/session/ses_-zUR5OmbOzzRR2yKQtE2/events"
+          }
+        ],
+        "aborts": [
+          {
+            "id": 94,
+            "at": "2026-10-23T21:54:51.562Z",
+            "path": "/session/ses_-zUR5OmbOzzRR2yKQtE2/events"
+          },
+          {
+            "id": 27,
+            "at": "2026-10-23T21:55:11.029Z",
+            "path": "/work-ledger/events"
+          }
+        ]
+      },
+      "retirement": {
+        "at": "2026-10-23T21:55:56.903Z",
+        "authRetired": 1,
+        "catalogRetired": 1,
+        "authCopied": true,
+        "modelRequests": 4,
+        "model": "gpt-6.1-sol",
+        "streaming200OriginalReaderEOF": 4,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968,
+          "content": "Exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 644959,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      }
+    },
+    {
+      "stage": "after",
+      "entry": "main-p5w1SQyE.js",
+      "originalExec": 76206,
+      "qualification": "Intermediate existing-owner guide mismatch; not final",
+      "ready": {
+        "owner": {
+          "pid": 85348,
+          "processInstanceID": "win32:639283894244803770",
+          "occurrenceID": "78881344-19c9-4963-a1d9-4e86e69c9db6"
+        },
+        "parent": {
+          "pid": 97128,
+          "processInstanceID": "win32:639283894244499107",
+          "occurrenceID": "3f6b0372-91c4-4bef-bcf6-18a8967d2fc2"
+        },
+        "occurrence": "home-launcher-scope-561-after-308c928b-81f9-4a37-8017-e12ef5d7ceb3",
+        "admission": {
+          "credential": "registered OAuth",
+          "projectedModel": "gpt-6.1-sol"
+        },
+        "maxRequests": 0,
+        "mode": "UI only; before four actual model requests qualified",
+        "observedAt": "2026-10-23T21:57:11.420Z"
+      },
+      "physical": {
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-23T22:00:14.5855867Z"
+        },
+        "native": {
+          "occurrence": "home-launcher-scope-561-after-308c928b-81f9-4a37-8017-e12ef5d7ceb3",
+          "outcome": "settled",
+          "host": {
+            "pid": 95188,
+            "processInstanceID": "win32:639283894232669030",
+            "occurrenceID": "7078986f-294e-42ee-a3f1-53edb48919c0"
+          },
+          "target": {
+            "pid": 85348,
+            "processInstanceID": "win32:639283894244803770",
+            "occurrenceID": "8367d97e-8159-44e6-9537-f8a58e8de7a9"
+          },
+          "observedAtUtc": "2026-10-23T22:00:14.534Z",
+          "deadlineAt": 1792793822575,
+          "terminal": {
+            "occurrenceID": "home-launcher-scope-561-after-308c928b-81f9-4a37-8017-e12ef5d7ceb3",
+            "pid": 85348,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-23T22:00:16.1709982Z",
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 95188,
+              "processInstanceID": "win32:639283894232669030",
+              "occurrenceID": "7078986f-294e-42ee-a3f1-53edb48919c0"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 85348,
+              "processInstanceID": "win32:639283894244803770",
+              "occurrenceID": "8367d97e-8159-44e6-9537-f8a58e8de7a9"
+            }
+          }
+        ]
+      },
+      "provider": {
+        "maximum": 0,
+        "exhausted": false,
+        "requests": []
+      },
+      "preservation": {
+        "stage": "before",
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 81195008,
+          "modifiedAtMs": 1792792529688.7092
+        },
+        "schema": {
+          "sourceVersion": 4,
+          "targetVersion": 4,
+          "extraObjects": [],
+          "integrity": "ok"
+        },
+        "canonical": "Complete source bytes exact",
+        "originalRowDifferences": [],
+        "tables": 90,
+        "originalRows": 173476,
+        "providerActivities": {
+          "original": 427,
+          "current": 427
+        }
+      },
+      "requests": {
+        "observed": 105,
+        "posts": [
+          {
+            "at": "2026-10-23T22:00:14.328Z",
+            "path": "/shutdown"
+          }
+        ],
+        "canonical": [
+          {
+            "id": 30,
+            "at": "2026-10-23T21:57:28.281Z",
+            "path": "/work-ledger/events"
+          },
+          {
+            "id": 70,
+            "at": "2026-10-23T21:58:27.778Z",
+            "path": "/session/ses_-zUR5OmbOzzRR2yKQtE2/events"
+          }
+        ],
+        "aborts": [
+          {
+            "id": 30,
+            "at": "2026-10-23T21:59:59.400Z",
+            "path": "/work-ledger/events"
+          },
+          {
+            "id": 70,
+            "at": "2026-10-23T21:59:59.404Z",
+            "path": "/session/ses_-zUR5OmbOzzRR2yKQtE2/events"
+          }
+        ]
+      },
+      "retirement": {
+        "at": "2026-10-23T22:00:19.741Z",
+        "authRetired": 1,
+        "catalogRetired": 1,
+        "authCopied": true,
+        "modelRequests": 0,
+        "model": "gpt-6.1-sol",
+        "streaming200OriginalReaderEOF": 0,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968,
+          "content": "Exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 1008133,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      }
+    },
+    {
+      "stage": "verified",
+      "entry": "main-DXPgQK57.js",
+      "originalExec": 21586,
+      "qualification": "Final Home/Chat guide qualified; Side max0 boundary failed",
+      "ready": {
+        "owner": {
+          "pid": 96088,
+          "processInstanceID": "win32:639283897108906787",
+          "occurrenceID": "3b55d3c4-1d7e-4aaf-9066-89de455c5e23"
+        },
+        "parent": {
+          "pid": 72712,
+          "processInstanceID": "win32:639283897108464017",
+          "occurrenceID": "c558b6fe-35e3-4c2a-8945-503e8a858b17"
+        },
+        "occurrence": "home-launcher-scope-561-verified-e32d514d-413c-48da-a402-a83a42c70695",
+        "admission": {
+          "credential": "registered OAuth",
+          "projectedModel": "gpt-6.1-sol"
+        },
+        "maxRequests": 0,
+        "mode": "UI only; before four actual model requests qualified",
+        "observedAt": "2026-10-23T22:02:01.360Z"
+      },
+      "physical": {
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 78680,
+              "processInstanceID": "win32:639283897092094427",
+              "occurrenceID": "c4a58d1e-4d34-4143-adc2-c4b490cd36eb"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 96088,
+              "processInstanceID": "win32:639283897108906787",
+              "occurrenceID": "a85f1ff1-854f-4d3d-ad2e-e88504c20183"
+            }
+          }
+        ],
+        "launcher": {
+          "observedAtUtc": "2026-10-23T22:07:03.8373167Z",
+          "originalChildExit": 0
+        },
+        "native": {
+          "occurrence": "home-launcher-scope-561-verified-e32d514d-413c-48da-a402-a83a42c70695",
+          "outcome": "settled",
+          "host": {
+            "pid": 78680,
+            "processInstanceID": "win32:639283897092094427",
+            "occurrenceID": "c4a58d1e-4d34-4143-adc2-c4b490cd36eb"
+          },
+          "target": {
+            "pid": 96088,
+            "processInstanceID": "win32:639283897108906787",
+            "occurrenceID": "a85f1ff1-854f-4d3d-ad2e-e88504c20183"
+          },
+          "observedAtUtc": "2026-10-23T22:07:03.78Z",
+          "deadlineAt": 1792794108118,
+          "terminal": {
+            "occurrenceID": "home-launcher-scope-561-verified-e32d514d-413c-48da-a402-a83a42c70695",
+            "pid": 96088,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-10-23T22:07:05.8019287Z"
+      },
+      "provider": {
+        "maximum": 0,
+        "exhausted": true,
+        "requests": []
+      },
+      "preservation": {
+        "stage": "before",
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 81195008,
+          "modifiedAtMs": 1792792706746.6328
+        },
+        "schema": {
+          "sourceVersion": 4,
+          "targetVersion": 4,
+          "extraObjects": [],
+          "integrity": "ok"
+        },
+        "canonical": "Complete source bytes exact",
+        "originalRowDifferences": [
+          {
+            "table": "memory_chunk",
+            "identity": "mck_huXI8pO1gqTk6LcZGn7X",
+            "fields": [
+              "content",
+              "time_updated"
+            ]
+          },
+          {
+            "table": "memory_file",
+            "identity": "mem_hAUcFiShRDPzOLcaniOG",
+            "fields": [
+              "time_updated"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ],
+        "tables": 90,
+        "originalRows": 173478,
+        "providerActivities": {
+          "original": 427,
+          "current": 427
+        }
+      },
+      "requests": {
+        "observed": 216,
+        "posts": [
+          {
+            "at": "2026-10-23T22:04:08.355Z",
+            "path": "/session/ses_-zUR5OmbOzzRR2yKQtE2/side-chat"
+          },
+          {
+            "at": "2026-10-23T22:07:03.585Z",
+            "path": "/shutdown"
+          }
+        ],
+        "canonical": [
+          {
+            "id": 30,
+            "at": "2026-10-23T22:02:22.057Z",
+            "path": "/work-ledger/events"
+          },
+          {
+            "id": 68,
+            "at": "2026-10-23T22:02:46.298Z",
+            "path": "/session/ses_-zUR5OmbOzzRR2yKQtE2/events"
+          },
+          {
+            "id": 114,
+            "at": "2026-10-23T22:03:42.782Z",
+            "path": "/session/ses_-zUR5OmbOzzRR2yKQtE2/events"
+          },
+          {
+            "id": 129,
+            "at": "2026-10-23T22:04:08.923Z",
+            "path": "/session/ses_-zUR5L4UszzD1W1CTldf/events"
+          }
+        ],
+        "aborts": [
+          {
+            "id": 68,
+            "at": "2026-10-23T22:03:24.008Z",
+            "path": "/session/ses_-zUR5OmbOzzRR2yKQtE2/events"
+          },
+          {
+            "id": 30,
+            "at": "2026-10-23T22:06:45.698Z",
+            "path": "/work-ledger/events"
+          },
+          {
+            "id": 129,
+            "at": "2026-10-23T22:06:45.702Z",
+            "path": "/session/ses_-zUR5L4UszzD1W1CTldf/events"
+          },
+          {
+            "id": 114,
+            "at": "2026-10-23T22:06:45.704Z",
+            "path": "/session/ses_-zUR5OmbOzzRR2yKQtE2/events"
+          }
+        ]
+      },
+      "retirement": {
+        "at": "2026-10-23T22:07:11.231Z",
+        "boundary": {
+          "maximum": 0,
+          "exhausted": true,
+          "actualRequests": 0,
+          "reason": "Side initialization memcy blocked by UI-only checker budget; independent bounded scope reruns it"
+        },
+        "authRetired": 1,
+        "catalogRetired": 1,
+        "authCopied": true,
+        "modelRequests": 0,
+        "model": "gpt-6.1-sol",
+        "streaming200OriginalReaderEOF": 0,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968,
+          "content": "Exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 884437,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      }
+    },
+    {
+      "stage": "side-verified",
+      "entry": "main-DXPgQK57.js",
+      "originalExec": 47383,
+      "qualification": "Final Side guide and ready state qualified",
+      "ready": {
+        "owner": {
+          "pid": 81728,
+          "processInstanceID": "win32:639283901162672703",
+          "occurrenceID": "a2f925a8-d008-4819-901d-08ccd8a7fb1c"
+        },
+        "parent": {
+          "pid": 74564,
+          "processInstanceID": "win32:639283901162369940",
+          "occurrenceID": "4f73d254-28ce-4fd0-9c91-ce8f2057e3d3"
+        },
+        "occurrence": "home-launcher-scope-561-side-verified-019846b9-1cfe-4a28-b079-ac5976de4558",
+        "admission": {
+          "credential": "registered OAuth",
+          "projectedModel": "gpt-6.1-sol"
+        },
+        "maxRequests": 4,
+        "mode": "Side initialization memory and UI review; before four actual requests qualified",
+        "observedAt": "2026-10-23T22:08:43.757Z"
+      },
+      "physical": {
+        "observedAtUtc": "2026-10-23T22:11:44.5439342Z",
+        "native": {
+          "occurrence": "home-launcher-scope-561-side-verified-019846b9-1cfe-4a28-b079-ac5976de4558",
+          "outcome": "settled",
+          "host": {
+            "pid": 95976,
+            "processInstanceID": "win32:639283901148466803",
+            "occurrenceID": "f4d26937-2df7-4b57-a864-ebd97570a8e8"
+          },
+          "target": {
+            "pid": 81728,
+            "processInstanceID": "win32:639283901162672703",
+            "occurrenceID": "972249e5-e859-455d-9821-831b445b6545"
+          },
+          "observedAtUtc": "2026-10-23T22:11:41.917Z",
+          "deadlineAt": 1792794514776,
+          "terminal": {
+            "occurrenceID": "home-launcher-scope-561-side-verified-019846b9-1cfe-4a28-b079-ac5976de4558",
+            "pid": 81728,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 95976,
+              "processInstanceID": "win32:639283901148466803",
+              "occurrenceID": "f4d26937-2df7-4b57-a864-ebd97570a8e8"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 81728,
+              "processInstanceID": "win32:639283901162672703",
+              "occurrenceID": "972249e5-e859-455d-9821-831b445b6545"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-10-23T22:11:42.0379554Z"
+        }
+      },
+      "provider": {
+        "maximum": 4,
+        "exhausted": false,
+        "requests": [
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": {
+              "boundary": "provider-source-reader",
+              "state": "settled",
+              "receivedAt": 1792793346375,
+              "boundAt": 1792793346378,
+              "chunkCount": 26,
+              "byteCount": 52560,
+              "firstByteReadAt": 1792793346381,
+              "lastByteReadAt": 1792793349644,
+              "identityState": "observed",
+              "requestContext": {
+                "sessionID": "ses_-zUR5L4UszzD1W1CTldf",
+                "streamRequest": {
+                  "requestID": "msg_g0VYuevVC00mpBLGbz2y",
+                  "agentID": "memory",
+                  "providerID": "openai",
+                  "modelID": "gpt-6.1-sol",
+                  "apiModelID": "gpt-6.1-sol"
+                },
+                "activity": {
+                  "id": "act_g0VYugApD00MCDWewRfk",
+                  "attempt": 0
+                }
+              },
+              "terminal": {
+                "kind": "eof",
+                "at": 1792793349705
+              }
+            }
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": {
+              "boundary": "provider-source-reader",
+              "state": "settled",
+              "receivedAt": 1792793445558,
+              "boundAt": 1792793445560,
+              "chunkCount": 27,
+              "byteCount": 54355,
+              "firstByteReadAt": 1792793445562,
+              "lastByteReadAt": 1792793448500,
+              "identityState": "observed",
+              "requestContext": {
+                "sessionID": "ses_-zUR5JPZszz61h05525m",
+                "streamRequest": {
+                  "requestID": "msg_g0VYugaQB00oTJWJWgD3",
+                  "agentID": "memory",
+                  "providerID": "openai",
+                  "modelID": "gpt-6.1-sol",
+                  "apiModelID": "gpt-6.1-sol"
+                },
+                "activity": {
+                  "id": "act_g0VYugaTR006FcQdmMac",
+                  "attempt": 0
+                }
+              },
+              "terminal": {
+                "kind": "eof",
+                "at": 1792793448505
+              }
+            }
+          }
+        ]
+      },
+      "preservation": {
+        "stage": "before",
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 81195008,
+          "modifiedAtMs": 1792793050285.9788
+        },
+        "schema": {
+          "sourceVersion": 4,
+          "targetVersion": 4,
+          "extraObjects": [],
+          "integrity": "ok"
+        },
+        "canonical": "Complete source bytes exact",
+        "originalRowDifferences": [
+          {
+            "table": "memory_chunk",
+            "identity": "mck_huXI8pO1gqTk6LcZGn7X",
+            "fields": [
+              "content",
+              "token_count",
+              "time_updated"
+            ]
+          },
+          {
+            "table": "memory_chunk",
+            "identity": "mck_hXfu1WD6yNwBqoS56n9C",
+            "fields": [
+              "rowid",
+              "id",
+              "file_id",
+              "project_id",
+              "content",
+              "token_count",
+              "time_created",
+              "time_updated"
+            ]
+          },
+          {
+            "table": "memory_file",
+            "identity": "mem_hAUcFiShRDPzOLcaniOG",
+            "fields": [
+              "time_updated"
+            ]
+          },
+          {
+            "table": "memory_file",
+            "identity": "mem_hEb8cJr1jhxgXvykpZiP",
+            "fields": [
+              "rowid",
+              "id",
+              "project_id",
+              "title",
+              "source",
+              "kind",
+              "key",
+              "importance",
+              "confidence",
+              "time_created",
+              "time_updated"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ],
+        "tables": 90,
+        "originalRows": 173854,
+        "providerActivities": {
+          "original": 427,
+          "current": 427
+        }
+      },
+      "requests": {
+        "observed": 122,
+        "posts": [
+          {
+            "at": "2026-10-23T22:10:43.976Z",
+            "path": "/session/ses_-zUR5OmbOzzRR2yKQtE2/side-chat"
+          },
+          {
+            "at": "2026-10-23T22:11:41.640Z",
+            "path": "/shutdown"
+          }
+        ],
+        "canonical": [
+          {
+            "id": 20,
+            "at": "2026-10-23T22:09:01.206Z",
+            "path": "/work-ledger/events"
+          },
+          {
+            "id": 36,
+            "at": "2026-10-23T22:09:03.821Z",
+            "path": "/session/ses_-zUR5OmbOzzRR2yKQtE2/events"
+          },
+          {
+            "id": 80,
+            "at": "2026-10-23T22:10:04.095Z",
+            "path": "/session/ses_-zUR5L4UszzD1W1CTldf/events"
+          },
+          {
+            "id": 107,
+            "at": "2026-10-23T22:10:44.563Z",
+            "path": "/session/ses_-zUR5JPZszz61h05525m/events"
+          }
+        ],
+        "aborts": [
+          {
+            "id": 80,
+            "at": "2026-10-23T22:10:44.458Z",
+            "path": "/session/ses_-zUR5L4UszzD1W1CTldf/events"
+          },
+          {
+            "id": 20,
+            "at": "2026-10-23T22:11:00.789Z",
+            "path": "/work-ledger/events"
+          },
+          {
+            "id": 36,
+            "at": "2026-10-23T22:11:00.792Z",
+            "path": "/session/ses_-zUR5OmbOzzRR2yKQtE2/events"
+          },
+          {
+            "id": 107,
+            "at": "2026-10-23T22:11:00.793Z",
+            "path": "/session/ses_-zUR5JPZszz61h05525m/events"
+          }
+        ]
+      },
+      "retirement": {
+        "at": "2026-10-23T22:11:49.480Z",
+        "authRetired": 1,
+        "catalogRetired": 1,
+        "authCopied": true,
+        "modelRequests": 2,
+        "model": "gpt-6.1-sol",
+        "streaming200OriginalReaderEOF": 2,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968,
+          "content": "Exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 1013009,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      }
+    }
+  ],
+  "qualificationLimits": [
+    "Native restart and other stream entry model tasks remain separate",
+    "No new continuous goal was submitted or executed in this UI wording batch",
+    "Raw user_message pending consumption by Organizer is distinct from immutable canonical Message history",
+    "Copied history retaining user-input provenance requires the next shared backend repair; not fixed by this UI commit"
+  ]
+}

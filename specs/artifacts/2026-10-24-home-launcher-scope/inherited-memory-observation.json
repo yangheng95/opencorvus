@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-23T22:18:58.078Z",
+  "message": {
+    "id": "msg_g0VYuevVC00mpBLGbz2y",
+    "sessionID": "ses_-zUR5L4UszzD1W1CTldf",
+    "role": "user",
+    "userInputMarkerFields": [
+      "version",
+      "surface",
+      "literalText"
+    ],
+    "copySources": [
+      {
+        "partID": "prt_g0VYuevVC00PbIjF15DC",
+        "sources": [
+          {
+            "sessionID": "ses_-zUR5OmbOzzRR2yKQtE2",
+            "messageID": "msg_3a73fda6-9739-4d3d-b108-3bcde2fd3638",
+            "partID": "prt_g0VYubE1a002NytGZXe3"
+          }
+        ]
+      }
+    ]
+  },
+  "consumedPendingIdentity": "message:msg_g0VYuevVC00mpBLGbz2y",
+  "projectID": "prj_hNGT4wsmwC7GHqHckukD",
+  "contract": "Pending user_message consumed by Organizer; canonical Message retained",
+  "followup": "Copied historical marker currently recaptured as new input; shared provenance repair pending"
+}

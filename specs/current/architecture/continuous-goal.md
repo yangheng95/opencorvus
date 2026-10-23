@@ -134,7 +134,8 @@ same goal form in Home, Chat, Task and Mission. SideChat's own composer + menu
 opens that form for its independent Session. No goal creation section or empty
 goal strip occupies the conversation surface. Existing goals retain their status,
 usage, pause and details controls. The introduction names the same localized
-menu action. Task scope tools, tabs and Environment progress use Deliverables for
+menu action. The creation guide and form footer resolve the same localized start
+action for Home and existing conversation owners. Task scope tools, tabs and Environment progress use Deliverables for
 Delivery Slice contracts; their panel explains where to find continuous execution
 controls without creating another goal entry or mutation path.
 It opens the existing goal form before creating a Conversation. The Home form

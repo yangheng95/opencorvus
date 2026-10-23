@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-23T22:12:36.664Z",
+  "rows": [
+    {
+      "table": "memory_file",
+      "before": {
+        "id": "mem_hEb8cJr1jhxgXvykpZiP",
+        "rowid": 188,
+        "projectID": "prj_hNGT4wsmwC7GHqHckukD",
+        "title": "Side chat · 这是一条隔离产品验收消息，只验证全局新对话的项目归属和流式回复。请只回复“首页新对话归属正常。”，不要调用工具，不修改文件，不创建持续目标、Task、Mi...",
+        "source": "user",
+        "kind": "user_message",
+        "key": "message:msg_g0VYuevVC00mpBLGbz2y"
+      },
+      "sameIdentity": null,
+      "replacementAtRowid": null
+    },
+    {
+      "table": "memory_chunk",
+      "before": {
+        "id": "mck_hXfu1WD6yNwBqoS56n9C",
+        "rowid": 188,
+        "projectID": "prj_hNGT4wsmwC7GHqHckukD",
+        "fileID": "mem_hEb8cJr1jhxgXvykpZiP"
+      },
+      "sameIdentity": null,
+      "replacementAtRowid": null
+    }
+  ]
+}

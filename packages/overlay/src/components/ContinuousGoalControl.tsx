@@ -35,6 +35,7 @@ import { Icon } from "./ui/Icon"
 import { TextField } from "./ui/TextField"
 
 const REFRESH_MS = 5_000
+const CREATE_ACTION_LABEL_KEY = "continuous_goal.start"
 const guideSteps = ["start", "define", "manage"] as const
 
 export type GoalLaunchContext = { authority: ApiAuthority; selectionEpoch: number; composerDraftKey?: string }
@@ -52,7 +53,7 @@ function GoalGuideSteps() {
         {(step) => (
           <li>
             <strong>{t(`continuous_goal.guide.${step}.title`)}</strong>
-            <span>{t(`continuous_goal.guide.${step}.body`, { createLabel: t("continuous_goal.title") })}</span>
+            <span>{t(`continuous_goal.guide.${step}.body`, { createLabel: t("continuous_goal.title"), submitLabel: t(CREATE_ACTION_LABEL_KEY) })}</span>
           </li>
         )}
       </For>
@@ -596,7 +597,7 @@ export function ContinuousGoalControl(props: {
                   busy()
                     ? "continuous_goal.saving"
                     : mode() === "create"
-                      ? "continuous_goal.start"
+                      ? CREATE_ACTION_LABEL_KEY
                       : mode() === "complete"
                         ? "continuous_goal.mark_complete"
                         : resume() || editing()?.status === "budget_limited"

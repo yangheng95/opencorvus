@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [首页启动与项目归属复核](2026-10-24-home-launcher-scope.md)：561中英文Home/Chat/Side指南、六次真实Sol与四服务闭合，保留中间失败及后端来源发现。
+
 - [服务替换后的流恢复](2026-10-24-stream-reconnect.md)：560全局通知owner根因修复、12合同83断言、四次Sol及三对服务真实替换。
 
 - [共享流传输修复](2026-10-24-stream-socket-transport.md)：559一次性鉴权ticket、原SSE字节桥接、真实五页/侧栏/Sol及完整资源结算。
