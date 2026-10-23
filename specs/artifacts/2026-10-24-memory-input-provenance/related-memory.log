@@ -1,0 +1,27 @@
+$ bun script/run-tests.ts test/memory/project-memory.test.ts "--test-name-pattern=captures trusted turns|captures attachment-only|user-facing|Question|Permission|question|permission|task creation"
+[1/1] START test/memory/project-memory.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Project MEMORY.MD pending input and organizer document > captures trusted turns with two transcript contexts, redaction, replay, rename, and protected access [2555.15ms]
+(pass) Project MEMORY.MD pending input and organizer document > captures attachment-only input and direct occurrences with stable canonical metadata [1595.44ms]
+(pass) Project MEMORY.MD pending input and organizer document > commits one authoritative permission reply when the HTTP decision is repeated with different text [3265.43ms]
+22 |
+23 | export namespace Question {
+24 |   let afterUserOutboxCommitForTest: (() => void) | undefined
+25 |
+26 |   export namespace TestHooks {
+27 |     export function failAfterNextUserOutboxCommit(error = new Error("injected post-commit interruption")): Disposable {
+                                                                   ^
+error: injected post-commit interruption
+      at failAfterNextUserOutboxCommit (D:\myhexin-local\opencorvus\packages\opencorvus\src\question\index.ts:27:63)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\project-memory.test.ts:1829:50)
+
+(pass) Project MEMORY.MD pending input and organizer document > recovers a committed question reply and its memory occurrence after interruption before durable delivery [2566.99ms]
+
+ 4 pass
+ 21 filtered out
+ 0 fail
+ 47 expect() calls
+Ran 4 tests across 1 file. [14.99s]
+[1/1] DONE test/memory/project-memory.test.ts exit=0 duration=15.56s

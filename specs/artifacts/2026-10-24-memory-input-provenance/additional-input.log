@@ -1,0 +1,14 @@
+$ bun script/run-tests.ts test/memory/project-memory.test.ts "--test-name-pattern=direct user Task creation|literal channel answer"
+[1/1] START test/memory/project-memory.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Project MEMORY.MD pending input and organizer document > captures direct user Task creation and trusted HTTP interaction input while service calls stay internal [3956.15ms]
+(pass) Project MEMORY.MD pending input and organizer document > records the literal channel answer through the real bound-task interaction path [2673.52ms]
+
+ 2 pass
+ 23 filtered out
+ 0 fail
+ 15 expect() calls
+Ran 2 tests across 1 file. [11.57s]
+[1/1] DONE test/memory/project-memory.test.ts exit=0 duration=12.11s

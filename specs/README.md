@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [记忆输入的真实来源与首次登记](records/2026-10/2026-10-24-memory-input-provenance.md)：562共享历史复制与消息重放的来源修复及实际侧聊验收。
+
 - [首页启动与项目归属复核](records/2026-10/2026-10-24-home-launcher-scope.md)：561统一Goal帮助与开始按钮，23实图、真实新对话归属和侧聊复核；共享记忆复制来源待续。
 
 - [服务替换后的流恢复](records/2026-10/2026-10-24-stream-reconnect.md)：560修复恢复时全局流重复重建，Sources/草稿真实重连、20实图及六服务完整结算。

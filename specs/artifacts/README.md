@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [记忆输入的真实来源与首次登记](2026-10-24-memory-input-provenance/README.md)：562旧实现失败、真实侧聊与规范记忆/Provider/原生闭合事实。
+
 - [首页启动与项目归属复核](2026-10-24-home-launcher-scope/README.md)：561二十三实图、四份原请求/EOF/退休事实；排除Recents误判并保留共享来源待修证据。
 
 - [服务替换后的流恢复](2026-10-24-stream-reconnect/README.md)：560二十实图、六份真实请求与闭合事实，全局恢复连接3→1、原Source和读位保持。

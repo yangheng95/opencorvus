@@ -325,6 +325,15 @@ Both named documents use all caps. API and tool responses distinguish them with 
 
 Trusted ingress supplies versioned Message-level provenance containing literal input frozen before host materialization. The canonical Session bundle transaction enqueues one host-owned `user_message` occurrence with the Task/conversation name, safe content/attachments, and up to two preceding visible transcript Messages. Direct-user Task creation and validated Question/Permission replies use the same pending contract. Runtime wakes, automatic resolutions, and internal service/tool calls do not.
 
+Message admission belongs to the canonical bundle's first creation in that same
+transaction. Updating or replaying a stored Message retains its existing memory
+admission after the pending inbox has been consumed. Historical copies retain
+their original provenance and `copySources` evidence, and are classified as
+`copied_context`; fresh human input in either a fork or independent side Session
+has its own Message identity and ordinary admission. Previously accepted pending
+inputs continue through the same Organizer. Entry and document formats remain
+unchanged, and canonical history stays intact.
+
 Pending occurrence IDs are deterministic and replay must match the full canonical payload. Secrets, private-key blocks, inline payloads, and unsafe attachment references are redacted or omitted before persistence. `user_message` is an inbox, not a permanent archive: an accepted Organizer commit atomically consumes its exact ordered prefix. The Session transcript remains authoritative raw history.
 
 ## Dedicated Memory Organizer

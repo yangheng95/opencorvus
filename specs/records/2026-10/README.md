@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [记忆输入的真实来源与首次登记](2026-10-24-memory-input-provenance.md)：562保留canonical历史，验证复制上下文、真实新输入和首次原子登记。
+
 - [首页启动与项目归属复核](2026-10-24-home-launcher-scope.md)：561中英文Home/Chat/Side指南、六次真实Sol与四服务闭合，保留中间失败及后端来源发现。
 
 - [服务替换后的流恢复](2026-10-24-stream-reconnect.md)：560全局通知owner根因修复、12合同83断言、四次Sol及三对服务真实替换。

@@ -568,6 +568,7 @@ export namespace ProjectMemory {
   ) {
     const marker = provenance(input.info)
     if (!marker) return { classification: "runtime_internal" as const, messageID: input.info.id }
+    if (input.info.copySources !== undefined) return { classification: "copied_context" as const, messageID: input.info.id }
     const session = db.select().from(SessionTable).where(eq(SessionTable.id, input.info.sessionID)).get()
     if (!session) throw new Error(`Project memory Session not found: ${input.info.sessionID}`)
     const literal = marker.literalText

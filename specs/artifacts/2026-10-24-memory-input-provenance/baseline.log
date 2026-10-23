@@ -1,0 +1,73 @@
+$ bun script/run-tests.ts test/memory/project-memory-input-provenance.test.ts
+[1/1] START test/memory/project-memory-input-provenance.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+55 |       const copied = (await Session.messages({ sessionID: owner.id })).find(message => message.info.role === "user")!
+56 |       expect(copied.info.role).toBe("user")
+57 |       expect((copied.info as Message.User).extra).toEqual(initial.info.extra)
+58 |       expect(copied.parts.map(part => part.type === "text" ? part.text : part.type)).toEqual([initial.parts[0]!.text])
+59 |       expect(copied.info.copySources).toEqual([expect.objectContaining({ sources: [expect.objectContaining({ sessionID: source.id, messageID: initial.info.id })] })])
+60 |       expect(Database.transaction(db => ProjectMemory.captureMessageInTransaction(db, copied))).toEqual({
+     ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "classification": "copied_context",
+-   "messageID": "msg_g0VYuqkmN00f13begjCc",
++   "classification": "user_input",
++   "fileID": "mem_hTPcuapaXyRsV4Wrxeox",
++   "occurrenceID": "msg_g0VYuqkmN00f13begjCc",
+  }
+
+- Expected  - 2
++ Received  + 3
+
+      at toEqual (unknown:1:1)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\project-memory-input-provenance.test.ts:60:97
+(fail) copied history retains its source while fresh human inputs own the project inbox [3632.88ms]
+ 98 |     }))
+ 99 |     await Session.setTitle({ sessionID: owner.id, title: "Renamed owner" })
+100 |     await Session.persistMessage(first)
+101 |     const next = userInput(owner.id, "The next requirement.", 2_000)
+102 |     await Session.persistMessage(next)
+103 |     expect(ProjectMemory.read(projectID)).toMatchObject({ revision: 1, content: "# Project context\n\nThe first requirement.\n", pendingCount: 1 })
+                                                ^
+error: expect(received).toMatchObject(expected)
+
+  {
+    "content":
+  "# Project context
+
+  The first requirement.
+  "
+  ,
+-   "pendingCount": 1,
++   "droppedPendingCount": 0,
++   "filename": "MEMORY.MD",
++   "notice": undefined,
++   "pendingCount": 2,
+    "revision": 1,
++   "scope": "project",
++   "status": "idle",
++   "timeCreated": 1792795868707,
++   "timeUpdated": 1792795868707,
++   "tokenCount": 11,
+  }
+
+- Expected  - 1
++ Received  + 9
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\project-memory-input-provenance.test.ts:103:43)
+(fail) consumed message replay retains the document and admits the next human input [1547.01ms]
+(pass) a rolled back bundle accepts its exact input once on successful retry [1643.54ms]
+
+ 1 pass
+ 2 fail
+ 10 expect() calls
+Ran 3 tests across 1 file. [9.32s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\project-memory-input-provenance.test.ts
+[1/1] DONE test/memory/project-memory-input-provenance.test.ts exit=1 duration=10.01s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\project-memory-input-provenance.test.ts
+error: script "test" exited with code 1

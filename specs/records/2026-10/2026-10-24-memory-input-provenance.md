@@ -1,0 +1,69 @@
+# 记忆输入的真实来源与首次登记
+
+## Recall
+
+562继续用户要求的单agent自主迭代，后续单agent指令覆盖旧Goal中的Astra，不委托。561为progress：d159051a7已正常push、fresh0/0，Goal帮助和统一开始按钮共用本地化键，Home/Chat/Side实页23图及六次gpt-6.1-sol流式200/原reader EOF；四服务原exec/native/launcher正常退出0，四auth/catalog配对退休，所有源原行/字节/时间保持。目标记忆待办消费与文档变化按实际记录，没有声称所有目标行零变化。整体Goal active。
+
+561真实打开Side复制历史后出现记忆模型请求。零请求checker曾拦截并显示E2E_REQUEST_BUDGET_EXHAUSTED，修正私有预算后正常重跑；继续追查确认canonical复制user Message msg_g0VYuevVC00mpBLGbz2y同时具有copySources和extra.project_memory_user_input，并被再次登记为pending user_message。该待办后来被Organizer消费，但原canonical Message仍在。证据见561 inherited-memory-observation、memory-lifecycle-observation及真实provider audit，不用最后一个错误或模型自述判断根因。
+
+当前HEAD d159051a7。开始172删除、121修改、11未跟踪，唯一其他暂存engine-evidence.ts，全部保留。Session/index.ts已有无关Mission公开权限与Side完成边界/compaction依赖闭包改动；project-memory架构已有无关compaction说明。保存和审查其差异，不混入本轮提交，不创建branch/worktree。project-memory.ts、organizer.ts及相关memory测试开始干净。工作区并行迁移4不属于本轮；隔离源561-side-verified实际schema4，用户数据库及18571进程/窗口不参与。
+
+## 修改前完整分析与共享机制审计
+
+已读AGENTS、当前project-memory/continuous-goal及07-panel契约、561完整Recall/证据；Session.fork和copy-evidence、completed-reply、persistMessageBundleRows及调用、ProjectMemory provenance/insert/pending/文档/租约/提交/失败修剪、Organizer完整admission/配置/流/后台重驱/订阅，以及真实memory test runner/隔离fixture。computer-use与benchmark-debug-template先前已应用，继续真实页面及原生进程证据要求。
+
+全仓搜索所有userInputExtra生产者：公开Session prompt、control.message、Task operator输入、明确userAuthored wake、command与shell入口；runtime唤醒、Goal controller、代理/服务消息没有该人类输入标记。Task创建只在actor=user进入task_create；Question/Permission由已验证的人类终态输入进入interaction_reply/reject。Question终态使用固定occurrence，Permission只在ledger decision.won发布，durable（持久）subscriber（订阅者）的同源重放仍沿原contract（契约）；本轮不擅改assertResolvedReplay，因为Permission首次捕获也使用它。新增聚焦检查保留原入口的正向合同，不能以其名字推断只有重试。
+
+Message复制唯一生产者是Session.fork，普通fork和side-chat共用同一clone与原子bundle事务，extra被完整复制且建立copySources。原Message/Part和冻结来源仍是历史事实，不应删除标记、改写消息或增造用户消息。公开新输入创建新Message，没有copySources；引用/附件也不等于整个Message历史复制。当前capture仅检查role=user和输入标记，因此历史引用被误当新输入。这是共享来源身份问题，不是一个Side的流程选择或模型行为。
+
+唯一生产capture sink是persistMessageBundleRows，所有persistMessage/persistMessageWithCommit、依赖pair、Task输入和Mission receipt共用；它已在同一事务读取existing并只为首次创建发布Message.Created，但每次更新仍调用memory capture。Organizer消费后删除pending副本，重放旧bundle会重新登记，改名/移动后甚至可能让冻结ownerNameAtCapture改变。根因是将“写消息投影”混同“发生一次新用户输入”；现有canonical首次创建事实已经足够，不应再建receipt/tombstone或永久原文档案。
+
+正常、错误、终态、重试和重启：原Message bundle与pending/Event原子提交，原Organizer单Project keyed lock和数据库租约仍负责自动/手动/tool/重启同一队列，exact prefix与revision/lease校验拒绝陈旧提交。Side是独立Session并引用原history；普通fork保留祖先，Task/Mission公开权限、执行轮次和完成边界保留当前实现。新登记策略覆盖全部canonical Message入口；不修改Scheduler/并发队列/模型选择或跨Project边界。测试覆盖原文/来源保留、真实新输入、消费后重放、owner改名、串行重试与两Project隔离。既有Task/交互合同另作聚焦回归，不把fixture断言冒充实际Provider或UI资格。
+
+数据、格式与风险：Entry/DocumentEnvelope仍version1，SQLite schema及迁移不变；不清除原消息、已提交文档或已接受的旧pending。旧队列通过同一当前Organizer正常消费，没有legacy reader或兼容配置。修复的是新admission（登记）与同一Message的重放，已有在途/待处理工作继续原合同。新capture返回明确copied_context分类，只对有有效人类来源标记的历史副本；助手或runtime消息保留runtime_internal。可能风险是误丢真实新输入、把复制误认为新作者、普通fork根归属、首次事务回滚后重试、引用历史与当前输入混淆、及混入其他Session/index改动，必须以实际正向输出和精确stage排除。
+
+## 实施前方案
+
+1. 新非UI正向回归使用真实SQLite/Session.persist/Session.fork：普通fork和Side保留完整provenance与copySources，新的Side/Fork用户输入得到明确pending身份和owner；另Project的输入独立。消费原输入并改名后重放旧bundle，再接收新输入，文档revision/content和新pending身份准确。先在旧实现运行，保存失败，再修共享sink与分类。只使用聚焦测试，禁止新增/运行UI自动化。
+2. ProjectMemory.capture在有效标记后识别copySources为copied_context，不改canonical消息或标记。Session持久事务只有首次创建调用capture，沿原existing事实与Message.Created生命周期，不加影子状态。新初次事务回滚也回滚消息/队列，重试重新正常登记。全仓分类调用与函数签名搜索后再改，不改公共HTTP或工具协议。
+3. 修改前源CLI before从完全闭合561-side-verified完整复制，随机空闲端口、正式完整main-DXPgQK57 UI（本轮前端源码不变）、20分钟原生边界/180秒启动无活动/五分钟收尾。用户授权OpenAI完整条目与相邻完整models配对复制，分别验证OAuth、模型投影与实际gpt-6.1-sol流式预检；每scope至多6，全批至多12。手动新建Side观察原记忆请求、原Source/消息及pending/document事实，不点击启动Goal。
+4. 代码改动后独立after完整publication及闭合前态数据，实页新Side保持引用/正常就绪，canonical分类和Project记忆revision/原模型请求分阶段记录，再实际发送一条有限Side问题，验证真实新用户输入和Sol流式回复及后续记忆整理。零新增模型调用只能作真实观测，不能写“不调用”自动化测试或用0预算造假通过。所有模型原reader必须EOF。
+5. 各scope公开shutdown，等待原exec/native/launcher/物理/输出/请求闭合，退休auth/catalog，核对所有源原行/时间/字节/canonical/schema对象/integrity与目标真实变化。四索引/当前架构同步，文档/必要类型/聚焦合同；只提交自己的hunk，保留其他暂存blob。fetch/merge upstream、完整待推集合审查、normal hooks push/fresh0/0，不发布。整体Goal继续active。
+
+## 旧实现回归与工作区更新
+
+新3个本地非UI合同首轮原94314完成exit1，两个真实产品失败分别为copied_context得到user_input、消费后重放使pendingCount为2而预期新输入1。第三例误用不存在Session.getMessage，且文档规范化会保留结尾换行；已按实际MessageStore.get与原normalize合同修正，保留原失败日志并重跑校正后的旧实现验收，不改变生产代码迁就checker。
+
+期间其他任务提交179b71816/f42484e43/24edbf827/7c92fd33，当前HEAD7c92fd33；原Session/index与project-memory架构的其他改动已成为HEAD，不再按旧未提交hunk处理。当前其他暂存变为native-agent-materializer源码/测试及expert-squad-mechanism-cases记录，提交前重新快照其精确entries/patch，保留整个集合。共享捕获缺陷仍在当前代码和校正回归中存在，不能用旧HEAD或他人提交名替代当前证据。本轮没有使用其暂存内容作为自己的交付。
+
+校正后的旧实现原92302完成exit1：1pass/2fail/10expect，事务回滚重试正向合同通过，两个来源/重放缺陷稳定复现。生产代码仍未修改。
+
+初始before正常被schema检查拒绝：其561隔离源使用未提交迁移4草稿（当时只有message_move索引），当前f42484e43首次提交的正式迁移4同时含part_removal索引，当前migration文件与HEAD无差异。不是改写已交付迁移，也不擅自给prototype补DDL或绕过一致性校验。原始launch已直接exit1，native97996/94684及launcher exit1，physical/output/request闭合、端口空闲、0模型，源/目标原174227行及原字节时间保持，auth/catalog各退休1；没有HTTP listener因此不伪造shutdown200。
+
+改用已正常闭合560-sources-after的正式schema3完整数据（90表172483原行），新before-canonical同端口54054让生产迁移链实际3→4，核对唯一新增两个已声明索引。选用其中已真实完成的Work Session ses_-zUR5coFizznlxwzV81M及原Project9921adf1…f67b15，模型overlay仍为openai/gpt-6.1-sol。不清空数据、不回退版本、不为未发布原型加兼容层。failed-before保留失败结算，本批实际模型总上限仍12，后续before-canonical/after各至多6。
+
+## 实施与正向合同
+
+共享capture在有效人类输入provenance之后读取既有copySources并返回copied_context。持久bundle沿同一事务已有existing事实只为首次Message创建调用capture，与Message.Created边界一致，没有新增receipt、配置、补偿队列或历史改写。当前project-memory架构同步来源与首次登记合同。已接受旧pending继续原Organizer；本轮数据库schema、公开API和持久格式不变。
+
+新增真实SQLite/Session事务正向回归3pass/21expect，分别验证普通fork/Side原文和来源、新输入与两Project独立；消费后重放及改名时规范文档和新pending身份；事务回滚后同ID成功重试。既有可信输入/附件/Permission真实HTTP重复/Question durable中断恢复4pass/47expect，Task创建与真实绑定channel交互2pass/15expect，fork完整bounded transcript/截断/事务中断重试3pass/5expect：最终聚焦12个不同合同、88断言通过。局部fixture与注入中断只证明本地合同，实际Provider和UI资格另列。
+
+两次验收选择错误保留：先将仅匹配memory的pattern错误应用fork文件，fork匹配0导致组合runner exit1；随后fork独立原入口3/5通过。补跑Task/channel时误将--test-name-pattern和内容拆成两个参数，runner先执行完整memory文件后把这两个字符串当路径并exit1；按已读脚本的--test-name-pattern=<pattern>重跑原memory入口，原16256正常exit0、2/15。没有把这些工具失败计入绿色验收，也没有为checker改产品合同。后端Node TypeScript类型检查原4717 exit0。docs:check 346 operations/26 groups通过。
+
+## 真实侧聊与Provider
+
+正式before原32901从90表172483原行启动，原生94596；完整main-DXPgQK57实页手动打开Side chat 1并展开两条引用历史。主Project prj_h3JzinjPYdtZ7Dg2I8Hq，主Session ses_-zUR5coFizznlxwzV81M，Side1 ses_-zUR56rcuzz0vJQBd3ub。预检真实chat+memory两请求后，只创建Side就新增memory请求，规范记忆mem_hL9eLfCyAgrpABlCU57V从revision1变2。关闭后用只读SQLite比较原始完整Markdown字符串，确实仍为原402字符而非仅长度相同。复制user msg_g0VYut8N6001mmvrzJeO保留来源标记和copySources，指向原msg_613ec268-85c8-4f50-8b39-a6ceb2e16c92。这是额外登记/整理的运行证据。
+
+修复后原58710从闭合before-canonical的90表173306原行完整复制启动，原生70056。手动新建Side chat 2 ses_-zUR54flpzzby4xUJQPT，展开真实引用历史并正常就绪：revision2/105tokens/402字符与实际两次预检请求保持，user副本msg_g0VYuvKEB00UXJl4kYxo仍保留来源及完整copySources，没有删历史伪造效果。随后通过真实Side输入框发送有限中文验收问题，产生独立新user msg_bbf9a433-a000-486e-9fe9-57891d886ac3，得到真实回复“新的侧聊输入正常。”；对应chat和memory两请求完整结束，revision2→3、221tokens/852字符，pending被原Organizer正常消费。没有启动Goal、Task、Mission或子agent工作。
+
+五张实图均实际呈现并人工查看：01连接中间态、02修改前就绪引用、03修改后就绪引用、04发送后回复落在视口下方的中间态、05重新打开同一Side后回复实际可见。04已据真实资格改名为reply-outside-viewport，不能以DOM可读代替可见回复。重新打开后引用历史折叠，05才证明回复可见。发送时保持旧阅读位置的行为另作后续调查：已读SideChatPanel.send与setupAutoScroll，发现send没有显式恢复follow，但尚未完成与主输入、共享滚动primitive及读位合同的横向根因审计；本轮不改滚动代码、不声称该现象已修复。
+
+真实before/after分别3与4次模型请求，全部gpt-6.1-sol、流式200、原Provider source reader EOF，实际7/批次上限12，各scope上限6。复制完整授权OpenAI条目与相邻完整models，独立校验可用凭据、投影与实际请求模型；不把schema启动拒绝算Provider验收。前端源码未改，沿上轮完整正式main-DXPgQK57 bundle，无无目标build或UI自动化测试。
+
+## 关闭、保留与交付
+
+正式before/after公开shutdown均200，预留分别1034039/536304ms，超过五分钟；原32901/58710均join terminal exit0，实际native/launcher exit0，physicalCompletion/outputDrainComplete/requestCleanupComplete全部true，精确birth/occurrence链均dead_or_reused。加上schema拒绝scope，三套auth/catalog各退休1。原catalog完整内容、9155406字节及mtime1791128890137.9968保持。用户数据库及18571应用窗口/进程不参与。
+
+三scope源90表原174227/172483/173306行逐rowid/主键/全字段/时间保持，源数据库字节/mtime和canonical配置保持。正式before生产3→4新增声明两索引，after4→4对象相同、integrity均ok。两个正式target仅本项目memory_chunk、memory_file时间及两条容量租约原字段正常变化，其他原Task/Mission/Session/Goal字段保持，Side/实际消息及运行事件是新增；失败target原行保持。待办消费不等于删除canonical历史，不宣称目标所有行零变化。
+
+[完整证据入口](../../artifacts/2026-10-24-memory-input-provenance/README.md)保留阶段数据库/Provider/进程事实、原始安全请求观察、实际截图和测试日志（公开副本仅统一行尾空白，私有原输出保持）。四索引与当前架构同步。期间并行065aabf7c已成为HEAD，fresh fetch upstream0/0；提交前当前staged集合为空，用独立index只装本轮22个精确文件和三个README的一行，不覆盖他人删除/新增/未暂存。交付执行正常commit、fetch/merge、完整待推审查与hooks push，以实际Git输出为准。整体Goal继续active，不因一批完成终止。

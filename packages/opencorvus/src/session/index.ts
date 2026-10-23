@@ -1894,7 +1894,7 @@ export namespace Session {
           part: part as Message.VisiblePart,
         })
       }
-      ProjectMemory.captureMessageInTransaction(db, { info: finalPersisted, parts: input.parts })
+      if (!existing) ProjectMemory.captureMessageInTransaction(db, { info: finalPersisted, parts: input.parts })
       for (const control of input.controls ?? []) SessionControl.createInTransaction(db, control)
       for (const patch of input.metadataPatches ?? []) mergeMetadataInTransaction(db, patch)
       if (input.touchSessionID) touch(input.touchSessionID)

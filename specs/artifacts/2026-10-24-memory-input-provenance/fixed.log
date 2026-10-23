@@ -1,0 +1,14 @@
+$ bun script/run-tests.ts test/memory/project-memory-input-provenance.test.ts
+[1/1] START test/memory/project-memory-input-provenance.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) copied history retains its source while fresh human inputs own the project inbox [3445.75ms]
+(pass) consumed message replay retains the document and admits the next human input [1384.00ms]
+(pass) a rolled back bundle accepts its exact input once on successful retry [1418.94ms]
+
+ 3 pass
+ 0 fail
+ 21 expect() calls
+Ran 3 tests across 1 file. [8.61s]
+[1/1] DONE test/memory/project-memory-input-provenance.test.ts exit=0 duration=9.14s
