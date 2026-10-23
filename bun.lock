@@ -161,7 +161,7 @@
         "turndown": "7.2.0",
         "ulid": "catalog:",
         "undici": "6.28.1",
-        "venice-ai-sdk-provider": "2.0.2",
+        "venice-ai-sdk-provider": "2.2.0",
         "web-tree-sitter": "0.25.10",
         "which": "2.0.2",
         "yargs": "18.1.0",
@@ -369,7 +369,6 @@
     "drizzle-orm@1.0.0-beta.20": "patches/drizzle-orm@1.0.0-beta.20.patch",
     "@kobalte/core@0.13.11": "patches/@kobalte%2Fcore@0.13.11.patch",
     "@standard-community/standard-openapi@0.2.9": "patches/@standard-community%2Fstandard-openapi@0.2.9.patch",
-    "venice-ai-sdk-provider@2.0.2": "patches/venice-ai-sdk-provider@2.0.2.patch",
     "rrule@2.8.1": "patches/rrule@2.8.1.patch",
     "solid-js@1.9.14": "patches/solid-js@1.9.14.patch",
     "@astrojs/starlight@0.41.7": "patches/@astrojs%2Fstarlight@0.41.7.patch",
@@ -3859,7 +3858,7 @@
 
     "vega-wordcloud": ["vega-wordcloud@5.1.2", "", { "dependencies": { "vega-canvas": "^2.0.0", "vega-dataflow": "^6.1.2", "vega-scale": "^8.1.2", "vega-statistics": "^2.0.0", "vega-util": "^2.1.0" } }, "sha512-ZSw6fupf4qx4hBzL9q/oVUKPVbVePjJ/FSgfxxgRcKvE1VoYq3HWfx9qg+CQMvgDS+oGDsn2WoQJuNLYx9T3AQ=="],
 
-    "venice-ai-sdk-provider": ["venice-ai-sdk-provider@2.0.2", "", { "dependencies": { "@ai-sdk/openai-compatible": "^2.0.47", "@ai-sdk/provider": "^3.0.10", "@ai-sdk/provider-utils": "^4.0.27" }, "peerDependencies": { "ai": "^6.0.90" } }, "sha512-aoa05nI3BTK5aGbjBflq+Gfln2AHAkwNbWuGGvCzUIsOfp5Y3iPD4O4PUGDAEiWVJWbjpPn0KfDa0H/HebwsaA=="],
+    "venice-ai-sdk-provider": ["venice-ai-sdk-provider@2.2.0", "", { "dependencies": { "@ai-sdk/openai-compatible": "^2.0.81", "@ai-sdk/provider": "^3.0.18", "@ai-sdk/provider-utils": "^4.0.57" }, "peerDependencies": { "ai": "^6.0.90" } }, "sha512-sa4VmhaYrw/6X7rW8aiswXI/Aw7Vrcu71g/OoNuUgHAJ4DZXS/4EYqForO4xGD4VqNlJZCyxrWAg4pdeX7O/gg=="],
 
     "vfile": ["vfile@6.0.3", "", { "dependencies": { "@types/unist": "^3.0.0", "vfile-message": "^4.0.0" } }, "sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q=="],
 
