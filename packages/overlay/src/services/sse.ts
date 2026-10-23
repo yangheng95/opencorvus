@@ -553,7 +553,7 @@ export function stopSSE() {
 }
 
 // ── Unified Work Ledger change stream ──
-let workLedgerHandle: StreamHandle | null = null
+let workLedgerStream: { handle: StreamHandle; authority: ApiAuthority } | null = null
 let workLedgerRetryTimer: any = null
 export type WorkLedgerStreamEvent = Exclude<WorkLedgerEvent, { type: "mailbox.changed" | "work-ledger.heartbeat" }>
 
@@ -591,6 +591,7 @@ export function setWorkLedgerChangeHandler(handler: ((event: WorkLedgerStreamEve
 
 export function startWorkLedgerSSE(authority = captureApiAuthority()) {
   assertApiAuthorityCurrent(authority)
+  if (workLedgerStream && isApiAuthorityCurrent(workLedgerStream.authority)) return
   stopWorkLedgerSSE()
   if (!workLedgerChangeHandler) return
   const transport = getHostTransport()
@@ -598,7 +599,7 @@ export function startWorkLedgerSSE(authority = captureApiAuthority()) {
     { path: "work-ledger/events", authority },
     {
       onEvent: (data) => {
-        if (!isApiAuthorityCurrent(authority) || handle !== workLedgerHandle) return
+        if (!isApiAuthorityCurrent(authority) || handle !== workLedgerStream?.handle) return
         let event: unknown
         try {
           event = JSON.parse(data)
@@ -648,8 +649,8 @@ export function startWorkLedgerSSE(authority = captureApiAuthority()) {
         }
       },
       onClose: (_reason, info) => {
-        if (handle !== workLedgerHandle) return
-        workLedgerHandle = null
+        if (handle !== workLedgerStream?.handle) return
+        workLedgerStream = null
         if (workLedgerRetryTimer) clearTimeout(workLedgerRetryTimer)
         if (info?.current === false || !isApiAuthorityCurrent(authority)) return
         workLedgerRetryTimer = setTimeout(() => {
@@ -658,12 +659,12 @@ export function startWorkLedgerSSE(authority = captureApiAuthority()) {
         }, 3000)
       },
       onError: () => {
-        if (!isApiAuthorityCurrent(authority) || handle !== workLedgerHandle) return
+        if (!isApiAuthorityCurrent(authority) || handle !== workLedgerStream?.handle) return
         handle.close("transport-error")
       },
     },
   )
-  workLedgerHandle = handle
+  workLedgerStream = { handle, authority }
 }
 
 export function stopWorkLedgerSSE() {
@@ -671,7 +672,7 @@ export function stopWorkLedgerSSE() {
     clearTimeout(workLedgerRetryTimer)
     workLedgerRetryTimer = null
   }
-  const handle = workLedgerHandle
-  workLedgerHandle = null
+  const handle = workLedgerStream?.handle
+  workLedgerStream = null
   if (handle) handle.close("consumer-dispose")
 }

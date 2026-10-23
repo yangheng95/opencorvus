@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [服务替换后的流恢复](2026-10-24-stream-reconnect.md)：560全局通知owner根因修复、12合同83断言、四次Sol及三对服务真实替换。
+
 - [共享流传输修复](2026-10-24-stream-socket-transport.md)：559一次性鉴权ticket、原SSE字节桥接、真实五页/侧栏/Sol及完整资源结算。
 
 - [多页面连接与持久历史读取](2026-10-24-multiple-page-connection.md)：558跨项目连接证据及共享读取准入修复；保留中间失败与未完成传输修复。

@@ -3,6 +3,7 @@ import { afterEach, expect, test } from "bun:test"
 import { HOST_CAPABILITIES } from "../src/services/host-transport"
 import type { HostTransport, StreamHandlers } from "../src/services/host-transport"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
+import { captureApiAuthority, configure, DEFAULT_SERVER, type ApiAuthority } from "../src/services/api"
 import {
   setWorkLedgerChangeHandler,
   startWorkLedgerSSE,
@@ -14,10 +15,11 @@ afterEach(() => {
   setWorkLedgerChangeHandler(null)
   stopWorkLedgerSSE()
   __setHostTransportForTest(undefined)
+  configure({ serverUrl: DEFAULT_SERVER, username: "opencorvus", password: "", directory: "" })
 })
 
 test("Work Ledger and Mailbox notifications share one app-lifetime physical stream", () => {
-  const streamRequests: Array<{ path: string; handlers: StreamHandlers }> = []
+  const streamRequests: Array<{ path: string; authority?: ApiAuthority; handlers: StreamHandlers }> = []
   let closes = 0
   const transport: HostTransport = {
     kind: "browser",
@@ -26,7 +28,7 @@ test("Work Ledger and Mailbox notifications share one app-lifetime physical stre
       throw new Error("not used")
     },
     openStream(request, handlers) {
-      streamRequests.push({ path: request.path, handlers })
+      streamRequests.push({ path: request.path, authority: request.authority, handlers })
       return {
         close() {
           closes += 1
@@ -38,6 +40,7 @@ test("Work Ledger and Mailbox notifications share one app-lifetime physical stre
     },
   }
   __setHostTransportForTest(transport)
+  configure({ serverUrl: "http://ledger-first.test", password: "", directory: "" })
 
   const workLedgerEvents: string[] = []
   let mailboxRefreshes = 0
@@ -48,6 +51,8 @@ test("Work Ledger and Mailbox notifications share one app-lifetime physical stre
   const unsubscribeMailbox = subscribeMailboxChanges(() => {
     mailboxRefreshes += 1
   })
+  startWorkLedgerSSE()
+  startWorkLedgerSSE()
   startWorkLedgerSSE()
 
   expect(streamRequests.map((request) => request.path)).toEqual(["work-ledger/events"])
@@ -80,7 +85,22 @@ test("Work Ledger and Mailbox notifications share one app-lifetime physical stre
   expect(workLedgerEvents).toEqual(["work-ledger.changed", "work-ledger.connected"])
   unsubscribeFailingMailbox()
   unsubscribeMailbox()
-  expect(closes).toBe(0)
+  streamRequests[0]!.handlers.onEvent(
+    JSON.stringify({ type: "work-ledger.changed", sourceType: "task.completed", taskID: null, sequence: 12 }),
+  )
+  expect(workLedgerEvents).toEqual(["work-ledger.changed", "work-ledger.connected", "work-ledger.changed"])
   stopWorkLedgerSSE()
   expect(closes).toBe(1)
+  startWorkLedgerSSE()
+  expect(streamRequests[1]!.authority).toEqual(captureApiAuthority())
+  configure({ serverUrl: "http://ledger-second.test" })
+  startWorkLedgerSSE()
+  expect(streamRequests.map((request) => request.path)).toEqual([
+    "work-ledger/events",
+    "work-ledger/events",
+    "work-ledger/events",
+  ])
+  expect(streamRequests[2]!.authority).toEqual(captureApiAuthority())
+  stopWorkLedgerSSE()
+  expect(closes).toBe(3)
 })

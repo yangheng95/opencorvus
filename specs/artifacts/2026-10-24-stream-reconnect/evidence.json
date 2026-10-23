@@ -1,0 +1,932 @@
+{
+  "iteration": 560,
+  "mode": "Source CLI /ui; manual CUA interactions and screenshots; no UI automation tests",
+  "pages": [
+    "210",
+    "211",
+    "212",
+    "213",
+    "214",
+    "215",
+    "216"
+  ],
+  "uiQualifications": [
+    "Original four pages reconnect after normal owned service replacement without navigation or reload",
+    "Task tool disclosure, original payload reading position and independent drafts retained",
+    "New explicit chat receives real streamed Sol reply after replacement",
+    "Visible Sources card verified before/offline/after second owned replacement",
+    "Fixed bundle: retained page216 Sources title/domain/copy and original reading position before/offline/after service replacement; screenshots18–20 manually viewed"
+  ],
+  "offlineButton": {
+    "observedAt": "2026-10-23T20:57:15.842Z",
+    "button": {
+      "ariaDisabled": null,
+      "attribute": "",
+      "disabled": true
+    },
+    "context": "Original source service stopped normally, same retained Side draft"
+  },
+  "qualificationLimits": [
+    "Native restart button and /restart handoff not exercised",
+    "Actual VCS, MCP and panel POST model streams remain unqualified",
+    "Earlier Side button first-offline snapshot did not include live DOM property; transient mechanism unknown",
+    "559 extra direct HTTP caller remains unidentified; all 560 observed canonical streams match tickets",
+    "Fixed runtime E/F include concurrent uncommitted backend migration4; E isolated copy3→4 adds only the declared Message move index, F4→4. This batch does not own or stage that migration; original user DB is outside every runtime."
+  ],
+  "scopes": [
+    {
+      "stage": "before",
+      "port": 53783,
+      "ready": {
+        "owner": {
+          "pid": 81384,
+          "processInstanceID": "win32:639283848919200485",
+          "occurrenceID": "c5d52c4e-8552-450d-ba4b-85e1f372e98e"
+        },
+        "parent": {
+          "pid": 73160,
+          "processInstanceID": "win32:639283848918956132",
+          "occurrenceID": "c1989872-d684-47c0-890a-24bd2a68d0fe"
+        },
+        "occurrence": "stream-reconnect-560-before-575e1663-6767-4c15-b192-8d234c9782ea",
+        "mode": "Read existing UI only; no auth copied or model requests",
+        "maxRequests": 0,
+        "observedAt": "2026-10-23T20:41:36.100Z"
+      },
+      "owner": {
+        "pid": 81384,
+        "processInstanceID": "win32:639283848919200485",
+        "occurrenceID": "24822187-5883-4d31-89dd-21410e7be927"
+      },
+      "parent": {
+        "pid": 94976,
+        "processInstanceID": "win32:639283848908639739",
+        "occurrenceID": "688986b4-0f40-4ba7-b518-261d0055247a"
+      },
+      "requests": {
+        "observed": 501,
+        "canonicalStreamInstances": 9,
+        "peakObservedActive": 9,
+        "paired": 9,
+        "direct": [],
+        "remaining": [],
+        "globalTimeline": [
+          {
+            "id": 17,
+            "at": "2026-10-23T20:42:48.304Z",
+            "phase": "arrived",
+            "streamID": "8ec1218e-e5f1-4981-aaf0-a3372d0c8cb0"
+          },
+          {
+            "id": 150,
+            "at": "2026-10-23T20:44:58.145Z",
+            "phase": "arrived",
+            "streamID": "426e2d8e-5f62-4f59-8693-96c350a41a5d"
+          },
+          {
+            "id": 236,
+            "at": "2026-10-23T20:45:05.273Z",
+            "phase": "arrived",
+            "streamID": "18bfceb9-ccde-4a68-8db6-a51cce2af6d1"
+          },
+          {
+            "id": 300,
+            "at": "2026-10-23T20:45:11.679Z",
+            "phase": "arrived",
+            "streamID": "8cc58963-18c7-4717-b7a5-f315a364d185"
+          },
+          {
+            "id": 17,
+            "at": "2026-10-23T20:46:50.332Z",
+            "phase": "aborted"
+          },
+          {
+            "id": 150,
+            "at": "2026-10-23T20:46:50.334Z",
+            "phase": "aborted"
+          },
+          {
+            "id": 236,
+            "at": "2026-10-23T20:46:50.335Z",
+            "phase": "aborted"
+          },
+          {
+            "id": 300,
+            "at": "2026-10-23T20:46:50.336Z",
+            "phase": "aborted"
+          }
+        ]
+      },
+      "provider": {
+        "maximum": 0,
+        "exhausted": false,
+        "requests": []
+      },
+      "preservation": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 80433152,
+          "modifiedAtMs": 1792786848456.9617
+        },
+        "canonical": "Complete source bytes exact",
+        "schema": "Same actual application objects and version3;integrity ok",
+        "tables": 90,
+        "originalRows": 170855,
+        "originalRowDifferences": [],
+        "providerActivities": {
+          "original": 423,
+          "current": 423
+        }
+      },
+      "retirement": {
+        "at": "2026-10-23T20:47:09.759Z",
+        "catalogRetired": 1,
+        "authCopied": false,
+        "modelRequests": 0,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "mtimeMs": 1791128890137.9968,
+          "content": "exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 880283,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "implementation": "Before global owner fix; transport559"
+    },
+    {
+      "stage": "after",
+      "port": 53783,
+      "ready": {
+        "owner": {
+          "pid": 95728,
+          "processInstanceID": "win32:639283853304741640",
+          "occurrenceID": "b59bca40-bfa8-418c-95ec-a1cb4a268ccd"
+        },
+        "parent": {
+          "pid": 92804,
+          "processInstanceID": "win32:639283853304458824",
+          "occurrenceID": "c8ba4dec-6f5a-4ff9-ac1a-977291874888"
+        },
+        "occurrence": "stream-reconnect-560-after-028133ec-5c4b-4170-9115-4af0387d2f53",
+        "preflight": {
+          "sessionID": "ses_h99xL4xcxFm1NMolXaDC",
+          "credential": "usable",
+          "catalog": "projected",
+          "actualModel": "gpt-6.1-sol",
+          "streaming": true
+        },
+        "maxRequests": 6,
+        "observedAt": "2026-10-23T20:49:17.535Z"
+      },
+      "owner": {
+        "pid": 95728,
+        "processInstanceID": "win32:639283853304741640",
+        "occurrenceID": "02238942-7f5b-439a-b290-76983618b2c1"
+      },
+      "parent": {
+        "pid": 97164,
+        "processInstanceID": "win32:639283853294606244",
+        "occurrenceID": "917e5d88-3886-40bd-8722-4fb3ebea7de2"
+      },
+      "requests": {
+        "observed": 1342,
+        "canonicalStreamInstances": 23,
+        "peakObservedActive": 11,
+        "paired": 23,
+        "direct": [],
+        "remaining": [],
+        "globalTimeline": [
+          {
+            "id": 15,
+            "at": "2026-10-23T20:48:56.585Z",
+            "phase": "arrived",
+            "streamID": "03d62fc3-1c9c-4747-be84-35e947cedef4"
+          },
+          {
+            "id": 28,
+            "at": "2026-10-23T20:48:57.102Z",
+            "phase": "arrived",
+            "streamID": "31029e82-cd8d-4b6f-8854-81885fee2c1c"
+          },
+          {
+            "id": 34,
+            "at": "2026-10-23T20:48:57.249Z",
+            "phase": "arrived",
+            "streamID": "a69f4370-1b46-4c67-8f53-39855cc29103"
+          },
+          {
+            "id": 46,
+            "at": "2026-10-23T20:48:57.714Z",
+            "phase": "arrived",
+            "streamID": "16722039-629c-4c86-9706-7ad3fd5e1e47"
+          },
+          {
+            "id": 34,
+            "at": "2026-10-23T20:48:58.132Z",
+            "phase": "aborted"
+          },
+          {
+            "id": 59,
+            "at": "2026-10-23T20:48:59.089Z",
+            "phase": "arrived",
+            "streamID": "dfda63f2-6603-4985-bf90-abdd38d1e308"
+          },
+          {
+            "id": 15,
+            "at": "2026-10-23T20:49:02.190Z",
+            "phase": "aborted"
+          },
+          {
+            "id": 98,
+            "at": "2026-10-23T20:49:02.740Z",
+            "phase": "arrived",
+            "streamID": "438b7dcc-b585-4b12-a1c4-3e30af0c57db"
+          },
+          {
+            "id": 46,
+            "at": "2026-10-23T20:49:03.189Z",
+            "phase": "aborted"
+          },
+          {
+            "id": 118,
+            "at": "2026-10-23T20:49:03.698Z",
+            "phase": "arrived",
+            "streamID": "39d05982-fcfe-4a83-9a60-863d705ded79"
+          },
+          {
+            "id": 28,
+            "at": "2026-10-23T20:49:04.059Z",
+            "phase": "aborted"
+          },
+          {
+            "id": 137,
+            "at": "2026-10-23T20:49:04.695Z",
+            "phase": "arrived",
+            "streamID": "6809f541-1eba-4e1e-aac5-319566c1343e"
+          },
+          {
+            "id": 59,
+            "at": "2026-10-23T20:49:05.913Z",
+            "phase": "aborted"
+          },
+          {
+            "id": 165,
+            "at": "2026-10-23T20:49:06.313Z",
+            "phase": "arrived",
+            "streamID": "cff4e4c8-232c-4b04-a2fc-bacfdef1b5b8"
+          },
+          {
+            "id": 137,
+            "at": "2026-10-23T20:49:15.779Z",
+            "phase": "aborted"
+          },
+          {
+            "id": 294,
+            "at": "2026-10-23T20:49:16.732Z",
+            "phase": "arrived",
+            "streamID": "f0daf738-7097-4afa-bc3b-5ba122a16752"
+          },
+          {
+            "id": 118,
+            "at": "2026-10-23T20:49:18.341Z",
+            "phase": "aborted"
+          },
+          {
+            "id": 327,
+            "at": "2026-10-23T20:49:19.140Z",
+            "phase": "arrived",
+            "streamID": "797b499d-f6dc-4611-9f40-9bbbc87b064a"
+          },
+          {
+            "id": 671,
+            "at": "2026-10-23T20:52:07.924Z",
+            "phase": "arrived",
+            "streamID": "e4cf8169-bfcc-453d-ae16-0efe4f4a5cb5"
+          },
+          {
+            "id": 327,
+            "at": "2026-10-23T20:56:02.427Z",
+            "phase": "aborted"
+          },
+          {
+            "id": 294,
+            "at": "2026-10-23T20:56:02.469Z",
+            "phase": "aborted"
+          },
+          {
+            "id": 165,
+            "at": "2026-10-23T20:56:02.507Z",
+            "phase": "aborted"
+          },
+          {
+            "id": 671,
+            "at": "2026-10-23T20:56:02.544Z",
+            "phase": "aborted"
+          },
+          {
+            "id": 98,
+            "at": "2026-10-23T20:57:01.564Z",
+            "phase": "aborted"
+          }
+        ]
+      },
+      "provider": {
+        "maximum": 6,
+        "exhausted": false,
+        "requests": [
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": {
+              "state": "settled",
+              "terminal": {
+                "kind": "eof",
+                "at": 1792788555459
+              },
+              "byteCount": 41144,
+              "chunkCount": 6
+            }
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": {
+              "state": "settled",
+              "terminal": {
+                "kind": "eof",
+                "at": 1792788556591
+              },
+              "byteCount": 515987,
+              "chunkCount": 2
+            }
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": {
+              "state": "settled",
+              "terminal": {
+                "kind": "eof",
+                "at": 1792788829243
+              },
+              "byteCount": 49071,
+              "chunkCount": 10
+            }
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "streaming": true,
+            "status": 200,
+            "reader": {
+              "state": "settled",
+              "terminal": {
+                "kind": "eof",
+                "at": 1792788831670
+              },
+              "byteCount": 558943,
+              "chunkCount": 7
+            }
+          }
+        ]
+      },
+      "preservation": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 80433152,
+          "modifiedAtMs": 1792788300067.0193
+        },
+        "canonical": "Complete source bytes exact",
+        "schema": "Same actual application objects and version3;integrity ok",
+        "tables": 90,
+        "originalRows": 170855,
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ],
+        "providerActivities": {
+          "original": 423,
+          "current": 425
+        }
+      },
+      "retirement": {
+        "at": "2026-10-23T20:59:42.644Z",
+        "catalogRetired": 1,
+        "authRetired": 1,
+        "authCopied": true,
+        "modelRequests": 4,
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "allProviderReaders": "eof",
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "mtimeMs": 1791128890137.9968,
+          "content": "exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 707821,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused",
+        "remainingCanonicalStreams": []
+      },
+      "implementation": "Before global owner fix; transport559"
+    },
+    {
+      "stage": "sources-before",
+      "port": 53783,
+      "ready": {
+        "owner": {
+          "pid": 94248,
+          "processInstanceID": "win32:639283860892274825",
+          "occurrenceID": "1a6ac454-a5de-4e17-8254-7d7324ae12c5"
+        },
+        "parent": {
+          "pid": 78840,
+          "processInstanceID": "win32:639283860892069313",
+          "occurrenceID": "f5084f38-e564-4e8c-ac52-9c06a8cc1f44"
+        },
+        "occurrence": "stream-reconnect-560-sources-before-4f71122c-cd80-4504-94e2-327dba50f8a2",
+        "mode": "Read existing UI only; no auth copied or model requests",
+        "maxRequests": 0,
+        "observedAt": "2026-10-23T21:01:33.416Z"
+      },
+      "owner": {
+        "pid": 94248,
+        "processInstanceID": "win32:639283860892274825",
+        "occurrenceID": "0f1f98f9-daa1-4292-89bf-809bf72d1d89"
+      },
+      "parent": {
+        "pid": 71440,
+        "processInstanceID": "win32:639283860884093270",
+        "occurrenceID": "de052152-a50f-45a2-8fa8-2d78e57ec86f"
+      },
+      "requests": {
+        "observed": 109,
+        "canonicalStreamInstances": 2,
+        "peakObservedActive": 2,
+        "paired": 2,
+        "direct": [],
+        "remaining": [],
+        "globalTimeline": [
+          {
+            "id": 29,
+            "at": "2026-10-23T21:01:51.564Z",
+            "phase": "arrived",
+            "streamID": "64666fd3-aa1a-4ce5-b76b-39b5ff2abf2b"
+          },
+          {
+            "id": 29,
+            "at": "2026-10-23T21:03:09.267Z",
+            "phase": "aborted"
+          }
+        ]
+      },
+      "provider": {
+        "maximum": 0,
+        "exhausted": false,
+        "requests": []
+      },
+      "preservation": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 81195008,
+          "modifiedAtMs": 1792789021621.5332
+        },
+        "canonical": "Complete source bytes exact",
+        "schema": "Same actual application objects and version3;integrity ok",
+        "tables": 90,
+        "originalRows": 172483,
+        "originalRowDifferences": [],
+        "providerActivities": {
+          "original": 425,
+          "current": 425
+        }
+      },
+      "retirement": {
+        "at": "2026-10-23T21:03:13.614Z",
+        "catalogRetired": 1,
+        "authCopied": false,
+        "modelRequests": 0,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "mtimeMs": 1791128890137.9968,
+          "content": "exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 1099073,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "implementation": "Before global owner fix; transport559"
+    },
+    {
+      "stage": "sources-after",
+      "port": 53783,
+      "ready": {
+        "owner": {
+          "pid": 75372,
+          "processInstanceID": "win32:639283862395526081",
+          "occurrenceID": "206c8b67-ebd8-4d2e-9863-e4be02caa5b5"
+        },
+        "parent": {
+          "pid": 94248,
+          "processInstanceID": "win32:639283862395299039",
+          "occurrenceID": "70e1fc11-15f1-42e6-87cc-beb2cc7d247b"
+        },
+        "occurrence": "stream-reconnect-560-sources-after-ae506680-a22c-4f1c-8289-b535e3582c4a",
+        "mode": "Read existing UI only; no auth copied or model requests",
+        "maxRequests": 0,
+        "observedAt": "2026-10-23T21:04:03.920Z"
+      },
+      "owner": {
+        "pid": 75372,
+        "processInstanceID": "win32:639283862395526081",
+        "occurrenceID": "2a17eb25-c6e8-419d-af64-fb4e7d1fe78c"
+      },
+      "parent": {
+        "pid": 21460,
+        "processInstanceID": "win32:639283862387099042",
+        "occurrenceID": "dc5be2c9-c9e2-42fb-acd8-35af83a237dc"
+      },
+      "requests": {
+        "observed": 93,
+        "canonicalStreamInstances": 5,
+        "peakObservedActive": 2,
+        "paired": 5,
+        "direct": [],
+        "remaining": [],
+        "globalTimeline": [
+          {
+            "id": 4,
+            "at": "2026-10-23T21:04:06.497Z",
+            "phase": "arrived",
+            "streamID": "b8185ca8-34d4-420a-bed4-99abbd2cf984"
+          },
+          {
+            "id": 4,
+            "at": "2026-10-23T21:04:06.766Z",
+            "phase": "aborted"
+          },
+          {
+            "id": 20,
+            "at": "2026-10-23T21:04:08.261Z",
+            "phase": "arrived",
+            "streamID": "b3f17960-43be-45af-a600-245d591fea12"
+          },
+          {
+            "id": 20,
+            "at": "2026-10-23T21:04:10.190Z",
+            "phase": "aborted"
+          },
+          {
+            "id": 41,
+            "at": "2026-10-23T21:04:10.636Z",
+            "phase": "arrived",
+            "streamID": "5eacdca1-02e7-4c65-8d6a-576e94209af3"
+          },
+          {
+            "id": 41,
+            "at": "2026-10-23T21:05:13.231Z",
+            "phase": "aborted"
+          }
+        ]
+      },
+      "provider": {
+        "maximum": 0,
+        "exhausted": false,
+        "requests": []
+      },
+      "preservation": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 81195008,
+          "modifiedAtMs": 1792789313593.3867
+        },
+        "canonical": "Complete source bytes exact",
+        "schema": "Same actual application objects and version3;integrity ok",
+        "tables": 90,
+        "originalRows": 172483,
+        "originalRowDifferences": [],
+        "providerActivities": {
+          "original": 425,
+          "current": 425
+        }
+      },
+      "retirement": {
+        "at": "2026-10-23T21:05:30.836Z",
+        "catalogRetired": 1,
+        "authCopied": false,
+        "modelRequests": 0,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "mtimeMs": 1791128890137.9968,
+          "content": "exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 1112487,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "implementation": "Before global owner fix; transport559"
+    },
+    {
+      "stage": "fixed-before",
+      "implementation": "Current authority retains one global owner",
+      "entry": "main-HBKlRKaR.js",
+      "port": 53783,
+      "originalExec": 15990,
+      "ready": {
+        "owner": {
+          "pid": 84280,
+          "processInstanceID": "win32:639283878924286107",
+          "occurrenceID": "15269a4d-53b5-4497-a9f7-c0c5a6c85764"
+        },
+        "parent": {
+          "pid": 98160,
+          "processInstanceID": "win32:639283878924053302",
+          "occurrenceID": "721cf7dc-84df-417a-8d81-4fdf65f68035"
+        },
+        "occurrence": "stream-reconnect-560-fixed-before-c3582bcb-570f-440c-8313-3e63c72af303",
+        "mode": "Read existing UI only; no auth copied or model requests",
+        "maxRequests": 0,
+        "observedAt": "2026-10-23T21:31:42.084Z"
+      },
+      "owner": {
+        "pid": 84280,
+        "processInstanceID": "win32:639283878924286107",
+        "occurrenceID": "1c194153-6d79-4849-afa8-ce03f597156b"
+      },
+      "parent": {
+        "pid": 80152,
+        "processInstanceID": "win32:639283878912237152",
+        "occurrenceID": "82bd5ad3-2ddc-40a5-8899-655c55f826b6"
+      },
+      "requests": {
+        "observed": 82,
+        "canonicalStreamInstances": 2,
+        "peakObservedActive": 2,
+        "paired": 2,
+        "direct": [],
+        "remaining": [],
+        "globalTimeline": [
+          {
+            "id": 29,
+            "at": "2026-10-23T21:31:54.146Z",
+            "phase": "arrived",
+            "streamID": "8d3edf57-c8a0-4820-9110-a071ebb9dd50"
+          },
+          {
+            "id": 29,
+            "at": "2026-10-23T21:32:26.913Z",
+            "phase": "aborted"
+          }
+        ]
+      },
+      "provider": {
+        "maximum": 0,
+        "exhausted": false,
+        "requests": []
+      },
+      "preservation": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 81195008,
+          "modifiedAtMs": 1792789448050.8025
+        },
+        "canonical": "Complete source bytes exact",
+        "schema": {
+          "sourceVersion": 3,
+          "targetVersion": 4,
+          "extraObjects": [
+            {
+              "type": "index",
+              "name": "bus_publication_outbox_message_move_idx",
+              "tbl_name": "bus_publication_outbox",
+              "sql": "CREATE INDEX \"bus_publication_outbox_message_move_idx\" ON \"bus_publication_outbox\" (\"project_id\", json_extract(\"properties\", '$.info.id'), json_extract(\"properties\", '$.sourceSessionID'), json_extract(\"properties\", '$.info.sessionID')) WHERE \"event_type\" = 'message.moved'"
+            }
+          ],
+          "integrity": "ok"
+        },
+        "tables": 90,
+        "originalRows": 172483,
+        "originalRowDifferences": [],
+        "providerActivities": {
+          "original": 425,
+          "current": 425
+        }
+      },
+      "retirement": {
+        "at": "2026-10-23T21:32:35.407Z",
+        "catalogRetired": 1,
+        "authCopied": false,
+        "modelRequests": 0,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "mtimeMs": 1791128890137.9968,
+          "content": "exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 1143516,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      }
+    },
+    {
+      "stage": "fixed-after",
+      "implementation": "Current authority retains one global owner",
+      "entry": "main-HBKlRKaR.js",
+      "port": 53783,
+      "originalExec": 98631,
+      "ready": {
+        "owner": {
+          "pid": 76148,
+          "processInstanceID": "win32:639283879720653089",
+          "occurrenceID": "f9050d90-abdb-4649-b1f4-54876a65bb86"
+        },
+        "parent": {
+          "pid": 94884,
+          "processInstanceID": "win32:639283879720417075",
+          "occurrenceID": "73f82093-84af-447a-a2fd-5f7f1fb3c610"
+        },
+        "occurrence": "stream-reconnect-560-fixed-after-de0ec724-36ec-4bc5-b033-2a2d4df1bc99",
+        "mode": "Read existing UI only; no auth copied or model requests",
+        "maxRequests": 0,
+        "observedAt": "2026-10-23T21:32:56.785Z"
+      },
+      "owner": {
+        "pid": 76148,
+        "processInstanceID": "win32:639283879720653089",
+        "occurrenceID": "b86fc1ff-ae43-4f80-b9f2-d7e4dd6a9ca1"
+      },
+      "parent": {
+        "pid": 98100,
+        "processInstanceID": "win32:639283879711386931",
+        "occurrenceID": "1d26b5c4-7904-48ca-b628-81198b949381"
+      },
+      "requests": {
+        "observed": 62,
+        "canonicalStreamInstances": 3,
+        "peakObservedActive": 2,
+        "paired": 3,
+        "direct": [],
+        "remaining": [],
+        "globalTimeline": [
+          {
+            "id": 4,
+            "at": "2026-10-23T21:32:57.034Z",
+            "phase": "arrived",
+            "streamID": "7e90753e-f0f7-4d3b-b69a-af5ed4ec9d50"
+          },
+          {
+            "id": 4,
+            "at": "2026-10-23T21:33:26.181Z",
+            "phase": "aborted"
+          }
+        ]
+      },
+      "provider": {
+        "maximum": 0,
+        "exhausted": false,
+        "requests": []
+      },
+      "preservation": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 81195008,
+          "modifiedAtMs": 1792791117001.402
+        },
+        "canonical": "Complete source bytes exact",
+        "schema": {
+          "sourceVersion": 4,
+          "targetVersion": 4,
+          "extraObjects": [],
+          "integrity": "ok"
+        },
+        "tables": 90,
+        "originalRows": 172483,
+        "originalRowDifferences": [],
+        "providerActivities": {
+          "original": 425,
+          "current": 425
+        }
+      },
+      "retirement": {
+        "at": "2026-10-23T21:33:47.654Z",
+        "catalogRetired": 1,
+        "authCopied": false,
+        "modelRequests": 0,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "mtimeMs": 1791128890137.9968,
+          "content": "exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 1151292,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      }
+    }
+  ],
+  "entries": {
+    "beforeFix": "main-C7aBtTu6.js",
+    "afterFix": "main-HBKlRKaR.js"
+  },
+  "rootCause": {
+    "scope": "Global Work Ledger/Mailbox stream owner",
+    "trigger": "stream retry restores before health recovery; init.recoverWorkspace and refreshConnectionWorkspace each start again",
+    "before": "startWorkLedgerSSE unconditionally disposes the current handle",
+    "change": "One {handle,authority} owner; repeated start keeps current authority; explicit disposal, expired authority and genuine close retain lifecycle semantics",
+    "productionComparison": {
+      "before": {
+        "scope": "sources-after",
+        "globalConnections": 3
+      },
+      "after": {
+        "scope": "fixed-after",
+        "globalConnections": 1
+      }
+    },
+    "limits": "Selected Task replay stream separately rebinds once during workspace projection recovery; no claim that this fixes every Rendering cause"
+  },
+  "validation": {
+    "baseline": {
+      "command": "bun run test test/server/stream-socket-runtime.test.ts",
+      "result": "exit1;1pass1fail20expect; current Session title notification replaced by work-ledger.connected"
+    },
+    "fixed": {
+      "productionSocket": {
+        "tests": 2,
+        "assertions": 24
+      },
+      "socketContract": {
+        "tests": 9,
+        "assertions": 50
+      },
+      "hostNotification": {
+        "tests": 1,
+        "assertions": 9
+      },
+      "total": {
+        "tests": 12,
+        "assertions": 83
+      }
+    },
+    "typecheck": {
+      "overlay": "Node tsc exit0; original25629",
+      "backend": "Node tsc exit0; original7775"
+    },
+    "uiBuild": {
+      "command": "bun run build:vite; official Node Vite runner",
+      "exit": 0,
+      "originalExec": 13500,
+      "entry": "main-HBKlRKaR.js"
+    },
+    "documentation": "docs:check346operations26groups"
+  }
+}

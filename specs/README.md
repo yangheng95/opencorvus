@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [服务替换后的流恢复](records/2026-10/2026-10-24-stream-reconnect.md)：560修复恢复时全局流重复重建，Sources/草稿真实重连、20实图及六服务完整结算。
+
 - [共享流传输修复](records/2026-10/2026-10-24-stream-socket-transport.md)：559统一WebSocket流，五页/Sources/Goal实图与真实Sol；保留原HTTP客户端归属及未验范围。
 
 - [多页面连接与持久历史读取](records/2026-10/2026-10-24-multiple-page-connection.md)：558复现六流请求/Rendering阻塞，修复Session/Mission只读模型耦合；13实图/10合同，传输待续。

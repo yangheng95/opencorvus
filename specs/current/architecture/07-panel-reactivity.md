@@ -892,7 +892,12 @@ The left-sidebar Mailbox hydrates from the global registered-project `/mailbox`
 projection and subscribes in memory to `mailbox.changed` on the page-global
 `/work-ledger/events` notification stream. Work Ledger and Mailbox share that
 single physical WebSocket connection carrying canonical SSE bytes; a selected Task or Session
-may own one additional replay stream. Every Mailbox change causes a fresh
+may own one additional replay stream. Starting the global stream is idempotent
+while its owner belongs to the current API authority. Health recovery, workspace
+projection refresh and the stream's retry share that owner, preserving live
+notification delivery. Explicit disposal, an expired authority or an actual
+disconnect ends the owner before another connection takes its place.
+Every Mailbox change causes a fresh
 canonical page read, so the notification stream is not a second payload/history
 source. Project directory changes abort the previous
 transport request and rebind the API context before hydration, but they do not

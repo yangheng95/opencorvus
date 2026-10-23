@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [服务替换后的流恢复](2026-10-24-stream-reconnect/README.md)：560二十实图、六份真实请求与闭合事实，全局恢复连接3→1、原Source和读位保持。
+
 - [共享流传输修复](2026-10-24-stream-socket-transport/README.md)：559八张实图、实际请求时间、四次流式Sol及隔离凭据/进程/数据核对。
 
 - [多页面连接与持久历史读取](2026-10-24-multiple-page-connection/README.md)：558十三实图、原HTTP到达/关闭时序、Mission最终可读及三服务完整结算。
