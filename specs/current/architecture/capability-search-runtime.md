@@ -16,9 +16,9 @@ universal executable interface.
 3. The authoritative input Message is atomically bound to a content-addressed
    `CatalogViewSnapshotPayloadV3`. `HarnessProjection` binds the same snapshot
    ref/hash and cannot expand it.
-4. Revision zero exposes authorized routine tools directly. It also exposes the
-   production `skill` loader when the authoritative visible user input names an
-   exact Skill already granted to that Conversation or Task identity. The
+4. Revision zero exposes authorized routine tools directly, including the
+   production `skill` loader whenever granted to that Conversation or Task
+   identity. A name in the input and a prior search are not prerequisites. The
    loader ref and normalized definition are part of the same immutable
    permanent base, active refs, digest, and payload accounting; loading the
    Skill content remains an ordinary model Tool call. For Task workers and
@@ -53,7 +53,7 @@ Tool may also have a valid reveal receipt and appears once in the projection.
 Deactivating that reveal preserves its permanent availability. Definition and
 executable-identity conflict validation still applies before projection.
 A new authoritative input starts at revision zero with its bound
-permanent base, including an eligible exact visible production Skill directive;
+permanent base, including its authorized Skill-family loader;
 v2 search receipts continue to record only dynamically activated extensions.
 
 ## General tool contracts
@@ -208,8 +208,7 @@ conflict.
 ## Provider budgets
 
 - Revision zero's permanent surface contains the authorized routine tools,
-  `capability_search`, and any eligible exact production Skill loader named by
-  the authoritative visible input. Search itself is at most 4,000 normalized characters and
+  `capability_search`, and its authorized Skill-family loader. Search itself is at most 4,000 normalized characters and
   1,000 estimated tokens. The conditional
   response encoder remains outside the Harness but is counted in the immutable
   Provider base and total payload budget.
@@ -226,6 +225,35 @@ conflict.
 - Any single extension leaf that cannot fit is rejected and must be split into canonical
   action leaves. `panel` is split into exact `panel_<action>` Tools; the old
   model-facing umbrella and the schema-enumerating `batch` Tool do not exist.
+
+Package Tools generate their JSON Schema from the one executable Zod validator
+with `reused: "ref"`; repeated substructures use standard local `$defs`/`$ref`
+instead of repeated inline copies. Native capsule execution still parses with
+that original validator. Provider adaptation preserves referenced object arrays
+and root definition scope; strict-mode argument materialization resolves local
+JSON Pointers before selecting a branch or restoring optional fields. Invalid
+references fail explicitly. Full normalized definitions, including shared
+definitions, count toward the unchanged character and token allowances.
+
+Package admission validates each declared Skill's loader and required Tool
+projection after Capability Set expansion. Default Skill dependencies are
+validated by the active resolver against the same exact Tool set. Explore
+supplies the general Skill loader and supports exact operator mounts; reading a
+method does not add Tool grants, approve effects, or change its read-oriented
+responsibility. Permissions and current execution availability remain separate
+checks and may still narrow a valid declaration.
+
+Every frozen package Tool is introspected in a supervised metadata-only process
+before package admission, using the same immutable bundle, RPC worker and
+settlement path as Task introspection. That scope has no ToolHost execution
+authority. Irreducible single-leaf definitions fail the same character/token
+budget contract at admission; actual Provider normalization is rechecked at
+reveal. Discovery descriptions for package Tools derive from this inspected
+definition, bounded to Catalog metadata size, and are projected to the exact
+scheduler/worker owner. Task capsule introspection must equal the admitted
+definition. No inferred provider-name prose replaces the package's real purpose.
+`bun run check:expert-squad-capabilities [exact-id ...]` exercises the production
+package admission path in an isolated runtime across the selected built-ins.
 
 The positive budget contract normalizes definitions for the Provider ABI,
 measures each complete routine role surface and validates extension accounting

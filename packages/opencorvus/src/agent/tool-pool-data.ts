@@ -228,6 +228,7 @@ export const runtimeTemplateAssignments = Object.freeze({
   explore: createToolPool({
     global: [
       ...PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS,
+      "skill",
       "read",
       "glob",
       "search_code",

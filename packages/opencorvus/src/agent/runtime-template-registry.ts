@@ -95,7 +95,7 @@ const definitions = {
     adapterID: "explore",
     corePromptSeed: EXPLORE_CORE,
     description: "Read-oriented repository exploration runtime.",
-    skillMountable: false,
+    skillMountable: true,
     exactRuntimeContract: false,
     broadProjectSourceWork: false,
   },

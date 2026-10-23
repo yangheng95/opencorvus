@@ -558,7 +558,9 @@ scheduler-only platform worker 与 package worker；`orchestrator` 是保留的 
 Orchestrator Turn 与 worker Turn 都经 `PromptProfileResolver` 和 `SkillMount.resolve()` 重算同一
 projection；matrix row 不是第二份执行授权。每个 owner 仍必须拥有物理 `skill` Tool，Skill eligibility
 仍按 platform、required tools 与 permission 独立判定。改变角色名称或 `base_role` 不会继承 mount；例如
-Advanced `source-investigator` 只有在 manifest 显式使用 Skill-mountable runtime 且 operator 精确挂载后，
+Explore 的只读职责允许读取已授权的方法 Skill；其通用 loader 与其他支持 Skill 的模板同样常驻，
+包声明必须在 Capability Set 展开后同时满足 loader 和 required_tools 的投影闭合。
+Advanced `source-investigator` 只有在 manifest 显式使用对应 runtime 且 operator 精确挂载后，
 才可通过其真实只读命令/Skill surface 调用项目客户端。
 
 - `advanced` manifest 的 scheduler 与精确 `requirement-engineer` worker 各自通过 typed Skill `capability_refs`

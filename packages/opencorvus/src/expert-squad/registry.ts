@@ -4,6 +4,9 @@ import { PackageToolBundle } from "@/expert-squad/package-tool-bundle"
 import { McpConfigSchema } from "@/config/mcp-schema"
 import { Filesystem } from "@/util/filesystem"
 import { SkillReadDiagnostics } from "@/skill/read-diagnostics"
+import { assertSkillProjectionExecutable } from "@/skill/eligibility"
+import { introspectPackageToolForValidation, type PackageToolIntrospection } from "@/expert-squad/package-tool-capsule"
+import { assertCapabilityToolDefinitionBudget, NormalizedProviderToolDefinition } from "@/capability/reveal-receipt"
 import { Flag } from "@/flag/flag"
 import { parseFrontmatter } from "@/util/frontmatter"
 import { Global } from "@/global"
@@ -33,7 +36,7 @@ import {
   type ExpertSquadManifestV2,
   validateExpertSquadManifestDispatchTopology,
 } from "@opencorvus-ai/sdk/expert-squad-authoring"
-import { defaultToolNameFromRef } from "@/expert-squad/provider-names"
+import { defaultToolNameFromRef, packageToolProviderName } from "@/expert-squad/provider-names"
 import { createHash } from "node:crypto"
 import { isUtf8 } from "node:buffer"
 import type { Dirent } from "fs"
@@ -276,6 +279,10 @@ export namespace ExpertSquadRegistry {
     readonly declaration: PreparedPackageMcpDeclaration
   }
 
+  export interface ValidatedPackageTool extends PackageToolBundle.Prepared {
+    readonly definition: PackageToolIntrospection
+  }
+
   export interface LoadedPackage extends PackageLocation {
     readonly packageDigest: string
     readonly manifest: Manifest
@@ -286,7 +293,7 @@ export namespace ExpertSquadRegistry {
       readonly agents: Readonly<Record<string, string>>
     }
     readonly packageSkills: ReadonlyMap<string, Immutable<PreparedPackageSkill>>
-    readonly packageToolBundles: ReadonlyMap<string, Immutable<PackageToolBundle.Prepared>>
+    readonly packageToolBundles: ReadonlyMap<string, Immutable<ValidatedPackageTool>>
     readonly packageMcpDeclarations: ReadonlyMap<string, Immutable<PreparedPackageMcpDeclaration>>
     readonly packageMcpTools: ReadonlyMap<string, Immutable<PreparedPackageMcpCapability>>
     readonly packageMcpPrompts: ReadonlyMap<string, Immutable<PreparedPackageMcpCapability>>
@@ -1342,6 +1349,10 @@ export namespace ExpertSquadRegistry {
       knownDefaultHostToolIDs,
       projectableDefaultHostToolIDs,
     } = input
+    const skillToolIDs = new Set([
+      ...capabilities.builtInToolIDs,
+      ...capabilities.defaultToolRefs.map(defaultToolNameFromRef),
+    ])
     for (const toolID of capabilities.builtInToolIDs) {
       if (!knownBuiltInToolIDs.has(toolID)) throw new Error(`${context}: unknown built-in tool "${toolID}"`)
       if (!projectableBuiltInToolIDs.has(toolID)) {
@@ -1353,6 +1364,7 @@ export namespace ExpertSquadRegistry {
       if (!parsed.success) {
         throw new Error(`${context}: default skill ref ${JSON.stringify(ref)} must match default/skill/<name>`)
       }
+      assertSkillProjectionExecutable({ capabilityRef: ref, requiredTools: [], projectedToolIDs: skillToolIDs, context })
     }
     for (const ref of capabilities.defaultToolRefs) {
       assertDefaultRef(ref, "tool", context)
@@ -1389,6 +1401,12 @@ export namespace ExpertSquadRegistry {
         id,
         available: resources.skills,
         ownerID,
+        context,
+      })
+      assertSkillProjectionExecutable({
+        capabilityRef: ref,
+        requiredTools: resources.skills.get(ref)!.definition.required_tools,
+        projectedToolIDs: skillToolIDs,
         context,
       })
     }
@@ -1586,7 +1604,7 @@ export namespace ExpertSquadRegistry {
   async function preparePackageToolBundles(input: {
     metadata: ParsedPackageMetadata
     resources: Awaited<ReturnType<typeof collectPackageResources>>
-  }): Promise<ReadonlyMap<string, PackageToolBundle.Prepared>> {
+  }): Promise<ReadonlyMap<string, ValidatedPackageTool>> {
     const tools = [...input.resources.tools.values()].sort((left, right) =>
       left.ref < right.ref ? -1 : left.ref > right.ref ? 1 : 0,
     )
@@ -1599,7 +1617,21 @@ export namespace ExpertSquadRegistry {
         sourcePath: tool.sourcePath,
       })),
     )
-    return new Map(tools.map((tool, index) => [tool.ref, prepared[index]!] as const))
+    const validated = new Map<string, ValidatedPackageTool>()
+    for (const bundle of prepared) {
+      const definition = await introspectPackageToolForValidation({ prepared: bundle, cwd: input.metadata.root })
+      assertCapabilityToolDefinitionBudget(
+        bundle.snapshot.ref,
+        NormalizedProviderToolDefinition.parse({
+          name: packageToolProviderName(bundle.snapshot.ref),
+          description: definition.description,
+          input_schema: definition.inputSchema,
+          strict: false,
+        }),
+      )
+      validated.set(bundle.snapshot.ref, { ...bundle, definition })
+    }
+    return validated
   }
 
   async function collectLibraryFiles(packageRoot: string): Promise<string[]> {

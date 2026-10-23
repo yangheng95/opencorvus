@@ -147,10 +147,15 @@ describe("built-in typed publisher provider schemas", () => {
         }
         required: string[]
       }>
+      const payloadSchema = (branch: (typeof branches)[number]) => {
+        const payload = branch.properties.payload as Record<string, unknown>
+        if (typeof payload.$ref !== "string") return payload
+        return payload.$ref.slice(2).split("/").reduce((value: any, key) => value[key.replace(/~1/g, "/").replace(/~0/g, "~")], schema) as Record<string, unknown>
+      }
       return {
         artifactTypes: branches.map((branch) => branch.properties.artifact_type.const),
-        payloadTypes: branches.map((branch) => branch.properties.payload.type),
-        payloadStrictness: branches.map((branch) => branch.properties.payload.additionalProperties),
+        payloadTypes: branches.map((branch) => payloadSchema(branch).type),
+        payloadStrictness: branches.map((branch) => payloadSchema(branch).additionalProperties),
         branchStrictness: branches.map((branch) => branch.additionalProperties),
         required: branches.map((branch) => branch.required),
         expectedArtifactTypes: [...artifactTypes],

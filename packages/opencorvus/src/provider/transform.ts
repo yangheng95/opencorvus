@@ -1368,7 +1368,14 @@ export namespace ProviderTransform {
           }
           // Ensure items has at least a type if it's an empty object
           // This handles nested arrays like { type: "array", items: { type: "array", items: {} } }
-          if (typeof result.items === "object" && !Array.isArray(result.items) && !result.items.type) {
+          if (
+            typeof result.items === "object" &&
+            !Array.isArray(result.items) &&
+            !result.items.type &&
+            !result.items.$ref &&
+            !result.items.anyOf &&
+            !result.items.oneOf
+          ) {
             result.items.type = "string"
           }
         }

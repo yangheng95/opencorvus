@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [已授权能力执行闭合](2026-10-24-authorized-capability-execution/README.md)：Explore 自主加载、通用报告和联合发布的真实工具事实、三张人工实图及完整资源结算；保留原预算失败。
+
 - [剪贴板路径对照](2026-10-24-clipboard-path/README.md)：555三实图、已知键盘/API对照及完整停止详情，0模型/原90表数据保持与正常闭合。
 
 - [取消事实与当前提示归属](2026-10-23-cancellation-presentation/README.md)：554十五实图、10次Sol，修复取消红色误报和旧提示覆盖成功；保留一次资源截止失败与复制核验限制，最终服务正常闭合。

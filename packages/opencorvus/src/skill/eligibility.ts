@@ -9,6 +9,34 @@ export type SkillDisabledReason =
   | "platform_incompatible"
   | "missing_required_tool"
 
+export class SkillProjectionContractError extends Error {
+  readonly code: "skill_loader_unprojected" | "skill_required_tool_unprojected"
+  constructor(
+    readonly capabilityRef: string,
+    readonly toolID: string,
+    context: string,
+  ) {
+    super(
+      `${context}: Skill ${capabilityRef} requires projected Tool ${toolID}. Declare its exact capability within the runtime template's supported surface.`,
+    )
+    this.name = "SkillProjectionContractError"
+    this.code = toolID === "skill" ? "skill_loader_unprojected" : "skill_required_tool_unprojected"
+  }
+}
+
+export function assertSkillProjectionExecutable(input: {
+  capabilityRef: string
+  requiredTools: readonly string[]
+  projectedToolIDs: ReadonlySet<string>
+  context: string
+}): void {
+  for (const toolID of ["skill", ...input.requiredTools]) {
+    if (!input.projectedToolIDs.has(toolID)) {
+      throw new SkillProjectionContractError(input.capabilityRef, toolID, input.context)
+    }
+  }
+}
+
 export function skillLoaderAvailable(input: {
   runtime: SessionAgentRuntime
   toolID: "skill" | "mission_skill"

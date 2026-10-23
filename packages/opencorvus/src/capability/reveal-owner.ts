@@ -12,7 +12,7 @@ import type { CatalogViewSnapshotPayloadV3 } from "./catalog-binding"
 import { CatalogOccurrenceBinding } from "./catalog-binding"
 import { harnessGrantAllows, type HarnessProjection } from "./harness-projection"
 import {
-  CAPABILITY_REVEAL_MAX_ACTIVE_CHARS,
+  assertCapabilityToolDefinitionBudget,
   CAPABILITY_REVEAL_RECEIPT_METADATA_KEY,
   ActivatedCapability,
   capabilityRevealMaterializationFingerprint,
@@ -352,12 +352,8 @@ export function createCapabilityRevealOwner(input: {
             )
           }
           const definition = normalizedProviderToolDefinition(materialized.providerName, materialized.tool)
+          assertCapabilityToolDefinitionBudget(CapabilityRefCodec.encode(requestedRef), definition)
           const payloadChars = providerToolDefinitionChars(definition)
-          if (payloadChars > CAPABILITY_REVEAL_MAX_ACTIVE_CHARS) {
-            throw new Error(
-              `Capability ${CapabilityRefCodec.encode(requestedRef)} definition is ${payloadChars} chars and must be split below ${CAPABILITY_REVEAL_MAX_ACTIVE_CHARS}.`,
-            )
-          }
           return ActivatedCapability.parse({
             requested_ref: requestedRef,
             executable_ref: executableRef,

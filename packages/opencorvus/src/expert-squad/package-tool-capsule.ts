@@ -18,7 +18,7 @@ type CapsuleContext = Pick<
   "sessionID" | "messageID" | "agent" | "directory" | "worktree" | "configuration"
 >
 
-type Introspection = Readonly<{
+export type PackageToolIntrospection = Readonly<{
   description: string
   inputSchema: Record<string, unknown>
 }>
@@ -464,7 +464,7 @@ export function nativePackageToolEnvironment(): NodeJS.ProcessEnv {
 
 async function runCapsule(input: {
   prepared: PackageToolBundle.Prepared
-  taskID: string
+  authority: { kind: "task"; taskID: string } | { kind: "package_validation" }
   cwd: string
   operation: "introspect" | "execute"
   host?: ToolHost
@@ -472,14 +472,22 @@ async function runCapsule(input: {
   args?: unknown
   abort?: AbortSignal
 }): Promise<unknown> {
+  if (input.authority.kind === "package_validation" && input.operation !== "introspect") {
+    throw new Error("Package validation authority permits introspection only")
+  }
   if (input.abort?.aborted) throw input.abort.reason
-  const execution = await resolveTaskProcessExecution({ taskID: input.taskID, cwd: input.cwd })
-  const capsuleRuntime = execution.kind === "task_capsule" ? await activeExecutionCapsuleRuntimeFact() : undefined
-  if (execution.kind === "task_capsule" && !capsuleRuntime) {
+  const execution =
+    input.authority.kind === "task"
+      ? await resolveTaskProcessExecution({ taskID: input.authority.taskID, cwd: input.cwd })
+      : undefined
+  const capsuleRuntime = execution?.kind === "task_capsule" ? await activeExecutionCapsuleRuntimeFact() : undefined
+  if (execution?.kind === "task_capsule" && !capsuleRuntime) {
     throw new ExecutionCapsuleRuntimeUnavailableError("Package tool Task Capsule runtime is unavailable")
   }
   const nativeNode =
-    execution.kind === "task_native" ? (await resolveBrowserNodeSidecarRuntime()).nodeExecutable : undefined
+    input.authority.kind === "package_validation" || execution?.kind === "task_native"
+      ? (await resolveBrowserNodeSidecarRuntime()).nodeExecutable
+      : undefined
   const executable =
     capsuleRuntime?.nodePath ??
     (nativeNode && (path.isAbsolute(nativeNode) ? nativeNode : which(nativeNode))) ??
@@ -488,7 +496,7 @@ async function runCapsule(input: {
     throw new ExecutionCapsuleRuntimeUnavailableError("Package tool native Node runtime is unavailable")
   }
   const inactivityMs = capsuleRuntime?.packageToolInactivityMs ?? NATIVE_PACKAGE_TOOL_INACTIVITY_MS
-  const nativeWorker = execution.kind === "task_native" ? await nativePackageToolWorkerPath(input.prepared) : undefined
+  const nativeWorker = nativeNode ? await nativePackageToolWorkerPath(input.prepared) : undefined
   const args = nativeWorker ? [nativeWorker] : ["-e", WORKER_SOURCE]
   const workerRuntimeDirectory = nativeWorker ? path.dirname(nativeWorker) : "/tmp"
   const bundle = await readFile(input.prepared.bundlePath)
@@ -497,13 +505,17 @@ async function runCapsule(input: {
       `Package tool ${input.prepared.snapshot.ref} compiled bundle digest does not match its frozen snapshot`,
     )
   }
-  const handle = await ProcessSupervisor.spawnTaskCommand({ taskID: input.taskID, cwd: input.cwd }, {
+  const spawnOptions = {
     executable,
     args,
-    env: execution.kind === "task_capsule" ? {} : nativePackageToolEnvironment(),
-    stdin: "pipe",
+    env: execution?.kind === "task_capsule" ? {} : nativePackageToolEnvironment(),
+    stdin: "pipe" as const,
     owner: `package-tool:${input.prepared.snapshot.ref}`,
-  })
+  }
+  const handle =
+    input.authority.kind === "task"
+      ? await ProcessSupervisor.spawnTaskCommand({ taskID: input.authority.taskID, cwd: input.cwd }, spawnOptions)
+      : await ProcessSupervisor.spawnHostCommand({ ...spawnOptions, cwd: input.cwd })
   let stderr = ""
   let outputBuffer = ""
   let settled = false
@@ -620,8 +632,24 @@ export function introspectPackageToolInCapsule(input: {
   prepared: PackageToolBundle.Prepared
   taskID: string
   cwd: string
-}): Promise<Introspection> {
-  return runCapsule({ ...input, operation: "introspect" }) as Promise<Introspection>
+}): Promise<PackageToolIntrospection> {
+  return runCapsule({
+    ...input,
+    authority: { kind: "task", taskID: input.taskID },
+    operation: "introspect",
+  }) as Promise<PackageToolIntrospection>
+}
+
+/** Validate frozen executable metadata before a package can own any Task. */
+export function introspectPackageToolForValidation(input: {
+  prepared: PackageToolBundle.Prepared
+  cwd: string
+}): Promise<PackageToolIntrospection> {
+  return runCapsule({
+    ...input,
+    authority: { kind: "package_validation" },
+    operation: "introspect",
+  }) as Promise<PackageToolIntrospection>
 }
 
 export function executePackageToolInCapsule(input: {
@@ -633,5 +661,9 @@ export function executePackageToolInCapsule(input: {
   args: unknown
   abort: AbortSignal
 }): Promise<Execution> {
-  return runCapsule({ ...input, operation: "execute" }) as Promise<Execution>
+  return runCapsule({
+    ...input,
+    authority: { kind: "task", taskID: input.taskID },
+    operation: "execute",
+  }) as Promise<Execution>
 }

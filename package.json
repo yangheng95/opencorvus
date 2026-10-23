@@ -19,6 +19,7 @@
     "check:sdk-imports": "bun run ./script/check-sdk-imports.ts",
     "check:ai-runtime": "bun run ./script/check-ai-runtime.ts",
     "check:expert-squad-topology": "bun run ./packages/opencorvus/script/check-builtin-expert-squad-topology.ts",
+    "check:expert-squad-capabilities": "bun run ./packages/opencorvus/script/check/expert-squad-capabilities.ts",
     "typecheck": "bun run check:sdk-imports && bun run check:ai-runtime && bun run check:database-migrations && bun run check:expert-squad-types && bunx turbo run typecheck",
     "check:database-migrations": "bun run ./packages/opencorvus/script/check/database-migrations.ts",
     "typecheck:fresh": "bun run ./script/clean-cache.ts && bun run typecheck",

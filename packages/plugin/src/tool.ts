@@ -96,12 +96,13 @@ export function tool<Args extends z.ZodRawShape>(input: {
   args: Args
   execute(args: z.infer<z.ZodObject<Args>>, context: ToolContext): Promise<string>
 }) {
+  const inputSchema = z.object(input.args)
   return {
     description: input.description,
-    inputSchema: z.object(input.args),
+    inputSchema,
     introspect: () => ({
       description: input.description,
-      inputSchema: z.toJSONSchema(z.object(input.args)),
+      inputSchema: z.toJSONSchema(inputSchema, { reused: "ref" }),
     }),
     execute: (args: z.infer<z.ZodObject<Args>>, context: ToolContext) =>
       withToolFiles(context.host.files, () => input.execute(args, context)),

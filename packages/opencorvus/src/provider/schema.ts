@@ -86,9 +86,12 @@ export namespace ProviderSchema {
       }
     }
     const annotations = Object.fromEntries(
-      Object.entries(schema).filter(([key]) => key !== "anyOf" && key !== "oneOf"),
+      Object.entries(schema).filter(([key]) => !["anyOf", "oneOf", "$defs", "definitions", "$schema"].includes(key)),
     ) as JSONSchema7
     return {
+      ...(schema.$schema ? { $schema: schema.$schema } : {}),
+      ...(schema.$defs ? { $defs: schema.$defs } : {}),
+      ...(schema.definitions ? { definitions: schema.definitions } : {}),
       type: "object" as const,
       properties: {
         [STRICT_ROOT_UNION_ENVELOPE_KEY]: {

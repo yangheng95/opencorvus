@@ -470,11 +470,21 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
       ...projectedRefs
         .filter((ref) => ref.kind === "tool")
         .filter((ref) => ref.owner_ref !== "tool-registry" && !ref.owner_ref.startsWith("dispatch-stage:"))
-        .map((ref) =>
-          descriptorForProjectedRef(ref, {
+        .map((ref) => {
+          if (ref.source === "package") {
+            const description = owner.packageToolDescriptions[ref.local_ref]
+            if (typeof description !== "string") {
+              throw new CapabilityOwnerUnavailableError(
+                ref.owner_ref,
+                `Projected package Tool ${ref.local_ref} has no admitted executable description.`,
+              )
+            }
+            return descriptorForProjectedRef(ref, { description: description.slice(0, 2_000) })
+          }
+          return descriptorForProjectedRef(ref, {
             description: `${titleFromID(ref.local_ref)} is published by ${identity.expertSquadID}.`,
-          }),
-        ),
+          })
+        }),
       ...projectedRefs
         .filter((ref) => ref.kind === "skill")
         .map((ref) => {

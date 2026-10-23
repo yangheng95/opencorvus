@@ -32,6 +32,7 @@ import { ComputerHostRuntime } from "@/mcp/computer/host-runtime"
 import { bindComputerMcpPermissionKey, computerMcpToolKey } from "@/mcp/computer/permission-plan"
 import { withTaskScopedPluginToolHost } from "@/tool/plugin-tool-host"
 import { SkillReadDiagnostics } from "@/skill/read-diagnostics"
+import { assertSkillProjectionExecutable } from "@/skill/eligibility"
 import {
   bindPackageToolRuntime,
   bindProjectedTaskToolRuntime,
@@ -430,6 +431,7 @@ export namespace PromptProfileResolver {
     description?: string
     builtInToolIDs: string[]
     projectedToolIDs: string[]
+    packageToolDescriptions: Readonly<Record<string, string>>
   }
 
   export interface ResolvedProjectedScheduler {
@@ -439,6 +441,7 @@ export namespace PromptProfileResolver {
     virtualWorkflows: ExpertSquadRegistry.VirtualWorkflows
     builtInToolIDs: string[]
     projectedToolIDs: string[]
+    packageToolDescriptions: Readonly<Record<string, string>>
   }
 
   export interface SkillProjectionInput extends ProjectScope {
@@ -1875,6 +1878,11 @@ export namespace PromptProfileResolver {
       taskID: input.binding.taskID,
       cwd: input.executionDirectory,
     })
+    if (!isDeepStrictEqual(definition, input.prepared.definition)) {
+      throw new Error(
+        `Package Tool ${input.ref} runtime definition differs from its admitted frozen executable definition.`,
+      )
+    }
     const runtimeTool = tool({
       description: definition.description,
       inputSchema: jsonSchema(definition.inputSchema),
@@ -2403,7 +2411,17 @@ export namespace PromptProfileResolver {
   ): ProductionSkillGrant[] {
     const grants: ProductionSkillGrant[] = []
     const names = new Map<string, string>()
+    const projectedToolIDs = new Set([
+      ...capabilities.builtInToolIDs,
+      ...capabilities.defaultToolRefs.map(defaultToolNameFromRef),
+    ])
     const add = (grant: ProductionSkillGrant) => {
+      assertSkillProjectionExecutable({
+        capabilityRef: grant.ref,
+        requiredTools: grant.skill.required_tools,
+        projectedToolIDs,
+        context: `Expert squad ${context.active.profileID} agent ${agentID}`,
+      })
       const prior = names.get(grant.skill.name)
       if (prior) {
         throw new Error(
@@ -2619,6 +2637,9 @@ export namespace PromptProfileResolver {
         ...(workerCapability.projection.description ? { description: workerCapability.projection.description } : {}),
         builtInToolIDs: [...workerCapability.builtInToolIDs],
         projectedToolIDs,
+        packageToolDescriptions: Object.fromEntries(
+          workerCapability.packageTools.map((entry) => [entry.providerName, entry.prepared.definition.description]),
+        ),
       }
     }
     const projectedAgents = workerCapabilities.map(projectAgent)
@@ -2636,6 +2657,9 @@ export namespace PromptProfileResolver {
       virtualWorkflows: schedulerCapability.virtualWorkflows,
       builtInToolIDs: [...schedulerCapability.builtInToolIDs],
       projectedToolIDs: activeProjectedSchedulerToolIDs(schedulerCapability),
+      packageToolDescriptions: Object.fromEntries(
+        schedulerCapability.packageTools.map((entry) => [entry.providerName, entry.prepared.definition.description]),
+      ),
     }
     return freezeResolvedProjection<ResolvedSkillProjection>({
       expertSquadID: schedulerCapability.expertSquadID,

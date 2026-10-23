@@ -42,6 +42,31 @@ export function providerToolDefinitionTokens(definition: NormalizedProviderToolD
   )
 }
 
+export class CapabilityToolDefinitionBudgetError extends Error {
+  readonly code = "capability_tool_definition_budget_exceeded"
+  constructor(
+    readonly capabilityRef: string,
+    readonly chars: number,
+    readonly tokens: number,
+  ) {
+    super(
+      `Capability ${capabilityRef} Tool definition is ${chars} chars / ${tokens} estimated tokens; maximum is ${CAPABILITY_REVEAL_MAX_ACTIVE_CHARS} chars / ${CAPABILITY_REVEAL_MAX_ACTIVE_TOKENS} estimated tokens. Split an irreducibly oversized action into canonical leaves.`,
+    )
+    this.name = "CapabilityToolDefinitionBudgetError"
+  }
+}
+
+export function assertCapabilityToolDefinitionBudget(
+  capabilityRef: string,
+  definition: NormalizedProviderToolDefinition,
+): void {
+  const chars = providerToolDefinitionChars(definition)
+  const tokens = providerToolDefinitionTokens(definition)
+  if (chars > CAPABILITY_REVEAL_MAX_ACTIVE_CHARS || tokens > CAPABILITY_REVEAL_MAX_ACTIVE_TOKENS) {
+    throw new CapabilityToolDefinitionBudgetError(capabilityRef, chars, tokens)
+  }
+}
+
 export type CapabilityRevealBaseDefinition = Readonly<{
   providerNames: readonly string[]
   definitionDigest: string

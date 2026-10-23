@@ -272,6 +272,10 @@ args: { text: tool.schema.string() }, async execute(args) { return args.text } }
                   messages: await Session.messages({ sessionID: session.id }),
                   activeLocalRefs: [providerName],
                 })
+                if (family === "package-tool") {
+                  const declared = resolved.occurrence.payload.descriptors.find((entry) => entry.ref.kind === "tool" && entry.ref.local_ref === providerName)
+                  expect({ name: declared?.name, description: declared?.description }).toEqual({ name: providerName, description: "Return the exact requested public test text." })
+                }
                 const args = { text }
                 const call = Identifier.ascending("tool")
                 const result = (await resolved.tools[providerName]!.execute!(args, {
