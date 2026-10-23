@@ -620,6 +620,14 @@ the scroll owner. These reading records are in memory, separate from persisted
 card folding and application data migrations.
 The existing canonical message-list/message/Part GET readers use Project
 identity admission, independently of the current execution-model configuration.
+Session metadata, project Session lists, child lists, TODO records and turn
+artifacts use the same identity admission. Mission status and durable activity
+cursors are likewise projections under that exact Project identity.
+Opening persisted Mission or ordinary
+Session history does not initialize executable capabilities or validate the
+currently configured Provider model. Exact Project membership and Session
+lineage still qualify these reads; effective configuration and execution
+requests retain their own model-validation and runtime admission contracts.
 Their Session lineage and exact parent membership checks remain authoritative;
 config and execution requests continue to validate their required runtime.
 

@@ -1,0 +1,365 @@
+{
+  "batch": 558,
+  "date": "2026-10-24",
+  "surface": "Real Source CLI /ui, manually operated and visually reviewed; no UI automated tests",
+  "assets": {
+    "before": [
+      "http://127.0.0.1:19161/ui/assets/main-CpLITCN5.js"
+    ],
+    "final": [
+      "http://127.0.0.1:19165/ui/assets/main-CpLITCN5.js"
+    ]
+  },
+  "phases": [
+    {
+      "step": "open-task-a",
+      "at": "2026-10-23T19:18:43.843Z"
+    },
+    {
+      "step": "single-task-a-ready",
+      "at": "2026-10-23T19:19:16.936Z",
+      "online": true,
+      "disabledInput": false
+    },
+    {
+      "step": "open-task-b",
+      "at": "2026-10-23T19:19:16.982Z"
+    },
+    {
+      "step": "two-tasks-b-ready",
+      "at": "2026-10-23T19:19:53.684Z",
+      "online": true,
+      "disabledInput": false
+    },
+    {
+      "step": "open-task-c",
+      "at": "2026-10-23T19:19:53.729Z"
+    },
+    {
+      "step": "three-tasks-c-observed",
+      "at": "2026-10-23T19:20:38.809Z",
+      "online": false,
+      "connecting": true,
+      "offline": false,
+      "disabledInput": true
+    },
+    {
+      "step": "close-task-b",
+      "at": "2026-10-23T19:20:38.848Z"
+    },
+    {
+      "step": "after-close-b-c",
+      "at": "2026-10-23T19:21:38.157Z",
+      "online": true,
+      "disabledInput": false
+    },
+    {
+      "step": "c-switch-existing-chat-project",
+      "at": "2026-10-23T19:27:20.007Z"
+    },
+    {
+      "step": "task-chat-side-five-streams",
+      "at": "2026-10-23T19:28:01.047Z",
+      "online": true
+    },
+    {
+      "step": "open-mission-third-project",
+      "at": "2026-10-23T19:28:18.480Z"
+    },
+    {
+      "step": "mixed-mission-blocked",
+      "at": "2026-10-23T19:28:55.101Z",
+      "online": false,
+      "connecting": true,
+      "disabledInput": true
+    },
+    {
+      "step": "close-task-a",
+      "at": "2026-10-23T19:28:55.138Z"
+    },
+    {
+      "step": "mixed-after-release-mission-link-error",
+      "at": "2026-10-23T19:29:49.338Z",
+      "online": false,
+      "linkError": true
+    },
+    {
+      "step": "mixed-chat-side-after-release",
+      "at": "2026-10-23T19:30:36.227Z",
+      "onlineObservedInScreenshot": true,
+      "qualification": "Screenshot08 shows Online; AX delta omitted unchanged status and cannot derive a false offline value"
+    }
+  ],
+  "connection": {
+    "sixAdmittedStreams": [
+      {
+        "id": 15,
+        "at": "2026-10-23T19:18:44.454Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/work-ledger/events",
+        "diagnostic": false,
+        "streamID": "1d921279-1276-4978-ac0f-8e74301af395",
+        "aborted": false
+      },
+      {
+        "id": 57,
+        "at": "2026-10-23T19:18:48.011Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/task/tsk_g00VYhrJxy00qIC54qvM/events",
+        "diagnostic": false,
+        "streamID": "9fadd7f1-f4ab-4e80-a676-3d5a4dadf645",
+        "aborted": false
+      },
+      {
+        "id": 99,
+        "at": "2026-10-23T19:19:17.506Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/work-ledger/events",
+        "diagnostic": false,
+        "streamID": "7ea9429e-95b3-42b7-a791-275154bbb338",
+        "aborted": false
+      },
+      {
+        "id": 126,
+        "at": "2026-10-23T19:19:18.886Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/task/tsk_g00VYhrJxy00qIC54qvM/events",
+        "diagnostic": false,
+        "streamID": "2d813cb8-a726-402b-95f4-f36c71f96843",
+        "aborted": false
+      },
+      {
+        "id": 183,
+        "at": "2026-10-23T19:19:54.268Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/work-ledger/events",
+        "diagnostic": false,
+        "streamID": "97d8e747-066b-4970-abac-b28235a01ff0",
+        "aborted": false
+      },
+      {
+        "id": 211,
+        "at": "2026-10-23T19:19:56.505Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/task/tsk_g00VYhrJxy00qIC54qvM/events",
+        "diagnostic": false,
+        "streamID": "1e527f48-72ab-4d99-9f7e-c52b39db54ce",
+        "aborted": false
+      }
+    ],
+    "gaps": [
+      {
+        "scope": "three Tasks",
+        "from": "2026-10-23T19:19:56.505Z",
+        "to": "2026-10-23T19:20:38.848Z",
+        "milliseconds": 42343,
+        "ordinaryArrivals": 0
+      },
+      {
+        "scope": "Task + Chat + Side + Mission",
+        "from": "2026-10-23T19:28:19.388Z",
+        "to": "2026-10-23T19:28:55.138Z",
+        "milliseconds": 35750,
+        "ordinaryArrivals": 0
+      }
+    ],
+    "directHealth": [
+      {
+        "at": "2026-10-23T19:20:21.0755120Z",
+        "connections": [
+          {
+            "count": 1,
+            "state": "Listen"
+          },
+          {
+            "count": 6,
+            "state": "Established"
+          }
+        ],
+        "status": 200,
+        "elapsedMs": 95.9194
+      },
+      {
+        "at": "2026-10-23T19:28:42.5022928Z",
+        "elapsedMs": 114.0671,
+        "status": 200
+      }
+    ],
+    "worker": {
+      "path": "/ui/assets/markdown-render.worker-DXg_fqFo.js",
+      "arrivedAt": "2026-10-23T19:20:38.904Z",
+      "pageClosedAt": "2026-10-23T19:20:38.848Z",
+      "arrivalAfterCloseMs": 56
+    },
+    "closedStreams": 0,
+    "reference": "https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events",
+    "qualifiedRoot": "Browser ordinary HTTP request starvation with six long-lived streams; worker startup and health blocked; transport fix remains outstanding"
+  },
+  "metadataFix": {
+    "before": {
+      "status": 400,
+      "error": "ProviderModelNotFoundError",
+      "sessionID": "ses_-zURQjvQ8zz3y3NgFyVx"
+    },
+    "intermediate": {
+      "status": 200,
+      "id": "ses_-zURQjvQ8zz3y3NgFyVx",
+      "kind": "mission",
+      "projectID": "prj_hWd1qKOo07uQU3geUSA7",
+      "at": "2026-10-23T19:38:52.7730753Z",
+      "requestID": [
+        "d29cfa4c-86e1-49f2-b188-3630144ca67b"
+      ]
+    },
+    "final": {
+      "missionStatus": 200,
+      "activity": "inactive",
+      "sessionStatus": 200,
+      "sessionID": "ses_-zURQjvQ8zz3y3NgFyVx",
+      "at": "2026-10-23T19:43:26.8756154Z",
+      "missionID": "cf0a5f07eb9045c3"
+    },
+    "production": "Exact identity admission for persisted Session metadata/list/children/todo/turn-artifacts and Mission status/activity cursor; existing lineage/Project and execution admission retained",
+    "tests": {
+      "runner": "Existing isolated backend test runner",
+      "files": [
+        "test/project-route-context.test.ts",
+        "test/server/session-message-part-read.test.ts"
+      ],
+      "passed": 10,
+      "assertions": 88
+    },
+    "ui": "Same original four-message Mission and complete Goal readable; separate Task page remains Online"
+  },
+  "scopes": [
+    {
+      "name": "multiple-page-connection-558",
+      "closure": {
+        "at": "2026-10-23T19:31:05.169Z",
+        "catalogRetired": 1,
+        "authCopied": false,
+        "modelRequests": 0,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "mtimeMs": 1791128890137.9968,
+          "content": "exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 416081,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 79699968,
+          "modifiedAtMs": 1792781659281.7983
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 169304,
+        "differences": [],
+        "providerActivities": {
+          "original": 421,
+          "current": 421
+        }
+      }
+    },
+    {
+      "name": "multiple-page-connection-558-after",
+      "closure": {
+        "at": "2026-10-23T19:40:06.662Z",
+        "catalogRetired": 1,
+        "authCopied": false,
+        "modelRequests": 0,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "mtimeMs": 1791128890137.9968,
+          "content": "exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 1073463,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 79699968,
+          "modifiedAtMs": 1792783699738.8845
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 169304,
+        "differences": [],
+        "providerActivities": {
+          "original": 421,
+          "current": 421
+        }
+      }
+    },
+    {
+      "name": "multiple-page-connection-558-final",
+      "closure": {
+        "at": "2026-10-23T19:45:04.312Z",
+        "catalogRetired": 1,
+        "authCopied": false,
+        "modelRequests": 0,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "mtimeMs": 1791128890137.9968,
+          "content": "exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 1071903,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 79699968,
+          "modifiedAtMs": 1792784299657.5798
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 169304,
+        "differences": [],
+        "providerActivities": {
+          "original": 421,
+          "current": 421
+        }
+      }
+    }
+  ],
+  "limits": [
+    "Shared stream connection starvation is reproduced and not fixed by this metadata change",
+    "VCS/POST-message/MCP stream branches were read; not exercised as concurrent live network requests in this batch",
+    "Native Tauri multiwindow and authenticated stream network cases not independently qualified",
+    "Three scopes copied models only, no auth and zero model requests; missing-model Composer warning is intentional isolation boundary",
+    "Intermediate UI09/10 still failed at Mission status and are explicitly excluded from final qualification",
+    "A stable AX delta omitted Online; metadata corrected to screenshot08 evidence rather than treating missing delta text as Offline",
+    "Unrelated old asset deletions, expert-squad work and their whitespace findings remain untouched"
+  ]
+}

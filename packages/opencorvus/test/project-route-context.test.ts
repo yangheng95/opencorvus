@@ -78,6 +78,13 @@ describe("Project route context authority", () => {
   })
   test("uses Project identity for persisted Session pages and event subscriptions", () => {
     expect({
+      list: projectRouteContextKind("/session", "GET"),
+      info: projectRouteContextKind("/session/ses_1", "GET"),
+      children: projectRouteContextKind("/session/ses_1/children", "GET"),
+      todos: projectRouteContextKind("/session/ses_1/todo", "GET"),
+      artifacts: projectRouteContextKind("/session/ses_1/turn-artifacts", "GET"),
+      missionStatus: projectRouteContextKind("/mission/mission_1/status", "GET"),
+      missionActivity: projectRouteContextKind("/mission/mission_1/activity-cursor", "GET"),
       tail: projectRouteContextKind("/session/ses_1/conversation", "GET"),
       history: projectRouteContextKind("/session/ses_1/conversation/history", "GET"),
       messages: projectRouteContextKind("/session/ses_1/message", "GET"),
@@ -91,6 +98,13 @@ describe("Project route context authority", () => {
       configWrite: projectRouteContextKind("/session/ses_1/config", "PATCH"),
       prompt: projectRouteContextKind("/session/ses_1/prompt", "POST"),
     }).toEqual({
+      list: "identity",
+      info: "identity",
+      children: "identity",
+      todos: "identity",
+      artifacts: "identity",
+      missionStatus: "identity",
+      missionActivity: "identity",
       tail: "identity",
       history: "identity",
       messages: "identity",
@@ -129,7 +143,7 @@ describe("Project route context authority", () => {
         projectRouteContextKind("/work/capability", "GET"),
         projectRouteContextKind("/work/capability", "PATCH"),
       ],
-      runtime: projectRouteContextKind("/session/ses_1", "GET"),
+      runtime: projectRouteContextKind("/session/ses_1/prompt", "POST"),
     }).toEqual({
       identity: "identity",
       conversationCapabilities: ["identity", "identity", "identity", "identity"],

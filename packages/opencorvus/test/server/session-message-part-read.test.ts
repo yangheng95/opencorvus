@@ -97,7 +97,63 @@ test.each(["assistant", "mission"] as const)(
     )
     await Instance.disposeAll()
     const headers = { "x-opencorvus-directory": project.path }
+    if (kind === "mission") {
+      for (const suffix of ["status", "activity-cursor"]) {
+        await Instance.disposeAll()
+        const response = await runOutsideInstanceContext(() =>
+          Server.App().request(`/mission/historical-tool/${suffix}`, { headers }),
+        )
+        expect(response.status).toBe(200)
+        expect(await response.json()).toMatchObject(
+          suffix === "status"
+            ? { missionID: "historical-tool", sessionID: saved[0]!.session.id, status: "inactive" }
+            : { mission_id: "historical-tool", session_id: saved[0]!.session.id },
+        )
+        const foreignResponse = await runOutsideInstanceContext(() =>
+          Server.App().request(`/mission/historical-tool/${suffix}`, {
+            headers: { "x-opencorvus-directory": foreign.path },
+          }),
+        )
+        expect({ status: foreignResponse.status, body: await foreignResponse.json() }).toMatchObject({
+          status: 404,
+          body: { name: "NotFoundError", data: { message: "Mission not found: historical-tool" } },
+        })
+      }
+    }
+    const listedResponse = await runOutsideInstanceContext(() => Server.App().request("/session", { headers }))
+    expect(listedResponse.status).toBe(200)
+    expect((await listedResponse.json()).map((entry: Session.Info) => entry.id).sort()).toEqual(
+      saved.map((entry) => entry.session.id).sort(),
+    )
+    await Instance.disposeAll()
+    const childrenResponse = await runOutsideInstanceContext(() =>
+      Server.App().request(`/session/${saved[0]!.session.id}/children`, { headers }),
+    )
+    expect(childrenResponse.status).toBe(200)
+    expect(await childrenResponse.json()).toMatchObject([
+      { id: saved[1]!.session.id, projectID: saved[1]!.session.projectID, parentID: saved[0]!.session.id },
+    ])
     for (const entry of saved) {
+      await Instance.disposeAll()
+      const infoResponse = await runOutsideInstanceContext(() =>
+        Server.App().request(`/session/${entry.session.id}`, { headers }),
+      )
+      expect(infoResponse.status).toBe(200)
+      expect(await infoResponse.json()).toMatchObject({
+        id: entry.session.id,
+        projectID: entry.session.projectID,
+        kind: entry.session.kind,
+        title: entry.session.title,
+      })
+      const foreignInfo = await runOutsideInstanceContext(() =>
+        Server.App().request(`/session/${entry.session.id}`, {
+          headers: { "x-opencorvus-directory": foreign.path },
+        }),
+      )
+      expect({ status: foreignInfo.status, body: await foreignInfo.json() }).toMatchObject({
+        status: 404,
+        body: { name: "NotFoundError", data: { message: `Session not found: ${entry.session.id}` } },
+      })
       const base = `/session/${entry.session.id}/message`
       const routes = [base, `${base}/${entry.message.id}`, `${base}/${entry.message.id}/part/${entry.target.id}`]
       for (const [index, route] of routes.entries()) {

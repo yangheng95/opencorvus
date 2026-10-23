@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [多页面连接与持久历史读取](2026-10-24-multiple-page-connection/README.md)：558十三实图、原HTTP到达/关闭时序、Mission最终可读及三服务完整结算。
+
 - [复制完成与读取初始化](2026-10-24-clipboard-completion/README.md)：557七实图，新页reader初始化A/B及短长原文真实粘贴，完整关闭和原数据保持。
 
 - [持续目标加号入口](2026-10-24-goal-composer-menu/README.md)：12张真实桌面截图，中英菜单、表单、取消草稿和主/侧归属；0模型与正常结算。

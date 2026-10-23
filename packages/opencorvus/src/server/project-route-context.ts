@@ -8,6 +8,7 @@ const PROJECT_IDENTITY_ROUTE_KEYS = new Set([
   "GET /file/source-content",
   "GET /file/status",
   "GET /session/status",
+  "GET /session",
   "GET /vcs",
   "GET /vcs/branches",
   "GET /vcs/diff",
@@ -69,12 +70,15 @@ const PROJECT_IDENTITY_PROVIDER_ROUTE_KEYS = [
 ]
 
 const PROJECT_IDENTITY_CONVERSATION_ROUTE_PATTERNS = [
+  /^GET \/mission\/[^/]+\/(?:status|activity-cursor)$/,
   /^POST \/task\/[^/]+\/artifact-read$/,
   /^GET \/continuous-goal\/(?:chat|task|mission)\/[^/]+$/,
   /^GET \/task\/[^/]+\/build-observation\/[^/]+\/content$/,
   /^GET \/coding\/(?:chat|work)\/sessions$/,
   /^GET \/coding\/(?:chat|work)\/session\/[^/]+$/,
   /^PATCH \/coding\/(?:chat|work)\/session\/[^/]+$/,
+  /^GET \/session\/[^/]+$/,
+  /^GET \/session\/[^/]+\/(?:children|todo|turn-artifacts)$/,
   /^GET \/session\/[^/]+\/conversation$/,
   /^GET \/session\/[^/]+\/conversation\/history$/,
   /^GET \/session\/[^/]+\/interactive-artifact\/[^/]+$/,

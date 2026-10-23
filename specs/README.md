@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [多页面连接与持久历史读取](records/2026-10/2026-10-24-multiple-page-connection.md)：558复现六流请求/Rendering阻塞，修复Session/Mission只读模型耦合；13实图/10合同，传输待续。
+
 - [复制完成与读取初始化](records/2026-10/2026-10-24-clipboard-completion-observation.md)：557定位新tab专用reader首次旧值边界，修正验收方法并实际通过574/51840字符粘贴。
 
 - [结构化工具输出阅读](records/2026-10/2026-10-24-structured-payload-reading.md)：556修复有界输出改宽跳文，十八实图/0模型；复制旧值异常继续追查。
