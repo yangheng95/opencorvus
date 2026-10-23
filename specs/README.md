@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [结构化工具输出阅读](records/2026-10/2026-10-24-structured-payload-reading.md)：556修复有界输出改宽跳文，十八实图/0模型；复制旧值异常继续追查。
+
 - [剪贴板路径对照](records/2026-10/2026-10-24-clipboard-path-investigation.md)：555已知标记校准、三次真实复制粘贴通过；旧43字符异常未复现，0模型/原数据保持。
 
 - [已授权能力执行闭合](records/2026-10/2026-10-24-authorized-capability-execution.md)：Explore Skill、共享结构、真实用途发现及包执行闭合；122包、两Task真实完成与原失败保留。

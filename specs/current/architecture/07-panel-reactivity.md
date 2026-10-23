@@ -609,6 +609,15 @@ Completed, expanded Tool payloads participate in the outer conversation's scroll
 flow and do not establish an internal scroll container. Bounded and live payloads
 retain their own scrolling and reading-position restoration; expansion keeps the
 complete source text, wrapping and copy value intact.
+Bounded Tool payloads keep each format's pixel position and visible original-text
+anchor in that same conversation UI record. They reuse the outer transcript's
+character measurement and resolution primitives. Their existing ResizeObserver
+continues observing visible size changes after initial restoration; one frame
+controller restores the original character after rewrapping. Layout scroll events
+cannot replace the record before its changed width has been handled. Real user
+scroll input still takes over, and full expansion leaves the outer transcript as
+the scroll owner. These reading records are in memory, separate from persisted
+card folding and application data migrations.
 The existing canonical message-list/message/Part GET readers use Project
 identity admission, independently of the current execution-model configuration.
 Their Session lineage and exact parent membership checks remain authoritative;

@@ -2,15 +2,15 @@ import { batch } from "solid-js"
 import { createStore, reconcile } from "solid-js/store"
 import { getServerUrl, type ApiAuthority } from "../services/api-state"
 import type { BoardSource } from "./board"
-import type { ConversationReadingAnchor } from "../utils/conversation-reading-anchor"
+import type { ConversationReadingAnchor, TextReadingAnchor } from "../utils/conversation-reading-anchor"
 
 export type ConversationReadingPosition = { top: number; following: boolean; anchor?: ConversationReadingAnchor }
 export type ToolPayloadDisplayState = {
   raw?: boolean
   expanded?: boolean
   limit?: number
-  readingTop?: number
-  rawReadingTop?: number
+  readingPosition?: { top: number; anchor?: TextReadingAnchor }
+  rawReadingPosition?: { top: number; anchor?: TextReadingAnchor }
 }
 export type MainConversationReadingPosition = ConversationReadingPosition & {
   viewportWidth: number

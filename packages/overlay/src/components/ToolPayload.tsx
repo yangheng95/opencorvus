@@ -1,6 +1,7 @@
 import { createEffect, createMemo, createSignal, createUniqueId, For, on, onCleanup, Show, untrack } from "solid-js"
 import { conversationUiStore, setToolPayloadDisplayState, toolPayloadDisplayState } from "../store/conversation-ui"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
+import { captureTextReadingAnchor, resolveTextReadingTop } from "../utils/conversation-reading-anchor"
 import { t } from "../utils/i18n"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
@@ -64,25 +65,36 @@ export function ToolPayload(props: { stateKey: string; messageID: string; label:
   createEffect(on([content, () => props.stateKey, raw, expanded, () => props.live], ([element, stateKey, raw, expanded, live]) => {
     if (!element || (expanded && !live)) return
     const owner = untrack(() => conversationUiStore.activeKey)
-    const field = raw ? "rawReadingTop" : "readingTop"
-    const top = untrack(() => toolPayloadDisplayState(stateKey)?.[field]) ?? 0
+    const field = raw ? "rawReadingPosition" : "readingPosition"
+    const position = () => untrack(() => toolPayloadDisplayState(stateKey)?.[field])
     const current = () => conversationUiStore.activeKey === owner && props.stateKey === stateKey
     const visible = () => element.isConnected && element.clientHeight > 0 && !element.closest("[hidden], [inert]")
     let restoring = true
+    let width = element.clientWidth
+    const read = () => {
+      if (restoring || !current() || !visible() || element.clientWidth !== width) return
+      setToolPayloadDisplayState(stateKey, { [field]: {
+        top: element.scrollTop,
+        anchor: captureTextReadingAnchor(element, element.getBoundingClientRect(), position()?.anchor),
+      } })
+    }
     const restore = createAnimationFrameScheduler(() => {
       if (!current() || !visible()) return
+      const saved = position()
+      element.scrollTop = saved?.anchor ? resolveTextReadingTop(element, saved.anchor) ?? saved.top : saved?.top ?? 0
+      width = element.clientWidth
       restoring = false
-      observer.disconnect()
-      element.scrollTop = top
+      read()
     })
-    const observer = new ResizeObserver(() => restore.schedule())
-    const read = () => {
-      if (!restoring && current() && visible()) setToolPayloadDisplayState(stateKey, { [field]: element.scrollTop })
-    }
+    const observer = new ResizeObserver(() => {
+      if (!current() || !visible()) return
+      restoring = true
+      restore.schedule()
+    })
     const takeOver = () => {
       restoring = false
       restore.cancel()
-      observer.disconnect()
+      width = element.clientWidth
     }
     observer.observe(element)
     element.addEventListener("scroll", read)

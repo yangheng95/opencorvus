@@ -1,0 +1,265 @@
+{
+  "batch": 556,
+  "date": "2026-10-24",
+  "surface": "Real source CLI /ui; manual browser interactions and visual review; no UI automated tests",
+  "identity": {
+    "taskID": "tsk_g00VYhrJxy00qIC54qvM",
+    "sessionID": "ses_-zURI8ekpzzskoESwwiP",
+    "messageID": "msg_hkmMhdvRpzBesxGR2RSm",
+    "requestPartID": "prt_g0VYhsJQw00UlPV31v8w"
+  },
+  "assets": {
+    "before": [
+      "http://127.0.0.1:19155/ui/assets/main-_-Beyuq8.js"
+    ],
+    "after": [
+      "http://127.0.0.1:19157/ui/assets/main-DapVWEPi.js"
+    ]
+  },
+  "before": [
+    {
+      "phase": "before-narrow",
+      "reading": {
+        "identity": "[\"ses_-zURI8ekpzzskoESwwiP\",\"msg_hkmMhdvRpzBesxGR2RSm\",\"prt_g0VYhsJQw00UlPV31v8w\",\"output\"]",
+        "offset": -9,
+        "textOffset": 1173,
+        "top": 720,
+        "visibleText": "用于保留预先安排的换行。外部操作者可以自行观察这些内容的实际呈现，但本文不会把建议观察的项目写成已经通过的界面检查结果。\\n\\n## 第二节\\n\\n此次返回页面提供了若干可以直接辨认",
+        "width": 463
+      }
+    },
+    {
+      "phase": "before-wide-return",
+      "reading": {
+        "identity": "[\"ses_-zURI8ekpzzskoESwwiP\",\"msg_hkmMhdvRpzBesxGR2RSm\",\"prt_g0VYhsJQw00UlPV31v8w\",\"output\"]",
+        "offset": -9,
+        "textOffset": 1671,
+        "top": 720,
+        "visibleText": "这些全文入口已经被打开；看到入口与读取入口指向的完整材料，是两个不同层次的事实。\\n\\n为了让身份信息在长文中保持清楚，可以采用以下记录顺序：\\n\\n- 先写实际请求的页面地址，避免",
+        "width": 745
+      }
+    }
+  ],
+  "after": [
+    {
+      "phase": "wide-reading",
+      "reading": {
+        "identity": "[\"ses_-zURI8ekpzzskoESwwiP\",\"msg_hkmMhdvRpzBesxGR2RSm\",\"prt_g0VYhsJQw00UlPV31v8w\",\"output\"]",
+        "offset": -9,
+        "targetOffset": 1671,
+        "targetScreenOffset": -9,
+        "textOffset": 1671,
+        "top": 720,
+        "visibleText": "这些全文入口已经被打开；看到入口与读取入口指向的完整材料，是两个不同层次的事实。\\n\\n为了让身份信息在长文中保持清楚，可以采用以下记录顺序：\\n\\n- 先写实际请求的页面地址，避免",
+        "width": 745
+      }
+    },
+    {
+      "phase": "narrow-reading",
+      "reading": {
+        "identity": "[\"ses_-zURI8ekpzzskoESwwiP\",\"msg_hkmMhdvRpzBesxGR2RSm\",\"prt_g0VYhsJQw00UlPV31v8w\",\"output\"]",
+        "offset": -10.5,
+        "targetOffset": 1671,
+        "targetScreenOffset": -10.5,
+        "textOffset": 1649,
+        "top": 975,
+        "visibleText": "新状态”。同样，页面列有全文入口，并不意味着这些全文入口已经被打开；看到入口与读取入口指向的完整材料，是两个不同层次的事实。\\n\\n为了让身份信息在长文中保持清楚，可以采用以下记录顺",
+        "width": 463
+      }
+    },
+    {
+      "phase": "wide-return",
+      "reading": {
+        "identity": "[\"ses_-zURI8ekpzzskoESwwiP\",\"msg_hkmMhdvRpzBesxGR2RSm\",\"prt_g0VYhsJQw00UlPV31v8w\",\"output\"]",
+        "offset": -11,
+        "targetOffset": 1671,
+        "targetScreenOffset": -11,
+        "textOffset": 1671,
+        "top": 722,
+        "visibleText": "这些全文入口已经被打开；看到入口与读取入口指向的完整材料，是两个不同层次的事实。\\n\\n为了让身份信息在长文中保持清楚，可以采用以下记录顺序：\\n\\n- 先写实际请求的页面地址，避免",
+        "width": 745
+      }
+    },
+    {
+      "phase": "raw-format-return",
+      "reading": {
+        "identity": "[\"ses_-zURI8ekpzzskoESwwiP\",\"msg_hkmMhdvRpzBesxGR2RSm\",\"prt_g0VYhsJQw00UlPV31v8w\",\"output\"]",
+        "offset": -11,
+        "targetOffset": 1671,
+        "targetScreenOffset": -11,
+        "textOffset": 1671,
+        "top": 722,
+        "visibleText": "这些全文入口已经被打开；看到入口与读取入口指向的完整材料，是两个不同层次的事实。\\n\\n为了让身份信息在长文中保持清楚，可以采用以下记录顺序：\\n\\n- 先写实际请求的页面地址，避免",
+        "width": 745
+      }
+    },
+    {
+      "phase": "user-new-reading",
+      "reading": {
+        "identity": "[\"ses_-zURI8ekpzzskoESwwiP\",\"msg_hkmMhdvRpzBesxGR2RSm\",\"prt_g0VYhsJQw00UlPV31v8w\",\"output\"]",
+        "offset": -9.5,
+        "targetOffset": 3841,
+        "targetScreenOffset": -9.5,
+        "textOffset": 3841,
+        "top": 1442,
+        "visibleText": "交互方式。具体阅读环境可能影响体验，但环境差异不改变本次来源读取的事实。反过来说，一次成功的页面读取也不能证明产品中的所有文本元素都按预期显示。内容证据和呈现证据需要各自成立，不能因",
+        "width": 745
+      }
+    },
+    {
+      "phase": "user-new-narrow",
+      "reading": {
+        "identity": "[\"ses_-zURI8ekpzzskoESwwiP\",\"msg_hkmMhdvRpzBesxGR2RSm\",\"prt_g0VYhsJQw00UlPV31v8w\",\"output\"]",
+        "offset": -10,
+        "targetOffset": 3841,
+        "targetScreenOffset": -10,
+        "textOffset": 3809,
+        "top": 2164,
+        "visibleText": "“已经完成”的勾选状态，也没有假定操作者使用某一种屏幕、浏览器或交互方式。具体阅读环境可能影响体验，但环境差异不改变本次来源读取的事实。反过来说，一次成功的页面读取也不能证明产品中的",
+        "width": 463
+      }
+    },
+    {
+      "phase": "user-new-wide-return",
+      "reading": {
+        "identity": "[\"ses_-zURI8ekpzzskoESwwiP\",\"msg_hkmMhdvRpzBesxGR2RSm\",\"prt_g0VYhsJQw00UlPV31v8w\",\"output\"]",
+        "offset": -10.5,
+        "targetOffset": 3841,
+        "targetScreenOffset": -10.5,
+        "textOffset": 3841,
+        "top": 1443,
+        "visibleText": "交互方式。具体阅读环境可能影响体验，但环境差异不改变本次来源读取的事实。反过来说，一次成功的页面读取也不能证明产品中的所有文本元素都按预期显示。内容证据和呈现证据需要各自成立，不能因",
+        "width": 745
+      }
+    },
+    {
+      "phase": "full-output-collapse",
+      "reading": {
+        "identity": "[\"ses_-zURI8ekpzzskoESwwiP\",\"msg_hkmMhdvRpzBesxGR2RSm\",\"prt_g0VYhsJQw00UlPV31v8w\",\"output\"]",
+        "offset": -10.5,
+        "targetOffset": 3841,
+        "targetScreenOffset": -10.5,
+        "textOffset": 3841,
+        "top": 1443,
+        "visibleText": "交互方式。具体阅读环境可能影响体验，但环境差异不改变本次来源读取的事实。反过来说，一次成功的页面读取也不能证明产品中的所有文本元素都按预期显示。内容证据和呈现证据需要各自成立，不能因",
+        "width": 745
+      }
+    },
+    {
+      "phase": "nested-readable-to-raw",
+      "reading": {
+        "identity": "[\"ses_-zURI8ekpzzskoESwwiP\",\"msg_hkmMhdvRpzBesxGR2RSm\",\"prt_g0VYhsJQw00UlPV31v8w\",\"output\"]",
+        "offset": -10.5,
+        "targetOffset": 3841,
+        "targetScreenOffset": -10.5,
+        "textOffset": 3841,
+        "top": 1443,
+        "visibleText": "交互方式。具体阅读环境可能影响体验，但环境差异不改变本次来源读取的事实。反过来说，一次成功的页面读取也不能证明产品中的所有文本元素都按预期显示。内容证据和呈现证据需要各自成立，不能因",
+        "width": 745
+      }
+    }
+  ],
+  "clipboard": {
+    "characters": 361,
+    "equalsPreviousKnownStopDetails": true,
+    "hasExpectedOwnMarkers": false,
+    "button": "Copied checkmark visible",
+    "qualification": "Content copy not qualified; independent reader returned prior known clipboard value; no unknown contents retained"
+  },
+  "build": {
+    "runtime": "Node.js Vite production build",
+    "duration": "2m39s",
+    "exit": 0
+  },
+  "checks": {
+    "overlayTypecheck": "passed",
+    "docs": "345 ops/26 groups passed",
+    "architectureIndex": "20 current documents passed"
+  },
+  "scopes": [
+    {
+      "scope": "structured-payload-reading-556",
+      "closure": {
+        "at": "2026-10-23T18:33:19.348Z",
+        "catalogRetired": 1,
+        "authCopied": false,
+        "modelRequests": 0,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "mtimeMs": 1791128890137.9968,
+          "content": "exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 843307,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 79699968,
+          "modifiedAtMs": 1792779227286.4297
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 169304,
+        "originalRowDifferences": [],
+        "providerActivities": {
+          "original": 421,
+          "current": 421
+        }
+      }
+    },
+    {
+      "scope": "structured-payload-reading-556-after",
+      "closure": {
+        "at": "2026-10-23T18:44:18.797Z",
+        "catalogRetired": 1,
+        "authCopied": false,
+        "modelRequests": 0,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "mtimeMs": 1791128890137.9968,
+          "content": "exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 875704,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "data": {
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 79699968,
+          "modifiedAtMs": 1792780058156.4883
+        },
+        "schema": "Same actual application objects and version3;integrity ok",
+        "canonical": "Complete source bytes exact",
+        "tables": 90,
+        "originalRows": 169304,
+        "originalRowDifferences": [],
+        "providerActivities": {
+          "original": 421,
+          "current": 421
+        }
+      }
+    }
+  ],
+  "limits": [
+    "Same original character stays visible; observed top-edge rounding varied by up to 2px, not an exact pixel identity claim",
+    "Main Task raw JSON reading qualified; Side/member/Mission, long source excerpts and specialized code/diff not independently qualified in this batch",
+    "Nested JSON controls opened and scrolled; full deep message body in readable format was not visually qualified",
+    "Output copy content unqualified: independent reader returned prior known 361-character stop details despite checkmark; no copy root-cause conclusion",
+    "No auth copied or model requests; visible missing-model notice belongs to this deliberately unauthenticated isolated scope",
+    "Concurrent capability commit and later unrelated video/artifact deletions preserved outside this change"
+  ]
+}

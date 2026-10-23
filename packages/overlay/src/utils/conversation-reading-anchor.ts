@@ -1,3 +1,5 @@
+export type TextReadingAnchor = { textOffset: number; offset: number }
+
 export type ConversationReadingAnchor = { messageID: string; offset: number } & (
   | { kind: "text"; textIndex: number; blockIndex: number }
   | { kind: "source"; sourceIdentity: string }
@@ -20,10 +22,13 @@ export function conversationReadingAnchorOwner(container: HTMLElement, anchor: C
     : container.querySelectorAll<HTMLElement>(`[data-quotation-message="${CSS.escape(anchor.messageID)}"]`)[anchor.textIndex]
 }
 
-function capturePayloadText(element: HTMLElement, viewport: DOMRect): { textOffset: number; offset: number } | undefined {
+export function captureTextReadingAnchor(element: HTMLElement, viewport: DOMRect, previous?: TextReadingAnchor): TextReadingAnchor | undefined {
   const content = element.getBoundingClientRect()
   const visibleTop = Math.max(viewport.top, content.top)
   const visibleBottom = Math.min(viewport.bottom, content.bottom)
+  const previousRect = previous && payloadTextRect(element, previous.textOffset)
+  if (previousRect && previousRect.bottom > visibleTop && previousRect.top < visibleBottom)
+    return { textOffset: previous!.textOffset, offset: previousRect.top - viewport.top }
   const walker = element.ownerDocument.createTreeWalker(element, NodeFilter.SHOW_TEXT)
   const range = element.ownerDocument.createRange()
   let textOffset = 0
@@ -66,10 +71,8 @@ export function captureConversationReadingAnchor(container: HTMLElement, previou
   const viewport = container.getBoundingClientRect()
   if (previous?.kind === "tool-payload") {
     const owner = conversationReadingAnchorOwner(container, previous)
-    const bounds = owner && readingRect(owner)
-    const rect = owner && payloadTextRect(owner, previous.textOffset)
-    if (bounds && rect && rect.bottom > Math.max(viewport.top, bounds.top) && rect.top < Math.min(viewport.bottom, bounds.bottom))
-      return { ...previous, offset: rect.top - viewport.top }
+    const text = owner && readingRect(owner) && captureTextReadingAnchor(owner, viewport, previous)
+    if (text && text.textOffset === previous.textOffset) return { ...previous, ...text }
   }
   const quotes = Array.from(container.querySelectorAll<HTMLElement>("[data-quotation-message]"))
   const candidates = Array.from(container.querySelectorAll<HTMLElement>("[data-quotation-message], [data-source-identity][data-source-message-id], [data-tool-payload-identity][data-tool-message-id]"))
@@ -85,7 +88,7 @@ export function captureConversationReadingAnchor(container: HTMLElement, previou
     const rect = readingRect(candidate)
     if (!rect || rect.bottom <= viewport.top || rect.top >= viewport.bottom) continue
     if (candidate.dataset.toolPayloadIdentity && candidate.dataset.toolMessageId) {
-      const text = capturePayloadText(candidate, viewport)
+      const text = captureTextReadingAnchor(candidate, viewport)
       if (!text) continue
       return { kind: "tool-payload", payloadIdentity: candidate.dataset.toolPayloadIdentity, messageID: candidate.dataset.toolMessageId, ...text }
     }
@@ -114,10 +117,16 @@ export function captureConversationReadingAnchor(container: HTMLElement, previou
   }
 }
 
+export function resolveTextReadingTop(container: HTMLElement, anchor: TextReadingAnchor, content = container): number | null {
+  const rect = payloadTextRect(content, anchor.textOffset)
+  return rect ? Math.max(0, container.scrollTop + rect.top - container.getBoundingClientRect().top - anchor.offset) : null
+}
+
 export function resolveConversationReadingTop(container: HTMLElement, anchor: ConversationReadingAnchor): number | null {
   const owner = conversationReadingAnchorOwner(container, anchor)
+  if (anchor.kind === "tool-payload") return owner ? resolveTextReadingTop(container, anchor, owner) : null
   const element = anchor.kind === "text" ? owner?.querySelectorAll<HTMLElement>(".md-frozen-block")[anchor.blockIndex] : owner
-  const rect = element && (anchor.kind === "tool-payload" ? payloadTextRect(element, anchor.textOffset) : readingRect(element))
+  const rect = element && readingRect(element)
   if (!rect) return null
   return Math.max(0, container.scrollTop + rect.top - container.getBoundingClientRect().top - anchor.offset)
 }
