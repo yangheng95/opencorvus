@@ -333,7 +333,8 @@ Task lifecycle（生命周期）以 [Task control plane](task-control-plane.md) 
 和 canonical protocol events（规范协议事件）为权威。终态结算、终态对话和重新打开必须读取
 该同一投影；Task row 的展示字段、普通 `task.updated` 通知和 Tool 名称不产生第二份生命周期。
 
-Task 内的 worker 调度只有一个入口：`dispatch_agent dispatch.target=<active projected agent ID>`。每次调用创建一个
+Task 内的 worker 调度使用当前投影的委派工具，条目的 `dispatch.target` 必须是精确的 active projected Agent ID。
+每个真实单独调用或 collection member 都通过同一执行器创建一个
 不可变 `dispatch_lineage`，绑定调用方 tool part/call、精确 worker identity、work scope 与 child Session。
 它不表达 admission、running 或 terminal 状态。typed adapter 不再创建 Build/Integrity 等内层 owner；
 `base_role` 只选择运行模板和 adapter ABI，不决定取消策略。每条 lineage 还记录
@@ -347,8 +348,8 @@ action outcome。request 没有可变 status，action 没有 progress row；当�
 `execution_epoch` 使旧 epoch 的 pending request 失效，不再写第二套 cancellation authority。
 
 worker 的 `redispatch` 请求也不直接执行 adapter。`respond_agent_coordination` 只追加可见的
-response 与 action；Orchestrator 随后必须显式调用带 `coordination_action_id` 且不带 `workflow_subject` 的
-`dispatch_agent`。action 冻结原 dispatch lineage、原派发的可选参考 snapshot、logical occurrence
+response 与 action；Orchestrator 随后必须在当前投影的委派工具中提交带 `coordination_action_id` 且不带 `workflow_subject` 的
+continuation 条目。action 冻结原 dispatch lineage、原派发的可选参考 snapshot、logical occurrence
 和 Slice subjects；Host 从该绑定派生 continuation，caller 不能另选 workflow 或制造第二 occurrence。
 action 绑定到不可变 child Session，进程重启后仍从同一持久 action 继续。只有 completed 或 failed
 terminal outcome；completed outcome 必须由 action-specific durable effect authority 证明，不能由 Tool
@@ -366,8 +367,8 @@ canonical input 返回原 receipt；相同 identity 与不同 input 返回稳定
 都不是准入条件。
 
 `respond_agent_coordination decision=redispatch` 只记录可见的 Agent-to-Agent
-operation 与 `redispatch_worker` action。Orchestrator 随后通过绑定
-`coordination_action_id` 的 `dispatch_agent`，在同一 Session 写入一条新的真实输入消息并启动下一
+operation 与 `redispatch_worker` action。Orchestrator 随后通过当前投影的委派工具中绑定
+`coordination_action_id` 的 continuation 条目，在同一 Session 写入一条新的真实输入消息并启动下一
 Turn。Runtime 闭包不是可持久化的续跑协议；历史 terminal execution 只是前一条输入消息的执行证据，
 不能成为 Session 续跑准入条件。
 

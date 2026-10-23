@@ -28,7 +28,7 @@ Codex provider auth 与 `.claude` / `.codex` Skill discovery 也仍存在，但�
 **调用链**：
 
 ```
-Orchestrator 从当前 `dispatch_agent` schema 选择
+Orchestrator 从当前投影的委派工具 schema 选择
 `capability_projection.agents.<agentID>` 声明的动态 Agent ID → 已解析投影的
 `base_role` 同时选择模板 core prompt 及其必需领域输出，不能仅按独立性或名称推断模板。
 需要完整 ResearchBrief 的研究角色使用 `deep-research`；普通代码取证与因果调查使用
@@ -36,7 +36,7 @@ Orchestrator 从当前 `dispatch_agent` schema 选择
 `base_role` 由 `RuntimeTemplateRegistry.get(baseRole)` 取得 runtime template →
 template 的 `dispatchAdapterID` 由 `DispatchAdapterContractRegistry.get(...)`
 取得 core-owned adapter contract → build adapter 进入 `build/agent.ts`
-(`dispatch_agent.use_worktree` 是所有 Agent 一致的唯一公开选择：仅当并发
+(初次派发条目的 `dispatch.turn.use_worktree` 是所有 Agent 一致的唯一公开选择：仅当并发
 Agent 会双写重叠修改面或争夺同一所有权边界时传 `true`；只读 Agent、修改面
 和所有权面已证明互不相交的并行 Agent 均传 `false`，保守避免无必要 worktree；
 Build 将它映射到私有 `worktreeUsage`，
@@ -299,7 +299,7 @@ Base 的原始请求、真实修订、权限与适用来源定义交付义务。
 - 动态 Agent identifier (ID，身份标识) 的共同语法及保留身份由 `@opencorvus-ai/util/dynamic-agent-id` 唯一定义，SDK 包准入与运行态复用同一 schema。`user` 专属于人类消息作者，与 `orchestrator`、`shared` 一同禁止声明为动态 worker；SDK 另保留包内 `universal-build` 禁令及现有1..64长度，平台运行身份仍合法。冲突的包、worker identity、runtime override 或 skill mount 在当前准入返回明确校验错误，不自动改名、改写历史消息或增加兼容路径；
 - Advanced 的 `planned-delivery`、`researched-planned-delivery`、`evidence-investigation`、`greenfield-interface-delivery`、`greenfield-interface-visual-delivery` 和 `reference-interface-delivery` 是六张不可变 manifest v2 scheduler contract 图；researched 图只用于一个 load-bearing external web evidence gap 必须先于 Requirements 的非界面交付，禁止把 `research-investigator` 当作选中图之外的 optional node；greenfield 图自带完整需求、架构、原创界面设计、工作量复核、真实渲染复核与界面完整性谱系，不需要参考 URL，也不得与非界面 planned 图重叠选择；只有 reference 图要求 `interface-investigator` 与一个 operator 已提供的 source URL。Orchestrator 可见地选择精确图后必须完成全部声明 node/依赖，但这些图不是 host 执行引擎、状态机、active/default workflow 字段或持久化进度；
 - 激活任意其他 squad 会完整替换当前 Base、Advanced 或 Research Studio 投影，不继承或组合它们的 Agent、prompt、skill、tool、mount、MCP resource 或 virtual-workflow contract；
-- 每个 active squad 都由 `PromptProfileResolver` 获得平台 `universal-build`，且只进入 scheduler 的 `dispatch_agent` schema；manifest、virtual workflow、catalog member、public `projected_agent_ids` 和普通 worker surface 都不得声明或显示它。review / acceptance evidence 已证明需要修改 repository 时，Orchestrator 通过 prompt 自然选择负责的精确领域 producer，或在没有更窄责任时选择 `universal-build`；host 不加 route gate。领域 package 可以声明真实实现 Agent，但不得把它包装成平台兜底 Build；
+- 每个 active squad 都由 `PromptProfileResolver` 获得平台 `universal-build`，且只进入 scheduler 当前投影的委派工具 schema；manifest、virtual workflow、catalog member、public `projected_agent_ids` 和普通 worker surface 都不得声明或显示它。review / acceptance evidence 已证明需要修改 repository 时，Orchestrator 通过 prompt 自然选择负责的精确领域 producer，或在没有更窄责任时选择 `universal-build`；host 不加 route gate。领域 package 可以声明真实实现 Agent，但不得把它包装成平台兜底 Build；
 - manifest `version` 严格使用 `YYYY.MM.DD.N`，其中 `N` 是该 Squad 在该日的正整数修订序号；Registry 拒绝任意 SemVer、裸日期、时间戳、伪日期和零/前导零序号；
 - `PromptProfileResolver` 负责把 Task 创建时绑定的 active expert squad 精确 revision 投影成 scheduler
   capability、worker capability、active scheduler/worker production skill grants、package tools 和 scoped
@@ -333,7 +333,7 @@ Base 的原始请求、真实修订、权限与适用来源定义交付义务。
   损坏或不可读 target 保持真实错误，不能仅凭目录名接受；最终内容验证与 pinned revision 不变。
   通用重命名重试仍服务 Git index 与 Project 恢复，不能用它延迟接受已完成的包发布；
 - `capability_projection.scheduler` 是固定 host Orchestrator 的唯一 package 配置面；它不是 worker identity；
-- `capability_projection.agents.<agentID>` 的 key 是唯一动态 worker identity，也是 `dispatch_agent.dispatch.target` 的精确 literal。`base_role` 只选择 core prompt、model、tool、session、adapter 和 runtime template seed，不能反向推导或替代 `agentID`；
+- `capability_projection.agents.<agentID>` 的 key 是唯一动态 worker identity，也是当前委派条目 `dispatch.target` 的精确 literal。`base_role` 只选择 core prompt、model、tool、session、adapter 和 runtime template seed，不能反向推导或替代 `agentID`；
 - 每个 worker 的 canonical resource root 是 `agents/<agentID>/`。Prompt 与 typed Skill/Tool/MCP `capability_refs` 必须由同一个 projection 显式声明；未知 kind/source/owner、orphan directory 和未投影资源直接失败；
 - manifest 不存在 top-level `agents`、`virtual_agents`、`team` 或 dispatch identity 面，也不存在 `virtual-agents/**` resource root；动态身份只来自 `capability_projection.agents.<agentID>`；
 - Expert Squad 的核心契约是包身份、精确 Agent identity、工具/Skill/MCP 能力授权和领域证据契约。`capability_projection.virtual_workflows` 可省略；其 strategy/guidance、node identity/depends_on/when/repeat_until 是模型参考，不是执行状态或 Task 全局绑定。参考允许 DAG（Directed Acyclic Graph，有向无环图）、局部循环、多路选择与 adaptive 组合；仅显式 DAG 在 SDK 中校验无环，所有已声明引用仍必须闭合。工作流的完整当前契约见 [Expert Squad scheduling](expert-squad-scheduling.md)。

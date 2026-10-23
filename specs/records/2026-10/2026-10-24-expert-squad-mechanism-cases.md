@@ -251,3 +251,8 @@
 - 共享进程dispose 6、control-plane 17、实际并发原生包执行1通过；原1.2秒正确处置在旧1秒时钟下失败的真实对照保留。权限真实副作用四项OS恢复4通过；错误的wait权限fixture及重复消费者删除，真正Mission权限恢复和准确factory身份验证保留。
 - 最终backend typecheck、expert-squads唯一typecheck、docs:check（346 ops/26 groups）、architecture-index（20）、database-migrations（目标v4，两种索引及当前Schema一致）通过；提交前diff whitespace检查通过。后端路由、原生清理和实际页面各按其真实契约验收，没有运行UI自动化或全量bun test。
 - 审阅子集及原交付字节位于`specs/artifacts/2026-10-24-expert-squad-mechanism-cases/`，完整原DB/audit/失败日志在已退休凭据的各原隔离目录保留。本记录为提交前验收事实；实际提交、upstream合并及推送身份以Git历史与最后交付消息为准，不预写未发生的动作。
+
+## 最终架构文档对齐
+
+- 独立交付复核发现04-extensions仍把公开调度Schema固定写成单个dispatch_agent。横向搜索当前架构后，03-control的调度与continuation说明也有同义残留；task-control-plane及expert-squad-scheduling已经准确区分真实单调用与collection member，并复用同一执行器。
+- 已核dispatch-agent-tool、dispatch-agents-contract、dispatch-agents-tool与tools的真实投影：每个条目都是dispatch对象，初次派发的隔离选择实际位于dispatch.turn.use_worktree。决定只将两份架构中的旧固定工具文案对齐当前投影的委派条目/Schema，明确每个真实调用或collection member对应原不可变lineage；不改生产工具、权限、执行或历史身份。完成后重跑文档与架构检查，并交独立裁定者复核。
