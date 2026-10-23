@@ -405,7 +405,7 @@ export class RealProviderAudit implements Disposable {
         method: body === undefined ? "GET" : "POST",
         headers: { "content-type": "application/json" },
         ...(body === undefined ? {} : { body: JSON.stringify(body) }),
-        signal: AbortSignal.timeout(15_000),
+        signal: AbortSignal.timeout(input.inactivityMs),
       })
       assert(response.ok, `Provider preflight ${route}: HTTP ${response.status}`)
       return await response.json() as any

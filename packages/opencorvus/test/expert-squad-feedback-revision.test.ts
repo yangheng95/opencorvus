@@ -14,12 +14,12 @@ import {
   prepareEvolutionPackageMutation,
 } from "../src/expert-squad/evolution-mutation-intent"
 import {
-  nextExpertSquadVersion,
   parseFeedbackRevisionTarget,
   reviseInstalledExpertSquadFromFeedback,
   FeedbackRevisionIdentityConflictError,
   FeedbackRevisionEditError,
 } from "../src/expert-squad/feedback-revision"
+import { nextExpertSquadVersion } from "../src/expert-squad/version"
 import { readEvolutionHistory } from "../src/expert-squad/evolution-history"
 import { ExpertSquadPackageManager } from "../src/expert-squad/manager"
 import { ExpertSquadRegistry } from "../src/expert-squad/registry"

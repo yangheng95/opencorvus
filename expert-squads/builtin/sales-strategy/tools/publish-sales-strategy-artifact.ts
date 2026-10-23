@@ -2,7 +2,7 @@
 // SHA-256 means Secure Hash Algorithm 256-bit.
 
 import {
-  ArtifactReadLocatorSchema,
+  EngineArtifactLocatorSchema,
   TaskArtifactResourceSetLocatorSchema,
   inspectEngineArtifactEnvelope,
   readExactArtifactsSettled,
@@ -43,16 +43,16 @@ export default tool({
   args: {
     artifact: SalesStrategyPublishableArtifactInputSchema,
     resource_set: TaskArtifactResourceSetLocatorSchema.nullable(),
-    source_artifact_locators: tool.schema.array(ArtifactReadLocatorSchema),
+    predecessor_artifact_locators: tool.schema.array(EngineArtifactLocatorSchema).describe("Exact typed Engine Artifact predecessors required by this stage; use [] for a root stage. Original file evidence is selected separately through real read/select and retained by the Host in output provenance."),
   },
   async execute(args, context) {
     const artifactType = args.artifact.artifact_type
     const payload = parseSalesStrategyArtifact(artifactType, args.artifact.payload)
     const expected = expectedSources[artifactType]
-    if (args.source_artifact_locators.length !== expected.length) {
-      throw new Error(artifactType + " requires " + expected.length + " exact source Artifact locator(s)")
+    if (args.predecessor_artifact_locators.length !== expected.length) {
+      throw new Error(artifactType + " requires " + expected.length + " exact typed predecessor Artifact locator(s)")
     }
-    const batch = await readExactArtifactsSettled(context.host.engineArtifacts, args.source_artifact_locators)
+    const batch = await readExactArtifactsSettled(context.host.engineArtifacts, args.predecessor_artifact_locators)
     if (batch.diagnostics.length > 0) {
       throw new AggregateError(batch.diagnostics.map((item) => item.error), "Sales Strategy & Customer Research predecessor read failed")
     }

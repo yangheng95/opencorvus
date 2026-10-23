@@ -1,7 +1,7 @@
 // ABI means Application Binary Interface.
 
 import {
-  ArtifactReadLocatorSchema,
+  EngineArtifactLocatorSchema,
   TaskArtifactResourceSetLocatorSchema,
   inspectEngineArtifactEnvelope,
   readExactArtifactsSettled,
@@ -58,7 +58,7 @@ export default tool({
   args: {
     artifact: ViralContentPublishableArtifactInputSchema,
     resource_set: TaskArtifactResourceSetLocatorSchema.nullable(),
-    source_artifact_locators: tool.schema.array(ArtifactReadLocatorSchema).describe(
+    predecessor_artifact_locators: tool.schema.array(EngineArtifactLocatorSchema).describe(
       "Exact typed predecessor locators only. viral-content/delivery requires exactly campaign-brief, audience-dossier, trend-dossier, concept-set, copy-pack, and review; exclude snapshots and interactive Artifacts.",
     ),
   },
@@ -66,12 +66,12 @@ export default tool({
     const artifactType = args.artifact.artifact_type
     const payload = parseViralContentArtifact(artifactType, args.artifact.payload)
     const expected = expectedSources[artifactType]
-    if (args.source_artifact_locators.length !== expected.length) {
+    if (args.predecessor_artifact_locators.length !== expected.length) {
       throw new Error(
-        `${artifactType} requires exactly ${expected.length} typed predecessor locator(s), received ${args.source_artifact_locators.length}; exclude snapshot and interactive Artifact locators`,
+        `${artifactType} requires exactly ${expected.length} typed predecessor locator(s), received ${args.predecessor_artifact_locators.length}; exclude snapshot and interactive Artifact locators`,
       )
     }
-    const batch = await readExactArtifactsSettled(context.host.engineArtifacts, args.source_artifact_locators)
+    const batch = await readExactArtifactsSettled(context.host.engineArtifacts, args.predecessor_artifact_locators)
     if (batch.diagnostics.length > 0) {
       throw new AggregateError(batch.diagnostics.map((item) => item.error), "Viral Content predecessor read failed")
     }

@@ -29,7 +29,7 @@ import fs from "node:fs"
 import path from "node:path"
 import { EMBEDDED_EXPERT_SQUAD_IDS } from "../src/expert-squad/builtin/ids"
 import { ExpertSquadRegistry } from "../src/expert-squad/registry"
-import { ExpertSquadVersionSchema } from "../src/expert-squad/version"
+import { nextExpertSquadVersion } from "../src/expert-squad/version"
 import { canonicalExpertSquadPackageFileBytes } from "./expert-squad-package-file-bytes"
 
 /** Placeholder substituted for the real version before hashing, so the hash ignores it. */
@@ -119,20 +119,6 @@ function writeManifestVersion(root: string, version: string): void {
   )
 }
 
-/**
- * The next version for a package whose content changed, as a pure function of the current version
- * and the day. Same rule the runtime uses for a feedback revision: today's UTC date, and the next
- * daily revision when the current version is already today's.
- */
-export function nextVersionFor(current: string, now: Date): string {
-  const today = `${now.getUTCFullYear().toString().padStart(4, "0")}.${(now.getUTCMonth() + 1)
-    .toString()
-    .padStart(2, "0")}.${now.getUTCDate().toString().padStart(2, "0")}`
-  const parsed = /^(\d{4}\.\d{2}\.\d{2})\.([1-9]\d*)$/.exec(current)
-  const revision = parsed && parsed[1] === today ? Number(parsed[2]) + 1 : 1
-  return ExpertSquadVersionSchema.parse(`${today}.${revision}`)
-}
-
 export type RevisionPlan = {
   readonly records: ExpertSquadRevisionRecord[]
   /** Packages whose content moved under an unchanged version. Empty on a clean tree. */
@@ -153,7 +139,7 @@ export function planExpertSquadRevisions(input: {
     // A package the baseline has never seen is recorded as authored; only a package whose content
     // moved while its version stood still needs a new one.
     const needsStamp = Boolean(recorded && recorded.contentDigest !== contentDigest && recorded.version === declared)
-    const version = needsStamp ? nextVersionFor(declared, input.now) : declared
+    const version = needsStamp ? nextExpertSquadVersion({ current: declared, now: input.now.getTime() }) : declared
     if (needsStamp) stamped.push({ id, from: declared, to: version })
     records.push({ id, root: path.relative(input.repoRoot, root).replaceAll("\\", "/"), version, contentDigest })
   }

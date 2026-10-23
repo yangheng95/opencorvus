@@ -29,3 +29,15 @@ export function expertSquadVersionForTimestamp(timestamp: string, dailyRevision:
     .padStart(2, "0")}.${date.getUTCDate().toString().padStart(2, "0")}.${dailyRevision}`
   return ExpertSquadVersionSchema.parse(version)
 }
+
+/** Advance from the later of the current revision date and today's UTC date. */
+export function nextExpertSquadVersion(input: { current: string; now: number }): string {
+  const date = new Date(input.now)
+  const today = `${date.getUTCFullYear().toString().padStart(4, "0")}.${(date.getUTCMonth() + 1)
+    .toString()
+    .padStart(2, "0")}.${date.getUTCDate().toString().padStart(2, "0")}`
+  const currentMatch = /^(\d{4}\.\d{2}\.\d{2})\.([1-9]\d*)$/.exec(input.current)
+  const publicationDay = currentMatch && currentMatch[1]! > today ? currentMatch[1]! : today
+  const revision = currentMatch && currentMatch[1] === publicationDay ? Number(currentMatch[2]) + 1 : 1
+  return ExpertSquadVersionSchema.parse(`${publicationDay}.${revision}`)
+}

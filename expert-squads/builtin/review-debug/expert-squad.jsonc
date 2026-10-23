@@ -5,7 +5,7 @@
   "name": "Review & Debug",
   "label": "Review & Debug",
   "description": "Evidence-backed product review, root-cause debugging, product-source repair, and independent repair verification through durable catalog facts and visible narrative Turn summaries.",
-  "version": "2026.10.14.1",
+  "version": "2026.10.23.1",
   "product_pillars": [
     "code"
   ],
@@ -50,11 +50,11 @@
       "review-debug-root-cause-investigator": {
         "capability_refs": [
           "capability:capability_set:package:review-debug:shared-capabilities-1",
-          "capability:capability_set:platform:tool-registry:deep-research-base"
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
         ],
         "label": "Review & Debug Root Cause Investigator",
         "description": "Proves the causal chain from observable symptom through trigger and data flow to the underlying design or implementation fault.",
-        "base_role": "deep-research",
+        "base_role": "delegated-worker",
         "prompt": "agents/review-debug-root-cause-investigator/system.md"
       },
       "review-debug-repair-implementer": {

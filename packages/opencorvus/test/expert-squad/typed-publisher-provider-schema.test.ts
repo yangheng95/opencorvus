@@ -169,7 +169,7 @@ describe("built-in typed publisher provider schemas", () => {
         payloadStrictness: artifactTypes.map(() => false),
         branchStrictness: artifactTypes.map(() => false),
         required: artifactTypes.map(() => publisher === publishDataAnalysisArtifact
-          ? ["artifact_type", "payload", "resource_set", "source_artifact_locators"]
+          ? ["artifact_type", "payload", "resource_set", "predecessor_artifact_locators"]
           : ["artifact_type", "payload"]),
         expectedArtifactTypes: [...artifactTypes],
       })),

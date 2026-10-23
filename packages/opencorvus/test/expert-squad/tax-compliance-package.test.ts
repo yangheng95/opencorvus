@@ -452,7 +452,7 @@ describe("Tax Compliance Expert Squad", () => {
               {
                 artifact: { artifact_type: "tax-compliance/engagement-charter", payload: charter },
                 resource_set: null,
-                source_artifact_locators: [],
+                predecessor_artifact_locators: [],
               },
               { host, metadata() {} } as never,
             ),
@@ -466,7 +466,7 @@ describe("Tax Compliance Expert Squad", () => {
               {
                 artifact: { artifact_type: "tax-compliance/evidence-dossier", payload: dossier },
                 resource_set: null,
-                source_artifact_locators: [charterLocator],
+                predecessor_artifact_locators: [charterLocator],
               },
               { host, metadata() {} } as never,
             ),

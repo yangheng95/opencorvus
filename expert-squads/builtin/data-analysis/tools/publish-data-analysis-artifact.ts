@@ -37,7 +37,7 @@ const producerByType: Readonly<Record<DataAnalysisArtifactType, string>> = {
 }
 
 export default tool({
-  description: "Validate and publish one complete data-analysis Artifact ABI value. Supply artifact_type, payload, resource_set and source_artifact_locators together inside the single artifact object; resource_set is null for stages and the exact immutable resource set for the report.",
+  description: "Validate and publish one complete data-analysis Artifact ABI value. Supply artifact_type, payload, resource_set and predecessor_artifact_locators together inside the single artifact object; resource_set is null for stages and the exact immutable resource set for the report.",
   args: {
     artifact: DataAnalysisPublishableArtifactInputSchema,
   },
@@ -46,10 +46,10 @@ export default tool({
     const artifactType = args.artifact_type
     const payload = parseDataAnalysisArtifact(artifactType, args.payload)
     const expected = expectedSources[artifactType]
-    if (args.source_artifact_locators.length !== expected.length) {
-      throw new Error(artifactType + " requires " + expected.length + " exact source Artifact locator(s)")
+    if (args.predecessor_artifact_locators.length !== expected.length) {
+      throw new Error(artifactType + " requires " + expected.length + " exact typed predecessor Artifact locator(s)")
     }
-    const batch = await readExactArtifactsSettled(context.host.engineArtifacts, args.source_artifact_locators)
+    const batch = await readExactArtifactsSettled(context.host.engineArtifacts, args.predecessor_artifact_locators)
     if (batch.diagnostics.length > 0) {
       throw new AggregateError(batch.diagnostics.map((item) => item.error), "Data Analysis & Business Insights predecessor read failed")
     }

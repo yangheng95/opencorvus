@@ -40,9 +40,15 @@ import {
   canonicalTaskRunEvidenceJSON,
   TaskRunEvidenceBundleSchema,
   canonicalWorkspaceTreeJSON,
+  readExactArtifact,
   evolutionComparisonInputs,
 } from "@opencorvus-ai/plugin"
-import type { ArtifactReadLocator, EngineArtifactLocator, MetricEvaluationRequest, TaskArtifactRef } from "@opencorvus-ai/plugin"
+import type {
+  ArtifactReadLocator,
+  EngineArtifactLocator,
+  MetricEvaluationRequest,
+  TaskArtifactRef,
+} from "@opencorvus-ai/plugin"
 import {
   createTaskArtifactStoreExecution,
   publishTaskArtifactProjectFiles,
@@ -60,11 +66,12 @@ import {
 } from "@squads/evolution-lab/lib/evolution-lab/artifacts"
 import collectRunEvidenceTool from "@squads/evolution-lab/tools/collect-run-evidence"
 import expertSquadPackageTool from "@squads/evolution-lab/tools/expert-squad-package"
-import publishEvolutionArtifactTool, {
+import publishEvolutionArtifactTool from "@squads/evolution-lab/tools/publish-evolution-artifact"
+import {
   assertEvolutionArtifactOwner,
   evolutionArtifactOwner,
   requireEvolutionWorkerProducer,
-} from "@squads/evolution-lab/tools/publish-evolution-artifact"
+} from "@squads/evolution-lab/lib/evolution-lab/engine-evidence"
 import executeEvolutionMetricsTool from "@squads/evolution-lab/tools/execute-evolution-metrics"
 import { withTaskScopedPluginToolHost } from "../src/tool/plugin-tool-host"
 import { prepareCrossTaskArtifactImports } from "../src/engine/cross-task-artifact-import"
@@ -80,12 +87,16 @@ import {
   executionCapsuleSourceTreeSnapshot,
 } from "../src/execution-capsule/tree-digest"
 import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
-import { requireCurrentEvolutionEvidence, EvolutionComparisonReviewChangedError } from "../src/expert-squad/evolution-review-freshness"
+import {
+  requireCurrentEvolutionEvidence,
+  EvolutionComparisonReviewChangedError,
+} from "../src/expert-squad/evolution-review-freshness"
 import { MetricExecutionEvidence } from "../src/metrics/types"
 import { metricJudgeMessages } from "../src/tool/metric-judge-runner"
 
 function comparisonStatistics(payload: unknown) {
-  const { calculation_inputs, ...statistics } = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(payload)
+  const { calculation_inputs, ...statistics } =
+    EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(payload)
   return statistics
 }
 
@@ -761,23 +772,40 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         }
         expect(Object.keys(publisherSchema.properties ?? {})).toEqual(["artifact"])
         expect(publisherSchema.required).toEqual(["artifact"])
-        const publicationBranches = publisherSchema.properties?.artifact?.oneOf ?? []
-        expect(publicationBranches.map((branch) => branch.properties?.artifact_type?.const)).toEqual(
+        const resolveSchema = (value: any): any =>
+          typeof value?.$ref === "string"
+            ? resolveSchema(
+                value.$ref
+                  .slice(2)
+                  .split("/")
+                  .reduce(
+                    (node: any, key: string) => node[key.replace(/~1/g, "/").replace(/~0/g, "~")],
+                    publisherSchema,
+                  ),
+              )
+            : value
+        const publicationBranches = (publisherSchema.properties?.artifact?.oneOf ?? []).map(resolveSchema)
+        expect(publicationBranches.map((branch) => resolveSchema(branch.properties?.artifact_type)?.const)).toEqual(
           EvolutionPackagePublishableArtifactInputSchema.options.map((branch) => branch.shape.artifact_type.value),
         )
-        expect(
-          publicationBranches.every(
-            (branch) => branch.required?.join("|") === "artifact_type|payload|resource_set|source_artifact_locators",
-          ),
-        ).toBe(true)
+        expect(publicationBranches.map((branch) => branch.required)).toEqual([
+          ["artifact_type", "payload", "resource_set"],
+          ["artifact_type", "payload", "resource_set", "predecessor_artifact_locators"],
+          ["artifact_type", "payload", "resource_set", "predecessor_artifact_locators"],
+          ["artifact_type", "payload", "resource_set", "parent_resource_set"],
+          ["artifact_type", "payload", "resource_set", "predecessor_artifact_locators"],
+          ["artifact_type", "payload", "resource_set"],
+          ["artifact_type", "payload", "resource_set"],
+          ["artifact_type", "payload", "resource_set", "predecessor_artifact_locators"],
+        ])
         const attributionBranch = publicationBranches.find(
-          (branch) => branch.properties?.artifact_type?.const === "evolution-lab/failure-attribution",
+          (branch) => resolveSchema(branch.properties?.artifact_type)?.const === "evolution-lab/failure-attribution",
         )
         expect(attributionBranch?.required).toEqual([
           "artifact_type",
           "payload",
           "resource_set",
-          "source_artifact_locators",
+          "predecessor_artifact_locators",
         ])
         const session = Session.prepareRootNext({
           kind: "root",
@@ -932,6 +960,18 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         let sourceCampaignInput!: Record<string, unknown>
         await withTaskScopedPluginToolHost(scope, async (host) => {
           ;(scope.owner as { agentID: string }).agentID = "evolution-observer"
+          const diagnosticStage = await host.taskArtifacts.stage({ trees: ["diagnostics"] })
+          await writeFile(
+            path.join(diagnosticStage.treeDirectories.diagnostics!, "observation.txt"),
+            "Three incomplete deliveries in five selected runs",
+          )
+          const diagnosticPublication = await host.taskArtifacts.publish(diagnosticStage, {
+            snapshot_kind: "engine_resource",
+            files: [{ tree: "diagnostics", path: "observation.txt", media_type: "text/plain" }],
+          })
+          const diagnostic = {
+            locator: { source: "task_artifact_resource" as const, ref: diagnosticPublication.artifacts[0]! },
+          }
           const opportunityReceipt = JSON.parse(
             await executePublishEvolutionArtifact(
               {
@@ -940,7 +980,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                   target,
                   current_revision: revision,
                   trigger: { type: "user", identity: "message-user-authority" },
-                  evidence: [],
+                  evidence: [diagnostic.locator],
                   observable_symptom: "Repeated incomplete delivery",
                   impact_scope: "target workflow",
                   frequency: "3 of 5 runs",
@@ -954,11 +994,17 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                   suggested_budget: { runs: 4, max_cost: null },
                 },
                 resource_set: null,
-                source_artifact_locators: [],
               },
               { host } as never,
             ),
           ) as { locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
+          const opportunityRead = await readExactArtifact(host.engineArtifacts, opportunityReceipt.locator, {
+            maxBytes: 65_536,
+          })
+          expect(
+            EngineArtifactEnvelopeSchema.parse(JSON.parse(new TextDecoder().decode(opportunityRead.bytes)))
+              .source_artifact_locators,
+          ).toEqual([diagnostic.locator])
           sourceOpportunityLocator = opportunityReceipt.locator as EngineArtifactLocator
           sourceOpportunityInput = {
             target,
@@ -977,14 +1023,11 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             sensitivity: "internal",
             suggested_budget: { runs: 4, max_cost: null },
           }
-          const read = await host.engineArtifacts.read({
-            locator: opportunityReceipt.locator,
-            byte_offset: 0,
-            max_bytes: 65_536,
-            delivery: "inline",
-          })
-          expect(read.chunk.complete).toBe(true)
-          expect(EngineArtifactEnvelopeSchema.parse(JSON.parse(read.chunk.text!)).payload).toMatchObject({
+          const read = await readExactArtifact(host.engineArtifacts, opportunityReceipt.locator, { maxBytes: 65_536 })
+          expect(read.bytes.byteLength > 0).toBe(true)
+          expect(
+            EngineArtifactEnvelopeSchema.parse(JSON.parse(new TextDecoder().decode(read.bytes))).payload,
+          ).toMatchObject({
             suggested_budget: { runs: 4, max_cost: null },
           })
           await host.engineArtifacts.select({
@@ -1018,7 +1061,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 artifact_type: "evolution-lab/failure-attribution",
                 payload: attributionPayload,
                 resource_set: null,
-                source_artifact_locators: [],
+                predecessor_artifact_locators: [],
               },
               { host } as never,
             ),
@@ -1039,23 +1082,21 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 artifact_type: "evolution-lab/failure-attribution",
                 payload: attributionPayload,
                 resource_set: null,
-                source_artifact_locators: [opportunityReceipt.locator],
+                predecessor_artifact_locators: [opportunityReceipt.locator],
               },
               { host } as never,
             ),
           ) as { artifact_type: string; locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
           expect(attributionReceipt.artifact_type).toBe("evolution-lab/failure-attribution")
           sourceAttributionLocator = attributionReceipt.locator as EngineArtifactLocator
-          const attributionRead = await host.engineArtifacts.read({
-            locator: attributionReceipt.locator,
-            byte_offset: 0,
-            max_bytes: 65_536,
-            delivery: "inline",
+          const attributionRead = await readExactArtifact(host.engineArtifacts, attributionReceipt.locator, {
+            maxBytes: 65_536,
           })
-          expect(attributionRead.chunk.complete).toBe(true)
+          expect(attributionRead.bytes.byteLength > 0).toBe(true)
           expect(
-            EngineArtifactEnvelopeSchema.parse(JSON.parse(attributionRead.chunk.text!)).source_artifact_locators,
-          ).toEqual([opportunityReceipt.locator])
+            EngineArtifactEnvelopeSchema.parse(JSON.parse(new TextDecoder().decode(attributionRead.bytes)))
+              .source_artifact_locators,
+          ).toEqual(expect.arrayContaining([diagnostic.locator, opportunityReceipt.locator]))
           await host.engineArtifacts.select({
             locator: attributionReceipt.locator,
             purpose: "Exact causal attribution for the frozen campaign specification",
@@ -1079,7 +1120,10 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           const subjectScorerConfig = {
             workspace_digest: await executionCapsuleSourceTreeDigest(trialWorktree.directory),
             executable: process.execPath,
-            args: ["-e", `const fs=require('node:fs'); const subject=fs.readFileSync('g43-subject.txt','utf8'); process.stdout.write(subject==='1'?fs.readFileSync(${JSON.stringify(metricObservationControl)},'utf8'):subject)`],
+            args: [
+              "-e",
+              `const fs=require('node:fs'); const subject=fs.readFileSync('g43-subject.txt','utf8'); process.stdout.write(subject==='1'?fs.readFileSync(${JSON.stringify(metricObservationControl)},'utf8'):subject)`,
+            ],
             parse: "stdout_number" as const,
             inactivity_timeout_ms: 30_000,
           }
@@ -1133,12 +1177,22 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               }),
             ],
           ])
-          campaignInputContents.set("scorer-coverage.json", JSON.stringify({
-            schema_version: 1, scorer_id: "coverage", description: "Second independent recorded observation",
-            unit: "ratio", direction: "higher_better", target: 1, floor: 0, weight: 1,
-            observation_class: "quality", evaluator_kind: "query",
-            evaluator_config: { query: "constant_value", value: 1 },
-          }))
+          campaignInputContents.set(
+            "scorer-coverage.json",
+            JSON.stringify({
+              schema_version: 1,
+              scorer_id: "coverage",
+              description: "Second independent recorded observation",
+              unit: "ratio",
+              direction: "higher_better",
+              target: 1,
+              floor: 0,
+              weight: 1,
+              observation_class: "quality",
+              evaluator_kind: "query",
+              evaluator_config: { query: "constant_value", value: 1 },
+            }),
+          )
           for (const name of campaignInputNames)
             await writeFile(path.join(project.path, "campaign-inputs", name), campaignInputContents.get(name)!)
           const campaignInputPublication = await publishTaskArtifactProjectFiles({
@@ -1176,7 +1230,10 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               environment_path: environmentResource.path,
               workspace_template_path: workspaceResource.path,
               permission_snapshot_path: permissionResource.path,
-              scorer_assets: [{ scorer_id: "correctness", resource_path: scorerResource.path }, { scorer_id: "coverage", resource_path: coverageResource.path }],
+              scorer_assets: [
+                { scorer_id: "correctness", resource_path: scorerResource.path },
+                { scorer_id: "coverage", resource_path: coverageResource.path },
+              ],
             },
             external_side_effect_policy: "No production side effects",
             repetitions: 1,
@@ -1191,25 +1248,30 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 artifact_type: "evolution-lab/campaign-spec",
                 payload: campaignDraft,
                 resource_set: campaignInputResourceSet,
-                source_artifact_locators: [opportunityReceipt.locator, attributionReceipt.locator],
+                predecessor_artifact_locators: [opportunityReceipt.locator, attributionReceipt.locator],
               },
               { host } as never,
             ),
           ) as { locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
           sourceCampaignLocator = campaignReceipt.locator as EngineArtifactLocator
-          const repeatedTrialCampaign = JSON.parse(await executePublishEvolutionArtifact({
-            artifact_type: "evolution-lab/campaign-spec",
-            payload: { ...campaignDraft, repetitions: 2, budget: { ...campaignDraft.budget, max_runs: 4 } },
-            resource_set: campaignInputResourceSet, source_artifact_locators: [opportunityReceipt.locator, attributionReceipt.locator],
-          }, { host } as never)) as { locator: EngineArtifactLocator }
+          const repeatedTrialCampaign = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/campaign-spec",
+                payload: { ...campaignDraft, repetitions: 2, budget: { ...campaignDraft.budget, max_runs: 4 } },
+                resource_set: campaignInputResourceSet,
+                predecessor_artifact_locators: [opportunityReceipt.locator, attributionReceipt.locator],
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
 
-          const campaignEnvelopeRead = await host.engineArtifacts.read({
-            locator: campaignReceipt.locator,
-            byte_offset: 0,
-            max_bytes: 65_536,
-            delivery: "inline",
+          const campaignEnvelopeRead = await readExactArtifact(host.engineArtifacts, campaignReceipt.locator, {
+            maxBytes: 65_536,
           })
-          const campaignEnvelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(campaignEnvelopeRead.chunk.text!))
+          const campaignEnvelope = EngineArtifactEnvelopeSchema.parse(
+            JSON.parse(new TextDecoder().decode(campaignEnvelopeRead.bytes)),
+          )
           const persistedCampaign = EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(
             campaignEnvelope.payload,
           )
@@ -1253,7 +1315,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                   },
                 },
                 resource_set: campaignInputResourceSet,
-                source_artifact_locators: [opportunityReceipt.locator, attributionReceipt.locator],
+                predecessor_artifact_locators: [opportunityReceipt.locator, attributionReceipt.locator],
               },
               { host } as never,
             ),
@@ -1296,17 +1358,11 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                   },
                 },
                 resource_set: null,
-                source_artifact_locators: [],
               },
               { host } as never,
             ),
           ) as { locator: EngineArtifactLocator }
-          await host.engineArtifacts.read({
-            locator: builtInOpportunity.locator,
-            byte_offset: 0,
-            max_bytes: 65_536,
-            delivery: "inline",
-          })
+          await readExactArtifact(host.engineArtifacts, builtInOpportunity.locator, { maxBytes: 65_536 })
           await host.engineArtifacts.select({
             locator: builtInOpportunity.locator,
             purpose: "Exact built-in opportunity for scope-derived campaign execution",
@@ -1329,17 +1385,12 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                   unknowns: ["holdout behavior"],
                 },
                 resource_set: null,
-                source_artifact_locators: [builtInOpportunity.locator],
+                predecessor_artifact_locators: [builtInOpportunity.locator],
               },
               { host } as never,
             ),
           ) as { locator: EngineArtifactLocator }
-          await host.engineArtifacts.read({
-            locator: builtInAttribution.locator,
-            byte_offset: 0,
-            max_bytes: 65_536,
-            delivery: "inline",
-          })
+          await readExactArtifact(host.engineArtifacts, builtInAttribution.locator, { maxBytes: 65_536 })
           await host.engineArtifacts.select({
             locator: builtInAttribution.locator,
             purpose: "Exact built-in attribution for scope-derived campaign execution",
@@ -1351,20 +1402,18 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 artifact_type: "evolution-lab/campaign-spec",
                 payload: campaignDraft,
                 resource_set: campaignInputResourceSet,
-                source_artifact_locators: [builtInOpportunity.locator, builtInAttribution.locator],
+                predecessor_artifact_locators: [builtInOpportunity.locator, builtInAttribution.locator],
               },
               { host } as never,
             ),
           ) as { locator: EngineArtifactLocator }
-          const builtInCampaignRead = await host.engineArtifacts.read({
-            locator: builtInCampaign.locator,
-            byte_offset: 0,
-            max_bytes: 65_536,
-            delivery: "inline",
+          const builtInCampaignRead = await readExactArtifact(host.engineArtifacts, builtInCampaign.locator, {
+            maxBytes: 65_536,
           })
           expect(
             EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(
-              EngineArtifactEnvelopeSchema.parse(JSON.parse(builtInCampaignRead.chunk.text!)).payload,
+              EngineArtifactEnvelopeSchema.parse(JSON.parse(new TextDecoder().decode(builtInCampaignRead.bytes)))
+                .payload,
             ).trial_execution,
           ).toEqual({ status: "unavailable", reason_code: "product_release_required" })
           // Each call creates one independent terminal baseline Trial Task.
@@ -1575,34 +1624,38 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             sessionID: trialWorkerSession.id,
             agentID: "target-worker",
           })
-          const collectTrial = async () => JSON.parse(
-            await collectRunEvidenceTool.execute(
-              {
-                task_id: trialTaskID,
-                terminal_occurrence: terminalOccurrence,
-                selected_messages: [
-                  { session_id: trialSession.id, message_id: trialUser.id },
-                  { session_id: trialWorkerSession.id, message_id: trialAssistant.id },
-                ],
-              },
-              { host } as never,
-            ),
-          ) as {
-            resource_set: unknown
-            resource: {
-              snapshot: unknown
-              tree: string
-              path: string
-              media_type: "application/json"
-              bytes: number
-              sha256: string
+          const collectTrial = async () =>
+            JSON.parse(
+              await collectRunEvidenceTool.execute(
+                {
+                  task_id: trialTaskID,
+                  terminal_occurrence: terminalOccurrence,
+                  selected_messages: [
+                    { session_id: trialSession.id, message_id: trialUser.id },
+                    { session_id: trialWorkerSession.id, message_id: trialAssistant.id },
+                  ],
+                },
+                { host } as never,
+              ),
+            ) as {
+              resource_set: unknown
+              resource: {
+                snapshot: unknown
+                tree: string
+                path: string
+                media_type: "application/json"
+                bytes: number
+                sha256: string
+              }
             }
-          }
           const collectorReceipt = await collectTrial()
           const collectorResourceSet = TaskArtifactResourceSetLocatorSchema.parse(collectorReceipt.resource_set)
-          const readCollector = async (receipt: typeof collectorReceipt) => TaskRunEvidenceBundleSchema.parse(
-            JSON.parse(new TextDecoder().decode(await host.taskArtifacts.read(TaskArtifactRefSchema.parse(receipt.resource)))),
-          )
+          const readCollector = async (receipt: typeof collectorReceipt) =>
+            TaskRunEvidenceBundleSchema.parse(
+              JSON.parse(
+                new TextDecoder().decode(await host.taskArtifacts.read(TaskArtifactRefSchema.parse(receipt.resource))),
+              ),
+            )
           const originalUsage = (await readCollector(collectorReceipt)).usage
           expect(originalUsage).toMatchObject({ token_usage: 80, cost: 1.25, models: ["provider/model"] })
           expect(originalUsage.ledger_event_ids).toHaveLength(1)
@@ -1622,7 +1675,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 artifact_type: "evolution-lab/run-evidence-bundle",
                 payload: runSlot,
                 resource_set: collectorResourceSet,
-                source_artifact_locators: [],
+                predecessor_artifact_locators: [],
               },
               { host } as never,
             ),
@@ -1635,7 +1688,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 artifact_type: "evolution-lab/run-evidence-bundle",
                 payload: runSlot,
                 resource_set: collectorResourceSet,
-                source_artifact_locators: [campaignReceipt.locator],
+                predecessor_artifact_locators: [campaignReceipt.locator],
               },
               { host } as never,
             ),
@@ -1645,14 +1698,9 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"].parse(
               EngineArtifactEnvelopeSchema.parse(
                 JSON.parse(
-                  (
-                    await host.engineArtifacts.read({
-                      locator,
-                      byte_offset: 0,
-                      max_bytes: 65_536,
-                      delivery: "inline",
-                    })
-                  ).chunk.text!,
+                  new TextDecoder().decode(
+                    (await readExactArtifact(host.engineArtifacts, locator, { maxBytes: 65_536 })).bytes,
+                  ),
                 ),
               ).payload,
             )
@@ -1685,24 +1733,41 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             },
           }
           expect(await readRunPayload(runReceipt.locator)).toEqual(stampedRun)
-          await host.engineArtifacts.select({ locator: runReceipt.locator, purpose: "Read the existing immutable run observation before republishing it" })
-          const runAlias = JSON.parse(await executePublishEvolutionArtifact({
-            artifact_type: "evolution-lab/run-evidence-bundle", payload: runSlot,
-            resource_set: collectorResourceSet, source_artifact_locators: [campaignReceipt.locator],
-          }, { host } as never)) as typeof runReceipt
+          await host.engineArtifacts.select({
+            locator: runReceipt.locator,
+            purpose: "Read the existing immutable run observation before republishing it",
+          })
+          const runAlias = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/run-evidence-bundle",
+                payload: runSlot,
+                resource_set: collectorResourceSet,
+                predecessor_artifact_locators: [campaignReceipt.locator],
+              },
+              { host } as never,
+            ),
+          ) as typeof runReceipt
           expect(await readRunPayload(runAlias.locator)).toEqual(stampedRun)
           expect(new Set([runReceipt.locator, runAlias.locator].map((item) => JSON.stringify(item))).size).toBe(2)
-          const reusedTrialRun = JSON.parse(await executePublishEvolutionArtifact({
-            artifact_type: "evolution-lab/run-evidence-bundle", payload: { ...runSlot, repetition: 1 },
-            resource_set: collectorResourceSet, source_artifact_locators: [repeatedTrialCampaign.locator],
-          }, { host } as never)) as { locator: EngineArtifactLocator }
+          const reusedTrialRun = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/run-evidence-bundle",
+                payload: { ...runSlot, repetition: 1 },
+                resource_set: collectorResourceSet,
+                predecessor_artifact_locators: [repeatedTrialCampaign.locator],
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
           const mislabeledRunReceipt = JSON.parse(
             await executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/run-evidence-bundle",
                 payload: { ...runSlot, arm: "candidate" },
                 resource_set: collectorResourceSet,
-                source_artifact_locators: [campaignReceipt.locator],
+                predecessor_artifact_locators: [campaignReceipt.locator],
               },
               { host } as never,
             ),
@@ -1719,10 +1784,19 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             sessionID: trialWorkerSession.id,
             agentID: "target-worker",
           })
-          await expect(executePublishEvolutionArtifact({
-            artifact_type: "evolution-lab/run-evidence-bundle", payload: runSlot,
-            resource_set: collectorResourceSet, source_artifact_locators: [campaignReceipt.locator],
-          }, { host } as never)).rejects.toThrow("run-evidence-bundle resource no longer equals a fresh collection of authoritative Task facts")
+          await expect(
+            executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/run-evidence-bundle",
+                payload: runSlot,
+                resource_set: collectorResourceSet,
+                predecessor_artifact_locators: [campaignReceipt.locator],
+              },
+              { host } as never,
+            ),
+          ).rejects.toThrow(
+            "run-evidence-bundle resource no longer equals a fresh collection of authoritative Task facts",
+          )
           const unpricedCollector = await collectTrial()
           const unpricedUsage = (await readCollector(unpricedCollector)).usage
           expect(unpricedUsage).toMatchObject({ token_usage: 100, cost: null, models: ["provider/model"] })
@@ -1734,7 +1808,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 artifact_type: "evolution-lab/run-evidence-bundle",
                 payload: runSlot,
                 resource_set: TaskArtifactResourceSetLocatorSchema.parse(unpricedCollector.resource_set),
-                source_artifact_locators: [campaignReceipt.locator],
+                predecessor_artifact_locators: [campaignReceipt.locator],
               },
               { host } as never,
             ),
@@ -1743,8 +1817,10 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             ...stampedRun,
             run_evidence_sha256: unpricedCollector.resource.sha256,
             run_evidence_resource: {
-              path: unpricedCollector.resource.path, media_type: unpricedCollector.resource.media_type,
-              bytes: unpricedCollector.resource.bytes, sha256: unpricedCollector.resource.sha256,
+              path: unpricedCollector.resource.path,
+              media_type: unpricedCollector.resource.media_type,
+              bytes: unpricedCollector.resource.bytes,
+              sha256: unpricedCollector.resource.sha256,
             },
             token_usage: 100,
             cost: null,
@@ -1769,7 +1845,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 artifact_type: "evolution-lab/run-evidence-bundle",
                 payload: runSlot,
                 resource_set: TaskArtifactResourceSetLocatorSchema.parse(mixedModelCollector.resource_set),
-                source_artifact_locators: [campaignReceipt.locator],
+                predecessor_artifact_locators: [campaignReceipt.locator],
               },
               { host } as never,
             ),
@@ -1807,7 +1883,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 artifact_type: "evolution-lab/run-evidence-bundle",
                 payload: runSlot,
                 resource_set: TaskArtifactResourceSetLocatorSchema.parse(otherModelCollectorReceipt.resource_set),
-                source_artifact_locators: [campaignReceipt.locator],
+                predecessor_artifact_locators: [campaignReceipt.locator],
               },
               { host } as never,
             ),
@@ -1883,10 +1959,14 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             repetition: 0,
             trial_task_id: trialTaskID,
             trial_revision_digest: revision.package_digest,
-            scorers: [{ scorer_id: "correctness", status: "measured", value: 1 }, { scorer_id: "coverage", status: "measured", value: 1 }],
+            scorers: [
+              { scorer_id: "correctness", status: "measured", value: 1 },
+              { scorer_id: "coverage", status: "measured", value: 1 },
+            ],
           })
           const subjectEvidence = metricOutcome.receipt.scorers[0]!.evidence[0]!
-          if (subjectEvidence.source !== "task_artifact_resource") throw new Error("Expected the metric attempt resource")
+          if (subjectEvidence.source !== "task_artifact_resource")
+            throw new Error("Expected the metric attempt resource")
           const subjectAttempt = MetricExecutionEvidence.parse(
             JSON.parse(new TextDecoder().decode(await host.taskArtifacts.read(subjectEvidence.ref))),
           )
@@ -1914,19 +1994,17 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             },
             // The exact selected input shared with the judge renderer.
             selected_evidence: [
-              { locator: { source: "task_artifact_resource", ref: collectorIdentity }, sha256: collectorIdentity.sha256 },
+              {
+                locator: { source: "task_artifact_resource", ref: collectorIdentity },
+                sha256: collectorIdentity.sha256,
+              },
             ],
           })
           const measuredRunEnvelope = EngineArtifactEnvelopeSchema.parse(
             JSON.parse(
-              (
-                await host.engineArtifacts.read({
-                  locator: runReceipt.locator,
-                  byte_offset: 0,
-                  max_bytes: 65_536,
-                  delivery: "inline",
-                })
-              ).chunk.text!,
+              new TextDecoder().decode(
+                (await readExactArtifact(host.engineArtifacts, runReceipt.locator, { maxBytes: 65_536 })).bytes,
+              ),
             ),
           )
           expect(subjectAttempt.subject.resource).toEqual(
@@ -1936,23 +2014,42 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           const rubric = [{ score: 1, label: "complete", anchor: "Output satisfies the request", passes: true }]
           const judgeInput = metricJudgeMessages({
             spec: {
-              id: "g43-judge-renderer", task_id: taskID, scope: "global", goal_id: null,
-              name: "g43-judge-renderer", description: criteria, unit: "ordinal", direction: "higher_better",
-              target: 1, floor: 0, weight: 1, observation_class: "quality", evaluator_kind: "judge",
-              source: "baseline", frozen_at: 1, created_by: "architect",
+              id: "g43-judge-renderer",
+              task_id: taskID,
+              scope: "global",
+              goal_id: null,
+              name: "g43-judge-renderer",
+              description: criteria,
+              unit: "ordinal",
+              direction: "higher_better",
+              target: 1,
+              floor: 0,
+              weight: 1,
+              observation_class: "quality",
+              evaluator_kind: "judge",
+              source: "baseline",
+              frozen_at: 1,
+              created_by: "architect",
               evaluator_config: {
-                scorer_revision: scorerResource.sha256, provider_id: "test-driver", model_id: "test-driver",
-                inactivity_timeout_ms: 30_000, max_evidence_bytes: collectorReceipt.resource.bytes,
-                criteria, rubric,
+                scorer_revision: scorerResource.sha256,
+                provider_id: "test-driver",
+                model_id: "test-driver",
+                inactivity_timeout_ms: 30_000,
+                max_evidence_bytes: collectorReceipt.resource.bytes,
+                criteria,
+                rubric,
               },
             },
-            criteria, rubric,
-            selectedEvidence: [{
-              locator: subjectAttempt.selected_evidence[0]!.locator,
-              mediaType: "application/json",
-              sha256: collectorIdentity.sha256,
-              bytes: await host.taskArtifacts.read(subjectAttempt.subject.resource),
-            }],
+            criteria,
+            rubric,
+            selectedEvidence: [
+              {
+                locator: subjectAttempt.selected_evidence[0]!.locator,
+                mediaType: "application/json",
+                sha256: collectorIdentity.sha256,
+                bytes: await host.taskArtifacts.read(subjectAttempt.subject.resource),
+              },
+            ],
           })
           // Production message rendering, with no Provider call: content and
           // selected Message bodies are preserved, not a claim of model understanding.
@@ -1974,14 +2071,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           sourceMetricEvidence = metricEvidenceLocator.ref
           sourceAttemptText = new TextDecoder().decode(await host.taskArtifacts.read(sourceMetricEvidence))
           expect(
-            (
-              await host.engineArtifacts.read({
-                locator: metricEvidenceLocator,
-                byte_offset: 0,
-                max_bytes: 65_536,
-                delivery: "inline",
-              })
-            ).chunk.complete,
+            (await readExactArtifact(host.engineArtifacts, metricEvidenceLocator, { maxBytes: 65_536 })).bytes
+              .byteLength > 0,
           ).toBe(true)
           await host.engineArtifacts.select({
             locator: metricEvidenceLocator,
@@ -1997,7 +2088,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 artifact_type: "evolution-lab/evaluation-result",
                 payload: { arm: "candidate" },
                 resource_set: metricReceiptResourceSet,
-                source_artifact_locators: [campaignReceipt.locator, runReceipt.locator, metricEvidenceLocator],
               },
               { host } as never,
             ),
@@ -2009,55 +2099,76 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 artifact_type: "evolution-lab/evaluation-result",
                 payload: {},
                 resource_set: metricReceiptResourceSet,
-                source_artifact_locators: [campaignReceipt.locator, runReceipt.locator, metricEvidenceLocator],
               },
               { host } as never,
             ),
           ) as { locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
+          const evaluationRead = await readExactArtifact(host.engineArtifacts, evaluationReceipt.locator, {
+            maxBytes: 65_536,
+          })
+          expect(evaluationRead.bytes.byteLength > 0).toBe(true)
           expect(
-            (
-              await host.engineArtifacts.read({
-                locator: evaluationReceipt.locator,
-                byte_offset: 0,
-                max_bytes: 65_536,
-                delivery: "inline",
-              })
-            ).chunk.complete,
-          ).toBe(true)
+            EngineArtifactEnvelopeSchema.parse(JSON.parse(new TextDecoder().decode(evaluationRead.bytes)))
+              .source_artifact_locators,
+          ).toEqual(
+            expect.arrayContaining([
+              campaignReceipt.locator,
+              runReceipt.locator,
+              ...metricOutcome.receipt.scorers.flatMap((scorer) => scorer.evidence),
+            ]),
+          )
           await host.engineArtifacts.select({
             locator: evaluationReceipt.locator,
             purpose: "Measured evaluation result for independent integrity review",
           })
-          const evaluationAlias = JSON.parse(await executePublishEvolutionArtifact({
-            artifact_type: "evolution-lab/evaluation-result", payload: {}, resource_set: metricReceiptResourceSet,
-            source_artifact_locators: [campaignReceipt.locator, runReceipt.locator, metricEvidenceLocator],
-          }, { host } as never)) as typeof evaluationReceipt
-          expect(new Set([evaluationReceipt.locator, evaluationAlias.locator].map((item) => JSON.stringify(item))).size).toBe(2)
+          const evaluationAlias = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/evaluation-result",
+                payload: {},
+                resource_set: metricReceiptResourceSet,
+              },
+              { host } as never,
+            ),
+          ) as typeof evaluationReceipt
+          expect(
+            new Set([evaluationReceipt.locator, evaluationAlias.locator].map((item) => JSON.stringify(item))).size,
+          ).toBe(2)
           const publishAlteredReceipt = async (value: unknown) => {
             const stage = await host.taskArtifacts.stage({ trees: ["metric-evaluation"] })
-            await writeFile(path.join(stage.treeDirectories["metric-evaluation"]!, "receipt.json"),
-              JSON.stringify(EvolutionMetricReceiptSchema.parse(value)))
+            await writeFile(
+              path.join(stage.treeDirectories["metric-evaluation"]!, "receipt.json"),
+              JSON.stringify(EvolutionMetricReceiptSchema.parse(value)),
+            )
             const publication = await host.taskArtifacts.publish(stage, {
               snapshot_kind: "engine_resource",
               files: [{ tree: "metric-evaluation", path: "receipt.json", media_type: "application/json" }],
             })
-            return executePublishEvolutionArtifact({
-              artifact_type: "evolution-lab/evaluation-result", payload: {},
-              resource_set: { snapshot: publication.snapshot, tree: "metric-evaluation" },
-              source_artifact_locators: [campaignReceipt.locator, runReceipt.locator, metricEvidenceLocator],
-            }, { host } as never)
+            return executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/evaluation-result",
+                payload: {},
+                resource_set: { snapshot: publication.snapshot, tree: "metric-evaluation" },
+              },
+              { host } as never,
+            )
           }
           const alteredReceipt = structuredClone(metricOutcome.receipt)
           alteredReceipt.scorers[0].value = 0
           await expect(publishAlteredReceipt(alteredReceipt)).rejects.toThrow(
             "Metric receipt scorer correctness differs from its recorded observation",
           )
-          await expect(publishAlteredReceipt({
-            ...metricOutcome.receipt, trial_task_id: otherModelTrial.trialTaskID,
-          })).rejects.toThrow("Metric receipt does not identify its exact Trial run and slot")
+          await expect(
+            publishAlteredReceipt({
+              ...metricOutcome.receipt,
+              trial_task_id: otherModelTrial.trialTaskID,
+            }),
+          ).rejects.toThrow("Metric receipt does not identify its exact Trial run and slot")
           const copiedAttemptStage = await host.taskArtifacts.stage({ trees: ["metric-evidence"] })
-          await writeFile(path.join(copiedAttemptStage.treeDirectories["metric-evidence"]!, "attempt.json"),
-            JSON.stringify({ ...subjectAttempt, raw_value: 0 }))
+          await writeFile(
+            path.join(copiedAttemptStage.treeDirectories["metric-evidence"]!, "attempt.json"),
+            JSON.stringify({ ...subjectAttempt, raw_value: 0 }),
+          )
           const copiedAttempt = await host.taskArtifacts.publish(copiedAttemptStage, {
             snapshot_kind: "engine_resource",
             files: [{ tree: "metric-evidence", path: "attempt.json", media_type: "application/json" }],
@@ -2067,49 +2178,75 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             `Metric evidence must identify exactly one recorded result in Task ${taskID}; found 0`,
           )
           const secondCall = {
-            ...scope, toolCallID: "call-g45-metric-second", toolPartID: "part-g45-metric-second",
+            ...scope,
+            toolCallID: "call-g45-metric-second",
+            toolPartID: "part-g45-metric-second",
             owner: { ...scope.owner },
           }
           const secondInput = {
-            campaign_spec_locator: campaignReceipt.locator, candidate_revision_locator: null,
-            run_evidence_locator: runReceipt.locator, iteration: 0, delivery_slice_revision_id: null,
+            campaign_spec_locator: campaignReceipt.locator,
+            candidate_revision_locator: null,
+            run_evidence_locator: runReceipt.locator,
+            iteration: 0,
+            delivery_slice_revision_id: null,
             visual_feedback_verification_artifact_locators: [],
           }
           const secondStarted = Date.now()
           await Session.updatePart({
-            id: secondCall.toolPartID, sessionID: secondCall.sessionID, messageID: secondCall.messageID,
-            type: "tool", tool: "execute-evolution-metrics", callID: secondCall.toolCallID,
+            id: secondCall.toolPartID,
+            sessionID: secondCall.sessionID,
+            messageID: secondCall.messageID,
+            type: "tool",
+            tool: "execute-evolution-metrics",
+            callID: secondCall.toolCallID,
             state: { status: "running", input: secondInput, time: { start: secondStarted } },
           })
           const secondMeasurement = await withTaskScopedPluginToolHost(secondCall, async (secondHost) =>
             JSON.parse(await executeEvolutionMetricsTool.execute(secondInput, { host: secondHost } as never)),
           )
           await Session.updatePart({
-            id: secondCall.toolPartID, sessionID: secondCall.sessionID, messageID: secondCall.messageID,
-            type: "tool", tool: "execute-evolution-metrics", callID: secondCall.toolCallID,
-            state: { status: "completed", input: secondInput, title: "Recorded local metric invocation",
-              output: JSON.stringify(secondMeasurement), metadata: {}, time: { start: secondStarted, end: Date.now() } },
+            id: secondCall.toolPartID,
+            sessionID: secondCall.sessionID,
+            messageID: secondCall.messageID,
+            type: "tool",
+            tool: "execute-evolution-metrics",
+            callID: secondCall.toolCallID,
+            state: {
+              status: "completed",
+              input: secondInput,
+              title: "Recorded local metric invocation",
+              output: JSON.stringify(secondMeasurement),
+              metadata: {},
+              time: { start: secondStarted, end: Date.now() },
+            },
           })
           const mixedReceipt = structuredClone(metricOutcome.receipt)
           mixedReceipt.scorers[1] = secondMeasurement.receipt.scorers[1]
-          const producers = await Promise.all(mixedReceipt.scorers.map(async (scorer: { evidence: Array<{ ref: TaskArtifactRef }> }) => {
-            const ref = scorer.evidence[0]!.ref
-            const record = await readTaskArtifactSnapshotManifest({ projectID: scope.projectID,
-              projectDirectory: project.path, taskID, snapshot: ref.snapshot })
-            const observed = await host.metrics.recorded({ evidence_ref: ref })
-            expect(observed.producer).toEqual(record.manifest.producer)
-            if (record.manifest.producer.owner_kind !== "projected-worker") throw new Error("Expected a worker metric source")
-            return record.manifest.producer.tool_call_id
-          }))
+          const producers = await Promise.all(
+            mixedReceipt.scorers.map(async (scorer: { evidence: Array<{ ref: TaskArtifactRef }> }) => {
+              const ref = scorer.evidence[0]!.ref
+              const record = await readTaskArtifactSnapshotManifest({
+                projectID: scope.projectID,
+                projectDirectory: project.path,
+                taskID,
+                snapshot: ref.snapshot,
+              })
+              const observed = await host.metrics.recorded({ evidence_ref: ref })
+              expect(observed.producer).toEqual(record.manifest.producer)
+              if (record.manifest.producer.owner_kind !== "projected-worker")
+                throw new Error("Expected a worker metric source")
+              return record.manifest.producer.tool_call_id
+            }),
+          )
           expect(producers).toEqual([scope.toolCallID, secondCall.toolCallID])
           await expect(publishAlteredReceipt(mixedReceipt)).rejects.toThrow(
             "Metric receipt combines observations from different Tool invocations or iterations",
           )
           const intactSecond = JSON.parse(await publishAlteredReceipt(secondMeasurement.receipt))
-          const intactRead = await host.engineArtifacts.read({
-            locator: intactSecond.locator, byte_offset: 0, max_bytes: 65_536, delivery: "inline",
-          })
-          expect(JSON.parse(intactRead.chunk.text!).payload.scorers).toEqual(secondMeasurement.receipt.scorers)
+          const intactRead = await readExactArtifact(host.engineArtifacts, intactSecond.locator, { maxBytes: 65_536 })
+          expect(JSON.parse(new TextDecoder().decode(intactRead.bytes)).payload.scorers).toEqual(
+            secondMeasurement.receipt.scorers,
+          )
           ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
           const integrityReviewReceipt = JSON.parse(
             await executePublishEvolutionArtifact(
@@ -2154,20 +2291,13 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                   unknowns: ["candidate arm remains a separate immutable Trial"],
                 },
                 resource_set: null,
-                source_artifact_locators: [evaluationReceipt.locator, metricEvidenceLocator],
               },
               { host } as never,
             ),
           ) as { locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
           expect(
-            (
-              await host.engineArtifacts.read({
-                locator: integrityReviewReceipt.locator,
-                byte_offset: 0,
-                max_bytes: 65_536,
-                delivery: "inline",
-              })
-            ).chunk.complete,
+            (await readExactArtifact(host.engineArtifacts, integrityReviewReceipt.locator, { maxBytes: 65_536 })).bytes
+              .byteLength > 0,
           ).toBe(true)
           await host.engineArtifacts.select({
             locator: integrityReviewReceipt.locator,
@@ -2209,41 +2339,84 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           const reusedReceipts: Array<Record<string, unknown>> = []
           for (const runLocator of [runReceipt.locator, reusedTrialRun.locator]) {
             ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
-            const measured = JSON.parse(await executeEvolutionMetricsTool.execute({
-              campaign_spec_locator: repeatedTrialCampaign.locator, candidate_revision_locator: null,
-              run_evidence_locator: runLocator, iteration: 0, delivery_slice_revision_id: null,
-              visual_feedback_verification_artifact_locators: [],
-            } as never, { host } as never))
+            const measured = JSON.parse(
+              await executeEvolutionMetricsTool.execute(
+                {
+                  campaign_spec_locator: repeatedTrialCampaign.locator,
+                  candidate_revision_locator: null,
+                  run_evidence_locator: runLocator,
+                  iteration: 0,
+                  delivery_slice_revision_id: null,
+                  visual_feedback_verification_artifact_locators: [],
+                } as never,
+                { host } as never,
+              ),
+            )
             repeatedTrialIDs.push(measured.receipt.trial_task_id)
             reusedReceipts.push(measured.receipt)
-            const evaluation = JSON.parse(await executePublishEvolutionArtifact({
-              artifact_type: "evolution-lab/evaluation-result", payload: {}, resource_set: measured.resource_set,
-              source_artifact_locators: [],
-            }, { host } as never)) as { locator: EngineArtifactLocator }
+            const evaluation = JSON.parse(
+              await executePublishEvolutionArtifact(
+                {
+                  artifact_type: "evolution-lab/evaluation-result",
+                  payload: {},
+                  resource_set: measured.resource_set,
+                },
+                { host } as never,
+              ),
+            ) as { locator: EngineArtifactLocator }
             reusedEvaluations.push(evaluation.locator)
             ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
-            await executePublishEvolutionArtifact({ artifact_type: "evolution-lab/integrity-review",
-              payload: { case_id: "case-1", arm: "baseline", repetition: measured.receipt.repetition,
-                evaluation_result_locator: evaluation.locator, status: "reviewed", findings: [], accepted_limitations: [], unknowns: [] },
-              resource_set: null, source_artifact_locators: [evaluation.locator],
-            }, { host } as never)
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/integrity-review",
+                payload: {
+                  case_id: "case-1",
+                  arm: "baseline",
+                  repetition: measured.receipt.repetition,
+                  evaluation_result_locator: evaluation.locator,
+                  status: "reviewed",
+                  findings: [],
+                  accepted_limitations: [],
+                  unknowns: [],
+                },
+                resource_set: null,
+              },
+              { host } as never,
+            )
           }
           expect(repeatedTrialIDs).toEqual([trialTaskID, trialTaskID])
           ;(scope.owner as { agentID: string }).agentID = "evolution-recommendation-owner"
           // The Owner names only the pair. Every measurement bound to it is
           // consumed, so the reused Trial is disclosed instead of refused.
-          const trialCollision = JSON.parse(await executePublishEvolutionArtifact({
-            artifact_type: "evolution-lab/comparison-recommendation", payload: {}, resource_set: null,
-            source_artifact_locators: [repeatedTrialCampaign.locator, candidateSource.locator],
-          }, { host } as never)) as { locator: EngineArtifactLocator }
-          const collisionEnvelope = EngineArtifactEnvelopeSchema.parse(JSON.parse((await host.engineArtifacts.read({
-            locator: trialCollision.locator, byte_offset: 0, max_bytes: 65_536, delivery: "inline",
-          })).chunk.text!))
-          const collision = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(collisionEnvelope.payload)
+          const trialCollision = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/comparison-recommendation",
+                payload: {},
+                resource_set: null,
+                predecessor_artifact_locators: [repeatedTrialCampaign.locator, candidateSource.locator],
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
+          const collisionEnvelope = EngineArtifactEnvelopeSchema.parse(
+            JSON.parse(
+              new TextDecoder().decode(
+                (await readExactArtifact(host.engineArtifacts, trialCollision.locator, { maxBytes: 65_536 })).bytes,
+              ),
+            ),
+          )
+          const collision = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(
+            collisionEnvelope.payload,
+          )
           expect({
             recommendation: collision.recommendation,
-            collision: collision.required_unavailable_dimensions.filter((item) => item.startsWith("trial_slot_collision:")),
-            evaluations: new Set(evolutionComparisonInputs(collisionEnvelope).evaluations.map((item) => item.artifact_id)),
+            collision: collision.required_unavailable_dimensions.filter((item) =>
+              item.startsWith("trial_slot_collision:"),
+            ),
+            evaluations: new Set(
+              evolutionComparisonInputs(collisionEnvelope).evaluations.map((item) => item.artifact_id),
+            ),
           }).toEqual({
             recommendation: "inconclusive",
             collision: [`trial_slot_collision:${trialTaskID}`],
@@ -2255,34 +2428,89 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           const reusedCurrentReviews: EngineArtifactLocator[] = []
           for (const receipt of reusedReceipts) {
             ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
-            const current = JSON.parse(await publishAlteredReceipt({ ...receipt,
-              campaign_spec_locator: campaignReceipt.locator, run_evidence_locator: runReceipt.locator, repetition: 0 }))
+            const current = JSON.parse(
+              await publishAlteredReceipt({
+                ...receipt,
+                campaign_spec_locator: campaignReceipt.locator,
+                run_evidence_locator: runReceipt.locator,
+                repetition: 0,
+              }),
+            )
             reusedCurrentEvaluations.push(current.locator)
             ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
-            const review = JSON.parse(await executePublishEvolutionArtifact({ artifact_type: "evolution-lab/integrity-review",
-              payload: { case_id: "case-1", arm: "baseline", repetition: 0, evaluation_result_locator: current.locator,
-                status: "reviewed", findings: [], accepted_limitations: [], unknowns: [] },
-              resource_set: null, source_artifact_locators: [current.locator] }, { host } as never))
+            const review = JSON.parse(
+              await executePublishEvolutionArtifact(
+                {
+                  artifact_type: "evolution-lab/integrity-review",
+                  payload: {
+                    case_id: "case-1",
+                    arm: "baseline",
+                    repetition: 0,
+                    evaluation_result_locator: current.locator,
+                    status: "reviewed",
+                    findings: [],
+                    accepted_limitations: [],
+                    unknowns: [],
+                  },
+                  resource_set: null,
+                },
+                { host } as never,
+              ),
+            )
             reusedCurrentReviews.push(review.locator)
           }
           const originalReviewLocator = EngineArtifactLocatorSchema.parse(integrityReviewReceipt.locator)
-          sourceMeasurementImports = [candidateSource.locator, evaluationReceipt.locator, originalReviewLocator, metricEvidenceLocator]
+          sourceMeasurementImports = [
+            candidateSource.locator,
+            evaluationReceipt.locator,
+            originalReviewLocator,
+            metricEvidenceLocator,
+          ]
           ;(scope.owner as { agentID: string }).agentID = "evolution-recommendation-owner"
-          const unreviewedComparison = JSON.parse(await executePublishEvolutionArtifact({
-            artifact_type: "evolution-lab/comparison-recommendation", payload: {}, resource_set: null,
-            source_artifact_locators: [campaignReceipt.locator, candidateSource.locator, runReceipt.locator, evaluationReceipt.locator],
-          }, { host } as never)) as { locator: EngineArtifactLocator }
-          const unreviewedRead = await host.engineArtifacts.read({ locator: unreviewedComparison.locator,
-            byte_offset: 0, max_bytes: 65_536, delivery: "inline" })
-          expect(EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(JSON.parse(unreviewedRead.chunk.text!).payload)
-            .required_unavailable_dimensions).toEqual(expect.arrayContaining(["integrity_review:case-1:baseline:0"]))
+          const unreviewedComparison = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/comparison-recommendation",
+                payload: {},
+                resource_set: null,
+                predecessor_artifact_locators: [
+                  campaignReceipt.locator,
+                  candidateSource.locator,
+                  runReceipt.locator,
+                  evaluationReceipt.locator,
+                ],
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
+          const unreviewedRead = await readExactArtifact(host.engineArtifacts, unreviewedComparison.locator, {
+            maxBytes: 65_536,
+          })
+          expect(
+            EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(
+              JSON.parse(new TextDecoder().decode(unreviewedRead.bytes)).payload,
+            ).required_unavailable_dimensions,
+          ).toEqual(expect.arrayContaining(["integrity_review:case-1:baseline:0"]))
           ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
-          const initialSecondReview = JSON.parse(await executePublishEvolutionArtifact({
-            artifact_type: "evolution-lab/integrity-review", resource_set: null,
-            payload: { case_id: "case-1", arm: "baseline", repetition: 0,
-              evaluation_result_locator: intactSecond.locator, status: "reviewed", findings: [], accepted_limitations: [], unknowns: [] },
-            source_artifact_locators: [intactSecond.locator],
-          }, { host } as never)) as { locator: EngineArtifactLocator }
+          const initialSecondReview = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/integrity-review",
+                resource_set: null,
+                payload: {
+                  case_id: "case-1",
+                  arm: "baseline",
+                  repetition: 0,
+                  evaluation_result_locator: intactSecond.locator,
+                  status: "reviewed",
+                  findings: [],
+                  accepted_limitations: [],
+                  unknowns: [],
+                },
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
           ;(scope.owner as { agentID: string }).agentID = "evolution-recommendation-owner"
           const expectedComparison = {
             baseline_revision: revision,
@@ -2332,7 +2560,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 artifact_type: "evolution-lab/comparison-recommendation",
                 payload: {},
                 resource_set: null,
-                source_artifact_locators: [
+                predecessor_artifact_locators: [
                   campaignReceipt.locator,
                   candidateSource.locator,
                   runReceipt.locator,
@@ -2343,34 +2571,56 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             ),
           ) as { artifact_type: string; locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
           expect(recommendationReceipt.artifact_type).toBe("evolution-lab/comparison-recommendation")
-          const comparisonRead = await host.engineArtifacts.read({
-            locator: recommendationReceipt.locator,
-            byte_offset: 0,
-            max_bytes: 65_536,
-            delivery: "inline",
+          const comparisonRead = await readExactArtifact(host.engineArtifacts, recommendationReceipt.locator, {
+            maxBytes: 65_536,
           })
-          expect(comparisonRead.chunk.complete).toBe(true)
-          const comparisonEnvelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(comparisonRead.chunk.text!))
+          expect(comparisonRead.bytes.byteLength > 0).toBe(true)
+          const comparisonEnvelope = EngineArtifactEnvelopeSchema.parse(
+            JSON.parse(new TextDecoder().decode(comparisonRead.bytes)),
+          )
           expect(comparisonStatistics(comparisonEnvelope.payload)).toEqual(expectedComparison)
           const consumed = evolutionComparisonInputs(comparisonEnvelope)
-          expect({ campaign: consumed.campaign, candidate: consumed.candidate,
+          expect({
+            campaign: consumed.campaign,
+            candidate: consumed.candidate,
             runs: new Set(consumed.runs.map((item) => item.artifact_id)),
             evaluations: new Set(consumed.evaluations.map((item) => item.artifact_id)),
-            reviews: new Set(consumed.reviews.map((item) => item.artifact_id)) }).toEqual({
-              campaign: campaignReceipt.locator, candidate: candidateSource.locator,
-              runs: new Set([runReceipt.locator.artifact_id, runAlias.locator.artifact_id]),
-              // The Owner selected one measurement; the separately executed second
-              // measurement of the same slot is consumed as well.
-              evaluations: new Set([evaluationReceipt.locator.artifact_id, evaluationAlias.locator.artifact_id,
-                intactSecond.locator.artifact_id, ...reusedCurrentEvaluations.map((item) => item.artifact_id)]),
-              reviews: new Set([originalReviewLocator.artifact_id, initialSecondReview.locator.artifact_id, ...reusedCurrentReviews.map((item) => item.artifact_id)]),
-            })
-          expect(comparisonEnvelope.source_artifact_locators.some((item) => item.source === "task_artifact_resource")).toBe(true)
-          const facts = Database.use((db) => db.select().from(EngineArtifactTable)
-            .where(eq(EngineArtifactTable.task_id, scope.taskID)).all())
-            .filter((row) => row.kind === "expert_output").map((row) => ({ taskID: row.task_id,
-              locator: { source: "engine_artifact" as const, artifact_id: row.id,
-                catalog_revision: row.catalog_revision, expected_sha256: row.payload_sha256 }, envelope: row.payload }))
+            reviews: new Set(consumed.reviews.map((item) => item.artifact_id)),
+          }).toEqual({
+            campaign: campaignReceipt.locator,
+            candidate: candidateSource.locator,
+            runs: new Set([runReceipt.locator.artifact_id, runAlias.locator.artifact_id]),
+            // The Owner selected one measurement; the separately executed second
+            // measurement of the same slot is consumed as well.
+            evaluations: new Set([
+              evaluationReceipt.locator.artifact_id,
+              evaluationAlias.locator.artifact_id,
+              intactSecond.locator.artifact_id,
+              ...reusedCurrentEvaluations.map((item) => item.artifact_id),
+            ]),
+            reviews: new Set([
+              originalReviewLocator.artifact_id,
+              initialSecondReview.locator.artifact_id,
+              ...reusedCurrentReviews.map((item) => item.artifact_id),
+            ]),
+          })
+          expect(
+            comparisonEnvelope.source_artifact_locators.some((item) => item.source === "task_artifact_resource"),
+          ).toBe(true)
+          const facts = Database.use((db) =>
+            db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.task_id, scope.taskID)).all(),
+          )
+            .filter((row) => row.kind === "expert_output")
+            .map((row) => ({
+              taskID: row.task_id,
+              locator: {
+                source: "engine_artifact" as const,
+                artifact_id: row.id,
+                catalog_revision: row.catalog_revision,
+                expected_sha256: row.payload_sha256,
+              },
+              envelope: row.payload,
+            }))
           // The independent harness has one declared opportunity/attribution
           // profile and one logical Comparison. This Host fixture also publishes
           // another scope's pair and the repeated-Trial Campaign's disclosed
@@ -2378,47 +2628,81 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           // actual broad Comparison graph.
           const profileFacts = facts.filter((fact) => {
             const type = EngineArtifactEnvelopeSchema.parse(fact.envelope).artifact_type
-            return type === "evolution-lab/opportunity" ? JSON.stringify(fact.locator) === JSON.stringify(opportunityReceipt.locator)
-              : type === "evolution-lab/failure-attribution" ? JSON.stringify(fact.locator) === JSON.stringify(attributionReceipt.locator)
-                : type === "evolution-lab/comparison-recommendation" ? JSON.stringify(fact.locator) === JSON.stringify(recommendationReceipt.locator) : true
+            return type === "evolution-lab/opportunity"
+              ? JSON.stringify(fact.locator) === JSON.stringify(opportunityReceipt.locator)
+              : type === "evolution-lab/failure-attribution"
+                ? JSON.stringify(fact.locator) === JSON.stringify(attributionReceipt.locator)
+                : type === "evolution-lab/comparison-recommendation"
+                  ? JSON.stringify(fact.locator) === JSON.stringify(recommendationReceipt.locator)
+                  : true
           })
           expect(summarizeEvolutionEvidence(profileFacts).recommendation.locator).toEqual(recommendationReceipt.locator)
-
           ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
-          const transportedEvaluation = JSON.parse(await publishAlteredReceipt({ ...metricOutcome.receipt,
-            run_evidence_locator: runAlias.locator })) as { locator: EngineArtifactLocator }
+          const transportedEvaluation = JSON.parse(
+            await publishAlteredReceipt({ ...metricOutcome.receipt, run_evidence_locator: runAlias.locator }),
+          ) as { locator: EngineArtifactLocator }
           const readEvaluation = async (locator: EngineArtifactLocator) => {
-            const read = await host.engineArtifacts.read({ locator, byte_offset: 0, max_bytes: 65_536, delivery: "inline" })
-            return EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse(JSON.parse(read.chunk.text!).payload)
+            const read = await readExactArtifact(host.engineArtifacts, locator, { maxBytes: 65_536 })
+            return EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse(
+              JSON.parse(new TextDecoder().decode(read.bytes)).payload,
+            )
           }
           const originalMeasured = await readEvaluation(EngineArtifactLocatorSchema.parse(evaluationReceipt.locator))
           const transportedMeasured = await readEvaluation(transportedEvaluation.locator)
           expect(transportedMeasured.measurement_identity).toEqual(originalMeasured.measurement_identity)
           expect(transportedMeasured.scorers).toEqual(originalMeasured.scorers)
-          expect(originalMeasured.measurement_identity!.scorer_results).toEqual(await Promise.all(
-            metricOutcome.receipt.scorers.map(async (scorer) => {
-              const evidence = scorer.evidence[0]!
-              if (evidence.source !== "task_artifact_resource") throw new Error("Expected recorded scorer evidence")
-              const original = await host.metrics.recorded({ evidence_ref: evidence.ref })
-              return { scorer_id: scorer.scorer_id, metric_result_id: original.metric_result_id }
-            })))
+          expect(originalMeasured.measurement_identity!.scorer_results).toEqual(
+            await Promise.all(
+              metricOutcome.receipt.scorers.map(async (scorer) => {
+                const evidence = scorer.evidence[0]!
+                if (evidence.source !== "task_artifact_resource") throw new Error("Expected recorded scorer evidence")
+                const original = await host.metrics.recorded({ evidence_ref: evidence.ref })
+                return { scorer_id: scorer.scorer_id, metric_result_id: original.metric_result_id }
+              }),
+            ),
+          )
           const separatelyMeasured = await readEvaluation(EngineArtifactLocatorSchema.parse(intactSecond.locator))
-          expect(new Set([originalMeasured.measurement_identity!.scorer_results[0]!.metric_result_id,
-            separatelyMeasured.measurement_identity!.scorer_results[0]!.metric_result_id]).size).toBe(2)
+          expect(
+            new Set([
+              originalMeasured.measurement_identity!.scorer_results[0]!.metric_result_id,
+              separatelyMeasured.measurement_identity!.scorer_results[0]!.metric_result_id,
+            ]).size,
+          ).toBe(2)
           ;(scope.owner as { agentID: string }).agentID = "evolution-recommendation-owner"
-          const aliasComparison = JSON.parse(await executePublishEvolutionArtifact({
-            artifact_type: "evolution-lab/comparison-recommendation", payload: {}, resource_set: null,
-            source_artifact_locators: [campaignReceipt.locator, candidateSource.locator, runReceipt.locator,
-              runAlias.locator, evaluationReceipt.locator, evaluationAlias.locator],
-          }, { host } as never)) as typeof recommendationReceipt
-          const aliasRead = await host.engineArtifacts.read({ locator: aliasComparison.locator,
-            byte_offset: 0, max_bytes: 65_536, delivery: "inline" })
-          const aliasEnvelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(aliasRead.chunk.text!))
+          const aliasComparison = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/comparison-recommendation",
+                payload: {},
+                resource_set: null,
+                predecessor_artifact_locators: [
+                  campaignReceipt.locator,
+                  candidateSource.locator,
+                  runReceipt.locator,
+                  runAlias.locator,
+                  evaluationReceipt.locator,
+                  evaluationAlias.locator,
+                ],
+              },
+              { host } as never,
+            ),
+          ) as typeof recommendationReceipt
+          const aliasRead = await readExactArtifact(host.engineArtifacts, aliasComparison.locator, { maxBytes: 65_536 })
+          const aliasEnvelope = EngineArtifactEnvelopeSchema.parse(
+            JSON.parse(new TextDecoder().decode(aliasRead.bytes)),
+          )
           expect(comparisonStatistics(aliasEnvelope.payload)).toEqual(expectedComparison)
-          expect(evolutionComparisonInputs(aliasEnvelope).evaluations).toEqual(expect.arrayContaining([transportedEvaluation.locator]))
+          expect(evolutionComparisonInputs(aliasEnvelope).evaluations).toEqual(
+            expect.arrayContaining([transportedEvaluation.locator]),
+          )
 
-          expect(aliasEnvelope.source_artifact_locators.filter((item) => [runReceipt.locator, runAlias.locator,
-            evaluationReceipt.locator, evaluationAlias.locator].some((alias) => JSON.stringify(alias) === JSON.stringify(item))).length).toBe(4)
+          expect(
+            aliasEnvelope.source_artifact_locators.filter((item) =>
+              [runReceipt.locator, runAlias.locator, evaluationReceipt.locator, evaluationAlias.locator].some(
+                (alias) => JSON.stringify(alias) === JSON.stringify(item),
+              ),
+            ).length,
+          ).toBe(4)
           const comparisonSources = [
             campaignReceipt.locator,
             candidateSource.locator,
@@ -2433,22 +2717,13 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                   artifact_type: "evolution-lab/comparison-recommendation",
                   payload: {},
                   resource_set: null,
-                  source_artifact_locators: comparisonSources,
+                  predecessor_artifact_locators: comparisonSources,
                 },
                 { host } as never,
               ),
             ) as { locator: EngineArtifactLocator }
-            let offset = 0
-            let text = ""
-            for (;;) {
-              const read = await host.engineArtifacts.read({ locator: receipt.locator,
-                byte_offset: offset, max_bytes: 65_536, delivery: "inline" })
-              text += read.chunk.text!
-              if (read.chunk.complete) break
-              if (read.chunk.next_offset === null) throw new Error("Comparison read ended before its complete byte range")
-              offset = read.chunk.next_offset
-            }
-            return EngineArtifactEnvelopeSchema.parse(JSON.parse(text))
+            const read = await readExactArtifact(host.engineArtifacts, receipt.locator)
+            return EngineArtifactEnvelopeSchema.parse(JSON.parse(new TextDecoder().decode(read.bytes)))
           }
           const reviewPayload = {
             case_id: metricOutcome.receipt.case_id,
@@ -2468,7 +2743,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 payload: reviewPayload,
                 resource_set: null,
                 // An ordinary citation is evidence, not a replacement operation.
-                source_artifact_locators: [evaluationReceipt.locator, originalReviewLocator],
               },
               { host } as never,
             ),
@@ -2502,7 +2776,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                     ],
                   },
                   resource_set: null,
-                  source_artifact_locators: [evaluationReceipt.locator],
                 },
                 { host } as never,
               ),
@@ -2525,7 +2798,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                   },
                 },
                 resource_set: null,
-                source_artifact_locators: [evaluationReceipt.locator, originalReviewLocator],
               },
               { host } as never,
             ),
@@ -2543,12 +2815,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                   },
                 },
                 resource_set: null,
-                source_artifact_locators: [
-                  evaluationReceipt.locator,
-                  originalReviewLocator,
-                  parallelReview.locator,
-                  ...pagedReviews,
-                ],
               },
               { host } as never,
             ),
@@ -2582,212 +2848,438 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             expect.arrayContaining([originalReviewLocator, parallelReview.locator, revisedReview.locator]),
           )
           ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
-          const aliasReview = JSON.parse(await executePublishEvolutionArtifact({
-            artifact_type: "evolution-lab/integrity-review", resource_set: null,
-            payload: { ...reviewPayload, evaluation_result_locator: transportedEvaluation.locator,
-              findings: [{ category: "permission", invariant: "New finding on the identical measurement alias",
-                outcome: "unavailable", evidence: [transportedEvaluation.locator], severity: "blocker",
-                owner: "evolution-safety-auditor", correction: "Investigate the declared evidence boundary." }] },
-            source_artifact_locators: [transportedEvaluation.locator],
-          }, { host } as never)) as { locator: EngineArtifactLocator }
+          const aliasReview = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/integrity-review",
+                resource_set: null,
+                payload: {
+                  ...reviewPayload,
+                  evaluation_result_locator: transportedEvaluation.locator,
+                  findings: [
+                    {
+                      category: "permission",
+                      invariant: "New finding on the identical measurement alias",
+                      outcome: "unavailable",
+                      evidence: [transportedEvaluation.locator],
+                      severity: "blocker",
+                      owner: "evolution-safety-auditor",
+                      correction: "Investigate the declared evidence boundary.",
+                    },
+                  ],
+                },
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
           const aliasReviewedComparison = await publishComparison()
           const aliasRequired = `integrity_finding:case-1:baseline:0:${aliasReview.locator.artifact_id}:permission:0`
-          expect((aliasReviewedComparison.payload as typeof expectedComparison).required_unavailable_dimensions)
-            .toEqual([...(revisedComparison.payload as typeof expectedComparison).required_unavailable_dimensions, aliasRequired].sort())
-          expect(aliasReviewedComparison.source_artifact_locators).toEqual(expect.arrayContaining([
-            runAlias.locator, evaluationAlias.locator, aliasReview.locator,
-          ]))
+          expect(
+            (aliasReviewedComparison.payload as typeof expectedComparison).required_unavailable_dimensions,
+          ).toEqual(
+            [
+              ...(revisedComparison.payload as typeof expectedComparison).required_unavailable_dimensions,
+              aliasRequired,
+            ].sort(),
+          )
+          expect(aliasReviewedComparison.source_artifact_locators).toEqual(
+            expect.arrayContaining([runAlias.locator, evaluationAlias.locator, aliasReview.locator]),
+          )
           ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
-          const correctedAliasReview = JSON.parse(await executePublishEvolutionArtifact({
-            artifact_type: "evolution-lab/integrity-review", resource_set: null,
-            payload: { ...reviewPayload, evaluation_result_locator: transportedEvaluation.locator,
-              revision: { supersedes: [aliasReview.locator], reason: "The same original evidence resolves the earlier uncertainty." } },
-            source_artifact_locators: [transportedEvaluation.locator, aliasReview.locator],
-          }, { host } as never)) as { locator: EngineArtifactLocator }
+          const correctedAliasReview = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/integrity-review",
+                resource_set: null,
+                payload: {
+                  ...reviewPayload,
+                  evaluation_result_locator: transportedEvaluation.locator,
+                  revision: {
+                    supersedes: [aliasReview.locator],
+                    reason: "The same original evidence resolves the earlier uncertainty.",
+                  },
+                },
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
           const correctedAliasComparison = await publishComparison()
-          expect(comparisonStatistics(correctedAliasComparison.payload)).toEqual(comparisonStatistics(revisedComparison.payload))
-          expect(correctedAliasComparison.source_artifact_locators).toEqual(expect.arrayContaining([
-            evaluationReceipt.locator, evaluationAlias.locator, aliasReview.locator, correctedAliasReview.locator,
-          ]))
+          expect(comparisonStatistics(correctedAliasComparison.payload)).toEqual(
+            comparisonStatistics(revisedComparison.payload),
+          )
+          expect(correctedAliasComparison.source_artifact_locators).toEqual(
+            expect.arrayContaining([
+              evaluationReceipt.locator,
+              evaluationAlias.locator,
+              aliasReview.locator,
+              correctedAliasReview.locator,
+            ]),
+          )
           // One more complete native invocation of the same frozen scorer and
           // immutable Trial. Its original request remains the exact context
           // even before any Evaluation transports these measured results.
           ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
           await writeFile(metricObservationControl, "0")
-          const thirdCall = { ...scope, messageID: Identifier.ascending("message"),
-            toolCallID: "call-g53-metric-third", toolPartID: Identifier.ascending("part"),
-            owner: { ...scope.owner } }
+          const thirdCall = {
+            ...scope,
+            messageID: Identifier.ascending("message"),
+            toolCallID: "call-g53-metric-third",
+            toolPartID: Identifier.ascending("part"),
+            owner: { ...scope.owner },
+          }
           const thirdStarted = Date.now()
-          await Session.updateMessage({ id: thirdCall.messageID, sessionID: thirdCall.sessionID,
-            role: "assistant", author: "evolution-evaluator", time: { created: thirdStarted }, parentID: userMessage.id,
-            modelID: "test", providerID: "test", agent: "evolution-evaluator",
-            path: { cwd: project.path, root: project.path }, cost: 0,
-            tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } }, finish: "stop" })
-          await Session.updatePart({ id: Identifier.ascending("part"), sessionID: thirdCall.sessionID,
-            messageID: thirdCall.messageID, type: "step-start" })
-          await Session.updatePart({ id: thirdCall.toolPartID, sessionID: thirdCall.sessionID,
-            messageID: thirdCall.messageID, type: "tool", tool: "execute-evolution-metrics", callID: thirdCall.toolCallID,
-            state: { status: "running", input: secondInput, time: { start: thirdStarted } } })
+          await Session.updateMessage({
+            id: thirdCall.messageID,
+            sessionID: thirdCall.sessionID,
+            role: "assistant",
+            author: "evolution-evaluator",
+            time: { created: thirdStarted },
+            parentID: userMessage.id,
+            modelID: "test",
+            providerID: "test",
+            agent: "evolution-evaluator",
+            path: { cwd: project.path, root: project.path },
+            cost: 0,
+            tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+            finish: "stop",
+          })
+          await Session.updatePart({
+            id: Identifier.ascending("part"),
+            sessionID: thirdCall.sessionID,
+            messageID: thirdCall.messageID,
+            type: "step-start",
+          })
+          await Session.updatePart({
+            id: thirdCall.toolPartID,
+            sessionID: thirdCall.sessionID,
+            messageID: thirdCall.messageID,
+            type: "tool",
+            tool: "execute-evolution-metrics",
+            callID: thirdCall.toolCallID,
+            state: { status: "running", input: secondInput, time: { start: thirdStarted } },
+          })
           const thirdMeasurement = await withTaskScopedPluginToolHost(thirdCall, async (thirdHost) =>
-            JSON.parse(await executeEvolutionMetricsTool.execute(secondInput, { host: thirdHost } as never)))
+            JSON.parse(await executeEvolutionMetricsTool.execute(secondInput, { host: thirdHost } as never)),
+          )
           const thirdRef = TaskArtifactRefSchema.parse(thirdMeasurement.receipt.scorers[0].evidence[0].ref)
           const whileRunning = await host.metrics.recorded({ evidence_ref: thirdRef })
-          expect(whileRunning).toMatchObject({ tool_request: {
-            tool_part_id: thirdCall.toolPartID, tool_name: "execute-evolution-metrics", input: secondInput,
-          } })
-          const producerRequest = { taskID, sessionID: thirdCall.sessionID,
-            messageID: thirdCall.messageID, toolCallID: thirdCall.toolCallID }
-          expect(() => readTaskAssistantProducerToolRequest({ ...producerRequest, taskID: otherModelTrial.trialTaskID }))
-            .toThrow(`Producer session ${thirdCall.sessionID} does not belong to Task ${otherModelTrial.trialTaskID}.`)
-          expect(() => readTaskAssistantProducerToolRequest({ ...producerRequest, toolCallID: "missing-call-g54" }))
-            .toThrow(`Producer Tool request missing-call-g54 does not exist on assistant message ${thirdCall.messageID}.`)
-          await Session.updatePart({ id: thirdCall.toolPartID, sessionID: thirdCall.sessionID,
-            messageID: thirdCall.messageID, type: "tool", tool: "execute-evolution-metrics", callID: thirdCall.toolCallID,
-            state: { status: "error", input: secondInput, failure: {
-              kind: "test-driver", name: "PostMeasurementFailure", message: "The call failed after its measured results were recorded",
-              originSite: "evolution-artifact-evidence-host.test", classification: "tool-execution",
-            }, time: { start: thirdStarted, end: Date.now() } } })
+          expect(whileRunning).toMatchObject({
+            tool_request: {
+              tool_part_id: thirdCall.toolPartID,
+              tool_name: "execute-evolution-metrics",
+              input: secondInput,
+            },
+          })
+          const producerRequest = {
+            taskID,
+            sessionID: thirdCall.sessionID,
+            messageID: thirdCall.messageID,
+            toolCallID: thirdCall.toolCallID,
+          }
+          expect(() =>
+            readTaskAssistantProducerToolRequest({ ...producerRequest, taskID: otherModelTrial.trialTaskID }),
+          ).toThrow(`Producer session ${thirdCall.sessionID} does not belong to Task ${otherModelTrial.trialTaskID}.`)
+          expect(() =>
+            readTaskAssistantProducerToolRequest({ ...producerRequest, toolCallID: "missing-call-g54" }),
+          ).toThrow(
+            `Producer Tool request missing-call-g54 does not exist on assistant message ${thirdCall.messageID}.`,
+          )
+          await Session.updatePart({
+            id: thirdCall.toolPartID,
+            sessionID: thirdCall.sessionID,
+            messageID: thirdCall.messageID,
+            type: "tool",
+            tool: "execute-evolution-metrics",
+            callID: thirdCall.toolCallID,
+            state: {
+              status: "error",
+              input: secondInput,
+              failure: {
+                kind: "test-driver",
+                name: "PostMeasurementFailure",
+                message: "The call failed after its measured results were recorded",
+                originSite: "evolution-artifact-evidence-host.test",
+                classification: "tool-execution",
+              },
+              time: { start: thirdStarted, end: Date.now() },
+            },
+          })
           await writeFile(metricObservationControl, "1")
           const thirdRecorded = await host.metrics.recorded({ evidence_ref: thirdRef })
           expect(thirdRecorded).toEqual(whileRunning)
-          const thirdAttempt = MetricExecutionEvidence.parse(JSON.parse(new TextDecoder().decode(await host.taskArtifacts.read(thirdRef))))
-          expect(thirdRecorded).toMatchObject({ task_id: taskID, trial_task_id: trialTaskID, iteration: 0,
-            producer: { session_id: thirdCall.sessionID, message_id: thirdCall.messageID, tool_call_id: thirdCall.toolCallID },
-            outcome: { status: "measured", value: 0 } })
+          const thirdAttempt = MetricExecutionEvidence.parse(
+            JSON.parse(new TextDecoder().decode(await host.taskArtifacts.read(thirdRef))),
+          )
+          expect(thirdRecorded).toMatchObject({
+            task_id: taskID,
+            trial_task_id: trialTaskID,
+            iteration: 0,
+            producer: {
+              session_id: thirdCall.sessionID,
+              message_id: thirdCall.messageID,
+              tool_call_id: thirdCall.toolCallID,
+            },
+            outcome: { status: "measured", value: 0 },
+          })
           expect(thirdAttempt).toMatchObject({ status: "measured", raw_value: 0, subject: subjectAttempt.subject })
-          expect(readResultsForIteration(taskID, 0).find((row) => row.id === thirdRecorded.metric_result_id))
-            .toMatchObject({ raw_value: 0, evidence_ref: thirdRef, evidence_fresh: true })
-          const savedInvocation = await MessageStore.get({ sessionID: thirdCall.sessionID, messageID: thirdCall.messageID })
-          const savedCalls = savedInvocation.parts.filter((part) => part.type === "tool" && part.callID === thirdCall.toolCallID)
-          expect(savedCalls).toMatchObject([{ type: "tool", tool: "execute-evolution-metrics",
-            state: { status: "error", input: secondInput, failure: { name: "PostMeasurementFailure" } } }])
+          expect(
+            readResultsForIteration(taskID, 0).find((row) => row.id === thirdRecorded.metric_result_id),
+          ).toMatchObject({ raw_value: 0, evidence_ref: thirdRef, evidence_fresh: true })
+          const savedInvocation = await MessageStore.get({
+            sessionID: thirdCall.sessionID,
+            messageID: thirdCall.messageID,
+          })
+          const savedCalls = savedInvocation.parts.filter(
+            (part) => part.type === "tool" && part.callID === thirdCall.toolCallID,
+          )
+          expect(savedCalls).toMatchObject([
+            {
+              type: "tool",
+              tool: "execute-evolution-metrics",
+              state: { status: "error", input: secondInput, failure: { name: "PostMeasurementFailure" } },
+            },
+          ])
           const visibleResources: Array<{ locator: ArtifactReadLocator; producer: unknown }> = []
           let resourceCursor: string | undefined
           do {
-            const page = await host.engineArtifacts.search({ sources: ["task_artifact"], limit: 100,
-              producer_session_ids: [thirdCall.sessionID], ...(resourceCursor ? { cursor: resourceCursor } : {}) })
-            expect({ complete: page.catalog_complete, errors: page.provider_errors }).toEqual({ complete: true, errors: [] })
+            const page = await host.engineArtifacts.search({
+              sources: ["task_artifact"],
+              limit: 100,
+              producer_session_ids: [thirdCall.sessionID],
+              ...(resourceCursor ? { cursor: resourceCursor } : {}),
+            })
+            expect({ complete: page.catalog_complete, errors: page.provider_errors }).toEqual({
+              complete: true,
+              errors: [],
+            })
             visibleResources.push(...page.entries)
             resourceCursor = page.next_cursor ?? undefined
           } while (resourceCursor)
-          expect(visibleResources.find(({ locator }) => locator.source === "task_artifact_resource" &&
-            JSON.stringify(locator.ref) === JSON.stringify(thirdRef)))
-            .toMatchObject({ producer: thirdRecorded.producer })
+          expect(
+            visibleResources.find(
+              ({ locator }) =>
+                locator.source === "task_artifact_resource" && JSON.stringify(locator.ref) === JSON.stringify(thirdRef),
+            ),
+          ).toMatchObject({ producer: thirdRecorded.producer })
           const thirdReceiptRef = TaskArtifactRefSchema.parse(thirdMeasurement.resource)
-          const recoveredReceipt = visibleResources.find(({ locator }) => locator.source === "task_artifact_resource" &&
-            JSON.stringify(locator.ref) === JSON.stringify(thirdReceiptRef))
+          const recoveredReceipt = visibleResources.find(
+            ({ locator }) =>
+              locator.source === "task_artifact_resource" &&
+              JSON.stringify(locator.ref) === JSON.stringify(thirdReceiptRef),
+          )
           expect(recoveredReceipt).toMatchObject({ producer: thirdRecorded.producer })
-          if (recoveredReceipt?.locator.source !== "task_artifact_resource") throw new Error("Expected the original catalog receipt")
-          const recoveredRead = await host.engineArtifacts.read({ locator: recoveredReceipt.locator,
-            byte_offset: 0, max_bytes: 65_536, delivery: "inline" })
-          expect({ complete: recoveredRead.chunk.complete, receipt: JSON.parse(recoveredRead.chunk.text!) })
-            .toEqual({ complete: true, receipt: thirdMeasurement.receipt })
+          if (recoveredReceipt?.locator.source !== "task_artifact_resource")
+            throw new Error("Expected the original catalog receipt")
+          const recoveredRead = await readExactArtifact(host.engineArtifacts, recoveredReceipt.locator, {
+            maxBytes: 65_536,
+          })
+          expect({
+            complete: recoveredRead.bytes.byteLength > 0,
+            receipt: JSON.parse(new TextDecoder().decode(recoveredRead.bytes)),
+          }).toEqual({
+            complete: true,
+            receipt: thirdMeasurement.receipt,
+          })
           ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
           const nativeSnapshot = await host.metrics.recordedSnapshot()
-          expect(nativeSnapshot.observations.find((item) => item.metric_result_id === thirdRecorded.metric_result_id))
-            .toEqual(thirdRecorded)
-          await expect(host.metrics.assertRecordedSnapshot({ task_id: taskID, result_ids: [] }))
-            .rejects.toThrow(`Native metric snapshot changed for Task ${taskID}; read a new snapshot`)
+          expect(
+            nativeSnapshot.observations.find((item) => item.metric_result_id === thirdRecorded.metric_result_id),
+          ).toEqual(thirdRecorded)
+          await expect(host.metrics.assertRecordedSnapshot({ task_id: taskID, result_ids: [] })).rejects.toThrow(
+            `Native metric snapshot changed for Task ${taskID}; read a new snapshot`,
+          )
           const unpublishedComparison = await publishComparison()
-          const unpublishedPayload = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(unpublishedComparison.payload)
+          const unpublishedPayload = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(
+            unpublishedComparison.payload,
+          )
           const nativeInputs = unpublishedPayload.calculation_inputs!.native_measurements!
-          expect(structuredClone(nativeInputs)).toMatchObject({ task_id: taskID,
+          expect(structuredClone(nativeInputs)).toMatchObject({
+            task_id: taskID,
             result_ids: nativeSnapshot.observations.map((item) => item.metric_result_id).sort(),
-            unpublished: expect.arrayContaining([{ metric_result_id: thirdRecorded.metric_result_id,
-              evidence_ref: thirdRef, run_locators: expect.arrayContaining([runReceipt.locator]) }]) })
-          expect(unpublishedPayload.required_unavailable_dimensions.filter((item) => item.startsWith("unpublished_measurement:")))
-            .toEqual(nativeInputs.unpublished.map((item) => `unpublished_measurement:${taskID}:${item.metric_result_id}`).sort())
+            unpublished: expect.arrayContaining([
+              {
+                metric_result_id: thirdRecorded.metric_result_id,
+                evidence_ref: thirdRef,
+                run_locators: expect.arrayContaining([runReceipt.locator]),
+              },
+            ]),
+          })
+          expect(
+            unpublishedPayload.required_unavailable_dimensions.filter((item) =>
+              item.startsWith("unpublished_measurement:"),
+            ),
+          ).toEqual(
+            nativeInputs.unpublished.map((item) => `unpublished_measurement:${taskID}:${item.metric_result_id}`).sort(),
+          )
           expect(unpublishedPayload.recommendation).toBe("inconclusive")
           expect(evolutionComparisonInputs(unpublishedComparison).native_measurements).toEqual(nativeInputs)
           ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
-          const thirdEvaluation = JSON.parse(await executePublishEvolutionArtifact({
-            artifact_type: "evolution-lab/evaluation-result", payload: {},
-            resource_set: { snapshot: recoveredReceipt.locator.ref.snapshot, tree: recoveredReceipt.locator.ref.tree },
-            source_artifact_locators: [campaignReceipt.locator, runReceipt.locator,
-              { source: "task_artifact_resource", ref: thirdRef }],
-          }, { host } as never)) as { locator: EngineArtifactLocator }
+          const thirdEvaluation = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/evaluation-result",
+                payload: {},
+                resource_set: {
+                  snapshot: recoveredReceipt.locator.ref.snapshot,
+                  tree: recoveredReceipt.locator.ref.tree,
+                },
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
           ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
-          await executePublishEvolutionArtifact({ artifact_type: "evolution-lab/integrity-review", resource_set: null,
-            payload: { ...reviewPayload, evaluation_result_locator: thirdEvaluation.locator },
-            source_artifact_locators: [thirdEvaluation.locator] }, { host } as never)
+          await executePublishEvolutionArtifact(
+            {
+              artifact_type: "evolution-lab/integrity-review",
+              resource_set: null,
+              payload: { ...reviewPayload, evaluation_result_locator: thirdEvaluation.locator },
+            },
+            { host } as never,
+          )
           const thirdComparison = await publishComparison()
-          const thirdComparisonPayload = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(thirdComparison.payload)
+          const thirdComparisonPayload = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(
+            thirdComparison.payload,
+          )
           expect(thirdComparisonPayload.calculation_inputs!.native_measurements!.unpublished).toEqual([])
-          expect({ recommendation: thirdComparisonPayload.recommendation,
-            conflict: thirdComparisonPayload.required_unavailable_dimensions.filter((item) => item.startsWith("scorer_conflict:")),
-            inputs: evolutionComparisonInputs(thirdComparison).evaluations.some((item) => item.artifact_id === thirdEvaluation.locator.artifact_id),
-          }).toEqual({ recommendation: "inconclusive", conflict: ["scorer_conflict:correctness:case-1:baseline:0"], inputs: true })
+          expect({
+            recommendation: thirdComparisonPayload.recommendation,
+            conflict: thirdComparisonPayload.required_unavailable_dimensions.filter((item) =>
+              item.startsWith("scorer_conflict:"),
+            ),
+            inputs: evolutionComparisonInputs(thirdComparison).evaluations.some(
+              (item) => item.artifact_id === thirdEvaluation.locator.artifact_id,
+            ),
+          }).toEqual({
+            recommendation: "inconclusive",
+            conflict: ["scorer_conflict:correctness:case-1:baseline:0"],
+            inputs: true,
+          })
           // A distinct local Trial returns nonnumeric output under the same
           // frozen scorer. Its unavailable result travels through the package
           // receipt and publisher, rather than being read as a measured null.
           await writeFile(path.join(trialWorktree.directory, "g43-subject.txt"), "2")
           const unavailableTrial = await createTrial("unreadable-number")
           UsageLedger.record({
-            providerID: "provider", modelID: "model", purpose: "session",
+            providerID: "provider",
+            modelID: "model",
+            purpose: "session",
             tokens: { input: 1, output: 1, reasoning: 0, cache: { read: 0, write: 0 }, total: 2 },
-            costUSD: 0, billing: { status: "priced" },
-            sessionID: unavailableTrial.trialWorkerSession.id, agentID: "target-worker",
+            costUSD: 0,
+            billing: { status: "priced" },
+            sessionID: unavailableTrial.trialWorkerSession.id,
+            agentID: "target-worker",
           })
           ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
-          const unavailableCollection = JSON.parse(await collectRunEvidenceTool.execute({
-            task_id: unavailableTrial.trialTaskID, terminal_occurrence: unavailableTrial.terminalOccurrence,
-            selected_messages: [],
-          }, { host } as never))
-          const unavailableRun = JSON.parse(await executePublishEvolutionArtifact({
-            artifact_type: "evolution-lab/run-evidence-bundle", payload: runSlot,
-            resource_set: unavailableCollection.resource_set, source_artifact_locators: [campaignReceipt.locator],
-          }, { host } as never))
-          const unavailableMeasurement = JSON.parse(await executeEvolutionMetricsTool.execute({
-            campaign_spec_locator: campaignReceipt.locator, candidate_revision_locator: null,
-            run_evidence_locator: unavailableRun.locator, iteration: 1, delivery_slice_revision_id: null,
-            visual_feedback_verification_artifact_locators: [],
-          }, { host } as never))
+          const unavailableCollection = JSON.parse(
+            await collectRunEvidenceTool.execute(
+              {
+                task_id: unavailableTrial.trialTaskID,
+                terminal_occurrence: unavailableTrial.terminalOccurrence,
+                selected_messages: [],
+              },
+              { host } as never,
+            ),
+          )
+          const unavailableRun = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/run-evidence-bundle",
+                payload: runSlot,
+                resource_set: unavailableCollection.resource_set,
+                predecessor_artifact_locators: [campaignReceipt.locator],
+              },
+              { host } as never,
+            ),
+          )
+          const unavailableMeasurement = JSON.parse(
+            await executeEvolutionMetricsTool.execute(
+              {
+                campaign_spec_locator: campaignReceipt.locator,
+                candidate_revision_locator: null,
+                run_evidence_locator: unavailableRun.locator,
+                iteration: 1,
+                delivery_slice_revision_id: null,
+                visual_feedback_verification_artifact_locators: [],
+              },
+              { host } as never,
+            ),
+          )
           expect(unavailableMeasurement.receipt.scorers).toMatchObject([
             { scorer_id: "correctness", status: "unavailable", reason: "parse_failed" },
             { scorer_id: "coverage", status: "measured", value: 1 },
           ])
-          const unavailableEvaluation = JSON.parse(await executePublishEvolutionArtifact({
-            artifact_type: "evolution-lab/evaluation-result", payload: {},
-            resource_set: unavailableMeasurement.resource_set,
-            source_artifact_locators: [campaignReceipt.locator, unavailableRun.locator,
-              unavailableMeasurement.receipt.scorers[0].evidence[0]],
-          }, { host } as never))
-          const unavailableRead = await host.engineArtifacts.read({
-            locator: unavailableEvaluation.locator, byte_offset: 0, max_bytes: 65_536, delivery: "inline",
+          const unavailableEvaluation = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/evaluation-result",
+                payload: {},
+                resource_set: unavailableMeasurement.resource_set,
+              },
+              { host } as never,
+            ),
+          )
+          const unavailableRead = await readExactArtifact(host.engineArtifacts, unavailableEvaluation.locator, {
+            maxBytes: 65_536,
           })
-          expect(JSON.parse(unavailableRead.chunk.text!).payload.scorers).toEqual(unavailableMeasurement.receipt.scorers)
+          expect(JSON.parse(new TextDecoder().decode(unavailableRead.bytes)).payload.scorers).toEqual(
+            unavailableMeasurement.receipt.scorers,
+          )
           // The Owner still names one measurement, but every published
           // measurement of the compared pair is consumed: the separately
           // executed measurement's blocking Review and the second Trial
           // published for the same slot are disclosed, not left out.
           ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
-          const secondMeasurementReview = JSON.parse(await executePublishEvolutionArtifact({
-            artifact_type: "evolution-lab/integrity-review", resource_set: null,
-            payload: {
-              case_id: "case-1", arm: "baseline", repetition: 0, status: "reviewed",
-              evaluation_result_locator: intactSecond.locator,
-              findings: [{
-                category: "permission",
-                invariant: "The separately executed measurement observed the declared permission boundary",
-                outcome: "unavailable", evidence: [intactSecond.locator], severity: "blocker",
-                owner: "evolution-safety-auditor", correction: null,
-              }],
-              accepted_limitations: [], unknowns: [],
-            },
-            source_artifact_locators: [intactSecond.locator],
-          }, { host } as never)) as { locator: EngineArtifactLocator }
+          const secondMeasurementReview = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/integrity-review",
+                resource_set: null,
+                payload: {
+                  case_id: "case-1",
+                  arm: "baseline",
+                  repetition: 0,
+                  status: "reviewed",
+                  evaluation_result_locator: intactSecond.locator,
+                  findings: [
+                    {
+                      category: "permission",
+                      invariant: "The separately executed measurement observed the declared permission boundary",
+                      outcome: "unavailable",
+                      evidence: [intactSecond.locator],
+                      severity: "blocker",
+                      owner: "evolution-safety-auditor",
+                      correction: null,
+                    },
+                  ],
+                  accepted_limitations: [],
+                  unknowns: [],
+                },
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
           const disclosed = await publishComparison()
-          const disclosedPayload = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(disclosed.payload)
+          const disclosedPayload = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(
+            disclosed.payload,
+          )
           const disclosedInputs = evolutionComparisonInputs(disclosed)
           expect({
-            selected: comparisonSources.some((locator) => JSON.stringify(locator) === JSON.stringify(intactSecond.locator)),
+            selected: comparisonSources.some(
+              (locator) => JSON.stringify(locator) === JSON.stringify(intactSecond.locator),
+            ),
             recommendation: disclosedPayload.recommendation,
-            disclosed: disclosedPayload.required_unavailable_dimensions.filter((item) =>
-              item === "trial_conflict:case-1:baseline:0" || item.includes(secondMeasurementReview.locator.artifact_id)),
+            disclosed: disclosedPayload.required_unavailable_dimensions.filter(
+              (item) =>
+                item === "trial_conflict:case-1:baseline:0" ||
+                item.includes(secondMeasurementReview.locator.artifact_id),
+            ),
             evaluations: [intactSecond.locator, unavailableEvaluation.locator].map((locator) =>
-              disclosedInputs.evaluations.some((item) => item.artifact_id === locator.artifact_id)),
+              disclosedInputs.evaluations.some((item) => item.artifact_id === locator.artifact_id),
+            ),
             runs: disclosedInputs.runs.some((item) => item.artifact_id === unavailableRun.locator.artifact_id),
-            review: disclosedInputs.reviews.some((item) => item.artifact_id === secondMeasurementReview.locator.artifact_id),
+            review: disclosedInputs.reviews.some(
+              (item) => item.artifact_id === secondMeasurementReview.locator.artifact_id,
+            ),
           }).toEqual({
             selected: false,
             recommendation: "inconclusive",
@@ -2962,16 +3454,20 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         await withTaskScopedPluginToolHost(importedScope, async (host) => {
           const importedEvidence = []
           for (const [type, locator] of importedLocators) {
-            const read = await host.engineArtifacts.read({locator, byte_offset:0, max_bytes:65_536, delivery:"inline"})
-            if (!read.chunk.complete) throw new Error("Expected complete imported envelope")
-            const envelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(read.chunk.text!))
+            const read = await readExactArtifact(host.engineArtifacts, locator, { maxBytes: 65_536 })
+            if (!(read.bytes.byteLength > 0)) throw new Error("Expected complete imported envelope")
+            const envelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(new TextDecoder().decode(read.bytes)))
             importedEvidence.push({ type, locator, envelope })
           }
           const direct = importedEvidence.find((item) => item.type === "opencorvus/imported-task-artifact-resource")!
           const nested = importedEvidence.find((item) => item.type === "evolution-lab/evaluation-result")!
           const nestedAttempt = nested.envelope.resources.find((ref) => ref.sha256 === sourceMetricEvidence.sha256)!
-          const nestedManifest = await readTaskArtifactSnapshotManifest({projectID:importedScope.projectID,
-            projectDirectory:project.path, taskID:importedTaskID, snapshot:nestedAttempt.snapshot})
+          const nestedManifest = await readTaskArtifactSnapshotManifest({
+            projectID: importedScope.projectID,
+            projectDirectory: project.path,
+            taskID: importedTaskID,
+            snapshot: nestedAttempt.snapshot,
+          })
           const directText = new TextDecoder().decode(await host.taskArtifacts.read(direct.envelope.resources[0]!))
           const nestedText = new TextDecoder().decode(await host.taskArtifacts.read(nestedAttempt))
           expect(directText).toBe(sourceAttemptText)
@@ -2981,47 +3477,90 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             source_locator: { source: "task_artifact_resource", ref: sourceMetricEvidence },
             source_producer: { owner_kind: "projected-worker", tool_call_id: scope.toolCallID },
           })
-          expect(nestedManifest.manifest.producer).toMatchObject({ owner_kind: "mission", tool_call_id: "call-campaign-import" })
+          expect(nestedManifest.manifest.producer).toMatchObject({
+            owner_kind: "mission",
+            tool_call_id: "call-campaign-import",
+          })
           importedEvaluationEnvelope = nested.envelope
           expect(engineArtifactSourceChain(nested.envelope)).toEqual([nested.envelope.import_lineage!])
           const importedReview = importedEvidence.find((item) => item.type === "evolution-lab/integrity-review")!
           const publishImportedComparison = async () => {
             ;(importedScope.owner as { agentID: string }).agentID = "evolution-recommendation-owner"
-            const receipt = JSON.parse(await executePublishEvolutionArtifact({
-              artifact_type: "evolution-lab/comparison-recommendation", payload: {}, resource_set: null,
-              source_artifact_locators: [importedCampaignLocator,
-                importedLocators.get("evolution-lab/candidate-revision")!, importedRunLocator, nested.locator],
-            }, { host } as never))
-            const read = await host.engineArtifacts.read({ locator: receipt.locator, byte_offset: 0, max_bytes: 65_536, delivery: "inline" })
-            return { locator: receipt.locator, envelope: EngineArtifactEnvelopeSchema.parse(JSON.parse(read.chunk.text!)) }
+            const receipt = JSON.parse(
+              await executePublishEvolutionArtifact(
+                {
+                  artifact_type: "evolution-lab/comparison-recommendation",
+                  payload: {},
+                  resource_set: null,
+                  predecessor_artifact_locators: [
+                    importedCampaignLocator,
+                    importedLocators.get("evolution-lab/candidate-revision")!,
+                    importedRunLocator,
+                    nested.locator,
+                  ],
+                },
+                { host } as never,
+              ),
+            )
+            const read = await readExactArtifact(host.engineArtifacts, receipt.locator, { maxBytes: 65_536 })
+            return {
+              locator: receipt.locator,
+              envelope: EngineArtifactEnvelopeSchema.parse(JSON.parse(new TextDecoder().decode(read.bytes))),
+            }
           }
           const importedComparison = await publishImportedComparison()
-          const importedValue = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(importedComparison.envelope.payload)
-          expect(importedValue).toMatchObject({ recommendation: "inconclusive", aggregate_score: null,
-            unknowns: ["candidate arm remains a separate immutable Trial"] })
+          const importedValue = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(
+            importedComparison.envelope.payload,
+          )
+          expect(importedValue).toMatchObject({
+            recommendation: "inconclusive",
+            aggregate_score: null,
+            unknowns: ["candidate arm remains a separate immutable Trial"],
+          })
           expect(importedValue.required_unavailable_dimensions).toContain(
             `integrity_finding:case-1:baseline:0:${importedReview.locator.artifact_id}:security:1`,
           )
-          expect(importedComparison.envelope.source_artifact_locators).toEqual(expect.arrayContaining([importedReview.locator]))
+          expect(importedComparison.envelope.source_artifact_locators).toEqual(
+            expect.arrayContaining([importedReview.locator]),
+          )
           ;(importedScope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
-          const reconsidered = JSON.parse(await executePublishEvolutionArtifact({
-            artifact_type: "evolution-lab/integrity-review", resource_set: null,
-            payload: {
-              ...EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse(importedReview.envelope.payload),
-              evaluation_result_locator: nested.locator, findings: [], unknowns: [],
-              revision: { supersedes: [importedReview.locator], reason: "Reconsidered the same imported original evidence." },
-            },
-            source_artifact_locators: [nested.locator, importedReview.locator],
-          }, { host } as never))
+          const reconsidered = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/integrity-review",
+                resource_set: null,
+                payload: {
+                  ...EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse(importedReview.envelope.payload),
+                  evaluation_result_locator: nested.locator,
+                  findings: [],
+                  unknowns: [],
+                  revision: {
+                    supersedes: [importedReview.locator],
+                    reason: "Reconsidered the same imported original evidence.",
+                  },
+                },
+              },
+              { host } as never,
+            ),
+          )
           let freshnessError: unknown
-          try { requireCurrentEvolutionEvidence({ taskID: importedTaskID, comparisonLocator: importedComparison.locator }) }
-          catch (error) { freshnessError = error }
+          try {
+            requireCurrentEvolutionEvidence({ taskID: importedTaskID, comparisonLocator: importedComparison.locator })
+          } catch (error) {
+            freshnessError = error
+          }
           expect(freshnessError).toBeInstanceOf(EvolutionComparisonReviewChangedError)
-          expect((freshnessError as InstanceType<typeof EvolutionComparisonReviewChangedError>).data.missingReviewLocators)
-            .toEqual([reconsidered.locator])
+          expect(
+            (freshnessError as InstanceType<typeof EvolutionComparisonReviewChangedError>).data.missingReviewLocators,
+          ).toEqual([reconsidered.locator])
           const correctedImportedComparison = await publishImportedComparison()
-          expect(comparisonStatistics(correctedImportedComparison.envelope.payload)).toEqual(comparisonStatistics(sourceCorrectedComparisonPayload))
-          requireCurrentEvolutionEvidence({ taskID: importedTaskID, comparisonLocator: correctedImportedComparison.locator })
+          expect(comparisonStatistics(correctedImportedComparison.envelope.payload)).toEqual(
+            comparisonStatistics(sourceCorrectedComparisonPayload),
+          )
+          requireCurrentEvolutionEvidence({
+            taskID: importedTaskID,
+            comparisonLocator: correctedImportedComparison.locator,
+          })
           ;(importedScope.owner as { agentID: string }).agentID = "evolution-evaluator"
           await expect(host.metrics.recorded({ evidence_ref: sourceMetricEvidence })).rejects.toThrow(
             `Metric evidence must identify exactly one recorded result in Task ${importedTaskID}; found 0`,
@@ -3068,17 +3607,11 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 artifact_type: "evolution-lab/opportunity",
                 payload: { ...sourceOpportunityInput, observable_symptom: "Unrelated imported-task opportunity" },
                 resource_set: null,
-                source_artifact_locators: [],
               },
               { host } as never,
             ),
           ) as { locator: EngineArtifactLocator }
-          await host.engineArtifacts.read({
-            locator: unrelatedOpportunity.locator,
-            byte_offset: 0,
-            max_bytes: 65_536,
-            delivery: "inline",
-          })
+          await readExactArtifact(host.engineArtifacts, unrelatedOpportunity.locator, { maxBytes: 65_536 })
           await host.engineArtifacts.select({
             locator: unrelatedOpportunity.locator,
             purpose: "Different current opportunity for imported correlation mismatch",
@@ -3091,7 +3624,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 artifact_type: "evolution-lab/campaign-spec",
                 payload: importedCampaignInput,
                 resource_set: rehydrated.resource_set,
-                source_artifact_locators: [unrelatedOpportunity.locator, importedAttributionLocator],
+                predecessor_artifact_locators: [unrelatedOpportunity.locator, importedAttributionLocator],
               },
               { host } as never,
             )
@@ -3107,13 +3640,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               [importedOpportunityLocator, "Exact imported opportunity for Campaign correlation"],
               [importedAttributionLocator, "Exact imported attribution for Campaign correlation"],
             ] as const) {
-              const read = await publicationHost.engineArtifacts.read({
-                locator,
-                byte_offset: 0,
-                max_bytes: 65_536,
-                delivery: "inline",
-              })
-              expect(read.chunk.complete).toBe(true)
+              const read = await readExactArtifact(publicationHost.engineArtifacts, locator, { maxBytes: 65_536 })
+              expect(read.bytes.byteLength > 0).toBe(true)
               await publicationHost.engineArtifacts.select({ locator, purpose })
             }
             return JSON.parse(
@@ -3122,20 +3650,17 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                   artifact_type: "evolution-lab/campaign-spec",
                   payload: importedCampaignInput,
                   resource_set: rehydrated.resource_set,
-                  source_artifact_locators: [importedOpportunityLocator, importedAttributionLocator],
+                  predecessor_artifact_locators: [importedOpportunityLocator, importedAttributionLocator],
                 },
                 { host: publicationHost } as never,
               ),
             ) as { locator: EngineArtifactLocator }
           })
-          const importedPairCampaignRead = await host.engineArtifacts.read({
-            locator: importedPairCampaign.locator,
-            byte_offset: 0,
-            max_bytes: 65_536,
-            delivery: "inline",
+          const importedPairCampaignRead = await readExactArtifact(host.engineArtifacts, importedPairCampaign.locator, {
+            maxBytes: 65_536,
           })
           expect(
-            EngineArtifactEnvelopeSchema.parse(JSON.parse(importedPairCampaignRead.chunk.text!))
+            EngineArtifactEnvelopeSchema.parse(JSON.parse(new TextDecoder().decode(importedPairCampaignRead.bytes)))
               .source_artifact_locators.map((locator) => JSON.stringify(locator))
               .toSorted(),
           ).toEqual(
@@ -3166,52 +3691,102 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           // validation error, not as an unhandled worker rejection.
           const prepared = loaded.packageToolBundles.get("evolution-lab/shared/publish-evolution-artifact")!
           const measuredCampaign = EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(
-            importedEvidence.find((item) => item.type === "evolution-lab/campaign-spec")!.envelope.payload)
+            importedEvidence.find((item) => item.type === "evolution-lab/campaign-spec")!.envelope.payload,
+          )
           const measuredRun = importedEvidence.find((item) => item.type === "evolution-lab/run-evidence-bundle")!
-          const measuredRunValue = EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"].parse(measuredRun.envelope.payload)
-          const measuredSubject = measuredRun.envelope.resources.find((item) => item.sha256 === measuredRunValue.run_evidence_resource.sha256)!
+          const measuredRunValue = EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"].parse(
+            measuredRun.envelope.payload,
+          )
+          const measuredSubject = measuredRun.envelope.resources.find(
+            (item) => item.sha256 === measuredRunValue.run_evidence_resource.sha256,
+          )!
           ;(importedScope.owner as { agentID: string }).agentID = "evolution-recommendation-owner"
-          const concurrentHost = { ...host, metrics: { ...host.metrics,
-            async recordedSnapshot() {
-              const frozen = await host.metrics.recordedSnapshot()
-              // All observation bytes and native rows come from the production
-              // executor; this driver controls only the concurrency window.
-              ;(importedScope.owner as { agentID: string }).agentID = "evolution-evaluator"
-              try {
-                await host.metrics.evaluate({ iteration: 0, delivery_slice_revision_id: null,
-                  scorers: measuredCampaign.scorers, subject: measuredSubject,
-                  selected_evidence_locators: [{ source: "task_artifact_resource", ref: measuredSubject }],
-                  visual_feedback_verification_artifact_locators: [] })
-              } finally { (importedScope.owner as { agentID: string }).agentID = "evolution-recommendation-owner" }
-              return frozen
+          const concurrentHost = {
+            ...host,
+            metrics: {
+              ...host.metrics,
+              async recordedSnapshot() {
+                const frozen = await host.metrics.recordedSnapshot()
+                // All observation bytes and native rows come from the production
+                // executor; this driver controls only the concurrency window.
+                ;(importedScope.owner as { agentID: string }).agentID = "evolution-evaluator"
+                try {
+                  await host.metrics.evaluate({
+                    iteration: 0,
+                    delivery_slice_revision_id: null,
+                    scorers: measuredCampaign.scorers,
+                    subject: measuredSubject,
+                    selected_evidence_locators: [{ source: "task_artifact_resource", ref: measuredSubject }],
+                    visual_feedback_verification_artifact_locators: [],
+                  })
+                } finally {
+                  ;(importedScope.owner as { agentID: string }).agentID = "evolution-recommendation-owner"
+                }
+                return frozen
+              },
             },
-          } }
-          const capsuleInput = { prepared, taskID: importedTaskID, cwd: project.path,
+          }
+          const capsuleInput = {
+            prepared,
+            taskID: importedTaskID,
+            cwd: project.path,
             abort: new AbortController().signal,
-            context: { sessionID: importedScope.sessionID, messageID: importedScope.messageID,
-              agent: "evolution-recommendation-owner", directory: project.path, worktree: project.path, configuration: {} },
-            args: { artifact: { artifact_type: "evolution-lab/comparison-recommendation", payload: {}, resource_set: null,
-              source_artifact_locators: [importedCampaignLocator, importedLocators.get("evolution-lab/candidate-revision")!] } },
+            context: {
+              sessionID: importedScope.sessionID,
+              messageID: importedScope.messageID,
+              agent: "evolution-recommendation-owner",
+              directory: project.path,
+              worktree: project.path,
+              configuration: {},
+            },
+            args: {
+              artifact: {
+                artifact_type: "evolution-lab/comparison-recommendation",
+                payload: {},
+                resource_set: null,
+                predecessor_artifact_locators: [
+                  importedCampaignLocator,
+                  importedLocators.get("evolution-lab/candidate-revision")!,
+                ],
+              },
+            },
           }
           let capsuleFailure: unknown
-          try { await executePackageToolInCapsule({ ...capsuleInput, host: concurrentHost }) }
-          catch (error) { capsuleFailure = { name: (error as Error).name, message: (error as Error).message } }
-          expect(capsuleFailure).toEqual({ name: "Error",
-            message: `Native metric snapshot changed for Task ${importedTaskID}; read a new snapshot` })
+          try {
+            await executePackageToolInCapsule({ ...capsuleInput, host: concurrentHost })
+          } catch (error) {
+            capsuleFailure = { name: (error as Error).name, message: (error as Error).message }
+          }
+          expect(capsuleFailure).toEqual({
+            name: "Error",
+            message: `Native metric snapshot changed for Task ${importedTaskID}; read a new snapshot`,
+          })
           const currentNative = await host.metrics.recordedSnapshot()
           const capsuleSuccess = await executePackageToolInCapsule({ ...capsuleInput, host })
           const capsuleReceipt = JSON.parse(capsuleSuccess.output)
-          const capsuleRead = await host.engineArtifacts.read({ locator: capsuleReceipt.locator,
-            byte_offset: 0, max_bytes: 65_536, delivery: "inline" })
-          expect(capsuleRead.chunk.complete).toBe(true)
-          const capsuleEnvelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(capsuleRead.chunk.text!))
-          const capsuleComparison = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(capsuleEnvelope.payload)
-          expect(capsuleComparison.calculation_inputs!.native_measurements!.result_ids)
-            .toEqual(currentNative.observations.map((item) => item.metric_result_id).sort())
-          expect(capsuleComparison.required_unavailable_dimensions.filter((item) => item.startsWith("unpublished_measurement:")))
-            .toEqual(currentNative.observations.map((item) => `unpublished_measurement:${importedTaskID}:${item.metric_result_id}`).sort())
+          const capsuleRead = await readExactArtifact(host.engineArtifacts, capsuleReceipt.locator, {
+            maxBytes: 65_536,
+          })
+          expect(capsuleRead.bytes.byteLength > 0).toBe(true)
+          const capsuleEnvelope = EngineArtifactEnvelopeSchema.parse(
+            JSON.parse(new TextDecoder().decode(capsuleRead.bytes)),
+          )
+          const capsuleComparison = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(
+            capsuleEnvelope.payload,
+          )
+          expect(capsuleComparison.calculation_inputs!.native_measurements!.result_ids).toEqual(
+            currentNative.observations.map((item) => item.metric_result_id).sort(),
+          )
+          expect(
+            capsuleComparison.required_unavailable_dimensions.filter((item) =>
+              item.startsWith("unpublished_measurement:"),
+            ),
+          ).toEqual(
+            currentNative.observations
+              .map((item) => `unpublished_measurement:${importedTaskID}:${item.metric_result_id}`)
+              .sort(),
+          )
           expect(capsuleComparison.recommendation).toBe("inconclusive")
-
         })
         let previousTaskID = importedTaskID
         let previousSessionID = importedSession.id
@@ -3222,47 +3797,78 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         for (const hop of [2, 3]) {
           const completedAt = Date.now()
           await completeFixtureTaskWithDeliverables({
-            taskID: previousTaskID, sessionID: previousSessionID,
-            deliverableArtifactLocators: [previousLocator], completedAt,
+            taskID: previousTaskID,
+            sessionID: previousSessionID,
+            deliverableArtifactLocators: [previousLocator],
+            completedAt,
           })
           const nextTaskID = Identifier.ascending("task")
           const nextRoot = Session.prepareRootNext({
-            kind: "root", directory: Instance.directory, title: `Imported measurement hop ${hop}`,
+            kind: "root",
+            directory: Instance.directory,
+            title: `Imported measurement hop ${hop}`,
           })
           const imports = await prepareCrossTaskArtifactImports({
             imports: [{ source_task_id: previousTaskID, locator: previousLocator }],
-            projectID: Instance.project.id, targetProjectDirectory: project.path, targetTaskID: nextTaskID,
+            projectID: Instance.project.id,
+            targetProjectDirectory: project.path,
+            targetTaskID: nextTaskID,
             importer: {
-              missionID, sessionID: missionSessionID, messageID: Identifier.ascending("message"),
+              missionID,
+              sessionID: missionSessionID,
+              messageID: Identifier.ascending("message"),
               toolCallID: `call-measurement-import-${hop}`,
             },
           })
           persistTask({
-            taskID: nextTaskID, rootSession: nextRoot, now: completedAt + 1,
-            title: `Imported measurement hop ${hop}`, request: "Read the same original Evaluation",
-            productPillar: "code", source: "test", priority: "normal",
+            taskID: nextTaskID,
+            rootSession: nextRoot,
+            now: completedAt + 1,
+            title: `Imported measurement hop ${hop}`,
+            request: "Read the same original Evaluation",
+            productPillar: "code",
+            source: "test",
+            priority: "normal",
             metadata: { actor: "mission", mission: { id: missionID, session_id: missionSessionID } },
-            projectID: Instance.project.id, artifactImports: imports,
+            projectID: Instance.project.id,
+            artifactImports: imports,
             packageRevision: {
-              scope: "project", projectID: Instance.project.id, namespace: "builtin", id: "evolution-lab",
-              version: loaded.manifest.version, packageDigest: loaded.packageDigest,
+              scope: "project",
+              projectID: Instance.project.id,
+              namespace: "builtin",
+              id: "evolution-lab",
+              version: loaded.manifest.version,
+              packageDigest: loaded.packageDigest,
             },
             executionCapsuleBinding: await taskProcessBinding(nextTaskID, loaded.packageDigest, completedAt + 1),
           })
-          const row = Database.use((db) => db.select().from(EngineArtifactTable)
-            .where(eq(EngineArtifactTable.id, imports[0]!.importedArtifactID)).get())!
+          const row = Database.use((db) =>
+            db
+              .select()
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.id, imports[0]!.importedArtifactID))
+              .get(),
+          )!
           const envelope = EngineArtifactEnvelopeSchema.parse(row.payload)
           expect(envelope.payload).toEqual(importedEvaluationEnvelope.payload)
-          expect(envelope.producer).toMatchObject({ owner_kind: "mission", tool_call_id: `call-measurement-import-${hop}` })
+          expect(envelope.producer).toMatchObject({
+            owner_kind: "mission",
+            tool_call_id: `call-measurement-import-${hop}`,
+          })
           const chain = engineArtifactSourceChain(envelope)
-          expect(chain).toEqual([{
-            source_task_id: previousTaskID, source_locator: previousLocator,
-            source_kind: "expert_output", source_producer: previousEnvelope.producer,
-            source_provenance: {
-              observed_artifact_locators: previousEnvelope.observed_artifact_locators,
-              source_artifact_locators: previousEnvelope.source_artifact_locators,
+          expect(chain).toEqual([
+            {
+              source_task_id: previousTaskID,
+              source_locator: previousLocator,
+              source_kind: "expert_output",
+              source_producer: previousEnvelope.producer,
+              source_provenance: {
+                observed_artifact_locators: previousEnvelope.observed_artifact_locators,
+                source_artifact_locators: previousEnvelope.source_artifact_locators,
+              },
             },
-          }, ...engineArtifactSourceChain(previousEnvelope)])
+            ...engineArtifactSourceChain(previousEnvelope),
+          ])
           requireEvolutionWorkerProducer(envelope, "evolution-evaluator")
           expect(chain.at(-1)).toEqual(importedEvaluationEnvelope.import_lineage!)
           expect(() => requireEvolutionWorkerProducer(envelope, "evolution-safety-auditor")).toThrow(
@@ -3275,18 +3881,22 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           )
           const attempt = envelope.resources.find((ref) => ref.sha256 === sourceMetricEvidence.sha256)!
           const bytes = await readTaskArtifactRef({
-            projectID: Instance.project.id, projectDirectory: project.path, taskID: nextTaskID, ref: attempt,
+            projectID: Instance.project.id,
+            projectDirectory: project.path,
+            taskID: nextTaskID,
+            ref: attempt,
           })
           expect(new TextDecoder().decode(bytes)).toBe(sourceAttemptText)
           previousTaskID = nextTaskID
           previousSessionID = nextRoot.id
           previousLocator = {
-            source: "engine_artifact", artifact_id: row.id, catalog_revision: row.catalog_revision,
+            source: "engine_artifact",
+            artifact_id: row.id,
+            catalog_revision: row.catalog_revision,
             expected_sha256: row.payload_sha256,
           }
           previousEnvelope = envelope
         }
-
       },
     })
   }, 120_000)
@@ -3467,6 +4077,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           "lib/evolution-lab/artifacts.ts",
           "lib/evolution-lab/candidate-integrity.ts",
           "lib/evolution-lab/comparison.ts",
+          "lib/evolution-lab/engine-evidence.ts",
           "lib/evolution-lab/metric-context.ts",
           "selector.md",
           "skills/campaign/SKILL.md",
@@ -3574,6 +4185,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           "lib/evolution-lab/artifacts.ts",
           "lib/evolution-lab/candidate-integrity.ts",
           "lib/evolution-lab/comparison.ts",
+          "lib/evolution-lab/engine-evidence.ts",
           "lib/evolution-lab/metric-context.ts",
           "tools/collect-run-evidence.ts",
           "tools/execute-evolution-metrics.ts",
@@ -3581,7 +4193,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           "tools/publish-evolution-artifact.ts",
           "tools/rehydrate-evolution-resources.ts",
         ])
-        expect(comparison.diff_sha256).toHaveLength(64)
         await compareExecution.close()
 
         const candidateUserMessage = await Session.updateMessage({
@@ -3662,6 +4273,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         let candidateArtifactLocator!: Parameters<typeof rehydrateEvolutionResourcesTool.execute>[0]["artifact_locator"]
         await withTaskScopedPluginToolHost(candidatePublisherScope, async (host) => {
           const developmentResource = portableResource(parentPackageResources[0]!)
+          ;(candidatePublisherScope.owner as { agentID: string }).agentID = "evolution-experiment-planner"
           const developmentCampaign = await host.engineArtifacts.publish({
             artifact_type: "evolution-lab/campaign-spec",
             schema_version: 1,
@@ -3740,14 +4352,11 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             resources: [],
             source_artifact_locators: [],
           })
-          const developmentCampaignRead = await host.engineArtifacts.read({
-            locator: developmentCampaign.locator,
-            byte_offset: 0,
-            max_bytes: 65_536,
-            delivery: "inline",
+          const developmentCampaignRead = await readExactArtifact(host.engineArtifacts, developmentCampaign.locator, {
+            maxBytes: 65_536,
           })
           const developmentCampaignEnvelope = EngineArtifactEnvelopeSchema.parse(
-            JSON.parse(developmentCampaignRead.chunk.text!),
+            JSON.parse(new TextDecoder().decode(developmentCampaignRead.bytes)),
           )
           const holdoutCampaign = await host.engineArtifacts.publish({
             artifact_type: "evolution-lab/campaign-spec",
@@ -3768,6 +4377,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           // The author supplies only what it owns; the publisher derives every
           // revision, manifest, digest, and receipt from the two validated
           // resource sets.
+          ;(candidatePublisherScope.owner as { agentID: string }).agentID = "evolution-candidate-author"
           const candidatePayload = {
             development_campaign_locator: developmentCampaign.locator,
             feedback: null,
@@ -3786,7 +4396,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 },
                 resource_set: candidateResourceSet,
                 parent_resource_set: materialized.resource_set,
-                source_artifact_locators: [incompatibleCampaign.locator],
               },
               { host } as never,
             )
@@ -3808,7 +4417,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 },
                 resource_set: candidateResourceSet,
                 parent_resource_set: materialized.resource_set,
-                source_artifact_locators: [holdoutCampaign.locator],
               },
               { host } as never,
             ),
@@ -3823,7 +4431,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 payload: { ...candidatePayload, diff_sha256: "0".repeat(64) },
                 resource_set: candidateResourceSet,
                 parent_resource_set: materialized.resource_set,
-                source_artifact_locators: [developmentCampaign.locator],
               },
               { host } as never,
             ),
@@ -3835,7 +4442,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 payload: candidatePayload,
                 resource_set: candidateResourceSet,
                 parent_resource_set: materialized.resource_set,
-                source_artifact_locators: [developmentCampaign.locator],
               },
               { host } as never,
             ),
@@ -4286,7 +4892,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             ],
           },
         ])
-        expect(evidence.canonical_sha256).toHaveLength(64)
 
         const evidenceOwnerSession = Session.prepareRootNext({
           kind: "root",
@@ -4547,55 +5152,93 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         })
         const scope: TaskToolExecutionScope = {
           packageToolRef: "evolution-lab/shared/publish-evolution-artifact",
-          kind: "task", projectID: Instance.project.id, projectDirectory: project.path, taskID,
-          taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, taskID), sessionID: session.id,
-          messageID: "g43-live-subject", toolCallID: "g43-live-subject", toolPartID: "g43-live-subject",
+          kind: "task",
+          projectID: Instance.project.id,
+          projectDirectory: project.path,
+          taskID,
+          taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, taskID),
+          sessionID: session.id,
+          messageID: "g43-live-subject",
+          toolCallID: "g43-live-subject",
+          toolPartID: "g43-live-subject",
           executionSurface: {},
           owner: {
-            kind: "projected-scheduler", expertSquadID: "base", agentID: "orchestrator",
+            kind: "projected-scheduler",
+            expertSquadID: "base",
+            agentID: "orchestrator",
             projectionHash: "a".repeat(64),
             packageRevision: {
-              scope: "built_in", projectID: null, namespace: "builtin", id: "base",
-              version: "2026.08.06.1", packageDigest: "a".repeat(64),
+              scope: "built_in",
+              projectID: null,
+              namespace: "builtin",
+              id: "base",
+              version: "2026.08.06.1",
+              packageDigest: "a".repeat(64),
             },
           },
         }
         await withTaskScopedPluginToolHost(scope, async (host) => {
           for (const [iteration, bundle] of [awaiting, inactive].entries()) {
             const stage = await host.taskArtifacts.stage({ trees: ["subject"] })
-            await writeFile(path.join(stage.treeDirectories.subject!, "bundle.json"), canonicalTaskRunEvidenceJSON(bundle))
+            await writeFile(
+              path.join(stage.treeDirectories.subject!, "bundle.json"),
+              canonicalTaskRunEvidenceJSON(bundle),
+            )
             const publication = await host.taskArtifacts.publish(stage, {
               snapshot_kind: "engine_resource",
               files: [{ tree: "subject", path: "bundle.json", media_type: "application/json" }],
             })
             const resource = publication.artifacts[0]!
             const input: MetricEvaluationRequest = {
-              iteration, delivery_slice_revision_id: null, subject: resource,
+              iteration,
+              delivery_slice_revision_id: null,
+              subject: resource,
               selected_evidence_locators: [{ source: "task_artifact_resource", ref: resource }],
               visual_feedback_verification_artifact_locators: [],
-              scorers: [{
-                scorer_id: "live-subject-shell", scorer_revision: "a".repeat(64), scope: "global", goal_id: null,
-                description: "A live observation has no immutable shell workspace", unit: "number",
-                direction: "higher_better", target: 1, floor: 0, weight: 1, observation_class: "quality",
-                evaluator_kind: "shell", evaluator_config: {
-                  scorer_revision: "a".repeat(64), workspace_digest: awaiting.workspace_checkpoint.initial_tree_sha256,
-                  executable: process.execPath, args: ["-e", "process.stdout.write('1')"],
-                  parse: "stdout_number", inactivity_timeout_ms: 30_000,
+              scorers: [
+                {
+                  scorer_id: "live-subject-shell",
+                  scorer_revision: "a".repeat(64),
+                  scope: "global",
+                  goal_id: null,
+                  description: "A live observation has no immutable shell workspace",
+                  unit: "number",
+                  direction: "higher_better",
+                  target: 1,
+                  floor: 0,
+                  weight: 1,
+                  observation_class: "quality",
+                  evaluator_kind: "shell",
+                  evaluator_config: {
+                    scorer_revision: "a".repeat(64),
+                    workspace_digest: awaiting.workspace_checkpoint.initial_tree_sha256,
+                    executable: process.execPath,
+                    args: ["-e", "process.stdout.write('1')"],
+                    parse: "stdout_number",
+                    inactivity_timeout_ms: 30_000,
+                  },
                 },
-              }],
+              ],
             }
             const outcome = await host.metrics.evaluate(input)
-            expect(outcome.unavailable).toMatchObject([{ scorer_id: "live-subject-shell", reason_code: "input_unavailable" }])
+            expect(outcome.unavailable).toMatchObject([
+              { scorer_id: "live-subject-shell", reason_code: "input_unavailable" },
+            ])
             const attempt = MetricExecutionEvidence.parse(
               JSON.parse(new TextDecoder().decode(await host.taskArtifacts.read(outcome.unavailable[0]!.evidence_ref))),
             )
             expect(attempt).toMatchObject({
-              status: "unavailable", reason_code: "input_unavailable", task_id: taskID,
+              status: "unavailable",
+              reason_code: "input_unavailable",
+              task_id: taskID,
               subject: { resource, trial_task_id: taskID, result: { kind: "live_observation" } },
             })
-            await expect(host.metrics.evaluate({
-              ...input, scorers: input.scorers.map((scorer) => ({ ...scorer, target: 2 })),
-            })).rejects.toThrow(`Metric scorer live-subject-shell conflicts with the frozen Task scorer definition`)
+            await expect(
+              host.metrics.evaluate({
+                ...input,
+                scorers: input.scorers.map((scorer) => ({ ...scorer, target: 2 })),
+              }),
+            ).rejects.toThrow(`Metric scorer live-subject-shell conflicts with the frozen Task scorer definition`)
           }
         })
       },

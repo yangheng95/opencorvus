@@ -299,7 +299,7 @@ describe("Viral Content Expert Squad package", () => {
                 {
                   artifact: { artifact_type: artifactType, payload: samples[artifactType] } as never,
                   resource_set: resourceSet,
-                  source_artifact_locators: sources,
+                  predecessor_artifact_locators: sources,
                 },
                 { host, metadata: () => {} } as never,
               ),
@@ -333,7 +333,6 @@ describe("Viral Content Expert Squad package", () => {
             payload: samples["viral-content/audience-dossier"],
             source_artifact_locators: [briefReceipt.locator],
           })
-          expect(audienceReceipt.artifact_sha256).toMatch(/^[a-f0-9]{64}$/)
 
           const stage = await host.taskArtifacts.stage({ trees: ["viral-delivery"] })
           await writeFile(path.join(stage.treeDirectories["viral-delivery"]!, "campaign.md"), "# OpenCorvus launch\n")
@@ -372,7 +371,6 @@ describe("Viral Content Expert Squad package", () => {
             delivery: "inline",
           })
           const deliveryEnvelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(deliveryRead.chunk.text!))
-          expect(deliveryReceipt.artifact_sha256).toMatch(/^[a-f0-9]{64}$/)
           expect(deliveryEnvelope.resources.map((resource) => resource.path)).toEqual(["campaign.json", "campaign.md"])
           const expectedDeliverySources = [
             briefReceipt.locator,

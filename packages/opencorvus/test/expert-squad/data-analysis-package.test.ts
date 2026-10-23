@@ -6,6 +6,7 @@ import {
   EngineArtifactEnvelopeSchema,
   TaskArtifactResourceSetLocatorSchema,
   type EngineArtifactLocator,
+  type ArtifactReadLocator,
 } from "@opencorvus-ai/plugin"
 import { Config } from "../../src/config/config"
 import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
@@ -240,7 +241,7 @@ describe("Data Analysis expert squad package", () => {
         expect(introspection.inputSchema.required).toEqual(["artifact"])
         const branches = (introspection.inputSchema.properties as Record<string, { oneOf: Array<{ required: string[] }> }>).artifact.oneOf
         expect(branches.map((branch) => branch.required)).toEqual(
-          Object.keys(samples).map(() => ["artifact_type", "payload", "resource_set", "source_artifact_locators"]),
+          Object.keys(samples).map(() => ["artifact_type", "payload", "resource_set", "predecessor_artifact_locators"]),
         )
         const userMessage = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -252,6 +253,7 @@ describe("Data Analysis expert squad package", () => {
           model: { providerID: "test", modelID: "test" },
         })
         let invocation = 0
+        let originalResource: ArtifactReadLocator | undefined
         const publish = async (
           artifactType: keyof typeof samples,
           producer: keyof typeof dependencies,
@@ -318,13 +320,30 @@ describe("Data Analysis expert squad package", () => {
             },
           }
           return withTaskScopedPluginToolHost(scope, async (host) => {
+            if (artifactType === "data-analysis/analysis-charter") {
+              const stage = await host.taskArtifacts.stage({ trees: ["original-input"] })
+              await writeFile(path.join(stage.treeDirectories["original-input"]!, "operations.csv"), "revenue,cost\n100,60\n")
+              const snapshot = await host.taskArtifacts.publish(stage, {
+                snapshot_kind: "catalog",
+                files: [{ tree: "original-input", path: "operations.csv", media_type: "text/csv" }],
+              })
+              const [resource] = await host.taskArtifacts.resources({ snapshot: snapshot.snapshot, tree: "original-input" })
+              if (!resource) throw new Error("Published original input resource is missing")
+              originalResource = { source: "task_artifact_resource", ref: resource }
+            }
+            if (artifactType === "data-analysis/analysis-charter" || artifactType === "data-analysis/data-dossier") {
+              if (!originalResource) throw new Error("Original input snapshot must exist")
+              const input = await host.engineArtifacts.read({ locator: originalResource, byte_offset: 0, max_bytes: 65_536, delivery: "inline" })
+              expect(input.chunk.text).toBe("revenue,cost\n100,60\n")
+              await host.engineArtifacts.select({ locator: originalResource, purpose: "Original numerical input for the current output" })
+            }
             if (artifactType === "data-analysis/report") {
               await expect(publishExpertArtifact({ scope: { ...scope, packageToolRef: null }, artifact: {
                 artifact_type: artifactType, schema_version: 1, label: "Report bypass", payload: samples[artifactType],
                 resources: [], source_artifact_locators: [],
               } })).rejects.toMatchObject({ code: "PACKAGE_TYPED_PUBLISHER_REQUIRED", expectedPublisher: publisherRef, actualPublisher: null })
               await expect(publishDataAnalysisArtifact.execute({ artifact: { artifact_type: artifactType, payload: samples[artifactType],
-                resource_set: null, source_artifact_locators: [] } as never }, { host } as never)).rejects.toThrow("requires 6 exact source Artifact locator(s)")
+                resource_set: null, predecessor_artifact_locators: [] } as never }, { host } as never)).rejects.toThrow("requires 6 exact typed predecessor Artifact locator(s)")
               const note = await publishExpertArtifact({ scope: { ...scope, packageToolRef: null }, artifact: {
                 artifact_type: "data-analysis/operator-note", schema_version: 1, label: "Generic note", payload: { status: "observed" }, resources: [], source_artifact_locators: [],
               } })
@@ -347,7 +366,7 @@ describe("Data Analysis expert squad package", () => {
                 tree: "data-analysis-delivery",
               })
             }
-            const placed = { artifact: { artifact_type: artifactType, payload: samples[artifactType], resource_set: resourceSet, source_artifact_locators: sources } }
+            const placed = { artifact: { artifact_type: artifactType, payload: samples[artifactType], resource_set: resourceSet, predecessor_artifact_locators: sources } }
             expect(publishDataAnalysisArtifact.inputSchema.safeParse(placed).success).toBe(true)
             const context = { sessionID: session.id, messageID: assistantMessage.id, agent: producer,
               directory: project.path, worktree: project.path, configuration: {} }
@@ -368,12 +387,15 @@ describe("Data Analysis expert squad package", () => {
             })
             return {
               receipt,
+              readSHA256: read.chunk.sha256,
               envelope: EngineArtifactEnvelopeSchema.parse(JSON.parse(read.chunk.text!)),
             }
           })
         }
 
         const charter = await publish("data-analysis/analysis-charter", "data-analysis-planner", [])
+        expect(charter.envelope.source_artifact_locators).toEqual([originalResource!])
+        expect(charter.receipt.artifact_sha256).toBe(charter.readSHA256)
         const dossier = await publish("data-analysis/data-dossier", "data-analysis-data-steward", [
           charter.receipt.locator,
         ])
@@ -381,14 +403,16 @@ describe("Data Analysis expert squad package", () => {
           artifact_type: "data-analysis/data-dossier",
           schema_version: 1,
           payload: samples["data-analysis/data-dossier"],
-          source_artifact_locators: [charter.receipt.locator],
           producer: {
             owner_kind: "projected-worker",
             expert_squad_id: "data-analysis",
             agent_id: "data-analysis-data-steward",
           },
         })
-        expect(dossier.receipt.artifact_sha256).toMatch(/^[a-f0-9]{64}$/)
+        expect(dossier.envelope.source_artifact_locators).toHaveLength(2)
+        const sourceOrder = (left: ArtifactReadLocator, right: ArtifactReadLocator) => JSON.stringify(left).localeCompare(JSON.stringify(right))
+        expect([...dossier.envelope.source_artifact_locators].sort(sourceOrder)).toEqual([charter.receipt.locator, originalResource!].sort(sourceOrder))
+        expect(dossier.receipt.artifact_sha256).toBe(dossier.readSHA256)
 
         const performance = await publish(
           "data-analysis/performance-analysis",
@@ -430,7 +454,6 @@ describe("Data Analysis expert squad package", () => {
           expert_squad_id: "data-analysis",
           agent_id: "data-analysis-report-writer",
         })
-        expect(report.receipt.artifact_sha256).toMatch(/^[a-f0-9]{64}$/)
       },
     })
   }, 120_000)

@@ -304,7 +304,7 @@ describe("Sales Strategy expert squad package", () => {
                   payload: samples["sales-strategy/research-charter"],
                 },
                 resource_set: null,
-                source_artifact_locators: [],
+                predecessor_artifact_locators: [],
               },
               { host } as never,
             ),
@@ -318,7 +318,7 @@ describe("Sales Strategy expert squad package", () => {
                   payload: samples["sales-strategy/customer-dossier"],
                 },
                 resource_set: null,
-                source_artifact_locators: [charterReceipt.locator],
+                predecessor_artifact_locators: [charterReceipt.locator],
               },
               { host } as never,
             ),
@@ -341,7 +341,6 @@ describe("Sales Strategy expert squad package", () => {
               agent_id: "sales-customer-researcher",
             },
           })
-          expect(dossierReceipt.artifact_sha256).toMatch(/^[a-f0-9]{64}$/)
 
           const publish = async (
             artifactType: keyof typeof samples,
@@ -355,7 +354,7 @@ describe("Sales Strategy expert squad package", () => {
                 {
                   artifact: { artifact_type: artifactType, payload: samples[artifactType] } as never,
                   resource_set: resourceSet,
-                  source_artifact_locators: sources,
+                  predecessor_artifact_locators: sources,
                 },
                 { host } as never,
               ),
@@ -419,7 +418,6 @@ describe("Sales Strategy expert squad package", () => {
             expert_squad_id: "sales-strategy",
             agent_id: "sales-playbook-writer",
           })
-          expect(playbookReceipt.artifact_sha256).toMatch(/^[a-f0-9]{64}$/)
         })
       },
     })

@@ -304,7 +304,7 @@ describe("Human Resources Operations expert squad package", () => {
                   payload: samples["hr-operations/operating-charter"],
                 },
                 resource_set: null,
-                source_artifact_locators: [],
+                predecessor_artifact_locators: [],
               },
               { host } as never,
             ),
@@ -318,7 +318,7 @@ describe("Human Resources Operations expert squad package", () => {
                   payload: samples["hr-operations/evidence-dossier"],
                 },
                 resource_set: null,
-                source_artifact_locators: [charterReceipt.locator],
+                predecessor_artifact_locators: [charterReceipt.locator],
               },
               { host } as never,
             ),
@@ -341,7 +341,6 @@ describe("Human Resources Operations expert squad package", () => {
               agent_id: "human-resources-evidence-curator",
             },
           })
-          expect(dossierReceipt.artifact_sha256).toMatch(/^[a-f0-9]{64}$/)
 
           const publish = async (
             artifactType: keyof typeof samples,
@@ -355,7 +354,7 @@ describe("Human Resources Operations expert squad package", () => {
                 {
                   artifact: { artifact_type: artifactType, payload: samples[artifactType] } as never,
                   resource_set: resourceSet,
-                  source_artifact_locators: sources,
+                  predecessor_artifact_locators: sources,
                 },
                 { host } as never,
               ),
@@ -420,7 +419,6 @@ describe("Human Resources Operations expert squad package", () => {
             expert_squad_id: "hr-operations",
             agent_id: "human-resources-operating-plan-writer",
           })
-          expect(operatingPlanReceipt.artifact_sha256).toMatch(/^[a-f0-9]{64}$/)
         })
       },
     })

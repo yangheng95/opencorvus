@@ -1,7 +1,7 @@
 // ABI means Application Binary Interface. JSON means JavaScript Object Notation.
 // URL means Uniform Resource Locator.
 
-import { ArtifactReadLocatorSchema, TaskArtifactResourceSetLocatorSchema, tool } from "@opencorvus-ai/plugin"
+import { EngineArtifactLocatorSchema, TaskArtifactResourceSetLocatorSchema, tool } from "@opencorvus-ai/plugin"
 
 const nonempty = tool.schema.string().trim().min(1)
 const distinctStrings = tool.schema.array(nonempty).refine(
@@ -65,7 +65,7 @@ export type DataAnalysisArtifactType = tool.schema.infer<typeof DataAnalysisArti
 // The complete publication has one location, including its resources and exact sources.
 const publicationFields = {
   resource_set: TaskArtifactResourceSetLocatorSchema.nullable(),
-  source_artifact_locators: tool.schema.array(ArtifactReadLocatorSchema),
+  predecessor_artifact_locators: tool.schema.array(EngineArtifactLocatorSchema).describe("Exact typed Engine Artifact predecessors for this stage; [] for analysis-charter. Original file evidence is selected separately and retained in complete Host provenance."),
 }
 export const DataAnalysisPublishableArtifactInputSchema = tool.schema.discriminatedUnion("artifact_type", [
   tool.schema.object({ artifact_type: tool.schema.literal("data-analysis/analysis-charter"), payload: DataAnalysisArtifactSchemas["data-analysis/analysis-charter"], ...publicationFields }).strict(),

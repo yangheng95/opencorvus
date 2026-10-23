@@ -1,10 +1,10 @@
 import {
   EngineArtifactLocatorSchema,
-  EngineArtifactEnvelopeSchema,
+  inspectEngineArtifactEnvelope,
+  readExactArtifactsSettled,
+  selectExactArtifactSources,
   TaskArtifactResourceSetLocatorSchema,
   tool,
-  type EngineArtifactLocator,
-  type ToolContext,
 } from "@opencorvus-ai/plugin"
 import {
   MarketingGrowthPublishableArtifactInputSchema,
@@ -23,36 +23,20 @@ const producerByType = {
   "marketing-growth/campaign-plan": "marketing-growth-campaign-writer",
 } as const
 
-async function readSource(locator: EngineArtifactLocator, context: ToolContext) {
-  let offset = 0
-  let text = ""
-  for (;;) {
-    const result = await context.host.engineArtifacts.read({ locator, byte_offset: offset, max_bytes: 65_536, delivery: "inline" })
-    if (result.chunk.text === undefined) throw new Error("Marketing & Growth Strategy source Artifact must be readable JSON text")
-    text += result.chunk.text
-    if (result.chunk.complete) break
-    if (result.chunk.next_offset === null) throw new Error("Marketing & Growth Strategy source Artifact ended before completion")
-    offset = result.chunk.next_offset
-  }
-  await context.host.engineArtifacts.select({ locator, purpose: "Exact predecessor for Marketing & Growth Strategy" })
-  return EngineArtifactEnvelopeSchema.parse(JSON.parse(text))
-}
-
 export default tool({
   description: "Validate and publish one strict marketing-growth Artifact ABI value with exact selected predecessors and immutable resources.",
   args: {
     artifact: MarketingGrowthPublishableArtifactInputSchema,
     resource_set: TaskArtifactResourceSetLocatorSchema.nullable(),
-    // Predecessors of this Artifact type are Engine Artifacts. Declaring the
-    // wider read-locator union let a caller express a Task Artifact locator
-    // that readSource would then handle as an Engine Artifact.
-    source_artifact_locators: tool.schema.array(EngineArtifactLocatorSchema),
+    predecessor_artifact_locators: tool.schema.array(EngineArtifactLocatorSchema).describe("Exact typed Engine Artifact predecessors required by this stage; use [] for a root stage. Original file evidence is selected separately through real read/select and retained by the Host in output provenance."),
   },
   async execute(args, context) {
     const parsed = parseMarketingGrowthArtifact(args.artifact.artifact_type, args.artifact.payload)
     if (context.agent !== producerByType[parsed.artifactType])
       throw new Error("Marketing & Growth Strategy " + parsed.artifactType + " must be published by " + producerByType[parsed.artifactType])
-    const sources = await Promise.all(args.source_artifact_locators.map((locator) => readSource(locator, context)))
+    const batch = await readExactArtifactsSettled(context.host.engineArtifacts, args.predecessor_artifact_locators)
+    if (batch.diagnostics.length) throw new AggregateError(batch.diagnostics.map(item => item.error), "Marketing & Growth Strategy predecessor read failed")
+    const sources = batch.reads.map(read => inspectEngineArtifactEnvelope(read, { schemaVersion: 1 }))
     const expectedTypes = [...marketingGrowthArtifactDependencies[parsed.artifactType]].sort()
     const actualTypes = sources.map((source) => source.artifact_type).sort()
     if (JSON.stringify(actualTypes) !== JSON.stringify(expectedTypes))
@@ -64,7 +48,9 @@ export default tool({
         source.producer.expert_squad_id !== "marketing-growth" ||
         source.producer.agent_id !== producerByType[sourceType]
       ) throw new Error("Marketing & Growth Strategy source " + sourceType + " has the wrong projected worker producer")
+      parseMarketingGrowthArtifact(sourceType, source.payload)
     }
+    await selectExactArtifactSources(context.host.engineArtifacts, batch.reads, "Typed predecessors for " + parsed.artifactType)
     const resources = args.resource_set ? await context.host.taskArtifacts.resources(args.resource_set) : []
     if (parsed.artifactType === "marketing-growth/campaign-plan" && resources.length === 0)
       throw new Error("Marketing & Growth Strategy terminal delivery requires its canonical immutable resource set")

@@ -18,10 +18,14 @@ The stage `data-analysis/audit` covers its exact insight brief. Review of a late
 - `data-analysis/audit`
 - `data-analysis/report`
 
-Every consumed stage uses the package-owned codec and `data-analysis/shared/publish-data-analysis-artifact` publisher. Only the final Build-owned role writes and rereads `artifacts/data-analysis/report.md`, verifies, commits, and merges it when working in a managed worktree, reads and snapshots the exact immutable returned `primary_head`, publishes the terminal Artifact, and publishes an identical `document@1` view.
+Every consumed stage uses the package-owned codec and `data-analysis/shared/publish-data-analysis-artifact` publisher. Only the final Build-owned role writes and rereads one canonical file at the user's explicit delivery path (default: `artifacts/data-analysis/report.md`), verifies, commits, and merges it when working in a managed worktree, reads and snapshots the exact immutable returned `primary_head`, publishes the terminal Artifact, and publishes an identical `document@1` view.
 
-The publisher takes one `artifact` object containing `artifact_type`, the type-specific `payload`, `resource_set` (null for intermediate stages), and `source_artifact_locators`. The final report supplies its immutable resource set and all six exact predecessor locators in that same object. This input contract belongs to package version `2026.09.27.4`; previously installed Task bindings retain their own immutable package version.
+The publisher takes one `artifact` object containing `artifact_type`, the type-specific `payload`, `resource_set` (null for intermediate stages), and `predecessor_artifact_locators`. The final report supplies its immutable resource set and all six exact predecessor locators in that same object. The current input contract belongs to the revision declared in `expert-squad.jsonc`; previously installed Task bindings retain their own immutable package version.
 
 ## Boundary
 
 Treat correlation as observation, not causation. Never invent missing values, silently change metric definitions, or present an estimate as a source fact.
+
+## Publisher dependency contract — 2026.10.24.1
+
+`predecessor_artifact_locators` contains only the exact typed Engine Artifact predecessors required by the selected stage; root stages pass `[]`. Completely read and select other semantic evidence, including original file resources, through the normal Artifact transport. The Host retains that evidence in the output envelope’s `source_artifact_locators` together with the selected typed predecessors. This package input and complete output provenance have different purposes. Existing Tasks keep their frozen package revision; new installations use the current input contract.

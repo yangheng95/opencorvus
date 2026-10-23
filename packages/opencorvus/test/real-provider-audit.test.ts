@@ -9,6 +9,18 @@ import { assertCopiedOAuthAccess, CopiedOAuthCredentialExpiredError, CopiedOAuth
 import { takeProviderResponseObserver, type ProviderRequestContext } from "../src/util/provider-response-observation"
 import { settlementTrackedReadableStream } from "../src/util/stream-activity"
 
+test("preflight HTTP silence uses the declared inactivity budget", async () => {
+  const server = Bun.serve({ hostname: "127.0.0.1", port: 0, async fetch() {
+    await new Promise(resolve => setTimeout(resolve, 200))
+    return Response.json({ session: { id: "local-preflight", directory: "." }, messageID: "local-input" })
+  } })
+  try {
+    using audit = new RealProviderAudit("authorized-model", 1)
+    await expect(audit.preflight({ serverURL: server.url, model: "local/authorized-model", inactivityMs: 25,
+      activity: () => ({ status: "idle" }) })).rejects.toMatchObject({ name: "TimeoutError" })
+  } finally { await server.stop(true) }
+})
+
 test("credential collection preserves token budgets and JSON serialization preserves numeric measurements", () => {
   const redactor = new CredentialRedactor()
   redactor.collect({
@@ -262,14 +274,13 @@ test("real local HTTP204 empty reader, HTTP error and unbound consumers retain a
     const direct = await request("direct")
     const original = await request("replacement")
     const replacement = new Response(original.body, { status: original.status, headers: original.headers })
-    expect({ emptyStatus: absent.status, emptyText: await consumeObservedResponse(absent), error: await error.text(), direct: await direct.text(), replacement: await replacement.text() })
+    expect({ emptyStatus: absent.status, emptyText: await absent.text(), error: await error.text(), direct: await direct.text(), replacement: await replacement.text() })
       .toEqual({ emptyStatus: 204, emptyText: "", error: "actual HTTP error", direct: "direct", replacement: "replacement" })
-    expect(audit.requests[0]!.response_reader).toMatchObject({ boundary: "provider-source-reader", state: "settled",
-      byteCount: 0, chunkCount: 0, firstByteReadAt: null, lastByteReadAt: null, terminal: { kind: "eof" } })
+    expect(audit.requests[0]!.response_reader).toMatchObject({ boundary: "provider-source-reader", state: "body_absent" })
     expect(accepted).toEqual(["absent", "error", "direct", "replacement"])
     expect(audit.requests.map((entry) => ({ status: entry.status, boundary: entry.response_reader.boundary, state: entry.response_reader.state })))
       .toEqual([
-        { status: 204, boundary: "provider-source-reader", state: "settled" },
+        { status: 204, boundary: "provider-source-reader", state: "body_absent" },
         { status: 503, boundary: "provider-source-reader", state: "http_error" },
         { status: 200, boundary: "provider-source-reader", state: "awaiting_binding" },
         { status: 200, boundary: "provider-source-reader", state: "awaiting_binding" },

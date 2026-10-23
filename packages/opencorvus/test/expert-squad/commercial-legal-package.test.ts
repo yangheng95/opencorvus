@@ -419,7 +419,7 @@ describe("Commercial Legal Expert Squad", () => {
               {
                 artifact: { artifact_type: "commercial-legal/matter-charter", payload: charter },
                 resource_set: null,
-                source_artifact_locators: [],
+                predecessor_artifact_locators: [],
               },
               { host, metadata() {} } as never,
             ),
@@ -433,7 +433,7 @@ describe("Commercial Legal Expert Squad", () => {
               {
                 artifact: { artifact_type: "commercial-legal/authority-dossier", payload: dossier },
                 resource_set: null,
-                source_artifact_locators: [charterLocator],
+                predecessor_artifact_locators: [charterLocator],
               },
               { host, metadata() {} } as never,
             ),

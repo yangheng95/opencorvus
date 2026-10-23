@@ -5,7 +5,7 @@
   "name": "Evolution Lab",
   "label": "Evolution Lab",
   "description": "Target-agnostic evidence, candidate, evaluation, integrity review, and recommendation package for explicit Expert Squad evolution campaigns.",
-  "version": "2026.10.14.1",
+  "version": "2026.10.24.7",
   "product_pillars": [
     "code",
     "work"
@@ -63,11 +63,11 @@
       "evolution-failure-analyst": {
         "capability_refs": [
           "capability:capability_set:package:evolution-lab:shared-capabilities-2",
-          "capability:capability_set:platform:tool-registry:deep-research-base"
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
         ],
         "label": "Evolution Failure Analyst",
         "description": "Reconstructs the evidence-backed causal chain and assigns proven ownership while preserving unknowns.",
-        "base_role": "deep-research",
+        "base_role": "delegated-worker",
         "prompt": "agents/evolution-failure-analyst/system.md"
       },
       "evolution-experiment-planner": {

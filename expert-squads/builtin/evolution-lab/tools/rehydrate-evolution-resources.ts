@@ -1,15 +1,14 @@
 import path from "node:path"
 import { mkdir, writeFile } from "node:fs/promises"
 import {
-  EngineArtifactEnvelopeSchema,
   EngineArtifactLocatorSchema,
   TaskArtifactResourceSetLocatorSchema,
   compareTaskArtifactPathsByUTF8,
   tool,
-  type EngineArtifactLocator,
-  type ToolContext,
 } from "@opencorvus-ai/plugin"
 import { EvolutionArtifactSchemas, EvolutionArtifactIntegrityError } from "../lib/evolution-lab/artifacts"
+
+import { readEngineArtifactEnvelope } from "../lib/evolution-lab/engine-evidence"
 
 type ResourceIdentity = Readonly<{ path: string; media_type: string; bytes: number; sha256: string }>
 type RoleEntry = Readonly<{ role: string; outputPath: string; identity: ResourceIdentity }>
@@ -21,28 +20,6 @@ function resolveInsideTree(treeDirectory: string, relativePath: string) {
   if (relative === ".." || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative))
     throw new EvolutionArtifactIntegrityError(`Evolution rehydration path escapes its staging tree: ${relativePath}`)
   return target
-}
-
-async function readEnvelope(locator: EngineArtifactLocator, context: ToolContext) {
-  let offset = 0
-  let text = ""
-  for (;;) {
-    const result = await context.host.engineArtifacts.read({
-      locator,
-      byte_offset: offset,
-      max_bytes: 65_536,
-      delivery: "inline",
-    })
-    if (result.chunk.text === undefined)
-      throw new EvolutionArtifactIntegrityError("Evolution resource envelope is not readable JSON text")
-    text += result.chunk.text
-    if (result.chunk.complete) break
-    if (result.chunk.next_offset === null)
-      throw new EvolutionArtifactIntegrityError("Evolution resource envelope ended before completion")
-    offset = result.chunk.next_offset
-  }
-  await context.host.engineArtifacts.select({ locator, purpose: "Exact portable evolution resource closure" })
-  return EngineArtifactEnvelopeSchema.parse(JSON.parse(text))
 }
 
 function campaignEntries(
@@ -92,7 +69,11 @@ export default tool({
     resource_role: tool.schema.enum(["campaign_inputs", "parent_package", "candidate_package"]),
   },
   async execute(args, context) {
-    const envelope = await readEnvelope(args.artifact_locator, context)
+    const envelope = await readEngineArtifactEnvelope(
+      args.artifact_locator,
+      context,
+      "Exact portable evolution resource closure",
+    )
     let entries: RoleEntry[]
     let tree: string
     if (args.resource_role === "campaign_inputs") {

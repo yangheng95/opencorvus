@@ -77,9 +77,9 @@ describe("native Task package-tool process authority", () => {
         expect(Object.keys(introspection.inputSchema.properties as Record<string, unknown>)).toEqual([
           "artifact",
           "resource_set",
-          "source_artifact_locators",
+          "predecessor_artifact_locators",
         ])
-        expect(introspection.inputSchema.required).toEqual(["artifact", "resource_set", "source_artifact_locators"])
+        expect(introspection.inputSchema.required).toEqual(["artifact", "resource_set", "predecessor_artifact_locators"])
         const artifactBranches = (
           introspection.inputSchema.properties as Record<
             string,
@@ -150,7 +150,7 @@ describe("native Task package-tool process authority", () => {
               },
             },
             resource_set: null,
-            source_artifact_locators: [],
+            predecessor_artifact_locators: [],
           },
           abort: new AbortController().signal,
         })
@@ -175,7 +175,7 @@ describe("native Task package-tool process authority", () => {
             args: {
               artifact: { artifact_type: "viral-content/campaign-brief", payload: {} },
               resource_set: null,
-              source_artifact_locators: [],
+              predecessor_artifact_locators: [],
             },
             abort: new AbortController().signal,
           }),
@@ -203,7 +203,7 @@ describe("native Task package-tool process authority", () => {
                   success_hypotheses: ["Malformed sibling controls are rejected before execution"],
                 },
                 resource_set: null,
-                source_artifact_locators: [],
+                predecessor_artifact_locators: [],
               },
             },
             abort: new AbortController().signal,
@@ -230,7 +230,7 @@ describe("native Task package-tool process authority", () => {
             workflow_id: "evidence-backed-content-campaign",
             segments: [{ name: "Maintainers", need: "Exact errors", evidence_urls: ["https://example.invalid/test"] }],
             tensions: ["An incompatible predecessor version"], language_patterns: ["Expected and received"], unknowns: [],
-          } }, resource_set: null, source_artifact_locators: [predecessorLocator] },
+          } }, resource_set: null, predecessor_artifact_locators: [predecessorLocator] },
           abort: new AbortController().signal,
         })).rejects.toThrow("Artifact inspection failed: schema_version must be 1; received 2")
       },

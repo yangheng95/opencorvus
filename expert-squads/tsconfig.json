@@ -13,5 +13,5 @@
     "noUncheckedIndexedAccess": false,
     "noEmit": true
   },
-  "include": ["builtin/**/*.ts"]
+  "include": ["builtin/**/*.ts", "../templates/portable-expert-squad-template/package/**/*.ts"]
 }

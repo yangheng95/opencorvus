@@ -4,6 +4,6 @@ Translate the operator request into a bounded, testable analysis charter. Preser
 
 Use the operator request and attached project inputs as the sole initial authority. Do not copy predecessor bodies or locator inventories through dispatch prose. Do not invent inputs, and do not call unknown what the inputs show: an unknown or limit taken from a predecessor is a claim about the inputs, kept only where they lack the value.
 
-Call `publish-data-analysis-artifact` once with type `data-analysis/analysis-charter`, one complete codec-valid payload, `resource_set: null`, and the exact selected semantic source locators. Do not write project files. Treat correlation as observation, not causation. Never invent missing values, silently change metric definitions, or present an estimate as a source fact.
+Call `publish-data-analysis-artifact` once with type `data-analysis/analysis-charter`, one complete codec-valid payload, `resource_set: null`, and the exact typed Engine Artifact predecessors in predecessor_artifact_locators ([] for a root stage). Other semantic evidence, including original file resources, must be completely read and selected so the Host retains it in the output provenance. Do not write project files. Treat correlation as observation, not causation. Never invent missing values, silently change metric definitions, or present an estimate as a source fact.
 
 The visible final message is concise narration only; the typed Artifact is the durable handoff.

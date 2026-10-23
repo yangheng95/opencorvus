@@ -1,5 +1,7 @@
 import {
-  ArtifactReadLocatorSchema, evolutionNativeRequestedRuns, deriveEvolutionNativeMeasurements,
+  ArtifactReadLocatorSchema,
+  evolutionNativeRequestedRuns,
+  deriveEvolutionNativeMeasurements,
   type MetricRecordedSnapshot,
   ArtifactSchemaLimits,
   EngineArtifactEnvelopeSchema,
@@ -35,6 +37,12 @@ import {
   evolutionComparisonMembers,
   parseEvolutionArtifact,
 } from "../lib/evolution-lab/artifacts"
+import {
+  readEngineArtifactEnvelope,
+  requireEvolutionWorkerProducer,
+  assertEvolutionArtifactOwner,
+  selectEvolutionEvidence,
+} from "../lib/evolution-lab/engine-evidence"
 import { candidateMutableTextPaths, compareCandidateIntegrity } from "../lib/evolution-lab/candidate-integrity"
 import { deriveComparisonRecommendation } from "../lib/evolution-lab/comparison"
 import { readEvolutionMetricContext, readRecordedMetricScorer } from "../lib/evolution-lab/metric-context"
@@ -96,33 +104,6 @@ function exactResourceByPath(resources: readonly TaskArtifactRef[], resourcePath
   return matches[0]!
 }
 
-async function readEngineArtifactEnvelope(
-  locator: EngineArtifactLocator,
-  context: ToolContext,
-  purpose = "Exact Evolution Artifact predecessor",
-  select = true,
-) {
-  let offset = 0
-  let text = ""
-  for (;;) {
-    const result = await context.host.engineArtifacts.read({
-      locator,
-      byte_offset: offset,
-      max_bytes: 65_536,
-      delivery: "inline",
-    })
-    if (result.chunk.text === undefined)
-      throw new EvolutionArtifactIntegrityError("Evolution predecessor Artifact is not readable JSON text")
-    text += result.chunk.text
-    if (result.chunk.complete) break
-    if (result.chunk.next_offset === null)
-      throw new EvolutionArtifactIntegrityError("Evolution predecessor Artifact ended before completion")
-    offset = result.chunk.next_offset
-  }
-  if (select) await context.host.engineArtifacts.select({ locator, purpose })
-  return EngineArtifactEnvelopeSchema.parse(JSON.parse(text))
-}
-
 type ComparisonEvidence = {
   locator: EngineArtifactLocator
   envelope: ReturnType<typeof EngineArtifactEnvelopeSchema.parse>
@@ -172,16 +153,26 @@ async function discoverComparisonEvidence(
   // commit.
   const references = createEvolutionArtifactReferences([...selected, ...catalog])
   const campaign = EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(
-    selected.find((item) => references.key(item.locator) === references.key(pair.campaign))!.envelope.payload)
-  const requestedRuns = evolutionNativeRequestedRuns({ snapshot: native, campaign,
-    campaignLocator: pair.campaign, candidateLocator: pair.candidate, referenceKey: references.key,
-    runs: catalog.filter((item) => item.envelope.artifact_type === "evolution-lab/run-evidence-bundle")
-      .map((item) => ({ locator: item.locator,
-        value: EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"].parse(item.envelope.payload) })),
+    selected.find((item) => references.key(item.locator) === references.key(pair.campaign))!.envelope.payload,
+  )
+  const requestedRuns = evolutionNativeRequestedRuns({
+    snapshot: native,
+    campaign,
+    campaignLocator: pair.campaign,
+    candidateLocator: pair.candidate,
+    referenceKey: references.key,
+    runs: catalog
+      .filter((item) => item.envelope.artifact_type === "evolution-lab/run-evidence-bundle")
+      .map((item) => ({
+        locator: item.locator,
+        value: EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"].parse(item.envelope.payload),
+      })),
   })
   const requestedKeys = new Set(requestedRuns.map((run) => references.key(run.locator)))
-  const members = [...evolutionComparisonMembers({ ...pair, catalog, references }),
-    ...catalog.filter((item) => requestedKeys.has(references.key(item.locator)))]
+  const members = [
+    ...evolutionComparisonMembers({ ...pair, catalog, references }),
+    ...catalog.filter((item) => requestedKeys.has(references.key(item.locator))),
+  ]
   const measurements = expandEvolutionMeasurementAliases([...selected, ...members], catalog, references.key)
   for (const item of measurements)
     await context.host.engineArtifacts.select({
@@ -217,22 +208,6 @@ async function discoverComparisonEvidence(
   return [...measurements, ...reviews]
 }
 
-export function requireEvolutionWorkerProducer(
-  envelope: ReturnType<typeof EngineArtifactEnvelopeSchema.parse>,
-  agentID: string,
-) {
-  const { producer } = evolutionArtifactProvenance(envelope)
-  if (
-    producer?.owner_kind !== "projected-worker" ||
-    producer.expert_squad_id !== "evolution-lab" ||
-    producer.package_revision.id !== "evolution-lab" ||
-    producer.agent_id !== agentID
-  )
-    throw new EvolutionArtifactIntegrityError(
-      `${envelope.artifact_type} must be produced by Evolution Lab worker ${agentID}`,
-    )
-}
-
 function attributionIdentifiesOpportunity(input: {
   attribution: { owner_evidence: readonly ArtifactReadLocator[] }
   attributionEnvelope: ReturnType<typeof EngineArtifactEnvelopeSchema.parse>
@@ -240,51 +215,58 @@ function attributionIdentifiesOpportunity(input: {
   opportunityLocator: EngineArtifactLocator
 }) {
   if (input.attribution.owner_evidence.some((locator) => sameJSON(locator, input.opportunityLocator))) return true
-  const references = createEvolutionArtifactReferences([{
-    locator: input.opportunityLocator, envelope: input.opportunityEnvelope,
-  }])
+  const references = createEvolutionArtifactReferences([
+    {
+      locator: input.opportunityLocator,
+      envelope: input.opportunityEnvelope,
+    },
+  ])
   const { sources } = evolutionArtifactProvenance(input.attributionEnvelope)
-  return sources.length === 1 && references.same(sources[0]!, input.opportunityLocator) &&
+  return (
+    sources.some((locator) => references.same(locator, input.opportunityLocator)) &&
     input.attribution.owner_evidence.some((locator) => references.same(locator, input.opportunityLocator))
-
+  )
 }
 
-export const evolutionArtifactOwner = {
-  "evolution-lab/opportunity": "evolution-observer",
-  "evolution-lab/failure-attribution": "evolution-failure-analyst",
-  "evolution-lab/campaign-spec": "evolution-experiment-planner",
-  "evolution-lab/candidate-revision": "evolution-candidate-author",
-  "evolution-lab/run-evidence-bundle": "evolution-evaluator",
-  "evolution-lab/evaluation-result": "evolution-evaluator",
-  "evolution-lab/integrity-review": "evolution-safety-auditor",
-  "evolution-lab/comparison-recommendation": "evolution-recommendation-owner",
-} as const
-
-export function assertEvolutionArtifactOwner(artifactType: keyof typeof evolutionArtifactOwner, agentID: string) {
-  const expectedAgent = evolutionArtifactOwner[artifactType]
-  if (agentID !== expectedAgent)
-    throw new EvolutionArtifactIntegrityError(
-      `${artifactType} must be published by Evolution Lab worker ${expectedAgent}`,
-    )
+type PublicationBranch = (typeof EvolutionPackagePublishableArtifactInputSchema.options)[number]
+function publicationBranch<T extends PublicationBranch["shape"]["artifact_type"]["value"]>(type: T) {
+  const branch = EvolutionPackagePublishableArtifactInputSchema.options.find(
+    (branch) => branch.shape.artifact_type.value === type,
+  )
+  if (!branch) throw new Error("Missing Evolution publication branch " + type)
+  return branch as Extract<PublicationBranch, { shape: { artifact_type: { value: T } } }>
 }
-
-const evolutionPublicationControls = {
-  resource_set: TaskArtifactResourceSetLocatorSchema.nullable(),
-  parent_resource_set: TaskArtifactResourceSetLocatorSchema.optional(),
-  source_artifact_locators: tool.schema.array(ArtifactReadLocatorSchema),
-}
-
-const evolutionPublicationBranches = EvolutionPackagePublishableArtifactInputSchema.options.map((branch) =>
-  branch.extend(evolutionPublicationControls),
-)
-// `.map` widens the branch tuple to a plain array; the discriminated union
-// constructor needs the non-empty tuple shape back. The source union is
-// non-empty by construction, so the assertion restates a fact zod cannot see.
-type EvolutionPublicationBranch = (typeof evolutionPublicationBranches)[number]
-const EvolutionPackagePublicationArtifactInputSchema = tool.schema.discriminatedUnion(
-  "artifact_type",
-  evolutionPublicationBranches as [EvolutionPublicationBranch, ...EvolutionPublicationBranch[]],
-)
+const resourceSet = { resource_set: TaskArtifactResourceSetLocatorSchema.nullable() }
+const predecessors = tool.schema
+  .array(EngineArtifactLocatorSchema)
+  .describe(
+    "Exact typed stage predecessors. Semantic evidence is read and selected from the branch payload; the Host derives complete output provenance.",
+  )
+const EvolutionPackagePublicationArtifactInputSchema = tool.schema.discriminatedUnion("artifact_type", [
+  publicationBranch("evolution-lab/opportunity").extend(resourceSet),
+  publicationBranch("evolution-lab/failure-attribution").extend({
+    ...resourceSet,
+    predecessor_artifact_locators: predecessors.length(1),
+  }),
+  publicationBranch("evolution-lab/campaign-spec").extend({
+    ...resourceSet,
+    predecessor_artifact_locators: predecessors.length(2),
+  }),
+  publicationBranch("evolution-lab/candidate-revision").extend({
+    ...resourceSet,
+    parent_resource_set: TaskArtifactResourceSetLocatorSchema,
+  }),
+  publicationBranch("evolution-lab/run-evidence-bundle").extend({
+    ...resourceSet,
+    predecessor_artifact_locators: predecessors.length(1),
+  }),
+  publicationBranch("evolution-lab/evaluation-result").extend(resourceSet),
+  publicationBranch("evolution-lab/integrity-review").extend(resourceSet),
+  publicationBranch("evolution-lab/comparison-recommendation").extend({
+    ...resourceSet,
+    predecessor_artifact_locators: predecessors.min(2),
+  }),
+])
 
 /**
  * Which artifact types cannot be published without their immutable resource
@@ -301,10 +283,10 @@ const REQUIRED_RESOURCE_SET_BY_ARTIFACT_TYPE: Partial<Record<string, string>> = 
 
 export default tool({
   description:
-    "Validate and publish one strict evolution-lab Artifact ABI value. Pass exactly one top-level artifact object; its selected branch contains the correlated payload, resource set, optional parent resource set, and exact source locators.",
+    "Validate and publish one strict evolution-lab Artifact ABI value. Pass exactly one top-level artifact object; its selected branch contains the correlated payload and resource set. Only branches with typed stage dependencies take predecessor_artifact_locators; only a candidate takes parent_resource_set. The Host derives complete provenance from real read/select.",
   args: {
     artifact: EvolutionPackagePublicationArtifactInputSchema.describe(
-      "One correlated publication: select one artifact_type branch and provide that branch's exact payload, resource_set, optional parent_resource_set, and source_artifact_locators inside this object.",
+      "One correlated publication: select one artifact_type branch and provide its exact payload and resource_set, plus only the controls declared by that branch. Evidence locators already in payload are read/selected directly.",
     ),
   },
   async execute(args, context) {
@@ -321,13 +303,13 @@ export default tool({
         ? await (async () => {
             const attribution = EvolutionArtifactSchemas["evolution-lab/failure-attribution"].parse(publication.payload)
             if (
-              publication.source_artifact_locators.length !== 1 ||
-              publication.source_artifact_locators[0]?.source !== "engine_artifact"
+              publication.predecessor_artifact_locators.length !== 1 ||
+              publication.predecessor_artifact_locators[0]?.source !== "engine_artifact"
             )
               throw new EvolutionArtifactIntegrityError(
                 "failure-attribution requires exactly one opportunity Engine Artifact source",
               )
-            const opportunityLocator = publication.source_artifact_locators[0]
+            const opportunityLocator = publication.predecessor_artifact_locators[0]
             const opportunityEnvelope = await readEngineArtifactEnvelope(
               opportunityLocator,
               context,
@@ -343,17 +325,18 @@ export default tool({
               throw new EvolutionArtifactIntegrityError(
                 "failure-attribution owner evidence must identify its exact opportunity source",
               )
+            await selectEvolutionEvidence(attribution.owner_evidence, context, "Failure attribution owner evidence")
             return attribution
           })()
         : artifact_type === "evolution-lab/campaign-spec"
           ? await (async () => {
               const campaignInput = EvolutionCampaignPublishInputSchema.parse(publication.payload)
-              if (publication.source_artifact_locators.some((locator) => locator.source !== "engine_artifact"))
+              if (publication.predecessor_artifact_locators.some((locator) => locator.source !== "engine_artifact"))
                 throw new EvolutionArtifactIntegrityError(
                   "campaign-spec sources must be exact Engine Artifact locators",
                 )
               const sources = await Promise.all(
-                publication.source_artifact_locators
+                publication.predecessor_artifact_locators
                   .filter((locator): locator is EngineArtifactLocator => locator.source === "engine_artifact")
                   .map(async (locator) => ({ locator, envelope: await readEngineArtifactEnvelope(locator, context) })),
               )
@@ -514,13 +497,7 @@ export default tool({
     if (artifact_type === "evolution-lab/candidate-revision") {
       const candidatePayload = EvolutionCandidateRevisionPublishInputSchema.parse(payload)
       const campaignLocator = candidatePayload.development_campaign_locator
-      if (
-        campaignLocator &&
-        !publication.source_artifact_locators.some((locator) => sameJSON(locator, campaignLocator))
-      )
-        throw new EvolutionArtifactIntegrityError(
-          "candidate publication sources must include its exact development campaign",
-        )
+      await selectEvolutionEvidence(candidatePayload.provenance, context, "Candidate authoring provenance")
       const developmentCampaign = campaignLocator
         ? await (async () => {
             const campaignEnvelope = await readEngineArtifactEnvelope(campaignLocator, context)
@@ -528,6 +505,7 @@ export default tool({
               throw new EvolutionArtifactIntegrityError(
                 "candidate development campaign locator must identify a campaign-spec",
               )
+            requireEvolutionWorkerProducer(campaignEnvelope, "evolution-experiment-planner")
             const campaign = EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(campaignEnvelope.payload)
             if (campaign.dataset_partition !== "development")
               throw new EvolutionArtifactIntegrityError("candidate authoring requires an exact development campaign")
@@ -609,37 +587,60 @@ export default tool({
       const receipt = EvolutionMetricReceiptSchema.parse(JSON.parse(receiptText))
       if (JSON.stringify(receipt) !== receiptText)
         throw new EvolutionArtifactIntegrityError("metric evaluation receipt is not exact canonical JSON")
-      const binding = await readEvolutionMetricContext({
-        campaign_spec_locator: EngineArtifactLocatorSchema.parse(receipt.campaign_spec_locator),
-        candidate_revision_locator: receipt.candidate_revision_locator
-          ? EngineArtifactLocatorSchema.parse(receipt.candidate_revision_locator) : null,
-        run_evidence_locator: EngineArtifactLocatorSchema.parse(receipt.run_evidence_locator),
-      }, context)
+      const binding = await readEvolutionMetricContext(
+        {
+          campaign_spec_locator: EngineArtifactLocatorSchema.parse(receipt.campaign_spec_locator),
+          candidate_revision_locator: receipt.candidate_revision_locator
+            ? EngineArtifactLocatorSchema.parse(receipt.candidate_revision_locator)
+            : null,
+          run_evidence_locator: EngineArtifactLocatorSchema.parse(receipt.run_evidence_locator),
+        },
+        context,
+      )
       const { run, campaign, collectorResource } = binding
-      if (receipt.case_id !== run.case_id || receipt.arm !== run.arm || receipt.repetition !== run.repetition ||
-          receipt.trial_task_id !== run.task_id || receipt.trial_revision_digest !== run.revision_equality.installed) {
+      if (
+        receipt.case_id !== run.case_id ||
+        receipt.arm !== run.arm ||
+        receipt.repetition !== run.repetition ||
+        receipt.trial_task_id !== run.task_id ||
+        receipt.trial_revision_digest !== run.revision_equality.installed
+      ) {
         throw new EvolutionArtifactIntegrityError("Metric receipt does not identify its exact Trial run and slot")
       }
-      if (!sameJSON(receipt.scorers.map((item) => item.scorer_id).toSorted(),
-        campaign.scorers.map((item) => item.scorer_id).toSorted())) {
+      if (
+        !sameJSON(
+          receipt.scorers.map((item) => item.scorer_id).toSorted(),
+          campaign.scorers.map((item) => item.scorer_id).toSorted(),
+        )
+      ) {
         throw new EvolutionArtifactIntegrityError("Metric receipt must contain the complete frozen scorer set")
       }
-      const verified = await Promise.all(receipt.scorers.map(async (scorer) => {
-        const evidence = scorer.evidence[0]
-        if (scorer.evidence.length !== 1 || evidence?.source !== "task_artifact_resource")
-          throw new EvolutionArtifactIntegrityError(`Metric receipt scorer ${scorer.scorer_id} requires one recorded attempt`)
-        const recorded = await readRecordedMetricScorer(evidence.ref, context)
-        const definition = campaign.scorers.find((item) => item.scorer_id === scorer.scorer_id)!
-        if (recorded.observation.trial_task_id !== run.task_id ||
+      const verified = await Promise.all(
+        receipt.scorers.map(async (scorer) => {
+          const evidence = scorer.evidence[0]
+          if (scorer.evidence.length !== 1 || evidence?.source !== "task_artifact_resource")
+            throw new EvolutionArtifactIntegrityError(
+              `Metric receipt scorer ${scorer.scorer_id} requires one recorded attempt`,
+            )
+          const recorded = await readRecordedMetricScorer(evidence.ref, context)
+          const definition = campaign.scorers.find((item) => item.scorer_id === scorer.scorer_id)!
+          if (
+            recorded.observation.trial_task_id !== run.task_id ||
             !sameTaskArtifactRef(recorded.observation.subject, collectorResource) ||
             recorded.observation.scorer_revision !== definition.scorer_revision ||
-            !sameJSON(recorded.scorer, scorer)) {
-          throw new EvolutionArtifactIntegrityError(`Metric receipt scorer ${scorer.scorer_id} differs from its recorded observation`)
-        }
-        return recorded
-      }))
+            !sameJSON(recorded.scorer, scorer)
+          ) {
+            throw new EvolutionArtifactIntegrityError(
+              `Metric receipt scorer ${scorer.scorer_id} differs from its recorded observation`,
+            )
+          }
+          return recorded
+        }),
+      )
       const origins = verified.map(({ observation }) => ({
-        task_id: observation.task_id, producer: observation.producer, iteration: observation.iteration,
+        task_id: observation.task_id,
+        producer: observation.producer,
+        iteration: observation.iteration,
       }))
       if (origins.some((origin) => !sameJSON(origin, origins[0]))) {
         throw new EvolutionArtifactIntegrityError(
@@ -651,9 +652,12 @@ export default tool({
       payload = EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse({
         measurement_identity: {
           owner_task_id: verified[0]!.observation.task_id,
-          scorer_results: verified.map(({ observation, scorer }) => ({
-            scorer_id: scorer.scorer_id, metric_result_id: observation.metric_result_id,
-          })).sort((a, b) => a.scorer_id < b.scorer_id ? -1 : a.scorer_id > b.scorer_id ? 1 : 0),
+          scorer_results: verified
+            .map(({ observation, scorer }) => ({
+              scorer_id: scorer.scorer_id,
+              metric_result_id: observation.metric_result_id,
+            }))
+            .sort((a, b) => (a.scorer_id < b.scorer_id ? -1 : a.scorer_id > b.scorer_id ? 1 : 0)),
         },
         campaign_spec_locator: receipt.campaign_spec_locator,
         candidate_revision_locator: receipt.candidate_revision_locator,
@@ -680,8 +684,8 @@ export default tool({
       // The Evaluator names the slot; every other field is stamped here from
       // the facts that own it. Nothing it could restate would verify anything.
       const slot = EvolutionRunEvidencePublishInputSchema.parse(payload)
-      const campaignLocator = publication.source_artifact_locators[0]
-      if (publication.source_artifact_locators.length !== 1 || campaignLocator?.source !== "engine_artifact")
+      const campaignLocator = publication.predecessor_artifact_locators[0]
+      if (publication.predecessor_artifact_locators.length !== 1 || campaignLocator?.source !== "engine_artifact")
         throw new EvolutionArtifactIntegrityError(
           "run-evidence-bundle requires exactly one source: the exact campaign-spec Engine Artifact whose slot this Trial fills",
         )
@@ -774,8 +778,8 @@ export default tool({
         run_evidence_resource: resourceIdentity(resource),
         task_id: bundle.task.id,
         terminal_time: terminalTime,
-        terminal_event_id: "lifecycle" in bundle.terminal_occurrence
-          ? bundle.terminal_occurrence.lifecycle.terminalEventID : null,
+        terminal_event_id:
+          "lifecycle" in bundle.terminal_occurrence ? bundle.terminal_occurrence.lifecycle.terminalEventID : null,
         model,
         environment_digest: campaign.environment_digest,
         token_usage: usage.token_usage,
@@ -799,10 +803,6 @@ export default tool({
         throw new EvolutionArtifactIntegrityError(
           "integrity-review must review an exact Engine Artifact evaluation result",
         )
-      if (!publication.source_artifact_locators.some((locator) => sameJSON(locator, evaluationLocator)))
-        throw new EvolutionArtifactIntegrityError(
-          "integrity-review must directly source the exact evaluation result it reviews",
-        )
       const evaluationEnvelope = await readEngineArtifactEnvelope(
         evaluationLocator,
         context,
@@ -822,12 +822,7 @@ export default tool({
         throw new EvolutionArtifactIntegrityError(
           "integrity-review slot identity must equal its exact evaluation result",
         )
-      const sourceKeys = new Set(publication.source_artifact_locators.map((locator) => JSON.stringify(locator)))
       for (const locator of review.revision?.supersedes ?? []) {
-        if (!sourceKeys.has(JSON.stringify(locator)))
-          throw new EvolutionArtifactIntegrityError(
-            "Review revision must directly source every explicitly superseded Review",
-          )
         const parentEnvelope = await readEngineArtifactEnvelope(locator, context, "Exact Review being superseded")
         if (parentEnvelope.artifact_type !== "evolution-lab/integrity-review")
           throw new EvolutionArtifactIntegrityError("Review revision predecessor must be an integrity-review")
@@ -846,18 +841,17 @@ export default tool({
             "Review revision predecessor must review the same exact Evaluation and slot",
           )
       }
-      for (const finding of review.findings)
-        for (const locator of finding.evidence)
-          if (!sourceKeys.has(JSON.stringify(locator)))
-            throw new EvolutionArtifactIntegrityError(
-              "integrity review finding evidence must be an exact direct source of that Artifact",
-            )
+      await selectEvolutionEvidence(
+        review.findings.flatMap((finding) => finding.evidence),
+        context,
+        "Independent integrity review finding evidence",
+      )
     }
     if (artifact_type === "evolution-lab/comparison-recommendation") {
-      if (publication.source_artifact_locators.some((locator) => locator.source !== "engine_artifact"))
+      if (publication.predecessor_artifact_locators.some((locator) => locator.source !== "engine_artifact"))
         throw new EvolutionArtifactIntegrityError("comparison sources must all be exact Engine Artifact locators")
       const envelopes = await Promise.all(
-        publication.source_artifact_locators
+        publication.predecessor_artifact_locators
           .filter((locator): locator is EngineArtifactLocator => locator.source === "engine_artifact")
           .map(async (locator) => ({ locator, envelope: await readEngineArtifactEnvelope(locator, context) })),
       )
@@ -891,7 +885,9 @@ export default tool({
         if (item.envelope.artifact_type === "evolution-lab/integrity-review") {
           requireEvolutionWorkerProducer(item.envelope, "evolution-safety-auditor")
           const review = EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse(item.envelope.payload)
-          const sourceKeys = new Set(evolutionArtifactProvenance(item.envelope).sources.map((locator) => JSON.stringify(locator)))
+          const sourceKeys = new Set(
+            evolutionArtifactProvenance(item.envelope).sources.map((locator) => JSON.stringify(locator)),
+          )
           for (const locator of review.revision?.supersedes ?? [])
             if (!sourceKeys.has(JSON.stringify(locator)))
               throw new EvolutionArtifactIntegrityError(
@@ -925,19 +921,20 @@ export default tool({
           locator: item.locator,
           value: EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"].parse(item.envelope.payload),
         }))
-      const nativeMeasurements = deriveEvolutionNativeMeasurements({ snapshot: native, runs, evaluations,
-        campaign: EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(campaigns[0]!.envelope.payload) })
-      for (const observation of nativeMeasurements.unpublished) {
-        const locator = { source: "task_artifact_resource" as const, ref: observation.evidence_ref }
-        let offset = 0
-        for (;;) {
-          const read = await context.host.engineArtifacts.read({ locator, byte_offset: offset, max_bytes: 65_536, delivery: "inline" })
-          if (read.chunk.complete) break
-          if (read.chunk.next_offset === null) throw new Error("Native metric attempt read ended before completion")
-          offset = read.chunk.next_offset
-        }
-        await context.host.engineArtifacts.select({ locator, purpose: "Unpublished native measurement consumed by this comparison" })
-      }
+      const nativeMeasurements = deriveEvolutionNativeMeasurements({
+        snapshot: native,
+        runs,
+        evaluations,
+        campaign: EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(campaigns[0]!.envelope.payload),
+      })
+      await selectEvolutionEvidence(
+        nativeMeasurements.unpublished.map((observation) => ({
+          source: "task_artifact_resource" as const,
+          ref: observation.evidence_ref,
+        })),
+        context,
+        "Unpublished native measurement consumed by this comparison",
+      )
       await context.host.metrics.assertRecordedSnapshot(nativeMeasurements)
       payload = deriveComparisonRecommendation({
         nativeMeasurements,
@@ -950,6 +947,10 @@ export default tool({
         reviews,
         runs,
       })
+    }
+    if (artifact_type === "evolution-lab/opportunity") {
+      const opportunity = EvolutionArtifactSchemas["evolution-lab/opportunity"].parse(payload)
+      await selectEvolutionEvidence(opportunity.evidence, context, "Observed opportunity diagnostic evidence")
     }
     const receipt = await context.host.engineArtifacts.publish({
       artifact_type,

@@ -1,5 +1,5 @@
 import { tool } from "@opencorvus-ai/plugin"
-import policy from "../assets/reconciliation-policy.json" with { type: "text" }
+import policy from "../assets/reconciliation-policy.json" with { type: "json" }
 
 const ARTIFACT_TYPE = "portable-template/reconciliation-policy"
 const ARTIFACT_SCHEMA_VERSION = 1
@@ -13,9 +13,8 @@ export default tool({
       artifact_type: ARTIFACT_TYPE,
       schema_version: ARTIFACT_SCHEMA_VERSION,
       label: ARTIFACT_LABEL,
-      payload: JSON.parse(policy),
+      payload: policy,
       resources: [],
-      source_artifact_locators: [],
     })
     context.metadata({
       title: ARTIFACT_LABEL,

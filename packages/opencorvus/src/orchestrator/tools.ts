@@ -1053,8 +1053,8 @@ export function createOrchestratorTools(input: {
         : z.enum(AGENT_COORDINATION_ACTIVE_DECISIONS)
       ).describe(
         input.terminalConversationAuthority
-          ? "redispatch records the only continuation authority and must be followed by dispatch_agent using turn.kind=continuation and the returned coordination action authority; cancel_worker aborts a real requesting worker Runtime; ask_user opens a real task interaction; fail_task is an exceptional force-majeure stop that makes the Task inactive and is never a normal business outcome. acknowledge_terminal is valid only for the exact host-authorized terminal conversation."
-          : "redispatch records the only continuation authority and must be followed by dispatch_agent using turn.kind=continuation and the returned coordination action authority; cancel_worker aborts a real requesting worker Runtime; ask_user opens a real task interaction; fail_task is an exceptional force-majeure stop that makes the Task inactive and is never a normal business outcome.",
+          ? "redispatch records the only continuation authority and is applied by an explicit call to the currently projected dispatch Tool, using its exact schema with turn.kind=continuation and the returned coordination action authority; cancel_worker aborts a real requesting worker Runtime; ask_user opens a real task interaction; fail_task is an exceptional force-majeure stop that makes the Task inactive and is never a normal business outcome. acknowledge_terminal is valid only for the exact host-authorized terminal conversation."
+          : "redispatch records the only continuation authority and is applied by an explicit call to the currently projected dispatch Tool, using its exact schema with turn.kind=continuation and the returned coordination action authority; cancel_worker aborts a real requesting worker Runtime; ask_user opens a real task interaction; fail_task is an exceptional force-majeure stop that makes the Task inactive and is never a normal business outcome.",
       ) as z.ZodType<AgentCoordinationDecision>,
       message: z
         .string()
@@ -1658,11 +1658,18 @@ export function createOrchestratorTools(input: {
               actionID: action.payload.action_id,
               result: action.payload.result ?? {},
             })
-            return (
-              `Responded to coordination request ${request.payload.request_id} with a pending redispatch action. ` +
-              `response=${response.payload.response_id}; action=${response.payload.action_id}; ` +
-              `call dispatch_agent with dispatch.target=${binding.identity.agentID}, dispatch.turn.kind=continuation, and dispatch.turn.authority.coordination_action_id=${response.payload.action_id} explicitly.`
-            )
+            return JSON.stringify({
+              status: "pending",
+              request_id: request.payload.request_id,
+              response_id: response.payload.response_id,
+              continuation: {
+                target: binding.identity.agentID,
+                work_scope: workScope,
+                turn: { kind: "continuation", authority: {
+                  kind: "coordination_action", coordination_action_id: response.payload.action_id,
+                } },
+              },
+            })
           }
           if (decision === "cancel_worker") {
             const { session } = await assertAgentCoordinationRequestSessionLineage({

@@ -26,7 +26,7 @@ describe("portable Expert Squad scheduler template", () => {
     expect({
       version: manifest.version,
       dispatch: schedulerCapabilityGrants(manifest).builtInToolIDs.filter((id) => id.startsWith("dispatch_")),
-    }).toEqual({ version: "2026.10.14.1", dispatch: ["dispatch_agents"] })
+    }).toEqual({ version: "2026.10.24.1", dispatch: ["dispatch_agents"] })
 
     const trackedScheduler = await fs.readFile(
       path.resolve(import.meta.dir, "../../../templates/portable-expert-squad-template/package/agents/orchestrator/system.md"),
