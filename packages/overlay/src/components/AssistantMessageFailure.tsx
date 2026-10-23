@@ -9,18 +9,20 @@ export function AssistantMessageFailure(props: {
   details?: string
   cardID?: string
   messageID?: string
+  cancelled?: boolean
 }) {
   return (
     <div
       class="msg-tool-error msg-assistant-error"
       data-agent-error-card-id={props.cardID}
       data-agent-error-message-id={props.messageID}
-      role="alert"
+      data-cancelled={props.cancelled ? "true" : undefined}
+      role={props.cancelled ? "status" : "alert"}
     >
       <div class="msg-assistant-error__heading">
-        <strong>{t("card.error_reason_title")}</strong>
+        <strong>{t(props.cancelled ? "card.cancelled_reason_title" : "card.error_reason_title")}</strong>
         <Show when={props.messageID}>
-          <CardErrorReasonIndicator reason={props.reason} details={props.details} />
+          <CardErrorReasonIndicator reason={props.reason} details={props.details} cancelled={props.cancelled} />
         </Show>
       </div>
       <div>{props.reason}</div>

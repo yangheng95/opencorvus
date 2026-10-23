@@ -3,6 +3,7 @@ import { __setHostTransportForTest } from "../src/services/host-transport-runtim
 import type { HostTransport, StreamHandlers, StreamOpenRequest, TransportRequest, TransportResponse } from "../src/services/host-transport"
 import { replyInteraction, rejectInteraction } from "../src/services/interaction-reply"
 import { connectSideChat } from "../src/services/side-chat"
+import type { SubagentConversationTranscript } from "../src/services/subagent-conversation"
 import type { InteractionData } from "../src/components/InteractionCard"
 import { questionInteraction, resolveQuestionInteraction, reuseQuestionInteraction } from "../src/utils/question-interaction"
 import { AppLog } from "../src/utils/log"
@@ -147,16 +148,58 @@ function sideStream() {
   let stream!: StreamHandlers
   const updates: InteractionData[][] = []
   const errors: unknown[] = []
+  const transcripts: SubagentConversationTranscript[] = []
   __setHostTransportForTest({
     request: async () => ({ status: 200, ok: true, headers: {}, body: {} }),
     openStream: (_request: unknown, handlers: StreamHandlers) => { stream = handlers; return { close() {} } },
   } as unknown as HostTransport)
   const close = connectSideChat({ sessionID: "ses_side", directory: "D:/project-side" }, {
-    transcript() {}, connection() {}, activity() {}, error(error) { errors.push(error) },
+    transcript(value) { transcripts.push(value) }, connection() {}, activity() {}, error(error) { errors.push(error) },
     interactions(value) { updates.push(value) },
   })
-  return { updates, errors, close, send(event: unknown) { stream.onEvent(JSON.stringify(event)) } }
+  return { updates, errors, transcripts, close, send(event: unknown) { stream.onEvent(JSON.stringify(event)) } }
 }
+
+test("current Side diagnostics retain their exact Message while historical errors stay with the original transcript", () => {
+  const connection = sideStream()
+  const info = (id: string, created: number, error: unknown) => ({
+    id, sessionID: "ses_side", agentID: "chat", sessionAgentID: "chat", role: "assistant", author: "chat",
+    channel: "chat", originSource: "", resolvedRole: "chat", time: { created, completed: created + 1 },
+    orderKey: `v1:${String(created).padStart(16, "0")}:0000000000000030:0000000000000000:message:${id}`, error,
+  })
+  const original = info("msg_old", 100, { name: "MessageAbortedError", data: { message: "Original cancellation" } })
+  const current = info("msg_current", 200, { name: "APIError", data: { message: "Current Provider failure" } })
+  const payload = (message: typeof original) => ({ error: message.error,
+    failureOccurrence: { session_id: message.sessionID, assistant_message_id: message.id,
+      error_name: (message.error as { name: string }).name } })
+  const unsettled = { ...payload(original), observationFailures: [{ phase: "snapshot_patch", message: "Retained read failure" }] }
+  try {
+    connection.send(connectionSnapshot([]))
+    for (const message of [original, current]) connection.send({ type: "message.updated", payload: { info: message } })
+    for (const value of [payload(original), payload(current), unsettled])
+      connection.send({ type: "session.error", session_id: "ses_side", payload: value })
+    expect(connection.transcripts.at(-1)?.messages.map(message => message.info)).toEqual([original, current])
+    expect(connection.errors).toEqual([payload(current), unsettled])
+  } finally { connection.close() }
+})
+
+test("side session errors retain the original cancellation occurrence and additional convergence evidence", () => {
+  const connection = sideStream()
+  const occurrence = { session_id: "ses_side", assistant_message_id: "msg_side", error_name: "MessageAbortedError" }
+  const payload = {
+    error: { name: "MessageAbortedError", data: { message: "The operator stopped this turn",
+      cancellation: { actor: "user", source: "session.abort", surface: "session", requestID: "stop-side",
+        reason: "The operator stopped this turn", targetSessionID: "ses_side" } } },
+    failureOccurrence: occurrence,
+    convergenceFailure: { failure_occurrence: occurrence, unconverged_part_ids: ["prt_side"],
+      write_errors: [{ part_id: "prt_side", message: "Actual storage write failure" }] },
+    observationFailures: [{ phase: "snapshot_patch", message: "Actual snapshot read failure" }],
+  }
+  try {
+    connection.send({ type: "session.error", session_id: "ses_side", payload })
+    expect(connection.errors).toEqual([payload])
+  } finally { connection.close() }
+})
 
 test("side transport recovery preserves its exact Question owner and reports current business outcomes", async () => {
   const streams: StreamHandlers[] = []
@@ -213,7 +256,7 @@ test("side transport recovery preserves its exact Question owner and reports cur
     ])
     expect(updates[1]![0]).toBe(original)
     expect(activity).toEqual([true])
-    expect(errors).toEqual([businessError])
+    expect(errors).toEqual([{ sessionID: "ses_side", error: businessError }])
     expect(AppLog.entries.at(-1)).toMatchObject({
       level: "warn", service: "side-chat",
       extra: { sessionID: "ses_side", directory: "D:/project-side", connectionGeneration: 1, error: interrupted.stack },

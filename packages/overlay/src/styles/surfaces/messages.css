@@ -343,6 +343,12 @@
   white-space: normal;
 }
 
+.msg-assistant-error[data-cancelled="true"] {
+  background: var(--surface-inset);
+  border-color: var(--border);
+  color: var(--text-soft);
+}
+
 .msg-assistant-error__heading {
   display: flex;
   align-items: center;

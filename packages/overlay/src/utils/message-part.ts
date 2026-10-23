@@ -46,7 +46,14 @@ export function messageFailurePresentation(reason: string, responseBody?: string
   return { reason: packet?.message ?? packet?.code ?? packet?.type ?? reason, details }
 }
 
-export function assistantMessageFailure(info: any): { reason: string; details?: string } | undefined {
+/** Canonical message cancellation, independent of translated reason text. */
+export function isMessageAbortedError(error: unknown): boolean {
+  if (!error || typeof error !== "object" || !("name" in error) || error.name !== "MessageAbortedError") return false
+  if (!("data" in error) || !error.data || typeof error.data !== "object") return false
+  return "message" in error.data && typeof error.data.message === "string"
+}
+
+export function assistantMessageFailure(info: any): { reason: string; details?: string; cancelled: boolean } | undefined {
   if (String(info?.role || "") !== "assistant" || !info?.error) return undefined
   const error = info.error
   if (typeof error === "object") {
@@ -54,7 +61,12 @@ export function assistantMessageFailure(info: any): { reason: string; details?: 
       .find((value) => typeof value === "string" && value.trim())?.trim()
     if (reason) {
       const responseBody = error?.data?.responseBody
-      return messageFailurePresentation(reason, typeof responseBody === "string" ? responseBody : undefined)
+      const cancelled = isMessageAbortedError(error)
+      return {
+        ...messageFailurePresentation(reason, cancelled ? JSON.stringify(error, null, 2)
+          : typeof responseBody === "string" ? responseBody : undefined),
+        cancelled,
+      }
     }
   }
   throw new Error(`assistant message ${String(info.id || "")} has an error without a displayable reason`)

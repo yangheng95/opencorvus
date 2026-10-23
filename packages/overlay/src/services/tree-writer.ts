@@ -111,21 +111,17 @@ function messageInfoIsAssistant(info: any): boolean {
   return String(info?.role || "") === "assistant"
 }
 
-function assistantMessageWasAborted(info: any): boolean {
-  return messageInfoIsAssistant(info) && String(info?.error?.name || "") === "MessageAbortedError"
-}
-
 function assistantMessageSettlement(info: any): ProjectedSessionStatus | undefined {
   if (!messageInfoIsAssistant(info)) return
   const completedAt = Number(info?.time?.completed)
-  if (assistantMessageWasAborted(info)) {
+  const failure = assistantMessageFailure(info)
+  if (failure?.cancelled) {
     return {
       cardStatus: "completed",
       terminalReason: "aborted",
       ...(completedAt > 0 ? { timeCompleted: completedAt } : {}),
     }
   }
-  const failure = assistantMessageFailure(info)
   if (failure) {
     return {
       cardStatus: "error",

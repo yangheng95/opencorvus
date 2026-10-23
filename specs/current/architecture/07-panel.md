@@ -472,6 +472,14 @@ and Side chat lists. A real assistant error retains its reason and error state;
 identity-only rows do not create visible message boundaries. Archive and
 turn-artifact consumers retain their existing visible-output contracts.
 
+Message cancellation derives from the canonical `MessageAbortedError` shape,
+through one shared presentation reader. Main and Side projections retain the
+aborted terminal reason. Message-level cancellation uses a neutral stopped
+notice with its original reason and complete cancellation details; member
+history carries that same classification with the original Message identity.
+Copy controls and headings follow the current language. Other assistant errors
+retain their error presentation, and the underlying Message/Tool facts stay intact.
+
 Review selection is exact group/path. Material request identity includes endpoints,
 objects, evidence and receipts in memory; ambiguous shorthand is a precise error.
 Loading/failure cannot present a previous preview. The existing logical immutable
@@ -822,6 +830,14 @@ transcript parser reconcile reconnects; current activity comes from Session
 status and exact-occurrence lifecycle events. The main selection, prompt owner
 and transcript remain independent. Side chats are retained and reopenable;
 closing their tab hides the panel rather than deleting audit history.
+Side diagnostics retain the original complete Session error payload until
+display, including its failure occurrence and convergence/observation failures.
+Replayed errors whose exact original Message is followed by a later Message in
+the same transcript remain with that historical Message. Current and uncorrelated
+diagnostics still reach the panel's notice owner, as do additional persistence
+or observation failures. A cancellation is neutral only when those additional
+faults are absent. The existing transcript supplies this qualification; there
+is no extra error cache, message lookup or inferred timestamp boundary.
 The reference-history disclosure retains the user's open/closed choice in the
 existing conversation disclosure store, scoped to API authority, source and Side
 Session. Its layout choice survives Dock remounts and primary-conversation

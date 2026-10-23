@@ -110,18 +110,28 @@ export function connectSideChat(
             } else if (base) {
               live = observeSubagentConversationLiveEvent(live, event)
             }
-            if (base && event.type !== "session.heartbeat")
-              handlers.transcript(projectSubagentConversationLive(base, live))
+            const transcript = base && event.type !== "session.heartbeat" ? projectSubagentConversationLive(base, live) : undefined
+            if (transcript) handlers.transcript(transcript)
             if (event.type === "agent.execution.lifecycle" && event.session_id === target.sessionID) {
-              const latestInput =
-                base &&
-                projectSubagentConversationLive(base, live).messages.findLast((message) => message.info.role === "user")
+              const latestInput = transcript?.messages.findLast((message) => message.info.role === "user")
               if (event.payload.inputMessageID === latestInput?.messageID) {
                 lifecycleVersion++
                 handlers.activity(["streaming", "retry"].includes(event.payload.status?.type))
               }
             }
-            if (event.type === "session.error") handlers.error(event.payload.error ?? event.payload)
+            if (event.type === "session.error") {
+              const payload = event.payload
+              const occurrence = payload?.failureOccurrence
+              const original = transcript?.messages.find((message) =>
+                message.messageID === occurrence?.assistant_message_id && message.sessionID === occurrence?.session_id)
+              const latest = original && transcript?.messages.findLast((message) => message.sessionID === original.sessionID)
+              // Reconnection replays historical diagnostics. Their original
+              // Message keeps the reason; only the current occurrence owns a
+              // conversation-wide notice. Unsettled persistence faults still
+              // require attention even after a subsequent Message arrives.
+              if (!original || latest?.messageID === original.messageID ||
+                payload.convergenceFailure || payload.observationFailures?.length) handlers.error(payload)
+            }
             if (event.session_id === target.sessionID) {
               const payload = event.payload
               const id = payload?.id ?? payload?.requestID

@@ -16,7 +16,7 @@ function stopMetaClick(event: MouseEvent): void {
   event.stopPropagation()
 }
 
-export function CardErrorReasonIndicator(props: { reason: string; details?: string }) {
+export function CardErrorReasonIndicator(props: { reason: string; details?: string; cancelled?: boolean }) {
   const [copyFeedback, setCopyFeedback] = createSignal<"copied" | "failed" | null>(null)
   let copyFeedbackTimer: number | undefined
 
@@ -41,7 +41,7 @@ export function CardErrorReasonIndicator(props: { reason: string; details?: stri
   const feedbackText = () => {
     if (copyFeedback() === "copied") return t("common.copied")
     if (copyFeedback() === "failed") return t("markdown.copy_failed")
-    return t("card.error_reason_copy_hint")
+    return t(props.cancelled ? "card.cancelled_reason_copy_hint" : "card.error_reason_copy_hint")
   }
 
   return (
@@ -51,22 +51,22 @@ export function CardErrorReasonIndicator(props: { reason: string; details?: stri
         type="button"
         variant="ghost"
         size="icon"
-        tone="danger"
+        tone={props.cancelled ? "neutral" : "danger"}
         class="card-error-reason-indicator"
         data-chrome="icon-action"
         data-ui="card-error-reason"
         data-copy-feedback={copyFeedback() ?? undefined}
-        aria-label={copyFeedback() ? feedbackText() : t("card.error_reason_copy_hint")}
+        aria-label={feedbackText()}
         onClick={(event: MouseEvent) => {
           event.stopPropagation()
           void copyReason()
         }}
       >
-        <Icon name={copyFeedback() === "copied" ? "check" : "error-reason"} size="medium" />
+        <Icon name={copyFeedback() === "copied" ? "check" : props.cancelled ? "copy" : "error-reason"} size="medium" />
       </Tooltip.Trigger>
       <Tooltip.Portal>
         <Tooltip.Content class="card-error-reason-tooltip" data-ui="card-error-reason-tooltip">
-          <strong>{t("card.error_reason_title")}</strong>
+          <strong>{t(props.cancelled ? "card.cancelled_reason_title" : "card.error_reason_title")}</strong>
           <pre>{props.reason}</pre>
           <span data-copy-feedback={copyFeedback() ?? undefined} aria-live="polite">
             {feedbackText()}

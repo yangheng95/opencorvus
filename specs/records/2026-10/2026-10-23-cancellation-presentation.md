@@ -1,0 +1,57 @@
+# 取消事实的统一展示
+
+## Recall
+
+554继续单开发agent、真实UI体验、OpenCorvus原认证和完整models目录、Sol流式验收、提交推送。用户后续禁止子agent覆盖旧Goal文字。553是progress：f78e8e4ff已推送、fresh0/0，48项聚焦合同、四实图/4次Sol与原exec56445完整闭合。工作区仅原两缓存；无活跃自有进程或页面。Goal保持active。
+
+已读553 Recall及实际SQLite、07-panel、553/506/354历史决策；搜索全部assistantMessageFailure、MessageAbortedError、messageFailures、Side事件/错误调用点、Card/ChatBubble/成员投影、类型及CSS/英中词条。已读相关side-chat-transport、subagent-conversation-service、subagent-terminal-projection，均为数据/传输合同，无DOM/组件或截图测试；不新增/运行UI自动化。沿用已应用computer-use与benchmark-debug-template真实页面、截图人工复核及资源结算。
+
+## 修改前分析
+
+553图03/04实际Stop后，许可卡已正确终结，但Side banner为红色needs attention，消息为红色Error details。原SQLite msg_g0VYoiNsB00zBpcg0Cog保存MessageAbortedError+user/session.abort完整来源；protocol_event按aggregate_id读取最新生命周期pev_g0VYoiVXw001c3DzdMLT是同一输入的terminal/aborted，session.error pev_g0VYoiVX600t7k45k1c9保留同一原错误与failureOccurrence，无额外convergenceFailure/observationFailures。先按nullable session_id检索无结果，后按规范aggregate_id确认，不能据空结果推断丢事件。因此本次为展示语义差异；553共享Task/Mission/Session取消审计仍适用，无新增调度/终态失败证据。
+
+Main tree-writer先识别MessageAbortedError并投影completed+terminalReason=aborted；SideMessage只看errorReason一律error。通用assistantMessageFailure返回原因却不带取消分类，成员messageFailures也使用同一红色AssistantMessageFailure。Side stream把session.error的error解包丢掉failureOccurrence及其它诊断，再把对象format成string存入error信号，UI无法判断真实种类。506仅修ToolFailureCause的工具汇总/详情，354仅修消息错误归属，均未处理Side和消息级取消显示，因此问题延续。
+
+完整原错误和取消来源必须仍可阅读/复制，真正Provider/执行/持久化故障必须继续红色；不能按reason文字或整个Task状态将错误归为取消。消息/工具/生命周期持久事实不变；消息轮次、部分输出、Sources、重载及后续发送不受影响。角色、公共HTTP/数据库/schema/配置/Provider策略无需变化。风险是取消同时有工具结算或观察失败时被错误降级，必须保留完整session.error envelope并将此类额外失败仍视为attention。
+
+## 实施方案
+
+在既有message-part展示工具中统一结构化MessageAbortedError判定（规范name及data.message），assistantMessageFailure带派生cancelled，并为取消保留原完整诊断。Main移除本地重复判定；Side依据同一事实投影completed+aborted，沿现有Card错误原因字段保留原因。ChatBubble的终态原因区域对aborted也可见并传取消语义；共享AssistantMessageFailure及复制控件用现有tokens中性样式/已停止标题，成员messageFailures透传派生标志。其余错误继续原语义，不增加第二终态或持久缓存。
+
+Side现有error信号保留原对象，显示时才格式化。session.error传完整payload，保留failureOccurrence、convergenceFailure和observationFailures；只有规范取消且没有额外收敛/观察故障时显示中性“侧聊已停止”，其它仍原错误。英中新增必要标题和复制名称。传输改动增加聚焦正向完整payload合同，界面验证仅真实页面和截图。
+
+Node正式Vite构建到新自有bundle，不开独立Vite服务；fresh source CLI /ui捕获新资产。复制完整闭合553真实历史90表/原canonical，在已有Side先阅读旧取消/Details，再有界单次webfetch等待审批后真实Stop，重新加载/打开及中文复核；读取实际历史真实故障保持红色（优先同源中已有Provider错误，未发现则明确范围）。主会话以同一真实Side Session的公开conversation定位核对原消息；成员若无合适同源实际错误历史不伪造消息、不委派，明确未覆盖。
+
+每scope8次/全批16次Sol额度（自然memory及chat计入），20分钟原生边界、180秒无活动、至少5分钟收尾。构建完成后才复制当前App完整OpenAI及models，预检认证/目录/API模型一致；只操作隔离服务/页，不操作用户库/进程。服务正常shutdown、原exec/native/launcher/output/request身份闭合、配对4文件退休，原90表全部字段时间/源文件/canonical及schema3验证。四索引/当前文档检查、类型/CSS/i18n检查、完整diff审查、范围提交，fresh fetch/merge/audit/push/fresh0/0。未覆盖场景如实记录。
+
+## 实测中的验收扩展
+
+19147实际main-DZcP4DrH.js，旧取消与本次15秒真实Stop均显示中性Stopped/已停止及原session aborted、完整来源Details。03截图保留的是本次Working期间仍在阅读旧Details的视口，实际新许可已由AX与SQL确定；不得把03称为新许可卡可见图。04才是本轮15秒停止后的实际中性结果。06核对旧428 Task主视图仍已取消；其仅有orchestrator，没有可打开的子成员，未冒充成员侧栏验收。真实Provider过载历史保留在同源ses_-zURzTlJFzzacrP6FufN，09滚到原消息后才看到红色错误，07/08是同会话后续成功内容，不能替代09。
+
+为验证停止后可继续，以及重载的旧session.error会否覆盖后续成功，本scope在原8次额度内追加一条只回复固定标记、禁止工具的真实用户输入（预计memory/chat两次，累计6次）。不创建任何新会话/成员/Goal，先验证当前恢复，再重载同一Side；保留实际结果后决定是否需收敛同一展示owner。复制按钮实际显示Copied，但独立剪贴板读取返回43字符且未匹配本次取消ID，未将该工具读取作为内容复制通过证据，也未保留未确认内容；原诊断展开内容已独立观察。
+
+## 重载后历史提示复现与补充根因
+
+图10实际新一轮成功回复STOP554RESUMED且没有停止提示；重新加载同页并打开Side后，图11在同一成功回复上方出现旧“侧聊已停止”。6次Sol全部200/EOF。原session.error的failureOccurrence指向前一已取消Message，最新Message属于后续输入且已成功，后端事实并无错误。Session事件路由为历史诊断重放最新session.error；Main tree-writer明确不把此事件改写为当前Card，而成员按原Message保存诊断。全仓只有connectSideChat直接把每个session.error提升为全局提示。旧Side路径未对照原失败消息与当前消息，这是新问题的展示控制流根因。
+
+沿已有base/live投影，不新增缓存/查询/时间猜测：同一事件回调只计算一次当前transcript；事件failureOccurrence能在其中精确关联原Session/Message且后面已有同Session新Message时，旧原因保留在原消息，不提升为当前全局提示。当前消息、缺少可核实消息归属的诊断，以及带额外convergenceFailure/observationFailures的真实故障仍完整交给现有错误owner。跨项目/连接代际继续既有authority/generation；不改Task/Mission/Session取消、恢复、启动或消息事实。补正向传输合同验证历史消息保留、最新消息对应原错误及旧收敛失败仍可见；不写UI自动化。
+
+19147先公开shutdown200、原exec25724/native/launcher0及四份配对退休后才补改。新增fresh19149，从该闭合真实历史复制（包含STOP554RESUMED），正式新构建后启动并核对实际资产。scope最多3次预检、批次16不变，预计累计8次；只阅读原历史，验证成功轮次的提示归属、原取消Details仍可见、真正故障仍红色，正常收尾。两源各自原字段/时间/canonical分别验证。
+
+## 2026-10-24恢复与资源收尾修正
+
+19149已实际加载最终main-_-Beyuq8.js，图12看到STOP554RESUMED及原输入且当前提示正确；图13展开历史停止详情，原20688a79-e973-4dec-bcf9-3a2e6156a324取消来源仍在。两次预检200/EOF。再次实际复制、粘贴到隔离未发送草稿仍得到43字符且未匹配，已立即清空，未保存未知内容；因此不宣称复制内容端到端通过。Details的DOM button定位失败后使用新鲜原生AX中的summary控件成功展开，不修改产品来绕过定位器差异。
+
+会话中断后19149在2026-10-22T22:24:39.811Z触发原20分钟边界，原exec98875/native/launcher退出1、reason=deadline_exceeded；不是正常public shutdown，不满足五分钟收尾指标。恢复后已连接原handle确认终态，physical/output/request全部闭合、精确出生dead_or_reused，四配对退休，源App认证/catalog保持。90表168869原行及source canonical/mtime保持，目标只改变两项容量租约；没有业务模型新请求。保留该失败事实，不能用图12/13覆盖资源失败。
+
+新增verified19151完成原最终验收与正常关闭，仍在全批16次额度内（现已8次，预计再2次）。从正常关闭的19147真实历史复制，复用19149最终完整静态UI，不重编译或变更生产代码；启动前重新配对当前App认证/catalog，真实预检认证/模型一致。只读原成功/取消/故障历史，核对已发布实际资产和实图后立即public shutdown并原handle闭合，留足五分钟；不重复未达成的剪贴板内容验收，也不扩大模型任务。
+
+## 最终结果与边界
+
+[十五张实图和原资源结算](../../artifacts/2026-10-23-cancellation-presentation/README.md)。新页190实际main-_-Beyuq8.js，14中STOP554RESUMED保持当前成功展示，15原取消来源20688a79-e973-4dec-bcf9-3a2e6156a324仍可展开。页189已核验为自有旧页后关闭，190也已关闭。最终19151 public shutdown200、原exec5224/native/launcher0、精确出生dead_or_reused、输出/request闭合，1087714ms收尾余量；2次预检实际200/EOF。三scope累计10次Sol，12份配对退休，App原条目/全catalog及mtime保持。19149原deadline/exit1作为失败保留，最终正常闭合不改写它。
+
+源90表分别167559、168869、168869原行全字段/时间/源大小mtime/canonical保持；目标schema3/实际对象/integrity一致。首scope真实停止+继续使Side更新时间、memory两行及容量租约两行变化；其后只读scope仅两条容量租约变化。当前DB用户数据未操作，没有schema/版本/API变更。
+
+最终15项传输合同37断言通过；完整payload、当前错误、原历史消息和额外观察故障均有明确正向输出。原UI类型检查、两次Node构建（62秒、52.39秒）、双语2542词条及CSS tokens检查通过；当前文档检查通过。界面验收仅真实交互、截图和人工观察，没有DOM/组件/快照测试。
+
+尚未满足的独立验收是复制内容核验，现象和未知根因已保留，不能由Copied反馈代替内容证明；已清空未发送草稿并删除本任务误写的未知剪贴板内容文件。成员取消独立视图亦未覆盖，当前有Side共享消息组件与Main取消、真实Provider错误页面证据。已修复的取消语义及历史提示归属可交付，整体持续目标保持active，继续单agent自主排查，不因本批提交宣称整体完成。

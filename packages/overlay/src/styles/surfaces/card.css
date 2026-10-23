@@ -346,16 +346,19 @@ body {
 .card-error-reason-indicator.oc-button {
   --oc-button-height: calc(26px * var(--ui-scale));
   --oc-button-padding-x: 0;
-  --oc-button-color: var(--bad);
 
   width: calc(26px * var(--ui-scale));
   min-width: calc(26px * var(--ui-scale));
   height: calc(26px * var(--ui-scale));
-  color: var(--bad);
   user-select: none;
 }
 
-.card-error-reason-indicator.oc-button:is(:hover, :focus-visible) {
+.card-error-reason-indicator.oc-button[data-tone="danger"] {
+  --oc-button-color: var(--bad);
+  color: var(--bad);
+}
+
+.card-error-reason-indicator.oc-button[data-tone="danger"]:is(:hover, :focus-visible) {
   --oc-button-bg: var(--bad-dim);
   --oc-button-color: var(--bad);
 

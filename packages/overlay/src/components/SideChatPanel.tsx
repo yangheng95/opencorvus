@@ -33,7 +33,7 @@ import type { SubagentConversationTranscript, SubagentTranscriptMessage } from "
 import { formatErrorDetails } from "../services/diagnostics"
 import { pauseAutoScrollForReading, setupAutoScroll, type AutoScrollController } from "../utils/dom-utils"
 import { captureConversationReadingAnchor, resolveConversationReadingTop } from "../utils/conversation-reading-anchor"
-import { assistantMessageFailure, conversationMessageHasDisplayContent, isCardBodyMessagePart } from "../utils/message-part"
+import { assistantMessageFailure, conversationMessageHasDisplayContent, isCardBodyMessagePart, isMessageAbortedError } from "../utils/message-part"
 import { t } from "../utils/i18n"
 import { ConversationCard } from "./ConversationCard"
 import { QuotationSelection } from "./QuotationSelection"
@@ -73,11 +73,12 @@ function SideMessage(props: { message: SubagentTranscriptMessage }) {
       title: message.agentID,
       parts: message.parts.filter(isCardBodyMessagePart),
       childIDs: [],
-      status: errorReason
-        ? ("error" as const)
+      status: failure
+        ? failure.cancelled ? ("completed" as const) : ("error" as const)
         : user || time?.completed
           ? ("completed" as const)
           : ("running" as const),
+      terminalReason: failure?.cancelled ? ("aborted" as const) : undefined,
       errorReason,
       errorDetails: failure?.details,
       orderKey: message.orderKey,
@@ -104,7 +105,15 @@ export function SideChatPanel(props: {
   const [active, setActive] = createSignal(false)
   const [interactions, setInteractions] = createSignal<InteractionData[]>([])
   const [stopping, setStopping] = createSignal(false)
-  const [error, setError] = createSignal("")
+  const [error, setError] = createSignal<unknown>("")
+  const errorCancelled = createMemo(() => {
+    const value = error()
+    if (isMessageAbortedError(value)) return true
+    if (!value || typeof value !== "object" || !("error" in value)) return false
+    const event = value as { error: unknown; convergenceFailure?: unknown; observationFailures?: unknown }
+    return isMessageAbortedError(event.error) && !event.convergenceFailure &&
+      (event.observationFailures === undefined || (Array.isArray(event.observationFailures) && event.observationFailures.length === 0))
+  })
   const [tracking, setTracking] = createSignal(true)
   let generation = 0
   let attemptedRequest: SideChatRequest | undefined
@@ -135,7 +144,7 @@ export function SideChatPanel(props: {
     return messages().some((message) => message.messageID === submission.messageID && message.info.role === "user")
   })
   const preparing = () => creating() || sessionListState() === "loading"
-  const report = (error: unknown) => setError(formatErrorDetails(error))
+  const report = (error: unknown) => setError(() => error)
   const rememberReadingPosition = () => {
     const owner = reader
     if (!owner || owner.restoring || !isApiAuthorityCurrent(owner.authority) || boardStore.selectEpoch !== owner.epoch || selected() !== owner.sessionID || sourceKey() !== owner.sourceKey) return
@@ -416,8 +425,8 @@ export function SideChatPanel(props: {
       </Show>
       <Show when={error()}>
         <Feedback
-          tone="error"
-          details={error()}
+          tone={errorCancelled() ? "neutral" : "error"}
+          details={formatErrorDetails(error())}
           actions={
             <>
               <Show when={(sessionListState() === "error" || props.request) && !preparing()}>
@@ -442,7 +451,7 @@ export function SideChatPanel(props: {
             </>
           }
         >
-          {t("side_chat.failed")}
+          {t(errorCancelled() ? "side_chat.stopped" : "side_chat.failed")}
         </Feedback>
       </Show>
       <div class="side-chat-panel__scroll" ref={scroll} onScroll={rememberReadingPosition}>
