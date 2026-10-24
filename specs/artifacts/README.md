@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [成员工具切换与正文所有者调查](2026-10-24-member-tool-transition/README.md)：574实页截图与原请求结算。
+
 - [成员对话实时 Part 顺序修复](2026-10-24-source-render-order/README.md)：573真实记录审计、成员侧栏和 Sources 实图。
 
 - [对话加载指示器的状态与无障碍语义](2026-10-24-conversation-loading-semantics/README.md)：572真实Task/Chat加载实图与完整数据结算。

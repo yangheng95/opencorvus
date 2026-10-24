@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [成员工具切换与正文所有者调查](2026-10-24-member-tool-transition.md)：574原成员有界流式执行与真实所有者观察。
+
 - [成员对话实时 Part 顺序修复](2026-10-24-source-render-order.md)：573完整生产投影审计与实页 Sources 复核。
 
 - [对话加载指示器的状态与无障碍语义](2026-10-24-conversation-loading-semantics.md)：572真实慢读下加载与空闲语义修复。

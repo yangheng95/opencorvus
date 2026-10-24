@@ -1,0 +1,539 @@
+{
+  "at": "2026-10-24T05:39:19.838Z",
+  "scope": "574",
+  "productSourceChange": false,
+  "qualification": "One bounded real original-member continuation, two genuine Sources, private passive observation and manual screenshots; no Rendering root-cause claim.",
+  "build": {
+    "publication": {
+      "at": "2026-10-24T05:22:22.784Z",
+      "entry": "main-BfGZu73-.js",
+      "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/member-tool-transition-574-bundle/bin/ui",
+      "qualification": "Actual completed Node Vite build with private passive Part/body/source owner metadata instrumentation MT574"
+    },
+    "preservation": {
+      "before": {
+        "bytes": 92295168,
+        "modifiedAtMs": 1792819259806.3398
+      },
+      "after": {
+        "bytes": 92295168,
+        "modifiedAtMs": 1792819259806.3398
+      }
+    }
+  },
+  "preflight": {
+    "sessionID": "ses_hLg0J4z8bpHmLFUpBl2D",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "business": {
+    "at": "2026-10-24T05:34:23.665Z",
+    "taskID": "tsk_g00VYlyopB00h7w27eIw",
+    "sessionID": "ses_hHpC127wALpwIiSOX86d",
+    "taskStatus": "completed",
+    "messages": 29,
+    "parts": 94,
+    "sources": [
+      {
+        "id": "prt_g0VYwSnK300CM79NW3PQ",
+        "title": "Disclosure (Show/Hide) Pattern | APG | WAI | W3C",
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/",
+        "messageID": "msg_g0VYwSTZ800douL43WMV",
+        "toolPartID": "prt_g0VYwSY1300YGZy5SY6G",
+        "toolStatus": "completed",
+        "canonicalOrderKey": "v1:0001792819709663:0000000000000031:0000000000000000:part:prt_g0VYwSnK300CM79NW3PQ"
+      },
+      {
+        "id": "prt_g0VYwT1iI00AbaVV53dG",
+        "title": "Accordion Pattern (Sections With Show/Hide Functionality) | APG | WAI | W3C",
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/accordion/",
+        "messageID": "msg_g0VYwSnQb00sgoMyfsj0",
+        "toolPartID": "prt_g0VYwSoTD00fTl37Ikz1",
+        "toolStatus": "completed",
+        "canonicalOrderKey": "v1:0001792819764982:0000000000000031:0000000000000000:part:prt_g0VYwT1iI00AbaVV53dG"
+      }
+    ],
+    "allSourceParts": 8,
+    "attachment": {
+      "status": 200,
+      "bytes": 643,
+      "identity": "Exact original immutable PNG"
+    },
+    "memory": [
+      {
+        "key": "project-memory-document",
+        "status": "idle",
+        "revision": 23,
+        "recentCoveredOccurrenceIDs": [
+          "tsk_g00VYlyopB00h7w27eIw",
+          "int_g0VYlyyon007596CDfIV",
+          "int_g0VYlz9Up00WFuWLlv7B",
+          "int_g0VYlz9jY00vtdWg5hP5",
+          "int_g0VYlzOro00qHQEo5CLl",
+          "int_g0VYlzTkE00i8ZZk7y0m",
+          "int_g0VYmMN9v00dUZU78a67",
+          "int_g0VYmNBpk00kidetEB4a",
+          "msg_g0VYmU0Sw00bUTFK9Jyj",
+          "int_g0VYmU7vE00VIZswV0X4",
+          "int_g0VYmUcGK00rIVSIjUwb",
+          "int_g0VYmVHco00oFQyssFN6",
+          "msg_g0VYmYgHr00xlUzKf3Qb",
+          "int_g0VYmYnB300CThHCnRZY",
+          "int_g0VYmaIZT00mLVqq0pn7",
+          "int_g0VYmaoWo00B5UZmV3Tm",
+          "msg_g0VYn0ac20039In89sSv",
+          "int_g0VYn0iLK00lJru3uKwu",
+          "int_g0VYn146m00enetogh5v",
+          "int_g0VYn2GoW00kDVju2G3Y",
+          "msg_g0VYw5DFJ00Wb7rAdt8N",
+          "int_g0VYw5IfR00qYtXITtRi",
+          "int_g0VYw5VpG00DOshZZVOZ",
+          "int_g0VYw5ocX00xPKzi7DUR",
+          "msg_g0VYwRnN000WS7yLDBw5",
+          "int_g0VYwRtBm0077dT3KiPl",
+          "int_g0VYwSY9R00YCNvKmLBI",
+          "int_g0VYwSoac004g4uQg9XH",
+          "int_g0VYwTHLq00Hu5BCTg3S"
+        ]
+      }
+    ],
+    "requests": 15,
+    "readers": [
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "state": "settled",
+        "terminal": "eof"
+      }
+    ],
+    "qualification": "Actual native CLI Task read, production parser, original member Source/Tool outcome and SQLite canonical identity, original asset HTTP and actual streaming Provider readers. Not a UI test."
+  },
+  "assistantOutput": {
+    "plan": {
+      "partID": "prt_g0VYwSUO9004e1jdEn8D",
+      "messageID": "msg_g0VYwSTZ800douL43WMV",
+      "characters": 662
+    },
+    "final": {
+      "partID": "prt_g0VYwT3Nx00fARjbsKVz",
+      "messageID": "msg_g0VYwT24w00V80S1QCFq",
+      "characters": 1524
+    },
+    "role": "assistant",
+    "ordering": "Real assistant plan precedes both admitted webfetch Parts; real final assistant output follows both",
+    "qualification": "Post-read admission of the actual captured HTTP transcript and original persisted assistant facts; strengthens the initial whole-transcript marker check. No new network scope or synthesized fixture."
+  },
+  "provider": {
+    "at": "2026-10-24T05:34:45.957Z",
+    "authRetired": 1,
+    "catalogRetired": 1,
+    "authCopied": true,
+    "modelRequests": 15,
+    "model": "gpt-6.1-sol",
+    "streaming200OriginalReaderEOF": 15,
+    "sourceCatalog": {
+      "bytes": 9155406,
+      "modifiedAtMs": 1791128890137.9968,
+      "content": "Exact original"
+    },
+    "publicShutdown": 200,
+    "reserveMs": 462702,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "exactProcessChain": "dead_or_reused"
+  },
+  "authSourceMetadata": "Exact original bytes length and mtime retained; content never logged",
+  "originalExec": {
+    "session": 21941,
+    "joinedExit": 0
+  },
+  "passiveObservation": {
+    "busEvents": 1496,
+    "transitions": [
+      {
+        "partID": "prt_g0VYwSTOO00EE1Yz8j5w",
+        "messageID": "msg_g0VYwSRT400o0DDCmqNK",
+        "removedAt": 1792819633395,
+        "admittedAt": 1792819633402,
+        "intervalMs": 7,
+        "tool": "read_agent_message",
+        "canonicalOrderKey": "v1:0001792819633396:0000000000000031:0000000000000000:part:prt_g0VYwSTOO00EE1Yz8j5w"
+      },
+      {
+        "partID": "prt_g0VYwSY1300YGZy5SY6G",
+        "messageID": "msg_g0VYwSTZ800douL43WMV",
+        "removedAt": 1792819651169,
+        "admittedAt": 1792819651173,
+        "intervalMs": 4,
+        "tool": "webfetch",
+        "canonicalOrderKey": "v1:0001792819651170:0000000000000031:0000000000000000:part:prt_g0VYwSY1300YGZy5SY6G"
+      },
+      {
+        "partID": "prt_g0VYwSoTD00fTl37Ikz1",
+        "messageID": "msg_g0VYwSnQb00sgoMyfsj0",
+        "removedAt": 1792819714416,
+        "admittedAt": 1792819714423,
+        "intervalMs": 7,
+        "tool": "webfetch",
+        "canonicalOrderKey": "v1:0001792819714417:0000000000000031:0000000000000000:part:prt_g0VYwSoTD00fTl37Ikz1"
+      }
+    ],
+    "originalBodyCount": 17,
+    "finalBodyCount": 20,
+    "bodyIdentityMatrix": [
+      {
+        "part": "prt_g0VYlz8dd00pWcuVkoZF",
+        "before": "11",
+        "after": "11",
+        "beforeBlocks": 1,
+        "afterBlocks": 1
+      },
+      {
+        "part": "prt_g0VYlzNy200G9j4TgB2N",
+        "before": "12",
+        "after": "12",
+        "beforeBlocks": 1,
+        "afterBlocks": 1
+      },
+      {
+        "part": "prt_g0VYm1lEs00O2KijUi86",
+        "before": "13",
+        "after": "13",
+        "beforeBlocks": 1,
+        "afterBlocks": 1
+      },
+      {
+        "part": "prt_g0VYmMab300GY28UWAJt",
+        "before": "14",
+        "after": "14",
+        "beforeBlocks": 1,
+        "afterBlocks": 1
+      },
+      {
+        "part": "prt_g0VYmMcJU00PFeeyJf7k",
+        "before": "15",
+        "after": "15",
+        "beforeBlocks": 32,
+        "afterBlocks": 32
+      },
+      {
+        "part": "prt_g0VYmUNau00ka4jsGLu7",
+        "before": "16",
+        "after": "16",
+        "beforeBlocks": 1,
+        "afterBlocks": 1
+      },
+      {
+        "part": "prt_g0VYmUPS300JPqmNLo2D",
+        "before": "17",
+        "after": "17",
+        "beforeBlocks": 13,
+        "afterBlocks": 13
+      },
+      {
+        "part": "prt_g0VYmUrRH00iG2zOFlhG",
+        "before": "18",
+        "after": "18",
+        "beforeBlocks": 22,
+        "afterBlocks": 22
+      },
+      {
+        "part": "prt_g0VYma1AT004jdIyz0bP",
+        "before": "19",
+        "after": "19",
+        "beforeBlocks": 1,
+        "afterBlocks": 1
+      },
+      {
+        "part": "prt_g0VYma2wD003owRu5m9l",
+        "before": "20",
+        "after": "20",
+        "beforeBlocks": 14,
+        "afterBlocks": 14
+      },
+      {
+        "part": "prt_g0VYmaNTs00F3UDN30bC",
+        "before": "21",
+        "after": "21",
+        "beforeBlocks": 21,
+        "afterBlocks": 21
+      },
+      {
+        "part": "prt_g0VYn0rha005V1KlZppe",
+        "before": "22",
+        "after": "22",
+        "beforeBlocks": 1,
+        "afterBlocks": 1
+      },
+      {
+        "part": "prt_g0VYn0tPU00GJfPCOkag",
+        "before": "23",
+        "after": "23",
+        "beforeBlocks": 6,
+        "afterBlocks": 6
+      },
+      {
+        "part": "prt_g0VYn1Ezt00aQBqYLfgw",
+        "before": "24",
+        "after": "24",
+        "beforeBlocks": 8,
+        "afterBlocks": 8
+      },
+      {
+        "part": "prt_g0VYw5RTi00q5ATqCk5d",
+        "before": "25",
+        "after": "25",
+        "beforeBlocks": 1,
+        "afterBlocks": 1
+      },
+      {
+        "part": "prt_g0VYw5TZL00rR6Y5CIqt",
+        "before": "26",
+        "after": "26",
+        "beforeBlocks": 2,
+        "afterBlocks": 2
+      },
+      {
+        "part": "prt_g0VYw5eil00vfzbWhSjq",
+        "before": "27",
+        "after": "27",
+        "beforeBlocks": 6,
+        "afterBlocks": 6
+      }
+    ],
+    "consoleMetadataRecords": 0,
+    "qualification": "Manual read-only observations of the actual page; no automated DOM assertions or UI tests. Original 17 body owners and HTML block counts match across recorded snapshots."
+  },
+  "preservation": {
+    "tables": 90,
+    "originalRows": 197241,
+    "source": {
+      "allOriginalRows": "Exact rowid/primary key/all fields/times",
+      "bytes": 92295168,
+      "modifiedAtMs": 1792818505575.1973
+    },
+    "schema": {
+      "sourceVersion": 5,
+      "targetVersion": 5,
+      "extraObjects": [],
+      "integrity": "ok"
+    },
+    "canonical": "Complete source bytes exact",
+    "targetOriginalRowDifferences": [
+      {
+        "table": "memory_chunk",
+        "identity": "mck_hd2PLf49sorereyDu9w0",
+        "fields": [
+          "content",
+          "token_count",
+          "time_updated"
+        ]
+      },
+      {
+        "table": "memory_file",
+        "identity": "mem_h6r23eQkVxF8ppMaNuxh",
+        "fields": [
+          "time_updated"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "identity": "[1]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "identity": "[2]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "session",
+        "identity": "ses_-zURE1Aonzzko22HlxqB",
+        "fields": [
+          "time_updated"
+        ]
+      },
+      {
+        "table": "session",
+        "identity": "ses_-zURE19wozzlTmx3ixXd",
+        "fields": [
+          "time_updated"
+        ]
+      },
+      {
+        "table": "session",
+        "identity": "ses_hHpC127wALpwIiSOX86d",
+        "fields": [
+          "time_updated"
+        ]
+      }
+    ],
+    "originalTranscript": "All original message and Part rows/fields/times exact",
+    "providerActivities": {
+      "original": 490,
+      "current": 499
+    },
+    "intentionalMemory": {
+      "before": {
+        "status": "idle",
+        "revision": 19,
+        "covered": 24
+      },
+      "after": {
+        "status": "idle",
+        "revision": 23,
+        "covered": 29
+      },
+      "retainedCoverage": "Exact original prefix",
+      "newlyCovered": [
+        "msg_g0VYwRnN000WS7yLDBw5",
+        "int_g0VYwRtBm0077dT3KiPl",
+        "int_g0VYwSY9R00YCNvKmLBI",
+        "int_g0VYwSoac004g4uQg9XH",
+        "int_g0VYwTHLq00Hu5BCTg3S"
+      ]
+    },
+    "capacityLeaseExpiry": [
+      {
+        "slot": 0,
+        "expiresAt": 1792819991410,
+        "observedAt": 1792820157217
+      },
+      {
+        "slot": 1,
+        "expiresAt": 1792819825081,
+        "observedAt": 1792820157217
+      },
+      {
+        "slot": 2,
+        "expiresAt": 1792670557919,
+        "observedAt": 1792820157217
+      }
+    ]
+  },
+  "manualImages": 7,
+  "nextFinding": "Actual default Home has no visible Goal entry; create is hidden inside composer More actions. The next batch will address discoverability using the existing single Goal launch flow.",
+  "limitations": [
+    "No Rendering flicker observed in this bounded sequential two-source continuation. The model chose sequential reads; no parallel Tool interleaving claim.",
+    "Console metadata collection returned zero despite the actual instrumented build and data-observed-renderer attributes. Claims rely on real DOM identity snapshots and native Bus metadata, not missing console records.",
+    "A brief within-owner HTML reset between manual observations is not ruled out; no video or per-frame observation was performed.",
+    "Initial marker validation searched the whole transcript and could match user instructions. After closure it was strengthened to actual assistant-role plan/final Parts in the captured real HTTP transcript, checked against exact persisted assistant rows and canonical order. No server restart or synthetic fixture was used.",
+    "Target memory/control/session rows intentionally changed during the authorized continuation; the target is not claimed bit-identical. The original source database and all original transcript/Source facts remain exact."
+  ],
+  "user18571": "Untouched",
+  "goal": "active, one development agent"
+}
