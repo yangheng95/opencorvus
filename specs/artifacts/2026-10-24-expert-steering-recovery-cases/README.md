@@ -11,6 +11,11 @@
 - [01-marketing-runtime-fault.png](01-marketing-runtime-fault.png)：MG-02原故障，尚未完成交付。
 - [02-marketing-steering-active.png](02-marketing-steering-active.png)：MG-03编排器真实接受1200更正并继续；不是最终完成证据。
 - [03-seo-native-recovery.png](03-seo-native-recovery.png)：SEO原编排器明确保留工具超时并安排原交付负责人接续。
+- [04-seo-pdf-preview-fault.png](04-seo-pdf-preview-fault.png)：实际最终文件卡片的未加载navigation解引用错误。
+- [05-sales-revised-completed.png](05-sales-revised-completed.png)：销售第二epoch完成，原路径正文修订仍在。
+- [06-pdf-first-open-fixed.png](06-pdf-first-open-fixed.png)、[07-pdf-page-two-zoom-fixed.png](07-pdf-page-two-zoom-fixed.png)：首处修复后的文件入口真实首开/翻页/缩放；当时尚未证明inline入口。
+- [08-pdf-delivery-initial-size-fault.png](08-pdf-delivery-initial-size-fault.png)：首处修复后继续发现inline自动高度与首宽互等，不能把这一轮称为完成。
+- [09-pdf-delivery-final.png](09-pdf-delivery-final.png)、[10-pdf-delivery-table-final.png](10-pdf-delivery-table-final.png)、[11-pdf-file-entry-final.png](11-pdf-file-entry-final.png)：两处修复后原交付卡片和文件入口的实际页面；无凭据、零模型、原890行参与者/产物数据不改。
 
 ## 聚焦后端原runner证据
 

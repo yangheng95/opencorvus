@@ -158,10 +158,11 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
     viewportHost = element
     resizeObserver = new ResizeObserver(([entry]) => {
       if (entry.target !== viewportHost) return
-      if (!entry.contentRect.width || !entry.contentRect.height) {
+      if (!entry.contentRect.width) {
         restorePending = true
         return
       }
+      if (!entry.contentRect.height) restorePending = true
       setViewportWidth(Math.floor(entry.contentRect.width))
       restoreReading.schedule()
     })
@@ -228,7 +229,7 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
     const zoomFactor = zoom()
     navigationRender()
     const linkLabel = t("artifact.file.open_document_link")
-    const navigation = pendingNavigation?.document === loaded && pendingNavigation.pageNumber === pageNumber
+    const navigation = pendingNavigation && pendingNavigation.document === loaded && pendingNavigation.pageNumber === pageNumber
       ? pendingNavigation : undefined
     if (!loaded || !target || !frame || !textTarget || pageCount() === 0 || availableWidth <= 0) return
     paintedWidth = 0

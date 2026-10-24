@@ -231,8 +231,11 @@ existing write admission. File Editor lazily loads the shared PdfPreview used
 by FilePreviewArtifact, retaining one PDF.js document/canvas lifecycle, resource
 authority, page and zoom controls. The current viewport ref owns its resize
 observer so error recovery observes the replacement node. Resource errors are
-checked before reading a failed Solid resource, and original parse/resource
-diagnostics remain visible through Feedback. No synthetic Artifact is created
+checked before reading a failed Solid resource. A pending navigation is read
+only when its intent exists. A positive observed viewport width starts page
+layout even before an inline reader has content height; zero height preserves
+pending reading-position restoration rather than withholding the first width.
+Original parse/resource diagnostics remain visible through Feedback. No synthetic Artifact is created
 for a file source, and no second PDF renderer or file-read endpoint is added.
 The current PDF document/page remembers only visible, stable top/left reading
 offsets. Hiding a pane cannot replace them with zero-size geometry; reopening

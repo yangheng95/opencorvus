@@ -56,3 +56,28 @@ MG-02已启动：`C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-0
 - MG-03原Task `tsk_g00VYyl3AK00URPjoC7V`在19140新隔离服务上复测，202/accepted更正原Message `msg_g0VYylKwV009EBHg4hrI`、ingress `art_h5hCdth0ACMjZJX473Rg`。真实页面已看到原编排器明确接收1200、保留3000草案关系、准确复算6000/370/47/1900及40.43，随后自然继续来源整理；02截图只证明这一阶段，尚未完整交付。至少203次原生工具处置已分别观察到物理/输出/请求完成，无处置失败，不能用此排除原异常。
 - SEO原轮在原writer Session `ses_hhUkRAw84u1Sqvm2BrWs`真实再次出现同类处置故障，原Message `msg_g0VYylepk00qisGfR9de`及生命周期事件 `pev_g0VYym4LP008Wza7gxKO`保持；Task随后由原编排器明确处理失败并接续同一writer，不能抹去故障。日志14:57:35处置错误、15:02:47原detached completion及root loop恢复早于本轮打开UI，排除“打开页面才恢复”的猜测。原watcher只观察Task/Message/reader而在真实结算等待期报无活动，已保留原observer失败；重新观察同一Task，不新建输入或重新起算原预算。
 - 只读环境采样：当时系统CPU100%、磁盘2%且队列0、可用内存约24GiB，主要计算来自VS Code进程65608的多路Mermaid文件检索。这是同时发生的负载事实，尚不能作为原超时的完整根因；没有终止或修改这些用户进程。真实native阶段观测显示个别正常处置总耗时2735ms，但原两轮缺少失败时各阶段marker，不能猜测其确切长尾。既定5000ms和现有绝对deadline合同保持，未扩大超时或跳过清理。
+
+## 追加发现：最终PDF预览的未加载状态（实施前）
+
+### Recall与证据
+
+- 延续原要求，完成状态之后也实际点击交付资源。SEO原epoch1在245/360请求后completed，正式artifact-read进入真实checker读取七类完整原产物及最终MD/PDF，主项目MD15566字节、PDF373815字节与各自不可变资源逐字节相等。PDF六页真实Poppler PNG均已人工查看，中文/15字段/URL/附录可读。计划与线上观测边界保留；这不清除原native失败及observer无活动失败。
+- 同一真实/ui点击最终PDF的Preview，直接出现`TypeError: Cannot read properties of undefined (reading 'pageNumber')`，04截图保留。原PDF自身及资源正确，因此错误在共享阅读器，不是该专家团文档损坏。
+- 已读PdfPreview全部生命周期、FileEditorPane与FilePreviewArtifact两个生产调用、当前07-panel PDF单一阅读器合同、历史381链接方案与实际构建/手工交互记录。全仓pageNumber及相同可选链比较模式搜索确认本处；pdf-destination.test.ts是纯PDF坐标数据映射合同，不含DOM/组件/源码文案或截图断言，本轮不运行、不改写它；不新增UI自动化。
+
+### 根因、影响与方案
+
+- 渲染effect在初始加载和来源切换期间，`currentDocument()`与`pendingNavigation`都可以合法为undefined。它在loaded准入判断前先计算`pendingNavigation?.document === loaded && pendingNavigation.pageNumber === pageNumber`：两边undefined比较为true后，第二项直接解引用缺失navigation。旧可选链只保护第一个属性访问；后面的loaded guard来不及执行。该控制流由代码和当前真实冷打开共同证明，不据错误文字单独归因。
+- 影响全部共享PdfPreview入口：Task交付、file-preview@1、项目/绝对来源文件、初次加载及文档切换；页码/缩放/内部链接继续使用原PDF.js primitive。无后端接口、Schema、数据库、Task/Mission/Session调度、凭据或持久格式改动；无新文案，当前语言合同保持。旧381交付记录是历史验证，不足以排除当前未加载组合。
+- 修复只明确要求pendingNavigation实际存在，再比较其文档和页码；不catch掉错误、不加第二阅读器、不延时、不伪造导航状态。以真实原PDF在全新无凭据、零模型调用开发服务的/ui复验首开、下一页、缩放、关闭重开，以及同一共享组件的文件入口。使用独立构建目录和原Server.listen/overlayUiSource注入，不启动Vite独立服务、不操作现用用户进程。构建/类型检查仅辅助，必须有实际截图和人工可读结果。
+
+### 第一处修复后的真实复验与第二处尺寸根因（实施前）
+
+- 独立构建及Overlay typecheck通过。无凭据03沿正式coding/work/session创建普通空会话（无任何用户/模型消息），文件面板实际打开原PDF为1/6、翻到2/6并缩放125%，关闭后重开回1/6，06/07截图人工查看。前两次checker分别错误配置无凭据模型及误用UI的conversation位置名作为Session kind而退出1，0模型、原生完整结算；两份catalog已退休，不计产品缺陷。03首次普通root不具备Work身份的404也属checker选错正式入口，改用现有coding/work/session，无生产身份旁路。
+- 为复验真实交付卡片，原SEO/Sales分别HTTP shutdown200，原launcher79203/1117均exit0、physical/output/request结清，八份auth/models副本全部退休、源原文与mtime不变。04从已闭合SEO原runtime/data复制无凭据数据，使用新构建的原Server.listen/ui及零请求审计；保留原Task/Message/Part/产物身份，不注入消息或伪造交付。
+- 在04点击同一最终PDF，pageNumber错误已消失，但卡片只有1/6工具栏、正文空白；08截图保留，不能称修复完成。一次只读实际页面尺寸观察为宽732px、高24px、上下padding各12px，canvas为0×0、TextLayer长度0。FileEditor入口因父布局分配高度可启动，而inline FilePreviewArtifact按内容自然定高。
+- 第二根因由当前CSS和控制流证实：canvas在加载时清为0高度，inline PDF viewport的内容高度因此为0；bindViewport看到height=0便在setViewportWidth前返回。渲染effect又要求viewportWidth>0才能绘制page及建立高度，形成初始几何互等。max-height只限制上界，不提供初始内容高度。旧缩放/读位保护将“尚无页面高度”和“不可用宽度”混为一类，文件面板通过不能证明inline入口通过。
+- 修复方案只从实际正宽度启动页面布局；内容height=0仍保留restorePending，不阻止登记真实宽度。原restoreReading继续等可用视口、当前paint与动画后恢复读位，不用固定假高度、不加第二CSS状态、不改变PDF资源/导航/页码合同。再次独立构建、新零模型服务冻结新UI，复验原交付卡片首开/翻页/缩放/重开及文件入口，截图为最终资格。
+- 最终05使用第二次独立构建，真实交付卡片首开已绘出原PDF，下一页到2/6、缩放125%后Fit width100%、折叠重开回1/6均实际成立；同一页再从Files打开原PDF，FileEditor入口也实际显示1/6及正文。09/10/11截图主agent人工查看。未运行UI自动化；真实界面观察而非DOM文本或build分数作为视觉资格。只读SQLite对照05与闭合SEO原件的engine_task1/session10/message225/part614/engine_artifact39/interactive_artifact1共890行及rowid逐字段相等，原消息和交付均为真实历史，零合成。
+- 最终Overlay typecheck原命令退出0；第二次私有build:vite完成（1分10秒），仅既有大chunk/第三方use-client提示。03/04/05原launcher分别54160/16249/19661均exit0，原生physical/output/request结清，审计均0请求、没有auth副本；三份catalog已退休且原catalog内容/mtime保持。01/02两个失败checker同样完整结算并退休catalog，原失败日志保留。
+- 本逻辑交付仅修共享PDF的真实初始化合同与记录，不宣布整个Goal完成：native处置的长尾根因仍待完整排除，MG原轮继续，Word最终渲染仍须独立验收。销售原Task已在279/360内完成epoch2，保留epoch1完成事件`pev_g0VYypHKn009qMknuHzg`与epoch2完成事件`pev_g0VYyt6ce00P2ybLZc8A`。正式artifact-read原checker读取9个业务产物、两个历史/新文件资源及真实document，当前18778字节Markdown与最新资源及document逐字一致；1500/5000旧新关系、A12/5/2/1与B8/4/1/0及访谈/未知边界已人工复核。新独立fact-check角色在写作后实际登记复核，未把旧审阅冒充本轮结果。
