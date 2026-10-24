@@ -7,11 +7,27 @@ import { Identifier } from "@/id/id"
 import { deterministicAutomationID } from "@/scheduler/automation-identity"
 import { Database, DatabaseUnavailableError } from "@/storage/db"
 import { queryAllFinalized } from "@/storage/sqlite-statement"
+import { DATABASE_MIGRATIONS } from "@/storage/migrations"
 import { createTestDatabase, editTestDatabase, resetDatabase } from "./fixture/db"
 
 afterEach(resetDatabase)
 
-function seed(version = 2, conversation?: unknown) {
+const currentVersion = DATABASE_MIGRATIONS.at(-1)!.version
+
+async function createVersionTwoDatabase() {
+  await resetDatabase()
+  const databasePath = Database.Path()
+  fs.mkdirSync(path.dirname(databasePath), { recursive: true })
+  using sqlite = new SQLite(databasePath)
+  sqlite.exec("PRAGMA journal_mode=WAL")
+  sqlite.exec(DATABASE_MIGRATIONS[1]!.ddl)
+  sqlite.exec("PRAGMA user_version=2")
+  const identity = randomUUID()
+  sqlite.run("INSERT INTO database_authority(key,instance_id,time_created) VALUES('primary',?,?)", [identity, Date.now()])
+  return identity
+}
+
+function seed(conversation?: unknown) {
   const projectID = Identifier.ascending("project"),
     eventJobID = Identifier.ascending("event_job")
   const eventID = Identifier.ascending("session"),
@@ -111,7 +127,6 @@ function seed(version = 2, conversation?: unknown) {
       now,
       JSON.stringify({ type: "text", text: "原文与来源保留：仅用于界面测试。" }),
     ])
-    sqlite.exec(`PRAGMA user_version=${version}`)
     sessions = queryAllFinalized(sqlite, "SELECT rowid,* FROM session ORDER BY id")
     messages = queryAllFinalized(sqlite, "SELECT rowid,* FROM message ORDER BY id")
     parts = queryAllFinalized(sqlite, "SELECT rowid,* FROM part ORDER BY id")
@@ -120,11 +135,10 @@ function seed(version = 2, conversation?: unknown) {
 }
 
 test("the production version-2 upgrade exposes exact Event and project Automation results and preserves their original graph and backup", async () => {
-  await createTestDatabase()
-  const identity = Database.Identity(),
-    before = seed()
+  const identity = await createVersionTwoDatabase()
+  const before = seed()
   Database.Client()
-  expect(Database.allFinalized("PRAGMA user_version")).toEqual([{ user_version: 3 }])
+  expect(Database.allFinalized("PRAGMA user_version")).toEqual([{ user_version: currentVersion }])
   expect(Database.Identity()).toBe(identity)
   const expected = before.sessions.map((row) =>
     [before.eventID, before.automationSessionID].includes(row.id)
@@ -143,7 +157,7 @@ test("the production version-2 upgrade exposes exact Event and project Automatio
   const backupDirectory = path.join(path.dirname(Database.Path()), "migration-backups")
   const backupName = fs
     .readdirSync(backupDirectory)
-    .filter((name) => name.startsWith(`${path.basename(Database.Path())}.v2-to-v3.`))
+    .filter((name) => name.startsWith(`${path.basename(Database.Path())}.v2-to-v${currentVersion}.`))
     .sort()
     .at(-1)!
   const backup = new SQLite(path.join(backupDirectory, backupName), { readonly: true })
@@ -161,8 +175,8 @@ test("the production version-2 upgrade exposes exact Event and project Automatio
 })
 
 test("a conflicting historical result identity returns the precise maintenance error with the original version and graph retained", async () => {
-  await createTestDatabase()
-  const before = seed(2, { surface: "foreign-owner", experience: "work" })
+  await createVersionTwoDatabase()
+  const before = seed({ surface: "foreign-owner", experience: "work" })
   let error: unknown
   try {
     Database.Client()
@@ -186,7 +200,7 @@ for (const [conversation, code] of [
 ] as const) {
   test(`the current production opener reports ${code} for the exact standalone result identity`, async () => {
     await createTestDatabase()
-    const before = seed(3, conversation)
+    const before = seed(conversation)
     let error: unknown
     try {
       Database.Client()
@@ -198,7 +212,7 @@ for (const [conversation, code] of [
       code,
     })
     editTestDatabase((sqlite) => {
-      expect(queryAllFinalized(sqlite, "PRAGMA user_version")).toEqual([{ user_version: 3 }])
+      expect(queryAllFinalized(sqlite, "PRAGMA user_version")).toEqual([{ user_version: currentVersion }])
       expect(queryAllFinalized(sqlite, "SELECT rowid,* FROM session ORDER BY id")).toEqual(before.sessions)
     })
   })

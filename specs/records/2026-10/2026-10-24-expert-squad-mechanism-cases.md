@@ -306,3 +306,11 @@
 - 最后实际复验结算：上述6文件71项、同步Bus7、交互9、迁移selector9、原schema23、旁聊/复制/压缩/HTTP五文件42、权限OS4和Message来源3，合计168项聚焦合同全部原runner退出0；只统计最终各文件一次，不累加红例或重复运行。权限OS共58断言、164秒，真实live-same-project/live-two-projects/dead-unexpired/dead-expired的physical/output/request/provider/resource全部结算；保留原deliberate exit23。后台最终typecheck退出0，索引拓扑1180 modules/6039 runtime edges/4 clean imports通过；docs346 ops/26 groups、architecture20及database-migrations目标5均通过。未跑UI自动化或全量bun test。
 - 独立裁定另逐对象核旧成功原snapshot v4→v5，原ledger、Replied、interaction、owner event、success receipt及memory正文/修订/时间保持；公开JSON七组前后子集×11字段与私有原件一致，501条实际Part正文对应human literal，探针及native三文件均与原件逐字一致。原三项Sol业务和共享压缩/恢复矩阵结论保持，当前有界矩阵没有新的已证明机制缺陷。最终范围及Git交付仍以实际索引、提交与push为准。
 - 临时探针的组合shell清理被自动审核拒绝，改用精确可审阅patch后，两份临时执行源码已删除，保留公开原件与原SQLite/失败日志；只读进程核查未再发现本轮探针进程。新增升级案例没有凭据副本或真实模型调用，不涉及现用服务。正常源码快照与无凭据的原运行数据保留作证据，未删除原失败或伪造结算。
+
+## 最后全仓版本引用复核：旧迁移检查器漂移（修复前）
+
+- 747423bd4已正常fetch/merge、全套hook和push，原168项与独立裁定仍成立。Goal尚未关闭；最后全仓检索user_version、当前版本与registry调用发现scheduled-conversation-migration的成功开库期望/backup前缀仍固定3，另两项宣称current opener却seed(3)，当前事实已为5。该检查器此前v4时已经落后，不能把原23项通用迁移绿例外推它有效。
+- 已读完整文件、测试db helper、permission-ledger-migration及版本registry/迁移器。全文件仅SQL、持久消息和真实Database.Client合同，没有DOM/组件/截图或UI自动化；夹具正文提到界面不构成UI验收。旧版本2为此语义迁移的合法源，必须保留；当前版本应沿唯一registry取值。当前seed借当前DDL再重标旧版本，会让新索引混进所谓旧schema；需同时明确其历史目标身份，不能以修改期望掩盖夹具不真实。
+- 先运行原scheduled文件保留红例；再决定以已发布版本目标建立历史夹具、以真实current registry建立当前错误夹具，保留原图/rowid/原文/备份和明确typed error。版本1–5及生产reader/writer不改，不扩展为新迁移或绕过错误。关联permission-ledger迁移也重跑，排除追加语义迁移破坏原链；如暴露生产异常则重新分析，不归因于模型或静态测试过期。当前只记录调查，尚未修改检查器或宣称通过。
+- 原检查器实际1pass/3fail：成功升级实际5与期望3冲突；两个current错误因seed3实际触发迁移，public operation/code与当前开库合同不符。另原permission-ledger完整10项39断言通过。决定仅在scheduled测试本地用成熟resetDatabase校验隔离路径后，从已发布v2 DDL新建真实WAL测试库和原database_authority身份，再seed原图；不修改公共db helper或生产路径。当前错误使用原createTestDatabase，不再重标版本。成功目标、backup前缀和current版本保留检查从唯一registry派生；仍需原4项全通过与独立复核，旧红日志不删除。
+- 修订后的原scheduled4项21断言全部通过，原UUID由历史夹具在首次Database.Client前直接保留，session/message/part含rowid、中文原文及原backup检查继续成立；当前两个错误分别按DATA_MIGRATION_REQUIRED/DATA_INTEGRITY_ERROR原公开合同返回。独立裁定已确认原三个红例是fixture版本漂移而非生产异常，后续最终实现仍交其核验。最终聚焦合同增加此4项及原permission-ledger10项，累计182项，每文件只计最终一次；生产实现没有新变化，不重复消耗模型或重跑已通过真实业务。
