@@ -81,3 +81,9 @@ ProjectMemory.read、HTTP和现有memory.project_read返回unresolvedCount及每
 - 旧源码生成器必须显式绑定已验证native supervisor。两个新样本预运行遗漏绑定导致旧源码尝试重建工具，未完成业务生成；日志保留，正式案例绑定现有helper后完成。没有现用进程操作、凭据或模型请求。
 
 证据聚合及可复用探针见[artifact](../../artifacts/2026-10-24-permission-memory-stock-recovery/README.md)。原SQLite、原human正文与私有定位只留自有ignored证据目录，不进入Git。缺永久消费证明仍然未知；本次保证原输入保全和当前恢复完成，不能恢复已经丢失的历史消费事实。
+
+## 独立裁定与交付
+
+只读独立子agent `/root/independent_judge` 最终裁定：实现、公开文档与证据通过；有界矩阵及横向审计未发现新的已证明机制问题。它直接核原件与备份、原interaction身份、旧pending原样保全、同ID重建的新输入消费、严格父子目录与相邻前缀、并发busy与新进程重开、UTF-16分页完整重组，以及提交范围。其裁定没有以模型自述、测试名称、文档checker或单个绿例代替原始证据。
+
+实现提交 `c2fd5291f` 共29个本任务文件，已正常推送 `origin/main`。推送前fetch并merge upstream，待推集合只有本提交；正常hook的typecheck、SDK/AI runtime/迁移、路由/文档、control lease、architecture/package/module/release topology及secret-scan全部通过，未跳过hook。已交付迁移1–5保持，其他owner的577索引改动、原171项删除及非本任务未跟踪文件未混入。现用原库保持未写入，本轮无模型或凭据用途。
