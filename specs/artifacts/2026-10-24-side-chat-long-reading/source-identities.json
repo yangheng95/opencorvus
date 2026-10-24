@@ -1,0 +1,34 @@
+{
+  "task": [
+    {
+      "id": "tsk_g00VYhrJxy00qIC54qvM",
+      "project_id": "prj_hlVwmME4dYUkGLOkDqOR",
+      "session_id": "ses_-zURI8flEzz7XOW5XhCo",
+      "title": "双成员正文流中刷新 511"
+    }
+  ],
+  "sources": [
+    {
+      "sessionID": "ses_hM7XNBWOoUj94oRFpAmh",
+      "messageID": "msg_g0VYhrhKJ00pSz55N2sG",
+      "partID": "prt_g0VYhrnMV00ONx3IDQ3a",
+      "type": "source-url",
+      "sourceId": "52b554955b70fcc4b438fedbebffe54187b7eb1e7f8dbf73a92f3cd41f49cf2c",
+      "url": "https://arxiv.org/abs/2509.11035v1",
+      "title": "[2509.11035v1] Free-MAD: Consensus-Free Multi-Agent Debate",
+      "provider": "opencorvus-webfetch",
+      "toolPartID": "prt_g0VYhricV00kw0LMvejz"
+    },
+    {
+      "sessionID": "ses_h0gcSAerl0lMXEbz1cq3",
+      "messageID": "msg_g0VYhrhIx00FJZHmUMhS",
+      "partID": "prt_g0VYhrsML00F2uyTDsUa",
+      "type": "source-url",
+      "sourceId": "8ec6f82b6c31f93b1314a87fba17fbeb1e05b8d18b479713801f118e86f504bc",
+      "url": "https://aclanthology.org/2025.naacl-long.475/",
+      "title": "S2-MAD: Breaking the Token Barrier to Enhance Multi-Agent Debate Efficiency - ACL Anthology",
+      "provider": "opencorvus-webfetch",
+      "toolPartID": "prt_g0VYhrjsn00uiuWzu41k"
+    }
+  ]
+}

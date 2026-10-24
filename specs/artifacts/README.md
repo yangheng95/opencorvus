@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [长回复中的阅读意图与原 Sources](2026-10-24-side-chat-long-reading/README.md)：564实际进行中/终态截图、原Source身份与完整运行结算。
+
 - [侧聊的主动回到底部与发送跟随](2026-10-24-side-chat-explicit-follow/README.md)：563真实阅读、恢复按钮和新回复实图与完整结算。
 
 - [记忆输入的真实来源与首次登记](2026-10-24-memory-input-provenance/README.md)：562旧实现失败、真实侧聊与规范记忆/Provider/原生闭合事实。

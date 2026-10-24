@@ -47,3 +47,5 @@ Side唯一scrollToLatest沿reader的API authority/source/Session/selectEpoch归�
 [完整证据入口](../../artifacts/2026-10-24-side-chat-explicit-follow/README.md)记录截图、阶段数据、Provider原reader与原生闭合、安全请求观察。三索引和当前阅读架构同步；提交前重新核对HEAD/staged与其他任务改动，独立index只装本轮文件/README单行。交付正常fetch/merge、待推集合审查和hooks push，以原Git输出证明，不绕过检查。
 
 提交准备时HEAD仍080c4d22e，默认index已有其他任务9个暂存文件（CHANGELOG、interaction/permission源码与测试、project-memory架构及expert-squad机制记录）；完整entries和binary patch已私有保存。17个本轮文件进入独立index，三个共享README只使用HEAD加本轮一行。未将任何其他暂存内容混入本轮，提交后只批量对齐本轮17个index entries并核对原其他集合。
+
+后续564已[实际补齐长流期间上翻与EOF边界](2026-10-24-side-chat-long-reading.md)：约102秒真实Sol长回复、七图及原reader时刻，EOF后原读位保持，显式到底有效；另一页原Sources在流前/流中/完成后稳定。本记录的两秒短回复资格仍按当时实际范围保留，不追改成当时已测长流。

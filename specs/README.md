@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [长回复中的阅读意图与原 Sources](records/2026-10/2026-10-24-side-chat-long-reading.md)：564真实长流中上翻、完成边界与既有成员来源实页复核。
+
 - [侧聊的主动回到底部与发送跟随](records/2026-10/2026-10-24-side-chat-explicit-follow.md)：563补齐暂停阅读后的明确恢复与主动发送跟随。
 
 - [记忆输入的真实来源与首次登记](records/2026-10/2026-10-24-memory-input-provenance.md)：562共享历史复制与消息重放的来源修复及实际侧聊验收。

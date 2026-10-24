@@ -23,3 +23,5 @@
 源 90 表原 174,518 行全字段/时间、数据库字节/修改时间和完整配置保持，schema 4→4、真实对象一致、integrity ok。目标原行差异仅测试项目 memory chunk/file、两条运行容量租约，以及本次确实发送新问题的原 Side chat 2 的 time_updated；原其他 Task/Mission/Session/Goal 字段保持。真实新 Message、Part 与运行事件为正常新增。用户数据库、18571进程及窗口没有参与。
 
 本轮实际覆盖有限回复与完成后重新暂停；未实际演练长回复未完成时上翻。代码只在发送 dispatch（提交）前恢复一次，不在流式更新或完成回调恢复。原生重启和其他流式入口专项仍继续，整体 Goal active。
+
+后续[564真实长流补充验收](../2026-10-24-side-chat-long-reading/README.md)已覆盖约102秒回复生成中的上翻、EOF后读位及另一页原Sources；原图与Provider时刻独立保留，不扩大本页当时短回复的资格。

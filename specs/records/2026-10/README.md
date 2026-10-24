@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [长回复中的阅读意图与原 Sources](2026-10-24-side-chat-long-reading.md)：564有限真实Sol长回复及跨页来源/读位人工体验。
+
 - [侧聊的主动回到底部与发送跟随](2026-10-24-side-chat-explicit-follow.md)：563复用共享controller和既有读位，真实侧聊视觉验收。
 
 - [记忆输入的真实来源与首次登记](2026-10-24-memory-input-provenance.md)：562保留canonical历史，验证复制上下文、真实新输入和首次原子登记。
