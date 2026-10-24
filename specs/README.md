@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [来源文件定位与新焦点归属](records/2026-10/2026-10-24-source-file-focus.md)：568真实慢读取、来源定位及新输入焦点。
+
 - [Sources 复制与成员侧栏阅读](records/2026-10/2026-10-24-source-copy-dock-review.md)：567真实来源复制、折叠与成员侧栏体验。
 
 - [持续目标的流中暂停与恢复](records/2026-10/2026-10-24-goal-live-pause.md)：566真实流中操作、恢复与预算/完成反馈。

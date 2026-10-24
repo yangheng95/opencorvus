@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [来源文件定位与新焦点归属](2026-10-24-source-file-focus/README.md)：568实页焦点、原文件及完整运行结算。
+
 - [Sources 复制与成员侧栏阅读](2026-10-24-source-copy-dock-review/README.md)：567原来源身份、实际桌面截图与完整结算。
 
 - [持续目标的流中暂停与恢复](2026-10-24-goal-live-pause/README.md)：566真实桌面交互与Goal/Provider/数据闭合事实。

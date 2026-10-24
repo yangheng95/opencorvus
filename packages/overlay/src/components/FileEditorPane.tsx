@@ -129,6 +129,10 @@ export function FileEditorPane() {
   const [content, setContent] = createSignal<FileContent | null>(null)
   const [loading, setLoading] = createSignal(false)
   const target = createMemo(() => selectedFileTarget())
+  const revealFocusOrigin = createMemo(() => {
+    fileEditorRevealRevision()
+    return document.activeElement
+  })
   const path = createMemo(() => target()?.path ?? "")
   const displayName = createMemo(() => target()?.displayName ?? content()?.displayName)
   const textContent = createMemo(() => canEdit(content()))
@@ -467,6 +471,7 @@ export function FileEditorPane() {
                     path={path()}
                     lineRange={target()?.range}
                     lineRangeRevealRevision={fileEditorRevealRevision()}
+                    lineRangeFocusOrigin={revealFocusOrigin()}
                     ariaLabel={displayName() ?? t("file_editor.title")}
                     onValueChange={updateDraft}
                     readOnly={!writable() || fileEditorReserved()}

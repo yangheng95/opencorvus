@@ -496,6 +496,13 @@ including a repeated range-free request for the current resource. The main
 workbench consumes that revision to reveal a hidden Dock. Repeated resource
 identity preserves the editor draft and loaded content; line citations also
 retain their existing exact range reveal behavior.
+FileEditorPane captures the current focus origin with that explicit reveal revision,
+before an asynchronous read can mount its CodeEditor. Range presentation still
+sets the cursor, line band and scroll target after layout measurement. It transfers
+keyboard focus only while the original origin, BODY or that editor's content DOM
+still owns it. A control focused during loading retains its keyboard ownership.
+The origin belongs to the existing pane/reveal lifetime; no global focus store or
+new navigation revision is introduced.
 Read-only CodeEditor content keeps a normal keyboard focus entry through the
 existing read-only compartment's content attributes. It remains non-editable
 at both the state and DOM levels; range reveals can focus the same view, and

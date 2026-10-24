@@ -28,6 +28,7 @@ export interface CodeEditorProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>
   onValueChange: (value: string) => void
   lineRange?: SourceFileRange
   lineRangeRevealRevision?: number
+  lineRangeFocusOrigin?: Element | null
   readOnly?: boolean
   class?: string
 }
@@ -40,6 +41,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     "onValueChange",
     "lineRange",
     "lineRangeRevealRevision",
+    "lineRangeFocusOrigin",
     "readOnly",
     "class",
   ])
@@ -106,7 +108,8 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     // A view mounted in this same frame has not been measured yet, so the
     // scroll effect would otherwise resolve against a zero-height scroller.
     editor.requestMeasure()
-    editor.focus()
+    const active = document.activeElement
+    if (active === local.lineRangeFocusOrigin || active === document.body || active === editor.contentDOM) editor.focus()
     revealedIdentity = identity
   }
 

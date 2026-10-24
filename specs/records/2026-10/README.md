@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [来源文件定位与新焦点归属](2026-10-24-source-file-focus.md)：568原文件与引用定位的异步焦点调查。
+
 - [Sources 复制与成员侧栏阅读](2026-10-24-source-copy-dock-review.md)：567沿原canonical来源检查复制与Dock阅读保持。
 
 - [持续目标的流中暂停与恢复](2026-10-24-goal-live-pause.md)：566首页到真实流式暂停、恢复及证据完成。

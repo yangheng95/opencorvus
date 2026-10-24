@@ -1,0 +1,391 @@
+{
+  "batch": 568,
+  "date": "2026-10-24",
+  "scope": "Single agent real UI keyboard focus during asynchronous source reads",
+  "userService18571": "Untouched",
+  "uiAutomationTests": "Not created or run",
+  "modelRequests": 4,
+  "maximumBatchRequests": 8,
+  "scopes": [
+    {
+      "stage": "before",
+      "entry": "main-D5Ah_P6W.js",
+      "provider": {
+        "admission": {
+          "credential": "registered OAuth",
+          "projectedModel": "gpt-6.1-sol"
+        },
+        "preflight": {
+          "sessionID": "ses_htxo50Da353xklNNVvw3",
+          "credential": "usable",
+          "catalog": "projected",
+          "actualModel": "gpt-6.1-sol",
+          "streaming": true
+        },
+        "maxRequests": 4,
+        "actualRequests": 2,
+        "streaming200OriginalReaderEOF": 2
+      },
+      "fileReadLatency": {
+        "milliseconds": 8000,
+        "scope": "Real GET /file/content and /file/source-content beforeRequest hook; original route and bytes",
+        "events": [
+          {
+            "id": 101,
+            "at": "2026-10-24T02:00:40.047Z",
+            "phase": "latency-start",
+            "path": "/file/content",
+            "file": "source-reading/research-references-with-authored-context/published-material-and-source-identities/nested-reading-material-for-desktop-review/reference-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-original.md",
+            "latencyMilliseconds": 8000
+          },
+          {
+            "id": 101,
+            "at": "2026-10-24T02:00:48.048Z",
+            "phase": "latency-end",
+            "path": "/file/content",
+            "file": "source-reading/research-references-with-authored-context/published-material-and-source-identities/nested-reading-material-for-desktop-review/reference-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-original.md",
+            "latencyMilliseconds": 8000
+          },
+          {
+            "id": 150,
+            "at": "2026-10-24T02:02:58.440Z",
+            "phase": "latency-start",
+            "path": "/file/content",
+            "file": "source-reading/research-references-with-authored-context/published-material-and-source-identities/nested-reading-material-for-desktop-review/reference-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-original.md",
+            "latencyMilliseconds": 8000
+          },
+          {
+            "id": 150,
+            "at": "2026-10-24T02:03:06.441Z",
+            "phase": "latency-end",
+            "path": "/file/content",
+            "file": "source-reading/research-references-with-authored-context/published-material-and-source-identities/nested-reading-material-for-desktop-review/reference-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-original.md",
+            "latencyMilliseconds": 8000
+          }
+        ],
+        "note": "latency-end ends the injected wait; not HTTP response/reader completion"
+      },
+      "focus": {
+        "pending": {
+          "at": "2026-10-24T02:02:59.175Z",
+          "state": [
+            "\t\t\t\t\t\t\t\t\t\t\t320 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, Value: FOCUS568_DRAFT_ONLY, ID: chatTextarea",
+            "\t\t\t\t\t\t\t\t\t346 text 加载中…",
+            "The focused UI element is 320 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, Value: FOCUS568_DRAFT_ONLY, ID: chatTextarea"
+          ]
+        },
+        "settled": {
+          "at": "2026-10-24T02:03:18.274Z",
+          "state": [
+            "\t\t\t\t\t\t\t\t\t\t\t320 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, Value: FOCUS568_DRAFT_ONLY, ID: chatTextarea",
+            "\t\t\t\t\t\t\t\t\t\t347 text entry area (settable) Description: 编辑器, Value: # 来源阅读材料",
+            "The focused UI element is 347 text entry area (settable) Description: 编辑器, Value: # 来源阅读材料"
+          ]
+        }
+      },
+      "data": {
+        "tables": 90,
+        "originalRows": 179748,
+        "sourceAllOriginalRows": "Exact rowid/primary key/all fields/times",
+        "sourceBytes": 81690624,
+        "sourceModifiedAtMs": 1792805741054.5212,
+        "schema": {
+          "sourceVersion": 5,
+          "targetVersion": 5,
+          "extraObjects": [],
+          "integrity": "ok"
+        },
+        "canonical": "Complete source bytes exact",
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ],
+        "providerActivities": {
+          "original": 439,
+          "current": 440
+        },
+        "physicalOriginalFiles": 5,
+        "physicalFilePreservation": "Exact full original bytes and mtime for all five files"
+      },
+      "closure": {
+        "at": "2026-10-24T02:04:43.346Z",
+        "authRetired": 1,
+        "catalogRetired": 1,
+        "authCopied": true,
+        "modelRequests": 2,
+        "model": "gpt-6.1-sol",
+        "streaming200OriginalReaderEOF": 2,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968,
+          "content": "Exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 901628,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      }
+    },
+    {
+      "stage": "after",
+      "entry": "main-i7S5rL3p.js",
+      "provider": {
+        "admission": {
+          "credential": "registered OAuth",
+          "projectedModel": "gpt-6.1-sol"
+        },
+        "preflight": {
+          "sessionID": "ses_hY4uMOi02l2CZDSPNcYw",
+          "credential": "usable",
+          "catalog": "projected",
+          "actualModel": "gpt-6.1-sol",
+          "streaming": true
+        },
+        "maxRequests": 4,
+        "actualRequests": 2,
+        "streaming200OriginalReaderEOF": 2
+      },
+      "fileReadLatency": {
+        "milliseconds": 8000,
+        "scope": "Real GET /file/content and /file/source-content beforeRequest hook; original route and bytes",
+        "events": [
+          {
+            "id": 85,
+            "at": "2026-10-24T02:11:51.388Z",
+            "phase": "latency-start",
+            "path": "/file/content",
+            "file": "source-reading/research-references-with-authored-context/published-material-and-source-identities/nested-reading-material-for-desktop-review/reference-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-original.md",
+            "latencyMilliseconds": 8000
+          },
+          {
+            "id": 85,
+            "at": "2026-10-24T02:11:59.390Z",
+            "phase": "latency-end",
+            "path": "/file/content",
+            "file": "source-reading/research-references-with-authored-context/published-material-and-source-identities/nested-reading-material-for-desktop-review/reference-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-original.md",
+            "latencyMilliseconds": 8000
+          },
+          {
+            "id": 119,
+            "at": "2026-10-24T02:13:15.809Z",
+            "phase": "latency-start",
+            "path": "/file/content",
+            "file": "source-reading/identity-422.md ",
+            "latencyMilliseconds": 8000
+          },
+          {
+            "id": 119,
+            "at": "2026-10-24T02:13:23.810Z",
+            "phase": "latency-end",
+            "path": "/file/content",
+            "file": "source-reading/identity-422.md ",
+            "latencyMilliseconds": 8000
+          },
+          {
+            "id": 126,
+            "at": "2026-10-24T02:13:36.941Z",
+            "phase": "latency-start",
+            "path": "/file/content",
+            "file": " identity-423.md",
+            "latencyMilliseconds": 8000
+          },
+          {
+            "id": 126,
+            "at": "2026-10-24T02:13:44.943Z",
+            "phase": "latency-end",
+            "path": "/file/content",
+            "file": " identity-423.md",
+            "latencyMilliseconds": 8000
+          },
+          {
+            "id": 132,
+            "at": "2026-10-24T02:13:52.207Z",
+            "phase": "latency-start",
+            "path": "/file/content",
+            "file": "identity-423.md",
+            "latencyMilliseconds": 8000
+          },
+          {
+            "id": 132,
+            "at": "2026-10-24T02:14:00.207Z",
+            "phase": "latency-end",
+            "path": "/file/content",
+            "file": "identity-423.md",
+            "latencyMilliseconds": 8000
+          }
+        ],
+        "note": "latency-end ends the injected wait; not HTTP response/reader completion"
+      },
+      "focus": {
+        "pending": {
+          "at": "2026-10-24T02:11:52.208Z",
+          "lines": [
+            "\t\t\t\t\t\t\t\t\t\t\t209 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, Value: FOCUS568_DRAFT_ONLY, ID: chatTextarea",
+            "\t\t\t\t\t\t\t\t\t235 text 加载中…",
+            "The focused UI element is 209 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, Value: FOCUS568_DRAFT_ONLY, ID: chatTextarea"
+          ]
+        },
+        "settled": {
+          "at": "2026-10-24T02:12:05.485Z",
+          "lines": [
+            "\t\t\t\t\t\t\t\t\t\t\t209 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, Value: FOCUS568_DRAFT_ONLY, ID: chatTextarea",
+            "\t\t\t\t\t\t\t\t229 container 编辑器",
+            "\t\t\t\t\t\t\t\t\t\t349 text entry area (settable) Description: 编辑器, Value: # 来源阅读材料",
+            "The focused UI element is 209 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, Value: FOCUS568_DRAFT_ONLY, ID: chatTextarea"
+          ]
+        }
+      },
+      "data": {
+        "tables": 90,
+        "originalRows": 180183,
+        "sourceAllOriginalRows": "Exact rowid/primary key/all fields/times",
+        "sourceBytes": 82055168,
+        "sourceModifiedAtMs": 1792807478298.0298,
+        "schema": {
+          "sourceVersion": 5,
+          "targetVersion": 5,
+          "extraObjects": [],
+          "integrity": "ok"
+        },
+        "canonical": "Complete source bytes exact",
+        "originalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ],
+        "providerActivities": {
+          "original": 440,
+          "current": 441
+        },
+        "physicalOriginalFiles": 5,
+        "physicalFilePreservation": "Exact full original bytes and mtime for all five files"
+      },
+      "closure": {
+        "at": "2026-10-24T02:14:31.040Z",
+        "authRetired": 1,
+        "catalogRetired": 1,
+        "authCopied": true,
+        "modelRequests": 2,
+        "model": "gpt-6.1-sol",
+        "streaming200OriginalReaderEOF": 2,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968,
+          "content": "Exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 1013451,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      }
+    }
+  ],
+  "manualReadOnlyDom": {
+    "secondLine": {
+      "at": "2026-10-24T02:12:59.547Z",
+      "selection": {
+        "active": "编辑器",
+        "cursors": [
+          "left: 147.609px; top: 32.5px; height: 17px;"
+        ],
+        "lines": [
+          {
+            "classes": "cm-line",
+            "text": "# 来源阅读材料"
+          },
+          {
+            "classes": "cm-line cm-activeLine cm-oc-reveal-line",
+            "text": "价格：CNY 99，仅用于界面测试。"
+          },
+          {
+            "classes": "cm-line",
+            "text": "交付：确认需求后5个工作日，仅用于界面测试。"
+          },
+          {
+            "classes": "cm-line",
+            "text": ""
+          }
+        ]
+      }
+    },
+    "thirdLine": {
+      "at": "2026-10-24T02:12:44.836Z",
+      "selection": {
+        "active": "编辑器",
+        "cursors": [
+          {
+            "classes": "cm-cursor cm-cursor-primary",
+            "style": "left: 225.609px; top: 52px; height: 17px;"
+          }
+        ],
+        "editorLines": [
+          {
+            "classes": "cm-line",
+            "text": "# 来源阅读材料"
+          },
+          {
+            "classes": "cm-line",
+            "text": "价格：CNY 99，仅用于界面测试。"
+          },
+          {
+            "classes": "cm-line cm-activeLine cm-oc-reveal-line",
+            "text": "交付：确认需求后5个工作日，仅用于界面测试。"
+          },
+          {
+            "classes": "cm-line",
+            "text": ""
+          }
+        ]
+      }
+    }
+  },
+  "limitations": [
+    "First attempt was after the read, so image 01 is not failure evidence.",
+    "Read-only browser DOM does not expose document.getSelection(); visible caret geometry and line bands recorded, no native selection API claim.",
+    "This change protects a newly focused control; it does not infer input intent when activeElement is unchanged.",
+    "Provider preflights prove credentials/catalog/model/streaming; file UI interactions send no business message."
+  ]
+}
