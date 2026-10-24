@@ -271,12 +271,17 @@ export const ExperimentalRoutes = lazy(() =>
       "/worktree/reset",
       describeRoute({
         summary: "Reset worktree",
-        description: "Reset a worktree branch to the primary default branch.",
+        description:
+          "Reset a worktree branch with an immutable operationID. Reuse the same ID to recover that operation; use a new ID for a new explicit reset.",
         operationId: "worktree.reset",
         responses: {
           200: {
             description: "Worktree reset",
             content: { "application/json": { schema: resolver(z.boolean()) } },
+          },
+          409: {
+            description: "Worktree startup outcome is unknown; existing files are preserved",
+            content: { "application/json": { schema: resolver(Worktree.StartupOutcomeUnknownError.Schema) } },
           },
           ...errors(400, 404),
         },
@@ -284,7 +289,12 @@ export const ExperimentalRoutes = lazy(() =>
       validator("json", Worktree.reset.schema),
       async (c) => {
         const body = c.req.valid("json")
-        await Worktree.resetProjectWorktree(body)
+        try {
+          await Worktree.resetProjectWorktree(body)
+        } catch (error) {
+          if (Worktree.StartupOutcomeUnknownError.isInstance(error)) return c.json(error.toObject(), 409)
+          throw error
+        }
         return c.json(true)
       },
     )

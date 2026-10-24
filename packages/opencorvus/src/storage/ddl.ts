@@ -382,6 +382,13 @@ function generatedSchemaDdl() {
 // FTS is Full-Text Search. Drizzle table declarations do not model SQLite FTS5
 // virtual tables, so this remains an explicit storage extension.
 const STORAGE_EXTENSION_DDL = /* sql */ `
+CREATE TRIGGER IF NOT EXISTS expert_squad_mutation_receipt_no_update
+BEFORE UPDATE ON expert_squad_mutation_receipt FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'expert_squad_mutation_receipt: installation commit history is immutable'); END;
+CREATE TRIGGER IF NOT EXISTS expert_squad_mutation_receipt_no_delete
+BEFORE DELETE ON expert_squad_mutation_receipt FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'expert_squad_mutation_receipt: installation commit history is immutable'); END;
+
 CREATE TRIGGER IF NOT EXISTS project_generation_required_insert
 BEFORE INSERT ON project
 FOR EACH ROW
@@ -561,6 +568,15 @@ WHEN NEW.accepted_project_id IS NOT NULL AND NOT (
         AND json_extract(target_session.metadata,'$.globalChatStart.version')=2
         AND json_extract(target_session.metadata,'$.globalChatStart.requestFingerprint')=NEW.request_fingerprint
     )
+  ) OR (
+    NEW.kind='automation_run' AND EXISTS (
+      SELECT 1 FROM automation_run AS run
+      WHERE run.id=NEW.accepted_target_id AND run.target_project_id=NEW.accepted_project_id
+        AND run.target_project_generation=NEW.materialized_project_generation
+        AND run.id=json_extract(NEW.request_contract,'$.runID')
+        AND run.fire_id=json_extract(NEW.request_contract,'$.fireID')
+        AND run.automation_revision_id=json_extract(NEW.request_contract,'$.revisionID')
+    )
   )
 )
 BEGIN
@@ -585,6 +601,13 @@ WHEN NEW.accepted_project_id IS NOT NULL AND NOT (
       AND json_extract(target_session.metadata,'$.globalChatStart.requestID')=NEW.request_id
       AND json_extract(target_session.metadata,'$.globalChatStart.version')=2
       AND json_extract(target_session.metadata,'$.globalChatStart.requestFingerprint')=NEW.request_fingerprint
+  )) OR (NEW.kind='automation_run' AND EXISTS (
+    SELECT 1 FROM automation_run AS run
+    WHERE run.id=NEW.accepted_target_id AND run.target_project_id=NEW.accepted_project_id
+      AND run.target_project_generation=NEW.materialized_project_generation
+      AND run.id=json_extract(NEW.request_contract,'$.runID')
+      AND run.fire_id=json_extract(NEW.request_contract,'$.fireID')
+      AND run.automation_revision_id=json_extract(NEW.request_contract,'$.revisionID')
   ))
 )
 BEGIN
@@ -4398,6 +4421,19 @@ BEGIN SELECT RAISE(ABORT, 'bus_publication_outbox: publication input is immutabl
 CREATE TRIGGER IF NOT EXISTS bus_publication_outbox_no_delete
 BEFORE DELETE ON bus_publication_outbox FOR EACH ROW
 BEGIN SELECT RAISE(ABORT, 'bus_publication_outbox: publication history is immutable'); END;
+CREATE TRIGGER IF NOT EXISTS bus_publication_owner_no_update
+BEFORE UPDATE ON bus_publication_owner FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'bus_publication_owner: immutable original Project occurrence'); END;
+CREATE TRIGGER IF NOT EXISTS bus_publication_owner_no_delete
+BEFORE DELETE ON bus_publication_owner FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'bus_publication_owner: original owner history is immutable'); END;
+CREATE TRIGGER IF NOT EXISTS bus_publication_owner_insert
+BEFORE INSERT ON bus_publication_owner FOR EACH ROW
+WHEN NEW.project_generation IS NULL OR NOT EXISTS (
+  SELECT 1 FROM bus_publication_outbox AS source JOIN project ON project.id=source.project_id
+  WHERE source.occurrence_id=NEW.occurrence_id AND project.generation=NEW.project_generation
+)
+BEGIN SELECT RAISE(ABORT, 'bus_publication_owner: new source must bind its exact current Project'); END;
 CREATE TRIGGER IF NOT EXISTS bus_publication_delivery_no_update
 BEFORE UPDATE ON bus_publication_delivery FOR EACH ROW
 BEGIN SELECT RAISE(ABORT, 'bus_publication_delivery: effect request is immutable'); END;

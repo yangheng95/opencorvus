@@ -1038,11 +1038,7 @@ export namespace MCP {
             promptDefinitions: capabilities?.prompts ? await collectMcpPromptPages(client, timeout) : [],
             resourceDefinitions: capabilities?.resources ? await collectMcpResourcePages(client, timeout) : [],
           }
-          const committed = commitConnectionCapabilityInventory(
-            connection,
-            { snapshot: current, generation },
-            snapshot,
-          )
+          const committed = commitConnectionCapabilityInventory(connection, { snapshot: current, generation }, snapshot)
           if (committed) return committed
         }
         throw new Error(
@@ -2046,7 +2042,9 @@ export namespace MCP {
         ? ComputerMCPBuiltin.catalogIdentityConfig(mcp)
         : mcp
     const value = isMcpConfigured(identity) ? { ...identity, enabled: identity.enabled !== false } : identity
-    return createHash("sha256").update(JSON.stringify(canonicalConfigValue(value))).digest("hex")
+    return createHash("sha256")
+      .update(JSON.stringify(canonicalConfigValue(value)))
+      .digest("hex")
   }
 
   interface CreateOptions {
@@ -2379,10 +2377,11 @@ export namespace MCP {
     "mcp",
   )
 
-  function state() {
+  async function state() {
     // A reader waiting behind a Config writer must not publish initialization
     // that the same writer will then join during runtime reconciliation.
-    return Config.withConfigGenerationRead(() => stateSource())
+    const { SkillManager } = await import("@/skill/manager")
+    return SkillManager.withCatalogMutationOwner(() => Config.withConfigGenerationRead(() => stateSource()))
   }
 
   function startConnection(
@@ -2779,80 +2778,98 @@ export namespace MCP {
   export async function configure(name: string, mcp: Config.Mcp, credentialSecret?: string) {
     const parsed = ConfigureInput.parse({ name, config: mcp, credentialSecret })
     const s = await state()
-    return withRuntimeControl(s, parsed.name, async () => {
-      const staticCredential = parsed.credentialSecret
-        ? McpAuth.StaticCredential.parse({ secret: parsed.credentialSecret })
-        : undefined
-      const authKey = mcpAuthKey(parsed.name)
-
-      // The secret is STAGED before the definition commits and promoted to the
-      // active credential after it — the active credential the previous
-      // definition serves is never destroyed ahead of the commit that retires
-      // it. Every interruption converges: a crash before the definition
-      // commit leaves a staged secret matching no committed definition, which
-      // reconciliation drops; a crash between commit and promotion leaves a
-      // staged secret matching the committed definition, which reconciliation
-      // promotes. No window leaves an enabled definition whose secret is
-      // durably absent.
-      const stagedIdentity =
-        parsed.config.type === "remote" && parsed.config.credential && staticCredential
-          ? { serverUrl: parsed.config.url, credentialIdentity: configuredCredentialIdentity(parsed.config)! }
+    return Config.withMutationOwner(() =>
+      withRuntimeControl(s, parsed.name, async () => {
+        const staticCredential = parsed.credentialSecret
+          ? McpAuth.StaticCredential.parse({ secret: parsed.credentialSecret })
           : undefined
-      await afterStaticConfigureRuntimeAdmissionForTest?.()
-      if (stagedIdentity && staticCredential) {
-        await McpAuth.stageStaticCredential(
-          authKey,
-          staticCredential.secret,
-          stagedIdentity.serverUrl,
-          stagedIdentity.credentialIdentity,
-          async () => {
-            await assertProjectOccurrenceCurrent(`staging ${parsed.name} credentials`)
-          },
-        )
-      }
-      try {
-        await Config.updateProjectPatchAtomic(() => ({
-          mcp: {
-            [parsed.name]: parsed.config,
-          },
-        }))
-      } catch (error) {
-        // The definition never committed; the staged secret is dropped and
-        // the previously active credential was never touched.
-        try {
-          if (stagedIdentity) {
-            await McpAuth.clearStagedStaticCredential(authKey, async () => {
-              await assertProjectOccurrenceCurrent(`rolling back ${parsed.name} credentials`)
-            })
-          }
-        } catch (rollbackError) {
-          throw new AggregateError(
-            [error, rollbackError],
-            `MCP server ${parsed.name} definition commit and staged credential drop failed`,
+        const authKey = mcpAuthKey(parsed.name)
+
+        // The secret is STAGED before the definition commits and promoted to the
+        // active credential after it — the active credential the previous
+        // definition serves is never destroyed ahead of the commit that retires
+        // it. Every interruption converges: a crash before the definition
+        // commit leaves a staged secret matching no committed definition, which
+        // reconciliation drops; a crash between commit and promotion leaves a
+        // staged secret matching the committed definition, which reconciliation
+        // promotes. No window leaves an enabled definition whose secret is
+        // durably absent.
+        const stagedIdentity =
+          parsed.config.type === "remote" && parsed.config.credential && staticCredential
+            ? { serverUrl: parsed.config.url, credentialIdentity: configuredCredentialIdentity(parsed.config)! }
+            : undefined
+        await afterStaticConfigureRuntimeAdmissionForTest?.()
+        if (stagedIdentity && staticCredential) {
+          await McpAuth.stageStaticCredential(
+            authKey,
+            staticCredential.secret,
+            stagedIdentity.serverUrl,
+            stagedIdentity.credentialIdentity,
+            async () => {
+              await assertProjectOccurrenceCurrent(`staging ${parsed.name} credentials`)
+            },
           )
         }
-        throw error
-      }
-      if (stagedIdentity) {
-        await McpAuth.promoteStagedStaticCredential(authKey, stagedIdentity, async () => {
-          await assertProjectOccurrenceCurrent(`promoting ${parsed.name} credentials`)
-        })
-      }
-
-      if (staticCredential) {
-        const existing = s.connections[parsed.name]
-        if (existing?.configIdentity === mcpConfigIdentity(parsed.config)) {
-          queueConnectionCleanup(s, parsed.name, existing)
-          await settleConnectionCleanup(s, parsed.name, existing)
-          s.status[parsed.name] = { status: "disconnected" }
-          s.statusIdentity[parsed.name] = mcpConfigIdentity(parsed.config)
+        try {
+          await Config.updateProjectPatchAtomic(() => ({
+            mcp: {
+              [parsed.name]: parsed.config,
+            },
+          }))
+        } catch (error) {
+          if (error instanceof Config.ProjectConfigCommittedReconcileError) {
+            const committed = error.config.mcp?.[parsed.name]
+            if (stagedIdentity && committed && mcpConfigIdentity(committed) === mcpConfigIdentity(parsed.config)) {
+              try {
+                await McpAuth.promoteStagedStaticCredential(authKey, stagedIdentity, async () => {
+                  await assertProjectOccurrenceCurrent(`recovering committed ${parsed.name} credentials`)
+                })
+              } catch (credentialError) {
+                throw new AggregateError(
+                  [error, credentialError],
+                  `MCP server ${parsed.name} committed configuration and credential settlement failed`,
+                )
+              }
+            }
+            throw error
+          }
+          // The definition never committed; the staged secret is dropped and
+          // the previously active credential was never touched.
+          try {
+            if (stagedIdentity) {
+              await McpAuth.clearStagedStaticCredential(authKey, async () => {
+                await assertProjectOccurrenceCurrent(`rolling back ${parsed.name} credentials`)
+              })
+            }
+          } catch (rollbackError) {
+            throw new AggregateError(
+              [error, rollbackError],
+              `MCP server ${parsed.name} definition commit and staged credential drop failed`,
+            )
+          }
+          throw error
         }
-      }
-      await ensureConfiguredConnections(s, { [parsed.name]: parsed.config }, false)
-      return {
-        status: s.status,
-      }
-    })
+        if (stagedIdentity) {
+          await McpAuth.promoteStagedStaticCredential(authKey, stagedIdentity, async () => {
+            await assertProjectOccurrenceCurrent(`promoting ${parsed.name} credentials`)
+          })
+        }
+
+        if (staticCredential) {
+          const existing = s.connections[parsed.name]
+          if (existing?.configIdentity === mcpConfigIdentity(parsed.config)) {
+            queueConnectionCleanup(s, parsed.name, existing)
+            await settleConnectionCleanup(s, parsed.name, existing)
+            s.status[parsed.name] = { status: "disconnected" }
+            s.statusIdentity[parsed.name] = mcpConfigIdentity(parsed.config)
+          }
+        }
+        await ensureConfiguredConnections(s, { [parsed.name]: parsed.config }, false)
+        return {
+          status: s.status,
+        }
+      }),
+    )
   }
 
   async function removeStoredAuth(mcpName: string): Promise<void> {
@@ -3786,8 +3803,7 @@ export namespace MCP {
           Object.freeze({
             runtime_name: runtimeName,
             server_id: toolCapabilities.find(
-              (candidate) =>
-                candidate.capabilityName === value.tool.name && candidate.value.tool === value.tool,
+              (candidate) => candidate.capabilityName === value.tool.name && candidate.value.tool === value.tool,
             )!.serverID,
             tool_name: value.tool.name,
             config_digest: value.configDigest,

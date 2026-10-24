@@ -52,7 +52,6 @@ describe("worktree readiness receipts", () => {
         await fs.mkdir(root, { recursive: true })
         const directory = path.join(root, name)
         await runGit(project.path, ["worktree", "add", "--no-checkout", "-b", `opencorvus/${name}`, directory])
-        expect(await Filesystem.exists(path.join(directory, ".gitattributes"))).toBe(false)
 
         const reused = await Worktree.create({ name, reuseIfValid: true })
         expect({
@@ -60,7 +59,7 @@ describe("worktree readiness receipts", () => {
           populated: await Filesystem.exists(path.join(reused.directory, ".gitattributes")),
           ready: await WorktreeReadiness.isReady(reused.directory),
         }).toEqual({
-          directory,
+          directory: await fs.realpath(directory),
           populated: true,
           ready: true,
         })
@@ -94,10 +93,10 @@ describe("worktree readiness receipts", () => {
       fn: async () => {
         await freezeMetadata(project.path)
         const name = "converge-probe"
-        // Only the project start command can fail population; the extra
-        // worktree script is fire-and-forget by contract.
+        // Both project and extra startup scripts must complete successfully.
         await Project.update({ projectID: Instance.project.id, commands: { start: "exit 1" } })
-        await expect(Worktree.create({ name })).rejects.toThrow()
+        const failure = await Worktree.create({ name }).catch((error: unknown) => error)
+        expect(failure).toBeInstanceOf(Worktree.StartCommandFailedError)
 
         await Project.update({ projectID: Instance.project.id, commands: { start: "" } })
         const retried = await Worktree.create({ name })

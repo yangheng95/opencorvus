@@ -70,6 +70,34 @@ export const ExpertSquadPackageError = NamedError.create(
   }),
 )
 
+const MutationRecoveryQuery = z.object({
+  id: ExpertSquadIDSchema,
+  installationScope: ExpertSquadPackageLocations.InstallationScopeSchema,
+  occurrenceID: z.string().uuid().optional(),
+  cursor: z.string().uuid().optional(),
+  byteOffset: z.coerce.number().int().min(0).default(0),
+})
+const MutationRecoveryResponse = z.union([
+  z.object({
+    entries: z.array(
+      z.object({
+        occurrenceID: z.string(),
+        disposition: z.literal("commit_receipt_unavailable"),
+        preservation: z.enum(["complete", "pending"]),
+        timeCreated: z.number(),
+      }),
+    ),
+    nextCursor: z.string().nullable(),
+  }),
+  z.object({
+    occurrenceID: z.string(),
+    totalBytes: z.number(),
+    byteOffset: z.number(),
+    dataBase64: z.string(),
+    nextByteOffset: z.number().nullable(),
+  }),
+])
+
 const ImportFolderInput = z
   .object({
     sourceDirectory: z.string().min(1),
@@ -1006,6 +1034,30 @@ export function ExpertSquadRoutes() {
         const input = c.req.valid("json")
         return c.json(await packageRoute(() => executeEvolutionPackageMutation(input)))
       },
+    )
+    .get(
+      "/mutation-recovery",
+      describeRoute({
+        summary: "Read preserved package mutation evidence",
+        description:
+          "Read ordered recovery summaries or a 4096-byte original evidence page. A preservation outcome records current evidence retention, not a historical mutation success.",
+        operationId: "expertSquad.mutationRecovery",
+        responses: {
+          200: {
+            description: "Preserved mutation evidence",
+            content: { "application/json": { schema: resolver(MutationRecoveryResponse) } },
+          },
+          ...errors(400, 404),
+        },
+      }),
+      validator("query", MutationRecoveryQuery),
+      async (c) =>
+        c.json(
+          await ExpertSquadPackageManager.inspectMutationRecovery({
+            ...c.req.valid("query"),
+            projectDirectory: Instance.project.worktree,
+          }),
+        ),
     )
     .get(
       "/evolution-history",

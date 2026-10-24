@@ -15,6 +15,23 @@
 
 ## 单一内部运行时
 
+MCP配置的credential stage、definition持久化与promotion由现有唯一Config mutation
+authority覆盖完整操作；startup staged settlement在同一owner内重读原definition。
+锁顺序保持catalog/reference owner在Config generation read/write之前；冷MCP初始化
+不能持generation read再等待mutation owner。真实postpersist reconciliation错误携带
+原已提交candidate，按精确definition完成stage promotion并保留原错误，不清空已提交效果。
+配置已丢失的旧secret无法从definition猜补，保留诊断，等待明确新输入。
+
+Skill replacement以原configured phase和实际受影响配置字段为效果证据。无关用户配置
+修订保留，不用整个可变Config revision阻止已发生效果的收尾；用户后来修改受影响字段
+也不重放旧配置覆盖它。文件身份与replacement目录仍由原publication事实验证。
+
+Expert Squad 安装 mutation 的成功事实由安装级唯一 receipt 拥有，原 Task Artifact 是正式
+报告投影，原 Project 删除后长期成功事实仍可读。版本化迁移保留正 receipt 原字节与时刻；
+cold 缺 receipt 保全 current、before/staging 和原 journal，并公开 commit_receipt_unavailable。
+当前包与归档分别保留，后续新操作需按真实当前版本执行；读取入口为
+`GET /expert-squad/mutation-recovery`，不因新同 ID 包操作覆盖旧记录。
+
 Chat、Mission 和 projected Task scheduler 直接获得通用的
 create_continuous_goal/get_continuous_goal/update_continuous_goal 工具；声明、registry 和
 实际 scheduler factory 同源。其 [持续意图合同](continuous-goal.md) 与 Delivery Slice Goal

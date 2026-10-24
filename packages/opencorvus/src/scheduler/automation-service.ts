@@ -89,6 +89,8 @@ import {
 } from "./tool-occurrence"
 import { FifoPermitPool, settledWork } from "@/util/queue"
 import { globalExecutionCapacity } from "@/runtime/execution-capacity"
+import { GlobalCreationAllocation } from "@/project/global-creation-allocation"
+import { assertSchedulerProjectOwner, schedulerProjectDisposition } from "./project-owner"
 
 export { AutomationRunOutcomes }
 
@@ -181,7 +183,7 @@ export type AutomationRunView = {
     productPillar: ProductPillar | null
   } | null
   outcome: (typeof AutomationRunOutcomes)[number]
-  disposition: "mission_closed" | "target_deleted" | "superseded" | null
+  disposition: "mission_closed" | "target_deleted" | "superseded" | "owner_unresolved" | null
   closureEventID: string | null
   startedAt: number
   completedAt: number | null
@@ -194,7 +196,7 @@ export type AutomationFireRunReceipt = {
   targetProjectId: string | null
   sessionId: string | null
   outcome: (typeof AutomationRunOutcomes)[number]
-  disposition: "mission_closed" | "target_deleted" | "superseded" | null
+  disposition: "mission_closed" | "target_deleted" | "superseded" | "owner_unresolved" | null
   closureEventID: string | null
   startedAt: number
   completedAt: number | null
@@ -220,6 +222,7 @@ export type GlobalConversationCreator = (input: {
   experience: ConversationExperience
   model?: string
   sessionID?: string
+  creationAllocation?: Parameters<typeof GlobalCreationAllocation.materializeProject>[0]
 }) => Promise<{ session: Session.Info }>
 
 export const AutomationRunningConflictError = NamedError.create(
@@ -424,7 +427,11 @@ export namespace AutomationService {
         .select()
         .from(AutomationFireTable)
         .where(inArray(AutomationFireTable.automation_revision_id, revisionIDs))
-        .orderBy(desc(AutomationFireTable.scheduled_due_at), desc(AutomationFireTable.time_created), desc(AutomationFireTable.id))
+        .orderBy(
+          desc(AutomationFireTable.scheduled_due_at),
+          desc(AutomationFireTable.time_created),
+          desc(AutomationFireTable.id),
+        )
         .all()
         .map((fire) => fireHistoryView(projectAutomationFireInTransaction(db, fire))),
     )
@@ -821,7 +828,12 @@ export namespace AutomationService {
       }
       const inserted = tx.select().from(AutomationTable).where(eq(AutomationTable.id, revisionID)).get()!
       if (inserted.status === "active") {
-        ensureScheduledAutomationFireFrontierInTransaction(tx, inserted, Recurrence.nextRun(inserted.recurrence!, committedAt), committedAt)
+        ensureScheduledAutomationFireFrontierInTransaction(
+          tx,
+          inserted,
+          Recurrence.nextRun(inserted.recurrence!, committedAt),
+          committedAt,
+        )
       } else {
         clearAutomationFireFrontierInTransaction(tx, inserted.definition_id)
       }
@@ -1434,11 +1446,7 @@ export namespace AutomationService {
     if (definition.kind !== "recurring" || definition.scope !== "session" || !definition.session_id) {
       return { stable: true as const }
     }
-    return SessionPromptOwner.activeExecutionForObservedOwnerInTransaction(
-      db,
-      definition.session_id,
-      observedOwner,
-    )
+    return SessionPromptOwner.activeExecutionForObservedOwnerInTransaction(db, definition.session_id, observedOwner)
   }
 
   /**
@@ -1590,8 +1598,9 @@ export namespace AutomationService {
     job: AutomationRow,
     runID: string,
     owner: string,
-    closureEventID: string,
+    closureEventID: string | null,
     consumeDefinition: boolean,
+    disposition: "mission_closed" | "owner_unresolved" | "target_deleted" = "mission_closed",
   ): void {
     const now = Date.now()
     Database.immediateTransaction((db) => {
@@ -1604,7 +1613,7 @@ export namespace AutomationService {
       if (existing) {
         if (
           existing.outcome !== "disposition" ||
-          existing.disposition !== "mission_closed" ||
+          existing.disposition !== disposition ||
           existing.closure_event_id !== closureEventID
         ) {
           throw new Error(`Automation run ${runID} conflicts with its terminal Mission disposition`)
@@ -1633,7 +1642,7 @@ export namespace AutomationService {
           id: Identifier.ascending("automation"),
           run_id: runID,
           outcome: "disposition",
-          disposition: "mission_closed",
+          disposition,
           closure_event_id: closureEventID,
           time_created: now,
         })
@@ -1763,7 +1772,12 @@ export namespace AutomationService {
               id: runID,
               automation_revision_id: job.revision_id,
               fire_id: fireID,
-              target_project_id: null,
+              target_project_id: targetSession.projectID,
+              target_project_generation: db
+                .select({ generation: ProjectTable.generation })
+                .from(ProjectTable)
+                .where(eq(ProjectTable.id, targetSession.projectID))
+                .get()?.generation,
               mission_opened_event_id: reservation.openedEventID,
               mission_disposition: reservation.disposition,
               mission_closure_event_id: reservation.closureEventID,
@@ -1810,11 +1824,32 @@ export namespace AutomationService {
           settleAutomationMissionClosed(job, runID, owner, missionDisposition.closureEventID, true)
           return fireID
         }
+        const run = Database.use((db) => projectAutomationRunInTransaction(db, reserved))
+        const ownerDisposition = Database.use((db) =>
+          schedulerProjectDisposition(db, {
+            projectID: run.project_id,
+            generation: run.target_project_generation,
+          }),
+        )
+        if (ownerDisposition) {
+          settleAutomationMissionClosed(job, runID, owner, null, true, ownerDisposition)
+          return fireID
+        }
         inactivityFence.touch("delayed wake dispatch")
         let outcome: Awaited<ReturnType<typeof executeDelayedWake>>
         try {
           outcome = await executeDelayedWake(job, fireID, runID, owner, executionSignal, inactivityFence)
         } catch (error) {
+          const ownerDisposition = Database.use((db) =>
+            schedulerProjectDisposition(db, {
+              projectID: run.project_id,
+              generation: run.target_project_generation,
+            }),
+          )
+          if (ownerDisposition) {
+            settleAutomationMissionClosed(job, runID, owner, null, true, ownerDisposition)
+            return fireID
+          }
           const missionAdmissionRejected =
             MissionExecutionWakeClosedError.isInstance(error) ||
             MissionExecutionWakeNotOpenedError.isInstance(error) ||
@@ -1829,6 +1864,7 @@ export namespace AutomationService {
         // tombstone and the end of this fire's lease are the same fact, so a
         // lost fence must leave none of them behind.
         Database.immediateTransaction((db) => {
+          assertAutomationRunProjectOwner(db, run, false)
           const lease = currentControlLeaseInTransaction(db, "automation", job.id)
           if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= completedAt) {
             throw new AutomationRunningConflictError({
@@ -1879,7 +1915,7 @@ export namespace AutomationService {
 
       if (!job.recurrence) throw new Error(`Automation ${job.id} has no recurrence rule`)
       inactivityFence.touch("target resolution")
-      const targets = await executionTargets(job)
+      const targets = await executionTargets(job, fireID)
       const runIDs = targets.map((target) => deterministicAutomationID("atr", fireID, automationTargetIdentity(target)))
       await beforeRunReservationForTest?.()
       const terminalAtReservation = Database.immediateTransaction((db) => {
@@ -1901,13 +1937,20 @@ export namespace AutomationService {
         const terminalReceipts: (typeof AutomationRunReceiptTable.$inferInsert)[] = []
         targets.forEach((target, index) => {
           const reservation = schedulerMissionReservationInTransaction(db, target.sessionID)
+          const ownerDisposition =
+            target.disposition ??
+            schedulerProjectDisposition(db, {
+              projectID: target.projectID,
+              generation: target.generation ?? null,
+            })
           const inserted = db
             .insert(AutomationRunTable)
             .values({
               id: runIDs[index],
               automation_revision_id: job.revision_id,
               fire_id: fireID,
-              target_project_id: target.scope === "project" ? target.projectID : null,
+              target_project_id: target.projectID,
+              target_project_generation: target.generation,
               mission_opened_event_id: reservation.openedEventID,
               mission_disposition: reservation.disposition,
               mission_closure_event_id: reservation.closureEventID,
@@ -1916,6 +1959,14 @@ export namespace AutomationService {
             .onConflictDoNothing()
             .returning()
             .get()
+          if (inserted && target.allocation)
+            GlobalCreationAllocation.acceptInTransaction(db, {
+              allocationID: target.allocation.id,
+              kind: "automation_run",
+              projectID: target.projectID!,
+              targetID: inserted.id,
+              acceptedAt: Date.now(),
+            })
           if (inserted && reservation.kind === "mission_closed") {
             terminalReceipts.push({
               id: Identifier.ascending("automation"),
@@ -1926,12 +1977,12 @@ export namespace AutomationService {
               time_created: now,
             })
           }
-          if (inserted && target.disposition === "target_deleted") {
+          if (inserted && ownerDisposition && reservation.kind !== "mission_closed") {
             terminalReceipts.push({
               id: Identifier.ascending("automation"),
               run_id: inserted.id,
               outcome: "disposition",
-              disposition: "target_deleted",
+              disposition: ownerDisposition,
               time_created: now,
             })
           }
@@ -2008,6 +2059,7 @@ export namespace AutomationService {
       let results: PromiseSettledResult<
         | { kind: "succeeded"; sessionID: string }
         | { kind: "target_deleted" }
+        | { kind: "owner_unresolved" }
         | Extract<MissionSchedulerOccurrenceDisposition, { kind: "mission_closed" }>
       >[] = []
       results = await settledWork({
@@ -2030,7 +2082,8 @@ export namespace AutomationService {
               return { kind: "succeeded" as const, sessionID: reserved.session_id }
             }
             if (reserved?.outcome === "disposition") {
-              if (reserved.disposition === "target_deleted") return { kind: "target_deleted" as const }
+              if (reserved.disposition === "target_deleted" || reserved.disposition === "owner_unresolved")
+                return { kind: reserved.disposition }
               if (reserved.disposition !== "mission_closed" || !reserved.closure_event_id) {
                 throw new Error(`Automation run ${reserved.id} has an invalid terminal disposition`)
               }
@@ -2041,6 +2094,13 @@ export namespace AutomationService {
               return exact
             }
             if (!reserved) throw new Error(`Automation run ${runIDs[index]} was not reserved`)
+            const ownerDisposition = Database.use((db) =>
+              schedulerProjectDisposition(db, {
+                projectID: reserved.project_id,
+                generation: reserved.target_project_generation,
+              }),
+            )
+            if (ownerDisposition) return { kind: ownerDisposition }
             const missionDisposition = missionDispositionForAutomationRun(reserved)
             if (missionDisposition?.kind === "mission_closed") return missionDisposition
             const existing = findAutomationWake(job.id, fireID, target)
@@ -2063,6 +2123,15 @@ export namespace AutomationService {
               )),
             }
           } catch (error) {
+            const ownerDisposition = reserved
+              ? Database.use((db) =>
+                  schedulerProjectDisposition(db, {
+                    projectID: reserved.project_id,
+                    generation: reserved.target_project_generation,
+                  }),
+                )
+              : undefined
+            if (ownerDisposition) return { kind: ownerDisposition }
             const missionAdmissionRejected =
               MissionExecutionWakeClosedError.isInstance(error) ||
               MissionExecutionWakeNotOpenedError.isInstance(error) ||
@@ -2092,11 +2161,7 @@ export namespace AutomationService {
       const error = failures.length > 0 ? failures.map((failure) => failure.message).join("; ") : null
       const exhausted = error !== null && job.failure_count + 1 >= MAX_FIRE_ATTEMPTS
       const retryAt = error && !exhausted ? automationRetryAt(job.failure_count + 1, committedAt) : 0
-      const nextRun = retryAt
-        ? retryAt
-        : reschedule
-          ? Recurrence.nextRun(job.recurrence, committedAt)
-          : job.next_run
+      const nextRun = retryAt ? retryAt : reschedule ? Recurrence.nextRun(job.recurrence, committedAt) : job.next_run
       inactivityFence.touch("durable fire settlement")
       Database.immediateTransaction((tx) => {
         const lease = currentControlLeaseInTransaction(tx, "automation", job.id)
@@ -2136,6 +2201,8 @@ export namespace AutomationService {
           const prior = persisted ? projectAutomationRunInTransaction(tx, persisted) : undefined
           if (prior?.outcome === "succeeded" || prior?.outcome === "disposition") return
           if (!prior) throw new Error(`Automation run ${runIDs[index]} was not reserved`)
+          if (result.status === "fulfilled" && result.value.kind === "succeeded")
+            assertAutomationRunProjectOwner(tx, prior, false)
           tx.insert(AutomationRunReceiptTable)
             .values({
               id: Identifier.ascending("automation"),
@@ -2143,18 +2210,20 @@ export namespace AutomationService {
               outcome:
                 result.status === "fulfilled" && result.value.kind === "mission_closed"
                   ? "disposition"
-                  : result.status === "fulfilled" && result.value.kind === "target_deleted"
+                  : result.status === "fulfilled" &&
+                      (result.value.kind === "target_deleted" || result.value.kind === "owner_unresolved")
                     ? "disposition"
-                  : result.status === "fulfilled"
-                    ? "succeeded"
-                    : exhausted
-                      ? "failed"
-                      : "retry_wait",
+                    : result.status === "fulfilled"
+                      ? "succeeded"
+                      : exhausted
+                        ? "failed"
+                        : "retry_wait",
               disposition:
                 result.status === "fulfilled" && result.value.kind === "mission_closed"
                   ? "mission_closed"
-                  : result.status === "fulfilled" && result.value.kind === "target_deleted"
-                    ? "target_deleted"
+                  : result.status === "fulfilled" &&
+                      (result.value.kind === "target_deleted" || result.value.kind === "owner_unresolved")
+                    ? result.value.kind
                     : null,
               closure_event_id:
                 result.status === "fulfilled" && result.value.kind === "mission_closed"
@@ -2223,6 +2292,8 @@ export namespace AutomationService {
     scope: AutomationTarget["scope"]
     projectID: string | null
     directory?: string
+    generation?: string
+    allocation?: ReturnType<typeof GlobalCreationAllocation.reserve>
     sessionID?: string
     disposition?: "target_deleted"
   }
@@ -2279,9 +2350,7 @@ export namespace AutomationService {
     const definition = fire
       ? db.select().from(AutomationTable).where(eq(AutomationTable.id, fire.automation_revision_id)).get()
       : undefined
-    const lease = definition
-      ? currentControlLeaseInTransaction(db, "automation", definition.definition_id)
-      : undefined
+    const lease = definition ? currentControlLeaseInTransaction(db, "automation", definition.definition_id) : undefined
     if (!lease || lease.owner_occurrence_id !== input.owner || lease.expires_at <= input.now) {
       throw new Error(`Automation fire ${input.fireID} has no live owner admission`)
     }
@@ -2292,11 +2361,7 @@ export namespace AutomationService {
       .orderBy(desc(EngineControlActivationLeaseGrantTable.ordinal))
       .limit(1)
       .get()
-    if (
-      !leaseGrant ||
-      leaseGrant.expires_at !== lease.expires_at ||
-      leaseGrant.time_created > input.now
-    ) {
+    if (!leaseGrant || leaseGrant.expires_at !== lease.expires_at || leaseGrant.time_created > input.now) {
       throw new Error(`Automation fire ${input.fireID} has no current immutable lease grant`)
     }
     const latest = db
@@ -2335,10 +2400,7 @@ export namespace AutomationService {
       }
     }
     const ordinal = (latest?.ordinal ?? 0) + 1
-    const attemptID = Identifier.deterministic(
-      "automation",
-      `automation-fire-attempt-v1\0${input.fireID}\0${ordinal}`,
-    )
+    const attemptID = Identifier.deterministic("automation", `automation-fire-attempt-v1\0${input.fireID}\0${ordinal}`)
     db.insert(AutomationFireAttemptTable)
       .values({
         id: attemptID,
@@ -2354,7 +2416,11 @@ export namespace AutomationService {
     return db.select().from(AutomationFireAttemptTable).where(eq(AutomationFireAttemptTable.id, attemptID)).get()!
   }
 
-  function settleAutomationFireAttemptReservedInTransaction(db: Database.TxOrDb, job: AutomationRow, now: number): void {
+  function settleAutomationFireAttemptReservedInTransaction(
+    db: Database.TxOrDb,
+    job: AutomationRow,
+    now: number,
+  ): void {
     if (!job.attempt_id) throw new Error(`Automation fire ${job.pending_fire_id ?? job.id} has no physical attempt`)
     const existing = db
       .select()
@@ -2406,11 +2472,7 @@ export namespace AutomationService {
     if (session.kind !== "mission") return wake()
     if (!runID) throw new Error(`Mission Automation wake for Session ${session.id} has no exact run identity`)
     const run = Database.use((db) => db.select().from(AutomationRunTable).where(eq(AutomationRunTable.id, runID)).get())
-    if (
-      !run?.mission_opened_event_id ||
-      run.mission_disposition !== null ||
-      run.mission_closure_event_id !== null
-    ) {
+    if (!run?.mission_opened_event_id || run.mission_disposition !== null || run.mission_closure_event_id !== null) {
       throw new Error(`Automation run ${runID} has no exact Mission opened occurrence binding`)
     }
     await beforeMissionSessionAdmissionForTest?.()
@@ -2434,6 +2496,11 @@ export namespace AutomationService {
     inactivityFence: SchedulerExecutionInactivityFence,
     runID: string,
   ): Promise<string> {
+    Database.use((db) => {
+      const row = db.select().from(AutomationRunTable).where(eq(AutomationRunTable.id, runID)).get()
+      if (!row) throw new Error(`Automation Run ${runID} is missing`)
+      assertAutomationRunProjectOwner(db, projectAutomationRunInTransaction(db, row), false)
+    })
     const session = await Session.get(existing.sessionID)
     const receipt = await admitAutomationSessionWake(session, runID, (missionAdmission) =>
       SessionWake.resumePersistedWakeWithReceipt({
@@ -2441,7 +2508,12 @@ export namespace AutomationService {
         messageID: existing.messageID,
         directory: session.directory,
         retryFailedReply: true,
-        ownerPreflight: missionAdmission?.ownerPreflight,
+        ownerPreflight: (db) => {
+          const row = db.select().from(AutomationRunTable).where(eq(AutomationRunTable.id, runID)).get()
+          if (!row) throw new Error(`Automation Run ${runID} is missing`)
+          assertAutomationRunProjectOwner(db, projectAutomationRunInTransaction(db, row))
+          missionAdmission?.ownerPreflight?.(db)
+        },
         ownerLifecycle: missionAdmission?.ownerLifecycle,
       }),
     )
@@ -2479,7 +2551,7 @@ export namespace AutomationService {
     return row ? { sessionID: row.sessionID, messageID: row.id } : undefined
   }
 
-  async function executionTargets(job: AutomationRow): Promise<ExecutionTarget[]> {
+  async function executionTargets(job: AutomationRow, fireID: string): Promise<ExecutionTarget[]> {
     const target = Database.use((db) =>
       targetForRevision(db, { revisionID: job.revision_id, scope: job.scope, sessionID: job.session_id }),
     )
@@ -2489,14 +2561,76 @@ export namespace AutomationService {
         throw error
       })
       return session
-        ? [{ scope: "session", projectID: session.projectID, directory: session.directory, sessionID: session.id }]
+        ? [
+            {
+              scope: "session",
+              projectID: session.projectID,
+              directory: session.directory,
+              sessionID: session.id,
+              generation: Database.use(
+                (db) =>
+                  db
+                    .select({ generation: ProjectTable.generation })
+                    .from(ProjectTable)
+                    .where(eq(ProjectTable.id, session.projectID))
+                    .get()?.generation,
+              ),
+            },
+          ]
         : [{ scope: "session", projectID: null, sessionID: target.sessionId, disposition: "target_deleted" }]
     }
-    if (target.scope === "global") return [{ scope: "global", projectID: null }]
+    if (target.scope === "global") {
+      const runID = deterministicAutomationID("atr", fireID, "global")
+      const reserved = Database.use((db) =>
+        db.select().from(AutomationRunTable).where(eq(AutomationRunTable.id, runID)).get(),
+      )
+      if (reserved && !reserved.target_project_generation)
+        return [{ scope: "global", projectID: reserved.target_project_id }]
+      const requestContract = { protocol: "automation-run-project-v1", revisionID: job.revision_id, fireID, runID }
+      const allocation = reserved
+        ? GlobalCreationAllocation.find({ kind: "automation_run", requestID: runID, requestContract })
+        : GlobalCreationAllocation.reserve({
+            kind: "automation_run",
+            requestID: runID,
+            requestContract,
+            resolutionSeed: {},
+          })
+      if (!allocation) throw new Error(`Automation global Run ${runID} has no original Project allocation`)
+      if (reserved) {
+        const project = reserved.target_project_id
+          ? Database.use((db) =>
+              db.select().from(ProjectTable).where(eq(ProjectTable.id, reserved.target_project_id!)).get(),
+            )
+          : undefined
+        return [
+          {
+            scope: "global",
+            projectID: reserved.target_project_id,
+            generation: reserved.target_project_generation ?? undefined,
+            directory: project?.worktree,
+            allocation,
+          },
+        ]
+      }
+      const created = await GlobalCreationAllocation.materializeProject(allocation)
+      const project = Database.use((db) =>
+        db.select().from(ProjectTable).where(eq(ProjectTable.id, created.project.id)).get(),
+      )
+      if (!project) throw new Error(`Automation global allocation ${allocation.id} lost its Project before reservation`)
+      return [
+        {
+          scope: "global",
+          projectID: project.id,
+          generation: project.generation,
+          directory: project.worktree,
+          allocation,
+        },
+      ]
+    }
     return target.projectIds.map((projectID) => {
       const project = Database.use((db) => db.select().from(ProjectTable).where(eq(ProjectTable.id, projectID)).get())
       if (!project) return { scope: "project" as const, projectID, disposition: "target_deleted" as const }
-      return { scope: "project" as const, projectID, directory: project.worktree }
+      return { scope: "project" as const, projectID, generation: project.generation, directory: project.worktree }
     })
   }
 
@@ -2510,6 +2644,13 @@ export namespace AutomationService {
     inactivityFence: SchedulerExecutionInactivityFence,
   ): Promise<{ sessionID: string }> {
     const targetSessionID = automationTargetSessionID(target, runID)
+    const readOwner = () =>
+      Database.use((db) => {
+        const row = db.select().from(AutomationRunTable).where(eq(AutomationRunTable.id, runID)).get()
+        if (!row) throw new Error(`Automation Run ${runID} is missing`)
+        return projectAutomationRunInTransaction(db, row)
+      })
+    Database.use((db) => assertAutomationRunProjectOwner(db, readOwner(), false))
     if (target.scope === "global") {
       let globalSession = await Session.get(targetSessionID).catch((error) => {
         if (error instanceof NotFoundError) return undefined
@@ -2521,6 +2662,7 @@ export namespace AutomationService {
             experience: "chat",
             model: job.model_provider_id && job.model_id ? `${job.model_provider_id}/${job.model_id}` : undefined,
             sessionID: targetSessionID,
+            creationAllocation: target.allocation,
           })
           globalSession = created.session
         } catch (error) {
@@ -2531,15 +2673,19 @@ export namespace AutomationService {
       }
       return await runInTargetProject({
         directory: globalSession.directory,
-        fn: async () => ({
-          sessionID: await wakeSession(job, fireID, globalSession.id, runID, runID, owner, signal, inactivityFence),
-        }),
+        fn: async () => {
+          Database.use((db) => assertAutomationRunProjectOwner(db, readOwner()))
+          return {
+            sessionID: await wakeSession(job, fireID, globalSession.id, runID, runID, owner, signal, inactivityFence),
+          }
+        },
       })
     }
     if (!target.directory) throw new Error(`Automation target ${target.projectID ?? target.scope} has no directory`)
     return await runInTargetProject({
       directory: target.directory,
       fn: async () => {
+        Database.use((db) => assertAutomationRunProjectOwner(db, readOwner()))
         if (target.scope === "session") {
           if (!target.sessionID) throw new Error(`Session automation ${job.id} has no session target`)
           return {
@@ -2548,6 +2694,7 @@ export namespace AutomationService {
         }
         if (job.execution_mode === "worktree") {
           const worktree = await Worktree.create({ name: `automation-${job.id}`, reuseIfValid: true })
+          Worktree.assertReady(worktree)
           return await Instance.provide({
             directory: worktree.directory,
             fn: async () => {
@@ -2629,7 +2776,14 @@ export namespace AutomationService {
           fenceAutomationWakeCommit({ automationID: job.id, runID, owner, sessionID: message.sessionID })
         },
         preflightBundle: missionAdmission?.preflightBundle,
-        ownerPreflight: missionAdmission?.ownerPreflight,
+        ownerPreflight: (db) => {
+          if (runID) {
+            const row = db.select().from(AutomationRunTable).where(eq(AutomationRunTable.id, runID)).get()
+            if (!row) throw new Error(`Automation Run ${runID} is missing`)
+            assertAutomationRunProjectOwner(db, projectAutomationRunInTransaction(db, row))
+          }
+          missionAdmission?.ownerPreflight?.(db)
+        },
         ownerLifecycle: missionAdmission?.ownerLifecycle,
         reason: {
           source: "scheduler.automation",
@@ -2676,6 +2830,7 @@ export namespace AutomationService {
           automationID: input.automationID,
         })
       const run = persisted ? projectAutomationRunInTransaction(db, persisted) : undefined
+      if (run) assertAutomationRunProjectOwner(db, run)
       if (!run || run.outcome !== "running" || run.session_id !== input.sessionID) {
         throw new AutomationRunningConflictError({
           message: `Automation run ${input.runID} lost ownership before wake Message commit`,
@@ -2683,6 +2838,23 @@ export namespace AutomationService {
         })
       }
     })
+  }
+
+  function assertAutomationRunProjectOwner(db: Database.TxOrDb, run: AutomationRunRow, requireInstance = true): void {
+    assertSchedulerProjectOwner(
+      db,
+      { occurrenceID: run.id, projectID: run.project_id, generation: run.target_project_generation },
+      requireInstance,
+    )
+    if (run.session_id) {
+      const session = db
+        .select({ projectID: SessionTable.project_id })
+        .from(SessionTable)
+        .where(eq(SessionTable.id, run.session_id))
+        .get()
+      if (session && session.projectID !== run.project_id)
+        throw new Error(`Automation Run ${run.id} Session has another Project owner`)
+    }
   }
 
   async function executeDelayedWake(
@@ -2938,6 +3110,4 @@ export namespace AutomationService {
         .run()
     }
   }
-
-
 }

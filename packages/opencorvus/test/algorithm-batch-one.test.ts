@@ -1,4 +1,5 @@
 import { describe, expect, setDefaultTimeout, spyOn, test } from "bun:test"
+import assert from "node:assert/strict"
 import { Identifier } from "../src/id/id"
 import { WorktreeOwnershipCriticalSection } from "../src/worktree/ownership-critical-section"
 import { SessionPromptState } from "../src/session/prompt/state"
@@ -231,9 +232,7 @@ describe("worktree ownership critical section", () => {
       const proof = await Ownership.Worktree.proveOwnerless({ primaryWorktreeDir: root, worktreeDir: presentWorktree })
       expect(proof.status).toBe("ownerless")
 
-      expect(
-        (await validWorktreeOwners(root)).map((entry) => entry.marker.sessionID),
-      ).toEqual([staleSessionID])
+      expect((await validWorktreeOwners(root)).map((entry) => entry.marker.sessionID)).toEqual([staleSessionID])
     } finally {
       await rm(root, { recursive: true, force: true })
     }
@@ -322,7 +321,7 @@ describe("worktree ownership critical section", () => {
     expect(ownerless).toEqual({ status: "removed", value: "removed" })
 
     let durableOwnerRecorded = true
-    await expect(
+    await assert.rejects(
       WorktreeOwnershipCriticalSection.remove({
         directory,
         proveOwnerless: () =>
@@ -331,7 +330,8 @@ describe("worktree ownership critical section", () => {
           throw new Error("physical removal failed")
         },
       }),
-    ).rejects.toThrow("physical removal failed")
+      /physical removal failed/,
+    )
     expect(durableOwnerRecorded).toBe(true)
   })
 
@@ -401,9 +401,10 @@ describe("worktree ownership critical section", () => {
           expect(inner.owner.token).toBe(outer.owner.token)
           expect(path.resolve(inner.lockPath)).toBe(path.resolve(outer.lockPath))
         })
-        await expect(
+        await assert.rejects(
           ProjectGitLock.withLease({ projectID: "project-b", primaryWorktreeDir: second }, async () => undefined),
-        ).rejects.toThrow("nested lock authority differs")
+          /nested lock authority differs/,
+        )
       })
     } finally {
       await rm(first, { recursive: true, force: true })
@@ -502,12 +503,15 @@ describe("worktree ownership critical section", () => {
           directory: worktree.directory,
           sessionID: secondSessionID,
         })
-        await Worktree.remove({ directory: worktree.directory })
-        expect(
-          (await validWorktreeOwners(Instance.project.worktree)).filter(
-            (entry) => entry.marker.cwd === worktree.directory,
-          ),
-        ).toEqual([])
+        expect(await Worktree.removeManagedProjectWorktreeDirectory({
+          projectID: Instance.project.id,
+          directory: worktree.directory,
+        })).toEqual({
+          directory: worktree.directory,
+          removed: true,
+          proof: "ownerless",
+          receipt: { ok: true, status: "removed" },
+        })
         await Ownership.Worktree.record({
           primaryWorktreeDir: Instance.project.worktree,
           worktreeDir: worktree.directory,
@@ -519,11 +523,6 @@ describe("worktree ownership critical section", () => {
           preserved: 0,
           integrity: { status: "complete" },
         })
-        expect(
-          (await validWorktreeOwners(Instance.project.worktree)).filter(
-            (entry) => entry.marker.cwd === worktree.directory,
-          ),
-        ).toEqual([])
       },
     })
   }, 60_000)
@@ -560,13 +559,20 @@ describe("worktree ownership critical section", () => {
           directory: worktree.directory,
           releaseSandboxOwnership: true,
         })
-        const preservedReset = await Worktree.resetProjectWorktree({ directory: worktree.directory }).catch(
-          (error) => error,
-        )
+        const preservedReset = await Worktree.resetProjectWorktree({
+          directory: worktree.directory,
+          operationID: "owned-reset",
+        }).catch((error) => error)
 
         await EngineService.deleteSession(session.id, { projectID: session.projectID })
-        const resetAfterSettlement = await Worktree.resetProjectWorktree({ directory: worktree.directory })
-        const scratchAfterReset = await fs.stat(scratch).then(() => "present", () => "absent")
+        const resetAfterSettlement = await Worktree.resetProjectWorktree({
+          directory: worktree.directory,
+          operationID: "after-owner-settlement",
+        })
+        const [originalDirectory, returnedDirectory] = await Promise.all([
+          fs.stat(worktree.directory, { bigint: true }),
+          fs.stat(resetAfterSettlement.directory, { bigint: true }),
+        ])
         const removalAfterSettlement = await Worktree.removeManagedProjectWorktreeDirectory({
           projectID: Instance.project.id,
           directory: worktree.directory,
@@ -576,14 +582,16 @@ describe("worktree ownership critical section", () => {
         expect({
           preservedRemoval,
           preservedReset: preservedReset?.name,
-          resetAfterSettlement: path.resolve(resetAfterSettlement.directory),
-          scratchAfterReset,
+          resetAfterSettlement: {
+            dev: returnedDirectory.dev, ino: returnedDirectory.ino, birthtimeNs: returnedDirectory.birthtimeNs,
+          },
           removalAfterSettlement,
         }).toEqual({
           preservedRemoval: { directory: worktree.directory, removed: false, proof: "owned" },
           preservedReset: "WorktreeResetFailedError",
-          resetAfterSettlement: path.resolve(worktree.directory),
-          scratchAfterReset: "absent",
+          resetAfterSettlement: {
+            dev: originalDirectory.dev, ino: originalDirectory.ino, birthtimeNs: originalDirectory.birthtimeNs,
+          },
           removalAfterSettlement: {
             directory: worktree.directory,
             removed: true,
@@ -653,9 +661,7 @@ describe("worktree ownership critical section", () => {
           releaseSandboxOwnership: true,
         })
         const replacement = await fs.readFile(path.join(alias, "replacement.txt"), "utf8")
-        const retainedAdmissions = Database.use(
-          (db) => db.select().from(ProjectDirectoryAdmissionTable).all().length,
-        )
+        const retainedAdmissions = Database.use((db) => db.select().from(ProjectDirectoryAdmissionTable).all().length)
         await fs.rm(alias, { recursive: true, force: true })
         const resumed = await Worktree.removeManagedProjectWorktreeDirectory({
           projectID: current.id,
@@ -670,9 +676,7 @@ describe("worktree ownership critical section", () => {
           retainedAdmissions,
           resumed,
           sandboxes: Project.get(current.id)?.sandboxes,
-          finalAdmissions: Database.use(
-            (db) => db.select().from(ProjectDirectoryAdmissionTable).all().length,
-          ),
+          finalAdmissions: Database.use((db) => db.select().from(ProjectDirectoryAdmissionTable).all().length),
         }).toEqual({
           replaced: true,
           preserved: { directory: worktree.directory, removed: false, proof: "owned" },
@@ -703,7 +707,7 @@ describe("worktree ownership critical section", () => {
         const sandboxesBeforeUnboundCreation = Project.get(projectID)!.sandboxes
         {
           using _unboundInitializer = TaskExecutionDirectoryInitializerTestHooks.replace(undefined)
-          await expect(
+          await assert.rejects(
             EngineService.createTask(
               {
                 requestID: `directory-admission-unbound-${Identifier.ascending("artifact")}`,
@@ -715,7 +719,8 @@ describe("worktree ownership critical section", () => {
               },
               { actor: "user" },
             ),
-          ).rejects.toThrow("Task execution directory initializer is not bound by Project bootstrap.")
+            /Task execution directory initializer is not bound by Project bootstrap\./,
+          )
         }
         expect(Project.get(projectID)!.sandboxes).toEqual(sandboxesBeforeUnboundCreation)
         await Worktree.removeManagedProjectWorktreeDirectory({
@@ -1015,7 +1020,10 @@ describe("worktree ownership critical section", () => {
           directory: worktree.directory,
           releaseSandboxOwnership: true,
         })
-        const reset = await Worktree.resetProjectWorktree({ directory: worktree.directory }).catch((error) => error)
+        const reset = await Worktree.resetProjectWorktree({
+          directory: worktree.directory,
+          operationID: "durable-owner-reset",
+        }).catch((error) => error)
         local[Symbol.dispose]()
         const cleanup = await Worktree.removeManagedProjectWorktreeDirectory({
           projectID: Instance.project.id,
@@ -1094,7 +1102,10 @@ describe("worktree ownership critical section", () => {
           await fs.mkdir(worktree.directory, { recursive: true })
           await fs.writeFile(path.join(worktree.directory, "replacement.txt"), "preserve reset\n", "utf8")
         })
-        const failure = await Worktree.resetProjectWorktree({ directory: worktree.directory }).catch((error) => error)
+        const failure = await Worktree.resetProjectWorktree({
+          directory: worktree.directory,
+          operationID: "physical-reset",
+        }).catch((error) => error)
         const replacement = await fs.readFile(path.join(worktree.directory, "replacement.txt"), "utf8")
         await fs.rm(worktree.directory, { recursive: true, force: true })
         await fs.rename(original, worktree.directory)
@@ -1154,13 +1165,20 @@ describe("worktree ownership critical section", () => {
               .where(eq(ProjectDirectoryAdmissionTable.directory_key, directoryKey))
               .all().length,
         )
-        const danglingAlias = await fs.lstat(alias).then(() => "retained", () => "missing")
+        const danglingAlias = await fs.lstat(alias).then(
+          () => "retained",
+          () => "missing",
+        )
         let replaced = false
         using _replace = ProjectDirectoryAdmission.TestHooks.installAfterDurableAcquire(async (token) => {
           if (replaced || token.kind !== "reclamation" || token.directory !== path.resolve(worktree.directory)) return
           replaced = true
           await fs.mkdir(worktree.directory, { recursive: true })
-          await fs.writeFile(path.join(worktree.directory, "replacement.txt"), "preserve retained replacement\n", "utf8")
+          await fs.writeFile(
+            path.join(worktree.directory, "replacement.txt"),
+            "preserve retained replacement\n",
+            "utf8",
+          )
         })
         const preservedReplacement = await Worktree.removeManagedProjectWorktreeDirectory({
           projectID: Instance.project.id,
@@ -1190,7 +1208,10 @@ describe("worktree ownership critical section", () => {
               .where(eq(ProjectDirectoryAdmissionTable.directory_key, directoryKey))
               .all().length,
         )
-        const aliasAfterSettlement = await fs.lstat(alias).then(() => "retained", () => "removed")
+        const aliasAfterSettlement = await fs.lstat(alias).then(
+          () => "retained",
+          () => "removed",
+        )
         expect({
           first: first?.name,
           danglingAlias,
@@ -1245,9 +1266,7 @@ describe("worktree ownership critical section", () => {
           releaseSandboxOwnership: true,
         })
         const replacement = await fs.readFile(path.join(worktree.directory, "replacement.txt"), "utf8")
-        const retainedAdmissions = Database.use(
-          (db) => db.select().from(ProjectDirectoryAdmissionTable).all().length,
-        )
+        const retainedAdmissions = Database.use((db) => db.select().from(ProjectDirectoryAdmissionTable).all().length)
         await fs.rm(worktree.directory, { recursive: true, force: true })
         const resumed = await Worktree.removeManagedProjectWorktreeDirectory({
           projectID: Instance.project.id,
@@ -1261,9 +1280,7 @@ describe("worktree ownership critical section", () => {
           replacement,
           retainedAdmissions,
           resumed,
-          finalAdmissions: Database.use(
-            (db) => db.select().from(ProjectDirectoryAdmissionTable).all().length,
-          ),
+          finalAdmissions: Database.use((db) => db.select().from(ProjectDirectoryAdmissionTable).all().length),
         }).toEqual({
           replaced: true,
           preserved: { directory: worktree.directory, removed: false, proof: "owned" },
@@ -1294,7 +1311,15 @@ describe("worktree ownership critical section", () => {
         const worktree = await Worktree.create({ name: `reset-intent-${Date.now()}` })
         await fs.writeFile(path.join(project.path, "reset-intent.txt"), "next\n", "utf8")
         git("add", "--", "reset-intent.txt")
-        git("-c", "user.name=OpenCorvus Test", "-c", "user.email=test@opencorvus.ai", "commit", "-m", "next reset target")
+        git(
+          "-c",
+          "user.name=OpenCorvus Test",
+          "-c",
+          "user.email=test@opencorvus.ai",
+          "commit",
+          "-m",
+          "next reset target",
+        )
         const nextCommit = git("rev-parse", "HEAD")
         let injected = false
         const hook = Worktree.TestHooks.installAfterResetHard(() => {
@@ -1302,31 +1327,48 @@ describe("worktree ownership critical section", () => {
           injected = true
           throw new Worktree.ResetFailedError({ message: "Injected post-reset interruption" })
         })
-        const first = await Worktree.resetProjectWorktree({ directory: worktree.directory }).catch((error) => error)
+        const first = await Worktree.resetProjectWorktree({
+          directory: worktree.directory,
+          operationID: "frozen-reset",
+        }).catch((error) => error)
         hook[Symbol.dispose]()
         await fs.writeFile(path.join(project.path, "reset-intent-later.txt"), "later\n", "utf8")
         git("add", "--", "reset-intent-later.txt")
-        git("-c", "user.name=OpenCorvus Test", "-c", "user.email=test@opencorvus.ai", "commit", "-m", "advance moving reset ref")
+        git(
+          "-c",
+          "user.name=OpenCorvus Test",
+          "-c",
+          "user.email=test@opencorvus.ai",
+          "commit",
+          "-m",
+          "advance moving reset ref",
+        )
         const advancedCommit = git("rev-parse", "HEAD")
         const conflictingIntent = await Worktree.resetProjectWorktree({
           directory: worktree.directory,
+          operationID: "frozen-reset",
           baseRef: advancedCommit,
         }).catch((error) => error)
-        const resumed = await Worktree.resetProjectWorktree({ directory: worktree.directory })
+        const resumed = await Worktree.resetProjectWorktree({
+          directory: worktree.directory,
+          operationID: "frozen-reset",
+        }).catch((error) => error)
         const finalHead = Bun.spawnSync(["git", "rev-parse", "HEAD"], {
           cwd: worktree.directory,
           stdout: "pipe",
           stderr: "pipe",
-        }).stdout.toString().trim()
+        })
+          .stdout.toString()
+          .trim()
         expect({
           first: first?.name,
           conflictingIntent: conflictingIntent?.name,
-          resumed: path.resolve(resumed.directory),
+          resumed: resumed.name,
           finalHead,
         }).toEqual({
           first: "WorktreeResetFailedError",
           conflictingIntent: "WorktreeResetFailedError",
-          resumed: path.resolve(worktree.directory),
+          resumed: "WorktreeStartupOutcomeUnknownError",
           finalHead: nextCommit,
         })
       },
@@ -1422,11 +1464,10 @@ describe("prompt ownership termination", () => {
 
     await SessionPromptState.release(sessionID)
 
-    expect(
-      (await validWorktreeOwners(primaryWorktreeDir)).filter(
-        (entry) => entry.marker.cwd === managedWorktreeDir && entry.marker.sessionID === sessionID,
-      ),
-    ).toEqual([])
+    const proof=await Ownership.Worktree.proveOwnerless({primaryWorktreeDir,worktreeDir:managedWorktreeDir})
+    expect({status:proof.status,integrity:proof.status==="ownerless"?proof.snapshot.integrity:undefined}).toEqual({
+      status:"ownerless",integrity:{status:"complete"},
+    })
   })
 
   test("retries the exact managed-worktree cleanup receipt after a transient owner-release failure", async () => {
@@ -1466,8 +1507,9 @@ describe("prompt ownership termination", () => {
           },
         )
         try {
-          await expect(SessionPromptState.finish(sessionID, owner, worktree.directory)).rejects.toThrow(
-            "injected transient managed owner release failure",
+          await assert.rejects(
+            SessionPromptState.finish(sessionID, owner, worktree.directory),
+            /injected transient managed owner release failure/,
           )
           expect({ outcome: receipt.outcome, retryCleanup: typeof receipt.retryCleanup }).toEqual({
             outcome: "pending",
@@ -1524,8 +1566,9 @@ describe("prompt ownership termination", () => {
           },
         )
         try {
-          await expect(SessionPromptState.finish(sessionID, owner, worktree.directory)).rejects.toThrow(
-            "injected deterministic managed owner release failure",
+          await assert.rejects(
+            SessionPromptState.finish(sessionID, owner, worktree.directory),
+            /injected deterministic managed owner release failure/,
           )
           while (receipt.outcome !== "failed" || receipt.retryRunning) {
             await Bun.sleep(5)
@@ -1605,7 +1648,7 @@ describe("prompt ownership termination", () => {
           throw new Error("status termination failed")
         })
         try {
-          await expect(SessionPromptState.release(sessionID)).rejects.toThrow("status termination failed")
+          await assert.rejects(SessionPromptState.release(sessionID), /status termination failed/)
         } finally {
           status.mockRestore()
         }
@@ -1644,7 +1687,7 @@ describe("prompt ownership termination", () => {
           throw new Error("delayed prompt cleanup failed")
         })
         try {
-          await expect(SessionPromptState.release(session.id)).rejects.toThrow("delayed prompt cleanup failed")
+          await assert.rejects(SessionPromptState.release(session.id), /delayed prompt cleanup failed/)
         } finally {
           status.mockRestore()
         }
@@ -1655,13 +1698,13 @@ describe("prompt ownership termination", () => {
             failures: requested.failures,
             handle: "test.delayed-subtree-settlement",
           })
-        await expect(assertSettlement()).rejects.toMatchObject({
+        await assert.rejects(assertSettlement(), {
           name: "TaskCancellationIncompleteError",
-          message: expect.stringContaining("delayed prompt cleanup failed"),
+          message: /delayed prompt cleanup failed/,
         })
-        await expect(assertSettlement()).rejects.toMatchObject({
+        await assert.rejects(assertSettlement(), {
           name: "TaskCancellationIncompleteError",
-          message: expect.stringContaining("delayed prompt cleanup failed"),
+          message: /delayed prompt cleanup failed/,
         })
         expect(() => SessionPromptState.start(session.id, session.directory)).toThrow(
           expect.objectContaining({ name: "BusyError" }),

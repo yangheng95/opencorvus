@@ -1,7 +1,14 @@
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import { validator } from "@/server/validator"
-import { ChannelIngress, ChannelIngressInput, ChannelIngressResult } from "@/channel/ingress"
+import {
+  ChannelIngress,
+  ChannelIngressInput,
+  ChannelIngressResult,
+  ChannelIngressInspection,
+  ChannelIngressInspectionQuery,
+} from "@/channel/ingress"
+import { ChannelId } from "@/channel/catalog"
 import { ChannelRegistry } from "@/channel/registry"
 import { ChannelSupervisor } from "@/channel/supervisor"
 import { ChannelAttachment } from "@/channel/attachment"
@@ -32,6 +39,25 @@ export const ChannelRoutes = lazy(() =>
       async (c) => {
         return c.json(await ChannelRegistry.list())
       },
+    )
+    .get(
+      "/message/:platform/:requestID",
+      describeRoute({
+        summary: "Read original channel ingress evidence",
+        description:
+          "Inspect the retained input, effect and outcome JSON as original byte pages, with bounded causal source history.",
+        operationId: "channel.messageInspect",
+        responses: {
+          200: {
+            description: "Original ingress evidence",
+            content: { "application/json": { schema: resolver(ChannelIngressInspection) } },
+          },
+          ...errors(404),
+        },
+      }),
+      validator("param", z.object({ platform: ChannelId, requestID: z.string().min(1) })),
+      validator("query", ChannelIngressInspectionQuery),
+      (c) => c.json(ChannelIngress.inspect({ ...c.req.valid("param"), ...c.req.valid("query") })),
     )
     .post(
       "/attachment",

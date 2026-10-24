@@ -1,6 +1,7 @@
 import { lstat, mkdir, readFile, rename, rm, stat } from "fs/promises"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { createHash, randomUUID } from "node:crypto"
+import { isDeepStrictEqual } from "node:util"
 import path from "path"
 import z from "zod"
 import { Config } from "@/config/config"
@@ -1277,6 +1278,20 @@ function configurationEffectSatisfied(effect: SkillCatalogConfigurationEffect, c
   return effect.names.every((name) => config.skill_policy?.[name] === effect.policy)
 }
 
+function configurationEffectScope(effect: SkillCatalogConfigurationEffect, config: z.infer<typeof Config.Info>) {
+  if (effect.kind === "none") return null
+  return {
+    policies: Object.fromEntries(effect.names.map((name) => [name, config.skill_policy?.[name] ?? null])),
+    ...(effect.kind === "market_install"
+      ? {
+          targetConfigured: (config.skills?.paths ?? []).some(
+            (candidate) => resolveGlobalConfiguredPath(candidate) === path.normalize(effect.target),
+          ),
+        }
+      : {}),
+  }
+}
+
 async function readConfigurationEffect(effect: SkillCatalogConfigurationEffect) {
   Config.global.reset()
   await Config.state.resetAll()
@@ -1284,6 +1299,7 @@ async function readConfigurationEffect(effect: SkillCatalogConfigurationEffect) 
   return {
     revision: await globalConfigRevision(),
     satisfied: configurationEffectSatisfied(effect, config),
+    scope: configurationEffectScope(effect, config),
   }
 }
 
@@ -1327,30 +1343,32 @@ async function convergeSkillReplacement(entry: SkillReplacementPublication.Entry
       await SkillReplacementPublication.markPublished(entry.operationID, entry.targets.length)
       await replacementCut("catalog-published")
     }
-    let configuredRevision = entry.configuredRevision
     let configuration = await readConfigurationEffect(entry.configuration)
-    if (configuredRevision) {
-      if (configuration.revision !== configuredRevision || !configuration.satisfied) {
-        throw new Error(`Skill replacement ${entry.operationID} configured revision no longer matches its effect`)
-      }
+    let disposition: "applied" | "superseded" | "unknown_preserved" = "applied"
+    if (entry.configuredRevision) {
+      // The original phase proves its past effect. A later operator edit is
+      // current configuration, never permission to reapply the old request.
+      if (!configuration.satisfied) disposition = "superseded"
     } else {
       if (!configuration.satisfied) {
-        if (configuration.revision !== entry.globalConfigBeforeRevision) {
-          throw new Error(`Skill replacement ${entry.operationID} global config changed before its effect committed`)
+        const originalScopeKnown = entry.configurationBefore !== undefined
+        const unchanged = originalScopeKnown
+          ? isDeepStrictEqual(configuration.scope, entry.configurationBefore)
+          : configuration.revision === entry.globalConfigBeforeRevision
+        if (unchanged) {
+          await applyConfigurationEffect(entry.configuration)
+          configuration = await readConfigurationEffect(entry.configuration)
+        } else {
+          disposition = originalScopeKnown ? "superseded" : "unknown_preserved"
         }
-        await applyConfigurationEffect(entry.configuration)
-        configuration = await readConfigurationEffect(entry.configuration)
       }
-      if (!configuration.satisfied) {
+      if (disposition === "applied" && !configuration.satisfied) {
         throw new Error(`Skill replacement ${entry.operationID} configuration effect did not commit`)
       }
-      configuredRevision = configuration.revision
-      await SkillReplacementPublication.markConfigured(entry.operationID, configuredRevision)
-      await replacementCut("configuration-published")
-    }
-    configuration = await readConfigurationEffect(entry.configuration)
-    if (configuration.revision !== configuredRevision || !configuration.satisfied) {
-      throw new Error(`Skill replacement ${entry.operationID} lost its exact configured revision`)
+      if (disposition === "applied") {
+        await SkillReplacementPublication.markConfigured(entry.operationID, configuration.revision)
+        await replacementCut("configuration-published")
+      }
     }
     for (const [index, target] of entry.targets.entries()) {
       const staging = await skillTreeState(target.staging)
@@ -1364,15 +1382,11 @@ async function convergeSkillReplacement(entry: SkillReplacementPublication.Entry
       }
       if (backup.kind === "directory") await rm(target.backup, { recursive: true, force: false })
     }
-    await SkillReplacementPublication.settle(entry.operationID, "committed")
+    await SkillReplacementPublication.settle(entry.operationID, "committed", disposition)
     await SkillManager.refreshDiscoveryState()
     return "forward"
   }
 
-  const configuration = await readConfigurationEffect(entry.configuration)
-  if (configuration.revision !== entry.globalConfigBeforeRevision) {
-    throw new Error(`Skill replacement ${entry.operationID} global config changed before catalog rollback`)
-  }
   for (let index = entry.targets.length - 1; index >= 0; index--) {
     const target = entry.targets[index]!
     const currentTarget = await skillTreeState(target.target)
@@ -1471,6 +1485,7 @@ async function replaceSkillDirectories(
         requireExisting,
         configuration: SkillCatalogConfigurationEffect.parse(configuration),
         globalConfigBeforeRevision: await globalConfigRevision(),
+        configurationBefore: (await readConfigurationEffect(configuration)).scope,
       })
       await replacementCut("intent-published")
     } catch (error) {

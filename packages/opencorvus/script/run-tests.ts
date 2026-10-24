@@ -14,6 +14,7 @@ process.env.OPENCORVUS_TEST_RUNNER_ROOT = runnerRuntime.processRoot
 process.env.OPENCORVUS_TEST_RUNNER_PID = String(process.pid)
 
 let settlementConfirmed = true
+let completedSuccessfully = false
 try {
   const { runHostCommandWithInactivity } = await import("../src/shell/command-inactivity")
   const cwd = path.resolve(import.meta.dir, "..")
@@ -68,10 +69,11 @@ try {
   }
   if (failedFiles.length)
     console.error(`OpenCorvus failed test files (${failedFiles.length}):\n${failedFiles.join("\n")}`)
+  completedSuccessfully = failedFiles.length === 0
 } finally {
-  if (settlementConfirmed) await removeIsolatedTestRuntime(runnerRuntime)
-  else
-    console.error(
-      `Test runtime retained because physical/output settlement is unconfirmed: ${runnerRuntime.processRoot}`,
-    )
+  if (completedSuccessfully && settlementConfirmed) await removeIsolatedTestRuntime(runnerRuntime)
+  else {
+    console.error(`Test runtime retained after unsuccessful run: ${runnerRuntime.ownerRoot}`)
+    console.error(`Physical/output settlement confirmed: ${settlementConfirmed}`)
+  }
 }

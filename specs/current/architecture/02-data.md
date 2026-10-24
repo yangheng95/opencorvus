@@ -57,6 +57,19 @@ outbox及规范receipt/lease仍是唯一持久事实，重试和重启读取原o
 执行无持久收据的SQL effect。同一durable ID和callback更改普通/事务模式返回原订阅身份
 冲突。外部、异步副作用仍使用普通Bus接口及其原occurrence幂等合同。
 
+Bus source的Project ID、原目录、事件正文与Project generation共同确定不可重绑的来源；
+普通exact与事务exact共用同一个source writer。取得delivery lease时在同一writer重验
+terminal receipt，避免原成功后被排队的另一owner再次进入callback。同步effect、异步
+effect前和success提交均验证原generation；共享receipt batch只读数据库authority，
+不能借batch调度者的Instance代替原delivery上下文。冷恢复在原Project当前注册目录进入
+其生命周期，当前Instance不符不等同于原Project已退休。
+
+未完成旧来源由真实host owner verifier写自己的ignored处置：`owner_unresolved`或
+`owner_retired`，即使原source在delivery注册前中断也有实际校验回执；原callback成功、
+ignored与phase历史均不改写。`GET /global/publication`及`/global/publication/source`
+在Project删除或phase完成后仍可读原owner、原始JSON字节、delivery/attempt/phase及
+lease/grant事实。正文按4096原字节base64分页，来源与事实每页最多64条，不重序列化正文。
+
 ## SQLite 回写与连接生命周期
 
 SQLite的周期回写由成功初始化的物理连接统一拥有：同一个不保活进程的定时器在每个
@@ -75,7 +88,7 @@ PASSIVE的busy/部分进度在下次周期继续；非暂态回写错误进入�
 
 ## 数据库版本化迁移
 
-当前版本为6，从新建的不可改写版本1基线开始支持自动迁移。唯一 registry 位于
+当前版本为8，从新建的不可改写版本1基线开始支持自动迁移。唯一 registry 位于
 `src/storage/migrations/index.ts`，每版保存完整、不可改写的目标 SQL；后续结构或持久
 payload 语义变更必须追加连续版本。`PRAGMA user_version` 是唯一已完成版本，当前
 `SCHEMA_DDL` 与 typed schema 继续定义唯一业务 reader/writer。`check:database-migrations`
@@ -153,12 +166,47 @@ Organizer或容量丢弃，新输入正常消费。归属冲突、缺Project且�
 ignored终态返回明确完整性合同。恢复不执行原批准工具或模型。
 新恢复pending由正常Project打开时的持久OrganizationRequested进入同一个Organizer。
 
+版本7保留所有历史source/receipt/rowid，并为每个原Bus outbox追加唯一不可变owner绑定；
+旧generation一律NULL，不以当前同ID的Project、Session或Message猜补历史归属。
+新Bus source与绑定同事务提交；缺绑定行属于完整性错误，NULL是合法的历史未知。
+Event Fire与Automation Run在原reservation冻结Project generation；旧执行未知归属记录
+`owner_unresolved`，原Project消失或代次改变记录`target_deleted`，不重造新代次的执行数据。
+Channel accepted新增原generation及实际选择的effect引用，并移除Project cascade，保留
+原accepted/outcome历史；旧两列NULL保持可审阅未知。已交付版本1–6原文保持。
+
 非空版本0返回 `SCHEMA_BASELINE_REQUIRED`，不属于本基线的升级范围；高于当前版本返回
 `SCHEMA_VERSION_AHEAD`。当前版本出现未声明结构漂移或有损转换返回
 `SCHEMA_MIGRATION_REQUIRED`；执行/备份/校验失败返回 `SCHEMA_MIGRATION_FAILED`。
 当前已登记版本中出现旧语义返回 `DATA_MIGRATION_REQUIRED`，真实当前数据完整性损坏返回
 `DATA_INTEGRITY_ERROR`。错误保留原数据供修复，不以抹库作为基线之后的升级方式。显式
 管理员 reset 仍是独立破坏性维护能力。未登记历史库的首次基线处置必须有用户明确授权。
+
+版本8将安装 mutation 的成功事实从 Task 报告生命周期分离。唯一不可变
+`expert_squad_mutation_receipt` 保留原完整 Manager envelope、source Task identity 与创建时刻，
+无 Task/Artifact 外键；原 Task 报告和消息继续按原删除合同处理。唯一 Artifact writer 在同一
+SAVEPOINT 内写原报告字节、长期事实、catalog revision 与真实 Protocol 事件；payload 更新
+保持原 receipt 字节身份，label 等元数据可正常更新。跨 Task 导入是报告，不生成本地安装权威。
+迁移仅从实际正 receipt 复制原 envelope 字节和时刻；Manager/Evolution 仅读长期事实裁成功。
+历史缺 receipt 的 cold journal 保全原 current、before backup、staging 与 journal 全部证据，
+公开 `commit_receipt_unavailable`；保全 terminal 仅说明当前保全完成。原包可用时继续可用；
+target 原本 absent 时保留该实际状态，可从归档通过新的显式操作恢复版本，不猜历史成功。
+原 journal 在保全 terminal 前始终保留恢复入口，terminal 后才退休 current slot；后续显式
+mutation 不删除旧 archive。只读 `/expert-squad/mutation-recovery` 有序分页读取保全记录。
+
+Worktree readiness 的唯一 journal 按 Database authority 与稳定 Project ID 分区；intent 冻结
+Project generation、请求的 logical directory、canonical physical occurrence 和实际 startup。
+同一次目录解析分别冻结保留真实大小写及未创建 suffix 的 `physicalPath` 与规范化的
+`directoryKey`；前者用于 Git、startup、owner marker 和公开目录，后者只作比较/锁身份。
+Windows 比较 key 不可用来创建带 Task/Session ID 的目录，业务 ID 与实际目录名必须逐字一致。
+`reset` 必须显式提供 `operationID`，同 logical path 与 operationID 只能恢复原请求，即使
+路径别名改指或 Project 已重建也不能对替代资源再次执行。新操作使用新 ID；物理 subject 的
+同一跨进程 owner 覆盖读取、Git mutation、startup 和 terminal。别名共享同一资源的当前结果。
+已持久 `populated` 只补回执并保留现有字节；成功未知返回 `startup_outcome_unknown` 保全结果，
+不重跑任意脚本。Build、Workspace、Automation 和 Orchestrator 在使用前核真实 READY。
+重启遇到 dead/reused reset admission，按原 immutable facts 收尾后结算 exact fence；live/未知
+owner 及其他 admission kind 仍由其原 authority 处理，不能让残留 reset 阻断整个 Project 打开。
+Store 先读取并校验 intent，再为匹配资源读取完整 phases/terminal；查找成本随当前 Project
+历史 intent 数线性增长，不读取其他 Project 分区。它不是全局历史扫描或第二份 current index。
 
 ## 运行时目录根
 
@@ -561,7 +609,8 @@ findings全部进入比较，后续完整Review可显式取代多个分支；原
 与`REVIEW_SNAPSHOT_CHANGED`，保留原推荐，不提供该快照已知过期的promotion_intent。安装前检查仅为预检，最终检查与durable receipt写入
 在同一个SQLite immediate事务中串行化：相关新测量或Review先提交则原manager按journal回滚未提交安装；
 receipt先提交则后发证据不倒改历史。重试先识别已有receipt，按原journal清理并返回；
-未提交的中断先reconcile再复核新证据，避免提前拒绝遗留未提交安装。恢复/feedback授权保持原契约。
+同进程确定失败按原journal回滚；cold中断缺长期receipt先按上文保全unknown，新的显式执行
+再复核当前版本与新证据。恢复/feedback授权保持原契约。
 
 Run/Evaluation的发布身份与测量身份分开：Evaluation publisher从已核验原生结果盖章
 measurement_identity（owner_task_id及每个scorer的metric_result_id），不从回执包装猜评分发生。

@@ -446,8 +446,7 @@ export namespace Config {
       const isGlobalConfigDir =
         Filesystem.normalizeForCompare(Filesystem.resolve(dir)) ===
         Filesystem.normalizeForCompare(Filesystem.resolve(Global.Path.config))
-      const loadsConfig =
-        isExactProjectConfigDir || (isNonProjectConfigDir && !isGlobalConfigDir)
+      const loadsConfig = isExactProjectConfigDir || (isNonProjectConfigDir && !isGlobalConfigDir)
       if (loadsConfig) {
         const filepath = await ConfigPaths.assertCanonicalDirectory(dir)
         const projectOwnedSource = isExactProjectConfigDir ? "project" : "non-project"
@@ -2458,6 +2457,12 @@ export namespace Config {
   // Skill projection and a concurrent Project initialization form a cycle.
   async function withConfigMutationAuthority<T>(mutate: () => Promise<T>): Promise<T> {
     if (configGenerationOwner.getStore()?.active) throw new ConfigGenerationReentrantMutationError()
+    return withMutationOwner(() => withConfigGenerationWrite(mutate))
+  }
+
+  /** Own one complete configuration mutation, including staged effects that
+   * precede the actual file writer. Generation writes remain the writer's job. */
+  export async function withMutationOwner<T>(mutate: () => Promise<T>): Promise<T> {
     const [{ withConversationCapabilityReferenceMutation }, { withSkillCatalogMutation }, { SkillManager }] =
       await Promise.all([
         import("@/conversation/capability-transaction"),
@@ -2465,9 +2470,7 @@ export namespace Config {
         import("@/skill/manager"),
       ])
     return withSkillCatalogMutation(() =>
-      withConversationCapabilityReferenceMutation(() =>
-        SkillManager.withCatalogMutationOwner(() => withConfigGenerationWrite(mutate)),
-      ),
+      withConversationCapabilityReferenceMutation(() => SkillManager.withCatalogMutationOwner(mutate)),
     )
   }
 
@@ -2497,34 +2500,40 @@ export namespace Config {
           transition = { before, after: candidate }
         },
         async onWritten(merged) {
-          await resetProjectState()
-          global.reset()
-          const committedTransition = transition
-          if (!committedTransition) {
-            throw new Error("Project configuration post-commit reconciliation is missing its committed transition")
-          }
-          await TestHooks.beforeProjectRuntimeSettlement?.({
-            directory: projectDirectory,
-            config: committedTransition.after,
-          })
-          await settleProjectRuntimeTransition({
-            directory: projectDirectory,
-            before: committedTransition.before,
-            after: committedTransition.after,
-          })
-          // Project Config writers already own the exact project identity
-          // required by assertCanonicalProjectConfig(). Re-entering the
-          // Instance here is both redundant and invalid while Project open
-          // is preparing that same Instance. Reread the source generation
-          // under the current identity so a peer write that won after our
-          // commit still receives one ordered runtime transition.
-          const current = await currentProjectState()
-          if (!runtimeConfigsEqual(current.config, committedTransition.after)) {
+          try {
+            await resetProjectState()
+            global.reset()
+            const committedTransition = transition
+            if (!committedTransition) {
+              throw new Error("Project configuration post-commit reconciliation is missing its committed transition")
+            }
+            await TestHooks.beforeProjectRuntimeSettlement?.({
+              directory: projectDirectory,
+              config: committedTransition.after,
+            })
             await settleProjectRuntimeTransition({
               directory: projectDirectory,
-              before: committedTransition.after,
-              after: current.config,
+              before: committedTransition.before,
+              after: committedTransition.after,
             })
+            // Project Config writers already own the exact project identity
+            // required by assertCanonicalProjectConfig(). Re-entering the
+            // Instance here is both redundant and invalid while Project open
+            // is preparing that same Instance. Reread the source generation
+            // under the current identity so a peer write that won after our
+            // commit still receives one ordered runtime transition.
+            const current = await currentProjectState()
+            if (!runtimeConfigsEqual(current.config, committedTransition.after)) {
+              await settleProjectRuntimeTransition({
+                directory: projectDirectory,
+                before: committedTransition.after,
+                after: current.config,
+              })
+            }
+          } catch (error) {
+            if (error instanceof ProjectConfigCommittedReconcileError) throw error
+            if (!transition) throw error
+            throw new ProjectConfigCommittedReconcileError([error], transition.after)
           }
         },
       })

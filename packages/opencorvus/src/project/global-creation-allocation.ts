@@ -12,28 +12,23 @@ import { ImplicitProject } from "./implicit-project"
 import { Project } from "./project"
 import { EngineChannelBindingTable, EngineTaskCreationContractTable, EngineTaskTable } from "@/engine/engine.sql"
 import { SessionTable } from "@/session/session.sql"
-import {
-  canonicalTaskCreationContract,
-  taskCreationContractFingerprint,
-} from "@/engine/task-creation-contract"
+import { AutomationRunTable } from "@/scheduler/automation.sql"
+import { canonicalTaskCreationContract, taskCreationContractFingerprint } from "@/engine/task-creation-contract"
 import { canonicalJSONValue } from "@/util/canonical-digest"
 import { globalTaskAllocationTaskRequest } from "@/engine/task-creation-request"
 import {
   TaskChannelBindingGlobalCreationConflictError,
   TaskChannelBindingProjectConflictError,
 } from "@/engine/task-project-error"
-import {
-  assertGlobalChatAcceptedSession,
-  assertGlobalTaskAcceptedResolution,
-} from "@/engine/global-creation-target"
+import { assertGlobalChatAcceptedSession, assertGlobalTaskAcceptedResolution } from "@/engine/global-creation-target"
 
-export type GlobalCreationKind = "global_task" | "global_chat_start"
+export type GlobalCreationKind = "global_task" | "global_chat_start" | "automation_run"
 
 export const GlobalCreationAllocationConflictError = NamedError.create(
   "GlobalCreationAllocationConflictError",
   z.object({
     message: z.string(),
-    kind: z.enum(["global_task", "global_chat_start"]),
+    kind: z.enum(["global_task", "global_chat_start", "automation_run"]),
     requestID: z.string(),
     expectedFingerprint: z.string().regex(/^[a-f0-9]{64}$/),
     actualFingerprint: z.string().regex(/^[a-f0-9]{64}$/),
@@ -44,7 +39,7 @@ export const GlobalCreationAcceptedTargetUnavailableError = NamedError.create(
   "GlobalCreationAcceptedTargetUnavailableError",
   z.object({
     message: z.string(),
-    kind: z.enum(["global_task", "global_chat_start"]),
+    kind: z.enum(["global_task", "global_chat_start", "automation_run"]),
     requestID: z.string(),
     projectID: z.string(),
     targetID: z.string(),
@@ -56,7 +51,7 @@ export const GlobalCreationAllocatedProjectUnavailableError = NamedError.create(
   "GlobalCreationAllocatedProjectUnavailableError",
   z.object({
     message: z.string(),
-    kind: z.enum(["global_task", "global_chat_start"]),
+    kind: z.enum(["global_task", "global_chat_start", "automation_run"]),
     requestID: z.string(),
     projectID: z.string(),
     projectGeneration: z.string(),
@@ -68,20 +63,22 @@ export const GlobalCreationAcceptedTargetConflictError = NamedError.create(
   "GlobalCreationAcceptedTargetConflictError",
   z.object({
     message: z.string(),
-    kind: z.enum(["global_task", "global_chat_start"]),
+    kind: z.enum(["global_task", "global_chat_start", "automation_run"]),
     requestID: z.string(),
     targetID: z.string(),
   }),
 )
 
-const PersistedRejection = z.object({
-  name: z.enum([
-    "TaskChannelBindingProjectConflictError",
-    "TaskChannelBindingGlobalCreationConflictError",
-    "GlobalCreationAcceptedTargetConflictError",
-  ]),
-  data: z.record(z.string(), z.unknown()),
-}).strict()
+const PersistedRejection = z
+  .object({
+    name: z.enum([
+      "TaskChannelBindingProjectConflictError",
+      "TaskChannelBindingGlobalCreationConflictError",
+      "GlobalCreationAcceptedTargetConflictError",
+    ]),
+    data: z.record(z.string(), z.unknown()),
+  })
+  .strict()
 
 function rejectionError(value: unknown): Error {
   const rejection = PersistedRejection.parse(value)
@@ -158,9 +155,7 @@ export namespace GlobalCreationAllocation {
         )
         .get(),
     )
-    return existing
-      ? assertRequestContract(existing, { ...input, requestID })
-      : undefined
+    return existing ? assertRequestContract(existing, { ...input, requestID }) : undefined
   }
 
   export function reserve(input: {
@@ -258,7 +253,15 @@ export namespace GlobalCreationAllocation {
       throw new Error(`Global creation allocation ${input.allocationID} is already accepted by another target`)
     }
     let initialConfigOverlay: Record<string, unknown>
-    if (input.kind === "global_task") {
+    if (input.kind === "automation_run") {
+      const target = db.select().from(AutomationRunTable).where(eq(AutomationRunTable.id, input.targetID)).get()
+      if (
+        target?.target_project_id !== input.projectID ||
+        target.target_project_generation !== allocation.materialized_project_generation
+      )
+        throw new Error(`Automation allocation ${allocation.id} does not own its reserved Run`)
+      initialConfigOverlay = {}
+    } else if (input.kind === "global_task") {
       const target = db
         .select({
           projectID: EngineTaskTable.project_id,
@@ -269,10 +272,7 @@ export namespace GlobalCreationAllocation {
           rootSessionMetadata: SessionTable.metadata,
         })
         .from(EngineTaskTable)
-        .innerJoin(
-          EngineTaskCreationContractTable,
-          eq(EngineTaskCreationContractTable.task_id, EngineTaskTable.id),
-        )
+        .innerJoin(EngineTaskCreationContractTable, eq(EngineTaskCreationContractTable.task_id, EngineTaskTable.id))
         .innerJoin(SessionTable, eq(SessionTable.id, EngineTaskTable.session_id))
         .where(eq(EngineTaskTable.id, input.targetID))
         .get()
@@ -406,11 +406,7 @@ export namespace GlobalCreationAllocation {
     ) {
       return undefined
     }
-    if (
-      !allocation.accepted_project_id ||
-      !allocation.accepted_target_id ||
-      allocation.time_accepted === null
-    ) {
+    if (!allocation.accepted_project_id || !allocation.accepted_target_id || allocation.time_accepted === null) {
       throw new Error(`Global creation allocation ${allocation.kind}/${allocation.request_id} has a partial acceptance`)
     }
     return {
@@ -463,11 +459,7 @@ export namespace GlobalCreationAllocation {
 
   export function read(allocationID: string) {
     const allocation = Database.use((db) =>
-      db
-        .select()
-        .from(GlobalCreationAllocationTable)
-        .where(eq(GlobalCreationAllocationTable.id, allocationID))
-        .get(),
+      db.select().from(GlobalCreationAllocationTable).where(eq(GlobalCreationAllocationTable.id, allocationID)).get(),
     )
     if (!allocation) throw new Error(`Global creation allocation ${allocationID} does not exist`)
     return allocation
@@ -491,11 +483,7 @@ export namespace GlobalCreationAllocation {
           .get()
         if (!current) throw new Error(`Global creation allocation ${allocation.id} does not exist`)
         if (!current.materialized_project_id) return undefined
-        const project = db
-          .select()
-          .from(ProjectTable)
-          .where(eq(ProjectTable.id, current.materialized_project_id))
-          .get()
+        const project = db.select().from(ProjectTable).where(eq(ProjectTable.id, current.materialized_project_id)).get()
         if (!project || project.generation !== current.materialized_project_generation) {
           throw new GlobalCreationAllocatedProjectUnavailableError({
             message: `Global ${allocation.kind} request ${allocation.request_id} carrying Project is no longer retained`,
@@ -513,38 +501,35 @@ export namespace GlobalCreationAllocation {
       return existing
     }
     await fs.mkdir(path.dirname(directory), { recursive: true })
-    const created = await withProcessLock(
-      directory,
-      { realpath: false, retries: CROSS_PROCESS_LOCK_RETRY },
-      () =>
-        ImplicitProject.create({
-          directory,
-          commitInTransaction: (db, project) => {
-            const current = db
-              .select()
-              .from(GlobalCreationAllocationTable)
-              .where(eq(GlobalCreationAllocationTable.id, allocation.id))
-              .get()
-            if (!current) throw new Error(`Global creation allocation ${allocation.id} does not exist`)
-            if (current.materialized_project_id) {
-              if (
-                current.materialized_project_id !== project.id ||
-                current.materialized_project_generation !== project.generation
-              ) {
-                throw new Error(`Global creation allocation ${allocation.id} is bound to another Project occurrence`)
-              }
-              return
+    const created = await withProcessLock(directory, { realpath: false, retries: CROSS_PROCESS_LOCK_RETRY }, () =>
+      ImplicitProject.create({
+        directory,
+        commitInTransaction: (db, project) => {
+          const current = db
+            .select()
+            .from(GlobalCreationAllocationTable)
+            .where(eq(GlobalCreationAllocationTable.id, allocation.id))
+            .get()
+          if (!current) throw new Error(`Global creation allocation ${allocation.id} does not exist`)
+          if (current.materialized_project_id) {
+            if (
+              current.materialized_project_id !== project.id ||
+              current.materialized_project_generation !== project.generation
+            ) {
+              throw new Error(`Global creation allocation ${allocation.id} is bound to another Project occurrence`)
             }
-            db.update(GlobalCreationAllocationTable)
-              .set({
-                materialized_project_id: project.id,
-                materialized_project_generation: project.generation,
-                time_materialized: Date.now(),
-              })
-              .where(eq(GlobalCreationAllocationTable.id, allocation.id))
-              .run()
-          },
-        }),
+            return
+          }
+          db.update(GlobalCreationAllocationTable)
+            .set({
+              materialized_project_id: project.id,
+              materialized_project_generation: project.generation,
+              time_materialized: Date.now(),
+            })
+            .where(eq(GlobalCreationAllocationTable.id, allocation.id))
+            .run()
+        },
+      }),
     )
     const bound = readBound()
     if (!bound || bound.project.id !== created.project.id) {

@@ -19,7 +19,7 @@ import {
   EventOccurrenceTable,
   type EventJobFireCausationEntry,
 } from "./event.sql"
-import { BusPublicationOutboxTable } from "@/bus/bus.sql"
+import { BusPublicationOutboxTable, BusPublicationOwnerTable } from "@/bus/bus.sql"
 import {
   completedOneShotEventDefinitionIDsInTransaction,
   currentEventDefinitionPageInTransaction,
@@ -66,6 +66,8 @@ import {
 } from "./tool-occurrence"
 import { FifoPermitPool } from "@/util/queue"
 import { globalExecutionCapacity } from "@/runtime/execution-capacity"
+import { assertSchedulerProjectOwner, schedulerProjectDisposition } from "./project-owner"
+import { Filesystem } from "@/util/filesystem"
 
 type Match = Record<string, string | number | boolean>
 type EventEnvelope = Bus.Envelope
@@ -152,6 +154,9 @@ export namespace EventService {
 
   let wakeExecutorForTest: EventWakeExecutor | undefined
   let fireAcceptedHookForTest: EventFireAcceptedHook | undefined
+  let occurrenceAcceptedHookForTest:
+    | ((input: { occurrenceID: string; fireIDs: string[]; replayed: boolean }) => void | Promise<void>)
+    | undefined
   let beforeSessionWakeForTest: BeforeSessionWakeHook | undefined
   let afterEventFireClaimForTest: AfterEventFireClaimHook | undefined
   let createFireFailuresForTest = 0
@@ -454,6 +459,11 @@ export namespace EventService {
       ? Identifier.deterministic("event_job", `event-job-definition-v1\0${causation.occurrence.toolPartID}`)
       : Identifier.ascending("event_job")
     const row = Database.immediateTransaction((db) => {
+      assertSchedulerProjectOwner(db, {
+        occurrenceID: id,
+        projectID: input.projectId,
+        generation: Instance.projectGeneration,
+      })
       if (causation) {
         assertScheduledToolOccurrenceInTransaction(db, causation.occurrence)
         const existing = db
@@ -468,8 +478,7 @@ export namespace EventService {
           return existing
         }
       }
-      db
-        .insert(EventJobTable)
+      db.insert(EventJobTable)
         .values({
           id,
           definition_id: id,
@@ -525,6 +534,7 @@ export namespace EventService {
 
   function removeEventJob(id: string, projectID: string): boolean {
     return Database.immediateTransaction((db) => {
+      assertSchedulerProjectOwner(db, { occurrenceID: id, projectID, generation: Instance.projectGeneration })
       const row = latestEventDefinitionInTransaction(db, id)
       if (!row || row.project_id !== projectID) return false
       appendEventDefinitionTombstoneInTransaction(db, row, Date.now())
@@ -537,7 +547,65 @@ export namespace EventService {
     const s = state()
     if (s.lifecycle.signal.aborted) return
     const now = Date.now()
+    let replayed = false
     const fires = Database.immediateTransaction((db) => {
+      assertSchedulerProjectOwner(db, {
+        occurrenceID: event.occurrenceID,
+        projectID: Instance.project.id,
+        generation: Instance.projectGeneration,
+      })
+      const outbox = db
+        .select()
+        .from(BusPublicationOutboxTable)
+        .where(eq(BusPublicationOutboxTable.occurrence_id, event.occurrenceID))
+        .get()
+      if (
+        outbox &&
+        (outbox.project_id !== Instance.project.id ||
+          outbox.event_type !== event.type ||
+          !isDeepStrictEqual(outbox.properties, event.properties))
+      )
+        throw new Error(`Event occurrence ${event.occurrenceID} conflicts with its immutable input fact`)
+      if (outbox) {
+        const owner = db
+          .select()
+          .from(BusPublicationOwnerTable)
+          .where(eq(BusPublicationOwnerTable.occurrence_id, outbox.occurrence_id))
+          .get()
+        if (!owner) throw new Error(`Event source ${event.occurrenceID} has no immutable owner fact`)
+        assertSchedulerProjectOwner(db, {
+          occurrenceID: event.occurrenceID,
+          projectID: outbox.project_id,
+          generation: owner.project_generation,
+        })
+      }
+      const existing = db
+        .select()
+        .from(EventOccurrenceTable)
+        .where(eq(EventOccurrenceTable.id, event.occurrenceID))
+        .get()
+      const occurrence = {
+        id: event.occurrenceID,
+        bus_outbox_id: outbox?.occurrence_id ?? null,
+        project_id: outbox ? null : Instance.project.id,
+        event_type: outbox ? null : event.type,
+        properties: outbox ? null : event.properties,
+        time_created: now,
+      }
+      if (existing) {
+        if (
+          existing.bus_outbox_id !== occurrence.bus_outbox_id ||
+          existing.project_id !== occurrence.project_id ||
+          existing.event_type !== occurrence.event_type ||
+          !isDeepStrictEqual(existing.properties, occurrence.properties)
+        )
+          throw new Error(`Event occurrence ${event.occurrenceID} conflicts with its immutable input fact`)
+        replayed = true
+        return []
+      }
+      // This fact and all matched Fires share this writer snapshot. Durable
+      // empty acceptance is an effect too; a later definition cannot consume it.
+      if (outbox) db.insert(EventOccurrenceTable).values(occurrence).run()
       const accepted: EventJobFire[] = []
       let afterDefinitionID: string | undefined
       let causation: FireCausation | undefined
@@ -555,12 +623,11 @@ export namespace EventService {
             ok(event, job.match_json ?? {}),
         )
         if (matches.length > 0) {
+          if (!outbox && accepted.length === 0) db.insert(EventOccurrenceTable).values(occurrence).run()
           causation ??= resolveCausation(event)
           accepted.push(
             ...createFires({
               jobs: matches,
-              eventType: event.type,
-              properties: event.properties,
               occurrenceID: event.occurrenceID,
               causation,
               now,
@@ -573,7 +640,12 @@ export namespace EventService {
       }
       return accepted
     })
-    if (fires.length === 0) return
+    await occurrenceAcceptedHookForTest?.({
+      occurrenceID: event.occurrenceID,
+      fireIDs: fires.map((fire) => fire.id),
+      replayed,
+    })
+    if (fires.length === 0 && !replayed) return
     processSettlementGate?.projectIDs.add(Instance.project.id)
     for (const fire of fires) {
       await fireAcceptedHookForTest?.(fire)
@@ -583,8 +655,6 @@ export namespace EventService {
 
   function createFires(input: {
     jobs: Array<typeof EventJobTable.$inferSelect>
-    eventType: string
-    properties: unknown
     occurrenceID: string
     causation: FireCausation
     now: number
@@ -594,40 +664,6 @@ export namespace EventService {
       throw new Error("injected Event fire durable insert failure")
     }
     return Database.immediateTransaction((db) => {
-      const outbox = db
-        .select({ id: BusPublicationOutboxTable.occurrence_id })
-        .from(BusPublicationOutboxTable)
-        .where(eq(BusPublicationOutboxTable.occurrence_id, input.occurrenceID))
-        .get()
-      const occurrence = {
-        id: input.occurrenceID,
-        bus_outbox_id: outbox?.id ?? null,
-        project_id: outbox ? null : Instance.project.id,
-        event_type: outbox ? null : input.eventType,
-        properties: outbox ? null : input.properties,
-        time_created: input.now,
-      }
-      const insertedOccurrence = db
-        .insert(EventOccurrenceTable)
-        .values(occurrence)
-        .onConflictDoNothing()
-        .returning()
-        .get()
-      if (!insertedOccurrence) {
-        const existing = db
-          .select()
-          .from(EventOccurrenceTable)
-          .where(eq(EventOccurrenceTable.id, input.occurrenceID))
-          .get()
-        if (
-          !existing ||
-          existing.bus_outbox_id !== occurrence.bus_outbox_id ||
-          existing.project_id !== occurrence.project_id ||
-          existing.event_type !== occurrence.event_type ||
-          !isDeepStrictEqual(existing.properties, occurrence.properties)
-        )
-          throw new Error(`Event occurrence ${input.occurrenceID} conflicts with its immutable input fact`)
-      }
       const queuePositions = nextEventFireQueuePositionsInTransaction(
         db,
         input.jobs.map((job) => job.definition_id),
@@ -646,6 +682,7 @@ export namespace EventService {
             queue_position: queuePosition,
             event_job_revision_id: job.id,
             event_occurrence_id: input.occurrenceID,
+            project_generation: Instance.projectGeneration,
             causation_fire_id: input.causation.parentFireID,
             causal_cycle: cycle,
             created_session_id: job.session_id === null ? Identifier.ascending("session") : null,
@@ -706,10 +743,7 @@ export namespace EventService {
         .from(EventJobFireTable)
         .innerJoin(EventJobTable, eq(EventJobTable.id, EventJobFireTable.event_job_revision_id))
         .where(
-          and(
-            eq(EventJobFireTable.created_session_id, sessionID),
-            eq(EventJobTable.project_id, Instance.project.id),
-          ),
+          and(eq(EventJobFireTable.created_session_id, sessionID), eq(EventJobTable.project_id, Instance.project.id)),
         )
         .orderBy(desc(EventJobFireTable.time_created), desc(EventJobFireTable.id))
         .get()
@@ -876,13 +910,20 @@ export namespace EventService {
     })
   }
 
-  async function resumeEventWake(input: { session: Session.Info; messageID: string }): Promise<void> {
+  async function resumeEventWake(input: {
+    session: Session.Info
+    messageID: string
+    fire: EventJobFire
+  }): Promise<void> {
     await admitEventSessionWake(input.session, (missionAdmission) =>
       requireSessionWake().resumePersistedWakeWithReceipt({
         sessionID: input.session.id,
         messageID: input.messageID,
         directory: input.session.directory,
-        ownerPreflight: missionAdmission?.ownerPreflight,
+        ownerPreflight: (db) => {
+          assertEventProjectOwner(db, input.fire)
+          missionAdmission?.ownerPreflight?.(db)
+        },
         ownerLifecycle: missionAdmission?.ownerLifecycle,
       }),
     )
@@ -936,6 +977,17 @@ export namespace EventService {
     try {
       await afterEventFireClaimForTest?.({ fire: claimed, ownerID: s.ownerID, signal })
       throwIfAborted(signal)
+      const ownerDisposition = Database.use((db) =>
+        schedulerProjectDisposition(db, {
+          projectID: claimed.project_id,
+          generation: claimed.project_generation,
+        }),
+      )
+      if (ownerDisposition) {
+        settleDisposition(claimed, s.ownerID, ownerDisposition, null)
+        return
+      }
+      Database.use((db) => assertEventProjectOwner(db, claimed))
       inactivityFence.touch("wake reconciliation")
       const existingMessageID = findWakeMessageID(claimed)
       job = Database.use((db) => {
@@ -965,7 +1017,7 @@ export namespace EventService {
       if (existingMessageID) {
         const session = await Session.get(claimed.target_session_id)
         throwIfAborted(signal)
-        await resumeEventWake({ session, messageID: existingMessageID })
+        await resumeEventWake({ session, messageID: existingMessageID, fire: claimed })
         settleSuccess(claimed, job, s.ownerID, claimed.target_session_id, existingMessageID)
         return
       }
@@ -997,7 +1049,15 @@ export namespace EventService {
           MissionExecutionWakeClosedError.isInstance(error) ||
           MissionExecutionWakeNotOpenedError.isInstance(error) ||
           MissionSchedulerOccurrenceClosedError.isInstance(error)
-        if (missionAdmissionRejected && !leaseFence.lost) {
+        const ownerDisposition = Database.use((db) =>
+          schedulerProjectDisposition(db, {
+            projectID: claimed.project_id,
+            generation: claimed.project_generation,
+          }),
+        )
+        if (ownerDisposition && !leaseFence.lost) {
+          settleDisposition(claimed, s.ownerID, ownerDisposition, null)
+        } else if (missionAdmissionRejected && !leaseFence.lost) {
           const disposition = missionDispositionForEventFire(claimed)
           if (disposition?.kind !== "mission_closed") throw error
           settleDisposition(claimed, s.ownerID, "mission_closed", null, disposition.closureEventID)
@@ -1009,7 +1069,7 @@ export namespace EventService {
         } else if (reconciledMessageID && !leaseFence.lost) {
           const session = await Session.get(claimed.target_session_id)
           throwIfAborted(leaseFence.signal)
-          await resumeEventWake({ session, messageID: reconciledMessageID })
+          await resumeEventWake({ session, messageID: reconciledMessageID, fire: claimed })
           settleSuccess(claimed, job, s.ownerID, claimed.target_session_id, reconciledMessageID)
         } else if (leaseFence.lost) {
           scheduleLeaseRecovery(claimed.id)
@@ -1231,6 +1291,25 @@ export namespace EventService {
     signal: AbortSignal
   }): Promise<{ sessionID: string; messageID: string }> {
     throwIfAborted(input.signal)
+    Database.use((db) => assertEventProjectOwner(db, input.fire))
+    const target = Database.use((db) =>
+      db
+        .select({ directory: SessionTable.directory })
+        .from(SessionTable)
+        .where(eq(SessionTable.id, input.fire.target_session_id))
+        .get(),
+    )
+    if (target)
+      await Session.assertLineageInProject({
+        sessionID: input.fire.target_session_id,
+        projectID: input.fire.project_id,
+      })
+    // Event definitions name a Project or an existing Session. Their source
+    // publication's ambient working directory is not another target identity.
+    const directory = target?.directory ?? Project.get(input.fire.project_id)!.worktree
+    if (Filesystem.resolve(Instance.directory) !== Filesystem.resolve(directory)) {
+      return runWithInitializedIndependentProject({ directory, signal: input.signal, fn: () => executeWake(input) })
+    }
     if (input.fire.creates_session) {
       const existing = Database.use((db) =>
         db
@@ -1243,6 +1322,12 @@ export namespace EventService {
         await createRightSidebarConversationSession("work", {
           id: input.fire.target_session_id,
           title: input.job.name,
+          commitInTransaction: (_db, session) =>
+            fenceEventWakeCommit({
+              fireID: input.fire.id,
+              ownerID: input.ownerID,
+              sessionID: session.id,
+            }),
         })
       }
     }
@@ -1290,7 +1375,10 @@ export namespace EventService {
           })
         },
         preflightBundle: missionAdmission?.preflightBundle,
-        ownerPreflight: missionAdmission?.ownerPreflight,
+        ownerPreflight: (db) => {
+          assertEventProjectOwner(db, input.fire)
+          missionAdmission?.ownerPreflight?.(db)
+        },
         ownerLifecycle: missionAdmission?.ownerLifecycle,
       })
     })
@@ -1306,7 +1394,9 @@ export namespace EventService {
     const committedAt = Date.now()
     const authority = Database.use((db) => {
       const row = db.select().from(EventJobFireTable).where(eq(EventJobFireTable.id, input.fireID)).get()
-      return row ? projectEventFireInTransaction(db, row, committedAt) : undefined
+      const fire = row ? projectEventFireInTransaction(db, row, committedAt) : undefined
+      if (fire) assertEventProjectOwner(db, fire)
+      return fire
     })
     if (
       authority?.status !== "running" ||
@@ -1316,6 +1406,14 @@ export namespace EventService {
     ) {
       throw new Error(`Event fire ${input.fireID} lost its lease before wake Message commit`)
     }
+  }
+
+  function assertEventProjectOwner(db: Database.TxOrDb, fire: EventJobFire, requireInstance = true): void {
+    assertSchedulerProjectOwner(
+      db,
+      { occurrenceID: fire.id, projectID: fire.project_id, generation: fire.project_generation },
+      requireInstance,
+    )
   }
 
   function deterministicEventWakeID(prefix: "msg" | "prt", fireID: string): string {
@@ -1352,6 +1450,7 @@ export namespace EventService {
   ): void {
     const now = Date.now()
     Database.immediateTransaction((db) => {
+      assertEventProjectOwner(db, fire)
       const terminal = db
         .select()
         .from(EventJobFireReceiptTable)
@@ -1408,7 +1507,13 @@ export namespace EventService {
   function settleDisposition(
     fire: EventJobFire,
     ownerID: string,
-    disposition: "causal_cycle" | "cooldown" | "job_disabled" | "mission_closed" | "target_deleted",
+    disposition:
+      | "causal_cycle"
+      | "cooldown"
+      | "job_disabled"
+      | "mission_closed"
+      | "target_deleted"
+      | "owner_unresolved",
     error: string | null,
     closureEventID: string | null = null,
   ): void {
@@ -1544,6 +1649,15 @@ export namespace EventService {
   }
 
   export const TestHooks = {
+    installOccurrenceAcceptedHook(hook: NonNullable<typeof occurrenceAcceptedHookForTest>): Disposable {
+      if (occurrenceAcceptedHookForTest) throw new Error("Event occurrence acceptance hook is already installed")
+      occurrenceAcceptedHookForTest = hook
+      return {
+        [Symbol.dispose]() {
+          occurrenceAcceptedHookForTest = undefined
+        },
+      }
+    },
     installAfterExecutionPermit(hook: (cancel: (reason: unknown) => void) => void | Promise<void>): Disposable {
       if (afterExecutionPermitForTest) throw new Error("Event post-permit test hook is already installed")
       afterExecutionPermitForTest = hook

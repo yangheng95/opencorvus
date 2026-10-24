@@ -41,6 +41,12 @@ export function requestID(c: { req: { header(name: string): string | undefined }
 
 export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "ContinuousGoalError") return 409
+  if (err.name === "ChannelIngressOutcomeUnknownError") return 409
+  if (err.name === "ChannelIngressProcessingError") return 409
+  if (err.name === "ChannelIngressOwnerConflictError") return 409
+  if (err.name === "ChannelIngressProjectContextConflictError") return 409
+  if (err.name === "SchedulerProjectOwnerError") return 409
+  if (err.name === "WorktreeStartupOutcomeUnknownError") return 409
   if (err.name === "NotFoundError") return 404
   if (err.name === "WorktreeOwnershipObservationError") return 503
   if (err.name === "DatabaseUnavailableError") return 503

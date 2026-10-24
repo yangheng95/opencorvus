@@ -85,7 +85,7 @@ export const GlobalCreationAllocationTable = sqliteTable(
   "global_creation_allocation",
   {
     id: text().primaryKey(),
-    kind: text({ enum: ["global_task", "global_chat_start"] }).notNull(),
+    kind: text({ enum: ["global_task", "global_chat_start", "automation_run"] }).notNull(),
     request_id: text().notNull(),
     request_fingerprint: text().notNull(),
     request_contract: text({ mode: "json" }).notNull().$type<Record<string, unknown>>(),
@@ -123,11 +123,12 @@ export const GlobalCreationAllocationTable = sqliteTable(
           AND (
             (${table.kind} = 'global_task' AND json_extract(${table.request_contract}, '$.protocol') = 'global-task-project-allocation-v2')
             OR (${table.kind} = 'global_chat_start' AND json_extract(${table.request_contract}, '$.protocol') = 'global-chat-start-request-v2')
+            OR (${table.kind} = 'automation_run' AND json_extract(${table.request_contract}, '$.protocol') = 'automation-run-project-v1')
           )
           AND json_type(${table.resolution_seed}) = 'object'
           AND (
             (${table.kind} = 'global_task' AND json_type(${table.task_resolution}) = 'object')
-            OR (${table.kind} = 'global_chat_start' AND ${table.task_resolution} IS NULL)
+            OR (${table.kind} IN ('global_chat_start','automation_run') AND ${table.task_resolution} IS NULL)
           )
           AND (
             (${table.materialized_project_id} IS NULL AND ${table.materialized_project_generation} IS NULL AND ${table.time_materialized} IS NULL)

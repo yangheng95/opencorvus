@@ -274,6 +274,36 @@ function assertCurrentDataIntegrity(
   db: SQLiteBunDatabase<typeof ApplicationSchema>,
   dbPath: string,
 ): void {
+  const missingPublicationOwner = queryAllFinalized<{ occurrence_id: string }>(
+    sqlite,
+    `SELECT source.occurrence_id FROM bus_publication_outbox AS source
+     LEFT JOIN bus_publication_owner AS owner ON owner.occurrence_id=source.occurrence_id
+     WHERE owner.occurrence_id IS NULL LIMIT 1`,
+  )[0]
+  if (missingPublicationOwner)
+    throw new DatabaseUnavailableError({
+      message: `Durable publication ${missingPublicationOwner.occurrence_id} is missing its immutable owner fact; original source data is retained.`,
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.publicationOwner",
+      code: "DATA_INTEGRITY_ERROR",
+    })
+  const mutationProjectionIssue = queryAllFinalized<{ id: string }>(sqlite, `
+    SELECT report.id FROM engine_artifact AS report
+    LEFT JOIN expert_squad_mutation_receipt AS receipt ON receipt.artifact_id=report.id
+    WHERE report.kind='expert_output'
+      AND json_extract(report.payload,'$.artifact_type')='evolution-lab/promotion-receipt'
+      AND json_extract(report.payload,'$.producer.owner_kind')='core'
+      AND json_extract(report.payload,'$.producer.component_id')='expert-squad-package-manager'
+      AND json_type(report.payload,'$.import_lineage') IS NULL
+      AND (receipt.artifact_id IS NULL OR receipt.task_id<>report.task_id OR receipt.envelope<>report.payload)
+    LIMIT 1`)[0]
+  if (mutationProjectionIssue)
+    throw new DatabaseUnavailableError({
+      message: `Package mutation report ${mutationProjectionIssue.id} differs from its immutable installation receipt; original data is retained.`,
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.installationMutationReceipt",
+      code: "DATA_INTEGRITY_ERROR",
+    })
   const scheduledConversationIssue = standaloneScheduledConversationIdentityIssues(sqlite)[0]
   if (scheduledConversationIssue) {
     throw new DatabaseUnavailableError({
@@ -286,10 +316,15 @@ function assertCurrentDataIntegrity(
   try {
     validateCurrentPermissionLedger(db)
   } catch (cause) {
-    throw new DatabaseUnavailableError({
-      message: `OpenCorvus database contains invalid Permission ledger facts at ${dbPath}.`,
-      path: dbPath, operation: "Database.Client.dataIntegrity.permissionLedger", code: "DATA_INTEGRITY_ERROR",
-    }, { cause })
+    throw new DatabaseUnavailableError(
+      {
+        message: `OpenCorvus database contains invalid Permission ledger facts at ${dbPath}.`,
+        path: dbPath,
+        operation: "Database.Client.dataIntegrity.permissionLedger",
+        code: "DATA_INTEGRITY_ERROR",
+      },
+      { cause },
+    )
   }
   const invalidTaskProcessBinding = queryAllFinalized<{
     id: string
@@ -783,7 +818,11 @@ function checkpointSqlite(sqlite: BunDatabase, mode: "PASSIVE" | "TRUNCATE", sou
   const result = queryAllFinalized<Omit<CheckpointResult, "duration">>(sqlite, `PRAGMA wal_checkpoint(${mode})`)[0]
   if (!result) throw new Error("SQLite checkpoint did not return its completion result")
   log.debug("checkpoint", {
-    source, mode, busy: result.busy, logFrames: result.log, checkpointedFrames: result.checkpointed,
+    source,
+    mode,
+    busy: result.busy,
+    logFrames: result.log,
+    checkpointedFrames: result.checkpointed,
     duration: performance.now() - started,
   })
   return result
@@ -792,8 +831,12 @@ function checkpointSqlite(sqlite: BunDatabase, mode: "PASSIVE" | "TRUNCATE", sou
 function isCheckpointBlocked(error: unknown) {
   return errorGraph(error).some((cause) => {
     const code = stringField(cause, "code")
-    return code === "SQLITE_BUSY" || code?.startsWith("SQLITE_BUSY_") ||
-      code === "SQLITE_LOCKED" || code?.startsWith("SQLITE_LOCKED_")
+    return (
+      code === "SQLITE_BUSY" ||
+      code?.startsWith("SQLITE_BUSY_") ||
+      code === "SQLITE_LOCKED" ||
+      code?.startsWith("SQLITE_LOCKED_")
+    )
   })
 }
 
@@ -874,7 +917,10 @@ export namespace Database {
     if (state.sqlite !== sqlite || state.unavailable || state.checkpointTimer || state.checkpointJob) return
     let admission: RuntimeExecutionReservation
     try {
-      admission = RuntimeExecutionSettlement.reserve("database_checkpoint", `database-checkpoint:${state.connectionEpoch}`)
+      admission = RuntimeExecutionSettlement.reserve(
+        "database_checkpoint",
+        `database-checkpoint:${state.connectionEpoch}`,
+      )
     } catch (error) {
       if (error instanceof RuntimeExecutionAdmissionClosedError) return
       throw error
@@ -885,50 +931,69 @@ export namespace Database {
       // An already-running SQLite operation owns its real thread exit. A
       // shutdown cancellation cannot interrupt it midway through file writes.
     })
-    state.checkpointTimer = runOutsideContext(() => setTimeout(() => {
-      state.checkpointTimer = undefined
-      state.checkpointAdmission = undefined
-      admission.settleWith((async () => {
-        if (state.sqlite !== sqlite || state.unavailable) return
-        let job: ReturnType<typeof startCheckpoint> | undefined
-        try {
-          job = startCheckpoint(Path())
-          state.checkpointJob = job
-          const result = await job.exited
-          if (state.sqlite !== sqlite || state.checkpointJob !== job) return
-          state.checkpointJob = undefined
-          log.debug("checkpoint", {
-            source: "periodic", mode: "PASSIVE", busy: result.busy,
-            logFrames: result.log, checkpointedFrames: result.checkpointed, duration: result.duration,
-          })
-        } catch (error) {
-          if (state.sqlite !== sqlite || (job && state.checkpointJob !== job)) return
-          if (job) {
+    state.checkpointTimer = runOutsideContext(() =>
+      setTimeout(() => {
+        state.checkpointTimer = undefined
+        state.checkpointAdmission = undefined
+        admission.settleWith(
+          (async () => {
+            if (state.sqlite !== sqlite || state.unavailable) return
+            let job: ReturnType<typeof startCheckpoint> | undefined
             try {
-              job.release()
+              job = startCheckpoint(Path())
+              state.checkpointJob = job
+              const result = await job.exited
+              if (state.sqlite !== sqlite || state.checkpointJob !== job) return
               state.checkpointJob = undefined
-            } catch (releaseError) {
-              error = new AggregateError([error, releaseError], "SQLite checkpoint and resource release failed", { cause: error })
+              log.debug("checkpoint", {
+                source: "periodic",
+                mode: "PASSIVE",
+                busy: result.busy,
+                logFrames: result.log,
+                checkpointedFrames: result.checkpointed,
+                duration: result.duration,
+              })
+            } catch (error) {
+              if (state.sqlite !== sqlite || (job && state.checkpointJob !== job)) return
+              if (job) {
+                try {
+                  job.release()
+                  state.checkpointJob = undefined
+                } catch (releaseError) {
+                  error = new AggregateError([error, releaseError], "SQLite checkpoint and resource release failed", {
+                    cause: error,
+                  })
+                }
+              }
+              const blocked = !state.checkpointJob && isCheckpointBlocked(error)
+              if (blocked) {
+                log.debug("checkpoint blocked", { error: error instanceof Error ? error.message : String(error) })
+              } else {
+                const failure = isUnavailableError(error)
+                  ? error
+                  : new DatabaseUnavailableError(
+                      {
+                        path: Path(),
+                        operation: "Database.checkpoint",
+                        code: "SQLITE_CHECKPOINT_FAILED",
+                        message: `SQLite checkpoint failed: ${error instanceof Error ? error.message : String(error)}`,
+                      },
+                      { cause: error },
+                    )
+                const normalized = normalizeError(failure, "Database.checkpoint")
+                log.error("checkpoint failed", {
+                  error: normalized instanceof Error ? normalized.message : String(normalized),
+                })
+                return
+              }
             }
-          }
-          const blocked = !state.checkpointJob && isCheckpointBlocked(error)
-          if (blocked) {
-            log.debug("checkpoint blocked", { error: error instanceof Error ? error.message : String(error) })
-          } else {
-            const failure = isUnavailableError(error) ? error : new DatabaseUnavailableError({
-              path: Path(), operation: "Database.checkpoint", code: "SQLITE_CHECKPOINT_FAILED",
-              message: `SQLite checkpoint failed: ${error instanceof Error ? error.message : String(error)}`,
-            }, { cause: error })
-            const normalized = normalizeError(failure, "Database.checkpoint")
-            log.error("checkpoint failed", { error: normalized instanceof Error ? normalized.message : String(normalized) })
-            return
-          }
-        }
-        // Measure the interval from completion, so slow I/O cannot create a
-        // catch-up loop. New writes never postpone the next scheduled attempt.
-        scheduleCheckpoint(sqlite)
-      })())
-    }, CHECKPOINT_INTERVAL_MS).unref())
+            // Measure the interval from completion, so slow I/O cannot create a
+            // catch-up loop. New writes never postpone the next scheduled attempt.
+            scheduleCheckpoint(sqlite)
+          })(),
+        )
+      }, CHECKPOINT_INTERVAL_MS).unref(),
+    )
   }
 
   function releaseCheckpoint() {
@@ -940,10 +1005,17 @@ export namespace Database {
     // connection remains valid. Preserve its cadence until retirement succeeds.
     if (state.sqlite) scheduleCheckpoint(state.sqlite)
     if (error && !isCheckpointBlocked(error)) {
-      throw isUnavailableError(error) ? error : new DatabaseUnavailableError({
-        path: Path(), operation: "Database.checkpoint", code: stringField(error, "code") ?? "SQLITE_CHECKPOINT_FAILED",
-        message: `SQLite checkpoint failed: ${error.message}`,
-      }, { cause: error })
+      throw isUnavailableError(error)
+        ? error
+        : new DatabaseUnavailableError(
+            {
+              path: Path(),
+              operation: "Database.checkpoint",
+              code: stringField(error, "code") ?? "SQLITE_CHECKPOINT_FAILED",
+              message: `SQLite checkpoint failed: ${error.message}`,
+            },
+            { cause: error },
+          )
     }
   }
 

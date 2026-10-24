@@ -401,7 +401,7 @@ export class DurablePublicationStore {
     })
   }
 
-  async read(kind: string, occurrenceID: string): Promise<DurablePublicationOccurrence> {
+  private async readIntent(kind: string, occurrenceID: string) {
     const directory = this.occurrenceDirectory(kind, occurrenceID)
     const rawIntent = await readOptional(path.join(directory, "intent.json"))
     if (!rawIntent) throw new Error(`Durable publication intent is missing: ${directory}`)
@@ -409,6 +409,11 @@ export class DurablePublicationStore {
     if (intent.kind !== kind || intent.occurrenceID !== occurrenceID) {
       throw new Error(`Durable publication path/content identity mismatch: ${directory}`)
     }
+    return { directory, intent }
+  }
+
+  async read(kind: string, occurrenceID: string): Promise<DurablePublicationOccurrence> {
+    const { directory, intent } = await this.readIntent(kind, occurrenceID)
     const phaseDirectory = path.join(directory, "phases")
     const names = await readdir(phaseDirectory).catch((error: NodeJS.ErrnoException) => {
       if (error.code === "ENOENT") return []
@@ -434,7 +439,10 @@ export class DurablePublicationStore {
     return { directory, intent, phases, terminal }
   }
 
-  async list(kind: string): Promise<DurablePublicationOccurrence[]> {
+  async list(
+    kind: string,
+    matchesIntent?: (intent: DurablePublicationIntent) => boolean,
+  ): Promise<DurablePublicationOccurrence[]> {
     const kindDirectory = path.join(this.root, segment(kind, "publication kind"))
     const entries = await readdir(kindDirectory, { withFileTypes: true }).catch((error: NodeJS.ErrnoException) => {
       if (error.code === "ENOENT") return []
@@ -445,6 +453,7 @@ export class DurablePublicationStore {
       if (!entry.isDirectory() || entry.isSymbolicLink()) {
         throw new Error(`Unexpected durable publication occurrence entry: ${path.join(kindDirectory, entry.name)}`)
       }
+      if (matchesIntent && !matchesIntent((await this.readIntent(kind, entry.name)).intent)) continue
       occurrences.push(await this.read(kind, entry.name))
     }
     return occurrences

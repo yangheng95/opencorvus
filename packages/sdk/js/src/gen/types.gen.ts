@@ -909,6 +909,7 @@ export type Event =
   | EventWorkspaceReady
   | EventWorktreeFailed
   | EventWorktreeReady
+  | EventWorktreeRecoveryPreserved
 
 export type EventAgentCoordinationAction = {
   properties: {
@@ -1911,6 +1912,20 @@ export type EventWorktreeReady = {
     name: string
   }
   type: "worktree.ready"
+}
+
+export type EventWorktreeRecoveryPreserved = {
+  properties: {
+    branch: string
+    directory: string
+    name: string
+    recovery: {
+      kind: "startup_outcome_unknown"
+      message: string
+      occurrenceID: string
+    }
+  }
+  type: "worktree.recovery_preserved"
 }
 
 /**
@@ -6530,6 +6545,11 @@ export type Worktree = {
   branch: string
   directory: string
   name: string
+  recovery?: {
+    kind: "startup_outcome_unknown"
+    message: string
+    occurrenceID: string
+  }
 }
 
 export type WorktreeCreateInput = {
@@ -6563,6 +6583,19 @@ export type WorktreeRemoveInput = {
 export type WorktreeResetInput = {
   baseRef?: string
   directory: string
+  operationID: string
+}
+
+export type WorktreeStartupOutcomeUnknownError = {
+  data: {
+    directory: string
+    recovery: {
+      kind: "startup_outcome_unknown"
+      message: string
+      occurrenceID: string
+    }
+  }
+  name: "WorktreeStartupOutcomeUnknownError"
 }
 
 export type ZaloChannelConfig = {
@@ -7063,6 +7096,115 @@ export type ChannelMessageResponses = {
 }
 
 export type ChannelMessageResponse = ChannelMessageResponses[keyof ChannelMessageResponses]
+
+export type ChannelMessageInspectData = {
+  body?: never
+  path: {
+    platform:
+      | "slack"
+      | "telegram"
+      | "discord"
+      | "feishu"
+      | "whatsapp"
+      | "googlechat"
+      | "msteams"
+      | "line"
+      | "matrix"
+      | "mattermost"
+      | "signal"
+      | "wecom"
+      | "dingtalk"
+      | "clickclack"
+      | "imessage"
+      | "irc"
+      | "nextcloud-talk"
+      | "nostr"
+      | "qqbot"
+      | "raft"
+      | "reef"
+      | "sms"
+      | "synology-chat"
+      | "tlon"
+      | "twitch"
+      | "zalo"
+      | "zalouser"
+    requestID: string
+  }
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+    projectID?: string
+    field?: "input" | "effect" | "outcome"
+    byteOffset?: number
+    afterSource?: string
+    limit?: number
+  }
+  url: "/channel/message/{platform}/{requestID}"
+}
+
+export type ChannelMessageInspectErrors = {
+  /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+}
+
+export type ChannelMessageInspectError = ChannelMessageInspectErrors[keyof ChannelMessageInspectErrors]
+
+export type ChannelMessageInspectResponses = {
+  /**
+   * Original ingress evidence
+   */
+  200: {
+    acceptedAt: number
+    acceptedID: string
+    body: {
+      byteOffset: number
+      data: string
+      encoding: "base64"
+      field?: "input" | "effect" | "outcome"
+      nextByteOffset: number | null
+      totalBytes: number
+    }
+    currentProjectGeneration: string | null
+    effect: "control" | "interaction" | null
+    lease: {
+      expires_at: number
+      id: string
+      owner_occurrence_id: string
+      target: string
+      target_id: string
+      time_activated: number
+    } | null
+    nextSource: string | null
+    outcomeRecorded: boolean
+    owner: "current" | "retired" | "unknown"
+    platform: string
+    projectGeneration: string | null
+    projectID: string
+    requestID: string
+    sourceOccurrences: Array<{
+      occurrenceID: string
+      type: string
+    }>
+  }
+}
+
+export type ChannelMessageInspectResponse = ChannelMessageInspectResponses[keyof ChannelMessageInspectResponses]
 
 export type ChannelRuntimeData = {
   body?: never
@@ -9327,6 +9469,10 @@ export type WorktreeResetErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Worktree startup outcome is unknown; existing files are preserved
+   */
+  409: WorktreeStartupOutcomeUnknownError
 }
 
 export type WorktreeResetError = WorktreeResetErrors[keyof WorktreeResetErrors]
@@ -17797,6 +17943,75 @@ export type ExpertSquadMulticaSquadsResponses = {
 export type ExpertSquadMulticaSquadsResponse =
   ExpertSquadMulticaSquadsResponses[keyof ExpertSquadMulticaSquadsResponses]
 
+export type ExpertSquadMutationRecoveryData = {
+  body?: never
+  path?: never
+  query: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+    id: string
+    installationScope: "project" | "global"
+    occurrenceID?: string
+    cursor?: string
+    byteOffset?: number
+  }
+  url: "/expert-squad/mutation-recovery"
+}
+
+export type ExpertSquadMutationRecoveryErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+}
+
+export type ExpertSquadMutationRecoveryError =
+  ExpertSquadMutationRecoveryErrors[keyof ExpertSquadMutationRecoveryErrors]
+
+export type ExpertSquadMutationRecoveryResponses = {
+  /**
+   * Preserved mutation evidence
+   */
+  200:
+    | {
+        entries: Array<{
+          disposition: "commit_receipt_unavailable"
+          occurrenceID: string
+          preservation: "complete" | "pending"
+          timeCreated: number
+        }>
+        nextCursor: string | null
+      }
+    | {
+        byteOffset: number
+        dataBase64: string
+        nextByteOffset: number | null
+        occurrenceID: string
+        totalBytes: number
+      }
+}
+
+export type ExpertSquadMutationRecoveryResponse =
+  ExpertSquadMutationRecoveryResponses[keyof ExpertSquadMutationRecoveryResponses]
+
 export type ExpertSquadReleasePayloadData = {
   body?: never
   path?: never
@@ -21246,7 +21461,7 @@ export type GlobalAutomationsFiresResponses = {
     runs: Array<{
       closureEventID: string | null
       completedAt: number | null
-      disposition: "mission_closed" | "target_deleted" | "superseded" | null
+      disposition: "mission_closed" | "target_deleted" | "superseded" | "owner_unresolved" | null
       error: string | null
       id: string
       outcome: "running" | "retry_wait" | "succeeded" | "failed" | "disposition"
@@ -22308,6 +22523,118 @@ export type GlobalProvidersTestResponses = {
 }
 
 export type GlobalProvidersTestResponse = GlobalProvidersTestResponses[keyof GlobalProvidersTestResponses]
+
+export type GlobalPublicationListData = {
+  body?: never
+  path?: never
+  query: {
+    projectID: string
+    after?: string
+    limit?: number
+  }
+  url: "/global/publication"
+}
+
+export type GlobalPublicationListErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+}
+
+export type GlobalPublicationListError = GlobalPublicationListErrors[keyof GlobalPublicationListErrors]
+
+export type GlobalPublicationListResponses = {
+  /**
+   * Retained source identities, including settled and retired history
+   */
+  200: {
+    next: string | null
+    sources: Array<{
+      directory: string
+      eventType: string
+      generation: string | null
+      occurrenceID: string
+      ownerRecordedAt: number
+      projectID: string
+      timeCreated: number
+    }>
+  }
+}
+
+export type GlobalPublicationListResponse = GlobalPublicationListResponses[keyof GlobalPublicationListResponses]
+
+export type GlobalPublicationReadData = {
+  body?: never
+  path?: never
+  query: {
+    projectID: string
+    occurrenceID: string
+    field?: "properties" | "causation"
+    byteOffset?: number
+    section?: "deliveries" | "receipts" | "attempts" | "phases" | "leases" | "grants"
+    offset?: number
+    limit?: number
+  }
+  url: "/global/publication/source"
+}
+
+export type GlobalPublicationReadErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+}
+
+export type GlobalPublicationReadError = GlobalPublicationReadErrors[keyof GlobalPublicationReadErrors]
+
+export type GlobalPublicationReadResponses = {
+  /**
+   * Original stored source bytes and paged delivery facts
+   */
+  200: {
+    body: {
+      byteOffset: number
+      data: string
+      encoding: "base64"
+      field: "properties" | "causation"
+      nextByteOffset: number | null
+      totalBytes: number
+    }
+    facts: Array<{
+      [key: string]: unknown
+    }>
+    nextOffset: number | null
+    section?: "deliveries" | "receipts" | "attempts" | "phases" | "leases" | "grants"
+    source: {
+      directory: string
+      eventType: string
+      generation: string | null
+      occurrenceID: string
+      ownerRecordedAt: number
+      projectID: string
+      timeCreated: number
+    }
+  }
+}
+
+export type GlobalPublicationReadResponse = GlobalPublicationReadResponses[keyof GlobalPublicationReadResponses]
 
 export type GlobalSkillInstallData = {
   body: {

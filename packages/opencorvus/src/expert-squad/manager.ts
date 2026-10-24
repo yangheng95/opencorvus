@@ -21,11 +21,11 @@ import { writeExpertSquadInstallationMetadata, type ExpertSquadGenerationMetadat
 import { NamedError } from "@opencorvus-ai/util/error"
 import z from "zod"
 import { Log } from "@/util/log"
-import { EngineArtifactEnvelopeSchema, EvolutionPromotionReceiptSchema } from "@opencorvus-ai/plugin"
 import { EXPERT_SQUAD_ARCHIVE_IMPORT_LIMITS } from "@opencorvus-ai/sdk/expert-squad-package-contract"
 import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v2"
-import { EngineArtifactTable } from "@/engine/engine.sql"
-import { Database, eq } from "@/storage/db"
+import { Database } from "@/storage/db"
+import { readExpertSquadMutationReceipt } from "@/engine/expert-squad-mutation-receipt"
+import { inspectExpertSquadMutationPreservation, preserveUnknownExpertSquadMutation } from "./mutation-preservation"
 import { scoreDiscoveryFields, scoreDocumentField } from "@/capability/fuzzy"
 import { ExpertSquadIDSchema, ExpertSquadNamespaceSchema } from "./id"
 
@@ -107,6 +107,19 @@ export namespace ExpertSquadPackageManager {
         if (!pending) return
         pending = false
         throw new PackageMutationAbruptTerminationForTest()
+      }
+      return () => {
+        packageMutationAfterTargetMoveInterruptForTest = previous
+      }
+    }
+
+    export function afterTargetMoveBeforeInstallOnce(callback: () => Promise<void>) {
+      const previous = packageMutationAfterTargetMoveInterruptForTest
+      let pending = true
+      packageMutationAfterTargetMoveInterruptForTest = async () => {
+        if (!pending) return
+        pending = false
+        await callback()
       }
       return () => {
         packageMutationAfterTargetMoveInterruptForTest = previous
@@ -319,7 +332,11 @@ export namespace ExpertSquadPackageManager {
 
   const EvolutionMutationJournalSchema = z
     .object({
-      protocol: z.literal("opencorvus/expert-squad-evolution-mutation-intent@1"),
+      protocol: z.enum([
+        "opencorvus/expert-squad-evolution-mutation-intent@1",
+        "opencorvus/expert-squad-evolution-mutation-intent@2",
+      ]),
+      databaseAuthority: z.string().uuid().optional(),
       operationID: z.string().uuid(),
       identity: z.object({ taskID: z.string().min(1), artifactID: z.string().min(1) }).strict(),
       target: z.string().min(1),
@@ -335,6 +352,20 @@ export namespace ExpertSquadPackageManager {
       afterPackageDigest: z.string().regex(/^[a-f0-9]{64}$/),
     })
     .strict()
+    .superRefine((journal, context) => {
+      if (journal.protocol.endsWith("@2") && journal.databaseAuthority === undefined)
+        context.addIssue({
+          code: "custom",
+          path: ["databaseAuthority"],
+          message: "Current mutation journal requires its original database authority",
+        })
+      if (journal.protocol.endsWith("@1") && journal.databaseAuthority !== undefined)
+        context.addIssue({
+          code: "custom",
+          path: ["databaseAuthority"],
+          message: "Historical journal cannot acquire a later database authority",
+        })
+    })
   type EvolutionMutationJournal = z.infer<typeof EvolutionMutationJournalSchema>
 
   const PackageReplacementJournalSchema = z
@@ -556,22 +587,14 @@ export namespace ExpertSquadPackageManager {
 
   function committedEvolutionReceipt(journal: EvolutionMutationJournal) {
     evolutionReceiptReadForTest?.()
+    if (journal.databaseAuthority !== undefined && journal.databaseAuthority !== Database.Identity()) return undefined
     const identity = journal.identity
-    const row = Database.use((db) =>
-      db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, identity.artifactID)).get(),
-    )
+    const row = Database.use((db) => readExpertSquadMutationReceipt(db, identity.artifactID))
     if (!row) return undefined
-    if (row.task_id !== identity.taskID || row.kind !== "expert_output")
+    if (row.task_id !== identity.taskID)
       throw new Error("Expert squad mutation journal receipt belongs to a foreign Artifact partition")
-    const envelope = EngineArtifactEnvelopeSchema.parse(row.payload)
-    if (
-      envelope.artifact_type !== "evolution-lab/promotion-receipt" ||
-      envelope.schema_version !== 1 ||
-      envelope.producer.owner_kind !== "core" ||
-      envelope.producer.component_id !== "expert-squad-package-manager"
-    )
-      throw new Error("Expert squad mutation journal receipt identity collides with a non-Manager Artifact")
-    const receipt = EvolutionPromotionReceiptSchema.parse(envelope.payload)
+    const envelope = row.envelope
+    const receipt = row.receipt
     // The journal proves what the Manager did; the receipt's own operation
     // names what authorized it. Only restoration is pinned one-to-one — every
     // other authorization installs, so a new one must not have to edit this.
@@ -597,13 +620,14 @@ export namespace ExpertSquadPackageManager {
   async function reconcileEvolutionMutationJournal(input: {
     location: ExpertSquadPackageLocations.Location
     id: string
+    confirmedUncommitted?: ExpertSquadInstallLock.Lease
   }) {
     const journalPath = evolutionMutationJournalPath(input.location, input.id)
     const text = await readFile(journalPath, "utf8").catch((error: NodeJS.ErrnoException) => {
       if (error.code === "ENOENT") return undefined
       throw error
     })
-    if (text === undefined) return
+    if (text === undefined) return { disposition: "none" as const }
     const journal = EvolutionMutationJournalSchema.parse(JSON.parse(text))
     assertMutationJournalLocation(journal, input.location, input.id)
     const committed = committedEvolutionReceipt(journal)
@@ -631,8 +655,20 @@ export namespace ExpertSquadPackageManager {
       } catch (error) {
         throw new EvolutionMutationCleanupPendingError(error)
       }
-      return
+      return { disposition: "committed" as const }
     }
+    if (!input.confirmedUncommitted)
+      return preserveUnknownExpertSquadMutation({
+        configRoot: input.location.configRoot,
+        id: input.id,
+        journalPath,
+        journalText: text,
+        journal,
+        databaseAuthority: Database.Identity(),
+      })
+    ExpertSquadInstallLock.assertHeld(input.confirmedUncommitted, input.id)
+    if (journal.databaseAuthority !== Database.Identity())
+      throw new Error("Current failed mutation lost its original database authority")
     if (
       packageStateHasDigest(targetState, journal.beforePackageDigest) &&
       backupState.kind === "absent" &&
@@ -641,7 +677,7 @@ export namespace ExpertSquadPackageManager {
       await rm(journal.staging, { recursive: true, force: true })
       await rm(journal.discard, { recursive: true, force: true })
       await rm(journalPath)
-      return
+      return { disposition: "rolled_back" as const }
     }
     if (!packageStateHasDigest(backupState, journal.beforePackageDigest))
       throw new Error("Uncommitted expert squad mutation journal has no exact prior revision backup")
@@ -658,6 +694,7 @@ export namespace ExpertSquadPackageManager {
     await rm(journal.discard, { recursive: true, force: true })
     await rm(journalPath)
     await ExpertSquadRegistry.invalidateAvailable()
+    return { disposition: "rolled_back" as const }
   }
 
   async function packageRootByID(
@@ -1027,7 +1064,7 @@ export namespace ExpertSquadPackageManager {
     const loaded = input.loaded
     const targetLocation = input.targetLocation
     const target = targetRootForLocation(targetLocation, loaded.namespace, loaded.id)
-    return ExpertSquadInstallLock.run(loaded.id, async () => {
+    return ExpertSquadInstallLock.run(loaded.id, async (lease) => {
       await reconcilePackageReplacementJournal({
         location: targetLocation,
         id: loaded.id,
@@ -1157,7 +1194,8 @@ export namespace ExpertSquadPackageManager {
         if (input.durableReceipt) {
           if (!before) throw new Error("Durable expert squad evolution mutation requires an installed prior revision")
           const journal: EvolutionMutationJournal = {
-            protocol: "opencorvus/expert-squad-evolution-mutation-intent@1",
+            protocol: "opencorvus/expert-squad-evolution-mutation-intent@2",
+            databaseAuthority: Database.Identity(),
             operationID,
             identity: input.durableReceipt.identity,
             target,
@@ -1265,6 +1303,7 @@ export namespace ExpertSquadPackageManager {
             await reconcileEvolutionMutationJournal({
               location: targetLocation,
               id: loaded.id,
+              confirmedUncommitted: lease,
             })
           } catch (recoveryError) {
             throw new AggregateError(
@@ -1958,7 +1997,20 @@ export namespace ExpertSquadPackageManager {
   }) {
     const id = ExpertSquadRegistry.parseID(input.id, "expert squad mutation reconciliation id")
     const location = ExpertSquadPackageLocations.resolve(input.installationScope, input.projectDirectory)
-    await ExpertSquadInstallLock.run(id, () => reconcileEvolutionMutationJournal({ location, id }))
+    return ExpertSquadInstallLock.run(id, () => reconcileEvolutionMutationJournal({ location, id }))
+  }
+
+  export function inspectMutationRecovery(input: {
+    projectDirectory: string
+    id: string
+    installationScope: ExpertSquadPackageLocations.InstallationScope
+    occurrenceID?: string
+    cursor?: string
+    byteOffset?: number
+  }) {
+    const id = ExpertSquadRegistry.parseID(input.id, "expert squad mutation recovery inspection id")
+    const location = ExpertSquadPackageLocations.resolve(input.installationScope, input.projectDirectory)
+    return inspectExpertSquadMutationPreservation({ ...input, id, configRoot: location.configRoot })
   }
 
   async function reconcilePendingLocations(locations: readonly ExpertSquadPackageLocations.Location[]) {

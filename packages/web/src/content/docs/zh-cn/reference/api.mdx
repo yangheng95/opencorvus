@@ -52,6 +52,8 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | POST | `/global/providers/{providerID}/oauth/callback` | Complete global Provider subscription authorization 请求体: `code`, `flowID`, `method`; 错误: `AuthReadError`, `BadRequestError`, `ProviderAuthOAuthExchangeActiveError`, `ProviderAuthOAuthExchangeUncertainError`, `ProviderCredentialExchangeFailedError`, `ProviderCredentialExchangeReplacedError`. | `global.providers.oauth.callback` |
 | POST | `/global/providers/{providerID}/oauth/cancel` | Cancel pending Provider authorization 请求体: `flowID`, `method`; 错误: `AuthReadError`, `BadRequestError`, `ProviderAuthOAuthExchangeActiveError`. | `global.providers.oauth.cancel` |
 | POST | `/global/providers/{providerID}/test` | Test a global Provider connection 请求体: `modelID`; 错误: `AuthReadError`, `BadRequestError`, `ProviderConnectionTestResult`. | `global.providers.test` |
+| GET | `/global/publication` | List durable publication history 错误: `BadRequestError`. | `global.publication.list` |
+| GET | `/global/publication/source` | Read durable publication evidence 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `global.publication.read` |
 | POST | `/global/skill/install` | Install a global Skill market source 请求体: `kind`, `policy`, `value`; 错误: `BadRequestError`. | `global.skill.install` |
 | GET | `/global/skill/market` | List the global Skill market | `global.skill.market` |
 | GET | `/global/skill/market/detail` | Inspect a global Skill Market candidate 错误: `BadRequestError`, `SkillMarketUpstreamError`. | `global.skill.market.detail` |
@@ -264,6 +266,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | POST | `/channel/attachment` | Create a temporary channel attachment URL 请求体: `data`, `filename`, `mime`; 错误: `BadRequestError`. | `channel.attachment.create` |
 | GET | `/channel/attachment/{id}` | Read a temporary channel attachment 错误: `LogFileNotFoundError`, `NotFoundError`. | `channel.attachment.get` |
 | POST | `/channel/message` | Handle channel message 请求体: `allow_create`, `allow_session_mutation`, `attachments`, `bind`, `channel`, `model`, `platform`, `request_id`, `source`, `task_id`, `text`, `thread`, `user_id`. | `channel.message` |
+| GET | `/channel/message/{platform}/{requestID}` | Read original channel ingress evidence 错误: `LogFileNotFoundError`, `NotFoundError`. | `channel.messageInspect` |
 | GET | `/channel/runtime` | Get managed channel runtime | `channel.runtime` |
 | POST | `/channel/runtime/restart` | Restart managed channel runtime | `channel.runtime.restart` |
 
@@ -320,6 +323,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/expert-squad/market/detail` | Inspect one bundled expert squad 错误: `ExpertSquadPackageError`, `NotFoundError`. | `expertSquad.marketDetail` |
 | POST | `/expert-squad/multica/preview` | Preview a Multica squad import 请求体: `mapping`, `squadID`; 错误: `ExpertSquadPackageError`. | `expertSquad.multicaPreview` |
 | GET | `/expert-squad/multica/squads` | List Multica squads with expert-squad installation status 错误: `ExpertSquadPackageError`. | `expertSquad.multicaSquads` |
+| GET | `/expert-squad/mutation-recovery` | Read preserved package mutation evidence 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `expertSquad.mutationRecovery` |
 | POST | `/expert-squad/release-payload` | Release bundled expert-squad packages 错误: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.releasePayload` |
 | POST | `/expert-squad/repair-bundled` | Replace obsolete bundled Expert Squad installations 错误: `ExpertSquadPackageError`. | `expertSquad.repairBundled` |
 | GET | `/expert-squad/search` | Search expert-squad declarations 错误: `BadRequestError`, `UnknownError`. | `expertSquad.search` |
@@ -489,4 +493,4 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | DELETE | `/experimental/worktree` | Remove worktree 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeOwnershipObservationError`. | `worktree.remove` |
 | GET | `/experimental/worktree` | List worktrees | `worktree.list` |
 | POST | `/experimental/worktree` | Create worktree 错误: `BadRequestError`. | `worktree.create` |
-| POST | `/experimental/worktree/reset` | Reset worktree 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `worktree.reset` |
+| POST | `/experimental/worktree/reset` | Reset worktree 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeStartupOutcomeUnknownError`. | `worktree.reset` |

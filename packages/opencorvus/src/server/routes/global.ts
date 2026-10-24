@@ -5,6 +5,7 @@ import { streamGlobalSSE } from "../sse"
 import z from "zod"
 import { BusEvent } from "@/bus/bus-event"
 import { GlobalBus } from "@/bus/global"
+import { PublicationRead } from "@/bus/publication-read"
 import { Event as ServerEvent, globalEnvelope } from "../event"
 import { Instance } from "../../project/instance"
 import { Project } from "../../project/project"
@@ -136,7 +137,7 @@ export const AutomationFireHistoryViewSchema = z
           targetProjectId: z.string().nullable(),
           sessionId: z.string().nullable(),
           outcome: z.enum(AutomationRunOutcomes),
-          disposition: z.enum(["mission_closed", "target_deleted", "superseded"]).nullable(),
+          disposition: z.enum(["mission_closed", "target_deleted", "superseded", "owner_unresolved"]).nullable(),
           closureEventID: z.string().nullable(),
           startedAt: z.number(),
           completedAt: z.number().nullable(),
@@ -196,6 +197,38 @@ function errorMessage(error: unknown): string {
 export const GlobalRoutes = lazy(() =>
   new Hono()
     .get(
+      "/publication",
+      describeRoute({
+        summary: "List durable publication history",
+        operationId: "global.publication.list",
+        responses: {
+          200: {
+            description: "Retained source identities, including settled and retired history",
+            content: { "application/json": { schema: resolver(PublicationRead.ListResult) } },
+          },
+            ...errors(400),
+        },
+      }),
+      validator("query", PublicationRead.ListInput),
+      (c) => c.json(PublicationRead.list(c.req.valid("query"))),
+    )
+    .get(
+      "/publication/source",
+      describeRoute({
+        summary: "Read durable publication evidence",
+        operationId: "global.publication.read",
+        responses: {
+          200: {
+            description: "Original stored source bytes and paged delivery facts",
+            content: { "application/json": { schema: resolver(PublicationRead.Result) } },
+          },
+            ...errors(400, 404),
+        },
+      }),
+      validator("query", PublicationRead.Input),
+      (c) => c.json(PublicationRead.read(c.req.valid("query"))),
+    )
+    .get(
       "/usage",
       describeRoute({
         summary: "Get natural-period Provider usage",
@@ -239,7 +272,12 @@ export const GlobalRoutes = lazy(() =>
             content: {
               "application/json": {
                 schema: resolver(
-                  z.object({ id: z.string(), revisionId: z.string(), name: z.string(), nextRun: z.number().nullable() }),
+                  z.object({
+                    id: z.string(),
+                    revisionId: z.string(),
+                    name: z.string(),
+                    nextRun: z.number().nullable(),
+                  }),
                 ),
               },
             },
@@ -265,7 +303,9 @@ export const GlobalRoutes = lazy(() =>
             description: "Observed definition changed or its execution is running",
             content: {
               "application/json": {
-                schema: resolver(z.union([AutomationRevisionConflictError.Schema, AutomationRunningConflictError.Schema])),
+                schema: resolver(
+                  z.union([AutomationRevisionConflictError.Schema, AutomationRunningConflictError.Schema]),
+                ),
               },
             },
           },
@@ -293,7 +333,8 @@ export const GlobalRoutes = lazy(() =>
       "/automations/:id/fires",
       describeRoute({
         summary: "List scheduled automation Fire history",
-        description: "Lists logical Fire occurrences with immutable target-run receipts, including terminal Fires that reserved no target runs.",
+        description:
+          "Lists logical Fire occurrences with immutable target-run receipts, including terminal Fires that reserved no target runs.",
         operationId: "global.automations.fires",
         responses: {
           200: {
@@ -337,7 +378,9 @@ export const GlobalRoutes = lazy(() =>
             description: "Observed definition changed or its execution is running",
             content: {
               "application/json": {
-                schema: resolver(z.union([AutomationRevisionConflictError.Schema, AutomationRunningConflictError.Schema])),
+                schema: resolver(
+                  z.union([AutomationRevisionConflictError.Schema, AutomationRunningConflictError.Schema]),
+                ),
               },
             },
           },

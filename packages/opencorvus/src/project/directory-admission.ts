@@ -133,43 +133,58 @@ export namespace ProjectDirectoryAdmission {
     return process.platform === "win32" ? normalized.toLowerCase() : normalized
   }
 
+  export type ResolvedDirectory = { physicalPath: string; directoryKey: string }
+
+  function resolvedDirectory(value: string): ResolvedDirectory {
+    const physicalPath = Filesystem.normalizeWindowsPath(path.resolve(value))
+    return { physicalPath, directoryKey: normalizeKey(physicalPath) }
+  }
+
   /** Resolve aliases through the physical directory or, before publication,
    * through its nearest existing parent. */
-  export async function key(directory: string): Promise<string> {
+  export async function resolve(directory: string): Promise<ResolvedDirectory> {
     let candidate = path.resolve(directory)
     const missing: string[] = []
     while (true) {
       try {
         const physical = await fs.realpath(candidate)
-        return normalizeKey(path.join(physical, ...missing.reverse()))
+        return resolvedDirectory(path.join(physical, ...missing.reverse()))
       } catch (error) {
         if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error
         const parent = path.dirname(candidate)
-        if (parent === candidate) return normalizeKey(path.resolve(directory))
+        if (parent === candidate) return resolvedDirectory(directory)
         missing.push(path.basename(candidate))
         candidate = parent
       }
     }
   }
 
+  export async function key(directory: string): Promise<string> {
+    return (await resolve(directory)).directoryKey
+  }
+
   /** Synchronous counterpart for an already active SQLite owner-writer
    * transaction. It performs one bounded ancestor walk and never mutates the
    * namespace. */
-  export function keySync(directory: string): string {
+  export function resolveSync(directory: string): ResolvedDirectory {
     let candidate = path.resolve(directory)
     const missing: string[] = []
     while (true) {
       try {
         const physical = fsSync.realpathSync.native(candidate)
-        return normalizeKey(path.join(physical, ...missing.reverse()))
+        return resolvedDirectory(path.join(physical, ...missing.reverse()))
       } catch (error) {
         if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error
         const parent = path.dirname(candidate)
-        if (parent === candidate) return normalizeKey(path.resolve(directory))
+        if (parent === candidate) return resolvedDirectory(directory)
         missing.push(path.basename(candidate))
         candidate = parent
       }
     }
+  }
+
+  export function keySync(directory: string): string {
+    return resolveSync(directory).directoryKey
   }
 
   export function directoryPresentSync(directory: string): boolean {
@@ -568,6 +583,47 @@ export namespace ProjectDirectoryAdmission {
    * one SQLite transaction. A callback failure leaves the durable owner open. */
   export function settle(token: Token, mutation: (db: Database.TxOrDb) => void): void {
     settleMany([token], mutation)
+  }
+
+  /** Release an abandoned exact fence after its domain has durably recorded
+   * recovery or retirement. This never resolves or mutates the directory: a
+   * replacement at the old pathname is not owned by the historical token. */
+  export function settleAbandoned(token: Token & { timeCreated: number }): void {
+    if (observeRuntimeProcessOccurrence(token.owner) !== "dead_or_reused") {
+      throw new ClosedError({
+        directory: token.directory,
+        operationID: token.operationID,
+        kind: token.kind,
+        message: "The original directory operation owner is still live or cannot be proven dead",
+      })
+    }
+    Database.immediateTransaction((db) => {
+      assertOwned(db, token)
+      const row = db
+        .select()
+        .from(ProjectDirectoryAdmissionTable)
+        .where(eq(ProjectDirectoryAdmissionTable.directory_key, token.directoryKey))
+        .get()!
+      if (
+        row.directory !== token.directory ||
+        row.time_created !== token.timeCreated ||
+        observeRuntimeProcessOccurrence(token.owner) !== "dead_or_reused"
+      )
+        throw closed(row)
+      db.delete(ProjectDirectoryAdmissionTable)
+        .where(
+          and(
+            eq(ProjectDirectoryAdmissionTable.directory_key, token.directoryKey),
+            eq(ProjectDirectoryAdmissionTable.generation, token.generation),
+            eq(ProjectDirectoryAdmissionTable.operation_id, token.operationID),
+            eq(ProjectDirectoryAdmissionTable.kind, token.kind),
+            eq(ProjectDirectoryAdmissionTable.owner_pid, token.owner.pid),
+            eq(ProjectDirectoryAdmissionTable.owner_process_instance_id, token.owner.processInstanceID),
+            eq(ProjectDirectoryAdmissionTable.owner_occurrence_id, token.owner.occurrenceID),
+          ),
+        )
+        .run()
+    })
   }
 
   /** Atomically publish one registry mutation and release every path it owns. */

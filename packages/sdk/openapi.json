@@ -2686,6 +2686,9 @@
           },
           {
             "$ref": "#/components/schemas/Event.worktree.ready"
+          },
+          {
+            "$ref": "#/components/schemas/Event.worktree.recovery_preserved"
           }
         ]
       },
@@ -6382,6 +6385,60 @@
           },
           "type": {
             "const": "worktree.ready",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "properties"
+        ],
+        "type": "object"
+      },
+      "Event.worktree.recovery_preserved": {
+        "properties": {
+          "properties": {
+            "properties": {
+              "branch": {
+                "type": "string"
+              },
+              "directory": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "recovery": {
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "const": "startup_outcome_unknown",
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "occurrenceID": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "occurrenceID",
+                  "message"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "directory",
+              "name",
+              "branch",
+              "recovery"
+            ],
+            "type": "object"
+          },
+          "type": {
+            "const": "worktree.recovery_preserved",
             "type": "string"
           }
         },
@@ -22657,6 +22714,27 @@
           },
           "name": {
             "type": "string"
+          },
+          "recovery": {
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "const": "startup_outcome_unknown",
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "occurrenceID": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "occurrenceID",
+              "message"
+            ],
+            "type": "object"
           }
         },
         "required": [
@@ -22745,10 +22823,62 @@
           },
           "directory": {
             "type": "string"
+          },
+          "operationID": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
           }
         },
         "required": [
-          "directory"
+          "directory",
+          "operationID"
+        ],
+        "type": "object"
+      },
+      "WorktreeStartupOutcomeUnknownError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "directory": {
+                "type": "string"
+              },
+              "recovery": {
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "const": "startup_outcome_unknown",
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "occurrenceID": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "occurrenceID",
+                  "message"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "directory",
+              "recovery"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "WorktreeStartupOutcomeUnknownError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
         ],
         "type": "object"
       },
@@ -23983,6 +24113,375 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.channel.message({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/channel/message/{platform}/{requestID}": {
+      "get": {
+        "description": "Inspect the retained input, effect and outcome JSON as original byte pages, with bounded causal source history.",
+        "operationId": "channel.messageInspect",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "platform",
+            "required": true,
+            "schema": {
+              "enum": [
+                "slack",
+                "telegram",
+                "discord",
+                "feishu",
+                "whatsapp",
+                "googlechat",
+                "msteams",
+                "line",
+                "matrix",
+                "mattermost",
+                "signal",
+                "wecom",
+                "dingtalk",
+                "clickclack",
+                "imessage",
+                "irc",
+                "nextcloud-talk",
+                "nostr",
+                "qqbot",
+                "raft",
+                "reef",
+                "sms",
+                "synology-chat",
+                "tlon",
+                "twitch",
+                "zalo",
+                "zalouser"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "requestID",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "projectID",
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "field",
+            "schema": {
+              "default": "input",
+              "enum": [
+                "input",
+                "effect",
+                "outcome"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "byteOffset",
+            "schema": {
+              "default": 0,
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "afterSource",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "default": 16,
+              "maximum": 32,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "acceptedAt": {
+                      "type": "number"
+                    },
+                    "acceptedID": {
+                      "type": "string"
+                    },
+                    "body": {
+                      "properties": {
+                        "byteOffset": {
+                          "type": "number"
+                        },
+                        "data": {
+                          "type": "string"
+                        },
+                        "encoding": {
+                          "const": "base64",
+                          "type": "string"
+                        },
+                        "field": {
+                          "default": "input",
+                          "enum": [
+                            "input",
+                            "effect",
+                            "outcome"
+                          ],
+                          "type": "string"
+                        },
+                        "nextByteOffset": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "totalBytes": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "encoding",
+                        "byteOffset",
+                        "totalBytes",
+                        "data",
+                        "nextByteOffset"
+                      ],
+                      "type": "object"
+                    },
+                    "currentProjectGeneration": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "effect": {
+                      "anyOf": [
+                        {
+                          "enum": [
+                            "control",
+                            "interaction"
+                          ],
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "lease": {
+                      "anyOf": [
+                        {
+                          "properties": {
+                            "expires_at": {
+                              "type": "number"
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "owner_occurrence_id": {
+                              "type": "string"
+                            },
+                            "target": {
+                              "type": "string"
+                            },
+                            "target_id": {
+                              "type": "string"
+                            },
+                            "time_activated": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "target",
+                            "target_id",
+                            "owner_occurrence_id",
+                            "time_activated",
+                            "expires_at"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "nextSource": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "outcomeRecorded": {
+                      "type": "boolean"
+                    },
+                    "owner": {
+                      "enum": [
+                        "current",
+                        "retired",
+                        "unknown"
+                      ],
+                      "type": "string"
+                    },
+                    "platform": {
+                      "type": "string"
+                    },
+                    "projectGeneration": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "projectID": {
+                      "type": "string"
+                    },
+                    "requestID": {
+                      "type": "string"
+                    },
+                    "sourceOccurrences": {
+                      "items": {
+                        "properties": {
+                          "occurrenceID": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "occurrenceID",
+                          "type"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "acceptedID",
+                    "requestID",
+                    "platform",
+                    "projectID",
+                    "projectGeneration",
+                    "currentProjectGeneration",
+                    "owner",
+                    "effect",
+                    "acceptedAt",
+                    "outcomeRecorded",
+                    "body",
+                    "sourceOccurrences",
+                    "nextSource",
+                    "lease"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Original ingress evidence"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "NotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "LogFileNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Not found"
+          }
+        },
+        "summary": "Read original channel ingress evidence",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.channel.messageInspect({\n  ...\n})"
           }
         ]
       }
@@ -29406,7 +29905,7 @@
     },
     "/experimental/worktree/reset": {
       "post": {
-        "description": "Reset a worktree branch to the primary default branch.",
+        "description": "Reset a worktree branch with an immutable operationID. Reuse the same ID to recover that operation; use a new ID for a new explicit reset.",
         "operationId": "worktree.reset",
         "parameters": [
           {
@@ -29500,6 +29999,16 @@
               }
             },
             "description": "Not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorktreeStartupOutcomeUnknownError"
+                }
+              }
+            },
+            "description": "Worktree startup outcome is unknown; existing files are preserved"
           }
         },
         "summary": "Reset worktree",
@@ -69017,6 +69526,239 @@
         ]
       }
     },
+    "/expert-squad/mutation-recovery": {
+      "get": {
+        "description": "Read ordered recovery summaries or a 4096-byte original evidence page. A preservation outcome records current evidence retention, not a historical mutation success.",
+        "operationId": "expertSquad.mutationRecovery",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "maxLength": 64,
+              "minLength": 1,
+              "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "installationScope",
+            "required": true,
+            "schema": {
+              "enum": [
+                "project",
+                "global"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "occurrenceID",
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "byteOffset",
+            "schema": {
+              "default": 0,
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "entries": {
+                          "items": {
+                            "properties": {
+                              "disposition": {
+                                "const": "commit_receipt_unavailable",
+                                "type": "string"
+                              },
+                              "occurrenceID": {
+                                "type": "string"
+                              },
+                              "preservation": {
+                                "enum": [
+                                  "complete",
+                                  "pending"
+                                ],
+                                "type": "string"
+                              },
+                              "timeCreated": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "occurrenceID",
+                              "disposition",
+                              "preservation",
+                              "timeCreated"
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "nextCursor": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "entries",
+                        "nextCursor"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "byteOffset": {
+                          "type": "number"
+                        },
+                        "dataBase64": {
+                          "type": "string"
+                        },
+                        "nextByteOffset": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "occurrenceID": {
+                          "type": "string"
+                        },
+                        "totalBytes": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "occurrenceID",
+                        "totalBytes",
+                        "byteOffset",
+                        "dataBase64",
+                        "nextByteOffset"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Preserved mutation evidence"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "NotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "LogFileNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Not found"
+          }
+        },
+        "summary": "Read preserved package mutation evidence",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.expertSquad.mutationRecovery({\n  ...\n})"
+          }
+        ]
+      }
+    },
     "/expert-squad/release-payload": {
       "post": {
         "description": "Explicitly provisions bundled expert-squad payload packages into the current project's namespaced .opencorvus expert-squads catalog without overwriting existing packages.",
@@ -79805,7 +80547,8 @@
                                   "enum": [
                                     "mission_closed",
                                     "target_deleted",
-                                    "superseded"
+                                    "superseded",
+                                    "owner_unresolved"
                                   ],
                                   "type": "string"
                                 },
@@ -82676,6 +83419,417 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.global.providers.test({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/global/publication": {
+      "get": {
+        "operationId": "global.publication.list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "projectID",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "after",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "default": 32,
+              "maximum": 64,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "next": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "sources": {
+                      "items": {
+                        "properties": {
+                          "directory": {
+                            "type": "string"
+                          },
+                          "eventType": {
+                            "type": "string"
+                          },
+                          "generation": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "occurrenceID": {
+                            "type": "string"
+                          },
+                          "ownerRecordedAt": {
+                            "type": "number"
+                          },
+                          "projectID": {
+                            "type": "string"
+                          },
+                          "timeCreated": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "occurrenceID",
+                          "projectID",
+                          "directory",
+                          "eventType",
+                          "timeCreated",
+                          "generation",
+                          "ownerRecordedAt"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "sources",
+                    "next"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Retained source identities, including settled and retired history"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          }
+        },
+        "summary": "List durable publication history",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.global.publication.list({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/global/publication/source": {
+      "get": {
+        "operationId": "global.publication.read",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "projectID",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "occurrenceID",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "field",
+            "schema": {
+              "default": "properties",
+              "enum": [
+                "properties",
+                "causation"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "byteOffset",
+            "schema": {
+              "default": 0,
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "section",
+            "schema": {
+              "default": "receipts",
+              "enum": [
+                "deliveries",
+                "receipts",
+                "attempts",
+                "phases",
+                "leases",
+                "grants"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "default": 0,
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "default": 32,
+              "maximum": 64,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "body": {
+                      "properties": {
+                        "byteOffset": {
+                          "type": "number"
+                        },
+                        "data": {
+                          "type": "string"
+                        },
+                        "encoding": {
+                          "const": "base64",
+                          "type": "string"
+                        },
+                        "field": {
+                          "enum": [
+                            "properties",
+                            "causation"
+                          ],
+                          "type": "string"
+                        },
+                        "nextByteOffset": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "totalBytes": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "field",
+                        "encoding",
+                        "byteOffset",
+                        "totalBytes",
+                        "data",
+                        "nextByteOffset"
+                      ],
+                      "type": "object"
+                    },
+                    "facts": {
+                      "items": {
+                        "additionalProperties": {},
+                        "propertyNames": {
+                          "type": "string"
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "nextOffset": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "section": {
+                      "default": "receipts",
+                      "enum": [
+                        "deliveries",
+                        "receipts",
+                        "attempts",
+                        "phases",
+                        "leases",
+                        "grants"
+                      ],
+                      "type": "string"
+                    },
+                    "source": {
+                      "properties": {
+                        "directory": {
+                          "type": "string"
+                        },
+                        "eventType": {
+                          "type": "string"
+                        },
+                        "generation": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "occurrenceID": {
+                          "type": "string"
+                        },
+                        "ownerRecordedAt": {
+                          "type": "number"
+                        },
+                        "projectID": {
+                          "type": "string"
+                        },
+                        "timeCreated": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "occurrenceID",
+                        "projectID",
+                        "directory",
+                        "eventType",
+                        "timeCreated",
+                        "generation",
+                        "ownerRecordedAt"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "source",
+                    "body",
+                    "facts",
+                    "nextOffset"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Original stored source bytes and paged delivery facts"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "NotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "LogFileNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Not found"
+          }
+        },
+        "summary": "Read durable publication evidence",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.global.publication.read({\n  ...\n})"
           }
         ]
       }

@@ -6,6 +6,7 @@ import {
   BusPublicationDeliveryReceiptTable,
   BusPublicationDeliveryTable,
   BusPublicationOutboxTable,
+  BusPublicationOwnerTable,
   BusPublicationPhaseReceiptTable,
 } from "../bus/bus.sql"
 import { ChannelIngressAcceptedTable, ChannelIngressOutcomeTable } from "../channel/channel.sql"
@@ -90,8 +91,10 @@ import { DecisionLogTable } from "../decision-log/schema"
 import { EngineMetricSpecTable, EngineMetricResultTable } from "../metrics/metrics.sql"
 import { ProviderUsageEventTable } from "../usage/usage.sql"
 import { RuntimeExecutionCapacityLeaseTable } from "../runtime/execution-capacity.sql"
+import { ExpertSquadMutationReceiptTable } from "../expert-squad/mutation-receipt.sql"
 
 export {
+  ExpertSquadMutationReceiptTable,
   ControlAccountTable,
   DatabaseAuthorityTable,
   BusPublicationDeliveryTable,
@@ -99,6 +102,7 @@ export {
   BusPublicationPhaseReceiptTable,
   BusPublicationAttemptReceiptTable,
   BusPublicationOutboxTable,
+  BusPublicationOwnerTable,
   ChannelIngressAcceptedTable,
   ChannelIngressOutcomeTable,
   SessionTable,
@@ -179,6 +183,7 @@ export {
 }
 
 export const ApplicationSchema = {
+  ExpertSquadMutationReceiptTable,
   ControlAccountTable,
   DatabaseAuthorityTable,
   BusPublicationDeliveryTable,
@@ -186,6 +191,7 @@ export const ApplicationSchema = {
   BusPublicationPhaseReceiptTable,
   BusPublicationAttemptReceiptTable,
   BusPublicationOutboxTable,
+  BusPublicationOwnerTable,
   ChannelIngressAcceptedTable,
   ChannelIngressOutcomeTable,
   SessionTable,

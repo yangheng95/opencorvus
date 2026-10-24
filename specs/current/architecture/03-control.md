@@ -304,7 +304,23 @@ Server 在 Instance disposal 之前取得的 process settlement gate 也遵守�
 `ChannelIngressResult` 是 Control result 与确定性 interaction result 的显式 union；
 只有真实 Control Agent 调用返回 `message_id`、`control_session_id` 和 tool-result refs。
 
+Channel ingress的accepted、实际effect选择和首次lease在同一writer冻结。Permission与
+Question按原interaction/request/type及`channel.ingress` causation的真实terminal恢复；
+Control按原Session/user Message与规范完成reply恢复，再复用原buildResult。调用者不能
+自述结果补回执。当前Project registry与Instance generation都须匹配原accepted；原owner
+活跃返回processing，明确OS死亡或真实lease release才可接管，结果与lease release同提交。
+未知旧effect保持可审阅历史；`GET /channel/message/:platform/:requestID`可用只读projectID
+读取已删除Project原件，正文按4096原字节分页，因果source列表最多32条，409只附首有界页。
+
+Scheduler的回复完成判定复用`session/completed-reply`的同一公共存储投影：受理集合来自
+`acceptedInputMessageIDs`（历史缺省为parent），普通tool-calls只是步骤完成；只有真实
+completed Tool outcome携带规范park/handoff control才是该类步骤的最终回复。summary、
+缺finish及失败回复不能当成功。持久单项读取、Project discovery与unanswered分页共同
+使用该合同，避免重启遗漏工具后续步骤或重复恢复已经被同一reply批量回答的输入。
+
 ## Bus — 全局事件总线
+
+Event 的执行目录由真实目标决定：既有 Session 使用其持久 directory，独立新会话使用原 Project 同 generation 的当前 worktree。在线与冷恢复均进入同一执行入口并重验 owner；Bus 来源目录只是来源事实，不作为另一份 Event 目标。合法 Project 目录迁移不会更换原 occurrence 或伪装为 owner 退休。
 
 **代码**：`src/bus/`
 

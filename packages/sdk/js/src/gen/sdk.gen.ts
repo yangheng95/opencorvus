@@ -37,6 +37,8 @@ import type {
   ChannelAttachmentGetErrors,
   ChannelAttachmentGetResponses,
   ChannelListResponses,
+  ChannelMessageInspectErrors,
+  ChannelMessageInspectResponses,
   ChannelMessageResponses,
   ChannelRuntimeResponses,
   ChannelRuntimeRestartResponses,
@@ -166,6 +168,8 @@ import type {
   ExpertSquadMulticaPreviewResponses,
   ExpertSquadMulticaSquadsErrors,
   ExpertSquadMulticaSquadsResponses,
+  ExpertSquadMutationRecoveryErrors,
+  ExpertSquadMutationRecoveryResponses,
   ExpertSquadReleasePayloadErrors,
   ExpertSquadReleasePayloadResponses,
   ExpertSquadRepairBundledErrors,
@@ -274,6 +278,10 @@ import type {
   GlobalProvidersRemoveResponses,
   GlobalProvidersTestErrors,
   GlobalProvidersTestResponses,
+  GlobalPublicationListErrors,
+  GlobalPublicationListResponses,
+  GlobalPublicationReadErrors,
+  GlobalPublicationReadResponses,
   GlobalSkillInstallErrors,
   GlobalSkillInstallResponses,
   GlobalSkillMarketDetailErrors,
@@ -1192,6 +1200,79 @@ export class Channel extends HeyApiClient {
         ...options?.headers,
         ...params.headers,
       },
+    })
+  }
+
+  /**
+   * Read original channel ingress evidence
+   *
+   * Inspect the retained input, effect and outcome JSON as original byte pages, with bounded causal source history.
+   */
+  public messageInspect<ThrowOnError extends boolean = false>(
+    parameters: {
+      platform:
+        | "slack"
+        | "telegram"
+        | "discord"
+        | "feishu"
+        | "whatsapp"
+        | "googlechat"
+        | "msteams"
+        | "line"
+        | "matrix"
+        | "mattermost"
+        | "signal"
+        | "wecom"
+        | "dingtalk"
+        | "clickclack"
+        | "imessage"
+        | "irc"
+        | "nextcloud-talk"
+        | "nostr"
+        | "qqbot"
+        | "raft"
+        | "reef"
+        | "sms"
+        | "synology-chat"
+        | "tlon"
+        | "twitch"
+        | "zalo"
+        | "zalouser"
+      requestID: string
+      directory?: string
+      projectID?: string
+      field?: "input" | "effect" | "outcome"
+      byteOffset?: number
+      afterSource?: string
+      limit?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "platform" },
+            { in: "path", key: "requestID" },
+            { in: "query", key: "directory" },
+            { in: "query", key: "projectID" },
+            { in: "query", key: "field" },
+            { in: "query", key: "byteOffset" },
+            { in: "query", key: "afterSource" },
+            { in: "query", key: "limit" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<
+      ChannelMessageInspectResponses,
+      ChannelMessageInspectErrors,
+      ThrowOnError
+    >({
+      url: "/channel/message/{platform}/{requestID}",
+      ...options,
+      ...params,
     })
   }
 
@@ -3030,7 +3111,7 @@ export class Worktree extends HeyApiClient {
   /**
    * Reset worktree
    *
-   * Reset a worktree branch to the primary default branch.
+   * Reset a worktree branch with an immutable operationID. Reuse the same ID to recover that operation; use a new ID for a new explicit reset.
    */
   public reset<ThrowOnError extends boolean = false>(
     parameters: {
@@ -3967,6 +4048,48 @@ export class ExpertSquad extends HeyApiClient {
       ThrowOnError
     >({
       url: "/expert-squad/multica/squads",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Read preserved package mutation evidence
+   *
+   * Read ordered recovery summaries or a 4096-byte original evidence page. A preservation outcome records current evidence retention, not a historical mutation success.
+   */
+  public mutationRecovery<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory?: string
+      id: string
+      installationScope: "project" | "global"
+      occurrenceID?: string
+      cursor?: string
+      byteOffset?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "query", key: "id" },
+            { in: "query", key: "installationScope" },
+            { in: "query", key: "occurrenceID" },
+            { in: "query", key: "cursor" },
+            { in: "query", key: "byteOffset" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<
+      ExpertSquadMutationRecoveryResponses,
+      ExpertSquadMutationRecoveryErrors,
+      ThrowOnError
+    >({
+      url: "/expert-squad/mutation-recovery",
       ...options,
       ...params,
     })
@@ -6943,6 +7066,84 @@ export class Providers extends HeyApiClient {
   }
 }
 
+export class Publication extends HeyApiClient {
+  /**
+   * List durable publication history
+   */
+  public list<ThrowOnError extends boolean = false>(
+    parameters: {
+      projectID: string
+      after?: string
+      limit?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "projectID" },
+            { in: "query", key: "after" },
+            { in: "query", key: "limit" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<
+      GlobalPublicationListResponses,
+      GlobalPublicationListErrors,
+      ThrowOnError
+    >({
+      url: "/global/publication",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Read durable publication evidence
+   */
+  public read<ThrowOnError extends boolean = false>(
+    parameters: {
+      projectID: string
+      occurrenceID: string
+      field?: "properties" | "causation"
+      byteOffset?: number
+      section?: "deliveries" | "receipts" | "attempts" | "phases" | "leases" | "grants"
+      offset?: number
+      limit?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "projectID" },
+            { in: "query", key: "occurrenceID" },
+            { in: "query", key: "field" },
+            { in: "query", key: "byteOffset" },
+            { in: "query", key: "section" },
+            { in: "query", key: "offset" },
+            { in: "query", key: "limit" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<
+      GlobalPublicationReadResponses,
+      GlobalPublicationReadErrors,
+      ThrowOnError
+    >({
+      url: "/global/publication/source",
+      ...options,
+      ...params,
+    })
+  }
+}
+
 export class Market extends HeyApiClient {
   /**
    * Inspect a global Skill Market candidate
@@ -7312,6 +7513,11 @@ export class Global extends HeyApiClient {
   private _providers?: Providers
   get providers(): Providers {
     return (this._providers ??= new Providers({ client: this.client }))
+  }
+
+  private _publication?: Publication
+  get publication(): Publication {
+    return (this._publication ??= new Publication({ client: this.client }))
   }
 
   private _skill?: Skill

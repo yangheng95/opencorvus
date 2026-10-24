@@ -1,161 +1,367 @@
-import { createHash } from "node:crypto"
+import { createHash, randomUUID } from "node:crypto"
 import path from "node:path"
+import z from "zod"
 import { DurablePublicationStore, type DurablePublicationOccurrence } from "@opencorvus-ai/util/durable-publication"
 import { Global } from "../global"
+import { Database } from "../storage/db"
+import { Instance } from "../project/instance"
+import { Project } from "../project/project"
+import { ProjectDirectoryAdmission } from "../project/directory-admission"
+import { Filesystem } from "../util/filesystem"
 
-/**
- * The durable readiness occurrence of one managed worktree directory.
- *
- * Git linkage is registration, not readiness: a worktree added with
- * `--no-checkout` whose population (checkout, submodules, start scripts) was
- * killed still passes `isValid`. This journal records the occurrence before
- * the `git worktree add`, advances through `created` and `populated`, and
- * settles `committed` — the READY receipt reuse requires. An occurrence
- * without that receipt is an incomplete tree whose reuse path must resume
- * population; a removed worktree forgets its occurrence.
- */
+/** Historical path receipts remain immutable evidence. Version 3 uses one
+ * Project journal, exact physical ownership and stable logical request identity. */
 export namespace WorktreeReadiness {
-  const KIND = "worktree-readiness"
+  const HISTORICAL_KIND = "worktree-readiness"
+  const KIND = "worktree-readiness-v3"
+  const OWNER_KIND = "worktree-readiness-resource"
+  const Startup = z.object({ project: z.string(), extra: z.string() }).strict()
+  const ResetAdmission = z
+    .object({
+      directoryKey: z.string(),
+      directory: z.string(),
+      generation: z.string().uuid(),
+      operationID: z.string(),
+      kind: z.literal("reclamation"),
+      timeCreated: z.number().int().optional(),
+      owner: z.object({ pid: z.number().int().positive(), processInstanceID: z.string(), occurrenceID: z.string() }),
+    })
+    .strict()
+  const Intent = z
+    .object({
+      version: z.literal(3),
+      databaseInstanceID: z.string().uuid(),
+      projectID: z.string(),
+      projectGeneration: z.string().uuid(),
+      directory: z.string(),
+      requestedDirectory: z.string(),
+      directoryKey: z.string(),
+      branch: z.string(),
+      name: z.string(),
+      primaryBranch: z.string(),
+      startup: Startup,
+      historicalOccurrenceIDs: z.array(z.string()),
+      resetOperationID: z.string().optional(),
+      resetAdmission: ResetAdmission.optional(),
+      resetOrigin: z.enum(["current", "historical_unknown"]).optional(),
+    })
+    .strict()
+  export const Recovery = z
+    .object({
+      kind: z.literal("startup_outcome_unknown"),
+      occurrenceID: z.string(),
+      message: z.string(),
+    })
+    .strict()
+  export type Recovery = z.infer<typeof Recovery>
+  export type Input = {
+    projectID: string
+    projectGeneration: string
+    directory: string
+    branch: string
+    name: string
+    primaryBranch: string
+    startup: z.infer<typeof Startup>
+    resetOperationID?: string
+    resetAdmission?: z.infer<typeof ResetAdmission>
+    resetOrigin?: "current" | "historical_unknown"
+  }
+  export type Current = {
+    id: string
+    directory: string
+    startup: z.infer<typeof Startup>
+    checkedOut: boolean
+    startupStarted: boolean
+    populated: boolean
+    ready: boolean
+    outcome?: "committed" | "rolled_back"
+    disposition?: string
+    recovery?: Recovery
+    resetOperationID?: string
+    resetAdmission?: z.infer<typeof ResetAdmission>
+    resetOrigin?: "current" | "historical_unknown"
+  }
 
-  function store(): DurablePublicationStore {
+  type ProjectOwner = { projectID: string; projectGeneration: string }
+  function caller(): ProjectOwner {
+    return { projectID: Instance.project.id, projectGeneration: Instance.projectGeneration }
+  }
+  export function requestedDirectoryKey(directory: string) {
+    const resolved = Filesystem.normalizeWindowsPath(path.resolve(directory))
+    return process.platform === "win32" ? resolved.toLowerCase() : resolved
+  }
+
+  function store() {
     return new DurablePublicationStore(path.join(Global.Path.data, "durable-publications"))
   }
-
-  /** One occurrence per directory: the receipt's lifetime is the tree's. */
-  function occurrenceID(directory: string): string {
-    return createHash("sha256").update(path.resolve(directory)).digest("hex").slice(0, 40)
+  function scope(owner: ProjectOwner) {
+    return createHash("sha256")
+      .update(JSON.stringify([Database.Identity(), owner.projectID]))
+      .digest("hex")
+      .slice(0, 40)
   }
-
-  async function read(directory: string): Promise<DurablePublicationOccurrence | undefined> {
-    try {
-      return await store().read(KIND, occurrenceID(directory))
-    } catch {
-      return undefined
-    }
+  function kind(owner: ProjectOwner) {
+    return `${KIND}-${scope(owner)}`
   }
-
-  export async function isReady(directory: string): Promise<boolean> {
-    return (await read(directory))?.terminal?.outcome === "committed"
+  function kindForID(id: string) {
+    if (!/^[a-f0-9]{40}-[a-f0-9-]{36}$/.test(id)) throw new Error(`Worktree readiness identity is not version 3: ${id}`)
+    return `${KIND}-${id.slice(0, 40)}`
   }
-
-  /**
-   * Open the occurrence for a creation. Any previous occurrence for the same
-   * directory is superseded: a crashed create rolls back, a stale receipt for
-   * a tree the caller is re-creating is removed.
-   */
-  export async function begin(input: {
-    projectID: string
-    directory: string
-    branch: string
-    name: string
-    primaryBranch: string
-  }): Promise<string> {
-    const id = occurrenceID(input.directory)
-    const existing = await read(input.directory)
-    if (existing) {
-      if (!existing.terminal) {
-        await store().settle(KIND, {
-          occurrenceID: id,
-          outcome: "rolled_back",
-          payload: { reason: "superseded by a new creation of the same directory" },
-          timeCreated: Date.now(),
-        })
-      }
-      await store().removeSettled(KIND, id)
-    }
-    await store().create({
-      occurrenceID: id,
-      kind: KIND,
-      subject: `worktree:${input.directory}`,
-      payload: {
-        projectID: input.projectID,
-        directory: input.directory,
-        branch: input.branch,
-        name: input.name,
-        primaryBranch: input.primaryBranch,
+  /** Current scoped history plus the exact immutable version 1 source, if any. */
+  export async function history(
+    directory: string,
+    owner: ProjectOwner = caller(),
+    directoryKey = ProjectDirectoryAdmission.keySync(directory),
+  ): Promise<DurablePublicationOccurrence[]> {
+    const originalID = createHash("sha256").update(path.resolve(directory)).digest("hex").slice(0, 40)
+    const original = await store()
+      .read(HISTORICAL_KIND, originalID)
+      .catch((error) => {
+        if (
+          error instanceof Error &&
+          error.message ===
+            `Durable publication intent is missing: ${store().occurrenceDirectory(HISTORICAL_KIND, originalID)}`
+        )
+          return undefined
+        throw error
+      })
+    const historicalScope = createHash("sha256").update(directoryKey).digest("hex").slice(0, 40)
+    const historical = await store().list(`${HISTORICAL_KIND}-${historicalScope}`)
+    const current = await store().list(kind(owner), (record) => {
+      const intent = Intent.parse(record.payload)
+      if (intent.databaseInstanceID !== Database.Identity() || intent.projectID !== owner.projectID)
+        throw new Error("Worktree readiness Project journal owner differs from its immutable namespace")
+      return intent.directoryKey === directoryKey || intent.requestedDirectory === requestedDirectoryKey(directory)
+    })
+    return [...(original ? [original] : []), ...historical, ...current]
+  }
+  export async function withOwner<T>(
+    directory: string,
+    run: (owner: ProjectDirectoryAdmission.ResolvedDirectory) => Promise<T>,
+  ): Promise<T> {
+    const resource = await ProjectDirectoryAdmission.resolve(directory)
+    return withHistoricalOwner(resource.directoryKey, () => run(resource))
+  }
+  /** The old canonical subject is needed when a pathname now resolves to a replacement. */
+  export async function withHistoricalOwner<T>(directoryKey: string, run: () => Promise<T>): Promise<T> {
+    return store().withSubjectLock(OWNER_KIND, `worktree:${directoryKey}`, run)
+  }
+  async function current(
+    directory: string,
+    projectID = Instance.project.id,
+    projectGeneration = Instance.projectGeneration,
+  ): Promise<DurablePublicationOccurrence | undefined> {
+    const physical = await ProjectDirectoryAdmission.observeDirectory(directory).catch(
+      (error: NodeJS.ErrnoException) => {
+        if (error.code === "ENOENT") return undefined
+        throw error
       },
-      timeCreated: Date.now(),
+    )
+    if (!physical) return undefined
+    const scoped = (await history(directory, { projectID, projectGeneration })).filter(
+      (record) => record.intent.payload.version === 3,
+    )
+    const predecessors = new Set(
+      scoped
+        .filter((occurrence) => occurrence.terminal?.outcome !== "rolled_back")
+        .flatMap((occurrence) => Intent.parse(occurrence.intent.payload).historicalOccurrenceIDs),
+    )
+    const candidates = scoped.filter((occurrence) => {
+      if (predecessors.has(occurrence.intent.occurrenceID)) return false
+      if (occurrence.terminal?.outcome === "rolled_back") return false
+      const intent = Intent.parse(occurrence.intent.payload)
+      if (intent.directoryKey !== physical.directoryKey) return false
+      if (
+        intent.databaseInstanceID !== Database.Identity() ||
+        intent.projectID !== projectID ||
+        intent.projectGeneration !== projectGeneration
+      )
+        return false
+      const created = occurrence.phases.find((phase) => phase.name === "created")
+      return (
+        created &&
+        ProjectDirectoryAdmission.sameOccurrence(
+          ProjectDirectoryAdmission.DirectoryOccurrence.parse(created.payload),
+          physical,
+        )
+      )
     })
-    return id
+    if (candidates.length > 1)
+      throw new Error(`Worktree has multiple readiness owners for one physical occurrence: ${directory}`)
+    return candidates[0]
   }
-
-  /**
-   * Open (or adopt) the occurrence for a population resume of a registered
-   * tree that has no ready receipt — a create killed mid-population, or a
-   * tree that predates the journal. The physical registration exists, so the
-   * occurrence starts at `created`.
-   */
-  export async function resume(input: {
-    projectID: string
-    directory: string
-    branch: string
-    name: string
-    primaryBranch: string
-  }): Promise<string> {
-    const existing = await read(input.directory)
-    if (existing && !existing.terminal) return existing.intent.occurrenceID
-    const id = await begin(input)
-    await markCreated(id)
-    return id
+  function projection(occurrence: DurablePublicationOccurrence): Current {
+    const intent = Intent.parse(occurrence.intent.payload)
+    const preserved = occurrence.phases.find((phase) => phase.name === "preserved")
+    const recovery = preserved ? Recovery.parse(preserved.payload) : undefined
+    return {
+      id: occurrence.intent.occurrenceID,
+      directory: intent.directory,
+      startup: intent.startup,
+      checkedOut: occurrence.phases.some((phase) => phase.name === "checked_out"),
+      startupStarted: occurrence.phases.some((phase) => phase.name === "startup_started"),
+      populated: occurrence.phases.some((phase) => phase.name === "populated"),
+      ready:
+        occurrence.terminal?.outcome === "committed" &&
+        occurrence.phases.some((phase) => phase.name === "populated") &&
+        !recovery,
+      ...(occurrence.terminal ? { outcome: occurrence.terminal.outcome } : {}),
+      ...(typeof occurrence.terminal?.payload.disposition === "string"
+        ? { disposition: occurrence.terminal.payload.disposition }
+        : {}),
+      ...(recovery ? { recovery } : {}),
+      ...(intent.resetOperationID ? { resetOperationID: intent.resetOperationID } : {}),
+      ...(intent.resetAdmission ? { resetAdmission: intent.resetAdmission } : {}),
+      ...(intent.resetOrigin ? { resetOrigin: intent.resetOrigin } : {}),
+    }
   }
-
-  export async function markCreated(id: string): Promise<void> {
-    const occurrence = await store().read(KIND, id)
-    if (occurrence.phases.some((phase) => phase.sequence === 1)) return
-    await store().appendPhase(KIND, {
+  export async function isReady(directory: string) {
+    const found = await current(directory)
+    return found ? projection(found).ready : false
+  }
+  export async function begin(
+    input: Input,
+    frozenResource?: ProjectDirectoryAdmission.ResolvedDirectory,
+  ): Promise<string> {
+    const resource = frozenResource ?? (await ProjectDirectoryAdmission.resolve(input.directory))
+    const { directoryKey } = resource
+    return withHistoricalOwner(directoryKey, async () => {
+      if (Project.occurrence(input.projectID)?.generation !== input.projectGeneration)
+        throw new Error("Worktree readiness Project identity differs from its caller")
+      const historical = await history(input.directory, input, directoryKey)
+      const predecessors = new Set(
+        historical
+          .filter(
+            (occurrence) => occurrence.intent.payload.version === 3 && occurrence.terminal?.outcome !== "rolled_back",
+          )
+          .flatMap((occurrence) => Intent.parse(occurrence.intent.payload).historicalOccurrenceIDs),
+      )
+      const id = `${scope(input)}-${randomUUID()}`
+      await store().create({
+        occurrenceID: id,
+        kind: kind(input),
+        subject: `worktree:${directoryKey}`,
+        payload: Intent.parse({
+          ...input,
+          version: 3,
+          directory: resource.physicalPath,
+          requestedDirectory: requestedDirectoryKey(input.directory),
+          directoryKey,
+          databaseInstanceID: Database.Identity(),
+          historicalOccurrenceIDs: historical
+            .filter((occurrence) => !predecessors.has(occurrence.intent.occurrenceID))
+            .map((occurrence) => occurrence.intent.occurrenceID),
+        }),
+        timeCreated: Date.now(),
+      })
+      return id
+    })
+  }
+  export async function resume(
+    input: Input,
+    frozenResource?: ProjectDirectoryAdmission.ResolvedDirectory,
+  ): Promise<Current> {
+    const resource = frozenResource ?? (await ProjectDirectoryAdmission.resolve(input.directory))
+    const { directoryKey } = resource
+    const physical = await ProjectDirectoryAdmission.observeDirectory(input.directory)
+    if (physical.directoryKey !== directoryKey)
+      throw new Error("Worktree canonical resource changed after owner admission")
+    const found = await current(resource.physicalPath, input.projectID, input.projectGeneration)
+    if (found) return projection(found)
+    const id = await begin(input, resource)
+    await markCreated(id, physical)
+    return projection(await store().read(kindForID(id), id))
+  }
+  export async function inspect(
+    input: Pick<Input, "directory" | "projectID" | "projectGeneration">,
+  ): Promise<Current | undefined> {
+    const found = await current(input.directory, input.projectID, input.projectGeneration)
+    return found ? projection(found) : undefined
+  }
+  export async function read(id: string): Promise<Current> {
+    const occurrence = await store().read(kindForID(id), id)
+    const current = projection(occurrence)
+    const resource = await ProjectDirectoryAdmission.resolve(current.directory)
+    if (resource.directoryKey !== Intent.parse(occurrence.intent.payload).directoryKey)
+      throw new Error("Worktree physical execution path differs from its immutable resource subject")
+    return { ...current, directory: resource.physicalPath }
+  }
+  export async function retire(id: string): Promise<void> {
+    const occurrence = await store().read(kindForID(id), id)
+    if (occurrence.terminal) return
+    await phase(id, 6, "resource_retired", { disposition: "original_physical_resource_retired" })
+    await store().settle(kindForID(id), {
       occurrenceID: id,
-      sequence: 1,
-      name: "created",
-      payload: {},
+      outcome: "committed",
+      payload: { disposition: "resource_retired" },
       timeCreated: Date.now(),
     })
   }
-
-  export async function markPopulated(id: string): Promise<void> {
-    const occurrence = await store().read(KIND, id)
-    if (occurrence.phases.some((phase) => phase.sequence === 2)) return
-    await store().appendPhase(KIND, {
-      occurrenceID: id,
-      sequence: 2,
-      name: "populated",
-      payload: {},
-      timeCreated: Date.now(),
-    })
-  }
-
-  /** The READY receipt: reuse requires exactly this. */
-  export async function commitReady(id: string): Promise<void> {
-    await store().settle(KIND, { occurrenceID: id, outcome: "committed", payload: {}, timeCreated: Date.now() })
-  }
-
-  export async function rollback(id: string, reason: string): Promise<void> {
-    try {
-      const occurrence = await store().read(KIND, id)
-      if (occurrence.terminal) return
-    } catch {
+  async function phase(id: string, sequence: number, name: string, payload: Record<string, string> = {}) {
+    const occurrence = await store().read(kindForID(id), id)
+    const existing = occurrence.phases.find((item) => item.sequence === sequence)
+    if (existing) {
+      if (existing.name !== name || JSON.stringify(existing.payload) !== JSON.stringify(payload))
+        throw new Error(`Worktree readiness phase identity changed: ${id}:${sequence}`)
       return
     }
-    await store().settle(KIND, {
+    await store().appendPhase(kindForID(id), { occurrenceID: id, sequence, name, payload, timeCreated: Date.now() })
+  }
+  export async function markCreated(id: string, expected?: ProjectDirectoryAdmission.DirectoryOccurrence) {
+    const occurrence = await store().read(kindForID(id), id)
+    const intent = Intent.parse(occurrence.intent.payload)
+    const physical = await ProjectDirectoryAdmission.observeDirectory(intent.directory)
+    if (expected && !ProjectDirectoryAdmission.sameOccurrence(expected, physical))
+      throw new Error("Worktree physical occurrence changed before readiness binding")
+    await phase(id, 1, "created", physical)
+  }
+  export async function markCheckedOut(id: string) {
+    await phase(id, 2, "checked_out")
+  }
+  export async function markStartupStarted(id: string) {
+    await phase(id, 3, "startup_started")
+  }
+  export async function markPopulated(id: string) {
+    await phase(id, 4, "populated")
+  }
+  export async function commitReady(id: string) {
+    const occurrence = await store().read(kindForID(id), id)
+    if (occurrence.terminal?.outcome === "committed") return
+    if (!occurrence.phases.some((phase) => phase.name === "populated"))
+      throw new Error(`Worktree readiness has no completed population: ${id}`)
+    await store().settle(kindForID(id), {
+      occurrenceID: id,
+      outcome: "committed",
+      payload: {},
+      timeCreated: Date.now(),
+    })
+  }
+  export async function preserve(id: string): Promise<Recovery> {
+    const recovery: Recovery = {
+      kind: "startup_outcome_unknown",
+      occurrenceID: id,
+      message:
+        "The existing worktree is preserved. Its historical startup outcome is unknown; review the original startup evidence before any explicit new startup operation.",
+    }
+    const occurrence = await store().read(kindForID(id), id)
+    if (!occurrence.phases.some((phase) => phase.name === "preserved")) await phase(id, 5, "preserved", recovery)
+    if (!occurrence.terminal)
+      await store().settle(kindForID(id), {
+        occurrenceID: id,
+        outcome: "committed",
+        payload: { disposition: "population_preserved" },
+        timeCreated: Date.now(),
+      })
+    return recovery
+  }
+  export async function rollback(id: string, reason: string) {
+    const occurrence = await store().read(kindForID(id), id)
+    if (occurrence.terminal) return
+    await store().settle(kindForID(id), {
       occurrenceID: id,
       outcome: "rolled_back",
       payload: { reason },
       timeCreated: Date.now(),
     })
-  }
-
-  /** A removed worktree has no readiness: settle anything open and forget. */
-  export async function forget(directory: string): Promise<void> {
-    const existing = await read(directory)
-    if (!existing) return
-    const id = existing.intent.occurrenceID
-    if (!existing.terminal) {
-      await store().settle(KIND, {
-        occurrenceID: id,
-        outcome: "rolled_back",
-        payload: { reason: "worktree removed" },
-        timeCreated: Date.now(),
-      })
-    }
-    await store().removeSettled(KIND, id)
   }
 }

@@ -5,7 +5,7 @@ import { Session } from "@/session"
 import { Message } from "@/session"
 import { SessionPrompt } from "@/session/prompt"
 import { MessageStore } from "@/session/message-store"
-import { Database, and, eq } from "@/storage/db"
+import { Database, NotFoundError, and, eq, sql } from "@/storage/db"
 import { EngineTaskTable } from "@/engine"
 import { ControlMessageInput, ControlMessageResult, PanelMessageStreamEvent } from "./message-schema"
 import { ControlPromptContext, withControlPromptContext } from "./prompt"
@@ -16,6 +16,8 @@ import { ChannelId } from "@/channel/catalog"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import { ProjectMemory } from "@/memory/project-memory"
 import { assertPublicSessionOperationAuthority } from "@/mission/public-session-authority"
+import { BusPublicationOutboxTable } from "@/bus/bus.sql"
+import { isCompletedReplyToUserMessage } from "@/session/completed-reply"
 
 const log = Log.create({ service: "control-message" })
 
@@ -28,6 +30,96 @@ type ControlSession = {
 }
 
 export namespace ControlMessage {
+  /** Read the exact completed turn authored by this original request. This
+   * shares the normal result projection and never starts a prompt or a Tool. */
+  export async function recover(input: { projectID: string; causation: Bus.Causation }) {
+    const sources = Database.use((db) =>
+      db
+        .select()
+        .from(BusPublicationOutboxTable)
+        .where(
+          and(
+            eq(BusPublicationOutboxTable.project_id, input.projectID),
+            sql`json_extract(${BusPublicationOutboxTable.causation}, '$.source') = ${input.causation.source}`,
+            sql`json_extract(${BusPublicationOutboxTable.causation}, '$.occurrenceID') = ${input.causation.occurrenceID}`,
+          ),
+        )
+        .all(),
+    )
+    const users = new Map<string, Message.User>()
+    for (const source of sources) {
+      if (source.event_type !== Message.Event.Created.type) continue
+      const parsed = Message.User.safeParse((source.properties as { info?: unknown })?.info)
+      if (parsed.success && parsed.data.agent === "control" && parsed.data.author === "user")
+        users.set(parsed.data.id, parsed.data)
+    }
+    if (users.size === 0) return
+    if (users.size !== 1)
+      throw new Error(`Control request ${input.causation.occurrenceID} has multiple original user Messages`)
+    const originalUser = [...users.values()][0]!
+    const sessionSources = sources.filter(
+      (source) =>
+        source.event_type === Session.Event.Created.type &&
+        (source.properties as { info?: { id?: string } })?.info?.id === originalUser.sessionID,
+    )
+    if (sessionSources.length !== 1)
+      throw new Error(`Control request ${input.causation.occurrenceID} has no exact original Session creation`)
+    const originalSession = Session.Info.parse((sessionSources[0]!.properties as { info: unknown }).info)
+    if (originalSession.kind !== "assistant" || originalSession.projectID !== input.projectID)
+      throw new Error(`Control request ${input.causation.occurrenceID} original Session has conflicting ownership`)
+    const session = await Session.getInProject({ sessionID: originalSession.id, projectID: input.projectID }).catch(
+      (error) => {
+        if (error instanceof NotFoundError) return
+        throw error
+      },
+    )
+    if (!session || session.kind !== originalSession.kind) return
+    const user = await MessageStore.get({ sessionID: originalUser.sessionID, messageID: originalUser.id }).catch(
+      (error) => {
+        if (error instanceof NotFoundError) return
+        throw error
+      },
+    )
+    if (user?.info.role !== "user" || user.info.agent !== "control" || user.info.author !== "user") return
+    const turnMessages = (await Session.messages({ sessionID: session.id })).filter(
+      (message) =>
+        message.info.id === originalUser.id ||
+        (message.info.role === "assistant" && Message.acceptsInputMessage(message.info, originalUser.id)),
+    )
+    const completed = turnMessages.filter((message) => isCompletedReplyToUserMessage(message, originalUser.id))
+    if (completed.length === 0) return
+    if (completed.length !== 1)
+      throw new Error(
+        `Control request ${input.causation.occurrenceID} has multiple completed replies to its original user Message`,
+      )
+    const finalMessage = completed[0]!
+    const terminalSources = sources.filter(
+      (source) =>
+        source.event_type === Message.Event.Updated.type &&
+        (source.properties as { info?: { id?: string; role?: string; time?: { completed?: number } } })?.info?.id ===
+          finalMessage.info.id &&
+        (source.properties as { info?: { time?: { completed?: number } } }).info?.time?.completed ===
+          (finalMessage.info.role === "assistant" ? finalMessage.info.time.completed : undefined),
+    )
+    if (terminalSources.length === 0)
+      throw new Error(`Control request ${input.causation.occurrenceID} has no exact completed Message publication`)
+    for (const source of terminalSources) {
+      const terminal = Message.Assistant.parse((source.properties as { info: unknown }).info)
+      if (
+        finalMessage.info.role !== "assistant" ||
+        terminal.sessionID !== originalSession.id ||
+        terminal.parentID !== finalMessage.info.parentID ||
+        terminal.finish !== finalMessage.info.finish ||
+        terminal.author !== finalMessage.info.author ||
+        terminal.agent !== finalMessage.info.agent
+      )
+        throw new Error(
+          `Control request ${input.causation.occurrenceID} completed publication conflicts with its original reply`,
+        )
+    }
+    return buildResult({ control: { info: session, created: true }, finalMessage, turnMessages })
+  }
+
   export async function assertPublicSessionAuthority(raw: z.input<typeof ControlMessageInput>): Promise<void> {
     const input = ControlMessageInput.parse(raw)
     await resolveReusableSession(input)

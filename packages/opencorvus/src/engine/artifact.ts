@@ -1,8 +1,5 @@
 import { Identifier } from "@/id/id"
-import {
-  ArtifactProducerSchema,
-  ArtifactSchemaLimits,
-} from "@opencorvus-ai/plugin/artifact-catalog"
+import { ArtifactProducerSchema, ArtifactSchemaLimits } from "@opencorvus-ai/plugin/artifact-catalog"
 import { Database, and, eq, sql, type SQL } from "@/storage/db"
 import {
   EngineArtifactCatalogRevisionTable,
@@ -18,6 +15,10 @@ import {
 import { engineArtifactCatalogLabelIndex } from "./artifact-catalog-constants"
 import { Event } from "./model"
 import { EngineProtocol } from "./protocol"
+import {
+  appendExpertSquadMutationReceipt,
+  assertExpertSquadMutationReceiptProjection,
+} from "./expert-squad-mutation-receipt"
 
 export type EngineArtifactRow = typeof EngineArtifactTable.$inferSelect
 
@@ -50,9 +51,7 @@ export interface EngineArtifactWhereUpdateInput {
 
 function exactArtifactLabel(label: string): string {
   if (label.length === 0 || label.length > ArtifactSchemaLimits.storedLabelLength) {
-    throw new Error(
-      `Engine Artifact label must contain 1-${ArtifactSchemaLimits.storedLabelLength} characters`,
-    )
+    throw new Error(`Engine Artifact label must contain 1-${ArtifactSchemaLimits.storedLabelLength} characters`)
   }
   return label
 }
@@ -90,28 +89,32 @@ function artifactValues(input: EngineArtifactInput, catalogRevision: number) {
   const payloadText = serializeEngineArtifactPayload(input.payload)
   const metadata = deriveEngineArtifactCatalogMetadata({ kind: input.kind, payloadText })
   return {
-    id,
-    task_id: input.taskID,
-    kind: input.kind,
-    label,
-    payload: sql`${payloadText}`,
-    ...metadata,
-    catalog_metadata_sha256: engineArtifactCatalogMetadataSHA256({
-      artifact_id: id,
+    payloadText,
+    values: {
+      id,
       task_id: input.taskID,
       kind: input.kind,
-      label_index: engineArtifactCatalogLabelIndex(label),
+      label,
+      payload: sql`${payloadText}`,
+      ...metadata,
+      catalog_metadata_sha256: engineArtifactCatalogMetadataSHA256({
+        artifact_id: id,
+        task_id: input.taskID,
+        kind: input.kind,
+        label_index: engineArtifactCatalogLabelIndex(label),
+        time_created: timeCreated,
+        time_updated: timeUpdated,
+        ...metadata,
+      }),
+      catalog_revision: catalogRevision,
       time_created: timeCreated,
       time_updated: timeUpdated,
-      ...metadata,
-    }),
-    catalog_revision: catalogRevision,
-    time_created: timeCreated,
-    time_updated: timeUpdated,
+    },
   }
 }
 
 function artifactPatchValues(
+  db: Database.TxOrDb,
   row: EngineArtifactRow,
   input: {
     label?: string
@@ -119,6 +122,21 @@ function artifactPatchValues(
     timeUpdated?: number
   },
 ) {
+  const payloadText =
+    input.payload !== undefined
+      ? serializeEngineArtifactPayload(input.payload)
+      : db
+          .select({ value: sql<string>`CAST(${EngineArtifactTable.payload} AS TEXT)` })
+          .from(EngineArtifactTable)
+          .where(eq(EngineArtifactTable.id, row.id))
+          .get()!.value
+  assertExpertSquadMutationReceiptProjection(db, {
+    artifactID: row.id,
+    taskID: row.task_id,
+    kind: row.kind,
+    payload: input.payload ?? row.payload,
+    payloadText,
+  })
   const timeUpdated = input.timeUpdated ?? Date.now()
   const set: Partial<typeof EngineArtifactTable.$inferInsert> = {
     time_updated: timeUpdated,
@@ -140,7 +158,6 @@ function artifactPatchValues(
     catalog_search_text_truncated: row.catalog_search_text_truncated,
   }
   if (input.payload !== undefined) {
-    const payloadText = serializeEngineArtifactPayload(input.payload)
     set.payload = sql`${payloadText}` as never
     metadata = deriveEngineArtifactCatalogMetadata({ kind: row.kind, payloadText })
     Object.assign(set, metadata)
@@ -154,13 +171,43 @@ function artifactPatchValues(
     time_updated: timeUpdated,
     ...metadata,
   })
-  return set
+  return { values: set, payloadText, payload: input.payload ?? row.payload }
+}
+
+function appendPatchedMutationReceipt(
+  db: Database.TxOrDb,
+  row: EngineArtifactRow,
+  patch: ReturnType<typeof artifactPatchValues>,
+) {
+  appendExpertSquadMutationReceipt(db, {
+    artifactID: row.id,
+    taskID: row.task_id,
+    kind: row.kind,
+    payload: patch.payload,
+    payloadText: patch.payloadText,
+    timeCreated: row.time_created,
+  })
 }
 
 export function insertEngineArtifact(db: Database.TxOrDb, input: EngineArtifactInput): string {
   return artifactWriteTransaction(db, () => {
-    const values = artifactValues(input, allocateCatalogRevision(db))
+    const { values, payloadText } = artifactValues(input, allocateCatalogRevision(db))
+    assertExpertSquadMutationReceiptProjection(db, {
+      artifactID: values.id,
+      taskID: input.taskID,
+      kind: input.kind,
+      payload: input.payload,
+      payloadText,
+    })
     db.insert(EngineArtifactTable).values(values).run()
+    appendExpertSquadMutationReceipt(db, {
+      artifactID: values.id,
+      taskID: input.taskID,
+      kind: input.kind,
+      payload: input.payload,
+      payloadText,
+      timeCreated: values.time_created,
+    })
     EngineProtocol.emitInTransaction(
       Event.ArtifactPersisted,
       {
@@ -184,10 +231,15 @@ export function patchEngineArtifact(db: Database.TxOrDb, input: EngineArtifactUp
     const row = db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, input.id)).get()
     if (!row) throw new Error(`Engine Artifact ${input.id} does not exist`)
     const catalogRevision = allocateCatalogRevision(db)
-    db.update(EngineArtifactTable)
-      .set({ ...artifactPatchValues(row, input), catalog_revision: catalogRevision })
+    const patch = artifactPatchValues(db, row, input)
+    const updated = db
+      .update(EngineArtifactTable)
+      .set({ ...patch.values, catalog_revision: catalogRevision })
       .where(eq(EngineArtifactTable.id, input.id))
-      .run()
+      .returning()
+      .get()
+    if (!updated) return
+    appendPatchedMutationReceipt(db, updated, patch)
     EngineProtocol.emitInTransaction(
       Event.ArtifactPersisted,
       {
@@ -214,10 +266,15 @@ export function updateEngineArtifactsWhere(db: Database.TxOrDb, input: EngineArt
         throw new Error(`Conditional Engine Artifact update selected ${row.kind}; expected ${input.kind}`)
       }
       const catalogRevision = allocateCatalogRevision(db)
-      db.update(EngineArtifactTable)
-        .set({ ...artifactPatchValues(row, normalized), catalog_revision: catalogRevision })
+      const patch = artifactPatchValues(db, row, normalized)
+      const updated = db
+        .update(EngineArtifactTable)
+        .set({ ...patch.values, catalog_revision: catalogRevision })
         .where(and(input.where, eq(EngineArtifactTable.id, row.id)))
-        .run()
+        .returning()
+        .get()
+      if (!updated) continue
+      appendPatchedMutationReceipt(db, updated, patch)
       EngineProtocol.emitInTransaction(
         Event.ArtifactPersisted,
         {
@@ -245,12 +302,15 @@ export function updateEngineArtifactWhereReturning(
         throw new Error(`Conditional Engine Artifact update selected ${row.kind}; expected ${input.kind}`)
       }
       const catalogRevision = allocateCatalogRevision(db)
+      const patch = artifactPatchValues(db, row, normalized)
       const updated = db
         .update(EngineArtifactTable)
-        .set({ ...artifactPatchValues(row, normalized), catalog_revision: catalogRevision })
+        .set({ ...patch.values, catalog_revision: catalogRevision })
         .where(and(input.where, eq(EngineArtifactTable.id, row.id)))
         .returning()
         .get()
+      if (!updated) continue
+      appendPatchedMutationReceipt(db, updated, patch)
       EngineProtocol.emitInTransaction(
         Event.ArtifactPersisted,
         {

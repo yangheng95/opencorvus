@@ -182,6 +182,7 @@ export namespace Workspace {
         })
       requireCurrentProjectGeneration(currentEntry.projectID, currentEntry.projectGeneration, currentEntry.workspaceID)
       const worktree = await Worktree.create({ name: currentEntry.plan.info.name, reuseIfValid: true })
+      Worktree.assertReady(worktree)
       if (
         worktree.name !== currentEntry.plan.info.name ||
         worktree.branch !== currentEntry.plan.info.branch ||

@@ -51,9 +51,9 @@ const DECLARED_OWNERS: Record<string, Declaration> = {
   },
   "channel/ingress.ts": {
     targets: ["effect"],
-    sites: 1,
+    sites: 3,
     release:
-      "The outcome receipt releases in its own transaction; a failing executeMessage hands ownership back through releaseControlLeaseOnErrorPath.",
+      "Initial accepted admission, fact-proven recovery, and unchanged-original-owner settlement after expiry acquire the same effect namespace. settleOutcome writes the immutable outcome and releases its current exact lease in one transaction. endOriginalLeaseOnError releases only the same original lease ID and owner; if that unchanged lease has expired it obtains and immediately releases a current lease in that transaction. A superseded writer cannot release the successor, and recovery observes actual physical death or a recorded release rather than treating natural expiry as death.",
   },
   "engine/build-observation-cleanup.ts": {
     targets: ["build_cleanup"],

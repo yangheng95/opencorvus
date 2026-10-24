@@ -19,7 +19,14 @@ export type EventJobFireRow = typeof EventJobFireTable.$inferSelect & {
   target_session_id: string
   creates_session: boolean
   status: "pending" | "running" | "retry_wait" | "succeeded" | "disposition"
-  disposition: "causal_cycle" | "cooldown" | "job_disabled" | "mission_closed" | "target_deleted" | null
+  disposition:
+    | "causal_cycle"
+    | "cooldown"
+    | "job_disabled"
+    | "mission_closed"
+    | "target_deleted"
+    | "owner_unresolved"
+    | null
   closure_event_id: string | null
   message_id: string | null
   owner_id: string | null
@@ -115,7 +122,10 @@ function requestedValues(values: readonly string[], label: string) {
   if (values.length === 0 || values.length > EVENT_FRONTIER_PAGE_SIZE) {
     throw new Error(`${label} set must contain between 1 and ${EVENT_FRONTIER_PAGE_SIZE} IDs`)
   }
-  return sql.join(values.map((value) => sql`(${value})`), sql`, `)
+  return sql.join(
+    values.map((value) => sql`(${value})`),
+    sql`, `,
+  )
 }
 
 type EventQueuePosition = { definition_id: string; queue_position: number }
@@ -214,24 +224,20 @@ function projectEventFireHeadsInTransaction(
   input.observe?.("leases")
   const leases = currentControlLeasesInTransaction(db, "event_fire", fireIDs)
   return page.map((fire) => {
-      const retry = retryByFire.get(fire.id)
-      const lease = leases.get(fire.id)
-      const status =
-        (retry?.retry_at ?? 0) > input.now
-          ? "retry_wait"
-          : lease && lease.expires_at > input.now
-            ? "running"
-            : "pending"
-      return {
-        fire,
-        definitionID: fire.definition_id,
-        projectID: input.projectID,
-        status,
-        retryAt: retry?.retry_at ?? null,
-        leaseUntil: lease?.expires_at ?? 0,
-        ownerID: lease?.owner_occurrence_id ?? null,
-      }
-    })
+    const retry = retryByFire.get(fire.id)
+    const lease = leases.get(fire.id)
+    const status =
+      (retry?.retry_at ?? 0) > input.now ? "retry_wait" : lease && lease.expires_at > input.now ? "running" : "pending"
+    return {
+      fire,
+      definitionID: fire.definition_id,
+      projectID: input.projectID,
+      status,
+      retryAt: retry?.retry_at ?? null,
+      leaseUntil: lease?.expires_at ?? 0,
+      ownerID: lease?.owner_occurrence_id ?? null,
+    }
+  })
 }
 
 export function currentEventFireHeadPageInTransaction(
@@ -300,10 +306,7 @@ export function currentEventFireHeadForOccurrenceInTransaction(
     .from(EventJobFireTable)
     .innerJoin(
       EventJobTable,
-      and(
-        eq(EventJobTable.definition_id, EventJobFireTable.definition_id),
-        eq(EventJobTable.revision, 1),
-      ),
+      and(eq(EventJobTable.definition_id, EventJobFireTable.definition_id), eq(EventJobTable.revision, 1)),
     )
     .where(eq(EventJobFireTable.id, input.fireID))
     .get()
@@ -358,23 +361,13 @@ function currentEventFireReceiptInTransaction(db: Database.TxOrDb, fireID: strin
   const terminal = db
     .select()
     .from(EventJobFireReceiptTable)
-    .where(
-      and(
-        eq(EventJobFireReceiptTable.fire_id, fireID),
-        sql`${EventJobFireReceiptTable.outcome}<>'retry_wait'`,
-      ),
-    )
+    .where(and(eq(EventJobFireReceiptTable.fire_id, fireID), sql`${EventJobFireReceiptTable.outcome}<>'retry_wait'`))
     .get()
   if (terminal) return terminal
   return db
     .select()
     .from(EventJobFireReceiptTable)
-    .where(
-      and(
-        eq(EventJobFireReceiptTable.fire_id, fireID),
-        eq(EventJobFireReceiptTable.outcome, "retry_wait"),
-      ),
-    )
+    .where(and(eq(EventJobFireReceiptTable.fire_id, fireID), eq(EventJobFireReceiptTable.outcome, "retry_wait")))
     .orderBy(desc(EventJobFireReceiptTable.time_created), desc(EventJobFireReceiptTable.id))
     .get()
 }
@@ -385,15 +378,32 @@ function currentEventFireReceiptInTransaction(db: Database.TxOrDb, fireID: strin
  * job's fires re-read the clock once per fire and two fires in one projection
  * could land on opposite sides of a lease expiry.
  */
-export function projectEventFireInTransaction(db: Database.TxOrDb, row: typeof EventJobFireTable.$inferSelect, now: number): EventJobFireRow {
-  const definition = db.select({ definitionID: EventJobTable.definition_id, sessionID: EventJobTable.session_id }).from(EventJobTable)
-    .where(eq(EventJobTable.id, row.event_job_revision_id)).get()
-  const occurrence = db.select().from(EventOccurrenceTable).where(eq(EventOccurrenceTable.id, row.event_occurrence_id)).get()
-  const bus = occurrence?.bus_outbox_id ? db.select({ projectID: BusPublicationOutboxTable.project_id, eventType: BusPublicationOutboxTable.event_type })
-    .from(BusPublicationOutboxTable).where(eq(BusPublicationOutboxTable.occurrence_id, occurrence.bus_outbox_id)).get() : undefined
+export function projectEventFireInTransaction(
+  db: Database.TxOrDb,
+  row: typeof EventJobFireTable.$inferSelect,
+  now: number,
+): EventJobFireRow {
+  const definition = db
+    .select({ definitionID: EventJobTable.definition_id, sessionID: EventJobTable.session_id })
+    .from(EventJobTable)
+    .where(eq(EventJobTable.id, row.event_job_revision_id))
+    .get()
+  const occurrence = db
+    .select()
+    .from(EventOccurrenceTable)
+    .where(eq(EventOccurrenceTable.id, row.event_occurrence_id))
+    .get()
+  const bus = occurrence?.bus_outbox_id
+    ? db
+        .select({ projectID: BusPublicationOutboxTable.project_id, eventType: BusPublicationOutboxTable.event_type })
+        .from(BusPublicationOutboxTable)
+        .where(eq(BusPublicationOutboxTable.occurrence_id, occurrence.bus_outbox_id))
+        .get()
+    : undefined
   const projectID = bus?.projectID ?? occurrence?.project_id
   const eventType = bus?.eventType ?? occurrence?.event_type
-  if (!definition || !occurrence || !projectID || !eventType) throw new Error(`Event fire ${row.id} has incomplete immutable definition/occurrence authority`)
+  if (!definition || !occurrence || !projectID || !eventType)
+    throw new Error(`Event fire ${row.id} has incomplete immutable definition/occurrence authority`)
   const targetSessionID = definition.sessionID ?? row.created_session_id
   if (!targetSessionID) throw new Error(`Event fire ${row.id} has no exact target Session authority`)
   const ancestry: Array<{ fireID: string; jobID: string }> = []
@@ -402,11 +412,21 @@ export function projectEventFireInTransaction(db: Database.TxOrDb, row: typeof E
   while (parentID) {
     if (seen.has(parentID)) throw new Error(`Event fire ${row.id} contains a causation cycle`)
     seen.add(parentID)
-    const parent = db.select({ id: EventJobFireTable.id, revisionID: EventJobFireTable.event_job_revision_id, parentID: EventJobFireTable.causation_fire_id })
-      .from(EventJobFireTable).where(eq(EventJobFireTable.id, parentID)).get()
+    const parent = db
+      .select({
+        id: EventJobFireTable.id,
+        revisionID: EventJobFireTable.event_job_revision_id,
+        parentID: EventJobFireTable.causation_fire_id,
+      })
+      .from(EventJobFireTable)
+      .where(eq(EventJobFireTable.id, parentID))
+      .get()
     if (!parent) throw new Error(`Event fire ${row.id} references missing parent fire ${parentID}`)
-    const parentDefinition = db.select({ definitionID: EventJobTable.definition_id }).from(EventJobTable)
-      .where(eq(EventJobTable.id, parent.revisionID)).get()
+    const parentDefinition = db
+      .select({ definitionID: EventJobTable.definition_id })
+      .from(EventJobTable)
+      .where(eq(EventJobTable.id, parent.revisionID))
+      .get()
     if (!parentDefinition) throw new Error(`Event fire ${parent.id} references missing definition ${parent.revisionID}`)
     ancestry.unshift({ fireID: parent.id, jobID: parentDefinition.definitionID })
     parentID = parent.parentID
@@ -437,7 +457,15 @@ export function projectEventFireInTransaction(db: Database.TxOrDb, row: typeof E
     .get()
   const lease = currentControlLeaseInTransaction(db, "event_fire", row.id)
   const disposition = latest?.disposition ?? null
-  const status = disposition ? "disposition" : latest?.outcome === "succeeded" ? "succeeded" : latest?.outcome === "retry_wait" && (latest.retry_at ?? 0) > now ? "retry_wait" : lease && lease.expires_at > now ? "running" : "pending"
+  const status = disposition
+    ? "disposition"
+    : latest?.outcome === "succeeded"
+      ? "succeeded"
+      : latest?.outcome === "retry_wait" && (latest.retry_at ?? 0) > now
+        ? "retry_wait"
+        : lease && lease.expires_at > now
+          ? "running"
+          : "pending"
   return {
     ...row,
     event_job_id: definition.definitionID,
@@ -456,8 +484,7 @@ export function projectEventFireInTransaction(db: Database.TxOrDb, row: typeof E
     attempt: leaseAggregate?.attempt ?? 0,
     error: latest?.error ?? null,
     time_started: leaseAggregate?.timeStarted ?? null,
-    time_completed:
-      latest?.outcome === "succeeded" || latest?.outcome === "disposition" ? latest.time_created : null,
+    time_completed: latest?.outcome === "succeeded" || latest?.outcome === "disposition" ? latest.time_created : null,
     time_updated: latest?.time_created ?? lease?.time_activated ?? row.time_created,
     retry_at: latest?.retry_at ?? null,
   }
@@ -471,11 +498,27 @@ export type EventJobRow = typeof EventJobTable.$inferSelect & {
   last_error: string | null
 }
 
-export function projectEventJobInTransaction(db: Database.TxOrDb, row: typeof EventJobTable.$inferSelect, now: number): EventJobRow {
-  const revisions = db.select({ id: EventJobTable.id }).from(EventJobTable).where(eq(EventJobTable.definition_id, row.definition_id)).all().map((entry) => entry.id)
-  const fires = revisions.length === 0 ? [] : db.select().from(EventJobFireTable).where(inArray(EventJobFireTable.event_job_revision_id, revisions))
-    .orderBy(asc(EventJobFireTable.queue_position)).all()
-    .map((fire) => projectEventFireInTransaction(db, fire, now))
+export function projectEventJobInTransaction(
+  db: Database.TxOrDb,
+  row: typeof EventJobTable.$inferSelect,
+  now: number,
+): EventJobRow {
+  const revisions = db
+    .select({ id: EventJobTable.id })
+    .from(EventJobTable)
+    .where(eq(EventJobTable.definition_id, row.definition_id))
+    .all()
+    .map((entry) => entry.id)
+  const fires =
+    revisions.length === 0
+      ? []
+      : db
+          .select()
+          .from(EventJobFireTable)
+          .where(inArray(EventJobFireTable.event_job_revision_id, revisions))
+          .orderBy(asc(EventJobFireTable.queue_position))
+          .all()
+          .map((fire) => projectEventFireInTransaction(db, fire, now))
   const latest = fires.at(-1)
   let failures = 0
   for (const fire of fires.toReversed()) {

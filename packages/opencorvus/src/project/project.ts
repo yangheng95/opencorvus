@@ -705,6 +705,10 @@ export namespace Project {
       }
       return { id: current.id, sandbox: directory, worktree: directory }
     })
+    // An abandoned reset owns a child namespace that would otherwise close
+    // registration of the whole Project. Its domain settles exact dead owners
+    // from durable evidence before this new registration is admitted.
+    await (await import("../worktree")).Worktree.recoverAbandonedResets({ projectID: data.id, directory })
     const proposedSandbox =
       data.sandbox !== data.worktree && !(await sameFilesystemLocation(data.sandbox, data.worktree))
         ? data.sandbox

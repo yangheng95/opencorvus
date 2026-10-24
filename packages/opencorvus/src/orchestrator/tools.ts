@@ -2344,6 +2344,7 @@ export function createOrchestratorTools(input: {
         taskID: worktreeTaskID,
         sessionID,
       })
+      Worktree.assertReady(workspace)
       log.info("dispatch_agent created isolated worktree", {
         taskID: worktreeTaskID,
         targetAgentID,

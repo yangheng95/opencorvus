@@ -24,19 +24,41 @@ export const BusPublicationOutboxTable = sqliteTable(
     time_created: integer().notNull(),
   },
   (table) => [
-    check("bus_publication_outbox_task_status_is_projection", sql`${table.event_type} <> 'task.updated' OR json_type(${table.properties}, '$.status') IS NULL`),
+    check(
+      "bus_publication_outbox_task_status_is_projection",
+      sql`${table.event_type} <> 'task.updated' OR json_type(${table.properties}, '$.status') IS NULL`,
+    ),
     index("bus_publication_outbox_project_idx").on(table.project_id, table.time_created),
     index("bus_publication_outbox_message_move_idx")
-      .on(table.project_id, sql`json_extract(${table.properties}, '$.info.id')`,
-        sql`json_extract(${table.properties}, '$.sourceSessionID')`, sql`json_extract(${table.properties}, '$.info.sessionID')`)
+      .on(
+        table.project_id,
+        sql`json_extract(${table.properties}, '$.info.id')`,
+        sql`json_extract(${table.properties}, '$.sourceSessionID')`,
+        sql`json_extract(${table.properties}, '$.info.sessionID')`,
+      )
       .where(sql`${table.event_type} = 'message.moved'`),
     index("bus_publication_outbox_part_removal_idx")
-      .on(table.project_id, sql`json_extract(${table.properties}, '$.messageID')`,
-        sql`json_extract(${table.properties}, '$.sessionID')`, sql`json_extract(${table.properties}, '$.partID')`,
-        sql`json_extract(${table.properties}, '$.partType')`)
+      .on(
+        table.project_id,
+        sql`json_extract(${table.properties}, '$.messageID')`,
+        sql`json_extract(${table.properties}, '$.sessionID')`,
+        sql`json_extract(${table.properties}, '$.partID')`,
+        sql`json_extract(${table.properties}, '$.partType')`,
+      )
       .where(sql`${table.event_type} = 'message.part.removed'`),
   ],
 )
+
+/** The original publication's immutable Project occurrence. Kept separately
+ * from the historical outbox projection used by published semantic migrations.
+ * No payload, Project ID or completion state is copied here. */
+export const BusPublicationOwnerTable = sqliteTable("bus_publication_owner", {
+  occurrence_id: text()
+    .primaryKey()
+    .references(() => BusPublicationOutboxTable.occurrence_id, { onDelete: "restrict" }),
+  project_generation: text(),
+  time_created: integer().notNull(),
+})
 
 export const BusPublicationDeliveryTable = sqliteTable(
   "bus_publication_delivery",
@@ -68,13 +90,22 @@ export const BusPublicationDeliveryReceiptTable = sqliteTable(
     time_created: integer().notNull(),
   },
   (table) => [
-    index("bus_publication_delivery_receipt_idx").on(table.occurrence_id, table.phase, table.subscriber_id, table.time_created),
-    check("bus_publication_delivery_receipt_shape", sql`
+    index("bus_publication_delivery_receipt_idx").on(
+      table.occurrence_id,
+      table.phase,
+      table.subscriber_id,
+      table.time_created,
+    ),
+    check(
+      "bus_publication_delivery_receipt_shape",
+      sql`
       (${table.outcome}='succeeded' AND ${table.error} IS NULL AND ${table.retry_at} IS NULL)
       OR (${table.outcome}='ignored' AND ${table.retry_at} IS NULL)
       OR (${table.outcome}='failed' AND ${table.error} IS NOT NULL AND ${table.retry_at} IS NULL)
-    `),
-    uniqueIndex("bus_publication_delivery_terminal_idx").on(table.occurrence_id, table.phase, table.subscriber_id)
+    `,
+    ),
+    uniqueIndex("bus_publication_delivery_terminal_idx")
+      .on(table.occurrence_id, table.phase, table.subscriber_id)
       .where(sql`${table.outcome} IN ('succeeded','ignored')`),
   ],
 )
@@ -83,7 +114,9 @@ export const BusPublicationPhaseReceiptTable = sqliteTable(
   "bus_publication_phase_receipt",
   {
     id: text().primaryKey(),
-    occurrence_id: text().notNull().references(() => BusPublicationOutboxTable.occurrence_id, { onDelete: "cascade" }),
+    occurrence_id: text()
+      .notNull()
+      .references(() => BusPublicationOutboxTable.occurrence_id, { onDelete: "cascade" }),
     phase: text({ enum: ["exact", "wildcard", "global"] }).notNull(),
     time_created: integer().notNull(),
   },
@@ -94,7 +127,9 @@ export const BusPublicationAttemptReceiptTable = sqliteTable(
   "bus_publication_attempt_receipt",
   {
     id: text().primaryKey(),
-    occurrence_id: text().notNull().references(() => BusPublicationOutboxTable.occurrence_id, { onDelete: "cascade" }),
+    occurrence_id: text()
+      .notNull()
+      .references(() => BusPublicationOutboxTable.occurrence_id, { onDelete: "cascade" }),
     error: text().notNull(),
     retry_at: integer().notNull(),
     time_created: integer().notNull(),

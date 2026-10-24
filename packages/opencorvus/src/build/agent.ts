@@ -623,6 +623,7 @@ export namespace BuildAgent {
           sessionID: buildSessionID,
         })
         worktreeDir = info.directory
+        Worktree.assertReady(info)
         worktreeBranch = info.branch
         baseRef = await resolveRequiredGitHead(worktreeDir)
       }

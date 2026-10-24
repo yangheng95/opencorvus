@@ -2,6 +2,7 @@ import { Message } from "@/session/message"
 import { MessageTable } from "@/session/session.sql"
 import { and, eq, sql, type Database } from "@/storage/db"
 import { SchedulerMessageWakeReason } from "./scheduler-message-wake-reason"
+import { completedReplyPredicateSql } from "@/session/completed-reply"
 
 /**
  * Whether the persisted wake Message is the one this scheduler delivery owns.
@@ -46,10 +47,11 @@ export function successfulSchedulerWakeReplyExistsInTransaction(
       .where(
         and(
           eq(MessageTable.session_id, input.sessionID),
-          sql`json_extract(${MessageTable.data}, '$.role') = 'assistant'`,
-          sql`json_extract(${MessageTable.data}, '$.parentID') = ${input.messageID}`,
-          sql`json_extract(${MessageTable.data}, '$.time.completed') IS NOT NULL`,
-          sql`json_extract(${MessageTable.data}, '$.error') IS NULL`,
+          completedReplyPredicateSql({
+            data: sql`${MessageTable.data}`,
+            messageID: sql`${MessageTable.id}`,
+            userMessageID: sql`${input.messageID}`,
+          }),
         ),
       )
       .get(),
@@ -67,9 +69,12 @@ export function completedSchedulerWakeReplyExistsInTransaction(
       .where(
         and(
           eq(MessageTable.session_id, input.sessionID),
-          sql`json_extract(${MessageTable.data}, '$.role') = 'assistant'`,
-          sql`json_extract(${MessageTable.data}, '$.parentID') = ${input.messageID}`,
-          sql`json_extract(${MessageTable.data}, '$.time.completed') IS NOT NULL`,
+          completedReplyPredicateSql({
+            data: sql`${MessageTable.data}`,
+            messageID: sql`${MessageTable.id}`,
+            userMessageID: sql`${input.messageID}`,
+            includeFailedReply: true,
+          }),
         ),
       )
       .get(),

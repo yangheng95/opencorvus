@@ -53,6 +53,7 @@ const Intent = z
     requireExisting: z.boolean(),
     configuration: SkillCatalogConfigurationEffect,
     globalConfigBeforeRevision: z.string().min(1),
+    configurationBefore: z.json().optional(),
   })
   .strict()
 
@@ -66,6 +67,7 @@ export namespace SkillReplacementPublication {
     published: z.boolean(),
     configuredRevision: z.string().optional(),
     terminal: z.enum(["committed", "rolled_back"]).optional(),
+    configurationDisposition: z.enum(["applied", "superseded", "unknown_preserved"]).optional(),
   })
   export type Entry = z.infer<typeof Entry>
   export type Target = z.infer<typeof Target>
@@ -94,6 +96,7 @@ export namespace SkillReplacementPublication {
       published: Boolean(published),
       configuredRevision: configured ? Configured.parse(configured.payload).globalConfigAfterRevision : undefined,
       terminal: occurrence.terminal?.outcome,
+      configurationDisposition: occurrence.terminal?.payload.configurationDisposition,
     })
   }
 
@@ -121,7 +124,9 @@ export namespace SkillReplacementPublication {
       .sort((left, right) => left.timeCreated - right.timeCreated || left.operationID.localeCompare(right.operationID))
   }
 
-  export async function record(input: Omit<Entry, "published" | "configuredRevision" | "terminal">): Promise<void> {
+  export async function record(
+    input: Omit<Entry, "published" | "configuredRevision" | "terminal" | "configurationDisposition">,
+  ): Promise<void> {
     const entry = Entry.parse({ ...input, published: false })
     await withCatalogOwner(async () => {
       const existing = await open()
@@ -135,6 +140,7 @@ export namespace SkillReplacementPublication {
           requireExisting: entry.requireExisting,
           configuration: entry.configuration,
           globalConfigBeforeRevision: entry.globalConfigBeforeRevision,
+          ...(entry.configurationBefore !== undefined ? { configurationBefore: entry.configurationBefore } : {}),
         }),
         timeCreated: entry.timeCreated,
       })
@@ -161,11 +167,15 @@ export namespace SkillReplacementPublication {
     })
   }
 
-  export async function settle(operationID: string, outcome: "committed" | "rolled_back"): Promise<void> {
+  export async function settle(
+    operationID: string,
+    outcome: "committed" | "rolled_back",
+    configurationDisposition?: "applied" | "superseded" | "unknown_preserved",
+  ): Promise<void> {
     await store().settle(KIND, {
       occurrenceID: operationID,
       outcome,
-      payload: {},
+      payload: configurationDisposition ? { configurationDisposition } : {},
       timeCreated: Date.now(),
     })
   }

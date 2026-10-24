@@ -13,7 +13,7 @@ import { Global } from "../global"
 import { Instance } from "../project/instance"
 import { Project } from "../project/project"
 import { Database, eq, NotFoundError } from "../storage/db"
-import { ProjectTable } from "../project/project.sql"
+import { ProjectTable, ProjectDirectoryAdmissionTable } from "../project/project.sql"
 import { fn } from "../util/fn"
 import { hostGit as runGit } from "../util/git"
 import { stageGitSourceEntries } from "../util/git-source-stage"
@@ -36,6 +36,7 @@ import { isTaskTerminal } from "@/engine/task-status"
 import { releaseManagedWorktreeSessionOwner as releaseManagedSessionOwner } from "@/worktree/managed-session-owner"
 import { ProjectDirectoryAdmission } from "@/project/directory-admission"
 import { Filesystem } from "@/util/filesystem"
+import { observeRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
 import {
   assertProjectDeletionRegistryAdmission,
   type ProjectDeletionRegistryAdmission,
@@ -52,13 +53,24 @@ export namespace Worktree {
   type AfterSandboxAliasObservationHook = (directory: string) => void | Promise<void>
   type BeforeRemovalSettlementHook = (directory: string) => void | Promise<void>
   type BeforeBranchRemovalHook = (input: { branch: string; targetCommit: string }) => void | Promise<void>
+  type AfterResetStartupHook = (input: { directory: string }) => void | Promise<void>
   let afterPhysicalDirectoryRemoval: AfterPhysicalDirectoryRemovalHook | undefined
   let afterResetHard: AfterResetHardHook | undefined
   let afterSandboxAliasObservation: AfterSandboxAliasObservationHook | undefined
   let beforeRemovalSettlement: BeforeRemovalSettlementHook | undefined
   let beforeBranchRemoval: BeforeBranchRemovalHook | undefined
+  let afterResetStartup: AfterResetStartupHook | undefined
 
   export namespace TestHooks {
+    export function installAfterResetStartup(hook: AfterResetStartupHook) {
+      const previous = afterResetStartup
+      afterResetStartup = hook
+      return {
+        [Symbol.dispose]() {
+          if (afterResetStartup === hook) afterResetStartup = previous
+        },
+      }
+    }
     export function installAfterPhysicalDirectoryRemoval(hook: AfterPhysicalDirectoryRemovalHook) {
       const previous = afterPhysicalDirectoryRemoval
       afterPhysicalDirectoryRemoval = hook
@@ -141,6 +153,10 @@ export namespace Worktree {
         name: z.string(),
         branch: z.string(),
       }),
+    ),
+    RecoveryPreserved: BusEvent.define(
+      "worktree.recovery_preserved",
+      z.object({ directory: z.string(), name: z.string(), branch: z.string(), recovery: WorktreeReadiness.Recovery }),
     ),
     Failed: BusEvent.define(
       "worktree.failed",
@@ -501,12 +517,22 @@ export namespace Worktree {
       name: z.string(),
       branch: z.string(),
       directory: z.string(),
+      recovery: WorktreeReadiness.Recovery.optional(),
     })
     .meta({
       ref: "Worktree",
     })
 
   export type Info = z.infer<typeof Info>
+
+  export const StartupOutcomeUnknownError = NamedError.create(
+    "WorktreeStartupOutcomeUnknownError",
+    z.object({ directory: z.string(), recovery: WorktreeReadiness.Recovery }),
+  )
+
+  export function assertReady(info: Info): void {
+    if (info.recovery) throw new StartupOutcomeUnknownError({ directory: info.directory, recovery: info.recovery })
+  }
 
   export const ProjectWorktreeInfo = ProjectWorktreeInfoSchema
 
@@ -557,6 +583,7 @@ export namespace Worktree {
   export const ResetInput = z
     .object({
       directory: z.string(),
+      operationID: z.string().min(1).max(200),
       baseRef: z.string().optional(),
     })
     .meta({
@@ -1093,7 +1120,7 @@ export namespace Worktree {
     if (!target) {
       throw new NotFoundError({ message: `Project worktree not found: ${input.directory}` })
     }
-    await reset({ directory: target.directory, baseRef: input.baseRef })
+    await reset({ directory: input.directory, baseRef: input.baseRef, operationID: input.operationID })
     return target
   })
 
@@ -1950,18 +1977,6 @@ export namespace Worktree {
     return false
   }
 
-  async function runStartScripts(directory: string, input: { projectID: string; extra?: string }) {
-    const row = Database.use((db) => db.select().from(ProjectTable).where(eq(ProjectTable.id, input.projectID)).get())
-    const project = row ? Project.fromRow(row) : undefined
-    const startup = project?.commands?.start?.trim() ?? ""
-    const ok = await runStartScript(directory, startup, "project")
-    if (!ok) return false
-
-    const extra = input.extra ?? ""
-    await runStartScript(directory, extra, "worktree")
-    return true
-  }
-
   type Gitlink = { object: string; path: string }
 
   async function readGitlinks(directory: string): Promise<Gitlink[]> {
@@ -2184,11 +2199,12 @@ export namespace Worktree {
     GlobalBus.emit("event", {
       directory: projectDirectory,
       payload: {
-        type: Event.Ready.type,
+        type: info.recovery ? Event.RecoveryPreserved.type : Event.Ready.type,
         properties: {
           directory: info.directory,
           name: info.name,
           branch: info.branch,
+          ...(info.recovery ? { recovery: info.recovery } : {}),
         },
       },
     })
@@ -2319,9 +2335,15 @@ export namespace Worktree {
     })()
 
     const extra = input?.startCommand?.trim()
-    const populateWorktree = async (target: Info) => {
+    const startupRow = Database.use((db) => db.select().from(ProjectTable).where(eq(ProjectTable.id, projectID)).get())
+    const startup = {
+      project: (startupRow ? Project.fromRow(startupRow).commands?.start : "")?.trim() ?? "",
+      extra: extra ?? "",
+    }
+    const checkoutWorktree = async (target: Info, readinessID: string) => {
+      const physicalDirectory = (await WorktreeReadiness.read(readinessID)).directory
       const populated = await runGit(["reset", "--hard"], {
-        cwd: target.directory,
+        cwd: physicalDirectory,
         timeoutProfile: "default",
       })
       if (populated.exitCode !== 0) {
@@ -2330,73 +2352,19 @@ export namespace Worktree {
         throw new CreateFailedError({ message })
       }
 
-      await initializeSubmodules({ sourceRoot: primaryDir, targetRoot: target.directory })
-
-      const started = await runStartScripts(target.directory, { projectID, extra })
-      if (!started) {
+      await initializeSubmodules({ sourceRoot: primaryDir, targetRoot: physicalDirectory })
+      await WorktreeReadiness.markCheckedOut(readinessID)
+    }
+    const startWorktree = async (target: Info, readinessID: string, commands: typeof startup) => {
+      const physicalDirectory = (await WorktreeReadiness.read(readinessID)).directory
+      await WorktreeReadiness.markStartupStarted(readinessID)
+      if (
+        !(await runStartScript(physicalDirectory, commands.project, "project")) ||
+        !(await runStartScript(physicalDirectory, commands.extra, "worktree"))
+      ) {
         throw new StartCommandFailedError({ message: `Worktree startup scripts failed: ${target.directory}` })
       }
-    }
-
-    // Optional fast path: caller asked to reuse a previously-created worktree
-    // with the same deterministic name (resumed Build Session that
-    // produced files but skipped merge_back). Only honoured when the existing
-    // dir + git linkage is still healthy via isValid() AND the durable ready
-    // receipt exists; a registered tree without its receipt is an incomplete
-    // population and is resumed to convergence before anything reuses it.
-    if (base && input?.reuseIfValid) {
-      const directory = scopedInfo?.directory ?? path.join(root, base)
-      const branch = scopedInfo?.branch ?? `opencorvus/${base}`
-      const ownership = WorktreeOwnershipCriticalSection.acquire(directory)
-      try {
-        const reused = await withGitLock(async () => {
-          const validity = await isValid(directory)
-          if (!validity.valid) return { validity }
-          const info = Info.parse({ name: base, branch, directory })
-          await Project.addSandbox(projectID, directory)
-          if (input?.taskID && input.sessionID) {
-            await Ownership.Worktree.record({
-              primaryWorktreeDir: primaryDir,
-              worktreeDir: directory,
-              taskID: input.taskID,
-              sessionID: input.sessionID,
-            })
-          }
-          return { validity, info }
-        })
-        if (reused.info) {
-          if (!(await WorktreeReadiness.isReady(reused.info.directory))) {
-            // Registration is not readiness: this tree's population never
-            // committed (a create killed after `git worktree add`, or a tree
-            // that predates the receipt). Resume population to convergence
-            // before the checkout is exposed.
-            const readinessID = await WorktreeReadiness.resume({
-              projectID,
-              directory: reused.info.directory,
-              branch: reused.info.branch,
-              name: reused.info.name,
-              primaryBranch: primary.branch,
-            })
-            await populateWorktree(reused.info)
-            await WorktreeReadiness.markPopulated(readinessID)
-            await WorktreeReadiness.commitReady(readinessID)
-            log.info("worktree reuse: resumed population to readiness", { directory: reused.info.directory })
-          }
-          log.info("worktree reuse: existing valid worktree, skipping create", { name: base, directory, branch })
-          publishCreateReady(projectDirectory, reused.info)
-          return reused.info
-        }
-        log.info("worktree reuse: existing tree invalid, continuing to reclaim", {
-          name: base,
-          directory,
-          reason: reused.validity.reason,
-        })
-      } catch (error) {
-        publishCreateFailure(projectDirectory, Info.parse({ name: base, branch, directory }), error)
-        throw error
-      } finally {
-        ownership[Symbol.dispose]()
-      }
+      await WorktreeReadiness.markPopulated(readinessID)
     }
 
     const intendedInfo =
@@ -2404,93 +2372,199 @@ export namespace Worktree {
       (base
         ? Info.parse({ name: base, branch: `opencorvus/${base}`, directory: path.join(root, base) })
         : await candidate(root))
-    const ownership = WorktreeOwnershipCriticalSection.acquire(intendedInfo.directory)
-    let info = intendedInfo
 
-    let createdByCall = false
-    let readinessID: string | undefined
-    try {
-      // All git operations serialized to prevent concurrent corruption
-      await Worktree.withGitLock(async () => {
-        if (base) info = await reclaimInfo(intendedInfo, ownership)
-        // CONTRACT: project opening always commits the baseline Git metadata
-        // first (see engine/git-project-metadata.ts), so HEAD is non-empty by
-        // the time any worktree is requested. If we still see no HEAD here,
-        // bootstrap broke earlier — fail loud rather than paper over with a
-        // `git add -A` "initial scaffold" empty commit that historically
-        // swallowed `node_modules/` into HEAD before .gitignore landed.
-        const hasCommits =
-          (
-            await runGit(["rev-parse", "--verify", "HEAD"], {
-              cwd: primaryDir,
-              timeoutProfile: "fast",
-            })
-          ).exitCode === 0
-        if (!hasCommits) {
-          throw new CreateFailedError({
-            message:
-              `Worktree create requires HEAD to exist on the primary repo (${primaryDir}). ` +
-              `The project bootstrap path (Instance.provide → Project.initGit → ensureGitProjectMetadata) ` +
-              `must seed the baseline metadata commit before any worktree dispatch — investigate ` +
-              `why project metadata did not land a first commit instead of patching here.`,
-          })
-        }
-
-        // The readiness occurrence is durable BEFORE the git mutation: a
-        // death from here on leaves an open occurrence whose reuse path
-        // resumes population instead of trusting bare git linkage.
-        readinessID = await WorktreeReadiness.begin({
-          projectID,
-          directory: info.directory,
-          branch: info.branch,
-          name: info.name,
-          primaryBranch: primary.branch,
-        })
-        const created = await runGit(
-          ["worktree", "add", "--no-checkout", "-b", info.branch, info.directory, primary.branch],
-          { cwd: primaryDir, timeoutProfile: "default" },
-        )
-        if (created.exitCode !== 0) {
-          throw new CreateFailedError({ message: errorText(created) || "Failed to create git worktree" })
-        }
-        createdByCall = true
-        await WorktreeReadiness.markCreated(readinessID!)
-        await Project.addSandbox(projectID, info.directory)
-        if (input?.taskID && input.sessionID) {
-          await Ownership.Worktree.record({
-            primaryWorktreeDir: primaryDir,
-            worktreeDir: info.directory,
-            taskID: input.taskID,
-            sessionID: input.sessionID,
-          })
-        }
-      })
-      await populateWorktree(info)
-      await WorktreeReadiness.markPopulated(readinessID!)
-      await WorktreeReadiness.commitReady(readinessID!)
-    } catch (error) {
-      if (readinessID) {
-        await WorktreeReadiness.rollback(readinessID, error instanceof Error ? error.message : String(error)).catch(
-          () => undefined,
-        )
+    return WorktreeReadiness.withOwner(intendedInfo.directory, async (resourceOwner) => {
+      const assertResourceOwner = async () => {
+        if ((await ProjectDirectoryAdmission.key(intendedInfo.directory)) !== resourceOwner.directoryKey)
+          throw new CreateFailedError({ message: "Worktree canonical resource changed after owner admission" })
       }
-      const failure = createdByCall
-        ? await convergeFailedCreate({
-            info,
-            projectID,
-            primaryDirectory: primaryDir,
-            cause: error,
-            ownershipAcquisition: ownership,
+      await assertResourceOwner()
+      const physicalInfo = Info.parse({ ...intendedInfo, directory: resourceOwner.physicalPath })
+      // Optional fast path: caller asked to reuse a previously-created worktree
+      // with the same deterministic name (resumed Build Session that
+      // produced files but skipped merge_back). Only honoured when the existing
+      // dir + git linkage is still healthy via isValid() AND the durable ready
+      // receipt exists; a registered tree without its receipt is an incomplete
+      // population and is resumed to convergence before anything reuses it.
+      if (base && input?.reuseIfValid) {
+        const directory = physicalInfo.directory
+        const branch = scopedInfo?.branch ?? `opencorvus/${base}`
+        const ownership = WorktreeOwnershipCriticalSection.acquire(directory)
+        try {
+          const reused = await withGitLock(async () => {
+            const validity = await isValid(directory)
+            if (!validity.valid) return { validity }
+            const registered = (await listRegisteredWorktrees(primaryDir)).find((entry) =>
+              Project.samePath(entry.path, directory),
+            )
+            if (registered?.branch?.replace(/^refs\/heads\//, "") !== branch) {
+              throw new CreateFailedError({
+                message: `Worktree branch identity changed: expected ${branch}, found ${registered?.branch ?? "detached"}. The existing tree is preserved.`,
+              })
+            }
+            const info = Info.parse({ name: base, branch, directory })
+            await Project.addSandbox(projectID, directory)
+            if (input?.taskID && input.sessionID) {
+              await Ownership.Worktree.record({
+                primaryWorktreeDir: primaryDir,
+                worktreeDir: directory,
+                taskID: input.taskID,
+                sessionID: input.sessionID,
+              })
+            }
+            return { validity, info }
           })
-        : error
-      publishCreateFailure(projectDirectory, info, failure)
-      throw failure
-    } finally {
-      ownership[Symbol.dispose]()
-    }
+          if (reused.info) {
+            const readiness = await WorktreeReadiness.resume(
+              {
+                projectID,
+                projectGeneration: Instance.projectGeneration,
+                directory: intendedInfo.directory,
+                branch: reused.info.branch,
+                name: reused.info.name,
+                primaryBranch: primary.branch,
+                startup,
+              },
+              resourceOwner,
+            )
+            if (readiness.recovery) {
+              reused.info.recovery = readiness.recovery
+            } else if (!readiness.ready) {
+              if (readiness.populated) {
+                await WorktreeReadiness.commitReady(readiness.id)
+              } else if (readiness.startupStarted) {
+                reused.info.recovery = await WorktreeReadiness.preserve(readiness.id)
+              } else {
+                if (!readiness.checkedOut) {
+                  const [tracked, untracked] = await Promise.all([
+                    runGit(["ls-files", "-z"], { cwd: reused.info.directory, timeoutProfile: "fast" }),
+                    runGit(["ls-files", "--others", "-z"], { cwd: reused.info.directory, timeoutProfile: "fast" }),
+                  ])
+                  if (tracked.exitCode !== 0 || untracked.exitCode !== 0)
+                    throw new CreateFailedError({ message: "Cannot inspect the existing worktree population" })
+                  if (tracked.stdout.length > 0 || untracked.stdout.length > 0) {
+                    reused.info.recovery = await WorktreeReadiness.preserve(readiness.id)
+                  } else {
+                    await checkoutWorktree(reused.info, readiness.id)
+                  }
+                }
+                if (!reused.info.recovery) {
+                  await startWorktree(reused.info, readiness.id, readiness.startup)
+                  await WorktreeReadiness.commitReady(readiness.id)
+                }
+              }
+            }
+            log.info("worktree reuse: existing valid worktree, skipping create", { name: base, directory, branch })
+            publishCreateReady(projectDirectory, reused.info)
+            return reused.info
+          }
+          log.info("worktree reuse: existing tree invalid, continuing to reclaim", {
+            name: base,
+            directory,
+            reason: reused.validity.reason,
+          })
+        } catch (error) {
+          publishCreateFailure(projectDirectory, Info.parse({ name: base, branch, directory }), error)
+          throw error
+        } finally {
+          ownership[Symbol.dispose]()
+        }
+      }
 
-    publishCreateReady(projectDirectory, info)
-    return info
+      const ownership = WorktreeOwnershipCriticalSection.acquire(physicalInfo.directory)
+      let info = physicalInfo
+
+      let createdByCall = false
+      let readinessID: string | undefined
+      try {
+        // All git operations serialized to prevent concurrent corruption
+        await Worktree.withGitLock(async () => {
+          await assertResourceOwner()
+          if (base) info = await reclaimInfo(physicalInfo, ownership)
+          // CONTRACT: project opening always commits the baseline Git metadata
+          // first (see engine/git-project-metadata.ts), so HEAD is non-empty by
+          // the time any worktree is requested. If we still see no HEAD here,
+          // bootstrap broke earlier — fail loud rather than paper over with a
+          // `git add -A` "initial scaffold" empty commit that historically
+          // swallowed `node_modules/` into HEAD before .gitignore landed.
+          const hasCommits =
+            (
+              await runGit(["rev-parse", "--verify", "HEAD"], {
+                cwd: primaryDir,
+                timeoutProfile: "fast",
+              })
+            ).exitCode === 0
+          if (!hasCommits) {
+            throw new CreateFailedError({
+              message:
+                `Worktree create requires HEAD to exist on the primary repo (${primaryDir}). ` +
+                `The project bootstrap path (Instance.provide → Project.initGit → ensureGitProjectMetadata) ` +
+                `must seed the baseline metadata commit before any worktree dispatch — investigate ` +
+                `why project metadata did not land a first commit instead of patching here.`,
+            })
+          }
+
+          // The readiness occurrence is durable BEFORE the git mutation: a
+          // death from here on leaves an open occurrence whose reuse path
+          // resumes population instead of trusting bare git linkage.
+          readinessID = await WorktreeReadiness.begin(
+            {
+              projectID,
+              projectGeneration: Instance.projectGeneration,
+              directory: intendedInfo.directory,
+              branch: info.branch,
+              name: info.name,
+              primaryBranch: primary.branch,
+              startup,
+            },
+            resourceOwner,
+          )
+          const created = await runGit(
+            ["worktree", "add", "--no-checkout", "-b", info.branch, info.directory, primary.branch],
+            { cwd: primaryDir, timeoutProfile: "default" },
+          )
+          if (created.exitCode !== 0) {
+            throw new CreateFailedError({ message: errorText(created) || "Failed to create git worktree" })
+          }
+          createdByCall = true
+          await WorktreeReadiness.markCreated(readinessID!)
+          await Project.addSandbox(projectID, info.directory)
+          if (input?.taskID && input.sessionID) {
+            await Ownership.Worktree.record({
+              primaryWorktreeDir: primaryDir,
+              worktreeDir: info.directory,
+              taskID: input.taskID,
+              sessionID: input.sessionID,
+            })
+          }
+        })
+        await checkoutWorktree(info, readinessID!)
+        await startWorktree(info, readinessID!, startup)
+        await WorktreeReadiness.commitReady(readinessID!)
+      } catch (error) {
+        if (readinessID) {
+          await WorktreeReadiness.rollback(readinessID, error instanceof Error ? error.message : String(error)).catch(
+            () => undefined,
+          )
+        }
+        const failure = createdByCall
+          ? await convergeFailedCreate({
+              info,
+              projectID,
+              primaryDirectory: primaryDir,
+              cause: error,
+              ownershipAcquisition: ownership,
+            })
+          : error
+        publishCreateFailure(projectDirectory, info, failure)
+        throw failure
+      } finally {
+        ownership[Symbol.dispose]()
+      }
+
+      publishCreateReady(projectDirectory, info)
+      return info
+    })
   })
 
   /**
@@ -2544,6 +2618,15 @@ export namespace Worktree {
   > {
     const validity = await isValid(input.directory)
     if (validity.valid) {
+      const registered = (await listRegisteredWorktrees(Instance.worktree)).find((entry) =>
+        Project.samePath(entry.path, input.directory),
+      )
+      if (registered?.branch?.replace(/^refs\/heads\//, "") !== input.branch) {
+        return {
+          status: "unrecoverable",
+          reason: `Worktree branch identity changed: expected ${input.branch}, found ${registered?.branch ?? "detached"}; existing bytes are preserved`,
+        }
+      }
       return { status: "recovered", directory: input.directory, branch: input.branch }
     }
 
@@ -2681,7 +2764,6 @@ export namespace Worktree {
           await clean(input.directory.requested)
           await afterPhysicalDirectoryRemoval?.(input.directory.requested)
         }
-        await WorktreeReadiness.forget(input.directory.requested)
         await settleBranch()
         return
       }
@@ -2693,7 +2775,6 @@ export namespace Worktree {
       }
       // A removed worktree has no readiness: the receipt goes with the tree,
       // before the registry prune so a death here leaves no stale READY fact.
-      await WorktreeReadiness.forget(entry.path)
 
       const pruned = await runGit(["worktree", "prune"], {
         cwd: Instance.worktree,
@@ -2759,7 +2840,7 @@ export namespace Worktree {
   export const remove = fn(RemoveInput, (input) => removeWithAcquisition(input))
 
   async function resolveResetPlanUnderGitLock(input: {
-    directory: string
+    resource: ProjectDirectoryAdmission.ResolvedDirectory
     primaryDirectory: string
     targetRef: string
   }): Promise<{ worktreePath: string; branch: string; targetCommit: string }> {
@@ -2785,7 +2866,7 @@ export namespace Worktree {
       }, [])
     let entry: { path?: string; branch?: string } | undefined
     for (const candidate of entries) {
-      if (candidate.path && (await canonical(candidate.path)) === input.directory) {
+      if (candidate.path && (await ProjectDirectoryAdmission.key(candidate.path)) === input.resource.directoryKey) {
         entry = candidate
         break
       }
@@ -2799,21 +2880,21 @@ export namespace Worktree {
       throw new ResetFailedError({ message: errorText(target) || `Reset target not found: ${input.targetRef}` })
     }
     return {
-      worktreePath: entry.path,
+      worktreePath: input.resource.physicalPath,
       branch: entry.branch ?? "",
       targetCommit: outputText(target.stdout).trim(),
     }
   }
 
   async function resolveResetPlan(input: {
-    directory: string
+    resource: ProjectDirectoryAdmission.ResolvedDirectory
     primaryDirectory: string
     targetRef: string
   }): Promise<{ worktreePath: string; branch: string; targetCommit: string }> {
     return withGitLock(() => resolveResetPlanUnderGitLock(input))
   }
 
-  const ResetOperationIdentity = z.object({
+  const HistoricalResetOperationIdentity = z.object({
     version: z.literal(2),
     projectID: z.string().min(1),
     directoryKey: z.string().min(1),
@@ -2822,6 +2903,10 @@ export namespace Worktree {
     requestedRef: z.string().min(1),
     targetCommit: z.string().regex(/^[0-9a-f]{40,64}$/),
   })
+  const ResetOperationIdentity = z.union([
+    HistoricalResetOperationIdentity.extend({ version: z.literal(3), requestOperationID: z.string().min(1).max(200) }),
+    HistoricalResetOperationIdentity,
+  ])
   type ResetOperationIdentity = z.infer<typeof ResetOperationIdentity>
 
   function resetOperationID(identity: ResetOperationIdentity): string {
@@ -2840,204 +2925,404 @@ export namespace Worktree {
     }
   }
 
-  export const reset = fn(ResetInput, async (input) => {
-    if (!Project.isGitRepo(Instance.directory)) {
-      throw new NotGitError({ message: "Worktrees are only supported for git projects" })
-    }
-
-    const primaryInfo = await primaryWorktreeInfo().catch((err) => {
-      throw new ResetFailedError({ message: err instanceof Error ? err.message : String(err) })
-    })
-    const directory = await canonical(input.directory)
-    const primary = await canonical(primaryInfo.directory)
-    if (directory === primary) {
-      throw new ResetFailedError({ message: "Cannot reset the primary workspace" })
-    }
-    const projectID = Instance.project.id
-    const directoryIdentity = await Ownership.Worktree.observeIdentity(input.directory, "resolve-reset-worktree")
-    const occurrence = await ProjectDirectoryAdmission.observeDirectory(input.directory)
-    const requestedRef = input.baseRef ?? primaryInfo.branch
-    const activeReset = await ProjectDirectoryAdmission.activeExactOperation(input.directory, "reclamation")
-    const persistedReset = activeReset
-      ? parseResetOperationID(ProjectDirectoryAdmission.domainOperationID(projectID, activeReset.operationID) ?? "")
-      : undefined
-    const persistedIntentMatches =
-      persistedReset !== undefined &&
-      persistedReset.projectID === projectID &&
-      persistedReset.directoryKey === directoryIdentity.key &&
-      persistedReset.device === occurrence.device &&
-      persistedReset.inode === occurrence.inode &&
-      persistedReset.birthtimeNs === occurrence.birthtimeNs &&
-      persistedReset.requestedRef === requestedRef
-    const resetPlan = await resolveResetPlan({
-      directory,
-      primaryDirectory: primaryInfo.directory,
-      targetRef: persistedIntentMatches ? persistedReset.targetCommit : requestedRef,
-    })
-    const resumePersistedIntent =
-      persistedIntentMatches &&
-      persistedReset.branch === resetPlan.branch &&
-      persistedReset.targetCommit === resetPlan.targetCommit
-    const operationIdentity: ResetOperationIdentity = {
-      version: 2,
-      projectID,
-      directoryKey: directoryIdentity.key,
-      device: occurrence.device,
-      inode: occurrence.inode,
-      birthtimeNs: occurrence.birthtimeNs,
-      branch: resetPlan.branch,
-      requestedRef,
-      targetCommit: resetPlan.targetCommit,
-    }
-    const operationID = resumePersistedIntent
-      ? activeReset!.operationID
-      : ProjectDirectoryAdmission.scopeOperationID(projectID, resetOperationID(operationIdentity))
-    const acquired = await ProjectDirectoryAdmission.acquire({
-      directory: input.directory,
-      operationID,
-      kind: "reclamation",
-      occurrence,
-    }).catch((error) => {
-      if (ProjectDirectoryAdmission.ClosedError.isInstance(error)) {
-        throw new ResetFailedError({ message: `Worktree is actively owned: ${input.directory}` })
+  /** Resolve only this domain's abandoned fence, before Project registration
+   * needs the namespace. No Git or startup action is part of recovery. */
+  export async function recoverAbandonedResets(input: { projectID: string; directory: string }): Promise<void> {
+    const project = Project.occurrence(input.projectID)
+    if (!project) return
+    const directoryKey = await ProjectDirectoryAdmission.key(input.directory)
+    const rows = Database.use((db) =>
+      db
+        .select()
+        .from(ProjectDirectoryAdmissionTable)
+        .where(eq(ProjectDirectoryAdmissionTable.kind, "reclamation"))
+        .all(),
+    )
+    for (const row of rows) {
+      if (!ProjectDirectoryAdmission.overlaps(directoryKey, row.directory_key)) continue
+      const source = parseResetOperationID(
+        ProjectDirectoryAdmission.domainOperationID(input.projectID, row.operation_id) ?? "",
+      )
+      if (!source || source.projectID !== input.projectID || source.directoryKey !== row.directory_key) continue
+      const token: ProjectDirectoryAdmission.Token & { timeCreated: number } = {
+        directory: row.directory,
+        directoryKey: row.directory_key,
+        generation: row.generation,
+        operationID: row.operation_id,
+        kind: "reclamation",
+        timeCreated: row.time_created,
+        owner: {
+          pid: row.owner_pid,
+          processInstanceID: row.owner_process_instance_id,
+          occurrenceID: row.owner_occurrence_id,
+        },
       }
-      throw error
-    })
-    if (acquired.outcome !== "acquired") throw new ResetFailedError({ message: "Reset admission was not acquired" })
-    const admission = acquired.token
-    let mutationStarted = false
-    let settled = false
-    try {
-      const mutation = await WorktreeOwnershipCriticalSection.mutate({
-        directory: directoryIdentity.key,
-        mutate: async () => {
-          if (!(await ProjectDirectoryAdmission.ownsCurrentOccurrence(admission, input.directory))) {
-            throw new ResetFailedError({ message: `Worktree occurrence changed before reset: ${input.directory}` })
-          }
-          const sessions = Database.use((db) =>
-            db
-              .select({ directory: SessionTable.directory })
-              .from(SessionTable)
-              .where(eq(SessionTable.project_id, projectID))
-              .all(),
+      if (observeRuntimeProcessOccurrence(token.owner) !== "dead_or_reused") continue
+      await WorktreeReadiness.withHistoricalOwner(row.directory_key, async () => {
+        const stillCurrent = Database.use((db) =>
+          db
+            .select()
+            .from(ProjectDirectoryAdmissionTable)
+            .where(eq(ProjectDirectoryAdmissionTable.directory_key, row.directory_key))
+            .get(),
+        )
+        if (!stillCurrent || stillCurrent.generation !== row.generation) return
+        ProjectDirectoryAdmission.assertOwnedNow(token)
+        if (observeRuntimeProcessOccurrence(token.owner) !== "dead_or_reused") return
+        const resource = await ProjectDirectoryAdmission.resolve(source.directoryKey)
+        const physical = await ProjectDirectoryAdmission.observeDirectory(resource.physicalPath).catch(
+          (error: NodeJS.ErrnoException) => {
+            if (error.code === "ENOENT") return undefined
+            throw error
+          },
+        )
+        const samePhysical =
+          resource.directoryKey === row.directory_key &&
+          physical &&
+          ProjectDirectoryAdmission.sameOccurrence(source, physical)
+        const exact = samePhysical
+          ? await WorktreeReadiness.inspect({
+              directory: source.directoryKey,
+              projectID: input.projectID,
+              projectGeneration: project.generation,
+            })
+          : undefined
+        if (exact?.resetOperationID === row.operation_id && exact.resetAdmission?.generation === row.generation) {
+          if (exact.populated) await WorktreeReadiness.commitReady(exact.id)
+          else await WorktreeReadiness.preserve(exact.id)
+        } else {
+          const history = await WorktreeReadiness.history(
+            row.directory,
+            { projectID: input.projectID, projectGeneration: project.generation },
+            row.directory_key,
           )
-          for (const session of sessions) {
-            if (
-              (await Ownership.Worktree.compareIdentity(
-                directoryIdentity,
-                session.directory,
-                "compare-reset-session-owner",
-              )) === "same"
-            ) {
-              throw new ResetFailedError({ message: `Worktree is owned by a durable Session: ${input.directory}` })
-            }
-          }
-          for (const binding of activeTaskProcessBindingRoots({ projectID, diagnosticRoot: primaryInfo.directory })) {
-            if (
-              (await Ownership.Worktree.compareIdentity(
-                directoryIdentity,
-                binding.directory,
-                "compare-reset-process-binding-owner",
-              )) === "same"
-            ) {
-              throw new ResetFailedError({ message: `Worktree is owned by a Task process: ${input.directory}` })
-            }
-          }
-          const markerProof = await Ownership.Worktree.proveOwnerless({
-            primaryWorktreeDir: primaryInfo.directory,
-            worktreeDir: directoryIdentity.requested,
-            canReleaseDeadOwner: (taskID) => !findTask(taskID),
+          const prior = history.find((item) => {
+            const admission = item.intent.payload.resetAdmission as { generation?: string } | undefined
+            return admission?.generation === row.generation && item.terminal?.payload.disposition === "resource_retired"
           })
-          if (markerProof.status === "owned") {
-            throw new ResetFailedError({ message: `Worktree is owned by a durable Task: ${input.directory}` })
-          }
-          Ownership.Worktree.requireCompleteRelease(await Ownership.Worktree.settleOwnerlessProof(markerProof))
-          const worktreePath = await withGitLock(async () => {
-            const currentPlan = await resolveResetPlanUnderGitLock({
-              directory,
-              primaryDirectory: primaryInfo.directory,
-              targetRef: resetPlan.targetCommit,
-            })
-            if (
-              (await canonical(currentPlan.worktreePath)) !== (await canonical(resetPlan.worktreePath)) ||
-              currentPlan.branch !== resetPlan.branch ||
-              currentPlan.targetCommit !== resetPlan.targetCommit
-            ) {
-              throw new ResetFailedError({
-                message: `Worktree reset intent changed before mutation: ${input.directory}`,
-              })
-            }
-            if (!(await ProjectDirectoryAdmission.ownsCurrentOccurrence(admission, input.directory))) {
-              throw new ResetFailedError({
-                message: `Worktree occurrence changed before destructive reset: ${input.directory}`,
-              })
-            }
-            mutationStarted = true
-            const resetToTarget = await runGit(["reset", "--hard", resetPlan.targetCommit], {
-              cwd: resetPlan.worktreePath,
-              timeoutProfile: "default",
-            })
-            if (resetToTarget.exitCode !== 0) {
-              throw new ResetFailedError({ message: errorText(resetToTarget) || "Failed to reset worktree to target" })
-            }
-            await afterResetHard?.({ directory: resetPlan.worktreePath, targetCommit: resetPlan.targetCommit })
-
-            const clean = await sweep(resetPlan.worktreePath)
-            if (clean.exitCode !== 0) {
-              throw new ResetFailedError({ message: errorText(clean) || "Failed to clean worktree" })
-            }
-
-            await materializeGitlinks({
-              sourceRoot: primaryInfo.directory,
-              targetRoot: resetPlan.worktreePath,
-              force: true,
-            }).catch((error) => {
-              throw new ResetFailedError({ message: error instanceof Error ? error.message : String(error) })
-            })
-
-            await resetMaterializedGitlinks(resetPlan.worktreePath).catch((error) => {
-              throw new ResetFailedError({ message: error instanceof Error ? error.message : String(error) })
-            })
-
-            const status = await gitSourceStatus(
+          const id =
+            prior?.intent.occurrenceID ??
+            (await WorktreeReadiness.begin(
               {
+                projectID: input.projectID,
+                projectGeneration: project.generation,
+                directory: row.directory,
+                branch: source.branch.replace(/^refs\/heads\//, ""),
+                name: path.basename(row.directory),
+                primaryBranch: source.requestedRef,
+                startup: { project: "", extra: "" },
+                resetOperationID: row.operation_id,
+                resetAdmission: {
+                  directory: token.directory,
+                  directoryKey: token.directoryKey,
+                  generation: token.generation,
+                  operationID: token.operationID,
+                  kind: "reclamation",
+                  owner: token.owner,
+                  timeCreated: row.time_created,
+                },
+                resetOrigin: "historical_unknown",
+              },
+              {
+                physicalPath: samePhysical ? resource.physicalPath : source.directoryKey,
+                directoryKey: row.directory_key,
+              },
+            ))
+          if (samePhysical) {
+            await WorktreeReadiness.markCreated(id, source)
+            await WorktreeReadiness.preserve(id)
+          } else await WorktreeReadiness.retire(id)
+        }
+        // Domain evidence is durable before this exact old generation is released.
+        ProjectDirectoryAdmission.settleAbandoned(token)
+      })
+    }
+  }
+
+  export const reset = fn(ResetInput, async (input) => {
+    return WorktreeReadiness.withOwner(input.directory, async (resourceOwner) => {
+      if (!Project.isGitRepo(Instance.directory)) {
+        throw new NotGitError({ message: "Worktrees are only supported for git projects" })
+      }
+
+      const primaryInfo = await primaryWorktreeInfo().catch((err) => {
+        throw new ResetFailedError({ message: err instanceof Error ? err.message : String(err) })
+      })
+      const directory = await canonical(input.directory)
+      const primary = await canonical(primaryInfo.directory)
+      if (directory === primary) {
+        throw new ResetFailedError({ message: "Cannot reset the primary workspace" })
+      }
+      const projectID = Instance.project.id
+      const directoryIdentity = await Ownership.Worktree.observeIdentity(input.directory, "resolve-reset-worktree")
+      const occurrence = await ProjectDirectoryAdmission.observeDirectory(input.directory)
+      if (
+        directoryIdentity.key !== resourceOwner.directoryKey ||
+        occurrence.directoryKey !== resourceOwner.directoryKey
+      )
+        throw new ResetFailedError({
+          message: "Worktree canonical resource changed after owner admission; the replacement is preserved",
+        })
+      const requestedRef = input.baseRef ?? primaryInfo.branch
+      const historical = await WorktreeReadiness.history(input.directory)
+      const matchingRequests = historical.filter((item) => {
+        if (item.intent.payload.requestedDirectory !== WorktreeReadiness.requestedDirectoryKey(input.directory))
+          return false
+        const operation = item.intent.payload.resetOperationID
+        if (typeof operation !== "string") return false
+        const parsed = parseResetOperationID(ProjectDirectoryAdmission.domainOperationID(projectID, operation) ?? "")
+        return parsed?.version === 3 && parsed.requestOperationID === input.operationID
+      })
+      const supersededRequests = new Set(
+        matchingRequests.flatMap((item) => (item.intent.payload.historicalOccurrenceIDs as string[]) ?? []),
+      )
+      const previousRequests = matchingRequests.filter((item) => !supersededRequests.has(item.intent.occurrenceID))
+      if (previousRequests.length > 1)
+        throw new ResetFailedError({ message: "Reset operationID has multiple immutable recovery owners" })
+      const previousRequest = previousRequests[0]
+      if (previousRequest) {
+        const original = parseResetOperationID(
+          ProjectDirectoryAdmission.domainOperationID(
+            projectID,
+            String(previousRequest.intent.payload.resetOperationID),
+          ) ?? "",
+        )!
+        if (
+          original.requestedRef !== requestedRef ||
+          !ProjectDirectoryAdmission.sameOccurrence(original, occurrence) ||
+          previousRequest.intent.payload.projectGeneration !== Instance.projectGeneration ||
+          previousRequest.intent.payload.databaseInstanceID !== Database.Identity()
+        )
+          throw new ResetFailedError({
+            message:
+              "Reset operationID belongs to a different immutable reset intent; the current resource is preserved",
+          })
+        const previous = await WorktreeReadiness.read(previousRequest.intent.occurrenceID)
+        if (previous.disposition === "resource_retired")
+          throw new ResetFailedError({
+            message:
+              "The physical resource of this reset operation has been retired; the current resource is preserved",
+          })
+        if (previous.outcome === "rolled_back")
+          throw new ResetFailedError({
+            message: "This reset operation failed before mutation; use a new operationID for a new reset",
+          })
+        if (previous.populated) {
+          await WorktreeReadiness.commitReady(previous.id)
+          return true
+        }
+        const recovery = previous.recovery ?? (await WorktreeReadiness.preserve(previous.id))
+        throw new StartupOutcomeUnknownError({ directory: input.directory, recovery })
+      }
+      const resetPlan = await resolveResetPlan({
+        resource: resourceOwner,
+        primaryDirectory: primaryInfo.directory,
+        targetRef: requestedRef,
+      })
+      const operationIdentity: ResetOperationIdentity = {
+        version: 3,
+        requestOperationID: input.operationID,
+        projectID,
+        directoryKey: directoryIdentity.key,
+        device: occurrence.device,
+        inode: occurrence.inode,
+        birthtimeNs: occurrence.birthtimeNs,
+        branch: resetPlan.branch,
+        requestedRef,
+        targetCommit: resetPlan.targetCommit,
+      }
+      const operationID = ProjectDirectoryAdmission.scopeOperationID(projectID, resetOperationID(operationIdentity))
+      const acquired = await ProjectDirectoryAdmission.acquire({
+        directory: input.directory,
+        operationID,
+        kind: "reclamation",
+        expectedDirectoryKey: resourceOwner.directoryKey,
+        occurrence,
+      }).catch((error) => {
+        if (ProjectDirectoryAdmission.ClosedError.isInstance(error)) {
+          throw new ResetFailedError({ message: error.data.message })
+        }
+        throw error
+      })
+      if (acquired.outcome !== "acquired") throw new ResetFailedError({ message: "Reset admission was not acquired" })
+      const admission = acquired.token
+      let publicationID: string | undefined
+      let mutationStarted = false
+      let settled = false
+      try {
+        const readinessID = (publicationID = await WorktreeReadiness.begin(
+          {
+            projectID,
+            projectGeneration: Instance.projectGeneration,
+            directory: input.directory,
+            branch: resetPlan.branch.replace(/^refs\/heads\//, ""),
+            name: path.basename(input.directory),
+            primaryBranch: primaryInfo.branch,
+            startup: { project: Project.get(projectID)?.commands?.start ?? "", extra: "" },
+            resetOperationID: operationID,
+            resetAdmission: {
+              directory: admission.directory,
+              directoryKey: admission.directoryKey,
+              generation: admission.generation,
+              operationID: admission.operationID,
+              kind: "reclamation",
+              owner: admission.owner,
+            },
+            resetOrigin: "current",
+          },
+          resourceOwner,
+        ))
+        await WorktreeReadiness.markCreated(readinessID, occurrence).catch((error) => {
+          throw new ResetFailedError({ message: error instanceof Error ? error.message : String(error) })
+        })
+        const mutation = await WorktreeOwnershipCriticalSection.mutate({
+          directory: directoryIdentity.key,
+          mutate: async () => {
+            if (!(await ProjectDirectoryAdmission.ownsCurrentOccurrence(admission, input.directory))) {
+              throw new ResetFailedError({ message: `Worktree occurrence changed before reset: ${input.directory}` })
+            }
+            const sessions = Database.use((db) =>
+              db
+                .select({ directory: SessionTable.directory })
+                .from(SessionTable)
+                .where(eq(SessionTable.project_id, projectID))
+                .all(),
+            )
+            for (const session of sessions) {
+              if (
+                (await Ownership.Worktree.compareIdentity(
+                  directoryIdentity,
+                  session.directory,
+                  "compare-reset-session-owner",
+                )) === "same"
+              ) {
+                throw new ResetFailedError({ message: `Worktree is owned by a durable Session: ${input.directory}` })
+              }
+            }
+            for (const binding of activeTaskProcessBindingRoots({ projectID, diagnosticRoot: primaryInfo.directory })) {
+              if (
+                (await Ownership.Worktree.compareIdentity(
+                  directoryIdentity,
+                  binding.directory,
+                  "compare-reset-process-binding-owner",
+                )) === "same"
+              ) {
+                throw new ResetFailedError({ message: `Worktree is owned by a Task process: ${input.directory}` })
+              }
+            }
+            const markerProof = await Ownership.Worktree.proveOwnerless({
+              primaryWorktreeDir: primaryInfo.directory,
+              worktreeDir: directoryIdentity.requested,
+              canReleaseDeadOwner: (taskID) => !findTask(taskID),
+            })
+            if (markerProof.status === "owned") {
+              throw new ResetFailedError({ message: `Worktree is owned by a durable Task: ${input.directory}` })
+            }
+            Ownership.Worktree.requireCompleteRelease(await Ownership.Worktree.settleOwnerlessProof(markerProof))
+            const worktreePath = await withGitLock(async () => {
+              const currentPlan = await resolveResetPlanUnderGitLock({
+                resource: resourceOwner,
+                primaryDirectory: primaryInfo.directory,
+                targetRef: resetPlan.targetCommit,
+              })
+              if (
+                (await canonical(currentPlan.worktreePath)) !== (await canonical(resetPlan.worktreePath)) ||
+                currentPlan.branch !== resetPlan.branch ||
+                currentPlan.targetCommit !== resetPlan.targetCommit
+              ) {
+                throw new ResetFailedError({
+                  message: `Worktree reset intent changed before mutation: ${input.directory}`,
+                })
+              }
+              if (!(await ProjectDirectoryAdmission.ownsCurrentOccurrence(admission, input.directory))) {
+                throw new ResetFailedError({
+                  message: `Worktree occurrence changed before destructive reset: ${input.directory}`,
+                })
+              }
+              mutationStarted = true
+              const resetToTarget = await runGit(["reset", "--hard", resetPlan.targetCommit], {
                 cwd: resetPlan.worktreePath,
                 timeoutProfile: "default",
-              },
-              "lines",
-            )
-            if (status.exitCode !== 0) {
-              throw new ResetFailedError({ message: errorText(status) || "Failed to read git status" })
-            }
+              })
+              if (resetToTarget.exitCode !== 0) {
+                throw new ResetFailedError({
+                  message: errorText(resetToTarget) || "Failed to reset worktree to target",
+                })
+              }
+              await afterResetHard?.({ directory: resetPlan.worktreePath, targetCommit: resetPlan.targetCommit })
 
-            const dirty = statusLinesBlockingMerge(outputText(status.stdout))
-            if (dirty.length > 0) {
-              throw new ResetFailedError({ message: `Worktree reset left local changes:\n${dirty.join("\n")}` })
-            }
+              const clean = await sweep(resetPlan.worktreePath)
+              if (clean.exitCode !== 0) {
+                throw new ResetFailedError({ message: errorText(clean) || "Failed to clean worktree" })
+              }
 
-            return resetPlan.worktreePath
-          })
-          const started = await runStartScripts(worktreePath, { projectID })
-          if (!started) {
-            throw new StartCommandFailedError({ message: `Worktree startup scripts failed: ${worktreePath}` })
-          }
-          return worktreePath
-        },
-      })
-      if (mutation.status === "owned") {
+              await materializeGitlinks({
+                sourceRoot: primaryInfo.directory,
+                targetRoot: resetPlan.worktreePath,
+                force: true,
+              }).catch((error) => {
+                throw new ResetFailedError({ message: error instanceof Error ? error.message : String(error) })
+              })
+
+              await resetMaterializedGitlinks(resetPlan.worktreePath).catch((error) => {
+                throw new ResetFailedError({ message: error instanceof Error ? error.message : String(error) })
+              })
+
+              const status = await gitSourceStatus(
+                {
+                  cwd: resetPlan.worktreePath,
+                  timeoutProfile: "default",
+                },
+                "lines",
+              )
+              if (status.exitCode !== 0) {
+                throw new ResetFailedError({ message: errorText(status) || "Failed to read git status" })
+              }
+
+              const dirty = statusLinesBlockingMerge(outputText(status.stdout))
+              if (dirty.length > 0) {
+                throw new ResetFailedError({ message: `Worktree reset left local changes:\n${dirty.join("\n")}` })
+              }
+
+              return resetPlan.worktreePath
+            })
+            await WorktreeReadiness.markCheckedOut(readinessID)
+            await WorktreeReadiness.markStartupStarted(readinessID)
+            const startup = (await WorktreeReadiness.read(readinessID)).startup
+            const started = await runStartScript(worktreePath, startup.project, "project")
+            if (!started) {
+              throw new StartCommandFailedError({ message: `Worktree startup scripts failed: ${worktreePath}` })
+            }
+            await WorktreeReadiness.markPopulated(readinessID)
+            await afterResetStartup?.({ directory: worktreePath })
+            return worktreePath
+          },
+        })
+        if (mutation.status === "owned") {
+          await WorktreeReadiness.rollback(readinessID, "Worktree is actively owned")
+          ProjectDirectoryAdmission.settle(admission, () => undefined)
+          settled = true
+          throw new ResetFailedError({ message: `Worktree is actively owned: ${input.directory}` })
+        }
+        await WorktreeReadiness.commitReady(readinessID)
         ProjectDirectoryAdmission.settle(admission, () => undefined)
         settled = true
-        throw new ResetFailedError({ message: `Worktree is actively owned: ${input.directory}` })
+        return true
+      } catch (error) {
+        if (!mutationStarted && !settled) {
+          if (publicationID)
+            await WorktreeReadiness.rollback(publicationID, error instanceof Error ? error.message : String(error))
+          ProjectDirectoryAdmission.settle(admission, () => undefined)
+          settled = true
+        }
+        if (mutationStarted && !settled) {
+          const recorded = await WorktreeReadiness.read(publicationID!)
+          if (!recorded.ready && !recorded.recovery) await WorktreeReadiness.preserve(publicationID!)
+          ProjectDirectoryAdmission.settle(admission, () => undefined)
+          settled = true
+        }
+        throw error
       }
-      ProjectDirectoryAdmission.settle(admission, () => undefined)
-      settled = true
-      return true
-    } catch (error) {
-      if (!mutationStarted && !settled) {
-        ProjectDirectoryAdmission.settle(admission, () => undefined)
-        settled = true
-      }
-      throw error
-    }
+    })
   })
 }

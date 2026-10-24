@@ -1,7 +1,9 @@
 import { expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
+import { pathToFileURL } from "node:url"
 import { runHostCommandWithInactivity } from "../src/shell/command-inactivity"
+import { readRunnerEvidence, removeVerifiedRunnerEvidence, RUNNER_EVIDENCE_BYTES } from "./fixture/runner-evidence"
 
 test("the isolated runner completes selected files and reports their failed exit", async () => {
   const owner = process.env.OPENCORVUS_TEST_PROCESS_ROOT
@@ -12,6 +14,7 @@ test("the isolated runner completes selected files and reports their failed exit
   }
   const receipt = path.join(root, "receipts.jsonl")
   const files = [path.join(root, "first.case.ts"), path.join(root, "second.case.ts")]
+  const manifests = files.map((_, index) => path.join(root, `original-${index + 1}.json`))
   try {
     for (const [index, file] of files.entries()) {
       const record = { file: index + 1, outcome: index === 0 ? "failed" : "passed" }
@@ -20,7 +23,9 @@ test("the isolated runner completes selected files and reports their failed exit
         [
           'import { test } from "bun:test"',
           'import fs from "node:fs"',
+          `import {writeRunnerEvidence} from ${JSON.stringify(pathToFileURL(path.join(import.meta.dir, "fixture/runner-evidence.ts")).href)}`,
           `test("selected case ${index + 1}", () => {`,
+          `writeRunnerEvidence(${JSON.stringify(manifests[index])},${JSON.stringify(`selected-${index + 1}`)})`,
           `fs.appendFileSync(${JSON.stringify(receipt)}, ${JSON.stringify(JSON.stringify(record) + "\n")})`,
           index === 0 ? 'throw new Error("controlled selected-file failure")' : "",
           "})",
@@ -53,6 +58,25 @@ test("the isolated runner completes selected files and reports their failed exit
       { file: 1, outcome: "failed" },
       { file: 2, outcome: "passed" },
     ])
+    const evidence = manifests.map(readRunnerEvidence)
+    expect(
+      evidence.map((item) => ({ row: item.row, binary: item.binary, ownerRoot: item.original.ownerRoot })),
+    ).toEqual(
+      [1, 2].map((index) => ({
+        row: {
+          id: `selected-${index}`,
+          outcome: "effect_written_before_checker_failure",
+          evidence: RUNNER_EVIDENCE_BYTES,
+        },
+        binary: RUNNER_EVIDENCE_BYTES,
+        ownerRoot: evidence[0].original.ownerRoot,
+      })),
+    )
+    expect(result.stderr).toContain(`Test runtime retained after unsuccessful run: ${evidence[0].original.ownerRoot}`)
+    await removeVerifiedRunnerEvidence(
+      evidence[0],
+      result.settlementConfirmed && result.stderr.includes("Physical/output settlement confirmed: true"),
+    )
   } finally {
     await fs.rm(root, { recursive: true, force: true })
   }

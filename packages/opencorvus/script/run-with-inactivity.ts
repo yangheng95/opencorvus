@@ -30,6 +30,7 @@ const runnerRuntime = await bootstrapIsolatedTestRuntime("runner")
 if (testProcessSupervisor) process.env.OPENCORVUS_PROCESS_SUPERVISOR = testProcessSupervisor
 
 let settlementConfirmed = true
+let completedSuccessfully = false
 try {
   const { runHostCommandWithInactivity } = await import("../src/shell/command-inactivity")
   settlementConfirmed = false
@@ -52,11 +53,12 @@ try {
     throw new Error("Inactivity runner returned no exit code or failure diagnostic")
   } else {
     process.exitCode = result.exitCode
+    completedSuccessfully = result.exitCode === 0
   }
 } finally {
-  if (settlementConfirmed) await removeIsolatedTestRuntime(runnerRuntime)
-  else
-    console.error(
-      `Test runtime retained because physical/output settlement is unconfirmed: ${runnerRuntime.processRoot}`,
-    )
+  if (completedSuccessfully && settlementConfirmed) await removeIsolatedTestRuntime(runnerRuntime)
+  else {
+    console.error(`Test runtime retained after unsuccessful run: ${runnerRuntime.ownerRoot}`)
+    console.error(`Physical/output settlement confirmed: ${settlementConfirmed}`)
+  }
 }

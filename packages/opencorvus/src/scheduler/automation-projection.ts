@@ -114,7 +114,12 @@ export function currentSessionDelayDefinitionsForSessionsInTransaction(
         )`,
       ),
     )
-    .orderBy(AutomationTable.session_id, AutomationTable.definition_id, desc(AutomationTable.revision), desc(AutomationTable.id))
+    .orderBy(
+      AutomationTable.session_id,
+      AutomationTable.definition_id,
+      desc(AutomationTable.revision),
+      desc(AutomationTable.id),
+    )
     .all()
 }
 
@@ -126,7 +131,7 @@ export type AutomationRunRow = typeof AutomationRunTable.$inferSelect & {
   session_id: string | null
   owner: string | null
   outcome: "running" | "retry_wait" | "succeeded" | "failed" | "disposition"
-  disposition: "mission_closed" | "target_deleted" | "superseded" | null
+  disposition: "mission_closed" | "target_deleted" | "superseded" | "owner_unresolved" | null
   closure_event_id: string | null
   completed_at: number | null
   error: string | null
@@ -137,25 +142,38 @@ function deterministicRunSessionID(runID: string): string {
   return `ses_automation_${createHash("sha256").update(runID).digest("hex").slice(0, 32)}`
 }
 
-export function projectAutomationRunInTransaction(db: Database.TxOrDb, row: typeof AutomationRunTable.$inferSelect): AutomationRunRow {
+export function projectAutomationRunInTransaction(
+  db: Database.TxOrDb,
+  row: typeof AutomationRunTable.$inferSelect,
+): AutomationRunRow {
   const fire = db.select().from(AutomationFireTable).where(eq(AutomationFireTable.id, row.fire_id)).get()
   if (!fire) throw new Error(`Automation run ${row.id} references missing logical fire ${row.fire_id}`)
-  const definition = db.select({
-    definitionID: AutomationTable.definition_id,
-    kind: AutomationTable.kind,
-    scope: AutomationTable.scope,
-    projectID: AutomationTable.project_id,
-    sessionID: AutomationTable.session_id,
-  }).from(AutomationTable)
-    .where(eq(AutomationTable.id, row.automation_revision_id)).get()
-  if (!definition) throw new Error(`Automation run ${row.id} references missing definition revision ${row.automation_revision_id}`)
-  const receipt = db.select().from(AutomationRunReceiptTable)
+  const definition = db
+    .select({
+      definitionID: AutomationTable.definition_id,
+      kind: AutomationTable.kind,
+      scope: AutomationTable.scope,
+      projectID: AutomationTable.project_id,
+      sessionID: AutomationTable.session_id,
+    })
+    .from(AutomationTable)
+    .where(eq(AutomationTable.id, row.automation_revision_id))
+    .get()
+  if (!definition)
+    throw new Error(`Automation run ${row.id} references missing definition revision ${row.automation_revision_id}`)
+  const receipt = db
+    .select()
+    .from(AutomationRunReceiptTable)
     .where(eq(AutomationRunReceiptTable.run_id, row.id))
-    .orderBy(asc(AutomationRunReceiptTable.time_created), asc(AutomationRunReceiptTable.id)).all().at(-1)
+    .orderBy(asc(AutomationRunReceiptTable.time_created), asc(AutomationRunReceiptTable.id))
+    .all()
+    .at(-1)
   const lease = currentControlLeaseInTransaction(db, "automation", definition.definitionID)
   const targetScope = definition.scope ?? (definition.sessionID ? "session" : "project")
   const projectID = row.target_project_id ?? definition.projectID
-  const sessionID = definition.sessionID ?? (definition.kind === "recurring" && targetScope !== "session" ? deterministicRunSessionID(row.id) : null)
+  const sessionID =
+    definition.sessionID ??
+    (definition.kind === "recurring" && targetScope !== "session" ? deterministicRunSessionID(row.id) : null)
   if (definition.sessionID) {
     const reservation = assertSchedulerMissionReservationInTransaction(db, definition.sessionID, row)
     if (
@@ -167,7 +185,21 @@ export function projectAutomationRunInTransaction(db: Database.TxOrDb, row: type
       throw new Error(`Automation run ${row.id} terminal Mission reservation has no exact atomic receipt`)
     }
   }
-  return { ...row, scheduled_due_at: fire.scheduled_due_at, automation_id: definition.definitionID, target_scope: targetScope, project_id: projectID, session_id: sessionID, owner: lease?.owner_occurrence_id ?? null, outcome: receipt?.outcome ?? "running", disposition: receipt?.disposition ?? null, closure_event_id: receipt?.closure_event_id ?? null, completed_at: receipt?.time_created ?? null, error: receipt?.error ?? null, retry_at: receipt?.retry_at ?? null }
+  return {
+    ...row,
+    scheduled_due_at: fire.scheduled_due_at,
+    automation_id: definition.definitionID,
+    target_scope: targetScope,
+    project_id: projectID,
+    session_id: sessionID,
+    owner: lease?.owner_occurrence_id ?? null,
+    outcome: receipt?.outcome ?? "running",
+    disposition: receipt?.disposition ?? null,
+    closure_event_id: receipt?.closure_event_id ?? null,
+    completed_at: receipt?.time_created ?? null,
+    error: receipt?.error ?? null,
+    retry_at: receipt?.retry_at ?? null,
+  }
 }
 
 export type AutomationFireProjection = {
@@ -199,10 +231,10 @@ type AutomationFireAttemptSummary = {
   count: number
   failureCount: number
   latest: {
-  outcome: "reserved" | "retry_wait" | "failed" | null
-  retryAt: number | null
-  error: string | null
-  completedAt: number | null
+    outcome: "reserved" | "retry_wait" | "failed" | null
+    retryAt: number | null
+    error: string | null
+    completedAt: number | null
   } | null
 }
 
@@ -234,10 +266,10 @@ function reduceAutomationFireState(input: {
       ? input.attempts.count === 0
         ? "scheduled"
         : latestAttempt?.outcome === "failed"
-        ? "failed"
-        : latestAttempt?.outcome === "retry_wait"
-          ? "retry_wait"
-          : "running"
+          ? "failed"
+          : latestAttempt?.outcome === "retry_wait"
+            ? "retry_wait"
+            : "running"
       : hasRunning
         ? "running"
         : hasRetry
@@ -259,8 +291,7 @@ function reduceAutomationFireState(input: {
     : null
   const runErrors = input.runs.flatMap((run) => (run.error ? [run.error] : []))
   return {
-    startedAt:
-      input.runs.length > 0 ? Math.min(...input.runs.map((run) => run.startedAt)) : input.fire.time_created,
+    startedAt: input.runs.length > 0 ? Math.min(...input.runs.map((run) => run.startedAt)) : input.fire.time_created,
     completedAt,
     state,
     attemptCount: input.attempts.count,
@@ -291,7 +322,8 @@ export function projectAutomationFireInTransaction(
     .from(AutomationTable)
     .where(eq(AutomationTable.id, fire.automation_revision_id))
     .get()
-  if (!definition) throw new Error(`Automation fire ${fire.id} references missing revision ${fire.automation_revision_id}`)
+  if (!definition)
+    throw new Error(`Automation fire ${fire.id} references missing revision ${fire.automation_revision_id}`)
   const runs = db
     .select()
     .from(AutomationRunTable)
@@ -305,13 +337,19 @@ export function projectAutomationFireInTransaction(
     .where(eq(AutomationFireAttemptTable.fire_id, fire.id))
     .orderBy(asc(AutomationFireAttemptTable.ordinal), asc(AutomationFireAttemptTable.id))
     .all()
-  const attemptReceipts = attempts.length === 0
-    ? []
-    : db
-        .select()
-        .from(AutomationFireAttemptReceiptTable)
-        .where(inArray(AutomationFireAttemptReceiptTable.attempt_id, attempts.map((attempt) => attempt.id)))
-        .all()
+  const attemptReceipts =
+    attempts.length === 0
+      ? []
+      : db
+          .select()
+          .from(AutomationFireAttemptReceiptTable)
+          .where(
+            inArray(
+              AutomationFireAttemptReceiptTable.attempt_id,
+              attempts.map((attempt) => attempt.id),
+            ),
+          )
+          .all()
   const receiptByAttempt = new Map(attemptReceipts.map((receipt) => [receipt.attempt_id, receipt]))
   const reduced = reduceAutomationFireState({
     fire,
@@ -414,18 +452,15 @@ export function projectAutomationInTransaction(
   }
   const memberFailureCounts = latestFire
     ? latestFire.runs.map(
-          (member) =>
-            db
-              .select({ id: AutomationRunReceiptTable.id })
-              .from(AutomationRunReceiptTable)
-              .where(
-                and(
-                  eq(AutomationRunReceiptTable.run_id, member.id),
-                  eq(AutomationRunReceiptTable.outcome, "retry_wait"),
-                ),
-              )
-              .all().length + (member.outcome === "failed" ? 1 : 0),
-        )
+        (member) =>
+          db
+            .select({ id: AutomationRunReceiptTable.id })
+            .from(AutomationRunReceiptTable)
+            .where(
+              and(eq(AutomationRunReceiptTable.run_id, member.id), eq(AutomationRunReceiptTable.outcome, "retry_wait")),
+            )
+            .all().length + (member.outcome === "failed" ? 1 : 0),
+      )
     : []
   const failureCount = latestFire
     ? reduceAutomationFireFailureCount({
@@ -478,13 +513,15 @@ export function projectAutomationFrontierInTransaction(
     .select({ fire: AutomationFireTable })
     .from(AutomationFireTable)
     .innerJoin(AutomationTable, eq(AutomationTable.id, AutomationFireTable.automation_revision_id))
-    .where(and(
-      eq(AutomationTable.definition_id, row.definition_id),
-      sql`(
+    .where(
+      and(
+        eq(AutomationTable.definition_id, row.definition_id),
+        sql`(
         EXISTS (SELECT 1 FROM automation_fire_attempt AS attempt WHERE attempt.fire_id=${AutomationFireTable.id})
         OR EXISTS (SELECT 1 FROM automation_run AS run WHERE run.fire_id=${AutomationFireTable.id})
       )`,
-    ))
+      ),
+    )
     .orderBy(
       desc(AutomationFireTable.scheduled_due_at),
       desc(AutomationFireTable.time_created),
@@ -493,10 +530,13 @@ export function projectAutomationFrontierInTransaction(
     .limit(1)
     .get()?.fire
   const latest = latestFire ? projectAutomationFireInTransaction(db, latestFire) : undefined
-  const pendingFire = db.select({ fire: AutomationFireTable }).from(AutomationFireTable)
-    .where(and(
-      eq(AutomationFireTable.automation_revision_id, row.id),
-      sql`(
+  const pendingFire = db
+    .select({ fire: AutomationFireTable })
+    .from(AutomationFireTable)
+    .where(
+      and(
+        eq(AutomationFireTable.automation_revision_id, row.id),
+        sql`(
         (
           NOT EXISTS (SELECT 1 FROM automation_run AS run WHERE run.fire_id=${AutomationFireTable.id})
           AND EXISTS (
@@ -525,9 +565,15 @@ export function projectAutomationFrontierInTransaction(
             AND (receipt.id IS NULL OR receipt.outcome='retry_wait')
         )
       )`,
-    ))
-    .orderBy(desc(AutomationFireTable.scheduled_due_at), desc(AutomationFireTable.time_created), desc(AutomationFireTable.id))
-    .limit(1).get()?.fire
+      ),
+    )
+    .orderBy(
+      desc(AutomationFireTable.scheduled_due_at),
+      desc(AutomationFireTable.time_created),
+      desc(AutomationFireTable.id),
+    )
+    .limit(1)
+    .get()?.fire
   const pending = pendingFire ? projectAutomationFireInTransaction(db, pendingFire) : undefined
   if (pendingFire && pendingFire.automation_revision_id !== row.id) {
     throw new Error(
@@ -574,18 +620,16 @@ export function projectAutomationFrontierInTransaction(
         .get()
     : undefined
   const memberFailureCounts = latest
-    ? latest.runs.map((member) =>
+    ? latest.runs.map(
+        (member) =>
           db
             .select({ id: AutomationRunReceiptTable.id })
             .from(AutomationRunReceiptTable)
             .where(
-              and(
-                eq(AutomationRunReceiptTable.run_id, member.id),
-                eq(AutomationRunReceiptTable.outcome, "retry_wait"),
-              ),
+              and(eq(AutomationRunReceiptTable.run_id, member.id), eq(AutomationRunReceiptTable.outcome, "retry_wait")),
             )
             .all().length + (member.outcome === "failed" ? 1 : 0),
-        )
+      )
     : []
   return {
     ...row,
@@ -667,7 +711,10 @@ function automationFrontierFireFactsInTransaction(
 ): AutomationFrontierFireFact[] {
   if (definitions.length === 0) return []
   observe?.("fires")
-  const requested = sql.join(definitions.map((definition) => sql`(${definition.definition_id},${definition.id})`), sql`, `)
+  const requested = sql.join(
+    definitions.map((definition) => sql`(${definition.definition_id},${definition.id})`),
+    sql`, `,
+  )
   return db.all<AutomationFrontierFireFact>(sql`
     WITH requested(definition_id,revision_id) AS (VALUES ${requested})
     SELECT
@@ -773,7 +820,10 @@ function automationFrontierRunFactsInTransaction(
 ): AutomationFrontierRunFact[] {
   if (fireIDs.length === 0) return []
   observe?.("runs")
-  const requested = sql.join(fireIDs.map((fireID) => sql`(${fireID})`), sql`, `)
+  const requested = sql.join(
+    fireIDs.map((fireID) => sql`(${fireID})`),
+    sql`, `,
+  )
   return db.all<AutomationFrontierRunFact>(sql`
     WITH requested(fire_id) AS (VALUES ${requested})
     SELECT
@@ -812,7 +862,10 @@ function automationFrontierAttemptFactsInTransaction(
 ): AutomationFrontierAttemptFact[] {
   if (fireIDs.length === 0) return []
   observe?.("attempts")
-  const requested = sql.join(fireIDs.map((fireID) => sql`(${fireID})`), sql`, `)
+  const requested = sql.join(
+    fireIDs.map((fireID) => sql`(${fireID})`),
+    sql`, `,
+  )
   return db.all<AutomationFrontierAttemptFact>(sql`
     WITH requested(fire_id) AS (VALUES ${requested})
     SELECT
@@ -855,7 +908,10 @@ export function currentAutomationLeaseFrontiersInTransaction(
 ): Map<string, AutomationLeaseFrontier> {
   if (definitionIDs.length === 0) return new Map()
   observe?.("leases")
-  const requested = sql.join(definitionIDs.map((definitionID) => sql`(${definitionID})`), sql`, `)
+  const requested = sql.join(
+    definitionIDs.map((definitionID) => sql`(${definitionID})`),
+    sql`, `,
+  )
   const rows = db.all<AutomationLeaseFrontier>(sql`
     WITH requested(definition_id) AS (VALUES ${requested})
     SELECT lease.*
@@ -936,9 +992,10 @@ function batchedAutomationFireStatesInTransaction(
     states.set(fire.id, {
       fire,
       reduced,
-      latestAttempt: attempt?.attempt_id && attempt.ordinal !== null
-        ? { id: attempt.attempt_id, ordinal: attempt.ordinal }
-        : undefined,
+      latestAttempt:
+        attempt?.attempt_id && attempt.ordinal !== null
+          ? { id: attempt.attempt_id, ordinal: attempt.ordinal }
+          : undefined,
       reservedTargetFailures: Math.max(
         0,
         ...fireRuns.map((run) => run.retry_count + (run.outcome === "failed" ? 1 : 0)),
@@ -963,9 +1020,7 @@ function currentAutomationDefinitionPageInTransaction(
     .from(AutomationTable)
     .where(
       and(
-        input.afterDefinitionID
-          ? gt(AutomationTable.definition_id, input.afterDefinitionID)
-          : undefined,
+        input.afterDefinitionID ? gt(AutomationTable.definition_id, input.afterDefinitionID) : undefined,
         input.status ? eq(AutomationTable.status, input.status) : undefined,
         input.kind ? eq(AutomationTable.kind, input.kind) : undefined,
         sql`NOT EXISTS (

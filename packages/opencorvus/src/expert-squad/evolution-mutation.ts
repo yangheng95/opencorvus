@@ -1,5 +1,4 @@
 import { Identifier } from "@/id/id"
-import { NamedError } from "@opencorvus-ai/util/error"
 import z from "zod"
 import {
   canonicalEvolutionJSON,
@@ -16,10 +15,12 @@ import {
 } from "@opencorvus-ai/plugin"
 import { exactEngineArtifactLocator } from "@/artifact-catalog"
 import { insertEngineArtifact } from "@/engine/artifact"
-import { EngineArtifactTable } from "@/engine/engine.sql"
+import { readExpertSquadMutationReceipt } from "@/engine/expert-squad-mutation-receipt"
 import { Instance } from "@/project/instance"
 import { EngineService } from "@/task-api"
-import { Database, eq } from "@/storage/db"
+import { Database } from "@/storage/db"
+import { EvolutionMutationReceiptIdentityConflictError } from "./mutation-receipt-validation"
+export { EvolutionMutationReceiptIdentityConflictError } from "./mutation-receipt-validation"
 import { ExpertSquadPackageManager } from "./manager"
 import { requireCurrentEvolutionEvidence } from "./evolution-review-freshness"
 import { requireEvolutionMutationAuthorization, requireEvolutionMutationRootSession } from "./mutation-authorization"
@@ -49,7 +50,10 @@ export async function authorizeEvolutionPackageMutation(rawInput: EvolutionMutat
   })
   const prepared = prepareEvolutionPackageMutation({ taskID: input.taskID, intent: input.intent })
   if (prepared.operation === "promotion")
-    requireCurrentEvolutionEvidence({ taskID: input.taskID, comparisonLocator: prepared.intent.comparisonResultLocator })
+    requireCurrentEvolutionEvidence({
+      taskID: input.taskID,
+      comparisonLocator: prepared.intent.comparisonResultLocator,
+    })
   const confirmationText = preparedConfirmation(prepared)
   if (input.confirmationText !== confirmationText)
     throw new Error("Evolution mutation authorization text does not equal the exact current evidence decision")
@@ -76,11 +80,6 @@ export async function authorizeEvolutionPackageMutation(rawInput: EvolutionMutat
   })
 }
 
-export const EvolutionMutationReceiptIdentityConflictError = NamedError.create(
-  "EvolutionMutationReceiptIdentityConflictError",
-  z.object({ artifactID: z.string() }),
-)
-
 type ReceiptIdentity = {
   operation: string
   authorizationMessageID: string
@@ -96,13 +95,11 @@ function receiptArtifactID(input: ReceiptIdentity) {
 }
 
 function existingReceipt(input: { taskID: string; artifactID: string; identity: ReceiptIdentity }) {
-  const row = Database.use((db) =>
-    db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, input.artifactID)).get(),
-  )
+  const row = Database.use((db) => readExpertSquadMutationReceipt(db, input.artifactID))
   if (!row) return undefined
-  if (row.task_id !== input.taskID || row.kind !== "expert_output")
+  if (row.task_id !== input.taskID)
     throw new EvolutionMutationReceiptIdentityConflictError({ artifactID: input.artifactID })
-  const envelope = EngineArtifactEnvelopeSchema.parse(row.payload)
+  const envelope = row.envelope
   if (
     envelope.artifact_type !== "evolution-lab/promotion-receipt" ||
     envelope.producer.owner_kind !== "core" ||
@@ -152,12 +149,11 @@ function persistReceipt(input: {
     source_artifact_locators: input.receipt.evidence,
   })
   Database.immediateTransaction((db) => {
-    const current = db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, input.artifactID)).get()
+    const current = readExpertSquadMutationReceipt(db, input.artifactID)
     if (current) {
       if (
         current.task_id !== input.taskID ||
-        current.kind !== "expert_output" ||
-        canonicalEvolutionJSON(EngineArtifactEnvelopeSchema.parse(current.payload)) !== canonicalEvolutionJSON(envelope)
+        canonicalEvolutionJSON(current.envelope) !== canonicalEvolutionJSON(envelope)
       )
         throw new EvolutionMutationReceiptIdentityConflictError({ artifactID: input.artifactID })
       return

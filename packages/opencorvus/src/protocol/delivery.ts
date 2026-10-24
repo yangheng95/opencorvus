@@ -1,21 +1,29 @@
 import { createHash } from "node:crypto"
 import { NamedError } from "@opencorvus-ai/util/error"
 import z from "zod"
-import {
-  EngineControlActivationLeaseTable,
-  EngineTaskRootIngressTable,
-  EngineTaskTable,
-} from "@/engine/engine.sql"
+import { EngineControlActivationLeaseTable, EngineTaskRootIngressTable, EngineTaskTable } from "@/engine/engine.sql"
 import { taskLifecycleProjectionInTransaction } from "@/engine/task-lifecycle"
 import { deriveTaskStatus, isTaskActive } from "@/engine/task-status"
 import { Identifier } from "@/id/id"
-import { MessageTable, PartTable, ToolPartRequestTable, SessionControlRecordTable, SessionTable } from "@/session/session.sql"
+import {
+  MessageTable,
+  PartTable,
+  ToolPartRequestTable,
+  SessionControlRecordTable,
+  SessionTable,
+} from "@/session/session.sql"
 import { Message } from "@/session/message"
+import { completedReplyPredicateSql } from "@/session/completed-reply"
 import { and, asc, Database, eq, inArray, or, sql } from "@/storage/db"
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
 import { ProtocolDeliveryReceiptTable, ProtocolEventTable, ProtocolInboxTable } from "./protocol.sql"
 import { projectProtocolDeliveryInTransaction, type ProtocolDeliveryRow } from "./delivery-projection"
-import { acquireControlLease, currentControlLeaseInTransaction, releaseControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
+import {
+  acquireControlLease,
+  currentControlLeaseInTransaction,
+  releaseControlLeaseInTransaction,
+  renewControlLease,
+} from "@/engine/control-lease"
 import {
   ProtocolInboxDeliveryResult,
   SchedulerEndpoint,
@@ -112,10 +120,7 @@ function schedulerSessionWakeHasRecoverableTerminalReceipt() {
       FROM protocol_delivery_receipt AS scheduler_session_wake_receipt
       JOIN message AS scheduler_successful_reply
         ON scheduler_successful_reply.session_id = ${ProtocolInboxTable.actor_id}
-       AND json_extract(scheduler_successful_reply.data, '$.role') = 'assistant'
-       AND json_extract(scheduler_successful_reply.data, '$.parentID') = json_extract(scheduler_session_wake_receipt.receipt, '$.message_id')
-       AND json_extract(scheduler_successful_reply.data, '$.time.completed') IS NOT NULL
-       AND json_extract(scheduler_successful_reply.data, '$.error') IS NULL
+       AND ${completedReplyPredicateSql({ data: sql`scheduler_successful_reply.data`, messageID: sql`scheduler_successful_reply.id`, userMessageID: sql`json_extract(scheduler_session_wake_receipt.receipt, '$.message_id')` })}
       WHERE scheduler_session_wake_receipt.inbox_id = ${ProtocolInboxTable.id}
         AND json_extract(scheduler_session_wake_receipt.receipt, '$.kind') = 'session_wake'
     )`
@@ -163,16 +168,19 @@ function schedulerSessionWakeHasNoSuccessfulReply() {
     SELECT 1
     FROM message AS scheduler_successful_reply
     WHERE scheduler_successful_reply.session_id = ${ProtocolInboxTable.actor_id}
-      AND json_extract(scheduler_successful_reply.data, '$.role') = 'assistant'
-      AND json_extract(scheduler_successful_reply.data, '$.parentID') = json_extract(${ProtocolDeliveryReceiptTable.receipt}, '$.message_id')
-      AND json_extract(scheduler_successful_reply.data, '$.time.completed') IS NOT NULL
-      AND json_extract(scheduler_successful_reply.data, '$.error') IS NULL
+      AND ${completedReplyPredicateSql({ data: sql`scheduler_successful_reply.data`, messageID: sql`scheduler_successful_reply.id`, userMessageID: sql`json_extract(${ProtocolDeliveryReceiptTable.receipt}, '$.message_id')` })}
   )`
 }
 
 function sourceBodyFromPartData(data: unknown): string | undefined {
   if (!data || typeof data !== "object" || Array.isArray(data)) return undefined
-  const part = data as { type?: unknown; tool?: unknown; input?: { message?: unknown }; state?: { input?: { message?: unknown } }; text?: unknown }
+  const part = data as {
+    type?: unknown
+    tool?: unknown
+    input?: { message?: unknown }
+    state?: { input?: { message?: unknown } }
+    text?: unknown
+  }
   if (
     (part.type === "tool-request" || part.type === "tool") &&
     part.tool === "scheduler_message" &&
@@ -220,10 +228,7 @@ export type MissionSchedulerOccurrenceDisposition =
 /** Capture the one Mission occurrence a durable scheduler fact is allowed to
  * target. The scheduler writer calls this in the same transaction that stores
  * the fact, so retries never resolve a later reopen. */
-export function missionSchedulerOccurrenceBindingInTransaction(
-  db: Database.TxOrDb,
-  sessionID: string,
-): string | null {
+export function missionSchedulerOccurrenceBindingInTransaction(db: Database.TxOrDb, sessionID: string): string | null {
   const latest = db
     .select({ id: ProtocolEventTable.id, type: ProtocolEventTable.type })
     .from(ProtocolEventTable)
@@ -334,13 +339,8 @@ function missionSchedulerOccurrenceDispositionForEnvelopeInTransaction(
   throw new Error(`Scheduler Message ${envelopeID} for Mission Session ${sessionID} has no causal lifecycle boundary`)
 }
 
-export function missionSchedulerOccurrenceBindingForEnvelope(
-  sessionID: string,
-  envelopeID: string,
-): string | null {
-  return Database.use((db) =>
-    missionSchedulerOccurrenceBindingForEnvelopeInTransaction(db, sessionID, envelopeID),
-  )
+export function missionSchedulerOccurrenceBindingForEnvelope(sessionID: string, envelopeID: string): string | null {
+  return Database.use((db) => missionSchedulerOccurrenceBindingForEnvelopeInTransaction(db, sessionID, envelopeID))
 }
 
 export function missionSchedulerOccurrenceDispositionForEnvelope(
@@ -777,16 +777,8 @@ function requireReplyAuthority(input: {
       currentEpoch,
     })
   }
-  staleReversedTaskOccurrence(
-    input.source,
-    requestPayload.target_task_execution_epoch,
-    input.sourceTaskExecutionEpoch,
-  )
-  staleReversedTaskOccurrence(
-    input.target,
-    requestPayload.source_task_execution_epoch,
-    input.targetTaskExecutionEpoch,
-  )
+  staleReversedTaskOccurrence(input.source, requestPayload.target_task_execution_epoch, input.sourceTaskExecutionEpoch)
+  staleReversedTaskOccurrence(input.target, requestPayload.source_task_execution_epoch, input.targetTaskExecutionEpoch)
   const existingReply = input.db
     .select({ id: ProtocolEventTable.id })
     .from(ProtocolEventTable)
@@ -873,19 +865,22 @@ function requireSourceOccurrence(
       })
     }
     if (input.sourcePartID) {
-      const part = db
-        .select({ id: PartTable.id })
-        .from(PartTable)
-        .where(
-          and(
-            eq(PartTable.id, input.sourcePartID),
-            eq(PartTable.message_id, input.sourceMessageID),
-          ),
-        )
-        .get() ?? db.select({ id: ToolPartRequestTable.id }).from(ToolPartRequestTable).where(and(
-          eq(ToolPartRequestTable.id, input.sourcePartID),
-          eq(ToolPartRequestTable.message_id, input.sourceMessageID),
-        )).get()
+      const part =
+        db
+          .select({ id: PartTable.id })
+          .from(PartTable)
+          .where(and(eq(PartTable.id, input.sourcePartID), eq(PartTable.message_id, input.sourceMessageID)))
+          .get() ??
+        db
+          .select({ id: ToolPartRequestTable.id })
+          .from(ToolPartRequestTable)
+          .where(
+            and(
+              eq(ToolPartRequestTable.id, input.sourcePartID),
+              eq(ToolPartRequestTable.message_id, input.sourceMessageID),
+            ),
+          )
+          .get()
       if (!part) {
         throw new SchedulerMessageAuthorityError({
           message: `Scheduler source Part ${input.sourcePartID} does not belong to source Message ${input.sourceMessageID}.`,
@@ -936,11 +931,16 @@ function requireTaskSourceMessageOccurrence(
       message: `Task scheduler source Message ${input.sourceMessageID} has no exact Task ingress occurrence.`,
     })
   }
-  const lease = db.select().from(EngineControlActivationLeaseTable)
-    .where(and(
-      eq(EngineControlActivationLeaseTable.id, assistant.data.activationID),
-      eq(EngineControlActivationLeaseTable.target, "task_root_ingress"),
-    )).get()
+  const lease = db
+    .select()
+    .from(EngineControlActivationLeaseTable)
+    .where(
+      and(
+        eq(EngineControlActivationLeaseTable.id, assistant.data.activationID),
+        eq(EngineControlActivationLeaseTable.target, "task_root_ingress"),
+      ),
+    )
+    .get()
   const ingress = lease
     ? db.select().from(EngineTaskRootIngressTable).where(eq(EngineTaskRootIngressTable.id, lease.target_id)).get()
     : undefined
@@ -972,9 +972,12 @@ export function schedulerSourceBodyInTransaction(
     if (!event) throw new SchedulerMessageAuthorityError({ message: `Scheduler terminal source is missing.` })
     return JSON.stringify(event.payload ?? {})
   }
-  const part = db.select({ data: ToolPartRequestTable.data }).from(ToolPartRequestTable)
-    .where(eq(ToolPartRequestTable.id, input.sourcePartID!)).get()
-    ?? db.select({ data: PartTable.data }).from(PartTable).where(eq(PartTable.id, input.sourcePartID!)).get()
+  const part =
+    db
+      .select({ data: ToolPartRequestTable.data })
+      .from(ToolPartRequestTable)
+      .where(eq(ToolPartRequestTable.id, input.sourcePartID!))
+      .get() ?? db.select({ data: PartTable.data }).from(PartTable).where(eq(PartTable.id, input.sourcePartID!)).get()
   const body = sourceBodyFromPartData(part?.data)
   if (!body?.trim()) {
     throw new SchedulerMessageAuthorityError({
@@ -1011,11 +1014,7 @@ function requireDeliveryResultOccurrence(
     const closure = requireMissionExecutionClosureEvent(result.closure_event_id)
     const disposition =
       inbox.actor === "session"
-        ? missionSchedulerOccurrenceDispositionForEnvelopeInTransaction(
-            db,
-            inbox.actor_id,
-            inbox.envelope_id,
-          )
+        ? missionSchedulerOccurrenceDispositionForEnvelopeInTransaction(db, inbox.actor_id, inbox.envelope_id)
         : undefined
     if (
       inbox.actor !== "session" ||
@@ -1327,8 +1326,24 @@ export function claimNextSchedulerDelivery(input: {
       .get()?.inbox
   })
   if (!row) return undefined
-  const acquired = acquireControlLease({ target: "protocol_delivery", targetID: row.id, ownerOccurrenceID: input.ownerID, now, leaseMilliseconds: input.leaseMilliseconds })
-  return acquired.acquired ? parseDeliveryRow(Database.use((db) => projectProtocolDeliveryInTransaction(db, db.select().from(ProtocolInboxTable).where(eq(ProtocolInboxTable.id, row.id)).get()!, now))) : undefined
+  const acquired = acquireControlLease({
+    target: "protocol_delivery",
+    targetID: row.id,
+    ownerOccurrenceID: input.ownerID,
+    now,
+    leaseMilliseconds: input.leaseMilliseconds,
+  })
+  return acquired.acquired
+    ? parseDeliveryRow(
+        Database.use((db) =>
+          projectProtocolDeliveryInTransaction(
+            db,
+            db.select().from(ProtocolInboxTable).where(eq(ProtocolInboxTable.id, row.id)).get()!,
+            now,
+          ),
+        ),
+      )
+    : undefined
 }
 
 export function settleSchedulerDeliveryInTransaction(
@@ -1342,8 +1357,16 @@ export function settleSchedulerDeliveryInTransaction(
   if (!current) throw new Error(`Scheduler delivery not found: ${input.inboxID}`)
   const projected = projectProtocolDeliveryInTransaction(db, current, now)
   requireDeliveryResultOccurrence(db, projected, result)
-  const terminal = db.select().from(ProtocolDeliveryReceiptTable)
-    .where(and(eq(ProtocolDeliveryReceiptTable.inbox_id, input.inboxID), sql`json_extract(${ProtocolDeliveryReceiptTable.receipt}, '$.kind') <> 'retry_wait'`)).get()
+  const terminal = db
+    .select()
+    .from(ProtocolDeliveryReceiptTable)
+    .where(
+      and(
+        eq(ProtocolDeliveryReceiptTable.inbox_id, input.inboxID),
+        sql`json_extract(${ProtocolDeliveryReceiptTable.receipt}, '$.kind') <> 'retry_wait'`,
+      ),
+    )
+    .get()
   if (terminal) {
     if (JSON.stringify(terminal.receipt) !== JSON.stringify(result)) {
       throw new Error(`Scheduler delivery ${input.inboxID} conflicts with its immutable terminal receipt`)
@@ -1351,8 +1374,11 @@ export function settleSchedulerDeliveryInTransaction(
     return parseDeliveryRow(projectProtocolDeliveryInTransaction(db, current, now))
   }
   const lease = currentControlLeaseInTransaction(db, "protocol_delivery", input.inboxID)
-  if (!lease || lease.owner_occurrence_id !== input.ownerID || lease.expires_at <= now) throw new Error(`Scheduler delivery ${input.inboxID} is not leased by ${input.ownerID}`)
-  db.insert(ProtocolDeliveryReceiptTable).values({ id: Identifier.ascending("protocol_inbox"), inbox_id: input.inboxID, receipt: result, time_created: now }).run()
+  if (!lease || lease.owner_occurrence_id !== input.ownerID || lease.expires_at <= now)
+    throw new Error(`Scheduler delivery ${input.inboxID} is not leased by ${input.ownerID}`)
+  db.insert(ProtocolDeliveryReceiptTable)
+    .values({ id: Identifier.ascending("protocol_inbox"), inbox_id: input.inboxID, receipt: result, time_created: now })
+    .run()
   return parseDeliveryRow(projectProtocolDeliveryInTransaction(db, current, now))
 }
 
@@ -1364,8 +1390,16 @@ export function renewSchedulerDeliveryLease(input: {
 }) {
   const now = input.now ?? Date.now()
   const lease = Database.use((db) => currentControlLeaseInTransaction(db, "protocol_delivery", input.inboxID))
-  if (!lease || lease.owner_occurrence_id !== input.ownerID || lease.expires_at <= now) throw new Error(`Scheduler delivery ${input.inboxID} is not leased by ${input.ownerID}`)
-  renewControlLease({ target: "protocol_delivery", targetID: input.inboxID, leaseID: lease.id, ownerOccurrenceID: input.ownerID, now, expiresAt: now + input.leaseMilliseconds })
+  if (!lease || lease.owner_occurrence_id !== input.ownerID || lease.expires_at <= now)
+    throw new Error(`Scheduler delivery ${input.inboxID} is not leased by ${input.ownerID}`)
+  renewControlLease({
+    target: "protocol_delivery",
+    targetID: input.inboxID,
+    leaseID: lease.id,
+    ownerOccurrenceID: input.ownerID,
+    now,
+    expiresAt: now + input.leaseMilliseconds,
+  })
   return findSchedulerDelivery(input.inboxID)!
 }
 
@@ -1393,13 +1427,27 @@ export function rescheduleSchedulerDelivery(input: {
   return Database.immediateTransaction((db) => {
     const current = db.select().from(ProtocolInboxTable).where(eq(ProtocolInboxTable.id, input.inboxID)).get()
     const lease = currentControlLeaseInTransaction(db, "protocol_delivery", input.inboxID)
-    if (!current || !lease || lease.owner_occurrence_id !== input.ownerID || lease.expires_at <= now) throw new Error(`Scheduler delivery ${input.inboxID} is not leased by ${input.ownerID}`)
-    db.insert(ProtocolDeliveryReceiptTable).values({ id: Identifier.ascending("protocol_inbox"), inbox_id: input.inboxID, receipt: { kind: "retry_wait", visible_at: input.visibleAt, error }, time_created: now }).run()
+    if (!current || !lease || lease.owner_occurrence_id !== input.ownerID || lease.expires_at <= now)
+      throw new Error(`Scheduler delivery ${input.inboxID} is not leased by ${input.ownerID}`)
+    db.insert(ProtocolDeliveryReceiptTable)
+      .values({
+        id: Identifier.ascending("protocol_inbox"),
+        inbox_id: input.inboxID,
+        receipt: { kind: "retry_wait", visible_at: input.visibleAt, error },
+        time_created: now,
+      })
+      .run()
     // Hand the lease back with the receipt. Holding it until expiry would make
     // `DELIVERY_LEASE_MS` the real retry period and the caller's backoff dead
     // code, so a failure the caller wanted to retry in half a second waits two
     // minutes instead.
-    releaseControlLeaseInTransaction(db, { target: "protocol_delivery", targetID: input.inboxID, leaseID: lease.id, ownerOccurrenceID: input.ownerID, now })
+    releaseControlLeaseInTransaction(db, {
+      target: "protocol_delivery",
+      targetID: input.inboxID,
+      leaseID: lease.id,
+      ownerOccurrenceID: input.ownerID,
+      now,
+    })
     return parseDeliveryRow(projectProtocolDeliveryInTransaction(db, current, now))
   })
 }
@@ -1411,7 +1459,11 @@ export function deadLetterSchedulerSessionDeliveriesInTransaction(
   Database.requireActiveTransaction("deadLetterSchedulerSessionDeliveriesInTransaction")
   if (input.sessionIDs.length === 0) return 0
   const now = input.now ?? Date.now()
-  const rows = db.select().from(ProtocolInboxTable).where(and(eq(ProtocolInboxTable.actor, "session"), inArray(ProtocolInboxTable.actor_id, [...input.sessionIDs]))).all()
+  const rows = db
+    .select()
+    .from(ProtocolInboxTable)
+    .where(and(eq(ProtocolInboxTable.actor, "session"), inArray(ProtocolInboxTable.actor_id, [...input.sessionIDs])))
+    .all()
   return appendDeadLetterReceipts(db, rows, input.errorName, input.message, now)
 }
 
@@ -1422,7 +1474,11 @@ export function deadLetterSchedulerTaskDeliveriesInTransaction(
   Database.requireActiveTransaction("deadLetterSchedulerTaskDeliveriesInTransaction")
   if (input.taskIDs.length === 0) return 0
   const now = input.now ?? Date.now()
-  const rows = db.select().from(ProtocolInboxTable).where(and(eq(ProtocolInboxTable.actor, "task"), inArray(ProtocolInboxTable.actor_id, [...input.taskIDs]))).all()
+  const rows = db
+    .select()
+    .from(ProtocolInboxTable)
+    .where(and(eq(ProtocolInboxTable.actor, "task"), inArray(ProtocolInboxTable.actor_id, [...input.taskIDs])))
+    .all()
   return appendDeadLetterReceipts(db, rows, input.errorName, input.message, now)
 }
 
@@ -1456,12 +1512,26 @@ export function deadLetterSchedulerSourceDeliveriesInTransaction(
   return appendDeadLetterReceipts(db, rows, input.errorName, input.message, now)
 }
 
-function appendDeadLetterReceipts(db: Database.TxOrDb, rows: Array<typeof ProtocolInboxTable.$inferSelect>, errorName: string, message: string, now: number): number {
+function appendDeadLetterReceipts(
+  db: Database.TxOrDb,
+  rows: Array<typeof ProtocolInboxTable.$inferSelect>,
+  errorName: string,
+  message: string,
+  now: number,
+): number {
   const unresolved = rows.filter((row) => {
     const status = projectProtocolDeliveryInTransaction(db, row, now).status
     return status === "pending" || status === "leased"
   })
-  for (const row of unresolved) db.insert(ProtocolDeliveryReceiptTable).values({ id: Identifier.ascending("protocol_inbox"), inbox_id: row.id, receipt: { kind: "dead_letter", error_name: errorName, message }, time_created: now }).run()
+  for (const row of unresolved)
+    db.insert(ProtocolDeliveryReceiptTable)
+      .values({
+        id: Identifier.ascending("protocol_inbox"),
+        inbox_id: row.id,
+        receipt: { kind: "dead_letter", error_name: errorName, message },
+        time_created: now,
+      })
+      .run()
   return unresolved.length
 }
 
@@ -1487,47 +1557,49 @@ export function listPendingSchedulerRecipientIDs(input: {
   }
   const now = input.now ?? Date.now()
   return Database.use((db) => {
-    const rows = input.actor === "session"
-      ? db
-        .select({ actorID: ProtocolInboxTable.actor_id })
-        .from(ProtocolInboxTable)
-        .innerJoin(ProtocolEventTable, eq(ProtocolEventTable.id, ProtocolInboxTable.envelope_id))
-        .innerJoin(SessionTable, eq(SessionTable.id, ProtocolInboxTable.actor_id))
-        .where(and(
-          eq(ProtocolInboxTable.actor, "session"),
-          eq(ProtocolEventTable.type, SCHEDULER_MESSAGE_EVENT_TYPE),
-          ...(input.projectID ? [eq(SessionTable.project_id, input.projectID)] : []),
-          ...(input.afterActorID ? [sql`${ProtocolInboxTable.actor_id} > ${input.afterActorID}`] : []),
-          schedulerDeliveryIsCurrentUnresolvedHead(),
-          schedulerDeliveryHeadIsDueAndUnleased(now),
-        ))
-        .orderBy(asc(ProtocolInboxTable.actor_id))
-        .limit(input.limit)
-        .all()
-      : db
-        .select({ actorID: ProtocolInboxTable.actor_id })
-        .from(ProtocolInboxTable)
-        .innerJoin(ProtocolEventTable, eq(ProtocolEventTable.id, ProtocolInboxTable.envelope_id))
-        .innerJoin(EngineTaskTable, eq(EngineTaskTable.id, ProtocolInboxTable.actor_id))
-        .where(and(
-          eq(ProtocolInboxTable.actor, "task"),
-          eq(ProtocolEventTable.type, SCHEDULER_MESSAGE_EVENT_TYPE),
-          ...(input.projectID ? [eq(EngineTaskTable.project_id, input.projectID)] : []),
-          ...(input.afterActorID ? [sql`${ProtocolInboxTable.actor_id} > ${input.afterActorID}`] : []),
-          schedulerDeliveryIsCurrentUnresolvedHead(),
-          schedulerDeliveryHeadIsDueAndUnleased(now),
-        ))
-        .orderBy(asc(ProtocolInboxTable.actor_id))
-        .limit(input.limit)
-        .all()
+    const rows =
+      input.actor === "session"
+        ? db
+            .select({ actorID: ProtocolInboxTable.actor_id })
+            .from(ProtocolInboxTable)
+            .innerJoin(ProtocolEventTable, eq(ProtocolEventTable.id, ProtocolInboxTable.envelope_id))
+            .innerJoin(SessionTable, eq(SessionTable.id, ProtocolInboxTable.actor_id))
+            .where(
+              and(
+                eq(ProtocolInboxTable.actor, "session"),
+                eq(ProtocolEventTable.type, SCHEDULER_MESSAGE_EVENT_TYPE),
+                ...(input.projectID ? [eq(SessionTable.project_id, input.projectID)] : []),
+                ...(input.afterActorID ? [sql`${ProtocolInboxTable.actor_id} > ${input.afterActorID}`] : []),
+                schedulerDeliveryIsCurrentUnresolvedHead(),
+                schedulerDeliveryHeadIsDueAndUnleased(now),
+              ),
+            )
+            .orderBy(asc(ProtocolInboxTable.actor_id))
+            .limit(input.limit)
+            .all()
+        : db
+            .select({ actorID: ProtocolInboxTable.actor_id })
+            .from(ProtocolInboxTable)
+            .innerJoin(ProtocolEventTable, eq(ProtocolEventTable.id, ProtocolInboxTable.envelope_id))
+            .innerJoin(EngineTaskTable, eq(EngineTaskTable.id, ProtocolInboxTable.actor_id))
+            .where(
+              and(
+                eq(ProtocolInboxTable.actor, "task"),
+                eq(ProtocolEventTable.type, SCHEDULER_MESSAGE_EVENT_TYPE),
+                ...(input.projectID ? [eq(EngineTaskTable.project_id, input.projectID)] : []),
+                ...(input.afterActorID ? [sql`${ProtocolInboxTable.actor_id} > ${input.afterActorID}`] : []),
+                schedulerDeliveryIsCurrentUnresolvedHead(),
+                schedulerDeliveryHeadIsDueAndUnleased(now),
+              ),
+            )
+            .orderBy(asc(ProtocolInboxTable.actor_id))
+            .limit(input.limit)
+            .all()
     return rows.map((row) => row.actorID)
   })
 }
 
-export function listPendingSchedulerProjectIDs(input: {
-  afterProjectID?: string
-  limit: number
-}): string[] {
+export function listPendingSchedulerProjectIDs(input: { afterProjectID?: string; limit: number }): string[] {
   if (!Number.isSafeInteger(input.limit) || input.limit <= 0 || input.limit > SCHEDULER_PROJECT_PAGE_LIMIT) {
     throw new Error(`Scheduler Project page limit must be between 1 and ${SCHEDULER_PROJECT_PAGE_LIMIT}`)
   }
@@ -1613,9 +1685,7 @@ export function listUnansweredSchedulerSessionWakes(input: {
   openedEventID: string
 }> {
   if (!Number.isSafeInteger(input.limit) || input.limit <= 0 || input.limit > SCHEDULER_WAKE_RECOVERY_PAGE_LIMIT) {
-    throw new Error(
-      `Scheduler wake recovery page limit must be between 1 and ${SCHEDULER_WAKE_RECOVERY_PAGE_LIMIT}`,
-    )
+    throw new Error(`Scheduler wake recovery page limit must be between 1 and ${SCHEDULER_WAKE_RECOVERY_PAGE_LIMIT}`)
   }
   return Database.use((db) => {
     const rows = db
@@ -1717,10 +1787,7 @@ export function auditSchedulerSessionDeliverySettlement(sessionID: string): {
         )
         if (!openedEventID) return true
         const disposition = missionSchedulerOccurrenceDispositionInTransaction(db, { sessionID, openedEventID })
-        return !(
-          disposition.kind === "mission_closed" &&
-          completedSchedulerWakeReplyExistsInTransaction(db, reply)
-        )
+        return !(disposition.kind === "mission_closed" && completedSchedulerWakeReplyExistsInTransaction(db, reply))
       })
       .map((delivery) => delivery.id)
       .sort()

@@ -28,7 +28,9 @@ export const EventJobTable = sqliteTable(
     cooldown_ms: integer().notNull().default(0),
     tool_part_id: text(),
     tool_input_digest: text(),
-    time_created: integer().notNull().$default(() => Date.now()),
+    time_created: integer()
+      .notNull()
+      .$default(() => Date.now()),
   },
   (table) => [
     uniqueIndex("event_job_definition_revision_idx").on(table.definition_id, table.revision),
@@ -43,10 +45,13 @@ export const EventJobTable = sqliteTable(
     uniqueIndex("event_job_tool_occurrence_idx")
       .on(table.tool_part_id)
       .where(sql`${table.tool_part_id} IS NOT NULL`),
-    check("event_job_tool_causation_shape", sql`
+    check(
+      "event_job_tool_causation_shape",
+      sql`
       (${table.tool_part_id} IS NULL AND ${table.tool_input_digest} IS NULL)
       OR (${table.tool_part_id} IS NOT NULL AND ${table.tool_input_digest} IS NOT NULL)
-    `),
+    `,
+    ),
   ],
 )
 
@@ -67,10 +72,13 @@ export const EventJobDefinitionTombstoneTable = sqliteTable(
     uniqueIndex("event_job_definition_tombstone_tool_occurrence_idx")
       .on(table.tool_part_id)
       .where(sql`${table.tool_part_id} IS NOT NULL`),
-    check("event_job_tombstone_tool_causation_shape", sql`
+    check(
+      "event_job_tombstone_tool_causation_shape",
+      sql`
       (${table.tool_part_id} IS NULL AND ${table.tool_input_digest} IS NULL)
       OR (${table.tool_part_id} IS NOT NULL AND ${table.tool_input_digest} IS NOT NULL)
-    `),
+    `,
+    ),
   ],
 )
 
@@ -85,10 +93,13 @@ export const EventOccurrenceTable = sqliteTable(
     time_created: integer().notNull(),
   },
   (table) => [
-    check("event_occurrence_owner_shape", sql`
+    check(
+      "event_occurrence_owner_shape",
+      sql`
       (${table.bus_outbox_id} IS NOT NULL AND ${table.project_id} IS NULL AND ${table.event_type} IS NULL AND ${table.properties} IS NULL)
       OR (${table.bus_outbox_id} IS NULL AND ${table.project_id} IS NOT NULL AND ${table.event_type} IS NOT NULL AND ${table.properties} IS NOT NULL)
-    `),
+    `,
+    ),
   ],
 )
 
@@ -98,8 +109,13 @@ export const EventJobFireTable = sqliteTable(
     id: text().primaryKey(),
     definition_id: text().notNull(),
     queue_position: integer().notNull(),
-    event_job_revision_id: text().notNull().references(() => EventJobTable.id, { onDelete: "restrict" }),
-    event_occurrence_id: text().notNull().references(() => EventOccurrenceTable.id, { onDelete: "restrict" }),
+    event_job_revision_id: text()
+      .notNull()
+      .references(() => EventJobTable.id, { onDelete: "restrict" }),
+    event_occurrence_id: text()
+      .notNull()
+      .references(() => EventOccurrenceTable.id, { onDelete: "restrict" }),
+    project_generation: text(),
     causation_fire_id: text(),
     causal_cycle: integer({ mode: "boolean" }).notNull().default(false),
     /** Present only when this fire pre-allocates a new Session. Existing
@@ -120,11 +136,14 @@ export const EventJobFireTable = sqliteTable(
     uniqueIndex("event_job_fire_target_session_idx")
       .on(table.created_session_id)
       .where(sql`${table.created_session_id} IS NOT NULL`),
-    check("event_job_fire_mission_reservation_shape", sql`
+    check(
+      "event_job_fire_mission_reservation_shape",
+      sql`
       (${table.mission_opened_event_id} IS NULL AND ${table.mission_disposition} IS NULL AND ${table.mission_closure_event_id} IS NULL)
       OR (${table.mission_opened_event_id} IS NOT NULL AND ${table.mission_disposition} IS NULL AND ${table.mission_closure_event_id} IS NULL)
       OR (${table.mission_opened_event_id} IS NULL AND ${table.mission_disposition}='mission_closed' AND ${table.mission_closure_event_id} IS NOT NULL)
-    `),
+    `,
+    ),
     check("event_job_fire_queue_position_positive", sql`${table.queue_position}>0`),
     check("event_job_fire_causal_cycle_shape", sql`${table.causal_cycle}=0 OR ${table.causation_fire_id} IS NOT NULL`),
   ],
@@ -140,7 +159,9 @@ export const EventJobFireReceiptTable = sqliteTable(
     definition_id: text().notNull(),
     queue_position: integer().notNull(),
     outcome: text({ enum: ["retry_wait", "succeeded", "disposition"] }).notNull(),
-    disposition: text({ enum: ["causal_cycle", "cooldown", "job_disabled", "mission_closed", "target_deleted"] }),
+    disposition: text({
+      enum: ["causal_cycle", "cooldown", "job_disabled", "mission_closed", "target_deleted", "owner_unresolved"],
+    }),
     closure_event_id: text().references(() => ProtocolEventTable.id, { onDelete: "restrict" }),
     message_id: text(),
     retry_at: integer(),
@@ -149,7 +170,8 @@ export const EventJobFireReceiptTable = sqliteTable(
   },
   (table) => [
     index("event_job_fire_receipt_fire_idx").on(table.fire_id, table.outcome, table.time_created, table.id),
-    uniqueIndex("event_job_fire_terminal_receipt_idx").on(table.fire_id)
+    uniqueIndex("event_job_fire_terminal_receipt_idx")
+      .on(table.fire_id)
       .where(sql`${table.outcome} <> 'retry_wait'`),
     uniqueIndex("event_job_fire_terminal_frontier_idx")
       .on(table.definition_id, table.queue_position)
@@ -162,7 +184,7 @@ export const EventJobFireReceiptTable = sqliteTable(
       sql`
       (${table.outcome}='retry_wait' AND ${table.disposition} IS NULL AND ${table.closure_event_id} IS NULL AND ${table.message_id} IS NULL AND ${table.retry_at} IS NOT NULL AND ${table.error} IS NOT NULL)
       OR (${table.outcome}='succeeded' AND ${table.disposition} IS NULL AND ${table.closure_event_id} IS NULL AND ${table.message_id} IS NOT NULL AND ${table.retry_at} IS NULL AND ${table.error} IS NULL)
-      OR (${table.outcome}='disposition' AND ${table.disposition} IN ('causal_cycle','cooldown','job_disabled','target_deleted') AND ${table.closure_event_id} IS NULL AND ${table.message_id} IS NULL AND ${table.retry_at} IS NULL)
+      OR (${table.outcome}='disposition' AND ${table.disposition} IN ('causal_cycle','cooldown','job_disabled','target_deleted','owner_unresolved') AND ${table.closure_event_id} IS NULL AND ${table.message_id} IS NULL AND ${table.retry_at} IS NULL)
       OR (${table.outcome}='disposition' AND ${table.disposition}='mission_closed' AND ${table.closure_event_id} IS NOT NULL AND ${table.message_id} IS NULL AND ${table.retry_at} IS NULL AND ${table.error} IS NULL)
     `,
     ),

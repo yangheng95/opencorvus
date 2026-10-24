@@ -669,8 +669,8 @@ describe("authorized expert squad evolution mutation", () => {
               findings: candidateReview.value.findings.map((finding) => ({ ...finding, evidence: [complete.mapped(candidateEvaluation.locator)] })) }
             const late = recordEvolutionArtifact({ taskID: complete.taskID, type: "evolution-lab/integrity-review",
               payload: lateValue, sources: [complete.mapped(candidateEvaluation.locator)] })
-            await expect(executeEvolutionPackageMutation({ ...importedIntent, authorization: authorization.authorization }))
-              .rejects.toBeInstanceOf(EvolutionComparisonReviewChangedError)
+            const importedChange = await executeEvolutionPackageMutation({ ...importedIntent, authorization: authorization.authorization }).catch((error) => error)
+            expect(importedChange).toBeInstanceOf(EvolutionComparisonReviewChangedError)
             const after = await readEvolutionHistory({ namespace: target.namespace, id: target.id, installationScope: "project" })
             const stale = after.records.find((item) => item.campaign.artifact.task_id === complete.taskID)!.candidates[0]!.comparisons[0]!
             expect({ recommendation: stale.recommendation, intent: stale.promotion_intent, issues: stale.graph_issues.map((issue) => issue.code) })
@@ -743,11 +743,12 @@ describe("authorized expert squad evolution mutation", () => {
             const repeatedTaskIntent = { operation: "promotion" as const, campaignSpecLocator: campaign,
               candidateRevisionLocator: candidateArtifact, comparisonResultLocator: repeatedTaskComparison,
               expectedCurrentPackageDigest: baselineRevision.package_digest }
-            await expect(authorizeEvolutionPackageMutation({ taskID: operationTask.taskID, sessionID: operationTask.session.id,
+            const repeatedTaskError = await authorizeEvolutionPackageMutation({ taskID: operationTask.taskID, sessionID: operationTask.session.id,
               intent: repeatedTaskIntent, confirmationText: evolutionMutationConfirmationText({ projectID: Instance.project.id, target,
                 operation: "promotion", beforeDigest: baselineRevision.package_digest, afterDigest: candidateRevision.package_digest,
                 evidenceSHA256s: [campaign, candidateArtifact, repeatedTaskComparison].map((item) => item.expected_sha256) }),
-            })).rejects.toBeInstanceOf(EvolutionTrialSlotConflictError)
+            }).catch((error) => error)
+            expect(repeatedTaskError).toBeInstanceOf(EvolutionTrialSlotConflictError)
             const repeatedTaskHistory = await readEvolutionHistory({ namespace: target.namespace, id: target.id, installationScope: "project" })
             const repeatedTaskDetail = await readEvolutionCampaignDetail({ namespace: target.namespace, id: target.id,
               installationScope: "project", campaignTaskID: operationTask.taskID, campaignLocator: campaign,
@@ -871,7 +872,8 @@ describe("authorized expert squad evolution mutation", () => {
             if (scenario === "review-recovery") {
               const interrupt = ExpertSquadPackageManager.TestHooks.interruptAfterTargetInstallBeforeReceiptOnce()
               try {
-                await expect(executeEvolutionPackageMutation(mutationRequest)).rejects.toBeInstanceOf(
+                const interrupted = await executeEvolutionPackageMutation(mutationRequest).catch((error) => error)
+                expect(interrupted).toBeInstanceOf(
                   ExpertSquadPackageManager.EvolutionMutationAbruptTerminationForTest,
                 )
               } finally {
@@ -932,8 +934,31 @@ describe("authorized expert squad evolution mutation", () => {
               expectedChange,
             )
             expect((await ExpertSquadRegistry.loadPackage(installed.after.targetRoot)).packageDigest).toBe(
-              baselineRevision.package_digest,
+              scenario === "review-recovery" ? candidateRevision.package_digest : baselineRevision.package_digest,
             )
+            if (scenario === "review-recovery") {
+              const preservedReview = await ExpertSquadPackageManager.inspectMutationRecovery({
+                projectDirectory: project.path,
+                id: candidate.id,
+                installationScope: "project",
+              })
+              expect(
+                "entries" in preservedReview &&
+                  preservedReview.entries.map((entry) => ({
+                    disposition: entry.disposition,
+                    preservation: entry.preservation,
+                  })),
+              ).toEqual([{ disposition: "commit_receipt_unavailable", preservation: "complete" }])
+              // This is a new explicit CAS operation. The catalog upper freezes
+              // the evidence graph; executable intents still use today's install.
+              const explicitBaseline = await ExpertSquadPackageManager.importDirectory({
+                projectDirectory: project.path,
+                sourceDirectory: baselineSource,
+                installationScope: "project",
+                expectedCurrentPackageDigest: candidateRevision.package_digest,
+              })
+              expect(explicitBaseline.after.packageDigest).toBe(baselineRevision.package_digest)
+            }
             const historyAfter = await readEvolutionHistory({
               namespace: target.namespace,
               id: target.id,
@@ -1161,11 +1186,11 @@ describe("authorized expert squad evolution mutation", () => {
               expect((await ExpertSquadRegistry.loadPackage(installed.after.targetRoot)).packageDigest).toBe(baselineRevision.package_digest)
               const nativeIntent = { operation: "promotion" as const, campaignSpecLocator: campaign, candidateRevisionLocator: candidateArtifact,
                 comparisonResultLocator: finalRequest.comparisonResultLocator, expectedCurrentPackageDigest: baselineRevision.package_digest }
-              await expect(authorizeEvolutionPackageMutation({ taskID: operationTask.taskID, sessionID: operationTask.session.id,
+              const staleNativeAuthorization = await authorizeEvolutionPackageMutation({ taskID: operationTask.taskID, sessionID: operationTask.session.id,
                 intent: nativeIntent, confirmationText: evolutionMutationConfirmationText({ projectID: Instance.project.id, target,
                   operation: "promotion", beforeDigest: baselineRevision.package_digest, afterDigest: candidateRevision.package_digest,
-                  evidenceSHA256s: [campaign, candidateArtifact, finalRequest.comparisonResultLocator].map((item) => item.expected_sha256) }) }))
-                .rejects.toBeInstanceOf(EvolutionComparisonNativeMeasurementChangedError)
+                  evidenceSHA256s: [campaign, candidateArtifact, finalRequest.comparisonResultLocator].map((item) => item.expected_sha256) }) }).catch((error) => error)
+              expect(staleNativeAuthorization).toBeInstanceOf(EvolutionComparisonNativeMeasurementChangedError)
               const detail = await readEvolutionCampaignDetail({ namespace: target.namespace, id: target.id, installationScope: "project",
                 campaignTaskID: operationTask.taskID, campaignLocator: campaign, candidateLocator: candidateArtifact,
                 comparisonLocator: finalRequest.comparisonResultLocator, catalogRevisionUpper: frozenHistory.catalog_revision_upper })
@@ -1275,8 +1300,27 @@ describe("authorized expert squad evolution mutation", () => {
             { actor: "user" },
           )
           expect(requireTaskPackageRevisionBinding(recoveryTaskID).package_digest).toBe(
-            baselineRevision.package_digest,
+            candidateRevision.package_digest,
           )
+          const preserved = await ExpertSquadPackageManager.inspectMutationRecovery({
+            projectDirectory: project.path,
+            id: candidate.id,
+            installationScope: "project",
+          })
+          expect(
+            "entries" in preserved &&
+              preserved.entries.map((entry) => ({
+                disposition: entry.disposition,
+                preservation: entry.preservation,
+              })),
+          ).toEqual([{ disposition: "commit_receipt_unavailable", preservation: "complete" }])
+          const resetForExplicitPromotion = await ExpertSquadPackageManager.importDirectory({
+            projectDirectory: project.path,
+            sourceDirectory: baselineSource,
+            installationScope: "project",
+            expectedCurrentPackageDigest: candidateRevision.package_digest,
+          })
+          expect(resetForExplicitPromotion.after.packageDigest).toBe(baselineRevision.package_digest)
           const receiptReadFailure = ExpertSquadPackageManager.TestHooks.failFirstReceiptReadAfterCommit()
           let promotion!: Awaited<ReturnType<typeof executeEvolutionPackageMutation>>
           try {
