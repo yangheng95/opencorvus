@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [对话加载指示器的状态与无障碍语义](2026-10-24-conversation-loading-semantics/README.md)：572真实Task/Chat加载实图与完整数据结算。
+
 - [成员侧栏加载与正文连续性复核](2026-10-24-member-dock-loading/README.md)：571实页、原流和完整运行结算。
 
 - [文件编辑、保存与来源往返](2026-10-24-file-editor-roundtrip/README.md)：570实际编辑、原数据和运行收敛。

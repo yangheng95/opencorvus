@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [对话加载指示器的状态与无障碍语义](records/2026-10/2026-10-24-conversation-loading-semantics.md)：572统一Task/Chat加载反馈和可访问状态。
+
 - [成员侧栏加载与正文连续性复核](records/2026-10/2026-10-24-member-dock-loading.md)：571慢读取下原成员/Source与真实加载反馈。
 
 - [文件编辑、保存与来源往返](records/2026-10/2026-10-24-file-editor-roundtrip.md)：570真实新文件、保存中编辑和模型Source闭环。

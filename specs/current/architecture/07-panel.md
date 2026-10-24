@@ -34,6 +34,15 @@ target. Other query/fragment data and History state retain their existing values
 The address carries no credentials or message bodies and creates no execution.
 Existing Task cold-start preferences retain their separate host-settings role;
 there is no additional localStorage selection cache or persisted-format revision.
+
+Task, Chat and Mission hydration share the existing `boardStore.taskSwitching`
+projection. App directly binds the non-blocking header progress indicator and
+the conversation region's `aria-busy`/description to that one state. The
+indicator has a localized conversation-loading name and indeterminate
+`progressbar` semantics while active; its idle projection is hidden from the
+accessibility tree. No second DOM-writing effect or synthetic percentage owns
+the loading presentation, and the fixed indicator reserves no layout space.
+
 Invalid or conflicting location parameters produce the existing localized
 diagnostic after settings and locale hydration. Connection and sidebar loading
 continue, while that rejected navigation consumes the existing workspace epoch

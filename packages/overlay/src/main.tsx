@@ -2295,18 +2295,6 @@ function OverlayRoot() {
 
   onMount(() => syncScrollbarGuttersOnFrame.schedule())
 
-  // ── Task-switch progress bar (non-blocking) ──
-  // Reflects boardStore.taskSwitching (set synchronously at selectTask entry,
-  // cleared when the async load chain completes). The bar lives in a fixed
-  // slot above the chat header so user input is never gated on load.
-  createEffect(() => {
-    const active = boardStore.taskSwitching
-    const bar = document.getElementById("taskSwitchProgress")
-    if (!bar) return
-    bar.setAttribute("data-active", active ? "true" : "false")
-    bar.setAttribute("aria-busy", active ? "true" : "false")
-  })
-
   createEffect(() => {
     const panels = centerWorkbenchPanels()
     const primarySurface = primaryWorkspaceSurface()

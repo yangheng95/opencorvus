@@ -455,13 +455,20 @@ export function App(props: AppProps) {
                           <ConversationAgentRail onOpenSubagentConversation={props.onOpenSubagentConversation} />
                         </div>
                         <div class="center-workbench-activity chat-conversation-activity">
-                          <section class="chat" id="chatSection" data-empty-chat-home={String(props.homeActive)}>
+                          <section
+                            class="chat"
+                            id="chatSection"
+                            data-empty-chat-home={String(props.homeActive)}
+                            aria-busy={boardStore.taskSwitching}
+                            aria-describedby={boardStore.taskSwitching ? "taskSwitchProgress" : undefined}
+                          >
                             <div
                               class="task-switch-progress"
                               id="taskSwitchProgress"
-                              aria-label={t("workspace.loading_task")}
-                              aria-busy="false"
-                              data-active="false"
+                              role="progressbar"
+                              aria-label={t("workspace.loading_conversation")}
+                              aria-hidden={!boardStore.taskSwitching}
+                              data-active={String(boardStore.taskSwitching)}
                             />
                             <header class="chat-header oc-surface-header">
                               <div class="chat-header-main oc-surface-header__main">

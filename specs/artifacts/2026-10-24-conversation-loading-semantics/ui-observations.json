@@ -1,0 +1,184 @@
+[
+  {
+    "phase": "chat-loaded-en",
+    "at": 1792815969860,
+    "bar": {
+      "active": "false",
+      "hidden": "true",
+      "name": "Loading conversation",
+      "role": "progressbar"
+    },
+    "region": {
+      "busy": "false",
+      "description": null
+    },
+    "loadingAccessibilityNodes": []
+  },
+  {
+    "phase": "task-switch-en",
+    "at": 1792815984121,
+    "bar": {
+      "active": "true",
+      "hidden": "false",
+      "name": "Loading conversation",
+      "role": "progressbar"
+    },
+    "region": {
+      "busy": "true",
+      "description": "taskSwitchProgress"
+    },
+    "loadingAccessibilityNodes": [
+      "\t\t\t\t\t134 progress indicator Description: Loading conversation, ID: taskSwitchProgress"
+    ]
+  },
+  {
+    "phase": "task-loaded-en",
+    "at": 1792816008076,
+    "bar": {
+      "active": "false",
+      "hidden": "true",
+      "name": "Loading conversation",
+      "role": "progressbar"
+    },
+    "region": {
+      "busy": "false",
+      "description": null
+    },
+    "loadingAccessibilityNodes": []
+  },
+  {
+    "phase": "chat-loading-zh-with-draft",
+    "at": 1792816055066,
+    "bar": {
+      "active": "true",
+      "hidden": "false",
+      "name": "正在加载对话",
+      "role": "progressbar"
+    },
+    "draft": "572 加载期间的本地草稿，未发送",
+    "region": {
+      "busy": "true",
+      "description": "taskSwitchProgress"
+    },
+    "loadingAccessibilityNodes": [
+      "\t\t\t\t\t134 progress indicator Description: 正在加载对话, ID: taskSwitchProgress"
+    ]
+  },
+  {
+    "phase": "chat-loaded-zh-draft-retained",
+    "at": 1792816108492,
+    "bar": {
+      "active": "false",
+      "hidden": "true",
+      "name": "正在加载对话",
+      "role": "progressbar"
+    },
+    "draft": "572 加载期间的本地草稿，未发送",
+    "region": {
+      "busy": "false",
+      "description": null
+    },
+    "loadingAccessibilityNodes": []
+  },
+  {
+    "phase": "mission-loading-zh",
+    "at": 1792816166971,
+    "bar": {
+      "active": "true",
+      "hidden": "false",
+      "name": "正在加载对话",
+      "role": "progressbar"
+    },
+    "region": {
+      "busy": "true",
+      "description": "taskSwitchProgress"
+    },
+    "loadingAccessibilityNodes": [
+      "\t\t\t\t\t\t132 progress indicator Description: 正在加载对话, ID: taskSwitchProgress"
+    ]
+  },
+  {
+    "phase": "mission-loaded-zh",
+    "at": 1792816237179,
+    "bar": {
+      "active": "false",
+      "hidden": "true",
+      "name": "正在加载对话",
+      "role": "progressbar"
+    },
+    "region": {
+      "busy": "false",
+      "description": null
+    },
+    "loadingAccessibilityNodes": []
+  },
+  {
+    "phase": "chat-pending-before-leaving",
+    "at": 1792816248716,
+    "bar": {
+      "active": "true",
+      "hidden": "false",
+      "name": "正在加载对话",
+      "role": "progressbar"
+    },
+    "region": {
+      "busy": "true",
+      "description": "taskSwitchProgress"
+    },
+    "loadingAccessibilityNodes": [
+      "\t\t\t\t\t\t150 progress indicator Description: 正在加载对话, ID: taskSwitchProgress"
+    ]
+  },
+  {
+    "phase": "home-after-chat-load-completed",
+    "at": 1792816262521,
+    "bar": {
+      "active": "false",
+      "hidden": "true",
+      "name": "正在加载对话",
+      "role": "progressbar"
+    },
+    "region": {
+      "busy": "false",
+      "description": null
+    },
+    "loadingAccessibilityNodes": []
+  },
+  {
+    "phase": "rapid-chat-to-home",
+    "pending": {
+      "active": "true",
+      "at": 1792816302666,
+      "busy": "true"
+    },
+    "settledHome": {
+      "active": "false",
+      "at": 1792816303039,
+      "busy": "false",
+      "description": null,
+      "hidden": "true"
+    },
+    "pendingLoadingAccessibilityNodes": [
+      "\t\t\t\t\t\t136 progress indicator Description: 正在加载对话, ID: taskSwitchProgress"
+    ],
+    "homeHeading": [
+      "\t\t\t\t\t\t\t\t136 heading 今天想做点什么？, Value: 1"
+    ]
+  },
+  {
+    "phase": "home-after-old-chat-read-settled-and-goal-help-closed",
+    "at": 1792816366675,
+    "bar": {
+      "active": "false",
+      "hidden": "true",
+      "name": "正在加载对话",
+      "role": "progressbar"
+    },
+    "draft": "",
+    "region": {
+      "busy": "false",
+      "description": null
+    },
+    "loadingAccessibilityNodes": []
+  }
+]

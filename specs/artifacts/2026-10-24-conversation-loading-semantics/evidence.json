@@ -1,0 +1,225 @@
+{
+  "at": "2026-10-24T04:35:06.780Z",
+  "scope": "572",
+  "rootCause": "Opacity-only hiding retained a permanently named accessibility node; a separate main.tsx effect wrote visual/busy attributes and Task wording covered all conversation types.",
+  "change": "App directly binds existing loading flag to nonblocking indicator and region accessibility state. Progressbar is indeterminate and localized, hidden in idle. Removed duplicate DOM-writing effect.",
+  "build": {
+    "publication": {
+      "at": "2026-10-24T04:22:30.845Z",
+      "entry": "main-33iLUm4L.js",
+      "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/conversation-loading-semantics-572-bundle/bin/ui",
+      "qualification": "Actual completed standard Node Vite build, no private renderer instrumentation"
+    },
+    "preservation": {
+      "at": "2026-10-24T04:21:39.854Z",
+      "database": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/conversation-loading-semantics-572/runtime/data/opencorvus.db",
+      "before": {
+        "bytes": 92295168,
+        "modifiedAtMs": 1792815585726.0608
+      },
+      "after": {
+        "bytes": 92295168,
+        "modifiedAtMs": 1792815585726.0608
+      },
+      "identity": "Owned complete original SQLite bytes/mtime remained unchanged across actual Node build; full rows checked separately"
+    },
+    "prestartRows": "All 90 tables and 197241 original rows/fields/times matched before native start"
+  },
+  "existing": {
+    "at": "2026-10-24T04:30:18.192Z",
+    "delivery": {
+      "status": 200,
+      "entry": "main-33iLUm4L.js",
+      "assets": "assets/CommandMenuSurface-9Ez69chO.css,assets/CommandMenuSurface-CN3W_QEU.js,assets/main-33iLUm4L.js,assets/main-tXaylPa9.css"
+    },
+    "attachment": {
+      "status": 200,
+      "bytes": 643,
+      "identity": "Exact original published PNG and original source mtime"
+    },
+    "chat": {
+      "sessionID": "ses_hmMOeHbVmtnygDqxg0lA",
+      "experience": "chat",
+      "persistentKind": "assistant"
+    },
+    "mission": {
+      "status": 200,
+      "sessionID": "ses_-zURQjvQ8zz3y3NgFyVx",
+      "boardSessionID": "ses_-zURQjvQ8zz3y3NgFyVx"
+    },
+    "provider": {
+      "requestBudget": 0,
+      "requests": 0,
+      "authCopied": false
+    },
+    "qualification": "Actual public CLI UI delivery and original attachment, original Mission conversation contract and persisted Chat identity; no UI assertions"
+  },
+  "retirement": {
+    "at": "2026-10-24T04:35:06.775Z",
+    "authCopied": false,
+    "providerRequests": 0,
+    "catalogRetired": 1,
+    "catalogSource": {
+      "bytes": 9155406,
+      "modifiedAtMs": 1791128890137.9968,
+      "content": "Exact original"
+    },
+    "scopeDataFileNamesBeforeRetirement": [
+      "durable-publications",
+      "expert-squad-package-revisions",
+      "models.json",
+      "opencorvus.db",
+      "opencorvus.db-shm",
+      "opencorvus.db-wal",
+      "project-directory-admission.json"
+    ],
+    "publicShutdown": 200,
+    "reserveMs": 611836,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "exactProcessChain": "dead_or_reused"
+  },
+  "preservation": {
+    "source": {
+      "allOriginalRows": "Exact rowid/primary key/all fields/times",
+      "bytes": 92295168,
+      "modifiedAtMs": 1792814911810.3635
+    },
+    "schema": {
+      "sourceVersion": 5,
+      "targetVersion": 5,
+      "extraObjects": [],
+      "integrity": "ok"
+    },
+    "canonical": "Complete source bytes exact",
+    "tables": 90,
+    "rows": 197241,
+    "targetOriginalRowDifferences": [],
+    "providerActivityCounts": {
+      "original": 490,
+      "current": 490
+    }
+  },
+  "latency": [
+    {
+      "id": 106,
+      "at": "2026-10-24T04:25:41.253Z",
+      "phase": "latency-start",
+      "path": "/coding/chat/session/ses_hmMOeHbVmtnygDqxg0lA",
+      "latencyMilliseconds": 12000
+    },
+    {
+      "id": 106,
+      "at": "2026-10-24T04:25:53.255Z",
+      "phase": "latency-end",
+      "path": "/coding/chat/session/ses_hmMOeHbVmtnygDqxg0lA",
+      "latencyMilliseconds": 12000
+    },
+    {
+      "id": 198,
+      "at": "2026-10-24T04:27:34.592Z",
+      "phase": "latency-start",
+      "path": "/coding/chat/session/ses_hmMOeHbVmtnygDqxg0lA",
+      "latencyMilliseconds": 12000
+    },
+    {
+      "id": 198,
+      "at": "2026-10-24T04:27:46.594Z",
+      "phase": "latency-end",
+      "path": "/coding/chat/session/ses_hmMOeHbVmtnygDqxg0lA",
+      "latencyMilliseconds": 12000
+    },
+    {
+      "id": 270,
+      "at": "2026-10-24T04:29:18.862Z",
+      "phase": "latency-start",
+      "path": "/session/ses_-zURQjvQ8zz3y3NgFyVx/conversation",
+      "latencyMilliseconds": 12000
+    },
+    {
+      "id": 270,
+      "at": "2026-10-24T04:29:30.863Z",
+      "phase": "latency-end",
+      "path": "/session/ses_-zURQjvQ8zz3y3NgFyVx/conversation",
+      "latencyMilliseconds": 12000
+    },
+    {
+      "id": 295,
+      "at": "2026-10-24T04:30:06.110Z",
+      "phase": "latency-start",
+      "path": "/session/ses_-zURQjvQ8zz3y3NgFyVx/conversation",
+      "latencyMilliseconds": 12000
+    },
+    {
+      "id": 295,
+      "at": "2026-10-24T04:30:18.111Z",
+      "phase": "latency-end",
+      "path": "/session/ses_-zURQjvQ8zz3y3NgFyVx/conversation",
+      "latencyMilliseconds": 12000
+    },
+    {
+      "id": 316,
+      "at": "2026-10-24T04:30:48.451Z",
+      "phase": "latency-start",
+      "path": "/coding/chat/session/ses_hmMOeHbVmtnygDqxg0lA",
+      "latencyMilliseconds": 12000
+    },
+    {
+      "id": 316,
+      "at": "2026-10-24T04:31:00.453Z",
+      "phase": "latency-end",
+      "path": "/coding/chat/session/ses_hmMOeHbVmtnygDqxg0lA",
+      "latencyMilliseconds": 12000
+    },
+    {
+      "id": 349,
+      "at": "2026-10-24T04:31:42.396Z",
+      "phase": "latency-start",
+      "path": "/coding/chat/session/ses_hmMOeHbVmtnygDqxg0lA",
+      "latencyMilliseconds": 12000
+    },
+    {
+      "id": 349,
+      "at": "2026-10-24T04:31:54.398Z",
+      "phase": "latency-end",
+      "path": "/coding/chat/session/ses_hmMOeHbVmtnygDqxg0lA",
+      "latencyMilliseconds": 12000
+    }
+  ],
+  "taskConversationReads": [
+    {
+      "id": 44,
+      "at": "2026-10-24T04:24:20.627Z",
+      "phase": "arrived",
+      "method": "GET",
+      "path": "/task/tsk_g00VYlyopB00h7w27eIw/conversation",
+      "origin": null,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "initialSignalAborted": false,
+      "diagnostic": false
+    },
+    {
+      "id": 152,
+      "at": "2026-10-24T04:26:25.384Z",
+      "phase": "arrived",
+      "method": "GET",
+      "path": "/task/tsk_g00VYlyopB00h7w27eIw/conversation",
+      "origin": null,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "initialSignalAborted": false,
+      "diagnostic": false
+    }
+  ],
+  "manualScreenshots": 15,
+  "qualification": "Manual actual Task/Chat/Mission busy and idle, Chinese/English names, local unsent draft preserved, rapid leave before original response, default home and Goal menu/form/help. No UI automated tests or screenshot comparisons.",
+  "limitations": [
+    "No physical screen-reader speech or third-party assistive technology run; actual accessibility tree and screenshots only",
+    "Task board latency hook did not match the normal conversation entry. Task busy was captured on the actual unmodified conversation request; only Chat and Mission experienced artificial 12s delay",
+    "This fixes loading semantics, not an exhaustive claim about member Rendering flicker",
+    "No model execution in this UI-only batch; expected unavailable-model feedback is visible without copied credentials"
+  ],
+  "user18571": "Untouched"
+}
