@@ -1,0 +1,1131 @@
+{
+  "batch": 583,
+  "at": "2026-10-24T10:35:25.615Z",
+  "implementation": "No product source modification. Private passive owner observations against current HEAD8b57e2f9b; one current Node build.",
+  "inventory": {
+    "at": "2026-10-24T10:18:05.725Z",
+    "mode": "Actual closed databases readonly/create false; no native or Provider launched",
+    "records": [
+      {
+        "name": "member-stream-rendering-577",
+        "schema": 6,
+        "tables": [
+          "bus_publication_attempt_receipt",
+          "bus_publication_delivery",
+          "bus_publication_delivery_receipt",
+          "bus_publication_outbox",
+          "bus_publication_phase_receipt",
+          "event_job",
+          "event_job_definition_tombstone",
+          "event_job_fire",
+          "event_job_fire_receipt",
+          "event_occurrence",
+          "protocol_event",
+          "provider_usage_event",
+          "session_control_event"
+        ],
+        "events": [
+          {
+            "event_type": "message.created",
+            "count": 778
+          },
+          {
+            "event_type": "message.moved",
+            "count": 9
+          },
+          {
+            "event_type": "message.part.updated",
+            "count": 1048
+          },
+          {
+            "event_type": "message.updated",
+            "count": 1802
+          }
+        ],
+        "columns": [
+          {
+            "name": "occurrence_id",
+            "type": "TEXT"
+          },
+          {
+            "name": "project_id",
+            "type": "TEXT"
+          },
+          {
+            "name": "directory",
+            "type": "TEXT"
+          },
+          {
+            "name": "event_type",
+            "type": "TEXT"
+          },
+          {
+            "name": "properties",
+            "type": "TEXT"
+          },
+          {
+            "name": "causation",
+            "type": "TEXT"
+          },
+          {
+            "name": "time_created",
+            "type": "INTEGER"
+          }
+        ],
+        "sourceBytes": 95682560,
+        "sourceModifiedAtMs": 1792828797672.7832,
+        "sourceMetadataPreserved": true
+      },
+      {
+        "name": "source-excerpt-reading-582",
+        "schema": 7,
+        "tables": [
+          "bus_publication_attempt_receipt",
+          "bus_publication_delivery",
+          "bus_publication_delivery_receipt",
+          "bus_publication_outbox",
+          "bus_publication_owner",
+          "bus_publication_phase_receipt",
+          "event_job",
+          "event_job_definition_tombstone",
+          "event_job_fire",
+          "event_job_fire_receipt",
+          "event_occurrence",
+          "protocol_event",
+          "provider_usage_event",
+          "session_control_event"
+        ],
+        "events": [
+          {
+            "event_type": "message.created",
+            "count": 781
+          },
+          {
+            "event_type": "message.moved",
+            "count": 9
+          },
+          {
+            "event_type": "message.part.updated",
+            "count": 1050
+          },
+          {
+            "event_type": "message.updated",
+            "count": 1809
+          }
+        ],
+        "columns": [
+          {
+            "name": "occurrence_id",
+            "type": "TEXT"
+          },
+          {
+            "name": "project_id",
+            "type": "TEXT"
+          },
+          {
+            "name": "directory",
+            "type": "TEXT"
+          },
+          {
+            "name": "event_type",
+            "type": "TEXT"
+          },
+          {
+            "name": "properties",
+            "type": "TEXT"
+          },
+          {
+            "name": "causation",
+            "type": "TEXT"
+          },
+          {
+            "name": "time_created",
+            "type": "INTEGER"
+          }
+        ],
+        "sourceBytes": 95682560,
+        "sourceModifiedAtMs": 1792836491727.3499,
+        "sourceMetadataPreserved": true
+      }
+    ]
+  },
+  "publication": {
+    "at": "2026-10-24T10:21:57.212Z",
+    "entry": "main-D00h6xUK.js",
+    "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/live-text-event-order-583-bundle/bin/ui",
+    "qualification": "Completed current production Node Vite build with private passive capture/resolve metadata; native CLI /ui"
+  },
+  "build": {
+    "time": "64s",
+    "preservation": {
+      "before": {
+        "bytes": 95682560,
+        "modifiedAtMs": 1792837219189.2397
+      },
+      "after": {
+        "bytes": 95682560,
+        "modifiedAtMs": 1792837219189.2397
+      }
+    }
+  },
+  "actual": {
+    "at": "2026-10-24T10:33:22.706Z",
+    "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+    "messages": 16,
+    "parts": 41,
+    "newSources": [
+      {
+        "id": "prt_g0VYxezLu00sLJt6Hd8k",
+        "messageID": "msg_g0VYxewPY00LEDWpoFs6",
+        "sourceId": "d19514673f82e55b4dd7b5acee5ff6dbdcf7634e06a0933053430cc19657f0c7",
+        "toolPartID": "prt_g0VYxezEh00ofzQfqAZA",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project\\README.md",
+        "range": {
+          "startLine": 2,
+          "endLine": 2
+        }
+      },
+      {
+        "id": "prt_g0VYxf0M200Qcc3o5pOq",
+        "messageID": "msg_g0VYxezNc00Gssq77k0d",
+        "sourceId": "862fb911e7414ce6ccc2f0464c49349f3b7014b32386f8e8f66481c4bf5a0bb4",
+        "toolPartID": "prt_g0VYxf0FR001Q7fDaM7K",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project\\README.md",
+        "range": {
+          "startLine": 3,
+          "endLine": 3
+        }
+      }
+    ],
+    "tools": [
+      {
+        "id": "prt_g0VYxezEh00ofzQfqAZA",
+        "tool": "read",
+        "input": {
+          "filePath": "README.md",
+          "offset": 2,
+          "limit": 1
+        },
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VYxf0FR001Q7fDaM7K",
+        "tool": "read",
+        "input": {
+          "filePath": "README.md",
+          "offset": 3,
+          "limit": 1
+        },
+        "status": "completed"
+      }
+    ],
+    "texts": [
+      {
+        "id": "prt_g0VYxewLV00PQaVKzQNh",
+        "messageID": "msg_0d550bc3-0c0c-470a-97d6-9a54c29c8819",
+        "role": "user",
+        "characters": 279,
+        "canonical": "Exact SQLite Part text"
+      },
+      {
+        "id": "prt_g0VYxexVv00opAcKgOdl",
+        "messageID": "msg_g0VYxewPY00LEDWpoFs6",
+        "role": "assistant",
+        "characters": 437,
+        "canonical": "Exact SQLite Part text"
+      },
+      {
+        "id": "prt_g0VYxf1Ev00Uc2t737H7",
+        "messageID": "msg_g0VYxf0Ng000XzRh3RNk",
+        "role": "assistant",
+        "characters": 2545,
+        "canonical": "Exact SQLite Part text"
+      }
+    ],
+    "events": {
+      "count": 2167,
+      "counts": {
+        "message.part.updated": 157,
+        "message.part.delta": 2008,
+        "message.part.removed": 2
+      },
+      "backwardObservations": 0,
+      "texts": [
+        {
+          "partID": "prt_g0VYxewLV00PQaVKzQNh",
+          "events": 2,
+          "first": {
+            "sequence": 1,
+            "at": 1792837380796,
+            "type": "message.part.updated",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "messageID": "msg_0d550bc3-0c0c-470a-97d6-9a54c29c8819",
+            "partID": "prt_g0VYxewLV00PQaVKzQNh",
+            "partType": "text",
+            "textLength": 279,
+            "orderKey": "v1:0001792837380628:0000000000000031:0000000000000000:part:prt_g0VYxewLV00PQaVKzQNh"
+          },
+          "last": {
+            "sequence": 2,
+            "at": 1792837382862,
+            "type": "message.part.updated",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "messageID": "msg_0d550bc3-0c0c-470a-97d6-9a54c29c8819",
+            "partID": "prt_g0VYxewLV00PQaVKzQNh",
+            "partType": "text",
+            "textLength": 279,
+            "previousLength": 279,
+            "appendFromPrevious": true,
+            "orderKey": "v1:0001792837380628:0000000000000031:0000000000000000:part:prt_g0VYxewLV00PQaVKzQNh"
+          }
+        },
+        {
+          "partID": "prt_g0VYxexVv00opAcKgOdl",
+          "events": 318,
+          "first": {
+            "sequence": 4,
+            "at": 1792837385121,
+            "type": "message.part.updated",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "messageID": "msg_g0VYxewPY00LEDWpoFs6",
+            "partID": "prt_g0VYxexVv00opAcKgOdl",
+            "partType": "text",
+            "textLength": 0,
+            "orderKey": "v1:0001792837385111:0000000000000031:0000000000000000:part:prt_g0VYxexVv00opAcKgOdl"
+          },
+          "last": {
+            "sequence": 321,
+            "at": 1792837391729,
+            "type": "message.part.updated",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "messageID": "msg_g0VYxewPY00LEDWpoFs6",
+            "partID": "prt_g0VYxexVv00opAcKgOdl",
+            "partType": "text",
+            "textLength": 437,
+            "previousLength": 437,
+            "appendFromPrevious": true,
+            "textEnded": 1792837391724,
+            "orderKey": "v1:0001792837385111:0000000000000031:0000000000000000:part:prt_g0VYxexVv00opAcKgOdl"
+          }
+        },
+        {
+          "partID": "prt_g0VYxf1Ev00Uc2t737H7",
+          "events": 1831,
+          "first": {
+            "sequence": 336,
+            "at": 1792837399444,
+            "type": "message.part.updated",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "messageID": "msg_g0VYxf0Ng000XzRh3RNk",
+            "partID": "prt_g0VYxf1Ev00Uc2t737H7",
+            "partType": "text",
+            "textLength": 0,
+            "orderKey": "v1:0001792837399433:0000000000000031:0000000000000000:part:prt_g0VYxf1Ev00Uc2t737H7"
+          },
+          "last": {
+            "sequence": 2166,
+            "at": 1792837433377,
+            "type": "message.part.updated",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "messageID": "msg_g0VYxf0Ng000XzRh3RNk",
+            "partID": "prt_g0VYxf1Ev00Uc2t737H7",
+            "partType": "text",
+            "textLength": 2545,
+            "previousLength": 2545,
+            "appendFromPrevious": true,
+            "textEnded": 1792837433372,
+            "orderKey": "v1:0001792837399433:0000000000000031:0000000000000000:part:prt_g0VYxf1Ev00Uc2t737H7"
+          }
+        }
+      ],
+      "toolRetirements": [
+        {
+          "partID": "prt_g0VYxezEh00ofzQfqAZA",
+          "messageID": "msg_g0VYxewPY00LEDWpoFs6",
+          "previousStatus": "pending",
+          "at": 1792837391919,
+          "sequence": 323,
+          "nextEvent": {
+            "sequence": 324,
+            "at": 1792837391925,
+            "type": "message.part.updated",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "messageID": "msg_g0VYxewPY00LEDWpoFs6",
+            "partID": "prt_g0VYxezEh00ofzQfqAZA",
+            "partType": "tool",
+            "tool": "read",
+            "toolStatus": "running",
+            "orderKey": "v1:0001792837391920:0000000000000031:0000000000000000:part:prt_g0VYxezEh00ofzQfqAZA"
+          },
+          "followingVisibleTextsAtRetirement": []
+        },
+        {
+          "partID": "prt_g0VYxf0FR001Q7fDaM7K",
+          "messageID": "msg_g0VYxezNc00Gssq77k0d",
+          "previousStatus": "pending",
+          "at": 1792837395904,
+          "sequence": 330,
+          "nextEvent": {
+            "sequence": 331,
+            "at": 1792837395912,
+            "type": "message.part.updated",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "messageID": "msg_g0VYxezNc00Gssq77k0d",
+            "partID": "prt_g0VYxf0FR001Q7fDaM7K",
+            "partType": "tool",
+            "tool": "read",
+            "toolStatus": "running",
+            "orderKey": "v1:0001792837395905:0000000000000031:0000000000000000:part:prt_g0VYxf0FR001Q7fDaM7K"
+          },
+          "followingVisibleTextsAtRetirement": []
+        }
+      ]
+    },
+    "lifecycle": {
+      "owners": [
+        {
+          "name": "owners-before",
+          "at": "2026-10-24T10:23:00.109Z",
+          "parts": [
+            {
+              "messageID": "msg_g0VYajX9A00r9VlN3kU5",
+              "partID": "prt_g0VYajYdB00dd6w7h51Z",
+              "renderers": [
+                {
+                  "blocks": "55",
+                  "emptyAfter": null,
+                  "length": "7104",
+                  "owner": "22",
+                  "pending": "false"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "owners-active-01",
+          "at": "2026-10-24T10:23:15.350Z",
+          "parts": [
+            {
+              "messageID": "msg_g0VYajX9A00r9VlN3kU5",
+              "partID": "prt_g0VYajYdB00dd6w7h51Z",
+              "renderers": [
+                {
+                  "blocks": "55",
+                  "emptyAfter": null,
+                  "length": "7104",
+                  "owner": "37",
+                  "pending": "false"
+                }
+              ]
+            },
+            {
+              "messageID": "msg_0d550bc3-0c0c-470a-97d6-9a54c29c8819",
+              "partID": "prt_g0VYxewLV00PQaVKzQNh",
+              "renderers": [
+                {
+                  "blocks": "1",
+                  "emptyAfter": null,
+                  "length": "279",
+                  "owner": "23",
+                  "pending": "true"
+                }
+              ]
+            },
+            {
+              "messageID": "msg_g0VYxewPY00LEDWpoFs6",
+              "partID": "prt_g0VYxexVv00opAcKgOdl",
+              "renderers": [
+                {
+                  "blocks": "3",
+                  "emptyAfter": null,
+                  "length": "437",
+                  "owner": "26",
+                  "pending": "false"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "owners-active-02",
+          "at": "2026-10-24T10:23:45.793Z",
+          "parts": [
+            {
+              "messageID": "msg_g0VYxewPY00LEDWpoFs6",
+              "partID": "prt_g0VYxexVv00opAcKgOdl",
+              "renderers": [
+                {
+                  "blocks": "3",
+                  "emptyAfter": null,
+                  "length": "437",
+                  "owner": "26",
+                  "pending": "false"
+                }
+              ]
+            },
+            {
+              "messageID": "msg_g0VYxf0Ng000XzRh3RNk",
+              "partID": "prt_g0VYxf1Ev00Uc2t737H7",
+              "renderers": [
+                {
+                  "blocks": "26",
+                  "emptyAfter": null,
+                  "length": "1939",
+                  "owner": "42",
+                  "pending": "true"
+                }
+              ]
+            }
+          ],
+          "top": 19117
+        },
+        {
+          "name": "owners-final",
+          "at": "2026-10-24T10:25:44.881Z",
+          "follow": "false",
+          "parts": [
+            {
+              "messageID": "msg_g0VYajX9A00r9VlN3kU5",
+              "partID": "prt_g0VYajYdB00dd6w7h51Z",
+              "renderers": [
+                {
+                  "blocks": "55",
+                  "emptyAfter": null,
+                  "length": "7104",
+                  "owner": "105",
+                  "pending": "false"
+                }
+              ]
+            },
+            {
+              "messageID": "msg_0d550bc3-0c0c-470a-97d6-9a54c29c8819",
+              "partID": "prt_g0VYxewLV00PQaVKzQNh",
+              "renderers": [
+                {
+                  "blocks": "1",
+                  "emptyAfter": null,
+                  "length": "279",
+                  "owner": "106",
+                  "pending": "false"
+                }
+              ]
+            },
+            {
+              "messageID": "msg_g0VYxewPY00LEDWpoFs6",
+              "partID": "prt_g0VYxexVv00opAcKgOdl",
+              "renderers": [
+                {
+                  "blocks": "3",
+                  "emptyAfter": null,
+                  "length": "437",
+                  "owner": "26",
+                  "pending": "false"
+                }
+              ]
+            },
+            {
+              "messageID": "msg_g0VYxf0Ng000XzRh3RNk",
+              "partID": "prt_g0VYxf1Ev00Uc2t737H7",
+              "renderers": [
+                {
+                  "blocks": "32",
+                  "emptyAfter": null,
+                  "length": "2545",
+                  "owner": "42",
+                  "pending": "false"
+                }
+              ]
+            }
+          ],
+          "top": 17953
+        }
+      ],
+      "retiredByPart": [
+        {
+          "partID": "prt_g0VXzSxIe00ogaixmfuP",
+          "retirements": 2,
+          "first": {
+            "owner": 1,
+            "messageID": "msg_9f8966c9-0774-4ab4-a192-30207863bd3d",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VXzSxIe00ogaixmfuP",
+            "textLength": 127,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 4119.5,
+            "at": 4180.599999904633
+          },
+          "last": {
+            "owner": 19,
+            "messageID": "msg_9f8966c9-0774-4ab4-a192-30207863bd3d",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VXzSxIe00ogaixmfuP",
+            "textLength": 127,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 4282.89999961853,
+            "at": 4944.799999713898
+          }
+        },
+        {
+          "partID": "prt_g0VXzSyZj00RI0xPGf2M",
+          "retirements": 2,
+          "first": {
+            "owner": 2,
+            "messageID": "msg_g0VXzSxN100FhCIC5P2R",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VXzSyZj00RI0xPGf2M",
+            "textLength": 61,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 4120.39999961853,
+            "at": 4181.699999809265
+          },
+          "last": {
+            "owner": 20,
+            "messageID": "msg_g0VXzSxN100FhCIC5P2R",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VXzSyZj00RI0xPGf2M",
+            "textLength": 61,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 4283.299999713898,
+            "at": 4945.299999713898
+          }
+        },
+        {
+          "partID": "prt_g0VXzT67t00vU2TW7u4p",
+          "retirements": 2,
+          "first": {
+            "owner": 3,
+            "messageID": "msg_g0VXzT4is00AK1DH2Jyu",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VXzT67t00vU2TW7u4p",
+            "textLength": 159,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 4121.199999809265,
+            "at": 4182.099999904633
+          },
+          "last": {
+            "owner": 21,
+            "messageID": "msg_g0VXzT4is00AK1DH2Jyu",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VXzT67t00vU2TW7u4p",
+            "textLength": 159,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 4283.699999809265,
+            "at": 4945.599999904633
+          }
+        },
+        {
+          "partID": "prt_g0VY3HUb300w4QKHQ21I",
+          "retirements": 2,
+          "first": {
+            "owner": 4,
+            "messageID": "msg_d953f4ff-f2d4-4d50-9933-7e83e47def30",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VY3HUb300w4QKHQ21I",
+            "textLength": 200,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 4121.699999809265,
+            "at": 4182.5
+          },
+          "last": {
+            "owner": 13,
+            "messageID": "msg_d953f4ff-f2d4-4d50-9933-7e83e47def30",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VY3HUb300w4QKHQ21I",
+            "textLength": 200,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 4878.599999904633,
+            "at": 4945.799999713898
+          }
+        },
+        {
+          "partID": "prt_g0VY3HXjw00dr897Ixjo",
+          "retirements": 2,
+          "first": {
+            "owner": 5,
+            "messageID": "msg_g0VY3HWFk0018rVRP3hF",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VY3HXjw00dr897Ixjo",
+            "textLength": 4024,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 4123.099999904633,
+            "at": 4183.699999809265
+          },
+          "last": {
+            "owner": 14,
+            "messageID": "msg_g0VY3HWFk0018rVRP3hF",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VY3HXjw00dr897Ixjo",
+            "textLength": 4024,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 4879.199999809265,
+            "at": 5022.099999904633
+          }
+        },
+        {
+          "partID": "prt_g0VYah8GC00VDbDh5HO9",
+          "retirements": 2,
+          "first": {
+            "owner": 6,
+            "messageID": "msg_g0VYah8Fn00qmEh1R3mc",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VYah8GC00VDbDh5HO9",
+            "textLength": 292,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 4123.699999809265,
+            "at": 4183.89999961853
+          },
+          "last": {
+            "owner": 15,
+            "messageID": "msg_g0VYah8Fn00qmEh1R3mc",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VYah8GC00VDbDh5HO9",
+            "textLength": 292,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 4970.5,
+            "at": 5022.39999961853
+          }
+        },
+        {
+          "partID": "prt_g0VYah9BZ00L29pnNw9C",
+          "retirements": 2,
+          "first": {
+            "owner": 7,
+            "messageID": "msg_g0VYah8HH0030Ceh5lXH",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VYah9BZ00L29pnNw9C",
+            "textLength": 6695,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 4157.099999904633,
+            "at": 4184.099999904633
+          },
+          "last": {
+            "owner": 16,
+            "messageID": "msg_g0VYah8HH0030Ceh5lXH",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VYah9BZ00L29pnNw9C",
+            "textLength": 6695,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 4971.39999961853,
+            "at": 5317.599999904633
+          }
+        },
+        {
+          "partID": "prt_g0VYaiFkb00wF5E9phIA",
+          "retirements": 2,
+          "first": {
+            "owner": 8,
+            "messageID": "msg_g0VYaiFkE00yhItnIZTN",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VYaiFkb00wF5E9phIA",
+            "textLength": 304,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 4157.699999809265,
+            "at": 4184.199999809265
+          },
+          "last": {
+            "owner": 17,
+            "messageID": "msg_g0VYaiFkE00yhItnIZTN",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VYaiFkb00wF5E9phIA",
+            "textLength": 304,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 4973.199999809265,
+            "at": 5318
+          }
+        },
+        {
+          "partID": "prt_g0VYaiHHN00enqemXX2P",
+          "retirements": 2,
+          "first": {
+            "owner": 9,
+            "messageID": "msg_g0VYaiFlg00Gu7OJMI4l",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VYaiHHN00enqemXX2P",
+            "textLength": 7013,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 4158.099999904633,
+            "at": 4184.39999961853
+          },
+          "last": {
+            "owner": 18,
+            "messageID": "msg_g0VYaiFlg00Gu7OJMI4l",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VYaiHHN00enqemXX2P",
+            "textLength": 7013,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 4974.099999904633,
+            "at": 5318.299999713898
+          }
+        },
+        {
+          "partID": "prt_g0VYajX8500TbKpgV6IZ",
+          "retirements": 2,
+          "first": {
+            "owner": 10,
+            "messageID": "msg_g0VYajX7h00hm1lCk22a",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VYajX8500TbKpgV6IZ",
+            "textLength": 308,
+            "streaming": false,
+            "htmlBlocks": 0,
+            "pending": true,
+            "observedAt": 4158.599999904633,
+            "at": 4184.699999809265
+          },
+          "last": {
+            "owner": 12,
+            "messageID": "msg_g0VYajX7h00hm1lCk22a",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VYajX8500TbKpgV6IZ",
+            "textLength": 308,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 4877.699999809265,
+            "at": 5105.89999961853
+          }
+        },
+        {
+          "partID": "prt_g0VYajYdB00dd6w7h51Z",
+          "retirements": 40,
+          "first": {
+            "owner": 11,
+            "messageID": "msg_g0VYajX9A00r9VlN3kU5",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VYajYdB00dd6w7h51Z",
+            "textLength": 7104,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 4875.39999961853,
+            "at": 5106.199999809265
+          },
+          "last": {
+            "owner": 103,
+            "messageID": "msg_g0VYajX9A00r9VlN3kU5",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VYajYdB00dd6w7h51Z",
+            "textLength": 7104,
+            "streaming": false,
+            "htmlBlocks": 55,
+            "pending": false,
+            "observedAt": 90768.09999990463,
+            "at": 90808.5
+          }
+        },
+        {
+          "partID": "prt_g0VYxewLV00PQaVKzQNh",
+          "retirements": 42,
+          "first": {
+            "owner": 23,
+            "messageID": "msg_0d550bc3-0c0c-470a-97d6-9a54c29c8819",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VYxewLV00PQaVKzQNh",
+            "textLength": 279,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": true,
+            "observedAt": 46338.5,
+            "at": 61748
+          },
+          "last": {
+            "owner": 104,
+            "messageID": "msg_0d550bc3-0c0c-470a-97d6-9a54c29c8819",
+            "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+            "partID": "prt_g0VYxewLV00PQaVKzQNh",
+            "textLength": 279,
+            "streaming": false,
+            "htmlBlocks": 1,
+            "pending": false,
+            "observedAt": 90768.5,
+            "at": 90809
+          }
+        }
+      ],
+      "consoleEntries": 451
+    },
+    "qualification": "Actual native GlobalBus chronological observations, persisted closed SQLite and original source file, actual public conversation/production parser and manual DOM metadata. Event/lifecycle counts are observations, not UI test assertions."
+  },
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792837382578,
+        "boundAt": 1792837382579,
+        "chunkCount": 802,
+        "byteCount": 2403620,
+        "firstByteReadAt": 1792837382582,
+        "lastByteReadAt": 1792837466080,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "streamRequest": {
+            "requestID": "msg_0d550bc3-0c0c-470a-97d6-9a54c29c8819",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYxewOa00R3tZ42b8O",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792837466093
+        }
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792837384131,
+        "boundAt": 1792837384132,
+        "chunkCount": 82,
+        "byteCount": 746181,
+        "firstByteReadAt": 1792837384145,
+        "lastByteReadAt": 1792837391965,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "streamRequest": {
+            "requestID": "msg_0d550bc3-0c0c-470a-97d6-9a54c29c8819",
+            "agentID": "work",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYxewxW00p0HSwKDAr",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYxewPY00LEDWpoFs6"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792837392154
+        }
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792837394676,
+        "boundAt": 1792837394677,
+        "chunkCount": 30,
+        "byteCount": 655526,
+        "firstByteReadAt": 1792837394707,
+        "lastByteReadAt": 1792837395899,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "streamRequest": {
+            "requestID": "msg_0d550bc3-0c0c-470a-97d6-9a54c29c8819",
+            "agentID": "work",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYxezji00szaVQGarq",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYxezNc00Gssq77k0d"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792837396020
+        }
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792837398588,
+        "boundAt": 1792837398589,
+        "chunkCount": 268,
+        "byteCount": 1176137,
+        "firstByteReadAt": 1792837398595,
+        "lastByteReadAt": 1792837433398,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "streamRequest": {
+            "requestID": "msg_0d550bc3-0c0c-470a-97d6-9a54c29c8819",
+            "agentID": "work",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYxf0jX00IZecupURS",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYxf0Ng000XzRh3RNk"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792837433521
+        }
+      }
+    }
+  ],
+  "lifecycle": {
+    "originalExec": 6905,
+    "originalExecJoinedExit": 0,
+    "pageClosed": "259",
+    "at": "2026-10-24T10:32:19.114Z",
+    "authRetired": 1,
+    "catalogRetired": 1,
+    "authCopied": true,
+    "modelRequests": 4,
+    "model": "gpt-6.1-sol",
+    "streaming200OriginalReaderEOF": 4,
+    "sourceCatalog": {
+      "bytes": 9155406,
+      "modifiedAtMs": 1791128890137.9968,
+      "content": "Exact original"
+    },
+    "publicShutdown": 200,
+    "reserveMs": 582118,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "exactProcessChain": "dead_or_reused"
+  },
+  "preservation": {
+    "at": "2026-10-24T10:32:22.384Z",
+    "sourceSchema": 6,
+    "targetSchema": 7,
+    "originalTables": 90,
+    "originalRows": 207330,
+    "originalFieldDifferences": [
+      {
+        "table": "memory_chunk",
+        "id": "mck_h0TwOCuDIItgGfxTGf6k",
+        "fields": [
+          "content",
+          "token_count",
+          "time_updated"
+        ]
+      },
+      {
+        "table": "memory_file",
+        "id": "mem_hBhVOjG2IHNZ58LGhFBJ",
+        "fields": [
+          "time_updated"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "id": "[1]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "id": "[2]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "session",
+        "id": "ses_-zUS0X33CzzWEKMgCk98",
+        "fields": [
+          "time_updated"
+        ]
+      }
+    ],
+    "integrity": "ok",
+    "sourceBytes": 95682560,
+    "sourceModifiedAtMs": 1792828797672.7832,
+    "canonicalConfiguration": "Exact original",
+    "qualification": "Full original field/row verification after original native exit and physical/output/request closure"
+  },
+  "qualification": {
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "screenshots": 6,
+    "visual": "All screenshots actually presented and personally reviewed. Snapshot02 and03 correspond to unfinished real Work output; final reader/model state checked separately.",
+    "proven": [
+      "2167 actual GlobalBus observations include2008 complete-value deltas157 snapshots and2 retired tool drafts",
+      "Two Tool retirements were followed by real running admission after6ms and8ms; neither had a later visible text Part in the same Message",
+      "Observed text progression retained prior prefixes; final originals match closed SQLite exactly",
+      "Real assistant preface437 and final2545 chars keep owner26 and42 in sampled observations",
+      "Actual SourceL2/L3 bind their exact completed read calls and canonical ranges; final copy feedback plus real clipboard includes original path and:2"
+    ],
+    "unknown": [
+      "Original member high-frequency Rendering remains unproven",
+      "Main historical7104-char message has40 retirements and new user279-char input42; concrete virtual range/measurement reason not yet captured",
+      "An attempted Source copy during follow did not yield Copied feedback and its screenshot remained on final prose; no evidence that the action registered. It is not a verified product follow-lock defect.",
+      "No frame recording; metadata observations do not prove all-frame visual stability or performance",
+      "No long source excerpt or physical778px acceptance"
+    ]
+  }
+}

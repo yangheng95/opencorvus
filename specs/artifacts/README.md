@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [流式正文事件与分组身份](2026-10-24-live-text-event-order/README.md)：583真实页面与事件身份截图。
+
 - [来源摘录内部阅读位置](2026-10-24-source-excerpt-reading/README.md)：582真实来源与阅读截图。
 
 - [主对话与侧聊的共享阅读恢复](2026-10-24-main-side-reading/README.md)：581认证与实际读者截图。

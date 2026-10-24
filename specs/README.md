@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [流式正文事件与分组身份](records/2026-10/2026-10-24-live-text-event-order.md)：583原事件与正文生命周期调查。
+
 - [来源摘录内部阅读位置](records/2026-10/2026-10-24-source-excerpt-reading.md)：582实际搜索来源与摘录阅读调查。
 
 - [主对话与侧聊的共享阅读恢复](records/2026-10/2026-10-24-main-side-reading.md)：581真实Main/Side阅读与授权Sol预检。
