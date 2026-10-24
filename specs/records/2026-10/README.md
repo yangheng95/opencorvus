@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [来源摘录内部阅读位置](2026-10-24-source-excerpt-reading.md)：582原始库存与自然搜索来源实页。
+
 - [主对话与侧聊的共享阅读恢复](2026-10-24-main-side-reading.md)：581原有Main/Side历史的独立实页复验。
 
 - [来源在视口边缘的尺寸恢复](2026-10-24-source-viewport-edge.md)：580聚焦来源与短视口边界。

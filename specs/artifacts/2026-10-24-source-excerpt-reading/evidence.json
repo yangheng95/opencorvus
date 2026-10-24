@@ -1,0 +1,287 @@
+{
+  "batch": 582,
+  "at": "2026-10-24T10:09:18.368Z",
+  "scope": "Single existing ordinary Work Session, no development delegation or new product child/Task/Goal",
+  "implementation": "No product code modification; UI a0f66c594/current45422d065",
+  "inventory": {
+    "at": "2026-10-24T10:03:08.247Z",
+    "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/member-stream-rendering-577",
+    "mode": "SQLite readonly/create false",
+    "schema": 6,
+    "integrity": {
+      "integrity_check": "ok"
+    },
+    "facts": [
+      {
+        "type": "source-file",
+        "count": 31,
+        "withSnippet": 3,
+        "maxSnippetCharacters": 27
+      },
+      {
+        "type": "source-url",
+        "count": 29,
+        "withSnippet": 0,
+        "maxSnippetCharacters": null
+      }
+    ],
+    "sourceBytes": 95682560,
+    "sourceModifiedAtMs": 1792828797672.7832,
+    "sourceMetadataPreserved": true,
+    "qualification": "Actual complete source inventory. No eligible web/document excerpt exists; no native service or auth/catalog copy was created for this batch."
+  },
+  "publication": {
+    "at": "2026-10-24T10:04:47.639Z",
+    "entry": "main-Bx3pGZMu.js",
+    "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/source-excerpt-reading-582-bundle/bin/ui",
+    "qualification": "Completed current production Node Vite build with private passive capture/resolve metadata; native CLI /ui"
+  },
+  "live": {
+    "at": "2026-10-24T10:08:02.024Z",
+    "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+    "messages": 15,
+    "parts": 36,
+    "sourceCount": 0,
+    "tool": {
+      "id": "prt_g0VYxabDC00rRcSutqsY",
+      "tool": "websearch",
+      "status": "error",
+      "input": {
+        "query": "W3C CSS scroll anchoring specification",
+        "numResults": 3
+      },
+      "failure": {
+        "kind": "tool-execution",
+        "name": "ExaMcpFailure",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "canonicalCode": "rate_limited",
+        "providerRateLimited": true
+      }
+    },
+    "texts": [
+      {
+        "id": "prt_g0VYxaYQe00zUfbvDrCL",
+        "messageID": "msg_0e8e77d7-db81-454c-89ce-9c6b2ee762b1",
+        "characters": 293,
+        "canonical": "Exact SQLite Part text"
+      },
+      {
+        "id": "prt_g0VYxaZjK00RvU28qqHS",
+        "messageID": "msg_g0VYxaYVW00cczcVFUBM",
+        "characters": 311,
+        "canonical": "Exact SQLite Part text"
+      },
+      {
+        "id": "prt_g0VYxacfd00hCH1YS5bq",
+        "messageID": "msg_g0VYxabWK00iuf8NMryn",
+        "characters": 129,
+        "canonical": "Exact SQLite Part text"
+      }
+    ],
+    "finalAssistantID": "msg_g0VYxabWK00iuf8NMryn",
+    "requests": 3,
+    "model": "gpt-6.1-sol",
+    "streaming200EOF": 3
+  },
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792836336613,
+        "boundAt": 1792836336614,
+        "chunkCount": 887,
+        "byteCount": 2202648,
+        "firstByteReadAt": 1792836336616,
+        "lastByteReadAt": 1792836423735,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "streamRequest": {
+            "requestID": "msg_0e8e77d7-db81-454c-89ce-9c6b2ee762b1",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYxaYU800DIH1Hwo7X",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792836423745
+        }
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792836339442,
+        "boundAt": 1792836339443,
+        "chunkCount": 48,
+        "byteCount": 718724,
+        "firstByteReadAt": 1792836339444,
+        "lastByteReadAt": 1792836346487,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "streamRequest": {
+            "requestID": "msg_0e8e77d7-db81-454c-89ce-9c6b2ee762b1",
+            "agentID": "work",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYxaZ6b00nfF4x8A3V",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYxaYVW00cczcVFUBM"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792836346751
+        }
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792836350697,
+        "boundAt": 1792836350698,
+        "chunkCount": 29,
+        "byteCount": 674263,
+        "firstByteReadAt": 1792836350699,
+        "lastByteReadAt": 1792836353904,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+          "streamRequest": {
+            "requestID": "msg_0e8e77d7-db81-454c-89ce-9c6b2ee762b1",
+            "agentID": "work",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYxac5K006jDXJwvf0",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYxabWK00iuf8NMryn"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792836354125
+        }
+      }
+    }
+  ],
+  "lifecycle": {
+    "originalExec": 58695,
+    "originalExecJoinedExit": 0,
+    "pageClosed": "258",
+    "at": "2026-10-24T10:08:13.633Z",
+    "authRetired": 1,
+    "catalogRetired": 1,
+    "authCopied": true,
+    "modelRequests": 3,
+    "model": "gpt-6.1-sol",
+    "streaming200OriginalReaderEOF": 3,
+    "sourceCatalog": {
+      "bytes": 9155406,
+      "modifiedAtMs": 1791128890137.9968,
+      "content": "Exact original"
+    },
+    "publicShutdown": 200,
+    "reserveMs": 1001207,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "exactProcessChain": "dead_or_reused"
+  },
+  "preservation": {
+    "at": "2026-10-24T10:08:17.203Z",
+    "sourceSchema": 6,
+    "targetSchema": 7,
+    "originalTables": 90,
+    "originalRows": 207330,
+    "originalFieldDifferences": [
+      {
+        "table": "memory_chunk",
+        "id": "mck_h0TwOCuDIItgGfxTGf6k",
+        "fields": [
+          "content",
+          "token_count",
+          "time_updated"
+        ]
+      },
+      {
+        "table": "memory_file",
+        "id": "mem_hBhVOjG2IHNZ58LGhFBJ",
+        "fields": [
+          "time_updated"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "id": "[1]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "id": "[2]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "session",
+        "id": "ses_-zUS0X33CzzWEKMgCk98",
+        "fields": [
+          "time_updated"
+        ]
+      }
+    ],
+    "integrity": "ok",
+    "sourceBytes": 95682560,
+    "sourceModifiedAtMs": 1792828797672.7832,
+    "canonicalConfiguration": "Exact original",
+    "qualification": "Full original field/row verification after original native exit and physical/output/request closure"
+  },
+  "qualification": {
+    "screenshots": 3,
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "method": "Actual native /ui manual operator interactions and personally viewed screenshots",
+    "provider": "Three actual exact gpt-6.1-sol streaming200 requests, memory + two Work responses, all original readers EOF",
+    "failure": "Actual Exa provider explicit ai.exa/rateLimited true; preserved as canonical rate_limited tool-execution error. One search, no fallback or retry.",
+    "excerpt": "Not qualified: original web sources have no snippet; actual search returned rate limit and no sources.",
+    "rendering": "Only normal initial newly submitted user text Rendering observed; high-frequency existing-body flashing remains unknown."
+  }
+}
