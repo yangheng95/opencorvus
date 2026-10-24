@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [持续目标的输入命令](2026-10-24-goal-composer-command.md)：575命令语法、主/侧输入与真实有界Goal。
+
 - [成员工具切换与正文所有者调查](2026-10-24-member-tool-transition.md)：574原成员有界流式执行与真实所有者观察。
 
 - [成员对话实时 Part 顺序修复](2026-10-24-source-render-order.md)：573完整生产投影审计与实页 Sources 复核。

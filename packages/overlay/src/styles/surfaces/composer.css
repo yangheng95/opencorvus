@@ -522,6 +522,17 @@
   grid-template-columns: calc(20px * var(--ui-scale)) minmax(0, 1fr);
 }
 
+.composer-attachment-menu-item--command {
+  grid-template-columns: calc(20px * var(--ui-scale)) minmax(0, 1fr) auto;
+}
+
+.composer-attachment-menu-command {
+  margin-inline-start: var(--ui-gap-lg);
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+  white-space: nowrap;
+}
+
 .composer-attachment-loader-count {
   min-width: 0;
   padding-inline: var(--ui-gap-3xs);

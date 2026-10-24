@@ -1,0 +1,92 @@
+[
+  {
+    "file": "01-home.png",
+    "build": "initial",
+    "observation": "Original global Home composition; no permanent Goal card",
+    "method": "Manual actual page interaction/screenshot and human review; no UI automated assertions"
+  },
+  {
+    "file": "02-menu-command-hint.png",
+    "build": "initial",
+    "observation": "English + menu displays Continuous goal and /goal",
+    "method": "Manual actual page interaction/screenshot and human review; no UI automated assertions"
+  },
+  {
+    "file": "03-command-form-en.png",
+    "build": "initial",
+    "observation": "Multiline command opens original form, objective prefilled and focused",
+    "method": "Manual actual page interaction/screenshot and human review; no UI automated assertions"
+  },
+  {
+    "file": "04-command-help-en.png",
+    "build": "initial",
+    "observation": "English guide explains command/+ entry and actual Start goal label",
+    "method": "Manual actual page interaction/screenshot and human review; no UI automated assertions"
+  },
+  {
+    "file": "05-cancel-retains-draft.png",
+    "build": "initial",
+    "observation": "Multiline objective retained after help/cancel",
+    "method": "Manual actual page interaction/screenshot and human review; no UI automated assertions"
+  },
+  {
+    "file": "06-final-empty-form.png",
+    "build": "final",
+    "observation": "Empty command submitted by button opens focused objective",
+    "method": "Manual actual page interaction/screenshot and human review; no UI automated assertions"
+  },
+  {
+    "file": "07-final-focus-restored.png",
+    "build": "final",
+    "observation": "Close returns actual accessibility focus to main input 139",
+    "method": "Manual actual page interaction/screenshot and human review; no UI automated assertions"
+  },
+  {
+    "file": "08-final-menu-zh.png",
+    "build": "final",
+    "observation": "Chinese menu and /goal hint, actual selected GPT-6.1 Sol",
+    "method": "Manual actual page interaction/screenshot and human review; no UI automated assertions"
+  },
+  {
+    "file": "09-final-command-form-zh.png",
+    "build": "final",
+    "observation": "Chinese command objective prefilled before any confirmation",
+    "method": "Manual actual page interaction/screenshot and human review; no UI automated assertions"
+  },
+  {
+    "file": "10-final-help-zh.png",
+    "build": "final",
+    "observation": "Chinese help describes both entry points and budget semantics",
+    "method": "Manual actual page interaction/screenshot and human review; no UI automated assertions"
+  },
+  {
+    "file": "11-bounded-confirmation.png",
+    "build": "final",
+    "observation": "Explicit confirmation with automatic turn budget 2",
+    "method": "Manual actual page interaction/screenshot and human review; no UI automated assertions"
+  },
+  {
+    "file": "12-live-goal-result.png",
+    "build": "final",
+    "observation": "Actual assistant marker and exact current Goal completion permission",
+    "method": "Manual actual page interaction/screenshot and human review; no UI automated assertions"
+  },
+  {
+    "file": "13-goal-completed.png",
+    "build": "final",
+    "observation": "Actual assistant output and complete Goal strip",
+    "method": "Manual actual page interaction/screenshot and human review; no UI automated assertions"
+  },
+  {
+    "file": "14-side-command-form.png",
+    "build": "final",
+    "observation": "Independent SideChat Goal form and its own objective",
+    "method": "Manual actual page interaction/screenshot and human review; no UI automated assertions"
+  },
+  {
+    "file": "15-side-cancel-retains.png",
+    "build": "final",
+    "observation": "Side draft retained and accessibility focus restored to Side input 204",
+    "method": "Manual actual page interaction/screenshot and human review; no UI automated assertions"
+  }
+]

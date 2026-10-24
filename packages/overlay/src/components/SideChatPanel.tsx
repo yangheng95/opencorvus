@@ -47,6 +47,7 @@ import { SelectControl } from "./ui/SelectControl"
 import { InteractionCard, type InteractionData } from "./InteractionCard"
 import { ContinuousGoalControl } from "./ContinuousGoalControl"
 import { DropdownMenu } from "./ui/DropdownMenu"
+import { parseComposerCommand } from "../utils/composer-command"
 
 export interface SideChatRequest {
   source: SideChatSource
@@ -128,6 +129,7 @@ export function SideChatPanel(props: {
   const historyExpanded = () => conversationDisclosureExpanded(historyKey(), false)
   const session = createMemo(() => sessions().find((item) => item.id === selected()))
   const key = () => composerDraftKey("side-chat", getServerUrl(), props.source?.directory ?? "", selected())
+  const goalCommand = createMemo(() => parseComposerCommand(composerDraftText(key())).kind === "goal")
   const inherited = createMemo(() => new Set(session()?.metadata.sideChat.inheritedMessageIDs ?? []))
   const displayedMessages = createMemo(() => transcript()?.messages.filter(conversationMessageHasDisplayContent) ?? [])
   const history = createMemo(() => displayedMessages().filter((item) => inherited().has(item.messageID)))
@@ -337,6 +339,13 @@ export function SideChatPanel(props: {
     const source = props.source
     const text = composerDraftText(key()).trim()
     if (!source || !selected() || !text || running() || !connected()) return
+    const command = parseComposerCommand(text)
+    if (command.kind === "goal") {
+      setComposerDraft(key(), command.text)
+      textarea?.focus()
+      setGoalOpenRequest((value) => value + 1)
+      return
+    }
     const target = { ...source, sessionID: selected() }
     const authority = captureApiAuthority()
     const current = generation
@@ -630,11 +639,12 @@ export function SideChatPanel(props: {
                   <DropdownMenu.Item
                     as="button"
                     type="button"
-                    class="composer-attachment-menu-item"
+                    class="composer-attachment-menu-item composer-attachment-menu-item--command"
                     onSelect={() => setGoalOpenRequest((value) => value + 1)}
                   >
                     <Icon name="goals" size="medium" />
                     <span>{t("continuous_goal.title")}</span>
+                    <span class="composer-attachment-menu-command">/goal</span>
                   </DropdownMenu.Item>
                 </DropdownMenu.Content>
               </DropdownMenu.Portal>
@@ -652,7 +662,8 @@ export function SideChatPanel(props: {
                   tone="neutral"
                   size="icon"
                   disabled={fileEditorReserved() || !connected() || !composerDraftText(key()).trim()}
-                  aria-label={t("side_chat.send")}
+                  aria-label={t(goalCommand() ? "continuous_goal.open" : "side_chat.send")}
+                  title={goalCommand() ? t("continuous_goal.open") : undefined}
                 >
                   <Icon name="arrow-up" />
                 </Button>

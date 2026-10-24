@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [持续目标的输入命令](2026-10-24-goal-composer-command/README.md)：575中英文实图、原模型流和完整数据结算。
+
 - [成员工具切换与正文所有者调查](2026-10-24-member-tool-transition/README.md)：574实页截图与原请求结算。
 
 - [成员对话实时 Part 顺序修复](2026-10-24-source-render-order/README.md)：573真实记录审计、成员侧栏和 Sources 实图。

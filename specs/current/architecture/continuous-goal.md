@@ -131,7 +131,13 @@ archives affect only goals whose exact owner is that Session.
 The home page places the heading, existing composer and suggested conversation
 starters together. The composer's + menu offers Continuous goal and opens the
 same goal form in Home, Chat, Task and Mission. SideChat's own composer + menu
-opens that form for its independent Session. No goal creation section or empty
+opens that form for its independent Session. The explicit `/goal` input command
+in either composer opens the same form or current goal details. An optional
+objective after the command replaces only the command invocation in that
+composer's existing draft; quotation and attachment context retains its original
+authority. The ordinary-message path and `/side` context restrictions remain
+unchanged. Opening a command performs no goal mutation or Message submission.
+No goal creation section or empty
 goal strip occupies the conversation surface. Existing goals retain their status,
 usage, pause and details controls. The introduction names the same localized
 menu action. The creation guide and form footer resolve the same localized start
@@ -171,7 +177,7 @@ use the current interface language and the actual localized Resume label.
 Its first step identifies the model menu below the Home message input and that
 menu's Configure Provider action for an empty connected-model list. Configured
 defaults may still be inherited; this guidance adds no model-selection policy.
-The form opens only after an explicit menu request. That request waits for the
+The form opens only after an explicit menu or input-command request. That request waits for the
 initial owner projection before choosing creation or existing-goal details, and
 does not carry a goal value or mutation authority across a selection.
 The creation dialog uses a bounded 560px width, one concise execution explanation

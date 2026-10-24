@@ -1,0 +1,450 @@
+{
+  "at": "2026-10-24T06:19:21.569Z",
+  "scope": "575",
+  "change": "Explicit /goal command in Main and SideChat reuses the existing Goal form and original draft. The + menu exposes /goal; English/Chinese guide and action names agree. Focus returns to the original input, including an empty invocation submitted by button. Removed inline /side parsing in favor of one input grammar. Corrected stale architecture; no permanent Home Goal creation section.",
+  "tests": {
+    "parserPassed": 4,
+    "expectations": 10,
+    "typecheck": "Passed",
+    "i18n": {
+      "locales": 2,
+      "keys": 2536
+    },
+    "cssTokenCheck": "Passed"
+  },
+  "builds": {
+    "initial": {
+      "at": "2026-10-24T05:53:24.515Z",
+      "entry": "main-D0Z974lu.js",
+      "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/goal-composer-command-575-bundle/bin/ui",
+      "qualification": "Actual completed standard Node Vite build, no private renderer instrumentation"
+    },
+    "initialPreservation": {
+      "at": "2026-10-24T05:52:54.047Z",
+      "database": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/goal-composer-command-575/runtime/data/opencorvus.db",
+      "before": {
+        "bytes": 93990912,
+        "modifiedAtMs": 1792821118134.9004
+      },
+      "after": {
+        "bytes": 93990912,
+        "modifiedAtMs": 1792821118134.9004
+      },
+      "identity": "Owned complete original SQLite bytes/mtime remained unchanged across actual Node build; full rows checked separately"
+    },
+    "final": {
+      "at": "2026-10-24T06:01:56.400Z",
+      "entry": "main-CPAfMIiv.js",
+      "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/goal-composer-command-575-verified-bundle/bin/ui",
+      "qualification": "Actual completed standard Node Vite build, no private renderer instrumentation"
+    },
+    "finalPreservation": {
+      "at": "2026-10-24T05:59:03.247Z",
+      "database": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/goal-composer-command-575/runtime/data/opencorvus.db",
+      "before": {
+        "bytes": 94294016,
+        "modifiedAtMs": 1792821226531.8823
+      },
+      "after": {
+        "bytes": 94294016,
+        "modifiedAtMs": 1792821226531.8823
+      },
+      "identity": "Owned complete original SQLite bytes/mtime remained unchanged across actual Node build; full rows checked separately"
+    }
+  },
+  "scopes": [
+    {
+      "scope": "initial",
+      "publication": {
+        "at": "2026-10-24T05:53:24.515Z",
+        "entry": "main-D0Z974lu.js",
+        "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/goal-composer-command-575-bundle/bin/ui",
+        "qualification": "Actual completed standard Node Vite build, no private renderer instrumentation"
+      },
+      "preflight": {
+        "sessionID": "ses_htvZ4a5vdoVDpMweOijt",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "retirement": {
+        "at": "2026-10-24T06:00:56.669Z",
+        "authRetired": 1,
+        "catalogRetired": 1,
+        "authCopied": true,
+        "modelRequests": 2,
+        "model": "gpt-6.1-sol",
+        "streaming200OriginalReaderEOF": 2,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968,
+          "content": "Exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 753875,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "originalExec": {
+        "session": 63280,
+        "joinedExit": 0
+      },
+      "preservation": {
+        "tables": 90,
+        "originalRows": 201153,
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 93990912,
+          "modifiedAtMs": 1792820082039.134
+        },
+        "schema": {
+          "sourceVersion": 5,
+          "targetVersion": 5,
+          "extraObjects": [],
+          "integrity": "ok"
+        },
+        "canonical": "Complete source bytes exact",
+        "targetOriginalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ],
+        "originalTranscript": "All original Message/Part/Source rows, fields and times exact"
+      }
+    },
+    {
+      "scope": "verified",
+      "publication": {
+        "at": "2026-10-24T06:01:56.400Z",
+        "entry": "main-CPAfMIiv.js",
+        "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/goal-composer-command-575-verified-bundle/bin/ui",
+        "qualification": "Actual completed standard Node Vite build, no private renderer instrumentation"
+      },
+      "preflight": {
+        "sessionID": "ses_hM39BCOOHKzo5rCmFT5i",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "retirement": {
+        "at": "2026-10-24T06:15:49.821Z",
+        "authRetired": 1,
+        "catalogRetired": 1,
+        "authCopied": true,
+        "modelRequests": 5,
+        "model": "gpt-6.1-sol",
+        "streaming200OriginalReaderEOF": 5,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968,
+          "content": "Exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 372880,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "originalExec": {
+        "session": 74833,
+        "joinedExit": 0
+      },
+      "preservation": {
+        "tables": 90,
+        "originalRows": 201588,
+        "source": {
+          "allOriginalRows": "Exact rowid/primary key/all fields/times",
+          "bytes": 94294016,
+          "modifiedAtMs": 1792821652696.2773
+        },
+        "schema": {
+          "sourceVersion": 5,
+          "targetVersion": 5,
+          "extraObjects": [],
+          "integrity": "ok"
+        },
+        "canonical": "Complete source bytes exact",
+        "targetOriginalRowDifferences": [
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "identity": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          }
+        ],
+        "originalTranscript": "All original Message/Part/Source rows, fields and times exact"
+      }
+    }
+  ],
+  "totalRequests": 7,
+  "totalOriginalReaderEOF": 7,
+  "requestBudget": 16,
+  "goal": {
+    "at": "2026-10-24T06:14:07.099Z",
+    "sessionID": "ses_-zUR3NNSmzzAfat1t3GY",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-24\\goal-composer-command-575-verified\\runtime\\data\\projects\\2026\\10\\24\\ebad45c4-5fd7-4d4d-a18a-a12ca7eedf14",
+    "goal": {
+      "id": "pev_g0VYwcdDv00y7AnAwAiW",
+      "revision": "pev_g0VYwcs4L008XaKrbMb3",
+      "owner": {
+        "kind": "chat",
+        "id": "ses_-zUR3NNSmzzAfat1t3GY"
+      },
+      "objective": "在本对话完整输出 GOAL575READY，然后使用现有持续目标工具将本目标标记完成。只输出该标记及简短完成说明，不访问网络或文件，不创建成员、helper或Task，不继续其他工作。完成标准：真实助手正文有完整标记，目标状态为已完成。",
+      "status": "complete",
+      "reason": "已在本对话真实助手正文完整输出 GOAL575READY；未访问网络或文件，未创建成员、helper 或 Task。",
+      "turnBudget": 2,
+      "tokensUsed": 68041,
+      "turnsAccepted": 1,
+      "createdAt": 1792822054123,
+      "updatedAt": 1792822111188,
+      "sessionID": "ses_-zUR3NNSmzzAfat1t3GY",
+      "projectID": "prj_hPfRZpjzLW3vOLjwWFBQ",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-24\\goal-composer-command-575-verified\\runtime\\data\\projects\\2026\\10\\24\\ebad45c4-5fd7-4d4d-a18a-a12ca7eedf14"
+    },
+    "assistantOutput": {
+      "messageID": "msg_g0VYwcdVM00sUch3jLY6",
+      "partID": "prt_g0VYwceVm00ARkFb2hMT",
+      "text": "GOAL575READY",
+      "role": "assistant"
+    },
+    "messageParticipants": [
+      {
+        "messageID": "msg_hvaECAufdGm5TuRwTckT",
+        "role": "user",
+        "author": "goal-controller"
+      },
+      {
+        "messageID": "msg_g0VYwcdVM00sUch3jLY6",
+        "role": "assistant",
+        "author": "work"
+      },
+      {
+        "messageID": "msg_g0VYwcehO00cM8sqf57D",
+        "role": "assistant",
+        "author": "work"
+      },
+      {
+        "messageID": "msg_g0VYwcs5c00z4SeKEkhI",
+        "role": "assistant",
+        "author": "work"
+      }
+    ],
+    "persistedFacts": {
+      "created": {
+        "id": "pev_g0VYwcdDv00y7AnAwAiW",
+        "type": "continuous_goal.created"
+      },
+      "updated": {
+        "id": "pev_g0VYwcs4L008XaKrbMb3",
+        "type": "continuous_goal.updated"
+      }
+    },
+    "requests": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "sessionID": "ses_hM39BCOOHKzo5rCmFT5i",
+        "agent": "memory"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "sessionID": "ses_hM39BCOOHKzo5rCmFT5i",
+        "agent": "chat"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "sessionID": "ses_-zUR3NNSmzzAfat1t3GY",
+        "agent": "work"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "sessionID": "ses_-zUR3NNSmzzAfat1t3GY",
+        "agent": "work"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "sessionID": "ses_-zUR3NNSmzzAfat1t3GY",
+        "agent": "work"
+      }
+    ],
+    "attachment": {
+      "status": 200,
+      "bytes": 643,
+      "identity": "Exact original immutable PNG"
+    },
+    "qualification": "Actual native CLI public Goal and conversation, production transcript parser, persisted original assistant output and Goal facts, original Provider readers; no UI assertions"
+  },
+  "commandOpening": {
+    "before": {
+      "at": "2026-10-24T05:54:51.041Z",
+      "stage": "before-command",
+      "counts": {
+        "session": 264,
+        "message": 757,
+        "part": 1841,
+        "engine_task": 21
+      },
+      "goalCreated": 17,
+      "providerRequests": 2,
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    "opened": {
+      "at": "2026-10-24T05:55:43.696Z",
+      "stage": "command-form-open",
+      "counts": {
+        "session": 264,
+        "message": 757,
+        "part": 1841,
+        "engine_task": 21
+      },
+      "goalCreated": 17,
+      "providerRequests": 2,
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    "qualification": "Actual canonical counters before/after opening the command form and actual original Provider readers; no simulated response"
+  },
+  "sideObservation": {
+    "at": "2026-10-24T06:12:34.775Z",
+    "stage": "after-side-command",
+    "counts": {
+      "session": 267,
+      "message": 767,
+      "part": 1863,
+      "engine_task": 21
+    },
+    "goalCreated": 18,
+    "providerRequests": 5,
+    "requests": [
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      }
+    ]
+  },
+  "manualImages": {
+    "total": 15,
+    "initialBuild": 5,
+    "finalBuild": 10
+  },
+  "limitations": [
+    "Initial empty command button path lost focus on cancel, observed in the actual accessibility tree. Fixed and manually repeated on final build; initial screenshots are not final focus acceptance.",
+    "An in-process static file replacement did not change the frozen native UI source. Its identity check failed. The original process was normally closed and credentials retired before a distinct final scope used the completed build. Both original scopes/deadlines/readers are reported.",
+    "Initial private PowerShell build helper quoting failed before execution; corrected with a saved Node helper and completed the original final build.",
+    "Main English/Chinese and SideChat Chinese command/form/cancel, English empty focus, Chinese guide/menu and one real bounded Goal were manually verified. IME, attachment/quotation, active SideChat submission and legacy /side end-to-end were not newly exercised; pure /side grammar is covered by positive parser tests.",
+    "This entry feature and focus repair do not establish a Rendering flicker root cause."
+  ],
+  "user18571": "Untouched",
+  "goalStatus": "Active; one development agent"
+}

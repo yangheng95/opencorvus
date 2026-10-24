@@ -3273,18 +3273,20 @@ Manual interaction and screenshot review on the formal development `/ui` surface
 provide UI acceptance; API contract checks do not substitute for visual evidence.
 
 The launcher home keeps ordinary chat starters immediately after the real
-composer, followed by the shared continuous-goal control in a compact region
-separated by a rule. The centered heading and suggested starter pills retain the
-real composer as the primary action. The goal explanation covers automatic
-continuation and progress/pause; selected-model guidance appears when creating,
-and optional budgets expand within the original form. The detailed guide uses
-the same localized control and form. Opening
+composer. Goal creation opens through the composer's + menu or the explicit
+`/goal` input command, with an optional objective after the command. Main and
+SideChat inputs share the command grammar and open the same owner-bound form;
+the command moves its objective into the existing composer draft and does not
+submit a conversation Message. The menu shows `/goal` and the localized guide
+explains both entry points. The centered heading and suggested starter pills
+retain the real composer as the primary action. Goal explanation, model guidance
+and optional budgets remain within the original form and guide. Opening
 the home form preserves the composer draft and creates no owner, Message, or
 goal; confirmation invokes the existing new-conversation/goal launch flow.
 Selected conversations keep the owner-bound strip above their transcript.
 Creation remains an explicit action, with automatic-continuation and budget
 semantics shown before confirmation. The home composition scrolls as one region
-so the input, starters, and goal remain reachable with a desktop dock open.
+so the input and starters remain reachable with a desktop dock open.
 
 ## Current diagnostic log viewer
 

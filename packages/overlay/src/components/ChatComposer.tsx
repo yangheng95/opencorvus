@@ -80,6 +80,7 @@ import {
   unattendedConfigPatch,
 } from "../services/composer-run-controls"
 import { composerPrimaryAction } from "../services/composer-primary-action"
+import { parseComposerCommand } from "../utils/composer-command"
 import { refreshActiveComposerModelFromSession } from "../services/composer-model"
 import { isComposerImeKeyboardEvent } from "../services/composer-keyboard"
 import {
@@ -423,12 +424,13 @@ function ComposerAttachmentLoaders(props: ComposerAttachmentLoadersProps): JSX.E
             <DropdownMenu.Item
               as="button"
               type="button"
-              class="composer-attachment-menu-item"
+              class="composer-attachment-menu-item composer-attachment-menu-item--command"
               data-ui="composer-goal-trigger"
               onSelect={props.onGoal}
             >
               <Icon name="goals" size="medium" />
               <span>{t("continuous_goal.title")}</span>
+              <span class="composer-attachment-menu-command">/goal</span>
             </DropdownMenu.Item>
             <DropdownMenu.Separator />
             <DropdownMenu.Sub gutter={6}>
@@ -627,11 +629,13 @@ export function ChatComposer(props: ChatComposerProps) {
   const uploadingCount = uploads.count
   onCleanup(uploads.dispose)
   const modelAvailable = createMemo(() => Boolean(appStore.composerModel.trim()) || !boardStore.selectedSource)
-  const sideCommand = createMemo(() =>
-    props.onSideChat && !composerQuotation(props.draftKey) && attachments().length === 0
-      ? /^\/side(?:\s+([\s\S]*))?$/.exec(text().trim())
-      : null,
-  )
+  const localCommand = createMemo(() => {
+    const command = parseComposerCommand(text())
+    if (command.kind === "goal") return command
+    if (command.kind === "side" && props.onSideChat && !composerQuotation(props.draftKey) && attachments().length === 0)
+      return command
+    return undefined
+  })
   const attachmentCounts = createMemo(() => composerAttachmentCounts(attachments()))
   const [savingRunControl, setSavingRunControl] = createSignal<"parallelism" | "unattended" | null>(null)
   createEffect(
@@ -1053,7 +1057,7 @@ export function ChatComposer(props: ChatComposerProps) {
     if (submitting()) return
     if (uploadingCount() > 0) return
     if (!composerEnabled()) return
-    if (!modelAvailable() && !sideCommand()) return
+    if (!modelAvailable() && !localCommand()) return
     const trimmed = text().trim()
     if (!trimmed) return
     const sentAttachments = [...attachments()]
@@ -1065,9 +1069,15 @@ export function ChatComposer(props: ChatComposerProps) {
     setSubmissionError("")
     setSubmitting(true)
     try {
-      const command = sideCommand()
-      if (command && props.onSideChat) {
-        await props.onSideChat(command[1]?.trim() ?? "")
+      const command = localCommand()
+      if (command?.kind === "goal") {
+        writeDraftText(command.text)
+        textareaRef?.focus()
+        props.onGoal()
+        return
+      }
+      if (command?.kind === "side" && props.onSideChat) {
+        await props.onSideChat(command.text)
         if (!owns()) return
         writeDraftText("")
         return
@@ -1264,7 +1274,7 @@ export function ChatComposer(props: ChatComposerProps) {
     if (submitting() || props.availability === "submitting") return "submitting"
     if (uploadingCount() > 0) return "uploading"
     if (!composerEnabled()) return "unavailable"
-    if (!modelAvailable() && !sideCommand()) return "model-required"
+    if (!modelAvailable() && !localCommand()) return "model-required"
     if (!hasText()) return "empty"
     return undefined
   })
@@ -1279,10 +1289,10 @@ export function ChatComposer(props: ChatComposerProps) {
     if (reason === "unavailable") return t("chat.disabled_unavailable")
     if (reason === "model-required") return t("chat.disabled_model_required")
     if (reason === "empty") return t("chat.disabled_empty")
-    return t("chat.send_title")
+    return t(localCommand()?.kind === "goal" ? "continuous_goal.open" : "chat.send_title")
   }
-  const sendAriaLabel = () => (stopMode() ? t("chat.stop_label") : t("chat.send_label"))
-  const sendLabel = () => (stopMode() ? t("chat.stop_label") : t("chat.send_label"))
+  const sendAriaLabel = () => t(stopMode() ? "chat.stop_label" : localCommand()?.kind === "goal" ? "continuous_goal.open" : "chat.send_label")
+  const sendLabel = sendAriaLabel
   const activeComposerIntent = createMemo(() => props.activeComposerIntent ?? props.composerIntent)
   const productPillarOptions = createMemo<ComposerIntentOption<ProductPillar>[]>(() => [
     {
