@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Sources 复制与成员侧栏阅读](2026-10-24-source-copy-dock-review/README.md)：567原来源身份、实际桌面截图与完整结算。
+
 - [持续目标的流中暂停与恢复](2026-10-24-goal-live-pause/README.md)：566真实桌面交互与Goal/Provider/数据闭合事实。
 
 - [持续目标的首次读取与后台刷新](2026-10-24-goal-refresh-readiness/README.md)：565真实八秒路由条件、Goal入口实图和完整保留/闭合事实。

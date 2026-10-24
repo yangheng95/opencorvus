@@ -1,0 +1,251 @@
+{
+  "batch": 567,
+  "at": "2026-10-24T01:38:11.336Z",
+  "result": "Manual source copy/group/dock checks passed after correcting clipboard observation timing; no new product defect established.",
+  "ui": {
+    "entry": "main-D5Ah_P6W.js",
+    "source": "Previously qualified full 565 publication, actual source CLI /ui, no request latency injection, no standalone Vite.",
+    "screenshots": [
+      "01-file-source-group.png",
+      "02-file-copy-feedback.png",
+      "03-file-native-paste.png",
+      "04-second-file-native-paste.png",
+      "05-file-group-collapsed.png",
+      "06-member-source-copy.png",
+      "07-delayed-web-paste-mismatch.png",
+      "08-web-copy-native-confirmed.png",
+      "09-dock-hidden.png",
+      "10-dock-reopened-source.png",
+      "11-member-list.png",
+      "12-member-return-source.png",
+      "13-other-member-reading-position.png",
+      "14-other-source-native-paste.png"
+    ],
+    "automation": "None. Actual manual actions and presented screenshots."
+  },
+  "sourceInventory": {
+    "url": 15,
+    "file": 31,
+    "document": 0,
+    "webSnippet": "Empty for the existing original records; no long-excerpt qualification."
+  },
+  "data": {
+    "source": {
+      "allOriginalRows": "Exact rowid/primary key/all fields/times",
+      "bytes": 81367040,
+      "modifiedAtMs": 1792804013090.692,
+      "tables": 90,
+      "originalRows": 179313,
+      "canonical": "Complete source bytes exact"
+    },
+    "schema": {
+      "sourceVersion": 5,
+      "targetVersion": 5,
+      "extraObjects": [],
+      "integrity": "ok"
+    },
+    "targetOriginalRowDifferences": [
+      {
+        "table": "runtime_execution_capacity_lease",
+        "identity": "[1]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "identity": "[2]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      }
+    ],
+    "providerActivities": {
+      "original": 438,
+      "current": 439
+    }
+  },
+  "provider": {
+    "maximumRequests": 4,
+    "maximumBatchRequests": 8,
+    "actualRequests": 2,
+    "model": "gpt-6.1-sol",
+    "streaming200OriginalReaderEOF": 2,
+    "requests": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": {
+          "boundary": "provider-source-reader",
+          "state": "settled",
+          "receivedAt": 1792804966998,
+          "boundAt": 1792804966999,
+          "chunkCount": 20,
+          "byteCount": 39262,
+          "firstByteReadAt": 1792804967001,
+          "lastByteReadAt": 1792804970256,
+          "identityState": "observed",
+          "requestContext": {
+            "sessionID": "ses_hlFtLMCn71vBMkHzTxrx",
+            "streamRequest": {
+              "requestID": "msg_hud0iItVZtjwazk83X26",
+              "agentID": "memory",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VYvSvpI0086Z8YsZcQ",
+              "attempt": 0
+            }
+          },
+          "terminal": {
+            "kind": "eof",
+            "at": 1792804970256
+          }
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": {
+          "boundary": "provider-source-reader",
+          "state": "settled",
+          "receivedAt": 1792804967690,
+          "boundAt": 1792804967690,
+          "chunkCount": 42,
+          "byteCount": 515999,
+          "firstByteReadAt": 1792804967691,
+          "lastByteReadAt": 1792804968826,
+          "identityState": "observed",
+          "requestContext": {
+            "sessionID": "ses_hlFtLMCn71vBMkHzTxrx",
+            "streamRequest": {
+              "requestID": "msg_hud0iItVZtjwazk83X26",
+              "agentID": "chat",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VYvSw2c00zdcInIRvj",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VYvSvpU003zoBHhdNv"
+            }
+          },
+          "terminal": {
+            "kind": "eof",
+            "at": 1792804968965
+          }
+        }
+      }
+    ],
+    "afterScope": "Not launched."
+  },
+  "requests": {
+    "totalArrivals": 399,
+    "writes": [
+      {
+        "at": "2026-10-24T01:22:43.679Z",
+        "method": "POST",
+        "path": "/global/chat/start"
+      },
+      {
+        "at": "2026-10-24T01:23:01.769Z",
+        "method": "POST",
+        "path": "/global/transport/stream",
+        "admission": {
+          "method": "GET",
+          "path": "/work-ledger/events",
+          "streamID": "ee1396e1-050e-460a-9524-ad6a2fc05850"
+        }
+      },
+      {
+        "at": "2026-10-24T01:23:04.530Z",
+        "method": "POST",
+        "path": "/global/transport/stream",
+        "admission": {
+          "method": "GET",
+          "path": "/session/ses_-zURzTlJFzzacrP6FufN/events",
+          "streamID": "593fc5a3-a054-4528-830c-ca60b93718c0"
+        }
+      },
+      {
+        "at": "2026-10-24T01:23:05.127Z",
+        "method": "POST",
+        "path": "/log"
+      },
+      {
+        "at": "2026-10-24T01:23:26.465Z",
+        "method": "POST",
+        "path": "/log"
+      },
+      {
+        "at": "2026-10-24T01:29:00.675Z",
+        "method": "POST",
+        "path": "/global/transport/stream",
+        "admission": {
+          "method": "GET",
+          "path": "/work-ledger/events",
+          "streamID": "57c40d7c-1a3c-4b25-878d-4c8c083f5933"
+        }
+      },
+      {
+        "at": "2026-10-24T01:29:03.165Z",
+        "method": "POST",
+        "path": "/global/transport/stream",
+        "admission": {
+          "method": "GET",
+          "path": "/task/tsk_g00VYhrJxy00qIC54qvM/events",
+          "streamID": "9b37b909-e670-42a1-adc3-25b5f04c68fa"
+        }
+      },
+      {
+        "at": "2026-10-24T01:29:03.766Z",
+        "method": "POST",
+        "path": "/log"
+      },
+      {
+        "at": "2026-10-24T01:35:40.969Z",
+        "method": "POST",
+        "path": "/shutdown"
+      }
+    ]
+  },
+  "closure": {
+    "at": "2026-10-24T01:35:57.776Z",
+    "authRetired": 1,
+    "catalogRetired": 1,
+    "authCopied": true,
+    "modelRequests": 2,
+    "model": "gpt-6.1-sol",
+    "streaming200OriginalReaderEOF": 2,
+    "sourceCatalog": {
+      "bytes": 9155406,
+      "modifiedAtMs": 1791128890137.9968,
+      "content": "Exact original"
+    },
+    "publicShutdown": 200,
+    "reserveMs": 417335,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "exactProcessChain": "dead_or_reused"
+  },
+  "limits": [
+    "Screenshots are discrete observations; continuous flicker and every Rendering entry are not proven eliminated.",
+    "No long web excerpt or document source was present in this canonical data.",
+    "The delayed clipboard mismatch does not establish a product copy failure or a specific tool-internal root cause.",
+    "No new business message, member, Goal execution, product code, public API, schema, version or release was introduced by the UI steps."
+  ]
+}

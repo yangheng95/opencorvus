@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Sources 复制与成员侧栏阅读](2026-10-24-source-copy-dock-review.md)：567沿原canonical来源检查复制与Dock阅读保持。
+
 - [持续目标的流中暂停与恢复](2026-10-24-goal-live-pause.md)：566首页到真实流式暂停、恢复及证据完成。
 
 - [持续目标的首次读取与后台刷新](2026-10-24-goal-refresh-readiness.md)：565保留跨进程观察，复核首次读取与后台失效合并。
