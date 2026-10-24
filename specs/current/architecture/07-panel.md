@@ -1979,13 +1979,24 @@ order where applicable, and non-interactive at zero width. The canonical
 reduced-motion preference makes these layout transitions instant. Persisted
 pane widths and the existing resizers remain the only width sources.
 
-The open Right Dock's CSS maximum uses the same existing Workbench panel
-minimum floor as its pointer/keyboard width clamp. When the available desktop
-Workspace cannot fit both the nominal conversation minimum and that panel
-minimum, the shrinkable center conversation takes the remaining width rather
-than compressing the open dock below its reading minimum. Responsive allocation
-does not rewrite the persisted pane preference or automatically collapse
-navigation. Closed dock width remains zero through its canonical open signal.
+Desktop pane allocation reserves both the Conversation and open Right Dock
+minimums when resolving the left Projects width. If the measured Panel cannot
+fit navigation, the Projects minimum, both separators and those reading lanes,
+the Projects root temporarily presents as collapsed. This projection reads the
+existing saved collapse preference, Dock open state, shared scale-aware tokens
+and measured Panel width; it does not rewrite pane preferences. Closing the Dock
+or widening the Panel restores an expanded Projects preference. Explicitly
+showing Projects while that space is constrained closes the Dock, so the same
+toggle always exposes a usable navigation lane. The toggle, inert state and
+left separator share the projected collapse state. Existing window and visual
+viewport resize scheduling updates the measurement; no second resize observer
+or persisted layout state is introduced. Focus inside Projects returns to its
+toggle before automatic collapse.
+
+The open Right Dock retains the same Workbench minimum floor in its CSS maximum
+and pointer/keyboard clamp. On a desktop Panel too narrow even for navigation
+and the two reading lanes without Projects, Conversation takes the remainder.
+Closed Dock width remains zero through its canonical open signal.
 
 Environment Information embeds one compact `TaskProgressBar` projection only
 when the canonical board contains Goals. Its header exposes the Deliverables shortcut,
@@ -2699,10 +2710,12 @@ value and tooltip; the visible label also supplies keyboard prefix navigation.
 Right Dock width has one persisted source, `rightDockWidth`. Its runtime
 renderer, pointer and keyboard resizers, and Cascading Style Sheets (CSS)
 maximum all apply the same bounds: the Dock keeps the shared workbench-panel
-minimum, never exceeds the shared Dock maximum, and always leaves the canonical
-`--ui-chat-min-width` plus the separator for Conversation. Restoring an older
-wide value or resizing the desktop window therefore cannot squeeze the
-transcript below its supported layout boundary.
+minimum, never exceeds the shared Dock maximum, and reserves the canonical
+`--ui-chat-min-width` plus the separator when the available Workspace can fit
+both reading lanes. The shared desktop allocation above first releases Projects
+when necessary; only a Workspace narrower than the two lane minimums lets the
+Conversation shrink further. Restoring an older wide Dock preference uses these
+same constraints.
 The Dock separator exposes its current constrained rendered width and the same
 minimum/maximum through ARIA range properties. One resize observer follows the
 Dock and workspace geometry, coalesced by the existing animation-frame scheduler;

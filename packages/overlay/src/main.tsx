@@ -115,6 +115,7 @@ import {
   cancelPaneResize,
   renderPaneLayout,
   PANEL_PANE_CONFIG,
+  type PaneConfig,
   type PaneState,
 } from "./services/pane"
 import { panelMessage } from "./services/chat"
@@ -245,7 +246,7 @@ import {
   failedComposerReferenceCatalogSnapshot,
   updateComposerExpertSquadSearch,
 } from "./services/composer-expert-squad-catalog"
-import { currentUIScale, layoutTokenPx } from "./utils/layout-tokens"
+import { createLayoutTokenResolver, currentUIScale, layoutTokenPx } from "./utils/layout-tokens"
 import { copyText } from "./services/clipboard"
 
 // ── Module teardown ──
@@ -268,12 +269,42 @@ const REGISTERED_ICON_NAMES = new Set<string>(REGISTERED_ICONS)
 const LUCIDE_ICON_NAME_SET = new Set<string>(LUCIDE_ICON_NAMES)
 
 let pendingPaneLayoutState: PaneState | null = null
+const [panelInlineSize, setPanelInlineSize] = createSignal(0, { equals: false })
+
+const workspacePaneConfig: PaneConfig = {
+  ...PANEL_PANE_CONFIG,
+  remainingMinWidth: (tokens = createLayoutTokenResolver()) =>
+    tokens.tokenPx("--ui-chat-min-width") +
+    (rightDockOpen() ? tokens.tokenPx("--ui-workbench-panel-min-width") + tokens.tokenPx("--oc-border-width") : 0),
+}
+
+function measurePanelInlineSize(): void {
+  const width = document.getElementById("panelBody")?.clientWidth
+  if (width && width > 0) setPanelInlineSize(width)
+}
+
+function sidebarNeedsReadingSpace(): boolean {
+  const width = panelInlineSize()
+  if (!rightDockOpen() || width <= 0) return false
+  const tokens = createLayoutTokenResolver()
+  return (
+    width <
+    tokens.tokenPx("--ui-navigation-width") +
+      tokens.tokenPx("--ui-rail-min-width") +
+      tokens.tokenPx("--ui-resizer-width") +
+      workspacePaneConfig.remainingMinWidth(tokens)
+  )
+}
+
+function sidebarCollapsedForLayout(): boolean {
+  return settingsStore.sidebarCollapsed || sidebarNeedsReadingSpace()
+}
 
 function flushPaneLayout(): void {
   const state = pendingPaneLayoutState
   pendingPaneLayoutState = null
   if (!state) return
-  renderPaneLayout(state, PANEL_PANE_CONFIG)
+  renderPaneLayout(state, workspacePaneConfig)
 }
 
 const renderPaneLayoutOnFrame = createAnimationFrameScheduler(flushPaneLayout)
@@ -2159,7 +2190,7 @@ const [settingsHydrated, setSettingsHydrated] = createSignal(false)
 
 const paneCallbacks = {
   getState: () => ({
-    sidebarCollapsed: settingsStore.sidebarCollapsed,
+    sidebarCollapsed: sidebarCollapsedForLayout(),
     sidebarWidth: settingsStore.sidebarWidth,
   }),
   onWidthsChanged: (sidebarWidth: number | null) => {
@@ -2195,7 +2226,8 @@ function OverlayRoot() {
   })
 
   onMount(() => {
-    const disposePaneResizers = initPaneResizers(paneCallbacks, PANEL_PANE_CONFIG)
+    measurePanelInlineSize()
+    const disposePaneResizers = initPaneResizers(paneCallbacks, workspacePaneConfig)
     onCleanup(disposePaneResizers)
   })
 
@@ -2257,6 +2289,7 @@ function OverlayRoot() {
     if (!settingsHydrated()) return
     applyTheme(settingsStore.theme)
     applyZoom(settingsStore.zoom)
+    measurePanelInlineSize()
   })
 
   createEffect(() => {
@@ -2341,10 +2374,10 @@ function OverlayRoot() {
 
   createEffect(() => {
     if (!settingsHydrated()) return
-    // Scale changes both pane constraints and default widths. Resolve geometry
-    // after the theme effect applies the hydrated scale, not only on dragging.
-    void settingsStore.zoom
-    const sidebarCollapsed = settingsStore.sidebarCollapsed
+    // Read layout only after the theme owner has applied the current scale.
+    // The measurement also invalidates token geometry when only scale changes.
+    void panelInlineSize()
+    const sidebarCollapsed = sidebarCollapsedForLayout()
 
     const sidebar = document.getElementById("sidebar")
     const leftActivityShell = document.getElementById("leftActivityShell")
@@ -2354,6 +2387,9 @@ function OverlayRoot() {
       sidebar.hidden = false
     }
     if (leftActivityShell) {
+      if (sidebarCollapsed && leftActivityShell.contains(document.activeElement)) {
+        document.querySelector<HTMLButtonElement>('[data-ui="titlebar-sidebar-toggle"]')?.focus({ preventScroll: true })
+      }
       leftActivityShell.dataset.collapsed = String(sidebarCollapsed)
       leftActivityShell.inert = sidebarCollapsed
       leftActivityShell.setAttribute("aria-hidden", String(sidebarCollapsed))
@@ -2487,12 +2523,16 @@ function OverlayRoot() {
           type="button"
           data-ui="titlebar-sidebar-toggle"
           data-chrome="icon-action"
-          title={t(settingsStore.sidebarCollapsed ? "titlebar.sidebar_show" : "titlebar.sidebar_hide")}
-          aria-label={t(settingsStore.sidebarCollapsed ? "titlebar.sidebar_show" : "titlebar.sidebar_hide")}
+          title={t(sidebarCollapsedForLayout() ? "titlebar.sidebar_show" : "titlebar.sidebar_hide")}
+          aria-label={t(sidebarCollapsedForLayout() ? "titlebar.sidebar_show" : "titlebar.sidebar_hide")}
           aria-controls="sidebar workspaceMain"
-          aria-expanded={!settingsStore.sidebarCollapsed}
+          aria-expanded={!sidebarCollapsedForLayout()}
           onClick={() => {
-            setSettingsStore("sidebarCollapsed", !settingsStore.sidebarCollapsed)
+            const show = sidebarCollapsedForLayout()
+            batch(() => {
+              if (show && sidebarNeedsReadingSpace()) setRightDockVisible(false)
+              setSettingsStore("sidebarCollapsed", !show)
+            })
             persistMainSettings("settings.persist-sidebar-collapse")
           }}
         >
@@ -3214,6 +3254,7 @@ window.addEventListener(
 )
 function applyWindowResize(): void {
   applyZoom(settingsStore.zoom)
+  measurePanelInlineSize()
   syncScrollbarGutters()
   schedulePaneLayout(paneCallbacks.getState())
   renderRightDockWidth()

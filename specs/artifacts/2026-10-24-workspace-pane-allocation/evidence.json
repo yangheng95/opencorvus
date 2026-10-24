@@ -1,0 +1,568 @@
+{
+  "batch": 578,
+  "at": "2026-10-24T08:39:13.199Z",
+  "implementation": {
+    "files": [
+      "packages/overlay/src/main.tsx",
+      "specs/current/architecture/07-panel.md"
+    ],
+    "behavior": "Shared left pane budget reserves Conversation plus open Dock; constrained desktop temporarily releases Projects without changing its saved preference. Explicitly showing Projects closes the constrained Dock. Geometry notification follows applied scale."
+  },
+  "build": {
+    "at": "2026-10-24T08:29:38.118Z",
+    "entry": "main-RwZqHg_7.js",
+    "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/workspace-pane-allocation-578-verified-bundle/bin/ui",
+    "qualification": "Completed current production Node Vite build without diagnostic transforms; served by the native project CLI /ui"
+  },
+  "typecheck": "Overlay typecheck exit0 for final implementation; normal delivery checks follow",
+  "preservation": {
+    "at": "2026-10-24T08:37:15.708Z",
+    "sourceSchema": 6,
+    "targetSchema": 7,
+    "originalTables": 90,
+    "originalRows": 207330,
+    "originalFieldDifferences": [],
+    "addedColumns": [
+      {
+        "table": "automation_run",
+        "columns": [
+          "target_project_generation"
+        ]
+      },
+      {
+        "table": "channel_ingress_accepted",
+        "columns": [
+          "project_generation",
+          "effect"
+        ]
+      },
+      {
+        "table": "event_job_fire",
+        "columns": [
+          "project_generation"
+        ]
+      }
+    ],
+    "newTable": {
+      "name": "bus_publication_owner",
+      "rows": 6221
+    },
+    "integrity": "ok",
+    "source": "Exact original rows/fields/times, bytes/mtime and canonical configuration preserved",
+    "counts": {
+      "automation": {
+        "original": 2,
+        "current": 2
+      },
+      "automation_definition_tombstone": {
+        "original": 0,
+        "current": 0
+      },
+      "automation_delay_settlement": {
+        "original": 0,
+        "current": 0
+      },
+      "automation_fire": {
+        "original": 2,
+        "current": 2
+      },
+      "automation_fire_attempt": {
+        "original": 1,
+        "current": 1
+      },
+      "automation_fire_attempt_receipt": {
+        "original": 1,
+        "current": 1
+      },
+      "automation_fire_frontier": {
+        "original": 0,
+        "current": 0
+      },
+      "automation_project_target": {
+        "original": 2,
+        "current": 2
+      },
+      "automation_run": {
+        "original": 1,
+        "current": 1
+      },
+      "automation_run_receipt": {
+        "original": 1,
+        "current": 1
+      },
+      "bus_publication_attempt_receipt": {
+        "original": 0,
+        "current": 0
+      },
+      "bus_publication_delivery": {
+        "original": 42727,
+        "current": 42727
+      },
+      "bus_publication_delivery_receipt": {
+        "original": 42727,
+        "current": 42727
+      },
+      "bus_publication_outbox": {
+        "original": 6221,
+        "current": 6221
+      },
+      "bus_publication_phase_receipt": {
+        "original": 18663,
+        "current": 18663
+      },
+      "channel_ingress_accepted": {
+        "original": 0,
+        "current": 0
+      },
+      "channel_ingress_outcome": {
+        "original": 0,
+        "current": 0
+      },
+      "control_account": {
+        "original": 0,
+        "current": 0
+      },
+      "database_authority": {
+        "original": 1,
+        "current": 1
+      },
+      "decision_log": {
+        "original": 13,
+        "current": 13
+      },
+      "engine_artifact": {
+        "original": 247,
+        "current": 247
+      },
+      "engine_artifact_catalog_revision": {
+        "original": 247,
+        "current": 247
+      },
+      "engine_artifact_version": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_browser_preview_target_identity": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_build_observation_cleanup": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_build_observation_cleanup_receipt": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_channel_binding": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_control_activation_lease": {
+        "original": 43177,
+        "current": 43177
+      },
+      "engine_control_activation_lease_grant": {
+        "original": 43285,
+        "current": 43285
+      },
+      "engine_git_checkpoint_outcome": {
+        "original": 54,
+        "current": 54
+      },
+      "engine_git_checkpoint_request": {
+        "original": 54,
+        "current": 54
+      },
+      "engine_goal": {
+        "original": 5,
+        "current": 5
+      },
+      "engine_interaction_outcome": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_interaction_request": {
+        "original": 71,
+        "current": 71
+      },
+      "engine_metric_result": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_metric_spec": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_progress_snapshot": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_task": {
+        "original": 21,
+        "current": 21
+      },
+      "engine_task_creation_contract": {
+        "original": 21,
+        "current": 21
+      },
+      "engine_task_root_ingress": {
+        "original": 64,
+        "current": 64
+      },
+      "engine_task_root_ingress_policy": {
+        "original": 1,
+        "current": 1
+      },
+      "engine_task_wait_registration": {
+        "original": 0,
+        "current": 0
+      },
+      "engine_task_wait_settlement": {
+        "original": 0,
+        "current": 0
+      },
+      "event_job": {
+        "original": 3,
+        "current": 3
+      },
+      "event_job_definition_tombstone": {
+        "original": 1,
+        "current": 1
+      },
+      "event_job_fire": {
+        "original": 2,
+        "current": 2
+      },
+      "event_job_fire_receipt": {
+        "original": 2,
+        "current": 2
+      },
+      "event_occurrence": {
+        "original": 2,
+        "current": 2
+      },
+      "global_creation_allocation": {
+        "original": 182,
+        "current": 182
+      },
+      "interactive_artifact": {
+        "original": 0,
+        "current": 0
+      },
+      "memory_chunk": {
+        "original": 197,
+        "current": 197
+      },
+      "memory_embedding": {
+        "original": 0,
+        "current": 0
+      },
+      "memory_file": {
+        "original": 197,
+        "current": 197
+      },
+      "memory_fts": {
+        "original": 0,
+        "current": 0
+      },
+      "memory_fts_config": {
+        "original": 1,
+        "current": 1
+      },
+      "memory_fts_content": {
+        "original": 0,
+        "current": 0
+      },
+      "memory_fts_data": {
+        "original": 2,
+        "current": 2
+      },
+      "memory_fts_docsize": {
+        "original": 0,
+        "current": 0
+      },
+      "memory_fts_idx": {
+        "original": 0,
+        "current": 0
+      },
+      "message": {
+        "original": 778,
+        "current": 778
+      },
+      "part": {
+        "original": 1891,
+        "current": 1891
+      },
+      "permission_execution_result": {
+        "original": 144,
+        "current": 144
+      },
+      "permission_ledger": {
+        "original": 725,
+        "current": 725
+      },
+      "permission_policy": {
+        "original": 37,
+        "current": 37
+      },
+      "project": {
+        "original": 197,
+        "current": 197
+      },
+      "project_directory_admission": {
+        "original": 0,
+        "current": 0
+      },
+      "project_maintenance_fence": {
+        "original": 0,
+        "current": 0
+      },
+      "protocol_delivery_receipt": {
+        "original": 0,
+        "current": 0
+      },
+      "protocol_event": {
+        "original": 2247,
+        "current": 2247
+      },
+      "protocol_inbox": {
+        "original": 0,
+        "current": 0
+      },
+      "provider_activity_outcome": {
+        "original": 512,
+        "current": 512
+      },
+      "provider_activity_request": {
+        "original": 512,
+        "current": 512
+      },
+      "provider_usage_event": {
+        "original": 795,
+        "current": 795
+      },
+      "quick_note": {
+        "original": 0,
+        "current": 0
+      },
+      "runtime_execution_capacity_lease": {
+        "original": 3,
+        "current": 3
+      },
+      "session": {
+        "original": 268,
+        "current": 268
+      },
+      "session_control_event": {
+        "original": 197,
+        "current": 197
+      },
+      "session_control_record": {
+        "original": 197,
+        "current": 197
+      },
+      "session_prompt_owner": {
+        "original": 8,
+        "current": 8
+      },
+      "session_share": {
+        "original": 0,
+        "current": 0
+      },
+      "task_plan": {
+        "original": 0,
+        "current": 0
+      },
+      "todo": {
+        "original": 0,
+        "current": 0
+      },
+      "todo_snapshot": {
+        "original": 0,
+        "current": 0
+      },
+      "tool_part_outcome": {
+        "original": 245,
+        "current": 245
+      },
+      "tool_part_progress": {
+        "original": 28,
+        "current": 28
+      },
+      "tool_part_request": {
+        "original": 245,
+        "current": 245
+      },
+      "workbench_brief_snapshot": {
+        "original": 64,
+        "current": 64
+      },
+      "worker_turn_descriptor": {
+        "original": 39,
+        "current": 39
+      },
+      "workspace": {
+        "original": 0,
+        "current": 0
+      },
+      "workspace_lifecycle_admission": {
+        "original": 0,
+        "current": 0
+      }
+    },
+    "business": {
+      "taskID": "tsk_g00VYlyopB00h7w27eIw",
+      "sessionID": "ses_hHpC127wALpwIiSOX86d",
+      "messages": 33,
+      "parts": 107,
+      "sources": 9,
+      "assistant": {
+        "plan": {
+          "partID": "prt_g0VYx2s6Z00tS7K6at5e",
+          "messageID": "msg_g0VYx2r1y00VGC049Rqk",
+          "characters": 1517
+        },
+        "final": {
+          "partID": "prt_g0VYx3Lfe00yPWtixOdI",
+          "messageID": "msg_g0VYx3HfM00NfkvlRPw3",
+          "characters": 1775
+        },
+        "role": "assistant",
+        "ordering": "Real assistant plan precedes the admitted webfetch Part; real final assistant output follows it"
+      },
+      "attachment": {
+        "status": 200,
+        "bytes": 643,
+        "identity": "Original immutable PNG"
+      }
+    },
+    "providerRequests": 0,
+    "qualification": "Actual native HTTP and production conversation parser, canonical SQLite data and full original-row preservation; concurrent runtime migration7 is an isolated startup effect, not a UI build effect or this delivery implementation"
+  },
+  "runs": [
+    {
+      "scope": "workspace-pane-allocation-578",
+      "originalExec": 67596,
+      "originalExecJoinedExit": 0,
+      "at": "2026-10-24T08:22:36.033Z",
+      "authCopied": false,
+      "providerRequests": 0,
+      "catalogRetired": 1,
+      "publicShutdown": 200,
+      "reserveMs": 911033,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "exactProcessChain": "dead_or_reused"
+    },
+    {
+      "scope": "workspace-pane-allocation-578-fixed",
+      "at": "2026-10-24T08:29:31.883Z",
+      "fullyQualified": false,
+      "failure": "SCHEMA_MIGRATION_REQUIRED for the concurrent unfinished channel_ingress_accepted DDL, followed by owned CLI_STARTUP_INACTIVITY",
+      "listener": "Never started; no public shutdown claim",
+      "originalExec": 75075,
+      "originalExecJoinedExit": 1,
+      "authCopied": false,
+      "providerRequests": 0,
+      "catalogRetired": 1,
+      "nativeExit": 7,
+      "launcherExit": 7,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "exactProcessChain": "dead_or_reused"
+    },
+    {
+      "scope": "workspace-pane-allocation-578-verified",
+      "originalExec": 65025,
+      "originalExecJoinedExit": 0,
+      "at": "2026-10-24T08:37:20.001Z",
+      "authCopied": false,
+      "providerRequests": 0,
+      "catalogRetired": 1,
+      "publicShutdown": 200,
+      "reserveMs": 741988,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "exactProcessChain": "dead_or_reused"
+    }
+  ],
+  "visual": {
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "actualScales": [
+      1,
+      1.6,
+      0.8,
+      1
+    ],
+    "observedSettledGeometry": [
+      {
+        "scale": 1.6,
+        "left": 0,
+        "dock": 448,
+        "main": 740.40625
+      },
+      {
+        "scale": 1,
+        "left": 280,
+        "dock": 380,
+        "main": 561
+      },
+      {
+        "scale": 1,
+        "left": 208,
+        "dock": 513,
+        "main": 500,
+        "rightSeparator": {
+          "min": 280,
+          "max": 513,
+          "now": 513
+        }
+      }
+    ],
+    "qualified": [
+      "Actual scale100→160 releases Projects immediately after applied scale",
+      "Explicit Show sidebar closes constrained Dock; reopening retains selected original member",
+      "Scale160→80→100 restores expanded preference",
+      "Left and right keyboard size bounds leave supported main lane when all panes fit",
+      "Chinese labels, default page, + goal entry and form shown without business creation"
+    ],
+    "limitations": [
+      "Physical778px desktop viewport could not be obtained; current hidden chat open request queued. No user window manipulated.",
+      "Window drag, reduced motion, dedicated Mission/Side Chat and native desktop-host viewport not independently exercised.",
+      "Exact reading anchor continuity through font scale changes is not proven; Source view moved to final table during the scale round trip and needs a dedicated investigation.",
+      "At160% the View menu switched to Edit after End; keyboard bubbling vs pointer hover from changed menu geometry remains unknown.",
+      "Original high-frequency Rendering report remains unreproduced; this delivery fixes width allocation, not a proven markdown streaming cause."
+    ],
+    "screenshots": [
+      "01-open-member.png",
+      "02-visible-member.png",
+      "03-scaled-reading-space.png",
+      "04-reopen-at-large-scale.png",
+      "05-final-scale-collapse.png",
+      "06-explicit-projects.png",
+      "07-restored-member-reading.png",
+      "08-member-source-reading.png",
+      "09-tabs-source.png",
+      "10-visible-tabs-source.png",
+      "11-restored-three-panes.png",
+      "12-left-resize-bound.png",
+      "13-right-resize-bound.png",
+      "14-chinese-layout.png",
+      "15-default-page.png",
+      "16-goal-in-plus-menu.png",
+      "17-goal-form.png"
+    ],
+    "qualification": "Manual real page interactions, screenshots personally viewed; DOM geometry only supporting observations, no UI automated test or screenshot baseline"
+  }
+}

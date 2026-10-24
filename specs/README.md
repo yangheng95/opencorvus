@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [工作区双侧栏的阅读空间分配](records/2026-10/2026-10-24-workspace-pane-allocation.md)：578共享布局分配、偏好保持与实页复验。
+
 - [成员流式正文的瞬时呈现调查](records/2026-10/2026-10-24-member-stream-rendering.md)：577原成员真实Sol流与正文状态观察。
 
 - [成员侧栏恢复时的正文身份](records/2026-10/2026-10-24-member-reconnect-rendering.md)：576真实服务更换、Sources及正文owner观察。

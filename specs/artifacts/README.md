@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [工作区双侧栏的阅读空间分配](2026-10-24-workspace-pane-allocation/README.md)：578真实原生页面及人工截图。
+
 - [成员流式正文的瞬时呈现调查](2026-10-24-member-stream-rendering/README.md)：577真实页面与原始模型reader结算。
 
 - [旧权限记忆存量恢复](2026-10-24-permission-memory-stock-recovery/README.md)：原件只读审计、真实升级、回滚与并发收敛。
