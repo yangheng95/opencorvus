@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [成员流式正文的瞬时呈现调查](records/2026-10/2026-10-24-member-stream-rendering.md)：577原成员真实Sol流与正文状态观察。
+
 - [成员侧栏恢复时的正文身份](records/2026-10/2026-10-24-member-reconnect-rendering.md)：576真实服务更换、Sources及正文owner观察。
 
 - [持续目标的输入命令](records/2026-10/2026-10-24-goal-composer-command.md)：575以/goal复用加号目标表单、保留原首页布局。

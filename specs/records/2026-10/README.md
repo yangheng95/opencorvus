@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [成员流式正文的瞬时呈现调查](2026-10-24-member-stream-rendering.md)：577有界Provider与瞬时空正文调查。
+
 - [成员侧栏恢复时的正文身份](2026-10-24-member-reconnect-rendering.md)：576单agent零模型恢复与人工视觉证据。
 
 - [持续目标的输入命令](2026-10-24-goal-composer-command.md)：575命令语法、主/侧输入与真实有界Goal。

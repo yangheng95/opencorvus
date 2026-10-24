@@ -1,0 +1,540 @@
+{
+  "batch": 577,
+  "at": "2026-10-24T08:10:14.023Z",
+  "fullyQualified": false,
+  "productChange": false,
+  "task": {
+    "id": "tsk_g00VYlyopB00h7w27eIw",
+    "sessionID": "ses_hHpC127wALpwIiSOX86d",
+    "status": "completed",
+    "messages": 33,
+    "parts": 107,
+    "sources": 9,
+    "assistant": [
+      {
+        "kind": "plan",
+        "partID": "prt_g0VYx2s6Z00tS7K6at5e",
+        "messageID": "msg_g0VYx2r1y00VGC049Rqk",
+        "characters": 1517,
+        "headings": 6,
+        "tableDataRows": 0,
+        "listItems": 0,
+        "fenceLines": 0,
+        "persistence": "Exact public HTTP assistant text equals canonical SQLite text"
+      },
+      {
+        "kind": "final",
+        "partID": "prt_g0VYx3Lfe00yPWtixOdI",
+        "messageID": "msg_g0VYx3HfM00NfkvlRPw3",
+        "characters": 1775,
+        "headings": 6,
+        "tableDataRows": 5,
+        "listItems": 3,
+        "fenceLines": 2,
+        "persistence": "Exact public HTTP assistant text equals canonical SQLite text"
+      }
+    ],
+    "newSources": [
+      {
+        "id": "prt_g0VYx3HLV00yjloTgqoD",
+        "title": "Tabs Pattern | APG | WAI | W3C",
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+        "messageID": "msg_g0VYx2r1y00VGC049Rqk",
+        "toolPartID": "prt_g0VYx32pR00jXd2Cc74Y",
+        "toolStatus": "completed",
+        "canonicalOrderKey": "v1:0001792828404882:0000000000000031:0000000000000000:part:prt_g0VYx3HLV00yjloTgqoD"
+      }
+    ],
+    "attachment": {
+      "status": 200,
+      "bytes": 643,
+      "identity": "Exact original immutable PNG"
+    }
+  },
+  "provider": {
+    "model": "gpt-6.1-sol",
+    "requests": 14,
+    "streamingHTTP200OriginalReaderEOF": 14,
+    "lastEOF": 1792828773121,
+    "memoryRequests": 6
+  },
+  "memory": {
+    "oldCovered": 29,
+    "currentCovered": 33,
+    "status": "idle",
+    "revision": 27,
+    "originalCoverage": "Exact ordered prefix retained"
+  },
+  "preservation": {
+    "sourceSchema": 6,
+    "targetSchema": 6,
+    "tables": 90,
+    "originalRows": 203799,
+    "targetRows": 207330,
+    "integrity": "ok",
+    "source": "Exact all original rows/fields/times and source bytes/mtime/canonical",
+    "schemaObjects": 519,
+    "originalRowDifferences": [
+      {
+        "table": "memory_chunk",
+        "id": "mck_hd2PLf49sorereyDu9w0",
+        "fields": [
+          "content",
+          "token_count",
+          "time_updated"
+        ]
+      },
+      {
+        "table": "memory_file",
+        "id": "mem_h6r23eQkVxF8ppMaNuxh",
+        "fields": [
+          "time_updated"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "id": "[1]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "id": "[2]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "session",
+        "id": "ses_-zURE1Aonzzko22HlxqB",
+        "fields": [
+          "time_updated"
+        ]
+      },
+      {
+        "table": "session",
+        "id": "ses_-zURE19wozzlTmx3ixXd",
+        "fields": [
+          "time_updated"
+        ]
+      },
+      {
+        "table": "session",
+        "id": "ses_hHpC127wALpwIiSOX86d",
+        "fields": [
+          "time_updated"
+        ]
+      }
+    ]
+  },
+  "observations": {
+    "before": {
+      "bodies": [
+        {
+          "blocks": 1,
+          "empties": null,
+          "owner": "8",
+          "part": "prt_g0VYlz8dd00pWcuVkoZF"
+        },
+        {
+          "blocks": 1,
+          "empties": null,
+          "owner": "9",
+          "part": "prt_g0VYlzNy200G9j4TgB2N"
+        },
+        {
+          "blocks": 1,
+          "empties": null,
+          "owner": "10",
+          "part": "prt_g0VYm1lEs00O2KijUi86"
+        },
+        {
+          "blocks": 1,
+          "empties": null,
+          "owner": "11",
+          "part": "prt_g0VYmMab300GY28UWAJt"
+        },
+        {
+          "blocks": 32,
+          "empties": null,
+          "owner": "12",
+          "part": "prt_g0VYmMcJU00PFeeyJf7k"
+        },
+        {
+          "blocks": 1,
+          "empties": null,
+          "owner": "13",
+          "part": "prt_g0VYmUNau00ka4jsGLu7"
+        },
+        {
+          "blocks": 13,
+          "empties": null,
+          "owner": "14",
+          "part": "prt_g0VYmUPS300JPqmNLo2D"
+        },
+        {
+          "blocks": 22,
+          "empties": null,
+          "owner": "15",
+          "part": "prt_g0VYmUrRH00iG2zOFlhG"
+        },
+        {
+          "blocks": 1,
+          "empties": null,
+          "owner": "16",
+          "part": "prt_g0VYma1AT004jdIyz0bP"
+        },
+        {
+          "blocks": 14,
+          "empties": null,
+          "owner": "17",
+          "part": "prt_g0VYma2wD003owRu5m9l"
+        },
+        {
+          "blocks": 21,
+          "empties": null,
+          "owner": "18",
+          "part": "prt_g0VYmaNTs00F3UDN30bC"
+        },
+        {
+          "blocks": 1,
+          "empties": null,
+          "owner": "19",
+          "part": "prt_g0VYn0rha005V1KlZppe"
+        },
+        {
+          "blocks": 6,
+          "empties": null,
+          "owner": "20",
+          "part": "prt_g0VYn0tPU00GJfPCOkag"
+        },
+        {
+          "blocks": 8,
+          "empties": null,
+          "owner": "21",
+          "part": "prt_g0VYn1Ezt00aQBqYLfgw"
+        },
+        {
+          "blocks": 1,
+          "empties": null,
+          "owner": "22",
+          "part": "prt_g0VYw5RTi00q5ATqCk5d"
+        },
+        {
+          "blocks": 2,
+          "empties": null,
+          "owner": "23",
+          "part": "prt_g0VYw5TZL00rR6Y5CIqt"
+        },
+        {
+          "blocks": 6,
+          "empties": null,
+          "owner": "24",
+          "part": "prt_g0VYw5eil00vfzbWhSjq"
+        },
+        {
+          "blocks": 1,
+          "empties": null,
+          "owner": "25",
+          "part": "prt_g0VYwSSwe00tHP9BUXFn"
+        },
+        {
+          "blocks": 7,
+          "empties": null,
+          "owner": "26",
+          "part": "prt_g0VYwSUO9004e1jdEn8D"
+        },
+        {
+          "blocks": 12,
+          "empties": null,
+          "owner": "27",
+          "part": "prt_g0VYwT3Nx00fARjbsKVz"
+        }
+      ],
+      "retirements": [],
+      "scrollOwner": "1",
+      "session": "ses_hHpC127wALpwIiSOX86d",
+      "sources": [
+        {
+          "link": "https://aclanthology.org/2025.naacl-long.475/",
+          "owner": "2"
+        },
+        {
+          "link": "https://aclanthology.org/2025.acl-long.195/",
+          "owner": "4"
+        },
+        {
+          "link": "https://arxiv.org/abs/2509.11035v1",
+          "owner": "6"
+        },
+        {
+          "link": "https://arxiv.org/html/2509.11035v1",
+          "owner": "8"
+        },
+        {
+          "link": "https://aclanthology.org/2024.acl-long.381/",
+          "owner": "10"
+        },
+        {
+          "link": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/",
+          "owner": "12"
+        },
+        {
+          "link": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/",
+          "owner": "14"
+        },
+        {
+          "link": "https://www.w3.org/WAI/ARIA/apg/patterns/accordion/",
+          "owner": "16"
+        }
+      ],
+      "top": 31619
+    },
+    "final": {
+      "bodies": [
+        {
+          "blocks": 1,
+          "empties": null,
+          "owner": "8",
+          "part": "prt_g0VYlz8dd00pWcuVkoZF"
+        },
+        {
+          "blocks": 1,
+          "empties": null,
+          "owner": "9",
+          "part": "prt_g0VYlzNy200G9j4TgB2N"
+        },
+        {
+          "blocks": 1,
+          "empties": null,
+          "owner": "10",
+          "part": "prt_g0VYm1lEs00O2KijUi86"
+        },
+        {
+          "blocks": 1,
+          "empties": null,
+          "owner": "11",
+          "part": "prt_g0VYmMab300GY28UWAJt"
+        },
+        {
+          "blocks": 32,
+          "empties": null,
+          "owner": "12",
+          "part": "prt_g0VYmMcJU00PFeeyJf7k"
+        },
+        {
+          "blocks": 1,
+          "empties": null,
+          "owner": "13",
+          "part": "prt_g0VYmUNau00ka4jsGLu7"
+        },
+        {
+          "blocks": 13,
+          "empties": null,
+          "owner": "14",
+          "part": "prt_g0VYmUPS300JPqmNLo2D"
+        },
+        {
+          "blocks": 22,
+          "empties": null,
+          "owner": "15",
+          "part": "prt_g0VYmUrRH00iG2zOFlhG"
+        },
+        {
+          "blocks": 1,
+          "empties": null,
+          "owner": "16",
+          "part": "prt_g0VYma1AT004jdIyz0bP"
+        },
+        {
+          "blocks": 14,
+          "empties": null,
+          "owner": "17",
+          "part": "prt_g0VYma2wD003owRu5m9l"
+        },
+        {
+          "blocks": 21,
+          "empties": null,
+          "owner": "18",
+          "part": "prt_g0VYmaNTs00F3UDN30bC"
+        },
+        {
+          "blocks": 1,
+          "empties": null,
+          "owner": "19",
+          "part": "prt_g0VYn0rha005V1KlZppe"
+        },
+        {
+          "blocks": 6,
+          "empties": null,
+          "owner": "20",
+          "part": "prt_g0VYn0tPU00GJfPCOkag"
+        },
+        {
+          "blocks": 8,
+          "empties": null,
+          "owner": "21",
+          "part": "prt_g0VYn1Ezt00aQBqYLfgw"
+        },
+        {
+          "blocks": 1,
+          "empties": null,
+          "owner": "22",
+          "part": "prt_g0VYw5RTi00q5ATqCk5d"
+        },
+        {
+          "blocks": 2,
+          "empties": null,
+          "owner": "23",
+          "part": "prt_g0VYw5TZL00rR6Y5CIqt"
+        },
+        {
+          "blocks": 6,
+          "empties": null,
+          "owner": "24",
+          "part": "prt_g0VYw5eil00vfzbWhSjq"
+        },
+        {
+          "blocks": 1,
+          "empties": null,
+          "owner": "25",
+          "part": "prt_g0VYwSSwe00tHP9BUXFn"
+        },
+        {
+          "blocks": 7,
+          "empties": null,
+          "owner": "26",
+          "part": "prt_g0VYwSUO9004e1jdEn8D"
+        },
+        {
+          "blocks": 12,
+          "empties": null,
+          "owner": "27",
+          "part": "prt_g0VYwT3Nx00fARjbsKVz"
+        },
+        {
+          "blocks": 1,
+          "empties": null,
+          "owner": "49",
+          "part": "prt_g0VYx2qXk00BYGQbrcf5"
+        },
+        {
+          "blocks": 13,
+          "empties": null,
+          "owner": "52",
+          "part": "prt_g0VYx2s6Z00tS7K6at5e"
+        },
+        {
+          "blocks": 18,
+          "empties": null,
+          "owner": "59",
+          "part": "prt_g0VYx3Lfe00yPWtixOdI"
+        }
+      ],
+      "retirements": [],
+      "scrollOwner": "1",
+      "sources": [
+        {
+          "link": "https://aclanthology.org/2025.naacl-long.475/",
+          "owner": "2"
+        },
+        {
+          "link": "https://aclanthology.org/2025.acl-long.195/",
+          "owner": "4"
+        },
+        {
+          "link": "https://arxiv.org/abs/2509.11035v1",
+          "owner": "6"
+        },
+        {
+          "link": "https://arxiv.org/html/2509.11035v1",
+          "owner": "8"
+        },
+        {
+          "link": "https://aclanthology.org/2024.acl-long.381/",
+          "owner": "10"
+        },
+        {
+          "link": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/",
+          "owner": "12"
+        },
+        {
+          "link": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/",
+          "owner": "14"
+        },
+        {
+          "link": "https://www.w3.org/WAI/ARIA/apg/patterns/accordion/",
+          "owner": "16"
+        },
+        {
+          "link": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+          "owner": "18"
+        }
+      ],
+      "top": 38616
+    },
+    "qualification": "Manual page reads and screenshots, with private passive owner metadata. Not UI assertions or pixel/frame continuity proof."
+  },
+  "lifecycle": {
+    "at": "2026-10-24T08:04:17.292Z",
+    "fullyQualified": false,
+    "unmetRequirement": {
+      "code": "DIAGNOSTIC_SHUTDOWN_RESERVE_BELOW_MINIMUM",
+      "requiredMs": 300000,
+      "actualMs": 276754,
+      "shortfallMs": 23246,
+      "originalChecker": "retire.mjs: assert(reserveMs>=300000) failed and remains unchanged"
+    },
+    "authRetired": 1,
+    "catalogRetired": 1,
+    "authCopied": true,
+    "sourceCatalog": "Exact original bytes/mtime",
+    "sourceAuthMetadata": "Exact original bytes length/mtime",
+    "modelRequests": 14,
+    "model": "gpt-6.1-sol",
+    "streaming200OriginalReaderEOF": 14,
+    "memory": {
+      "status": "idle",
+      "revision": 27,
+      "covered": 33
+    },
+    "publicShutdown": 200,
+    "reserveMs": 276754,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "exactProcessChain": "dead_or_reused",
+    "originalExec": 39618,
+    "originalExecJoinedExit": 0
+  },
+  "visual": {
+    "viewport": {
+      "width": 778,
+      "height": 884
+    },
+    "screenshots": [
+      "01-original-sources.png",
+      "02-task-submitted.png",
+      "03-original-b-dispatch.png",
+      "04-webfetch-permission.png",
+      "05-webfetch-permission-details.png",
+      "06-new-tabs-source.png",
+      "07-final-body.png",
+      "08-old-and-new-boundary.png",
+      "09-reading-plan-body.png",
+      "10-final-structure.png",
+      "11-final-table-and-list.png"
+    ],
+    "finding": "Both sidebars constrain the main narrative to about 155px at this desktop pane width; hiding the left sidebar improves reading.",
+    "limitation": "The high-frequency Rendering report was not reproduced. Zero recorded empty transitions does not prove every pixel/frame was stable."
+  }
+}
