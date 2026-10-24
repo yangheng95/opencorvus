@@ -1,0 +1,103 @@
+{
+  "requestCount": 692,
+  "observedDisposals": 667,
+  "disposals": [
+    {
+      "pid": 89664,
+      "label": "package tool marketing-growth/shared/publish-marketing-growth-artifact",
+      "beganAt": 1792854442234,
+      "markers": {
+        "ready.json": {
+          "protocol": 3,
+          "detached": false,
+          "request_id": "07a9633d-6882-40ff-9c03-8eb0116f55b9",
+          "helper_pid": 94452,
+          "target_pid": 89664,
+          "target_process_instance_id": "win32:639284512400133565",
+          "runtime_occurrence_id": "1c2488a0-ecc3-49fc-80de-4a68abba1d0d"
+        },
+        "helper.json": {
+          "protocol": 1,
+          "request_id": "07a9633d-6882-40ff-9c03-8eb0116f55b9",
+          "helper_pid": 94452,
+          "helper_process_instance_id": "win32:639284512393589363",
+          "runtime_occurrence_id": "1c2488a0-ecc3-49fc-80de-4a68abba1d0d"
+        },
+        "settled.json": {
+          "protocol": 1,
+          "request_id": "07a9633d-6882-40ff-9c03-8eb0116f55b9",
+          "helper_pid": 94452,
+          "target_pid": 89664,
+          "active_processes": 0,
+          "runtime_occurrence_id": "1c2488a0-ecc3-49fc-80de-4a68abba1d0d"
+        }
+      },
+      "requestID": "07a9633d-6882-40ff-9c03-8eb0116f55b9",
+      "requestDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261024-mg-03\\runtime\\tmp\\supervisor-y0kqlq",
+      "output": {
+        "outcome": "fulfilled",
+        "elapsedMs": 4885.839099999983
+      },
+      "error": "AggregateError: package tool marketing-growth/shared/publish-marketing-growth-artifact disposal failed: package tool marketing-growth/shared/publish-marketing-growth-artifact dispose cleanup did not finish within 5000ms; package tool marketing-growth/shared/publish-marketing-growth-artifact process did not exit within 5000ms after disposal was requested; package tool marketing-growth/shared/publish-marketing-growth-artifact supervisor settlement did not finish within 5000ms after disposal was requested",
+      "returnedMs": 5465.7648000000045,
+      "physical": {
+        "outcome": "fulfilled",
+        "elapsedMs": 9943.285299999989,
+        "value": 1
+      },
+      "settlement": {
+        "outcome": "fulfilled",
+        "elapsedMs": 9945.990899999975
+      }
+    },
+    {
+      "pid": 71492,
+      "label": "package tool marketing-growth/shared/publish-marketing-growth-artifact",
+      "beganAt": 1792854871931,
+      "markers": {
+        "ready.json": {
+          "protocol": 3,
+          "detached": false,
+          "request_id": "d3b39eac-77ef-470c-9a65-240b50fa0621",
+          "helper_pid": 52024,
+          "target_pid": 71492,
+          "target_process_instance_id": "win32:639284516689748700",
+          "runtime_occurrence_id": "1c2488a0-ecc3-49fc-80de-4a68abba1d0d"
+        },
+        "helper.json": {
+          "protocol": 1,
+          "request_id": "d3b39eac-77ef-470c-9a65-240b50fa0621",
+          "helper_pid": 52024,
+          "helper_process_instance_id": "win32:639284516686216819",
+          "runtime_occurrence_id": "1c2488a0-ecc3-49fc-80de-4a68abba1d0d"
+        },
+        "settled.json": {
+          "protocol": 1,
+          "request_id": "d3b39eac-77ef-470c-9a65-240b50fa0621",
+          "helper_pid": 52024,
+          "target_pid": 71492,
+          "active_processes": 0,
+          "runtime_occurrence_id": "1c2488a0-ecc3-49fc-80de-4a68abba1d0d"
+        }
+      },
+      "requestID": "d3b39eac-77ef-470c-9a65-240b50fa0621",
+      "requestDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261024-mg-03\\runtime\\tmp\\supervisor-AdsILj",
+      "output": {
+        "outcome": "fulfilled",
+        "elapsedMs": 992.7962999998126
+      },
+      "physical": {
+        "outcome": "fulfilled",
+        "elapsedMs": 1160.7236999999732,
+        "value": 1
+      },
+      "error": "AggregateError: package tool marketing-growth/shared/publish-marketing-growth-artifact disposal failed: package tool marketing-growth/shared/publish-marketing-growth-artifact dispose cleanup did not finish within 5000ms; package tool marketing-growth/shared/publish-marketing-growth-artifact supervisor settlement did not finish within 5000ms after disposal was requested",
+      "returnedMs": 6107.381599999964,
+      "settlement": {
+        "outcome": "fulfilled",
+        "elapsedMs": 6205.436499999836
+      }
+    }
+  ],
+  "qualification": "Original business run with synchronous historical-ready diagnostic overhead; elapsed times are whole observed promises and do not identify a filesystem syscall."
+}

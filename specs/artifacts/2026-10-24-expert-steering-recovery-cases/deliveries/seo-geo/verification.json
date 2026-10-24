@@ -1,0 +1,654 @@
+{
+  "taskID": "tsk_g00VYybre500DKSJ7sPU",
+  "status": "completed",
+  "lifecycle": {
+    "taskID": "tsk_g00VYybre500DKSJ7sPU",
+    "epoch": 1,
+    "openedEventID": "pev_g0VYybsCV00KFM1dIw1p",
+    "openedAt": 1792851423905,
+    "status": "completed",
+    "terminalEventID": "pev_g0VYyrAtF007BMDSncZQ",
+    "terminalAt": 1792855068520
+  },
+  "canonicalPath": "outputs/discovery-plan.md",
+  "canonicalBytes": 15566,
+  "canonicalResource": {
+    "artifactID": "art_hAiaxtqWtmDX36CCNZAF",
+    "path": "outputs/discovery-plan.md",
+    "bytes": 15566,
+    "file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261024-seo-01\\evidence\\delivery-verification\\art_hAiaxtqWtmDX36CCNZAF-discovery-plan.md",
+    "ranges": [
+      "bytes 0-4095/15566",
+      "bytes 4096-8190/15566",
+      "bytes 8191-12286/15566",
+      "bytes 12287-15565/15566"
+    ],
+    "ref": {
+      "snapshot": {
+        "schema_version": 2,
+        "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+        "task_id": "tsk_g00VYybre500DKSJ7sPU",
+        "snapshot_id": "01e1e88c-549d-57ff-abb3-c13a2fbfb696",
+        "manifest_sha256": "8bc22839ac29412e12ec0dc224c19100930d31f3b0cad6fed0f10262ea9203e9"
+      },
+      "tree": "resources",
+      "path": "outputs/discovery-plan.md",
+      "media_type": "text/markdown",
+      "bytes": 15566,
+      "sha256": "afd1a1d9e0d9e77e9e78ac2fb51952048a7767f3213fe3e0420bfebfda1e24cb"
+    }
+  },
+  "document": {
+    "artifactID": "art_hAiaxtqWtmDX36CCNZAF",
+    "path": "outputs/discovery-plan.pdf",
+    "bytes": 373815,
+    "file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261024-seo-01\\evidence\\delivery-verification\\art_hAiaxtqWtmDX36CCNZAF-discovery-plan.pdf",
+    "ranges": [
+      "bytes 0-373814/373815"
+    ],
+    "ref": {
+      "snapshot": {
+        "schema_version": 2,
+        "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+        "task_id": "tsk_g00VYybre500DKSJ7sPU",
+        "snapshot_id": "01e1e88c-549d-57ff-abb3-c13a2fbfb696",
+        "manifest_sha256": "8bc22839ac29412e12ec0dc224c19100930d31f3b0cad6fed0f10262ea9203e9"
+      },
+      "tree": "resources",
+      "path": "outputs/discovery-plan.pdf",
+      "media_type": "application/pdf",
+      "bytes": 373815,
+      "sha256": "362d4ca9f8542e49672d8913b216cb816c17fe259ec081f3f866bf415268b0f0"
+    }
+  },
+  "artifacts": [
+    {
+      "id": "art_hGje1yc5DwwVv7Hl24Xm",
+      "type": "seo-geo/discovery-brief",
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hGje1yc5DwwVv7Hl24Xm",
+        "catalog_revision": 5,
+        "expected_sha256": "90f6b6c3a52cf517ba6222e2bbf3acf4b82497cd63b9a7a91a5118d2d358b715"
+      },
+      "sourceLocators": [
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+              "task_id": "tsk_g00VYybre500DKSJ7sPU",
+              "snapshot_id": "fdc30387-4a61-5217-a9e1-f7f09c3cb29d",
+              "manifest_sha256": "e108281927a553afaa96cfaca480e3205d88f9692a9d4ebd915063e93ffcd0f4"
+            },
+            "tree": "resources",
+            "path": "pages.csv",
+            "media_type": "text/csv",
+            "bytes": 307,
+            "sha256": "c6900d274c0fb2c53e22e815fb18f85577cc8446db3fff5ad8d2a8f02cfa3484"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+              "task_id": "tsk_g00VYybre500DKSJ7sPU",
+              "snapshot_id": "fdc30387-4a61-5217-a9e1-f7f09c3cb29d",
+              "manifest_sha256": "e108281927a553afaa96cfaca480e3205d88f9692a9d4ebd915063e93ffcd0f4"
+            },
+            "tree": "resources",
+            "path": "brief.md",
+            "media_type": "text/markdown",
+            "bytes": 930,
+            "sha256": "f2ad6f6f587a35915bd25134e0f2e3f67d6cae9816736dd0a9617a8f24398e3b"
+          }
+        }
+      ],
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "seo-geo",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+          "namespace": "builtin",
+          "id": "seo-geo",
+          "version": "2026.10.24.2",
+          "package_digest": "52433a72de7ba9e5eac69df4fc76de4a92a8e61d0b8e91b8b295fc4e5fea87f2"
+        },
+        "agent_id": "seo-geo-planner",
+        "projection_hash": "e80333ddf0468e4f42691086210e1fd04382c84c99c8a6d7a7491654a1591cc0",
+        "session_id": "ses_h7wusRK7rktN7Xa3urrv",
+        "message_id": "msg_g0VYycSJi004bjug2BFU",
+        "tool_call_id": "call_6e98d57cb59d430393aa96d099071885"
+      },
+      "resources": []
+    },
+    {
+      "id": "art_hR5DcROGQpaP3sBnWslM",
+      "type": "seo-geo/source-dossier",
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hR5DcROGQpaP3sBnWslM",
+        "catalog_revision": 9,
+        "expected_sha256": "675f63bbe60ca744cad2f13db4dfaa30ba85f2e6c0131f735ee428e904b6d381"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hGje1yc5DwwVv7Hl24Xm",
+          "catalog_revision": 5,
+          "expected_sha256": "90f6b6c3a52cf517ba6222e2bbf3acf4b82497cd63b9a7a91a5118d2d358b715"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+              "task_id": "tsk_g00VYybre500DKSJ7sPU",
+              "snapshot_id": "fdc30387-4a61-5217-a9e1-f7f09c3cb29d",
+              "manifest_sha256": "e108281927a553afaa96cfaca480e3205d88f9692a9d4ebd915063e93ffcd0f4"
+            },
+            "tree": "resources",
+            "path": "pages.csv",
+            "media_type": "text/csv",
+            "bytes": 307,
+            "sha256": "c6900d274c0fb2c53e22e815fb18f85577cc8446db3fff5ad8d2a8f02cfa3484"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+              "task_id": "tsk_g00VYybre500DKSJ7sPU",
+              "snapshot_id": "fdc30387-4a61-5217-a9e1-f7f09c3cb29d",
+              "manifest_sha256": "e108281927a553afaa96cfaca480e3205d88f9692a9d4ebd915063e93ffcd0f4"
+            },
+            "tree": "resources",
+            "path": "brief.md",
+            "media_type": "text/markdown",
+            "bytes": 930,
+            "sha256": "f2ad6f6f587a35915bd25134e0f2e3f67d6cae9816736dd0a9617a8f24398e3b"
+          }
+        }
+      ],
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "seo-geo",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+          "namespace": "builtin",
+          "id": "seo-geo",
+          "version": "2026.10.24.2",
+          "package_digest": "52433a72de7ba9e5eac69df4fc76de4a92a8e61d0b8e91b8b295fc4e5fea87f2"
+        },
+        "agent_id": "seo-geo-source-researcher",
+        "projection_hash": "6d615519088be59f7f42fc3d52719f60c7491e9a66099105a3c23abcc6fa331d",
+        "session_id": "ses_hObLFC698g6MNSVy46U8",
+        "message_id": "msg_g0VYyezRf00lhQdULvL0",
+        "tool_call_id": "call_e1b5739720e442d5b80dddd581db289b"
+      },
+      "resources": []
+    },
+    {
+      "id": "art_hgzgFgnERzIaoJ11JiTp",
+      "type": "seo-geo/generative-analysis",
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hgzgFgnERzIaoJ11JiTp",
+        "catalog_revision": 15,
+        "expected_sha256": "6b025e2d3908e34e9369fd9245eeb37559601166c3a154301fe5fe77c2754d11"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hR5DcROGQpaP3sBnWslM",
+          "catalog_revision": 9,
+          "expected_sha256": "675f63bbe60ca744cad2f13db4dfaa30ba85f2e6c0131f735ee428e904b6d381"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+              "task_id": "tsk_g00VYybre500DKSJ7sPU",
+              "snapshot_id": "fdc30387-4a61-5217-a9e1-f7f09c3cb29d",
+              "manifest_sha256": "e108281927a553afaa96cfaca480e3205d88f9692a9d4ebd915063e93ffcd0f4"
+            },
+            "tree": "resources",
+            "path": "pages.csv",
+            "media_type": "text/csv",
+            "bytes": 307,
+            "sha256": "c6900d274c0fb2c53e22e815fb18f85577cc8446db3fff5ad8d2a8f02cfa3484"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+              "task_id": "tsk_g00VYybre500DKSJ7sPU",
+              "snapshot_id": "fdc30387-4a61-5217-a9e1-f7f09c3cb29d",
+              "manifest_sha256": "e108281927a553afaa96cfaca480e3205d88f9692a9d4ebd915063e93ffcd0f4"
+            },
+            "tree": "resources",
+            "path": "brief.md",
+            "media_type": "text/markdown",
+            "bytes": 930,
+            "sha256": "f2ad6f6f587a35915bd25134e0f2e3f67d6cae9816736dd0a9617a8f24398e3b"
+          }
+        }
+      ],
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "seo-geo",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+          "namespace": "builtin",
+          "id": "seo-geo",
+          "version": "2026.10.24.2",
+          "package_digest": "52433a72de7ba9e5eac69df4fc76de4a92a8e61d0b8e91b8b295fc4e5fea87f2"
+        },
+        "agent_id": "seo-geo-generative-analyst",
+        "projection_hash": "478bc9f6a1646d59ac70a27acf758bcc3020f7aa4a59df51b5bd8d1aea958122",
+        "session_id": "ses_hxd8cdD36tog3SipFxpy",
+        "message_id": "msg_g0VYyfpKE00dem1t81eT",
+        "tool_call_id": "call_7f5e0486b3b447c39adebe58d1ae0ed7"
+      },
+      "resources": []
+    },
+    {
+      "id": "art_hQoyu7PzNM48hR6Eqflt",
+      "type": "seo-geo/search-analysis",
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hQoyu7PzNM48hR6Eqflt",
+        "catalog_revision": 17,
+        "expected_sha256": "b6aad3462e0ee02e770e1db11ab538184760765bd40a9efbf556b8c262c7c6fd"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hR5DcROGQpaP3sBnWslM",
+          "catalog_revision": 9,
+          "expected_sha256": "675f63bbe60ca744cad2f13db4dfaa30ba85f2e6c0131f735ee428e904b6d381"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+              "task_id": "tsk_g00VYybre500DKSJ7sPU",
+              "snapshot_id": "fdc30387-4a61-5217-a9e1-f7f09c3cb29d",
+              "manifest_sha256": "e108281927a553afaa96cfaca480e3205d88f9692a9d4ebd915063e93ffcd0f4"
+            },
+            "tree": "resources",
+            "path": "pages.csv",
+            "media_type": "text/csv",
+            "bytes": 307,
+            "sha256": "c6900d274c0fb2c53e22e815fb18f85577cc8446db3fff5ad8d2a8f02cfa3484"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+              "task_id": "tsk_g00VYybre500DKSJ7sPU",
+              "snapshot_id": "fdc30387-4a61-5217-a9e1-f7f09c3cb29d",
+              "manifest_sha256": "e108281927a553afaa96cfaca480e3205d88f9692a9d4ebd915063e93ffcd0f4"
+            },
+            "tree": "resources",
+            "path": "brief.md",
+            "media_type": "text/markdown",
+            "bytes": 930,
+            "sha256": "f2ad6f6f587a35915bd25134e0f2e3f67d6cae9816736dd0a9617a8f24398e3b"
+          }
+        }
+      ],
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "seo-geo",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+          "namespace": "builtin",
+          "id": "seo-geo",
+          "version": "2026.10.24.2",
+          "package_digest": "52433a72de7ba9e5eac69df4fc76de4a92a8e61d0b8e91b8b295fc4e5fea87f2"
+        },
+        "agent_id": "seo-geo-search-analyst",
+        "projection_hash": "ca4c0cfc3e3f5479ac7b6d7ff87b80aa9763baa5784cdf6995b037a8361ad601",
+        "session_id": "ses_hTVOicA62DFVNt9GVEaz",
+        "message_id": "msg_g0VYyftJa00I8GLGvM3U",
+        "tool_call_id": "call_0e7687f1cc4d439bb0f418ca14b5f690"
+      },
+      "resources": []
+    },
+    {
+      "id": "art_hEcd7U64BlGUneldoC0L",
+      "type": "seo-geo/discoverability-strategy",
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hEcd7U64BlGUneldoC0L",
+        "catalog_revision": 21,
+        "expected_sha256": "56eb62acf27a84605189d9592893e8ccdfc5faf00199dc22484f6ff7f50f0d5c"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hQoyu7PzNM48hR6Eqflt",
+          "catalog_revision": 17,
+          "expected_sha256": "b6aad3462e0ee02e770e1db11ab538184760765bd40a9efbf556b8c262c7c6fd"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hR5DcROGQpaP3sBnWslM",
+          "catalog_revision": 9,
+          "expected_sha256": "675f63bbe60ca744cad2f13db4dfaa30ba85f2e6c0131f735ee428e904b6d381"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hgzgFgnERzIaoJ11JiTp",
+          "catalog_revision": 15,
+          "expected_sha256": "6b025e2d3908e34e9369fd9245eeb37559601166c3a154301fe5fe77c2754d11"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+              "task_id": "tsk_g00VYybre500DKSJ7sPU",
+              "snapshot_id": "fdc30387-4a61-5217-a9e1-f7f09c3cb29d",
+              "manifest_sha256": "e108281927a553afaa96cfaca480e3205d88f9692a9d4ebd915063e93ffcd0f4"
+            },
+            "tree": "resources",
+            "path": "pages.csv",
+            "media_type": "text/csv",
+            "bytes": 307,
+            "sha256": "c6900d274c0fb2c53e22e815fb18f85577cc8446db3fff5ad8d2a8f02cfa3484"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+              "task_id": "tsk_g00VYybre500DKSJ7sPU",
+              "snapshot_id": "fdc30387-4a61-5217-a9e1-f7f09c3cb29d",
+              "manifest_sha256": "e108281927a553afaa96cfaca480e3205d88f9692a9d4ebd915063e93ffcd0f4"
+            },
+            "tree": "resources",
+            "path": "brief.md",
+            "media_type": "text/markdown",
+            "bytes": 930,
+            "sha256": "f2ad6f6f587a35915bd25134e0f2e3f67d6cae9816736dd0a9617a8f24398e3b"
+          }
+        }
+      ],
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "seo-geo",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+          "namespace": "builtin",
+          "id": "seo-geo",
+          "version": "2026.10.24.2",
+          "package_digest": "52433a72de7ba9e5eac69df4fc76de4a92a8e61d0b8e91b8b295fc4e5fea87f2"
+        },
+        "agent_id": "seo-geo-strategist",
+        "projection_hash": "1ffd79fee3147e63a86bfed11388812be1ea3e52d65621b77e2dfee7d2745374",
+        "session_id": "ses_hPQeV3X17yZEZutktMXz",
+        "message_id": "msg_g0VYyhKRL00vxqFrBqr5",
+        "tool_call_id": "call_68b7218c11db463cadca1a12d76ab463"
+      },
+      "resources": []
+    },
+    {
+      "id": "art_hkOrMeSq5B1pea1Wf406",
+      "type": "seo-geo/audit",
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hkOrMeSq5B1pea1Wf406",
+        "catalog_revision": 25,
+        "expected_sha256": "f093e049694fc82ff386003d005c0a6dcf6696f7f2ac1f501cb686caf2723092"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hEcd7U64BlGUneldoC0L",
+          "catalog_revision": 21,
+          "expected_sha256": "56eb62acf27a84605189d9592893e8ccdfc5faf00199dc22484f6ff7f50f0d5c"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hQoyu7PzNM48hR6Eqflt",
+          "catalog_revision": 17,
+          "expected_sha256": "b6aad3462e0ee02e770e1db11ab538184760765bd40a9efbf556b8c262c7c6fd"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hR5DcROGQpaP3sBnWslM",
+          "catalog_revision": 9,
+          "expected_sha256": "675f63bbe60ca744cad2f13db4dfaa30ba85f2e6c0131f735ee428e904b6d381"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hgzgFgnERzIaoJ11JiTp",
+          "catalog_revision": 15,
+          "expected_sha256": "6b025e2d3908e34e9369fd9245eeb37559601166c3a154301fe5fe77c2754d11"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+              "task_id": "tsk_g00VYybre500DKSJ7sPU",
+              "snapshot_id": "fdc30387-4a61-5217-a9e1-f7f09c3cb29d",
+              "manifest_sha256": "e108281927a553afaa96cfaca480e3205d88f9692a9d4ebd915063e93ffcd0f4"
+            },
+            "tree": "resources",
+            "path": "pages.csv",
+            "media_type": "text/csv",
+            "bytes": 307,
+            "sha256": "c6900d274c0fb2c53e22e815fb18f85577cc8446db3fff5ad8d2a8f02cfa3484"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+              "task_id": "tsk_g00VYybre500DKSJ7sPU",
+              "snapshot_id": "fdc30387-4a61-5217-a9e1-f7f09c3cb29d",
+              "manifest_sha256": "e108281927a553afaa96cfaca480e3205d88f9692a9d4ebd915063e93ffcd0f4"
+            },
+            "tree": "resources",
+            "path": "brief.md",
+            "media_type": "text/markdown",
+            "bytes": 930,
+            "sha256": "f2ad6f6f587a35915bd25134e0f2e3f67d6cae9816736dd0a9617a8f24398e3b"
+          }
+        }
+      ],
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "seo-geo",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+          "namespace": "builtin",
+          "id": "seo-geo",
+          "version": "2026.10.24.2",
+          "package_digest": "52433a72de7ba9e5eac69df4fc76de4a92a8e61d0b8e91b8b295fc4e5fea87f2"
+        },
+        "agent_id": "seo-geo-fact-checker",
+        "projection_hash": "c9696c1c94d904345c66bb78c979984f6c210b5aa59903f548b5acd57aee7e77",
+        "session_id": "ses_hOOBlj3ebwRTvtCp9PQK",
+        "message_id": "msg_g0VYyibmV00ncBPgzEHu",
+        "tool_call_id": "call_594c9c22b2364d00b1def7408e0a6634"
+      },
+      "resources": []
+    },
+    {
+      "id": "art_hAiaxtqWtmDX36CCNZAF",
+      "type": "seo-geo/optimization-plan",
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hAiaxtqWtmDX36CCNZAF",
+        "catalog_revision": 35,
+        "expected_sha256": "4def4604065bedb55dcfae428e2f1a9f01cdc5ad22e067e0a8deb8bf57bfa787"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hEcd7U64BlGUneldoC0L",
+          "catalog_revision": 21,
+          "expected_sha256": "56eb62acf27a84605189d9592893e8ccdfc5faf00199dc22484f6ff7f50f0d5c"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hkOrMeSq5B1pea1Wf406",
+          "catalog_revision": 25,
+          "expected_sha256": "f093e049694fc82ff386003d005c0a6dcf6696f7f2ac1f501cb686caf2723092"
+        }
+      ],
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "seo-geo",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+          "namespace": "builtin",
+          "id": "seo-geo",
+          "version": "2026.10.24.2",
+          "package_digest": "52433a72de7ba9e5eac69df4fc76de4a92a8e61d0b8e91b8b295fc4e5fea87f2"
+        },
+        "agent_id": "seo-geo-plan-writer",
+        "projection_hash": "36194842cb53293eb5aeed7a5e9ecbb5711156392b76dcf9178a9c5a2c6a80f4",
+        "session_id": "ses_hhUkRAw84u1Sqvm2BrWs",
+        "message_id": "msg_g0VYypQ1p00JLdwAdTgX",
+        "tool_call_id": "call_fd54e50d61554824989c0edc1a2f8afb"
+      },
+      "resources": [
+        {
+          "artifactID": "art_hAiaxtqWtmDX36CCNZAF",
+          "path": "outputs/discovery-plan.md",
+          "bytes": 15566,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261024-seo-01\\evidence\\delivery-verification\\art_hAiaxtqWtmDX36CCNZAF-discovery-plan.md",
+          "ranges": [
+            "bytes 0-4095/15566",
+            "bytes 4096-8190/15566",
+            "bytes 8191-12286/15566",
+            "bytes 12287-15565/15566"
+          ],
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+              "task_id": "tsk_g00VYybre500DKSJ7sPU",
+              "snapshot_id": "01e1e88c-549d-57ff-abb3-c13a2fbfb696",
+              "manifest_sha256": "8bc22839ac29412e12ec0dc224c19100930d31f3b0cad6fed0f10262ea9203e9"
+            },
+            "tree": "resources",
+            "path": "outputs/discovery-plan.md",
+            "media_type": "text/markdown",
+            "bytes": 15566,
+            "sha256": "afd1a1d9e0d9e77e9e78ac2fb51952048a7767f3213fe3e0420bfebfda1e24cb"
+          }
+        },
+        {
+          "artifactID": "art_hAiaxtqWtmDX36CCNZAF",
+          "path": "outputs/discovery-plan.pdf",
+          "bytes": 373815,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261024-seo-01\\evidence\\delivery-verification\\art_hAiaxtqWtmDX36CCNZAF-discovery-plan.pdf",
+          "ranges": [
+            "bytes 0-373814/373815"
+          ],
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+              "task_id": "tsk_g00VYybre500DKSJ7sPU",
+              "snapshot_id": "01e1e88c-549d-57ff-abb3-c13a2fbfb696",
+              "manifest_sha256": "8bc22839ac29412e12ec0dc224c19100930d31f3b0cad6fed0f10262ea9203e9"
+            },
+            "tree": "resources",
+            "path": "outputs/discovery-plan.pdf",
+            "media_type": "application/pdf",
+            "bytes": 373815,
+            "sha256": "362d4ca9f8542e49672d8913b216cb816c17fe259ec081f3f866bf415268b0f0"
+          }
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "artifactID": "art_hAiaxtqWtmDX36CCNZAF",
+      "path": "outputs/discovery-plan.md",
+      "bytes": 15566,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261024-seo-01\\evidence\\delivery-verification\\art_hAiaxtqWtmDX36CCNZAF-discovery-plan.md",
+      "ranges": [
+        "bytes 0-4095/15566",
+        "bytes 4096-8190/15566",
+        "bytes 8191-12286/15566",
+        "bytes 12287-15565/15566"
+      ],
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+          "task_id": "tsk_g00VYybre500DKSJ7sPU",
+          "snapshot_id": "01e1e88c-549d-57ff-abb3-c13a2fbfb696",
+          "manifest_sha256": "8bc22839ac29412e12ec0dc224c19100930d31f3b0cad6fed0f10262ea9203e9"
+        },
+        "tree": "resources",
+        "path": "outputs/discovery-plan.md",
+        "media_type": "text/markdown",
+        "bytes": 15566,
+        "sha256": "afd1a1d9e0d9e77e9e78ac2fb51952048a7767f3213fe3e0420bfebfda1e24cb"
+      }
+    },
+    {
+      "artifactID": "art_hAiaxtqWtmDX36CCNZAF",
+      "path": "outputs/discovery-plan.pdf",
+      "bytes": 373815,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261024-seo-01\\evidence\\delivery-verification\\art_hAiaxtqWtmDX36CCNZAF-discovery-plan.pdf",
+      "ranges": [
+        "bytes 0-373814/373815"
+      ],
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hGzv5hMwjTwaSmXyZLuM",
+          "task_id": "tsk_g00VYybre500DKSJ7sPU",
+          "snapshot_id": "01e1e88c-549d-57ff-abb3-c13a2fbfb696",
+          "manifest_sha256": "8bc22839ac29412e12ec0dc224c19100930d31f3b0cad6fed0f10262ea9203e9"
+        },
+        "tree": "resources",
+        "path": "outputs/discovery-plan.pdf",
+        "media_type": "application/pdf",
+        "bytes": 373815,
+        "sha256": "362d4ca9f8542e49672d8913b216cb816c17fe259ec081f3f866bf415268b0f0"
+      }
+    }
+  ],
+  "verifiedAt": 1792855214451
+}

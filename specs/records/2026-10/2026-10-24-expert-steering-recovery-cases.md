@@ -81,3 +81,27 @@ MG-02已启动：`C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-0
 - 最终05使用第二次独立构建，真实交付卡片首开已绘出原PDF，下一页到2/6、缩放125%后Fit width100%、折叠重开回1/6均实际成立；同一页再从Files打开原PDF，FileEditor入口也实际显示1/6及正文。09/10/11截图主agent人工查看。未运行UI自动化；真实界面观察而非DOM文本或build分数作为视觉资格。只读SQLite对照05与闭合SEO原件的engine_task1/session10/message225/part614/engine_artifact39/interactive_artifact1共890行及rowid逐字段相等，原消息和交付均为真实历史，零合成。
 - 最终Overlay typecheck原命令退出0；第二次私有build:vite完成（1分10秒），仅既有大chunk/第三方use-client提示。03/04/05原launcher分别54160/16249/19661均exit0，原生physical/output/request结清，审计均0请求、没有auth副本；三份catalog已退休且原catalog内容/mtime保持。01/02两个失败checker同样完整结算并退休catalog，原失败日志保留。
 - 本逻辑交付仅修共享PDF的真实初始化合同与记录，不宣布整个Goal完成：native处置的长尾根因仍待完整排除，MG原轮继续，Word最终渲染仍须独立验收。销售原Task已在279/360内完成epoch2，保留epoch1完成事件`pev_g0VYypHKn009qMknuHzg`与epoch2完成事件`pev_g0VYyt6ce00P2ybLZc8A`。正式artifact-read原checker读取9个业务产物、两个历史/新文件资源及真实document，当前18778字节Markdown与最新资源及document逐字一致；1500/5000旧新关系、A12/5/2/1与B8/4/1/0及访谈/未知边界已人工复核。新独立fact-check角色在写作后实际登记复核，未把旧审阅冒充本轮结果。
+
+## 三组真实交付结算与下一项诊断（2026-10-25）
+
+- MG-03在310/360内完成原epoch1，终态事件`pev_g0VYz0uQu00Yogv1tvZX`、时间1792857390333。真实八类业务产物包括独立文档核验；正式artifact-read取得完整原件，当前15834字节Markdown与不可变资源及真实document `art_g0VYyweNv00SBUlvRaOR`全文相同。真实页面Completed、原来源研究者Error及随后Completed均可见，12截图保留，不能用终态抹去中间基础设施失败。
+- Word本地缺少soffice时原render_docx.py实际失败；使用官方签名有效的LibreOffice26.8.1 MSI与官方lessmsi2.12.9仅解压到私有诊断目录，未执行安装器、改注册表或操作用户Office。首次lessmsi输出分隔符错误保留，按原工具帮助修复后重跑原render_docx.py，直接DOCX→PDF成功，五页PNG已全部人工查看。正文/公式/中文/表格可读；表格跨页没有重复表头，第二页末出现孤立预算表头，属于输出排版不足，不能称打印排版完善。当前不手改模型原交付以掩盖它。
+- MG正式shutdown200、原launcher exit0、physical/output/request原生结算完成，四份auth/models副本退休、扫描未发现凭据值外泄、源内容及mtime保持。SEO/Sales此前各四份副本同样已退休。所有原运行目录、SQLite、原错误与审计保留。
+- 原MG-03观测仍有两次真实处置错误：request `07a9633d-6882-40ff-9c03-8eb0116f55b9`的output/physical/settlement约4886/9943/9946ms；`d3b39eac-77ef-470c-9a65-240b50fa0621`约993/1161/6205ms。既有诊断同步扫描历史ready文件，原dispose调用前开销未单独计量，故这些总值不能直接归为某个文件系统调用；MG-02/SEO没有该诊断也已失败，不能把全部故障归因诊断。
+- 下一诊断方案：只在全新无凭据官方隔离test runner中复用真实冻结package worker、Task原生binding及两个Project，观察原dispose/exited/output/settled和原fs.readFile/writeFile/rm的开始/完成；以handle映射原request，取消逐次全历史扫描，同步记录事件循环延迟及观察开销。分轮串行/并行，结果必须包含真实原description及Task/Project归属。只读计时保留原函数、原返回Promise、原错误与原5000ms期限，不注入领域结果，不把这个局部实机诊断冒充LLM端到端。
+- 仍未知：原生marker发布、异步文件I/O、进程通知或事件循环哪一段造成失败；旧48个真实Host和24个原生package请求未复现，不能排除。CPU负载只作环境观测，未收到终止VS Code子进程的授权，保持用户进程。未解释异常与Word排版不足均继续在验收缺口中，不关闭Goal。
+- 新双Project诊断136次原生冻结publisher introspection、串行8轮后并行16×8轮，通过原runner1项2正向合同；最大事件循环采样延迟365ms，原目录rm均未观察长尾。该轮25ms采样器本身可能唤醒事件循环，而早先24次诊断也有10ms扫描器，不能忽略观察干扰。下一变体移除周期采样和周期落盘，仅保留原操作回调的内存计时及每轮实际完成输出；不设置替代heartbeat。它检查绿例是否依赖额外唤醒，尚无证据认定Bun空闲唤醒有错。
+- 去采样136次及再加六段10秒空闲的136次均通过；原runner分别约21秒/82秒、各1项2断言。未支持“定时观察让坏路径变好”的候选，不能用总408次通过倒填原失败原因。保留所有原5000ms，未引用其他平台Bun issue作为本机根因。当前唯一可重复入口落在artifact的`checker/native-package-timing.test.ts`，最终候选修正观察器自身的失败收尾：每轮收齐所有真实并行调用，最终加入全部原Handle后恢复观察器/数据库；不是产品行为改动。
+
+### 原生超时共享影响复核
+
+| 共享入口或生命周期 | 本轮代码与真实证据 | 结论范围 |
+| --- | --- | --- |
+| Host/Task管道与inherit、package validation/introspection/execute | 唯一ProcessSupervisor Windows request及原dispose/exited/output/settled；package-tool-capsule.runCapsule最终调用同一strict disposer | 不限定某专家团；本轮136×多变体是两Project原生Task introspection，Host48及原包24另有日志，不冒称全部业务入口实机覆盖 |
+| Shell、MCP/browser、插件process facade、工具准备 | 定义/调用全仓搜索及04-extensions公共合同；严格disposer保一个5000ms绝对deadline，原生request cleanup复用原physical证明 | 全部仍有相同潜在影响；没有证据据此修改各调用者、扩大时限或提前发布成功 |
+| Task/Mission/Session occurrence、普通/终态接续 | processInvocation共享根输入修复与正式message正向合同；MG追加输入、SEO同worker恢复、Sales原epoch1→2真实闭环 | 原worker基础设施错误与后续成功同时保留；不能把最终completed当原处置无错，也未用模型自述推断根因 |
+| 并行/多Project、重试与重启 | 同库双Project根输入交错提交通过；原生两个Project串并行通过，原MG/SEO服务各有真实处置错误；原服务正常关闭并保留SQLite/marker | 本轮没有在超时切点执行整机重启，尚不能排除重启/文件系统及事件循环共同根因；未满足处明确保留 |
+
+Word排版不足的直接来源已核实际`tools/growth_document.py`：模型用标准库手写OOXML（Office Open XML，Office开放XML）表格，只设置cantSplit而没有重复表头及首行与正文同页关系。当前平台work-artifacts Skill和架构明确只qualified PPTX，不提供DOCX生产/渲染primitive；本轮不伪称已有通用Word质量闭环，也不向Host加语义gate或直接手改该项目文件冒充机制修复。后续方案需按公开能力面补成熟文档生成/渲染与模型可见使用指引，属于尚未交付的能力缺口。
+
+- 最终落盘checker原runner退出0（136个原Handle，1项2正向合同，约82秒）；读取完整原observations再归档，没有只写PASS摘要。首次独立typecheck配置遗漏当前项目既有`.d.ts`，并暴露request observer的unknown路径类型；补入现有声明并在checker边界保留真实string身份准入，原独立typecheck重跑退出0，不改产品类型或放宽协议。当前docs:check 350操作/26组与architecture-index 20文档均通过。原件归档后直接扫描已配置实际access/refresh值，90个文件0命中；后续新增诊断文件仍须提交前复扫。全部原真实模型服务已关闭；当前没有运行中的本任务模型验收，Goal仍active，因native长尾与通用Word质量闭环未满足而不宣称找不到新问题。

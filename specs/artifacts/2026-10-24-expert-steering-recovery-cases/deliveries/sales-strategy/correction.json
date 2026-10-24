@@ -1,0 +1,71 @@
+{
+  "input": {
+    "text": "继续同一Task并更正预算：customer-notes.md的5000元仅是旧草案，当前内部试点上限为1500元。请更新同一outputs/sales-playbook.md，并补充一个分组漏斗表：A接洽12/需求5/演示2/成交1，B接洽8/需求4/演示1/成交0，注明阶段是包含计数。让独立角色复核最终更正，提供同正文文档并结束这次追加工作。只本地内部，其他边界保持。",
+    "source": "expert-case-operator"
+  },
+  "accepted": {
+    "status": 202,
+    "result": {
+      "message": "Operator message recorded and accepted for delivery.",
+      "wake_status": "accepted",
+      "ingress_id": "art_hFVGk0K7bL0rGZgaKBW6",
+      "user_message": {
+        "info": {
+          "id": "msg_g0VYypJ8j000Hotr9QP4",
+          "sessionID": "ses_-zUR1O6RXzzf0RzZ507W",
+          "author": "user",
+          "role": "user",
+          "time": {
+            "created": 1792854627857
+          },
+          "agent": "orchestrator",
+          "model": {
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol"
+          },
+          "extra": {
+            "task_root_message": {
+              "protocol": "task-root-message",
+              "taskID": "tsk_g00VYybskN00tGCq2K3B",
+              "kind": "operator",
+              "source": "expert-case-operator"
+            },
+            "project_memory_user_input": {
+              "version": 1,
+              "surface": "task.expert-case-operator",
+              "literalText": "继续同一Task并更正预算：customer-notes.md的5000元仅是旧草案，当前内部试点上限为1500元。请更新同一outputs/sales-playbook.md，并补充一个分组漏斗表：A接洽12/需求5/演示2/成交1，B接洽8/需求4/演示1/成交0，注明阶段是包含计数。让独立角色复核最终更正，提供同正文文档并结束这次追加工作。只本地内部，其他边界保持。"
+            }
+          },
+          "orderKey": "v1:0001792854627857:0000000000000030:0000000000000000:message:msg_g0VYypJ8j000Hotr9QP4",
+          "resolvedRole": "user",
+          "channel": "main",
+          "agentID": "orchestrator",
+          "sessionAgentID": "orchestrator",
+          "originSource": ""
+        },
+        "parts": [
+          {
+            "id": "prt_g0VYypJ8k00N80Izq1kt",
+            "sessionID": "ses_-zUR1O6RXzzf0RzZ507W",
+            "messageID": "msg_g0VYypJ8j000Hotr9QP4",
+            "orderKey": "v1:0001792854627865:0000000000000031:0000000000000000:part:prt_g0VYypJ8k00N80Izq1kt",
+            "type": "text",
+            "text": "继续同一Task并更正预算：customer-notes.md的5000元仅是旧草案，当前内部试点上限为1500元。请更新同一outputs/sales-playbook.md，并补充一个分组漏斗表：A接洽12/需求5/演示2/成交1，B接洽8/需求4/演示1/成交0，注明阶段是包含计数。让独立角色复核最终更正，提供同正文文档并结束这次追加工作。只本地内部，其他边界保持。",
+            "kind": "user_content",
+            "source": "user"
+          }
+        ]
+      }
+    }
+  },
+  "originalStatus": "completed",
+  "originalLifecycle": {
+    "taskID": "tsk_g00VYybskN00tGCq2K3B",
+    "epoch": 1,
+    "openedEventID": "pev_g0VYybtZD00MRumaESos",
+    "openedAt": 1792851428139,
+    "status": "completed",
+    "terminalEventID": "pev_g0VYypHKn009qMknuHzg",
+    "terminalAt": 1792854616099
+  }
+}

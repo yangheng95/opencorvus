@@ -1,0 +1,13 @@
+{
+  "source": "Actual published DOCX parsed with python-docx; canonical Markdown parsed independently with marked lexer",
+  "canonicalBlocks": 81,
+  "wordBlocks": 81,
+  "paragraphs": 37,
+  "tableRows": 44,
+  "tables": 7,
+  "publishedWordBytes": 10552,
+  "orderedBodyEquality": true,
+  "publishedFileEquality": true,
+  "visualPages": 5,
+  "visualReview": "All five actual LibreOffice-rendered page images manually inspected; readable Chinese, formulas and cells. Repeated table headers and orphan header pagination remain a presentation limitation."
+}

@@ -1,0 +1,803 @@
+{
+  "taskID": "tsk_g00VYybskN00tGCq2K3B",
+  "status": "completed",
+  "lifecycle": {
+    "taskID": "tsk_g00VYybskN00tGCq2K3B",
+    "epoch": 2,
+    "openedEventID": "pev_g0VYypJ9G0099pMVp8Lb",
+    "openedAt": 1792854627888,
+    "previousTerminal": {
+      "epoch": 1,
+      "status": "completed",
+      "terminalEventID": "pev_g0VYypHKn009qMknuHzg",
+      "terminalAt": 1792854616099
+    },
+    "status": "completed",
+    "terminalEventID": "pev_g0VYyt6ce00P2ybLZc8A",
+    "terminalAt": 1792855530713
+  },
+  "canonicalPath": "outputs/sales-playbook.md",
+  "canonicalBytes": 18778,
+  "canonicalResource": {
+    "artifactID": "art_hblbwAQ1AsUVLZ9Hccse",
+    "path": "outputs/sales-playbook.md",
+    "bytes": 18778,
+    "file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261024-sales-01\\evidence\\delivery-verification\\art_hblbwAQ1AsUVLZ9Hccse-sales-playbook.md",
+    "ranges": [
+      "bytes 0-4095/18778",
+      "bytes 4096-8191/18778",
+      "bytes 8192-12285/18778",
+      "bytes 12286-16379/18778",
+      "bytes 16380-18777/18778"
+    ],
+    "ref": {
+      "snapshot": {
+        "schema_version": 2,
+        "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+        "task_id": "tsk_g00VYybskN00tGCq2K3B",
+        "snapshot_id": "793cc033-a017-5258-a03a-da47173f968f",
+        "manifest_sha256": "77eb967642209f20874bf7f1b04eebccb1939764959f2985329f683a56b2d888"
+      },
+      "tree": "resources",
+      "path": "outputs/sales-playbook.md",
+      "media_type": "text/markdown",
+      "bytes": 18778,
+      "sha256": "7b5a17f4f0a4fb4161615f646687e357eb573f98997d6a2d39fa03d79202cb9d"
+    }
+  },
+  "document": {
+    "id": "art_g0VYyrTio00ysGKVf35w",
+    "sessionID": "ses_hvRqFo40F4x9E9FCx8lN",
+    "messageID": "msg_g0VYyrEES00H0A11Jbee",
+    "payload": {
+      "renderer": "document@1",
+      "characters": 7585
+    }
+  },
+  "artifacts": [
+    {
+      "id": "art_hbn9ydw5XrNriPwCYFD0",
+      "type": "sales-strategy/research-charter",
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hbn9ydw5XrNriPwCYFD0",
+        "catalog_revision": 5,
+        "expected_sha256": "9ca72997f98b7165f36358ca408c5a2f9ff67268caef1062ff0c63f5b3741d81"
+      },
+      "sourceLocators": [
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+              "task_id": "tsk_g00VYybskN00tGCq2K3B",
+              "snapshot_id": "5025d56a-c57d-508d-ae59-27042fa238cd",
+              "manifest_sha256": "c117d3f0d3a92a2e9789055ce91a4fbac13e22e284d5338cf6441c5b8c66969c"
+            },
+            "tree": "resources",
+            "path": "customer-notes.md",
+            "media_type": "text/markdown",
+            "bytes": 1216,
+            "sha256": "c5bf466eb54920051542d0b4e07d2d597af0dcdadf78f479461025f64c0f3ca6"
+          }
+        }
+      ],
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "sales-strategy",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+          "namespace": "builtin",
+          "id": "sales-strategy",
+          "version": "2026.10.24.3",
+          "package_digest": "cb8d9d20bbc2d18d85faf5ce9098ab3ece74af2743356571bb3cc9a4e8b02253"
+        },
+        "agent_id": "sales-strategy-planner",
+        "projection_hash": "09f535cd12faec79fb7b8776c65278a1f98ef2f406af33c50911e2774f76b7bb",
+        "session_id": "ses_hZFJZFAI6ywUboltxj1o",
+        "message_id": "msg_g0VYycoRL002OPqntom2",
+        "tool_call_id": "call_e172459f0bd5404e8be665e6beec24ac"
+      },
+      "resources": []
+    },
+    {
+      "id": "art_hhG5sJswWjkAfK84Nn5E",
+      "type": "sales-strategy/customer-dossier",
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hhG5sJswWjkAfK84Nn5E",
+        "catalog_revision": 9,
+        "expected_sha256": "102519660363bdd616efefcbc61206abc937cb273c1fe2996705650fb9935761"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hbn9ydw5XrNriPwCYFD0",
+          "catalog_revision": 5,
+          "expected_sha256": "9ca72997f98b7165f36358ca408c5a2f9ff67268caef1062ff0c63f5b3741d81"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+              "task_id": "tsk_g00VYybskN00tGCq2K3B",
+              "snapshot_id": "5025d56a-c57d-508d-ae59-27042fa238cd",
+              "manifest_sha256": "c117d3f0d3a92a2e9789055ce91a4fbac13e22e284d5338cf6441c5b8c66969c"
+            },
+            "tree": "resources",
+            "path": "customer-notes.md",
+            "media_type": "text/markdown",
+            "bytes": 1216,
+            "sha256": "c5bf466eb54920051542d0b4e07d2d597af0dcdadf78f479461025f64c0f3ca6"
+          }
+        }
+      ],
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "sales-strategy",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+          "namespace": "builtin",
+          "id": "sales-strategy",
+          "version": "2026.10.24.3",
+          "package_digest": "cb8d9d20bbc2d18d85faf5ce9098ab3ece74af2743356571bb3cc9a4e8b02253"
+        },
+        "agent_id": "sales-customer-researcher",
+        "projection_hash": "deef3b2481ea932e4e623c30504fbf8fa1bbbabdd7ce5480d4a6b9bb532928f7",
+        "session_id": "ses_hIczrYBHZvx0QvrB6OEz",
+        "message_id": "msg_g0VYyfIBN0083BvbBt7o",
+        "tool_call_id": "call_96de8e9bc03643cd82b9553e1e8cdbf8"
+      },
+      "resources": []
+    },
+    {
+      "id": "art_hhe0cecqxZb7cIMVBlMW",
+      "type": "sales-strategy/opportunity-analysis",
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hhe0cecqxZb7cIMVBlMW",
+        "catalog_revision": 15,
+        "expected_sha256": "2ab95efd0da720cc3f286f2874050d96ffafea85d3657092e5c641d51a8dafd3"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hbn9ydw5XrNriPwCYFD0",
+          "catalog_revision": 5,
+          "expected_sha256": "9ca72997f98b7165f36358ca408c5a2f9ff67268caef1062ff0c63f5b3741d81"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hhG5sJswWjkAfK84Nn5E",
+          "catalog_revision": 9,
+          "expected_sha256": "102519660363bdd616efefcbc61206abc937cb273c1fe2996705650fb9935761"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+              "task_id": "tsk_g00VYybskN00tGCq2K3B",
+              "snapshot_id": "5025d56a-c57d-508d-ae59-27042fa238cd",
+              "manifest_sha256": "c117d3f0d3a92a2e9789055ce91a4fbac13e22e284d5338cf6441c5b8c66969c"
+            },
+            "tree": "resources",
+            "path": "customer-notes.md",
+            "media_type": "text/markdown",
+            "bytes": 1216,
+            "sha256": "c5bf466eb54920051542d0b4e07d2d597af0dcdadf78f479461025f64c0f3ca6"
+          }
+        }
+      ],
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "sales-strategy",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+          "namespace": "builtin",
+          "id": "sales-strategy",
+          "version": "2026.10.24.3",
+          "package_digest": "cb8d9d20bbc2d18d85faf5ce9098ab3ece74af2743356571bb3cc9a4e8b02253"
+        },
+        "agent_id": "sales-opportunity-analyst",
+        "projection_hash": "6ddd491cd6aa73cd5ae15017772276d429d46a18f837ac21c5632fb0ee144dae",
+        "session_id": "ses_hEuzE3w27fuVHP0Q7QBf",
+        "message_id": "msg_g0VYygFCM006SBRFxMRk",
+        "tool_call_id": "call_8fb0db72a84b4041afc75652f31b7f48"
+      },
+      "resources": []
+    },
+    {
+      "id": "art_h02dDK61X5ArIp4z9jDg",
+      "type": "sales-strategy/positioning-analysis",
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_h02dDK61X5ArIp4z9jDg",
+        "catalog_revision": 17,
+        "expected_sha256": "d5d22446bdb6badd43f35045bea673f82d66332e2512dc73012a06e50f376bb6"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hbn9ydw5XrNriPwCYFD0",
+          "catalog_revision": 5,
+          "expected_sha256": "9ca72997f98b7165f36358ca408c5a2f9ff67268caef1062ff0c63f5b3741d81"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hhG5sJswWjkAfK84Nn5E",
+          "catalog_revision": 9,
+          "expected_sha256": "102519660363bdd616efefcbc61206abc937cb273c1fe2996705650fb9935761"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+              "task_id": "tsk_g00VYybskN00tGCq2K3B",
+              "snapshot_id": "5025d56a-c57d-508d-ae59-27042fa238cd",
+              "manifest_sha256": "c117d3f0d3a92a2e9789055ce91a4fbac13e22e284d5338cf6441c5b8c66969c"
+            },
+            "tree": "resources",
+            "path": "customer-notes.md",
+            "media_type": "text/markdown",
+            "bytes": 1216,
+            "sha256": "c5bf466eb54920051542d0b4e07d2d597af0dcdadf78f479461025f64c0f3ca6"
+          }
+        }
+      ],
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "sales-strategy",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+          "namespace": "builtin",
+          "id": "sales-strategy",
+          "version": "2026.10.24.3",
+          "package_digest": "cb8d9d20bbc2d18d85faf5ce9098ab3ece74af2743356571bb3cc9a4e8b02253"
+        },
+        "agent_id": "sales-positioning-analyst",
+        "projection_hash": "e2f85737242d497d89482272ca36528bc7aa82a2b89bfb883048ffd583fc0d3a",
+        "session_id": "ses_hlc5SCWX18oaz99QMoJf",
+        "message_id": "msg_g0VYygHeW00GkG0rFcGn",
+        "tool_call_id": "call_ef292fa1a5264820945c4a1180b8f574"
+      },
+      "resources": []
+    },
+    {
+      "id": "art_hUFTIkAQpqLl6GxQNOsE",
+      "type": "sales-strategy/strategy-brief",
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hUFTIkAQpqLl6GxQNOsE",
+        "catalog_revision": 21,
+        "expected_sha256": "931c806e2d07fbef3d7216c314cff9ba5949932c10fb6d827018969750b0695a"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h02dDK61X5ArIp4z9jDg",
+          "catalog_revision": 17,
+          "expected_sha256": "d5d22446bdb6badd43f35045bea673f82d66332e2512dc73012a06e50f376bb6"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hbn9ydw5XrNriPwCYFD0",
+          "catalog_revision": 5,
+          "expected_sha256": "9ca72997f98b7165f36358ca408c5a2f9ff67268caef1062ff0c63f5b3741d81"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hhG5sJswWjkAfK84Nn5E",
+          "catalog_revision": 9,
+          "expected_sha256": "102519660363bdd616efefcbc61206abc937cb273c1fe2996705650fb9935761"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hhe0cecqxZb7cIMVBlMW",
+          "catalog_revision": 15,
+          "expected_sha256": "2ab95efd0da720cc3f286f2874050d96ffafea85d3657092e5c641d51a8dafd3"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+              "task_id": "tsk_g00VYybskN00tGCq2K3B",
+              "snapshot_id": "5025d56a-c57d-508d-ae59-27042fa238cd",
+              "manifest_sha256": "c117d3f0d3a92a2e9789055ce91a4fbac13e22e284d5338cf6441c5b8c66969c"
+            },
+            "tree": "resources",
+            "path": "customer-notes.md",
+            "media_type": "text/markdown",
+            "bytes": 1216,
+            "sha256": "c5bf466eb54920051542d0b4e07d2d597af0dcdadf78f479461025f64c0f3ca6"
+          }
+        }
+      ],
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "sales-strategy",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+          "namespace": "builtin",
+          "id": "sales-strategy",
+          "version": "2026.10.24.3",
+          "package_digest": "cb8d9d20bbc2d18d85faf5ce9098ab3ece74af2743356571bb3cc9a4e8b02253"
+        },
+        "agent_id": "sales-strategy-synthesizer",
+        "projection_hash": "a9e35a92d8e12ac91fc93fb403e521f291422639cddb8f2b6ab64ce4aee7c2b3",
+        "session_id": "ses_hZREY7RSE6JlMJTiOkbP",
+        "message_id": "msg_g0VYyhgQK00ROEhgDBSo",
+        "tool_call_id": "call_fc8c68e788b64f608229312836541e54"
+      },
+      "resources": []
+    },
+    {
+      "id": "art_husHA8KsDQHZGAubdiCC",
+      "type": "sales-strategy/audit",
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_husHA8KsDQHZGAubdiCC",
+        "catalog_revision": 25,
+        "expected_sha256": "b0775c7a4de8022c041314e77f1c350dcd39a51b4af931ba7fb1626db7138bf4"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h02dDK61X5ArIp4z9jDg",
+          "catalog_revision": 17,
+          "expected_sha256": "d5d22446bdb6badd43f35045bea673f82d66332e2512dc73012a06e50f376bb6"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hUFTIkAQpqLl6GxQNOsE",
+          "catalog_revision": 21,
+          "expected_sha256": "931c806e2d07fbef3d7216c314cff9ba5949932c10fb6d827018969750b0695a"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hbn9ydw5XrNriPwCYFD0",
+          "catalog_revision": 5,
+          "expected_sha256": "9ca72997f98b7165f36358ca408c5a2f9ff67268caef1062ff0c63f5b3741d81"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hhG5sJswWjkAfK84Nn5E",
+          "catalog_revision": 9,
+          "expected_sha256": "102519660363bdd616efefcbc61206abc937cb273c1fe2996705650fb9935761"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hhe0cecqxZb7cIMVBlMW",
+          "catalog_revision": 15,
+          "expected_sha256": "2ab95efd0da720cc3f286f2874050d96ffafea85d3657092e5c641d51a8dafd3"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+              "task_id": "tsk_g00VYybskN00tGCq2K3B",
+              "snapshot_id": "5025d56a-c57d-508d-ae59-27042fa238cd",
+              "manifest_sha256": "c117d3f0d3a92a2e9789055ce91a4fbac13e22e284d5338cf6441c5b8c66969c"
+            },
+            "tree": "resources",
+            "path": "customer-notes.md",
+            "media_type": "text/markdown",
+            "bytes": 1216,
+            "sha256": "c5bf466eb54920051542d0b4e07d2d597af0dcdadf78f479461025f64c0f3ca6"
+          }
+        }
+      ],
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "sales-strategy",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+          "namespace": "builtin",
+          "id": "sales-strategy",
+          "version": "2026.10.24.3",
+          "package_digest": "cb8d9d20bbc2d18d85faf5ce9098ab3ece74af2743356571bb3cc9a4e8b02253"
+        },
+        "agent_id": "sales-strategy-fact-checker",
+        "projection_hash": "9ae2858b054c1bf7a0ce03248bd6aca5a2a5f6cae19bb9f5aa45bd14e103f4d3",
+        "session_id": "ses_hFnUDFya8huByfgaMKCS",
+        "message_id": "msg_g0VYyjWjr00AAJ9LlFvo",
+        "tool_call_id": "call_a274ddbbaa3748f89a63b2ef0125e079"
+      },
+      "resources": []
+    },
+    {
+      "id": "art_hegcO0hpIEhH6zlsTiFq",
+      "type": "sales-strategy/playbook",
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hegcO0hpIEhH6zlsTiFq",
+        "catalog_revision": 30,
+        "expected_sha256": "9f45a005eae9d7d03dc2c2358e7bd4e286f045e9b8f729b74033982b6ff0c1f4"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h02dDK61X5ArIp4z9jDg",
+          "catalog_revision": 17,
+          "expected_sha256": "d5d22446bdb6badd43f35045bea673f82d66332e2512dc73012a06e50f376bb6"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hUFTIkAQpqLl6GxQNOsE",
+          "catalog_revision": 21,
+          "expected_sha256": "931c806e2d07fbef3d7216c314cff9ba5949932c10fb6d827018969750b0695a"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hbn9ydw5XrNriPwCYFD0",
+          "catalog_revision": 5,
+          "expected_sha256": "9ca72997f98b7165f36358ca408c5a2f9ff67268caef1062ff0c63f5b3741d81"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hhG5sJswWjkAfK84Nn5E",
+          "catalog_revision": 9,
+          "expected_sha256": "102519660363bdd616efefcbc61206abc937cb273c1fe2996705650fb9935761"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hhe0cecqxZb7cIMVBlMW",
+          "catalog_revision": 15,
+          "expected_sha256": "2ab95efd0da720cc3f286f2874050d96ffafea85d3657092e5c641d51a8dafd3"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_husHA8KsDQHZGAubdiCC",
+          "catalog_revision": 25,
+          "expected_sha256": "b0775c7a4de8022c041314e77f1c350dcd39a51b4af931ba7fb1626db7138bf4"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+              "task_id": "tsk_g00VYybskN00tGCq2K3B",
+              "snapshot_id": "5025d56a-c57d-508d-ae59-27042fa238cd",
+              "manifest_sha256": "c117d3f0d3a92a2e9789055ce91a4fbac13e22e284d5338cf6441c5b8c66969c"
+            },
+            "tree": "resources",
+            "path": "customer-notes.md",
+            "media_type": "text/markdown",
+            "bytes": 1216,
+            "sha256": "c5bf466eb54920051542d0b4e07d2d597af0dcdadf78f479461025f64c0f3ca6"
+          }
+        }
+      ],
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "sales-strategy",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+          "namespace": "builtin",
+          "id": "sales-strategy",
+          "version": "2026.10.24.3",
+          "package_digest": "cb8d9d20bbc2d18d85faf5ce9098ab3ece74af2743356571bb3cc9a4e8b02253"
+        },
+        "agent_id": "sales-playbook-writer",
+        "projection_hash": "9330f5d2d5e41869b8348d110ca5ca59bf213f82cfb64e7e2a865bc083806cd8",
+        "session_id": "ses_hvRqFo40F4x9E9FCx8lN",
+        "message_id": "msg_g0VYynT5e002s9laGr7w",
+        "tool_call_id": "call_2d3b10324a7744988e38906aed30b3f6"
+      },
+      "resources": [
+        {
+          "artifactID": "art_hegcO0hpIEhH6zlsTiFq",
+          "path": "outputs/sales-playbook.md",
+          "bytes": 17116,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261024-sales-01\\evidence\\delivery-verification\\art_hegcO0hpIEhH6zlsTiFq-sales-playbook.md",
+          "ranges": [
+            "bytes 0-4095/17116",
+            "bytes 4096-8190/17116",
+            "bytes 8191-12286/17116",
+            "bytes 12287-16381/17116",
+            "bytes 16382-17115/17116"
+          ],
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+              "task_id": "tsk_g00VYybskN00tGCq2K3B",
+              "snapshot_id": "3e9fb1b7-31d5-5ae8-a46e-bb97339061ce",
+              "manifest_sha256": "46f1ec99076d557c980456ed49ffef2c3ee8a0f76f1b18abb7f87f3316e9755f"
+            },
+            "tree": "resources",
+            "path": "outputs/sales-playbook.md",
+            "media_type": "text/markdown",
+            "bytes": 17116,
+            "sha256": "92ad1c6f2da5e83b050fb94cc375530d2aabddf46206089cc5d754e6d3639f35"
+          }
+        }
+      ]
+    },
+    {
+      "id": "art_hblbwAQ1AsUVLZ9Hccse",
+      "type": "sales-strategy/playbook",
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hblbwAQ1AsUVLZ9Hccse",
+        "catalog_revision": 37,
+        "expected_sha256": "4bed6ad5bd8a1a9cf6f36adf7d47a3690ecd272bd22959463d454696b70c8049"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h02dDK61X5ArIp4z9jDg",
+          "catalog_revision": 17,
+          "expected_sha256": "d5d22446bdb6badd43f35045bea673f82d66332e2512dc73012a06e50f376bb6"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hUFTIkAQpqLl6GxQNOsE",
+          "catalog_revision": 21,
+          "expected_sha256": "931c806e2d07fbef3d7216c314cff9ba5949932c10fb6d827018969750b0695a"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hbn9ydw5XrNriPwCYFD0",
+          "catalog_revision": 5,
+          "expected_sha256": "9ca72997f98b7165f36358ca408c5a2f9ff67268caef1062ff0c63f5b3741d81"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hegcO0hpIEhH6zlsTiFq",
+          "catalog_revision": 30,
+          "expected_sha256": "9f45a005eae9d7d03dc2c2358e7bd4e286f045e9b8f729b74033982b6ff0c1f4"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hhG5sJswWjkAfK84Nn5E",
+          "catalog_revision": 9,
+          "expected_sha256": "102519660363bdd616efefcbc61206abc937cb273c1fe2996705650fb9935761"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hhe0cecqxZb7cIMVBlMW",
+          "catalog_revision": 15,
+          "expected_sha256": "2ab95efd0da720cc3f286f2874050d96ffafea85d3657092e5c641d51a8dafd3"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_husHA8KsDQHZGAubdiCC",
+          "catalog_revision": 25,
+          "expected_sha256": "b0775c7a4de8022c041314e77f1c350dcd39a51b4af931ba7fb1626db7138bf4"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+              "task_id": "tsk_g00VYybskN00tGCq2K3B",
+              "snapshot_id": "3e9fb1b7-31d5-5ae8-a46e-bb97339061ce",
+              "manifest_sha256": "46f1ec99076d557c980456ed49ffef2c3ee8a0f76f1b18abb7f87f3316e9755f"
+            },
+            "tree": "resources",
+            "path": "outputs/sales-playbook.md",
+            "media_type": "text/markdown",
+            "bytes": 17116,
+            "sha256": "92ad1c6f2da5e83b050fb94cc375530d2aabddf46206089cc5d754e6d3639f35"
+          }
+        }
+      ],
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "sales-strategy",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+          "namespace": "builtin",
+          "id": "sales-strategy",
+          "version": "2026.10.24.3",
+          "package_digest": "cb8d9d20bbc2d18d85faf5ce9098ab3ece74af2743356571bb3cc9a4e8b02253"
+        },
+        "agent_id": "sales-playbook-writer",
+        "projection_hash": "9330f5d2d5e41869b8348d110ca5ca59bf213f82cfb64e7e2a865bc083806cd8",
+        "session_id": "ses_hvRqFo40F4x9E9FCx8lN",
+        "message_id": "msg_g0VYyr1Cw001gEAjgf55",
+        "tool_call_id": "call_3c774236db884c92a676a7e5d252c803"
+      },
+      "resources": [
+        {
+          "artifactID": "art_hblbwAQ1AsUVLZ9Hccse",
+          "path": "outputs/sales-playbook.md",
+          "bytes": 18778,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261024-sales-01\\evidence\\delivery-verification\\art_hblbwAQ1AsUVLZ9Hccse-sales-playbook.md",
+          "ranges": [
+            "bytes 0-4095/18778",
+            "bytes 4096-8191/18778",
+            "bytes 8192-12285/18778",
+            "bytes 12286-16379/18778",
+            "bytes 16380-18777/18778"
+          ],
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+              "task_id": "tsk_g00VYybskN00tGCq2K3B",
+              "snapshot_id": "793cc033-a017-5258-a03a-da47173f968f",
+              "manifest_sha256": "77eb967642209f20874bf7f1b04eebccb1939764959f2985329f683a56b2d888"
+            },
+            "tree": "resources",
+            "path": "outputs/sales-playbook.md",
+            "media_type": "text/markdown",
+            "bytes": 18778,
+            "sha256": "7b5a17f4f0a4fb4161615f646687e357eb573f98997d6a2d39fa03d79202cb9d"
+          }
+        }
+      ]
+    },
+    {
+      "id": "art_hrHmzUhGXr4q5lQQ5Hka",
+      "type": "sales-strategy/audit",
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hrHmzUhGXr4q5lQQ5Hka",
+        "catalog_revision": 42,
+        "expected_sha256": "897cfcbc1c717500fa546001891ba53d52d30deddae11324ac937932c6791552"
+      },
+      "sourceLocators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hUFTIkAQpqLl6GxQNOsE",
+          "catalog_revision": 21,
+          "expected_sha256": "931c806e2d07fbef3d7216c314cff9ba5949932c10fb6d827018969750b0695a"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hblbwAQ1AsUVLZ9Hccse",
+          "catalog_revision": 37,
+          "expected_sha256": "4bed6ad5bd8a1a9cf6f36adf7d47a3690ecd272bd22959463d454696b70c8049"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+              "task_id": "tsk_g00VYybskN00tGCq2K3B",
+              "snapshot_id": "5025d56a-c57d-508d-ae59-27042fa238cd",
+              "manifest_sha256": "c117d3f0d3a92a2e9789055ce91a4fbac13e22e284d5338cf6441c5b8c66969c"
+            },
+            "tree": "resources",
+            "path": "customer-notes.md",
+            "media_type": "text/markdown",
+            "bytes": 1216,
+            "sha256": "c5bf466eb54920051542d0b4e07d2d597af0dcdadf78f479461025f64c0f3ca6"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+              "task_id": "tsk_g00VYybskN00tGCq2K3B",
+              "snapshot_id": "3e9fb1b7-31d5-5ae8-a46e-bb97339061ce",
+              "manifest_sha256": "46f1ec99076d557c980456ed49ffef2c3ee8a0f76f1b18abb7f87f3316e9755f"
+            },
+            "tree": "resources",
+            "path": "outputs/sales-playbook.md",
+            "media_type": "text/markdown",
+            "bytes": 17116,
+            "sha256": "92ad1c6f2da5e83b050fb94cc375530d2aabddf46206089cc5d754e6d3639f35"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+              "task_id": "tsk_g00VYybskN00tGCq2K3B",
+              "snapshot_id": "793cc033-a017-5258-a03a-da47173f968f",
+              "manifest_sha256": "77eb967642209f20874bf7f1b04eebccb1939764959f2985329f683a56b2d888"
+            },
+            "tree": "resources",
+            "path": "outputs/sales-playbook.md",
+            "media_type": "text/markdown",
+            "bytes": 18778,
+            "sha256": "7b5a17f4f0a4fb4161615f646687e357eb573f98997d6a2d39fa03d79202cb9d"
+          }
+        }
+      ],
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "sales-strategy",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+          "namespace": "builtin",
+          "id": "sales-strategy",
+          "version": "2026.10.24.3",
+          "package_digest": "cb8d9d20bbc2d18d85faf5ce9098ab3ece74af2743356571bb3cc9a4e8b02253"
+        },
+        "agent_id": "sales-strategy-fact-checker",
+        "projection_hash": "9ae2858b054c1bf7a0ce03248bd6aca5a2a5f6cae19bb9f5aa45bd14e103f4d3",
+        "session_id": "ses_hFnUDFya8huByfgaMKCS",
+        "message_id": "msg_g0VYysLbz00k1WHs6glb",
+        "tool_call_id": "call_848c2ba828ce429085dda7cfb0d6cf98"
+      },
+      "resources": []
+    }
+  ],
+  "resources": [
+    {
+      "artifactID": "art_hegcO0hpIEhH6zlsTiFq",
+      "path": "outputs/sales-playbook.md",
+      "bytes": 17116,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261024-sales-01\\evidence\\delivery-verification\\art_hegcO0hpIEhH6zlsTiFq-sales-playbook.md",
+      "ranges": [
+        "bytes 0-4095/17116",
+        "bytes 4096-8190/17116",
+        "bytes 8191-12286/17116",
+        "bytes 12287-16381/17116",
+        "bytes 16382-17115/17116"
+      ],
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+          "task_id": "tsk_g00VYybskN00tGCq2K3B",
+          "snapshot_id": "3e9fb1b7-31d5-5ae8-a46e-bb97339061ce",
+          "manifest_sha256": "46f1ec99076d557c980456ed49ffef2c3ee8a0f76f1b18abb7f87f3316e9755f"
+        },
+        "tree": "resources",
+        "path": "outputs/sales-playbook.md",
+        "media_type": "text/markdown",
+        "bytes": 17116,
+        "sha256": "92ad1c6f2da5e83b050fb94cc375530d2aabddf46206089cc5d754e6d3639f35"
+      }
+    },
+    {
+      "artifactID": "art_hblbwAQ1AsUVLZ9Hccse",
+      "path": "outputs/sales-playbook.md",
+      "bytes": 18778,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261024-sales-01\\evidence\\delivery-verification\\art_hblbwAQ1AsUVLZ9Hccse-sales-playbook.md",
+      "ranges": [
+        "bytes 0-4095/18778",
+        "bytes 4096-8191/18778",
+        "bytes 8192-12285/18778",
+        "bytes 12286-16379/18778",
+        "bytes 16380-18777/18778"
+      ],
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hIAkAA0C6Sw3h8XUNWRa",
+          "task_id": "tsk_g00VYybskN00tGCq2K3B",
+          "snapshot_id": "793cc033-a017-5258-a03a-da47173f968f",
+          "manifest_sha256": "77eb967642209f20874bf7f1b04eebccb1939764959f2985329f683a56b2d888"
+        },
+        "tree": "resources",
+        "path": "outputs/sales-playbook.md",
+        "media_type": "text/markdown",
+        "bytes": 18778,
+        "sha256": "7b5a17f4f0a4fb4161615f646687e357eb573f98997d6a2d39fa03d79202cb9d"
+      }
+    }
+  ],
+  "verifiedAt": 1792855602390
+}
