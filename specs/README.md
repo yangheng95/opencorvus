@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [专家团追加交付与更正场景](records/2026-10/2026-10-24-expert-steering-recovery-cases.md)：当前源码的营销、搜索及销售完整交付与轮次接续。
+
 - [来源摘录与工具附件的共同身份](records/2026-10/2026-10-24-source-attachment-identity.md)：587修复摘录附件编号与真实Tool结果错绑。
 
 - [网页抓取来源摘录](records/2026-10/2026-10-24-webfetch-source-excerpt.md)：586由真实网页正文提供Sources摘录。
