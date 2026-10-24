@@ -32,6 +32,16 @@ cold 缺 receipt 保全 current、before/staging 和原 journal，并公开 comm
 当前包与归档分别保留，后续新操作需按真实当前版本执行；读取入口为
 `GET /expert-squad/mutation-recovery`，不因新同 ID 包操作覆盖旧记录。
 
+所有目录/压缩包导入、更新与durable安装在同一安装owner内先结算原replacement和Evolution
+journal，再比较当前版本并产生新效果。历史正receipt与当前包漂变分别处理：
+`committed_revision_changed`证明原commit存在但当前观察不同，保全可得原件和当前字节，
+不回滚后来版本。缺receipt继续明确unknown，旧授权重试仍按当前真实CAS合同执行。
+保全文件协议@2在原Store内以不可变upgrade/resource-plan阶段自动续接旧pending @1，
+原intent/阶段/complete字节保留；计划在文件操作前冻结，重入消费原计划。
+冻结观察树不可得时明确标记并另存当前observed资源，不能把当前包冒称原after。
+公开摘要的targetEvidence仅指保全时观察，originalMutationAfter保持unverified；
+原已完成@1历史不被重新解释为完整历史效果证明。
+
 Chat、Mission 和 projected Task scheduler 直接获得通用的
 create_continuous_goal/get_continuous_goal/update_continuous_goal 工具；声明、registry 和
 实际 scheduler factory 同源。其 [持续意图合同](continuous-goal.md) 与 Delivery Slice Goal

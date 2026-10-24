@@ -193,6 +193,20 @@ target 原本 absent 时保留该实际状态，可从归档通过新的显式�
 原 journal 在保全 terminal 前始终保留恢复入口，terminal 后才退休 current slot；后续显式
 mutation 不删除旧 archive。只读 `/expert-squad/mutation-recovery` 有序分页读取保全记录。
 
+保全文件协议@2通过原DurablePublicationStore的追加upgrade/resource-plan事实自动续接旧
+pending @1，原intent/已写阶段/complete不改。唯一resource plan在copy/rename前冻结原expected
+observation及实际source/destination；重入沿原plan认领已经完成的精确destination。
+可得的冻结原观察与当前变化分别保留，原expected树不可得时明确标记，不能用当前树替代。
+summary的targetEvidence为observed_at_preservation，originalMutationAfter为unverified，
+完整filesystem观察不能由journal包digest或旧commit猜补。历史正receipt且当前revision不同
+返回committed_revision_changed并保全当前观察，唯一成功权威仍为原长期表。
+所有新安装/导入/update先在同一安装owner内恢复原journal，再执行当前CAS和真实效果；
+普通导入也适用，不得通过省略durableReceipt越过原恢复。
+已开始的保全先于恢复后重新出现的canonical成功清理，防止删掉未保全的before。
+current journal已丢失时，显式及background恢复均从该installation/package原Store的open
+occurrence原intent继续；旧orphan不退休另一operation的当前slot。该恢复会枚举相关
+installation的包分区及各包历史，成本O(history)，不使用平行current index。
+
 Worktree readiness 的唯一 journal 按 Database authority 与稳定 Project ID 分区；intent 冻结
 Project generation、请求的 logical directory、canonical physical occurrence 和实际 startup。
 同一次目录解析分别冻结保留真实大小写及未创建 suffix 的 `physicalPath` 与规范化的

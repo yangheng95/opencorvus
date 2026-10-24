@@ -25,7 +25,13 @@ import { EXPERT_SQUAD_ARCHIVE_IMPORT_LIMITS } from "@opencorvus-ai/sdk/expert-sq
 import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v2"
 import { Database } from "@/storage/db"
 import { readExpertSquadMutationReceipt } from "@/engine/expert-squad-mutation-receipt"
-import { inspectExpertSquadMutationPreservation, preserveUnknownExpertSquadMutation } from "./mutation-preservation"
+import {
+  inspectExpertSquadMutationPreservation,
+  listPendingExpertSquadMutationPreservations,
+  listPendingExpertSquadMutationPreservationSubjects,
+  preserveExpertSquadMutationEvidence,
+  readExpertSquadMutationPreservation,
+} from "./mutation-preservation"
 import { scoreDiscoveryFields, scoreDocumentField } from "@/capability/fuzzy"
 import { ExpertSquadIDSchema, ExpertSquadNamespaceSchema } from "./id"
 
@@ -627,16 +633,97 @@ export namespace ExpertSquadPackageManager {
       if (error.code === "ENOENT") return undefined
       throw error
     })
-    if (text === undefined) return { disposition: "none" as const }
-    const journal = EvolutionMutationJournalSchema.parse(JSON.parse(text))
-    assertMutationJournalLocation(journal, input.location, input.id)
+    const current = text === undefined ? undefined : EvolutionMutationJournalSchema.parse(JSON.parse(text))
+    if (current) assertMutationJournalLocation(current, input.location, input.id)
+    const pending = await listPendingExpertSquadMutationPreservations({
+      configRoot: input.location.configRoot,
+      id: input.id,
+    })
+    const preserved: Awaited<ReturnType<typeof reconcileEvolutionMutationEvidence>>[] = []
+    let currentResult: Awaited<ReturnType<typeof reconcileEvolutionMutationEvidence>> | undefined
+    for (const occurrence of pending) {
+      const originalText = z.string().parse(occurrence.intent.payload.journalText)
+      const original = EvolutionMutationJournalSchema.parse(JSON.parse(originalText))
+      assertMutationJournalLocation(original, input.location, input.id)
+      if (original.operationID !== occurrence.intent.occurrenceID)
+        throw new Error("Pending mutation preservation does not own its original journal operation")
+      if (current?.operationID === original.operationID && text !== originalText)
+        throw new Error("Current mutation journal differs from its preservation original")
+      const result = await reconcileEvolutionMutationEvidence({
+        ...input,
+        journal: original,
+        journalText: originalText,
+        retireCurrentJournal: originalText === text,
+      })
+      preserved.push(result)
+      if (originalText === text) currentResult = result
+    }
+    if (currentResult) return currentResult
+    if (current && text !== undefined)
+      return reconcileEvolutionMutationEvidence({
+        ...input,
+        journal: current,
+        journalText: text,
+        retireCurrentJournal: true,
+      })
+    return preserved.length
+      ? { disposition: "preservations_completed" as const, occurrences: preserved }
+      : { disposition: "none" as const }
+  }
+
+  async function reconcileEvolutionMutationEvidence(input: {
+    location: ExpertSquadPackageLocations.Location
+    id: string
+    journal: EvolutionMutationJournal
+    journalText: string
+    retireCurrentJournal: boolean
+    confirmedUncommitted?: ExpertSquadInstallLock.Lease
+  }) {
+    const journal = input.journal
+    const text = input.journalText
+    const journalPath = evolutionMutationJournalPath(input.location, input.id)
     const committed = committedEvolutionReceipt(journal)
     const targetState = await packageStateAt(journal.target)
     const backupState = await packageStateAt(journal.backup)
     const discardState = await packageStateAt(journal.discard)
+    const preserveEvidence = () =>
+      preserveExpertSquadMutationEvidence({
+        configRoot: input.location.configRoot,
+        id: input.id,
+        journalPath,
+        journalText: text,
+        journal,
+        databaseAuthority: Database.Identity(),
+        retireCurrentJournal: input.retireCurrentJournal,
+        ...(committed ? { commitReceiptIdentity: journal.identity } : {}),
+        ...(committed && !packageStateHasDigest(targetState, journal.afterPackageDigest)
+          ? { disposition: "committed_revision_changed" as const }
+          : {}),
+        targetRevision: {
+          expectedPackageDigest: journal.afterPackageDigest,
+          observedPackageDigest: targetState.kind === "package" ? targetState.packageDigest : null,
+        },
+      })
+    const priorPreservation = await readExpertSquadMutationPreservation({
+      configRoot: input.location.configRoot,
+      id: input.id,
+      operationID: journal.operationID,
+    })
+    if (priorPreservation) {
+      // A restored database may expose a later commit while this earlier file
+      // preservation is pending. Its immutable plan still owns every resource.
+      const retained = await preserveEvidence()
+      return {
+        ...retained,
+        disposition: committed
+          ? packageStateHasDigest(targetState, journal.afterPackageDigest)
+            ? ("committed" as const)
+            : ("committed_revision_changed" as const)
+          : ("commit_receipt_unavailable" as const),
+      }
+    }
     if (committed) {
-      if (!packageStateHasDigest(targetState, journal.afterPackageDigest))
-        throw new Error("Committed expert squad mutation journal does not match the installed revision")
+      if (!packageStateHasDigest(targetState, journal.afterPackageDigest)) return preserveEvidence()
       const cleanup = await Promise.allSettled([
         rm(journal.backup, { recursive: true, force: true }),
         rm(journal.staging, { recursive: true, force: true }),
@@ -657,15 +744,7 @@ export namespace ExpertSquadPackageManager {
       }
       return { disposition: "committed" as const }
     }
-    if (!input.confirmedUncommitted)
-      return preserveUnknownExpertSquadMutation({
-        configRoot: input.location.configRoot,
-        id: input.id,
-        journalPath,
-        journalText: text,
-        journal,
-        databaseAuthority: Database.Identity(),
-      })
+    if (!input.confirmedUncommitted) return preserveEvidence()
     ExpertSquadInstallLock.assertHeld(input.confirmedUncommitted, input.id)
     if (journal.databaseAuthority !== Database.Identity())
       throw new Error("Current failed mutation lost its original database authority")
@@ -1069,11 +1148,10 @@ export namespace ExpertSquadPackageManager {
         location: targetLocation,
         id: loaded.id,
       })
-      if (input.durableReceipt)
-        await reconcileEvolutionMutationJournal({
-          location: targetLocation,
-          id: loaded.id,
-        })
+      await reconcileEvolutionMutationJournal({
+        location: targetLocation,
+        id: loaded.id,
+      })
       const existingIdentity = await installationExistingPackage({
         projectDirectory: input.projectDirectory,
         targetLocation,
@@ -2052,6 +2130,19 @@ export namespace ExpertSquadPackageManager {
           }
         } catch (error) {
           log.error("expert squad package mutation journal was retained unreconciled", { file, error })
+        }
+      }
+      const pendingSubjects = await listPendingExpertSquadMutationPreservationSubjects({
+        configRoot: location.configRoot,
+        onError: (id, error) =>
+          log.error("expert squad mutation preservation was retained unreconciled", { id, location, error }),
+      })
+      for (const subject of pendingSubjects) {
+        try {
+          const id = ExpertSquadRegistry.parseID(subject, "pending expert squad mutation preservation id")
+          await ExpertSquadInstallLock.run(id, () => reconcileEvolutionMutationJournal({ location, id }))
+        } catch (error) {
+          log.error("expert squad mutation preservation was retained unreconciled", { id: subject, location, error })
         }
       }
     }

@@ -69604,10 +69604,17 @@
                           "items": {
                             "properties": {
                               "disposition": {
-                                "const": "commit_receipt_unavailable",
+                                "enum": [
+                                  "commit_receipt_unavailable",
+                                  "committed_revision_changed"
+                                ],
                                 "type": "string"
                               },
                               "occurrenceID": {
+                                "type": "string"
+                              },
+                              "originalMutationAfter": {
+                                "const": "unverified",
                                 "type": "string"
                               },
                               "preservation": {
@@ -69615,6 +69622,10 @@
                                   "complete",
                                   "pending"
                                 ],
+                                "type": "string"
+                              },
+                              "targetEvidence": {
+                                "const": "observed_at_preservation",
                                 "type": "string"
                               },
                               "timeCreated": {
@@ -69625,6 +69636,8 @@
                               "occurrenceID",
                               "disposition",
                               "preservation",
+                              "targetEvidence",
+                              "originalMutationAfter",
                               "timeCreated"
                             ],
                             "type": "object"

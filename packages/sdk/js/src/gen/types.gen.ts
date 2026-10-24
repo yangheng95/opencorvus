@@ -17993,9 +17993,11 @@ export type ExpertSquadMutationRecoveryResponses = {
   200:
     | {
         entries: Array<{
-          disposition: "commit_receipt_unavailable"
+          disposition: "commit_receipt_unavailable" | "committed_revision_changed"
           occurrenceID: string
+          originalMutationAfter: "unverified"
           preservation: "complete" | "pending"
+          targetEvidence: "observed_at_preservation"
           timeCreated: number
         }>
         nextCursor: string | null

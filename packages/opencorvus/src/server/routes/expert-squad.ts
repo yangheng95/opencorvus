@@ -82,8 +82,10 @@ const MutationRecoveryResponse = z.union([
     entries: z.array(
       z.object({
         occurrenceID: z.string(),
-        disposition: z.literal("commit_receipt_unavailable"),
+        disposition: z.enum(["commit_receipt_unavailable", "committed_revision_changed"]),
         preservation: z.enum(["complete", "pending"]),
+        targetEvidence: z.literal("observed_at_preservation"),
+        originalMutationAfter: z.literal("unverified"),
         timeCreated: z.number(),
       }),
     ),
