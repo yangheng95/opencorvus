@@ -1,0 +1,63 @@
+[1/4] START test/task-root-message-delivery-fence.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) accepted Task-root Message delivery > projects the complete user transfer while consuming delayed original durable increments [23532.45ms]
+(pass) accepted Task-root Message delivery > projects the complete mission transfer while consuming delayed original durable increments [25765.96ms]
+(pass) accepted Task-root Message delivery > projects the complete orchestrator transfer while consuming delayed original durable increments [16738.01ms]
+(pass) accepted Task-root Message delivery > projects the complete goal-controller transfer while consuming delayed original durable increments [24772.65ms]
+(pass) accepted Task-root Message delivery > prepares a user input under its root owner and atomically commits a retry with stable identity [24588.61ms]
+(pass) accepted Task-root Message delivery > prepares a mission input under its root owner and atomically commits a retry with stable identity [18674.62ms]
+(pass) accepted Task-root Message delivery > prepares a orchestrator input under its root owner and atomically commits a retry with stable identity [31099.25ms]
+(pass) accepted Task-root Message delivery > prepares a goal-controller input under its root owner and atomically commits a retry with stable identity [22021.11ms]
+(pass) accepted Task-root Message delivery > delivers an accepted user Message with its original identity and author [32539.19ms]
+(pass) accepted Task-root Message delivery > delivers an accepted mission Message with its original identity and author [25858.53ms]
+(pass) accepted Task-root Message delivery > delivers an accepted orchestrator Message with its original identity and author [25560.15ms]
+(pass) accepted Task-root Message delivery > delivers an accepted goal-controller Message with its original identity and author [27306.66ms]
+(pass) accepted Task-root Message delivery > maps accepted Message fact edits to the SQLite immutable-fact error contract [20761.59ms]
+
+ 13 pass
+ 0 fail
+ 51 expect() calls
+Ran 13 tests across 1 file. [333.65s]
+[1/4] DONE test/task-root-message-delivery-fence.test.ts exit=0 duration=342.08s
+[2/4] START test/orchestrator-root-input-runtime.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) an operator input retains its Task-root owner during scheduler preparation, then receives its exact runtime reply [27115.31ms]
+
+ 1 pass
+ 0 fail
+ 3 expect() calls
+Ran 1 test across 1 file. [52.02s]
+[2/4] DONE test/orchestrator-root-input-runtime.test.ts exit=0 duration=53.41s
+[3/4] START test/orchestrator-control-message.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) exact terminal ingress persists one visible Orchestrator control Message and reuses it [2350.48ms]
+(pass) rejects an occupied reversible control identity before overwriting another Message [1363.93ms]
+(pass) rejects an occupied reversible control Part identity before writing the control occurrence [1026.47ms]
+(pass) rejects a reversible Part occupied after preparation at the persistence transaction fence [1020.33ms]
+(pass) reports a typed data migration requirement for an expanded Orchestrator control message identity [1876.09ms]
+(pass) reports a typed data migration requirement for an expanded Orchestrator control part identity [1562.85ms]
+(pass) publishes the staged control runtime before the visible Message event [809.35ms]
+
+ 7 pass
+ 0 fail
+ 21 expect() calls
+Ran 7 tests across 1 file. [15.14s]
+[3/4] DONE test/orchestrator-control-message.test.ts exit=0 duration=15.47s
+[4/4] START test/orchestrator/process-recovery-input-authority.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) process recovery input authority > uses the prepared Worker Turn message for a new occurrence after a terminal lifecycle [0.05ms]
+(pass) process recovery input authority > uses the lifecycle message for an interrupted executing occurrence [0.02ms]
+
+ 2 pass
+ 0 fail
+ 2 expect() calls
+Ran 2 tests across 1 file. [973.00ms]
+[4/4] DONE test/orchestrator/process-recovery-input-authority.test.ts exit=0 duration=1.12s

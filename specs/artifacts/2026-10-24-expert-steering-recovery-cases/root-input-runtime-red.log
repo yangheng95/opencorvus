@@ -1,0 +1,35 @@
+[1/1] START test/orchestrator-root-input-runtime.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+76 |       try {
+77 |         accepted = await EngineService.handleTaskMessage(taskID, { text: "Use the current budget of 1200.", source: "api" })
+78 |         await entered.promise
+79 |         const source = Database.use(db => db.select().from(MessageTable).where(eq(MessageTable.id, accepted!.user_message.info.id)).get())!
+80 |         expect({ sessionID: source.session_id, body: accepted.user_message.parts[0]?.type === "text" ? accepted.user_message.parts[0].text : undefined })
+81 |           .toEqual({ sessionID: task.sessionID, body: "Use the current budget of 1200." })
+                ^
+error: expect(received).toEqual(expected)
+
+  {
+    "body": "Use the current budget of 1200.",
+-   "sessionID": "ses_-zUR1JVTAzzE2U5vd5cL",
++   "sessionID": "ses_-zUR1JVR6zz5jU0YFlTx",
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\orchestrator-root-input-runtime.test.ts:81:12)
+(fail) an operator input retains its Task-root owner during scheduler preparation, then receives its exact runtime reply [7082.76ms]
+
+ 0 pass
+ 1 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [11.70s]
+[1/1] DONE test/orchestrator-root-input-runtime.test.ts exit=1 duration=12.25s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\orchestrator-root-input-runtime.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\orchestrator-root-input-runtime.test.ts
+Test runtime retained after unsuccessful run: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-svYQAo
+Physical/output settlement confirmed: true

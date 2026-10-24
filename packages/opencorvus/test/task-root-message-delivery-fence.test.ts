@@ -7,7 +7,10 @@ import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { MessageTable } from "@/session/session.sql"
 import { Database, eq } from "@/storage/db"
-import { deliverTaskRootMessageToOrchestratorSession } from "@/task-api/task-root-message"
+import {
+  deliverTaskRootMessageToOrchestratorSession,
+  prepareTaskRootMessageDelivery,
+} from "@/task-api/task-root-message"
 import { requireTask } from "@/engine/store"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { Bus } from "@/bus"
@@ -252,6 +255,60 @@ describe("accepted Task-root Message delivery", () => {
   )
 
   test.each(["user", "mission", "orchestrator", "goal-controller"])(
+    "prepares a %s input under its root owner and atomically commits a retry with stable identity",
+    async (author) => {
+      await using project = await memoryProject()
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const accepted = await acceptedRootMessage(`${author} prepared handoff`, author)
+          const original = await MessageStore.get({ sessionID: accepted.root.id, messageID: accepted.messageID })
+          const commit = await prepareTaskRootMessageDelivery({
+            task: requireTask(accepted.taskID),
+            messageID: accepted.messageID,
+            orchestratorSessionID: accepted.orchestrator.id,
+          })
+          expect(await MessageStore.get({ sessionID: accepted.root.id, messageID: accepted.messageID })).toEqual(
+            original,
+          )
+          expect(() =>
+            commit(() => {
+              throw new Error("Runtime preparation rejected the handoff")
+            }),
+          ).toThrow("Runtime preparation rejected the handoff")
+          expect(await MessageStore.get({ sessionID: accepted.root.id, messageID: accepted.messageID })).toEqual(
+            original,
+          )
+          commit()
+          const delivered = await MessageStore.get({
+            sessionID: accepted.orchestrator.id,
+            messageID: accepted.messageID,
+          })
+          commit()
+          expect(
+            await MessageStore.get({ sessionID: accepted.orchestrator.id, messageID: accepted.messageID }),
+          ).toEqual(delivered)
+          expect({
+            info: { id: delivered.info.id, author: delivered.info.role === "user" ? delivered.info.author : undefined },
+            parts: delivered.parts.map((part) => ({
+              id: part.id,
+              type: part.type,
+              text: part.type === "text" ? part.text : undefined,
+            })),
+          }).toEqual({
+            info: { id: original.info.id, author },
+            parts: original.parts.map((part) => ({
+              id: part.id,
+              type: part.type,
+              text: part.type === "text" ? part.text : undefined,
+            })),
+          })
+        },
+      })
+    },
+  )
+
+  test.each(["user", "mission", "orchestrator", "goal-controller"])(
     "delivers an accepted %s Message with its original identity and author",
     async (author) => {
       await using project = await memoryProject()
@@ -285,6 +342,50 @@ describe("accepted Task-root Message delivery", () => {
       })
     },
   )
+
+  test("commits prepared inputs for two Projects in reverse order under their original Task owners", async () => {
+    await using first = await memoryProject()
+    await using second = await memoryProject()
+    const deliveries = await Promise.all(
+      [first, second].map((project, index) =>
+        Instance.provide({
+          directory: project.path,
+          fn: async () => {
+            const accepted = await acceptedRootMessage(`Project ${index} original input`)
+            return {
+              ...accepted,
+              directory: project.path,
+              commit: await prepareTaskRootMessageDelivery({
+                task: requireTask(accepted.taskID),
+                messageID: accepted.messageID,
+                orchestratorSessionID: accepted.orchestrator.id,
+              }),
+            }
+          },
+        }),
+      ),
+    )
+    for (const input of deliveries.toReversed()) {
+      await Instance.provide({
+        directory: input.directory,
+        fn: async () => {
+          input.commit()
+          const message = await MessageStore.get({ sessionID: input.orchestrator.id, messageID: input.messageID })
+          expect({
+            taskID: requireTask(input.taskID).id,
+            projectID: (await Session.get(message.info.sessionID)).projectID,
+            parentID: (await Session.get(message.info.sessionID)).parentID,
+            text: message.parts.map((part) => (part.type === "text" ? part.text : undefined)),
+          }).toEqual({
+            taskID: input.taskID,
+            projectID: Instance.project.id,
+            parentID: input.root.id,
+            text: [`Project ${deliveries.indexOf(input)} original input`],
+          })
+        },
+      })
+    }
+  })
 
   test("maps accepted Message fact edits to the SQLite immutable-fact error contract", async () => {
     await using project = await memoryProject()

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [专家团追加交付与更正案例](2026-10-24-expert-steering-recovery-cases/README.md)：三个合成业务输入、共享输入交接红绿合同与真实页面阶段证据。
+
 - [专家团恢复与新操作接续](2026-10-24-expert-recovery-continuation/README.md)：真实备份、重复升级、原请求重试及保全后的并发接续。
 
 - [来源摘录附件身份验证](2026-10-24-source-attachment-identity/README.md)：587真实Tool与来源引用的共同身份。

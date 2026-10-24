@@ -1,0 +1,12 @@
+[1/1] START test/task-root-message-delivery-fence.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) accepted Task-root Message delivery > commits prepared inputs for two Projects in reverse order under their original Task owners [3587.74ms]
+
+ 1 pass
+ 13 filtered out
+ 0 fail
+ 2 expect() calls
+Ran 1 test across 1 file. [6.54s]
+[1/1] DONE test/task-root-message-delivery-fence.test.ts exit=0 duration=7.38s

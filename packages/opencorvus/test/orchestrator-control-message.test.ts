@@ -430,6 +430,7 @@ test("publishes the staged control runtime before the visible Message event", as
       })
       const control = currentOrchestratorControlMessage(event, taskID, wakeID)!
       const order: string[] = []
+      const visible = Promise.withResolvers<void>()
       const prompt = spyOn(SessionPrompt, "prompt").mockImplementation(async (input: any, hooks: any) =>
         Session.persistMessageWithCommit(
           {
@@ -454,7 +455,10 @@ test("publishes the staged control runtime before the visible Message event", as
         ),
       )
       const unsubscribe = Bus.subscribe(Message.Event.Updated, (messageEvent) => {
-        if (messageEvent.properties.info.id === control.messageID) order.push("visible-message")
+        if (messageEvent.properties.info.id === control.messageID) {
+          order.push("visible-message")
+          visible.resolve()
+        }
       })
       try {
         expect(
@@ -466,6 +470,7 @@ test("publishes the staged control runtime before the visible Message event", as
           }),
         ).toBe("created")
         await Database.awaitEffectIdle(5_000)
+        await visible.promise
         expect(order).toEqual(["runtime-armed", "visible-message"])
         expect(await materializeOrReuseCurrentOrchestratorControlMessage({ session, model, control })).toBe("reused")
       } finally {

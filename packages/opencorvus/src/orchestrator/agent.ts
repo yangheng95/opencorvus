@@ -96,7 +96,7 @@ import {
 import { deriveTaskStatus, isTaskTerminal } from "@/engine/task-status"
 import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-projection"
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
-import { deliverTaskRootMessageToOrchestratorSession, getTaskRootMessage } from "@/task-api/task-root-message"
+import { prepareTaskRootMessageDelivery, getTaskRootMessage } from "@/task-api/task-root-message"
 import { TaskRootMessageProvenance } from "@/protocol/task-root-message-schema"
 import { sendSchedulerMessage } from "@/protocol/scheduler-message"
 import { AgentTrace } from "@/trace"
@@ -450,13 +450,13 @@ export namespace Orchestrator {
       const agentSession = await taskOrchestratorSession(task)
       agentSessionID = agentSession.id
       agentSessionInfo = agentSession
-      if (event?.rootMessage) {
-        await deliverTaskRootMessageToOrchestratorSession({
-          task,
-          messageID: event.rootMessage.messageID,
-          orchestratorSessionID: agentSession.id,
-        })
-      }
+      const commitParticipantDelivery = event?.rootMessage
+        ? await prepareTaskRootMessageDelivery({
+            task,
+            messageID: event.rootMessage.messageID,
+            orchestratorSessionID: agentSession.id,
+          })
+        : undefined
       wakeStartMessageID = await latestSessionMessageID(agentSession.id)
 
       const profileScope = task.session_id ? { sessionID: task.session_id } : { taskID: task.id }
@@ -788,6 +788,15 @@ export namespace Orchestrator {
           throw new Error(`Orchestrator Session ${agentSession.id} runtime contract was not installed`)
         }
         const runtimeContract = installedRuntimeContract
+        if (commitParticipantDelivery && !currentControlMessage) {
+          commitParticipantDelivery(() =>
+            Database.effect(() => {
+              SessionPrompt.armSessionRuntimeContractWake(agentSession.id, runtimeContract)
+              runtimeWakeArmed = true
+            }),
+          )
+          wakeStartMessageID = event!.rootMessage!.messageID
+        }
         if (materializeCreatorBeforeTypedControl) {
           if (SessionPrompt.hasGeneration(agentSession.id)) {
             throw new Error(
@@ -839,6 +848,7 @@ export namespace Orchestrator {
             session: agentSession,
             model: { providerID: model.providerID, modelID: model.api.id },
             control: currentControlMessage,
+            commitParticipantDelivery,
             beforeVisibilityEffects: () =>
               Database.effect(() => {
                 SessionPrompt.armSessionRuntimeContractWake(agentSession.id, runtimeContract)
@@ -871,8 +881,10 @@ export namespace Orchestrator {
                 `${agentSession.id}; latest user Message is ${latestUserMessageID ?? "<none>"}`,
             )
           }
-          SessionPrompt.armSessionRuntimeContractWake(agentSession.id, runtimeContract)
-          runtimeWakeArmed = true
+          if (!runtimeWakeArmed) {
+            SessionPrompt.armSessionRuntimeContractWake(agentSession.id, runtimeContract)
+            runtimeWakeArmed = true
+          }
         }
         if (missionAcceptanceRepairForEvent(event)) {
           if (!currentControlMessage) {
@@ -1468,6 +1480,7 @@ export async function materializeOrReuseCurrentOrchestratorControlMessage(input:
   session: Session.Info
   model: { providerID: string; modelID: string }
   control: CurrentOrchestratorControlMessage
+  commitParticipantDelivery?: () => void
   beforeVisibilityEffects?: () => void
 }): Promise<"created" | "reused"> {
   let existing: Message.WithParts | undefined
@@ -1485,7 +1498,10 @@ export async function materializeOrReuseCurrentOrchestratorControlMessage(input:
     disposition = "created"
     await SessionPrompt.prompt(orchestratorControlPromptInput(input), {
       beforeVisibilityEffects: input.beforeVisibilityEffects,
-      preflightBundle: () => assertOrchestratorControlIdentityUnoccupied(input.control),
+      preflightBundle: () => {
+        input.commitParticipantDelivery?.()
+        assertOrchestratorControlIdentityUnoccupied(input.control)
+      },
     })
     existing = await MessageStore.get({ sessionID: input.session.id, messageID: input.control.messageID })
   }

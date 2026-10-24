@@ -28,11 +28,13 @@ export async function getTaskRootMessage(task: Pick<TaskRow, "id" | "session_id"
  * second Message. The stable Message/Part identities remain the protocol
  * receipt; only their containing Task-owned Session changes.
  */
-export async function deliverTaskRootMessageToOrchestratorSession(input: {
+type TaskRootMessageDeliveryInput = {
   task: Pick<TaskRow, "id" | "session_id" | "project_id">
   messageID: string
   orchestratorSessionID: string
-}): Promise<void> {
+}
+
+export async function prepareTaskRootMessageDelivery(input: TaskRootMessageDeliveryInput) {
   const message = await getTaskRootMessage(input.task, input.messageID)
   if (message.info.sessionID !== input.orchestratorSessionID && message.info.sessionID !== input.task.session_id) {
     throw new Error(
@@ -47,65 +49,72 @@ export async function deliverTaskRootMessageToOrchestratorSession(input: {
     throw new Error(`Orchestrator Session ${input.orchestratorSessionID} is outside Task ${input.task.id} lineage.`)
   }
   const sourceSessionID = message.info.sessionID
-  Database.immediateTransaction((db) => {
-    const current = db
-      .select({ data: MessageTable.data, sessionID: MessageTable.session_id })
-      .from(MessageTable)
-      .where(eq(MessageTable.id, input.messageID))
-      .get()
-    if (!current) throw new Error(`Task-root Message ${input.messageID} disappeared before delivery.`)
-    const currentParts = db.select().from(PartTable).where(eq(PartTable.message_id, input.messageID)).all()
-    if (current.sessionID === input.orchestratorSessionID) {
-      return
-    }
-    if (current.sessionID !== sourceSessionID) {
-      throw new Error(
-        `Task-root Message ${input.messageID} moved from ${sourceSessionID} to unexpected Session ${current.sessionID}.`,
-      )
-    }
-    const targetFrontier = db
-      .select({ timeCreated: MessageTable.time_created })
-      .from(MessageTable)
-      .where(eq(MessageTable.session_id, input.orchestratorSessionID))
-      .orderBy(desc(MessageTable.time_created), desc(MessageTable.id))
-      .get()
-    const visibleAt = Math.max(Date.now(), (targetFrontier?.timeCreated ?? 0) + 1)
-    const nextData = {
-      ...current.data,
-      time: { ...current.data.time, created: visibleAt },
-      orderKey: timelineMessageOrderKey({ info: { id: input.messageID, time: { created: visibleAt } } }),
-    }
-    const deliveredInfo = Message.VisibleInfo.parse({
-      ...nextData,
-      id: input.messageID,
-      sessionID: input.orchestratorSessionID,
-    })
-    const deliveredParts = currentParts.map((row) =>
-      Message.VisiblePart.parse({
-        ...row.data,
-        id: row.id,
-        messageID: row.message_id,
+  return (beforeVisibilityEffects?: () => void) =>
+    Database.immediateTransaction((db) => {
+      const current = db
+        .select({ data: MessageTable.data, sessionID: MessageTable.session_id })
+        .from(MessageTable)
+        .where(eq(MessageTable.id, input.messageID))
+        .get()
+      if (!current) throw new Error(`Task-root Message ${input.messageID} disappeared before delivery.`)
+      const currentParts = db.select().from(PartTable).where(eq(PartTable.message_id, input.messageID)).all()
+      if (current.sessionID === input.orchestratorSessionID) {
+        return
+      }
+      if (current.sessionID !== sourceSessionID) {
+        throw new Error(
+          `Task-root Message ${input.messageID} moved from ${sourceSessionID} to unexpected Session ${current.sessionID}.`,
+        )
+      }
+      const targetFrontier = db
+        .select({ timeCreated: MessageTable.time_created })
+        .from(MessageTable)
+        .where(eq(MessageTable.session_id, input.orchestratorSessionID))
+        .orderBy(desc(MessageTable.time_created), desc(MessageTable.id))
+        .get()
+      const visibleAt = Math.max(Date.now(), (targetFrontier?.timeCreated ?? 0) + 1)
+      const nextData = {
+        ...current.data,
+        time: { ...current.data.time, created: visibleAt },
+        orderKey: timelineMessageOrderKey({ info: { id: input.messageID, time: { created: visibleAt } } }),
+      }
+      const deliveredInfo = Message.VisibleInfo.parse({
+        ...nextData,
+        id: input.messageID,
         sessionID: input.orchestratorSessionID,
-        orderKey: timelinePartOrderKey({ id: row.id, timeCreated: visibleAt }),
-      }),
-    )
-    db.update(MessageTable)
-      .set({
-        session_id: input.orchestratorSessionID,
-        time_created: visibleAt,
-        time_updated: visibleAt,
-        data: nextData,
       })
-      .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, sourceSessionID)))
-      .run()
-    db.update(PartTable)
-      .set({ time_created: visibleAt, time_updated: visibleAt })
-      .where(eq(PartTable.message_id, input.messageID))
-      .run()
-    Bus.publishOwnedInTransaction(Message.Event.Moved, {
-      sourceSessionID,
-      info: deliveredInfo,
-      parts: deliveredParts,
+      const deliveredParts = currentParts.map((row) =>
+        Message.VisiblePart.parse({
+          ...row.data,
+          id: row.id,
+          messageID: row.message_id,
+          sessionID: input.orchestratorSessionID,
+          orderKey: timelinePartOrderKey({ id: row.id, timeCreated: visibleAt }),
+        }),
+      )
+      db.update(MessageTable)
+        .set({
+          session_id: input.orchestratorSessionID,
+          time_created: visibleAt,
+          time_updated: visibleAt,
+          data: nextData,
+        })
+        .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, sourceSessionID)))
+        .run()
+      db.update(PartTable)
+        .set({ time_created: visibleAt, time_updated: visibleAt })
+        .where(eq(PartTable.message_id, input.messageID))
+        .run()
+      beforeVisibilityEffects?.()
+      Bus.publishOwnedInTransaction(Message.Event.Moved, {
+        sourceSessionID,
+        info: deliveredInfo,
+        parts: deliveredParts,
+      })
     })
-  })
+}
+
+export async function deliverTaskRootMessageToOrchestratorSession(input: TaskRootMessageDeliveryInput): Promise<void> {
+  const commit = await prepareTaskRootMessageDelivery(input)
+  commit()
 }
