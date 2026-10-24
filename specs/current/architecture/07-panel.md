@@ -503,7 +503,11 @@ workbench consumes that revision to reveal a hidden Dock. Repeated resource
 identity preserves the editor draft and loaded content; line citations also
 retain their existing exact range reveal behavior.
 FileEditorPane captures the current focus origin with that explicit reveal revision,
-before an asynchronous read can mount its CodeEditor. Range presentation still
+before an asynchronous read can mount its CodeEditor. Both range-free file opens
+and citations use that layout-measured reveal for keyboard handoff. A newly created
+file can receive input immediately; no synthetic line range is added. Artifact
+editors without an explicit workbench reveal revision retain their own focus flow.
+Range presentation still
 sets the cursor, line band and scroll target after layout measurement. It transfers
 keyboard focus only while the original origin, BODY or that editor's content DOM
 still owns it. A control focused during loading retains its keyboard ownership.

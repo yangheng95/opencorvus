@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件编辑、保存与来源往返](records/2026-10/2026-10-24-file-editor-roundtrip.md)：570真实新文件、保存中编辑和模型Source闭环。
+
 - [文件工作台的文件名优先标题](records/2026-10/2026-10-24-source-file-title.md)：569深目录来源的文件名与无障碍标题。
 
 - [来源文件定位与新焦点归属](records/2026-10/2026-10-24-source-file-focus.md)：568真实慢读取、来源定位及新输入焦点。

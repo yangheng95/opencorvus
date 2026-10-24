@@ -473,8 +473,8 @@ export function FileEditorPane() {
                     value={draft()}
                     path={path()}
                     lineRange={target()?.range}
-                    lineRangeRevealRevision={fileEditorRevealRevision()}
-                    lineRangeFocusOrigin={revealFocusOrigin()}
+                    revealRevision={fileEditorRevealRevision()}
+                    revealFocusOrigin={revealFocusOrigin()}
                     ariaLabel={fileTitle()}
                     onValueChange={updateDraft}
                     readOnly={!writable() || fileEditorReserved()}

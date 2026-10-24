@@ -27,8 +27,8 @@ export interface CodeEditorProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>
   ariaLabel: string
   onValueChange: (value: string) => void
   lineRange?: SourceFileRange
-  lineRangeRevealRevision?: number
-  lineRangeFocusOrigin?: Element | null
+  revealRevision?: number
+  revealFocusOrigin?: Element | null
   readOnly?: boolean
   class?: string
 }
@@ -40,8 +40,8 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     "ariaLabel",
     "onValueChange",
     "lineRange",
-    "lineRangeRevealRevision",
-    "lineRangeFocusOrigin",
+    "revealRevision",
+    "revealFocusOrigin",
     "readOnly",
     "class",
   ])
@@ -60,11 +60,16 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
 
   const revealIdentity = () => {
     const range = local.lineRange
-    return [local.path, range?.startLine ?? "", range?.endLine ?? "", range?.startColumn ?? "", local.lineRangeRevealRevision ?? 0].join("\0")
+    return [local.path, range?.startLine ?? "", range?.endLine ?? "", range?.startColumn ?? "", local.revealRevision ?? 0].join("\0")
+  }
+
+  const focusForReveal = (editor: EditorView) => {
+    const active = document.activeElement
+    if (active === local.revealFocusOrigin || active === document.body || active === editor.contentDOM) editor.focus()
   }
 
   /**
-   * Send the cursor to a cited line and band the cited range.
+   * Reveal an explicitly opened file, locating and banding any cited range.
    *
    * A citation names a location, not a selection. Selecting
    * `startLine`..`endLine` turned the common whole-file citation (a plain
@@ -83,15 +88,19 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     if (identity === revealedIdentity) return
     const range = local.lineRange
     const target = resolveRevealTarget(editor.state.doc.lines, range)
+    // Explicit file opens share the same layout and keyboard handoff whether
+    // or not they carry a citation. Artifact mounts have no reveal revision.
+    // Retained views keep the request unsettled until their Dock is visible.
+    if (
+      (range || local.revealRevision !== undefined) &&
+      (!host?.clientWidth || !host.clientHeight || host.closest("[inert], [hidden]"))
+    ) return
     if (!range || !target) {
       editor.dispatch({ effects: revealLinesEffect(null) })
+      if (local.revealRevision !== undefined) focusForReveal(editor)
       revealedIdentity = range ? "" : identity
       return
     }
-    // A retained file view can receive a new citation before its Dock is
-    // visible. Keep that request unsettled until real layout can scroll and
-    // focus it; the host observer retries this same current request.
-    if (!host?.clientWidth || !host.clientHeight || host.closest("[inert], [hidden]")) return
     const line = editor.state.doc.line(target.anchorLine)
     let column = Math.min((range.startColumn ?? 1) - 1, line.length)
     const unit = line.text.charCodeAt(column)
@@ -108,8 +117,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     // A view mounted in this same frame has not been measured yet, so the
     // scroll effect would otherwise resolve against a zero-height scroller.
     editor.requestMeasure()
-    const active = document.activeElement
-    if (active === local.lineRangeFocusOrigin || active === document.body || active === editor.contentDOM) editor.focus()
+    focusForReveal(editor)
     revealedIdentity = identity
   }
 
@@ -117,7 +125,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
   const revealOnLayout = createAnimationFrameScheduler(() => {
     const editor = view
     if (!editor) return
-    if (!local.lineRange) {
+    if (!local.lineRange && local.revealRevision === undefined) {
       revealLineRange()
       return
     }
@@ -224,7 +232,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     void local.lineRange?.startLine
     void local.lineRange?.endLine
     void local.lineRange?.startColumn
-    void local.lineRangeRevealRevision
+    void local.revealRevision
     revealOnLayout.schedule()
   })
 
