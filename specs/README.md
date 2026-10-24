@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [来源在视口边缘的尺寸恢复](records/2026-10/2026-10-24-source-viewport-edge.md)：580来源边缘可见性与尺寸变化。
+
 - [字体缩放后的正文阅读位置](records/2026-10/2026-10-24-font-scale-reading.md)：579字符位置与真实布局变化调查。
 
 - [工作区双侧栏的阅读空间分配](records/2026-10/2026-10-24-workspace-pane-allocation.md)：578共享布局分配、偏好保持与实页复验。

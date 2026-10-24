@@ -1427,6 +1427,12 @@ keeps the previous character only while the same block and character are still
 visible; genuine scrolling otherwise captures the current visible text. The
 same native Range primitive already used for Tool payloads resolves this anchor
 after wrapping or font-scale changes. These anchors remain UI memory only.
+Source anchors retain their saved offset within the current viewport's feasible
+range. A card that fits stays fully visible; a taller card can keep the viewport
+inside its existing content. When reflow makes the old offset infeasible, the
+same resolver uses the nearest card edge instead of restoring the Source outside
+the viewport. Existing source identity, selected-citation priority and the one
+scroll writer remain the owners.
 Visible member and Side Chat viewport changes reuse the same position-restoration
 path. Layout-driven scroll events retain the prior reading record until that
 restore settles; new operator scroll input may take over normally. The controller

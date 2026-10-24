@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [来源在视口边缘的尺寸恢复](2026-10-24-source-viewport-edge/README.md)：580真实页面来源边缘截图。
+
 - [字体缩放后的正文阅读位置](2026-10-24-font-scale-reading/README.md)：579原生页面的实际阅读锚点和截图。
 
 - [工作区双侧栏的阅读空间分配](2026-10-24-workspace-pane-allocation/README.md)：578真实原生页面及人工截图。

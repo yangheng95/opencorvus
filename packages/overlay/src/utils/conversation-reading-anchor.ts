@@ -134,5 +134,8 @@ export function resolveConversationReadingTop(container: HTMLElement, anchor: Co
   if (anchor.kind === "text") return element ? resolveTextReadingTop(container, anchor, element) : null
   const rect = element && readingRect(element)
   if (!rect) return null
-  return Math.max(0, container.scrollTop + rect.top - container.getBoundingClientRect().top - anchor.offset)
+  const viewport = container.getBoundingClientRect()
+  const available = viewport.height - rect.height
+  const offset = Math.max(Math.min(0, available), Math.min(anchor.offset, Math.max(0, available)))
+  return Math.max(0, container.scrollTop + rect.top - viewport.top - offset)
 }
