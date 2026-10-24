@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [成员侧栏恢复时的正文身份](records/2026-10/2026-10-24-member-reconnect-rendering.md)：576真实服务更换、Sources及正文owner观察。
+
 - [持续目标的输入命令](records/2026-10/2026-10-24-goal-composer-command.md)：575以/goal复用加号目标表单、保留原首页布局。
 
 - [成员工具切换与正文所有者调查](records/2026-10/2026-10-24-member-tool-transition.md)：574真实流中草稿接纳与正文连续性调查。

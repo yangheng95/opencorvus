@@ -22,6 +22,11 @@ not turn non-modal prompts into focus traps or change modal dialogs' existing
 focus boundary, authorization decisions or continuation state.
 
 Member list/detail navigation retains keyboard context in the same panel.
+The selected member belongs to the current API authority, source kind and ID,
+and project directory. A same-source recovery may advance the workspace request
+epoch without clearing that member or retiring its accepted transcript reader.
+Changing the actual scope or explicitly leaving the conversation retires the
+member selection through the existing owner.
 Opening All agents focuses the currently selected Session row; opening that row
 focuses the detail view's All agents control. The original click or BODY must
 still own focus when the next frame commits, and the panel and destination must

@@ -1,0 +1,735 @@
+{
+  "at": "2026-10-24T07:06:11.033Z",
+  "scope": "576",
+  "base": "0ff10bde20eda8992a5a17c16a042e364925fe14",
+  "productChange": "Member selection follows actual authority/source/directory identity; same-source request invalidation retains its original reader.",
+  "builds": {
+    "old": {
+      "at": "2026-10-24T06:46:22.061Z",
+      "entry": "main-Cn7AP26y.js",
+      "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/member-reconnect-rendering-576-before-bundle/bin/ui",
+      "qualification": "Actual completed Node Vite build with private passive Part/body/source owner metadata instrumentation MR576"
+    },
+    "fixed": {
+      "at": "2026-10-24T06:55:24.116Z",
+      "entry": "main-Cj1kZFfk.js",
+      "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/member-reconnect-rendering-576-fixed-before-bundle/bin/ui",
+      "qualification": "Actual completed Node Vite build with private passive Part/body/source owner metadata instrumentation MR576"
+    }
+  },
+  "verification": {
+    "overlayTypecheckExit": 0,
+    "UI": "11 actual screenshots manually reviewed; no UI automated tests",
+    "oldPage": 246,
+    "finalPage": 247,
+    "oldFailure": "Native service replacement reset selected member to All agents",
+    "fixedResult": "Original B detail, 20 body owners, 8 source owners and reading top24721 retained during actual offline/recovery",
+    "manualScope": "A/B navigation, new chat and existing completed Goal in another Project",
+    "limitations": [
+      "No new Provider streaming call or per-frame video; original high-frequency Rendering root remains incompletely reproduced.",
+      "Cross-member navigation returns to the same source area with a small vertical difference; pixel-exact restoration is not claimed.",
+      "Chat/Mission/Side recovery inspected in code, not re-run as full UI cases.",
+      "Uncommitted foreign backend migration6 was active in isolated native services; not part of this delivery."
+    ]
+  },
+  "observations": {
+    "oldBefore": {
+      "bodies": [
+        {
+          "blocks": 1,
+          "part": "prt_g0VYlz8dd00pWcuVkoZF",
+          "renderer": "11"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYlzNy200G9j4TgB2N",
+          "renderer": "12"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYm1lEs00O2KijUi86",
+          "renderer": "13"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYmMab300GY28UWAJt",
+          "renderer": "14"
+        },
+        {
+          "blocks": 32,
+          "part": "prt_g0VYmMcJU00PFeeyJf7k",
+          "renderer": "15"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYmUNau00ka4jsGLu7",
+          "renderer": "16"
+        },
+        {
+          "blocks": 13,
+          "part": "prt_g0VYmUPS300JPqmNLo2D",
+          "renderer": "17"
+        },
+        {
+          "blocks": 22,
+          "part": "prt_g0VYmUrRH00iG2zOFlhG",
+          "renderer": "18"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYma1AT004jdIyz0bP",
+          "renderer": "19"
+        },
+        {
+          "blocks": 14,
+          "part": "prt_g0VYma2wD003owRu5m9l",
+          "renderer": "20"
+        },
+        {
+          "blocks": 21,
+          "part": "prt_g0VYmaNTs00F3UDN30bC",
+          "renderer": "21"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYn0rha005V1KlZppe",
+          "renderer": "22"
+        },
+        {
+          "blocks": 6,
+          "part": "prt_g0VYn0tPU00GJfPCOkag",
+          "renderer": "23"
+        },
+        {
+          "blocks": 8,
+          "part": "prt_g0VYn1Ezt00aQBqYLfgw",
+          "renderer": "24"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYw5RTi00q5ATqCk5d",
+          "renderer": "25"
+        },
+        {
+          "blocks": 2,
+          "part": "prt_g0VYw5TZL00rR6Y5CIqt",
+          "renderer": "26"
+        },
+        {
+          "blocks": 6,
+          "part": "prt_g0VYw5eil00vfzbWhSjq",
+          "renderer": "27"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYwSSwe00tHP9BUXFn",
+          "renderer": "28"
+        },
+        {
+          "blocks": 7,
+          "part": "prt_g0VYwSUO9004e1jdEn8D",
+          "renderer": "29"
+        },
+        {
+          "blocks": 12,
+          "part": "prt_g0VYwT3Nx00fARjbsKVz",
+          "renderer": "30"
+        }
+      ],
+      "client": 576,
+      "height": 26736,
+      "scrollOwner": "1",
+      "sources": [
+        {
+          "link": "https://aclanthology.org/2025.naacl-long.475/",
+          "owner": "2"
+        },
+        {
+          "link": "https://aclanthology.org/2025.acl-long.195/",
+          "owner": "4"
+        },
+        {
+          "link": "https://arxiv.org/abs/2509.11035v1",
+          "owner": "6"
+        },
+        {
+          "link": "https://arxiv.org/html/2509.11035v1",
+          "owner": "8"
+        },
+        {
+          "link": "https://aclanthology.org/2024.acl-long.381/",
+          "owner": "10"
+        },
+        {
+          "link": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/",
+          "owner": "12"
+        },
+        {
+          "link": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/",
+          "owner": "14"
+        },
+        {
+          "link": "https://www.w3.org/WAI/ARIA/apg/patterns/accordion/",
+          "owner": "16"
+        }
+      ],
+      "top": 26160
+    },
+    "oldOffline": {
+      "bodyOwners": [
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30"
+      ],
+      "scrollOwner": "1",
+      "sources": [
+        "2",
+        "4",
+        "6",
+        "8",
+        "10",
+        "12",
+        "14",
+        "16"
+      ],
+      "top": 24721
+    },
+    "oldRecovered": {
+      "bodies": [],
+      "sources": []
+    },
+    "fixedBefore": {
+      "bodies": [
+        {
+          "blocks": 1,
+          "part": "prt_g0VYlz8dd00pWcuVkoZF",
+          "renderer": "11"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYlzNy200G9j4TgB2N",
+          "renderer": "12"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYm1lEs00O2KijUi86",
+          "renderer": "13"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYmMab300GY28UWAJt",
+          "renderer": "14"
+        },
+        {
+          "blocks": 32,
+          "part": "prt_g0VYmMcJU00PFeeyJf7k",
+          "renderer": "15"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYmUNau00ka4jsGLu7",
+          "renderer": "16"
+        },
+        {
+          "blocks": 13,
+          "part": "prt_g0VYmUPS300JPqmNLo2D",
+          "renderer": "17"
+        },
+        {
+          "blocks": 22,
+          "part": "prt_g0VYmUrRH00iG2zOFlhG",
+          "renderer": "18"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYma1AT004jdIyz0bP",
+          "renderer": "19"
+        },
+        {
+          "blocks": 14,
+          "part": "prt_g0VYma2wD003owRu5m9l",
+          "renderer": "20"
+        },
+        {
+          "blocks": 21,
+          "part": "prt_g0VYmaNTs00F3UDN30bC",
+          "renderer": "21"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYn0rha005V1KlZppe",
+          "renderer": "22"
+        },
+        {
+          "blocks": 6,
+          "part": "prt_g0VYn0tPU00GJfPCOkag",
+          "renderer": "23"
+        },
+        {
+          "blocks": 8,
+          "part": "prt_g0VYn1Ezt00aQBqYLfgw",
+          "renderer": "24"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYw5RTi00q5ATqCk5d",
+          "renderer": "25"
+        },
+        {
+          "blocks": 2,
+          "part": "prt_g0VYw5TZL00rR6Y5CIqt",
+          "renderer": "26"
+        },
+        {
+          "blocks": 6,
+          "part": "prt_g0VYw5eil00vfzbWhSjq",
+          "renderer": "27"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYwSSwe00tHP9BUXFn",
+          "renderer": "28"
+        },
+        {
+          "blocks": 7,
+          "part": "prt_g0VYwSUO9004e1jdEn8D",
+          "renderer": "29"
+        },
+        {
+          "blocks": 12,
+          "part": "prt_g0VYwT3Nx00fARjbsKVz",
+          "renderer": "30"
+        }
+      ],
+      "client": 576,
+      "height": 26736,
+      "scrollOwner": "1",
+      "sources": [
+        {
+          "link": "https://aclanthology.org/2025.naacl-long.475/",
+          "owner": "2"
+        },
+        {
+          "link": "https://aclanthology.org/2025.acl-long.195/",
+          "owner": "4"
+        },
+        {
+          "link": "https://arxiv.org/abs/2509.11035v1",
+          "owner": "6"
+        },
+        {
+          "link": "https://arxiv.org/html/2509.11035v1",
+          "owner": "8"
+        },
+        {
+          "link": "https://aclanthology.org/2024.acl-long.381/",
+          "owner": "10"
+        },
+        {
+          "link": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/",
+          "owner": "12"
+        },
+        {
+          "link": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/",
+          "owner": "14"
+        },
+        {
+          "link": "https://www.w3.org/WAI/ARIA/apg/patterns/accordion/",
+          "owner": "16"
+        }
+      ],
+      "top": 24721
+    },
+    "fixedRecovered": {
+      "bodies": [
+        {
+          "blocks": 1,
+          "part": "prt_g0VYlz8dd00pWcuVkoZF",
+          "renderer": "11"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYlzNy200G9j4TgB2N",
+          "renderer": "12"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYm1lEs00O2KijUi86",
+          "renderer": "13"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYmMab300GY28UWAJt",
+          "renderer": "14"
+        },
+        {
+          "blocks": 32,
+          "part": "prt_g0VYmMcJU00PFeeyJf7k",
+          "renderer": "15"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYmUNau00ka4jsGLu7",
+          "renderer": "16"
+        },
+        {
+          "blocks": 13,
+          "part": "prt_g0VYmUPS300JPqmNLo2D",
+          "renderer": "17"
+        },
+        {
+          "blocks": 22,
+          "part": "prt_g0VYmUrRH00iG2zOFlhG",
+          "renderer": "18"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYma1AT004jdIyz0bP",
+          "renderer": "19"
+        },
+        {
+          "blocks": 14,
+          "part": "prt_g0VYma2wD003owRu5m9l",
+          "renderer": "20"
+        },
+        {
+          "blocks": 21,
+          "part": "prt_g0VYmaNTs00F3UDN30bC",
+          "renderer": "21"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYn0rha005V1KlZppe",
+          "renderer": "22"
+        },
+        {
+          "blocks": 6,
+          "part": "prt_g0VYn0tPU00GJfPCOkag",
+          "renderer": "23"
+        },
+        {
+          "blocks": 8,
+          "part": "prt_g0VYn1Ezt00aQBqYLfgw",
+          "renderer": "24"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYw5RTi00q5ATqCk5d",
+          "renderer": "25"
+        },
+        {
+          "blocks": 2,
+          "part": "prt_g0VYw5TZL00rR6Y5CIqt",
+          "renderer": "26"
+        },
+        {
+          "blocks": 6,
+          "part": "prt_g0VYw5eil00vfzbWhSjq",
+          "renderer": "27"
+        },
+        {
+          "blocks": 1,
+          "part": "prt_g0VYwSSwe00tHP9BUXFn",
+          "renderer": "28"
+        },
+        {
+          "blocks": 7,
+          "part": "prt_g0VYwSUO9004e1jdEn8D",
+          "renderer": "29"
+        },
+        {
+          "blocks": 12,
+          "part": "prt_g0VYwT3Nx00fARjbsKVz",
+          "renderer": "30"
+        }
+      ],
+      "client": 576,
+      "height": 26736,
+      "scrollOwner": "1",
+      "sources": [
+        {
+          "link": "https://aclanthology.org/2025.naacl-long.475/",
+          "owner": "2"
+        },
+        {
+          "link": "https://aclanthology.org/2025.acl-long.195/",
+          "owner": "4"
+        },
+        {
+          "link": "https://arxiv.org/abs/2509.11035v1",
+          "owner": "6"
+        },
+        {
+          "link": "https://arxiv.org/html/2509.11035v1",
+          "owner": "8"
+        },
+        {
+          "link": "https://aclanthology.org/2024.acl-long.381/",
+          "owner": "10"
+        },
+        {
+          "link": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/",
+          "owner": "12"
+        },
+        {
+          "link": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/",
+          "owner": "14"
+        },
+        {
+          "link": "https://www.w3.org/WAI/ARIA/apg/patterns/accordion/",
+          "owner": "16"
+        }
+      ],
+      "top": 24721
+    }
+  },
+  "scopes": [
+    {
+      "stage": "before",
+      "port": 54061,
+      "originalExec": 75182,
+      "originalExecJoinedExit": 0,
+      "retirement": {
+        "at": "2026-10-24T06:54:00.537Z",
+        "authCopied": false,
+        "providerRequests": 0,
+        "catalogRetired": 1,
+        "publicShutdown": 200,
+        "reserveMs": 1076329,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "sourceSchema": 5,
+      "targetSchema": 6,
+      "tables": 90,
+      "originalRows": 203799,
+      "currentRows": 203799,
+      "originalRowDifferences": [],
+      "source": "Exact all original rows/fields/times and source bytes/mtime/canonical",
+      "schemaObjects": 519,
+      "providerActivity": {
+        "original": 504,
+        "current": 504
+      },
+      "pairedOriginalAttachmentBytes": 643,
+      "streams": [
+        {
+          "id": 17,
+          "path": "/work-ledger/events",
+          "streamID": "54195752-4e8e-4f54-8572-e96e220119ac",
+          "openedAt": "2026-10-24T06:46:44.177Z",
+          "closedAt": "2026-10-24T06:48:27.473Z",
+          "admission": 15
+        },
+        {
+          "id": 66,
+          "path": "/task/tsk_g00VYlyopB00h7w27eIw/events",
+          "streamID": "0f51ddb7-8e8b-4a7f-979d-30ecb140bc25",
+          "openedAt": "2026-10-24T06:47:15.301Z",
+          "closedAt": "2026-10-24T06:48:27.476Z",
+          "admission": 56
+        }
+      ]
+    },
+    {
+      "stage": "after",
+      "port": 54061,
+      "originalExec": 68648,
+      "originalExecJoinedExit": 0,
+      "retirement": {
+        "at": "2026-10-24T06:54:00.613Z",
+        "authCopied": false,
+        "providerRequests": 0,
+        "catalogRetired": 1,
+        "publicShutdown": 200,
+        "reserveMs": 991897,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "sourceSchema": 6,
+      "targetSchema": 6,
+      "tables": 90,
+      "originalRows": 203799,
+      "currentRows": 203799,
+      "originalRowDifferences": [],
+      "source": "Exact all original rows/fields/times and source bytes/mtime/canonical",
+      "schemaObjects": 519,
+      "providerActivity": {
+        "original": 504,
+        "current": 504
+      },
+      "pairedOriginalAttachmentBytes": 643,
+      "streams": [
+        {
+          "id": 10,
+          "path": "/work-ledger/events",
+          "streamID": "c9209939-53bc-4084-85bd-eaa64bd873f4",
+          "openedAt": "2026-10-24T06:49:47.533Z",
+          "closedAt": "2026-10-24T06:53:09.390Z",
+          "admission": 5
+        },
+        {
+          "id": 21,
+          "path": "/task/tsk_g00VYlyopB00h7w27eIw/events",
+          "streamID": "b81c69c0-a257-4e00-9ce1-d7bf35e871e1",
+          "openedAt": "2026-10-24T06:49:50.070Z",
+          "closedAt": "2026-10-24T06:49:55.617Z",
+          "admission": 16
+        },
+        {
+          "id": 50,
+          "path": "/task/tsk_g00VYlyopB00h7w27eIw/events",
+          "streamID": "4219c813-3dfd-47dc-b261-468c67681518",
+          "openedAt": "2026-10-24T06:49:55.811Z",
+          "closedAt": "2026-10-24T06:53:09.392Z",
+          "admission": 40
+        }
+      ]
+    },
+    {
+      "stage": "fixed-before",
+      "port": 54062,
+      "originalExec": 86340,
+      "originalExecJoinedExit": 0,
+      "retirement": {
+        "at": "2026-10-24T07:04:39.551Z",
+        "authCopied": false,
+        "providerRequests": 0,
+        "catalogRetired": 1,
+        "publicShutdown": 200,
+        "reserveMs": 1097069,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "sourceSchema": 6,
+      "targetSchema": 6,
+      "tables": 90,
+      "originalRows": 203799,
+      "currentRows": 203799,
+      "originalRowDifferences": [],
+      "source": "Exact all original rows/fields/times and source bytes/mtime/canonical",
+      "schemaObjects": 519,
+      "providerActivity": {
+        "original": 504,
+        "current": 504
+      },
+      "pairedOriginalAttachmentBytes": 643,
+      "streams": [
+        {
+          "id": 17,
+          "path": "/work-ledger/events",
+          "streamID": "769e5692-91d1-4d57-9750-692f025ea96b",
+          "openedAt": "2026-10-24T06:55:38.462Z",
+          "closedAt": "2026-10-24T06:57:08.869Z",
+          "admission": 15
+        },
+        {
+          "id": 66,
+          "path": "/task/tsk_g00VYlyopB00h7w27eIw/events",
+          "streamID": "b5263e5c-fd02-4324-8c49-130629d01e48",
+          "openedAt": "2026-10-24T06:56:03.748Z",
+          "closedAt": "2026-10-24T06:57:08.871Z",
+          "admission": 55
+        }
+      ]
+    },
+    {
+      "stage": "fixed-after",
+      "port": 54062,
+      "originalExec": 98465,
+      "originalExecJoinedExit": 0,
+      "retirement": {
+        "at": "2026-10-24T07:04:39.640Z",
+        "authCopied": false,
+        "providerRequests": 0,
+        "catalogRetired": 1,
+        "publicShutdown": 200,
+        "reserveMs": 777267,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "sourceSchema": 6,
+      "targetSchema": 6,
+      "tables": 90,
+      "originalRows": 203799,
+      "currentRows": 203799,
+      "originalRowDifferences": [],
+      "source": "Exact all original rows/fields/times and source bytes/mtime/canonical",
+      "schemaObjects": 519,
+      "providerActivity": {
+        "original": 504,
+        "current": 504
+      },
+      "pairedOriginalAttachmentBytes": 643,
+      "streams": [
+        {
+          "id": 4,
+          "path": "/work-ledger/events",
+          "streamID": "c132a71f-04fd-468d-a9d2-a1f84deb446b",
+          "openedAt": "2026-10-24T06:57:39.001Z",
+          "closedAt": "2026-10-24T07:03:46.578Z",
+          "admission": 2
+        },
+        {
+          "id": 5,
+          "path": "/task/tsk_g00VYlyopB00h7w27eIw/events",
+          "streamID": "21b3f8d9-01f4-4fd7-9817-77f0541ae265",
+          "openedAt": "2026-10-24T06:57:39.025Z",
+          "closedAt": "2026-10-24T06:57:47.307Z",
+          "admission": 3
+        },
+        {
+          "id": 49,
+          "path": "/task/tsk_g00VYlyopB00h7w27eIw/events",
+          "streamID": "9cf2c2c6-92de-4e32-aaa9-3f0100defb38",
+          "openedAt": "2026-10-24T06:57:47.699Z",
+          "closedAt": "2026-10-24T07:01:49.577Z",
+          "admission": 38
+        },
+        {
+          "id": 159,
+          "path": "/session/ses_-zUR3NNSmzzAfat1t3GY/events",
+          "streamID": "166d1fd9-e1d2-4744-a8e8-2ea31e3e02ca",
+          "openedAt": "2026-10-24T07:02:42.673Z",
+          "closedAt": "2026-10-24T07:03:46.581Z",
+          "admission": 156
+        }
+      ]
+    }
+  ],
+  "user18571": "Untouched",
+  "goal": "active; one development agent"
+}

@@ -2279,15 +2279,17 @@ function OverlayRoot() {
     ),
   )
 
-  createEffect(
-    on(
-      () => settingsStore.workspaceEpoch,
-      () => {
-        setSelectedSubagentSessionID("")
-        pendingPrimaryBrowserPreviewNavigation = undefined
-      },
-    ),
-  )
+  // Request invalidation also advances during same-source recovery. Retire the
+  // reader only when its actual connection, conversation or directory changes.
+  const subagentSelectionScope = createMemo(() => {
+    const source = boardStore.selectedSource
+    return JSON.stringify([captureApiAuthority().revision, source?.kind, source?.id, activeDirectory()])
+  })
+  createEffect(on(subagentSelectionScope, () => setSelectedSubagentSessionID("")))
+
+  createEffect(on(() => settingsStore.workspaceEpoch, () => {
+    pendingPrimaryBrowserPreviewNavigation = undefined
+  }))
 
   createEffect(() => {
     runMainAsync("locale.apply-settings", () => setLocale(settingsStore.locale))

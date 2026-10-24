@@ -1,0 +1,49 @@
+# 成员侧栏恢复时的正文身份
+
+## Recall
+
+576继续用户授权的产品体验、Sources和侧栏Rendering调查，单agent，不委派。575的0ff10bde2已正常推送；/goal沿用命令与加号表单，原首页布局不增加目标卡片。用户已在OpenCorvus认证OpenAI；本批先做零Provider请求的真实历史恢复，凭据不复制。原18571页面、进程和用户数据库不参与。
+
+开始main/HEAD 0ff10bde2。171无关删除、.bun/与packages/opencorvus/bun/保留。另有未提交Permission memory存量恢复工作：memory organizer/project-memory、migration registry/schema runner、新entry/migration0006/probe及两份README既有行，均非本批，不修改或暂存。当前运行源码声明迁移6，而575完整闭合源为5；不得为取得绿色结果关闭迁移或宣称目标保持5。
+
+已读575/574/573与560恢复记录、当前07-panel-reactivity、selected-task-recovery、sse、conversation tail merge、conversation-agents、SubagentConversationPanel、subagent-conversation、CardParts、TextPart、原生stream-socket与native生命周期帮助。全仓搜索目标key、已接收快照、重连入口、公共流关闭和挂载调用；未运行UI自动化。继续既有benchmark-debug-template和computer-use工作流；不建立新的UI测试。
+
+## 实施前分析与影响面
+
+可观察现象仍是用户报告成员侧栏反复Rendering，574真实追加两来源未复现，17旧正文owner保留。573仅修正真实上下文Part顺序，不能当作assistant流式闪烁根因。TextPart仅pending且HTML为空时显示Rendering；因此需要区分正文owner重建、同owner空文本与第一次渲染。缓存、异步worker本身尚无故障证据。
+
+当前普通Task断线重开游标流、Session断线接收规范连接快照；sse明确禁止同Task全量hydrate。live epoch过期先mergeLatestConversationTail再重开；tail merge在batch内更新writer、board、agentView并发布snapshot。成员目标身份由source/session/directory/API authority组成，已接受HTTP值与呈现共享resource storage；相同target刷新保持旧值。Scroll keyed target，内部card要求活动记录与会话一致。记录若暂时消失或target变化会退休正文，是待核实路径。CardParts多级Index在插入/分组变化时也可能重新绑定，不能未经真实证据全部换Key。
+
+涉及定义/调用与公共契约包括Task、Mission（Session）、Chat、Side的共享transport、authority与projection lifecycle。服务替换会改变真实live epoch，区别于单纯网络短断，不把本次结果泛化为所有流式场景。当前未发现调度、队列、唤醒或终态异常；若发现立即按共享机制审计所有生产入口、轮次、终态、恢复与多项目隔离。
+
+本轮先不修改产品实现、schema、事件或界面文案。以真实服务生命周期确认身份；只有取得具体异常及控制流证据后才追加修复方案。无新接口、迁移、配置与文档公共契约；不更新版本或发布。原数据保留使用完整表/字段/时间/schema对象与原转录，非源码摘要验收。
+
+## 验收方案
+
+从575-verified已闭合完整90表数据库及原附件建立独立before，隔离HOME/config/data/tmp和原生bundle，正式Node构建当前overlay并附仅观察owner属性的私有变换。0模型预算、不复制auth，完整models按既有隔离运行要求复制并收尾退休。保留源原字节、时间、canonical、全部原行快照；目标真实5→6变化及任何原行变化单独记录，不修改并行迁移实现。
+
+每个新原生occurrence固定20分钟、启动180秒无活动边界，至少五分钟预留公开shutdown；原exec/native/launcher、物理完成、输出、请求与进程链全部结算。先由内置浏览器打开真实/ui，选择原Task的B成员、展开Sources并人工查看截图/只读owner元数据。正常关闭before，完整复制闭合库再启动after同端口，保留页面不刷新，观察离线→恢复、旧正文与来源身份和阅读位置。不得注入事件、伪造响应或操作浏览器内部状态。
+
+实际页面与截图人工复核是唯一UI验收；静态分析、类型检查、DOM身份观察均只作局部证据。没有复现就明确未解决原Rendering根因；仍推进下一条可验证触发路径。最后范围提交、本分支fetch/merge/audit/正常push，保留所有无关改动；Goal继续active。
+
+## 真实失败及修复前横向审计
+
+before正常shutdown200、原exec75182退出0后，真实页246处于离线，20正文owner11–30、8来源owner2–16、scroll owner1/top24721保持。after在同端口正常启动，页面未刷新且未导航；恢复后成员详情消失、自动退回All agents。04图明确显示该失败，owners-after中scroll不存在，不能当作“恢复成功后正文稳定”。这证明侧栏阅读状态被退休，尚不足以解释最初所有Rendering瞬间。
+
+控制流证据：main只有明确导航resetCenterWorkbenchToPrimaryPanel、打开成员、workspaceEpoch effect三处写selectedSubagentSessionID；本次未执行用户导航。Task第一次手工选择通过beginWorkspaceSelection只推进board.selectEpoch，workspaceEpoch仍可为0。init.recoverWorkspace在普通恢复时调用restoreInitialWorkspace；后者在当前Task已选中且board存在时跳过重新选择，仍推进workspaceEpoch。main把这个全局请求失效代数当成了成员选择身份，清空所选会话。成员Panel随之target=null并退休Scroll，不是worker排版本身清空HTML。旧代码虽然保留同target HTTP值，却无法抵御外层错误清空所选Session。
+
+横向范围：普通/跨项目Task选择、空工作区、Task重试与rewind、同会话多occurrence、Chat与Mission(Session)、Side、API authority更换、全局及选中流恢复均核查。Task可走上述epoch0恢复路径；Session恢复在restoreInitialWorkspace提前返回，其自己的连接快照和Side独立sourceKey不推进该成员选择。所有入口仍共享main的UI归属，不能把请求epoch作为身份。Task尾合并/Session规范快照有batch和同target resource保留；多occurrence仍选原Session的最新记录。监控单tick串行、当前authority/selection守卫、终态history及原生shutdown已见正常，未发现执行队列/唤醒/终态收敛故障，不改后端调度。跨项目、不同source和API authority离开必须真正清空成员，以免引用旧会话。
+
+决定仅把成员清空effect改为当前API authority、source kind/id及实际目录组成的稳定memo身份；仍沿用一个selectedSubagentSessionID，不创建状态缓存、兼容路径或恢复后自动再选择。workspaceEpoch原effect继续负责它原有的待浏览器导航退休。显式导航原reset不变。此为纯UI生命周期修复，不新增UI自动化测试、接口、schema或文案。当前构建通过只代表编译资格；最终使用全新原生fixed-before/fixed-after和新页面手工重做相同切换并复核截图、owner、阅读位置及跨成员选择。最初Rendering根因仍保留未完全确定边界。
+
+## 最终实页与数据结算
+
+最终Node构建main-Cj1kZFfk.js、overlay类型检查退出0。新页247从空首页手动选择同一Task/B成员；05、06、07三图分别对应原服务、真实离线、同端口新原生occurrence恢复。全过程没有刷新或重新选择B。恢复后scroll owner1、top24721、20正文owner11–30及各Part/块数、8来源owner2–16保持；正文和Disclosure/Accordion来源仍在原阅读视口。08实际切到A、09返回B仍能阅读同一来源区域；不把跨成员导航当作同owner保持，09视口与05有小幅垂直差异，未宣称该导航精确像素保持。10新对话、11另一项目的既有Goal正文均显示正确、旧成员选择为空。
+
+04保留旧实现自动退回All agents的失败，07才是最终修复恢复结果。本批未逐帧录像、未发起新的Provider流、未重新验收中文界面或每种Session/Side恢复；代码横向审计不能替代这些实页覆盖。原始高频Rendering仍未完整复现。当前确定并已修复的是同一来源恢复时成员选择被错误退休。
+
+四scope原exec75182/68648/86340/98465全部正常退出0；公开shutdown200，预留1076329/991897/1097069/777267ms，native/launcher退出0、物理完成、输出排空、请求清理与精确进程链dead_or_reused。四份完整models退休，各自Provider预算0、实际请求0、auth未复制。首份目标按并行工作区已声明迁移5→6，其后6→6；90表203799原行字段/时间与schema对象全部保持，原Provider活动504不变；源库字节/mtime/canonical和原附件逐份核对保持。迁移6未混入本批代码交付。
+
+两次执行器问题如实保留：初始Node构建未结束就执行publish得到ENOENT，原构建正常退出0后才成功发布；最终页一次Playwright语义checkbox定位未匹配实际控件，刷新辅助树后通过真实AX控件继续。二者均未被当作视觉通过、没有重启scope或扩大模型预算。复制旧数据准备器中的Provider资格标签来自575，记录中的真实Provider结果以各scope审计与退休事实为准，已单独纠正私有资格摘要，不能将旧标签算成本批预检。
+
+11张真实图全部人工查看，artifact证据只汇总实际owner观察、原生生命周期和完整数据结算；未运行UI自动化或源码摘要检查。提交前文档检查及正常Git hooks按真实结果记录；Goal继续active，18571未操作。
