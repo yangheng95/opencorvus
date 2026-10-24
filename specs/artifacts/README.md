@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [主对话与侧聊的共享阅读恢复](2026-10-24-main-side-reading/README.md)：581认证与实际读者截图。
+
 - [来源在视口边缘的尺寸恢复](2026-10-24-source-viewport-edge/README.md)：580真实页面来源边缘截图。
 
 - [字体缩放后的正文阅读位置](2026-10-24-font-scale-reading/README.md)：579原生页面的实际阅读锚点和截图。

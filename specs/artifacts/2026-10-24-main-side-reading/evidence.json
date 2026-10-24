@@ -1,0 +1,523 @@
+{
+  "batch": 581,
+  "at": "2026-10-24T09:56:34.771Z",
+  "implementation": "Existing product implementation a0f66c594; this batch adds evidence only",
+  "publication": {
+    "at": "2026-10-24T09:46:12.081Z",
+    "entry": "main-Bx3pGZMu.js",
+    "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/main-side-reading-581-bundle/bin/ui",
+    "qualification": "Completed current production Node Vite build with private passive capture/resolve metadata; native CLI /ui"
+  },
+  "manual": {
+    "mainBefore": {
+      "capture": {
+        "at": 31641.800000190735,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYajX9A00r9VlN3kU5",
+          "textIndex": 0,
+          "blockIndex": 45,
+          "textOffset": 0,
+          "offset": -13.703125
+        },
+        "character": {
+          "textOffset": 0,
+          "offset": -13.703125
+        },
+        "width": 927,
+        "height": 635,
+        "top": 15117,
+        "scale": "1.000"
+      },
+      "h": 635,
+      "top": 15117,
+      "w": 927
+    },
+    "main160": {
+      "capture": {
+        "at": 42658,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYajX9A00r9VlN3kU5",
+          "textIndex": 0,
+          "blockIndex": 45,
+          "textOffset": 0,
+          "offset": -14.1875
+        },
+        "character": {
+          "textOffset": 0,
+          "offset": -14.1875
+        },
+        "width": 784,
+        "height": 585,
+        "top": 19333,
+        "scale": "1.600"
+      },
+      "h": 585,
+      "resolve": {
+        "at": 42656.5,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYajX9A00r9VlN3kU5",
+          "textIndex": 0,
+          "blockIndex": 45,
+          "textOffset": 0,
+          "offset": -13.703125
+        },
+        "top": 19332.515625,
+        "width": 784,
+        "height": 585,
+        "scale": "1.600"
+      },
+      "top": 19333,
+      "w": 784
+    },
+    "sideBefore": {
+      "capture": {
+        "at": 96784.30000019073,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYwd8zC00PK2tBYUc0",
+          "textIndex": 0,
+          "blockIndex": 0,
+          "textOffset": 211,
+          "offset": -8.90625
+        },
+        "character": {
+          "textOffset": 211,
+          "offset": -8.90625
+        },
+        "width": 380,
+        "height": 387,
+        "top": 230,
+        "scale": "1.000"
+      },
+      "h": 387,
+      "top": 230,
+      "w": 380
+    },
+    "side160": {
+      "capture": {
+        "at": 98913.5,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYwd8zC00PK2tBYUc0",
+          "textIndex": 0,
+          "blockIndex": 0,
+          "textOffset": 211,
+          "offset": -9.109375
+        },
+        "character": {
+          "textOffset": 196,
+          "offset": -9.109375
+        },
+        "width": 448,
+        "height": 193,
+        "top": 438,
+        "scale": "1.600"
+      },
+      "h": 193,
+      "resolve": {
+        "at": 98912.59999990463,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYwd8zC00PK2tBYUc0",
+          "textIndex": 0,
+          "blockIndex": 0,
+          "textOffset": 211,
+          "offset": -8.90625
+        },
+        "top": 437.796875,
+        "width": 448,
+        "height": 193,
+        "scale": "1.600"
+      },
+      "top": 438,
+      "w": 448
+    },
+    "side100": {
+      "capture": {
+        "at": 111377.5,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYwd8zC00PK2tBYUc0",
+          "textIndex": 0,
+          "blockIndex": 0,
+          "textOffset": 211,
+          "offset": -8.90625
+        },
+        "character": {
+          "textOffset": 211,
+          "offset": -8.90625
+        },
+        "width": 380,
+        "height": 387,
+        "top": 230,
+        "scale": "1.000"
+      },
+      "h": 387,
+      "resolve": {
+        "at": 111377.09999990463,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYwd8zC00PK2tBYUc0",
+          "textIndex": 0,
+          "blockIndex": 0,
+          "textOffset": 211,
+          "offset": -8.734375
+        },
+        "top": 229.828125,
+        "width": 380,
+        "height": 387,
+        "scale": "1.000"
+      },
+      "top": 230,
+      "w": 380
+    },
+    "sideWidth": {
+      "capture": {
+        "at": 111893.59999990463,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYwd8zC00PK2tBYUc0",
+          "textIndex": 0,
+          "blockIndex": 0,
+          "textOffset": 211,
+          "offset": -8.421875
+        },
+        "character": {
+          "textOffset": 203,
+          "offset": -8.421875
+        },
+        "width": 441,
+        "height": 387,
+        "top": 206,
+        "scale": "1.000"
+      },
+      "h": 387,
+      "resolve": {
+        "at": 111893,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYwd8zC00PK2tBYUc0",
+          "textIndex": 0,
+          "blockIndex": 0,
+          "textOffset": 211,
+          "offset": -8.90625
+        },
+        "top": 206.484375,
+        "width": 441,
+        "height": 387,
+        "scale": "1.000"
+      },
+      "top": 206,
+      "w": 441
+    },
+    "sideReopened": {
+      "capture": {
+        "at": 151338.69999980927,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYwd8zC00PK2tBYUc0",
+          "textIndex": 0,
+          "blockIndex": 0,
+          "textOffset": 211,
+          "offset": -8.421875
+        },
+        "character": {
+          "textOffset": 203,
+          "offset": -8.421875
+        },
+        "width": 441,
+        "height": 387,
+        "top": 206,
+        "scale": "1.000"
+      },
+      "h": 387,
+      "resolve": {
+        "at": 151338.19999980927,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYwd8zC00PK2tBYUc0",
+          "textIndex": 0,
+          "blockIndex": 0,
+          "textOffset": 211,
+          "offset": -8.421875
+        },
+        "top": 206,
+        "width": 441,
+        "height": 387,
+        "scale": "1.000"
+      },
+      "top": 206,
+      "w": 441
+    }
+  },
+  "live": {
+    "at": "2026-10-24T09:55:01.621Z",
+    "side": {
+      "id": "ses_-zUR3Mr0pzznDJ7FjLY1",
+      "parent": "ses_-zUR3NNSmzzAfat1t3GY",
+      "inherited": 4
+    },
+    "conversations": [
+      {
+        "id": "ses_-zUS0X33CzzWEKMgCk98",
+        "messages": 12,
+        "texts": [
+          {
+            "partID": "prt_g0VXzSxIe00ogaixmfuP",
+            "messageID": "msg_9f8966c9-0774-4ab4-a192-30207863bd3d",
+            "role": "user",
+            "characters": 127
+          },
+          {
+            "partID": "prt_g0VXzSyZj00RI0xPGf2M",
+            "messageID": "msg_g0VXzSxN100FhCIC5P2R",
+            "role": "assistant",
+            "characters": 61
+          },
+          {
+            "partID": "prt_g0VXzT67t00vU2TW7u4p",
+            "messageID": "msg_g0VXzT4is00AK1DH2Jyu",
+            "role": "assistant",
+            "characters": 159
+          },
+          {
+            "partID": "prt_g0VY3HUb300w4QKHQ21I",
+            "messageID": "msg_d953f4ff-f2d4-4d50-9933-7e83e47def30",
+            "role": "user",
+            "characters": 200
+          },
+          {
+            "partID": "prt_g0VY3HXjw00dr897Ixjo",
+            "messageID": "msg_g0VY3HWFk0018rVRP3hF",
+            "role": "assistant",
+            "characters": 4024
+          },
+          {
+            "partID": "prt_g0VYah8GC00VDbDh5HO9",
+            "messageID": "msg_g0VYah8Fn00qmEh1R3mc",
+            "role": "user",
+            "characters": 292
+          },
+          {
+            "partID": "prt_g0VYah9BZ00L29pnNw9C",
+            "messageID": "msg_g0VYah8HH0030Ceh5lXH",
+            "role": "assistant",
+            "characters": 6695
+          },
+          {
+            "partID": "prt_g0VYaiFkb00wF5E9phIA",
+            "messageID": "msg_g0VYaiFkE00yhItnIZTN",
+            "role": "user",
+            "characters": 304
+          },
+          {
+            "partID": "prt_g0VYaiHHN00enqemXX2P",
+            "messageID": "msg_g0VYaiFlg00Gu7OJMI4l",
+            "role": "assistant",
+            "characters": 7013
+          },
+          {
+            "partID": "prt_g0VYajX8500TbKpgV6IZ",
+            "messageID": "msg_g0VYajX7h00hm1lCk22a",
+            "role": "user",
+            "characters": 308
+          },
+          {
+            "partID": "prt_g0VYajYdB00dd6w7h51Z",
+            "messageID": "msg_g0VYajX9A00r9VlN3kU5",
+            "role": "assistant",
+            "characters": 7104
+          }
+        ]
+      },
+      {
+        "id": "ses_-zUR3Mr0pzznDJ7FjLY1",
+        "messages": 4,
+        "texts": [
+          {
+            "partID": "prt_g0VYwd8zC00ulHbylZ0K",
+            "messageID": "msg_g0VYwd8zC00PK2tBYUc0",
+            "role": "user",
+            "characters": 723
+          },
+          {
+            "partID": "prt_g0VYwd8zC02q4PSg8Rxd",
+            "messageID": "msg_g0VYwd8zC01qHttZLtkE",
+            "role": "assistant",
+            "characters": 12
+          },
+          {
+            "partID": "prt_g0VYwd8zC09R21fhFPe3",
+            "messageID": "msg_g0VYwd8zC031ei9xKPEN",
+            "role": "assistant",
+            "characters": 10
+          }
+        ]
+      }
+    ],
+    "preflight": {
+      "sessionID": "ses_hExfuABnwhH2BsGuDlVM",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true,
+      "completedAssistantID": "msg_g0VYxVkSL00jPnwFJ4Ed",
+      "text": "OK"
+    }
+  },
+  "lifecycle": {
+    "originalExec": 34330,
+    "originalExecJoinedExit": 0,
+    "pagesClosed": [
+      "256",
+      "257"
+    ],
+    "at": "2026-10-24T09:55:35.505Z",
+    "authRetired": 1,
+    "catalogRetired": 1,
+    "authCopied": true,
+    "modelRequests": 2,
+    "model": "gpt-6.1-sol",
+    "streaming200OriginalReaderEOF": 2,
+    "sourceCatalog": {
+      "bytes": 9155406,
+      "modifiedAtMs": 1791128890137.9968,
+      "content": "Exact original"
+    },
+    "publicShutdown": 200,
+    "reserveMs": 658461,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "exactProcessChain": "dead_or_reused"
+  },
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792835192440,
+        "boundAt": 1792835192442,
+        "chunkCount": 23,
+        "byteCount": 42534,
+        "firstByteReadAt": 1792835192444,
+        "lastByteReadAt": 1792835200010,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hExfuABnwhH2BsGuDlVM",
+          "streamRequest": {
+            "requestID": "msg_hZQxdSElh8hN97kQ4ixd",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYxVkS300EqS90xN6t",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792835200065
+        }
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792835193401,
+        "boundAt": 1792835193402,
+        "chunkCount": 37,
+        "byteCount": 518861,
+        "firstByteReadAt": 1792835193409,
+        "lastByteReadAt": 1792835194820,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hExfuABnwhH2BsGuDlVM",
+          "streamRequest": {
+            "requestID": "msg_hZQxdSElh8hN97kQ4ixd",
+            "agentID": "chat",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYxVktL00iLO2zej8W",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYxVkSL00jPnwFJ4Ed"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792835194929
+        }
+      }
+    }
+  ],
+  "preservation": {
+    "at": "2026-10-24T09:55:38.519Z",
+    "sourceSchema": 6,
+    "targetSchema": 7,
+    "originalTables": 90,
+    "originalRows": 207330,
+    "originalFieldDifferences": [
+      {
+        "table": "runtime_execution_capacity_lease",
+        "id": "[1]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "id": "[2]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      }
+    ],
+    "integrity": "ok",
+    "sourceBytes": 95682560,
+    "sourceModifiedAtMs": 1792828797672.7832,
+    "canonicalConfiguration": "Exact original",
+    "qualification": "Full original field/row verification after original native exit and physical/output/request closure"
+  },
+  "checks": {
+    "migration": "In-memory declared target7 passed before native launch",
+    "docs": "docs:check passed:349 operations/26 groups"
+  },
+  "qualification": {
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "screenshots": 7,
+    "method": "Real native /ui manual browser interactions and personally viewed screenshots. Capture/resolve attributes are passive supporting observations; no UI automated tests.",
+    "main": "Actual 7104-character assistant message; block45 character0 -13.703125→-14.1875 after100→160",
+    "side": "Actual inherited user-role Goal controller input723 characters; character211 -8.90625→-9.109375 after100→160,100 restores top230; resize to441px retains211/-8.421875; close/reopen exact top206 and anchor",
+    "limitations": [
+      "Original high-frequency Rendering remains unproven",
+      "Side long assistant-generated prose and Side Sources were not independently exercised",
+      "Tall Source excerpts, file/document cards and physical778px window remain unqualified"
+    ]
+  }
+}
