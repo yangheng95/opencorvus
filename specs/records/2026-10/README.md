@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [网页抓取来源摘录](2026-10-24-webfetch-source-excerpt.md)：586生产者、正向合同与实际阅读。
+
 - [成员正文与来源的时序归属](2026-10-24-member-source-order.md)：585持久化时序及实际页面核对。
 
 - [Main虚拟窗口与尺寸测量](2026-10-24-main-virtual-range.md)：584实际Virtualizer测量链与正文实例。

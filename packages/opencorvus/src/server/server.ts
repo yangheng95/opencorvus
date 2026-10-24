@@ -86,6 +86,17 @@ export namespace Server {
     overlayUiSource?: FrozenOverlayUiSource
   }
 
+  export class ListenerStartupError extends Error {
+    override readonly name = "ListenerStartupError"
+
+    constructor(
+      cause: unknown,
+      public readonly settled: Promise<void>,
+    ) {
+      super(cause instanceof Error ? cause.message : String(cause), { cause })
+    }
+  }
+
   export class OverlayUiSourceConflictError extends Error {
     override readonly name = "OverlayUiSourceConflictError"
 
@@ -993,7 +1004,11 @@ export namespace Server {
     initializeContinuousGoals()
   }
 
-  function bind(opts: ListenOptions, initializeGlobalServices: boolean) {
+  function bind(
+    opts: ListenOptions,
+    initializeGlobalServices: boolean,
+    disposeInstances: () => Promise<void> = () => Instance.disposeAll(),
+  ) {
     /**
      * When true, port=0 maps directly to OS-assigned random port without
      * first attempting DEFAULT_SERVER_PORT. Required by independently
@@ -1042,7 +1057,7 @@ export namespace Server {
       }
       if (!server) {
         const detail = failure instanceof Error ? failure.message : failure ? String(failure) : "unknown"
-        throw new Error(`Failed to start server on port ${opts.port}: ${detail}`)
+        throw new Error(`Failed to start server on port ${opts.port}: ${detail}`, { cause: failure })
       }
       boundServer = server
 
@@ -1164,14 +1179,15 @@ export namespace Server {
           listenerCleanupComplete = true
         }
         terminated ??= await settleCurrentProcessExecution("Server.listen initialization failure", {
-          disposeInstances: () => Instance.disposeAll(),
+          disposeInstances,
         })
         await releaseRuntimeHandoff(terminated.releaseHandoff)
       }
-      void cleanup().catch((cleanupError) => {
+      const settled = cleanup()
+      void settled.catch((cleanupError) => {
         log.error("server startup cleanup failed", { error: cleanupError })
       })
-      throw error
+      throw new ListenerStartupError(error, settled)
     }
   }
 
@@ -1179,7 +1195,7 @@ export namespace Server {
     return bind(opts, true)
   }
 
-  export function listenPrepared(opts: ListenOptions) {
-    return bind(opts, false)
+  export function listenPrepared(opts: ListenOptions, disposeInstances?: () => Promise<void>) {
+    return bind(opts, false, disposeInstances)
   }
 }

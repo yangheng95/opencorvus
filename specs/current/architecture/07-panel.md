@@ -1345,6 +1345,18 @@ it does not add a separate excerpt action to every file match.
 Web source snippets belong to a separate native disclosure within each source
 entry. Its normal page reading region retains the complete text and
 supports native keyboard and pointer scrolling.
+Successful `webfetch` text reads populate that existing snippet from the decoded
+resource, bounded to a complete-character 4 KiB UTF-8 prefix. HTML/XHTML uses
+the existing readable-text parser across all requested output formats, with
+semantic navigation, page banners/footers and complementary regions skipped
+for the excerpt. HTML excerpt runs of three or more line breaks become one
+paragraph boundary; full Tool text retains its existing complete-document rules.
+Other text media retain the decoded literal text. Embedded data URLs follow
+the existing attachment externalization before the preview is bounded. The
+excerpt is fetched text, rather than a publisher-authored summary. The full
+Tool output keeps its existing format and budget, and the existing Source
+writer persists the excerpt with its exact URL and Tool binding. Earlier
+sources retain their originally published fields.
 Its text uses the body typography role, while the excerpt action and source
 metadata keep their caption role. The reading region is capped at forty percent
 of the viewport height rather than a multiple of button height, preserving an

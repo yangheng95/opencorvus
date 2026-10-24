@@ -1,0 +1,602 @@
+{
+  "at": "2026-10-24T12:43:14.234Z",
+  "iteration": 586,
+  "agentCount": 1,
+  "production": {
+    "webfetch": "One production producer supplies existing optional Source snippet, at most 4 KiB of complete UTF-8 characters",
+    "html": "Existing html-to-text parser, semantic chrome skipped for excerpt; paragraph blank lines bounded",
+    "fullTool": "Existing complete-document output rules retained",
+    "schemaChanges": 0,
+    "backfill": "Existing Source rows retained",
+    "listener": "ListenerStartupError retains original cause and one cleanup Promise; asynchronous recovery joins it"
+  },
+  "sourceResults": [
+    {
+      "scope": "initial",
+      "messages": 15,
+      "parts": 37,
+      "source": {
+        "id": "prt_g0VYy1xpD00aWfm2MNzu",
+        "messageID": "msg_g0VYy1vst00yv4cHFp16",
+        "sourceId": "e84bb5bfb116fa834ec62ae0d6af530f0c6586d8d2671c7834b97c6d857997ec",
+        "toolPartID": "prt_g0VYy1xVr00xM1QOrHqJ",
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+        "title": "Tabs Pattern | APG | WAI | W3C",
+        "snippetCharacters": 4096,
+        "snippetBytes": 4096
+      },
+      "completedWebfetchInput": {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+        "format": "text"
+      },
+      "actualArticleParagraph": "Matches original completed Tool result",
+      "persistedSource": "Exact API snippet and original ownership",
+      "requests": 3,
+      "streaming200OriginalReaderEOF": 3
+    },
+    {
+      "scope": "-retry",
+      "messages": 15,
+      "parts": 37,
+      "source": {
+        "id": "prt_g0VYy9w9A0094gk7QL6D",
+        "messageID": "msg_g0VYy9uOJ00wy4b50sUB",
+        "sourceId": "e84bb5bfb116fa834ec62ae0d6af530f0c6586d8d2671c7834b97c6d857997ec",
+        "toolPartID": "prt_g0VYy9vpV00Fw2p2FvvA",
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+        "title": "Tabs Pattern | APG | WAI | W3C",
+        "snippetCharacters": 4096,
+        "snippetBytes": 4096
+      },
+      "completedWebfetchInput": {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+        "format": "text"
+      },
+      "actualArticleParagraph": "Matches original completed Tool result",
+      "persistedSource": "Exact API snippet and original ownership",
+      "requests": 3,
+      "streaming200OriginalReaderEOF": 3
+    },
+    {
+      "scope": "-final",
+      "messages": 15,
+      "parts": 37,
+      "source": {
+        "id": "prt_g0VYyBQBY00iYpLOeDJ2",
+        "messageID": "msg_g0VYyBOWG00iPlKAfldb",
+        "sourceId": "e84bb5bfb116fa834ec62ae0d6af530f0c6586d8d2671c7834b97c6d857997ec",
+        "toolPartID": "prt_g0VYyBPsn005f0V1TTwT",
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+        "title": "Tabs Pattern | APG | WAI | W3C",
+        "snippetCharacters": 4095,
+        "snippetBytes": 4095
+      },
+      "completedWebfetchInput": {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+        "format": "text"
+      },
+      "actualArticleParagraph": "Matches original completed Tool result",
+      "persistedSource": "Exact API snippet and original ownership",
+      "requests": 3,
+      "streaming200OriginalReaderEOF": 3
+    }
+  ],
+  "manualUI": {
+    "browser": "Codex in-app browser 2",
+    "tabs": [
+      263,
+      264,
+      265
+    ],
+    "allClosed": true,
+    "automationTests": 0,
+    "finalObservations": [
+      {
+        "label": "final-open",
+        "at": "2026-10-24T12:33:21.494Z",
+        "source": {
+          "bottom": 616.125,
+          "clientHeight": 286,
+          "scrollHeight": 1398,
+          "scrollTop": 0,
+          "textLength": 4095,
+          "top": 328.125,
+          "width": 758
+        },
+        "host": {
+          "follow": null,
+          "height": 635,
+          "scrollTop": 11912
+        }
+      },
+      {
+        "label": "scrolled",
+        "at": "2026-10-24T12:33:22.318Z",
+        "source": {
+          "bottom": 315.125,
+          "clientHeight": 286,
+          "scrollHeight": 1398,
+          "scrollTop": 0,
+          "textLength": 4095,
+          "top": 27.125,
+          "width": 758
+        },
+        "host": {
+          "follow": null,
+          "height": 635,
+          "scrollTop": 12213
+        }
+      },
+      {
+        "label": "reopened",
+        "at": "2026-10-24T12:33:23.355Z",
+        "source": {
+          "bottom": 616.125,
+          "clientHeight": 286,
+          "scrollHeight": 1398,
+          "scrollTop": 0,
+          "textLength": 4095,
+          "top": 328.125,
+          "width": 758
+        },
+        "host": {
+          "follow": null,
+          "height": 635,
+          "scrollTop": 11912
+        }
+      },
+      {
+        "label": "zoom160",
+        "at": "2026-10-24T12:33:37.453Z",
+        "source": {
+          "bottom": 892.71875,
+          "clientHeight": 286,
+          "scrollHeight": 3212,
+          "scrollTop": 0,
+          "textLength": 4095,
+          "top": 604.71875,
+          "width": 674
+        },
+        "host": {
+          "follow": null,
+          "height": 585,
+          "scrollTop": 18624
+        }
+      },
+      {
+        "label": "zoom160-reading",
+        "at": "2026-10-24T12:34:33.558Z",
+        "source": {
+          "bottom": 460.71875,
+          "clientHeight": 286,
+          "scrollHeight": 3212,
+          "scrollTop": 396,
+          "textLength": 4095,
+          "top": 172.71875,
+          "width": 674
+        },
+        "host": {
+          "follow": null,
+          "height": 585,
+          "scrollTop": 19056
+        }
+      },
+      {
+        "label": "zoom160-reopened",
+        "at": "2026-10-24T12:34:46.140Z",
+        "source": {
+          "bottom": 597.71875,
+          "clientHeight": 286,
+          "scrollHeight": 3212,
+          "scrollTop": 396,
+          "textLength": 4095,
+          "top": 309.71875,
+          "width": 674
+        },
+        "host": {
+          "follow": null,
+          "height": 585,
+          "scrollTop": 18919
+        }
+      },
+      {
+        "label": "zoom100-return",
+        "at": "2026-10-24T12:34:56.177Z",
+        "source": {
+          "bottom": 509.125,
+          "clientHeight": 286,
+          "scrollHeight": 1398,
+          "scrollTop": 396,
+          "textLength": 4095,
+          "top": 221.125,
+          "width": 758
+        },
+        "host": {
+          "follow": null,
+          "height": 635,
+          "scrollTop": 12019
+        }
+      },
+      {
+        "label": "conversation-return",
+        "at": "2026-10-24T12:36:22.547Z",
+        "source": {
+          "bottom": 657.25,
+          "clientHeight": 286,
+          "scrollHeight": 1398,
+          "scrollTop": 396,
+          "textLength": 4095,
+          "top": 369.25,
+          "width": 758
+        },
+        "host": {
+          "follow": null,
+          "height": 635,
+          "scrollTop": 10859
+        }
+      }
+    ],
+    "copiedLocation": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+    "finalScreenshots": [
+      "10-final-open.png",
+      "14-final-160-body.png",
+      "15-final-100-reading.png",
+      "16-final-return.png"
+    ],
+    "cautions": [
+      "02-live-result.png captured completed state",
+      "11-final-reopened.png restores zero; actual nonzero recovery is separately observed at 160%",
+      "12/13 still show menu; later screenshot14 is the closed-menu reading view"
+    ]
+  },
+  "startupFailure": {
+    "observedErrors": [
+      {
+        "name": "Error",
+        "message": "Failed to start server on port 54078: Failed to start server. Is port 54078 in use?"
+      },
+      {
+        "name": "Error",
+        "message": "Runtime execution settlement is already in progress"
+      }
+    ],
+    "originalSocketOwner": "Unknown; original socket cause was discarded in prior production code",
+    "reproduction": "Actual Bun occupied socket through production recovery; exact EADDRINUSE cause retained, cancellation and disposal complete, same port health200 after release",
+    "diagnosticMonitor": "Now recognizes a failed startup receipt immediately"
+  },
+  "budget": {
+    "maximumBatchRequests": 10,
+    "actualRequests": 9,
+    "successfulScopes": 3,
+    "failedScopes": 1,
+    "authCopiesRetired": 4,
+    "catalogCopiesRetired": 4,
+    "exactModel": "gpt-6.1-sol",
+    "streaming200OriginalReaderEOF": 9
+  },
+  "scopes": [
+    {
+      "scope": "initial",
+      "port": 54077,
+      "occurrence": "webfetch-source-excerpt-586-8fe94fa4-85b8-452c-8104-bf5e8fbba404",
+      "originalExec": 22621,
+      "originalExecExit": 0,
+      "retirement": {
+        "at": "2026-10-24T12:02:15.355Z",
+        "authRetired": 1,
+        "catalogRetired": 1,
+        "authCopied": true,
+        "modelRequests": 3,
+        "model": "gpt-6.1-sol",
+        "streaming200OriginalReaderEOF": 3,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968,
+          "content": "Exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 681829,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "preservation": {
+        "at": "2026-10-24T12:02:18.595Z",
+        "sourceSchema": 6,
+        "targetSchema": 8,
+        "originalTables": 90,
+        "originalRows": 207330,
+        "originalFieldDifferences": [
+          {
+            "table": "memory_chunk",
+            "id": "mck_h0TwOCuDIItgGfxTGf6k",
+            "fields": [
+              "content",
+              "token_count",
+              "time_updated"
+            ]
+          },
+          {
+            "table": "memory_file",
+            "id": "mem_hBhVOjG2IHNZ58LGhFBJ",
+            "fields": [
+              "time_updated"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "id": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "id": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "session",
+            "id": "ses_-zUS0X33CzzWEKMgCk98",
+            "fields": [
+              "time_updated"
+            ]
+          }
+        ],
+        "integrity": "ok",
+        "sourceBytes": 95682560,
+        "sourceModifiedAtMs": 1792828797672.7832,
+        "canonicalConfiguration": "Exact original",
+        "qualification": "Full original field/row verification after original native exit and physical/output/request closure"
+      }
+    },
+    {
+      "scope": "-after",
+      "port": 54078,
+      "occurrence": "webfetch-source-excerpt-586-after-6c5d957d-0495-4c0c-a402-be6fdce525b0",
+      "originalExec": 6551,
+      "originalExecExit": 1,
+      "retirement": {
+        "at": "2026-10-24T12:19:30.315Z",
+        "qualification": "Failed startup; original native and launcher physically closed, not UI acceptance",
+        "authRetired": 1,
+        "catalogRetired": 1,
+        "authCopied": true,
+        "modelRequests": 0,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968,
+          "content": "Exact original"
+        },
+        "publicShutdown": "Unavailable before bind; failure receipt joined",
+        "reserveMs": 987349,
+        "nativeExit": 7,
+        "launcherExit": 7,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "preservation": {
+        "at": "2026-10-24T12:20:13.396Z",
+        "sourceSchema": 6,
+        "targetSchema": 8,
+        "originalTables": 90,
+        "originalRows": 207330,
+        "originalFieldDifferences": [],
+        "integrity": "ok",
+        "sourceBytes": 95682560,
+        "sourceModifiedAtMs": 1792828797672.7832,
+        "canonicalConfiguration": "Exact original",
+        "qualification": "Full original field/row verification after original native exit and physical/output/request closure"
+      }
+    },
+    {
+      "scope": "-retry",
+      "port": 54079,
+      "occurrence": "webfetch-source-excerpt-586-retry-6e1fe84b-b631-45ed-b9ea-44130280ebaa",
+      "originalExec": 82549,
+      "originalExecExit": 0,
+      "retirement": {
+        "at": "2026-10-24T12:28:49.123Z",
+        "authRetired": 1,
+        "catalogRetired": 1,
+        "authCopied": true,
+        "modelRequests": 3,
+        "model": "gpt-6.1-sol",
+        "streaming200OriginalReaderEOF": 3,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968,
+          "content": "Exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 845296,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "preservation": {
+        "at": "2026-10-24T12:28:51.598Z",
+        "sourceSchema": 6,
+        "targetSchema": 8,
+        "originalTables": 90,
+        "originalRows": 207330,
+        "originalFieldDifferences": [
+          {
+            "table": "memory_chunk",
+            "id": "mck_h0TwOCuDIItgGfxTGf6k",
+            "fields": [
+              "content",
+              "token_count",
+              "time_updated"
+            ]
+          },
+          {
+            "table": "memory_file",
+            "id": "mem_hBhVOjG2IHNZ58LGhFBJ",
+            "fields": [
+              "time_updated"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "id": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "id": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "session",
+            "id": "ses_-zUS0X33CzzWEKMgCk98",
+            "fields": [
+              "time_updated"
+            ]
+          }
+        ],
+        "integrity": "ok",
+        "sourceBytes": 95682560,
+        "sourceModifiedAtMs": 1792828797672.7832,
+        "canonicalConfiguration": "Exact original",
+        "qualification": "Full original field/row verification after original native exit and physical/output/request closure"
+      }
+    },
+    {
+      "scope": "-final",
+      "port": 54080,
+      "occurrence": "webfetch-source-excerpt-586-final-6e0cf024-51ca-43a2-addd-5816a1b3de4e",
+      "originalExec": 99723,
+      "originalExecExit": 0,
+      "retirement": {
+        "at": "2026-10-24T12:36:52.758Z",
+        "authRetired": 1,
+        "catalogRetired": 1,
+        "authCopied": true,
+        "modelRequests": 3,
+        "model": "gpt-6.1-sol",
+        "streaming200OriginalReaderEOF": 3,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968,
+          "content": "Exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 835680,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      },
+      "preservation": {
+        "at": "2026-10-24T12:36:55.229Z",
+        "sourceSchema": 6,
+        "targetSchema": 8,
+        "originalTables": 90,
+        "originalRows": 207330,
+        "originalFieldDifferences": [
+          {
+            "table": "memory_chunk",
+            "id": "mck_h0TwOCuDIItgGfxTGf6k",
+            "fields": [
+              "content",
+              "token_count",
+              "time_updated"
+            ]
+          },
+          {
+            "table": "memory_file",
+            "id": "mem_hBhVOjG2IHNZ58LGhFBJ",
+            "fields": [
+              "time_updated"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "id": "[1]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "runtime_execution_capacity_lease",
+            "id": "[2]",
+            "fields": [
+              "lease_id",
+              "owner_id",
+              "time_acquired",
+              "expires_at"
+            ]
+          },
+          {
+            "table": "session",
+            "id": "ses_-zUS0X33CzzWEKMgCk98",
+            "fields": [
+              "time_updated"
+            ]
+          }
+        ],
+        "integrity": "ok",
+        "sourceBytes": 95682560,
+        "sourceModifiedAtMs": 1792828797672.7832,
+        "canonicalConfiguration": "Exact original",
+        "qualification": "Full original field/row verification after original native exit and physical/output/request closure"
+      }
+    }
+  ],
+  "checks": {
+    "webfetch": {
+      "files": 4,
+      "passed": 19,
+      "expectations": 126
+    },
+    "startupAndExecutionSettlement": {
+      "files": 2,
+      "passed": 30,
+      "expectations": 59
+    },
+    "backendTypecheck": "Passed",
+    "documentation": {
+      "ops": 350,
+      "groups": 26
+    },
+    "architectureIndex": 20
+  },
+  "limits": [
+    "Original nonvirtual member Rendering flicker not reproduced or declared fixed",
+    "Semantic excerpt filtering is a preview, not a publisher summary or universal main-content detector",
+    "Original source schema6 preserved; only isolated target startup applies current schema8",
+    "User service18571 and user windows were not operated"
+  ]
+}

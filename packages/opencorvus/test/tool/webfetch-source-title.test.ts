@@ -134,11 +134,24 @@ test("fetched document metadata preserves published titles, resource content and
           ),
         )
         expect(results[0]!.sources).toEqual([
-          urlSource({ url: `${server.url}title`, title: "真正 & 标题 页面", provider: "opencorvus-webfetch" }),
+          urlSource({
+            url: `${server.url}title`,
+            title: "真正 & 标题 页面",
+            snippet: "Actual content",
+            provider: "opencorvus-webfetch",
+          }),
         ])
-        expect(results[1]!.sources).toEqual([urlSource({ url: `${server.url}empty`, provider: "opencorvus-webfetch" })])
+        expect(results[1]!.sources).toEqual([
+          urlSource({ url: `${server.url}empty`, snippet: "No title", provider: "opencorvus-webfetch" }),
+        ])
         expect(results[2]!.output).toBe("<title>Text is not HTML</title>")
-        expect(results[2]!.sources).toEqual([urlSource({ url: `${server.url}plain`, provider: "opencorvus-webfetch" })])
+        expect(results[2]!.sources).toEqual([
+          urlSource({
+            url: `${server.url}plain`,
+            snippet: "<title>Text is not HTML</title>",
+            provider: "opencorvus-webfetch",
+          }),
+        ])
         expect(results[3]!).toMatchObject({
           output: "Image fetched successfully",
           attachments: [{ type: "file", mime: "image/png", url: "data:image/png;base64,iVBORw==" }],
@@ -152,7 +165,12 @@ test("fetched document metadata preserves published titles, resource content and
         console.log("Owned HTTP plain text outputs", JSON.stringify(textResults.map((value) => value.output)))
         expect(textResults[0]!.output).toBe("Arabic: غرب & © 🙂\n\nLiteral: &lt;tag&gt; and <b>")
         expect(textResults[0]!.sources).toEqual([
-          urlSource({ url: `${server.url}text-entities`, title: "Entity & title", provider: "opencorvus-webfetch" }),
+          urlSource({
+            url: `${server.url}text-entities`,
+            title: "Entity & title",
+            snippet: "Arabic: غرب & © 🙂\n\nLiteral: &lt;tag&gt; and <b>",
+            provider: "opencorvus-webfetch",
+          }),
         ])
         expect(textResults[1]!.output.split(/\n+/)).toEqual([
           "Mixed case",
@@ -176,7 +194,12 @@ test("fetched document metadata preserves published titles, resource content and
         console.log("Owned HTTP format outputs", JSON.stringify({ formats, untitled }))
         expect(formats.map((value) => value.sources)).toEqual(
           Array.from({ length: 3 }, () => [
-            urlSource({ url: `${server.url}formats`, title: "Format & 标题", provider: "opencorvus-webfetch" }),
+            urlSource({
+              url: `${server.url}formats`,
+              title: "Format & 标题",
+              snippet: "Actual heading\n\nActual body",
+              provider: "opencorvus-webfetch",
+            }),
           ]),
         )
         expect(formats.map((value) => value.output)).toEqual([
@@ -193,7 +216,12 @@ test("fetched document metadata preserves published titles, resource content and
           expect(equivalent.map((value) => value.output)).toEqual(formats.map((value) => value.output))
           expect(equivalent.map((value) => value.sources)).toEqual(
             Array.from({ length: 3 }, () => [
-              urlSource({ url: `${server.url}${route}`, title: "Format & 标题", provider: "opencorvus-webfetch" }),
+              urlSource({
+                url: `${server.url}${route}`,
+                title: "Format & 标题",
+                snippet: "Actual heading\n\nActual body",
+                provider: "opencorvus-webfetch",
+              }),
             ]),
           )
         }
@@ -206,13 +234,19 @@ test("fetched document metadata preserves published titles, resource content and
           expect(literal.map((value) => value.output)).toEqual(Array(3).fill(formatBody))
           expect(literal.map((value) => value.sources)).toEqual(
             Array.from({ length: 3 }, () => [
-              urlSource({ url: `${server.url}${route}`, provider: "opencorvus-webfetch" }),
+              urlSource({ url: `${server.url}${route}`, snippet: formatBody, provider: "opencorvus-webfetch" }),
             ]),
           )
         }
         expect(untitled).toMatchObject({
           output: "<html><body><p>Actual untitled body</p></body></html>",
-          sources: [urlSource({ url: `${server.url}untitled`, provider: "opencorvus-webfetch" })],
+          sources: [
+            urlSource({
+              url: `${server.url}untitled`,
+              snippet: "Actual untitled body",
+              provider: "opencorvus-webfetch",
+            }),
+          ],
         })
         const persisted = await persistMessageSources({
           sessionID: session.id,
@@ -225,15 +259,14 @@ test("fetched document metadata preserves published titles, resource content and
           title: "真正 & 标题 页面",
           sessionID: session.id,
           messageID,
+          snippet: "Actual content",
         })
         const markdownFormats = await Promise.all(
           (["text", "markdown", "html"] as const).map((format) =>
             executeWebFetch({ url: `${server.url}markdown-quoted`, format }, ctx),
           ),
         )
-        expect(markdownFormats.map((value) => value.output)).toEqual(
-          Array(3).fill(markdownBodies["markdown-quoted"]),
-        )
+        expect(markdownFormats.map((value) => value.output)).toEqual(Array(3).fill(markdownBodies["markdown-quoted"]))
         for (const value of markdownFormats)
           expect(value.sources[0]).toMatchObject({
             type: "source-url",
@@ -263,7 +296,13 @@ test("fetched document metadata preserves published titles, resource content and
         for (const route of ["markdown-malformed", "markdown-script"] as const) {
           const value = await executeWebFetch({ url: `${server.url}${route}`, format: "markdown" }, ctx)
           expect(value.output).toBe(markdownBodies[route])
-          expect(value.sources).toEqual([urlSource({ url: `${server.url}${route}`, provider: "opencorvus-webfetch" })])
+          expect(value.sources).toEqual([
+            urlSource({
+              url: `${server.url}${route}`,
+              snippet: markdownBodies[route].trim(),
+              provider: "opencorvus-webfetch",
+            }),
+          ])
         }
         const markdownPersisted = await persistMessageSources({
           sessionID: session.id,
@@ -274,6 +313,7 @@ test("fetched document metadata preserves published titles, resource content and
           type: "source-url",
           url: `${server.url}markdown-folded`,
           title: "发布者 完整标题",
+          snippet: markdownBodies["markdown-folded"].trim(),
           sessionID: session.id,
           messageID,
         })

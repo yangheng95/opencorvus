@@ -1,0 +1,61 @@
+# 网页抓取来源摘录
+
+## Recall
+
+586继续用户授权的Sources体验、UI/UX与功能迭代；单agent、只在实际冲突等待。上个goal turn为progress：真实Source归属和菜单输入调查8d7e7957a已正常push，fresh HEAD/upstream0/0；原B33消息107Parts9来源的身份、URL、completed Tool绑定与原SQLite一致，100/160%聚焦Escape正常。0 Provider、原exec69261/native/launcher0、physical/output/request闭合、页262关闭，源6/90表207330原行字段时间/canonical/bytes/mtime保持，目标8原字段差异0，模型目录副本清退。原成员高频Rendering未复现；不据Index候选改源码。
+
+当前76个其他会话暂存交付及其继续变化、171删除和缓存目录保留，本批webfetch/对应测试/07-panel未有他人差异。已读webfetch完整解码/标题/格式转换/附件外置/截断/来源路径，source.ts、SourcePayload与持久化writer，SourceParts的文件Tooltip、网页Excerpt与阅读恢复，07-panel/reactivity、585/582/10-21网页来源历史决策。全仓搜索snippet生产者、webfetch调用与Source精确断言：search_code提供文件snippet（界面仅Tooltip），websearch/external_code_search提供网页snippet；webfetch目前只提供URL/标题。source-document公开schema没有snippet，本批不改该类型。已定位encoding/source-title/output/link-base/fragment等纯后端测试，无UI自动化测试。
+
+## 修改前深度与实施方案
+
+可观察缺口：585实页原Tabs/Free-MAD网页来源只有标题、域名和复制；对应29条URL均无snippet。直接触发点是webfetch成功结果构造urlSource时未附摘录，后续分支只加title。模型确已取得真实正文，数据/控制流中SourcePayload.snippet本就可选、writer和SDK支持、网页Excerpt已实现，但当前普通抓取入口未提供这个事实。此前“不能假称每次webfetch有摘录”是正确旧合同；本批明确新增从实际抓取内容得到的预览，不把它冒充出版者摘要，也不为验证去绕行Exa限额或伪造来源。
+
+唯一实现仍为executeWebFetch：成功解码的HTML/XHTML经现有extractTextFromHTML获得可读正文（跳过head/title/script/style等，链接只保留文本），同一plainText复用于text输出；其他文本媒体保留已解码原文。经现有embedded-data附件外置primitive清理内嵌数据URL，再用既有decodeUtf8Prefix限4 KiB且保留完整UTF-8字符，trim遵守既有URL snippet合同，非空时写原source.snippet。图片路径保持原真实图片附件结果。格式转换及formatFetchedText只保留一个文本结果返回点，正文完整性、选择格式、标题、最终URL、SourceID/Tool绑定、错误和正文预算均延续原合同。
+
+4 KiB上限进入webfetch现有输出策略常量面，不另建配置、缓存、解析器或Source存储。摘录为实际正文前缀，既有Excerpt标签表达部分阅读，不合成省略文本/摘要，不把完整Tool结果复制入来源；旧行不回填。API/SDK/数据库字段无新增，既有可选字段开始由该生产者提供，不改变schema或迁移，不能宣称用户库已升级。全部入口（普通Session、Task、Mission、重试/恢复）共用Tool执行和原事务writer；本改动不引入调度/执行状态或第二发布路径。额外成本是HTML正文一次有界解析（最大响应5 MiB）；text格式复用其结果，native文本格式不追加解析。
+
+验收先修原精确来源测试的当前合同，再加纯后端正向测试，走真实HTTP→executeWebFetch，覆盖可读HTML、默认Markdown与rawHTML的同一来源摘录、非HTML文字、Unicode字节边界、长正文与附件外置，并在原持久化测试核对snippet。运行聚焦encoding/source-title/source-excerpt/output等，禁止UI测试。按实际错误修工具/测试，不保留旧字段缺省断言来阻挡新能力。
+
+实页使用完整已闭合577源6/90表207330行/canonical/PNG的fresh隔离native /ui，当前正常启动目标8，用户18571不操作。前端源码未变，可复用已完成的当前6df对应Node前端构建main-D8VUecr4.js；当前backend TS加载新生产者。预算本批最多4次精确gpt-6.1-sol流式请求（memory/工作/重试合计），配对auth+完整catalog，启动前注册/目录/apiModel核对，不额外消耗Reply预检。只在原普通Main会话请求一次webfetch已知官方W3C Tabs地址、format text，有限原文说明；不搜索、不重试换站、不创建agent/成员/Task/Goal、不改项目文件。前基线使用585实际原网页Source无摘录证据，不重复模型调用。真实页面打开摘录、滚动、复制、收起重开和切换返回/缩放，截图人工复核；不把元数据或单元测试当视觉验收。原始Tool输出/Source/persisted snippet正向核对，20分钟期限、至少5分钟提前publicshutdown，全部原reader EOF与exec/native/launcher/physical/output/request/出生链闭合后清退凭据目录。
+
+风险与边界：本批只新增未来webfetch来源的真实摘录，不能据此宣布原非虚拟成员Rendering或document来源已完成；旧来源不会凭空获得正文。Source excerpt保留发布者原文，当前界面语言只作用控件，不翻译事实。完成后同步07-panel/Tool帮助/记录/产物/三索引，docs与必要typecheck，范围提交；正常fetch/merge、审查全部待推提交、原hook与push，不混入其他交付。
+
+## 实页反馈后的方案调整
+
+首个真实scope54077已完成：原Main15消息37Parts，单次webfetch已知W3C Tabs/text，真实45字预告/278字最终说明/EXCERPT586DONE，3次精确Sol流式200/原reader EOF。原来源摘录4096字节，实页显示新入口、286px高/1776px滚动区域，手动scrollTop432、收起重开仍432且hostTop10915/followfalse。截图03首屏却主要是Skip/ARIA导航，实际正文要下滚432px才看到；因此不能只以新入口存在交付。
+
+根据实际视觉补改：保留原完整Tool文本提取器；摘录使用同一成熟html-to-text与公共文本规则，仅加语义导航区的skip规则（nav、顶层header/footer、aside和navigation/banner/contentinfo角色），不是靠文字关键字猜正文，也不增加另一抓取或解析库。普通正文、HTML片段仍按同一解析规则处理，链接文字和段落保留；Tool的text/markdown/html结果不删导航、不改格式。此为不同展示用途的明确规则，不能把摘录冒充完整文档。增加真实HTTP正向合同，证明有导航时Source先呈现实际文章，而Tool输出保留完整取得内容。已查已安装html-to-text官方README支持CSS属性/子代选择器与skip formatter。
+
+首scope未耗尽（3/4）、已publicshutdown200提前681829ms、exec22621/native/launcher0、physical/output/request与出生链闭合、页263关闭，auth/models清退，源原字段时间保持，目标8五条自然memory/容量/Session变更另列。它不重启、不改预算、不回填其来源。为验证由真实截图发现的这一改动，追加独立after scope54078预算3，本批计划上限更新为7（旧4+新3，实际预计6）；这不是扩充耗尽scope或绕过Exa限额。after仍从完整577原源6复制，配对当前auth/catalog、同一已知地址单次webfetch/text/同样有限说明，新20分钟和提前5分钟完整退出，须重新实页截图，再交付最终结果。
+
+## 启动失败调查与修复前补充方案
+
+after 在12:11:23Z实际监听失败，日志的两个原始错误分别为54078绑定失败及Runtime execution settlement is already in progress；此时尚未发模型请求。最初的Bun绑定错误已经被server.bind包装丢失cause，失败时监听端口的进程身份没有被采集，事后无监听且该端口不在Windows排除范围，不能断言历史上是谁占用了它，也不能用“偶发”判定解决。隔离诊断monitor错误地只处理listening receipt，已发布failed仍等待180秒后CLI_STARTUP_INACTIVITY，必须让它读取真实终态立即抛错；该辅助脚本只服务本次验收，不是另一生产启动路径。
+
+实际重复收敛根因已由调用链证明：Server.bind catch启动异步cleanup()，内部调用settleCurrentProcessExecution并获得进程gate；它同步throw后，listenWithRecoveredServerRuntime的catch又调用同一settlement，第二个调用竞争独占gate，造成AggregateError掩盖第一错误。此前成功监听、正常stop与post-bind恢复测试未覆盖真实occupied-port失败，所以没有根治。全仓搜索覆盖Server.listen/listenPrepared全部生产调用、CLI serve初次与restart listener restore、ACP，以及脚本和后端测试：生产prepared路径只经该异步恢复wrapper，普通同步listen还被实际诊断与benchmark使用。Task/Mission/Session的application recovery在bind成功之后才启动，本失败从未进入它；共享process settlement仍覆盖其取消、scheduler/Bus/队列、Instance与项目lease，已有真实Task、Session、恢复和终态后端合同保持，不更改任何业务状态。多项目均共用同一进程gate，第二清理不是局部专家团问题；正常、失败、重启恢复必须复用同一已有cleanup operation，不能靠sleep或吞掉gate冲突处理。
+
+方案是在既有同步bind API保留一个明确ListenerStartupError，携带原始cause及唯一已启动的settled Promise。上层异步wrapper只join该真实清理，不再创建第二owner；若清理失败，保留绑定错误和清理错误两者。直接同步调用保留可观察throw和同一Promise日志，不改变其成功返回类型。Bun绑定包装保留原始cause供诊断。真实HTTP占用同一端口的正向后端测试验证错误类型/cause和完整cleanup，释放后从生产wrapper重新bind并实际health200；同一测试覆盖当前process内恢复，不以mock充当端到端。原正常恢复、取消及graceful stop聚焦测试重跑。无公共HTTP/OpenAPI、SDK、schema、业务调度契约变化；更新运行时架构这一条错误所有权描述。目标源文件已由其他会话提交1c1343c7c/ad7911334且无本地差异，本批只在当前HEAD最小修复，不覆盖它们。保留全部171个他人删除。
+
+failed scope原exec6551已join exit1，native68080/launcher分别7，physical/output/request全闭合、精确host/target出生链dead_or_reused，12:19:30Z清退成对auth/catalog，0/3请求、未耗尽；它不是通过的UI验收。关闭数据保持检查另存。修复后从完整577原源新建独立retry scope，继续原after剩余3次请求预算，本批实际上限仍7、预计6，不复用失败数据库或重置已耗尽预算，启动前先以真实socket验证候选端口可绑定。
+
+## 第二次视觉反馈后的空白调整
+
+54079按已修复的唯一cleanup合同真实启动；原会话metadata实际为experience work，初次误用chat链接收到明确404，按持久化身份纠正后成功恢复原Main12消息28Parts。这是诊断链接参数错误，不据此修改产品。真实单次webfetch/text已完成，3次Sol流式200/原reader EOF；Source4096字节、15消息37Parts。语义导航已移除，但截图08首屏显示How to build...与Tabs标题间有六个换行，原HTML结构转换保留的空行在pre-wrap区域浪费约126px，仍把正文推到下面；手动scroll360、收起重开360，复制URL正确。截图09证明正文可读，尚不能证明首屏体验已合格。
+
+54079已publicshutdown200提前845296ms、原exec82549/native/launcher0、physical/output/request/精确出生链闭合、页264关闭、成对auth/catalog清退，源6/90表207330原行字段时间/canonical/bytes/mtime保持，目标8五行正常运行变更单列。30个startup/runtime settlement后端合同、backend typecheck及docs/index通过。
+
+下一修订只把HTML摘录中的连续三个及以上LF压成两个，保留段落边界、单个换行与缩进；不改完整Tool结果、其他文本媒体或已持久化Source，也不猜测文章关键字。原HTTP HTML fixture增加真实连续br结构，明确Source输出仍是标题空一行接正文。新建独立final scope54080（真实socket预检）从完整577原源验证该修订的首屏、复制、折叠恢复、160/100%缩放和切换返回。它不是在旧scope追加请求或回填旧Source。为这次由实际截图触发的新修订，在实施前将本批计划上限更新为10（首次4+after预算3+final3，失败after0、retry3，前两成功实际6，预计总9）；新scope严格3次精确Sol流式请求、单次同URL/text、不搜索或创建成员，20分钟物理最大期与至少5分钟提前退出继续适用。
+
+## 最终结果与验证
+
+final54080使用当前backend源码真实启动，页265恢复原Main后发送同一234字符有限输入。实际48字预告、一次webfetch/text completed、最终304个序列化字符（包括Markdown网址）的文档概述和EXCERPT586DONE自然产生；原12消息28Parts变为15消息37Parts。来源prt_g0VYyBQBY00iYpLOeDJ2属于msg_g0VYyBOWG00iPlKAfldb并绑定真实Tool prt_g0VYyBPsn005f0V1TTwT；SourceId沿用同一URL的e84bb5bf...997ec。最终摘录4095字节（完整字符前缀后trim），截图10首屏已出现实际文章标题与正文，相比03导航占据、08过多空行有实际改进。HTML/text输出现在各有完整Tool与紧凑excerpt两种明确用途的解析，均走同一html-to-text依赖与共同文本规则；text格式需要两次有界解析，不能继续声称复用一次plainText。没有SDK/API/schema变化。
+
+手动缩放160并在控件渲染完成后Escape，实际菜单关闭且焦点回到View；首次紧接End的按键未完成关闭，12/13只保留为中间态。实际Source内滚396px，折叠重开396；100%返回396，Copied提示后剪贴板是指定原URL；切到既有Reply with OK会话再返回，Source仍展开396。早先100%首次scroll操作落到外层，观测Source0，不能据11重开0冒称非零恢复。最终14/15/16已人工查看。所有操作均为真实页面手动交互，几何记录只是辅助证据，没有UI自动化断言或测试。
+
+三次成功scope的HTTP解析、Source SQLite片段/Message/Tool身份精确一致，正文段落经当前completedToolOutcomeOutput规范读取与已完成Tool结果匹配。列表接口的Tool output为空是其deferred公开合同，不能据preview断言抓取无正文。验收脚本初次误用Drizzle旧构造产生内存空库，改为仓库当前drizzle({client: readonlySQLite})后重新完成检查，未写真实用户库；这不是产品缺表或迁移失败。原源每次90表207330行逐字段和时间精确核对，源DB95682560字节/mtime1792828797672.7832与canonical保留，integrity ok。失败after原字段差异0；三个成功目标8各5行memory_chunk、memory_file、两capacity lease与Main time_updated自然改变，不能说目标所有旧行未变。
+
+最终3次精确Sol流式200/原reader EOF后，12:36:37Z publicshutdown200，距20分钟最大期835680ms；原exec99723/native74376/launcher0，physical/output/request与精确出生链闭合，页265关闭，12:36:52Z auth/models清退。另两成功scope提前681829/845296ms退出。4个scope总实际9次请求，失败scope0，4组凭据与目录副本均清退，源凭据和model catalog元数据保持；用户18571未操作。凭据内容未进入记录/提交。
+
+验证：webfetch excerpt/encoding/source-title/output 19 pass、126 expect；runtime-startup-recovery/runtime-execution-settlement 30 pass、59 expect（真实occupied端口与重新绑定health200）；backend typecheck通过；docs:check 350 ops/26 groups、architecture-index20当前文档通过。第一次新startup测试的health精确对象漏掉现有paths字段，按实际health合同改成objectContaining后重跑30通过；没有修改health响应迁就测试。交付仍须正常范围提交、fetch/merge、全部待推集合与原hook验证、push及fresh0/0。
+
+已知边界：旧来源不回填；HTML语义区域和空白压缩用于短预览，不保证任意网站都以文章开头；原成员高频Rendering本批仍未复现，根因未据此定案。初次54078原生绑定原因未知，但被它暴露的重复运行时清理已由代码和实际占用端口复验修复。本批不发布版本、tag或Release。

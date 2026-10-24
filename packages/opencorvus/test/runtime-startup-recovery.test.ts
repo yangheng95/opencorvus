@@ -83,9 +83,9 @@ describe("runtime startup recovery", () => {
     let reportRecoveryStarted!: () => void
     const recoveryStarted = new Promise<void>((resolve) => (reportRecoveryStarted = resolve))
     const originalListen = Server.listenPrepared
-    const listen = spyOn(Server, "listenPrepared").mockImplementation((options) => {
+    const listen = spyOn(Server, "listenPrepared").mockImplementation((options, disposeInstances) => {
       order.push("bind")
-      return originalListen(options)
+      return originalListen(options, disposeInstances)
     })
     let sharedOccurrenceObserver: unknown
     const promotions = spyOn(ImplicitProject, "recoverPromotions").mockImplementation(async () => {
@@ -322,8 +322,8 @@ describe("runtime startup recovery", () => {
   test("stops a published listener when post-bind poller initialization fails", async () => {
     const originalListen = Server.listenPrepared
     let listenerURL: URL | undefined
-    const listen = spyOn(Server, "listenPrepared").mockImplementation((options) => {
-      const server = originalListen(options)
+    const listen = spyOn(Server, "listenPrepared").mockImplementation((options, disposeInstances) => {
+      const server = originalListen(options, disposeInstances)
       listenerURL = new URL("/global/health", server.url)
       return server
     })
@@ -345,6 +345,50 @@ describe("runtime startup recovery", () => {
     } finally {
       scheduler.mockRestore()
       listen.mockRestore()
+    }
+  }, 60_000)
+
+  test("settles an occupied listener failure before rebinding through the production runtime", async () => {
+    const occupied = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch: () => new Response("occupied") })
+    const port = occupied.port!
+    const events: string[] = []
+    const execution = RuntimeExecutionSettlement.reserve("session_wake_loop", "occupied-listener-startup")
+    execution.onCancel(() => {
+      events.push("execution:cancelled")
+      execution.settle()
+    })
+    try {
+      await expect(
+        listenWithRecoveredServerRuntime({
+          options: { hostname: "127.0.0.1", port },
+          recover: async () => {},
+          disposeInstances: async () => {
+            events.push("instances:disposed")
+          },
+        }),
+      ).rejects.toMatchObject({
+        name: "ListenerStartupError",
+        cause: { cause: { code: "EADDRINUSE" } },
+      })
+      expect(events).toEqual(["execution:cancelled", "instances:disposed"])
+      expect(await (await fetch(occupied.url)).text()).toBe("occupied")
+    } finally {
+      execution.settle()
+      await occupied.stop(true)
+    }
+    const replacement = await listenWithRecoveredServerRuntime({
+      options: { hostname: "127.0.0.1", port },
+      recover: async () => {},
+      disposeInstances: async () => {},
+    })
+    try {
+      const response = await fetch(new URL("/global/health", replacement.server.url))
+      expect({ status: response.status, body: await response.json() }).toEqual({
+        status: 200,
+        body: expect.objectContaining({ healthy: true, version: expect.any(String) }),
+      })
+    } finally {
+      await replacement.server.stop(true)
     }
   }, 60_000)
 

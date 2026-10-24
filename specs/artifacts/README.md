@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [网页抓取来源摘录](2026-10-24-webfetch-source-excerpt/README.md)：586真实摘录、复制与阅读恢复证据。
+
 - [成员正文与来源的时序归属](2026-10-24-member-source-order/README.md)：585非秘密时序和实际页面证据。
 
 - [Main虚拟窗口与尺寸测量](2026-10-24-main-virtual-range/README.md)：584真实页面与最后观察几何。

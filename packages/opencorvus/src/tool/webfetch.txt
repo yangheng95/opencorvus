@@ -17,3 +17,4 @@ Usage notes:
   - Format options: "markdown" (default), "text", or "html".
   - This tool is read-only and does not modify any files.
   - Results may be summarized if the content is very large.
+  - Successful text reads include a short source excerpt from the decoded resource. HTML excerpts use readable text; the tool output retains the requested format.

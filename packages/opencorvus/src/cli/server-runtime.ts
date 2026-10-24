@@ -129,13 +129,11 @@ export async function listenWithRecoveredServerRuntime(input: {
   const prepared = await prepareServerRuntimeForListener(input)
   let server: ReturnType<typeof Server.listenPrepared>
   try {
-    server = Server.listenPrepared(input.options)
+    server = Server.listenPrepared(input.options, input.disposeInstances)
   } catch (listenerError) {
+    if (!(listenerError instanceof Server.ListenerStartupError)) throw listenerError
     try {
-      const terminated = await Server.settleCurrentProcessExecution("Listener bind failed after runtime preparation", {
-        disposeInstances: input.disposeInstances,
-      })
-      await Server.releaseRuntimeHandoff(terminated.releaseHandoff)
+      await listenerError.settled
     } catch (cleanupError) {
       throw new AggregateError([listenerError, cleanupError], "Listener bind and runtime cleanup failed")
     }

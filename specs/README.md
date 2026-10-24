@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [网页抓取来源摘录](records/2026-10/2026-10-24-webfetch-source-excerpt.md)：586由真实网页正文提供Sources摘录。
+
 - [成员正文与来源的时序归属](records/2026-10/2026-10-24-member-source-order.md)：585真实来源时序与侧栏交互调查。
 
 - [Main虚拟窗口与尺寸测量](records/2026-10/2026-10-24-main-virtual-range.md)：584旧正文回收的范围/缓存/几何调查。

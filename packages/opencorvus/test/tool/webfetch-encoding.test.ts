@@ -144,6 +144,7 @@ for (const item of cases)
             sourceId: expect.any(String),
             url: server.url.href,
             provider: "opencorvus-webfetch",
+            snippet: "title" in item ? text : item.content.trim(),
             ...("title" in item ? { title: item.title } : {}),
           })
           if (item.name === "legacy meta pragma") {

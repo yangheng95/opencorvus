@@ -23,20 +23,41 @@ const DEFAULT_TIMEOUT = 30 * 1000 // 30 seconds
 const MAX_TIMEOUT = 120 * 1000 // 2 minutes
 const TEXT_OUTPUT_MARKER_RESERVE_BYTES = 512
 const TEXT_OUTPUT_MAX_BYTES = Truncate.MAX_BYTES - TEXT_OUTPUT_MARKER_RESERVE_BYTES
+const SOURCE_EXCERPT_MAX_BYTES = 4 * 1024
 const EMBEDDED_BASE64_DATA_URL = /data:([a-z0-9.+-]+\/[a-z0-9.+-]+)(?:;[^;,\s"'()<>]+)*;base64,[a-z0-9+/]+={0,2}/gi
 
+const htmlTextSelectors = [
+  ...["head", "title", "script", "style", "noscript", "iframe", "object", "embed", "img"].map((selector) => ({
+    selector,
+    format: "skip",
+  })),
+  { selector: "a", options: { ignoreHref: true } },
+  ...["h1", "h2", "h3", "h4", "h5", "h6"].map((selector) => ({ selector, options: { uppercase: false } })),
+  { selector: "table", options: { uppercaseHeaderCells: false } },
+]
 const extractTextFromHTML = compileHtmlToText({
   // Process the whole input, including fragments, through the same document path.
   baseElements: { selectors: [] },
   wordwrap: false,
+  selectors: htmlTextSelectors,
+})
+const extractSourceTextFromHTML = compileHtmlToText({
+  baseElements: { selectors: [] },
+  wordwrap: false,
   selectors: [
-    ...["head", "title", "script", "style", "noscript", "iframe", "object", "embed", "img"].map((selector) => ({
+    ...htmlTextSelectors,
+    ...[
+      "nav",
+      "body > header",
+      "body > footer",
+      "aside",
+      '[role="navigation"]',
+      '[role="banner"]',
+      '[role="contentinfo"]',
+    ].map((selector) => ({
       selector,
       format: "skip",
     })),
-    { selector: "a", options: { ignoreHref: true } },
-    ...["h1", "h2", "h3", "h4", "h5", "h6"].map((selector) => ({ selector, options: { uppercase: false } })),
-    { selector: "table", options: { uppercaseHeaderCells: false } },
   ],
 })
 
@@ -170,56 +191,24 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
     const content = decodeFetchedText(arrayBuffer, mediaType)
     const documentTitle = fetchedDocumentTitle(mime, content)
     if (documentTitle) source.title = documentTitle
+    const excerptText = externalizeEmbeddedDataUrls(
+      isHtmlMime(mime) ? extractSourceTextFromHTML(content).replace(/\n{3,}/g, "\n\n") : content,
+    ).output
+    const excerpt = decodeUtf8Prefix(Buffer.from(excerptText, "utf8"), SOURCE_EXCERPT_MAX_BYTES).trim()
+    if (excerpt) source.snippet = excerpt
 
-    // Handle content based on requested format and actual content type
-    switch (params.format) {
-      case "markdown":
-        if (isHtmlMime(mime)) {
-          const markdown = formatFetchedText(convertHTMLToMarkdown(content, source.url))
-          return {
-            ...markdown,
-            title,
-            sources: [source],
-          }
-        }
-        const markdown = formatFetchedText(content)
-        return {
-          ...markdown,
-          title,
-          sources: [source],
-        }
-
-      case "text":
-        if (isHtmlMime(mime)) {
-          const text = formatFetchedText(extractTextFromHTML(content))
-          return {
-            ...text,
-            title,
-            sources: [source],
-          }
-        }
-        const text = formatFetchedText(content)
-        return {
-          ...text,
-          title,
-          sources: [source],
-        }
-
-      case "html":
-        const html = formatFetchedText(content)
-        return {
-          ...html,
-          title,
-          sources: [source],
-        }
-
-      default:
-        const output = formatFetchedText(content)
-        return {
-          ...output,
-          title,
-          sources: [source],
-        }
+    const formatted =
+      params.format === "text"
+        ? isHtmlMime(mime)
+          ? extractTextFromHTML(content)
+          : content
+        : params.format === "markdown" && isHtmlMime(mime)
+          ? convertHTMLToMarkdown(content, source.url)
+          : content
+    return {
+      ...formatFetchedText(formatted),
+      title,
+      sources: [source],
     }
   } finally {
     clearTimeout()
