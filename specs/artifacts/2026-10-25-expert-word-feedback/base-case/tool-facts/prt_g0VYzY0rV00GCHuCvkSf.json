@@ -1,0 +1,77 @@
+{
+  "id": "prt_g0VYzY0rV00GCHuCvkSf",
+  "sessionID": "ses_-zUR0UuPRzz2Wom7unWE",
+  "messageID": "msg_hyZJn2SJvakgNi09mVhn",
+  "type": "tool",
+  "callID": "call_N1G3OvamJun66H6RPfhKjeOV",
+  "tool": "dispatch_agents",
+  "state": {
+    "status": "completed",
+    "input": {
+      "team": [
+        {
+          "name": "Word分页与全文独立复核",
+          "target": "base-tester",
+          "responsibility": "独立对照原始要求、验收正文、修订Word及本次全部真实PNG作视觉与全文复核",
+          "boundary": "只读审阅，不改业务正文、输入、Word或脚本，不联网；可运行项目内现有只读核验脚本",
+          "expected_result": "逐页视觉观察、全文与字节比较、保护边界及差异结论；发布内部复核证据，不把PNG/PDF列为正式交付",
+          "depends_on": []
+        }
+      ],
+      "dispatches": [
+        {
+          "dispatch": {
+            "target": "base-tester",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "initial",
+              "use_worktree": false,
+              "input": {
+                "goal_ids": [],
+                "instruction": "原始要求：完整读取acceptance-input和tools/growth_document.py，仅修现有营销Word分页；原第2页预算表仅表头、续表无重复表头。修outputs/growth-plan.docx及必要生成脚本，让跨页首部重复表头、表头和首数据行同页、行不拆分，中文数字公式单元格清晰完整；不能全表强制同页。outputs/growth-plan.md完整字节必须与acceptance-input/growth-plan.md相同，Word有序段落与表格单元格全文一致，保留1200当前上限、3000旧草案、1900合成成本。不得改输入及tools/render_docx.py，旧Word保留可读。只在此项目本地离线，不联网通信花费发布或另建Task/Goal。正式交付仅Word与规范MD，PNG/PDF内部验收，另需同正文阅读呈现。请独立检查已完成修订，不接受生产者PASS替代视觉判断。从本Task目录发现并完全读取、选择已发布outputs两正式文件和内部验收资源。当前真实页图为internal-qa/final-render/page-1.png至page-5.png，由项目tools/render_docx.py按tools/runtime.md调用既配离线LibreOffice/Poppler生成；必须用图像读取逐页亲眼查看全部5张，逐页记具体可见内容、分页、中文数字公式清晰完整性。注意DOCX附件自动解析可能由不同渲染环境给出不同页分布，不可把自动解析文本当指定真实PNG；若有矛盾用本项目渲染复现调查。独立比较全部Markdown字节与旧/新Word有序段落单元格，可运行python tools/growth_document.py（不要--build），并独立检查其验证覆盖范围及git diff确认输入和renderer未改。原脚本引用缺失campaign.csv曾导致自检中断，生产者已用验收MD字节和输入旧Word全文比较替代该历史业务数据依赖，不补造数据；请判断此变更是否适合本次排版任务。你可从dispatch_origin读取生产者操作事实。输出独立逐项结论及具体观察，若缺陷明确指出页码单元格与原始义务；不要修产品。发布内部复核证据，正式文件应继续引用已发布的不可变资源。",
+                "reason": "生产者已完成分页修订、真实5页渲染和逐页自检，现需按用户要求独立对照最终页图及全文，判定修复及保留条件。"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "output": "{\"members\":[{\"member_index\":0,\"name\":\"Word分页与全文独立复核\",\"target\":\"base-tester\",\"status\":\"completed\",\"outcome\":{\"kind\":\"accepted\",\"session_id\":\"ses_hShct6fcVHjUEqD5t2Mk\",\"dispatch_lineage_id\":\"art_g0VYzY5io00oscJfrjq1\"}}]}",
+    "title": "Settled frontier (1/1)",
+    "metadata": {
+      "frontier_size": 1,
+      "completed_count": 1,
+      "member_names": [
+        "Word分页与全文独立复核"
+      ],
+      "targets": [
+        "base-tester"
+      ],
+      "members": [
+        {
+          "member_index": 0,
+          "name": "Word分页与全文独立复核",
+          "target": "base-tester",
+          "status": "completed",
+          "outcome": {
+            "kind": "accepted",
+            "session_id": "ses_hShct6fcVHjUEqD5t2Mk",
+            "dispatch_lineage_id": "art_g0VYzY5io00oscJfrjq1"
+          }
+        }
+      ]
+    },
+    "time": {
+      "start": 1792865282357,
+      "end": 1792865301193
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0c745dded2093caf016adcf4023f6c87d08e367de7e36cf0b0"
+    }
+  },
+  "orderKey": "v1:0001792865300080:0000000000000031:0000000000000000:part:prt_g0VYzY0rV00GCHuCvkSf"
+}

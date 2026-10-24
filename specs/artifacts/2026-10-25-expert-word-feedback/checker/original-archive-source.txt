@@ -1,0 +1,33 @@
+import assert from "node:assert/strict"
+import fs from "node:fs"
+import path from "node:path"
+import {execFileSync} from "node:child_process"
+import {latestAuditSnapshotFiles} from "../../packages/opencorvus/script/audit-snapshot"
+
+const repo=path.resolve(import.meta.dir,"../.."),run="C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03"
+const e=path.join(run,"evidence/word-feedback-02"),project=path.join(run,"projects/marketing-growth")
+const dest=path.join(repo,"specs/artifacts/2026-10-25-expert-word-feedback/original-task")
+fs.mkdirSync(dest,{recursive:true})
+const read=(name:string)=>JSON.parse(fs.readFileSync(path.join(e,name),"utf8"))
+const put=(name:string,value:unknown)=>fs.writeFileSync(path.join(dest,name),JSON.stringify(value,null,2))
+const x=read("current.json"),baseline=read("restart-baseline.json"),audit=JSON.parse(fs.readFileSync((await latestAuditSnapshotFiles(e,"provider"))[0],"utf8"))
+assert.equal(baseline.task.status,"completed");assert.equal(baseline.task.executionLifecycle.epoch,1)
+assert.equal(x.task.status,"failed");assert.equal(x.task.executionLifecycle.epoch,2);assert.equal(audit.requests.length,50)
+assert.deepEqual(x.task.packageRevisionBinding,baseline.task.packageRevisionBinding)
+assert.deepEqual(x.task.executionLifecycle.previousTerminal,{epoch:1,status:"completed",terminalEventID:baseline.task.executionLifecycle.terminalEventID,terminalAt:baseline.task.executionLifecycle.terminalAt})
+assert(audit.requests.every((r:any)=>r.model==="gpt-6.1-sol"&&r.streaming===true&&["settled","fetch_failed"].includes(r.response_reader.state)))
+for(const name of ["submission.json","preflight-ready.json","preparation.json","authoring-marker.json","native-host-ready.json","native-host-settled.json","launcher-child-exit.json","shutdown.json","retirement.json"])
+  fs.copyFileSync(path.join(e,name),path.join(dest,name))
+put("task-before.json",baseline.task);put("task-after.json",x.task)
+put("provider.json",{requests:audit.requests.map((r:any,index:number)=>({index,model:r.model,streaming:r.streaming,status:r.status,response_reader:r.response_reader,declaredToolNames:r.tool_declarations.entries.flatMap((t:any)=>t.names.filter((n:any)=>n.state==="present").map((n:any)=>n.value))})),maximumRequests:50,priorRequests:310,aggregate:360})
+const fresh=x.conversation.transcript.filter((m:any)=>m.info.time.created>=x.task.executionLifecycle.openedAt)
+put("message-tool-timeline.json",fresh.map((m:any)=>({info:m.info,parts:m.parts.filter((p:any)=>["text","tool"].includes(p.type)).map((p:any)=>p.type==="text"?{id:p.id,type:p.type,text:p.text}:{id:p.id,type:p.type,tool:p.tool,state:{status:p.state.status,title:p.state.title,time:p.state.time,...(p.state.failure?{input:p.state.input,failure:p.state.failure}:{})}})})))
+const failures=fresh.flatMap((m:any)=>m.parts.filter((p:any)=>p.type==="tool"&&p.state.failure).map((p:any)=>({messageID:m.info.id,sessionID:m.info.sessionID,agent:m.info.agent,partID:p.id,tool:p.tool,state:p.state})))
+put("tool-failures.json",failures)
+const contentChecks=Object.fromEntries(["growth-plan.md","growth-plan.docx"].map(name=>[name,{bytes:fs.statSync(path.join(project,"outputs",name)).size,equalsOriginal:fs.readFileSync(path.join(project,"outputs",name)).equals(fs.readFileSync(path.join(e,"before",name)))}]))
+assert.equal(contentChecks["growth-plan.md"].equalsOriginal,true);assert.equal(contentChecks["growth-plan.docx"].equalsOriginal,true)
+fs.copyFileSync(path.join(project,"tools/growth_document.py"),path.join(dest,"partial-growth_document.py"))
+const patch=execFileSync("git",["diff","db75934a153d331cb0c4f83251936a71466891db","HEAD","--","tools/growth_document.py"],{cwd:project,encoding:"utf8"})
+fs.writeFileSync(path.join(dest,"partial-generator.patch"),patch)
+put("verification.json",{taskID:x.task.id,status:x.task.status,lifecycle:x.task.executionLifecycle,modelRequests:50,priorRequests:310,aggregateRequests:360,exactStreamingModel:true,allReadersSettled:true,contentChecks,projectHead:execFileSync("git",["rev-parse","HEAD"],{cwd:project,encoding:"utf8"}).trim(),typedPublications:x.conversation.board.artifacts.filter((a:any)=>a.payload?.artifact_type).map((a:any)=>({id:a.id,type:a.payload.artifact_type,time:a.time,locator:a.locator})),failureCount:failures.length,remainingAcceptance:["revised DOCX generation","all-page visual self-review","independent revision review","new immutable formal delivery"],source:"Actual public Task/conversation responses, exact Provider audit, physical process receipts, original and current file bytes"})
+console.log(JSON.stringify({archived:true,taskID:x.task.id,failureCount:failures.length,requests:50,contentChecks}))

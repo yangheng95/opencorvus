@@ -1,0 +1,150 @@
+import assert from "node:assert/strict"
+import fs from "node:fs"
+import path from "node:path"
+import { execFileSync } from "node:child_process"
+import { pathToFileURL } from "node:url"
+
+const [mode, occurrence] = process.argv.slice(2)
+const repo=path.resolve(import.meta.dir,"../.."),pkg=path.join(repo,"packages/opencorvus")
+const source=(file:string)=>pathToFileURL(path.join(pkg,file)).href
+const run="C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03"
+const runtime=path.join(run,"runtime"),oldEvidence=path.join(run,"evidence"),evidence=path.join(oldEvidence,"word-feedback-02")
+const project=path.join(run,"projects/marketing-growth"),taskID="tsk_g00VYyl3AK00URPjoC7V"
+const port=19145,endpoint=`http://127.0.0.1:${port}`,model="openai/gpt-6.1-sol"
+const credentialSource="C:/Users/hengu/AppData/Local/opencorvus/data/auth.json"
+const feedbackFile=path.join(repo,"specs/artifacts/2026-10-25-expert-word-feedback/feedback.txt")
+const read=(file:string)=>JSON.parse(fs.readFileSync(file,"utf8"))
+const write=(file:string,value:unknown)=>fs.writeFileSync(path.join(evidence,file),JSON.stringify(value,null,2))
+const api=async(route:string,body?:unknown)=>{
+  const url=new URL(route,endpoint);url.searchParams.set("directory",project)
+  const response=await fetch(url,{method:body===undefined?"GET":"POST",headers:{"content-type":"application/json"},...(body===undefined?{}:{body:JSON.stringify(body)}),signal:AbortSignal.timeout(180_000)})
+  const result=await response.json();assert(response.ok,JSON.stringify({route,status:response.status,result}));return {status:response.status,result}
+}
+if(mode==="prepare"){
+  if(fs.existsSync(evidence))throw new Error("Fresh revision evidence scope required")
+  const closed=read(path.join(oldEvidence,"native-host-settled.json")),launcher=read(path.join(oldEvidence,"launcher-child-exit.json")),retired=read(path.join(oldEvidence,"retirement.json"))
+  assert.equal(closed.physicalCompletion,true);assert.equal(closed.outputDrainComplete,true);assert.equal(closed.requestCleanupComplete,true);assert.equal(launcher.originalChildExit,0);assert.equal(retired.source,"unchanged")
+  const physical=await import(source("src/runtime/process-occurrence.ts"))
+  assert.equal(physical.observeRuntimeProcessOccurrence(closed.target),"dead_or_reused")
+  for(const file of ["auth.json","models.json"])if(fs.existsSync(path.join(runtime,"data",file)))throw new Error("Retired runtime authority must remain retired before this revision")
+  const {latestAuditSnapshotFiles}=await import(source("script/audit-snapshot.ts"))
+  const audits=await latestAuditSnapshotFiles(oldEvidence,"provider");assert.equal(audits.length,1)
+  const previousAudit=read(audits[0]);assert.equal(previousAudit.requests.length,310)
+  assert(previousAudit.requests.every((r:any)=>r.model==="gpt-6.1-sol"&&r.streaming===true&&["settled","fetch_failed"].includes(r.response_reader.state)))
+  const maximumRequests=360-previousAudit.requests.length;assert.equal(maximumRequests,50)
+  const previous=read(path.join(oldEvidence,"current.json"));assert.equal(previous.task.id,taskID);assert.equal(previous.task.status,"completed");assert.equal(previous.task.executionLifecycle.epoch,1)
+  const packageRevision=previous.task.packageRevisionBinding;assert(packageRevision);assert.equal(packageRevision.id,"marketing-growth")
+  assert.equal(execFileSync("git",["status","--short"],{cwd:project,encoding:"utf8"}).trim(),"")
+  const verification=read(path.join(oldEvidence,"delivery-verification/verification.json"))
+  for(const name of ["growth-plan.md","growth-plan.docx"]){
+    const resource=verification.resources.find((r:any)=>r.path===`outputs/${name}`);assert(resource)
+    assert(fs.readFileSync(path.join(project,"outputs",name)).equals(fs.readFileSync(resource.file)))
+  }
+  const credential=read(credentialSource),models=fs.readFileSync(path.join(path.dirname(credentialSource),"models.json"))
+  assert.equal(credential.openai.info.type,"oauth");assert(credential.openai.info.expires>Date.now()+1_200_000);assert(JSON.parse(models.toString()).openai.models["gpt-6.1-sol"])
+  const feedbackDirectory=path.join(project,"acceptance-feedback/word-pagination")
+  if(fs.existsSync(feedbackDirectory))throw new Error("Fresh feedback input directory required")
+  fs.mkdirSync(path.join(evidence,"authority"),{recursive:true});fs.mkdirSync(path.join(evidence,"before"))
+  for(const name of ["growth-plan.md","growth-plan.docx"])fs.copyFileSync(path.join(project,"outputs",name),path.join(evidence,"before",name))
+  fs.copyFileSync(path.join(project,"tools/growth_document.py"),path.join(evidence,"before/growth_document.py"))
+  fs.writeFileSync(path.join(evidence,"before/task.json"),JSON.stringify(previous.task,null,2))
+  fs.writeFileSync(path.join(evidence,"authority/auth.json"),JSON.stringify({openai:credential.openai}),{mode:0o600,flag:"wx"})
+  fs.writeFileSync(path.join(evidence,"authority/models.json"),models,{mode:0o600,flag:"wx"})
+  fs.mkdirSync(feedbackDirectory,{recursive:true})
+  for(const page of [2,3])fs.copyFileSync(path.join(repo,`specs/artifacts/2026-10-24-expert-steering-recovery-cases/word-pages/page-${page}.png`),path.join(feedbackDirectory,`page-${page}-before.png`))
+  fs.copyFileSync(feedbackFile,path.join(feedbackDirectory,"feedback.txt"))
+  execFileSync("git",["add","--","acceptance-feedback/word-pagination"],{cwd:project,stdio:"pipe"})
+  execFileSync("git",["commit","-m","test: record original Word pagination feedback"],{cwd:project,stdio:"pipe"})
+  const meta={run,evidence,project,taskID,model,port,priorRequests:310,maximumRequests,aggregateMaximum:360,originalAudit:audits[0],originalLifecycle:previous.task.executionLifecycle,
+    packageRevision,sourceCommit:execFileSync("git",["rev-parse","HEAD"],{cwd:repo,encoding:"utf8"}).trim(),projectInputHead:execFileSync("git",["rev-parse","HEAD"],{cwd:project,encoding:"utf8"}).trim(),
+    sourceMtime:fs.statSync(credentialSource).mtimeMs,modelsMtime:fs.statSync(path.join(path.dirname(credentialSource),"models.json")).mtimeMs}
+  write("preparation.json",meta);console.log(JSON.stringify({prepared:true,taskID,maximumRequests,priorRequests:310,aggregateMaximum:360}))
+}else if(mode==="serve"){
+  const meta=read(path.join(evidence,"preparation.json"));assert.equal(meta.maximumRequests,50)
+  assert.equal(path.resolve(process.env.OPENCORVUS_HOME!),path.resolve(runtime))
+  const {installProcessShims}=await import(source("src/runtime/shims.ts"));installProcessShims()
+  const {CredentialRedactor,RealProviderAudit,installProcessProviderAudit}=await import(source("script/real-provider-audit.ts"))
+  const {stageDiagnosticProvider}=await import(source("script/evolution-diagnostic-provider.ts"))
+  const {createAuditSnapshotPublisher}=await import(source("script/audit-snapshot.ts"))
+  const redactor=new CredentialRedactor()
+  const access=await stageDiagnosticProvider({authSource:path.join(evidence,"authority/auth.json"),dataDirectory:path.join(runtime,"data"),modelID:"gpt-6.1-sol",redactor})
+  const publish=createAuditSnapshotPublisher(evidence,"provider")
+  let audit:InstanceType<typeof RealProviderAudit>
+  const persist=()=>publish(JSON.parse(redactor.redact(JSON.stringify({at:Date.now(),priorRequests:310,maxRequests:50,aggregateMaximum:360,exhausted:audit.exhausted,requests:audit.requests}))))
+  audit=new RealProviderAudit("gpt-6.1-sol",50,persist,{copiedOAuthExpiresAt:access.copiedOAuthExpiresAt},undefined,{redactor})
+  installProcessProviderAudit(()=>({audit,persist}));audit.localOrigins.add(endpoint);persist();setInterval(persist,5000).unref()
+  const [{Instance},{Auth},{Provider},{SessionStatus},physical,shutdown]=await Promise.all([import(source("src/project/instance.ts")),import(source("src/auth/index.ts")),import(source("src/provider/provider.ts")),import(source("src/session/status.ts")),import(source("src/runtime/process-occurrence.ts")),import(source("src/server/shutdown.ts"))])
+  const parent=physical.observedProcessOccurrence(process.ppid);assert(parent)
+  await Instance.provide({directory:project,fn:async()=>{assert.equal((await Auth.get("openai"))?.type,"oauth");assert.equal((await Provider.getModel("openai","gpt-6.1-sol")).api.id,"gpt-6.1-sol")}})
+  write("authority-ready.json",{credential:"registered OAuth",projectedModel:"gpt-6.1-sol",package:"original fixed Task package retained"})
+  const receipt=path.join(evidence,"startup.json")
+  const monitor=(async()=>{
+    let previous="",last=Date.now()
+    for(;;){
+      let state:any;try{state=read(receipt)}catch(error){if((error as NodeJS.ErrnoException).code!=="ENOENT")throw error}
+      const next=JSON.stringify(state);if(next!==previous){previous=next;last=Date.now()}
+      if(state&&shutdown.hasServerShutdownHandler()){assert.equal(state.pid,process.pid);assert.equal(state.occurrenceID,occurrence);break}
+      if(Date.now()-last>180_000)throw new Error("WORD_FEEDBACK_STARTUP_INACTIVITY")
+      await Bun.sleep(250)
+    }
+    const preflight=await audit.preflight({serverURL:new URL(endpoint),model,inactivityMs:180_000,activity:SessionStatus.getActivity})
+    write("preflight-ready.json",{preflight,maximumRequests:50,priorRequests:310,aggregateMaximum:360,occurrence})
+  })()
+  process.argv=[process.execPath,path.join(pkg,"src/index.ts"),"serve","--hostname","127.0.0.1","--port",String(port),"--project-dir",project,"--startup-receipt",receipt,"--startup-occurrence",occurrence,"--parent-pid",String(parent.pid),"--parent-process-instance-id",parent.processInstanceID,"--log-level","INFO"]
+  try{await Promise.all([import(source("src/index.ts")),monitor])}catch(error){write("checker-error.json",{message:redactor.redact(String(error))});throw error}finally{persist()}
+}else if(mode==="submit"){
+  assert.equal(read(path.join(evidence,"preflight-ready.json")).preflight.credential,"usable")
+  if(fs.existsSync(path.join(evidence,"submission-attempt.json")))throw new Error("Inspect original submission before considering another operator input")
+  const actual=await api(`/task/${taskID}`),meta=read(path.join(evidence,"preparation.json"))
+  assert.equal(actual.result.status,"completed");assert.equal(actual.result.executionLifecycle.epoch,1);assert.equal(actual.result.executionLifecycle.terminalEventID,meta.originalLifecycle.terminalEventID)
+  assert.deepEqual(actual.result.packageRevisionBinding,meta.packageRevision)
+  const conversation=await api(`/task/${taskID}/conversation?tail_limit=2000`)
+  write("restart-baseline.json",{task:actual.result,conversation:conversation.result})
+  const marker="C:/Users/hengu/.codex/plugins/cache/openai-primary-runtime/documents/26.1017.31632/skills/documents/container_tools/mark_artifact_operation_started.mjs"
+  const node="C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe"
+  execFileSync(node,[marker,"--operation-kind","edit","--expected-output-count","1","--output-format","docx"],{cwd:project,stdio:"pipe"})
+  write("authoring-marker.json",{operation:"edit",expectedOutputCount:1,format:"docx",exitCode:0,at:Date.now()})
+  const body={text:fs.readFileSync(feedbackFile,"utf8"),source:"expert-word-pagination-feedback",metadata:{caseID:"word-feedback-02"}}
+  write("submission-attempt.json",{body,startedAt:Date.now()})
+  const accepted=await api(`/task/${taskID}/message`,body);write("submission.json",{body,...accepted});console.log(JSON.stringify({submitted:true,...accepted}))
+}else if(mode==="observe"||mode==="watch"){
+  if(!fs.existsSync(path.join(evidence,"submission.json")))throw new Error("Actual accepted operator input required")
+  const {latestAuditSnapshotFiles}=await import(source("script/audit-snapshot.ts"))
+  let signature="",last=Date.now(),previousSummary=""
+  for(;;){
+    const [t,c]=await Promise.all([api(`/task/${taskID}`),api(`/task/${taskID}/conversation`)])
+    const files=await latestAuditSnapshotFiles(evidence,"provider");assert.equal(files.length,1);const audit=read(files[0])
+    const next=JSON.stringify({task:t.result,conversation:c.result,readers:audit.requests.map((r:any)=>r.response_reader)})
+    if(next!==signature){signature=next;last=Date.now();write("current.json",{task:t.result,conversation:c.result})}
+    const tools=c.result.transcript.flatMap((m:any)=>m.parts.filter((p:any)=>p.type==="tool").map((p:any)=>({agent:m.info.agent,tool:p.tool,status:p.state.status,error:p.state.error})))
+    const summary={taskID,status:t.result.status,lifecycle:t.result.executionLifecycle,requests:audit.requests.length,priorRequests:310,aggregateRequests:310+audit.requests.length,maximumRequests:50,exhausted:audit.exhausted,tools:tools.slice(-4),silenceMs:Date.now()-last}
+    write("observation.json",summary)
+    const summaryText=JSON.stringify({...summary,silenceMs:undefined});if(mode==="observe"||summaryText!==previousSummary)console.log(JSON.stringify(summary));previousSummary=summaryText
+    if(mode==="observe"||(t.result.executionLifecycle.epoch>1&&["completed","failed","cancelled"].includes(t.result.status)))break
+    if(audit.exhausted)throw new Error("WORD_FEEDBACK_ORIGINAL_BUDGET_EXHAUSTED")
+    if(Date.now()-last>180_000)throw new Error("WORD_FEEDBACK_REAL_ACTIVITY_INACTIVITY")
+    await Bun.sleep(5000)
+  }
+}else if(mode==="capture"){
+  const [t,c]=await Promise.all([api(`/task/${taskID}`),api(`/task/${taskID}/conversation?tail_limit=2000`)])
+  write("current.json",{task:t.result,conversation:c.result});console.log(JSON.stringify({status:t.result.status,epoch:t.result.executionLifecycle.epoch,messages:c.result.transcript.length}))
+}else if(mode==="cancel"){
+  const result=await api(`/task/${taskID}/cancel`,{});write("cancellation.json",result);console.log(JSON.stringify(result))
+}else if(mode==="shutdown"){
+  const {latestAuditSnapshotFiles}=await import(source("script/audit-snapshot.ts"));const audit=read((await latestAuditSnapshotFiles(evidence,"provider"))[0])
+  assert(audit.requests.every((r:any)=>["settled","fetch_failed"].includes(r.response_reader.state)))
+  const result=await api("/shutdown",{});write("shutdown.json",result);console.log(result.status)
+}else if(mode==="retire"){
+  const closed=read(path.join(evidence,"native-host-settled.json")),launcher=read(path.join(evidence,"launcher-child-exit.json")),meta=read(path.join(evidence,"preparation.json"))
+  assert.equal(closed.physicalCompletion,true);assert.equal(closed.outputDrainComplete,true);assert.equal(closed.requestCleanupComplete,true);assert(Number.isInteger(launcher.originalChildExit))
+  const copy=read(path.join(evidence,"authority/auth.json")),original=read(credentialSource)
+  assert.deepEqual(copy.openai,original.openai);assert.equal(fs.statSync(credentialSource).mtimeMs,meta.sourceMtime)
+  const catalogSource=path.join(path.dirname(credentialSource),"models.json");assert(fs.readFileSync(catalogSource).equals(fs.readFileSync(path.join(evidence,"authority/models.json"))));assert.equal(fs.statSync(catalogSource).mtimeMs,meta.modelsMtime)
+  const secrets=[copy.openai.info.access,copy.openai.info.refresh].filter(Boolean),hits:string[]=[]
+  const credentialCopies=new Set([path.resolve(evidence,"authority/auth.json"),path.resolve(runtime,"data/auth.json")])
+  const scan=(directory:string)=>{for(const entry of fs.readdirSync(directory,{withFileTypes:true})){const target=path.join(directory,entry.name);if(entry.isSymbolicLink())continue;if(entry.isDirectory())scan(target);else if(!credentialCopies.has(path.resolve(target))&&(/\.(json|log|md|txt|ts|mjs|ps1|db)$/.test(entry.name)||entry.name.endsWith("-wal"))&&secrets.some(value=>fs.readFileSync(target).includes(Buffer.from(value))))hits.push(target)}}
+  for(const directory of [evidence,path.join(runtime,"data"),path.join(runtime,"log"),project])scan(directory);assert.deepEqual(hits,[])
+  const retired=[path.join(evidence,"authority/auth.json"),path.join(evidence,"authority/models.json"),path.join(runtime,"data/auth.json"),path.join(runtime,"data/models.json")]
+  for(const file of retired){assert(path.resolve(file).startsWith(path.resolve(run)+path.sep));assert.equal(fs.lstatSync(file).isSymbolicLink(),false);fs.unlinkSync(file)}
+  write("retirement.json",{retired:retired.map(file=>path.relative(run,file)),source:"unchanged",originalChildExit:launcher.originalChildExit,secretMatches:0,physicalCompletion:true,outputDrainComplete:true,requestCleanupComplete:true});console.log(JSON.stringify({retired:4,source:"unchanged"}))
+}else throw new Error("Unknown word feedback checker mode")

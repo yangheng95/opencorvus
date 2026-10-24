@@ -1,0 +1,44 @@
+import json
+from pathlib import Path
+from docx import Document
+from docx.table import Table
+from docx.text.paragraph import Paragraph
+from zipfile import ZipFile
+from xml.etree import ElementTree as ET
+
+root = Path('C:/Users/hengu/.codex/opencorvus-expert-word-base-20261025-01')
+evidence = root / 'evidence'
+verification = json.loads((evidence / 'delivery-verification/verification.json').read_text(encoding='utf-8'))
+resource = next(r for r in verification['selected'] if r['path'] == 'outputs/growth-plan.docx')
+published = Path(resource['file'])
+expected = json.loads((evidence / 'canonical-blocks.json').read_text(encoding='utf-8'))
+document = Document(published)
+actual = []
+for item in document.iter_inner_content():
+    if isinstance(item, Paragraph):
+        actual.append(['p', item.text])
+    elif isinstance(item, Table):
+        for row in item.rows:
+            actual.append(['row', [cell.text for cell in row.cells]])
+assert actual == expected, 'Full published Word body must equal independently parsed canonical Markdown in order'
+assert len(actual) == 81
+assert len(document.tables) == 7
+assert sum(kind == 'row' for kind, _ in actual) == 44
+ns = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
+with ZipFile(published) as package:
+    body = ET.fromstring(package.read('word/document.xml')).find('w:body', ns)
+    tables = body.findall('w:tbl', ns)
+    for table in tables:
+        first_row = table.find('w:tr', ns)
+        assert first_row.find('w:trPr/w:tblHeader', ns) is not None
+        for paragraph in first_row.findall('w:tc/w:p', ns):
+            assert paragraph.find('w:pPr/w:keepNext', ns) is not None
+        for row in table.findall('w:tr', ns):
+            assert row.find('w:trPr/w:cantSplit', ns) is not None
+result = {'canonicalBlocks': len(expected), 'wordBlocks': len(actual), 'paragraphs': sum(kind == 'p' for kind, _ in actual),
+          'tableRows': sum(kind == 'row' for kind, _ in actual), 'tables': len(document.tables),
+          'orderedBodyEquality': True, 'repeatingFirstRowHeaders': len(tables), 'headerKeepNext': True, 'unsplitRows': True,
+          'source': 'Actual published DOCX parsed independently with python-docx and ElementTree; canonical MD with marked lexer',
+          'visualStatus': 'Separate actual render and all-page manual inspection required; XML does not prove visual success'}
+(evidence / 'word-content-verification.json').write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
+print(json.dumps(result, ensure_ascii=False))

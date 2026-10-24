@@ -1,0 +1,110 @@
+diff --git a/tools/growth_document.py b/tools/growth_document.py
+index a2dddd1..3283a29 100644
+--- a/tools/growth_document.py
++++ b/tools/growth_document.py
+@@ -1,7 +1,6 @@
+ """Local, dependency-free DOCX conversion and full reading-order verification."""
+ 
+ from pathlib import Path
+-import csv
+ import re
+ import sys
+ from zipfile import ZipFile, ZIP_DEFLATED
+@@ -30,8 +29,8 @@ def blocks(text):
+     return result
+ 
+ 
+-def paragraph(text, heading=False):
+-    props = "<w:pPr><w:keepNext/></w:pPr>" if heading else ""
++def paragraph(text, heading=False, keep_next=False):
++    props = "<w:pPr><w:keepNext/></w:pPr>" if heading or keep_next else ""
+     bold = "<w:b/>" if heading else ""
+     return (
+         f"<w:p>{props}<w:r><w:rPr>{bold}"
+@@ -46,6 +45,7 @@ def build():
+     content, table = [], False
+     for kind, value in blocks(text):
+         if kind == "row":
++            is_header = not table
+             if not table:
+                 content.append(
+                     '<w:tbl><w:tblPr><w:tblW w:w="0" w:type="auto"/>'
+@@ -69,10 +69,12 @@ def build():
+                 )
+                 table = True
+             content.append(
+-                "<w:tr><w:trPr><w:cantSplit/></w:trPr>"
++                "<w:tr><w:trPr><w:cantSplit/>"
++                + ("<w:tblHeader/>" if is_header else "")
++                + "</w:trPr>"
+                 + "".join(
+                     '<w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/></w:tcPr>'
+-                    + paragraph(cell)
++                    + paragraph(cell, keep_next=is_header)
+                     + "</w:tc>"
+                     for cell in value
+                 )
+@@ -116,6 +118,9 @@ def build():
+ 
+ 
+ def verify():
++    assert (
++        SOURCE.read_bytes() == (ROOT / "acceptance-input/growth-plan.md").read_bytes()
++    ), "Canonical Markdown bytes changed"
+     text = SOURCE.read_text(encoding="utf-8")
+     expected = blocks(text)
+     with ZipFile(TARGET) as package:
+@@ -133,22 +138,30 @@ def verify():
+                     ("row", ["".join(c.itertext()) for c in row.findall("w:tc", NS)])
+                 )
+     assert actual == expected, "Full paragraph/table reading-order mismatch"
++    with ZipFile(ROOT / "acceptance-input/growth-plan.docx") as original:
++        assert original.testzip() is None
++        old_body = ET.fromstring(original.read("word/document.xml")).find("w:body", NS)
++    old_blocks = []
++    for node in old_body:
++        if node.tag == f"{{{W}}}p":
++            old_blocks.append(("p", "".join(node.itertext())))
++        elif node.tag == f"{{{W}}}tbl":
++            for row in node.findall("w:tr", NS):
++                old_blocks.append(
++                    ("row", ["".join(c.itertext()) for c in row.findall("w:tc", NS)])
++                )
++    assert actual == old_blocks, "Original Word reading order changed"
++    for table in body.findall("w:tbl", NS):
++        rows_in_table = table.findall("w:tr", NS)
++        for index, row in enumerate(rows_in_table):
++            assert row.find("w:trPr/w:cantSplit", NS) is not None
++            assert (row.find("w:trPr/w:tblHeader", NS) is not None) == (index == 0)
++            for p in row.findall("w:tc/w:p", NS):
++                assert (p.find("w:pPr/w:keepNext", NS) is not None) == (index == 0)
+     assert "\ufffd" not in text and not any("\ufffd" in str(b) for b in actual)
+     assert len(re.findall(r"^## ", text, re.M)) == 9
+-    with (ROOT / "campaign.csv").open(encoding="utf-8", newline="") as stream:
+-        rows = list(csv.DictReader(stream))
+-    assert len(rows) == 3
+-    totals = [
+-        sum(int(r[k]) for r in rows)
+-        for k in ("impressions", "clicks", "leads", "cost_cny")
+-    ]
+-    assert totals == [6000, 370, 47, 1900]
+-    assert [int(r["cost_cny"]) / int(r["leads"]) for r in rows] == [20, 50, 60]
+-    assert round(totals[3] / totals[2], 2) == 40.43
+-    for row in rows:
+-        channel = row["channel"]
+-        values = [row[k] for k in ("impressions", "clicks", "leads", "cost_cny")]
+-        assert f"| {channel} | " + " | ".join(values) + " |" in text
++    # This pagination-only project freezes the complete accepted body above;
++    # the previous business-research project's campaign.csv is not an input.
+     for required in (
+         "1900/47≈40.43",
+         "370/6000≈6.17%",
+@@ -174,7 +187,7 @@ def verify():
+     print(
+         f"PASS: {len(actual)} ordered blocks; 9 sections; "
+         f"{sum(k == 'row' for k, _ in actual)} table rows; no missing/drifting text; "
+-        "source arithmetic and budget checked; no second canonical body."
++        "accepted Markdown bytes and original Word text unchanged; pagination properties checked."
+     )
+ 
+ 

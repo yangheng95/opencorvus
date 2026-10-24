@@ -1,0 +1,159 @@
+{
+  "taskID": "tsk_g00VYyl3AK00URPjoC7V",
+  "status": "failed",
+  "lifecycle": {
+    "taskID": "tsk_g00VYyl3AK00URPjoC7V",
+    "epoch": 2,
+    "openedEventID": "pev_g0VYzQg7M00XG69Q9ymw",
+    "openedAt": 1792863534319,
+    "previousTerminal": {
+      "epoch": 1,
+      "status": "completed",
+      "terminalEventID": "pev_g0VYz0uQu00Yogv1tvZX",
+      "terminalAt": 1792857390333
+    },
+    "status": "failed",
+    "terminalEventID": "pev_g0VYzSe6X00C8YvaLcWd",
+    "terminalAt": 1792864003235,
+    "terminalError": "Orchestrator error: Error: E2E_REQUEST_BUDGET_EXHAUSTED",
+    "terminalReason": "interrupted"
+  },
+  "modelRequests": 50,
+  "priorRequests": 310,
+  "aggregateRequests": 360,
+  "exactStreamingModel": true,
+  "allReadersSettled": true,
+  "contentChecks": {
+    "growth-plan.md": {
+      "bytes": 15834,
+      "equalsOriginal": true
+    },
+    "growth-plan.docx": {
+      "bytes": 10552,
+      "equalsOriginal": true
+    }
+  },
+  "projectHead": "c49c3e114b70a209110b8117fe4138f9f5060714",
+  "typedPublications": [
+    {
+      "id": "art_hu0UNoYTazHyyhQqcQ9I",
+      "type": "marketing-growth/growth-brief",
+      "time": {
+        "created": 1792853818414,
+        "updated": 1792853818414
+      },
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hu0UNoYTazHyyhQqcQ9I",
+        "catalog_revision": 6,
+        "expected_sha256": "d71a5ab25584639ac7d9d5aedf89cdf6419528c5021d6c50562dda4f1bbf1064"
+      }
+    },
+    {
+      "id": "art_hBnwtthJgPvppzXLuQO5",
+      "type": "marketing-growth/evidence-dossier",
+      "time": {
+        "created": 1792854609212,
+        "updated": 1792854609212
+      },
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hBnwtthJgPvppzXLuQO5",
+        "catalog_revision": 14,
+        "expected_sha256": "c757fb1dc3886ae6c22151f711ae2f0fff9b31ebd0aa108ff13ec0a483bf8257"
+      }
+    },
+    {
+      "id": "art_hEv0gpNo1HfH2YkAe0nf",
+      "type": "marketing-growth/audience-analysis",
+      "time": {
+        "created": 1792855160850,
+        "updated": 1792855160850
+      },
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hEv0gpNo1HfH2YkAe0nf",
+        "catalog_revision": 20,
+        "expected_sha256": "d3825e6d607af2806f1b8c8e9b8bc56062c818f8d33e5c6ec0bb404e7773c49b"
+      }
+    },
+    {
+      "id": "art_ho2HYbb105YqS1356aB6",
+      "type": "marketing-growth/channel-analysis",
+      "time": {
+        "created": 1792855166828,
+        "updated": 1792855166828
+      },
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_ho2HYbb105YqS1356aB6",
+        "catalog_revision": 21,
+        "expected_sha256": "b17ea8913f997e9d46a766839fe034cf54f5722682777fd4b58cfbd02f181508"
+      }
+    },
+    {
+      "id": "art_hxtTUe0yFbsfhKx3fpN1",
+      "type": "marketing-growth/growth-strategy",
+      "time": {
+        "created": 1792855438374,
+        "updated": 1792855438374
+      },
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hxtTUe0yFbsfhKx3fpN1",
+        "catalog_revision": 26,
+        "expected_sha256": "6aac42b265950fceb0faca24cd4e221c5777b9783b35db91fea9b6d75073b704"
+      }
+    },
+    {
+      "id": "art_hvvRTJ3MrMGCB9zY8jnn",
+      "type": "marketing-growth/audit",
+      "time": {
+        "created": 1792855766860,
+        "updated": 1792855766860
+      },
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hvvRTJ3MrMGCB9zY8jnn",
+        "catalog_revision": 30,
+        "expected_sha256": "394bf4f7f3e413d60acf9332edeec1d67953b5e8bf6fcd8b3b9a710f15ad815c"
+      }
+    },
+    {
+      "id": "art_hvH1Ifw5ypYgh4x5XejS",
+      "type": "marketing-growth/campaign-plan",
+      "time": {
+        "created": 1792856330065,
+        "updated": 1792856330065
+      },
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hvH1Ifw5ypYgh4x5XejS",
+        "catalog_revision": 35,
+        "expected_sha256": "0ef8e216c3afb7ae0ac82693f4b990c68cb3fbbdb75a0330bb4844eda21ae653"
+      }
+    },
+    {
+      "id": "art_hJp5UZLT1UXSZUGljlGo",
+      "type": "marketing-growth/independent-document-verification",
+      "time": {
+        "created": 1792857068353,
+        "updated": 1792857068353
+      },
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hJp5UZLT1UXSZUGljlGo",
+        "catalog_revision": 46,
+        "expected_sha256": "a7f25017ae1cc5726eed3c95646f534598c390164502874ce323259996f3cdbf"
+      }
+    }
+  ],
+  "failureCount": 1,
+  "remainingAcceptance": [
+    "revised DOCX generation",
+    "all-page visual self-review",
+    "independent revision review",
+    "new immutable formal delivery"
+  ],
+  "source": "Actual public Task/conversation responses, exact Provider audit, physical process receipts, original and current file bytes"
+}

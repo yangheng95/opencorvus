@@ -1,0 +1,6 @@
+[render_docx] $ D:\myhexin-local\opencorvus\.tmp-product-iteration\expert-steering-recovery\doc-tools\libreoffice\SourceDir\LibreOffice\program\soffice.exe -env:UserInstallation=file:///C:/Users/hengu/AppData/Local/Temp/soffice_profile_glsxrjqz --invisible --headless --norestore --convert-to pdf --outdir C:\Users\hengu\AppData\Local\Temp\soffice_convert_prdfw3px C:\Users\hengu\.codex\opencorvus-expert-word-base-20261025-01\evidence\render-source\growth-plan.docx
+convert C:\Users\hengu\.codex\opencorvus-expert-word-base-20261025-01\evidence\render-source\growth-plan.docx as a Writer document -> C:\Users\hengu\AppData\Local\Temp\soffice_convert_prdfw3px\growth-plan.pdf using filter : writer_pdf_Export
+
+Could not find platform independent libraries <prefix>
+
+Pages rendered to C:\Users\hengu\.codex\opencorvus-expert-word-base-20261025-01\evidence\final-render

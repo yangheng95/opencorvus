@@ -1,0 +1,33 @@
+{
+  "run": "C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03",
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261024-mg-03\\evidence\\word-feedback-02",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261024-mg-03\\projects\\marketing-growth",
+  "taskID": "tsk_g00VYyl3AK00URPjoC7V",
+  "model": "openai/gpt-6.1-sol",
+  "port": 19145,
+  "priorRequests": 310,
+  "maximumRequests": 50,
+  "aggregateMaximum": 360,
+  "originalAudit": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261024-mg-03\\evidence\\provider-28356-e3462c0b-afef-417c-9b20-518e63793f1b-2005.json",
+  "originalLifecycle": {
+    "taskID": "tsk_g00VYyl3AK00URPjoC7V",
+    "epoch": 1,
+    "openedEventID": "pev_g0VYyl3j300NeQ5M61z8",
+    "openedAt": 1792853613139,
+    "status": "completed",
+    "terminalEventID": "pev_g0VYz0uQu00Yogv1tvZX",
+    "terminalAt": 1792857390333
+  },
+  "packageRevision": {
+    "scope": "project",
+    "project_id": "prj_hDXuOpoU1grGRMR4feyE",
+    "namespace": "builtin",
+    "id": "marketing-growth",
+    "version": "2026.10.24.2",
+    "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+  },
+  "sourceCommit": "ec4f2715c4ee1271e1b79d0e73947a5c17dbfa8e",
+  "projectInputHead": "db75934a153d331cb0c4f83251936a71466891db",
+  "sourceMtime": 1792683516975.7468,
+  "modelsMtime": 1791128890137.9968
+}

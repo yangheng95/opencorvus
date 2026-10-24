@@ -1,0 +1,108 @@
+import assert from "node:assert/strict"
+import fs from "node:fs"
+import path from "node:path"
+import { execFileSync } from "node:child_process"
+import { pathToFileURL } from "node:url"
+
+const [mode,occurrence]=process.argv.slice(2)
+const repo=path.resolve(import.meta.dir,"../.."),pkg=path.join(repo,"packages/opencorvus")
+const source=(file:string)=>pathToFileURL(path.join(pkg,file)).href
+const run="C:/Users/hengu/.codex/opencorvus-expert-word-base-20261025-01"
+const runtime=path.join(run,"runtime"),evidence=path.join(run,"evidence"),project=path.join(run,"project")
+const old="C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03/evidence/word-feedback-02"
+const skill="C:/Users/hengu/.codex/plugins/cache/openai-primary-runtime/documents/26.1017.31632/skills/documents"
+const deps="C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies"
+const credentialSource="C:/Users/hengu/AppData/Local/opencorvus/data/auth.json"
+const port=19146,endpoint=`http://127.0.0.1:${port}`,model="openai/gpt-6.1-sol"
+const read=(file:string)=>JSON.parse(fs.readFileSync(file,"utf8"))
+const write=(file:string,value:unknown)=>fs.writeFileSync(path.join(evidence,file),JSON.stringify(value,null,2))
+const taskID=()=>read(path.join(evidence,"creation.json")).result.task_id
+const api=async(route:string,body?:unknown)=>{
+  const url=new URL(route,endpoint);url.searchParams.set("directory",project)
+  const response=await fetch(url,{method:body===undefined?"GET":"POST",headers:{"content-type":"application/json"},...(body===undefined?{}:{body:JSON.stringify(body)}),signal:AbortSignal.timeout(180_000)})
+  const result=await response.json();assert(response.ok,JSON.stringify({route,status:response.status,result}));return {status:response.status,result}
+}
+if(mode==="files"){
+  if(fs.existsSync(run))throw new Error("Fresh independent Base case required")
+  assert.equal(read(path.join(old,"retirement.json")).originalChildExit,0)
+  for(const part of ["runtime/data","runtime/config","runtime/tmp","authority","evidence","home","appdata","localappdata","project/tools","project/outputs","project/acceptance-input"])
+    fs.mkdirSync(path.join(run,part),{recursive:true})
+  for(const name of ["growth-plan.md","growth-plan.docx"]){
+    for(const directory of ["outputs","acceptance-input"])fs.copyFileSync(path.join(old,"before",name),path.join(project,directory,name))
+  }
+  fs.copyFileSync(path.join(old,"before/growth_document.py"),path.join(project,"tools/growth_document.py"))
+  fs.copyFileSync(path.join(skill,"render_docx.py"),path.join(project,"tools/render_docx.py"))
+  for(const page of [2,3])fs.copyFileSync(path.join(repo,`specs/artifacts/2026-10-24-expert-steering-recovery-cases/word-pages/page-${page}.png`),path.join(project,`acceptance-input/page-${page}-before.png`))
+  const request="完整读取acceptance-input和tools/growth_document.py。本Task修订现有营销Word的分页，业务内容已经确定，不需要重新研究业务：原第2页预算表只有表头、后续跨页表格缺重复表头。请修outputs/growth-plan.docx及必要的tools/growth_document.py，让跨页首部表头正确重复、表头与首数据行同页、行不拆分、所有中文数字公式和单元格清晰完整。outputs/growth-plan.md及其完整字节必须与acceptance-input/growth-plan.md保持相同，Word有序段落和表格单元格必须全文一致，保留1200当前上限、3000旧草案、1900合成成本原边界。不要改验收输入或tools/render_docx.py，不以全表强制同页来替代正确跨页。项目tools/render_docx.py是成熟渲染器的完整副本，Python/LibreOffice/Poppler已配置到本子进程PATH且完成原件只读渲染预检，实际用法见tools/runtime.md；只使用项目内脚本，正常调用已配置离线运行时。请用真实渲染逐页查看全部最终PNG并自检，再由独立角色查看本次真实页图和正文进行复核，不能用XML、文件存在或PASS代替视觉判断。PNG和派生PDF只内部验收，正式交付仅修订Word和同正文规范MD，绑定实际不可变资源，保留输入旧Word可读；提供同正文阅读文档。如遇问题如实报告。只在此隔离项目本地内部，不联网、联系外部、花费、投放、发布或创建其他Task/Goal。完成独立复核和正式交付后结束Task。"
+  fs.writeFileSync(path.join(project,"request.txt"),request+"\n")
+  fs.writeFileSync(path.join(project,"tools/runtime.md"),"本用例离线依赖已配置到子进程PATH。python来自Codex bundled Python；soffice.exe来自本任务已解压的官方LibreOffice；pdftoppm/pdfinfo来自bundled Poppler。只读输入的预检命令：python tools/render_docx.py acceptance-input/growth-plan.docx --output_dir acceptance-input/baseline-render --emit_pdf --verbose。最终修订采用outputs/growth-plan.docx与独立内部QA目录。renderer自动使用独立UserInstallation profile，不连接用户Office。请先读取tools/render_docx.py用法。项目外源脚本不是模型文件读取入口。\n")
+  fs.writeFileSync(path.join(project,".gitignore"),".opencorvus/\n__pycache__/\n.ruff_cache/\nqa/\nacceptance-input/baseline-render/\n")
+  write("files-ready.json",{run,project,port,sourceCommit:execFileSync("git",["rev-parse","HEAD"],{cwd:repo,encoding:"utf8"}).trim(),inputSource:"Original MG-03 delivery, frozen before feedback epoch2",rendererSource:path.join(skill,"render_docx.py"),rendererBytes:fs.statSync(path.join(project,"tools/render_docx.py")).size})
+  console.log(JSON.stringify({filesReady:true,run,project,port}))
+}else if(mode==="prepare"){
+  const prepared=read(path.join(evidence,"files-ready.json")),rendered=read(path.join(evidence,"dependency-preflight.json"))
+  assert.equal(rendered.exitCode,0);assert.equal(rendered.pages,5)
+  assert(fs.readFileSync(path.join(project,"tools/render_docx.py")).equals(fs.readFileSync(path.join(skill,"render_docx.py"))))
+  assert.equal(fs.existsSync(path.join(evidence,"preparation.json")),false)
+  const credential=read(credentialSource),models=fs.readFileSync(path.join(path.dirname(credentialSource),"models.json"))
+  assert.equal(credential.openai.info.type,"oauth");assert(credential.openai.info.expires>Date.now()+1_200_000);assert(JSON.parse(models.toString()).openai.models["gpt-6.1-sol"])
+  fs.writeFileSync(path.join(run,"authority/auth.json"),JSON.stringify({openai:credential.openai}),{mode:0o600,flag:"wx"})
+  fs.writeFileSync(path.join(run,"authority/models.json"),models,{mode:0o600,flag:"wx"})
+  fs.writeFileSync(path.join(runtime,"config/opencorvus.jsonc"),JSON.stringify({model,small_model:model,prompt_profile:{active:"base"},permission_mode:"full_access"}))
+  for(const args of [["init","--initial-branch=main"],["config","user.name","OpenCorvus isolated acceptance"],["config","user.email","acceptance@opencorvus.invalid"],["add","."],["commit","-m","test: initialize independently renderable Word revision input"]])execFileSync("git",args,{cwd:project,stdio:"pipe"})
+  write("preparation.json",{...prepared,model,maximumRequests:360,sourceMtime:fs.statSync(credentialSource).mtimeMs,modelsMtime:fs.statSync(path.join(path.dirname(credentialSource),"models.json")).mtimeMs,projectHead:execFileSync("git",["rev-parse","HEAD"],{cwd:project,encoding:"utf8"}).trim()})
+  console.log(JSON.stringify({prepared:true,maximumRequests:360,independentTask:true}))
+}else if(mode==="serve"){
+  const meta=read(path.join(evidence,"preparation.json"));assert.equal(meta.maximumRequests,360);assert.equal(path.resolve(process.env.OPENCORVUS_HOME!),path.resolve(runtime))
+  const {installProcessShims}=await import(source("src/runtime/shims.ts"));installProcessShims()
+  const {CredentialRedactor,RealProviderAudit,installProcessProviderAudit}=await import(source("script/real-provider-audit.ts"))
+  const {stageDiagnosticProvider}=await import(source("script/evolution-diagnostic-provider.ts"))
+  const {createAuditSnapshotPublisher}=await import(source("script/audit-snapshot.ts"))
+  const redactor=new CredentialRedactor(),access=await stageDiagnosticProvider({authSource:path.join(run,"authority/auth.json"),dataDirectory:path.join(runtime,"data"),modelID:"gpt-6.1-sol",redactor})
+  const publish=createAuditSnapshotPublisher(evidence,"provider");let audit:InstanceType<typeof RealProviderAudit>
+  const persist=()=>publish(JSON.parse(redactor.redact(JSON.stringify({at:Date.now(),maxRequests:360,exhausted:audit.exhausted,requests:audit.requests}))))
+  audit=new RealProviderAudit("gpt-6.1-sol",360,persist,{copiedOAuthExpiresAt:access.copiedOAuthExpiresAt},undefined,{redactor})
+  installProcessProviderAudit(()=>({audit,persist}));audit.localOrigins.add(endpoint);persist();setInterval(persist,5000).unref()
+  const [{Instance},{Auth},{Provider},{SessionStatus},physical,shutdown,{getLoadedBuiltInPackages}]=await Promise.all([import(source("src/project/instance.ts")),import(source("src/auth/index.ts")),import(source("src/provider/provider.ts")),import(source("src/session/status.ts")),import(source("src/runtime/process-occurrence.ts")),import(source("src/server/shutdown.ts")),import(source("src/expert-squad/builtin/index.ts"))])
+  const parent=physical.observedProcessOccurrence(process.ppid);assert(parent)
+  await Instance.provide({directory:project,fn:async()=>{
+    assert.equal((await Auth.get("openai"))?.type,"oauth");assert.equal((await Provider.getModel("openai","gpt-6.1-sol")).api.id,"gpt-6.1-sol")
+    const builtin=getLoadedBuiltInPackages().find((p:any)=>p.id==="base");assert(builtin)
+    write("authority-ready.json",{credential:"registered OAuth",projectedModel:"gpt-6.1-sol",builtin:{id:builtin.id,version:builtin.manifest.version,packageDigest:builtin.packageDigest}})
+  }})
+  const receipt=path.join(evidence,"startup.json")
+  const monitor=(async()=>{let previous="",last=Date.now();for(;;){let state:any;try{state=read(receipt)}catch(error){if((error as NodeJS.ErrnoException).code!=="ENOENT")throw error}const next=JSON.stringify(state);if(next!==previous){previous=next;last=Date.now()}if(state&&shutdown.hasServerShutdownHandler()){assert.equal(state.pid,process.pid);assert.equal(state.occurrenceID,occurrence);break}if(Date.now()-last>180_000)throw new Error("BASE_WORD_STARTUP_INACTIVITY");await Bun.sleep(250)}write("preflight-ready.json",{preflight:await audit.preflight({serverURL:new URL(endpoint),model,inactivityMs:180_000,activity:SessionStatus.getActivity}),maximumRequests:360,occurrence})})()
+  process.argv=[process.execPath,path.join(pkg,"src/index.ts"),"serve","--hostname","127.0.0.1","--port",String(port),"--project-dir",project,"--startup-receipt",receipt,"--startup-occurrence",occurrence,"--parent-pid",String(parent.pid),"--parent-process-instance-id",parent.processInstanceID,"--log-level","INFO"]
+  try{await Promise.all([import(source("src/index.ts")),monitor])}catch(error){write("checker-error.json",{message:redactor.redact(String(error))});throw error}finally{persist()}
+}else if(mode==="start"){
+  assert.equal(read(path.join(evidence,"preflight-ready.json")).preflight.credential,"usable")
+  if(fs.existsSync(path.join(evidence,"submission-attempt.json")))throw new Error("Reconcile actual submission; do not repeat")
+  execFileSync(path.join(deps,"node/bin/node.exe"),[path.join(skill,"container_tools/mark_artifact_operation_started.mjs"),"--operation-kind","edit","--expected-output-count","1","--output-format","docx"],{cwd:project,stdio:"pipe"})
+  const body={requestID:crypto.randomUUID(),directory:project,productPillar:"work",promptProfile:"base",title:"既有营销Word分页修订和独立复核",request:fs.readFileSync(path.join(project,"request.txt"),"utf8"),model,source:"expert-word-independent-revision"}
+  write("submission-attempt.json",{body,authoringMarker:{operation:"edit",expectedOutputCount:1,format:"docx",exitCode:0},at:Date.now()})
+  const accepted=await api("/task",body);write("creation.json",{...accepted,body});console.log(JSON.stringify(accepted))
+}else if(mode==="observe"||mode==="capture"){
+  const [t,c]=await Promise.all([api(`/task/${taskID()}`),api(`/task/${taskID()}/conversation${mode==="capture"?"?tail_limit=2000":""}`)])
+  write("current.json",{task:t.result,conversation:c.result})
+  const {latestAuditSnapshotFiles}=await import(source("script/audit-snapshot.ts")),files=await latestAuditSnapshotFiles(evidence,"provider");assert.equal(files.length,1)
+  const audit=read(files[0]),messages=c.result.transcript
+  const tools=messages.flatMap((m:any)=>m.parts.filter((p:any)=>p.type==="tool").map((p:any)=>({agent:m.info.agent,tool:p.tool,status:p.state.status,failure:p.state.failure?.message})))
+  const summary={taskID:taskID(),status:t.result.status,lifecycle:t.result.executionLifecycle,requests:audit.requests.length,maximumRequests:360,exhausted:audit.exhausted,readers:audit.requests.reduce((acc:any,r:any)=>(acc[r.response_reader.state]=(acc[r.response_reader.state]||0)+1,acc),{}),tools:tools.slice(-5),artifactTypes:c.result.board.artifacts.map((a:any)=>a.payload?.artifact_type).filter(Boolean)}
+  write("observation.json",summary);console.log(JSON.stringify(summary))
+}else if(mode==="shutdown"){
+  const {latestAuditSnapshotFiles}=await import(source("script/audit-snapshot.ts")),audit=read((await latestAuditSnapshotFiles(evidence,"provider"))[0]);assert(audit.requests.every((r:any)=>["settled","fetch_failed"].includes(r.response_reader.state)))
+  const result=await api("/shutdown",{});write("shutdown.json",result);console.log(result.status)
+}else if(mode==="cancel"){
+  const result=await api(`/task/${taskID()}/cancel`,{});write("cancellation.json",result);console.log(result.status)
+}else if(mode==="retire"){
+  const closed=read(path.join(evidence,"native-host-settled.json")),launcher=read(path.join(evidence,"launcher-child-exit.json")),meta=read(path.join(evidence,"preparation.json"))
+  assert.equal(closed.physicalCompletion,true);assert.equal(closed.outputDrainComplete,true);assert.equal(closed.requestCleanupComplete,true);assert(Number.isInteger(launcher.originalChildExit))
+  const copy=read(path.join(run,"authority/auth.json")),original=read(credentialSource);assert.deepEqual(copy.openai,original.openai);assert.equal(fs.statSync(credentialSource).mtimeMs,meta.sourceMtime)
+  const catalogSource=path.join(path.dirname(credentialSource),"models.json");assert(fs.readFileSync(catalogSource).equals(fs.readFileSync(path.join(run,"authority/models.json"))));assert.equal(fs.statSync(catalogSource).mtimeMs,meta.modelsMtime)
+  const secrets=[copy.openai.info.access,copy.openai.info.refresh].filter(Boolean),credentialCopies=new Set([path.resolve(run,"authority/auth.json"),path.resolve(runtime,"data/auth.json")]),hits:string[]=[]
+  const scan=(directory:string)=>{for(const entry of fs.readdirSync(directory,{withFileTypes:true})){const target=path.join(directory,entry.name);if(entry.isSymbolicLink())continue;if(entry.isDirectory())scan(target);else if(!credentialCopies.has(path.resolve(target))&&(/\.(json|log|md|txt|ts|mjs|ps1|py|db)$/.test(entry.name)||entry.name.endsWith("-wal"))&&secrets.some(value=>fs.readFileSync(target).includes(Buffer.from(value))))hits.push(target)}}
+  for(const directory of [evidence,path.join(runtime,"data"),path.join(runtime,"log"),project])scan(directory);assert.deepEqual(hits,[])
+  const retired=[path.join(run,"authority/auth.json"),path.join(run,"authority/models.json"),path.join(runtime,"data/auth.json"),path.join(runtime,"data/models.json")]
+  for(const file of retired){assert(path.resolve(file).startsWith(path.resolve(run)+path.sep));assert.equal(fs.lstatSync(file).isSymbolicLink(),false);fs.unlinkSync(file)}
+  write("retirement.json",{retired:retired.map(file=>path.relative(run,file)),source:"unchanged",originalChildExit:launcher.originalChildExit,secretMatches:0,physicalCompletion:true,outputDrainComplete:true,requestCleanupComplete:true});console.log(JSON.stringify({retired:4,source:"unchanged"}))
+}else throw new Error("Unknown Base Word checker mode")

@@ -1,0 +1,169 @@
+{
+  "id": "tsk_g00VYyl3AK00URPjoC7V",
+  "orderKey": "v1:0001792853613139:0000000000000010:0000000000000000:task:tsk_g00VYyl3AK00URPjoC7V",
+  "projectID": "prj_hDXuOpoU1grGRMR4feyE",
+  "directory": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261024-mg-03\\projects\\marketing-growth",
+  "sessionID": "ses_-zUR1EwHjzzi5tPJwpOD",
+  "requestID": "b763bd38-43ed-40bb-a4ce-44935e73b7df",
+  "source": "expert-steering-recovery-cases",
+  "productPillar": "work",
+  "title": "marketing-growth 追加交付验收",
+  "request": "请完整读取本项目brief.md及campaign.csv，以原营销增长专家团完成有证据的营销计划：来源整理、受众与渠道两独立分析、汇合、审阅和规范交付。准确复算曝光/点击/线索/成本及线索成本，区别观察、假设、未知。唯一规范文件是outputs/growth-plan.md，并提供相同正文的文档产物。初始预算及后续明确更正遵循原输入。所有工作仅本地内部，不联网、不投放、不发布、不创建其他Task/Goal。",
+  "status": "completed",
+  "executionLifecycle": {
+    "taskID": "tsk_g00VYyl3AK00URPjoC7V",
+    "epoch": 1,
+    "openedEventID": "pev_g0VYyl3j300NeQ5M61z8",
+    "openedAt": 1792853613139,
+    "status": "completed",
+    "terminalEventID": "pev_g0VYz0uQu00Yogv1tvZX",
+    "terminalAt": 1792857390333
+  },
+  "terminalReason": "completed",
+  "priority": "normal",
+  "packageRevisionBinding": {
+    "scope": "project",
+    "project_id": "prj_hDXuOpoU1grGRMR4feyE",
+    "namespace": "builtin",
+    "id": "marketing-growth",
+    "version": "2026.10.24.2",
+    "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+  },
+  "completionDecision": {
+    "artifactLocator": {
+      "source": "engine_artifact",
+      "artifact_id": "art_g0VYz0tn400njnWioctJ",
+      "catalog_revision": 54,
+      "expected_sha256": "d419f747661c5c357bb111bef31494ab10fba33949052ca501ebf58c7f59e2e4"
+    },
+    "orchestratorSessionID": "ses_-zUR1EuUfzz9Myz6drh7",
+    "orchestratorMessageID": "msg_hTwtKrgt0ncy8SD5i1ry",
+    "toolCallID": "call_98961e08ab2b482ca01422e51da1e955",
+    "toolPartID": "prt_g0VYz0rQ100hm5p9DXzN",
+    "evidenceLocators": [
+      {
+        "source": "engine_artifact",
+        "artifact_id": "art_hvH1Ifw5ypYgh4x5XejS",
+        "catalog_revision": 35,
+        "expected_sha256": "0ef8e216c3afb7ae0ac82693f4b990c68cb3fbbdb75a0330bb4844eda21ae653"
+      },
+      {
+        "source": "engine_artifact",
+        "artifact_id": "art_hJp5UZLT1UXSZUGljlGo",
+        "catalog_revision": 46,
+        "expected_sha256": "a7f25017ae1cc5726eed3c95646f534598c390164502874ce323259996f3cdbf"
+      },
+      {
+        "source": "session_message",
+        "session_id": "ses_hESXxjll4D1d3M9K0jwQ",
+        "message_id": "msg_g0VYyweRd00AwZ0xHqIz"
+      },
+      {
+        "source": "session_message",
+        "session_id": "ses_hOzZm0FQ6gQeag9en4j7",
+        "message_id": "msg_g0VYyzYVG00G7G2RQl0D"
+      },
+      {
+        "source": "session_message",
+        "session_id": "ses_hqUn8g7WirPmDTgtt3re",
+        "message_id": "msg_g0VYz0X1F00NBlmwh2le"
+      }
+    ],
+    "deliverableArtifactLocators": [
+      {
+        "source": "engine_artifact",
+        "artifact_id": "art_hvH1Ifw5ypYgh4x5XejS",
+        "catalog_revision": 35,
+        "expected_sha256": "0ef8e216c3afb7ae0ac82693f4b990c68cb3fbbdb75a0330bb4844eda21ae653"
+      }
+    ],
+    "acceptedDeliverySliceRevisionIDs": [],
+    "workflowBinding": {
+      "kind": "virtual_workflow",
+      "workflow_id": "marketing-growth-campaign",
+      "package_revision": {
+        "scope": "project",
+        "project_id": "prj_hDXuOpoU1grGRMR4feyE",
+        "namespace": "builtin",
+        "id": "marketing-growth",
+        "version": "2026.10.24.2",
+        "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+      },
+      "nodes": [
+        {
+          "node_id": "marketing-growth-audience-analyst",
+          "agent_id": "marketing-growth-audience-analyst",
+          "depends_on": [
+            "marketing-growth-evidence-researcher"
+          ]
+        },
+        {
+          "node_id": "marketing-growth-campaign-writer",
+          "agent_id": "marketing-growth-campaign-writer",
+          "depends_on": [
+            "marketing-growth-fact-checker"
+          ]
+        },
+        {
+          "node_id": "marketing-growth-channel-analyst",
+          "agent_id": "marketing-growth-channel-analyst",
+          "depends_on": [
+            "marketing-growth-evidence-researcher"
+          ]
+        },
+        {
+          "node_id": "marketing-growth-evidence-researcher",
+          "agent_id": "marketing-growth-evidence-researcher",
+          "depends_on": [
+            "marketing-growth-planner"
+          ]
+        },
+        {
+          "node_id": "marketing-growth-fact-checker",
+          "agent_id": "marketing-growth-fact-checker",
+          "depends_on": [
+            "marketing-growth-strategist"
+          ]
+        },
+        {
+          "node_id": "marketing-growth-planner",
+          "agent_id": "marketing-growth-planner",
+          "depends_on": []
+        },
+        {
+          "node_id": "marketing-growth-strategist",
+          "agent_id": "marketing-growth-strategist",
+          "depends_on": [
+            "marketing-growth-audience-analyst",
+            "marketing-growth-channel-analyst"
+          ]
+        }
+      ]
+    },
+    "timeRecorded": 1792857390333
+  },
+  "metadata": {
+    "actor": "user",
+    "checks": {
+      "artifact": {
+        "require_changed_files": true,
+        "require_diff": true,
+        "mode": "strict"
+      },
+      "judge": {
+        "enabled": true,
+        "mode": "strict"
+      },
+      "spec_check": {
+        "enabled": true,
+        "mode": "strict"
+      }
+    }
+  },
+  "time": {
+    "created": 1792853613139,
+    "updated": 1792857390333,
+    "started": 1792853613139,
+    "completed": 1792857390333
+  }
+}

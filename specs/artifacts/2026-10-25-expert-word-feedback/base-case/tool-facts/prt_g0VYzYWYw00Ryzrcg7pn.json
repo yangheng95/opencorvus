@@ -1,0 +1,35 @@
+{
+  "id": "prt_g0VYzYWYw00Ryzrcg7pn",
+  "sessionID": "ses_hShct6fcVHjUEqD5t2Mk",
+  "messageID": "msg_g0VYzYUj700ojngGa4Am",
+  "type": "tool",
+  "callID": "call_iWCkk2kamOxA91LSOhLoMVvW",
+  "tool": "read",
+  "state": {
+    "status": "error",
+    "input": {
+      "filePath": "acceptance-input/growth-plan.docx"
+    },
+    "failure": {
+      "kind": "tool-execution",
+      "name": "Error",
+      "message": "Cannot read binary file: C:\\Users\\hengu\\.codex\\opencorvus-expert-word-base-20261025-01\\project\\acceptance-input\\growth-plan.docx",
+      "originSite": "session.processor.tool-error",
+      "classification": "tool-execution",
+      "data": {
+        "toolCallId": "call_iWCkk2kamOxA91LSOhLoMVvW",
+        "toolName": "read"
+      }
+    },
+    "time": {
+      "start": 1792865404214,
+      "end": 1792865405289
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_07b8ee0064a2a357016adcf47c1a0887d089eff2db8e5fdfc7"
+    }
+  },
+  "orderKey": "v1:0001792865404961:0000000000000031:0000000000000000:part:prt_g0VYzYWYw00Ryzrcg7pn"
+}

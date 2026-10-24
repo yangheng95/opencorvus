@@ -1,0 +1,66 @@
+{
+  "source": "Read-only exact persisted Tool outcome after native service settlement",
+  "requestPartID": "prt_g0VYzYEiD005NEds0fzz",
+  "message_id": "msg_g0VYzYDeW00HktXijxG4",
+  "session_id": "ses_hShct6fcVHjUEqD5t2Mk",
+  "id": "prt_h4f03rbar7vngew0vqit",
+  "time_created": 1792865339340,
+  "data": {
+    "outcome": "completed",
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hz4MUTMNoi0ikRKumyKx\",\"task_id\":\"tsk_g00VYzV4d60044VaYioJ\",\"snapshot_id\":\"2ac585a9-f2a1-5795-abd7-640f0b57ba71\",\"manifest_sha256\":\"c3741f3a607cf91c8b7cb938cd2a2a1f55ceb20eb97a31d51301c1b2a05ba73c\"},\"tree\":\"resources\",\"path\":\"outputs/growth-plan.md\",\"media_type\":\"text/markdown\",\"bytes\":15834,\"sha256\":\"7b421253a3945004c8b71a535115f9a5e0524b169dfc1758a6f7583ddb316c65\"}},\"media_type\":\"text/markdown\",\"byte_start\":8192,\"byte_end\":12288,\"next_offset\":12288,\"total_bytes\":15834,\"complete\":false,\"sha256\":\"7b421253a3945004c8b71a535115f9a5e0524b169dfc1758a6f7583ddb316c65\",\"text\":\"0+余额100=1200；预留与余额不是同一笔，也不得重复计入。\\n\\n未来实际经济成本=各角色确认工时×确认费率+另获授权的直接成本；跨项工作归属先定、共用活动只计一次。人员、工时、费率及1100元占位的可行性未知，不声称内部工时免费或经济总成本为零。本Task没有购买或投放安排，1900元不计作本次已用预算。任一项预测超限、总预测含预留超过1200或核算不清，先缩减或暂停并重新审阅，不自动挪用预留或余额。\\n\\n## 6. 统一角色、未来阶段与判定规则\\n\\n以下全为未来条件性方案，当前不执行。具体人员和起止日期待确认，不把渠道分支“最多5个工作日”建议当已批准日程。各阶段先固定版本、样本、答案、资源及同意规则，结束后报告达标、未达、缺失、负例与下一建议。\\n\\n责任角色：受众角色拟中性提纲；产品角色核能力及虚构任务；内容角色管文案与版本；数据角色管事件、分母与成本；隐私角色核同意、撤回和边界；独立复核角色检查解释。角色不代表已任命人员，允许兼任但复核须保留独立性。\\n\\n| 阶段与负责人 | 样本、指标与分母 | 预设操作门槛（假设） | 未达或达标后的建议 |\\n| --- | --- | --- | --- |\\n| V0准备：受众、产品、数据、隐私 | 统一提纲、能力清单、任务答案及匿名台账结构；不收集个人数据 | 能力、同意、资源和工作归属明确后才建议启动 | 未明不启动；完成只进入授权评估 |\\n| V1需求与采购：受众、隐私 | 至少5名同意且开始的内部自愿者；任务描述率=具体任务及当前办法者/开始访谈者；采购路径完整率=说明或明确不存在各环节者/开始采购提问者 | 至少5份，分别至少4/5清楚，且无权限阻断；样本超过5时各率至少80% | 未达修订或停止情境；达标仅保留情境，不确认市场需求 |\\n| V2任务：产品、观察 | 至少5人开始同一虚构检索/归类任务；无提示正确完成者/所有开始任务者 | 至少4/5；超过5人时至少80%；退出未完成留在分母 | 未达改任务或原型；达标保留候选，不宣称效率提升 |\\n| V3信息：内容、独立观察 | A/B交替顺序；各版正确复述预定义任务且未误认功能者/看过该版并开始复述者 | 各版至少5人、至少4/5准确，超过5人时至少80%，未实现功能误认人数必须0 | 未达改草稿；达标只保留，不宣布A/B赢家 |\\n| V4共用测量：数据、复核 | 虚构台账案例，核重复、退出、分子≤分母及零分母 | 所有预设案例无缺失且复核一致 | 不清则暂停判定、修订设计；达标才建议C1评估 |\\n\\nV1包含原受众分支V4采购检查，汇合V4改为共用测量，不是删除采购问题。所有退出和缺答不得静默剔除；未知不同于不存在。记录耗时与提示仅作描述，无独立基线不宣称提升。同人可参加多个环节，但各指标分母分别报告，不累加成独立人数；内部代理不等于真实客户。\\n\\n## 7. 渠道顺序、共同测量与下一决策\\n\\n优先C1 email本地版式：清晰单入口可能减少设计依赖，合成表排序只作为候选线索，不是渠道因果优势。C2本地社区讨论情境、C3固定问题与模拟搜索结果页仅为后备；C1复盘后确有新问题且资源确认才建议继续，不要求三者都做。不得发送邮件、进入真实社区或发起搜索请求。\\n\\n| 项目 | 责任角色及上限 | 待验证问题 | 下一建议 |\\n| --- | --- | --- | --- |\\n| C1 email | 内容与数据，200元 | 价值表述与单一入口是否清楚 | 未达改表述或入口；达标仅保留候选 |\\n| C2 community | 研究与内容，100元 | 讨论上下文能否解释行动理由 | 未达改上下文；达标不推断自然流量 |\\n| C3 search | 产品文案与数据，50元 | 问题意图、标题与落地内容是否匹配 | 未达改匹配；达标不推断搜索需求或回报 |\\n\\n\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_nA41xU46_9WI22j7\",\"artifact_read_ref\":\"ar_2Cp8iRpdoD5TLy4p\"}},{\"request_index\":1,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hz4MUTMNoi0ikRKumyKx\",\"task_id\":\"tsk_g00VYzV4d60044VaYioJ\",\"snapshot_id\":\"e4602826-390f-5c3e-a526-333f9f247c01\",\"manifest_sha256\":\"859aa8607f7769fddb89d74b0d251c82e2f797e49a1d412d294bc1ca0ae64ad6\"},\"tree\":\"resources\",\"path\":\"internal-qa/final-render/page-1.png\",\"media_type\":\"image/png\",\"bytes\":518618,\"sha256\":\"c707f3821fa1bdaa24fdd50d1f2b6410b3041f86ae19aa6707771a49acbb0fdd\"}},\"media_type\":\"image/png\",\"byte_start\":0,\"byte_end\":518618,\"next_offset\":null,\"total_bytes\":518618,\"complete\":true,\"sha256\":\"c707f3821fa1bdaa24fdd50d1f2b6410b3041f86ae19aa6707771a49acbb0fdd\",\"attachment\":true,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_pRyA60KR6OIzy35W\",\"artifact_read_ref\":\"ar_nSbE-FlsJai9AH1X\"}},{\"request_index\":2,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hz4MUTMNoi0ikRKumyKx\",\"task_id\":\"tsk_g00VYzV4d60044VaYioJ\",\"snapshot_id\":\"e4602826-390f-5c3e-a526-333f9f247c01\",\"manifest_sha256\":\"859aa8607f7769fddb89d74b0d251c82e2f797e49a1d412d294bc1ca0ae64ad6\"},\"tree\":\"resources\",\"path\":\"internal-qa/final-render/page-2.png\",\"media_type\":\"image/png\",\"bytes\":428258,\"sha256\":\"77fe4081359fe90490e7420ce5b729afc6689224ea63e60c1387a961d5cb5ef2\"}},\"media_type\":\"image/png\",\"byte_start\":0,\"byte_end\":428258,\"next_offset\":null,\"total_bytes\":428258,\"complete\":true,\"sha256\":\"77fe4081359fe90490e7420ce5b729afc6689224ea63e60c1387a961d5cb5ef2\",\"attachment\":true,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_MA5hCkRUV3AksX0A\",\"artifact_read_ref\":\"ar_GBXiESTLRw3vsGyZ\"}},{\"request_index\":3,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hz4MUTMNoi0ikRKumyKx\",\"task_id\":\"tsk_g00VYzV4d60044VaYioJ\",\"snapshot_id\":\"e4602826-390f-5c3e-a526-333f9f247c01\",\"manifest_sha256\":\"859aa8607f7769fddb89d74b0d251c82e2f797e49a1d412d294bc1ca0ae64ad6\"},\"tree\":\"resources\",\"path\":\"internal-qa/final-render/page-3.png\",\"media_type\":\"image/png\",\"bytes\":427944,\"sha256\":\"e0e437fefbfde1fc5a8807d543f39051c881f2b460cd289519fe8faafbfb0b17\"}},\"media_type\":\"image/png\",\"byte_start\":0,\"byte_end\":427944,\"next_offset\":null,\"total_bytes\":427944,\"complete\":true,\"sha256\":\"e0e437fefbfde1fc5a8807d543f39051c881f2b460cd289519fe8faafbfb0b17\",\"attachment\":true,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_GhIfZSoX9ZBK8kYw\",\"artifact_read_ref\":\"ar_0ac6IljjLqpR6wyW\"}},{\"request_index\":4,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hz4MUTMNoi0ikRKumyKx\",\"task_id\":\"tsk_g00VYzV4d60044VaYioJ\",\"snapshot_id\":\"e4602826-390f-5c3e-a526-333f9f247c01\",\"manifest_sha256\":\"859aa8607f7769fddb89d74b0d251c82e2f797e49a1d412d294bc1ca0ae64ad6\"},\"tree\":\"resources\",\"path\":\"internal-qa/final-render/page-4.png\",\"media_type\":\"image/png\",\"bytes\":555836,\"sha256\":\"3ed24a679dce538b2cf340f1dfc7ec051f3f8ab8ceb38ceaf9b9772057dafa2a\"}},\"media_type\":\"image/png\",\"byte_start\":0,\"byte_end\":555836,\"next_offset\":null,\"total_bytes\":555836,\"complete\":true,\"sha256\":\"3ed24a679dce538b2cf340f1dfc7ec051f3f8ab8ceb38ceaf9b9772057dafa2a\",\"attachment\":true,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_ez_lw-AJLbMlj5so\",\"artifact_read_ref\":\"ar_kf0Yv5PrHIAQBK4b\"}},{\"request_index\":5,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hz4MUTMNoi0ikRKumyKx\",\"task_id\":\"tsk_g00VYzV4d60044VaYioJ\",\"snapshot_id\":\"e4602826-390f-5c3e-a526-333f9f247c01\",\"manifest_sha256\":\"859aa8607f7769fddb89d74b0d251c82e2f797e49a1d412d294bc1ca0ae64ad6\"},\"tree\":\"resources\",\"path\":\"internal-qa/final-render/page-5.png\",\"media_type\":\"image/png\",\"bytes\":187505,\"sha256\":\"4d5750defa17db11af23fac6be45ca29dbfb5db1bfd38e214b37e3a52fbe505b\"}},\"media_type\":\"image/png\",\"byte_start\":0,\"byte_end\":187505,\"next_offset\":null,\"total_bytes\":187505,\"complete\":true,\"sha256\":\"4d5750defa17db11af23fac6be45ca29dbfb5db1bfd38e214b37e3a52fbe505b\",\"attachment\":true,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_AlXCgSuWAhNUMehQ\",\"artifact_read_ref\":\"ar__PKy7SgjHKvrJSM9\"}}],\"complete\":false,\"next_reads\":[{\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_nA41xU46_9WI22j7\",\"byte_offset\":12288,\"max_bytes\":20000,\"delivery\":\"inline\"}]}",
+    "title": "Artifacts (6)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "end": 1792865339340
+    },
+    "attachments": [
+      {
+        "id": "prt_g0VYzYFgY00NDBqxytNB",
+        "sessionID": "ses_hShct6fcVHjUEqD5t2Mk",
+        "messageID": "msg_g0VYzYDeW00HktXijxG4",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-1.png",
+        "url": "/attachment/prj_hz4MUTMNoi0ikRKumyKx/c707f3821fa1bdaa24fdd50d1f2b6410b3041f86ae19aa6707771a49acbb0fdd.png"
+      },
+      {
+        "id": "prt_g0VYzYFgY01tA2HBS4iW",
+        "sessionID": "ses_hShct6fcVHjUEqD5t2Mk",
+        "messageID": "msg_g0VYzYDeW00HktXijxG4",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-2.png",
+        "url": "/attachment/prj_hz4MUTMNoi0ikRKumyKx/77fe4081359fe90490e7420ce5b729afc6689224ea63e60c1387a961d5cb5ef2.png"
+      },
+      {
+        "id": "prt_g0VYzYFgY02epxcDAs1u",
+        "sessionID": "ses_hShct6fcVHjUEqD5t2Mk",
+        "messageID": "msg_g0VYzYDeW00HktXijxG4",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-3.png",
+        "url": "/attachment/prj_hz4MUTMNoi0ikRKumyKx/e0e437fefbfde1fc5a8807d543f39051c881f2b460cd289519fe8faafbfb0b17.png"
+      },
+      {
+        "id": "prt_g0VYzYFgY03NPZ5dhmea",
+        "sessionID": "ses_hShct6fcVHjUEqD5t2Mk",
+        "messageID": "msg_g0VYzYDeW00HktXijxG4",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-4.png",
+        "url": "/attachment/prj_hz4MUTMNoi0ikRKumyKx/3ed24a679dce538b2cf340f1dfc7ec051f3f8ab8ceb38ceaf9b9772057dafa2a.png"
+      },
+      {
+        "id": "prt_g0VYzYFgY04G8TNhnXVO",
+        "sessionID": "ses_hShct6fcVHjUEqD5t2Mk",
+        "messageID": "msg_g0VYzYDeW00HktXijxG4",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "page-5.png",
+        "url": "/attachment/prj_hz4MUTMNoi0ikRKumyKx/4d5750defa17db11af23fac6be45ca29dbfb5db1bfd38e214b37e3a52fbe505b.png"
+      }
+    ]
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "id": "prt_g0VYzZJnb00q63GCOAK1",
+  "sessionID": "ses_hShct6fcVHjUEqD5t2Mk",
+  "messageID": "msg_g0VYzZFW700q7U07Giad",
+  "type": "tool",
+  "callID": "call_aOTkcyM9ElxHhEjrZCsvXSra",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "python -c 'from pathlib import Path; import re,subprocess,hashlib; from zipfile import ZipFile; import xml.etree.ElementTree as E; ns={\"w\":\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"}; md=Path(\"acceptance-input/growth-plan.md\").read_bytes(); assert Path(\"outputs/growth-plan.md\").read_bytes()==md; expected=[]; [expected.append((\"r\",[s.strip() for s in l.strip(\"|\").split(\"|\")]) if l.startswith(\"|\") else (\"p\",re.sub(r\"^#+\\s+\",\"\",l))) for l in md.decode().splitlines() if l.strip() and not (l.startswith(\"|\") and all(re.fullmatch(r\":?-+:?\",s.strip()) for s in l.strip(\"|\").split(\"|\")))]; defcode=\"def doc(p):\\n with ZipFile(p) as z:\\n  assert z.testzip() is None\\n  body=E.fromstring(z.read(\\\"word/document.xml\\\")).find(\\\"w:body\\\",ns)\\n  return [(\\\"p\\\",\\\"\\\".join(n.itertext())) if n.tag.endswith(\\\"}p\\\") else (\\\"r\\\",[\\\"\\\".join(c.itertext()) for c in n.findall(\\\"w:tc\\\",ns)]) for b in body for n in ([b] if b.tag.endswith(\\\"}p\\\") else b.findall(\\\"w:tr\\\",ns))]\\n\"; exec(defcode); assert doc(\"acceptance-input/growth-plan.docx\")==doc(\"outputs/growth-plan.docx\")==expected; print(\"Independent exact comparison:\",len(expected),\"blocks; all text and MD bytes equal\"); protected=[p for p in subprocess.check_output([\"git\",\"ls-files\",\"acceptance-input\",\"tools/render_docx.py\"]).decode().splitlines()]; assert all(Path(p).read_bytes()==subprocess.check_output([\"git\",\"show\",\"HEAD:\"+p]) for p in protected); print(\"All\",len(protected),\"tracked protected input/renderer files byte-identical to HEAD\"); refs={\"outputs/growth-plan.docx\":\"43194d4d919df6920114de40490f47724b0bb3c5ec2342fa5ea4bc38a3674721\",\"outputs/growth-plan.md\":\"7b421253a3945004c8b71a535115f9a5e0524b169dfc1758a6f7583ddb316c65\",\"internal-qa/final-render/page-1.png\":\"c707f3821fa1bdaa24fdd50d1f2b6410b3041f86ae19aa6707771a49acbb0fdd\",\"internal-qa/final-render/page-2.png\":\"77fe4081359fe90490e7420ce5b729afc6689224ea63e60c1387a961d5cb5ef2\",\"internal-qa/final-render/page-3.png\":\"e0e437fefbfde1fc5a8807d543f39051c881f2b460cd289519fe8faafbfb0b17\",\"internal-qa/final-render/page-4.png\":\"3ed24a679dce538b2cf340f1dfc7ec051f3f8ab8ceb38ceaf9b9772057dafa2a\",\"internal-qa/final-render/page-5.png\":\"4d5750defa17db11af23fac6be45ca29dbfb5db1bfd38e214b37e3a52fbe505b\"}; assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==s for p,s in refs.items()); print(\"All 7 checked local deliverable/PNG files exactly match independently read immutable resource identities\")'",
+      "description": "独立比较完整正文保护文件及不可变资源身份"
+    },
+    "output": "Independent exact comparison: 81 blocks; all text and MD bytes equal\r\nAll 5 tracked protected input/renderer files byte-identical to HEAD\r\nAll 7 checked local deliverable/PNG files exactly match independently read immutable resource identities\r\n",
+    "title": "独立比较完整正文保护文件及不可变资源身份",
+    "metadata": {
+      "refused": false,
+      "command": "python -c 'from pathlib import Path; import re,subprocess,hashlib; from zipfile import ZipFile; import xml.etree.ElementTree as E; ns={\"w\":\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"}; md=Path(\"acceptance-input/growth-plan.md\").read_bytes(); assert Path(\"outputs/growth-plan.md\").read_bytes()==md; expected=[]; [expected.append((\"r\",[s.strip() for s in l.strip(\"|\").split(\"|\")]) if l.startswith(\"|\") else (\"p\",re.sub(r\"^#+\\s+\",\"\",l))) for l in md.decode().splitlines() if l.strip() and not (l.startswith(\"|\") and all(re.fullmatch(r\":?-+:?\",s.strip()) for s in l.strip(\"|\").split(\"|\")))]; defcode=\"def doc(p):\\n with ZipFile(p) as z:\\n  assert z.testzip() is None\\n  body=E.fromstring(z.read(\\\"word/document.xml\\\")).find(\\\"w:body\\\",ns)\\n  return [(\\\"p\\\",\\\"\\\".join(n.itertext())) if n.tag.endswith(\\\"}p\\\") else (\\\"r\\\",[\\\"\\\".join(c.itertext()) for c in n.findall(\\\"w:tc\\\",ns)]) for b in body for n in ([b] if b.tag.endswith(\\\"}p\\\") else b.findall(\\\"w:tr\\\",ns))]\\n\"; exec(defcode); assert doc(\"acceptance-input/growth-plan.docx\")==doc(\"outputs/growth-plan.docx\")==expected; print(\"Independent exact comparison:\",len(expected),\"blocks; all text and MD bytes equal\"); protected=[p for p in subprocess.check_output([\"git\",\"ls-files\",\"acceptance-input\",\"tools/render_docx.py\"]).decode().splitlines()]; assert all(Path(p).read_bytes()==subprocess.check_output([\"git\",\"show\",\"HEAD:\"+p]) for p in protected); print(\"All\",len(protected),\"tracked protected input/renderer files byte-identical to HEAD\"); refs={\"outputs/growth-plan.docx\":\"43194d4d919df6920114de40490f47724b0bb3c5ec2342fa5ea4bc38a3674721\",\"outputs/growth-plan.md\":\"7b421253a3945004c8b71a535115f9a5e0524b169dfc1758a6f7583ddb316c65\",\"internal-qa/final-render/page-1.png\":\"c707f3821fa1bdaa24fdd50d1f2b6410b3041f86ae19aa6707771a49acbb0fdd\",\"internal-qa/final-render/page-2.png\":\"77fe4081359fe90490e7420ce5b729afc6689224ea63e60c1387a961d5cb5ef2\",\"internal-qa/final-render/page-3.png\":\"e0e437fefbfde1fc5a8807d543f39051c881f2b460cd289519fe8faafbfb0b17\",\"internal-qa/final-render/page-4.png\":\"3ed24a679dce538b2cf340f1dfc7ec051f3f8ab8ceb38ceaf9b9772057dafa2a\",\"internal-qa/final-render/page-5.png\":\"4d5750defa17db11af23fac6be45ca29dbfb5db1bfd38e214b37e3a52fbe505b\"}; assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==s for p,s in refs.items()); print(\"All 7 checked local deliverable/PNG files exactly match independently read immutable resource identities\")'",
+      "output": "Independent exact comparison: 81 blocks; all text and MD bytes equal\r\nAll 5 tracked protected input/renderer files byte-identical to HEAD\r\nAll 7 checked local deliverable/PNG files exactly match independently read immutable resource identities\r\n",
+      "output_bytes": 245,
+      "exit": 0,
+      "pid": null,
+      "background": false,
+      "description": "独立比较完整正文保护文件及不可变资源身份",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792865593479,
+      "end": 1792865611166
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_07649c6cebbb5120016adcf5395d2887d096940d63096ecc4c"
+    }
+  },
+  "orderKey": "v1:0001792865609595:0000000000000031:0000000000000000:part:prt_g0VYzZJnb00q63GCOAK1"
+}

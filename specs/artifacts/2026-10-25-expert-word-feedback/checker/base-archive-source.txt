@@ -1,0 +1,41 @@
+import assert from "node:assert/strict"
+import fs from "node:fs"
+import path from "node:path"
+import {execFileSync} from "node:child_process"
+import {latestAuditSnapshotFiles} from "../../packages/opencorvus/script/audit-snapshot"
+
+const repo=path.resolve(import.meta.dir,"../.."),run="C:/Users/hengu/.codex/opencorvus-expert-word-base-20261025-01",e=path.join(run,"evidence"),project=path.join(run,"project")
+const dest=path.join(repo,"specs/artifacts/2026-10-25-expert-word-feedback/base-case"),read=(file:string)=>JSON.parse(fs.readFileSync(file,"utf8"))
+const x=read(path.join(e,"current.json")),verification=read(path.join(e,"delivery-verification/verification.json")),word=read(path.join(e,"word-content-verification.json")),visual=read(path.join(e,"outer-visual-observation.json"))
+assert.equal(x.task.status,"completed");assert.equal(verification.renderedSourceEquality,true);assert.equal(visual.pages,5);assert.equal(word.orderedBodyEquality,true)
+for(const name of ["current.json","preparation.json","preflight-ready.json","creation.json","submission-attempt.json","native-host-ready.json","word-content-verification.json","final-render.json","final-render.log","outer-visual-observation.json","render-source.json"])
+  fs.copyFileSync(path.join(e,name),path.join(dest,name))
+fs.cpSync(path.join(e,"delivery-verification"),path.join(dest,"delivery-verification"),{recursive:true})
+fs.cpSync(path.join(e,"tool-facts"),path.join(dest,"tool-facts"),{recursive:true})
+fs.cpSync(path.join(e,"final-render"),path.join(dest,"word-pages"),{recursive:true})
+fs.mkdirSync(path.join(dest,"delivery"),{recursive:true})
+for(const resource of verification.selected){const out=path.join(dest,"delivery",path.basename(resource.path));fs.copyFileSync(resource.file,out);assert(fs.readFileSync(out).equals(fs.readFileSync(resource.file)))}
+fs.copyFileSync(path.join(project,"tools/growth_document.py"),path.join(dest,"delivery/growth_document.py"))
+fs.writeFileSync(path.join(dest,"generator.patch"),execFileSync("git",["diff",read(path.join(e,"preparation.json")).projectHead,"HEAD","--","tools/growth_document.py"],{cwd:project}))
+const audit=read((await latestAuditSnapshotFiles(e,"provider"))[0]);assert.equal(audit.requests.length,92);assert(audit.requests.every((r:any)=>r.model==="gpt-6.1-sol"&&r.streaming===true&&["settled","fetch_failed"].includes(r.response_reader.state)))
+fs.writeFileSync(path.join(dest,"provider.json"),JSON.stringify({maximumRequests:360,requests:audit.requests.map((r:any,index:number)=>({index,model:r.model,streaming:r.streaming,status:r.status,response_reader:r.response_reader,declaredToolNames:r.tool_declarations.entries.flatMap((t:any)=>t.names.filter((n:any)=>n.state==="present").map((n:any)=>n.value))}))},null,2))
+const imageReads=x.conversation.transcript.flatMap((m:any)=>m.parts.filter((p:any)=>p.type==="tool"&&p.tool==="read"&&p.state.status==="completed"&&String(p.state.input?.filePath).startsWith("internal-qa/final-render/page-")).map((p:any)=>({agent:m.info.agent,sessionID:m.info.sessionID,messageID:m.info.id,partID:p.id,path:p.state.input.filePath,time:p.state.time})))
+assert.equal(imageReads.filter((r:any)=>r.agent==="orchestrator").length,5)
+const testerMedia=[]
+for(const message of x.conversation.transcript.filter((m:any)=>m.info.agent==="base-tester"))for(const part of message.parts.filter((p:any)=>p.type==="tool"&&p.tool==="artifact_read")){
+  const stored=read(path.join(e,"tool-facts",`${part.id}-persisted-outcome.json`));assert.equal(stored.message_id,message.info.id);assert.equal(stored.session_id,message.info.sessionID)
+  const output=JSON.parse(stored.data.output)
+  for(const item of output.results.filter((r:any)=>r.value?.media_type==="image/png")){
+    const value=item.value;assert.equal(value.complete,true);assert.equal(value.byte_start,0);assert.equal(value.byte_end,value.total_bytes);assert.equal(value.attachment,true)
+    const media=stored.data.attachments.find((a:any)=>a.filename===path.basename(value.locator.ref.path));assert(media);assert.equal(media.mime,"image/png");assert.equal(media.sessionID,message.info.sessionID);assert.equal(media.messageID,message.info.id)
+    testerMedia.push({agent:message.info.agent,sessionID:message.info.sessionID,messageID:message.info.id,requestPartID:part.id,outcomePartID:stored.id,locator:value.locator,path:value.locator.ref.path,complete:value.complete,bytes:value.total_bytes,attachment:media,time:stored.data.time})
+  }
+}
+assert.deepEqual(testerMedia.map((r:any)=>r.path).sort(),[1,2,3,4,5].map(p=>`internal-qa/final-render/page-${p}.png`))
+fs.writeFileSync(path.join(dest,"independent-image-read-receipts.json"),JSON.stringify(testerMedia,null,2))
+fs.writeFileSync(path.join(dest,"verification.json"),JSON.stringify({taskID:x.task.id,projectID:x.task.projectID,status:x.task.status,lifecycle:x.task.executionLifecycle,requests:audit.requests.length,maximumRequests:360,actualModel:"gpt-6.1-sol",allStreaming:true,allReadersSettled:true,completionDecision:verification.completionDecision,formalFiles:verification.selected.map((r:any)=>({path:r.path,bytes:r.bytes,ref:r.ref,archivedFile:"delivery/"+path.basename(r.path)})),readingDocument:verification.document,canonicalInputEquality:true,renderedSourceEquality:true,orderedBodyEquality:true,wordBlocks:word.wordBlocks,paragraphs:word.paragraphs,tableRows:word.tableRows,tables:word.tables,visualPages:visual.pages,exactFinalImageReads:imageReads,projectHead:execFileSync("git",["rev-parse","HEAD"],{cwd:project,encoding:"utf8"}).trim(),projectStatus:execFileSync("git",["status","--short"],{cwd:project,encoding:"utf8"}).trim(),source:"Actual complete public API reads, full canonical Tool parts, independent parsing, original process receipts and outer manual page-image observation"},null,2))
+const copied=read(path.join(run,"authority/auth.json")),secrets=[copied.openai.info.access,copied.openai.info.refresh].filter(Boolean),hits:string[]=[]
+const walk=(dir:string)=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const target=path.join(dir,entry.name);if(entry.isSymbolicLink())continue;if(entry.isDirectory())walk(target);else if(secrets.some(s=>fs.readFileSync(target).includes(Buffer.from(s))))hits.push(path.relative(repo,target))}}
+walk(path.join(repo,"specs/artifacts/2026-10-25-expert-word-feedback"));assert.deepEqual(hits,[])
+fs.writeFileSync(path.join(dest,"export-scan.json"),JSON.stringify({secretMatches:0,scope:"Every exported case file, original-Task and Base evidence; exact current copied access and refresh values checked in memory"},null,2))
+console.log(JSON.stringify({archived:true,requests:92,wordBlocks:81,tableRows:44,manualPages:5,producerFinalPageReads:5,independentFinalPageReads:5,secretMatches:0}))

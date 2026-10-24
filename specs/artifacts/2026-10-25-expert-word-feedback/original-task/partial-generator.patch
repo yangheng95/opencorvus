@@ -1,0 +1,113 @@
+diff --git a/tools/growth_document.py b/tools/growth_document.py
+index a2dddd1..159d170 100644
+--- a/tools/growth_document.py
++++ b/tools/growth_document.py
+@@ -1,6 +1,7 @@
+ """Local, dependency-free DOCX conversion and full reading-order verification."""
+ 
+ from pathlib import Path
++import argparse
+ import csv
+ import re
+ import sys
+@@ -30,8 +31,8 @@ def blocks(text):
+     return result
+ 
+ 
+-def paragraph(text, heading=False):
+-    props = "<w:pPr><w:keepNext/></w:pPr>" if heading else ""
++def paragraph(text, heading=False, keep_next=False):
++    props = "<w:pPr><w:keepNext/></w:pPr>" if heading or keep_next else ""
+     bold = "<w:b/>" if heading else ""
+     return (
+         f"<w:p>{props}<w:r><w:rPr>{bold}"
+@@ -46,6 +47,7 @@ def build():
+     content, table = [], False
+     for kind, value in blocks(text):
+         if kind == "row":
++            header = not table
+             if not table:
+                 content.append(
+                     '<w:tbl><w:tblPr><w:tblW w:w="0" w:type="auto"/>'
+@@ -69,10 +71,12 @@ def build():
+                 )
+                 table = True
+             content.append(
+-                "<w:tr><w:trPr><w:cantSplit/></w:trPr>"
++                "<w:tr><w:trPr><w:cantSplit/>"
++                + ("<w:tblHeader/>" if header else "")
++                + "</w:trPr>"
+                 + "".join(
+                     '<w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/></w:tcPr>'
+-                    + paragraph(cell)
++                    + paragraph(cell, keep_next=header)
+                     + "</w:tc>"
+                     for cell in value
+                 )
+@@ -115,7 +119,30 @@ def build():
+         package.writestr("word/document.xml", document)
+ 
+ 
+-def verify():
++def verify_table_layout(body):
++    tables = body.findall("w:tbl", NS)
++    assert tables, "No tables to verify"
++    for table in tables:
++        rows = table.findall("w:tr", NS)
++        assert len(rows) >= 2, "Header needs a first data row"
++        for index, row in enumerate(rows):
++            assert row.find("w:trPr/w:cantSplit", NS) is not None
++            assert (row.find("w:trPr/w:tblHeader", NS) is not None) == (index == 0)
++            for cell in row.findall("w:tc", NS):
++                for p in cell.findall("w:p", NS):
++                    # Only the header links forward; body rows remain free to paginate.
++                    assert (p.find("w:pPr/w:keepNext", NS) is not None) == (index == 0)
++    return len(tables)
++
++
++def verify(baseline=None):
++    if baseline is not None:
++        original = Path(baseline).read_bytes()
++        current = SOURCE.read_bytes()
++        assert current == original, "Canonical Markdown changed from frozen original"
++        print(
++            f"PASS: frozen Markdown and current file directly equal, {len(current)} bytes"
++        )
+     text = SOURCE.read_text(encoding="utf-8")
+     expected = blocks(text)
+     with ZipFile(TARGET) as package:
+@@ -123,6 +150,7 @@ def verify():
+         for name in package.namelist():
+             ET.fromstring(package.read(name))
+         body = ET.fromstring(package.read("word/document.xml")).find("w:body", NS)
++    table_count = verify_table_layout(body)
+     actual = []
+     for node in body:
+         if node.tag == f"{{{W}}}p":
+@@ -176,10 +204,24 @@ def verify():
+         f"{sum(k == 'row' for k, _ in actual)} table rows; no missing/drifting text; "
+         "source arithmetic and budget checked; no second canonical body."
+     )
++    print(
++        f"PASS: {table_count} tables have repeating first-row headers, header-only "
++        "keep-next and unsplit rows. Rendering and visual acceptance are separate."
++    )
+ 
+ 
+ if __name__ == "__main__":
+     sys.stdout.reconfigure(encoding="utf-8")
+-    if "--build" in sys.argv:
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("--build", action="store_true")
++    parser.add_argument(
++        "--baseline", type=Path, help="Exact materialized frozen Markdown"
++    )
++    args = parser.parse_args()
++    if args.baseline is not None:
++        assert SOURCE.read_bytes() == args.baseline.read_bytes(), (
++            "Markdown baseline mismatch"
++        )
++    if args.build:
+         build()
+-    verify()
++    verify(args.baseline)

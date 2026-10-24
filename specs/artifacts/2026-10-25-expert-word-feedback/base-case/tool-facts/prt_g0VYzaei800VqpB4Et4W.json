@@ -1,0 +1,38 @@
+{
+  "id": "prt_g0VYzaei800VqpB4Et4W",
+  "sessionID": "ses_-zUR0UuPRzz2Wom7unWE",
+  "messageID": "msg_hQWzuzZsrfKCn2fdK7qY",
+  "type": "tool",
+  "callID": "call_rp8EknkDurVJKzOAFGRCMojO",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "git status --short",
+      "description": "确认正式修订已提交且内部图像未提交"
+    },
+    "output": "?? internal-qa/\n",
+    "title": "确认正式修订已提交且内部图像未提交",
+    "metadata": {
+      "refused": false,
+      "command": "git status --short",
+      "output": "?? internal-qa/\n",
+      "output_bytes": 16,
+      "exit": 0,
+      "pid": null,
+      "background": false,
+      "description": "确认正式修订已提交且内部图像未提交",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792865912192,
+      "end": 1792865915531
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0519f4995b719401016adcf677da7c87d092774cc18075bcfa"
+    }
+  },
+  "orderKey": "v1:0001792865914968:0000000000000031:0000000000000000:part:prt_g0VYzaei800VqpB4Et4W"
+}

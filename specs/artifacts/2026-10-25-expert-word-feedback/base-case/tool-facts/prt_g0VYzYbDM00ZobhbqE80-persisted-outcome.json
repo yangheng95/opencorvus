@@ -1,0 +1,30 @@
+{
+  "source": "Read-only exact persisted Tool outcome after native service settlement",
+  "requestPartID": "prt_g0VYzYbDM00ZobhbqE80",
+  "message_id": "msg_g0VYzYZDn00bcbCX7Bsw",
+  "session_id": "ses_hShct6fcVHjUEqD5t2Mk",
+  "id": "prt_hE7Psu42FWFS8W5QEs6H",
+  "time_created": 1792865424952,
+  "data": {
+    "outcome": "completed",
+    "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hz4MUTMNoi0ikRKumyKx\",\"task_id\":\"tsk_g00VYzV4d60044VaYioJ\",\"snapshot_id\":\"2ac585a9-f2a1-5795-abd7-640f0b57ba71\",\"manifest_sha256\":\"c3741f3a607cf91c8b7cb938cd2a2a1f55ceb20eb97a31d51301c1b2a05ba73c\"},\"tree\":\"resources\",\"path\":\"outputs/growth-plan.md\",\"media_type\":\"text/markdown\",\"bytes\":15834,\"sha256\":\"7b421253a3945004c8b71a535115f9a5e0524b169dfc1758a6f7583ddb316c65\"}},\"media_type\":\"text/markdown\",\"byte_start\":12288,\"byte_end\":15834,\"next_offset\":null,\"total_bytes\":15834,\"complete\":true,\"sha256\":\"7b421253a3945004c8b71a535115f9a5e0524b169dfc1758a6f7583ddb316c65\",\"text\":\"共同样本假设：每渠道20个合格内部参与者-渠道组合，首次完整看指定原型计1次合格曝光；同组合重复不增加分母。各组合最多计1次入口点击、1次完成虚构必填字段及同意流程的合格模拟留资。模拟留资不是真实业务线索，须与原表合成线索、未来真实线索分列。\\n\\n指标A=点击组合数/合格曝光组合数，B=合格模拟留资组合数/点击组合数。满20曝光才判断，暂定A≥30%（至少6/20），B≥50%（按实际点击分母向上取满足比例的整数）；7点击需至少4次合格模拟留资，不固定为3条。零点击时B未定义且本轮未达；少于20标样本不足，不补造曝光或降低分母。\\n\\n任何一项未达都不通过本轮操作假设；达标只保留候选，不扩量、不外发、不授权下一阶段。同人跨渠道须记匿名代号、版本和展示顺序并承认相关性，不称为60名独立用户或随机可比实验。样本量、30%与50%均是人为风险筛选假设，不是外部基准、合成表效果预测、统计显著性或统计功效结论。\\n\\n## 8. 共同停止护栏与决策记录\\n\\n出现真实敏感文档或身份、权限不明、参与者撤回、要求联网/外部通信/付费/发布、未经证实功能承诺，立即停止相应步骤并复核；撤回不追问，记录依同意范围处理。台账缺失、重复不清、分子大于分母、分母不可追溯时暂停判断，不以换分母制造通过。工时费率和预算可行性未知不启动，超限先缩减或暂停。\\n\\n未来台账至少记录匿名编号、目标情境或代理属性、同意/开始/退出/缺失、版本与展示顺序、任务答案和提示、采购路径、曝光/点击/模拟留资以及工时费率与费用归属。不收集真实留资字段。每阶段或渠道20组合/约定窗口结束后，由职责负责人和独立复核者共同提出保留、修订或暂停建议；不得用外部触达补样本或自动追加预算。\\n\\n当前下一决策是接收本地计划并决定是否补齐未知与另行授权内部验证，不是启动真实试投。本Task不执行这些实验，所有未来通过情况保持未观测。\\n\\n## 9. 未知清单与交付使用限制\\n\\n| 类别 | 未知及对决策的影响 |\\n| --- | --- |\\n| 受众与需求 | 团队规模定义、行业地域、任务频次、痛点、现有替代、真实需求与触达许可；不形成已验证画像 |\\n| 产品与采购 | 实际功能、部署、权限、离线原型、数据处理与退出方式、批准者、价格及购买周期；不承诺产品能力或支付意愿 |\\n| 数据与归因 | 观察周期、人群重叠、去重、线索质量、成本构成、波动和可比性；不作因果、增量或预测推断 |\\n| 商业价值 | 成交、付费客户、收入、利润、留存、市场规模、竞争与外部基准；不计算可信CAC/LTV/ROI |\\n| 资源与执行 | 姓名、内部样本与同意、工时费率、可用性及日期；1100元并非资源已可行，1200元现行上限本身不是未知 |\\n\\n本文保留观察、方案假设和未知的边界。独立audit只审阅策略与其固定事实，不代表独立审阅者已经验收最终文件；最终交付者须实际核读Markdown及DOCX全部正文和表格，核对中文、章节完整性、预算沿革与数值，保留输入并确认没有第二规范正文后，再绑定真实文件资源发布。文档副本和内部阅读呈现均不得冒充另一套规范正文或对外发布许可。\\n\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_nA41xU46_9WI22j7\",\"artifact_read_ref\":\"ar_971Sxi0o4s1PTv42\"}},{\"request_index\":1,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hz4MUTMNoi0ikRKumyKx\",\"task_id\":\"tsk_g00VYzV4d60044VaYioJ\",\"snapshot_id\":\"e4602826-390f-5c3e-a526-333f9f247c01\",\"manifest_sha256\":\"859aa8607f7769fddb89d74b0d251c82e2f797e49a1d412d294bc1ca0ae64ad6\"},\"tree\":\"resources\",\"path\":\"acceptance-input/growth-plan.docx\",\"media_type\":\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",\"bytes\":10552,\"sha256\":\"25e0498818abb1a663e05b32075f405f46d969eb29e031886cc372fe0d5909b0\"}},\"media_type\":\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",\"byte_start\":0,\"byte_end\":10552,\"next_offset\":null,\"total_bytes\":10552,\"complete\":true,\"sha256\":\"25e0498818abb1a663e05b32075f405f46d969eb29e031886cc372fe0d5909b0\",\"attachment\":true,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_GLIL5Yo4MrCh5y6b\",\"artifact_read_ref\":\"ar_P19-6HkktOQfk0-T\"}}],\"complete\":true,\"next_reads\":[]}",
+    "title": "Artifacts (2)",
+    "metadata": {
+      "truncated": false
+    },
+    "time": {
+      "end": 1792865424952
+    },
+    "attachments": [
+      {
+        "id": "prt_g0VYzYbxP00te9oWBBjJ",
+        "sessionID": "ses_hShct6fcVHjUEqD5t2Mk",
+        "messageID": "msg_g0VYzYZDn00bcbCX7Bsw",
+        "type": "file",
+        "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "filename": "growth-plan.docx",
+        "url": "/attachment/prj_hz4MUTMNoi0ikRKumyKx/25e0498818abb1a663e05b32075f405f46d969eb29e031886cc372fe0d5909b0.docx"
+      }
+    ]
+  }
+}

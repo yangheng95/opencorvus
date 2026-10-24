@@ -1,0 +1,65 @@
+{
+  "id": "tsk_g00VYyl3AK00URPjoC7V",
+  "orderKey": "v1:0001792853613139:0000000000000010:0000000000000000:task:tsk_g00VYyl3AK00URPjoC7V",
+  "projectID": "prj_hDXuOpoU1grGRMR4feyE",
+  "directory": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261024-mg-03\\projects\\marketing-growth",
+  "sessionID": "ses_-zUR1EwHjzzi5tPJwpOD",
+  "requestID": "b763bd38-43ed-40bb-a4ce-44935e73b7df",
+  "source": "expert-steering-recovery-cases",
+  "productPillar": "work",
+  "title": "marketing-growth 追加交付验收",
+  "request": "请完整读取本项目brief.md及campaign.csv，以原营销增长专家团完成有证据的营销计划：来源整理、受众与渠道两独立分析、汇合、审阅和规范交付。准确复算曝光/点击/线索/成本及线索成本，区别观察、假设、未知。唯一规范文件是outputs/growth-plan.md，并提供相同正文的文档产物。初始预算及后续明确更正遵循原输入。所有工作仅本地内部，不联网、不投放、不发布、不创建其他Task/Goal。",
+  "status": "failed",
+  "executionLifecycle": {
+    "taskID": "tsk_g00VYyl3AK00URPjoC7V",
+    "epoch": 2,
+    "openedEventID": "pev_g0VYzQg7M00XG69Q9ymw",
+    "openedAt": 1792863534319,
+    "previousTerminal": {
+      "epoch": 1,
+      "status": "completed",
+      "terminalEventID": "pev_g0VYz0uQu00Yogv1tvZX",
+      "terminalAt": 1792857390333
+    },
+    "status": "failed",
+    "terminalEventID": "pev_g0VYzSe6X00C8YvaLcWd",
+    "terminalAt": 1792864003235,
+    "terminalError": "Orchestrator error: Error: E2E_REQUEST_BUDGET_EXHAUSTED",
+    "terminalReason": "interrupted"
+  },
+  "terminalReason": "interrupted",
+  "priority": "normal",
+  "packageRevisionBinding": {
+    "scope": "project",
+    "project_id": "prj_hDXuOpoU1grGRMR4feyE",
+    "namespace": "builtin",
+    "id": "marketing-growth",
+    "version": "2026.10.24.2",
+    "package_digest": "66bbf77da0945d7da12931b6599cd8f3211a70701de2051e0d3227017815fc5c"
+  },
+  "error": "Orchestrator error: Error: E2E_REQUEST_BUDGET_EXHAUSTED",
+  "metadata": {
+    "actor": "user",
+    "checks": {
+      "artifact": {
+        "require_changed_files": true,
+        "require_diff": true,
+        "mode": "strict"
+      },
+      "judge": {
+        "enabled": true,
+        "mode": "strict"
+      },
+      "spec_check": {
+        "enabled": true,
+        "mode": "strict"
+      }
+    }
+  },
+  "time": {
+    "created": 1792853613139,
+    "updated": 1792864003235,
+    "started": 1792863534319,
+    "completed": 1792864003235
+  }
+}

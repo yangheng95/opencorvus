@@ -1,0 +1,13 @@
+{
+  "canonicalBlocks": 81,
+  "wordBlocks": 81,
+  "paragraphs": 37,
+  "tableRows": 44,
+  "tables": 7,
+  "orderedBodyEquality": true,
+  "repeatingFirstRowHeaders": 7,
+  "headerKeepNext": true,
+  "unsplitRows": true,
+  "source": "Actual published DOCX parsed independently with python-docx and ElementTree; canonical MD with marked lexer",
+  "visualStatus": "Separate actual render and all-page manual inspection required; XML does not prove visual success"
+}

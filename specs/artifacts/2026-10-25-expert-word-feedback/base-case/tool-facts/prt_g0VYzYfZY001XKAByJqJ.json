@@ -1,0 +1,38 @@
+{
+  "id": "prt_g0VYzYfZY001XKAByJqJ",
+  "sessionID": "ses_hShct6fcVHjUEqD5t2Mk",
+  "messageID": "msg_g0VYzYbz100yL50dSNPa",
+  "type": "tool",
+  "callID": "call_iWKvKc5uDkDwrCFs0PKA3Lbc",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "ls internal-qa",
+      "description": "确认独立渲染临时目录的项目内位置"
+    },
+    "output": "final-render\n",
+    "title": "确认独立渲染临时目录的项目内位置",
+    "metadata": {
+      "refused": false,
+      "command": "ls internal-qa",
+      "output": "final-render\n",
+      "output_bytes": 13,
+      "exit": 0,
+      "pid": null,
+      "background": false,
+      "description": "确认独立渲染临时目录的项目内位置",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792865438848,
+      "end": 1792865440405
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_03f04f66fb5c4bf2016adcf49ebbe487d0819f202306572605"
+    }
+  },
+  "orderKey": "v1:0001792865439963:0000000000000031:0000000000000000:part:prt_g0VYzYfZY001XKAByJqJ"
+}

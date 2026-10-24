@@ -1,0 +1,577 @@
+{
+  "task": {
+    "id": "tsk_g00VYzV4d60044VaYioJ",
+    "orderKey": "v1:0001792864581856:0000000000000010:0000000000000000:task:tsk_g00VYzV4d60044VaYioJ",
+    "projectID": "prj_hz4MUTMNoi0ikRKumyKx",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-expert-word-base-20261025-01\\project",
+    "sessionID": "ses_-zUR0UvDpzz4FLK9ISSv",
+    "requestID": "e97c4cda-c5f0-4f29-9326-465b8c321dc3",
+    "source": "expert-word-independent-revision",
+    "productPillar": "work",
+    "title": "既有营销Word分页修订和独立复核",
+    "request": "完整读取acceptance-input和tools/growth_document.py。本Task修订现有营销Word的分页，业务内容已经确定，不需要重新研究业务：原第2页预算表只有表头、后续跨页表格缺重复表头。请修outputs/growth-plan.docx及必要的tools/growth_document.py，让跨页首部表头正确重复、表头与首数据行同页、行不拆分、所有中文数字公式和单元格清晰完整。outputs/growth-plan.md及其完整字节必须与acceptance-input/growth-plan.md保持相同，Word有序段落和表格单元格必须全文一致，保留1200当前上限、3000旧草案、1900合成成本原边界。不要改验收输入或tools/render_docx.py，不以全表强制同页来替代正确跨页。项目tools/render_docx.py是成熟渲染器的完整副本，Python/LibreOffice/Poppler已配置到本子进程PATH且完成原件只读渲染预检，实际用法见tools/runtime.md；只使用项目内脚本，正常调用已配置离线运行时。请用真实渲染逐页查看全部最终PNG并自检，再由独立角色查看本次真实页图和正文进行复核，不能用XML、文件存在或PASS代替视觉判断。PNG和派生PDF只内部验收，正式交付仅修订Word和同正文规范MD，绑定实际不可变资源，保留输入旧Word可读；提供同正文阅读文档。如遇问题如实报告。只在此隔离项目本地内部，不联网、联系外部、花费、投放、发布或创建其他Task/Goal。完成独立复核和正式交付后结束Task。\n",
+    "status": "completed",
+    "executionLifecycle": {
+      "taskID": "tsk_g00VYzV4d60044VaYioJ",
+      "epoch": 1,
+      "openedEventID": "pev_g0VYzV4mi00qySVUqIpH",
+      "openedAt": 1792864581856,
+      "status": "completed",
+      "terminalEventID": "pev_g0VYzbIQF00jml7yuOZC",
+      "terminalAt": 1792866062416
+    },
+    "terminalReason": "completed",
+    "priority": "normal",
+    "packageRevisionBinding": {
+      "scope": "built_in",
+      "project_id": null,
+      "namespace": "builtin",
+      "id": "base",
+      "version": "2026.10.14.1",
+      "package_digest": "83ea97ae6b85c404ff6ff75b43ab0d72fe907d3013a3dcd651b322c5a5579f4f"
+    },
+    "completionDecision": {
+      "artifactLocator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_g0VYzbHno00C6KncJ1LF",
+        "catalog_revision": 7,
+        "expected_sha256": "487eb0ab710147b19e20dfb069c91b4e214d75f71443dc4e85cb9701f05ac3d4"
+      },
+      "orchestratorSessionID": "ses_-zUR0UuPRzz2Wom7unWE",
+      "orchestratorMessageID": "msg_hQWzuzZsrfKCn2fdK7qY",
+      "toolCallID": "call_n1IcnGqsc7kwxGBhgk2c80j6",
+      "toolPartID": "prt_g0VYzbE7w00RuZe5gYG4",
+      "evidenceLocators": [
+        {
+          "source": "session_message",
+          "session_id": "ses_hShct6fcVHjUEqD5t2Mk",
+          "message_id": "msg_g0VYzZjPQ006AYZWBuZg"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h0sL9638oX8lpK7UfWZs",
+          "catalog_revision": 5,
+          "expected_sha256": "e5077182bcf8d50e0d41e649ebff6fec51116f676a594dddcf05ba7f1de87095"
+        },
+        {
+          "source": "session",
+          "session_id": "ses_-zUR0UuPRzz2Wom7unWE"
+        },
+        {
+          "source": "task_artifact_snapshot",
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+            "task_id": "tsk_g00VYzV4d60044VaYioJ",
+            "snapshot_id": "e4602826-390f-5c3e-a526-333f9f247c01",
+            "manifest_sha256": "859aa8607f7769fddb89d74b0d251c82e2f797e49a1d412d294bc1ca0ae64ad6"
+          }
+        }
+      ],
+      "deliverableArtifactLocators": [
+        {
+          "source": "task_artifact_snapshot",
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+            "task_id": "tsk_g00VYzV4d60044VaYioJ",
+            "snapshot_id": "2ac585a9-f2a1-5795-abd7-640f0b57ba71",
+            "manifest_sha256": "c3741f3a607cf91c8b7cb938cd2a2a1f55ceb20eb97a31d51301c1b2a05ba73c"
+          }
+        }
+      ],
+      "acceptedDeliverySliceRevisionIDs": [],
+      "workflowBinding": {
+        "kind": "direct",
+        "package_revision": {
+          "scope": "built_in",
+          "project_id": null,
+          "namespace": "builtin",
+          "id": "base",
+          "version": "2026.10.14.1",
+          "package_digest": "83ea97ae6b85c404ff6ff75b43ab0d72fe907d3013a3dcd651b322c5a5579f4f"
+        }
+      },
+      "timeRecorded": 1792866062416
+    },
+    "metadata": {
+      "actor": "user",
+      "checks": {
+        "artifact": {
+          "require_changed_files": true,
+          "require_diff": true,
+          "mode": "strict"
+        },
+        "judge": {
+          "enabled": true,
+          "mode": "strict"
+        },
+        "spec_check": {
+          "enabled": true,
+          "mode": "strict"
+        }
+      }
+    },
+    "time": {
+      "created": 1792864581856,
+      "updated": 1792866062416,
+      "started": 1792864581856,
+      "completed": 1792866062416
+    }
+  },
+  "completionDecision": {
+    "id": "art_g0VYzbHno00C6KncJ1LF",
+    "locator": {
+      "source": "engine_artifact",
+      "artifact_id": "art_g0VYzbHno00C6KncJ1LF",
+      "catalog_revision": 7,
+      "expected_sha256": "487eb0ab710147b19e20dfb069c91b4e214d75f71443dc4e85cb9701f05ac3d4"
+    },
+    "payload": {
+      "orchestrator_session_id": "ses_-zUR0UuPRzz2Wom7unWE",
+      "orchestrator_message_id": "msg_hQWzuzZsrfKCn2fdK7qY",
+      "tool_call_id": "call_n1IcnGqsc7kwxGBhgk2c80j6",
+      "tool_part_id": "prt_g0VYzbE7w00RuZe5gYG4",
+      "evidence_locators": [
+        {
+          "source": "session_message",
+          "session_id": "ses_hShct6fcVHjUEqD5t2Mk",
+          "message_id": "msg_g0VYzZjPQ006AYZWBuZg"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h0sL9638oX8lpK7UfWZs",
+          "catalog_revision": 5,
+          "expected_sha256": "e5077182bcf8d50e0d41e649ebff6fec51116f676a594dddcf05ba7f1de87095"
+        },
+        {
+          "source": "session",
+          "session_id": "ses_-zUR0UuPRzz2Wom7unWE"
+        },
+        {
+          "source": "task_artifact_snapshot",
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+            "task_id": "tsk_g00VYzV4d60044VaYioJ",
+            "snapshot_id": "e4602826-390f-5c3e-a526-333f9f247c01",
+            "manifest_sha256": "859aa8607f7769fddb89d74b0d251c82e2f797e49a1d412d294bc1ca0ae64ad6"
+          }
+        }
+      ],
+      "deliverable_artifact_locators": [
+        {
+          "source": "task_artifact_snapshot",
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+            "task_id": "tsk_g00VYzV4d60044VaYioJ",
+            "snapshot_id": "2ac585a9-f2a1-5795-abd7-640f0b57ba71",
+            "manifest_sha256": "c3741f3a607cf91c8b7cb938cd2a2a1f55ceb20eb97a31d51301c1b2a05ba73c"
+          }
+        }
+      ],
+      "worker_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h0sL9638oX8lpK7UfWZs",
+          "catalog_revision": 5,
+          "expected_sha256": "e5077182bcf8d50e0d41e649ebff6fec51116f676a594dddcf05ba7f1de87095"
+        }
+      ],
+      "accepted_delivery_slice_revision_ids": [],
+      "workflow_binding": {
+        "kind": "direct",
+        "package_revision": {
+          "scope": "built_in",
+          "project_id": null,
+          "namespace": "builtin",
+          "id": "base",
+          "version": "2026.10.14.1",
+          "package_digest": "83ea97ae6b85c404ff6ff75b43ab0d72fe907d3013a3dcd651b322c5a5579f4f"
+        }
+      },
+      "time_recorded": 1792866062416
+    }
+  },
+  "deliveries": [
+    {
+      "locator": {
+        "source": "task_artifact_snapshot",
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+          "task_id": "tsk_g00VYzV4d60044VaYioJ",
+          "snapshot_id": "2ac585a9-f2a1-5795-abd7-640f0b57ba71",
+          "manifest_sha256": "c3741f3a607cf91c8b7cb938cd2a2a1f55ceb20eb97a31d51301c1b2a05ba73c"
+        }
+      },
+      "producer": {
+        "owner_kind": "projected-scheduler",
+        "expert_squad_id": "base",
+        "package_revision": {
+          "scope": "built_in",
+          "project_id": null,
+          "namespace": "builtin",
+          "id": "base",
+          "version": "2026.10.14.1",
+          "package_digest": "83ea97ae6b85c404ff6ff75b43ab0d72fe907d3013a3dcd651b322c5a5579f4f"
+        },
+        "agent_id": "orchestrator",
+        "projection_hash": "cea044fca16fc14d0ed9452cc69de386f52e89d8fedcca782d55e6cf2a6d9f68",
+        "session_id": "ses_-zUR0UuPRzz2Wom7unWE",
+        "message_id": "msg_hyZJn2SJvakgNi09mVhn",
+        "tool_call_id": "call_qL3T3LDssWIok6dLWp4lAbpe"
+      },
+      "snapshotID": "2ac585a9-f2a1-5795-abd7-640f0b57ba71",
+      "resources": [
+        {
+          "artifactID": "2ac585a9-f2a1-5795-abd7-640f0b57ba71",
+          "path": "outputs/growth-plan.docx",
+          "bytes": 10474,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-word-base-20261025-01\\evidence\\delivery-verification\\resources\\2ac585a9-f2a1-5795-abd7-640f0b57ba71\\outputs\\growth-plan.docx",
+          "ranges": [
+            "bytes 0-10473/10474"
+          ],
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+              "task_id": "tsk_g00VYzV4d60044VaYioJ",
+              "snapshot_id": "2ac585a9-f2a1-5795-abd7-640f0b57ba71",
+              "manifest_sha256": "c3741f3a607cf91c8b7cb938cd2a2a1f55ceb20eb97a31d51301c1b2a05ba73c"
+            },
+            "tree": "resources",
+            "path": "outputs/growth-plan.docx",
+            "media_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "bytes": 10474,
+            "sha256": "43194d4d919df6920114de40490f47724b0bb3c5ec2342fa5ea4bc38a3674721"
+          }
+        },
+        {
+          "artifactID": "2ac585a9-f2a1-5795-abd7-640f0b57ba71",
+          "path": "outputs/growth-plan.md",
+          "bytes": 15834,
+          "file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-word-base-20261025-01\\evidence\\delivery-verification\\resources\\2ac585a9-f2a1-5795-abd7-640f0b57ba71\\outputs\\growth-plan.md",
+          "ranges": [
+            "bytes 0-4093/15834",
+            "bytes 4094-8189/15834",
+            "bytes 8190-12285/15834",
+            "bytes 12286-15833/15834"
+          ],
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+              "task_id": "tsk_g00VYzV4d60044VaYioJ",
+              "snapshot_id": "2ac585a9-f2a1-5795-abd7-640f0b57ba71",
+              "manifest_sha256": "c3741f3a607cf91c8b7cb938cd2a2a1f55ceb20eb97a31d51301c1b2a05ba73c"
+            },
+            "tree": "resources",
+            "path": "outputs/growth-plan.md",
+            "media_type": "text/markdown",
+            "bytes": 15834,
+            "sha256": "7b421253a3945004c8b71a535115f9a5e0524b169dfc1758a6f7583ddb316c65"
+          }
+        }
+      ]
+    }
+  ],
+  "canonicalBytes": 15834,
+  "canonicalInputEquality": true,
+  "originalMarkdownInputEquality": true,
+  "originalWordInputEquality": true,
+  "rendererSourceEquality": true,
+  "publishedFileEquality": true,
+  "renderedSourceEquality": true,
+  "readingDocumentEquality": true,
+  "canonicalBlocks": 81,
+  "artifacts": [
+    {
+      "id": "art_h0sL9638oX8lpK7UfWZs",
+      "type": "base/test-report",
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "base",
+        "package_revision": {
+          "scope": "built_in",
+          "project_id": null,
+          "namespace": "builtin",
+          "id": "base",
+          "version": "2026.10.14.1",
+          "package_digest": "83ea97ae6b85c404ff6ff75b43ab0d72fe907d3013a3dcd651b322c5a5579f4f"
+        },
+        "agent_id": "base-tester",
+        "projection_hash": "54c9dd175d8176a6561c64b14862cca46d3a8a8dd46384256b0cfc6867c592fe",
+        "session_id": "ses_hShct6fcVHjUEqD5t2Mk",
+        "message_id": "msg_g0VYzZTzf00XZpK61WW2",
+        "tool_call_id": "call_A6KqoRIQLlm2oFKE9s3vRaXI"
+      },
+      "sourceLocators": [
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+              "task_id": "tsk_g00VYzV4d60044VaYioJ",
+              "snapshot_id": "2ac585a9-f2a1-5795-abd7-640f0b57ba71",
+              "manifest_sha256": "c3741f3a607cf91c8b7cb938cd2a2a1f55ceb20eb97a31d51301c1b2a05ba73c"
+            },
+            "tree": "resources",
+            "path": "outputs/growth-plan.docx",
+            "media_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "bytes": 10474,
+            "sha256": "43194d4d919df6920114de40490f47724b0bb3c5ec2342fa5ea4bc38a3674721"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+              "task_id": "tsk_g00VYzV4d60044VaYioJ",
+              "snapshot_id": "e4602826-390f-5c3e-a526-333f9f247c01",
+              "manifest_sha256": "859aa8607f7769fddb89d74b0d251c82e2f797e49a1d412d294bc1ca0ae64ad6"
+            },
+            "tree": "resources",
+            "path": "acceptance-input/growth-plan.docx",
+            "media_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "bytes": 10552,
+            "sha256": "25e0498818abb1a663e05b32075f405f46d969eb29e031886cc372fe0d5909b0"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+              "task_id": "tsk_g00VYzV4d60044VaYioJ",
+              "snapshot_id": "2ac585a9-f2a1-5795-abd7-640f0b57ba71",
+              "manifest_sha256": "c3741f3a607cf91c8b7cb938cd2a2a1f55ceb20eb97a31d51301c1b2a05ba73c"
+            },
+            "tree": "resources",
+            "path": "outputs/growth-plan.md",
+            "media_type": "text/markdown",
+            "bytes": 15834,
+            "sha256": "7b421253a3945004c8b71a535115f9a5e0524b169dfc1758a6f7583ddb316c65"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+              "task_id": "tsk_g00VYzV4d60044VaYioJ",
+              "snapshot_id": "e4602826-390f-5c3e-a526-333f9f247c01",
+              "manifest_sha256": "859aa8607f7769fddb89d74b0d251c82e2f797e49a1d412d294bc1ca0ae64ad6"
+            },
+            "tree": "resources",
+            "path": "internal-qa/final-render/page-5.png",
+            "media_type": "image/png",
+            "bytes": 187505,
+            "sha256": "4d5750defa17db11af23fac6be45ca29dbfb5db1bfd38e214b37e3a52fbe505b"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+              "task_id": "tsk_g00VYzV4d60044VaYioJ",
+              "snapshot_id": "e4602826-390f-5c3e-a526-333f9f247c01",
+              "manifest_sha256": "859aa8607f7769fddb89d74b0d251c82e2f797e49a1d412d294bc1ca0ae64ad6"
+            },
+            "tree": "resources",
+            "path": "internal-qa/final-render/page-3.png",
+            "media_type": "image/png",
+            "bytes": 427944,
+            "sha256": "e0e437fefbfde1fc5a8807d543f39051c881f2b460cd289519fe8faafbfb0b17"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+              "task_id": "tsk_g00VYzV4d60044VaYioJ",
+              "snapshot_id": "e4602826-390f-5c3e-a526-333f9f247c01",
+              "manifest_sha256": "859aa8607f7769fddb89d74b0d251c82e2f797e49a1d412d294bc1ca0ae64ad6"
+            },
+            "tree": "resources",
+            "path": "internal-qa/final-render/page-2.png",
+            "media_type": "image/png",
+            "bytes": 428258,
+            "sha256": "77fe4081359fe90490e7420ce5b729afc6689224ea63e60c1387a961d5cb5ef2"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+              "task_id": "tsk_g00VYzV4d60044VaYioJ",
+              "snapshot_id": "e4602826-390f-5c3e-a526-333f9f247c01",
+              "manifest_sha256": "859aa8607f7769fddb89d74b0d251c82e2f797e49a1d412d294bc1ca0ae64ad6"
+            },
+            "tree": "resources",
+            "path": "internal-qa/final-render/page-1.png",
+            "media_type": "image/png",
+            "bytes": 518618,
+            "sha256": "c707f3821fa1bdaa24fdd50d1f2b6410b3041f86ae19aa6707771a49acbb0fdd"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+              "task_id": "tsk_g00VYzV4d60044VaYioJ",
+              "snapshot_id": "e4602826-390f-5c3e-a526-333f9f247c01",
+              "manifest_sha256": "859aa8607f7769fddb89d74b0d251c82e2f797e49a1d412d294bc1ca0ae64ad6"
+            },
+            "tree": "resources",
+            "path": "internal-qa/final-render/page-4.png",
+            "media_type": "image/png",
+            "bytes": 555836,
+            "sha256": "3ed24a679dce538b2cf340f1dfc7ec051f3f8ab8ceb38ceaf9b9772057dafa2a"
+          }
+        },
+        {
+          "source": "task_artifact_snapshot",
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+            "task_id": "tsk_g00VYzV4d60044VaYioJ",
+            "snapshot_id": "e4602826-390f-5c3e-a526-333f9f247c01",
+            "manifest_sha256": "859aa8607f7769fddb89d74b0d251c82e2f797e49a1d412d294bc1ca0ae64ad6"
+          }
+        }
+      ],
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_h0sL9638oX8lpK7UfWZs",
+        "catalog_revision": 5,
+        "expected_sha256": "e5077182bcf8d50e0d41e649ebff6fec51116f676a594dddcf05ba7f1de87095"
+      },
+      "resources": []
+    }
+  ],
+  "resources": [
+    {
+      "artifactID": "2ac585a9-f2a1-5795-abd7-640f0b57ba71",
+      "path": "outputs/growth-plan.docx",
+      "bytes": 10474,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-word-base-20261025-01\\evidence\\delivery-verification\\resources\\2ac585a9-f2a1-5795-abd7-640f0b57ba71\\outputs\\growth-plan.docx",
+      "ranges": [
+        "bytes 0-10473/10474"
+      ],
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+          "task_id": "tsk_g00VYzV4d60044VaYioJ",
+          "snapshot_id": "2ac585a9-f2a1-5795-abd7-640f0b57ba71",
+          "manifest_sha256": "c3741f3a607cf91c8b7cb938cd2a2a1f55ceb20eb97a31d51301c1b2a05ba73c"
+        },
+        "tree": "resources",
+        "path": "outputs/growth-plan.docx",
+        "media_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "bytes": 10474,
+        "sha256": "43194d4d919df6920114de40490f47724b0bb3c5ec2342fa5ea4bc38a3674721"
+      }
+    },
+    {
+      "artifactID": "2ac585a9-f2a1-5795-abd7-640f0b57ba71",
+      "path": "outputs/growth-plan.md",
+      "bytes": 15834,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-word-base-20261025-01\\evidence\\delivery-verification\\resources\\2ac585a9-f2a1-5795-abd7-640f0b57ba71\\outputs\\growth-plan.md",
+      "ranges": [
+        "bytes 0-4093/15834",
+        "bytes 4094-8189/15834",
+        "bytes 8190-12285/15834",
+        "bytes 12286-15833/15834"
+      ],
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+          "task_id": "tsk_g00VYzV4d60044VaYioJ",
+          "snapshot_id": "2ac585a9-f2a1-5795-abd7-640f0b57ba71",
+          "manifest_sha256": "c3741f3a607cf91c8b7cb938cd2a2a1f55ceb20eb97a31d51301c1b2a05ba73c"
+        },
+        "tree": "resources",
+        "path": "outputs/growth-plan.md",
+        "media_type": "text/markdown",
+        "bytes": 15834,
+        "sha256": "7b421253a3945004c8b71a535115f9a5e0524b169dfc1758a6f7583ddb316c65"
+      }
+    }
+  ],
+  "selected": [
+    {
+      "artifactID": "2ac585a9-f2a1-5795-abd7-640f0b57ba71",
+      "path": "outputs/growth-plan.md",
+      "bytes": 15834,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-word-base-20261025-01\\evidence\\delivery-verification\\resources\\2ac585a9-f2a1-5795-abd7-640f0b57ba71\\outputs\\growth-plan.md",
+      "ranges": [
+        "bytes 0-4093/15834",
+        "bytes 4094-8189/15834",
+        "bytes 8190-12285/15834",
+        "bytes 12286-15833/15834"
+      ],
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+          "task_id": "tsk_g00VYzV4d60044VaYioJ",
+          "snapshot_id": "2ac585a9-f2a1-5795-abd7-640f0b57ba71",
+          "manifest_sha256": "c3741f3a607cf91c8b7cb938cd2a2a1f55ceb20eb97a31d51301c1b2a05ba73c"
+        },
+        "tree": "resources",
+        "path": "outputs/growth-plan.md",
+        "media_type": "text/markdown",
+        "bytes": 15834,
+        "sha256": "7b421253a3945004c8b71a535115f9a5e0524b169dfc1758a6f7583ddb316c65"
+      }
+    },
+    {
+      "artifactID": "2ac585a9-f2a1-5795-abd7-640f0b57ba71",
+      "path": "outputs/growth-plan.docx",
+      "bytes": 10474,
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-word-base-20261025-01\\evidence\\delivery-verification\\resources\\2ac585a9-f2a1-5795-abd7-640f0b57ba71\\outputs\\growth-plan.docx",
+      "ranges": [
+        "bytes 0-10473/10474"
+      ],
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+          "task_id": "tsk_g00VYzV4d60044VaYioJ",
+          "snapshot_id": "2ac585a9-f2a1-5795-abd7-640f0b57ba71",
+          "manifest_sha256": "c3741f3a607cf91c8b7cb938cd2a2a1f55ceb20eb97a31d51301c1b2a05ba73c"
+        },
+        "tree": "resources",
+        "path": "outputs/growth-plan.docx",
+        "media_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "bytes": 10474,
+        "sha256": "43194d4d919df6920114de40490f47724b0bb3c5ec2342fa5ea4bc38a3674721"
+      }
+    }
+  ],
+  "document": {
+    "id": "art_g0VYzb8hF00mHF1kRJYX",
+    "sessionID": "ses_-zUR0UuPRzz2Wom7unWE",
+    "messageID": "msg_hQWzuzZsrfKCn2fdK7qY",
+    "renderer": "document@1",
+    "characters": 6873
+  },
+  "source": "Full official artifact-read responses and actual interactive-artifact GET; direct full-byte comparisons with actual project files and immutable input"
+}

@@ -1,0 +1,29 @@
+{
+  "occurrence": "expert-word-base-8d3ad3a8-3ed2-4d75-a43c-e120da554aad",
+  "outcome": "ready",
+  "host": {
+    "pid": 62404,
+    "processInstanceID": "win32:639284613620017443",
+    "occurrenceID": "93ce0a00-213f-4812-9ccd-31b48b03671a"
+  },
+  "parent": {
+    "pid": 70848,
+    "processInstanceID": "win32:639284613601496771",
+    "occurrenceID": "bc6c324c-e9ec-4040-8707-d1220c75fb23"
+  },
+  "target": {
+    "pid": 94212,
+    "processInstanceID": "win32:639284613629242683",
+    "occurrenceID": "af13c1f6-15fa-4fd4-b0e0-892fa16aa246"
+  },
+  "targetBirthAtMs": 1792864562924,
+  "deadlineAt": 1792867261980,
+  "observedAtUtc": "2026-10-24T17:56:02.956Z",
+  "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+  "args": [
+    "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\expert-word-feedback/base.ts",
+    "serve",
+    "expert-word-base-8d3ad3a8-3ed2-4d75-a43c-e120da554aad"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

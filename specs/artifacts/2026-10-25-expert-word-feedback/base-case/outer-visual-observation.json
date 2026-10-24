@@ -1,0 +1,29 @@
+{
+  "source": "Five actual PNGs freshly rendered with original documents Skill renderer and isolated official LibreOffice, manually viewed by outer agent",
+  "pages": 5,
+  "observations": [
+    {
+      "page": 1,
+      "observation": "标题、完整来源职责链表及末尾审阅文字可读；表头与首行同页。"
+    },
+    {
+      "page": 2,
+      "observation": "渠道数据及H1至H4完整；页末预算标题及说明保留，预算表头整体移到下一页。"
+    },
+    {
+      "page": 3,
+      "observation": "预算三列表头与300元首行同页；全部金额及1100/100合计关系清晰；阶段表表头、V0、V1、V2行完整。"
+    },
+    {
+      "page": 4,
+      "observation": "阶段续表重复四列表头，V3/V4完整且跨页语义清楚；渠道表和A/B公式及停止边界完整。"
+    },
+    {
+      "page": 5,
+      "observation": "未知清单两列表头与首行同页，五类记录和最后使用限制段完整。"
+    }
+  ],
+  "result": "All five pages readable; repeated stage header and budget header/first-row placement corrected; no observed clipping or overlapping content",
+  "renderReceipt": "final-render.json",
+  "publishedBinding": "Verify final resource full bytes against render-source/growth-plan.docx before claiming final acceptance"
+}

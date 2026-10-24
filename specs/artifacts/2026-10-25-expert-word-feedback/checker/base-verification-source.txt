@@ -1,0 +1,71 @@
+import assert from "node:assert/strict"
+import fs from "node:fs/promises"
+import path from "node:path"
+import {marked} from "../../packages/overlay/node_modules/marked/lib/marked.esm.js"
+
+const run="C:/Users/hengu/.codex/opencorvus-expert-word-base-20261025-01",evidence=path.join(run,"evidence"),project=path.join(run,"project")
+const root=path.join(evidence,"delivery-verification");await fs.mkdir(root,{recursive:true})
+const current=JSON.parse(await fs.readFile(path.join(evidence,"current.json"),"utf8"))
+assert.equal(current.task.status,"completed");assert.equal(current.task.executionLifecycle.epoch,1)
+const request=async(route:string,body?:unknown)=>{
+  const url=new URL(route,"http://127.0.0.1:19146");url.searchParams.set("directory",project)
+  const response=await fetch(url,{method:body===undefined?"GET":"POST",headers:{"content-type":"application/json"},...(body===undefined?{}:{body:JSON.stringify(body)}),signal:AbortSignal.timeout(180_000)})
+  assert(response.ok,`${response.status} ${route}`);return response
+}
+const read=async(locator:unknown)=>{
+  const chunks:Buffer[]=[],ranges:string[]=[];let offset=0
+  for(;;){const response=await request(`/task/${current.task.id}/artifact-read`,{locator,byte_offset:offset,max_bytes:4096});const range=response.headers.get("content-range")!;ranges.push(range);const chunk=Buffer.from(await response.arrayBuffer());chunks.push(chunk);const total=Number(range.split("/")[1]);offset+=chunk.length;if(offset===total)break;assert(chunk.length>0&&offset<total)}
+  return {bytes:Buffer.concat(chunks),ranges}
+}
+const artifacts:any[]=[],resources:any[]=[],documents:any[]=[]
+for(const summary of current.conversation.board.artifacts.filter((a:any)=>a.payload?.artifact_type)){
+  const original=await read(summary.locator),envelope=JSON.parse(original.bytes.toString());assert.equal(envelope.artifact_type,summary.payload.artifact_type)
+  await fs.writeFile(path.join(root,summary.id+".json"),original.bytes)
+  const entry={id:summary.id,type:envelope.artifact_type,producer:envelope.producer,sourceLocators:envelope.source_artifact_locators,locator:summary.locator,resources:[] as any[]};artifacts.push(entry)
+  for(const ref of envelope.resources){
+    const actual=await read({source:"task_artifact_resource",ref}),resourceRoot=path.resolve(root,"resources",summary.id),file=path.resolve(resourceRoot,ref.path)
+    assert(file.startsWith(resourceRoot+path.sep),"Archived resource retains its exact relative path inside its artifact")
+    await fs.mkdir(path.dirname(file),{recursive:true});await fs.writeFile(file,actual.bytes)
+    const resource={artifactID:summary.id,path:ref.path,bytes:actual.bytes.length,file,ranges:actual.ranges,ref};resources.push(resource);entry.resources.push(resource)
+  }
+}
+const decisions=current.conversation.board.artifacts.filter((a:any)=>a.kind==="task_completion_decision"&&a.time.created===current.task.executionLifecycle.terminalAt)
+assert.equal(decisions.length,1,"Exact current terminal Completion Decision required")
+const decisionBytes=await read(decisions[0].locator),decision=JSON.parse(decisionBytes.bytes.toString())
+await fs.writeFile(path.join(root,"completion-decision.json"),decisionBytes.bytes)
+assert.equal(decision.deliverable_artifact_locators.length,1)
+const deliveries=[]
+for(const locator of decision.deliverable_artifact_locators){
+  assert.equal(locator.source,"task_artifact_snapshot")
+  const bytes=await read(locator),manifest=JSON.parse(bytes.bytes.toString());assert.equal(manifest.task_id,current.task.id);assert.equal(manifest.project_id,current.task.projectID)
+  await fs.writeFile(path.join(root,`${manifest.snapshot_id}-manifest.json`),bytes.bytes)
+  const refs=Object.entries(manifest.trees).flatMap(([tree,value]:[string,any])=>value.files.map((file:any)=>({snapshot:locator.snapshot,tree,...file})))
+  assert.deepEqual(refs.map((r:any)=>r.path).sort(),["outputs/growth-plan.docx","outputs/growth-plan.md"])
+  const delivery={locator,producer:manifest.producer,snapshotID:manifest.snapshot_id,resources:[] as any[]};deliveries.push(delivery)
+  for(const ref of refs){
+    const actual=await read({source:"task_artifact_resource",ref}),resourceRoot=path.resolve(root,"resources",manifest.snapshot_id),file=path.resolve(resourceRoot,ref.path)
+    assert(file.startsWith(resourceRoot+path.sep));await fs.mkdir(path.dirname(file),{recursive:true});await fs.writeFile(file,actual.bytes)
+    const resource={artifactID:manifest.snapshot_id,path:ref.path,bytes:actual.bytes.length,file,ranges:actual.ranges,ref};resources.push(resource);delivery.resources.push(resource)
+  }
+}
+for(const message of current.conversation.transcript)for(const part of message.parts.filter((p:any)=>p.type==="interactive-artifact")){
+  const response=await request(`/session/${message.info.sessionID}/interactive-artifact/${part.artifactID}`),record=await response.json();await fs.writeFile(path.join(root,record.id+".json"),JSON.stringify(record,null,2));documents.push({id:record.id,sessionID:record.sessionID,messageID:record.messageID,payload:record.payload})
+}
+const canonical=await fs.readFile(path.join(project,"outputs/growth-plan.md")),baseline=await fs.readFile(path.join(project,"acceptance-input/growth-plan.md"))
+assert(baseline.equals(await fs.readFile("C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03/evidence/word-feedback-02/before/growth-plan.md")),"Frozen Markdown input equals the actual preceding delivery")
+assert(canonical.equals(baseline),"Actual complete canonical Markdown equals its frozen input")
+assert((await fs.readFile(path.join(project,"tools/render_docx.py"))).equals(await fs.readFile("C:/Users/hengu/.codex/plugins/cache/openai-primary-runtime/documents/26.1017.31632/skills/documents/render_docx.py")),"Mature renderer remains its original complete bytes")
+assert((await fs.readFile(path.join(project,"acceptance-input/growth-plan.docx"))).equals(await fs.readFile("C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03/evidence/word-feedback-02/before/growth-plan.docx")),"Original Word input equals the actual preceding delivery")
+const selected=[]
+for(const name of ["growth-plan.md","growth-plan.docx"]){const published=resources.filter(r=>r.path===`outputs/${name}`).at(-1);assert(published,`Formal published ${name} resource required`);assert((await fs.readFile(path.join(project,"outputs",name))).equals(await fs.readFile(published.file)),`Actual ${name} file equals complete immutable resource`);selected.push(published)}
+const finalWord=selected.find(r=>r.path==="outputs/growth-plan.docx")!,renderedWord=await fs.readFile(path.join(evidence,"render-source/growth-plan.docx"))
+assert((await fs.readFile(finalWord.file)).equals(renderedWord),"Final immutable Word equals the actual source rendered for outer manual verification")
+const document=documents.filter(d=>d.payload.renderer==="document@1").at(-1);assert(document,"Real message-owned reading document required");assert.equal(document.payload.markdown,canonical.toString(),"Actual reading document full text equals canonical Markdown")
+const blocks:any[]=[]
+for(const token of marked.lexer(canonical.toString())){
+  if(token.type==="heading"||token.type==="paragraph")blocks.push(["p",token.text])
+  if(token.type==="table"){blocks.push(["row",token.header.map((c:any)=>c.text)]);for(const row of token.rows)blocks.push(["row",row.map((c:any)=>c.text)])}
+}
+await fs.writeFile(path.join(evidence,"canonical-blocks.json"),JSON.stringify(blocks))
+const verification={task:current.task,completionDecision:{id:decisions[0].id,locator:decisions[0].locator,payload:decision},deliveries,canonicalBytes:canonical.length,canonicalInputEquality:true,originalMarkdownInputEquality:true,originalWordInputEquality:true,rendererSourceEquality:true,publishedFileEquality:true,renderedSourceEquality:true,readingDocumentEquality:true,canonicalBlocks:blocks.length,artifacts,resources,selected,document:{id:document.id,sessionID:document.sessionID,messageID:document.messageID,renderer:document.payload.renderer,characters:document.payload.markdown.length},source:"Full official artifact-read responses and actual interactive-artifact GET; direct full-byte comparisons with actual project files and immutable input"}
+await fs.writeFile(path.join(root,"verification.json"),JSON.stringify(verification,null,2));console.log(JSON.stringify({verified:true,artifacts:artifacts.length,resources:resources.length,canonicalBytes:canonical.length,canonicalBlocks:blocks.length,document:document.id}))

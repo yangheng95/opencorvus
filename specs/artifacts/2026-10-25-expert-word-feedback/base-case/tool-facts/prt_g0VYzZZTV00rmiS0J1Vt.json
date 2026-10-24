@@ -1,0 +1,46 @@
+{
+  "id": "prt_g0VYzZZTV00rmiS0J1Vt",
+  "sessionID": "ses_hShct6fcVHjUEqD5t2Mk",
+  "messageID": "msg_g0VYzZTzf00XZpK61WW2",
+  "type": "tool",
+  "callID": "call_A6KqoRIQLlm2oFKE9s3vRaXI",
+  "tool": "artifact_publish",
+  "state": {
+    "status": "completed",
+    "input": {
+      "artifact_type": "base/test-report",
+      "schema_version": 1,
+      "label": "营销Word分页修订独立复核（内部）",
+      "source_read_refs": [
+        "ar_H6xnmqto13Q6J9iJ",
+        "ar_971Sxi0o4s1PTv42",
+        "ar_nSbE-FlsJai9AH1X",
+        "ar_GBXiESTLRw3vsGyZ",
+        "ar_0ac6IljjLqpR6wyW",
+        "ar_kf0Yv5PrHIAQBK4b",
+        "ar__PKy7SgjHKvrJSM9",
+        "ar_P19-6HkktOQfk0-T",
+        "ar_jO08neRLmh5Od1K-"
+      ],
+      "resource_set": null,
+      "payload_json": "{\"scope\":\"本Task现有营销Word纯分页修订的独立复核；仅内部验收，不是正式交付文件\",\"verdict\":\"accept_pagination_revision\",\"expectations\":[\"跨页续表重复正确表头\",\"表头与首数据行同页\",\"所有数据行不拆分，不以整表同页规避\",\"Markdown完整字节与验收MD相同\",\"旧新Word有序段落及表格单元格全文与规范正文相同\",\"保留1200现行上限、3000旧草案、1900合成成本\",\"输入旧Word可读、验收输入和renderer不改\",\"正式文件仅Word和规范MD，图像和PDF仅内部验收\"],\"page_observations\":[{\"page\":1,\"visible\":\"标题、编制日期、决策摘要与权限边界、来源职责链及8条来源记录，页尾审阅意见落实段完整\",\"pagination\":\"来源表表头及首行同页，全部行完整\",\"clarity\":\"中文及来源标识可读；1200当前上限、3000初稿、1900合成成本边界清楚，无缺字遮挡\"},{\"page\":2,\"visible\":\"第3节合成渠道数据、全部4数据行含总体，第4节H1至H4假设，第5节标题及预算沿革说明\",\"pagination\":\"页底不再出现孤立的新版预算表头；该表从第3页起始\",\"clarity\":\"1900/47≈40.43、370/6000≈6.17%、47/370≈12.70%、47/6000≈0.78%完整可读；H1至H4单元格换行正常\"},{\"page\":3,\"visible\":\"页首完整新版预算表：300、250、200、100、50、200、1100、100，随后成本说明及第6节，阶段表V0、V1、V2\",\"pagination\":\"预算表三列表头与300元首数据行同页；阶段表表头与V0同页，页底V2整行完整\",\"clarity\":\"300+250+200+100+50+200=1100及1200-1100=100清晰；首预算行V1—V3仅在单元格内正常换行，未跨页拆分；V1采购分母文字完整\"},{\"page\":4,\"visible\":\"页首阶段续表V3、V4，第7节三渠道表及A/B指标，第8节停止护栏和下一决策\",\"pagination\":\"重复阶段与负责人、样本指标与分母、预设操作门槛、未达或达标建议四列表头；V3和V4完整，证明阶段表允许真实跨页而非整表强制同页\",\"clarity\":\"分子≤分母、A≥30%、B≥50%、6/20和7点击至少4次均可读；C3最后一格回报在格内换行，无裁切\"},{\"page\":5,\"visible\":\"第9节未知清单五类记录、交付使用限制结束段\",\"pagination\":\"两列表头与受众需求首行同页，五数据行完整，正文结尾可见\",\"clarity\":\"CAC/LTV/ROI、1100元资源占位与1200元现行上限说明完整；无溢出、重叠或截断\"}],\"independent_checks\":[{\"operation\":\"python tools/growth_document.py（未使用--build）\",\"result\":\"成功；81有序块、9节、44表格行；全部段落和单元格全文比较相等\"},{\"operation\":\"独立Python解析验收MD、旧Word及新Word，不调用growth_document.blocks或verify\",\"result\":\"81个有序块完全相等，MD原始字节相等\"},{\"operation\":\"git diff HEAD及保护文件直接字节比较git show HEAD\",\"result\":\"tracked验收输入及tools/render_docx.py共5个文件字节未改；git diff产品修改仅outputs/growth-plan.docx及tools/growth_document.py，internal-qa为内部生成目录\"},{\"operation\":\"将本地正式两文件和最终五PNG与已完全读取的不可变资源身份比较\",\"result\":\"7个文件全部匹配；身份检查仅证明本地验证目标与已发布资源是同一对象，不替代内容和视觉验收\"},{\"operation\":\"python tools/render_docx.py outputs/growth-plan.docx --output_dir internal-qa/independent-render-临时目录 --verbose，经临时目录隔离运行\",\"result\":\"离线LibreOffice/Poppler真实生成5页；全部5页与已查看发布PNG逐像素相同；临时目录已清理；附件自动解析分页不同不能替代项目指定渲染\"}],\"validator_review\":{\"appropriate_change\":true,\"finding\":\"原campaign.csv属于历史业务研究输入，本Task明确冻结已定正文不重新研究业务。原始生产者--build已生成Word后因缺失CSV发生FileNotFoundError；随后移除CSV依赖、增加验收MD完整字节及输入旧Word全文比较，未补造历史数据，符合本次范围。当前消息也不再声称重新校验CSV源数据。\",\"coverage\":\"验证器覆盖本文件格式的全部直接段落和表格行/单元格顺序、首行tblHeader、每行cantSplit、仅表头段落keepNext、关键固定文本及章节数；代码检查可证未对全部数据行串联keepNext。\",\"limitations\":\"XML属性和全文比较不能证明实际换页、字体或遮挡；本轮由指定5张图像亲眼逐页检查和真实重渲染补齐。未对历史业务来源真实性重新研究，也未声称任意Office环境分页相同。\"},\"producer_raw_evidence\":{\"session_id\":\"ses_-zUR0UuPRzz2Wom7unWE\",\"message_id\":\"msg_hyZJn2SJvakgNi09mVhn\",\"parts\":[\"prt_g0VYzVaHp00sXUk7ZKCJ\",\"prt_g0VYzVixe00qnCrXf1KC\",\"prt_g0VYzVoLj00qG222bxPg\",\"prt_g0VYzVxYm00IUcsVACyW\"],\"finding\":\"直接读取分页属性补丁、首次构建CSV缺失错误、删除历史依赖补丁及真实渲染回执；生产者PASS未被当作独立结论\"},\"formal_delivery_reference\":{\"snapshot_id\":\"2ac585a9-f2a1-5795-abd7-640f0b57ba71\",\"paths\":[\"outputs/growth-plan.docx\",\"outputs/growth-plan.md\"],\"instruction\":\"继续复用此已发布不可变正式资源；本记录及PNG/PDF均为内部验收，不增加正式交付物\"},\"findings\":[],\"fact_check_items\":[],\"remaining_owner_actions\":[\"主交付者提供与规范MD同正文阅读呈现并绑定上述正式资源；独立复核不代为认定尚未发生的正式交付动作\",\"主交付者提交自身产品修改；本次只读复核没有产品文件变更或待提交内容\"],\"acceptance_boundary\":\"接受本次分页修订及内容保留；Task最终交付和结束由主交付者处理。\"}"
+    },
+    "output": "{\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_h0sL9638oX8lpK7UfWZs\",\"catalog_revision\":5,\"expected_sha256\":\"e5077182bcf8d50e0d41e649ebff6fec51116f676a594dddcf05ba7f1de87095\"},\"sha256\":\"e5077182bcf8d50e0d41e649ebff6fec51116f676a594dddcf05ba7f1de87095\"}",
+    "title": "Published base/test-report",
+    "metadata": {
+      "artifactType": "base/test-report",
+      "sha256": "e5077182bcf8d50e0d41e649ebff6fec51116f676a594dddcf05ba7f1de87095",
+      "truncated": false
+    },
+    "time": {
+      "start": 1792865653737,
+      "end": 1792865691809
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0522ca95b2151076016adcf57582b087d097bdef4c6cad35dc"
+    }
+  },
+  "orderKey": "v1:0001792865691029:0000000000000031:0000000000000000:part:prt_g0VYzZZTV00rmiS0J1Vt"
+}

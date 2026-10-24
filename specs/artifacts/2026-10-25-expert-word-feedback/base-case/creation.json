@@ -1,0 +1,18 @@
+{
+  "status": 202,
+  "result": {
+    "task_id": "tsk_g00VYzV4d60044VaYioJ",
+    "project_id": "prj_hz4MUTMNoi0ikRKumyKx",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-expert-word-base-20261025-01\\project"
+  },
+  "body": {
+    "requestID": "e97c4cda-c5f0-4f29-9326-465b8c321dc3",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-expert-word-base-20261025-01\\project",
+    "productPillar": "work",
+    "promptProfile": "base",
+    "title": "既有营销Word分页修订和独立复核",
+    "request": "完整读取acceptance-input和tools/growth_document.py。本Task修订现有营销Word的分页，业务内容已经确定，不需要重新研究业务：原第2页预算表只有表头、后续跨页表格缺重复表头。请修outputs/growth-plan.docx及必要的tools/growth_document.py，让跨页首部表头正确重复、表头与首数据行同页、行不拆分、所有中文数字公式和单元格清晰完整。outputs/growth-plan.md及其完整字节必须与acceptance-input/growth-plan.md保持相同，Word有序段落和表格单元格必须全文一致，保留1200当前上限、3000旧草案、1900合成成本原边界。不要改验收输入或tools/render_docx.py，不以全表强制同页来替代正确跨页。项目tools/render_docx.py是成熟渲染器的完整副本，Python/LibreOffice/Poppler已配置到本子进程PATH且完成原件只读渲染预检，实际用法见tools/runtime.md；只使用项目内脚本，正常调用已配置离线运行时。请用真实渲染逐页查看全部最终PNG并自检，再由独立角色查看本次真实页图和正文进行复核，不能用XML、文件存在或PASS代替视觉判断。PNG和派生PDF只内部验收，正式交付仅修订Word和同正文规范MD，绑定实际不可变资源，保留输入旧Word可读；提供同正文阅读文档。如遇问题如实报告。只在此隔离项目本地内部，不联网、联系外部、花费、投放、发布或创建其他Task/Goal。完成独立复核和正式交付后结束Task。\n",
+    "model": "openai/gpt-6.1-sol",
+    "source": "expert-word-independent-revision"
+  }
+}

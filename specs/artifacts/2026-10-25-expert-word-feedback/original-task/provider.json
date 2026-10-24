@@ -1,0 +1,3053 @@
+{
+  "requests": [
+    {
+      "index": 0,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863465031,
+        "boundAt": 1792863465034,
+        "chunkCount": 21,
+        "byteCount": 43910,
+        "firstByteReadAt": 1792863465037,
+        "lastByteReadAt": 1792863471992,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hUAJktJZvTsLRLoujYIP",
+          "streamRequest": {
+            "requestID": "msg_hmcEEpAFlMK4c48CkXqT",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzQNhf00dpwNgtW8X",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863472083
+        }
+      },
+      "declaredToolNames": []
+    },
+    {
+      "index": 1,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863466084,
+        "boundAt": 1792863466085,
+        "chunkCount": 39,
+        "byteCount": 519089,
+        "firstByteReadAt": 1792863466213,
+        "lastByteReadAt": 1792863467397,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hUAJktJZvTsLRLoujYIP",
+          "streamRequest": {
+            "requestID": "msg_hmcEEpAFlMK4c48CkXqT",
+            "agentID": "chat",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzQO4e0085bEXlOD9",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzQNhw00F5DwfOflU"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863467622
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 2,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863535629,
+        "boundAt": 1792863535631,
+        "chunkCount": 153,
+        "byteCount": 347928,
+        "firstByteReadAt": 1792863535632,
+        "lastByteReadAt": 1792863558051,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUR1EwHjzzi5tPJwpOD",
+          "streamRequest": {
+            "requestID": "msg_g0VYzQg7C00JNyZlTmKP",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzQg9l006kgYIpCag",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863558373
+        }
+      },
+      "declaredToolNames": []
+    },
+    {
+      "index": 3,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863542137,
+        "boundAt": 1792863542139,
+        "chunkCount": 82,
+        "byteCount": 1261035,
+        "firstByteReadAt": 1792863542146,
+        "lastByteReadAt": 1792863548464,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUR1EuUfzz9Myz6drh7",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hDfv6EJp9pZWVCpjb60H_art_hDfv6EJp9pZWVCpjb60H",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzQhoR009d1SfFQvN",
+            "attempt": 0,
+            "assistantMessageID": "msg_hLvzV415RDCgbMaJkRmk"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863548626
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "read",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "cancel_subagent",
+        "create_continuous_goal",
+        "dispatch_agents",
+        "evolve_expert_squad_from_feedback",
+        "get_continuous_goal",
+        "manage_task",
+        "no_action",
+        "publish_interactive_artifact",
+        "question",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "respond_agent_coordination",
+        "scheduler_message",
+        "update_continuous_goal",
+        "wait",
+        "skill"
+      ]
+    },
+    {
+      "index": 4,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863551219,
+        "boundAt": 1792863551221,
+        "chunkCount": 88,
+        "byteCount": 1252435,
+        "firstByteReadAt": 1792863551227,
+        "lastByteReadAt": 1792863557300,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUR1EuUfzz9Myz6drh7",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hDfv6EJp9pZWVCpjb60H_art_hDfv6EJp9pZWVCpjb60H",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzQk3c00SqoVFciZ3",
+            "attempt": 0,
+            "assistantMessageID": "msg_hLvzV415RDCgbMaJkRmk"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863557510
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "read",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "cancel_subagent",
+        "create_continuous_goal",
+        "dispatch_agents",
+        "evolve_expert_squad_from_feedback",
+        "get_continuous_goal",
+        "manage_task",
+        "no_action",
+        "publish_interactive_artifact",
+        "question",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "respond_agent_coordination",
+        "scheduler_message",
+        "update_continuous_goal",
+        "wait",
+        "skill"
+      ]
+    },
+    {
+      "index": 5,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863560055,
+        "boundAt": 1792863560056,
+        "chunkCount": 79,
+        "byteCount": 1269206,
+        "firstByteReadAt": 1792863560068,
+        "lastByteReadAt": 1792863567512,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUR1EuUfzz9Myz6drh7",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hDfv6EJp9pZWVCpjb60H_art_hDfv6EJp9pZWVCpjb60H",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzQmPI00Gy25WI6It",
+            "attempt": 0,
+            "assistantMessageID": "msg_hLvzV415RDCgbMaJkRmk"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863567652
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "read",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "cancel_subagent",
+        "create_continuous_goal",
+        "dispatch_agents",
+        "evolve_expert_squad_from_feedback",
+        "get_continuous_goal",
+        "manage_task",
+        "no_action",
+        "publish_interactive_artifact",
+        "question",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "respond_agent_coordination",
+        "scheduler_message",
+        "update_continuous_goal",
+        "wait",
+        "skill"
+      ]
+    },
+    {
+      "index": 6,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863573229,
+        "boundAt": 1792863573230,
+        "chunkCount": 113,
+        "byteCount": 1256031,
+        "firstByteReadAt": 1792863573233,
+        "lastByteReadAt": 1792863578255,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUR1EuUfzz9Myz6drh7",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hDfv6EJp9pZWVCpjb60H_art_hDfv6EJp9pZWVCpjb60H",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzQp3z00n1GKWBURY",
+            "attempt": 0,
+            "assistantMessageID": "msg_hLvzV415RDCgbMaJkRmk"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863578429
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "read",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "cancel_subagent",
+        "create_continuous_goal",
+        "dispatch_agents",
+        "evolve_expert_squad_from_feedback",
+        "get_continuous_goal",
+        "manage_task",
+        "no_action",
+        "publish_interactive_artifact",
+        "question",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "respond_agent_coordination",
+        "scheduler_message",
+        "update_continuous_goal",
+        "wait",
+        "skill"
+      ]
+    },
+    {
+      "index": 7,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863584528,
+        "boundAt": 1792863584529,
+        "chunkCount": 124,
+        "byteCount": 1252709,
+        "firstByteReadAt": 1792863584534,
+        "lastByteReadAt": 1792863587804,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUR1EuUfzz9Myz6drh7",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hDfv6EJp9pZWVCpjb60H_art_hDfv6EJp9pZWVCpjb60H",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzQroc00PyJHNulX3",
+            "attempt": 0,
+            "assistantMessageID": "msg_hLvzV415RDCgbMaJkRmk"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863587805
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "read",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "cancel_subagent",
+        "create_continuous_goal",
+        "dispatch_agents",
+        "evolve_expert_squad_from_feedback",
+        "get_continuous_goal",
+        "manage_task",
+        "no_action",
+        "publish_interactive_artifact",
+        "question",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "respond_agent_coordination",
+        "scheduler_message",
+        "update_continuous_goal",
+        "wait",
+        "skill"
+      ]
+    },
+    {
+      "index": 8,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863593764,
+        "boundAt": 1792863593766,
+        "chunkCount": 116,
+        "byteCount": 1249586,
+        "firstByteReadAt": 1792863593774,
+        "lastByteReadAt": 1792863598055,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUR1EuUfzz9Myz6drh7",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hDfv6EJp9pZWVCpjb60H_art_hDfv6EJp9pZWVCpjb60H",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzQuTQ004Zh5xaLRy",
+            "attempt": 0,
+            "assistantMessageID": "msg_hLvzV415RDCgbMaJkRmk"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863598058
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "read",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "cancel_subagent",
+        "create_continuous_goal",
+        "dispatch_agents",
+        "evolve_expert_squad_from_feedback",
+        "get_continuous_goal",
+        "manage_task",
+        "no_action",
+        "publish_interactive_artifact",
+        "question",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "respond_agent_coordination",
+        "scheduler_message",
+        "update_continuous_goal",
+        "wait",
+        "skill"
+      ]
+    },
+    {
+      "index": 9,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863603016,
+        "boundAt": 1792863603018,
+        "chunkCount": 111,
+        "byteCount": 1248125,
+        "firstByteReadAt": 1792863603027,
+        "lastByteReadAt": 1792863606128,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUR1EuUfzz9Myz6drh7",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hDfv6EJp9pZWVCpjb60H_art_hDfv6EJp9pZWVCpjb60H",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzQwvA0019DpD9eUo",
+            "attempt": 0,
+            "assistantMessageID": "msg_hLvzV415RDCgbMaJkRmk"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863607073
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "read",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "cancel_subagent",
+        "create_continuous_goal",
+        "dispatch_agents",
+        "evolve_expert_squad_from_feedback",
+        "get_continuous_goal",
+        "manage_task",
+        "no_action",
+        "publish_interactive_artifact",
+        "question",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "respond_agent_coordination",
+        "scheduler_message",
+        "update_continuous_goal",
+        "wait",
+        "skill"
+      ]
+    },
+    {
+      "index": 10,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863612670,
+        "boundAt": 1792863612673,
+        "chunkCount": 113,
+        "byteCount": 1250345,
+        "firstByteReadAt": 1792863612679,
+        "lastByteReadAt": 1792863616123,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUR1EuUfzz9Myz6drh7",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hDfv6EJp9pZWVCpjb60H_art_hDfv6EJp9pZWVCpjb60H",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzQzHP00itr4V96Ei",
+            "attempt": 0,
+            "assistantMessageID": "msg_hLvzV415RDCgbMaJkRmk"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863616288
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "read",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "cancel_subagent",
+        "create_continuous_goal",
+        "dispatch_agents",
+        "evolve_expert_squad_from_feedback",
+        "get_continuous_goal",
+        "manage_task",
+        "no_action",
+        "publish_interactive_artifact",
+        "question",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "respond_agent_coordination",
+        "scheduler_message",
+        "update_continuous_goal",
+        "wait",
+        "skill"
+      ]
+    },
+    {
+      "index": 11,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863622851,
+        "boundAt": 1792863622853,
+        "chunkCount": 111,
+        "byteCount": 1251766,
+        "firstByteReadAt": 1792863622862,
+        "lastByteReadAt": 1792863627262,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUR1EuUfzz9Myz6drh7",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hDfv6EJp9pZWVCpjb60H_art_hDfv6EJp9pZWVCpjb60H",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzR1gk002ZBS7l6e3",
+            "attempt": 0,
+            "assistantMessageID": "msg_hLvzV415RDCgbMaJkRmk"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863627538
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "read",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "cancel_subagent",
+        "create_continuous_goal",
+        "dispatch_agents",
+        "evolve_expert_squad_from_feedback",
+        "get_continuous_goal",
+        "manage_task",
+        "no_action",
+        "publish_interactive_artifact",
+        "question",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "respond_agent_coordination",
+        "scheduler_message",
+        "update_continuous_goal",
+        "wait",
+        "skill"
+      ]
+    },
+    {
+      "index": 12,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863631766,
+        "boundAt": 1792863631768,
+        "chunkCount": 534,
+        "byteCount": 1452339,
+        "firstByteReadAt": 1792863631770,
+        "lastByteReadAt": 1792863651919,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUR1EuUfzz9Myz6drh7",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hDfv6EJp9pZWVCpjb60H_art_hDfv6EJp9pZWVCpjb60H",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzR4b200cbX205lLv",
+            "attempt": 0,
+            "assistantMessageID": "msg_hLvzV415RDCgbMaJkRmk"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863652146
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "read",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "cancel_subagent",
+        "create_continuous_goal",
+        "dispatch_agents",
+        "evolve_expert_squad_from_feedback",
+        "get_continuous_goal",
+        "manage_task",
+        "no_action",
+        "publish_interactive_artifact",
+        "question",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "respond_agent_coordination",
+        "scheduler_message",
+        "update_continuous_goal",
+        "wait",
+        "skill"
+      ]
+    },
+    {
+      "index": 13,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863657563,
+        "boundAt": 1792863657565,
+        "chunkCount": 32,
+        "byteCount": 478513,
+        "firstByteReadAt": 1792863657567,
+        "lastByteReadAt": 1792863662088,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hESXxjll4D1d3M9K0jwQ",
+          "streamRequest": {
+            "requestID": "msg_g0VYzRBKO00OFigcjQhO",
+            "agentID": "marketing-growth-campaign-writer",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzRBnN007lj0AKhMw",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzRBbK00oqW6hFQNN"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863662089
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 14,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863663944,
+        "boundAt": 1792863663946,
+        "chunkCount": 32,
+        "byteCount": 459689,
+        "firstByteReadAt": 1792863663950,
+        "lastByteReadAt": 1792863665581,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hESXxjll4D1d3M9K0jwQ",
+          "streamRequest": {
+            "requestID": "msg_g0VYzRBKO00OFigcjQhO",
+            "agentID": "marketing-growth-campaign-writer",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzRDV400OByXzYhEe",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzRDRY00W1szHYCpF"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863665730
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 15,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863668047,
+        "boundAt": 1792863668050,
+        "chunkCount": 20,
+        "byteCount": 471484,
+        "firstByteReadAt": 1792863668052,
+        "lastByteReadAt": 1792863669337,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hESXxjll4D1d3M9K0jwQ",
+          "streamRequest": {
+            "requestID": "msg_g0VYzRBKO00OFigcjQhO",
+            "agentID": "marketing-growth-campaign-writer",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzREQh00r8GlZabhM",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzREMY00oKcfQn2jT"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863669484
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 16,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863671276,
+        "boundAt": 1792863671278,
+        "chunkCount": 20,
+        "byteCount": 500377,
+        "firstByteReadAt": 1792863671288,
+        "lastByteReadAt": 1792863674016,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hESXxjll4D1d3M9K0jwQ",
+          "streamRequest": {
+            "requestID": "msg_g0VYzRBKO00OFigcjQhO",
+            "agentID": "marketing-growth-campaign-writer",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzRFOy00aKES85xGf",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzRFKl006HndUakw9"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863674191
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 17,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863679947,
+        "boundAt": 1792863679950,
+        "chunkCount": 71,
+        "byteCount": 479723,
+        "firstByteReadAt": 1792863679953,
+        "lastByteReadAt": 1792863684711,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hESXxjll4D1d3M9K0jwQ",
+          "streamRequest": {
+            "requestID": "msg_g0VYzRBKO00OFigcjQhO",
+            "agentID": "marketing-growth-campaign-writer",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzRGho00FOIO6GeZk",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzRGc1009zI7z9fXE"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863684941
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 18,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863690353,
+        "boundAt": 1792863690355,
+        "chunkCount": 29,
+        "byteCount": 470375,
+        "firstByteReadAt": 1792863690358,
+        "lastByteReadAt": 1792863692787,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hESXxjll4D1d3M9K0jwQ",
+          "streamRequest": {
+            "requestID": "msg_g0VYzRBKO00OFigcjQhO",
+            "agentID": "marketing-growth-campaign-writer",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzRJgA00ZSCo8Y8Ly",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzRJZO00cbezEoyr1"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863692975
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 19,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863697126,
+        "boundAt": 1792863697129,
+        "chunkCount": 60,
+        "byteCount": 469938,
+        "firstByteReadAt": 1792863697131,
+        "lastByteReadAt": 1792863702675,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hESXxjll4D1d3M9K0jwQ",
+          "streamRequest": {
+            "requestID": "msg_g0VYzRBKO00OFigcjQhO",
+            "agentID": "marketing-growth-campaign-writer",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzRLYF00naw74CMkc",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzRLQX00nLVr3PxP3"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863702971
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 20,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863708811,
+        "boundAt": 1792863708814,
+        "chunkCount": 42,
+        "byteCount": 471117,
+        "firstByteReadAt": 1792863708816,
+        "lastByteReadAt": 1792863712829,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hESXxjll4D1d3M9K0jwQ",
+          "streamRequest": {
+            "requestID": "msg_g0VYzRBKO00OFigcjQhO",
+            "agentID": "marketing-growth-campaign-writer",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzRON100HblcJeCDV",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzRO1r00WUmEPUqP5"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863713054
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 21,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863717171,
+        "boundAt": 1792863717174,
+        "chunkCount": 61,
+        "byteCount": 472452,
+        "firstByteReadAt": 1792863717176,
+        "lastByteReadAt": 1792863720876,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hESXxjll4D1d3M9K0jwQ",
+          "streamRequest": {
+            "requestID": "msg_g0VYzRBKO00OFigcjQhO",
+            "agentID": "marketing-growth-campaign-writer",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzRQkR000mrdQZjXu",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzRQeQ00yIsv17Dm7"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863721061
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 22,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863726217,
+        "boundAt": 1792863726220,
+        "chunkCount": 22,
+        "byteCount": 472343,
+        "firstByteReadAt": 1792863726306,
+        "lastByteReadAt": 1792863729049,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hESXxjll4D1d3M9K0jwQ",
+          "streamRequest": {
+            "requestID": "msg_g0VYzRBKO00OFigcjQhO",
+            "agentID": "marketing-growth-campaign-writer",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzRT2l00rdagfssRQ",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzRSja00X7luzFgDf"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863729276
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 23,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863734425,
+        "boundAt": 1792863734428,
+        "chunkCount": 42,
+        "byteCount": 472735,
+        "firstByteReadAt": 1792863734432,
+        "lastByteReadAt": 1792863737937,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hESXxjll4D1d3M9K0jwQ",
+          "streamRequest": {
+            "requestID": "msg_g0VYzRBKO00OFigcjQhO",
+            "agentID": "marketing-growth-campaign-writer",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzRUz200jRWVzvCMl",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzRUs100DwYVEgFWD"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863738203
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 24,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863742710,
+        "boundAt": 1792863742713,
+        "chunkCount": 45,
+        "byteCount": 470190,
+        "firstByteReadAt": 1792863742729,
+        "lastByteReadAt": 1792863746289,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hESXxjll4D1d3M9K0jwQ",
+          "streamRequest": {
+            "requestID": "msg_g0VYzRBKO00OFigcjQhO",
+            "agentID": "marketing-growth-campaign-writer",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzRXIR00JWymGS7z1",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzRXC0007RO5hm2g1"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863746289
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 25,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863749972,
+        "boundAt": 1792863749975,
+        "chunkCount": 36,
+        "byteCount": 472100,
+        "firstByteReadAt": 1792863750024,
+        "lastByteReadAt": 1792863753512,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hESXxjll4D1d3M9K0jwQ",
+          "streamRequest": {
+            "requestID": "msg_g0VYzRBKO00OFigcjQhO",
+            "agentID": "marketing-growth-campaign-writer",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzRZT800Fj8jxdEwi",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzRZL9008gjahX97L"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863753654
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 26,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863758856,
+        "boundAt": 1792863758859,
+        "chunkCount": 303,
+        "byteCount": 646061,
+        "firstByteReadAt": 1792863758862,
+        "lastByteReadAt": 1792863777664,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hESXxjll4D1d3M9K0jwQ",
+          "streamRequest": {
+            "requestID": "msg_g0VYzRBKO00OFigcjQhO",
+            "agentID": "marketing-growth-campaign-writer",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzRbJS00Z0bri5pQb",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzRbD900rHmSyHc4F"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863777934
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 27,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863787991,
+        "boundAt": 1792863787994,
+        "chunkCount": 11,
+        "byteCount": 1297174,
+        "firstByteReadAt": 1792863832052,
+        "lastByteReadAt": 1792863832107,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUR1EuUfzz9Myz6drh7",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hqPDJe6TkRC5aSC7mqQb_art_hqPDJe6TkRC5aSC7mqQb",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzRj2m00mRnpl26Xe",
+            "attempt": 0,
+            "assistantMessageID": "msg_hy3t0B6SnmMIBczaBnHS"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863832107
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "read",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "cancel_subagent",
+        "create_continuous_goal",
+        "dispatch_agents",
+        "evolve_expert_squad_from_feedback",
+        "get_continuous_goal",
+        "manage_task",
+        "no_action",
+        "publish_interactive_artifact",
+        "question",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "respond_agent_coordination",
+        "scheduler_message",
+        "update_continuous_goal",
+        "wait",
+        "skill"
+      ]
+    },
+    {
+      "index": 28,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863836724,
+        "boundAt": 1792863836727,
+        "chunkCount": 120,
+        "byteCount": 1314157,
+        "firstByteReadAt": 1792863836737,
+        "lastByteReadAt": 1792863844309,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUR1EuUfzz9Myz6drh7",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hqPDJe6TkRC5aSC7mqQb_art_hqPDJe6TkRC5aSC7mqQb",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzRvqm005cgMV9Z2h",
+            "attempt": 0,
+            "assistantMessageID": "msg_hy3t0B6SnmMIBczaBnHS"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863844309
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "read",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "cancel_subagent",
+        "create_continuous_goal",
+        "dispatch_agents",
+        "evolve_expert_squad_from_feedback",
+        "get_continuous_goal",
+        "manage_task",
+        "no_action",
+        "publish_interactive_artifact",
+        "question",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "respond_agent_coordination",
+        "scheduler_message",
+        "update_continuous_goal",
+        "wait",
+        "skill"
+      ]
+    },
+    {
+      "index": 29,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863849140,
+        "boundAt": 1792863849143,
+        "chunkCount": 83,
+        "byteCount": 1287471,
+        "firstByteReadAt": 1792863849145,
+        "lastByteReadAt": 1792863854319,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUR1EuUfzz9Myz6drh7",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hqPDJe6TkRC5aSC7mqQb_art_hqPDJe6TkRC5aSC7mqQb",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzRz1Z00xObbfIim6",
+            "attempt": 0,
+            "assistantMessageID": "msg_hy3t0B6SnmMIBczaBnHS"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863854621
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "read",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "cancel_subagent",
+        "create_continuous_goal",
+        "dispatch_agents",
+        "evolve_expert_squad_from_feedback",
+        "get_continuous_goal",
+        "manage_task",
+        "no_action",
+        "publish_interactive_artifact",
+        "question",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "respond_agent_coordination",
+        "scheduler_message",
+        "update_continuous_goal",
+        "wait",
+        "skill"
+      ]
+    },
+    {
+      "index": 30,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863860221,
+        "boundAt": 1792863860224,
+        "chunkCount": 165,
+        "byteCount": 1350163,
+        "firstByteReadAt": 1792863860244,
+        "lastByteReadAt": 1792863880683,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUR1EuUfzz9Myz6drh7",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hqPDJe6TkRC5aSC7mqQb_art_hqPDJe6TkRC5aSC7mqQb",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzS1i7000jAWW3vVf",
+            "attempt": 0,
+            "assistantMessageID": "msg_hy3t0B6SnmMIBczaBnHS"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863880778
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "read",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "cancel_subagent",
+        "create_continuous_goal",
+        "dispatch_agents",
+        "evolve_expert_squad_from_feedback",
+        "get_continuous_goal",
+        "manage_task",
+        "no_action",
+        "publish_interactive_artifact",
+        "question",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "respond_agent_coordination",
+        "scheduler_message",
+        "update_continuous_goal",
+        "wait",
+        "skill"
+      ]
+    },
+    {
+      "index": 31,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863885245,
+        "boundAt": 1792863885248,
+        "chunkCount": 583,
+        "byteCount": 1556865,
+        "firstByteReadAt": 1792863885258,
+        "lastByteReadAt": 1792863916802,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUR1EuUfzz9Myz6drh7",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hqPDJe6TkRC5aSC7mqQb_art_hqPDJe6TkRC5aSC7mqQb",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzS8Up00YGXO6OeKf",
+            "attempt": 0,
+            "assistantMessageID": "msg_hy3t0B6SnmMIBczaBnHS"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863916930
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "read",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "cancel_subagent",
+        "create_continuous_goal",
+        "dispatch_agents",
+        "evolve_expert_squad_from_feedback",
+        "get_continuous_goal",
+        "manage_task",
+        "no_action",
+        "publish_interactive_artifact",
+        "question",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "respond_agent_coordination",
+        "scheduler_message",
+        "update_continuous_goal",
+        "wait",
+        "skill"
+      ]
+    },
+    {
+      "index": 32,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863925098,
+        "boundAt": 1792863925102,
+        "chunkCount": 69,
+        "byteCount": 513031,
+        "firstByteReadAt": 1792863925105,
+        "lastByteReadAt": 1792863934638,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hESXxjll4D1d3M9K0jwQ",
+          "streamRequest": {
+            "requestID": "msg_g0VYzSIIS00M4BMk6NRk",
+            "agentID": "marketing-growth-campaign-writer",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzSIdu00HaWvse1bl",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzSIKp001OdUC1ZXe"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863934906
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 33,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863923253,
+        "boundAt": 1792863923257,
+        "chunkCount": 45,
+        "byteCount": 464308,
+        "firstByteReadAt": 1792863923263,
+        "lastByteReadAt": 1792863928153,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hlskRPU8CRB7tNBINkwD",
+          "streamRequest": {
+            "requestID": "msg_g0VYzSIQH00eBRQ8u7F3",
+            "agentID": "universal-build",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzSIgO00p5LpT5goV",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzSIRj002rJclJ1vM"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863928153
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 34,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863929691,
+        "boundAt": 1792863929694,
+        "chunkCount": 29,
+        "byteCount": 433347,
+        "firstByteReadAt": 1792863929697,
+        "lastByteReadAt": 1792863931549,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hlskRPU8CRB7tNBINkwD",
+          "streamRequest": {
+            "requestID": "msg_g0VYzSIQH00eBRQ8u7F3",
+            "agentID": "universal-build",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzSKhi00hbH5J85X6",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzSKd500RAu9OlHOv"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863931614
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 35,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863933058,
+        "boundAt": 1792863933061,
+        "chunkCount": 26,
+        "byteCount": 439532,
+        "firstByteReadAt": 1792863933070,
+        "lastByteReadAt": 1792863935158,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hlskRPU8CRB7tNBINkwD",
+          "streamRequest": {
+            "requestID": "msg_g0VYzSIQH00eBRQ8u7F3",
+            "agentID": "universal-build",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzSLYt00FHH8UEBJw",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzSLVF002Zcw3dbZB"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863935279
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 36,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863940677,
+        "boundAt": 1792863940680,
+        "chunkCount": 46,
+        "byteCount": 478589,
+        "firstByteReadAt": 1792863940683,
+        "lastByteReadAt": 1792863945473,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hESXxjll4D1d3M9K0jwQ",
+          "streamRequest": {
+            "requestID": "msg_g0VYzSIIS00M4BMk6NRk",
+            "agentID": "marketing-growth-campaign-writer",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzSMYa00de7aHgenn",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzSMNH00pE46glQFw"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863945473
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 37,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863938240,
+        "boundAt": 1792863938244,
+        "chunkCount": 24,
+        "byteCount": 433764,
+        "firstByteReadAt": 1792863938247,
+        "lastByteReadAt": 1792863939629,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hlskRPU8CRB7tNBINkwD",
+          "streamRequest": {
+            "requestID": "msg_g0VYzSIQH00eBRQ8u7F3",
+            "agentID": "universal-build",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzSMbY003QSD76PQB",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzSMTJ005YJ1XBee4"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863940536
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 38,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863942140,
+        "boundAt": 1792863942144,
+        "chunkCount": 27,
+        "byteCount": 434144,
+        "firstByteReadAt": 1792863942146,
+        "lastByteReadAt": 1792863943751,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hlskRPU8CRB7tNBINkwD",
+          "streamRequest": {
+            "requestID": "msg_g0VYzSIQH00eBRQ8u7F3",
+            "agentID": "universal-build",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzSNtB00BUPY5Qkmx",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzSNoj004o1d5Upe5"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863943912
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 39,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863945991,
+        "boundAt": 1792863945999,
+        "chunkCount": 20,
+        "byteCount": 465916,
+        "firstByteReadAt": 1792863946006,
+        "lastByteReadAt": 1792863948477,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hlskRPU8CRB7tNBINkwD",
+          "streamRequest": {
+            "requestID": "msg_g0VYzSIQH00eBRQ8u7F3",
+            "agentID": "universal-build",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzSOki00Tplp2ijYX",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzSOhM00YkkI9kVDr"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863948692
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 40,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863951216,
+        "boundAt": 1792863951220,
+        "chunkCount": 63,
+        "byteCount": 475911,
+        "firstByteReadAt": 1792863951223,
+        "lastByteReadAt": 1792863955010,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hESXxjll4D1d3M9K0jwQ",
+          "streamRequest": {
+            "requestID": "msg_g0VYzSIIS00M4BMk6NRk",
+            "agentID": "marketing-growth-campaign-writer",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzSPUQ00rCF4QmTYx",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzSP8000rBIv92u34"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863955222
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 41,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863950049,
+        "boundAt": 1792863950053,
+        "chunkCount": 31,
+        "byteCount": 449179,
+        "firstByteReadAt": 1792863950057,
+        "lastByteReadAt": 1792863955341,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hlskRPU8CRB7tNBINkwD",
+          "streamRequest": {
+            "requestID": "msg_g0VYzSIQH00eBRQ8u7F3",
+            "agentID": "universal-build",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzSQ0I003Q11N6oPb",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzSPwq004uQaH7UZV"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863955602
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 42,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863961924,
+        "boundAt": 1792863961928,
+        "chunkCount": 21,
+        "byteCount": 467212,
+        "firstByteReadAt": 1792863961942,
+        "lastByteReadAt": 1792863965055,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hESXxjll4D1d3M9K0jwQ",
+          "streamRequest": {
+            "requestID": "msg_g0VYzSIIS00M4BMk6NRk",
+            "agentID": "marketing-growth-campaign-writer",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzSRl300QDv7ykE5P",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzSRei00lcZXoM5Fm"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863965056
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 43,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863957983,
+        "boundAt": 1792863957987,
+        "chunkCount": 26,
+        "byteCount": 436403,
+        "firstByteReadAt": 1792863958006,
+        "lastByteReadAt": 1792863959482,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hlskRPU8CRB7tNBINkwD",
+          "streamRequest": {
+            "requestID": "msg_g0VYzSIQH00eBRQ8u7F3",
+            "agentID": "universal-build",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzSRsV00yZ0I9V5IX",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzSRnr00K0pjJK1ir"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863959535
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 44,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863960971,
+        "boundAt": 1792863960974,
+        "chunkCount": 28,
+        "byteCount": 436741,
+        "firstByteReadAt": 1792863960992,
+        "lastByteReadAt": 1792863963795,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hlskRPU8CRB7tNBINkwD",
+          "streamRequest": {
+            "requestID": "msg_g0VYzSIQH00eBRQ8u7F3",
+            "agentID": "universal-build",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzSSoa006i1BDt5j2",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzSSkm00NePDBNXbZ"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863963916
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 45,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863966968,
+        "boundAt": 1792863966972,
+        "chunkCount": 27,
+        "byteCount": 443033,
+        "firstByteReadAt": 1792863966975,
+        "lastByteReadAt": 1792863969027,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hlskRPU8CRB7tNBINkwD",
+          "streamRequest": {
+            "requestID": "msg_g0VYzSIQH00eBRQ8u7F3",
+            "agentID": "universal-build",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzSUEt00lvrQ46b8y",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzSTvS00rdI6lXlXf"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863969147
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 46,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863969710,
+        "boundAt": 1792863969714,
+        "chunkCount": 412,
+        "byteCount": 686248,
+        "firstByteReadAt": 1792863969717,
+        "lastByteReadAt": 1792863992892,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hESXxjll4D1d3M9K0jwQ",
+          "streamRequest": {
+            "requestID": "msg_g0VYzSIIS00M4BMk6NRk",
+            "agentID": "marketing-growth-campaign-writer",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzSUP600PQjZeJl9r",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzSUGj00m7h5q40uZ"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863992919
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 47,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863970609,
+        "boundAt": 1792863970613,
+        "chunkCount": 50,
+        "byteCount": 490501,
+        "firstByteReadAt": 1792863970622,
+        "lastByteReadAt": 1792863978542,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hlskRPU8CRB7tNBINkwD",
+          "streamRequest": {
+            "requestID": "msg_g0VYzSIQH00eBRQ8u7F3",
+            "agentID": "universal-build",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzSVKp00VHCYExuiy",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzSVHG00ATzmQnDZl"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863978667
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 48,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863980536,
+        "boundAt": 1792863980540,
+        "chunkCount": 33,
+        "byteCount": 445993,
+        "firstByteReadAt": 1792863980544,
+        "lastByteReadAt": 1792863986735,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hlskRPU8CRB7tNBINkwD",
+          "streamRequest": {
+            "requestID": "msg_g0VYzSIQH00eBRQ8u7F3",
+            "agentID": "universal-build",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzSXuu00ZSq7LMolA",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzSXrB00XFndjHRkg"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863986971
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    },
+    {
+      "index": 49,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1792863988322,
+        "boundAt": 1792863988326,
+        "chunkCount": 34,
+        "byteCount": 447078,
+        "firstByteReadAt": 1792863988336,
+        "lastByteReadAt": 1792863991870,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hlskRPU8CRB7tNBINkwD",
+          "streamRequest": {
+            "requestID": "msg_g0VYzSIQH00eBRQ8u7F3",
+            "agentID": "universal-build",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VYzSZx400ERgwObr7h",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VYzSZtf00JaKT5ZzbW"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1792863991987
+        }
+      },
+      "declaredToolNames": [
+        "capability_search",
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "edit",
+        "glob",
+        "mission_state",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "request_orchestrator_decision",
+        "schedule",
+        "search_code",
+        "send_mailbox_message",
+        "todo",
+        "write",
+        "skill"
+      ]
+    }
+  ],
+  "maximumRequests": 50,
+  "priorRequests": 310,
+  "aggregate": 360
+}

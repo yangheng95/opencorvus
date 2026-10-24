@@ -1,0 +1,6 @@
+{
+  "checker": "archive-base.ts",
+  "failedAssertion": "Expected 5 base-tester local read paths, actual 0",
+  "actualContract": "The independent reviewer used artifact_read for all five final PNGs. Exact persisted outcomes contain 5 complete byte-range receipts and 5 genuine message-owned image/png attachments.",
+  "correction": "Read canonical tool_part_request + tool_part_outcome through a read-only SQLite connection after original native service settlement; validate exact parent Message/Session, resource locator, full range and image attachment. Do not synthesize local read calls or change product results."
+}

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [专家团Word分页反馈](2026-10-25-expert-word-feedback/README.md)：原Task追加失败保全、验收依赖修正和Base五页实物复核通过。
+
 - [专家团追加交付与更正案例](2026-10-24-expert-steering-recovery-cases/README.md)：三个合成业务输入、共享输入交接红绿合同与真实页面阶段证据。
 
 - [专家团恢复与新操作接续](2026-10-24-expert-recovery-continuation/README.md)：真实备份、重复升级、原请求重试及保全后的并发接续。

@@ -1,0 +1,12 @@
+继续本Task，处理真实文档验收反馈。现有Word文档第2页末预算表只留下表头，后续跨页表格缺少重复表头。原第2/3页的实际渲染图在项目acceptance-feedback/word-pagination/page-2-before.png和page-3-before.png，供核对。
+
+本轮只修outputs/growth-plan.docx的分页呈现及必要的生成脚本：跨页延续时正确重复首部表头，表头与首条数据同页，中文、数字、公式和单元格保持清晰完整。唯一规范正文仍是outputs/growth-plan.md，必须保持现有全文逐字不变；Word有序正文和表格内容必须与它完整一致。保留1200元当前上限、3000元旧草案关系及1900元合成成本的原边界。无需重新研究业务或改写旧结论。
+
+请原专家团完成实际修订并独立复核；新交付绑定本次真实文件，保留旧交付可读，并提供相同正文的阅读文档。图和派生PDF仅用于内部验收，不加入正式交付文件。完成后结束本次追加工作，明确实际核验了什么及仍未知什么。只在本隔离项目内部处理，不联网、联系外部、投放、花费、对外发布或创建其他Task/Goal。
+
+本机已具备这些只读离线验收资源，可按需要使用：
+- Python：C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe
+- 实际DOCX渲染脚本：C:/Users/hengu/.codex/plugins/cache/openai-primary-runtime/documents/26.1017.31632/skills/documents/render_docx.py
+- LibreOffice可执行文件：D:/myhexin-local/opencorvus/.tmp-product-iteration/expert-steering-recovery/doc-tools/libreoffice/SourceDir/LibreOffice/program/soffice.exe
+
+调用renderer时可在该次命令的PATH中提供LibreOffice program目录，并使用本项目独立输出目录；renderer会使用独立Office profile。只运行本次自己的离线进程，不连接或操作用户Office窗口。请实际渲染并逐页查看最终页图，不能用文件存在、XML标记、正文提取或脚本PASS代替视觉判断。
