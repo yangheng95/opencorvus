@@ -905,8 +905,9 @@ describe("two-mode permission authority", () => {
             async () => "must-not-run",
           ),
         )
+        const staleOutcome = staleRun.execution.catch(error => error)
         await PermissionAuthority.settleStale(staleRun.request.id, "Tool input changed before execution")
-        await expect(staleRun.execution).rejects.toBeInstanceOf(PermissionAuthority.RejectedError)
+        expect(await staleOutcome).toBeInstanceOf(PermissionAuthority.RejectedError)
         expect((await PermissionAuthority.history()).map((row) => row.event_type)).toContain("expired")
         expect((await PermissionAuthority.history()).map((row) => row.event_type)).toContain("stale")
       },

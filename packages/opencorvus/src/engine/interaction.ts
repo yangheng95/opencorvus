@@ -1,6 +1,5 @@
 import { Bus } from "@/bus"
 import { readPermissionRequestFacts } from "@/permission/ledger-facts"
-import { isDeepStrictEqual } from "node:util"
 import { Identifier } from "@/id/id"
 import {
   agentCoordinationQuestionID,
@@ -29,7 +28,7 @@ import { PermissionLedgerTable } from "@/permission/permission.sql"
 import { Log } from "@/util/log"
 import { ProtocolStore } from "@/protocol/store"
 import { timelineInteractionResponseOrderKey } from "@/timeline/order"
-import { permissionInteractionRequest } from "@/permission/interaction-projection"
+import { ensurePermissionInteractionInTransaction } from "@/permission/interaction-record"
 
 const log = Log.create({ service: "engine.interaction" })
 
@@ -38,7 +37,7 @@ export namespace EngineInteraction {
     Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties, occurrenceID }) => upsertPermission(properties, occurrenceID), {
       durableID: "engine.interaction.permission-asked", effect: "idempotent_by_occurrence",
     })
-    Bus.subscribe(PermissionAuthority.Event.Replied, ({ properties }) => resolvePermission(properties), {
+    Bus.subscribeInTransaction(PermissionAuthority.Event.Replied, ({ properties }, db) => projectPermissionReply(db, properties), {
       durableID: "engine.interaction.permission-replied", effect: "idempotent_by_occurrence",
     })
     Bus.subscribe(PermissionAuthority.Event.Terminated, ({ properties }) => projectPermissionTermination(properties), {
@@ -313,24 +312,13 @@ async function recoverableAgentCoordinationQuestion(
 }
 
 async function upsertPermission(request: PermissionAuthority.Request, _sourceOccurrenceID: string) {
-  const owner = resolveOwner(request.sessionID)
-  if (!owner) return
+  const binding = Database.immediateTransaction(db => ensurePermissionInteractionInTransaction(db, {
+    request, projectID: Instance.project.id,
+  }))
+  if (!binding) return
   const facts = Database.use(db => readPermissionRequestFacts(db, request.id))
-  if (!facts || !isDeepStrictEqual(facts.request, request) || facts.request.taskID !== owner.taskID)
+  if (!facts)
     throw new Error(`Permission ${request.id} has inconsistent immutable requested ledger facts`)
-  if (findInteractionByExternal(request.id)) {
-    if (facts.decision) await resolvePermission({ sessionID: request.sessionID, requestID: request.id, decision: facts.decision })
-    return
-  }
-  Database.transaction((db) => {
-    insertEngineInteractionRequest(db, {
-      taskID: owner.taskID,
-      ...permissionInteractionRequest(request),
-      eventSource: "interaction.permission",
-      eventSummary: `Permission requested: ${request.toolName}`,
-      source: { kind: "permission_request", id: facts.requested.id },
-    })
-  })
   if (facts.decision) await resolvePermission({ sessionID: request.sessionID, requestID: request.id, decision: facts.decision })
 }
 
@@ -360,34 +348,55 @@ async function projectPermissionTermination(input: z.infer<typeof PermissionAuth
   })
 }
 
-async function resolvePermission(input: {
+type PermissionReply = {
   sessionID: string
   requestID: string
   decision: PermissionAuthority.Decision
   autoReply?: boolean
   userInput?: InteractionUserInput
-}) {
+}
+
+function projectPermissionReply(db: Database.TxOrDb, input: PermissionReply) {
+  const facts = readPermissionRequestFacts(db, input.requestID)
+  if (!facts) throw new Error(`Permission ${input.requestID} has no immutable request`)
+  ensurePermissionInteractionInTransaction(db, { request: facts.request, projectID: Instance.project.id })
+  const projected = resolvePermission(input)
+  if (!projected || !input.userInput) return
+  ProjectMemory.captureOccurrenceInTransaction(db, {
+    occurrenceKind: projected.interaction.status === "rejected" ? "interaction_reject" : "interaction_reply",
+    occurrenceID: projected.interaction.id,
+    projectID: facts.request.projectID,
+    sessionID: input.sessionID,
+    taskID: projected.interaction.task_id,
+    surface: input.userInput.surface,
+    timeCreated: facts.authority!.time_created,
+    text: input.userInput.text,
+    structured: input.userInput.structured,
+  })
+}
+
+function resolvePermission(input: PermissionReply) {
   const facts = Database.use(db => readPermissionRequestFacts(db, input.requestID))
   if (!facts?.authority || facts.request.sessionID !== input.sessionID || facts.decision !== input.decision)
     throw new Error(`Permission ${input.requestID} reply differs from its immutable ledger decision`)
   const interaction = findInteractionByExternal(input.requestID)
   if (!interaction) return
   // The Permission ledger decision is already the one terminal authority.
-  // This subscriber only projects/captures optional authored user evidence.
+  // Asked and Replied may both project it; only Replied owns memory admission.
   if (interaction.status === "pending") throw new Error(`Permission ${input.requestID} reply has no authoritative ledger decision`)
-  assertResolvedReplay(interaction, input.userInput)
   const task = Database.use(db => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, interaction.task_id)).get())
   if (interaction.request_type !== "permission" || interaction.session_id !== input.sessionID ||
     interaction.task_id !== facts.request.taskID || task?.project_id !== facts.request.projectID ||
     interaction.time_resolved !== facts.authority.time_created)
     throw new Error(`Permission ${input.requestID} reply differs from its Task interaction owner`)
-  ProtocolStore.dispatchEphemeral({
+  Database.effect(() => ProtocolStore.dispatchEphemeral({
     type: "interaction.resolved", aggregate: "task", taskID: interaction.task_id, sessionID: input.sessionID,
     source: "interaction.permission.replied",
     orderKey: timelineInteractionResponseOrderKey({ id: interaction.id, timeResolved: facts.authority.time_created }),
     payload: { taskID: interaction.task_id, interactionID: interaction.id, requestType: "permission", status: interaction.status,
       requestID: input.requestID, ledgerEventID: facts.authority.id, summary: "Permission " + facts.decision },
-  })
+  }))
+  return { interaction, facts }
 }
 
 function resolveOwner(sessionID: string) {
@@ -464,7 +473,7 @@ function projectQuestion(input: {
           : terminal.type === "question.expired"
             ? { origin: terminal.properties.origin, time_expires: terminal.properties.timeExpires }
             : { origin: terminal.properties.origin }
-      resolveEngineInteractionRequest(db, {
+      const createdOutcome = resolveEngineInteractionRequest(db, {
         row: interaction,
         status,
         response,
@@ -473,7 +482,7 @@ function projectQuestion(input: {
         sourceOccurrenceID: terminal.occurrenceID,
       })
       const userInput = "userInput" in terminal.properties ? terminal.properties.userInput : undefined
-      if (userInput) {
+      if (createdOutcome && userInput) {
         ProjectMemory.captureOccurrenceInTransaction(db, {
           occurrenceKind: status === "rejected" ? "interaction_reject" : "interaction_reply",
           occurrenceID: interaction.id,
@@ -492,25 +501,4 @@ function projectQuestion(input: {
   if (projected.facts.terminal)
     requestTaskControlScanInBackground(projected.interaction.task_id, `interaction.${projected.interaction.status}`)
   return projected
-}
-
-function assertResolvedReplay(interaction: InteractionRow, userInput?: InteractionUserInput) {
-  if (!userInput) return
-  const timeResolved = interaction.time_resolved
-  if (!timeResolved) throw new Error(`Interaction ${interaction.id} terminal replay has no resolution time`)
-  Database.immediateTransaction((db) => {
-    const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, interaction.task_id)).get()
-    if (!task) throw new Error(`Interaction ${interaction.id} replay Task owner not found`)
-    ProjectMemory.captureOccurrenceInTransaction(db, {
-      occurrenceKind: interaction.status === "rejected" ? "interaction_reject" : "interaction_reply",
-      occurrenceID: interaction.id,
-      projectID: task.project_id,
-      sessionID: interaction.session_id ?? undefined,
-      taskID: interaction.task_id,
-      surface: userInput.surface,
-      timeCreated: timeResolved,
-      text: userInput.text,
-      structured: userInput.structured,
-    })
-  })
 }

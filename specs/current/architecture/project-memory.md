@@ -334,6 +334,27 @@ has its own Message identity and ordinary admission. Previously accepted pending
 inputs continue through the same Organizer. Entry and document formats remain
 unchanged, and canonical history stays intact.
 
+Question replies and rejections admit their human input in the same transaction
+that first appends the immutable interaction outcome. Permission replies admit
+it only in the original Replied subscriber's synchronous transaction, together
+with its successful Bus delivery receipt and lease release. Asked only projects
+the decision and notification. Asked and an early Replied share the original
+requested-ledger source and validate its immutable Task owner before reusing an
+interaction. A failed transaction rolls back admission and receipt together;
+recovery of a committed delivery retains its original receipt after the
+Organizer consumes the inbox. A later human input owns a new occurrence.
+
+Version five establishes this atomic delivery boundary before recovery. An old
+human Task reply without an attempted delivery can continue from its original
+outbox; an existing successful receipt keeps its original meaning. Historical
+settled effects are preserved, not reconstructed retroactively from that receipt.
+It does not prove that an old implementation captured every memory input.
+Attempts without success cannot prove whether their inbox was already consumed.
+They return `SCHEMA_MIGRATION_REQUIRED`, retaining the database, version and
+pre-upgrade backup for evidence-based repair. Bounded recent coverage is not a
+permanent admission receipt, and the upgrade does not guess or replay those
+ambiguous inputs.
+
 Pending occurrence IDs are deterministic and replay must match the full canonical payload. Secrets, private-key blocks, inline payloads, and unsafe attachment references are redacted or omitted before persistence. `user_message` is an inbox, not a permanent archive: an accepted Organizer commit atomically consumes its exact ordered prefix. The Session transcript remains authoritative raw history.
 
 ## Dedicated Memory Organizer

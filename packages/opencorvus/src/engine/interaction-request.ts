@@ -99,7 +99,7 @@ export interface ResolveEngineInteractionRequestInput {
 export function resolveEngineInteractionRequest(
   db: Database.TxOrDb,
   input: ResolveEngineInteractionRequestInput,
-): void {
+): boolean {
   const timeResolved = input.timeResolved ?? Date.now()
   const requestType = input.row.request_type
   if (!requestType) throw new Error(`Interaction ${input.row.id} has no request type ownership`)
@@ -123,14 +123,14 @@ export function resolveEngineInteractionRequest(
     .where(eq(EngineInteractionOutcomeTable.interaction_id, input.row.id))
     .get()
   if (existing) {
-    if (input.sourceOccurrenceID && existing.source_occurrence_id === input.sourceOccurrenceID) return
+    if (input.sourceOccurrenceID && existing.source_occurrence_id === input.sourceOccurrenceID) return false
     if (
       !input.sourceOccurrenceID &&
       existing.source_occurrence_id === null &&
       existing.outcome === input.status &&
       JSON.stringify(existing.response) === JSON.stringify(input.response)
     )
-      return
+      return false
     throw new Error(`Interaction ${input.row.id} has a conflicting immutable outcome ${existing.id}`)
   }
   if ((current.source_kind === "bus_question") !== Boolean(input.sourceOccurrenceID)) {
@@ -160,4 +160,5 @@ export function resolveEngineInteractionRequest(
       source: input.eventSource,
     },
   )
+  return true
 }

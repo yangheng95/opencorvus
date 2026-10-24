@@ -45,10 +45,17 @@ Message 开放，终态重放保留原 completed 时间。各 Tool 的 park/hand
 Bus的投递请求注册、control lease取得、成功/失败receipt加lease释放及phase receipt，
 通过唯一`bus/delivery-transaction`提交原语在每个事件循环轮次合并最多256份同步数据库写入。
 每份写入用当前Database savepoint隔离输入/租约错误；数据库不可用则整批回滚。
-调用者只有在真实commit/rollback后才收到Promise结果，subscriber回调始终在事务外。
+调用者只有在真实commit/rollback后才收到Promise结果，普通subscriber回调在事务外。
 已存在的publication reservation与Project activity拥有排队和提交的完整生命周期，
 outbox及规范receipt/lease仍是唯一持久事实，重试和重启读取原occurrence，不另建投递状态。
 该有界队列只减少物理提交并让出事件循环，不改变事件内容、phase顺序或SQLite持久化配置。
+
+同步数据库effect使用`Bus.subscribeInTransaction`，由原delivery的Instance上下文直接
+进入`Database.immediateTransaction`，将effect、原success receipt和精确lease释放一起
+提交；不进入上述跨Project批量队列。通知通过`Database.effect`在commit后发出。异步返回
+映射明确同步合同错误；临时`Bus.publish`映射`BUS_DURABLE_PUBLICATION_REQUIRED`，不能
+执行无持久收据的SQL effect。同一durable ID和callback更改普通/事务模式返回原订阅身份
+冲突。外部、异步副作用仍使用普通Bus接口及其原occurrence幂等合同。
 
 ## SQLite 回写与连接生命周期
 
@@ -68,7 +75,7 @@ PASSIVE的busy/部分进度在下次周期继续；非暂态回写错误进入�
 
 ## 数据库版本化迁移
 
-当前版本为3，从新建的不可改写版本1基线开始支持自动迁移。唯一 registry 位于
+当前版本为5，从新建的不可改写版本1基线开始支持自动迁移。唯一 registry 位于
 `src/storage/migrations/index.ts`，每版保存完整、不可改写的目标 SQL；后续结构或持久
 payload 语义变更必须追加连续版本。`PRAGMA user_version` 是唯一已完成版本，当前
 `SCHEMA_DDL` 与 typed schema 继续定义唯一业务 reader/writer。`check:database-migrations`
@@ -114,6 +121,14 @@ conversation身份时补canonical Work metadata，其他metadata、Session/Messa
 不在reader或打开路由增加兼容路径。查询不依赖语义迁移期间被暂时移除的索引。
 执行历史仍按各次持久化输入中的真实agent投影，当前Work surface不重写旧coding等参与者；
 后续新输入继续由当前Work overlay产生，与历史使用同一执行身份解析器。
+
+版本4追加原Message移交及Part删除的精确来源查询索引，不改写原事件、消息或业务数据。
+版本5复用版本4的完整目标DDL，在同步权限记忆投递启用前检查旧human Task Replied的
+精确subscriber成功回执、attempt lease和exact phase。尚未attempt的原publication正常恢复；
+真实旧success保留既有结算，不据此追溯重建历史记忆效果。已有attempt而缺success，或
+exact phase已绕过该subscriber却无success时，无法判断原inbox是否曾被消费，返回
+`SCHEMA_MIGRATION_REQUIRED`并保留原库、版本与备份。最近500条覆盖、时钟和rowid不能
+替代永久效果证明；不猜补输入、不造成功回执，也不要求清空数据库。
 
 非空版本0返回 `SCHEMA_BASELINE_REQUIRED`，不属于本基线的升级范围；高于当前版本返回
 `SCHEMA_VERSION_AHEAD`。当前版本出现未声明结构漂移或有损转换返回

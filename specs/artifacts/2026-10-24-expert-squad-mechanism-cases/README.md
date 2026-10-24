@@ -26,3 +26,7 @@
 - `inputs/meeting-knowledge/`：确认、提议、拒绝认领和更正并存的会议稿。
 - `inputs/review-debug/`：可由Node.js原命令复现的小数金额截断缺陷。
 - `inputs/context-audit/create-inputs.mjs`：在新的隔离项目目录复现两次定向压缩案例使用的八页完整原输入，不启动服务或使用凭据。
+
+`permission-memory-recovery.json`保留Permission旧源码升级的原账本、Replied、interaction、lease/receipt及记忆子集：producer-only草案实际漏采红例；未attempt原publication的v4→v5首次捕获；原成功结算和已消费文档保持；原effect已消费又消费501个新真人Message后的明确升级错误。后者原库与三份备份共90表3044行、schema及版本4逐对象相同。不能把此子集当完整DB，也不能把旧成功receipt当历史记忆完整性的证明。完整原SQLite和失败日志仍在JSON中的隔离路径；没有模型调用、凭据副本或UI验收。
+
+`permission-memory-upgrade-probe.ts`是实际进程探针原件。复验时用`git archive 080c4d22e -- packages expert-squads`建立临时源码快照（不是分支或worktree），按现有module-topology materializer链接工作区依赖并构建SDK；将探针复制到快照及当前`packages/opencorvus/`，从各自包目录用Bun启动。先按既有prepare-test-process-supervisor绑定已准备的原生helper，原native三个文件须与快照逐字相同，避免Windows深路径触发无关重建。各场景使用全新绝对证据目录：旧源`old-ready`→新源`new`、旧源`old-gap`→新源`new-ambiguous`、旧源`old-success`→新源`new-settled`。旧进程在确切持久边界显式退出23；新版验收应退出0。`old`是原有attempt入口，用于重现已否决producer-only草案的漏采；不得把该轮称无attempt升级。探针只创建自己的隔离测试目录，保留原before.sqlite、前后JSON与备份，不接入现用服务；结束移除两份临时探针源码，保留证据。

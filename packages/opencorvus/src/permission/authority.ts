@@ -1059,6 +1059,9 @@ export namespace PermissionAuthority {
     )
     if (!requested) throw new Error(`Permission request not found: ${input.requestID}`)
     const request = requestFromRow(requested)
+    if (request.projectID !== Instance.project.id) {
+      throw new PermissionLedgerIntegrityError("request_owner_conflict", request.id, [requested.id], "project_id")
+    }
     if (!request.choices.includes(input.decision)) {
       throw new Error(`Permission decision ${input.decision} is not eligible for request ${input.requestID}`)
     }
@@ -1070,11 +1073,13 @@ export namespace PermissionAuthority {
         decision_scope: input.decision === "allow_task" ? "task" : input.decision === "allow_project" ? "project" : "invocation",
         actor_id: input.actorID, reason: input.message,
       })
-      if (decision.won) publication = Bus.publishOwnedInTransaction(Event.Replied, {
-        sessionID: request.sessionID, requestID: request.id, decision: decisionFromRow(decision.settled),
-        actorID: input.actorID, autoReply: input.userInput ? false : input.autoReply,
-        ...(input.userInput ? { userInput: input.userInput } : {}),
-      })
+      if (decision.won) {
+        publication = Bus.publishOwnedInTransaction(Event.Replied, {
+          sessionID: request.sessionID, requestID: request.id, decision: decisionFromRow(decision.settled),
+          actorID: input.actorID, autoReply: input.userInput ? false : input.autoReply,
+          ...(input.userInput ? { userInput: input.userInput } : {}),
+        })
+      }
       return decision
     })
     if (publication) await publication.retry()

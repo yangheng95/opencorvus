@@ -80,7 +80,7 @@ test("version four preserves exact historical Move facts and indexes the ownersh
     "INSERT INTO bus_publication_outbox(occurrence_id,project_id,directory,event_type,properties,time_created) VALUES(?,?,?,?,?,?)",
     ["remove", "project", "directory", "message.part.removed", removed, 122],
   )
-  const result = run(value, [...DATABASE_MIGRATIONS])
+  const result = run(value, DATABASE_MIGRATIONS.slice(0, 4))
   const query = `SELECT occurrence_id,properties FROM bus_publication_outbox WHERE project_id='project' AND event_type='message.moved' AND json_extract(properties,'$.info.id')='message' AND json_extract(properties,'$.sourceSessionID')='source' AND json_extract(properties,'$.info.sessionID')='target'`
   expect({
     from: result.from,

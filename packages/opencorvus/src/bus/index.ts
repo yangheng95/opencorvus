@@ -49,6 +49,8 @@ export namespace Bus {
 
   type Subscription = {
     callback: (event: Envelope<any>) => unknown | Promise<unknown>
+    callbackIdentity: unknown
+    transaction?: (event: Envelope<any>, db: Database.TxOrDb) => unknown
     id: string
     durable: boolean
     effectContract?: "idempotent_by_occurrence"
@@ -620,6 +622,7 @@ export namespace Bus {
     effectContract?: "idempotent_by_occurrence"
     settleFailure?: boolean
     deliver: () => unknown | Promise<unknown>
+    transaction?: (db: Database.TxOrDb) => unknown
   }
 
   function durableOutboxExists(id: string) {
@@ -786,15 +789,25 @@ export namespace Bus {
         }
       }, 10_000)
       renewal.unref()
+      const recordSuccess = (db: Database.TxOrDb) => {
+        const settledAt = Date.now()
+        const current = currentControlLeaseInTransaction(db, "bus_delivery", deliveryID)
+        if (!current || current.id !== lease.lease.id || current.owner_occurrence_id !== ownerID || current.expires_at <= settledAt) throw new Error(`Durable Bus delivery ${deliveryID} lost its lease before receipt`)
+        db.insert(BusPublicationDeliveryReceiptTable).values({ id: Identifier.ascending("call"), occurrence_id: payload.occurrenceID, phase, subscriber_id: target.id, outcome: "succeeded", error: null, retry_at: null, time_created: settledAt }).run()
+        releaseControlLeaseInTransaction(db, { target: "bus_delivery", targetID: deliveryID, leaseID: lease.lease.id, ownerOccurrenceID: ownerID, now: settledAt })
+      }
       try {
-        await target.deliver()
-        await commitDeliveryTransaction((db) => {
-          const settledAt = Date.now()
-          const current = currentControlLeaseInTransaction(db, "bus_delivery", deliveryID)
-          if (!current || current.id !== lease.lease.id || current.owner_occurrence_id !== ownerID || current.expires_at <= settledAt) throw new Error(`Durable Bus delivery ${deliveryID} lost its lease before receipt`)
-          db.insert(BusPublicationDeliveryReceiptTable).values({ id: Identifier.ascending("call"), occurrence_id: payload.occurrenceID, phase, subscriber_id: target.id, outcome: "succeeded", error: null, retry_at: null, time_created: settledAt }).run()
-          releaseControlLeaseInTransaction(db, { target: "bus_delivery", targetID: deliveryID, leaseID: lease.lease.id, ownerOccurrenceID: ownerID, now: settledAt })
-        })
+        if (target.transaction) {
+          // Run in this delivery's Instance context. The shared batched receipt
+          // queue can contain writes from other Projects and cannot own effects.
+          Database.immediateTransaction(db => {
+            target.transaction!(db)
+            recordSuccess(db)
+          })
+        } else {
+          await target.deliver()
+          await commitDeliveryTransaction(recordSuccess)
+        }
       } catch (error) {
         const outcome = target.settleFailure ? "ignored" as const : "failed" as const
         const settled = await commitDeliveryTransaction((db) => {
@@ -898,6 +911,7 @@ export namespace Bus {
             effectContract: sub.effectContract,
             settleFailure: !sub.durable,
             deliver: () => sub.callback(payload),
+            ...(sub.transaction ? { transaction: (db: Database.TxOrDb) => sub.transaction!(payload, db) } : {}),
           }))
           await dispatchDurableTargets(payload, phase, targets)
         } catch (error) {
@@ -1244,6 +1258,33 @@ export namespace Bus {
     return raw(def.type, callback, options)
   }
 
+  export class TransactionalPublicationRequiredError extends Error {
+    override readonly name = "TransactionalPublicationRequiredError"
+    readonly code = "BUS_DURABLE_PUBLICATION_REQUIRED"
+    constructor(readonly occurrenceID: string, readonly subscriberID: string) {
+      super(`Transactional Bus subscriber ${subscriberID} requires a durable publication: ${occurrenceID}`)
+    }
+  }
+
+  /** A synchronous database effect and its existing delivery receipt commit
+   * together. External/async effects belong to the ordinary subscription API. */
+  export function subscribeInTransaction<Definition extends BusEvent.Definition, Result>(
+    def: Definition,
+    callback: (event: Envelope<z.infer<Definition["properties"]>, Definition["type"]>, db: Database.TxOrDb) => Result,
+    options: { durableID: string; effect: "idempotent_by_occurrence" },
+    ..._synchronousOnly: Result extends PromiseLike<unknown> ? [never] : []
+  ) {
+    const transaction = (event: Envelope<any>, db: Database.TxOrDb): void => {
+      const result = callback(event, db)
+      if (result && typeof (result as unknown as PromiseLike<unknown>).then === "function") {
+        throw new TypeError(`Transactional Bus subscriber ${options.durableID} must complete synchronously`)
+      }
+    }
+    return raw(def.type, event => {
+      throw new TransactionalPublicationRequiredError(event.occurrenceID, options.durableID)
+    }, options, transaction, callback)
+  }
+
   export function subscribeAll(callback: (event: any) => unknown | Promise<unknown>, options?: { durableID: string; effect: "idempotent_by_occurrence" }) {
     return raw("*", callback, options)
   }
@@ -1352,7 +1393,7 @@ export namespace Bus {
     return unsub
   }
 
-  function raw(type: string, callback: (event: any) => unknown | Promise<unknown>, options?: { durableID: string; effect: "idempotent_by_occurrence" }) {
+  function raw(type: string, callback: (event: any) => unknown | Promise<unknown>, options?: { durableID: string; effect: "idempotent_by_occurrence" }, transaction?: Subscription["transaction"], callbackIdentity: unknown = callback) {
     log.debug("subscribing", { type })
     if (isBusTraceEnabled()) {
       const stack = new Error().stack
@@ -1372,7 +1413,7 @@ export namespace Bus {
     const durableKey = options ? `${type}\u0000${options.durableID}` : undefined
     if (durableKey) {
       const existing = current.durableSubscriptions.get(durableKey)
-      if (existing && existing.callback !== callback) {
+      if (existing && (existing.callbackIdentity !== callbackIdentity || Boolean(existing.transaction) !== Boolean(transaction))) {
         throw new DurableBusSubscriptionIdentityConflictError({
           channel: `local:${type}`,
           durableID: options!.durableID,
@@ -1387,6 +1428,8 @@ export namespace Bus {
       .join(" | ")
     const subscription: Subscription = {
       callback,
+      callbackIdentity,
+      transaction,
       id: options?.durableID ?? `runtime:${runtimeSubscriptionID}:${++subscriptionSequence}`,
       durable: options !== undefined,
       effectContract: options?.effect,
