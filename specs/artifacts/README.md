@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [专家团恢复与新操作接续](2026-10-24-expert-recovery-continuation/README.md)：真实备份、重复升级、原请求重试及保全后的并发接续。
+
 - [来源摘录附件身份验证](2026-10-24-source-attachment-identity/README.md)：587真实Tool与来源引用的共同身份。
 
 - [网页抓取来源摘录](2026-10-24-webfetch-source-excerpt/README.md)：586真实摘录、复制与阅读恢复证据。

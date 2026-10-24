@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [专家团未知保全后的恢复与接续](records/2026-10/2026-10-24-expert-recovery-continuation-audit.md)：备份恢复、重复升级及旧恢复与新操作的真实并发抽检。
+
 - [专家团追加交付与更正场景](records/2026-10/2026-10-24-expert-steering-recovery-cases.md)：当前源码的营销、搜索及销售完整交付与轮次接续。
 
 - [来源摘录与工具附件的共同身份](records/2026-10/2026-10-24-source-attachment-identity.md)：587修复摘录附件编号与真实Tool结果错绑。

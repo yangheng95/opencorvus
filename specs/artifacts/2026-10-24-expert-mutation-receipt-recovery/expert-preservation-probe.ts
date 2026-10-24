@@ -6,10 +6,10 @@ const [stage = "outer", mode = "concurrent", worker = "main"] = process.argv.sli
 const directory = process.env.EXPERT_PRESERVATION_DIRECTORY ?? path.join(import.meta.dir, `expert-preservation-${mode}`)
 const source = path.join(directory, "original")
 fs.mkdirSync(directory, { recursive: true })
-const settings: Record<string, { cut: string; count: number }> = {
+const settings: Record<string, { cut: string; count?: number; phase?: string }> = {
   intent: { cut: "occurrence-published", count: 1 },
-  target: { cut: "phase-published", count: 2 },
-  backup: { cut: "phase-temp-synced", count: 3 },
+  target: { cut: "phase-published", phase: "retained-target" },
+  backup: { cut: "phase-temp-synced", phase: "retained-backup" },
   terminal: { cut: "terminal-published", count: 1 },
 }
 if (stage === "outer") {
@@ -120,7 +120,24 @@ if (stage === "crash") {
   const setting = settings[mode]!
   let count = 0
   setDurablePublicationTestCutHook((cut, kind) => {
-    if (kind === "preservation" && cut === setting.cut && ++count === setting.count) {
+    if (kind !== "preservation" || cut !== setting.cut) return
+    count++
+    if (setting.phase) {
+      const phases = path.join(
+        report.runtime.runtimeRoot,
+        "config/durable-publications/expert-squad-mutations",
+        original.id,
+        "preservation",
+        journal.operationID,
+        "phases",
+      )
+      const matchingFact = fs.readdirSync(phases).some((name) => {
+        if (name.startsWith(".tmp-") !== (cut === "phase-temp-synced")) return false
+        return JSON.parse(fs.readFileSync(path.join(phases, name), "utf8")).name === setting.phase
+      })
+      if (!matchingFact) return
+    } else if (count !== setting.count) return
+    {
       {
         using raw = new SQLite(original.databasePath, { readonly: true, create: false })
         raw.exec("PRAGMA query_only=ON; BEGIN")
@@ -129,7 +146,11 @@ if (stage === "crash") {
       }
       fs.writeFileSync(
         path.join(directory, "cut.json"),
-        JSON.stringify({ cut, kind, count, journalPresent: fs.existsSync(original.journalPath) }, null, 2),
+        JSON.stringify(
+          { cut, kind, count, phase: setting.phase, journalPresent: fs.existsSync(original.journalPath) },
+          null,
+          2,
+        ),
       )
       process.exit(24)
     }

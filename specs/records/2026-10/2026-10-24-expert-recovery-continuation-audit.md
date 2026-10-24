@@ -1,0 +1,94 @@
+# 专家团未知保全后的恢复与接续抽检
+
+## Recall
+
+- 用户要求：继续抽检专家团，审计未知结果保全后的恢复、重试及新操作接续，重点覆盖备份恢复、重复升级和跨进程并发；用真实故障注入比较原数据、实际效果及回执；新问题先根因分析后修复，仍由独立子 agent 裁定。
+- 前序实现 `1c1343c7c`、证据 `ad7911334` 已正常推送；当前数据库版本8。迁移1–8均已交付，不得修改。前轮有界矩阵通过不等于本轮接续组合通过。前轮97852失败整库已丢失的限制保持，不能补造原件。
+- 已读：仓库 AGENTS.md、benchmark-debug-template、前轮持久投递/专家团生命周期方案及独立裁定、公开保全与旧版升级探针；当前02-data、04-extensions相关合同；Manager journal/reconcile/publish、Evolution execute/existingReceipt/persistReceipt、长期receipt writer/validator、mutation-preservation、install-lock及schema-migration。
+- 全仓搜索：Expert recovery/reconcile入口、所有Manager发布/导入/升级/恢复/卸载调用、DurablePublicationStore及其锁/terminal、数据库备份/版本锁与升级、确定性receipt ID与随机Manager operation ID。继续按实际候选补齐定义/调用及同语义搜索，不以函数名证明效果。
+- 初始工作区：171项无关删除及 `.bun/`、`packages/opencorvus/bun/` 未跟踪；main已有其他任务的Sources提交，保留、不混入。本轮不建branch/worktree、不动现用服务/窗口，不用凭据/模型、不运行UI自动化；所有进程和数据仅属于自建隔离runtime。
+- 用户授权一层分工：channel_audit审计业务恢复/旧请求与新版本；publication_audit审计共享保全/新操作并发；independent_judge全程独立只读反证和最终裁定。均禁止再委托、提交或操作现用数据；主agent负责方案、备份/重复升级与统一修复交付。初阶段其他agent只能写私有隔离探针，生产修改须在新证据和方案齐备后分配。
+
+## 初始问题深度与影响面
+
+可观察风险是三个不同生命周期再次相遇：长期receipt属于过去已提交的业务操作；当前journal属于一次随机物理安装attempt；preservation保存该attempt观察到的原字节，terminal只证明证据保全完成。恢复旧数据库或目录快照可能让过去的journal重新出现，而当前target已被后来合法操作替换。不得把旧成功理解为当前目录应回到过去，也不得把缺失receipt理解为过去必未提交。
+
+直接候选一：Manager的publishLoadedSourceDirectory目前只在durableReceipt存在时先reconcileEvolutionMutationJournal；普通import/update与uninstall虽共用安装锁，但须核是否在旧evolution journal尚存时修改target。前轮只证明保全完成、current journal退休后再显式import，未证明每个生产入口都先完成原恢复。若可达，旧journal的原target观察会被新操作改变，后续恢复可能保全错误版本、清理原backup或只报错阻断后续操作。
+
+直接候选二：committedEvolutionReceipt证明历史commit，而cold reconcile还要求当前target等于原after。备份/重复恢复让旧journal重现、后来合法版本已安装时，这个约束是否仍合理未知。需逐原receipt identity、原journal字节、实际target、archive及后续新journal核验，禁止先放宽校验或删除历史入口。
+
+直接候选三：preservation按原operationID保存intent/phase/terminal。真实文件copy/rename与phase存在切点，重复恢复、多个recoverer及新操作共用安装锁/subject锁；必须证明terminal前后的原件与current slot关系，并覆盖历史归档已经存在后恢复旧DB/旧journal的组合。不能只用两个同类recoverer代替recoverer与publisher竞争。
+
+旧路径未根治的可能原因：前轮覆盖了单次backup restore、一次保全后显式import及两个recoverer，未覆盖同一原授权重试、新合法版本后重现旧journal、反复旧版升级与发布竞争。以上均为待证候选，不据最后error或模型自述认定缺陷。
+
+影响面包括Manager全部生产入口、Evolution三类mutation、Task/Mission/Session原授权与Artifact运输、global/project安装位置、跨Project同ID锁、当前journal和长期archive、唯一长期receipt writer、Database.Client/迁移器、公开诊断API、聚焦后端测试及当前架构。schema或持久格式若需变化必须追加版本；无证据时保持1–8原样。当前不涉及界面、模型工具选择或外部发布；真实模型推理和任意外部副作用恰好一次保证不在本轮声明中。
+
+## 故障矩阵与验收合同
+
+1. 真实正式Manager安装到原after、receipt前硬退出23；保存完整原数据库、journal和before/after文件树。正式保全并记录唯一occurrence，然后分别保持after重试原请求、明确新恢复到before后重试原请求。比较原授权、确定性receipt ID、随机attempt、原archive和实际包版本；每个新成功必须有同一唯一writer事实。
+2. 真实正receipt提交后硬退出23；恢复同authority提交前数据库备份及独立authority备份，冷恢复原journal。保留原历史成功库、恢复前后整库，明确unknown与历史成功的区别。后续正式新操作和原retry都比较完整文件/DB事实。
+3. 已归档unknown→新合法版本→重现原旧journal/旧数据库：仅在自有working副本恢复实际备份，原master只读；核原archive、当前新版本、新receipt及恢复处置。不能改journal内容/版本号伪造历史。
+4. 重复升级：使用真正旧版源码生成的原6/7原件，正式Database.Client升级至8；关闭全部自有连接后再次恢复原旧DB并重新升级，另测同库两个独立opener竞争及不同库隔离。逐原表/原列/rowid比较，正式backup与原快照完全相等；重复当前opener也应保持事实。单SQLite busy是暂态真实错误，关闭竞争者后重开验证，不冒称升级成功。
+5. 跨进程：recoverer与普通import/update、durable promotion/restoration竞争，切在原archive terminal前后或新target已装/receipt前。收集每个实际exit、工具输入输出、current journal、唯一receipt与完整树；结果必须属于真实串行顺序或明确CAS错误，不能覆盖旧archive或借旧回执确认新效果。
+6. 横向覆盖同一公共机制的全部生产入口、正常/终态、重试/重启、串并行、多Project/global/project隔离。Task/Mission/Session不适用项须据实际调用与原授权证明，不把Manager局部fixture称完整业务/模型端到端。
+
+原件和逐进程日志位于忽略的 `.tmp-product-iteration/expert-recovery-continuation-audit/{root,channel,publication,judge}/`，每案fresh目录。所有真实CLI通过现有隔离runtime、成熟进程结算和无活动超时；失败原件必须保留。新公开探针若交付只含非秘密合成参数和代码，不提交原库/完整日志/凭据。检查器故障先修再重跑原case。
+
+## 修复与裁定顺序
+
+每个实际红例先补本记录：现象、触发、原始事实、完整数据/控制流根因、共享入口影响、公共合同和风险，再实施当前唯一实现的根修；不增加fallback/双源、不靠报错阻止升级收敛。运行聚焦正向后端合同及原真实红例，由独立judge直接查原DB/文件/日志反证。最后执行文档检查、必要typecheck/拓扑，精确暂存、正常commit、fetch/merge并审阅完整待推送集合后push；无关工作区改动保留。仅在本轮明确矩阵无未闭合新问题后完成，不作无界无缺陷声明。
+
+## 已证根因及修复方案（实施前）
+
+独立judge已直接逐字节核实三个真实红例，均为同一共享入口缺陷的表现。channel/committed-1792849917228在真实成功receipt→exit23后直接cold普通import v2→v1成功，但原journal未退休，原长期receipt1的完整envelope/task/time保持，之后两个冷恢复持续报当前revision不符。channel/unknown-1792849917237在真实receipt前exit23后先普通import v1，后续保全terminal完成却把v1放进target资源，与硬退出原v2逐文件不同。publication/pending-1792849931778在retained-journal phase1后exit24，普通新import v3成功，两个recoverer均因冻结target不符失败；原journal/intent/phase1和before仍在，当前v3合法。
+
+控制流根因是publishLoadedSourceDirectory持安装锁后只为durableReceipt调用Evolution恢复，普通import/update关闭Registry自动恢复，随后readInstalledPackageRevision、rename和cleanup先改变了旧current journal所指的同一target。锁仅将每次调用串行化，未保证每个effect前先完成跨调用原恢复。目录/压缩包导入、网络update、payload/builtin安装更新、repair、conversation-authoring和Multica共用这个writer，统一修复此处；uninstall已有under-lease恢复，仍核其关联scope隔离，不按route补丁。
+
+未来正确路径：在唯一publish writer的同一InstallLock内保留已有replacement恢复顺序，随后无条件收敛同一目标location的Evolution journal，再进入CAS/rename；所有新操作共用该前置事实顺序。旧缺陷允许较早Evolution与较晚普通replacement journal并存，较晚replacement若尚未完成应先沿其原合同恢复，不能颠倒这段已有因果顺序。已知正receipt且target等于原after，按原成功清理。原正receipt在但target是后来观察时，历史成功仍只由长期表裁定，保全当前证据并返回committed_revision_changed，不能把历史commit改称unknown、不能回滚当前包。缺receipt沿unknown保全。公开恢复summary增加这个准确disposition，旧历史summary准确表示保全时的观察，不把旧complete @1一概称原mutation after完整。
+
+仅修未来顺序不够，旧pending phase1和已被新操作替换的合法存量也必须可接续。保全文件payload升为@2，在原唯一DurablePublicationStore完成保留数据的版本化自动迁移：新intent直接声明@2；旧pending @1保原intent/phase字节，追加唯一upgrade-v2及不可变resource-plan事实，再由同一当前算法继续；旧complete @1只读保留，不重写历史。数据库结构无变化，不追加虚假schema9，已交付1–8不改。
+
+resource plan在copy/rename前持久化，冻结expected observation、实际source/destination及当前观测；重试消费原plan，copy/rename后phase前崩溃从精确destination认领。旧dest已等于冻结expected时优先保留该原件，changed source另存distinct observed资源；若原expected树在source/dest均不可得，显式expectedObservationAvailable=false并保当前observed字节，不能把它放入‘原after已保全’合同或改旧expected。非target before/staging/discard同样保原可得资源，不删除额外副本掩盖差异。plan执行时资源再变化须精确报可重入完整性错误并保数据，禁止每次重算plan掩盖漂变。保全完成后才精确退休current journal；新明确操作可继续。
+
+完整filesystem观察与journal的package digest为不同身份，安装metadata尤其不可从Registry包snapshot推回。只允许用原冻结完整tree的精确身份裁expected是否可得，不能把包digest相同当原完整安装树已恢复。历史长期receipt的引用/投影只是保全诊断，唯一成功事实仍为原canonical表。独立judge已确认该文件版本化自动迁移方向合规，要求重入plan稳定、准确区分历史commit和当前观察，并保留旧complete的unverified边界。
+
+root额外真实矩阵已通过：upgrade-1792850165310把真实旧7原件复制到新隔离DB，两轮恢复同一原7并分别双进程正式opener/后继复开，六次均exit0；原表/列/rowid与每份正式backup逐项一致。same-authority-1792850210045和foreign-authority-1792850210033分别恢复同authority提交前真实备份及独立新Database authority，两轮恢复原journal/DB并正式恢复，unknown归档字节保持、新显式v1保持，原receipt authority精确1→0，理由分别receipt_absent/database_authority_mismatch。该升级案仅裁Database.Client边界，原旧Task路径未搬运执行业务，不冒称完整旧任务E2E。
+
+## 备份交叉恢复的追加根因（修复前）
+
+publication/target-1792851300537真实在@2 target copy已发布、retained-target phase尚未完成时exit24，再从另一次正式Manager v3操作的实际完整target备份恢复当前目录；原archive target2和原plan均精确存在，冷恢复却因source变化报错。原plan不能重算，已取得的精确destination也不能被后来source变化否决。修复在原plan后追加resource-observation-v2，锚定原planSequence及上一观察事实，先冻结新实际source/destination、原asset可得性及distinct observed资源，再沿唯一算法复制/移动；原plan和已有阶段不改。缺失原asset明确投影expectedObservationAvailable=false及missing引用，保所有现存字节，不借验收外部原件补造生产资源。
+
+judge/receipt-reappears-1792851310796证实另一共享次序缺陷：真实原成功DB1→恢复同authority提交前DB0→保全target后exit24→恢复原成功DB1，Manager按canonical1直接删除before backup/current journal，留下无terminal的archive及缺失before；再冷恢复返回none，Provider0。根因是DB回执重新出现被错误地放在已经开始的文件保全生命周期之前，绕过已持久plan所拥有的资源。修复在committed cleanup及confirmed rollback前精确lookup同operation原Store；已有occurrence必须先沿其冻结plan完成保全，随后业务disposition仍从当前唯一canonical裁定。原保全记录的是开始时的可用事实，不把后来DB恢复篡改为当时已知成功；当前committed结果和保全历史是不同观察。同operation有current journal时可精确lookup，原slot已丢失的孤儿恢复枚举成本如下述，不另建current index。
+
+该新增红例的实际错误cleanup已让其working原before不可得，judge保存的at-cut backup只供对照，不能注入作为产品恢复来源。需以追加观察事实准确保留可得after/current/journal、标记原before缺失，完成可审阅处置及新操作；另以fresh重复同一故障序列证明修后能在cleanup之前保全完整before。坏版事实与fresh修后必须分开记录。
+
+独立复核进一步指出current journal也已被旧cleanup删除，单在current journal存在分支lookup archive无法触达这份真实存量。恢复入口改为在同一安装owner内从该installation/package唯一Store的listOpen读取所有pending occurrence，使用各原intent.journalText与严格journal/path校验恢复自身，再处理当前实际slot；不由master补journal、不另建current index。旧orphan完成归档时不碰另一个operation的current slot，只有与原字节相等的当前slot才退休。多个pending分别收敛并返回实际处置；代价是该精确包历史枚举O(history)，不声称恒定成本。显式操作只核该installation/package，background沿已有location发现范围逐包恢复、逐分区报告损坏。
+
+judge/known-archive-1792852470417证实最后一个返回值合同缺陷：正式原成功receipt→普通import before→恢复原journal使known archive完成，再恢复同authority真实提交前DB0及原journal，当前Manager仍从旧archive返回committed_revision_changed。4份原DB同authority，当前canonical0、Provider0，archive全bytes不变；没有据此写入新authority或形成安装伪成功。根因是priorPreservation分支的业务返回值在committed缺失时复用了历史retained.disposition。修复仅让当前缺canonical明确返回commit_receipt_unavailable，原known archive历史完全不改；仍只从当前canonical裁业务成功。独立judge将复跑原坏working和fresh同序列。
+
+## 最终真实验收与独立裁定
+
+独立judge最终裁定：**当前声明的有界机制矩阵通过，暂无新的明确反证。** 它逐原DB/目录/旧事实核实五类已证表现，未把controller0或实现agent自述当作通过。当前业务成功只读当前canonical，旧归档保留原历史观察；没有无限无缺陷声明。Git交付状态另以真实提交和push结算。
+
+| 范围 | 最终事实 |
+| --- | --- |
+| 普通导入 | channel fresh committed/unknown-1792852071247均真实23后普通import成功、旧reconcile及cold retry为none；unknown保原v2完整树，known唯一原receipt保持。原两红working的repaired-committed-1792852161681与repaired-unknown-1792852165222均实际0，新显式v3可继续；旧complete @1准确unverified。 |
+| 发布并发 | publication pending-1792852093904、terminal-1792852093718、backup-1792852093922均真实24后后继0、物理/输出结算true；原target2/before1、journal、既有phase和原DB列/rowid逐项相等。current依case为3/2，未越过旧保全。 |
+| 原plan及新观察 | target-1792851961513复制原2后实际24，再恢复另一次正式Manager产生的完整3备份，cold0；原plan不改，新增observation，原2及distinct3、before1保持。旧@1 physical-master恢复legacy-recovered-1792851971823两冷0、旧intent/phase字节/原DB行保持，原expected不可得false、current3另存、before1保持。 |
+| 回执交叉恢复 | judge receipt-reappears-1792852172178复跑DB1→0→target24→1，后继0/0，完整before先保全、原plan/phases不改、当前canonical1。旧坏working从自身Store恢复孤儿，before真实缺失明确标记，不注入master。 |
+| A孤儿与B当前slot | orphan-and-new-1792852233180实际B target3后25，恢复A旧partial archive形成并存；两op分别完成、B原journal归档、原canonical A1、Provider0。后续显式v4及两archive保持；background入口另实跑0，无currentjournal也从Store收敛A、旧plan/phase和current4/B保持。 |
+| 当前/历史disposition | known-archive-1792852470417/replay-fixed及fresh known-archive-1792852641164/replay-current均0、实际结算；当前canonical0明确unknown，历史known archive全JSON/整树不改。公开copy另fresh known-archive-1792852961522也通过。 |
+| 原授权接续 | feedback-retry-1792850506179真实Core反馈candidate→用户Message授权→execute23→unknown保全；原after重试明确CAS冲突，显式before后同授权成功，再次重试同receipt。5份DB原授权Message/Part逐列不改，归档before/after原字节保持。公开copy fresh feedback-retry-1792852786740通过，Provider0。 |
+| 重复升级 | unknown原7的upgrade-1792850788356双进程barrier两轮、正receipt原7的公开copy upgrade-1792851099396双进程两轮均0，均先实际读到7；91原表72/75原行及rowid保持，每份正式backup精确原schema/rows/7，正receipt原envelope/task/time保持。当前DB版本仍8，1–8原迁移不改。 |
+| 备份authority | same/foreign原两轮通过后，交付public copy又fresh same-authority-1792852130544、foreign-authority-1792852130534实际0，原真实1→0备份、原archive两轮全JSON相等，后来的v1保持。 |
+| HTTP实际入口 | public recovery-http从新合法Project读取known archive，200、4页14438字节、每页≤4096、原journal字节相等；missing404/invalid400/EOF200空页，Provider0。该summary准确为历史known，而当前Manager在DB0返回unknown。 |
+
+最终新增两个后端test文件共6项通过：局部Store/文件合同3项使用Node严格正向断言，Manager合同3项28次Bun断言；原Evolution5项151断言、Manager CAS1项30断言、唯一writer1项23断言全部通过。最终两新文件同一正式runner命令完整0，日志root/focused-new-final.log；原三文件完整0见root/focused-original-contracts.log。
+
+实际交付脚本已从specs/artifacts位置复跑，不只私有副本。manager unknown公有checker核当前版本/原树/canonical及cold retry；publication pending公有controller进入独立publication-evidence-check，逐原表列/rowid/目录树及所有exit/physical-output receipt核验。前期私有原红controller仅用于观察，退出0不是合同通过；交付版补齐明确实际输出断言和checker。更新的前轮target/backup故障探针也实际24后0，cut.json分别定位retained-target发布后和retained-backup临时事实fsync后，不再依序号误切plan。
+
+工程检查：正式SDK生成0；全仓typecheck 8任务全部成功（本轮均实际cache miss）；docs350操作/26组、架构20文档全部链接、路由6规则/36文件检查均0。当前source API/SDK/架构同源。最终暂存模块拓扑1191模块/6106运行时边、4项clean import均0；实际暂存tree的release拓扑5项authority均0；HEAD及index凭据扫描0命中。第一次向release检查器传入不支持的--index产生用法错误，随后按其正式--treeish合同检查实际git write-tree结果通过，不把用法失败记为产品缺陷。独立judge最终复核25项暂存与manifest完全相等、code9/证据16范围清晰、无原库/私有日志/凭据/无关改动；三个共享README只有本任务条目，已交付迁移1–8均未变。正常hook和push仍以实际Git结果结算。
+
+已损坏副本缺before或旧complete错误观察不伪补历史，外部验收master不注入产品恢复；完整证据仍保留。恢复枚举成本O(history)，未执行本轮模型推理、真实Campaign、外部发布或UI验收。公开复跑与安全汇总见[产物入口](../../artifacts/2026-10-24-expert-recovery-continuation/README.md)。
+
+机制、聚焦测试及当前架构已独立提交为`6134b727b`，本记录及复跑探针另作证据提交。交付采用main既有upstream的正常fetch/merge/push及仓库pre-push检查，最终远端状态以Git实际结果为准。

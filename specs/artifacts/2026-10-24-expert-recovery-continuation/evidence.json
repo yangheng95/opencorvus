@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "scope": "expert mutation unknown preservation, retry, restored backups, repeated upgrades and concurrent continuation",
+  "mechanismVerdict": "passed_within_declared_matrix",
+  "independentJudge": "/root/independent_judge",
+  "databaseTargetVersion": 8,
+  "publishedMigrationsUnchanged": [1, 2, 3, 4, 5, 6, 7, 8],
+  "preservationPayloadVersion": 2,
+  "closedFindings": [
+    "The common ordinary publication writer now reconciles the original journal before changing the target.",
+    "Exact archived resources survive a changed live source; immutable observations preserve both identities.",
+    "A restored successful receipt cannot clean resources owned by pending preservation.",
+    "Orphan preservation resumes from its original Store intent without replacing another operation's current journal.",
+    "Current business disposition reads current canonical receipts, while the archive retains its historical disposition."
+  ],
+  "realFaultMatrix": [
+    {
+      "case": "ordinary import after successful or missing receipt",
+      "hardExit": 23,
+      "freshAndOldWorkingStates": "passed",
+      "providerRequests": 0
+    },
+    {
+      "case": "pending preservation and two recoverers competing with new publication",
+      "hardExit": 24,
+      "currentVersion": "2026.10.24.3",
+      "archivedVersions": ["2026.10.24.2", "2026.10.24.1"],
+      "result": "passed"
+    },
+    {
+      "case": "terminal preservation and concurrent new operation",
+      "hardExit": 24,
+      "historicalFactsExact": true,
+      "result": "passed"
+    },
+    {
+      "case": "backup moved before retained phase, restored database and cold retry",
+      "hardExit": 24,
+      "originalTreesExact": true,
+      "result": "passed"
+    },
+    {
+      "case": "copied original target plus restored newer target",
+      "hardExit": 24,
+      "originalPlanExact": true,
+      "newObservationDistinct": true,
+      "result": "passed"
+    },
+    {
+      "case": "receipt reappears during pending preservation",
+      "databaseReceiptCounts": [1, 0, 1],
+      "freshBeforeTreeRetained": true,
+      "result": "passed"
+    },
+    {
+      "case": "damaged orphan plus another operation current journal",
+      "newOperationHardExit": 25,
+      "eachArchiveAndCurrentVersionPreserved": true,
+      "result": "passed"
+    },
+    {
+      "case": "background orphan recovery without current journal",
+      "oldPlanAndPhasesExact": true,
+      "missingOriginalExplicit": true,
+      "result": "passed"
+    },
+    {
+      "case": "historical known archive after actual database rollback",
+      "currentCanonicalReceipts": 0,
+      "currentDisposition": "commit_receipt_unavailable",
+      "archiveDisposition": "committed_revision_changed",
+      "archiveBytesExact": true,
+      "result": "passed"
+    },
+    {
+      "case": "same original user authorization after unknown preservation",
+      "firstRetry": "typed CAS conflict",
+      "afterExplicitBeforeImport": "success",
+      "nextRetry": "same canonical receipt",
+      "archiveBytesExact": true,
+      "providerRequests": 0
+    }
+  ],
+  "repeatedUpgrade": {
+    "sourceVersion": 7,
+    "targetVersion": 8,
+    "roundsPerOriginal": 2,
+    "concurrentOpenersPerRound": 2,
+    "allObservedVersion7BeforeSharedBarrier": true,
+    "followupCurrentOpenerPerRound": 1,
+    "originalTables": 91,
+    "originalRows": { "receiptAbsent": 72, "receiptPresent": 75 },
+    "originalColumnsAndRowIDsPreserved": true,
+    "everyFormalBackupEqualsOriginalSchemaAndRows": true,
+    "originalReceiptEnvelopeTaskAndTimeExact": true,
+    "boundary": "Database.Client migration; original absolute Task paths were not executed"
+  },
+  "restoredAuthorityMatrix": {
+    "sameDatabaseAuthority": "passed_two_rounds",
+    "independentDatabaseAuthority": "passed_two_rounds",
+    "originalActualCommitSnapshotRetained": true,
+    "archivedUnknownBytesUnchanged": true,
+    "laterExplicitInstalledVersionPreserved": true
+  },
+  "focusedTests": {
+    "newFilesystemContracts": 3,
+    "newManagerContracts": 3,
+    "existingEvolutionManagerAndWriterContracts": 7,
+    "result": "all_passed"
+  },
+  "http": {
+    "entry": "Server.App.request GET /expert-squad/mutation-recovery",
+    "actualGlobalArchiveFromNewProject": true,
+    "pages": 4,
+    "bytes": 14438,
+    "journalBytesExact": true,
+    "missingStatus": 404,
+    "invalidOffsetStatus": 400,
+    "eofStatus": 200,
+    "providerRequests": 0
+  },
+  "limits": [
+    "Missing bytes in already damaged working copies are marked explicitly; external test masters are not injected as product recovery sources.",
+    "Legacy completed preservation records describe their observed trees, not verified original mutation-after trees.",
+    "Recovery enumerates relevant installation/package Store history; pagination does not make that scan constant cost.",
+    "Backend Task fixtures and deterministic ingress controls do not prove model reasoning or a full Campaign run.",
+    "No credentials, current user services, external publication or UI automation were used."
+  ]
+}
