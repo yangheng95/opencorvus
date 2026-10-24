@@ -172,6 +172,7 @@ function VirtualizedConversationItem(props: {
 
 function VirtualizedConversationCards(props: {
   container: HTMLElement
+  following: () => boolean
   pinnedCardID: () => string | null
   onMeasuredContentChanged: () => void
   onCardScrollRequest: (request: ConversationCardScrollRequest) => void
@@ -386,7 +387,7 @@ function VirtualizedConversationCards(props: {
             }}
             data={order()}
             scrollRef={props.container}
-            bufferSize={VIRTUAL_BUFFER_PIXELS}
+            bufferSize={props.following() ? 0 : VIRTUAL_BUFFER_PIXELS}
             itemSize={ESTIMATED_CARD_HEIGHT}
             keepMounted={pinnedIndexes()}
             as={VirtualWindowShell}
@@ -1058,6 +1059,7 @@ export function Conversation(props: {
       </Show>
       <VirtualizedConversationCards
         container={el}
+        following={tracking}
         pinnedCardID={historyAnchorPinID}
         onMeasuredContentChanged={measuredContentChanged}
         onCardScrollRequest={(request) => {

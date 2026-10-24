@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Main虚拟窗口与尺寸测量](2026-10-24-main-virtual-range/README.md)：584真实页面与最后观察几何。
+
 - [流式正文事件与分组身份](2026-10-24-live-text-event-order/README.md)：583真实页面与事件身份截图。
 
 - [来源摘录内部阅读位置](2026-10-24-source-excerpt-reading/README.md)：582真实来源与阅读截图。

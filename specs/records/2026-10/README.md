@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Main虚拟窗口与尺寸测量](2026-10-24-main-virtual-range.md)：584实际Virtualizer测量链与正文实例。
+
 - [流式正文事件与分组身份](2026-10-24-live-text-event-order.md)：583真正流式事件库存与自然输入观察。
 
 - [来源摘录内部阅读位置](2026-10-24-source-excerpt-reading.md)：582原始库存与自然搜索来源实页。

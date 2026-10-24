@@ -1,0 +1,3163 @@
+{
+  "batch": 584,
+  "at": "2026-10-24T11:06:00.688Z",
+  "change": "Main Conversation uses its existing tracking signal: following viewport buffer 0, history reading buffer 1280; focused/history pins unchanged.",
+  "before": {
+    "publication": {
+      "at": "2026-10-24T10:42:18.197Z",
+      "entry": "main-DSC3ESem.js",
+      "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/main-virtual-range-584-bundle/bin/ui",
+      "qualification": "Completed current production Node Vite build with private passive lifecycle and Virtualizer geometry observations; native CLI /ui"
+    },
+    "buildPreservation": {
+      "before": {
+        "bytes": 95682560,
+        "modifiedAtMs": 1792838435387.0725
+      },
+      "after": {
+        "bytes": 95682560,
+        "modifiedAtMs": 1792838435387.0725
+      }
+    },
+    "actual": {
+      "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+      "messages": 16,
+      "parts": 41,
+      "texts": [
+        {
+          "id": "prt_g0VYxk1gh00n2qlt1Ntk",
+          "messageID": "msg_c8cc1634-f4ed-4e78-afb0-a8242c6efeb4",
+          "role": "user",
+          "characters": 279,
+          "canonical": "Exact SQLite Part text"
+        },
+        {
+          "id": "prt_g0VYxk35s00FfMRLTynw",
+          "messageID": "msg_g0VYxk1kD00wJfeQh05w",
+          "role": "assistant",
+          "characters": 423,
+          "canonical": "Exact SQLite Part text"
+        },
+        {
+          "id": "prt_g0VYxk7BC00ILAP23pdO",
+          "messageID": "msg_g0VYxk6EI00LskhLHSog",
+          "role": "assistant",
+          "characters": 2750,
+          "canonical": "Exact SQLite Part text"
+        }
+      ],
+      "tools": [
+        {
+          "id": "prt_g0VYxk4xl00Tt76Iaz6D",
+          "tool": "read",
+          "input": {
+            "filePath": "README.md",
+            "offset": 2,
+            "limit": 1
+          },
+          "status": "completed"
+        },
+        {
+          "id": "prt_g0VYxk63p00KF542wNPj",
+          "tool": "read",
+          "input": {
+            "filePath": "README.md",
+            "offset": 3,
+            "limit": 1
+          },
+          "status": "completed"
+        }
+      ],
+      "sources": [
+        {
+          "id": "prt_g0VYxk55d00YY2phfuyO",
+          "messageID": "msg_g0VYxk1kD00wJfeQh05w",
+          "sourceId": "d19514673f82e55b4dd7b5acee5ff6dbdcf7634e06a0933053430cc19657f0c7",
+          "toolPartID": "prt_g0VYxk4xl00Tt76Iaz6D",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project\\README.md",
+          "range": {
+            "startLine": 2,
+            "endLine": 2
+          }
+        },
+        {
+          "id": "prt_g0VYxk6CY00Kb3Sxx9tF",
+          "messageID": "msg_g0VYxk57e00aN7tbxSR8",
+          "sourceId": "862fb911e7414ce6ccc2f0464c49349f3b7014b32386f8e8f66481c4bf5a0bb4",
+          "toolPartID": "prt_g0VYxk63p00KF542wNPj",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project\\README.md",
+          "range": {
+            "startLine": 3,
+            "endLine": 3
+          }
+        }
+      ],
+      "events": {
+        "count": 2314,
+        "counts": {
+          "message.part.updated": 168,
+          "message.part.delta": 2144,
+          "message.part.removed": 2
+        },
+        "backwardObservations": 0,
+        "texts": [
+          {
+            "partID": "prt_g0VYxk1gh00n2qlt1Ntk",
+            "events": 2,
+            "first": {
+              "sequence": 1,
+              "at": 1792838593205,
+              "type": "message.part.updated",
+              "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+              "messageID": "msg_c8cc1634-f4ed-4e78-afb0-a8242c6efeb4",
+              "partID": "prt_g0VYxk1gh00n2qlt1Ntk",
+              "partType": "text",
+              "textLength": 279,
+              "orderKey": "v1:0001792838592802:0000000000000031:0000000000000000:part:prt_g0VYxk1gh00n2qlt1Ntk"
+            },
+            "last": {
+              "sequence": 2,
+              "at": 1792838594790,
+              "type": "message.part.updated",
+              "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+              "messageID": "msg_c8cc1634-f4ed-4e78-afb0-a8242c6efeb4",
+              "partID": "prt_g0VYxk1gh00n2qlt1Ntk",
+              "partType": "text",
+              "textLength": 279,
+              "previousLength": 279,
+              "appendFromPrevious": true,
+              "orderKey": "v1:0001792838592802:0000000000000031:0000000000000000:part:prt_g0VYxk1gh00n2qlt1Ntk"
+            }
+          },
+          {
+            "partID": "prt_g0VYxk35s00FfMRLTynw",
+            "events": 306,
+            "first": {
+              "sequence": 4,
+              "at": 1792838598208,
+              "type": "message.part.updated",
+              "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+              "messageID": "msg_g0VYxk1kD00wJfeQh05w",
+              "partID": "prt_g0VYxk35s00FfMRLTynw",
+              "partType": "text",
+              "textLength": 0,
+              "orderKey": "v1:0001792838598200:0000000000000031:0000000000000000:part:prt_g0VYxk35s00FfMRLTynw"
+            },
+            "last": {
+              "sequence": 309,
+              "at": 1792838605383,
+              "type": "message.part.updated",
+              "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+              "messageID": "msg_g0VYxk1kD00wJfeQh05w",
+              "partID": "prt_g0VYxk35s00FfMRLTynw",
+              "partType": "text",
+              "textLength": 423,
+              "previousLength": 423,
+              "appendFromPrevious": true,
+              "textEnded": 1792838605378,
+              "orderKey": "v1:0001792838598200:0000000000000031:0000000000000000:part:prt_g0VYxk35s00FfMRLTynw"
+            }
+          },
+          {
+            "partID": "prt_g0VYxk7BC00ILAP23pdO",
+            "events": 1990,
+            "first": {
+              "sequence": 324,
+              "at": 1792838613915,
+              "type": "message.part.updated",
+              "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+              "messageID": "msg_g0VYxk6EI00LskhLHSog",
+              "partID": "prt_g0VYxk7BC00ILAP23pdO",
+              "partType": "text",
+              "textLength": 0,
+              "orderKey": "v1:0001792838613906:0000000000000031:0000000000000000:part:prt_g0VYxk7BC00ILAP23pdO"
+            },
+            "last": {
+              "sequence": 2313,
+              "at": 1792838650693,
+              "type": "message.part.updated",
+              "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+              "messageID": "msg_g0VYxk6EI00LskhLHSog",
+              "partID": "prt_g0VYxk7BC00ILAP23pdO",
+              "partType": "text",
+              "textLength": 2750,
+              "previousLength": 2750,
+              "appendFromPrevious": true,
+              "textEnded": 1792838650688,
+              "orderKey": "v1:0001792838613906:0000000000000031:0000000000000000:part:prt_g0VYxk7BC00ILAP23pdO"
+            }
+          }
+        ],
+        "toolRetirements": [
+          {
+            "partID": "prt_g0VYxk4xl00Tt76Iaz6D",
+            "messageID": "msg_g0VYxk1kD00wJfeQh05w",
+            "previousStatus": "pending",
+            "at": 1792838605530,
+            "sequence": 311,
+            "nextEvent": {
+              "sequence": 312,
+              "at": 1792838605535,
+              "type": "message.part.updated",
+              "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+              "messageID": "msg_g0VYxk1kD00wJfeQh05w",
+              "partID": "prt_g0VYxk4xl00Tt76Iaz6D",
+              "partType": "tool",
+              "tool": "read",
+              "toolStatus": "running",
+              "orderKey": "v1:0001792838605531:0000000000000031:0000000000000000:part:prt_g0VYxk4xl00Tt76Iaz6D"
+            },
+            "followingVisibleTextsAtRetirement": []
+          },
+          {
+            "partID": "prt_g0VYxk63p00KF542wNPj",
+            "messageID": "msg_g0VYxk57e00aN7tbxSR8",
+            "previousStatus": "pending",
+            "at": 1792838609691,
+            "sequence": 318,
+            "nextEvent": {
+              "sequence": 319,
+              "at": 1792838609698,
+              "type": "message.part.updated",
+              "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+              "messageID": "msg_g0VYxk57e00aN7tbxSR8",
+              "partID": "prt_g0VYxk63p00KF542wNPj",
+              "partType": "tool",
+              "tool": "read",
+              "toolStatus": "running",
+              "orderKey": "v1:0001792838609692:0000000000000031:0000000000000000:part:prt_g0VYxk63p00KF542wNPj"
+            },
+            "followingVisibleTextsAtRetirement": []
+          }
+        ]
+      }
+    },
+    "readingObservations": [
+      {
+        "name": "owners-before",
+        "at": "2026-10-24T10:43:12.293Z",
+        "parts": [
+          {
+            "messageID": "msg_g0VYajX9A00r9VlN3kU5",
+            "partID": "prt_g0VYajYdB00dd6w7h51Z",
+            "renderers": [
+              {
+                "blocks": "55",
+                "emptyAfter": null,
+                "length": "7104",
+                "owner": "22",
+                "pending": "false"
+              }
+            ]
+          }
+        ],
+        "top": 15998,
+        "geometry": {
+          "at": 5662.900000095367,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "follow": "true",
+          "top": 15998,
+          "scrollHeight": 16633,
+          "viewport": 635,
+          "virtualOffset": 15998,
+          "virtualSize": 16444.78125,
+          "lastRows": [
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VY3HUc200tMymSAsyl",
+              "index": 4,
+              "size": 1100.671875,
+              "offset": 583.578125
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYah8Fn00qmEh1R3mc",
+              "index": 5,
+              "size": 308.125,
+              "offset": 1684.25
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYah8HH0030Ceh5lXH",
+              "index": 6,
+              "size": 4446.71875,
+              "offset": 1992.375
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFkE00yhItnIZTN",
+              "index": 7,
+              "size": 308.125,
+              "offset": 6439.09375
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFlg00Gu7OJMI4l",
+              "index": 8,
+              "size": 4588.140625,
+              "offset": 6747.21875
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX7h00hm1lCk22a",
+              "index": 9,
+              "size": 308.125,
+              "offset": 11335.359375
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+              "index": 10,
+              "size": 4625.296875,
+              "offset": 11643.484375
+            },
+            {
+              "id": "subagent-grid:ses_-zUS0WzzQzzDOGrIbYwN",
+              "index": 11,
+              "size": 176,
+              "offset": 16268.78125
+            }
+          ],
+          "mounted": [
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+              "top": -4314.515625,
+              "height": 4613.296875
+            },
+            {
+              "id": "subagent-grid:ses_-zUS0WzzQzzDOGrIbYwN",
+              "top": 302.78125,
+              "height": 176
+            }
+          ]
+        }
+      },
+      {
+        "name": "owners-active-01",
+        "at": "2026-10-24T10:43:49.683Z",
+        "parts": [
+          {
+            "messageID": "msg_c8cc1634-f4ed-4e78-afb0-a8242c6efeb4",
+            "partID": "prt_g0VYxk1gh00n2qlt1Ntk",
+            "renderers": [
+              {
+                "blocks": "1",
+                "emptyAfter": null,
+                "length": "279",
+                "owner": "88",
+                "pending": "false"
+              }
+            ]
+          },
+          {
+            "messageID": "msg_g0VYxk1kD00wJfeQh05w",
+            "partID": "prt_g0VYxk35s00FfMRLTynw",
+            "renderers": [
+              {
+                "blocks": "3",
+                "emptyAfter": null,
+                "length": "423",
+                "owner": "26",
+                "pending": "false"
+              }
+            ]
+          },
+          {
+            "messageID": "msg_g0VYxk6EI00LskhLHSog",
+            "partID": "prt_g0VYxk7BC00ILAP23pdO",
+            "renderers": [
+              {
+                "blocks": "15",
+                "emptyAfter": null,
+                "length": "1232",
+                "owner": "43",
+                "pending": "true"
+              }
+            ]
+          }
+        ],
+        "top": 17605,
+        "geometry": {
+          "at": 69224,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "follow": "true",
+          "top": 17605,
+          "scrollHeight": 18240,
+          "viewport": 635,
+          "virtualOffset": 17605,
+          "virtualSize": 18051.78125,
+          "lastRows": [
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYah8HH0030Ceh5lXH",
+              "index": 6,
+              "size": 4446.71875,
+              "offset": 1992.375
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFkE00yhItnIZTN",
+              "index": 7,
+              "size": 308.125,
+              "offset": 6439.09375
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFlg00Gu7OJMI4l",
+              "index": 8,
+              "size": 4588.140625,
+              "offset": 6747.21875
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX7h00hm1lCk22a",
+              "index": 9,
+              "size": 308.125,
+              "offset": 11335.359375
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+              "index": 10,
+              "size": 4625.296875,
+              "offset": 11643.484375
+            },
+            {
+              "id": "subagent-grid:ses_-zUS0WzzQzzDOGrIbYwN",
+              "index": 11,
+              "size": 176,
+              "offset": 16268.78125
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_c8cc1634-f4ed-4e78-afb0-a8242c6efeb4",
+              "index": 12,
+              "size": 308.125,
+              "offset": 16444.78125
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYxk1kD00wJfeQh05w",
+              "index": 13,
+              "size": 1298.875,
+              "offset": 16752.90625
+            }
+          ],
+          "mounted": [
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYxk1kD00wJfeQh05w",
+              "top": -812.09375,
+              "height": 1290.875
+            }
+          ]
+        }
+      },
+      {
+        "name": "owners-active-02",
+        "at": "2026-10-24T10:44:20.672Z",
+        "parts": [
+          {
+            "messageID": "msg_c8cc1634-f4ed-4e78-afb0-a8242c6efeb4",
+            "partID": "prt_g0VYxk1gh00n2qlt1Ntk",
+            "renderers": [
+              {
+                "blocks": "1",
+                "emptyAfter": null,
+                "length": "279",
+                "owner": "102",
+                "pending": "false"
+              }
+            ]
+          },
+          {
+            "messageID": "msg_g0VYxk1kD00wJfeQh05w",
+            "partID": "prt_g0VYxk35s00FfMRLTynw",
+            "renderers": [
+              {
+                "blocks": "3",
+                "emptyAfter": null,
+                "length": "423",
+                "owner": "26",
+                "pending": "false"
+              }
+            ]
+          },
+          {
+            "messageID": "msg_g0VYxk6EI00LskhLHSog",
+            "partID": "prt_g0VYxk7BC00ILAP23pdO",
+            "renderers": [
+              {
+                "blocks": "30",
+                "emptyAfter": null,
+                "length": "2750",
+                "owner": "43",
+                "pending": "true"
+              }
+            ]
+          }
+        ],
+        "top": 17794,
+        "geometry": {
+          "at": 100150.19999980927,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "follow": "false",
+          "top": 17794,
+          "scrollHeight": 19293,
+          "viewport": 635,
+          "virtualOffset": 17794,
+          "virtualSize": 19105.3125,
+          "lastRows": [
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYah8HH0030Ceh5lXH",
+              "index": 6,
+              "size": 4446.71875,
+              "offset": 1992.375
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFkE00yhItnIZTN",
+              "index": 7,
+              "size": 308.125,
+              "offset": 6439.09375
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFlg00Gu7OJMI4l",
+              "index": 8,
+              "size": 4588.140625,
+              "offset": 6747.21875
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX7h00hm1lCk22a",
+              "index": 9,
+              "size": 308.125,
+              "offset": 11335.359375
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+              "index": 10,
+              "size": 4625.296875,
+              "offset": 11643.484375
+            },
+            {
+              "id": "subagent-grid:ses_-zUS0WzzQzzDOGrIbYwN",
+              "index": 11,
+              "size": 176,
+              "offset": 16268.78125
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_c8cc1634-f4ed-4e78-afb0-a8242c6efeb4",
+              "index": 12,
+              "size": 308.125,
+              "offset": 16444.78125
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYxk1kD00wJfeQh05w",
+              "index": 13,
+              "size": 2352.40625,
+              "offset": 16752.90625
+            }
+          ],
+          "mounted": [
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_c8cc1634-f4ed-4e78-afb0-a8242c6efeb4",
+              "top": -1309.21875,
+              "height": 296.125
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYxk1kD00wJfeQh05w",
+              "top": -1001.09375,
+              "height": 2340.40625
+            }
+          ]
+        }
+      },
+      {
+        "name": "owners-final",
+        "at": "2026-10-24T10:49:19.547Z",
+        "parts": [
+          {
+            "messageID": "msg_g0VYajX9A00r9VlN3kU5",
+            "partID": "prt_g0VYajYdB00dd6w7h51Z",
+            "renderers": [
+              {
+                "blocks": "55",
+                "emptyAfter": null,
+                "length": "7104",
+                "owner": "104",
+                "pending": "false"
+              }
+            ]
+          },
+          {
+            "messageID": "msg_c8cc1634-f4ed-4e78-afb0-a8242c6efeb4",
+            "partID": "prt_g0VYxk1gh00n2qlt1Ntk",
+            "renderers": [
+              {
+                "blocks": "1",
+                "emptyAfter": null,
+                "length": "279",
+                "owner": "105",
+                "pending": "false"
+              }
+            ]
+          },
+          {
+            "messageID": "msg_g0VYxk1kD00wJfeQh05w",
+            "partID": "prt_g0VYxk35s00FfMRLTynw",
+            "renderers": [
+              {
+                "blocks": "3",
+                "emptyAfter": null,
+                "length": "423",
+                "owner": "26",
+                "pending": "false"
+              }
+            ]
+          },
+          {
+            "messageID": "msg_g0VYxk6EI00LskhLHSog",
+            "partID": "prt_g0VYxk7BC00ILAP23pdO",
+            "renderers": [
+              {
+                "blocks": "30",
+                "emptyAfter": null,
+                "length": "2750",
+                "owner": "43",
+                "pending": "true"
+              }
+            ]
+          }
+        ],
+        "top": 16873,
+        "geometry": {
+          "at": 398518.30000019073,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "follow": "false",
+          "top": 16873,
+          "scrollHeight": 19293,
+          "viewport": 635,
+          "virtualOffset": 16873,
+          "virtualSize": 19105.3125,
+          "lastRows": [
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYah8HH0030Ceh5lXH",
+              "index": 6,
+              "size": 4446.71875,
+              "offset": 1992.375
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFkE00yhItnIZTN",
+              "index": 7,
+              "size": 308.125,
+              "offset": 6439.09375
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFlg00Gu7OJMI4l",
+              "index": 8,
+              "size": 4588.140625,
+              "offset": 6747.21875
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX7h00hm1lCk22a",
+              "index": 9,
+              "size": 308.125,
+              "offset": 11335.359375
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+              "index": 10,
+              "size": 4625.296875,
+              "offset": 11643.484375
+            },
+            {
+              "id": "subagent-grid:ses_-zUS0WzzQzzDOGrIbYwN",
+              "index": 11,
+              "size": 176,
+              "offset": 16268.78125
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_c8cc1634-f4ed-4e78-afb0-a8242c6efeb4",
+              "index": 12,
+              "size": 308.125,
+              "offset": 16444.78125
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYxk1kD00wJfeQh05w",
+              "index": 13,
+              "size": 2352.40625,
+              "offset": 16752.90625
+            }
+          ],
+          "mounted": [
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYxk1kD00wJfeQh05w",
+              "top": -80.09375,
+              "height": 2340.40625
+            }
+          ]
+        }
+      }
+    ],
+    "oldPartObservations": {
+      "all": 41,
+      "followingAfterLoaded": 39,
+      "observations": [
+        {
+          "owner": 11,
+          "at": 5265,
+          "geometryAt": 5241.300000190735,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 3442,
+          "virtualOffset": 3442,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 2281.703125,
+            "offset": 4813.71875
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": 1411.71875,
+            "height": 3436.9375
+          }
+        },
+        {
+          "owner": 22,
+          "at": 32873.40000009537,
+          "geometryAt": 32861.300000190735,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16124,
+          "virtualOffset": 16124,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -4440.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 24,
+          "at": 34396.40000009537,
+          "geometryAt": 32883.800000190735,
+          "phase": "scroll",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16306,
+          "virtualOffset": 16306,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          }
+        },
+        {
+          "owner": 25,
+          "at": 38173.800000190735,
+          "geometryAt": 38164.800000190735,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16393,
+          "virtualOffset": 16374,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -4709.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 27,
+          "at": 38869.90000009537,
+          "geometryAt": 38865.59999990463,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16393,
+          "virtualOffset": 16393,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -4709.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 28,
+          "at": 40256.300000190735,
+          "geometryAt": 40244.90000009537,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16417,
+          "virtualOffset": 16417,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -4733.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 29,
+          "at": 40632.5,
+          "geometryAt": 40267.699999809265,
+          "phase": "scroll",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16440,
+          "virtualOffset": 16440,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          }
+        },
+        {
+          "owner": 30,
+          "at": 41540.40000009537,
+          "geometryAt": 41525.90000009537,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16470,
+          "virtualOffset": 16470,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -4786.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 31,
+          "at": 42726,
+          "geometryAt": 41550.199999809265,
+          "phase": "scroll",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16493,
+          "virtualOffset": 16493,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          }
+        },
+        {
+          "owner": 32,
+          "at": 43116.699999809265,
+          "geometryAt": 43102.90000009537,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16517,
+          "virtualOffset": 16517,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -4833.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 33,
+          "at": 44103,
+          "geometryAt": 44088.59999990463,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16547,
+          "virtualOffset": 16547,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -4863.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 34,
+          "at": 44764.59999990463,
+          "geometryAt": 44749.09999990463,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16570,
+          "virtualOffset": 16570,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -4886.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 35,
+          "at": 45203.59999990463,
+          "geometryAt": 44777.09999990463,
+          "phase": "scroll",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16594,
+          "virtualOffset": 16594,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          }
+        },
+        {
+          "owner": 36,
+          "at": 45385.199999809265,
+          "geometryAt": 45382.5,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16624,
+          "virtualOffset": 16594,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -4940.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 37,
+          "at": 45827.699999809265,
+          "geometryAt": 45397.40000009537,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16624,
+          "virtualOffset": 16624,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          }
+        },
+        {
+          "owner": 38,
+          "at": 49418.199999809265,
+          "geometryAt": 45937.699999809265,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16660,
+          "virtualOffset": 16660,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -4976.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 39,
+          "at": 49539.300000190735,
+          "geometryAt": 49536.59999990463,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16684,
+          "virtualOffset": 16660,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5000.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 40,
+          "at": 50121,
+          "geometryAt": 49550.800000190735,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16684,
+          "virtualOffset": 16684,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          }
+        },
+        {
+          "owner": 42,
+          "at": 53793,
+          "geometryAt": 50200.59999990463,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16732,
+          "virtualOffset": 16732,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          }
+        },
+        {
+          "owner": 44,
+          "at": 54062.800000190735,
+          "geometryAt": 54051.300000190735,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16766,
+          "virtualOffset": 16766,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5082.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 46,
+          "at": 54763.40000009537,
+          "geometryAt": 54748.800000190735,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16798,
+          "virtualOffset": 16798,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5114.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 48,
+          "at": 55581.90000009537,
+          "geometryAt": 55568.800000190735,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16821,
+          "virtualOffset": 16821,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5137.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 50,
+          "at": 56357.90000009537,
+          "geometryAt": 56340.59999990463,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16845,
+          "virtualOffset": 16845,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5161.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 52,
+          "at": 56895,
+          "geometryAt": 56880.699999809265,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16869,
+          "virtualOffset": 16869,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5185.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 54,
+          "at": 57158.90000009537,
+          "geometryAt": 57146.09999990463,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 16929,
+          "virtualOffset": 16929,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5245.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 56,
+          "at": 58235.09999990463,
+          "geometryAt": 58224.59999990463,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 17057,
+          "virtualOffset": 17057,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5373.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 58,
+          "at": 58721.90000009537,
+          "geometryAt": 58707,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 17081,
+          "virtualOffset": 17081,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5397.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 60,
+          "at": 59055.199999809265,
+          "geometryAt": 59039.59999990463,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 17104,
+          "virtualOffset": 17104,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5420.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 62,
+          "at": 59838.59999990463,
+          "geometryAt": 59825.800000190735,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 17165,
+          "virtualOffset": 17165,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5481.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 64,
+          "at": 60672.09999990463,
+          "geometryAt": 60658.59999990463,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 17188,
+          "virtualOffset": 17188,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5504.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 66,
+          "at": 61575.699999809265,
+          "geometryAt": 61564.5,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 17212,
+          "virtualOffset": 17212,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5528.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 68,
+          "at": 62109.699999809265,
+          "geometryAt": 62099.40000009537,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 17235,
+          "virtualOffset": 17235,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5551.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 70,
+          "at": 63011.199999809265,
+          "geometryAt": 63003.59999990463,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 17296,
+          "virtualOffset": 17296,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5612.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 72,
+          "at": 63923.59999990463,
+          "geometryAt": 63912,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 17319,
+          "virtualOffset": 17319,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5635.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 74,
+          "at": 64429.300000190735,
+          "geometryAt": 64418.09999990463,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 17343,
+          "virtualOffset": 17343,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5659.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 76,
+          "at": 64754.59999990463,
+          "geometryAt": 64737.199999809265,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 17395,
+          "virtualOffset": 17395,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5711.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 78,
+          "at": 65512.5,
+          "geometryAt": 65500.40000009537,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 17427,
+          "virtualOffset": 17427,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5743.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 80,
+          "at": 66256.09999990463,
+          "geometryAt": 66242.69999980927,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 17450,
+          "virtualOffset": 17450,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5766.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 82,
+          "at": 66868.59999990463,
+          "geometryAt": 66855.40000009537,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 17474,
+          "virtualOffset": 17474,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5790.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 84,
+          "at": 67199.90000009537,
+          "geometryAt": 67185.19999980927,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 17497,
+          "virtualOffset": 17497,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5813.515625,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 103,
+          "at": 398346.90000009537,
+          "geometryAt": 397591.80000019073,
+          "phase": "scroll",
+          "treeEpoch": 2,
+          "following": "false",
+          "scrollTop": 16570,
+          "virtualOffset": 16570,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 11643.484375
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -4886.515625,
+            "height": 4613.296875
+          }
+        }
+      ]
+    },
+    "partRetirements": [
+      {
+        "partID": "prt_g0VXzSxIe00ogaixmfuP",
+        "retirements": 2
+      },
+      {
+        "partID": "prt_g0VXzSyZj00RI0xPGf2M",
+        "retirements": 2
+      },
+      {
+        "partID": "prt_g0VXzT67t00vU2TW7u4p",
+        "retirements": 2
+      },
+      {
+        "partID": "prt_g0VY3HUb300w4QKHQ21I",
+        "retirements": 2
+      },
+      {
+        "partID": "prt_g0VY3HXjw00dr897Ixjo",
+        "retirements": 2
+      },
+      {
+        "partID": "prt_g0VYah8GC00VDbDh5HO9",
+        "retirements": 2
+      },
+      {
+        "partID": "prt_g0VYah9BZ00L29pnNw9C",
+        "retirements": 2
+      },
+      {
+        "partID": "prt_g0VYaiFkb00wF5E9phIA",
+        "retirements": 2
+      },
+      {
+        "partID": "prt_g0VYaiHHN00enqemXX2P",
+        "retirements": 2
+      },
+      {
+        "partID": "prt_g0VYajX8500TbKpgV6IZ",
+        "retirements": 2
+      },
+      {
+        "partID": "prt_g0VYajYdB00dd6w7h51Z",
+        "retirements": 41
+      },
+      {
+        "partID": "prt_g0VYxk1gh00n2qlt1Ntk",
+        "retirements": 40
+      }
+    ],
+    "consoleEntries": 447,
+    "requests": [
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "response_reader": {
+          "state": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792838678627
+          },
+          "boundary": "provider-source-reader"
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "response_reader": {
+          "state": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792838605846
+          },
+          "boundary": "provider-source-reader"
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "response_reader": {
+          "state": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792838610129
+          },
+          "boundary": "provider-source-reader"
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "response_reader": {
+          "state": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792838650807
+          },
+          "boundary": "provider-source-reader"
+        }
+      }
+    ],
+    "lifecycle": {
+      "originalExec": 58728,
+      "originalExecJoinedExit": 0,
+      "pageClosed": "260",
+      "at": "2026-10-24T10:49:37.328Z",
+      "authRetired": 1,
+      "catalogRetired": 1,
+      "authCopied": true,
+      "modelRequests": 4,
+      "model": "gpt-6.1-sol",
+      "streaming200OriginalReaderEOF": 4,
+      "sourceCatalog": {
+        "bytes": 9155406,
+        "modifiedAtMs": 1791128890137.9968,
+        "content": "Exact original"
+      },
+      "publicShutdown": 200,
+      "reserveMs": 765747,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "exactProcessChain": "dead_or_reused"
+    },
+    "preservation": {
+      "at": "2026-10-24T10:49:41.430Z",
+      "sourceSchema": 6,
+      "targetSchema": 8,
+      "originalTables": 90,
+      "originalRows": 207330,
+      "originalFieldDifferences": [
+        {
+          "table": "memory_chunk",
+          "id": "mck_h0TwOCuDIItgGfxTGf6k",
+          "fields": [
+            "content",
+            "token_count",
+            "time_updated"
+          ]
+        },
+        {
+          "table": "memory_file",
+          "id": "mem_hBhVOjG2IHNZ58LGhFBJ",
+          "fields": [
+            "time_updated"
+          ]
+        },
+        {
+          "table": "runtime_execution_capacity_lease",
+          "id": "[1]",
+          "fields": [
+            "lease_id",
+            "owner_id",
+            "time_acquired",
+            "expires_at"
+          ]
+        },
+        {
+          "table": "runtime_execution_capacity_lease",
+          "id": "[2]",
+          "fields": [
+            "lease_id",
+            "owner_id",
+            "time_acquired",
+            "expires_at"
+          ]
+        },
+        {
+          "table": "session",
+          "id": "ses_-zUS0X33CzzWEKMgCk98",
+          "fields": [
+            "time_updated"
+          ]
+        }
+      ],
+      "integrity": "ok",
+      "sourceBytes": 95682560,
+      "sourceModifiedAtMs": 1792828797672.7832,
+      "canonicalConfiguration": "Exact original",
+      "qualification": "Full original field/row verification after original native exit and physical/output/request closure"
+    }
+  },
+  "after": {
+    "publication": {
+      "at": "2026-10-24T10:58:05.848Z",
+      "entry": "main-D8VUecr4.js",
+      "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/main-virtual-range-584-after-bundle/bin/ui",
+      "qualification": "Completed current production Node Vite build with private passive lifecycle and Virtualizer geometry observations; native CLI /ui"
+    },
+    "buildPreservation": {
+      "before": {
+        "bytes": 95682560,
+        "modifiedAtMs": 1792839339940.24
+      },
+      "after": {
+        "bytes": 95682560,
+        "modifiedAtMs": 1792839339940.24
+      }
+    },
+    "actual": {
+      "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+      "messages": 16,
+      "parts": 41,
+      "texts": [
+        {
+          "id": "prt_g0VYxnzUy00qHhQbH3RQ",
+          "messageID": "msg_5dcf2224-3b33-46de-91bb-8bea239dba23",
+          "role": "user",
+          "characters": 279,
+          "canonical": "Exact SQLite Part text"
+        },
+        {
+          "id": "prt_g0VYxo0fm001Z6B214QM",
+          "messageID": "msg_g0VYxnzYR00ArvGGBZZR",
+          "role": "assistant",
+          "characters": 426,
+          "canonical": "Exact SQLite Part text"
+        },
+        {
+          "id": "prt_g0VYxo4s80066oTm4xUR",
+          "messageID": "msg_g0VYxo49E00ue6Y07UdW",
+          "role": "assistant",
+          "characters": 2957,
+          "canonical": "Exact SQLite Part text"
+        }
+      ],
+      "tools": [
+        {
+          "id": "prt_g0VYxo2IG00FkPmLEoQD",
+          "tool": "read",
+          "input": {
+            "filePath": "README.md",
+            "offset": 2,
+            "limit": 1
+          },
+          "status": "completed"
+        },
+        {
+          "id": "prt_g0VYxo3pT00PJVRe8i7h",
+          "tool": "read",
+          "input": {
+            "filePath": "README.md",
+            "offset": 3,
+            "limit": 1
+          },
+          "status": "completed"
+        }
+      ],
+      "sources": [
+        {
+          "id": "prt_g0VYxo2QD004SpZ4GwRu",
+          "messageID": "msg_g0VYxnzYR00ArvGGBZZR",
+          "sourceId": "d19514673f82e55b4dd7b5acee5ff6dbdcf7634e06a0933053430cc19657f0c7",
+          "toolPartID": "prt_g0VYxo2IG00FkPmLEoQD",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project\\README.md",
+          "range": {
+            "startLine": 2,
+            "endLine": 2
+          }
+        },
+        {
+          "id": "prt_g0VYxo47t00xv755ZGis",
+          "messageID": "msg_g0VYxo2Rv00Ifc760l6f",
+          "sourceId": "862fb911e7414ce6ccc2f0464c49349f3b7014b32386f8e8f66481c4bf5a0bb4",
+          "toolPartID": "prt_g0VYxo3pT00PJVRe8i7h",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\member-live-rendering-412-fresh\\project\\README.md",
+          "range": {
+            "startLine": 3,
+            "endLine": 3
+          }
+        }
+      ],
+      "events": {
+        "count": 2309,
+        "counts": {
+          "message.part.updated": 72,
+          "message.part.delta": 2235,
+          "message.part.removed": 2
+        },
+        "backwardObservations": 0,
+        "texts": [
+          {
+            "partID": "prt_g0VYxnzUy00qHhQbH3RQ",
+            "events": 2,
+            "first": {
+              "sequence": 1,
+              "at": 1792839537919,
+              "type": "message.part.updated",
+              "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+              "messageID": "msg_5dcf2224-3b33-46de-91bb-8bea239dba23",
+              "partID": "prt_g0VYxnzUy00qHhQbH3RQ",
+              "partType": "text",
+              "textLength": 279,
+              "orderKey": "v1:0001792839537699:0000000000000031:0000000000000000:part:prt_g0VYxnzUy00qHhQbH3RQ"
+            },
+            "last": {
+              "sequence": 2,
+              "at": 1792839539696,
+              "type": "message.part.updated",
+              "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+              "messageID": "msg_5dcf2224-3b33-46de-91bb-8bea239dba23",
+              "partID": "prt_g0VYxnzUy00qHhQbH3RQ",
+              "partType": "text",
+              "textLength": 279,
+              "previousLength": 279,
+              "appendFromPrevious": true,
+              "orderKey": "v1:0001792839537699:0000000000000031:0000000000000000:part:prt_g0VYxnzUy00qHhQbH3RQ"
+            }
+          },
+          {
+            "partID": "prt_g0VYxo0fm001Z6B214QM",
+            "events": 304,
+            "first": {
+              "sequence": 4,
+              "at": 1792839542215,
+              "type": "message.part.updated",
+              "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+              "messageID": "msg_g0VYxnzYR00ArvGGBZZR",
+              "partID": "prt_g0VYxo0fm001Z6B214QM",
+              "partType": "text",
+              "textLength": 0,
+              "orderKey": "v1:0001792839542206:0000000000000031:0000000000000000:part:prt_g0VYxo0fm001Z6B214QM"
+            },
+            "last": {
+              "sequence": 307,
+              "at": 1792839548434,
+              "type": "message.part.updated",
+              "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+              "messageID": "msg_g0VYxnzYR00ArvGGBZZR",
+              "partID": "prt_g0VYxo0fm001Z6B214QM",
+              "partType": "text",
+              "textLength": 426,
+              "previousLength": 426,
+              "appendFromPrevious": true,
+              "textEnded": 1792839548427,
+              "orderKey": "v1:0001792839542206:0000000000000031:0000000000000000:part:prt_g0VYxo0fm001Z6B214QM"
+            }
+          },
+          {
+            "partID": "prt_g0VYxo4s80066oTm4xUR",
+            "events": 1987,
+            "first": {
+              "sequence": 322,
+              "at": 1792839558358,
+              "type": "message.part.updated",
+              "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+              "messageID": "msg_g0VYxo49E00ue6Y07UdW",
+              "partID": "prt_g0VYxo4s80066oTm4xUR",
+              "partType": "text",
+              "textLength": 0,
+              "orderKey": "v1:0001792839558348:0000000000000031:0000000000000000:part:prt_g0VYxo4s80066oTm4xUR"
+            },
+            "last": {
+              "sequence": 2308,
+              "at": 1792839594183,
+              "type": "message.part.updated",
+              "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+              "messageID": "msg_g0VYxo49E00ue6Y07UdW",
+              "partID": "prt_g0VYxo4s80066oTm4xUR",
+              "partType": "text",
+              "textLength": 2957,
+              "previousLength": 2957,
+              "appendFromPrevious": true,
+              "textEnded": 1792839594159,
+              "orderKey": "v1:0001792839558348:0000000000000031:0000000000000000:part:prt_g0VYxo4s80066oTm4xUR"
+            }
+          }
+        ],
+        "toolRetirements": [
+          {
+            "partID": "prt_g0VYxo2IG00FkPmLEoQD",
+            "messageID": "msg_g0VYxnzYR00ArvGGBZZR",
+            "previousStatus": "pending",
+            "at": 1792839548619,
+            "sequence": 309,
+            "nextEvent": {
+              "sequence": 310,
+              "at": 1792839548625,
+              "type": "message.part.updated",
+              "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+              "messageID": "msg_g0VYxnzYR00ArvGGBZZR",
+              "partID": "prt_g0VYxo2IG00FkPmLEoQD",
+              "partType": "tool",
+              "tool": "read",
+              "toolStatus": "running",
+              "orderKey": "v1:0001792839548621:0000000000000031:0000000000000000:part:prt_g0VYxo2IG00FkPmLEoQD"
+            },
+            "followingVisibleTextsAtRetirement": []
+          },
+          {
+            "partID": "prt_g0VYxo3pT00PJVRe8i7h",
+            "messageID": "msg_g0VYxo2Rv00Ifc760l6f",
+            "previousStatus": "pending",
+            "at": 1792839554483,
+            "sequence": 316,
+            "nextEvent": {
+              "sequence": 317,
+              "at": 1792839554490,
+              "type": "message.part.updated",
+              "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+              "messageID": "msg_g0VYxo2Rv00Ifc760l6f",
+              "partID": "prt_g0VYxo3pT00PJVRe8i7h",
+              "partType": "tool",
+              "tool": "read",
+              "toolStatus": "running",
+              "orderKey": "v1:0001792839554483:0000000000000031:0000000000000000:part:prt_g0VYxo3pT00PJVRe8i7h"
+            },
+            "followingVisibleTextsAtRetirement": []
+          }
+        ]
+      }
+    },
+    "readingObservations": [
+      {
+        "name": "owners-before",
+        "at": "2026-10-24T10:58:57.461Z",
+        "parts": [
+          {
+            "messageID": "msg_g0VYajX9A00r9VlN3kU5",
+            "partID": "prt_g0VYajYdB00dd6w7h51Z",
+            "renderers": [
+              {
+                "blocks": "55",
+                "emptyAfter": null,
+                "length": "7104",
+                "owner": "9",
+                "pending": "false"
+              }
+            ]
+          }
+        ],
+        "geometry": {
+          "at": 5600.599999904633,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "follow": "true",
+          "top": 10258,
+          "scrollHeight": 10893,
+          "viewport": 635,
+          "virtualOffset": 10258,
+          "virtualSize": 10704.84375,
+          "lastRows": [
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VY3HUc200tMymSAsyl",
+              "index": 4,
+              "size": 320,
+              "offset": 894
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYah8Fn00qmEh1R3mc",
+              "index": 5,
+              "size": 320,
+              "offset": 1214
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYah8HH0030Ceh5lXH",
+              "index": 6,
+              "size": 320,
+              "offset": 1534
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFkE00yhItnIZTN",
+              "index": 7,
+              "size": 320,
+              "offset": 1854
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFlg00Gu7OJMI4l",
+              "index": 8,
+              "size": 3421.421875,
+              "offset": 2174
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX7h00hm1lCk22a",
+              "index": 9,
+              "size": 308.125,
+              "offset": 5595.421875
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+              "index": 10,
+              "size": 4625.296875,
+              "offset": 5903.546875
+            },
+            {
+              "id": "subagent-grid:ses_-zUS0WzzQzzDOGrIbYwN",
+              "index": 11,
+              "size": 176,
+              "offset": 10528.84375
+            }
+          ],
+          "mounted": [
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+              "top": -4314.453125,
+              "height": 4613.296875
+            },
+            {
+              "id": "subagent-grid:ses_-zUS0WzzQzzDOGrIbYwN",
+              "top": 302.84375,
+              "height": 176
+            }
+          ]
+        }
+      },
+      {
+        "name": "owners-active-01",
+        "at": "2026-10-24T10:59:14.255Z",
+        "parts": [
+          {
+            "messageID": "msg_5dcf2224-3b33-46de-91bb-8bea239dba23",
+            "partID": "prt_g0VYxnzUy00qHhQbH3RQ",
+            "renderers": [
+              {
+                "blocks": "1",
+                "emptyAfter": null,
+                "length": "279",
+                "owner": "10",
+                "pending": "true"
+              }
+            ]
+          },
+          {
+            "messageID": "msg_g0VYxnzYR00ArvGGBZZR",
+            "partID": "prt_g0VYxo0fm001Z6B214QM",
+            "renderers": [
+              {
+                "blocks": "3",
+                "emptyAfter": null,
+                "length": "426",
+                "owner": "11",
+                "pending": "false"
+              }
+            ]
+          }
+        ],
+        "geometry": {
+          "at": 40292,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "follow": "true",
+          "top": 10920,
+          "scrollHeight": 11555,
+          "viewport": 635,
+          "virtualOffset": 10920,
+          "virtualSize": 11366.609375,
+          "lastRows": [
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYah8HH0030Ceh5lXH",
+              "index": 6,
+              "size": 320,
+              "offset": 1534
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFkE00yhItnIZTN",
+              "index": 7,
+              "size": 320,
+              "offset": 1854
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFlg00Gu7OJMI4l",
+              "index": 8,
+              "size": 3421.421875,
+              "offset": 2174
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX7h00hm1lCk22a",
+              "index": 9,
+              "size": 308.125,
+              "offset": 5595.421875
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+              "index": 10,
+              "size": 4625.296875,
+              "offset": 5903.546875
+            },
+            {
+              "id": "subagent-grid:ses_-zUS0WzzQzzDOGrIbYwN",
+              "index": 11,
+              "size": 176,
+              "offset": 10528.84375
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_5dcf2224-3b33-46de-91bb-8bea239dba23",
+              "index": 12,
+              "size": 308.125,
+              "offset": 10704.84375
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYxnzYR00ArvGGBZZR",
+              "index": 13,
+              "size": 353.640625,
+              "offset": 11012.96875
+            }
+          ],
+          "mounted": [
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_5dcf2224-3b33-46de-91bb-8bea239dba23",
+              "top": -175.15625,
+              "height": 296.125
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYxnzYR00ArvGGBZZR",
+              "top": 132.96875,
+              "height": 345.640625
+            }
+          ]
+        }
+      },
+      {
+        "name": "owners-active-02",
+        "at": "2026-10-24T10:59:25.274Z",
+        "parts": [
+          {
+            "messageID": "msg_g0VYajX9A00r9VlN3kU5",
+            "partID": "prt_g0VYajYdB00dd6w7h51Z",
+            "renderers": [
+              {
+                "blocks": "55",
+                "emptyAfter": null,
+                "length": "7104",
+                "owner": "13",
+                "pending": "false"
+              }
+            ]
+          },
+          {
+            "messageID": "msg_5dcf2224-3b33-46de-91bb-8bea239dba23",
+            "partID": "prt_g0VYxnzUy00qHhQbH3RQ",
+            "renderers": [
+              {
+                "blocks": "1",
+                "emptyAfter": null,
+                "length": "279",
+                "owner": "14",
+                "pending": "false"
+              }
+            ]
+          },
+          {
+            "messageID": "msg_g0VYxnzYR00ArvGGBZZR",
+            "partID": "prt_g0VYxo0fm001Z6B214QM",
+            "renderers": [
+              {
+                "blocks": "3",
+                "emptyAfter": null,
+                "length": "426",
+                "owner": "11",
+                "pending": "false"
+              }
+            ]
+          },
+          {
+            "messageID": "msg_g0VYxo49E00ue6Y07UdW",
+            "partID": "prt_g0VYxo4s80066oTm4xUR",
+            "renderers": [
+              {
+                "blocks": "11",
+                "emptyAfter": null,
+                "length": "660",
+                "owner": "12",
+                "pending": "true"
+              }
+            ]
+          }
+        ],
+        "geometry": {
+          "at": 56194.5,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "follow": "false",
+          "top": 11152,
+          "scrollHeight": 12160,
+          "viewport": 635,
+          "virtualOffset": 11152,
+          "virtualSize": 11972.015625,
+          "lastRows": [
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYah8HH0030Ceh5lXH",
+              "index": 6,
+              "size": 320,
+              "offset": 1534
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFkE00yhItnIZTN",
+              "index": 7,
+              "size": 320,
+              "offset": 1854
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFlg00Gu7OJMI4l",
+              "index": 8,
+              "size": 3421.421875,
+              "offset": 2174
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX7h00hm1lCk22a",
+              "index": 9,
+              "size": 308.125,
+              "offset": 5595.421875
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+              "index": 10,
+              "size": 4625.296875,
+              "offset": 5903.546875
+            },
+            {
+              "id": "subagent-grid:ses_-zUS0WzzQzzDOGrIbYwN",
+              "index": 11,
+              "size": 176,
+              "offset": 10528.84375
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_5dcf2224-3b33-46de-91bb-8bea239dba23",
+              "index": 12,
+              "size": 308.125,
+              "offset": 10704.84375
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYxnzYR00ArvGGBZZR",
+              "index": 13,
+              "size": 959.046875,
+              "offset": 11012.96875
+            }
+          ],
+          "mounted": [
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+              "top": -5208.453125,
+              "height": 4613.296875
+            },
+            {
+              "id": "subagent-grid:ses_-zUS0WzzQzzDOGrIbYwN",
+              "top": -591.15625,
+              "height": 176
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_5dcf2224-3b33-46de-91bb-8bea239dba23",
+              "top": -407.15625,
+              "height": 296.125
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYxnzYR00ArvGGBZZR",
+              "top": -99.03125,
+              "height": 951.046875
+            }
+          ]
+        }
+      },
+      {
+        "name": "owners-final",
+        "at": "2026-10-24T11:01:15.958Z",
+        "parts": [
+          {
+            "messageID": "msg_g0VYajX9A00r9VlN3kU5",
+            "partID": "prt_g0VYajYdB00dd6w7h51Z",
+            "renderers": [
+              {
+                "blocks": "55",
+                "emptyAfter": null,
+                "length": "7104",
+                "owner": "28",
+                "pending": "false"
+              }
+            ]
+          },
+          {
+            "messageID": "msg_5dcf2224-3b33-46de-91bb-8bea239dba23",
+            "partID": "prt_g0VYxnzUy00qHhQbH3RQ",
+            "renderers": [
+              {
+                "blocks": "1",
+                "emptyAfter": null,
+                "length": "279",
+                "owner": "29",
+                "pending": "false"
+              }
+            ]
+          },
+          {
+            "messageID": "msg_g0VYxnzYR00ArvGGBZZR",
+            "partID": "prt_g0VYxo0fm001Z6B214QM",
+            "renderers": [
+              {
+                "blocks": "3",
+                "emptyAfter": null,
+                "length": "426",
+                "owner": "11",
+                "pending": "false"
+              }
+            ]
+          },
+          {
+            "messageID": "msg_g0VYxo49E00ue6Y07UdW",
+            "partID": "prt_g0VYxo4s80066oTm4xUR",
+            "renderers": [
+              {
+                "blocks": "40",
+                "emptyAfter": null,
+                "length": "2957",
+                "owner": "12",
+                "pending": "true"
+              }
+            ]
+          }
+        ],
+        "geometry": {
+          "at": 165886.59999990463,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "follow": "false",
+          "top": 11266,
+          "scrollHeight": 13846,
+          "viewport": 635,
+          "virtualOffset": 11266,
+          "virtualSize": 13658.28125,
+          "lastRows": [
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYah8HH0030Ceh5lXH",
+              "index": 6,
+              "size": 320,
+              "offset": 1534
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFkE00yhItnIZTN",
+              "index": 7,
+              "size": 320,
+              "offset": 1854
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFlg00Gu7OJMI4l",
+              "index": 8,
+              "size": 3421.421875,
+              "offset": 2174
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX7h00hm1lCk22a",
+              "index": 9,
+              "size": 308.125,
+              "offset": 5595.421875
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+              "index": 10,
+              "size": 4625.296875,
+              "offset": 5903.546875
+            },
+            {
+              "id": "subagent-grid:ses_-zUS0WzzQzzDOGrIbYwN",
+              "index": 11,
+              "size": 176,
+              "offset": 10528.84375
+            },
+            {
+              "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_5dcf2224-3b33-46de-91bb-8bea239dba23",
+              "index": 12,
+              "size": 308.125,
+              "offset": 10704.84375
+            },
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYxnzYR00ArvGGBZZR",
+              "index": 13,
+              "size": 2645.3125,
+              "offset": 11012.96875
+            }
+          ],
+          "mounted": [
+            {
+              "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYxnzYR00ArvGGBZZR",
+              "top": -213.03125,
+              "height": 2633.3125
+            }
+          ]
+        }
+      }
+    ],
+    "oldPartObservations": {
+      "all": 10,
+      "followingAfterLoaded": 1,
+      "observations": [
+        {
+          "owner": 4,
+          "at": 5353.300000190735,
+          "geometryAt": 4698.400000095367,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 2213,
+          "virtualOffset": 2213,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 92,
+            "offset": 2392
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": 219,
+            "height": 80
+          }
+        },
+        {
+          "owner": 9,
+          "at": 29074.200000286102,
+          "geometryAt": 29070.700000286102,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "true",
+          "scrollTop": 10384,
+          "virtualOffset": 10384,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 5903.546875
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -4440.453125,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 13,
+          "at": 71674.5,
+          "geometryAt": 71458.5,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "false",
+          "scrollTop": 11133,
+          "virtualOffset": 11133,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 5903.546875
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5189.453125,
+            "height": 4613.296875
+          }
+        },
+        {
+          "owner": 15,
+          "at": 139681,
+          "geometryAt": 139659,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "false",
+          "scrollTop": 18450,
+          "virtualOffset": 18111,
+          "viewport": 585,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 10956.4375,
+            "offset": 5903.546875
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -12482.46875,
+            "height": 10937.25
+          }
+        },
+        {
+          "owner": 18,
+          "at": 162446.40000009537,
+          "geometryAt": 139703.5,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "false",
+          "scrollTop": 18450,
+          "virtualOffset": 18450,
+          "viewport": 585,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 10956.4375,
+            "offset": 5903.546875
+          }
+        },
+        {
+          "owner": 19,
+          "at": 162775.59999990463,
+          "geometryAt": 162771.59999990463,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "false",
+          "scrollTop": 10199,
+          "virtualOffset": 10180,
+          "viewport": 652,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 3704.015625,
+            "offset": 5903.546875
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -4263.46875,
+            "height": 3694.4375
+          }
+        },
+        {
+          "owner": 20,
+          "at": 163507.59999990463,
+          "geometryAt": 163481.09999990463,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "false",
+          "scrollTop": 10467,
+          "virtualOffset": 10455,
+          "viewport": 648,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 3935.703125,
+            "offset": 5903.546875
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -4529.46875,
+            "height": 3925.515625
+          }
+        },
+        {
+          "owner": 22,
+          "at": 164523.90000009537,
+          "geometryAt": 164495.90000009537,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "false",
+          "scrollTop": 10731,
+          "virtualOffset": 10719,
+          "viewport": 643,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4163.046875,
+            "offset": 5903.546875
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -4791.46875,
+            "height": 4152.265625
+          }
+        },
+        {
+          "owner": 24,
+          "at": 165167.90000009537,
+          "geometryAt": 165138.30000019073,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "false",
+          "scrollTop": 10997,
+          "virtualOffset": 10985,
+          "viewport": 639,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4392.875,
+            "offset": 5903.546875
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5055.46875,
+            "height": 4381.484375
+          }
+        },
+        {
+          "owner": 26,
+          "at": 165738.90000009537,
+          "geometryAt": 165708,
+          "phase": "measured",
+          "treeEpoch": 2,
+          "following": "false",
+          "scrollTop": 11266,
+          "virtualOffset": 11254,
+          "viewport": 635,
+          "cached": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "index": 10,
+            "size": 4625.296875,
+            "offset": 5903.546875
+          },
+          "mounted": {
+            "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+            "top": -5322.453125,
+            "height": 4613.296875
+          }
+        }
+      ]
+    },
+    "partRetirements": [
+      {
+        "partID": "prt_g0VXzSxIe00ogaixmfuP",
+        "retirements": 1
+      },
+      {
+        "partID": "prt_g0VXzSyZj00RI0xPGf2M",
+        "retirements": 1
+      },
+      {
+        "partID": "prt_g0VXzT67t00vU2TW7u4p",
+        "retirements": 1
+      },
+      {
+        "partID": "prt_g0VYaiHHN00enqemXX2P",
+        "retirements": 2
+      },
+      {
+        "partID": "prt_g0VYajX8500TbKpgV6IZ",
+        "retirements": 2
+      },
+      {
+        "partID": "prt_g0VYajYdB00dd6w7h51Z",
+        "retirements": 10
+      },
+      {
+        "partID": "prt_g0VYxnzUy00qHhQbH3RQ",
+        "retirements": 8
+      }
+    ],
+    "consoleEntries": 128,
+    "requests": [
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "response_reader": {
+          "state": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792839620630
+          },
+          "boundary": "provider-source-reader"
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "response_reader": {
+          "state": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792839548908
+          },
+          "boundary": "provider-source-reader"
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "response_reader": {
+          "state": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792839555466
+          },
+          "boundary": "provider-source-reader"
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "status": 200,
+        "streaming": true,
+        "response_reader": {
+          "state": "settled",
+          "terminal": {
+            "kind": "eof",
+            "at": 1792839594189
+          },
+          "boundary": "provider-source-reader"
+        }
+      }
+    ],
+    "lifecycle": {
+      "originalExec": 65851,
+      "originalExecJoinedExit": 0,
+      "pageClosed": "261",
+      "at": "2026-10-24T11:04:02.647Z",
+      "authRetired": 1,
+      "catalogRetired": 1,
+      "authCopied": true,
+      "modelRequests": 4,
+      "model": "gpt-6.1-sol",
+      "streaming200OriginalReaderEOF": 4,
+      "sourceCatalog": {
+        "bytes": 9155406,
+        "modifiedAtMs": 1791128890137.9968,
+        "content": "Exact original"
+      },
+      "publicShutdown": 200,
+      "reserveMs": 871072,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "exactProcessChain": "dead_or_reused"
+    },
+    "preservation": {
+      "at": "2026-10-24T11:04:07.806Z",
+      "sourceSchema": 6,
+      "targetSchema": 8,
+      "originalTables": 90,
+      "originalRows": 207330,
+      "originalFieldDifferences": [
+        {
+          "table": "memory_chunk",
+          "id": "mck_h0TwOCuDIItgGfxTGf6k",
+          "fields": [
+            "content",
+            "token_count",
+            "time_updated"
+          ]
+        },
+        {
+          "table": "memory_file",
+          "id": "mem_hBhVOjG2IHNZ58LGhFBJ",
+          "fields": [
+            "time_updated"
+          ]
+        },
+        {
+          "table": "runtime_execution_capacity_lease",
+          "id": "[1]",
+          "fields": [
+            "lease_id",
+            "owner_id",
+            "time_acquired",
+            "expires_at"
+          ]
+        },
+        {
+          "table": "runtime_execution_capacity_lease",
+          "id": "[2]",
+          "fields": [
+            "lease_id",
+            "owner_id",
+            "time_acquired",
+            "expires_at"
+          ]
+        },
+        {
+          "table": "session",
+          "id": "ses_-zUS0X33CzzWEKMgCk98",
+          "fields": [
+            "time_updated"
+          ]
+        }
+      ],
+      "integrity": "ok",
+      "sourceBytes": 95682560,
+      "sourceModifiedAtMs": 1792828797672.7832,
+      "canonicalConfiguration": "Exact original",
+      "qualification": "Full original field/row verification after original native exit and physical/output/request closure"
+    }
+  },
+  "afterResumed": {
+    "at": "2026-10-24T10:59:44.272Z",
+    "parts": [
+      {
+        "messageID": "msg_g0VYxnzYR00ArvGGBZZR",
+        "partID": "prt_g0VYxo0fm001Z6B214QM",
+        "renderers": [
+          {
+            "blocks": "3",
+            "emptyAfter": null,
+            "length": "426",
+            "owner": "11",
+            "pending": "false"
+          }
+        ]
+      },
+      {
+        "messageID": "msg_g0VYxo49E00ue6Y07UdW",
+        "partID": "prt_g0VYxo4s80066oTm4xUR",
+        "renderers": [
+          {
+            "blocks": "30",
+            "emptyAfter": null,
+            "length": "2020",
+            "owner": "12",
+            "pending": "true"
+          }
+        ]
+      }
+    ],
+    "geometry": {
+      "at": 75404.5,
+      "phase": "measured",
+      "treeEpoch": 2,
+      "follow": "true",
+      "top": 12464,
+      "scrollHeight": 13128,
+      "viewport": 635,
+      "virtualOffset": 12464,
+      "virtualSize": 12940.203125,
+      "lastRows": [
+        {
+          "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYah8HH0030Ceh5lXH",
+          "index": 6,
+          "size": 320,
+          "offset": 1534
+        },
+        {
+          "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFkE00yhItnIZTN",
+          "index": 7,
+          "size": 320,
+          "offset": 1854
+        },
+        {
+          "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFlg00Gu7OJMI4l",
+          "index": 8,
+          "size": 3421.421875,
+          "offset": 2174
+        },
+        {
+          "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX7h00hm1lCk22a",
+          "index": 9,
+          "size": 308.125,
+          "offset": 5595.421875
+        },
+        {
+          "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+          "index": 10,
+          "size": 4625.296875,
+          "offset": 5903.546875
+        },
+        {
+          "id": "subagent-grid:ses_-zUS0WzzQzzDOGrIbYwN",
+          "index": 11,
+          "size": 176,
+          "offset": 10528.84375
+        },
+        {
+          "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_5dcf2224-3b33-46de-91bb-8bea239dba23",
+          "index": 12,
+          "size": 308.125,
+          "offset": 10704.84375
+        },
+        {
+          "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYxnzYR00ArvGGBZZR",
+          "index": 13,
+          "size": 1927.234375,
+          "offset": 11012.96875
+        }
+      ],
+      "mounted": [
+        {
+          "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYxnzYR00ArvGGBZZR",
+          "top": -1411.03125,
+          "height": 1919.234375
+        }
+      ]
+    }
+  },
+  "afterCompleted": {
+    "at": "2026-10-24T11:00:20.388Z",
+    "parts": [
+      {
+        "messageID": "msg_g0VYxnzYR00ArvGGBZZR",
+        "partID": "prt_g0VYxo0fm001Z6B214QM",
+        "renderers": [
+          {
+            "blocks": "3",
+            "emptyAfter": null,
+            "length": "426",
+            "owner": "11",
+            "pending": "false"
+          }
+        ]
+      },
+      {
+        "messageID": "msg_g0VYxo49E00ue6Y07UdW",
+        "partID": "prt_g0VYxo4s80066oTm4xUR",
+        "renderers": [
+          {
+            "blocks": "40",
+            "emptyAfter": null,
+            "length": "2957",
+            "owner": "12",
+            "pending": "true"
+          }
+        ]
+      }
+    ],
+    "geometry": {
+      "at": 86505.30000019073,
+      "phase": "measured",
+      "treeEpoch": 2,
+      "follow": "true",
+      "top": 13211,
+      "scrollHeight": 13846,
+      "viewport": 635,
+      "virtualOffset": 13211,
+      "virtualSize": 13658.28125,
+      "lastRows": [
+        {
+          "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYah8HH0030Ceh5lXH",
+          "index": 6,
+          "size": 320,
+          "offset": 1534
+        },
+        {
+          "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFkE00yhItnIZTN",
+          "index": 7,
+          "size": 320,
+          "offset": 1854
+        },
+        {
+          "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFlg00Gu7OJMI4l",
+          "index": 8,
+          "size": 3421.421875,
+          "offset": 2174
+        },
+        {
+          "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX7h00hm1lCk22a",
+          "index": 9,
+          "size": 308.125,
+          "offset": 5595.421875
+        },
+        {
+          "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+          "index": 10,
+          "size": 4625.296875,
+          "offset": 5903.546875
+        },
+        {
+          "id": "subagent-grid:ses_-zUS0WzzQzzDOGrIbYwN",
+          "index": 11,
+          "size": 176,
+          "offset": 10528.84375
+        },
+        {
+          "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_5dcf2224-3b33-46de-91bb-8bea239dba23",
+          "index": 12,
+          "size": 308.125,
+          "offset": 10704.84375
+        },
+        {
+          "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYxnzYR00ArvGGBZZR",
+          "index": 13,
+          "size": 2645.3125,
+          "offset": 11012.96875
+        }
+      ],
+      "mounted": [
+        {
+          "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYxnzYR00ArvGGBZZR",
+          "top": -2158.03125,
+          "height": 2633.3125
+        }
+      ]
+    }
+  },
+  "afterZoom160": {
+    "at": "2026-10-24T11:00:48.950Z",
+    "parts": [
+      {
+        "messageID": "msg_5dcf2224-3b33-46de-91bb-8bea239dba23",
+        "partID": "prt_g0VYxnzUy00qHhQbH3RQ",
+        "renderers": [
+          {
+            "blocks": "1",
+            "emptyAfter": null,
+            "length": "279",
+            "owner": "17",
+            "pending": "false"
+          }
+        ]
+      },
+      {
+        "messageID": "msg_g0VYxnzYR00ArvGGBZZR",
+        "partID": "prt_g0VYxo0fm001Z6B214QM",
+        "renderers": [
+          {
+            "blocks": "3",
+            "emptyAfter": null,
+            "length": "426",
+            "owner": "11",
+            "pending": "false"
+          }
+        ]
+      },
+      {
+        "messageID": "msg_g0VYxo49E00ue6Y07UdW",
+        "partID": "prt_g0VYxo4s80066oTm4xUR",
+        "renderers": [
+          {
+            "blocks": "40",
+            "emptyAfter": null,
+            "length": "2957",
+            "owner": "12",
+            "pending": "true"
+          }
+        ]
+      }
+    ],
+    "geometry": {
+      "at": 139703.5,
+      "phase": "measured",
+      "treeEpoch": 2,
+      "follow": "false",
+      "top": 18450,
+      "scrollHeight": 24145,
+      "viewport": 585,
+      "virtualOffset": 18450,
+      "virtualSize": 23844.703125,
+      "lastRows": [
+        {
+          "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYah8HH0030Ceh5lXH",
+          "index": 6,
+          "size": 320,
+          "offset": 1534
+        },
+        {
+          "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFkE00yhItnIZTN",
+          "index": 7,
+          "size": 320,
+          "offset": 1854
+        },
+        {
+          "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYaiFlg00Gu7OJMI4l",
+          "index": 8,
+          "size": 3421.421875,
+          "offset": 2174
+        },
+        {
+          "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX7h00hm1lCk22a",
+          "index": 9,
+          "size": 308.125,
+          "offset": 5595.421875
+        },
+        {
+          "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYajX9A00r9VlN3kU5",
+          "index": 10,
+          "size": 10956.4375,
+          "offset": 5903.546875
+        },
+        {
+          "id": "subagent-grid:ses_-zUS0WzzQzzDOGrIbYwN",
+          "index": 11,
+          "size": 280.234375,
+          "offset": 16859.984375
+        },
+        {
+          "id": "user:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_5dcf2224-3b33-46de-91bb-8bea239dba23",
+          "index": 12,
+          "size": 716.484375,
+          "offset": 17140.21875
+        },
+        {
+          "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYxnzYR00ArvGGBZZR",
+          "index": 13,
+          "size": 5988,
+          "offset": 17856.703125
+        }
+      ],
+      "mounted": [
+        {
+          "id": "assistant:session:ses_-zUS0X33CzzWEKMgCk98:message:msg_g0VYxnzYR00ArvGGBZZR",
+          "top": -529.3125,
+          "height": 5968.8125
+        }
+      ]
+    }
+  },
+  "qualification": {
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "screenshots": 21,
+    "visual": "All screenshots were actually presented and personally reviewed; native CLI /ui served isolated current builds. UI interaction and metadata are manual observations, not automated tests.",
+    "pending": "Private observedPending reads are untracked and can retain an earlier value. Actual product data-markdown-rendering was null on owners 28/29/11/12 after completion; observedPending on owner12 was stale true. Never treat that private value as visible Rendering.",
+    "limits": [
+      "No frame-by-frame visual recording or quantified frame performance.",
+      "Original nonvirtual member Rendering churn not reproduced.",
+      "No live Mission stream in this batch; shared Conversation caller audited.",
+      "No long Source excerpt or 778px physical window qualification.",
+      "Screenshot03 already completed; 14/15 menu overlays;19 transient Task loading before 20/21 loaded.",
+      "Different natural model output lengths and unloaded historical cache estimates prevent total scrollHeight comparison as an acceptance metric."
+    ]
+  }
+}

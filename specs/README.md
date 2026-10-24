@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Main虚拟窗口与尺寸测量](records/2026-10/2026-10-24-main-virtual-range.md)：584旧正文回收的范围/缓存/几何调查。
+
 - [流式正文事件与分组身份](records/2026-10/2026-10-24-live-text-event-order.md)：583原事件与正文生命周期调查。
 
 - [来源摘录内部阅读位置](records/2026-10/2026-10-24-source-excerpt-reading.md)：582实际搜索来源与摘录阅读调查。

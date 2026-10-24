@@ -1766,6 +1766,14 @@ input intent instead of consuming it as a return to the bottom. Programmatic
 echoes and content-layout rebasing keep their existing discrimination. An
 ordinary return to the bottom re-arms follow mode.
 
+The main virtual Conversation reads that same follow signal for its render
+buffer. Following the output uses the viewport range; reading history uses the
+existing four-card pixel buffer. This keeps directional scroll/idle overscan
+changes from repeatedly rebuilding offscreen Markdown during streaming pauses.
+Focused controls and a pending history restoration keep their existing explicit
+mounted-item pins. The buffer owns neither a second follow state nor a scroll
+writer; Session, Task, and Mission use the same Conversation policy.
+
 Agent list/detail visibility is local presentation state; it does not own
 Session identity. Returning to the list or choosing another Session is an
 explicit user action. List rows remain keyed by canonical `sessionID`, while
