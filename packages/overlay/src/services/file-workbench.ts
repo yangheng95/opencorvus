@@ -14,7 +14,7 @@ import {
   type ApiAuthority,
 } from "./api"
 import { projectScopedPath } from "./project-directory"
-import { isAbsoluteServerPath, normalizeProjectFilePath, pathWithForwardSeparators } from "../utils/server-path"
+import { isAbsoluteServerPath, normalizeProjectFilePath } from "../utils/server-path"
 import { relativePathFrom } from "../utils/tool"
 
 export type FileNode = SdkFileNode
@@ -378,12 +378,6 @@ async function admitFileMutation(
   const prepared = await prepareFileEditorTarget(destination, true, authority)
   if (prepared.status !== "ready") throw new FileEditorAdmissionError(prepared.status)
   return prepared.handle
-}
-
-export function shortWorkbenchPath(path: string, directory: string): string {
-  const parts = pathWithForwardSeparators(path, directory).split("/").filter(Boolean)
-  if (parts.length <= 2) return path
-  return parts.slice(-2).join("/")
 }
 
 async function droppedFilePayload(file: File): Promise<FileUploadPayload> {

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [文件工作台的文件名优先标题](2026-10-24-source-file-title.md)：569从当前实图追查标题截断及唯一显示实现。
+
 - [来源文件定位与新焦点归属](2026-10-24-source-file-focus.md)：568原文件与引用定位的异步焦点调查。
 
 - [Sources 复制与成员侧栏阅读](2026-10-24-source-copy-dock-review.md)：567沿原canonical来源检查复制与Dock阅读保持。

@@ -1,0 +1,262 @@
+{
+  "batch": 569,
+  "date": "2026-10-24",
+  "mode": "Single agent real desktop UI manual interaction and visual review",
+  "entry": "main-DeR3SiOg.js",
+  "beforeEvidence": "../2026-10-24-source-file-focus/07-after-repeat-first-reference.png",
+  "uiAutomationTests": "Not created or run",
+  "userService18571": "Untouched",
+  "provider": {
+    "admission": {
+      "credential": "registered OAuth",
+      "projectedModel": "gpt-6.1-sol"
+    },
+    "preflight": {
+      "sessionID": "ses_hQ1d81NnJccZqGnQMKzS",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true
+    },
+    "maxRequests": 4,
+    "maxBatchRequests": 4,
+    "actualRequests": 2,
+    "streaming200OriginalReaderEOF": 2
+  },
+  "focus": {
+    "pending": {
+      "at": "2026-10-24T02:23:56.395Z",
+      "lines": [
+        "\t\t\t\t\t\t\t\t\t\t\t\t321 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, Value: TITLE569_DRAFT_ONLY, ID: chatTextarea",
+        "\t\t\t\t\t\t\t\t\t\t347 text 加载中…",
+        "The focused UI element is 321 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, Value: TITLE569_DRAFT_ONLY, ID: chatTextarea"
+      ]
+    },
+    "settled": {
+      "at": "2026-10-24T02:24:19.280Z",
+      "lines": [
+        "\t\t\t\t\t\t\t\t\t\t\t320 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, Value: TITLE569_DRAFT_ONLY, ID: chatTextarea",
+        "\t\t\t\t\t\t\t\t\t\t347 text entry area (settable) Description: reference-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-original.md, Value: # 来源阅读材料",
+        "The focused UI element is 320 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, Value: TITLE569_DRAFT_ONLY, ID: chatTextarea"
+      ]
+    }
+  },
+  "readOnlyTitleDiagnostics": [
+    {
+      "at": "2026-10-24T02:24:19.300Z",
+      "dom": {
+        "editorLabel": "reference-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-original.md",
+        "fullPath": "source-reading/research-references-with-authored-context/published-material-and-source-identities/nested-reading-material-for-desktop-review/reference-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-original.md",
+        "lines": [
+          {
+            "classes": "cm-line",
+            "text": "# 来源阅读材料"
+          },
+          {
+            "classes": "cm-line cm-activeLine cm-oc-reveal-line",
+            "text": "价格：CNY 99，仅用于界面测试。"
+          },
+          {
+            "classes": "cm-line",
+            "text": "交付：确认需求后5个工作日，仅用于界面测试。"
+          },
+          {
+            "classes": "cm-line",
+            "text": ""
+          }
+        ],
+        "visibleHeading": "reference-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-original.md"
+      }
+    },
+    {
+      "at": "2026-10-24T02:25:34.829Z",
+      "dom": {
+        "editorLabel": "README.md",
+        "heading": "README.md",
+        "path": "README.md"
+      }
+    },
+    {
+      "at": "2026-10-24T02:27:41.602Z",
+      "dom": {
+        "editorLabel": "identity-422.md ",
+        "heading": "identity-422.md ",
+        "path": "source-reading/identity-422.md "
+      }
+    },
+    {
+      "at": "2026-10-24T02:28:30.068Z",
+      "dom": {
+        "editorLabel": " identity-423.md",
+        "heading": " identity-423.md",
+        "path": " identity-423.md"
+      }
+    },
+    {
+      "at": "2026-10-24T02:29:07.118Z",
+      "dom": {
+        "editorLabel": "identity-423.md",
+        "heading": "identity-423.md",
+        "path": "identity-423.md"
+      }
+    }
+  ],
+  "fileReads": {
+    "latencyMilliseconds": 8000,
+    "events": [
+      {
+        "id": 86,
+        "at": "2026-10-24T02:23:55.636Z",
+        "phase": "latency-start",
+        "path": "/file/content",
+        "file": "source-reading/research-references-with-authored-context/published-material-and-source-identities/nested-reading-material-for-desktop-review/reference-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-original.md",
+        "latencyMilliseconds": 8000
+      },
+      {
+        "id": 86,
+        "at": "2026-10-24T02:24:03.639Z",
+        "phase": "latency-end",
+        "path": "/file/content",
+        "file": "source-reading/research-references-with-authored-context/published-material-and-source-identities/nested-reading-material-for-desktop-review/reference-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-long-source-identity-original.md",
+        "latencyMilliseconds": 8000
+      },
+      {
+        "id": 119,
+        "at": "2026-10-24T02:25:14.553Z",
+        "phase": "latency-start",
+        "path": "/file/content",
+        "file": "README.md",
+        "latencyMilliseconds": 8000
+      },
+      {
+        "id": 119,
+        "at": "2026-10-24T02:25:22.555Z",
+        "phase": "latency-end",
+        "path": "/file/content",
+        "file": "README.md",
+        "latencyMilliseconds": 8000
+      },
+      {
+        "id": 156,
+        "at": "2026-10-24T02:27:13.734Z",
+        "phase": "latency-start",
+        "path": "/file/content",
+        "file": "source-reading/identity-422.md ",
+        "latencyMilliseconds": 8000
+      },
+      {
+        "id": 156,
+        "at": "2026-10-24T02:27:21.736Z",
+        "phase": "latency-end",
+        "path": "/file/content",
+        "file": "source-reading/identity-422.md ",
+        "latencyMilliseconds": 8000
+      },
+      {
+        "id": 170,
+        "at": "2026-10-24T02:27:59.787Z",
+        "phase": "latency-start",
+        "path": "/file/content",
+        "file": " identity-423.md",
+        "latencyMilliseconds": 8000
+      },
+      {
+        "id": 170,
+        "at": "2026-10-24T02:28:07.805Z",
+        "phase": "latency-end",
+        "path": "/file/content",
+        "file": " identity-423.md",
+        "latencyMilliseconds": 8000
+      },
+      {
+        "id": 180,
+        "at": "2026-10-24T02:28:30.321Z",
+        "phase": "latency-start",
+        "path": "/file/content",
+        "file": "identity-423.md",
+        "latencyMilliseconds": 8000
+      },
+      {
+        "id": 180,
+        "at": "2026-10-24T02:28:38.323Z",
+        "phase": "latency-end",
+        "path": "/file/content",
+        "file": "identity-423.md",
+        "latencyMilliseconds": 8000
+      }
+    ],
+    "note": "latency-end is the end of injected beforeRequest wait, not response completion."
+  },
+  "data": {
+    "tables": 90,
+    "originalRows": 180618,
+    "sourceAllOriginalRows": "Exact rowid/primary key/all fields/times",
+    "sourceBytes": 82415616,
+    "sourceModifiedAtMs": 1792808066348.702,
+    "schema": {
+      "sourceVersion": 5,
+      "targetVersion": 5,
+      "extraObjects": [],
+      "integrity": "ok"
+    },
+    "canonical": "Complete source bytes exact",
+    "originalRowDifferences": [
+      {
+        "table": "runtime_execution_capacity_lease",
+        "identity": "[1]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "identity": "[2]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      }
+    ],
+    "providerActivities": {
+      "original": 441,
+      "current": 442
+    },
+    "physicalOriginalFiles": 5,
+    "physicalOriginalPreservation": "Full original bytes and mtime exact",
+    "originalSourceInventoryEntries": 46,
+    "attachmentEntries": 0
+  },
+  "closure": {
+    "at": "2026-10-24T02:29:24.601Z",
+    "authRetired": 1,
+    "catalogRetired": 1,
+    "authCopied": true,
+    "modelRequests": 2,
+    "model": "gpt-6.1-sol",
+    "streaming200OriginalReaderEOF": 2,
+    "sourceCatalog": {
+      "bytes": 9155406,
+      "modifiedAtMs": 1791128890137.9968,
+      "content": "Exact original"
+    },
+    "publicShutdown": 200,
+    "reserveMs": 839348,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "exactProcessChain": "dead_or_reused"
+  },
+  "limits": [
+    "Extremely long filename remains ellipsized in a narrow Dock; full path kept in the existing title.",
+    "No new attachment visual qualification; explicit displayName remains authored and unsplit.",
+    "Two initial operations did not activate the intended source; their private captures are not visual success or product-failure evidence.",
+    "Readonly DOM title diagnostics supplement the viewed real screenshots."
+  ]
+}

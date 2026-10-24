@@ -169,6 +169,12 @@ open one project target, preserving drafts across repeated citations. External
 absolute paths retain the source reader. Explicit attachment sources retain their
 original display names and source targets. Existing persisted source snapshots
 are not rewritten.
+The file workbench prioritizes the exact filename in its compact heading and
+text editor's accessible name; a long parent directory cannot consume the space
+before the filename. Explicit displayName values remain authored presentation
+labels without further path splitting. Ordinary filenames use the existing
+server-path syntax and retain every character. The heading's full-path title
+keeps the resource location available without changing its identity.
 Body-reference click delegation also retains the exact already parsed path
 attribute, including whitespace decoded from an authored Markdown destination.
 Empty-attribute validation does not supply a trimmed replacement resource.

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件工作台的文件名优先标题](2026-10-24-source-file-title/README.md)：569原文件名标题、焦点及完整运行收敛。
+
 - [来源文件定位与新焦点归属](2026-10-24-source-file-focus/README.md)：568实页焦点、原文件及完整运行结算。
 
 - [Sources 复制与成员侧栏阅读](2026-10-24-source-copy-dock-review/README.md)：567原来源身份、实际桌面截图与完整结算。

@@ -6,7 +6,6 @@ import {
   fileEditorReserved,
   registerFileEditorBeforeNavigate,
   selectedFileTarget,
-  shortWorkbenchPath,
   type FileContent,
   type FileEditorTarget,
 } from "../services/file-workbench"
@@ -14,6 +13,7 @@ import { projectScopedPath } from "../services/project-directory"
 import { t } from "../utils/i18n"
 import { formatErrorDetails } from "../utils/error-details"
 import { restoreRightDockFocus } from "../utils/right-dock-focus"
+import { pathWithForwardSeparators } from "../utils/server-path"
 import { Icon } from "./ui/Icon"
 // CodeMirror and its Lezer grammars are only needed once a file is actually
 // open. This pane stays mounted to keep its state, so the editor itself is what
@@ -135,6 +135,9 @@ export function FileEditorPane() {
   })
   const path = createMemo(() => target()?.path ?? "")
   const displayName = createMemo(() => target()?.displayName ?? content()?.displayName)
+  const fileTitle = createMemo(() => displayName() ?? pathWithForwardSeparators(
+    path(), target()?.sourceAbsolutePath || target()?.directory || "",
+  ).split("/").at(-1) ?? "")
   const textContent = createMemo(() => canEdit(content()))
   const imageSource = createMemo(() => {
     const file = content()
@@ -362,7 +365,7 @@ export function FileEditorPane() {
       >
         <header class="file-editor-header">
           <div class="file-editor-title" title={[displayName(), target()?.sourceAbsolutePath || path()].filter(Boolean).join("\n")}>
-            <span class="file-editor-title-name">{displayName() ?? shortWorkbenchPath(path(), target()?.sourceAbsolutePath || target()?.directory || "")}</span>
+            <span class="file-editor-title-name">{fileTitle()}</span>
             <Show when={dirty()}>
               <span class="file-editor-dirty" aria-label={t("file_editor.unsaved")}>
                 *
@@ -472,7 +475,7 @@ export function FileEditorPane() {
                     lineRange={target()?.range}
                     lineRangeRevealRevision={fileEditorRevealRevision()}
                     lineRangeFocusOrigin={revealFocusOrigin()}
-                    ariaLabel={displayName() ?? t("file_editor.title")}
+                    ariaLabel={fileTitle()}
                     onValueChange={updateDraft}
                     readOnly={!writable() || fileEditorReserved()}
                   />
