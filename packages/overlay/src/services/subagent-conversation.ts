@@ -342,7 +342,11 @@ export function projectSubagentConversationLive(
       if (index >= 0) parts[index] = next
       else parts.push(next)
     }
-    return parts
+    // Replay keeps publication order: a later revision of an earlier Part can
+    // follow a newer Part. Match the canonical transcript's Part order.
+    return parts.sort((left, right) =>
+      compareTimelineOrderKeys(left.orderKey, right.orderKey, `subagent conversation ${messageID} live parts`),
+    )
   }
   const messages = base.messages
     .filter((message) => !removedMessageIDs.has(message.messageID))

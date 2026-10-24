@@ -252,6 +252,13 @@ process epoch. Replay expiry or an epoch change first replaces the canonical
 persisted tail and only then opens a new stream. There is no parallel timestamp
 watermark poll or coarse `task.messages.changed` projection.
 
+Member conversation projection orders each Message's merged Parts by the
+canonical Part `orderKey`, matching persisted transcript reads. Replay retains
+original publication order: replacing an earlier Part's snapshot can place its
+latest event after a newer Part. Arrival order therefore cannot determine the
+rendered Part order. Snapshot values, complete field updates, removals and
+completed-message sealing keep their existing authority.
+
 Unvalidated Provider Tool input is ephemeral transport, owned by the processor's
 current call draft rather than a SQLite Tool request. The producer publishes
 coalesced, self-contained `message.part.updated` snapshots with `status=pending`,

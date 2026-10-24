@@ -1,0 +1,160 @@
+{
+  "at": "2026-10-24T05:13:17.772Z",
+  "scope": "573",
+  "before": {
+    "stage": "before",
+    "publications": 2716,
+    "sessions": 230,
+    "projectedSessions": 228,
+    "projectedMessages": 736,
+    "inversions": 22,
+    "errors": [
+      {
+        "sessionID": "ses_-zURQO9DTzzYctM6sm3m",
+        "error": "bridge: message msg_hKcvnULNtYCBkRHonFvb missing persisted row while enriching part event"
+      },
+      {
+        "sessionID": "ses_-zURE1Aonzzko22HlxqB",
+        "error": "bridge: message msg_g0VYmU0Sw00bUTFK9Jyj missing persisted row while enriching part event"
+      }
+    ],
+    "qualification": "Actual durable outbox facts, actual bridge enrichment against isolated complete database, production replay compactor and full member projector. State checker; not browser/reconnect acceptance."
+  },
+  "after": {
+    "stage": "after",
+    "publications": 2716,
+    "sessions": 230,
+    "projectedSessions": 228,
+    "projectedMessages": 736,
+    "inversions": 0,
+    "errors": [
+      {
+        "sessionID": "ses_-zURQO9DTzzYctM6sm3m",
+        "error": "bridge: message msg_hKcvnULNtYCBkRHonFvb missing persisted row while enriching part event"
+      },
+      {
+        "sessionID": "ses_-zURE1Aonzzko22HlxqB",
+        "error": "bridge: message msg_g0VYmU0Sw00bUTFK9Jyj missing persisted row while enriching part event"
+      }
+    ],
+    "qualification": "Actual durable outbox facts, actual bridge enrichment against isolated complete database, production replay compactor and full member projector. State checker; not browser/reconnect acceptance."
+  },
+  "affectedMessageRoles": {
+    "user": 22
+  },
+  "rootCause": "Member live projection merged Parts in replay publication arrival order. Replay compaction legitimately moves the latest revision of an earlier Part behind a newer Part. Persisted reads and the main tree already use canonical Part order.",
+  "change": "Sort the member projection merged Parts with the existing canonical timeline comparator; preserve all content, ownership, source-tool binding and completion authority.",
+  "publicChecker": {
+    "at": "2026-10-24T05:11:38.794Z",
+    "entry": "main-DhqY_xIg.js",
+    "deliveryStatus": 200,
+    "results": [
+      {
+        "kind": "task",
+        "status": 200,
+        "messages": 24,
+        "parts": 77,
+        "sources": 6,
+        "originalPair": [
+          "prt_g0VYlz7FR00HODqEl8F7",
+          "prt_g0VYlz7FR01tKhsgBKNj"
+        ]
+      },
+      {
+        "kind": "session",
+        "status": 200,
+        "messages": 24,
+        "parts": 77,
+        "sources": 6,
+        "originalPair": [
+          "prt_g0VYlz7FR00HODqEl8F7",
+          "prt_g0VYlz7FR01tKhsgBKNj"
+        ]
+      }
+    ],
+    "attachment": {
+      "status": 200,
+      "bytes": 643,
+      "identity": "Exact immutable original published PNG"
+    },
+    "qualification": "Actual native development CLI public Task and Session child reads, production parser, canonical Part order and original attachment. No UI assertions and no simulated network."
+  },
+  "build": {
+    "publication": {
+      "at": "2026-10-24T05:07:58.216Z",
+      "entry": "main-DhqY_xIg.js",
+      "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/source-render-order-573-bundle/bin/ui",
+      "qualification": "Actual completed standard Node Vite build, no private renderer instrumentation"
+    },
+    "preservation": {
+      "at": "2026-10-24T05:07:48.004Z",
+      "database": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/source-render-order-573/runtime/data/opencorvus.db",
+      "before": {
+        "bytes": 92295168,
+        "modifiedAtMs": 1792818355234.2576
+      },
+      "after": {
+        "bytes": 92295168,
+        "modifiedAtMs": 1792818355234.2576
+      },
+      "identity": "Owned complete original SQLite bytes/mtime remained unchanged across actual Node build; full rows checked separately"
+    }
+  },
+  "focusedTests": {
+    "files": 2,
+    "passed": 32,
+    "failed": 0,
+    "expectations": 70
+  },
+  "typecheck": "Passed",
+  "preservation": {
+    "schema": {
+      "sourceVersion": 5,
+      "targetVersion": 5,
+      "extraObjects": [],
+      "integrity": "ok"
+    },
+    "source": {
+      "allOriginalRows": "Exact rowid/primary key/all fields/times",
+      "bytes": 92295168,
+      "modifiedAtMs": 1792816158260.1826
+    },
+    "canonical": "Complete source bytes exact",
+    "tables": 90,
+    "rows": 197241,
+    "targetOriginalRowDifferences": [],
+    "providerActivities": {
+      "original": 490,
+      "current": 490
+    }
+  },
+  "retirement": {
+    "at": "2026-10-24T05:13:17.772Z",
+    "authCopied": false,
+    "providerRequests": 0,
+    "catalogRetired": 1,
+    "sourceCatalogBytes": 9155406,
+    "sourceCatalogModifiedAtMs": 1791128890137.9968,
+    "publicShutdown": 200,
+    "reserveMs": 940970,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "originalExecSession": 37264,
+    "originalExecJoinedExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "exactProcessChain": "dead_or_reused"
+  },
+  "manualScreenshots": 4,
+  "manualObservation": "Actual original Task/B history and W3C source/prose/table, tool expand and collapse. Actual native CLI /ui and manually reviewed screenshots; no UI automation tests.",
+  "limitations": [
+    "22 affected historical messages are user-role inputs; original B is orchestrator dispatch context, not an assistant streaming body. This is not a proven Rendering flicker root cause.",
+    "Two historical Sessions include removed message rows and fail current bridge enrichment; both are reported explicitly and excluded from the 228 projected Sessions.",
+    "No new Provider stream or network disconnect/reconnect was performed in this zero-request batch. Durable replay checker and manual historical-page review are distinct evidence.",
+    "First public checker counted a nonexistent sources Part type and reported zero. Corrected to the actual source-url/source-document/source-file contract and reran both actual routes: six Sources each.",
+    "Initial test path filters also selected an unrelated tmp/gallery-project duplicate with missing dependencies. Exact ./ file paths passed 32 tests in the two intended files.",
+    "First private build invocation stopped at its required owned-home guard. Correct isolated environment build passed and preserved SQLite bytes/mtime."
+  ],
+  "user18571": "Untouched"
+}
