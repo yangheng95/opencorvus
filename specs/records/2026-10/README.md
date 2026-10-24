@@ -64,6 +64,13 @@
 
 - [旧权限记忆存量恢复](2026-10-24-permission-memory-stock-recovery.md)：真实存量只读审计、保留原数据的恢复方案与独立升级验收。
 
+- [持久投递效果与回执横向审计](2026-10-24-durable-effect-receipt-audit.md)：跨链路效果/回执窗口、真实故障注入及独立裁定。
+- [持久投递独立裁定](2026-10-24-durable-effect-receipt-verdict.md)：最终真实矩阵、原件与工程检查结论。
+- [Channel效果与回执恢复](2026-10-24-channel-effect-receipt-recovery.md)：原effect、generation与lease。
+- [文件发布效果与回执恢复](2026-10-24-publication-effect-receipt-recovery.md)：Worktree、Skill及MCP中断与并发。
+- [旧Automation保留升级验收](2026-10-24-legacy-automation-upgrade-acceptance.md)：四份真实v6原件升级与未知归属处置。
+- [全局专家团回执生命周期](2026-10-24-expert-global-receipt-lifetime-audit.md)：全局mutation与原Project物理删除的实际边界。
+
 - [持续目标加号入口](2026-10-24-goal-composer-menu.md)：首页、会话和侧聊通过输入框加号启动。
 
 - [剪贴板路径对照](2026-10-24-clipboard-path-investigation.md)：555隔离实页三次复制、重载及未发送草稿复核，不把未复现当作根因已修复。

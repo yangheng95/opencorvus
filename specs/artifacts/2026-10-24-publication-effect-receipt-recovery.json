@@ -1,0 +1,883 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-24",
+  "scope": "Isolated local production APIs and real process fault cuts; synthetic data only; no models, network, credentials or UI automation",
+  "originalVersionedUpgrade": [
+    {
+      "label": "worktree",
+      "fromVersion": 6,
+      "toVersion": 8,
+      "tables": 90,
+      "originalRows": 4,
+      "originalRowsPreserved": true,
+      "backupOriginalRowsExact": true,
+      "recovered": {
+        "action": "worktree-recover",
+        "result": {
+          "name": "receipt-window",
+          "branch": "opencorvus/receipt-window",
+          "directory": "<isolated-runtime-1>\\runner-94240-aqpyrg\\project\\.opencorvus\\.r\\project\\worktrees\\receipt-window",
+          "recovery": {
+            "kind": "startup_outcome_unknown",
+            "occurrenceID": "8aaf31e55dbaf3f2e95451a6eff6a764596d6508-6a79053e-7665-4c78-8b45-facbde9bef65",
+            "message": "The existing worktree is preserved. Its historical startup outcome is unknown; review the original startup evidence before any explicit new startup operation."
+          }
+        }
+      },
+      "originalAndRecoveryFacts": {
+        "action": "worktree-inspect",
+        "effects": "effect \r\n",
+        "tracked": "edit after start effect before receipt\n",
+        "occurrences": [
+          {
+            "directory": "<isolated-runtime-1>\\runner-94240-aQpYrG\\runtime-upgrade-final-1792838085532\\data\\durable-publications\\worktree-readiness\\2d053211225f8a22ab5ea19a569b0756fa18536a",
+            "intent": {
+              "schemaVersion": 1,
+              "occurrenceID": "2d053211225f8a22ab5ea19a569b0756fa18536a",
+              "kind": "worktree-readiness",
+              "subject": "worktree:<isolated-runtime-1>\\runner-94240-aQpYrG\\project\\.opencorvus\\.r\\project\\worktrees\\receipt-window",
+              "payload": {
+                "projectID": "prj_hzTB651yPf6LgHeb1NfE",
+                "directory": "<isolated-runtime-1>\\runner-94240-aQpYrG\\project\\.opencorvus\\.r\\project\\worktrees\\receipt-window",
+                "branch": "opencorvus/receipt-window",
+                "name": "receipt-window",
+                "primaryBranch": "master"
+              },
+              "timeCreated": 1792829646144
+            },
+            "phases": [
+              {
+                "schemaVersion": 1,
+                "occurrenceID": "2d053211225f8a22ab5ea19a569b0756fa18536a",
+                "sequence": 1,
+                "name": "created",
+                "payload": {},
+                "timeCreated": 1792829646345
+              },
+              {
+                "schemaVersion": 1,
+                "occurrenceID": "2d053211225f8a22ab5ea19a569b0756fa18536a",
+                "sequence": 2,
+                "name": "populated",
+                "payload": {},
+                "timeCreated": 1792829646690
+              }
+            ]
+          },
+          {
+            "directory": "<isolated-runtime-1>\\runner-94240-aQpYrG\\runtime-upgrade-final-1792838085532\\data\\durable-publications\\worktree-readiness-v3-8aaf31e55dbaf3f2e95451a6eff6a764596d6508\\8aaf31e55dbaf3f2e95451a6eff6a764596d6508-6a79053e-7665-4c78-8b45-facbde9bef65",
+            "intent": {
+              "schemaVersion": 1,
+              "occurrenceID": "8aaf31e55dbaf3f2e95451a6eff6a764596d6508-6a79053e-7665-4c78-8b45-facbde9bef65",
+              "kind": "worktree-readiness-v3-8aaf31e55dbaf3f2e95451a6eff6a764596d6508",
+              "subject": "worktree:<isolated-runtime-1>\\runner-94240-aqpyrg\\project\\.opencorvus\\.r\\project\\worktrees\\receipt-window",
+              "payload": {
+                "version": 3,
+                "databaseInstanceID": "e6d1c642-8906-474e-ba14-5135d617e869",
+                "projectID": "prj_hzTB651yPf6LgHeb1NfE",
+                "projectGeneration": "4097644e-30f4-4450-9f91-5bc51d56a7b6",
+                "directory": "<isolated-runtime-1>\\runner-94240-aqpyrg\\project\\.opencorvus\\.r\\project\\worktrees\\receipt-window",
+                "requestedDirectory": "<isolated-runtime-1>\\runner-94240-aqpyrg\\project\\.opencorvus\\.r\\project\\worktrees\\receipt-window",
+                "directoryKey": "<isolated-runtime-1>\\runner-94240-aqpyrg\\project\\.opencorvus\\.r\\project\\worktrees\\receipt-window",
+                "branch": "opencorvus/receipt-window",
+                "name": "receipt-window",
+                "primaryBranch": "master",
+                "startup": {
+                  "project": "",
+                  "extra": "echo effect >> startup-effects.txt"
+                },
+                "historicalOccurrenceIDs": ["2d053211225f8a22ab5ea19a569b0756fa18536a"]
+              },
+              "timeCreated": 1792838090852
+            },
+            "phases": [
+              {
+                "schemaVersion": 1,
+                "occurrenceID": "8aaf31e55dbaf3f2e95451a6eff6a764596d6508-6a79053e-7665-4c78-8b45-facbde9bef65",
+                "sequence": 1,
+                "name": "created",
+                "payload": {
+                  "directoryKey": "<isolated-runtime-1>\\runner-94240-aqpyrg\\project\\.opencorvus\\.r\\project\\worktrees\\receipt-window",
+                  "device": "382532482",
+                  "inode": "562949958336591",
+                  "birthtimeNs": "1792829646298350900"
+                },
+                "timeCreated": 1792838090889
+              },
+              {
+                "schemaVersion": 1,
+                "occurrenceID": "8aaf31e55dbaf3f2e95451a6eff6a764596d6508-6a79053e-7665-4c78-8b45-facbde9bef65",
+                "sequence": 5,
+                "name": "preserved",
+                "payload": {
+                  "kind": "startup_outcome_unknown",
+                  "occurrenceID": "8aaf31e55dbaf3f2e95451a6eff6a764596d6508-6a79053e-7665-4c78-8b45-facbde9bef65",
+                  "message": "The existing worktree is preserved. Its historical startup outcome is unknown; review the original startup evidence before any explicit new startup operation."
+                },
+                "timeCreated": 1792838091431
+              }
+            ],
+            "terminal": {
+              "schemaVersion": 1,
+              "occurrenceID": "8aaf31e55dbaf3f2e95451a6eff6a764596d6508-6a79053e-7665-4c78-8b45-facbde9bef65",
+              "outcome": "committed",
+              "payload": {
+                "disposition": "population_preserved"
+              },
+              "timeCreated": 1792838091456
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "skill",
+      "fromVersion": 6,
+      "toVersion": 8,
+      "tables": 90,
+      "originalRows": 4,
+      "originalRowsPreserved": true,
+      "backupOriginalRowsExact": true,
+      "recovered": {
+        "action": "skill-recover",
+        "result": [
+          {
+            "name": "receipt-audit",
+            "description": "receipt audit",
+            "policy": "allow"
+          }
+        ]
+      },
+      "originalAndRecoveryFacts": {
+        "action": "skill-inspect-raw",
+        "occurrences": [
+          {
+            "directory": "<isolated-runtime-2>\\runner-56664-Qxl03K\\runtime-upgrade-final-1792838095173\\data\\durable-publications\\skill-catalog-replacement\\7a550553-1cb8-4916-86db-a39d2ee9fcce",
+            "intent": {
+              "schemaVersion": 1,
+              "occurrenceID": "7a550553-1cb8-4916-86db-a39d2ee9fcce",
+              "kind": "skill-catalog-replacement",
+              "subject": "catalog",
+              "payload": {
+                "targets": [
+                  {
+                    "name": "receipt-audit",
+                    "target": "<isolated-runtime-2>\\runner-56664-Qxl03K\\project\\.opencorvus\\skill\\receipt-audit",
+                    "staging": "<isolated-runtime-2>\\runner-56664-Qxl03K\\project\\.opencorvus\\skill\\.skill-update-7a550553-1cb8-4916-86db-a39d2ee9fcce-0",
+                    "backup": "<isolated-runtime-2>\\runner-56664-Qxl03K\\project\\.opencorvus\\skill\\.skill-replace-7a550553-1cb8-4916-86db-a39d2ee9fcce-0",
+                    "beforeDigest": null,
+                    "afterDigest": "50509ea7b2458f7aa0641d1167bba8a456f6f036010adec0579a0634f65c5e6b"
+                  }
+                ],
+                "requireExisting": false,
+                "configuration": {
+                  "kind": "none"
+                },
+                "globalConfigBeforeRevision": "absent"
+              },
+              "timeCreated": 1792829507021
+            },
+            "phases": [
+              {
+                "schemaVersion": 1,
+                "occurrenceID": "7a550553-1cb8-4916-86db-a39d2ee9fcce",
+                "sequence": 1,
+                "name": "published",
+                "payload": {
+                  "targetCount": 1
+                },
+                "timeCreated": 1792829507050
+              },
+              {
+                "schemaVersion": 1,
+                "occurrenceID": "7a550553-1cb8-4916-86db-a39d2ee9fcce",
+                "sequence": 2,
+                "name": "configured",
+                "payload": {
+                  "globalConfigAfterRevision": "absent"
+                },
+                "timeCreated": 1792829507071
+              }
+            ],
+            "terminal": {
+              "schemaVersion": 1,
+              "occurrenceID": "7a550553-1cb8-4916-86db-a39d2ee9fcce",
+              "outcome": "committed",
+              "payload": {
+                "configurationDisposition": "applied"
+              },
+              "timeCreated": 1792838098705
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "originalLegacyReset": {
+    "before": {
+      "admission": [
+        {
+          "directory_key": "<isolated-runtime-3>\\runner-85272-5xrk7d\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+          "directory": "<isolated-runtime-3>\\runner-85272-5xRk7D\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+          "generation": "9d148866-5299-4dc9-b94e-7e12571e7e65",
+          "operation_id": "<immutable-reset-operation-1>",
+          "kind": "reclamation",
+          "owner_occurrence_id": "7c3d2c26-8ff0-43c0-8253-52f02759b4fe",
+          "owner_pid": 70588,
+          "owner_process_instance_id": "win32:639284289603529641",
+          "time_created": 1792832161938
+        }
+      ],
+      "tracked": "operator edit after reset effect\n",
+      "effects": "reset \r\nreset \r\n"
+    },
+    "after": {
+      "effects": "reset \r\nreset \r\n",
+      "tracked": "operator edit after reset effect\n",
+      "ready": false,
+      "admissions": [],
+      "historicalAndRecoveryFacts": [
+        {
+          "directory": "<isolated-runtime-3>\\runner-85272-5xRk7D\\runtime-root\\data\\durable-publications\\worktree-readiness-b8fead11aa85c22affaef0d8a253a40eb61a690a\\b8fead11aa85c22affaef0d8a253a40eb61a690a-036d9a7f-84e0-4dfb-894d-a48903b91d09",
+          "intent": {
+            "schemaVersion": 1,
+            "occurrenceID": "b8fead11aa85c22affaef0d8a253a40eb61a690a-036d9a7f-84e0-4dfb-894d-a48903b91d09",
+            "kind": "worktree-readiness-b8fead11aa85c22affaef0d8a253a40eb61a690a",
+            "subject": "worktree:<isolated-runtime-3>\\runner-85272-5xrk7d\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+            "payload": {
+              "version": 2,
+              "databaseInstanceID": "89cf334c-546d-4b8b-8660-87daee7acf7a",
+              "projectID": "prj_h8q9t783p10kLvOFDiQ9",
+              "projectGeneration": "88f067df-b6b6-4c69-9b93-8a3f5b442f7d",
+              "directory": "<isolated-runtime-3>\\runner-85272-5xRk7D\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+              "branch": "opencorvus/reset-window",
+              "name": "reset-window",
+              "primaryBranch": "master",
+              "startup": {
+                "project": "echo reset >> ..\\..\\..\\..\\..\\reset-effects.txt",
+                "extra": ""
+              },
+              "historicalOccurrenceIDs": []
+            },
+            "timeCreated": 1792832159540
+          },
+          "phases": [
+            {
+              "schemaVersion": 1,
+              "occurrenceID": "b8fead11aa85c22affaef0d8a253a40eb61a690a-036d9a7f-84e0-4dfb-894d-a48903b91d09",
+              "sequence": 1,
+              "name": "created",
+              "payload": {
+                "directoryKey": "<isolated-runtime-3>\\runner-85272-5xrk7d\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+                "device": "382532482",
+                "inode": "1125899911771241",
+                "birthtimeNs": "1792832159676490400"
+              },
+              "timeCreated": 1792832159721
+            },
+            {
+              "schemaVersion": 1,
+              "occurrenceID": "b8fead11aa85c22affaef0d8a253a40eb61a690a-036d9a7f-84e0-4dfb-894d-a48903b91d09",
+              "sequence": 2,
+              "name": "checked_out",
+              "payload": {},
+              "timeCreated": 1792832160153
+            },
+            {
+              "schemaVersion": 1,
+              "occurrenceID": "b8fead11aa85c22affaef0d8a253a40eb61a690a-036d9a7f-84e0-4dfb-894d-a48903b91d09",
+              "sequence": 3,
+              "name": "startup_started",
+              "payload": {},
+              "timeCreated": 1792832160175
+            },
+            {
+              "schemaVersion": 1,
+              "occurrenceID": "b8fead11aa85c22affaef0d8a253a40eb61a690a-036d9a7f-84e0-4dfb-894d-a48903b91d09",
+              "sequence": 4,
+              "name": "populated",
+              "payload": {},
+              "timeCreated": 1792832160244
+            }
+          ],
+          "terminal": {
+            "schemaVersion": 1,
+            "occurrenceID": "b8fead11aa85c22affaef0d8a253a40eb61a690a-036d9a7f-84e0-4dfb-894d-a48903b91d09",
+            "outcome": "committed",
+            "payload": {},
+            "timeCreated": 1792832160263
+          }
+        },
+        {
+          "directory": "<isolated-runtime-3>\\runner-85272-5xRk7D\\runtime-root\\data\\durable-publications\\worktree-readiness-b8fead11aa85c22affaef0d8a253a40eb61a690a\\b8fead11aa85c22affaef0d8a253a40eb61a690a-12a50735-0015-426b-b10f-f0793986e104",
+          "intent": {
+            "schemaVersion": 1,
+            "occurrenceID": "b8fead11aa85c22affaef0d8a253a40eb61a690a-12a50735-0015-426b-b10f-f0793986e104",
+            "kind": "worktree-readiness-b8fead11aa85c22affaef0d8a253a40eb61a690a",
+            "subject": "worktree:<isolated-runtime-3>\\runner-85272-5xrk7d\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+            "payload": {
+              "version": 2,
+              "databaseInstanceID": "89cf334c-546d-4b8b-8660-87daee7acf7a",
+              "projectID": "prj_h8q9t783p10kLvOFDiQ9",
+              "projectGeneration": "88f067df-b6b6-4c69-9b93-8a3f5b442f7d",
+              "directory": "<isolated-runtime-3>\\runner-85272-5xRk7D\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+              "branch": "opencorvus/reset-window",
+              "name": "reset-window",
+              "primaryBranch": "master",
+              "startup": {
+                "project": "",
+                "extra": ""
+              },
+              "historicalOccurrenceIDs": [
+                "b8fead11aa85c22affaef0d8a253a40eb61a690a-036d9a7f-84e0-4dfb-894d-a48903b91d09"
+              ],
+              "resetOperationID": "<immutable-reset-operation-1>",
+              "resetAdmission": {
+                "directoryKey": "<isolated-runtime-3>\\runner-85272-5xrk7d\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+                "directory": "<isolated-runtime-3>\\runner-85272-5xRk7D\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+                "generation": "9d148866-5299-4dc9-b94e-7e12571e7e65",
+                "operationID": "<immutable-reset-operation-1>",
+                "kind": "reclamation",
+                "timeCreated": 1792832161938,
+                "owner": {
+                  "pid": 70588,
+                  "processInstanceID": "win32:639284289603529641",
+                  "occurrenceID": "7c3d2c26-8ff0-43c0-8253-52f02759b4fe"
+                }
+              },
+              "resetOrigin": "historical_unknown"
+            },
+            "timeCreated": 1792833630258
+          },
+          "phases": [
+            {
+              "schemaVersion": 1,
+              "occurrenceID": "b8fead11aa85c22affaef0d8a253a40eb61a690a-12a50735-0015-426b-b10f-f0793986e104",
+              "sequence": 1,
+              "name": "created",
+              "payload": {
+                "directoryKey": "<isolated-runtime-3>\\runner-85272-5xrk7d\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+                "device": "382532482",
+                "inode": "1125899911771241",
+                "birthtimeNs": "1792832159676490400"
+              },
+              "timeCreated": 1792833630287
+            },
+            {
+              "schemaVersion": 1,
+              "occurrenceID": "b8fead11aa85c22affaef0d8a253a40eb61a690a-12a50735-0015-426b-b10f-f0793986e104",
+              "sequence": 5,
+              "name": "preserved",
+              "payload": {
+                "kind": "startup_outcome_unknown",
+                "occurrenceID": "b8fead11aa85c22affaef0d8a253a40eb61a690a-12a50735-0015-426b-b10f-f0793986e104",
+                "message": "The existing worktree is preserved. Its historical startup outcome is unknown; review the original startup evidence before any explicit new startup operation."
+              },
+              "timeCreated": 1792833630311
+            }
+          ],
+          "terminal": {
+            "schemaVersion": 1,
+            "occurrenceID": "b8fead11aa85c22affaef0d8a253a40eb61a690a-12a50735-0015-426b-b10f-f0793986e104",
+            "outcome": "committed",
+            "payload": {
+              "disposition": "population_preserved"
+            },
+            "timeCreated": 1792833630330
+          }
+        }
+      ]
+    },
+    "repeatCount": 2
+  },
+  "currentLegacyResetUpgrade": {
+    "fromVersion": 7,
+    "toVersion": 8,
+    "migrationStage": {
+      "database": "<isolated-runtime-3>\\runner-85272-5xRk7D\\runtime-reset-current-1792838514742\\data\\opencorvus.migration-stage.sqlite",
+      "originalRows": 6,
+      "originalRowsPreserved": true,
+      "backupOriginalRowsExact": true,
+      "originalFenceRows": 1,
+      "currentFenceRows": 1
+    },
+    "recoveryStage": {
+      "database": "<isolated-runtime-3>\\runner-85272-5xRk7D\\runtime-reset-current-1792838514742\\data\\opencorvus.db",
+      "originalTrackedRetained": true,
+      "originalEffectsRetained": true,
+      "sourceAdmissionEvidence": "immutable readiness intent",
+      "sourceAdmissionEvidenceRetained": true,
+      "originalFenceSettled": true,
+      "currentAdmissionCount": 0,
+      "startupOutcome": "unknown_preserved",
+      "repeatStable": true
+    },
+    "originalFacts": {
+      "admission": [
+        {
+          "directory_key": "<isolated-runtime-3>\\runner-85272-5xrk7d\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+          "directory": "<isolated-runtime-3>\\runner-85272-5xRk7D\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+          "generation": "9d148866-5299-4dc9-b94e-7e12571e7e65",
+          "operation_id": "<immutable-reset-operation-1>",
+          "kind": "reclamation",
+          "owner_occurrence_id": "7c3d2c26-8ff0-43c0-8253-52f02759b4fe",
+          "owner_pid": 70588,
+          "owner_process_instance_id": "win32:639284289603529641",
+          "time_created": 1792832161938
+        }
+      ],
+      "tracked": "operator edit after reset effect\n",
+      "effects": "reset \r\nreset \r\n"
+    },
+    "recovered": {
+      "effects": "reset \r\nreset \r\n",
+      "tracked": "operator edit after reset effect\n",
+      "ready": false,
+      "admissions": [],
+      "historicalAndRecoveryFacts": [
+        {
+          "directory": "<isolated-runtime-3>\\runner-85272-5xRk7D\\runtime-reset-current-1792838514742\\data\\durable-publications\\worktree-readiness-b8fead11aa85c22affaef0d8a253a40eb61a690a\\b8fead11aa85c22affaef0d8a253a40eb61a690a-036d9a7f-84e0-4dfb-894d-a48903b91d09",
+          "intent": {
+            "schemaVersion": 1,
+            "occurrenceID": "b8fead11aa85c22affaef0d8a253a40eb61a690a-036d9a7f-84e0-4dfb-894d-a48903b91d09",
+            "kind": "worktree-readiness-b8fead11aa85c22affaef0d8a253a40eb61a690a",
+            "subject": "worktree:<isolated-runtime-3>\\runner-85272-5xrk7d\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+            "payload": {
+              "version": 2,
+              "databaseInstanceID": "89cf334c-546d-4b8b-8660-87daee7acf7a",
+              "projectID": "prj_h8q9t783p10kLvOFDiQ9",
+              "projectGeneration": "88f067df-b6b6-4c69-9b93-8a3f5b442f7d",
+              "directory": "<isolated-runtime-3>\\runner-85272-5xRk7D\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+              "branch": "opencorvus/reset-window",
+              "name": "reset-window",
+              "primaryBranch": "master",
+              "startup": {
+                "project": "echo reset >> ..\\..\\..\\..\\..\\reset-effects.txt",
+                "extra": ""
+              },
+              "historicalOccurrenceIDs": []
+            },
+            "timeCreated": 1792832159540
+          },
+          "phases": [
+            {
+              "schemaVersion": 1,
+              "occurrenceID": "b8fead11aa85c22affaef0d8a253a40eb61a690a-036d9a7f-84e0-4dfb-894d-a48903b91d09",
+              "sequence": 1,
+              "name": "created",
+              "payload": {
+                "directoryKey": "<isolated-runtime-3>\\runner-85272-5xrk7d\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+                "device": "382532482",
+                "inode": "1125899911771241",
+                "birthtimeNs": "1792832159676490400"
+              },
+              "timeCreated": 1792832159721
+            },
+            {
+              "schemaVersion": 1,
+              "occurrenceID": "b8fead11aa85c22affaef0d8a253a40eb61a690a-036d9a7f-84e0-4dfb-894d-a48903b91d09",
+              "sequence": 2,
+              "name": "checked_out",
+              "payload": {},
+              "timeCreated": 1792832160153
+            },
+            {
+              "schemaVersion": 1,
+              "occurrenceID": "b8fead11aa85c22affaef0d8a253a40eb61a690a-036d9a7f-84e0-4dfb-894d-a48903b91d09",
+              "sequence": 3,
+              "name": "startup_started",
+              "payload": {},
+              "timeCreated": 1792832160175
+            },
+            {
+              "schemaVersion": 1,
+              "occurrenceID": "b8fead11aa85c22affaef0d8a253a40eb61a690a-036d9a7f-84e0-4dfb-894d-a48903b91d09",
+              "sequence": 4,
+              "name": "populated",
+              "payload": {},
+              "timeCreated": 1792832160244
+            }
+          ],
+          "terminal": {
+            "schemaVersion": 1,
+            "occurrenceID": "b8fead11aa85c22affaef0d8a253a40eb61a690a-036d9a7f-84e0-4dfb-894d-a48903b91d09",
+            "outcome": "committed",
+            "payload": {},
+            "timeCreated": 1792832160263
+          }
+        },
+        {
+          "directory": "<isolated-runtime-3>\\runner-85272-5xRk7D\\runtime-reset-current-1792838514742\\data\\durable-publications\\worktree-readiness-v3-c6711ec24c4e798b5419e8844c127de998db422b\\c6711ec24c4e798b5419e8844c127de998db422b-e0e647b6-8fb8-4455-81f3-9b97f5a95b8b",
+          "intent": {
+            "schemaVersion": 1,
+            "occurrenceID": "c6711ec24c4e798b5419e8844c127de998db422b-e0e647b6-8fb8-4455-81f3-9b97f5a95b8b",
+            "kind": "worktree-readiness-v3-c6711ec24c4e798b5419e8844c127de998db422b",
+            "subject": "worktree:<isolated-runtime-3>\\runner-85272-5xrk7d\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+            "payload": {
+              "version": 3,
+              "databaseInstanceID": "89cf334c-546d-4b8b-8660-87daee7acf7a",
+              "projectID": "prj_h8q9t783p10kLvOFDiQ9",
+              "projectGeneration": "88f067df-b6b6-4c69-9b93-8a3f5b442f7d",
+              "directory": "<isolated-runtime-3>\\runner-85272-5xrk7d\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+              "requestedDirectory": "<isolated-runtime-3>\\runner-85272-5xrk7d\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+              "directoryKey": "<isolated-runtime-3>\\runner-85272-5xrk7d\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+              "branch": "opencorvus/reset-window",
+              "name": "reset-window",
+              "primaryBranch": "master",
+              "startup": {
+                "project": "",
+                "extra": ""
+              },
+              "historicalOccurrenceIDs": [
+                "b8fead11aa85c22affaef0d8a253a40eb61a690a-036d9a7f-84e0-4dfb-894d-a48903b91d09"
+              ],
+              "resetOperationID": "<immutable-reset-operation-1>",
+              "resetAdmission": {
+                "directoryKey": "<isolated-runtime-3>\\runner-85272-5xrk7d\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+                "directory": "<isolated-runtime-3>\\runner-85272-5xRk7D\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+                "generation": "9d148866-5299-4dc9-b94e-7e12571e7e65",
+                "operationID": "<immutable-reset-operation-1>",
+                "kind": "reclamation",
+                "timeCreated": 1792832161938,
+                "owner": {
+                  "pid": 70588,
+                  "processInstanceID": "win32:639284289603529641",
+                  "occurrenceID": "7c3d2c26-8ff0-43c0-8253-52f02759b4fe"
+                }
+              },
+              "resetOrigin": "historical_unknown"
+            },
+            "timeCreated": 1792838516772
+          },
+          "phases": [
+            {
+              "schemaVersion": 1,
+              "occurrenceID": "c6711ec24c4e798b5419e8844c127de998db422b-e0e647b6-8fb8-4455-81f3-9b97f5a95b8b",
+              "sequence": 1,
+              "name": "created",
+              "payload": {
+                "directoryKey": "<isolated-runtime-3>\\runner-85272-5xrk7d\\project\\.opencorvus\\.r\\project\\worktrees\\reset-window",
+                "device": "382532482",
+                "inode": "1125899911771241",
+                "birthtimeNs": "1792832159676490400"
+              },
+              "timeCreated": 1792838516799
+            },
+            {
+              "schemaVersion": 1,
+              "occurrenceID": "c6711ec24c4e798b5419e8844c127de998db422b-e0e647b6-8fb8-4455-81f3-9b97f5a95b8b",
+              "sequence": 5,
+              "name": "preserved",
+              "payload": {
+                "kind": "startup_outcome_unknown",
+                "occurrenceID": "c6711ec24c4e798b5419e8844c127de998db422b-e0e647b6-8fb8-4455-81f3-9b97f5a95b8b",
+                "message": "The existing worktree is preserved. Its historical startup outcome is unknown; review the original startup evidence before any explicit new startup operation."
+              },
+              "timeCreated": 1792838516823
+            }
+          ],
+          "terminal": {
+            "schemaVersion": 1,
+            "occurrenceID": "c6711ec24c4e798b5419e8844c127de998db422b-e0e647b6-8fb8-4455-81f3-9b97f5a95b8b",
+            "outcome": "committed",
+            "payload": {
+              "disposition": "population_preserved"
+            },
+            "timeCreated": 1792838516843
+          }
+        }
+      ]
+    }
+  },
+  "originalAliasRequestFailure": {
+    "requestedDirectory": "reset-request-alias",
+    "operationID": "reset-reset-request-alias",
+    "originalProjectDirectory": "<isolated-runtime-4>\\publication-reset-alias-46948-6TtTXw\\project",
+    "before": {
+      "effects": "reset \r\nreset \r\nreset \r\n",
+      "tracked": "second resource operator bytes\n"
+    },
+    "after": {
+      "effects": 4,
+      "tracked": "original tracked bytes\n",
+      "error": null
+    },
+    "originalSnapshot": "private: reset-alias-before-original-copy (database excluded from repository)"
+  },
+  "performance": {
+    "method": "Formal Worktree.create then WorktreeReadiness.isReady; exact original Store.read observer delegates to original method; 5 samples for each current Project metadata scale",
+    "complexity": "O(all immutable intents in this Project across generations); phases/terminal only for matching resource; another Project namespace is not read",
+    "result": {
+      "measures": [
+        {
+          "unmatchedProjectIntents": 0,
+          "currentReady": true,
+          "fullOccurrenceReadCalls": 10,
+          "samples": 5,
+          "milliseconds": [
+            6.2697000000002845, 6.2948999999998705, 5.869900000000143, 5.479200000000219, 5.94360000000006
+          ]
+        },
+        {
+          "unmatchedProjectIntents": 100,
+          "currentReady": true,
+          "fullOccurrenceReadCalls": 10,
+          "samples": 5,
+          "milliseconds": [
+            390.34720000000016, 271.83380000000034, 196.08009999999922, 846.325499999999, 447.08179999999993
+          ]
+        },
+        {
+          "unmatchedProjectIntents": 1000,
+          "currentReady": true,
+          "fullOccurrenceReadCalls": 10,
+          "samples": 5,
+          "milliseconds": [555.9602000000014, 488.0708000000013, 480.8321999999971, 506.888300000006, 549.7827000000034]
+        }
+      ],
+      "effects": "effect \r\n",
+      "directory": "<isolated-runtime-4>\\publication-reset-alias-46948-6TtTXw\\project\\.opencorvus\\.r\\project\\worktrees\\query-scale"
+    },
+    "limitations": "Synthetic unmatched immutable intent metadata measures query cost, not end-to-end effect correctness. Observed about 0.5 seconds per read at 1000 unmatched intents; concurrent isolated checks affect timing."
+  },
+  "completedContracts": {
+    "intentFilterAndStore": "[1/3] START test/durable-publication-intent-query.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) intent selection returns exact current facts from one Project namespace [135.35ms]\r\n(pass) a malformed intent maps to its parse error before intent filtering [28.92ms]\r\n\r\n 2 pass\r\n 0 fail\r\n 2 expect() calls\r\nRan 2 tests across 1 file. [2.67s]\r\n[1/3] DONE test/durable-publication-intent-query.test.ts exit=0 duration=3.23s\r\n[2/3] START test/durable-publication-store.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) durable publication fact store > physical subject callbacks enter in their accepted admission order [56.43ms]\r\n(pass) durable publication fact store > a preparation failure settles the preceding admission before its successor owns the subject [9.97ms]\r\n(pass) durable publication fact store > a callback failure settles the preceding admission before its successor owns the subject [16.21ms]\r\n(pass) durable publication fact store > different subjects finish their own owner while the original subject remains admitted [7.78ms]\r\n(pass) durable publication fact store > subject owner observations follow the original active lease through nested callbacks and retirement [12.94ms]\r\n(pass) durable publication fact store > an accepted nested subject callback settles its value before the next owner enters [60.94ms]\r\n(pass) durable publication fact store > an inherited subject lease queues again after its outer owner releases [22.10ms]\r\n(pass) durable publication fact store > subject leases remain isolated across durable publication roots [10.37ms]\r\n(pass) durable publication fact store > alternate spellings of one root compete on the same subject lock [8.02ms]\r\n(pass) durable publication fact store > reloads one immutable intent, ordered phases and terminal receipt [104.08ms]\r\n(pass) durable publication fact store > a killed writer leaves only a complete old or new intent, phase and terminal fact [1060.69ms]\r\n\r\n 11 pass\r\n 0 fail\r\n 38 expect() calls\r\nRan 11 tests across 1 file. [2.49s]\r\n[2/3] DONE test/durable-publication-store.test.ts exit=0 duration=2.61s\r\n[3/3] START test/skill-replacement-publication.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) a multi-Skill catalog converges one complete revision across killed backend occurrences [137758.60ms]\r\n(pass) recovery preserves a changed backup whose digest no longer proves replacement ownership [16678.15ms]\r\n(pass) recovery rejects a publication whose scratch paths are not derived from its occurrence [14702.10ms]\r\n\r\n 3 pass\r\n 0 fail\r\n 56 expect() calls\r\nRan 3 tests across 1 file. [170.11s]\r\n[3/3] DONE test/skill-replacement-publication.test.ts exit=0 duration=170.25s\r\n",
+    "resetCoreIncludingAlias": "[1/1] START test/worktree-readiness-recovery.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) a successor opens a completed reset and retries the same operation with retained files and one reset effect [17815.50ms]\r\n(pass) a successor preserves the actual reset-hard-cut and exposes a typed retry outcome [14181.64ms]\r\n(pass) a retry through a retargeted managed junction resolves its original immutable reset request [13893.21ms]\r\n\r\n 3 pass\r\n 10 filtered out\r\n 0 fail\r\n 13 expect() calls\r\nRan 3 tests across 1 file. [48.84s]\r\n[1/1] DONE test/worktree-readiness-recovery.test.ts exit=0 duration=49.42s\r\n",
+    "originalProjectDeletion": "[1/1] START test/worktree-readiness-recovery.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) formal Project deletion and recreation retain the old reset request generation and admit a new explicit ID [23388.87ms]\r\n\r\n 1 pass\r\n 13 filtered out\r\n 0 fail\r\n 5 expect() calls\r\nRan 1 test across 1 file. [25.89s]\r\n[1/1] DONE test/worktree-readiness-recovery.test.ts exit=0 duration=26.56s\r\n",
+    "resetOwnershipAndReplacement": "[1/1] START test/algorithm-batch-one.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) worktree ownership critical section > preserves public remove and reset while a durable Session owns the worktree, then admits both after settlement [11682.69ms]\r\n(pass) worktree ownership critical section > maps process-local mutation ownership to the public preservation contracts [6724.12ms]\r\n(pass) worktree ownership critical section > preserves a present replacement before public reset reaches its destructive effect [6415.65ms]\r\n(pass) worktree ownership critical section > binds a retained reset generation to its immutable branch and commit intent [9499.79ms]\r\n\r\n 4 pass\r\n 33 filtered out\r\n 0 fail\r\n 4 expect() calls\r\nRan 4 tests across 1 file. [40.23s]\r\n[1/1] DONE test/algorithm-batch-one.test.ts exit=0 duration=41.18s\r\n",
+    "mcpWarmAndCold": "[1/2] START test/mcp-config-generation.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) project writer and a first concurrent MCP status read settle with the committed generation [4355.74ms]\r\n(pass) global writer and a first concurrent MCP status read settle with the committed generation [2603.45ms]\r\n\r\n 2 pass\r\n 0 fail\r\n 6 expect() calls\r\nRan 2 tests across 1 file. [10.06s]\r\n[1/2] DONE test/mcp-config-generation.test.ts exit=0 duration=10.80s\r\n[2/2] START test/mcp/configure-commit-recovery.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) a real post-persist failure retains the committed definition and promotes its staged credential [3464.54ms]\r\n(pass) a successor process promotes the actual stage left after a committed configure exits [7764.46ms]\r\n(pass) two warm backend processes preserve each configure's complete credential effect [7316.23ms]\r\n\r\n 3 pass\r\n 0 fail\r\n 5 expect() calls\r\nRan 3 tests across 1 file. [19.52s]\r\n[2/2] DONE test/mcp/configure-commit-recovery.test.ts exit=0 duration=19.78s\r\n",
+    "skillConfigurationScope": "START test/skill-replacement-config-scope.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) Skill recovery preserves current config scope at configuration-published with unrelated edits [26183.38ms]\r\n(pass) Skill recovery preserves current config scope at catalog-published with unrelated edits [20151.95ms]\r\n(pass) Skill recovery preserves current config scope at configuration-published with allow edits [17145.82ms]\r\n(pass) Skill recovery preserves current config scope at catalog-published with mixed edits [15512.42ms]\r\n\r\n 4 pass\r\n 0 fail\r\n 16 expect() calls\r\nRan 4 tests across 1 file. [80.37s]\r\n[3/3] DONE test/skill-replacement-config-scope.test.ts exit=0 duration=80.61s\r\n",
+    "finalCompleteWorktreeCases": "[1/1] START test/worktree-readiness-recovery.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) a successor opens a completed reset and retries the same operation with retained files and one reset effect [28000.18ms]\r\n(pass) a successor preserves the actual reset-hard-cut and exposes a typed retry outcome [16438.28ms]\r\n(pass) a successor preserves the actual reset-startup-cut and exposes a typed retry outcome [12963.20ms]\r\n(pass) a successor retires the old reset fence and preserves the actual recreated resource [12728.46ms]\r\n(pass) a successor retires the old reset fence and preserves the actual junction resource [13997.52ms]\r\n(pass) a retry through a retargeted managed junction resolves its original immutable reset request [14238.92ms]\r\n(pass) formal Project deletion and recreation retain the old reset request generation and admit a new explicit ID [35212.49ms]\r\n(pass) two logical aliases of one physical tree read its same preserved startup fact [17423.36ms]\r\n(pass) a real Project reads its current receipt while another Project journal retains a damaged intent [11478.68ms]\r\n(pass) two real processes recover one reset operation under its complete subject owner [12860.06ms]\r\n(pass) a new process settles completed population with the original edited bytes and effect [13301.56ms]\r\n(pass) a new physical tree obtains its own population and retains the prior receipt [9304.40ms]\r\n(pass) two live processes settle one population under the complete subject owner [7074.14ms]\r\n(pass) an interrupted startup preserves its physical tree and publishes an explicit recovery result [5769.72ms]\r\n(pass) a failed extra startup records rollback and the next creation reaches readiness [8349.48ms]\r\n(pass) a renamed registered branch maps to the exact ownership error while preserving its bytes [6370.72ms]\r\n\r\n 16 pass\r\n 0 fail\r\n 47 expect() calls\r\nRan 16 tests across 1 file. [228.92s]\r\n[1/1] DONE test/worktree-readiness-recovery.test.ts exit=0 duration=229.91s\r\n",
+    "finalColdRecoveryAndGeneration": "[1/1] START test/worktree-readiness-recovery.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) a successor opens a completed reset and retries the same operation with retained files and one reset effect [48952.11ms]\r\n(pass) formal Project deletion and recreation retain the old reset request generation and admit a new explicit ID [38377.70ms]\r\n\r\n 2 pass\r\n 14 filtered out\r\n 0 fail\r\n 12 expect() calls\r\nRan 2 tests across 1 file. [92.88s]\r\n[1/1] DONE test/worktree-readiness-recovery.test.ts exit=0 duration=93.98s\r\n",
+    "entryAliasOriginalRed": "[1/1] START test/worktree-readiness-recovery.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n232 |     await fs.symlink(`${target}-original`, target, process.platform === \"win32\" ? \"junction\" : \"dir\")\r\n233 |     await fs.writeFile(path.join(other.result.directory, \"tracked.txt\"), \"entry replacement operator bytes\\n\")\r\n234 |     const outcome = await p.output(p.spawn(\"reset-entry-retarget\", name))\r\n235 |     expect({ exit: outcome.exit, error: outcome.result.error?.name, effects: outcome.result.effects,\r\n236 |       tracked: outcome.result.tracked,\r\n237 |     }).toEqual({ exit: 0, error: \"WorktreeResetFailedError\", effects: 2, tracked: \"entry replacement operator bytes\\n\" })\r\n             ^\r\nerror: expect(received).toEqual(expected)\r\n\r\n  {\r\n-   \"effects\": 2,\r\n-   \"error\": \"WorktreeResetFailedError\",\r\n+   \"effects\": 3,\r\n+   \"error\": undefined,\r\n    \"exit\": 0,\r\n    \"tracked\": \r\n- \"entry replacement operator bytes\r\n+ \"original tracked bytes\r\n  \"\r\n  ,\r\n  }\r\n\r\n- Expected  - 3\r\n+ Received  + 3\r\n\r\n      at <anonymous> (<repository>\\packages\\opencorvus\\test\\worktree-readiness-recovery.test.ts:237:8)\r\n(fail) a reset entry retains its original canonical owner when a queued junction is retargeted [10352.41ms]\r\n\r\n 0 pass\r\n 16 filtered out\r\n 1 fail\r\n 1 expect() calls\r\nRan 1 test across 1 file. [12.69s]\r\nOpenCorvus test file failed (exit=1): <repository>\\packages\\opencorvus\\test\\worktree-readiness-recovery.test.ts\r\n[1/1] DONE test/worktree-readiness-recovery.test.ts exit=1 duration=13.32s\r\nOpenCorvus failed test files (1):\r\n<repository>\\packages\\opencorvus\\test\\worktree-readiness-recovery.test.ts\r\n",
+    "entryOwnerFixed": "[1/1] START test/worktree-readiness-recovery.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) a retry through a retargeted managed junction resolves its original immutable reset request [18414.95ms]\r\n(pass) a reset entry retains its original canonical owner when a queued junction is retargeted [8721.37ms]\r\n(pass) two real processes recover one reset operation under its complete subject owner [9183.47ms]\r\n(pass) a new process settles completed population with the original edited bytes and effect [8402.53ms]\r\n\r\n 4 pass\r\n 13 filtered out\r\n 0 fail\r\n 8 expect() calls\r\nRan 4 tests across 1 file. [47.99s]\r\n[1/1] DONE test/worktree-readiness-recovery.test.ts exit=0 duration=49.11s\r\n",
+    "createOwnerFixed": "[1/1] START test/worktree-readiness-recovery.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) a create reuse entry maps a queued alias replacement to its preservation error [7856.38ms]\r\n\r\n 1 pass\r\n 17 filtered out\r\n 0 fail\r\n 1 expect() calls\r\nRan 1 test across 1 file. [10.05s]\r\n[1/1] DONE test/worktree-readiness-recovery.test.ts exit=0 duration=10.56s\r\n",
+    "remainingStoreFamilies": "[1/2] START test/workspace-lifecycle.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) Workspace durable lifecycle > startup recovery publishes the same ready Workspace after a pre-row crash cut [4090.88ms]\r\n(pass) Workspace durable lifecycle > two backends converge one caller-supplied Workspace occurrence [7790.81ms]\r\n(pass) Workspace durable lifecycle > startup recovery completes the exact public delete after a post-prune crash cut [5927.98ms]\r\n(pass) Workspace durable lifecycle > Project deletion advances the managed-child journal chain when the same path has a new occurrence [8700.20ms]\r\n\r\n 4 pass\r\n 14 filtered out\r\n 0 fail\r\n 11 expect() calls\r\nRan 4 tests across 1 file. [32.85s]\r\n[1/2] DONE test/workspace-lifecycle.test.ts exit=0 duration=33.49s\r\n[2/2] START test/project-promotion-journal.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) anonymous Project promotion journal > startup releases the exact terminal-to-publication fence after a process death [14139.72ms]\r\n(pass) anonymous Project promotion journal > a promotion that died after publication converges forward at recovery [2958.27ms]\r\n\r\n 2 pass\r\n 15 filtered out\r\n 0 fail\r\n 7 expect() calls\r\nRan 2 tests across 1 file. [17.92s]\r\n[2/2] DONE test/project-promotion-journal.test.ts exit=0 duration=18.03s\r\n",
+    "finalMcpSkillContracts": "[1/3] START test/mcp/configure-commit-recovery.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) a real post-persist failure retains the committed definition and promotes its staged credential [9488.63ms]\r\n(pass) a successor process promotes the actual stage left after a committed configure exits [17186.69ms]\r\n(pass) two warm backend processes preserve each configure's complete credential effect [22449.88ms]\r\n\r\n 3 pass\r\n 0 fail\r\n 5 expect() calls\r\nRan 3 tests across 1 file. [54.44s]\r\n[1/3] DONE test/mcp/configure-commit-recovery.test.ts exit=0 duration=55.70s\r\n[2/3] START test/mcp-config-generation.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) project writer and a first concurrent MCP status read settle with the committed generation [3809.95ms]\r\n(pass) global writer and a first concurrent MCP status read settle with the committed generation [2024.57ms]\r\n\r\n 2 pass\r\n 0 fail\r\n 6 expect() calls\r\nRan 2 tests across 1 file. [7.42s]\r\n[2/3] DONE test/mcp-config-generation.test.ts exit=0 duration=7.65s\r\n[3/3] START test/skill-replacement-config-scope.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) Skill recovery preserves current config scope at configuration-published with unrelated edits [26183.38ms]\r\n(pass) Skill recovery preserves current config scope at catalog-published with unrelated edits [20151.95ms]\r\n(pass) Skill recovery preserves current config scope at configuration-published with allow edits [17145.82ms]\r\n(pass) Skill recovery preserves current config scope at catalog-published with mixed edits [15512.42ms]\r\n\r\n 4 pass\r\n 0 fail\r\n 16 expect() calls\r\nRan 4 tests across 1 file. [80.37s]\r\n[3/3] DONE test/skill-replacement-config-scope.test.ts exit=0 duration=80.61s\r\n",
+    "lateAliasOriginalRed": "[1/1] START test/worktree-readiness-recovery.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n286 |     const outcome = await p.output(p.spawn(\"reset-late-retarget\", name))\r\n287 |     const normalize = (value: string) => process.platform === \"win32\" ? path.resolve(value).toLowerCase() : path.resolve(value)\r\n288 |     expect({ exit: outcome.exit, error: outcome.result.error, effects: outcome.result.effects,\r\n289 |       tracked: outcome.result.tracked, physicalTracked: await fs.readFile(path.join(physical, \"tracked.txt\"), \"utf8\"),\r\n290 |       effectDirectory: normalize(outcome.result.effectDirectory),\r\n291 |     }).toEqual({ exit: 0, error: null, effects: 3, tracked: \"late replacement operator bytes\\n\",\r\n             ^\r\nerror: expect(received).toEqual(expected)\r\n\r\n  {\r\n-   \"effectDirectory\": \"<isolated-runtime-5>\\test-82676-b6tqxe\\runtime-root\\tmp\\worktree-receipt-0j79j8\\project\\.opencorvus\\.r\\project\\worktrees\\reset-late-original-original\",\r\n+   \"effectDirectory\": \"<isolated-runtime-5>\\test-82676-b6tqxe\\runtime-root\\tmp\\worktree-receipt-0j79j8\\project\\.opencorvus\\.r\\project\\worktrees\\reset-late-original\",\r\n    \"effects\": 3,\r\n    \"error\": null,\r\n    \"exit\": 0,\r\n    \"physicalTracked\": \r\n- \"original tracked bytes\r\n+ \"original physical operator bytes\r\n  \"\r\n  ,\r\n    \"tracked\": \r\n- \"late replacement operator bytes\r\n+ \"original tracked bytes\r\n  \"\r\n  ,\r\n  }\r\n\r\n- Expected  - 3\r\n+ Received  + 3\r\n\r\n      at <anonymous> (<repository>\\packages\\opencorvus\\test\\worktree-readiness-recovery.test.ts:291:8)\r\n(fail) a reset executes at its frozen physical directory after its final alias observation [11428.44ms]\r\n\r\n 0 pass\r\n 18 filtered out\r\n 1 fail\r\n 1 expect() calls\r\nRan 1 test across 1 file. [13.79s]\r\nOpenCorvus test file failed (exit=1): <repository>\\packages\\opencorvus\\test\\worktree-readiness-recovery.test.ts\r\n[1/1] DONE test/worktree-readiness-recovery.test.ts exit=1 duration=14.36s\r\nOpenCorvus failed test files (1):\r\n<repository>\\packages\\opencorvus\\test\\worktree-readiness-recovery.test.ts\r\n",
+    "frozenPhysicalEffects": "[1/1] START test/worktree-readiness-recovery.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) a successor opens a completed reset and retries the same operation with retained files and one reset effect [20588.09ms]\r\n(pass) a retry through a retargeted managed junction resolves its original immutable reset request [15045.65ms]\r\n(pass) a reset entry retains its original canonical owner when a queued junction is retargeted [8330.83ms]\r\n(pass) a reset executes at its frozen physical directory after its final alias observation [12329.70ms]\r\n(pass) two real processes recover one reset operation under its complete subject owner [9741.25ms]\r\n\r\n 5 pass\r\n 14 filtered out\r\n 0 fail\r\n 13 expect() calls\r\nRan 5 tests across 1 file. [68.96s]\r\n[1/1] DONE test/worktree-readiness-recovery.test.ts exit=0 duration=69.75s\r\n",
+    "frozenPhysicalLateRecovery": "[1/1] START test/worktree-readiness-recovery.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) a successor recovers the original physical reset after a late alias retarget and completed effect cut [16899.32ms]\r\n\r\n 1 pass\r\n 19 filtered out\r\n 0 fail\r\n 3 expect() calls\r\nRan 1 test across 1 file. [20.11s]\r\n[1/1] DONE test/worktree-readiness-recovery.test.ts exit=0 duration=21.61s\r\n",
+    "firstGitPhysicalOriginalRed": "[1/1] START test/worktree-readiness-recovery.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n{\"case\":\"first-git-physical-parent\",\"error\":{\"name\":\"AggregateError\",\"message\":\"Worktree creation failed and rollback left diagnostics: directory=<isolated-runtime-6>\\\\test-71316-M3QNz3\\\\runtime-root\\\\tmp\\\\worktree-receipt-WZhwNp\\\\project\\\\.opencorvus\\\\.r\\\\project\\\\worktrees\\\\physical-parent, git_registry=<isolated-runtime-6>\\\\test-71316-M3QNz3\\\\runtime-root\\\\tmp\\\\worktree-receipt-WZhwNp\\\\project\\\\.opencorvus\\\\.r\\\\project\\\\worktrees\\\\physical-parent, branch=opencorvus/physical-parent\"},\"originalChild\":[],\"replacementChild\":[\".git\"]}\r\n294 |       replacementChild: await fs.readdir(path.join(physicalB, \"physical-parent\")).catch(() => []),\r\n295 |     }))\r\n296 |     expect({ error: result.result.error, admission: result.result.admission,\r\n297 |       actual: await fs.readFile(path.join(actual, \"tracked.txt\"), \"utf8\").catch(() => \"creation result missing\"),\r\n298 |       parent: await fs.readFile(path.join(physicalB, \"operator.txt\"), \"utf8\"),\r\n299 |     }).toEqual({ error: null, admission: \"ready\", actual: \"original tracked bytes\\n\", parent: \"different parent operator bytes\\n\" })\r\n             ^\r\nerror: expect(received).toEqual(expected)\r\n\r\n  {\r\n-   \"actual\": \r\n- \"original tracked bytes\r\n- \"\r\n- ,\r\n-   \"admission\": \"ready\",\r\n-   \"error\": null,\r\n+   \"actual\": \"creation result missing\",\r\n+   \"admission\": undefined,\r\n+   \"error\": {\r\n+     \"message\": \"Worktree creation failed and rollback left diagnostics: directory=<isolated-runtime-6>\\test-71316-M3QNz3\\runtime-root\\tmp\\worktree-receipt-WZhwNp\\project\\.opencorvus\\.r\\project\\worktrees\\physical-parent, git_registry=<isolated-runtime-6>\\test-71316-M3QNz3\\runtime-root\\tmp\\worktree-receipt-WZhwNp\\project\\.opencorvus\\.r\\project\\worktrees\\physical-parent, branch=opencorvus/physical-parent\",\r\n+     \"name\": \"AggregateError\",\r\n+   },\r\n    \"parent\": \r\n  \"different parent operator bytes\r\n  \"\r\n  ,\r\n  }\r\n\r\n- Expected  - 6\r\n+ Received  + 6\r\n\r\n      at <anonymous> (<repository>\\packages\\opencorvus\\test\\worktree-readiness-recovery.test.ts:299:8)\r\n(fail) a first Git creation keeps its captured physical parent after the logical parent retargets [5936.77ms]\r\n\r\n 0 pass\r\n 20 filtered out\r\n 1 fail\r\n 2 expect() calls\r\nRan 1 test across 1 file. [8.19s]\r\nOpenCorvus test file failed (exit=1): <repository>\\packages\\opencorvus\\test\\worktree-readiness-recovery.test.ts\r\n[1/1] DONE test/worktree-readiness-recovery.test.ts exit=1 duration=8.81s\r\nOpenCorvus failed test files (1):\r\n<repository>\\packages\\opencorvus\\test\\worktree-readiness-recovery.test.ts\r\n",
+    "firstGitPhysicalFixed": "[1/1] START test/worktree-readiness-recovery.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n{\"case\":\"first-git-physical-parent\",\"error\":null,\"originalChild\":[\".git\",\"effects.txt\",\"tracked.txt\"],\"replacementChild\":[]}\r\n(pass) a first Git creation keeps its captured physical parent after the logical parent retargets [5189.31ms]\r\n(pass) two logical aliases of one physical tree read its same preserved startup fact [10790.90ms]\r\n(pass) a new process settles completed population with the original edited bytes and effect [6817.45ms]\r\n(pass) a new physical tree obtains its own population and retains the prior receipt [6240.73ms]\r\n(pass) two live processes settle one population under the complete subject owner [4591.43ms]\r\n(pass) an interrupted startup preserves its physical tree and publishes an explicit recovery result [6715.53ms]\r\n(pass) a renamed registered branch maps to the exact ownership error while preserving its bytes [8768.05ms]\r\n\r\n 7 pass\r\n 14 filtered out\r\n 0 fail\r\n 16 expect() calls\r\nRan 7 tests across 1 file. [51.37s]\r\n[1/1] DONE test/worktree-readiness-recovery.test.ts exit=0 duration=51.90s\r\n",
+    "physicalDirectoryReadinessContract": "[1/1] START test/worktree-readiness.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) worktree readiness receipts > a registered but unpopulated tree is resumed to readiness instead of being reused bare [4267.93ms]\r\n(pass) worktree readiness receipts > a completed create commits the ready receipt and reuse honors it [4093.52ms]\r\n(pass) worktree readiness receipts > a failed population converges: the retry creates a fresh ready tree [7952.25ms]\r\n\r\n 3 pass\r\n 0 fail\r\n 5 expect() calls\r\nRan 3 tests across 1 file. [19.43s]\r\n[1/1] DONE test/worktree-readiness.test.ts exit=0 duration=20.22s\r\n",
+    "physicalDirectoryWorkspaceContracts": "[1/1] START test/workspace-lifecycle.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) Workspace durable lifecycle > startup recovery publishes the same ready Workspace after a pre-row crash cut [4165.19ms]\r\n(pass) Workspace durable lifecycle > two backends converge one caller-supplied Workspace occurrence [6008.35ms]\r\n(pass) Workspace durable lifecycle > startup recovery completes the exact public delete after a post-prune crash cut [6348.33ms]\r\n\r\n 3 pass\r\n 15 filtered out\r\n 0 fail\r\n 6 expect() calls\r\nRan 3 tests across 1 file. [22.11s]\r\n[1/1] DONE test/workspace-lifecycle.test.ts exit=0 duration=22.90s\r\n",
+    "physicalDirectoryWorkspaceRecreation": "[1/1] START test/workspace-lifecycle.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) Workspace durable lifecycle > Project deletion advances the managed-child journal chain when the same path has a new occurrence [9394.89ms]\r\n\r\n 1 pass\r\n 17 filtered out\r\n 0 fail\r\n 5 expect() calls\r\nRan 1 test across 1 file. [13.73s]\r\n[1/1] DONE test/workspace-lifecycle.test.ts exit=0 duration=14.28s\r\n",
+    "completeTwentyWorktreeCasesBeforeFirstGitCase": "[1/1] START test/worktree-readiness-recovery.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) a successor opens a completed reset and retries the same operation with retained files and one reset effect [15372.38ms]\r\n(pass) a successor preserves the actual reset-hard-cut and exposes a typed retry outcome [11404.07ms]\r\n(pass) a successor preserves the actual reset-startup-cut and exposes a typed retry outcome [11367.97ms]\r\n(pass) a successor retires the old reset fence and preserves the actual recreated resource [8166.26ms]\r\n(pass) a successor retires the old reset fence and preserves the actual junction resource [7342.80ms]\r\n(pass) a retry through a retargeted managed junction resolves its original immutable reset request [10579.18ms]\r\n(pass) a reset entry retains its original canonical owner when a queued junction is retargeted [6733.51ms]\r\n(pass) a create reuse entry maps a queued alias replacement to its preservation error [6695.43ms]\r\n(pass) a reset executes at its frozen physical directory after its final alias observation [9775.30ms]\r\n(pass) a successor recovers the original physical reset after a late alias retarget and completed effect cut [10807.49ms]\r\n(pass) formal Project deletion and recreation retain the old reset request generation and admit a new explicit ID [18741.68ms]\r\n(pass) two logical aliases of one physical tree read its same preserved startup fact [8593.68ms]\r\n(pass) a real Project reads its current receipt while another Project journal retains a damaged intent [7768.68ms]\r\n(pass) two real processes recover one reset operation under its complete subject owner [7734.88ms]\r\n(pass) a new process settles completed population with the original edited bytes and effect [6430.98ms]\r\n(pass) a new physical tree obtains its own population and retains the prior receipt [5257.94ms]\r\n(pass) two live processes settle one population under the complete subject owner [4814.09ms]\r\n(pass) an interrupted startup preserves its physical tree and publishes an explicit recovery result [4480.96ms]\r\n(pass) a failed extra startup records rollback and the next creation reaches readiness [7918.30ms]\r\n(pass) a renamed registered branch maps to the exact ownership error while preserving its bytes [5932.81ms]\r\n\r\n 20 pass\r\n 0 fail\r\n 54 expect() calls\r\nRan 20 tests across 1 file. [178.26s]\r\n[1/1] DONE test/worktree-readiness-recovery.test.ts exit=0 duration=179.01s\r\n",
+    "currentV8WorkspaceContracts": "[1/1] START test/workspace-lifecycle.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) Workspace durable lifecycle > startup recovery publishes the same ready Workspace after a pre-row crash cut [5551.44ms]\r\n(pass) Workspace durable lifecycle > two backends converge one caller-supplied Workspace occurrence [8294.05ms]\r\n(pass) Workspace durable lifecycle > startup recovery completes the exact public delete after a post-prune crash cut [6996.91ms]\r\n(pass) Workspace durable lifecycle > Project deletion advances the managed-child journal chain when the same path has a new occurrence [15091.71ms]\r\n\r\n 4 pass\r\n 14 filtered out\r\n 0 fail\r\n 11 expect() calls\r\nRan 4 tests across 1 file. [41.91s]\r\n[1/1] DONE test/workspace-lifecycle.test.ts exit=0 duration=42.74s\r\n",
+    "currentV8InitialAttemptWithLostSetupDiagnostic": "[1/1] START test/worktree-readiness-recovery.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) a successor opens a completed reset and retries the same operation with retained files and one reset effect [22594.77ms]\r\n(pass) a successor preserves the actual reset-hard-cut and exposes a typed retry outcome [16677.83ms]\r\n(pass) a successor preserves the actual reset-startup-cut and exposes a typed retry outcome [17708.80ms]\r\n(pass) a successor retires the old reset fence and preserves the actual recreated resource [8195.02ms]\r\n(pass) a successor retires the old reset fence and preserves the actual junction resource [7210.73ms]\r\n(pass) a retry through a retargeted managed junction resolves its original immutable reset request [11214.17ms]\r\n(pass) a reset entry retains its original canonical owner when a queued junction is retargeted [8827.22ms]\r\n262 |     const original = await p.output(p.spawn(\"reset-setup\", name))\r\n263 |     const other = await p.output(p.spawn(\"reset-setup\", \"reset-entry-other\"))\r\n264 |     const target = original.result.directory\r\n265 |     await fs.rename(target, `${target}-original`)\r\n266 |     await fs.symlink(`${target}-original`, target, process.platform === \"win32\" ? \"junction\" : \"dir\")\r\n267 |     await fs.writeFile(path.join(other.result.directory, \"tracked.txt\"), \"create entry replacement bytes\\n\")\r\n                                             ^\r\nTypeError: null is not an object (evaluating 'other.result.directory')\r\n      at <anonymous> (<repository>\\packages\\opencorvus\\test\\worktree-readiness-recovery.test.ts:267:40)\r\n(fail) a create reuse entry maps a queued alias replacement to its preservation error [4842.39ms]\r\n{\"case\":\"first-git-physical-parent\",\"error\":null,\"originalChild\":[\".git\",\"effects.txt\",\"tracked.txt\"],\"replacementChild\":[]}\r\n(pass) a first Git creation keeps its captured physical parent after the logical parent retargets [5965.59ms]\r\n(pass) a reset executes at its frozen physical directory after its final alias observation [12229.85ms]\r\n(pass) a successor recovers the original physical reset after a late alias retarget and completed effect cut [15336.14ms]\r\n(pass) formal Project deletion and recreation retain the old reset request generation and admit a new explicit ID [24972.01ms]\r\n(pass) two logical aliases of one physical tree read its same preserved startup fact [10210.55ms]\r\n(pass) a real Project reads its current receipt while another Project journal retains a damaged intent [8338.14ms]\r\n(pass) two real processes recover one reset operation under its complete subject owner [8549.61ms]\r\n(pass) a new process settles completed population with the original edited bytes and effect [6817.54ms]\r\n(pass) a new physical tree obtains its own population and retains the prior receipt [6590.75ms]\r\n(pass) two live processes settle one population under the complete subject owner [4819.75ms]\r\n(pass) an interrupted startup preserves its physical tree and publishes an explicit recovery result [4763.13ms]\r\n(pass) a failed extra startup records rollback and the next creation reaches readiness [7418.16ms]\r\n(pass) a renamed registered branch maps to the exact ownership error while preserving its bytes [6028.68ms]\r\n\r\n 20 pass\r\n 1 fail\r\n 55 expect() calls\r\nRan 21 tests across 1 file. [222.02s]\r\n[1/1] DONE test/worktree-readiness-recovery.test.ts exit=1 duration=222.73s\r\nOpenCorvus test file failed (exit=1): <repository>\\packages\\opencorvus\\test\\worktree-readiness-recovery.test.ts\r\nOpenCorvus failed test files (1):\r\n<repository>\\packages\\opencorvus\\test\\worktree-readiness-recovery.test.ts\r\n",
+    "currentV8SetupCaseAfterDiagnosticRepair": "[1/1] START test/worktree-readiness-recovery.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) a create reuse entry maps a queued alias replacement to its preservation error [9663.52ms]\r\n\r\n 1 pass\r\n 20 filtered out\r\n 0 fail\r\n 1 expect() calls\r\nRan 1 test across 1 file. [12.20s]\r\n[1/1] DONE test/worktree-readiness-recovery.test.ts exit=0 duration=12.77s\r\n",
+    "currentV8FinalCompleteWorktreeCases": "[1/1] START test/worktree-readiness-recovery.test.ts\r\nbun test v1.4.3 (c6da4a4d3) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) a successor opens a completed reset and retries the same operation with retained files and one reset effect [21774.05ms]\r\n(pass) a successor preserves the actual reset-hard-cut and exposes a typed retry outcome [17058.03ms]\r\n(pass) a successor preserves the actual reset-startup-cut and exposes a typed retry outcome [14617.82ms]\r\n(pass) a successor retires the old reset fence and preserves the actual recreated resource [7646.57ms]\r\n(pass) a successor retires the old reset fence and preserves the actual junction resource [8158.87ms]\r\n(pass) a retry through a retargeted managed junction resolves its original immutable reset request [10097.43ms]\r\n(pass) a reset entry retains its original canonical owner when a queued junction is retargeted [7225.38ms]\r\n(pass) a create reuse entry maps a queued alias replacement to its preservation error [7000.42ms]\r\n{\"case\":\"first-git-physical-parent\",\"error\":null,\"originalChild\":[\".git\",\"effects.txt\",\"tracked.txt\"],\"replacementChild\":[]}\r\n(pass) a first Git creation keeps its captured physical parent after the logical parent retargets [4056.64ms]\r\n(pass) a reset executes at its frozen physical directory after its final alias observation [8763.35ms]\r\n(pass) a successor recovers the original physical reset after a late alias retarget and completed effect cut [10853.16ms]\r\n(pass) formal Project deletion and recreation retain the old reset request generation and admit a new explicit ID [19262.24ms]\r\n(pass) two logical aliases of one physical tree read its same preserved startup fact [8784.22ms]\r\n(pass) a real Project reads its current receipt while another Project journal retains a damaged intent [7770.55ms]\r\n(pass) two real processes recover one reset operation under its complete subject owner [7790.83ms]\r\n(pass) a new process settles completed population with the original edited bytes and effect [6570.53ms]\r\n(pass) a new physical tree obtains its own population and retains the prior receipt [5450.69ms]\r\n(pass) two live processes settle one population under the complete subject owner [6118.14ms]\r\n(pass) an interrupted startup preserves its physical tree and publishes an explicit recovery result [5676.57ms]\r\n(pass) a failed extra startup records rollback and the next creation reaches readiness [7498.05ms]\r\n(pass) a renamed registered branch maps to the exact ownership error while preserving its bytes [6050.32ms]\r\n\r\n 21 pass\r\n 0 fail\r\n 56 expect() calls\r\nRan 21 tests across 1 file. [200.96s]\r\n[1/1] DONE test/worktree-readiness-recovery.test.ts exit=0 duration=201.62s\r\n"
+  },
+  "privateOriginalEvidence": "Raw process output, databases and pre-recovery copies remain under .tmp-product-iteration/durable-effect-receipt-audit/publication and named isolated temporary runtimes; no private database is included in this artifact. Independent judge makes the final repair decision.",
+  "redaction": "Local absolute roots and encoded path-bearing immutable reset IDs use consistent placeholders. Relative namespaces, exact fact relationships and observable byte/effect outcomes are retained. Original bytes remain in the private isolated evidence.",
+  "historicalAcceptanceNotice": "Earlier 21-case/current8 results are retained as historical stages. A later Task-scoped missing-parent case proved that the normalized comparison key had incorrectly become a physical creation path. The expanded current matrix below supersedes the earlier scope; no Task or Session identity is case-folded.",
+  "taskScopedPhysicalIdentityAudit": {
+    "syntheticTestDataOnly": true,
+    "originalAlgorithmCapture": {
+      "databaseVersion": 8,
+      "existingOwnershipMarkersArchived": 2,
+      "method": "Read-only BEGIN serialize while the original owned worker was observed alive; copied its process tree and all ownership marker bytes present at capture.",
+      "privateManifest": "runner-evidence/scoped-path-original-manifest.json"
+    },
+    "originalRoot1105Failure": {
+      "databaseArchived": false,
+      "availableEvidence": "Contemporaneous read-only query output and later 70-sample profiler observation. This is separate from the later archived algorithm and fresh scoped originals."
+    },
+    "freshProductionFailure": {
+      "taskID": "tsk_g00VYxuscu00kLX0t1YS",
+      "sessionID": "ses_g0VYxuscu00I92np3xg9",
+      "taskDirectoryName": "tsk_g00vyxuscu00klx0t1ys",
+      "sessionDirectoryName": "ses_g0vyxuscu00i92np3xg9",
+      "physicalWorktreeTail": ".opencorvus\\.r\\tasks\\tsk_g00vyxuscu00klx0t1ys\\sessions\\ses_g0vyxuscu00i92np3xg9\\worktree",
+      "comparisonKeyTail": ".opencorvus\\.r\\tasks\\tsk_g00vyxuscu00klx0t1ys\\sessions\\ses_g0vyxuscu00i92np3xg9\\worktree",
+      "ownershipIntegrity": "invalid",
+      "observationReason": "path/content identity mismatch"
+    },
+    "freshProductionCorrection": {
+      "taskID": "tsk_g00VYxwZ3t00XfwtQBCN",
+      "sessionID": "ses_g0VYxwZ3t00lghLL1IDZ",
+      "taskDirectoryName": "tsk_g00VYxwZ3t00XfwtQBCN",
+      "sessionDirectoryName": "ses_g0VYxwZ3t00lghLL1IDZ",
+      "physicalWorktreeTail": ".opencorvus\\.r\\tasks\\tsk_g00VYxwZ3t00XfwtQBCN\\sessions\\ses_g0VYxwZ3t00lghLL1IDZ\\worktree",
+      "comparisonKeyTail": ".opencorvus\\.r\\tasks\\tsk_g00vyxwz3t00xfwtqbcn\\sessions\\ses_g0vyxwz3t00lghll1idz\\worktree",
+      "ownershipIntegrity": "complete",
+      "observationReason": "valid strict ownership marker"
+    },
+    "mechanism": "One canonical ancestor resolver returns a case-preserving physicalPath, retaining the original missing typed suffix, and the existing normalized directoryKey. The same owner freezes both. Effects consume physicalPath; locks, comparison and admission consume directoryKey. Typed IDs, strict marker parser, schema and migrations7/8 remain unchanged.",
+    "currentContracts": {
+      "taskScopedCreateListRenewReleaseAndSessionSettlement": {
+        "passed": 1,
+        "assertions": 5,
+        "log": "runner-evidence/scoped-full-algorithm-fixed.log"
+      },
+      "completeOriginalAlgorithm": {
+        "passed": 37,
+        "assertions": 98,
+        "exit": 0,
+        "log": "runner-evidence/scoped-algorithm-final.log"
+      },
+      "fullAliasAndProcessRecovery": {
+        "passed": 21,
+        "assertions": 56,
+        "exit": 0,
+        "log": "runner-evidence/scoped-alias21-fixed.log"
+      },
+      "workspaceCrashConcurrencyAndRecreation": {
+        "passed": 4,
+        "assertions": 11,
+        "exit": 0,
+        "log": "runner-evidence/scoped-workspace-final.log"
+      },
+      "backendTypecheck": {
+        "exit": 0,
+        "log": "runner-evidence/final-typecheck.log"
+      }
+    },
+    "legacyLegalOwnerUpgrade": {
+      "scope": "Actual legacy Worktree producer and Task-scoped physical path/ownership contract; no Task scheduling, model call or full Task execution is claimed.",
+      "producerSourceCommit": "8d7e7957a8b6d6b740610efb49c6c04df81b6cf1",
+      "fromVersion": 6,
+      "toVersion": 8,
+      "originalTables": 90,
+      "originalBusinessRows": 4,
+      "originalTaskDatabaseRows": 0,
+      "originalRowsAndRowidsPreserved": true,
+      "backupExact": true,
+      "originalMarkerBytesExactAtMigration": true,
+      "taskID": "tsk_g00VYxzIUM00u4fAuwSj",
+      "sessionID": "ses_g0VYxzIUM00AB5zFMk57",
+      "originalTaskDirectoryNames": ["tsk_g00VYxzIUM00u4fAuwSj"],
+      "originalSessionDirectoryNames": ["ses_g0VYxzIUM00AB5zFMk57"],
+      "ownershipBefore": "complete",
+      "ownershipAfterCurrentReuse": "complete",
+      "release": [
+        {
+          "taskID": "tsk_g00VYxzIUM00u4fAuwSj",
+          "sessionID": "ses_g0VYxzIUM00AB5zFMk57",
+          "physicalWorktreeTail": ".opencorvus\\.r\\tasks\\tsk_g00VYxzIUM00u4fAuwSj\\sessions\\ses_g0VYxzIUM00AB5zFMk57\\worktree"
+        }
+      ],
+      "releaseIntegrity": {
+        "status": "complete"
+      },
+      "originalStartupEffect": "original-effect \r\n",
+      "operatorBytes": "original mixed-case scoped operator bytes\n",
+      "startupRecovery": "startup_outcome_unknown",
+      "privateManifest": "runner-evidence/legacy-scoped-upgrade-manifest.json"
+    },
+    "historicalToolFailures": {
+      "oldSkillScopeLog": "scoped-final-tests.log",
+      "oldStage": "16:45; global_creation_allocation DDL/registry mismatch in the actual child stderr",
+      "laterGreenStage": "17:51 publication-final-contracts.log:4pass16assert",
+      "currentLog": "runner-evidence/final-tools-and-skill-scope.log",
+      "legacyProducerPreparation": "Initial missing workspace dependency/source export/tracked generated and builtin files were corrected using the same Git HEAD sources and installed repository dependencies. Those setup failures are retained separately and do not prove a product defect."
+    }
+  },
+  "runnerFailureEvidenceRetention": {
+    "syntheticTestDataOnly": true,
+    "originalRedLog": "runner-evidence/original-checker-red.log",
+    "mechanism": "Both CLIs clean up only after complete success and confirmed physical/output settlement. Failures retain the original ownerRoot. The public cleanup primitive is unchanged.",
+    "rawCliResults": [
+      {
+        "label": "ordinary-exit-1",
+        "exit": 1,
+        "physicalAndOutputSettlementConfirmed": true,
+        "coldReadOriginals": [
+          {
+            "row": {
+              "id": "exit-1",
+              "outcome": "effect_written_before_checker_failure",
+              "evidence": [0, 255, 13, 10, 195, 169, 0, 128]
+            },
+            "binary": [0, 255, 13, 10, 195, 169, 0, 128]
+          }
+        ]
+      },
+      {
+        "label": "ordinary-exit-7",
+        "exit": 7,
+        "physicalAndOutputSettlementConfirmed": true,
+        "coldReadOriginals": [
+          {
+            "row": {
+              "id": "exit-7",
+              "outcome": "effect_written_before_checker_failure",
+              "evidence": [0, 255, 13, 10, 195, 169, 0, 128]
+            },
+            "binary": [0, 255, 13, 10, 195, 169, 0, 128]
+          }
+        ]
+      },
+      {
+        "label": "native-observer-settled",
+        "exit": 1,
+        "physicalAndOutputSettlementConfirmed": true,
+        "coldReadOriginals": [
+          {
+            "row": {
+              "id": "observer",
+              "outcome": "effect_written_before_checker_failure",
+              "evidence": [0, 255, 13, 10, 195, 169, 0, 128]
+            },
+            "binary": [0, 255, 13, 10, 195, 169, 0, 128]
+          }
+        ]
+      },
+      {
+        "label": "native-watchdog-settled",
+        "exit": 1,
+        "physicalAndOutputSettlementConfirmed": true,
+        "coldReadOriginals": [
+          {
+            "row": {
+              "id": "watchdog",
+              "outcome": "effect_written_before_checker_failure",
+              "evidence": [0, 255, 13, 10, 195, 169, 0, 128]
+            },
+            "binary": [0, 255, 13, 10, 195, 169, 0, 128]
+          }
+        ]
+      },
+      {
+        "label": "selected-failure-then-success",
+        "exit": 1,
+        "physicalAndOutputSettlementConfirmed": true,
+        "coldReadOriginals": [
+          {
+            "row": {
+              "id": "selected-first",
+              "outcome": "effect_written_before_checker_failure",
+              "evidence": [0, 255, 13, 10, 195, 169, 0, 128]
+            },
+            "binary": [0, 255, 13, 10, 195, 169, 0, 128]
+          },
+          {
+            "row": {
+              "id": "selected-second",
+              "outcome": "effect_written_before_checker_failure",
+              "evidence": [0, 255, 13, 10, 195, 169, 0, 128]
+            },
+            "binary": [0, 255, 13, 10, 195, 169, 0, 128]
+          }
+        ]
+      }
+    ],
+    "currentFocusedContracts": {
+      "runnerCases": {
+        "passed": 5,
+        "assertions": 30
+      },
+      "nativeSettlement": {
+        "passed": 5,
+        "assertions": 10
+      },
+      "skillConfigScope": {
+        "passed": 4,
+        "assertions": 16
+      },
+      "exit": 0,
+      "log": "runner-evidence/final-tools-and-skill-scope.log"
+    },
+    "testOwnedResourceLifecycle": "After successful evidence verification and confirmed settlement, ordinary tests validate realpath containment, the exact manifest and owner prefix, then clean up their own generated failure runtimes. Five independent raw acceptance ownerRoots remain retained for review."
+  }
+}

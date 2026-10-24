@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-24",
+  "scope": "Real isolated backend production entry points; no user database mutation, credentials, external publication or UI automation",
+  "sourceInventory": {
+    "busDurableProductionSubscriptions": 11,
+    "permissionInteraction": 3,
+    "questionInteraction": 5,
+    "memoryOrganizer": 1,
+    "eventService": 1,
+    "messageMovedBridge": 1,
+    "durableGlobalProductionSubscriptions": 0
+  },
+  "realCases": [
+    {
+      "case": "Bus terminal receipt changes between prior read and lease grant",
+      "processes": 2,
+      "actualEffects": 1,
+      "target": "real persisted Session title"
+    },
+    {
+      "case": "Bus exact immutable owner and same-ID Project generation replacement",
+      "result": "typed owner identity conflict or explicit owner_retired receipt; original source remains readable"
+    },
+    {
+      "case": "Event Fire committed before Bus receipt then new definition",
+      "result": "original accepted set preserved; fresh independent input uses current set"
+    },
+    {
+      "case": "Event empty accepted set then new definition",
+      "result": "original empty fact stays empty; fresh input creates its Fire"
+    },
+    {
+      "case": "Event Fire hard exit before Bus receipt",
+      "prepareExit": 23,
+      "successorExit": 0,
+      "result": "original Fire, actual completed wake and original Bus receipt"
+    },
+    {
+      "case": "Automation same-generation hard restart",
+      "scopes": ["project", "session", "global"],
+      "prepareExit": 23,
+      "successorExit": 0,
+      "promptStreamsPerScope": 1,
+      "result": "original Run and user Message retained; succeeded receipt"
+    },
+    {
+      "case": "Automation target deletion and recreation",
+      "scopes": ["project", "session", "global"],
+      "result": "original Run target_deleted; source retained"
+    },
+    {
+      "case": "Global Project materialized before Run reservation",
+      "prepareExit": 23,
+      "successorProcesses": 2,
+      "successorExits": [0, 0],
+      "promptStreams": 1,
+      "runs": 1,
+      "allocations": 1,
+      "result": "exact materialized Project retained and original allocation accepted by original deterministic Run"
+    },
+    {
+      "case": "Mission read Tool step completed before true reply",
+      "prepareExit": 23,
+      "successorExit": 0,
+      "promptStreamsOnRecovery": 1,
+      "comparedFactTables": 21,
+      "result": "same scheduler Message resumed to actual final reply; original Tool facts unchanged"
+    },
+    {
+      "case": "Mission final reply accepts scheduler and later human input",
+      "result": "real single streaming final reply with accepted input set settles original scheduler Message despite another parent ID"
+    },
+    {
+      "case": "True legacy v6 Automation upgrade",
+      "originals": 4,
+      "originalTablesPerDatabase": 90,
+      "originalRowCounts": [54, 46, 47, 86],
+      "targetVersion": 8,
+      "result": "all original columns, rows and rowids preserved before recovery; exact backups; original Run and effects retained with owner_unresolved; previous v7 evidence retained separately"
+    },
+    {
+      "case": "Bus cold recovery after legal Project promotion",
+      "prepareExit": 23,
+      "successorExit": 0,
+      "comparedFactTables": 12,
+      "result": "original publication source retained; same Project generation resumes at promoted directory; actual Session title effect remains single"
+    },
+    {
+      "case": "Event target directory through warm child and cold recovery",
+      "cases": 3,
+      "comparedFactTables": 15,
+      "result": "existing Session uses its original directory; new Session uses current same-generation Project worktree; original Bus source unchanged"
+    },
+    {
+      "case": "Installation receipt survives original Project deletion",
+      "prepareExit": 23,
+      "targetVersion": 8,
+      "result": "one immutable installation receipt owns success after Task report removal; installed package remains committed"
+    },
+    {
+      "case": "Unknown Expert mutation evidence preservation",
+      "hardExitCuts": 4,
+      "concurrentSuccessors": 2,
+      "result": "one preservation occurrence retains original journal, before/current/staging evidence and allows subsequent explicit mutation; no invented historical success"
+    },
+    {
+      "case": "True original v7 Expert mutation upgrade",
+      "originals": 3,
+      "originalTablesPerDatabase": 91,
+      "originalRowCounts": [75, 69, 72],
+      "targetVersion": 8,
+      "result": "positive original receipt preserved byte for byte; deleted receipt and pre-commit cases preserved as unknown with complete resource trees and backups"
+    },
+    { "case": "Current v8 migration and schema contracts", "tests": 52, "assertions": 164, "runnerExit": 0 },
+    {
+      "case": "Task-scoped physical path preserves original business IDs",
+      "algorithmTests": 37,
+      "algorithmBunAssertions": 98,
+      "aliasTests": 21,
+      "aliasAssertions": 56,
+      "scopedTests": 1,
+      "scopedAssertions": 5,
+      "result": "case-preserving physical path and normalized comparison key resolved together; strict marker identity unchanged"
+    },
+    {
+      "case": "Legacy scoped-owner actual v6 to v8",
+      "originalTables": 90,
+      "originalRows": 4,
+      "result": "all original columns and rowids, backup and exact marker bytes preserved; actual reuse and owner release with original IDs"
+    },
+    {
+      "case": "Pending native matcher and failed-run evidence retention",
+      "originalNineFileTests": 35,
+      "originalNineFileBunAssertions": 161,
+      "toolingTests": 10,
+      "toolingAssertions": 40,
+      "rawFailedCLIProcesses": 5,
+      "rawRetainedSyntheticDatabases": 6,
+      "result": "ordinary JavaScript awaits actual failure before synchronous contract checks; only complete successful checks clean their runtime"
+    }
+  ],
+  "reproduceFocusedContracts": [
+    "cd packages/opencorvus",
+    "bun run test test/bus-publication-owner.test.ts test/bus-delivery-lease-race.test.ts test/scheduler-event-acceptance-replay.test.ts test/scheduler-event-directory.test.ts test/scheduler-event-restart.test.ts test/scheduler-reply-boundary.test.ts"
+  ],
+  "relatedArtifacts": [
+    "2026-10-24-channel-effect-receipt-recovery/README.md",
+    "2026-10-24-publication-effect-receipt-recovery.json",
+    "2026-10-24-expert-mutation-receipt-recovery/README.md"
+  ],
+  "evidenceLimits": [
+    "Local scripted streaming Provider proves runtime recovery and real tool/message facts, not model reasoning quality.",
+    "Raw production-boundary originals and full logs are retained locally and independently inspected; they are not committed. The first stalled checker runtime 97852 was cleaned by the former runner before a full database snapshot was made; only its readonly query output and failure log remain.",
+    "The finite production entry and fault-boundary matrix does not establish absence of all possible faults."
+  ],
+  "independentFinalVerdict": "mechanism repairs passed for the declared finite production-entry and fault-boundary matrix, including the additional Task-scoped regression; final Git delivery is recorded separately"
+}

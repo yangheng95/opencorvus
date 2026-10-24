@@ -1,0 +1,260 @@
+{
+  "stock": {
+    "paths": 720,
+    "readable": 720,
+    "tablesAvailable": 716,
+    "acceptedPaths": 0,
+    "acceptedCopies": 0,
+    "outcomeCopies": 0,
+    "missingPaths": 0,
+    "missingCopies": 0,
+    "missingOccurrences": 0
+  },
+  "restart": [
+    {
+      "kind": "question",
+      "hardExit": 23,
+      "actualEffectCount": 1,
+      "originalAcceptedPreserved": true,
+      "originalDomainFactsPreserved": true,
+      "exactResponseReceipt": true,
+      "recoveredBeforeOldLeaseDeadline": true,
+      "recoveredLeaseReleased": true
+    },
+    {
+      "kind": "permission",
+      "hardExit": 23,
+      "actualEffectCount": 1,
+      "originalAcceptedPreserved": true,
+      "originalDomainFactsPreserved": true,
+      "exactResponseReceipt": true,
+      "recoveredBeforeOldLeaseDeadline": true,
+      "recoveredLeaseReleased": true
+    }
+  ],
+  "concurrent": {
+    "question": {
+      "hardExit": 23,
+      "actualEffectCount": 1,
+      "workers": 3,
+      "initial": [
+        {
+          "status": "recovered",
+          "kind": "interaction",
+          "message": "Answer recorded."
+        },
+        {
+          "status": "recovered",
+          "kind": "interaction",
+          "message": "Answer recorded."
+        },
+        {
+          "status": "recovered",
+          "kind": "interaction",
+          "message": "Answer recorded."
+        }
+      ],
+      "retryCount": 0,
+      "receiptCount": 1,
+      "originalAcceptedPreserved": true,
+      "originalDomainFactsPreserved": true
+    },
+    "permission": {
+      "hardExit": 23,
+      "actualEffectCount": 1,
+      "workers": 3,
+      "initial": [
+        {
+          "status": "recovered",
+          "kind": "interaction",
+          "message": "Permission granted (once)."
+        },
+        {
+          "status": "recovered",
+          "kind": "interaction",
+          "message": "Permission granted (once)."
+        },
+        {
+          "status": "recovered",
+          "kind": "interaction",
+          "message": "Permission granted (once)."
+        }
+      ],
+      "retryCount": 0,
+      "receiptCount": 1,
+      "originalAcceptedPreserved": true,
+      "originalDomainFactsPreserved": true
+    }
+  },
+  "legacy": {
+    "settled": {
+      "originalVersion": 6,
+      "upgradedVersion": 8,
+      "originalTables": 90,
+      "retainedRows": 9,
+      "originalRowsAndRowIDsPreserved": true,
+      "originalBackupExact": true,
+      "identityPreservedOnRestart": true,
+      "legacyOwner": "unknown",
+      "freshRequestResult": "panel_response"
+    },
+    "gap": {
+      "originalVersion": 6,
+      "upgradedVersion": 8,
+      "originalTables": 90,
+      "retainedRows": 8,
+      "originalRowsAndRowIDsPreserved": true,
+      "originalBackupExact": true,
+      "identityPreservedOnRestart": true,
+      "legacyOwner": "unknown",
+      "freshRequestResult": "panel_response"
+    },
+    "question": {
+      "originalVersion": 6,
+      "upgradedVersion": 8,
+      "originalTables": 90,
+      "retainedRows": 60,
+      "originalRowsAndRowIDsPreserved": true,
+      "originalBackupExact": true,
+      "identityPreservedOnRestart": true,
+      "legacyOwner": "unknown",
+      "freshRequestResult": "panel_response"
+    },
+    "permission": {
+      "originalVersion": 6,
+      "upgradedVersion": 8,
+      "originalTables": 90,
+      "retainedRows": 56,
+      "originalRowsAndRowIDsPreserved": true,
+      "originalBackupExact": true,
+      "identityPreservedOnRestart": true,
+      "legacyOwner": "unknown",
+      "freshRequestResult": "panel_response"
+    }
+  },
+  "modelsUsed": 0,
+  "providerCredentialsUsed": 0,
+  "originalUserDatabasesWritten": 0,
+  "uiTestsRun": 0,
+  "priorFocusedTests": {
+    "tests": 21,
+    "assertions": 111,
+    "exit": 0
+  },
+  "currentFocusedTests": {
+    "tests": 23,
+    "assertions": 127,
+    "exit": 0,
+    "factStorage": {
+      "tests": 4,
+      "assertions": 37
+    },
+    "recovery": {
+      "tests": 11,
+      "assertions": 52
+    },
+    "serverTaskBoard": {
+      "tests": 8,
+      "assertions": 38
+    }
+  },
+  "currentTypecheckExit": 0,
+  "controlLeaseOwnerCheck": {
+    "exit": 0,
+    "owners": 18,
+    "acquireSites": 25,
+    "channelAcquireSites": 3
+  },
+  "directActivityAcknowledgement": {
+    "preparedGateScope": "production primitive prepares the durable gate; actual Provider unknown activity is not generated",
+    "actualAcknowledgement": "formal Channel to Task API",
+    "hardExit": 23,
+    "restartVerified": true,
+    "concurrentWorkers": 3,
+    "allInitialResponsesRecovered": true,
+    "retries": 0,
+    "originalAcceptedAndDomainRowsPreserved": true,
+    "actualOutcomeCount": 1,
+    "originalTerminalRowIDsExact": true
+  },
+  "runnerMatcher": {
+    "originalTwoCaseOrderReproduced": true,
+    "watchdogMilliseconds": 360000,
+    "actualInspectorSamples": 249,
+    "nativeToBeInstanceOfSamples": 249,
+    "changedCheck": "await the real rejected Promise, then assert the same error type synchronously",
+    "productionChangesForStarvation": 0,
+    "sameTwoCaseOrderAfterFix": {
+      "tests": 2,
+      "assertions": 8,
+      "exit": 0
+    }
+  },
+  "staleInstance": {
+    "actualLifecycle": "formal Project.delete and same-ID recreation in a separate process",
+    "originalRedVerified": true,
+    "currentGreenVerified": true,
+    "oldContextReplay": "CHANNEL_INGRESS_OWNER_CONFLICT",
+    "oldContextFirstAcceptance": "CHANNEL_INGRESS_PROJECT_CONTEXT_CONFLICT"
+  },
+  "staleEventWriter": {
+    "originalCreateRedVerified": true,
+    "currentCreateAndRemoveVerified": true,
+    "oldContextDisposition": "target_deleted",
+    "currentContextActualDefinitionRetained": true
+  },
+  "automationLegacyUpgrade": {
+    "sourceVersion": 6,
+    "targetVersion": 8,
+    "cases": [
+      {
+        "mode": "before",
+        "originalTables": 90,
+        "originalRows": 54
+      },
+      {
+        "mode": "deleted",
+        "originalTables": 90,
+        "originalRows": 46
+      },
+      {
+        "mode": "recreated",
+        "originalTables": 90,
+        "originalRows": 47
+      },
+      {
+        "mode": "resumed",
+        "originalTables": 90,
+        "originalRows": 86
+      }
+    ],
+    "migrationStageAllOriginalRowsAndRowIDsPreserved": true,
+    "migrationStageSnapshotsIndependentlyReviewed": true,
+    "originalBackupExact": true,
+    "legacyRunGeneration": null,
+    "formalRecovery": "AutomationService.runDueNow",
+    "actualDisposition": "owner_unresolved",
+    "recoveryStageOriginalRunFireMessageSessionPreserved": true,
+    "completedHistoricalBusSourceReadableWithoutDeliveries": true,
+    "originalPropertyBytesAndPhasesComplete": true,
+    "authorityStableOnRestart": true,
+    "providerRequests": 0
+  },
+  "currentMigrationTarget": 8,
+  "current8QuestionMatcher": {
+    "originalFullNineFileOrderReproduced": true,
+    "originalWatchdogMilliseconds": 360000,
+    "newInspectorStackTraces": 70,
+    "firstTopFrame": "native toThrow",
+    "nativeToThrowSamples": 1,
+    "remainingSamples": "execution resumed after Inspector start; run/spawn/SQL and other frames",
+    "originalRawSnapshotExported": false,
+    "changedCheck": "await each actual rejected call; synchronously assert exact Error type and original message",
+    "currentChannelThreeFileTests": 23,
+    "currentChannelThreeFileAssertions": 127,
+    "currentChannelThreeFileExit": 0,
+    "currentNineFileTests": 35,
+    "currentNineFileAssertions": 161,
+    "currentNineFileRunnerExit": 0
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "currentSchemaVersion": 8,
+  "originalRed": {
+    "actualManagerReceiptCommitted": true,
+    "hardExit": 23,
+    "formalProjectDeletion": "committed",
+    "remainingReportRows": 0,
+    "pendingJournal": true,
+    "beforeRecoveryVersion": "2026.10.24.2",
+    "oldRecoveryVersion": "2026.10.24.1",
+    "retainedSourceControlVersion": "2026.10.24.2"
+  },
+  "finalLifecycle": {
+    "projectDeletionCases": [
+      {
+        "scope": "global",
+        "operation": "promotion"
+      },
+      {
+        "scope": "global",
+        "operation": "restoration"
+      },
+      {
+        "scope": "project",
+        "operation": "promotion"
+      },
+      {
+        "scope": "project",
+        "operation": "restoration"
+      }
+    ],
+    "each": {
+      "hardExit": 23,
+      "formalProjectDeletion": "committed",
+      "remainingReportRows": 0,
+      "canonicalReceiptRows": 1,
+      "recovery": "committed",
+      "installedVersion": "2026.10.24.2",
+      "providerRequests": 0
+    },
+    "ordinaryTaskDeletion": {
+      "actualDeleteResult": true,
+      "taskRows": 1,
+      "reportRows": 1,
+      "canonicalReceiptRows": 1,
+      "finalExplicitRecovery": "none",
+      "installedVersion": "2026.10.24.2"
+    }
+  },
+  "realLegacyUpgrade": {
+    "from": 7,
+    "to": 8,
+    "originalTablesPerCase": 91,
+    "cases": [
+      {
+        "case": "positive",
+        "retainedRowsAndRowIDs": 75,
+        "recovery": "committed"
+      },
+      {
+        "case": "deleted",
+        "retainedRowsAndRowIDs": 69,
+        "recovery": "commit_receipt_unavailable"
+      },
+      {
+        "case": "before",
+        "retainedRowsAndRowIDs": 72,
+        "recovery": "commit_receipt_unavailable"
+      }
+    ],
+    "migrationStageOriginalRowsPreserved": true,
+    "originalBackupExact": true,
+    "positiveEnvelopeBytesAndOriginalTimeExact": true,
+    "unknownOriginalJournalBeforeAndAfterPreserved": true,
+    "archivesPreservedAfterExplicitNewImport": true,
+    "independentRawReview": "approved"
+  },
+  "coldPreservation": {
+    "disposition": "commit_receipt_unavailable",
+    "hardExit": 24,
+    "cuts": ["occurrence-published", "phase-published-2", "phase-temp-synced-3", "terminal-published"],
+    "currentJournalRetainedUntilPreservationTerminal": true,
+    "concurrentPhysicalProcesses": 2,
+    "concurrentResponses": ["commit_receipt_unavailable", "none"],
+    "singlePreservationOccurrence": true,
+    "phases": 5,
+    "earlyInstalledTarget": "absent",
+    "earlyBackupAndStagingRetained": true,
+    "explicitNewImportVersion": "2026.10.24.1",
+    "archivesExactAfterNewImport": true,
+    "relativeSymlinkDriftPreserved": true,
+    "symlinkPackageAdmission": "Registry rejects symbolic links",
+    "sameAuthorityBackupRestore": "unknown preservation after a real committed receipt disappears through restoring its earlier database backup",
+    "providerRequests": 0
+  },
+  "publicHTTP": {
+    "actualEntry": "Server.App.request GET /expert-squad/mutation-recovery",
+    "sourceProject": "deleted",
+    "readerProject": "new legal Project",
+    "listStatus": 200,
+    "chunkBytesMaximum": 4096,
+    "completePages": 2,
+    "completeBytes": 7150,
+    "originalJournalBytesEqual": true,
+    "missingStatus": 404,
+    "beyondEndEmptyChunkStatus": 200,
+    "invalidOffsetStatus": 400
+  },
+  "finalFocused": {
+    "files": 4,
+    "tests": 9,
+    "assertions": 208,
+    "allRunnerExitCodes": 0,
+    "writerAssertions": 23,
+    "browserBackendAssertions": 4,
+    "evolutionAssertions": 151,
+    "managerCASAssertions": 30,
+    "exactPayloadBytesAndRealDigestVerified": true,
+    "conditionalUpdateZeroRowsPreservesActualProjectionAndAuthority": true,
+    "importedReceiptBoundary": "hand-built imported report through the real unique Artifact writer",
+    "finalRealErrorAwaitChecks": "Four pending native async matchers replaced by awaiting the actual Error and synchronously checking the same exact type; original Evolution151 assertions retained"
+  },
+  "limits": [
+    "No model, credentials, UI automation or external publication was used.",
+    "Manager persistence acceptance does not claim a full autonomous Campaign or model authoring run.",
+    "The imported Manager report filter case is a writer contract; it is not a complete cross-Task authorization/import run.",
+    "Cold preservation records actual absent or drifted targets; a new explicit import restores a selected revision.",
+    "Public transport is bounded; enumeration costs O(history) for the exact installation and package."
+  ]
+}

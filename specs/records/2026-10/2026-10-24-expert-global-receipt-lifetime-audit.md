@@ -1,0 +1,81 @@
+# 全局 Expert Squad mutation 回执生命周期审计
+
+## Recall
+
+- 用户要求继续横向审计持久效果已发生但缺成功回执，覆盖删除重建、重启、并发、升级，由独立子 agent 裁定。root 在 Channel 范围闭合后追加只读候选：全局 Expert Squad mutation 已写 Manager receipt，cleanup 前硬退出，随后正式物理 Project.delete 删除 Task/Artifact，尚存 journal 会否把已提交全局 package 判为未提交并回滚。
+- 范围只读生产源码和自有隔离 backend 探针/证据，禁止再委托、源修改、index/commit/push、凭据/模型/UI/现用服务。新 spec 索引由 root 管理。不得仅根据外键推断实际可达，必须实际生产 Manager writer→硬退出→formal delete→reconcile。
+- 已读父持久审计 Recall、当前02-data/04-extensions的持久化及包替换合同；manager EvolutionMutationJournalSchema、journal路径、committedEvolutionReceipt、publishLoadedSourceDirectory commit/cleanup、公开promotePackageRevision/reconcileCommittedPackageMutation；evolution-mutation.persistReceipt及真实Task/Artifact writer、正式Project.delete、对应focused backend fixtures。
+- publication agent 独立读证：journal 位于location.configRoot/expert-squad-staging，global scope 不在Project文件分区；committedEvolutionReceipt只查EngineArtifactTable.id，缺行返回undefined；uncommitted恢复按真实before backup/after target回滚。尚无该组合实际探针，不能把候选当根因。
+
+## 深度分析与原假设
+
+可观察候选是receipt曾提交但其Project物理删除后全局package又恢复旧版。触发窗在真实receipt写入之后、backup/journal cleanup之前。输入journal冻结实际Manager操作及前后revision，成功判定依赖Task范围Artifact；全局文件效果的存续范围长于Project/Task Artifact时，receipt丢失可能被误判为未提交。旧普通替换journal按目录状态恢复的规则不等于Evolution mutation的成功receipt规则，不能拿普通replacement通过排除此路径。
+
+关键未知是正式delete会否在cascade前自然进入Catalog/Manager，先精确识别已有receipt并完成journal cleanup；若会，必须保留实际调用/前后文件依据，不能绕过该生产路径伪造红。Task普通delete是tombstone，不等于Project.delete物理cascade。影响面包括global mutation success事实、Project/Task retention、冷进程恢复、restoration/promotion同journal、失败回滚和历史证据保留。
+
+## 最小实际验收方案
+
+每案创建新runtime、合法baseline/candidate包和真实snapshot。Task/Session使用成熟fixture准备前态，不运行模型。正式Manager.promotePackageRevision经其durableReceipt.commit合同，用实际recordEngineArtifact提交完整Schema验证的Manager receipt envelope；receipt字段全部来自真实Manager返回、用户Message及实际Evidence Artifact locator，真实消息摘要只证明该消息字节身份。此组合验证Manager公开持久回执合同，不冒充完整Evolution campaign或模型授权链。
+
+receipt commit返回后立即process.exit(23)，不执行cleanup。新进程先只读原Task/Artifact/journal/target/backup；对照案直接正式reconcile验证该receipt确实被Manager认可；删除案走正式Project.delete，再保存raw行与文件状态，最后正式global reconcile。要求以实际版本正文、journal/backup和原receipt行判断：若已提交v2被回滚v1则原红；若正式delete自然提前cleanup，则记录实际保护路径和排除边界。源修由root负责，子agent不提前改变Journal/DDL或写入影子状态。
+
+## 已证根因与实施方案（root 决策，实施前）
+
+真实合法creator的删除案已证红：正式Manager安装v2、原receipt1、exit23；正式Project.delete committed/deletedTaskCount1/residue为空后Task/Artifact为0、全局journal仍在；正式reconcile把真实包和README退回v1。保留Project的对照保v2且清journal，证明原receipt确被真实Manager识别。独立judge直接读取原SQLite、完整payload/rowid及实际文件，认可生命周期根因。前五轮探针的model引用、evidence envelope、snapshot字段与缺creator metadata等错误原件保留，不当产品红；原正式delete origin始终合法。普通Task.delete是tombstone并保留receipt，作为已核排除路径，不能写成同一已证缺陷。
+
+直接触发是Manager.committedEvolutionReceipt仅查EngineArtifact，缺行直接判未提交；Task物理cascade能删除该报告，而global及普通project配置下的package效果、journal和backup可以继续存在。旧普通replacement按物理状态收尾不能证明Evolution success；全局包不是原Task的一次临时产物。全仓实际Artifact insert/record/patch/where/where-returning唯一物理writer在engine/artifact.ts，persist.ts是导出门面；有61处相关调用。正式跨Task import的顶层producer变为mission，原core producer只在import_lineage.source_producer；导入报告不能产生新的本地Manager commit。
+
+1. 新增唯一长期 `expert_squad_mutation_receipt`，字段为artifact_id主键、task_id、完整envelope、time_created，无Task/Artifact外键；更新与删除均禁止。只有无import_lineage且顶层core/expert-squad-package-manager/promotion-receipt的完整合法原envelope成为Manager事实。EngineArtifact只作该事实的正式报告投影，不能再作为success fallback。
+2. 原唯一Artifact writer的同一SAVEPOINT（保存点）登记报告和事实，连同catalog revision/Protocol原事件一同提交或回滚；公共insert与record均覆盖。所有payload update入口对已登记receipt校验exact身份，same-ID不同内容返回typed conflict，label等元数据仍按原合同更新；合法import只保留其报告，不登记另一条authority。Manager及Evolution existingReceipt仅读此表。
+3. 追加版本8自动迁移，1–7不改写。v7实际正receipt按完整Schema/原task与producer identity验证后，复制原envelope字节及原time_created，不用迁移时刻伪造过去commit；原Artifact保留。真实v7已删Artifact原件不猜补成功。v6真实旧原件还需重新通过当前6→8正式opener、保留全部原列/行/rowid与原backup。
+4. 版本化新journal冻结Database authority。冷恢复缺长期receipt一律保全unknown，包括旧journal且Task仍存、新journal同DB identity以及foreign authority；数据库备份回退会令absence无法证明历史未提交。实际同进程原owner仍持有时捕获确定失败，可以按真实失败证据回滚，不能把该分支用于重启reconcile。
+5. unknown复用DurablePublicationStore保全原journal完整字节、before backup与实际current/after证据；按原operationID与原installation subject收敛，使用成熟durable rename/phase/terminal，保全完成只表示当前处理完成，明确 `commit_receipt_unavailable`，不伪造过去success。before backup进入该保全occurrence管理，后续普通package cleanup/uninstall不得删除它；原after package保持可用，正常catalog/升级可以继续，新显式mutation仍按当前真实revision授权。保全证据提供有界读取诊断，原件不因新mutation丢失。
+6. 验收覆盖global/project、promotion/feedback/restoration、正式Project物理删除及普通Task tombstone；同writer故障整体回滚与patch/import公共合同；两进程同journal；真实7→8正receipt及缺receipt/Task存在与缺失原件；unknown各持久切点后重启及新显式操作后原archive保持。模型/授权完整Evolution campaign不在该最小Manager持久边界验收范围内，不能冒称。
+
+实现分工仍为一层：root负责表声明、Schema/DDL、迁移8、综合校验与提交；Channel agent经本方案明确授权后负责低层receipt helper、Artifact writer、Manager/Evolution读取、保全恢复及聚焦后端真实probe。独立judge不改实现，必须反证后裁定；此时整体仍未通过。
+
+## 实施影响面与关联修复
+
+纯 `mutation-receipt-validation.ts` 只依赖plugin Schema与NamedError，供运行writer和迁移8同步复用，不导Database、Manager或Registry，避免启动循环依赖。它只验证原envelope；唯一Artifact writer只计算一次成熟payloadText，报告和长期authority存同一原字节，原time_created也来自同一真实row。不能用Zod重新排列对象后把新字节当过去原报告。历史迁移直接复制原payload与原时间；当前patch对已登记receipt要求同Task、kind和完整存储字节一致，label/timeUpdated仍按原契约更新。合法import的顶层producer为mission、原producer只在import_lineage中，不新登记原commit。
+
+新增长期表不拥有Task生命周期，Task/Project物理删除不会删它；Manager和Evolution重放仅从此事实读成功，报告本身不再裁定。公共 `insertEngineArtifact`/`recordEngineArtifact`、单项patch与两种where更新都进入原SAVEPOINT（保存点），authority/report/catalog revision/原Protocol事件同事务。浏览器预览的两个真实生产patch caller在 `browser-preview/persist.ts`，只执行其后端target-persistence回归，不触UI自动化。
+
+独立judge和root追加发现公开where writer的原执行顺序风险：初次SELECT选中某row后，成熟catalog revision分配可能改变合法WHERE所依赖的当前事实，最终UPDATE为0；若derive阶段就append，会形成未发生的成功authority。两个where函数当前没有外部生产caller，但仍是公共数据writer合同，不能忽略。最终三个patch入口均为derive/完整性校验→保原WHERE的真实UPDATE RETURNING→仅实际updated row才append和Protocol，仍同一SAVEPOINT。真实SQLite聚焦用例让WHERE依赖当时max(catalog revision)，实际经历初选true、分配后UPDATE0，明确返回undefined、原projection完整row和authority集合保持。该候选的前态没有另存独立production-red库，不冒称已存在原红；源顺序反证与修后真实合同已由judge独立核查。
+
+Unknown保全复用成熟DurablePublicationStore，按原operationID及精确installation/package分区。Store在同一config卷、scratch之外，before/staging/discard以成熟durable rename移入同一occurrence，完整after副本经真实树身份校验和文件/目录同步后durable rename发布。原journal完整字节先原子持久保全，terminal持久后才核原字节并退休current slot；因此每个崩溃窗仍有原journal作唯一恢复入口，无需启动枚举永久历史。phase/terminal首次追加都记实际当前时间，重放沿原已存事实，不把跨日保全完成时间写成旧intent时刻。
+
+公开 `GET /expert-squad/mutation-recovery` 读取精确安装位置，16项摘要或单occurrence原JSON的4096字节base64页；missing为NotFoundError/404、越尾空页200、非法偏移400。内部枚举是该精确installation/package的O(history)，不声称永久历史索引成本恒定。`commit_receipt_unavailable` 是保全处置，不是原mutation成功。target absent时如实保留缺失，不能替用户猜选before/after；后续公开Manager新显式操作可从已保全before恢复可用包。
+
+## 真实原红与升级原件
+
+修前保留来源对照 `expert-global-retain-fourth` 认可原receipt、保留v2并清journal；真实合法creator删除案 `expert-global-delete-creator-correct` 在原receipt1/exit23后正式deleteProject committed、deletedTaskCount1、residue为空，原Project/Task/Artifact均0但global journal与v2仍在，随后正式reconcile退回v1。README实际正文也由v2退v1，Provider请求0。前期MissingModelConfig、缺合法Evidence producer operation_id、snapshot字段覆盖及裸fixture缺creator导致的delete rollback等探针故障全部保留原日志，未作为产品红；生产取消origin本身一直合法。
+
+在任何源改前另生成三个真正v7 master：`expert-v7-{positive,deleted,before}-preserved-2/`。三案都实际hardexit23；positive保留原receipt1，deleted经正式Project.delete后receipt0，before在真实afterTargetInstallBeforeReceipt硬退出且Task仍在/receipt0。每案保存完整 `committed-before-exit.sqlite`、`after-delete-before-reconcile.sqlite` 及原target/backup/journal文件，实际working runtime停在原窗口，未调用旧reconcile消费证据。首次追加表尚未同步DDL时三探针在opener失败，root撤下未交付注册后真正v7重跑成功；该中间schema漂移不是产品红。
+
+最终正式7→8的 `expert-upgrade-{positive,deleted,before}.log` 均actual0：91个原表分别75/69/72原行及rowid迁移阶段逐项保留，三份正式backup与原全schema/行/rowid/version7相等，opener后完整快照 `expert-upgrade-{mode}/after-upgrade-before-reconcile.sqlite` 可独立读取。positive回填原receipt完整字节/时间/task后恢复committed并保v2；deleted与before均不猜补authority，保全unknown且当前v2可用。随后真正显式新import baseline→当前v1，原archive before与完整after依然逐字节等于只读v7 master。Provider0，DBauthority复开稳定。独立judge已逐原表及完整文件/links复核并认可。
+
+上述v7和早期8证据是各自真实历史阶段。最终8 fresh生命周期另跑 `expert-final-{global-promotion,global-restoration,project-promotion,project-restoration,task-tombstone}.log`，五案actual0。四个scope/Manager operation组合都真实receipt提交→进程23→正式Project.delete committed→Artifact报告0/长期receipt1→冷恢复committed保v2；普通Task.delete返回true，原Task/报告/长期事实仍保留，部分清理由真实Task入口自然完成、最后显式reconcile为none，不能冒称仍有待处理journal。每案最后关闭后重新opener读取长期receipt1，Provider0。
+
+## 冷恢复、并发与真实持久切点
+
+`expert-preservation-{intent,target,backup,terminal,concurrent,early}.log` 六案actual0。四个保全阶段硬退出24分别为成熟Store occurrence-published、retained-target后的phase-published#2、backup真实rename后phase-temp-synced#3、terminal-published；原currentjournal在各切点仍在。新进程恢复同一原occurrence、五phase与唯一terminal，原journal和before/after完整树保留，之后新显式mutation也保持原archive。
+
+两独立进程同时恢复同一journal，一方返回commit_receipt_unavailable、另一方none，两者公开诊断读取同一完成occurrence。early在原target已移走/after仍在staging时实际进程23，处置明确target absent；原before/staging/journal保全后，通过公开Manager一次新显式import before恢复v1，原archive保持。六案最终SQLite均schema8、authority0/Provider0。独立judge已逐文件/目录/links读取原件认可这些有界切点与并发合同。
+
+相对symlink关联候选先实跑生产入口：Windows实际创建 `README.md` 相对link成功，readlink原字串与读取内容成立，但正式Manager→Registry返回“symbolic links are not allowed”；现行合法发布包不接受它。Unknown保全仍须保留硬退出后用户造成的partial/drifted树，因此copy沿成熟Manager的verbatimSymlinks选项。`expert-preservation-symlink.log` 实跑安装后磁盘漂变，原相对链接字串与完整树被保全；test driver明确移除当前漂变link后再执行新正式import，归档原link保持，不能宣称Registry支持合法symlink包。
+
+HTTP真实 `expert-recovery-http.log` 由新合法Project读取原已删来源Project的global archive，列表200、完整两页7150字节重组journal原字节相等、missing404、合法越尾空页200与负偏移400，actual0；不借用旧执行context，不是文案或mock检查。
+
+最后按root要求只补最小同authority备份恢复实证，未新增实现：`expert-preservation-backup-restore-final.log` actual0。真实Manager callback先以正式writer成功提交长期receipt1并hardexit23；将已全部退出的自有working DB恢复为同一实际@2 journal所处的真实receipt提交前备份，master不改、不SQL重写事实。原成功快照与恢复前快照的 `database_authority.instance_id` 实际相等，原成功authority1、恢复后的authority0。当前冷恢复仍明确receipt_absent/commit_receipt_unavailable，保全原before/after/journal，新的显式import后归档仍完整，Provider0。`original/committed-before-exit.sqlite`、`original/before-actual-receipt.sqlite`、`restored-before-recovery.sqlite` 与final.sqlite完整保留，checker精确比较同authority与真实1→0。跨DB authority不匹配分支已由source guard审查，本轮没有另称独立跨DB重置端到端验收。
+
+## 最终聚焦验收与边界
+
+最终 `bun script/run-tests.ts test/expert-squad-mutation-receipt.test.ts test/browser-preview/target-persistence.test.ts test/expert-squad-evolution-mutation.test.ts test/expert-squad-manager-cas.test.ts` 完整9项208断言，四runner均0，日志 `expert-final-focused.log`。writer1项23断言覆盖同writer原payload字节与真实digest、外层事务rollback、same-ID不同envelope及仅键序不同的typed conflict、三个patch入口、label-only更新、两个动态WHERE真实UPDATE0及手工import报告过滤；Browser backend2项4断言；原Evolution五case151断言；Manager CAS1项30断言。最后两个旧回归错误属于已替换absence→rollback测试合同，已改为当前candidate+明确unknown保全，再用一次新显式CAS恢复baseline后继续原后续审查/安装用例，没有放松生产promotionReady或伪冻结安装态。手工import报告仅证明writer过滤；完整Evolution imported-evidence另走正式import API，其业务语义不是本轮模型验收。
+
+阶段typecheck已0，最终总typecheck、格式/文档/Schema检查、SDK与提交由root统一结算。原6→最终8 Channel四案及Automation四案也已全部actual0并由独立judge再次raw认可，分别见各自记录；不拿先阶段7结果代替最终8。
+
+公开探针与安全汇总见[交付产物](../../artifacts/2026-10-24-expert-mutation-receipt-recovery/README.md)。本轮不使用模型/凭据、不操作现用服务或用户窗口、不运行UI自动化，不修改原只读master、不操作index/commit/push。最终有界结论仍由独立judge作出，不把本轮矩阵外的全部系统路径宣称无新问题。
+
+最终组合回归另在Channel原生pending promise matcher暴露执行饥饿，热栈、真实异常和最小工具修复另见Channel记录，未修改Expert或Channel生产行为。横向同步将本文件4处pending `.rejects.toBeInstanceOf`改为真实await错误后同步原类型验证，精确业务合同不变；最后四文件 `expert-final-focused-await-fixed.log` actual0，仍9项208断言（Evolution151）。以此最终轮为当前focused结果，早期四轮仅保留其各自真实阶段。原完整9文件同序也已35项161断言/9runner全0，Channel三文件23项127断言/3runner全0；最后独立裁定需同时核该追加工具链修复。
+
+公开读取补充：原Manager TS导出不是完整可交付的用户诊断入口。新增现有Expert Squad HTTP组的GET `/mutation-recovery`，按id与installationScope读取同一Manager helper，返回16项有序summary或原occurrence的4096字节base64页；原Project删除后的global证据可从当前任意合法Project上下文读取，不从被删Task报告反推。Schema、SDK与API文档同源生成。invalid query返回400，缺原occurrence返回404；超过末尾的非负offset返回空页，与既有Bus读取合同一致。该只读入口不增加执行授权或第二份事实。

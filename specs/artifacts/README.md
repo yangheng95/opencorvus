@@ -19,6 +19,10 @@
 - [成员流式正文的瞬时呈现调查](2026-10-24-member-stream-rendering/README.md)：577真实页面与原始模型reader结算。
 
 - [旧权限记忆存量恢复](2026-10-24-permission-memory-stock-recovery/README.md)：原件只读审计、真实升级、回滚与并发收敛。
+- [Channel效果与回执恢复](2026-10-24-channel-effect-receipt-recovery/README.md)：真实硬退出、三进程并发、四原件升级及安全汇总。
+- [持久投递横向验收](2026-10-24-durable-effect-receipt-audit/README.md)：Bus/Event/Automation/Mission真实故障切点、原件升级与验收边界。
+- [文件发布恢复验收](2026-10-24-publication-effect-receipt-recovery.json)：Worktree、Skill、MCP的实际故障、保全升级与目录别名恢复。
+- [专家团长期回执与保全验收](2026-10-24-expert-mutation-receipt-recovery/README.md)：真实Project删除、原7升级、保全故障切点与有界读取。
 
 - [成员侧栏恢复时的正文身份](2026-10-24-member-reconnect-rendering/README.md)：576真实服务更换和Sources实图。
 
