@@ -202,7 +202,12 @@ terminal execution notices. Task streams additionally forward their existing goa
 decision and Task terminal notifications. Invalidation carries only the exact owner,
 project-directory identity and API authority; no Goal value is copied from an event
 or inferred from tool output. The control coalesces same-microtask notices and keeps
-its existing visibility, busy and selection-lifetime checks. Periodic observation
+its existing visibility, busy and selection-lifetime checks. While the current
+resource is loading or a mutation is busy, background invalidations retain one
+pending refresh in that same source lifetime. They re-read after the current work
+settles, allowing the first snapshot to become ready instead of replacing it on
+every timer tick. Source retirement disposes this pending intent. Explicit mutation
+reads keep their existing post-commit behavior. Periodic observation
 still handles durable changes without an execution notice, including changes from
 another process. Native Session streams do not acquire an undeclared Goal protocol.
 

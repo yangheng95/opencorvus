@@ -199,16 +199,33 @@ export function ContinuousGoalControl(props: {
   createEffect(() => {
     const current = source()
     if (!current) return
-    const refresh = () => {
+    let refreshPending = false
+    const flushRefresh = () => {
       if (
+        refreshPending &&
+        !projection.loading &&
         document.visibilityState === "visible" &&
         root?.parentElement?.getBoundingClientRect().height &&
         owns(current.key) &&
         isApiAuthorityCurrent(current.authority) &&
         !busy()
-      )
+      ) {
+        refreshPending = false
         void refetch()
+      }
     }
+    const refresh = () => {
+      if (!owns(current.key) || !isApiAuthorityCurrent(current.authority)) return
+      refreshPending = true
+      flushRefresh()
+    }
+    // Let the current read settle before admitting one queued background read.
+    // Replacing a slow first read repeatedly leaves the form waiting forever.
+    createEffect(() => {
+      const loading = projection.loading
+      const mutating = busy()
+      if (!loading && !mutating) flushRefresh()
+    })
     const timer = window.setInterval(refresh, REFRESH_MS)
     let refreshQueued = false
     const stopRefresh = listenContinuousGoalRefresh(current.target, current.authority, () => {
@@ -222,6 +239,7 @@ export function ContinuousGoalControl(props: {
     window.addEventListener("focus", refresh)
     document.addEventListener("visibilitychange", refresh)
     onCleanup(() => {
+      refreshPending = false
       window.clearInterval(timer)
       stopRefresh()
       window.removeEventListener("focus", refresh)

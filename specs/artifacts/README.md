@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [持续目标的首次读取与后台刷新](2026-10-24-goal-refresh-readiness/README.md)：565真实八秒路由条件、Goal入口实图和完整保留/闭合事实。
+
 - [长回复中的阅读意图与原 Sources](2026-10-24-side-chat-long-reading/README.md)：564实际进行中/终态截图、原Source身份与完整运行结算。
 
 - [侧聊的主动回到底部与发送跟随](2026-10-24-side-chat-explicit-follow/README.md)：563真实阅读、恢复按钮和新回复实图与完整结算。

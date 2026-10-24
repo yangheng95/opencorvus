@@ -1,0 +1,236 @@
+{
+  "batch": 565,
+  "recordedAt": "2026-10-24T00:48:06.515Z",
+  "method": "Manual IAB interaction and viewed real-page screenshots; actual source CLI /ui, existing beforeRequest diagnostic latency only; original routes/database/responses retained.",
+  "scope": "Goal background refresh admission and first form readiness; no new Goal execution, API, schema or persistence contract.",
+  "latencyCounterMeaning": "Concurrent waits in the diagnostic beforeRequest hook, not active response-body readers. latency-end is the end of the injected wait, not an HTTP completion receipt. Last client cancellations include deliberate page close/source switch.",
+  "screenshots": [
+    "01-before-goal-request.png",
+    "02-before-goal-still-waiting.png",
+    "03-before-side-goal-waiting.png",
+    "04-after-main-form-open.png",
+    "05-after-main-edit-during-refresh.png",
+    "06-after-main-draft-survives-refresh.png",
+    "07-after-side-form-open.png",
+    "08-after-side-owner-switch.png",
+    "09-after-task-form-open.png",
+    "10-after-mission-form-open.png"
+  ],
+  "scopes": [
+    {
+      "name": "before",
+      "uiEntry": "main-BGogOrxR.js",
+      "latencyMilliseconds": 8000,
+      "requests": {
+        "/continuous-goal/chat/ses_-zUR5coFizznlxwzV81M": {
+          "starts": 60,
+          "ends": 60,
+          "clientAborts": 57,
+          "peakLatencyWaits": 3,
+          "firstAt": "2026-10-24T00:28:23.640Z",
+          "lastAt": "2026-10-24T00:33:32.807Z"
+        },
+        "/continuous-goal/chat/ses_-zUR54flpzzby4xUJQPT": {
+          "starts": 37,
+          "ends": 37,
+          "clientAborts": 36,
+          "peakLatencyWaits": 2,
+          "firstAt": "2026-10-24T00:30:14.851Z",
+          "lastAt": "2026-10-24T00:33:27.887Z"
+        }
+      },
+      "goalWrites": [],
+      "source": {
+        "allOriginalRows": "Exact rowid/primary key/all fields/times",
+        "bytes": 81195008,
+        "modifiedAtMs": 1792799694090.323,
+        "tables": 90,
+        "rows": 176384,
+        "canonical": "Complete source bytes exact"
+      },
+      "schema": {
+        "sourceVersion": 4,
+        "targetVersion": 5,
+        "extraObjects": [],
+        "integrity": "ok"
+      },
+      "targetOriginalRowDifferences": [
+        {
+          "table": "runtime_execution_capacity_lease",
+          "identity": "[1]",
+          "fields": [
+            "lease_id",
+            "owner_id",
+            "time_acquired",
+            "expires_at"
+          ]
+        },
+        {
+          "table": "runtime_execution_capacity_lease",
+          "identity": "[2]",
+          "fields": [
+            "lease_id",
+            "owner_id",
+            "time_acquired",
+            "expires_at"
+          ]
+        }
+      ],
+      "providerActivity": {
+        "original": 432,
+        "current": 433
+      },
+      "retirement": {
+        "at": "2026-10-24T00:33:39.825Z",
+        "authRetired": 1,
+        "catalogRetired": 1,
+        "authCopied": true,
+        "modelRequests": 2,
+        "model": "gpt-6.1-sol",
+        "streaming200OriginalReaderEOF": 2,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968,
+          "content": "Exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 855042,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      }
+    },
+    {
+      "name": "after",
+      "uiEntry": "main-D5Ah_P6W.js",
+      "latencyMilliseconds": 8000,
+      "requests": {
+        "/continuous-goal/chat/ses_-zUR5coFizznlxwzV81M": {
+          "starts": 53,
+          "ends": 53,
+          "clientAborts": 1,
+          "peakLatencyWaits": 1,
+          "firstAt": "2026-10-24T00:36:23.545Z",
+          "lastAt": "2026-10-24T00:43:28.309Z"
+        },
+        "/continuous-goal/chat/ses_-zUR54flpzzby4xUJQPT": {
+          "starts": 20,
+          "ends": 20,
+          "clientAborts": 0,
+          "peakLatencyWaits": 1,
+          "firstAt": "2026-10-24T00:39:17.442Z",
+          "lastAt": "2026-10-24T00:41:57.572Z"
+        },
+        "/continuous-goal/chat/ses_-zUR56rcuzz0vJQBd3ub": {
+          "starts": 12,
+          "ends": 12,
+          "clientAborts": 1,
+          "peakLatencyWaits": 1,
+          "firstAt": "2026-10-24T00:41:54.155Z",
+          "lastAt": "2026-10-24T00:43:30.229Z"
+        },
+        "/continuous-goal/task/tsk_g00VYhrJxy00qIC54qvM": {
+          "starts": 20,
+          "ends": 20,
+          "clientAborts": 1,
+          "peakLatencyWaits": 1,
+          "firstAt": "2026-10-24T00:43:26.813Z",
+          "lastAt": "2026-10-24T00:46:06.951Z"
+        },
+        "/continuous-goal/mission/ses_-zURQjvQ8zz3y3NgFyVx": {
+          "starts": 4,
+          "ends": 4,
+          "clientAborts": 1,
+          "peakLatencyWaits": 1,
+          "firstAt": "2026-10-24T00:46:04.290Z",
+          "lastAt": "2026-10-24T00:46:36.327Z"
+        }
+      },
+      "goalWrites": [],
+      "source": {
+        "allOriginalRows": "Exact rowid/primary key/all fields/times",
+        "bytes": 81195008,
+        "modifiedAtMs": 1792802015818.5432,
+        "tables": 90,
+        "rows": 176819,
+        "canonical": "Complete source bytes exact"
+      },
+      "schema": {
+        "sourceVersion": 5,
+        "targetVersion": 5,
+        "extraObjects": [],
+        "integrity": "ok"
+      },
+      "targetOriginalRowDifferences": [
+        {
+          "table": "runtime_execution_capacity_lease",
+          "identity": "[1]",
+          "fields": [
+            "lease_id",
+            "owner_id",
+            "time_acquired",
+            "expires_at"
+          ]
+        },
+        {
+          "table": "runtime_execution_capacity_lease",
+          "identity": "[2]",
+          "fields": [
+            "lease_id",
+            "owner_id",
+            "time_acquired",
+            "expires_at"
+          ]
+        }
+      ],
+      "providerActivity": {
+        "original": 433,
+        "current": 434
+      },
+      "retirement": {
+        "at": "2026-10-24T00:47:06.768Z",
+        "authRetired": 1,
+        "catalogRetired": 1,
+        "authCopied": true,
+        "modelRequests": 2,
+        "model": "gpt-6.1-sol",
+        "streaming200OriginalReaderEOF": 2,
+        "sourceCatalog": {
+          "bytes": 9155406,
+          "modifiedAtMs": 1791128890137.9968,
+          "content": "Exact original"
+        },
+        "publicShutdown": 200,
+        "reserveMs": 541597,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "exactProcessChain": "dead_or_reused"
+      }
+    }
+  ],
+  "checks": {
+    "overlayTypecheck": {
+      "exit": 0,
+      "originalExec": 83897
+    },
+    "nodeFullViteBuild": {
+      "exit": 0,
+      "originalExec": 63459,
+      "elapsedSeconds": 64,
+      "entry": "main-D5Ah_P6W.js",
+      "note": "Existing chunk-size advisory; complete build passed."
+    },
+    "uiAutomation": "None run or added; manual visual acceptance only."
+  },
+  "limitations": [
+    "Goal execution and mutation behavior were not re-run in this UI-only batch.",
+    "This fixes demonstrated slow-read Goal form starvation; it does not identify every possible Rendering label source.",
+    "Default home layout and Sources were not changed in this batch."
+  ]
+}

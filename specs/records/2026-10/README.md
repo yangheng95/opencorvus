@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [持续目标的首次读取与后台刷新](2026-10-24-goal-refresh-readiness.md)：565保留跨进程观察，复核首次读取与后台失效合并。
+
 - [长回复中的阅读意图与原 Sources](2026-10-24-side-chat-long-reading.md)：564有限真实Sol长回复及跨页来源/读位人工体验。
 
 - [侧聊的主动回到底部与发送跟随](2026-10-24-side-chat-explicit-follow.md)：563复用共享controller和既有读位，真实侧聊视觉验收。
