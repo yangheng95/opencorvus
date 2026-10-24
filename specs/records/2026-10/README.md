@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [成员正文与来源的时序归属](2026-10-24-member-source-order.md)：585持久化时序及实际页面核对。
+
 - [Main虚拟窗口与尺寸测量](2026-10-24-main-virtual-range.md)：584实际Virtualizer测量链与正文实例。
 
 - [流式正文事件与分组身份](2026-10-24-live-text-event-order.md)：583真正流式事件库存与自然输入观察。

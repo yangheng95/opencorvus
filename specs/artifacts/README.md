@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [成员正文与来源的时序归属](2026-10-24-member-source-order/README.md)：585非秘密时序和实际页面证据。
+
 - [Main虚拟窗口与尺寸测量](2026-10-24-main-virtual-range/README.md)：584真实页面与最后观察几何。
 
 - [流式正文事件与分组身份](2026-10-24-live-text-event-order/README.md)：583真实页面与事件身份截图。
