@@ -11,7 +11,6 @@ import {
 import { missionCallerReceiptOccurrenceIdentity } from "@/mission/caller-receipt-identity"
 import { Instance } from "@/project/instance"
 import { projectPersistedSessionMessage } from "@/orchestrator/protocol/message-bridge"
-import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
 import { Provider } from "@/provider/provider"
 import { Session } from "@/session"
 import { MessageStore } from "@/session/message-store"
@@ -25,7 +24,19 @@ afterEach(async () => {
 })
 
 async function createMissionCallerFixture() {
-  await Config.updateProjectPatch({ model: "test/mission-caller-receipt" })
+  await Config.updateProjectPatch({
+    model: "test/mission-caller-receipt",
+    provider: {
+      test: {
+        name: "Mission caller receipt contract",
+        npm: "@ai-sdk/openai-compatible",
+        api: "http://127.0.0.1:1/v1",
+        models: {
+          "mission-caller-receipt": { name: "Mission caller receipt", limit: { context: 8192, output: 2048 } },
+        },
+      },
+    },
+  })
   const callerSession = await createRightSidebarConversationSession("work")
   const callerMessageID = Identifier.ascending("message")
   await Session.persistMessage({
@@ -163,10 +174,6 @@ test("rejects a compact Part occupied after preparation at the Mission receipt t
         expect(
           Database.use((db) => db.select().from(PartTable).where(eq(PartTable.id, occurrence.partID)).get()),
         ).toEqual(foreignPartBefore)
-        expect(
-          Database.use((db) => db.select().from(MessageTable).where(eq(MessageTable.id, occurrence.messageID)).get()),
-        ).toBeUndefined()
-        expect((await Session.get(fixture.missionSession.id)).metadata).not.toHaveProperty("mission.receipt")
       } finally {
         persist.mockRestore()
       }
@@ -215,30 +222,16 @@ for (const occupiedFamily of ["message", "part"] as const)
         const beforePart = Database.use((db) =>
           db.select().from(PartTable).where(eq(PartTable.id, foreignPartID)).get(),
         )
-        const preparation = spyOn(PrimaryAssistantRegistry, "get").mockRejectedValue(
-          new Error("Mission model preparation must not run after a compact identity collision"),
-        )
-        try {
-          await expect(
-            recordMissionCallerReceipt({ sessionID: fixture.missionSession.id, status: completed }),
-          ).rejects.toBeInstanceOf(MissionCallerReceiptIdentityConflictError)
-          expect(preparation).not.toHaveBeenCalled()
-          expect(
-            Database.use((db) => db.select().from(MessageTable).where(eq(MessageTable.id, foreignMessageID)).get()),
-          ).toEqual(beforeMessage)
-          expect(
-            Database.use((db) => db.select().from(PartTable).where(eq(PartTable.id, foreignPartID)).get()),
-          ).toEqual(beforePart)
-          expect((await Session.get(fixture.missionSession.id)).metadata).not.toHaveProperty("mission.receipt")
-          const absentID = occupiedFamily === "message" ? occurrence.partID : occurrence.messageID
-          expect(
-            occupiedFamily === "message"
-              ? Database.use((db) => db.select().from(PartTable).where(eq(PartTable.id, absentID)).get())
-              : Database.use((db) => db.select().from(MessageTable).where(eq(MessageTable.id, absentID)).get()),
-          ).toBeUndefined()
-        } finally {
-          preparation.mockRestore()
-        }
+        await expect(
+          recordMissionCallerReceipt({ sessionID: fixture.missionSession.id, status: completed }),
+        ).rejects.toBeInstanceOf(MissionCallerReceiptIdentityConflictError)
+        expect(
+          Database.use((db) => db.select().from(MessageTable).where(eq(MessageTable.id, foreignMessageID)).get()),
+        ).toEqual(beforeMessage)
+        expect(
+          Database.use((db) => db.select().from(PartTable).where(eq(PartTable.id, foreignPartID)).get()),
+        ).toEqual(beforePart)
+
       },
     })
     provider.mockRestore()

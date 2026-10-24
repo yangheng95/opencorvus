@@ -1,0 +1,69 @@
+[1/5] START test/mission-caller-receipt-identity.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) persists and replays one compact Mission caller receipt with complete provenance [2131.49ms]
+(pass) rejects a compact Part occupied after preparation at the Mission receipt transaction fence [1540.15ms]
+(pass) rejects an occupied compact Mission receipt message before model preparation [1299.34ms]
+(pass) rejects an occupied compact Mission receipt part before model preparation [1388.73ms]
+(pass) rejects replay when persisted Mission receipt provenance is not the strict canonical metadata [1670.39ms]
+(pass) reports a typed data migration requirement for an expanded Mission caller receipt message identity [1614.41ms]
+(pass) reports a typed data migration requirement for an expanded Mission caller receipt part identity [1524.23ms]
+
+ 7 pass
+ 0 fail
+ 18 expect() calls
+Ran 7 tests across 1 file. [14.58s]
+[1/5] DONE test/mission-caller-receipt-identity.test.ts exit=0 duration=15.17s
+[2/5] START test/tool-part-fact-storage.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Tool effect fact storage > projects one immutable request and one immutable outcome as a completed visible ToolPart [1471.89ms]
+
+ 1 pass
+ 0 fail
+ 16 expect() calls
+Ran 1 test across 1 file. [2.23s]
+[2/5] DONE test/tool-part-fact-storage.test.ts exit=0 duration=2.34s
+[3/5] START test/session/execution-actor-identity.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) right-sidebar and delegated inputs retain their owner through helper messages [969.37ms]
+(pass) removal projects the actual deleted user Message snapshot [624.85ms]
+(pass) exact input ownership reports mismatches and preserves independent Project actors [947.18ms]
+(pass) generic assistant lifecycle and message retain the coding execution actor [691.31ms]
+(pass) generic assistant lifecycle and message retain the chat execution actor [610.40ms]
+(pass) generic assistant lifecycle and message retain the work execution actor [613.38ms]
+(pass) persisted lifecycle and messages retain exact actors through a Work surface upgrade and restart [986.08ms]
+
+ 7 pass
+ 0 fail
+ 20 expect() calls
+Ran 7 tests across 1 file. [6.51s]
+[3/5] DONE test/session/execution-actor-identity.test.ts exit=0 duration=6.63s
+[4/5] START test/mission-message-origin-projection.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) projects Mission operator and scheduler wake origins through one persisted and live contract [1851.44ms]
+(pass) keeps the right-sidebar display source authoritative over its retained wake reason [1.21ms]
+(pass) hydrates nested wake provenance through the Task conversation route [2422.22ms]
+
+ 3 pass
+ 0 fail
+ 7 expect() calls
+Ran 3 tests across 1 file. [6.33s]
+[4/5] DONE test/mission-message-origin-projection.test.ts exit=0 duration=6.44s
+[5/5] START test/task-historical-report-delivery.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) historical report HTTP delivery keeps its exact completed owner across reopen and later failure [3110.08ms]
+
+ 1 pass
+ 0 fail
+ 16 expect() calls
+Ran 1 test across 1 file. [4.65s]
+[5/5] DONE test/task-historical-report-delivery.test.ts exit=0 duration=4.77s

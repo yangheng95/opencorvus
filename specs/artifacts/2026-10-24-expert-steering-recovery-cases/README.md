@@ -1,6 +1,6 @@
 # 专家团追加交付与更正案例证据
 
-[方案与Recall](../../records/2026-10/2026-10-24-expert-steering-recovery-cases.md)。inputs是受控合成输入；三组原任务已完成实际业务交付及全文核验，中间原生处置超时仍未解决，不能称整体验收通过。完整运行目录和SQLite在方案指定的独立私有目录保留；此目录归档正式读取的完整产物、实际文件和精简原始回执，不包含凭据。
+[方案与Recall](../../records/2026-10/2026-10-24-expert-steering-recovery-cases.md)。inputs是受控合成输入；三组原任务已完成实际业务交付及全文核验，根输入/PDF及会话读取拖延原生结算的共享缺陷已修复，Word分页仍有限制。完整运行目录和SQLite在方案指定的独立私有目录保留；此目录归档正式读取的完整产物、实际文件和精简原始回执，不包含凭据。
 
 - `inputs/marketing-growth/`：三渠道可复算台账及原预算；执行中更正由正式Task消息提交。
 - `inputs/seo-geo/`：本地页面清单与明确观测边界。
@@ -30,13 +30,19 @@
 
 [word-pages/](word-pages/)的五页PNG均由原DOCX经官方LibreOffice实际渲染，主agent逐页查看。[word-render.log](word-render.log)是修复本地缺失工具链后重跑原render_docx.py的直接转换输出。所有正文、中文、数字和单元格可读；第二页末孤立预算表头及后续跨页未重复表头仍是排版不足，没有修改原输出掩盖。
 
-## 未闭环原生异常与局部诊断
+## 原生异常原件与先期局部诊断
 
 - [native-original-failures.json](native-original-failures.json)：MG-03原692个native request、667次严格处置中的两个实际超时，保留原request/target/helper/birth/active-zero及原Promise分段。原诊断有未单独量化的同步历史扫描开销，这些数值不能定位某个文件系统调用。
 - [native-package-timing.log](native-package-timing.log)：两个Project串行/并行136次真实冻结publisher introspection及低开销原I/O计时；原runner1项2合同通过，25ms采样最大lag365ms，没有复现原超时。
 - [native-package-no-sampling.log](native-package-no-sampling.log)：去掉周期采样/落盘后同136次也通过。两轮均为无凭据原生局部实机诊断，不是LLM业务端到端，也不足以宣布原超时已修复。
 - [native-package-idle.log](native-package-idle.log)：再加六段10秒空闲输入后同136次通过。
 - [checker/README.md](checker/README.md)：当前唯一可重复入口、原官方runner命令及证据资格；[native-package-published-final.log](native-package-published-final.log)记录最终源码原runner结果，[native-package-published-observations.json](native-package-published-observations.json)保留该轮136个原Handle与原I/O完整计时。
+
+## 后续真正复现与修复
+
+[native-conversation/README.md](native-conversation/README.md)记录真实长会话读取与原生工具的共享事件循环问题：相同四并发读取，修前原生严格处置6138ms拒绝，修后3758ms完成，原5000ms保持。完整响应及280条实际消息全文相等。最小修复删除每个Part重复且被丢弃的身份计算，同时保留真实归属及排序校验。[part-projection-owner-red.log](part-projection-owner-red.log)保留外来Part错误合同红例，[part-projection-green-final.log](part-projection-green-final.log)保留19项77断言最终通过；修前原失败没有被成功对照覆盖。
+
+[part-projection-root-input.log](part-projection-root-input.log)补证正式Task追加输入仍保留正确Message/Part归属及精确runtime回复（1项3断言），合计20项80断言。Word跨页表头不足仍未修饰为机制完成。
 
 ## 聚焦后端原runner证据
 

@@ -2,7 +2,7 @@
 
 - [专家团未知保全后的恢复与接续](2026-10-24-expert-recovery-continuation-audit.md)：真实备份、重复升级、重试和发布并发。
 
-- [专家团追加交付与更正场景](2026-10-24-expert-steering-recovery-cases.md)：三组真实交付、根输入/PDF修复及原生超时未闭环证据。
+- [专家团追加交付与更正场景](2026-10-24-expert-steering-recovery-cases.md)：三组真实交付与根输入、PDF、历史投影的共享修复及原生并发证据。
 
 - [来源摘录与工具附件的共同身份](2026-10-24-source-attachment-identity.md)：587共享响应附件表与实际页面验证。
 

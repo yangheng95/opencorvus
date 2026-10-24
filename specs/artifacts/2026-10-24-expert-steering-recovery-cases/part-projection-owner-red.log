@@ -1,0 +1,79 @@
+[1/1] START test/tool-part-fact-storage.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+207 |           orderKey: projectedAssistant.info.orderKey,
+208 |           part: { id: partID, orderKey: projectedAssistant.parts[0]?.orderKey },
+209 |         })
+210 |         expect(() =>
+211 |           projectPersistedSessionMessage({ info: finishedAssistant, parts: [userText] }),
+212 |         ).toThrow(
+      ^
+error: expect(received).toThrow(expected)
+
+Expected substring: "bridge: part prt_g0VYzAwA100h48z41DNJ belongs to ses_-zUR0p3qNzz2H2vHMXcp/msg_g0VYzAw9r0051xgAv1N2; expected ses_-zUR0p3qNzz2H2vHMXcp/msg_g0VYzAwAA00nDCtA6mjU"
+
+Received function did not throw
+Received value: {
+  info: {
+    id: "msg_g0VYzAwAA00nDCtA6mjU",
+    sessionID: "ses_-zUR0p3qNzz2H2vHMXcp",
+    orderKey: "v1:0001792859782732:0000000000000030:0000000000000000:message:msg_g0VYzAwAA00nDCtA6mjU",
+    author: "assistant",
+    role: "assistant",
+    time: {
+      created: 1792859782732,
+      completed: 1792859782735,
+    },
+    parentID: "msg_g0VYzAw9r0051xgAv1N2",
+    modelID: "gpt-5.6-terra",
+    providerID: "openai",
+    agent: "assistant",
+    path: {
+      cwd: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HHElOQ\\test-93300-SNlu4X\\fixtures\\memory-KM4QXR",
+      root: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HHElOQ\\test-93300-SNlu4X\\fixtures\\memory-KM4QXR",
+    },
+    cost: 0,
+    tokens: {
+      total: 0,
+      input: 0,
+      output: 0,
+      reasoning: 0,
+      cache: {
+        read: 0,
+        write: 0,
+      },
+    },
+    finish: "tool-calls",
+    resolvedRole: "assistant",
+    channel: "assistant",
+    agentID: "assistant",
+    sessionAgentID: "assistant",
+    originSource: "",
+  },
+  parts: [
+    {
+      id: "prt_g0VYzAwA100h48z41DNJ",
+      sessionID: "ses_-zUR0p3qNzz2H2vHMXcp",
+      messageID: "msg_g0VYzAw9r0051xgAv1N2",
+      type: "text",
+      text: "Build a Sokoban game",
+      orderKey: "v1:0001792859782743:0000000000000031:0000000000000000:part:prt_g0VYzAwA100h48z41DNJ",
+    }
+  ],
+}
+
+      at toThrow (unknown:1:1)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\test\tool-part-fact-storage.test.ts:212:11
+(fail) Tool effect fact storage > projects one immutable request and one immutable outcome as a completed visible ToolPart [2743.94ms]
+
+ 0 pass
+ 1 fail
+ 16 expect() calls
+Ran 1 test across 1 file. [5.27s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\tool-part-fact-storage.test.ts
+[1/1] DONE test/tool-part-fact-storage.test.ts exit=1 duration=5.83s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\tool-part-fact-storage.test.ts
+Test runtime retained after unsuccessful run: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-HHElOQ
+Physical/output settlement confirmed: true

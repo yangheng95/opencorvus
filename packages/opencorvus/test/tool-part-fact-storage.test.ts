@@ -207,6 +207,9 @@ describe("Tool effect fact storage", () => {
           orderKey: projectedAssistant.info.orderKey,
           part: { id: partID, orderKey: projectedAssistant.parts[0]?.orderKey },
         })
+        expect(() => projectPersistedSessionMessage({ info: finishedAssistant, parts: [userText] })).toThrow(
+          `bridge: part ${userText.id} belongs to ${session.id}/${user.id}; expected ${session.id}/${finishedAssistant.id}`,
+        )
       },
     })
   })

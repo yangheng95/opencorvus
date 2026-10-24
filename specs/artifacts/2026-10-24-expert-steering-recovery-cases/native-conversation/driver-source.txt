@@ -1,0 +1,116 @@
+import assert from "node:assert/strict"
+import fs from "node:fs/promises"
+import { readFileSync } from "node:fs"
+import path from "node:path"
+import { pathToFileURL } from "node:url"
+import { isDeepStrictEqual } from "node:util"
+import { execFileSync } from "node:child_process"
+
+const [run,sourceMode="current"]=process.argv.slice(2)
+assert.equal(path.resolve(process.env.OPENCORVUS_HOME!),path.resolve(run,"runtime"))
+const repo=path.resolve(import.meta.dir,"../.."),pkg=path.join(repo,"packages/opencorvus")
+const source=(file:string)=>pathToFileURL(path.join(pkg,file)).href
+let baselineModuleLoads=0
+if(sourceMode==="before"){
+  const {plugin}=await import("bun")
+  const original=execFileSync("git",["show","acab57ac0:packages/opencorvus/src/orchestrator/protocol/message-bridge.ts"],{cwd:repo,encoding:"utf8"})
+  plugin({name:"immutable-before-message-bridge",setup(build){
+    build.onLoad({filter:/orchestrator[\\/]protocol[\\/]message-bridge\.ts$/},()=>{baselineModuleLoads++;return {contents:original,loader:"ts"}})
+  }})
+}
+const evidence=path.join(run,"evidence"),taskID="tsk_g00VYyl3AK00URPjoC7V"
+const project="C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03/projects/marketing-growth"
+const originalConversation=JSON.parse(await fs.readFile("C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03/evidence/current.json","utf8")).conversation
+const {installProcessShims}=await import(source("src/runtime/shims.ts"));installProcessShims()
+const {RealProviderAudit}=await import(source("script/real-provider-audit.ts"))
+const audit=new RealProviderAudit("gpt-6.1-sol",0);audit.localOrigins.add("http://127.0.0.1:19144")
+const {Server}=await import(source("src/server/server.ts"))
+const {ProcessSupervisor}=await import(source("src/shell/process-supervisor.ts"))
+const {ExpertSquadRegistry}=await import(source("src/expert-squad/registry.ts"))
+const {introspectPackageToolForValidation}=await import(source("src/expert-squad/package-tool-capsule.ts"))
+const {Instance}=await import(source("src/project/instance.ts"))
+const server=Server.listen({port:19144,hostname:"127.0.0.1"})
+const requests:any[]=[],disposals:any[]=[],io:any[]=[],reads:any[]=[],scenarios:any[]=[]
+const handles=new Set<any>(),operations:Promise<unknown>[]=[]
+const original={dispose:ProcessSupervisor.disposeAndWaitForExit,rm:fs.rm,readFile:fs.readFile,writeFile:fs.writeFile}
+let scenario:any
+const restoreObserver=ProcessSupervisor.setWindowsRequestObserverForTest((request:any)=>{requests.push(structuredClone(request))})
+const requestMap=new Map<string,any>()
+const read=async(route:string)=>{
+  const url=new URL(`/task/${taskID}${route}`,server.url);url.searchParams.set("directory",project)
+  const record:any={scenario:scenario?.name??"warm",route,beganAt:Date.now()},start=performance.now();reads.push(record)
+  try{
+    const response=await fetch(url,{signal:AbortSignal.timeout(120_000)}),bytes=await response.arrayBuffer()
+    record.status=response.status;record.bytes=bytes.byteLength
+    assert.equal(response.status,200)
+    const value=JSON.parse(Buffer.from(bytes).toString("utf8"))
+    if(route==="")assert.equal(value.status,"completed")
+    if(route.startsWith("/conversation")){
+      record.messages=value.transcript.length;record.taskID=value.board.task.id
+      if(route.includes("2000")){
+        record.fullTranscriptEquality=isDeepStrictEqual(value.transcript,originalConversation.transcript)
+        await fs.writeFile(path.join(evidence,`actual-conversation-${reads.indexOf(record)}.json`),Buffer.from(bytes))
+        assert.equal(record.fullTranscriptEquality,true,"Actual transcript must equal the original business history in full")
+      }
+    }
+    return record
+  }catch(error){record.error=String(error);throw error}
+  finally{record.elapsedMs=performance.now()-start}
+}
+for(const name of ["rm","readFile","writeFile"] as const){
+  ;(fs as any)[name]=(...args:any[])=>{
+    const candidate=String(args[0]),request=requestMap.get(candidate)??requestMap.get(path.dirname(candidate))
+    if(!request)return (original[name] as any)(...args)
+    const record:any={requestID:request.request_id,operation:name,file:path.basename(candidate),beganAt:Date.now()},start=performance.now();io.push(record)
+    const actual=(original[name] as any)(...args)
+    void actual.then(()=>{record.outcome="fulfilled";record.elapsedMs=performance.now()-start},(error:any)=>{record.error=String(error);record.code=error.code;record.elapsedMs=performance.now()-start})
+    return actual
+  }
+}
+ProcessSupervisor.disposeAndWaitForExit=(handle:any,label:string,options:any)=>{
+  if(!label.startsWith("package tool"))return original.dispose(handle,label,options)
+  const start=performance.now(),record:any={pid:handle.pid,label,scenario:scenario?.name??"prepare",beganAt:Date.now()};disposals.push(record);handles.add(handle)
+  for(let i=requests.length-1;i>=Math.max(0,requests.length-24);i--){
+    try{const ready=JSON.parse(readFileSync(requests[i].ready_file,"utf8"));if(ready.target_pid===handle.pid){record.request=requests[i];record.ready=ready;requestMap.set(path.dirname(requests[i].ready_file),requests[i]);break}}catch{}
+  }
+  record.observerOverheadMs=performance.now()-start
+  for(const [name,promise]of [["physical",handle.exited],["output",handle.outputSettled],["settlement",handle.settled]])void promise.then((value:any)=>{record[name]={at:Date.now(),elapsedMs:performance.now()-start,value}},(error:any)=>{record[name]={at:Date.now(),elapsedMs:performance.now()-start,error:String(error)}})
+  const actual=original.dispose(handle,label,options)
+  void actual.then((exitCode:any)=>{record.returned={at:Date.now(),elapsedMs:performance.now()-start,exitCode}},(error:any)=>{record.returned={at:Date.now(),elapsedMs:performance.now()-start,error:String(error)}})
+  for(let i=0;i<(scenario?.concurrentReads??0);i++){
+    const op=read(scenario.route);operations.push(op);void op.catch(()=>{})
+  }
+  return actual
+}
+try{
+  await read("");await read("/conversation?tail_limit=2000")
+  const loaded=await Instance.provide({directory:project,fn:()=>ExpertSquadRegistry.loadSourcePackage(path.join(repo,"expert-squads/builtin/marketing-growth"))})
+  const prepared=loaded.packageToolBundles.get("marketing-growth/shared/publish-marketing-growth-artifact");assert(prepared)
+  for(const input of [
+    {name:"native-only",concurrentReads:0,route:"/conversation?tail_limit=2000"},
+    {name:"one-full-conversation",concurrentReads:1,route:"/conversation?tail_limit=2000"},
+    {name:"two-full-conversations",concurrentReads:2,route:"/conversation?tail_limit=2000"},
+    {name:"four-full-conversations",concurrentReads:4,route:"/conversation?tail_limit=2000"},
+    {name:"one-default-conversation",concurrentReads:1,route:"/conversation"},
+    {name:"one-board",concurrentReads:1,route:"/board"},
+  ]){
+    scenario={...input,beganAt:Date.now()};scenarios.push(scenario)
+    try{
+      const value=await introspectPackageToolForValidation({prepared,cwd:project})
+      assert.equal(value.description,"Validate and publish one strict marketing-growth Artifact ABI value with exact selected predecessors and immutable resources.")
+      scenario.actualDescription=value.description;scenario.outcome="fulfilled"
+    }catch(error){scenario.outcome="rejected";scenario.error=String(error)}
+    const outcomes=await Promise.allSettled(operations.splice(0));scenario.httpOutcomes=outcomes.map(outcome=>outcome.status)
+    await Promise.allSettled([...handles].flatMap(handle=>[handle.dispose(),handle.exited,handle.outputSettled,handle.settled]))
+    console.log(JSON.stringify({scenario,latest:disposals.at(-1),reads:reads.filter(r=>r.scenario===scenario.name)}))
+  }
+}finally{
+  await Promise.allSettled(operations)
+  await Promise.allSettled([...handles].flatMap(handle=>[handle.dispose(),handle.exited,handle.outputSettled,handle.settled]))
+  ProcessSupervisor.disposeAndWaitForExit=original.dispose
+  for(const name of ["rm","readFile","writeFile"]as const)(fs as any)[name]=original[name]
+  restoreObserver();await server.stop(true)
+  assert.equal(audit.requests.length,0)
+  if(sourceMode==="before")assert.equal(baselineModuleLoads,1,"Exact immutable before source must be loaded")
+  await fs.writeFile(path.join(evidence,"diagnostic.json"),JSON.stringify({sourceMode,baselineModuleLoads,baselineRevision:sourceMode==="before"?"acab57ac0":undefined,qualification:"Actual backend reads of closed business history plus real Host-native introspection; experiment collection is not a business success verdict",scenarios,requests,disposals,io,reads,modelRequests:audit.requests,stopped:true},null,2))
+}

@@ -595,13 +595,16 @@ function projectPersistedMessage<TInfo extends Message.Info>(
     taskID,
   )
   const parts = message.parts.map((part) => {
-    const partProperties = enrichMessageEventProperties(
-      Message.Event.PartUpdated.type,
-      { part },
-      part.sessionID,
-      taskID,
-    )
-    return partProperties.part as Message.VisiblePart
+    if (part.sessionID !== sessionID || part.messageID !== message.info.id) {
+      throw new Error(
+        `bridge: part ${part.id} belongs to ${part.sessionID}/${part.messageID}; expected ${sessionID}/${message.info.id}`,
+      )
+    }
+    // The parent message already resolved the exact execution identity. Parts
+    // retain their own durable ownership and ordering without recomputing that
+    // same identity for metadata this projection does not return.
+    const { partOrderKey } = partOrderKeysForEvent({ part })
+    return { ...part, orderKey: partOrderKey }
   })
   return {
     info: messageProperties.info as ProjectedTaskMessage<TInfo>["info"],

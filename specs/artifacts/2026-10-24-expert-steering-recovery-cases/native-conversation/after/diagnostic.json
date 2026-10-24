@@ -1,0 +1,984 @@
+{
+  "sourceMode": "current",
+  "baselineModuleLoads": 0,
+  "qualification": "Actual backend reads of closed business history plus real Host-native introspection; experiment collection is not a business success verdict",
+  "scenarios": [
+    {
+      "name": "native-only",
+      "concurrentReads": 0,
+      "route": "/conversation?tail_limit=2000",
+      "beganAt": 1792860333022,
+      "actualDescription": "Validate and publish one strict marketing-growth Artifact ABI value with exact selected predecessors and immutable resources.",
+      "outcome": "fulfilled",
+      "httpOutcomes": []
+    },
+    {
+      "name": "one-full-conversation",
+      "concurrentReads": 1,
+      "route": "/conversation?tail_limit=2000",
+      "beganAt": 1792860333340,
+      "actualDescription": "Validate and publish one strict marketing-growth Artifact ABI value with exact selected predecessors and immutable resources.",
+      "outcome": "fulfilled",
+      "httpOutcomes": [
+        "fulfilled"
+      ]
+    },
+    {
+      "name": "two-full-conversations",
+      "concurrentReads": 2,
+      "route": "/conversation?tail_limit=2000",
+      "beganAt": 1792860335077,
+      "actualDescription": "Validate and publish one strict marketing-growth Artifact ABI value with exact selected predecessors and immutable resources.",
+      "outcome": "fulfilled",
+      "httpOutcomes": [
+        "fulfilled",
+        "fulfilled"
+      ]
+    },
+    {
+      "name": "four-full-conversations",
+      "concurrentReads": 4,
+      "route": "/conversation?tail_limit=2000",
+      "beganAt": 1792860337453,
+      "actualDescription": "Validate and publish one strict marketing-growth Artifact ABI value with exact selected predecessors and immutable resources.",
+      "outcome": "fulfilled",
+      "httpOutcomes": [
+        "fulfilled",
+        "fulfilled",
+        "fulfilled",
+        "fulfilled"
+      ]
+    },
+    {
+      "name": "one-default-conversation",
+      "concurrentReads": 1,
+      "route": "/conversation",
+      "beganAt": 1792860341783,
+      "actualDescription": "Validate and publish one strict marketing-growth Artifact ABI value with exact selected predecessors and immutable resources.",
+      "outcome": "fulfilled",
+      "httpOutcomes": [
+        "fulfilled"
+      ]
+    },
+    {
+      "name": "one-board",
+      "concurrentReads": 1,
+      "route": "/board",
+      "beganAt": 1792860342834,
+      "actualDescription": "Validate and publish one strict marketing-growth Artifact ABI value with exact selected predecessors and immutable resources.",
+      "outcome": "fulfilled",
+      "httpOutcomes": [
+        "fulfilled"
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "kind": "command",
+      "executable": "C:\\Program Files\\Git\\cmd\\git.EXE",
+      "args": [
+        "-c",
+        "core.longPaths=true",
+        "rev-parse",
+        "--path-format=absolute",
+        "--show-toplevel",
+        "--git-common-dir"
+      ],
+      "detached": false,
+      "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261024-mg-03\\projects\\marketing-growth",
+      "ready_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-UT9Dm4\\ready.json",
+      "request_id": "7e35f5e8-02ee-4027-b7c3-3ab2216827d4",
+      "launch_failed_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-UT9Dm4\\launch-failed.json",
+      "cancel_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-UT9Dm4\\cancel",
+      "settled_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-UT9Dm4\\settled.json",
+      "owner_pid": 97184,
+      "owner_process_instance_id": "win32:639284571256264402",
+      "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+    },
+    {
+      "kind": "command",
+      "executable": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\cache\\expert-squad-package-tools\\opencorvus.expert-squad.package-tool.v1\\package-tool-worker-b76633192b7062b1fd0d61d3d1092e37a8817bdb11b1ce824a3a71eca1f9fa4a.cjs"
+      ],
+      "detached": false,
+      "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\data\\expert-squad-package-revisions\\v1\\89e98b1e06e298852fbb9ea906a61ddf80e382e28188da484ca7a9954c9515ee",
+      "ready_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-TsLMiL\\ready.json",
+      "request_id": "1c2a1d73-6b92-4027-ad79-ffb5a048ad0d",
+      "launch_failed_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-TsLMiL\\launch-failed.json",
+      "cancel_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-TsLMiL\\cancel",
+      "settled_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-TsLMiL\\settled.json",
+      "owner_pid": 97184,
+      "owner_process_instance_id": "win32:639284571256264402",
+      "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+    },
+    {
+      "kind": "command",
+      "executable": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\cache\\expert-squad-package-tools\\opencorvus.expert-squad.package-tool.v1\\package-tool-worker-b76633192b7062b1fd0d61d3d1092e37a8817bdb11b1ce824a3a71eca1f9fa4a.cjs"
+      ],
+      "detached": false,
+      "cwd": "C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03/projects/marketing-growth",
+      "ready_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-CFV8Rw\\ready.json",
+      "request_id": "8e06ba96-e41f-451f-94f2-6a8dab0297ac",
+      "launch_failed_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-CFV8Rw\\launch-failed.json",
+      "cancel_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-CFV8Rw\\cancel",
+      "settled_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-CFV8Rw\\settled.json",
+      "owner_pid": 97184,
+      "owner_process_instance_id": "win32:639284571256264402",
+      "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+    },
+    {
+      "kind": "command",
+      "executable": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\cache\\expert-squad-package-tools\\opencorvus.expert-squad.package-tool.v1\\package-tool-worker-b76633192b7062b1fd0d61d3d1092e37a8817bdb11b1ce824a3a71eca1f9fa4a.cjs"
+      ],
+      "detached": false,
+      "cwd": "C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03/projects/marketing-growth",
+      "ready_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-KFbeHv\\ready.json",
+      "request_id": "7969d2e3-cf94-4088-a09a-d599ccd15173",
+      "launch_failed_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-KFbeHv\\launch-failed.json",
+      "cancel_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-KFbeHv\\cancel",
+      "settled_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-KFbeHv\\settled.json",
+      "owner_pid": 97184,
+      "owner_process_instance_id": "win32:639284571256264402",
+      "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+    },
+    {
+      "kind": "command",
+      "executable": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\cache\\expert-squad-package-tools\\opencorvus.expert-squad.package-tool.v1\\package-tool-worker-b76633192b7062b1fd0d61d3d1092e37a8817bdb11b1ce824a3a71eca1f9fa4a.cjs"
+      ],
+      "detached": false,
+      "cwd": "C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03/projects/marketing-growth",
+      "ready_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-TLcF6B\\ready.json",
+      "request_id": "85d9c571-50e4-4690-b1a8-6ce830a25e5d",
+      "launch_failed_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-TLcF6B\\launch-failed.json",
+      "cancel_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-TLcF6B\\cancel",
+      "settled_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-TLcF6B\\settled.json",
+      "owner_pid": 97184,
+      "owner_process_instance_id": "win32:639284571256264402",
+      "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+    },
+    {
+      "kind": "command",
+      "executable": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\cache\\expert-squad-package-tools\\opencorvus.expert-squad.package-tool.v1\\package-tool-worker-b76633192b7062b1fd0d61d3d1092e37a8817bdb11b1ce824a3a71eca1f9fa4a.cjs"
+      ],
+      "detached": false,
+      "cwd": "C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03/projects/marketing-growth",
+      "ready_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-956LdV\\ready.json",
+      "request_id": "031114ee-e6ee-401d-864f-d73cb6bd9f1b",
+      "launch_failed_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-956LdV\\launch-failed.json",
+      "cancel_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-956LdV\\cancel",
+      "settled_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-956LdV\\settled.json",
+      "owner_pid": 97184,
+      "owner_process_instance_id": "win32:639284571256264402",
+      "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+    },
+    {
+      "kind": "command",
+      "executable": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\cache\\expert-squad-package-tools\\opencorvus.expert-squad.package-tool.v1\\package-tool-worker-b76633192b7062b1fd0d61d3d1092e37a8817bdb11b1ce824a3a71eca1f9fa4a.cjs"
+      ],
+      "detached": false,
+      "cwd": "C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03/projects/marketing-growth",
+      "ready_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-y8u1Y7\\ready.json",
+      "request_id": "454a1371-d03e-4b19-9e64-75dcafb81965",
+      "launch_failed_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-y8u1Y7\\launch-failed.json",
+      "cancel_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-y8u1Y7\\cancel",
+      "settled_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-y8u1Y7\\settled.json",
+      "owner_pid": 97184,
+      "owner_process_instance_id": "win32:639284571256264402",
+      "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+    },
+    {
+      "kind": "command",
+      "executable": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\cache\\expert-squad-package-tools\\opencorvus.expert-squad.package-tool.v1\\package-tool-worker-b76633192b7062b1fd0d61d3d1092e37a8817bdb11b1ce824a3a71eca1f9fa4a.cjs"
+      ],
+      "detached": false,
+      "cwd": "C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03/projects/marketing-growth",
+      "ready_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-b8T4L8\\ready.json",
+      "request_id": "21a79c8b-3c77-4a42-af40-6bc0cdb64614",
+      "launch_failed_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-b8T4L8\\launch-failed.json",
+      "cancel_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-b8T4L8\\cancel",
+      "settled_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-b8T4L8\\settled.json",
+      "owner_pid": 97184,
+      "owner_process_instance_id": "win32:639284571256264402",
+      "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+    }
+  ],
+  "disposals": [
+    {
+      "pid": 96648,
+      "label": "package tool marketing-growth/shared/publish-marketing-growth-artifact",
+      "scenario": "prepare",
+      "beganAt": 1792860332958,
+      "request": {
+        "kind": "command",
+        "executable": "C:\\Program Files\\nodejs\\node.exe",
+        "args": [
+          "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\cache\\expert-squad-package-tools\\opencorvus.expert-squad.package-tool.v1\\package-tool-worker-b76633192b7062b1fd0d61d3d1092e37a8817bdb11b1ce824a3a71eca1f9fa4a.cjs"
+        ],
+        "detached": false,
+        "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\data\\expert-squad-package-revisions\\v1\\89e98b1e06e298852fbb9ea906a61ddf80e382e28188da484ca7a9954c9515ee",
+        "ready_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-TsLMiL\\ready.json",
+        "request_id": "1c2a1d73-6b92-4027-ad79-ffb5a048ad0d",
+        "launch_failed_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-TsLMiL\\launch-failed.json",
+        "cancel_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-TsLMiL\\cancel",
+        "settled_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-TsLMiL\\settled.json",
+        "owner_pid": 97184,
+        "owner_process_instance_id": "win32:639284571256264402",
+        "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+      },
+      "ready": {
+        "protocol": 3,
+        "detached": false,
+        "request_id": "1c2a1d73-6b92-4027-ad79-ffb5a048ad0d",
+        "helper_pid": 17428,
+        "target_pid": 96648,
+        "target_process_instance_id": "win32:639284571326437726",
+        "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+      },
+      "observerOverheadMs": 0.5443999999997686,
+      "output": {
+        "at": 1792860333004,
+        "elapsedMs": 45.873999999999796
+      },
+      "physical": {
+        "at": 1792860333005,
+        "elapsedMs": 47.16579999999976,
+        "value": 0
+      },
+      "settlement": {
+        "at": 1792860333007,
+        "elapsedMs": 48.83880000000045
+      },
+      "returned": {
+        "at": 1792860333007,
+        "elapsedMs": 48.94459999999981,
+        "exitCode": 0
+      }
+    },
+    {
+      "pid": 90184,
+      "label": "package tool marketing-growth/shared/publish-marketing-growth-artifact",
+      "scenario": "native-only",
+      "beganAt": 1792860333310,
+      "request": {
+        "kind": "command",
+        "executable": "C:\\Program Files\\nodejs\\node.exe",
+        "args": [
+          "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\cache\\expert-squad-package-tools\\opencorvus.expert-squad.package-tool.v1\\package-tool-worker-b76633192b7062b1fd0d61d3d1092e37a8817bdb11b1ce824a3a71eca1f9fa4a.cjs"
+        ],
+        "detached": false,
+        "cwd": "C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03/projects/marketing-growth",
+        "ready_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-CFV8Rw\\ready.json",
+        "request_id": "8e06ba96-e41f-451f-94f2-6a8dab0297ac",
+        "launch_failed_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-CFV8Rw\\launch-failed.json",
+        "cancel_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-CFV8Rw\\cancel",
+        "settled_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-CFV8Rw\\settled.json",
+        "owner_pid": 97184,
+        "owner_process_instance_id": "win32:639284571256264402",
+        "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+      },
+      "ready": {
+        "protocol": 3,
+        "detached": false,
+        "request_id": "8e06ba96-e41f-451f-94f2-6a8dab0297ac",
+        "helper_pid": 88512,
+        "target_pid": 90184,
+        "target_process_instance_id": "win32:639284571330775143",
+        "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+      },
+      "observerOverheadMs": 0.2882000000008702,
+      "output": {
+        "at": 1792860333337,
+        "elapsedMs": 27.067000000000007
+      },
+      "physical": {
+        "at": 1792860333338,
+        "elapsedMs": 27.962100000000646,
+        "value": 0
+      },
+      "settlement": {
+        "at": 1792860333340,
+        "elapsedMs": 29.378700000000208
+      },
+      "returned": {
+        "at": 1792860333340,
+        "elapsedMs": 29.396700000000237,
+        "exitCode": 0
+      }
+    },
+    {
+      "pid": 97328,
+      "label": "package tool marketing-growth/shared/publish-marketing-growth-artifact",
+      "scenario": "one-full-conversation",
+      "beganAt": 1792860333639,
+      "request": {
+        "kind": "command",
+        "executable": "C:\\Program Files\\nodejs\\node.exe",
+        "args": [
+          "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\cache\\expert-squad-package-tools\\opencorvus.expert-squad.package-tool.v1\\package-tool-worker-b76633192b7062b1fd0d61d3d1092e37a8817bdb11b1ce824a3a71eca1f9fa4a.cjs"
+        ],
+        "detached": false,
+        "cwd": "C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03/projects/marketing-growth",
+        "ready_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-KFbeHv\\ready.json",
+        "request_id": "7969d2e3-cf94-4088-a09a-d599ccd15173",
+        "launch_failed_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-KFbeHv\\launch-failed.json",
+        "cancel_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-KFbeHv\\cancel",
+        "settled_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-KFbeHv\\settled.json",
+        "owner_pid": 97184,
+        "owner_process_instance_id": "win32:639284571256264402",
+        "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+      },
+      "ready": {
+        "protocol": 3,
+        "detached": false,
+        "request_id": "7969d2e3-cf94-4088-a09a-d599ccd15173",
+        "helper_pid": 91348,
+        "target_pid": 97328,
+        "target_process_instance_id": "win32:639284571333876122",
+        "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+      },
+      "observerOverheadMs": 0.28920000000016444,
+      "output": {
+        "at": 1792860334995,
+        "elapsedMs": 1356.1818999999996
+      },
+      "physical": {
+        "at": 1792860334997,
+        "elapsedMs": 1357.941999999999,
+        "value": 0
+      },
+      "settlement": {
+        "at": 1792860335003,
+        "elapsedMs": 1363.3811999999998
+      },
+      "returned": {
+        "at": 1792860335003,
+        "elapsedMs": 1363.4017999999996,
+        "exitCode": 0
+      }
+    },
+    {
+      "pid": 44556,
+      "label": "package tool marketing-growth/shared/publish-marketing-growth-artifact",
+      "scenario": "two-full-conversations",
+      "beganAt": 1792860335337,
+      "request": {
+        "kind": "command",
+        "executable": "C:\\Program Files\\nodejs\\node.exe",
+        "args": [
+          "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\cache\\expert-squad-package-tools\\opencorvus.expert-squad.package-tool.v1\\package-tool-worker-b76633192b7062b1fd0d61d3d1092e37a8817bdb11b1ce824a3a71eca1f9fa4a.cjs"
+        ],
+        "detached": false,
+        "cwd": "C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03/projects/marketing-growth",
+        "ready_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-TLcF6B\\ready.json",
+        "request_id": "85d9c571-50e4-4690-b1a8-6ce830a25e5d",
+        "launch_failed_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-TLcF6B\\launch-failed.json",
+        "cancel_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-TLcF6B\\cancel",
+        "settled_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-TLcF6B\\settled.json",
+        "owner_pid": 97184,
+        "owner_process_instance_id": "win32:639284571256264402",
+        "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+      },
+      "ready": {
+        "protocol": 3,
+        "detached": false,
+        "request_id": "85d9c571-50e4-4690-b1a8-6ce830a25e5d",
+        "helper_pid": 42388,
+        "target_pid": 44556,
+        "target_process_instance_id": "win32:639284571351552252",
+        "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+      },
+      "observerOverheadMs": 0.2551999999996042,
+      "output": {
+        "at": 1792860336414,
+        "elapsedMs": 1076.8773999999994
+      },
+      "physical": {
+        "at": 1792860337321,
+        "elapsedMs": 1984.5131000000001,
+        "value": 0
+      },
+      "settlement": {
+        "at": 1792860337325,
+        "elapsedMs": 1988.4175999999989
+      },
+      "returned": {
+        "at": 1792860337325,
+        "elapsedMs": 1988.4308999999994,
+        "exitCode": 0
+      }
+    },
+    {
+      "pid": 86712,
+      "label": "package tool marketing-growth/shared/publish-marketing-growth-artifact",
+      "scenario": "four-full-conversations",
+      "beganAt": 1792860337763,
+      "request": {
+        "kind": "command",
+        "executable": "C:\\Program Files\\nodejs\\node.exe",
+        "args": [
+          "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\cache\\expert-squad-package-tools\\opencorvus.expert-squad.package-tool.v1\\package-tool-worker-b76633192b7062b1fd0d61d3d1092e37a8817bdb11b1ce824a3a71eca1f9fa4a.cjs"
+        ],
+        "detached": false,
+        "cwd": "C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03/projects/marketing-growth",
+        "ready_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-956LdV\\ready.json",
+        "request_id": "031114ee-e6ee-401d-864f-d73cb6bd9f1b",
+        "launch_failed_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-956LdV\\launch-failed.json",
+        "cancel_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-956LdV\\cancel",
+        "settled_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-956LdV\\settled.json",
+        "owner_pid": 97184,
+        "owner_process_instance_id": "win32:639284571256264402",
+        "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+      },
+      "ready": {
+        "protocol": 3,
+        "detached": false,
+        "request_id": "031114ee-e6ee-401d-864f-d73cb6bd9f1b",
+        "helper_pid": 96668,
+        "target_pid": 86712,
+        "target_process_instance_id": "win32:639284571375842499",
+        "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+      },
+      "observerOverheadMs": 0.22080000000096334,
+      "output": {
+        "at": 1792860339683,
+        "elapsedMs": 1919.7906000000003
+      },
+      "physical": {
+        "at": 1792860341518,
+        "elapsedMs": 3754.938400000001,
+        "value": 0
+      },
+      "settlement": {
+        "at": 1792860341522,
+        "elapsedMs": 3758.281500000001
+      },
+      "returned": {
+        "at": 1792860341522,
+        "elapsedMs": 3758.2996999999996,
+        "exitCode": 0
+      }
+    },
+    {
+      "pid": 93684,
+      "label": "package tool marketing-growth/shared/publish-marketing-growth-artifact",
+      "scenario": "one-default-conversation",
+      "beganAt": 1792860342059,
+      "request": {
+        "kind": "command",
+        "executable": "C:\\Program Files\\nodejs\\node.exe",
+        "args": [
+          "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\cache\\expert-squad-package-tools\\opencorvus.expert-squad.package-tool.v1\\package-tool-worker-b76633192b7062b1fd0d61d3d1092e37a8817bdb11b1ce824a3a71eca1f9fa4a.cjs"
+        ],
+        "detached": false,
+        "cwd": "C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03/projects/marketing-growth",
+        "ready_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-y8u1Y7\\ready.json",
+        "request_id": "454a1371-d03e-4b19-9e64-75dcafb81965",
+        "launch_failed_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-y8u1Y7\\launch-failed.json",
+        "cancel_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-y8u1Y7\\cancel",
+        "settled_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-y8u1Y7\\settled.json",
+        "owner_pid": 97184,
+        "owner_process_instance_id": "win32:639284571256264402",
+        "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+      },
+      "ready": {
+        "protocol": 3,
+        "detached": false,
+        "request_id": "454a1371-d03e-4b19-9e64-75dcafb81965",
+        "helper_pid": 91656,
+        "target_pid": 93684,
+        "target_process_instance_id": "win32:639284571418605454",
+        "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+      },
+      "observerOverheadMs": 0.24829999999928987,
+      "output": {
+        "at": 1792860342783,
+        "elapsedMs": 723.9406999999992
+      },
+      "physical": {
+        "at": 1792860342784,
+        "elapsedMs": 724.9197000000022,
+        "value": 0
+      },
+      "settlement": {
+        "at": 1792860342788,
+        "elapsedMs": 728.7920999999988
+      },
+      "returned": {
+        "at": 1792860342788,
+        "elapsedMs": 728.8060000000005,
+        "exitCode": 0
+      }
+    },
+    {
+      "pid": 90896,
+      "label": "package tool marketing-growth/shared/publish-marketing-growth-artifact",
+      "scenario": "one-board",
+      "beganAt": 1792860343056,
+      "request": {
+        "kind": "command",
+        "executable": "C:\\Program Files\\nodejs\\node.exe",
+        "args": [
+          "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\cache\\expert-squad-package-tools\\opencorvus.expert-squad.package-tool.v1\\package-tool-worker-b76633192b7062b1fd0d61d3d1092e37a8817bdb11b1ce824a3a71eca1f9fa4a.cjs"
+        ],
+        "detached": false,
+        "cwd": "C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03/projects/marketing-growth",
+        "ready_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-b8T4L8\\ready.json",
+        "request_id": "21a79c8b-3c77-4a42-af40-6bc0cdb64614",
+        "launch_failed_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-b8T4L8\\launch-failed.json",
+        "cancel_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-b8T4L8\\cancel",
+        "settled_file": "C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-b8T4L8\\settled.json",
+        "owner_pid": 97184,
+        "owner_process_instance_id": "win32:639284571256264402",
+        "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+      },
+      "ready": {
+        "protocol": 3,
+        "detached": false,
+        "request_id": "21a79c8b-3c77-4a42-af40-6bc0cdb64614",
+        "helper_pid": 88792,
+        "target_pid": 90896,
+        "target_process_instance_id": "win32:639284571428730510",
+        "runtime_occurrence_id": "27d6e224-9c71-44ba-a0cf-6a080b184512"
+      },
+      "observerOverheadMs": 0.22179999999934807,
+      "output": {
+        "at": 1792860343353,
+        "elapsedMs": 296.85399999999936
+      },
+      "physical": {
+        "at": 1792860343354,
+        "elapsedMs": 298.71329999999944,
+        "value": 0
+      },
+      "settlement": {
+        "at": 1792860343356,
+        "elapsedMs": 299.91040000000066
+      },
+      "returned": {
+        "at": 1792860343356,
+        "elapsedMs": 299.9328999999998,
+        "exitCode": 0
+      }
+    }
+  ],
+  "io": [
+    {
+      "requestID": "1c2a1d73-6b92-4027-ad79-ffb5a048ad0d",
+      "operation": "writeFile",
+      "file": "cancel",
+      "beganAt": 1792860332959,
+      "outcome": "fulfilled",
+      "elapsedMs": 1.0534999999999854
+    },
+    {
+      "requestID": "1c2a1d73-6b92-4027-ad79-ffb5a048ad0d",
+      "operation": "readFile",
+      "file": "launch-failed.json",
+      "beganAt": 1792860333004,
+      "error": "Error: ENOENT: no such file or directory, open 'C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-TsLMiL\\launch-failed.json'",
+      "code": "ENOENT",
+      "elapsedMs": 0.26679999999942083
+    },
+    {
+      "requestID": "1c2a1d73-6b92-4027-ad79-ffb5a048ad0d",
+      "operation": "readFile",
+      "file": "ready.json",
+      "beganAt": 1792860333004,
+      "outcome": "fulfilled",
+      "elapsedMs": 0.19170000000030996
+    },
+    {
+      "requestID": "1c2a1d73-6b92-4027-ad79-ffb5a048ad0d",
+      "operation": "readFile",
+      "file": "settled.json",
+      "beganAt": 1792860333004,
+      "outcome": "fulfilled",
+      "elapsedMs": 0.569999999999709
+    },
+    {
+      "requestID": "1c2a1d73-6b92-4027-ad79-ffb5a048ad0d",
+      "operation": "rm",
+      "file": "supervisor-TsLMiL",
+      "beganAt": 1792860333005,
+      "outcome": "fulfilled",
+      "elapsedMs": 1.6130000000002838
+    },
+    {
+      "requestID": "8e06ba96-e41f-451f-94f2-6a8dab0297ac",
+      "operation": "writeFile",
+      "file": "cancel",
+      "beganAt": 1792860333311,
+      "outcome": "fulfilled",
+      "elapsedMs": 0.7040999999999258
+    },
+    {
+      "requestID": "8e06ba96-e41f-451f-94f2-6a8dab0297ac",
+      "operation": "readFile",
+      "file": "launch-failed.json",
+      "beganAt": 1792860333337,
+      "error": "Error: ENOENT: no such file or directory, open 'C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-CFV8Rw\\launch-failed.json'",
+      "code": "ENOENT",
+      "elapsedMs": 0.17510000000038417
+    },
+    {
+      "requestID": "8e06ba96-e41f-451f-94f2-6a8dab0297ac",
+      "operation": "readFile",
+      "file": "ready.json",
+      "beganAt": 1792860333338,
+      "outcome": "fulfilled",
+      "elapsedMs": 0.20470000000022992
+    },
+    {
+      "requestID": "8e06ba96-e41f-451f-94f2-6a8dab0297ac",
+      "operation": "readFile",
+      "file": "settled.json",
+      "beganAt": 1792860333338,
+      "outcome": "fulfilled",
+      "elapsedMs": 0.4032999999999447
+    },
+    {
+      "requestID": "8e06ba96-e41f-451f-94f2-6a8dab0297ac",
+      "operation": "rm",
+      "file": "supervisor-CFV8Rw",
+      "beganAt": 1792860333338,
+      "outcome": "fulfilled",
+      "elapsedMs": 1.3818999999994048
+    },
+    {
+      "requestID": "7969d2e3-cf94-4088-a09a-d599ccd15173",
+      "operation": "writeFile",
+      "file": "cancel",
+      "beganAt": 1792860333640,
+      "outcome": "fulfilled",
+      "elapsedMs": 1342.3634999999995
+    },
+    {
+      "requestID": "7969d2e3-cf94-4088-a09a-d599ccd15173",
+      "operation": "readFile",
+      "file": "launch-failed.json",
+      "beganAt": 1792860334996,
+      "error": "Error: ENOENT: no such file or directory, open 'C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-KFbeHv\\launch-failed.json'",
+      "code": "ENOENT",
+      "elapsedMs": 0.4372000000003027
+    },
+    {
+      "requestID": "7969d2e3-cf94-4088-a09a-d599ccd15173",
+      "operation": "readFile",
+      "file": "ready.json",
+      "beganAt": 1792860334996,
+      "outcome": "fulfilled",
+      "elapsedMs": 0.2907000000013795
+    },
+    {
+      "requestID": "7969d2e3-cf94-4088-a09a-d599ccd15173",
+      "operation": "readFile",
+      "file": "settled.json",
+      "beganAt": 1792860334996,
+      "outcome": "fulfilled",
+      "elapsedMs": 0.7716999999993277
+    },
+    {
+      "requestID": "7969d2e3-cf94-4088-a09a-d599ccd15173",
+      "operation": "rm",
+      "file": "supervisor-KFbeHv",
+      "beganAt": 1792860334997,
+      "outcome": "fulfilled",
+      "elapsedMs": 5.39220000000023
+    },
+    {
+      "requestID": "85d9c571-50e4-4690-b1a8-6ce830a25e5d",
+      "operation": "writeFile",
+      "file": "cancel",
+      "beganAt": 1792860335337,
+      "outcome": "fulfilled",
+      "elapsedMs": 1067.4224000000013
+    },
+    {
+      "requestID": "85d9c571-50e4-4690-b1a8-6ce830a25e5d",
+      "operation": "readFile",
+      "file": "launch-failed.json",
+      "beganAt": 1792860336414,
+      "error": "Error: ENOENT: no such file or directory, open 'C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-TLcF6B\\launch-failed.json'",
+      "code": "ENOENT",
+      "elapsedMs": 0.30049999999937427
+    },
+    {
+      "requestID": "85d9c571-50e4-4690-b1a8-6ce830a25e5d",
+      "operation": "readFile",
+      "file": "ready.json",
+      "beganAt": 1792860336414,
+      "outcome": "fulfilled",
+      "elapsedMs": 902.4310000000005
+    },
+    {
+      "requestID": "85d9c571-50e4-4690-b1a8-6ce830a25e5d",
+      "operation": "readFile",
+      "file": "settled.json",
+      "beganAt": 1792860337317,
+      "outcome": "fulfilled",
+      "elapsedMs": 4.762000000000626
+    },
+    {
+      "requestID": "85d9c571-50e4-4690-b1a8-6ce830a25e5d",
+      "operation": "rm",
+      "file": "supervisor-TLcF6B",
+      "beganAt": 1792860337321,
+      "outcome": "fulfilled",
+      "elapsedMs": 3.8677000000006956
+    },
+    {
+      "requestID": "031114ee-e6ee-401d-864f-d73cb6bd9f1b",
+      "operation": "writeFile",
+      "file": "cancel",
+      "beganAt": 1792860337764,
+      "outcome": "fulfilled",
+      "elapsedMs": 1931.2523999999994
+    },
+    {
+      "requestID": "031114ee-e6ee-401d-864f-d73cb6bd9f1b",
+      "operation": "readFile",
+      "file": "launch-failed.json",
+      "beganAt": 1792860339683,
+      "error": "Error: ENOENT: no such file or directory, open 'C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-956LdV\\launch-failed.json'",
+      "code": "ENOENT",
+      "elapsedMs": 14.359999999998763
+    },
+    {
+      "requestID": "031114ee-e6ee-401d-864f-d73cb6bd9f1b",
+      "operation": "readFile",
+      "file": "ready.json",
+      "beganAt": 1792860339697,
+      "outcome": "fulfilled",
+      "elapsedMs": 2.069900000000416
+    },
+    {
+      "requestID": "031114ee-e6ee-401d-864f-d73cb6bd9f1b",
+      "operation": "readFile",
+      "file": "settled.json",
+      "beganAt": 1792860339699,
+      "outcome": "fulfilled",
+      "elapsedMs": 1818.5887000000002
+    },
+    {
+      "requestID": "031114ee-e6ee-401d-864f-d73cb6bd9f1b",
+      "operation": "rm",
+      "file": "supervisor-956LdV",
+      "beganAt": 1792860341518,
+      "outcome": "fulfilled",
+      "elapsedMs": 3.2977000000009866
+    },
+    {
+      "requestID": "454a1371-d03e-4b19-9e64-75dcafb81965",
+      "operation": "writeFile",
+      "file": "cancel",
+      "beganAt": 1792860342059,
+      "outcome": "fulfilled",
+      "elapsedMs": 711.9350999999988
+    },
+    {
+      "requestID": "454a1371-d03e-4b19-9e64-75dcafb81965",
+      "operation": "readFile",
+      "file": "launch-failed.json",
+      "beganAt": 1792860342783,
+      "error": "Error: ENOENT: no such file or directory, open 'C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-y8u1Y7\\launch-failed.json'",
+      "code": "ENOENT",
+      "elapsedMs": 0.24309999999968568
+    },
+    {
+      "requestID": "454a1371-d03e-4b19-9e64-75dcafb81965",
+      "operation": "readFile",
+      "file": "ready.json",
+      "beganAt": 1792860342783,
+      "outcome": "fulfilled",
+      "elapsedMs": 0.14469999999710126
+    },
+    {
+      "requestID": "454a1371-d03e-4b19-9e64-75dcafb81965",
+      "operation": "readFile",
+      "file": "settled.json",
+      "beganAt": 1792860342783,
+      "outcome": "fulfilled",
+      "elapsedMs": 0.4763999999995576
+    },
+    {
+      "requestID": "454a1371-d03e-4b19-9e64-75dcafb81965",
+      "operation": "rm",
+      "file": "supervisor-y8u1Y7",
+      "beganAt": 1792860342784,
+      "outcome": "fulfilled",
+      "elapsedMs": 3.8436000000001513
+    },
+    {
+      "requestID": "21a79c8b-3c77-4a42-af40-6bc0cdb64614",
+      "operation": "writeFile",
+      "file": "cancel",
+      "beganAt": 1792860343056,
+      "outcome": "fulfilled",
+      "elapsedMs": 271.8836999999985
+    },
+    {
+      "requestID": "21a79c8b-3c77-4a42-af40-6bc0cdb64614",
+      "operation": "readFile",
+      "file": "launch-failed.json",
+      "beganAt": 1792860343353,
+      "error": "Error: ENOENT: no such file or directory, open 'C:\\Users\\hengu\\.codex\\opencorvus-expert-steering-20261025-native-conversation-05\\runtime\\tmp\\supervisor-b8T4L8\\launch-failed.json'",
+      "code": "ENOENT",
+      "elapsedMs": 1.085800000000745
+    },
+    {
+      "requestID": "21a79c8b-3c77-4a42-af40-6bc0cdb64614",
+      "operation": "readFile",
+      "file": "ready.json",
+      "beganAt": 1792860343354,
+      "outcome": "fulfilled",
+      "elapsedMs": 0.21090000000185682
+    },
+    {
+      "requestID": "21a79c8b-3c77-4a42-af40-6bc0cdb64614",
+      "operation": "readFile",
+      "file": "settled.json",
+      "beganAt": 1792860343354,
+      "outcome": "fulfilled",
+      "elapsedMs": 0.4372000000003027
+    },
+    {
+      "requestID": "21a79c8b-3c77-4a42-af40-6bc0cdb64614",
+      "operation": "rm",
+      "file": "supervisor-b8T4L8",
+      "beganAt": 1792860343354,
+      "outcome": "fulfilled",
+      "elapsedMs": 1.1647000000011758
+    }
+  ],
+  "reads": [
+    {
+      "scenario": "warm",
+      "route": "",
+      "beganAt": 1792860328770,
+      "status": 200,
+      "bytes": 4550,
+      "elapsedMs": 784.7631000000001
+    },
+    {
+      "scenario": "warm",
+      "route": "/conversation?tail_limit=2000",
+      "beganAt": 1792860329555,
+      "status": 200,
+      "bytes": 2433003,
+      "messages": 280,
+      "taskID": "tsk_g00VYyl3AK00URPjoC7V",
+      "fullTranscriptEquality": true,
+      "elapsedMs": 1952.995
+    },
+    {
+      "scenario": "one-full-conversation",
+      "route": "/conversation?tail_limit=2000",
+      "beganAt": 1792860333640,
+      "status": 200,
+      "bytes": 2433003,
+      "messages": 280,
+      "taskID": "tsk_g00VYyl3AK00URPjoC7V",
+      "fullTranscriptEquality": true,
+      "elapsedMs": 1437.1785
+    },
+    {
+      "scenario": "two-full-conversations",
+      "route": "/conversation?tail_limit=2000",
+      "beganAt": 1792860335337,
+      "status": 200,
+      "bytes": 2433003,
+      "messages": 280,
+      "taskID": "tsk_g00VYyl3AK00URPjoC7V",
+      "fullTranscriptEquality": true,
+      "elapsedMs": 2105.808299999999
+    },
+    {
+      "scenario": "two-full-conversations",
+      "route": "/conversation?tail_limit=2000",
+      "beganAt": 1792860335337,
+      "status": 200,
+      "bytes": 2433003,
+      "messages": 280,
+      "taskID": "tsk_g00VYyl3AK00URPjoC7V",
+      "fullTranscriptEquality": true,
+      "elapsedMs": 2115.958499999999
+    },
+    {
+      "scenario": "four-full-conversations",
+      "route": "/conversation?tail_limit=2000",
+      "beganAt": 1792860337763,
+      "status": 200,
+      "bytes": 2433003,
+      "messages": 280,
+      "taskID": "tsk_g00VYyl3AK00URPjoC7V",
+      "fullTranscriptEquality": true,
+      "elapsedMs": 4006.6196
+    },
+    {
+      "scenario": "four-full-conversations",
+      "route": "/conversation?tail_limit=2000",
+      "beganAt": 1792860337763,
+      "status": 200,
+      "bytes": 2433003,
+      "messages": 280,
+      "taskID": "tsk_g00VYyl3AK00URPjoC7V",
+      "fullTranscriptEquality": true,
+      "elapsedMs": 4008.3737999999994
+    },
+    {
+      "scenario": "four-full-conversations",
+      "route": "/conversation?tail_limit=2000",
+      "beganAt": 1792860337764,
+      "status": 200,
+      "bytes": 2433003,
+      "messages": 280,
+      "taskID": "tsk_g00VYyl3AK00URPjoC7V",
+      "fullTranscriptEquality": true,
+      "elapsedMs": 4006.5407000000014
+    },
+    {
+      "scenario": "four-full-conversations",
+      "route": "/conversation?tail_limit=2000",
+      "beganAt": 1792860337764,
+      "status": 200,
+      "bytes": 2433003,
+      "messages": 280,
+      "taskID": "tsk_g00VYyl3AK00URPjoC7V",
+      "fullTranscriptEquality": true,
+      "elapsedMs": 4018.6810000000005
+    },
+    {
+      "scenario": "one-default-conversation",
+      "route": "/conversation",
+      "beganAt": 1792860342059,
+      "status": 200,
+      "bytes": 1554859,
+      "messages": 98,
+      "taskID": "tsk_g00VYyl3AK00URPjoC7V",
+      "elapsedMs": 774.7383999999984
+    },
+    {
+      "scenario": "one-board",
+      "route": "/board",
+      "beganAt": 1792860343056,
+      "status": 200,
+      "bytes": 245682,
+      "elapsedMs": 297.6385999999984
+    }
+  ],
+  "modelRequests": [],
+  "stopped": true
+}

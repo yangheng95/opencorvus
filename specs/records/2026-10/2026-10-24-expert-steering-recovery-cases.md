@@ -105,3 +105,30 @@ MG-02已启动：`C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-0
 Word排版不足的直接来源已核实际`tools/growth_document.py`：模型用标准库手写OOXML（Office Open XML，Office开放XML）表格，只设置cantSplit而没有重复表头及首行与正文同页关系。当前平台work-artifacts Skill和架构明确只qualified PPTX，不提供DOCX生产/渲染primitive；本轮不伪称已有通用Word质量闭环，也不向Host加语义gate或直接手改该项目文件冒充机制修复。后续方案需按公开能力面补成熟文档生成/渲染与模型可见使用指引，属于尚未交付的能力缺口。
 
 - 最终落盘checker原runner退出0（136个原Handle，1项2正向合同，约82秒）；读取完整原observations再归档，没有只写PASS摘要。首次独立typecheck配置遗漏当前项目既有`.d.ts`，并暴露request observer的unknown路径类型；补入现有声明并在checker边界保留真实string身份准入，原独立typecheck重跑退出0，不改产品类型或放宽协议。当前docs:check 350操作/26组与architecture-index 20文档均通过。原件归档后直接扫描已配置实际access/refresh值，90个文件0命中；后续新增诊断文件仍须提交前复扫。全部原真实模型服务已关闭；当前没有运行中的本任务模型验收，Goal仍active，因native长尾与通用Word质量闭环未满足而不宣称找不到新问题。
+
+## 新线索：真实会话读取与native回调长尾重叠（诊断前）
+
+- Recall仍为原业务E2E（End-to-End，端到端）及共享根因闭环，尚未授权或操作VS Code子进程。新证据来自MG-03原dev.log，未运行或修改UI自动化。原两次native处置期间，正式GET conversation出现数秒请求：`fdae4ad7-9fe1-415e-bb88-622036b5a88d`为15:07:22.387→26.654、4267ms；`37e0a345-9dcd-46cb-8b5f-10ad79e91e2f`为27.992→31.464、3472ms；第二处`ada2eace-5d61-47ed-8b8a-e828a2dfb467`为15:14:33.097→37.629、4532ms，随后38.071原catalog真实500。相关性不是因果证明，仍不能定为文件I/O、SQLite或事件循环单因。
+- 已读正式/task/:id/conversation：同一Server事件循环内编译完整board、载入两个transcript、历史window、events和turn-artifacts及agent projection，最后c.json；该路径同时服务用户和checker，不宜把checker请求成本排除。原独立native诊断没有真实长会话读取负载，因而通过不能排除这个共享候选。
+- 下一输入：全新无凭据隔离目录，只复制已完全关闭MG的runtime/data真实历史，不改原源或合成参与者；原Task仍completed可读。独立Server.listen在19144上只做正式HTTP读取，0模型预算；同时用原Host validation authority真实冻结publisher introspection进入同一Windows supervisor。对照仅native、单conversation、双conversation、默认tail和board，保留原Promise与原5000ms，观察真实readFile/rm/退出/输出的分段；所有读请求和原Handle完整join后正常stop，由精确自有launcher原生结算并退休catalog。
+- 这是非UI的后端读取/原生并发实机诊断，不注入响应、不把Host局部证据冒充Task/LLM端到端。必要CPU（Central Processing Unit，中央处理器）profile用当前Bun实际CLI声明的原生采样，避免额外JS heartbeat。若复现，先定位实际同步热点及调用契约、横审全部会话/board/重试与多项目，再制定生产修复；此刻不改生产。
+
+### 真实红例、共享根因与最小方案（生产修改前）
+
+- 无凭据01原Host/launcher退出0，0模型，原catalog已退休。仅native约31ms，单完整conversation约1635ms、双完整conversation约2984ms；原writeFile(cancel)和readFile(ready)回调等待与同步读取分段重合。CPU profile中持久身份解析约4131ms（多次请求合计inclusive），message-bridge投影约3766ms，descriptor稳定序列化约2162ms；各计时有包含关系，不能相加当总耗时。
+- 无凭据02加入四个正常HTTP并发读取，真实280条Message/2433003字节响应全部200。原request `a28a06ab-55cd-433d-9d75-07a816de1d83`严格dispose在5504ms真实拒绝，physical/settlement随后5507/5539ms完成；output2847ms、原cancel写回调2804ms、原ready读取回调2656ms。原生单独约31ms、单读1578ms、双读2994ms、默认tail918ms、board295ms。没有注入延时、fake Promise或更改5000ms；这已复现业务同类错误，不再仅是日志关联。
+- 直接共享浪费点已核：`projectPersistedMessage`先对父Message执行完整enrich身份解析，随后对每个Part再执行完整enrich，却只取返回值的`part`字段。每个Part重复读取同一个父执行身份、解析完整不可变descriptor并计算其真实完整性hash；这些重复metadata结果被丢弃。`part`实际变化只有原`partOrderKeysForEvent`生成的orderKey。单个stream事件的完整enrich metadata确实被消费，不能一并删。
+- 影响全部`projectPersistedTaskMessage`的Task message接受结果、全会话/保护根会话/单Session/history增量，以及`projectPersistedSessionMessage`的普通Session精确读取和Mission receipt。根Task/Mission/Session发生、正常/终态/重试/重启重读沿同一投影；没有跨请求缓存，两个Project无需共享状态。原descriptor哈希是不可变协议完整性校验，必须保留，不能按无效源码摘要删除。其余board SQL和重叠投影确有成本，本次先不扩大重构。
+- 旧路径未根治原因：原生局部probe没有完整真实会话负载；原消息身份测试验证数据正确但没有覆盖每个Part丢弃metadata计算造成宿主回调饥饿。原5000ms错误合同本身正确，不通过改大时限修复读取热点。
+- 最小方案：父Message仍沿原完整enrich验证身份、参与者、Task root与descriptor；其所有Part先明确绑定到这一个Message/Session，再复用原唯一`partOrderKeysForEvent`校验真实Part/Tool request、时间、pending和orderKey，只返回与旧投影相同的`{...part, orderKey}`。删除被丢弃的重复enrich调用，不引入缓存/影子身份/第二排序实现/Host语义gate。实时stream路径保持原完整事件合同。
+- 风险与验证：Part若来自另一Message必须返回明确归属错误；同一Message混合真实Tool和text应保留完整正文/状态/顺序，且与实时事件完全相同。先补聚焦正向错误合同的原红例，再跑实际tool-part、执行身份、Mission来源和Task后台投影相关后端合同；复用同一闭合MG历史、相同0模型并发输入和原deadline做修后原生复验。没有接口、Schema、数据格式或本地化文案改动，不触UI自动化。若四并发仍失败，继续追根，不宣布完成。
+
+### 实施与公平前后对照
+
+- 聚焦新归属错误合同在旧代码真实失败（原函数返回了另一Message的真实Part而不是明确错误）；修复后原混合Tool/text、实时event同序及外来Part错误合同均通过。实现仅替换私有history函数中的被丢弃enrich调用，保留原partOrderKeysForEvent；不修改native disposer或descriptor schema/hash。
+- 首轮相关合同遇到旧Mission fixture故障：它只mock Provider.getModel却把未登记的test模型写入经过真实目录验证的项目配置，原七项中五项在测试准备阶段失败。已按现有fixture做法注册明确本地Provider/model元数据，删除发现的“不调用/不存在”断言与仅为它服务的拒绝stub，保留实际MissionCallerReceiptIdentityConflictError、原占位行完整状态和真实receipt来源等正向合同。没有放宽生产配置验证。
+- 五个相关文件原runner最终19项、77断言全部通过（Tool事实、执行参与者、Mission caller、Mission来源及历史Task报告重开/失败后读取）；backend typecheck原命令退出0。首次fixture失败日志保持，不当产品红例。
+- 为排除新诊断增加完整响应保存造成的观察差异，04/05使用完全相同驱动和真实闭合MG数据：04只将`message-bridge.ts`从已推送不可变提交`acab57ac0`作为Bun运行时模块输入，实际加载一次；其余源码相同，不回退工作区、不注入领域结果。05加载当前生产源码。两者均完整读取并与原业务280条Message比较；前后整个2433003字节JSON响应深度相等，不仅是摘要或字数。
+- 04四并发真实复现严格dispose拒绝6138ms；05同输入严格dispose完成3758ms，其他native-only/单读/双读/default/board均真实返回，原5000ms不变。初次修后03四并发3799ms且八次完整transcript等于原件，第二修后复验没有把旧失败清零。profile/原Promise/HTTP/readFile/writeFile/rm时序在artifact保留；这证明该共享读取热点及修复，不声称排除任意无限并发或逐个倒填缺少原分段的所有旧故障。
+- 01–05无凭据服务全部按原Server.stop退出，原launcher0、physical/output/request结清，五份catalog均退休，无模型调用。用户VS Code进程未操作。当前Word分页不足仍是明确交付限制，本次不把后端机制修复写成已具备通用Word生产能力。
+- 最后补跑正式根输入准备/接续原runner，1项3断言通过；与前五文件合计20项80断言。源文件与聚焦fixture修改后backend typecheck0，docs:check 350操作/26组、architecture-index20文档及精确diff检查通过。Mission fixture额外格式化已去除，并用同一格式器的标准结果核对逻辑完全相同，保留原无关格式；其修复只涉及当前模型目录准备与已发现的负向断言删除。

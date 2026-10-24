@@ -1,0 +1,128 @@
+{
+  "qualification": "Two real zero-model services reading the same closed Task history; immutable pre-fix bridge module versus current production source. Collection exit zero does not turn the pre-fix native failure into success.",
+  "beforeRevision": "acab57ac0",
+  "beforeModuleLoads": 1,
+  "afterSource": "current",
+  "taskID": "tsk_g00VYyl3AK00URPjoC7V",
+  "messages": 280,
+  "actualResponseBytes": 2433003,
+  "completeResponseEquality": true,
+  "before": [
+    {
+      "scenario": "prepare",
+      "returned": {
+        "at": 1792860296649,
+        "elapsedMs": 82.29460000000108,
+        "exitCode": 1
+      }
+    },
+    {
+      "scenario": "native-only",
+      "returned": {
+        "at": 1792860297163,
+        "elapsedMs": 24.59349999999904,
+        "exitCode": 0
+      }
+    },
+    {
+      "scenario": "one-full-conversation",
+      "returned": {
+        "at": 1792860299391,
+        "elapsedMs": 1987.4861999999994,
+        "exitCode": 0
+      }
+    },
+    {
+      "scenario": "two-full-conversations",
+      "returned": {
+        "at": 1792860303057,
+        "elapsedMs": 3253.8323,
+        "exitCode": 0
+      }
+    },
+    {
+      "scenario": "four-full-conversations",
+      "returned": {
+        "at": 1792860309663,
+        "elapsedMs": 6137.8330000000005,
+        "error": "AggregateError: package tool marketing-growth/shared/publish-marketing-growth-artifact disposal failed: package tool marketing-growth/shared/publish-marketing-growth-artifact dispose cleanup did not finish within 5000ms; package tool marketing-growth/shared/publish-marketing-growth-artifact process did not exit within 5000ms after disposal was requested; package tool marketing-growth/shared/publish-marketing-growth-artifact supervisor settlement did not finish within 5000ms after disposal was requested"
+      }
+    },
+    {
+      "scenario": "one-default-conversation",
+      "returned": {
+        "at": 1792860311318,
+        "elapsedMs": 1006.6782999999996,
+        "exitCode": 1
+      }
+    },
+    {
+      "scenario": "one-board",
+      "returned": {
+        "at": 1792860311966,
+        "elapsedMs": 320.9398999999976,
+        "exitCode": 0
+      }
+    }
+  ],
+  "after": [
+    {
+      "scenario": "prepare",
+      "returned": {
+        "at": 1792860333007,
+        "elapsedMs": 48.94459999999981,
+        "exitCode": 0
+      }
+    },
+    {
+      "scenario": "native-only",
+      "returned": {
+        "at": 1792860333340,
+        "elapsedMs": 29.396700000000237,
+        "exitCode": 0
+      }
+    },
+    {
+      "scenario": "one-full-conversation",
+      "returned": {
+        "at": 1792860335003,
+        "elapsedMs": 1363.4017999999996,
+        "exitCode": 0
+      }
+    },
+    {
+      "scenario": "two-full-conversations",
+      "returned": {
+        "at": 1792860337325,
+        "elapsedMs": 1988.4308999999994,
+        "exitCode": 0
+      }
+    },
+    {
+      "scenario": "four-full-conversations",
+      "returned": {
+        "at": 1792860341522,
+        "elapsedMs": 3758.2996999999996,
+        "exitCode": 0
+      }
+    },
+    {
+      "scenario": "one-default-conversation",
+      "returned": {
+        "at": 1792860342788,
+        "elapsedMs": 728.8060000000005,
+        "exitCode": 0
+      }
+    },
+    {
+      "scenario": "one-board",
+      "returned": {
+        "at": 1792860343356,
+        "elapsedMs": 299.9328999999998,
+        "exitCode": 0
+      }
+    }
+  ],
+  "modelRequests": 0,
+  "originalDeadlineMs": 5000
+}

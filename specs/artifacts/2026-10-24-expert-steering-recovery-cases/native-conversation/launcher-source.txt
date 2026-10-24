@@ -1,0 +1,38 @@
+param([ValidatePattern('^\d{2}$')][string]$RunSuffix='04',[ValidateSet('before','current')][string]$SourceMode='current')
+$ErrorActionPreference='Stop'
+$caseRepo='D:/myhexin-local/opencorvus'
+$caseRoot="C:/Users/hengu/.codex/opencorvus-expert-steering-20261025-native-conversation-$RunSuffix"
+$caseSource='C:/Users/hengu/.codex/opencorvus-expert-steering-20261024-mg-03'
+if(Test-Path -LiteralPath $caseRoot){throw 'Fresh owned scope required'}
+if(@(Get-NetTCPConnection -LocalPort 19144 -State Listen -ErrorAction SilentlyContinue).Count){throw 'Owned port is occupied'}
+$closed=Get-Content -LiteralPath "$caseSource/evidence/retirement.json" -Raw|ConvertFrom-Json
+if(-not($closed.physicalCompletion -and $closed.outputDrainComplete -and $closed.requestCleanupComplete)){throw 'Source must be settled'}
+if(Test-Path -LiteralPath "$caseSource/runtime/data/auth.json"){throw 'Source must be credential-free'}
+foreach($part in @('runtime/data','runtime/config','runtime/tmp','home','appdata','localappdata','evidence')){New-Item -ItemType Directory -Path "$caseRoot/$part" -Force|Out-Null}
+Get-ChildItem -LiteralPath "$caseSource/runtime/data" | ForEach-Object {Copy-Item -LiteralPath $_.FullName -Destination "$caseRoot/runtime/data" -Recurse}
+Copy-Item -LiteralPath 'C:/Users/hengu/AppData/Local/opencorvus/data/models.json' -Destination "$caseRoot/runtime/data/models.json"
+'{"permission_mode":"full_access"}'|Set-Content -LiteralPath "$caseRoot/runtime/config/opencorvus.jsonc"
+$caseBun=(Get-Command bun).Source
+$caseHelper=& $caseBun "$caseRepo/packages/opencorvus/script/prepare-test-process-supervisor.ts"
+if($LASTEXITCODE -ne 0){throw 'Native helper preparation failed'}
+$caseOriginal=@{};Get-ChildItem Env:|ForEach-Object {$caseOriginal[$_.Name]=$_.Value}
+$caseEnvironment=@{}
+foreach($name in @('PATH','SystemRoot','WINDIR','ComSpec','PATHEXT','LANG','LC_ALL','LC_CTYPE')){if($caseOriginal.ContainsKey($name)){$caseEnvironment[$name]=$caseOriginal[$name]}}
+$caseEnvironment.OPENCORVUS_HOME="$caseRoot/runtime";$caseEnvironment.HOME="$caseRoot/home";$caseEnvironment.USERPROFILE="$caseRoot/home"
+$caseEnvironment.HOMEDRIVE='C:';$caseEnvironment.HOMEPATH=([IO.Path]::GetFullPath("$caseRoot/home")).Substring(2)
+$caseEnvironment.APPDATA="$caseRoot/appdata";$caseEnvironment.LOCALAPPDATA="$caseRoot/localappdata"
+$caseEnvironment.OPENCORVUS_DISABLE_EXTERNAL_SKILLS='1';$caseEnvironment.OPENCORVUS_DISABLE_AUTOUPDATE='1'
+$caseEnvironment.OPENCORVUS_TASK_PROCESS_MODE='native';$caseEnvironment.OPENCORVUS_PROCESS_SUPERVISOR=[string]$caseHelper
+$caseEnvironment.TEMP="$caseRoot/runtime/tmp";$caseEnvironment.TMP=$caseEnvironment.TEMP;$caseEnvironment.TMPDIR=$caseEnvironment.TEMP
+$caseOccurrence='native-conversation-'+[Guid]::NewGuid().ToString();$caseDeadline=[DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()+300000
+try{
+ Get-ChildItem Env:|ForEach-Object {[Environment]::SetEnvironmentVariable($_.Name,$null,'Process')}
+ foreach($name in $caseEnvironment.Keys){[Environment]::SetEnvironmentVariable($name,$caseEnvironment[$name],'Process')}
+ & $caseBun "$caseRepo/.tmp-product-iteration/live-sol-task-guidance-413.ts" --owned-host "$caseRoot/evidence" $caseOccurrence ([string]$caseDeadline) $caseBun --cpu-prof "--cpu-prof-dir=$caseRoot/evidence" --cpu-prof-name=conversation.cpuprofile "$PSScriptRoot/native-conversation.ts" $caseRoot $SourceMode
+ $caseExit=$LASTEXITCODE
+}finally{
+ Get-ChildItem Env:|ForEach-Object {[Environment]::SetEnvironmentVariable($_.Name,$null,'Process')}
+ foreach($name in $caseOriginal.Keys){[Environment]::SetEnvironmentVariable($name,$caseOriginal[$name],'Process')}
+}
+@{originalChildExit=$caseExit;observedAtUtc=[DateTime]::UtcNow.ToString('o')}|ConvertTo-Json|Set-Content -LiteralPath "$caseRoot/evidence/launcher-child-exit.json"
+exit $caseExit
