@@ -191,12 +191,6 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
     const content = decodeFetchedText(arrayBuffer, mediaType)
     const documentTitle = fetchedDocumentTitle(mime, content)
     if (documentTitle) source.title = documentTitle
-    const excerptText = externalizeEmbeddedDataUrls(
-      isHtmlMime(mime) ? extractSourceTextFromHTML(content).replace(/\n{3,}/g, "\n\n") : content,
-    ).output
-    const excerpt = decodeUtf8Prefix(Buffer.from(excerptText, "utf8"), SOURCE_EXCERPT_MAX_BYTES).trim()
-    if (excerpt) source.snippet = excerpt
-
     const formatted =
       params.format === "text"
         ? isHtmlMime(mime)
@@ -205,8 +199,12 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
         : params.format === "markdown" && isHtmlMime(mime)
           ? convertHTMLToMarkdown(content, source.url)
           : content
+    const excerptText = isHtmlMime(mime) ? extractSourceTextFromHTML(content).replace(/\n{3,}/g, "\n\n") : content
+    const externalized = externalizeEmbeddedDataUrls([formatted, excerptText])
+    const excerpt = decodeUtf8Prefix(Buffer.from(externalized.outputs[1]!, "utf8"), SOURCE_EXCERPT_MAX_BYTES).trim()
+    if (excerpt) source.snippet = excerpt
     return {
-      ...formatFetchedText(formatted),
+      ...formatFetchedText(externalized.outputs[0]!, externalized.attachments),
       title,
       sources: [source],
     }
@@ -249,30 +247,33 @@ function fetchedDocumentTitle(mime: string, content: string): string | undefined
   }
 }
 
-function externalizeEmbeddedDataUrls(text: string) {
+function externalizeEmbeddedDataUrls(texts: readonly string[]) {
   const attachments: Array<{ type: "file"; mime: string; url: string }> = []
   const attachmentIndexByUrl = new Map<string, number>()
-  const output = text.replace(EMBEDDED_BASE64_DATA_URL, (dataUrl, mime: string) => {
-    const existingIndex = attachmentIndexByUrl.get(dataUrl)
-    if (existingIndex !== undefined) return `attachment:webfetch-embedded-${existingIndex}`
+  const outputs = texts.map((text) =>
+    text.replace(EMBEDDED_BASE64_DATA_URL, (dataUrl, mime: string) => {
+      const existingIndex = attachmentIndexByUrl.get(dataUrl)
+      if (existingIndex !== undefined) return `attachment:webfetch-embedded-${existingIndex}`
 
-    const index = attachments.length + 1
-    attachmentIndexByUrl.set(dataUrl, index)
-    attachments.push({
-      type: "file",
-      mime: mime.toLowerCase(),
-      url: dataUrl,
-    })
-    return `attachment:webfetch-embedded-${index}`
-  })
-  return { output, attachments }
+      const index = attachments.length + 1
+      attachmentIndexByUrl.set(dataUrl, index)
+      attachments.push({
+        type: "file",
+        mime: mime.toLowerCase(),
+        url: dataUrl,
+      })
+      return `attachment:webfetch-embedded-${index}`
+    }),
+  )
+  return { outputs, attachments }
 }
 
-function formatFetchedText(text: string) {
-  const externalized = externalizeEmbeddedDataUrls(text)
+function formatFetchedText(
+  content: string,
+  attachments: ReturnType<typeof externalizeEmbeddedDataUrls>["attachments"],
+) {
   // Converters own formatting; native text owns its whitespace. The output
-  // boundary only externalizes attachments and applies the byte budget.
-  const content = externalized.output
+  // boundary applies the byte budget after the body and excerpt share attachment identities.
   const originalBytes = Buffer.byteLength(content, "utf8")
   if (originalBytes <= TEXT_OUTPUT_MAX_BYTES) {
     return {
@@ -281,9 +282,9 @@ function formatFetchedText(text: string) {
         originalBytes,
         shownBytes: originalBytes,
         webfetchOutputClipped: false,
-        webfetchEmbeddedAttachmentCount: externalized.attachments.length,
+        webfetchEmbeddedAttachmentCount: attachments.length,
       },
-      ...(externalized.attachments.length > 0 ? { attachments: externalized.attachments } : {}),
+      ...(attachments.length > 0 ? { attachments } : {}),
     }
   }
 
@@ -313,9 +314,9 @@ function formatFetchedText(text: string) {
       shownBytes,
       omittedBytes,
       webfetchOutputClipped: true,
-      webfetchEmbeddedAttachmentCount: externalized.attachments.length,
+      webfetchEmbeddedAttachmentCount: attachments.length,
     },
-    ...(externalized.attachments.length > 0 ? { attachments: externalized.attachments } : {}),
+    ...(attachments.length > 0 ? { attachments } : {}),
   }
 }
 

@@ -19,15 +19,26 @@ test("actual HTTP sources retain readable excerpts and complete UTF-8 prefixes",
   ]
   const html =
     "<html><head><title>Published title</title><style>body{color:red}</style></head><body><header><p>Site banner</p></header><nav><p>Browse navigation</p></nav><div role='navigation'><p>Section links</p></div><aside><p>Related content</p></aside><main><h1>Actual heading</h1><div><br><br><br><br></div><p>Read <a href='/guide'>the guide</a> &amp; 中文.</p></main><footer><p>Legal footer</p></footer><script>privateScript()</script></body></html>"
+  const inlineImage = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+  const navigationData = "data:text/plain;base64,TkFW"
+  const articleData = "data:text/plain;base64,Qk9EWQ=="
+  const attachmentHtml = `<html><head><title>Attachment identity example</title></head><body><img src="${inlineImage}" alt="Inline"><nav><p>Navigation ${navigationData}</p></nav><main><h1>Attachment excerpt</h1><p>Article ${articleData}</p><p>Again ${articleData}</p></main></body></html>`
   await using project = await memoryProject("webfetch-source-excerpt")
   const server = Bun.serve({
     hostname: "127.0.0.1",
     port: 0,
     fetch(request) {
       const route = new URL(request.url).pathname.slice(1)
-      return new Response(route === "html" ? html : cases[Number(route)]!.body, {
-        headers: { "content-type": route === "html" ? "text/html; charset=utf-8" : "text/plain; charset=utf-8" },
-      })
+      return new Response(
+        route === "html" ? html : route === "attachments" ? attachmentHtml : cases[Number(route)]!.body,
+        {
+          headers: {
+            "content-type": ["html", "attachments"].includes(route)
+              ? "text/html; charset=utf-8"
+              : "text/plain; charset=utf-8",
+          },
+        },
+      )
     },
   })
   try {
@@ -84,6 +95,23 @@ test("actual HTTP sources retain readable excerpts and complete UTF-8 prefixes",
         expect(formats.map((result) => result.sources[0]!.sourceId)).toEqual(
           Array(3).fill(formats[0]!.sources[0]!.sourceId),
         )
+        for (const format of ["text", "markdown", "html"] as const) {
+          const result = await executeWebFetch({ url: `${server.url}attachments`, format }, ctx)
+          const articleIndex = format === "text" ? 2 : 3
+          expect(result.sources[0]).toMatchObject({
+            type: "source-url",
+            title: "Attachment identity example",
+            snippet: `Attachment excerpt\n\nArticle attachment:webfetch-embedded-${articleIndex}\n\nAgain attachment:webfetch-embedded-${articleIndex}`,
+          })
+          const attachments = [
+            ...(format === "text" ? [] : [{ type: "file", mime: "image/gif", url: inlineImage }]),
+            { type: "file", mime: "text/plain", url: navigationData },
+            { type: "file", mime: "text/plain", url: articleData },
+          ]
+          expect(result.attachments).toEqual(attachments)
+          expect(result.metadata).toMatchObject({ webfetchEmbeddedAttachmentCount: articleIndex })
+          expect(result.output).toContain(`Article attachment:webfetch-embedded-${articleIndex}`)
+        }
       },
     })
   } finally {

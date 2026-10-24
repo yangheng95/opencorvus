@@ -1,0 +1,678 @@
+{
+  "at": "2026-10-24T13:22:37.724Z",
+  "iteration": 587,
+  "agentCount": 1,
+  "base": "a949c2d6ffa0c321876fa47a0a0bcc322588eb00",
+  "before": {
+    "checker": "Actual HTTP executeWebFetch contract",
+    "outcome": "Failed",
+    "expected": "Article and Again reference embedded attachment2 in text format",
+    "actual": "Both references pointed to embedded attachment1",
+    "root": "Independent response body and source excerpt maps started numbering at1"
+  },
+  "after": {
+    "implementation": "One response-local map; formatted body first, source excerpt second; one shared actual attachment array",
+    "formats": {
+      "text": "BODY index2",
+      "markdown": "BODY index3",
+      "html": "BODY index3"
+    },
+    "repeatedReference": "Same actual attachment",
+    "apiSdkSchemaChanges": 0
+  },
+  "checks": {
+    "webfetch": {
+      "files": 6,
+      "passed": 50,
+      "expectations": 235
+    },
+    "backendTypecheck": "Passed",
+    "documentation": {
+      "ops": 350,
+      "groups": 26
+    },
+    "architectureIndex": 20,
+    "uiAutomationTests": 0
+  },
+  "actualProvider": {
+    "maximumRequests": 3,
+    "at": "2026-10-24T13:10:22.017Z",
+    "authRetired": 1,
+    "catalogRetired": 1,
+    "authCopied": true,
+    "modelRequests": 3,
+    "model": "gpt-6.1-sol",
+    "streaming200OriginalReaderEOF": 3,
+    "sourceCatalog": {
+      "bytes": 9155406,
+      "modifiedAtMs": 1791128890137.9968,
+      "content": "Exact original"
+    },
+    "publicShutdown": 200,
+    "reserveMs": 807321,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "exactProcessChain": "dead_or_reused"
+  },
+  "sourceAndTool": {
+    "at": "2026-10-24T13:13:33.011Z",
+    "sessionID": "ses_-zUS0X33CzzWEKMgCk98",
+    "messages": 15,
+    "parts": 37,
+    "source": {
+      "id": "prt_g0VYyJxvE00j7ozCV31O",
+      "messageID": "msg_g0VYyJwJA00pEK8wiRXt",
+      "toolPartID": "prt_g0VYyJxhG007VzX2RuhE",
+      "sourceId": "c3e2a4c5ec66c1e91cb5ba027ee5e74a7aedf8eaa34b97a06c292609427cf8d5",
+      "url": "http://127.0.0.1:54082/source-excerpt.html",
+      "title": "Attachment identity example",
+      "snippet": "Attachment excerpt\n\nArticle attachment:webfetch-embedded-3\n\nAgain attachment:webfetch-embedded-3",
+      "bytes": 96
+    },
+    "tool": {
+      "id": "prt_g0VYyJxhG007VzX2RuhE",
+      "callID": "call_087f09680b0b40398939be966739cf17",
+      "input": {
+        "url": "http://127.0.0.1:54082/source-excerpt.html",
+        "format": "html"
+      },
+      "status": "completed",
+      "receipt": "per_hpP7sJUjDNjkYy8hLxVm",
+      "output": "<html><head><title>Attachment identity example</title></head><body><img src=\"attachment:webfetch-embedded-1\" alt=\"Inline\"><nav><p>Navigation attachment:webfetch-embedded-2</p></nav><main><h1>Attachment excerpt</h1><p>Article attachment:webfetch-embedded-3</p><p>Again attachment:webfetch-embedded-3</p></main></body></html>",
+      "attachments": [
+        {
+          "index": 1,
+          "type": "file",
+          "mime": "image/gif",
+          "url": "/attachment/prj_hSQinOa1MIVoNEeARpn5/ef1955ae757c8b966c83248350331bd3a30f658ced11f387f8ebf05ab3368629.gif"
+        },
+        {
+          "index": 2,
+          "type": "file",
+          "mime": "text/plain",
+          "url": "/attachment/prj_hSQinOa1MIVoNEeARpn5/59d29bfe4c87cb9ed06600cade6abcfda9ffeab7021332f883f9bbd03a320981.txt",
+          "actualText": "NAV"
+        },
+        {
+          "index": 3,
+          "type": "file",
+          "mime": "text/plain",
+          "url": "/attachment/prj_hSQinOa1MIVoNEeARpn5/30e7e41efab31a8beaa512ea48aa4d99070496095423d4d653137a7f511eb877.txt",
+          "actualText": "BODY"
+        }
+      ],
+      "metadata": {
+        "originalBytes": 323,
+        "shownBytes": 323,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 3,
+        "truncated": false
+      }
+    },
+    "persistedSource": "Exact API text and ownership",
+    "attachmentHTTP": [
+      {
+        "attachment": "59d29bfe4c87cb9ed06600cade6abcfda9ffeab7021332f883f9bbd03a320981.txt",
+        "status": 200,
+        "body": "NAV",
+        "mime": "text/plain; charset=utf-8"
+      },
+      {
+        "attachment": "30e7e41efab31a8beaa512ea48aa4d99070496095423d4d653137a7f511eb877.txt",
+        "status": 200,
+        "body": "BODY",
+        "mime": "text/plain; charset=utf-8"
+      }
+    ]
+  },
+  "document": {
+    "owner": {
+      "pid": 97828,
+      "processInstanceID": "win32:639284438104714487",
+      "occurrenceID": "ae2bb215-d8d9-48fd-8d1d-8b2634ee687b"
+    },
+    "occurrence": "source-attachment-identity-587-7c8c1c54-0797-4547-a269-cad6f4ee4ed7",
+    "url": "http://127.0.0.1:54082/source-excerpt.html",
+    "title": "Attachment identity example",
+    "kind": "Scope-owned public example document, not external publisher data",
+    "attachmentOrder": [
+      "Inline GIF",
+      "NAV text",
+      "BODY text"
+    ],
+    "requests": [
+      {
+        "at": "2026-10-24T13:05:58.088Z",
+        "method": "GET",
+        "path": "/source-excerpt.html"
+      }
+    ],
+    "closure": {
+      "owner": {
+        "pid": 97828,
+        "processInstanceID": "win32:639284438104714487",
+        "occurrenceID": "ae2bb215-d8d9-48fd-8d1d-8b2634ee687b"
+      },
+      "occurrence": "source-attachment-identity-587-7c8c1c54-0797-4547-a269-cad6f4ee4ed7",
+      "port": 54082,
+      "closed": true,
+      "at": "2026-10-24T13:10:02.223Z"
+    }
+  },
+  "native": {
+    "originalExec": 19145,
+    "originalExecExit": 0,
+    "ports": [
+      54081,
+      54082
+    ],
+    "ownershipBeforeModel": {
+      "observedAtUtc": "2026-10-24T13:05:10.4549224Z",
+      "connections": [
+        {
+          "LocalAddress": "127.0.0.1",
+          "LocalPort": 54082,
+          "OwningProcess": 97828
+        },
+        {
+          "LocalAddress": "127.0.0.1",
+          "LocalPort": 54081,
+          "OwningProcess": 97828
+        }
+      ],
+      "target": {
+        "pid": 97828,
+        "processInstanceID": "win32:639284438104714487",
+        "occurrenceID": "5c2549d8-22c8-43c4-9cd9-3605620359e7"
+      }
+    },
+    "physical": {
+      "observedAtUtc": "2026-10-24T13:10:21.8534744Z",
+      "native": {
+        "occurrence": "source-attachment-identity-587-7c8c1c54-0797-4547-a269-cad6f4ee4ed7",
+        "outcome": "settled",
+        "host": {
+          "pid": 66284,
+          "processInstanceID": "win32:639284438096420790",
+          "occurrenceID": "a3f8ee02-ad96-495c-b347-dec8956000ff"
+        },
+        "target": {
+          "pid": 97828,
+          "processInstanceID": "win32:639284438104714487",
+          "occurrenceID": "5c2549d8-22c8-43c4-9cd9-3605620359e7"
+        },
+        "observedAtUtc": "2026-10-24T13:10:02.48Z",
+        "deadlineAt": 1792848209603,
+        "terminal": {
+          "occurrenceID": "source-attachment-identity-587-7c8c1c54-0797-4547-a269-cad6f4ee4ed7",
+          "pid": 97828,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "chain": [
+        {
+          "identity": {
+            "pid": 66284,
+            "processInstanceID": "win32:639284438096420790",
+            "occurrenceID": "a3f8ee02-ad96-495c-b347-dec8956000ff"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "identity": {
+            "pid": 97828,
+            "processInstanceID": "win32:639284438104714487",
+            "occurrenceID": "5c2549d8-22c8-43c4-9cd9-3605620359e7"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "launcher": {
+        "observedAtUtc": "2026-10-24T13:10:02.5159465Z",
+        "originalChildExit": 0
+      }
+    }
+  },
+  "preservation": {
+    "at": "2026-10-24T13:10:24.626Z",
+    "sourceSchema": 6,
+    "targetSchema": 8,
+    "originalTables": 90,
+    "originalRows": 207330,
+    "originalFieldDifferences": [
+      {
+        "table": "memory_chunk",
+        "id": "mck_h0TwOCuDIItgGfxTGf6k",
+        "fields": [
+          "content",
+          "token_count",
+          "time_updated"
+        ]
+      },
+      {
+        "table": "memory_file",
+        "id": "mem_hBhVOjG2IHNZ58LGhFBJ",
+        "fields": [
+          "time_updated"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "id": "[1]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "id": "[2]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "session",
+        "id": "ses_-zUS0X33CzzWEKMgCk98",
+        "fields": [
+          "time_updated"
+        ]
+      }
+    ],
+    "integrity": "ok",
+    "sourceBytes": 95682560,
+    "sourceModifiedAtMs": 1792828797672.7832,
+    "canonicalConfiguration": "Exact original",
+    "qualification": "Full original field/row verification after original native exit and physical/output/request closure"
+  },
+  "manualUI": {
+    "browser": "Codex in-app browser2",
+    "tab": 266,
+    "closed": true,
+    "screenshots": [
+      "01-existing-dock.png",
+      "02-main-and-dock.png",
+      "03-source-reference.png",
+      "04-tool-result.png",
+      "05-output-and-source.png",
+      "06-copy-and-dock.png"
+    ],
+    "observations": [
+      {
+        "label": "before",
+        "at": "2026-10-24T13:05:50.244Z",
+        "count": 35,
+        "owners": [
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
+          "24",
+          "25",
+          "26",
+          "27",
+          "28",
+          "29",
+          "30",
+          "31",
+          "32",
+          "33",
+          "34",
+          "35",
+          "36",
+          "37",
+          "38",
+          "39",
+          "40",
+          "41",
+          "42",
+          "43",
+          "44"
+        ],
+        "textLengths": [
+          53,
+          228,
+          205,
+          2078,
+          204,
+          2791,
+          204,
+          2689,
+          303,
+          3976,
+          293,
+          5886,
+          305,
+          5681,
+          309,
+          5885,
+          373,
+          4863,
+          610,
+          4752,
+          604,
+          38,
+          54,
+          66,
+          4670,
+          377,
+          47,
+          65,
+          701,
+          359,
+          47,
+          993,
+          341,
+          50,
+          1345
+        ],
+        "actualRendering": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "label": "after-main",
+        "at": "2026-10-24T13:06:24.076Z",
+        "count": 35,
+        "owners": [
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
+          "24",
+          "25",
+          "26",
+          "27",
+          "28",
+          "29",
+          "30",
+          "31",
+          "32",
+          "33",
+          "34",
+          "35",
+          "36",
+          "37",
+          "38",
+          "39",
+          "40",
+          "41",
+          "42",
+          "43",
+          "44"
+        ],
+        "textLengths": [
+          53,
+          228,
+          205,
+          2078,
+          204,
+          2791,
+          204,
+          2689,
+          303,
+          3976,
+          293,
+          5886,
+          305,
+          5681,
+          309,
+          5885,
+          373,
+          4863,
+          610,
+          4752,
+          604,
+          38,
+          54,
+          66,
+          4670,
+          377,
+          47,
+          65,
+          701,
+          359,
+          47,
+          993,
+          341,
+          50,
+          1345
+        ],
+        "actualRendering": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "label": "after-output-reading",
+        "at": "2026-10-24T13:09:52.331Z",
+        "count": 35,
+        "owners": [
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
+          "24",
+          "25",
+          "26",
+          "27",
+          "28",
+          "29",
+          "30",
+          "31",
+          "32",
+          "33",
+          "34",
+          "35",
+          "36",
+          "37",
+          "38",
+          "39",
+          "40",
+          "41",
+          "42",
+          "43",
+          "44"
+        ],
+        "textLengths": [
+          53,
+          228,
+          205,
+          2078,
+          204,
+          2791,
+          204,
+          2689,
+          303,
+          3976,
+          293,
+          5886,
+          305,
+          5681,
+          309,
+          5885,
+          373,
+          4863,
+          610,
+          4752,
+          604,
+          38,
+          54,
+          66,
+          4670,
+          377,
+          47,
+          65,
+          701,
+          359,
+          47,
+          993,
+          341,
+          50,
+          1345
+        ],
+        "actualRendering": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    ],
+    "limits": [
+      "02 and the after-main sample are completed-state observations, not live-frame proof",
+      "Stable owner samples do not exclude every transient pending state between observations",
+      "Private data-observed-pending is an old nonreactive observation and is not used as actual Rendering state",
+      "Original member high-frequency Rendering flicker remains unproven"
+    ]
+  },
+  "tooling": {
+    "initialIndependentPortProbe": "Failed before launch due to mixed require and top-level await; subsequent shell command hid the native exit code",
+    "authority": "Actual native ready receipts and same-target ownership of both listeners verified before the first model request",
+    "repair": "Explicit ES module script; same two ports actually bound/released after closure",
+    "resultReader": "Canonical completedToolExecutionResult uses persisted AttachmentStore URLs and nested file ownership; verified against actual HTTP bytes, not guessed data URI or independent part rows"
+  },
+  "scope": "Controlled scope-owned example document, not an external publisher or a synthetic conversation; user service18571 was not operated"
+}

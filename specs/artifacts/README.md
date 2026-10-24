@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [来源摘录附件身份验证](2026-10-24-source-attachment-identity/README.md)：587真实Tool与来源引用的共同身份。
+
 - [网页抓取来源摘录](2026-10-24-webfetch-source-excerpt/README.md)：586真实摘录、复制与阅读恢复证据。
 
 - [成员正文与来源的时序归属](2026-10-24-member-source-order/README.md)：585非秘密时序和实际页面证据。

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [来源摘录与工具附件的共同身份](records/2026-10/2026-10-24-source-attachment-identity.md)：587修复摘录附件编号与真实Tool结果错绑。
+
 - [网页抓取来源摘录](records/2026-10/2026-10-24-webfetch-source-excerpt.md)：586由真实网页正文提供Sources摘录。
 
 - [成员正文与来源的时序归属](records/2026-10/2026-10-24-member-source-order.md)：585真实来源时序与侧栏交互调查。

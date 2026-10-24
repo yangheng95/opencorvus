@@ -1351,8 +1351,11 @@ the existing readable-text parser across all requested output formats, with
 semantic navigation, page banners/footers and complementary regions skipped
 for the excerpt. HTML excerpt runs of three or more line breaks become one
 paragraph boundary; full Tool text retains its existing complete-document rules.
-Other text media retain the decoded literal text. Embedded data URLs follow
-the existing attachment externalization before the preview is bounded. The
+Other text media retain the decoded literal text. The formatted Tool body and
+excerpt share one response-local embedded-data attachment map, assigning the
+body's attachments first so excerpt references identify the same actual files.
+Embedded data URLs follow the existing attachment externalization before the
+preview is bounded. The
 excerpt is fetched text, rather than a publisher-authored summary. The full
 Tool output keeps its existing format and budget, and the existing Source
 writer persists the excerpt with its exact URL and Tool binding. Earlier
