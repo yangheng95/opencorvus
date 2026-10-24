@@ -1420,10 +1420,17 @@ readers consume this same in-memory anchor; Main retains the producing Message f
 virtual-history lookup. Native Range geometry observes text without replacing its
 content or introducing another scroll owner. Bounded payload scroll and original
 copy bytes remain owned by the existing ToolPayload presentation record.
-Visible member and Side Chat width changes reuse the same position-restoration
+Markdown prose uses its existing Message, text owner and frozen-block identity
+plus a rendered character offset within that block. Its viewport offset belongs
+to that character's line, rather than the entire paragraph's top edge. Capture
+keeps the previous character only while the same block and character are still
+visible; genuine scrolling otherwise captures the current visible text. The
+same native Range primitive already used for Tool payloads resolves this anchor
+after wrapping or font-scale changes. These anchors remain UI memory only.
+Visible member and Side Chat viewport changes reuse the same position-restoration
 path. Layout-driven scroll events retain the prior reading record until that
 restore settles; new operator scroll input may take over normally. The controller
-measures the actual viewport width and asks its current reader for the saved
+measures the actual viewport width and height and asks its current reader for the saved
 anchor, without keeping another anchor store or creating a second observer.
 Tool-payload and delivery-name copying share one mounted copy-action owner over
 the canonical host clipboard writer. Only a fulfilled host write shows the brief

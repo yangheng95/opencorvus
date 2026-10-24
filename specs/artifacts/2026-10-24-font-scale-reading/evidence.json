@@ -1,0 +1,409 @@
+{
+  "batch": 579,
+  "at": "2026-10-24T09:07:45.359Z",
+  "implementation": {
+    "files": [
+      "packages/overlay/src/utils/conversation-reading-anchor.ts",
+      "packages/overlay/src/utils/dom-utils.ts"
+    ],
+    "behavior": "Markdown prose captures a rendered character within its existing frozen block and restores that character through the existing native Range primitive; viewport height joins width in the existing restoration notification."
+  },
+  "before": {
+    "publication": {
+      "at": "2026-10-24T08:46:47.760Z",
+      "entry": "main-BxC0dIy1.js",
+      "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/font-scale-reading-579-bundle/bin/ui",
+      "qualification": "Completed current production Node Vite build with private passive capture/resolve metadata; native CLI /ui"
+    },
+    "position": {
+      "capture": {
+        "at": 113614.90000009537,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYn1Dr400aVXO3GoJ3",
+          "textIndex": 0,
+          "blockIndex": 1,
+          "offset": -151.046875
+        },
+        "character": {
+          "textOffset": 208,
+          "offset": -7.953125
+        },
+        "width": 380,
+        "height": 576,
+        "top": 20314,
+        "scale": "1.000"
+      },
+      "follow": "false",
+      "top": 20314,
+      "width": 380
+    },
+    "scaled": {
+      "capture": {
+        "at": 146166.7000002861,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYn1Dr400aVXO3GoJ3",
+          "textIndex": 0,
+          "blockIndex": 1,
+          "offset": -151.09375
+        },
+        "character": {
+          "textOffset": 106,
+          "offset": 2.46875
+        },
+        "width": 448,
+        "height": 440,
+        "top": 41621,
+        "scale": "1.600"
+      },
+      "follow": "false",
+      "resolve": {
+        "at": 146166.30000019073,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYn1Dr400aVXO3GoJ3",
+          "textIndex": 0,
+          "blockIndex": 1,
+          "offset": -151.046875
+        },
+        "top": 41620.953125,
+        "width": 448,
+        "height": 440,
+        "scale": "1.600"
+      },
+      "top": 41621,
+      "width": 448
+    },
+    "lifecycle": {
+      "originalExec": 93775,
+      "originalExecJoinedExit": 0,
+      "at": "2026-10-24T08:55:14.493Z",
+      "authCopied": false,
+      "providerRequests": 0,
+      "catalogRetired": 1,
+      "publicShutdown": 200,
+      "reserveMs": 882027,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "exactProcessChain": "dead_or_reused"
+    },
+    "closedPreservation": {
+      "at": "2026-10-24T08:55:17.462Z",
+      "sourceSchema": 6,
+      "targetSchema": 7,
+      "originalTables": 90,
+      "originalRows": 207330,
+      "originalFieldDifferences": [],
+      "integrity": "ok",
+      "sourceBytes": 95682560,
+      "sourceModifiedAtMs": 1792828797672.7832,
+      "canonicalConfiguration": "Exact original",
+      "qualification": "Full original field/row verification after original native exit and physical/output/request closure"
+    }
+  },
+  "after": {
+    "publication": {
+      "at": "2026-10-24T08:59:37.169Z",
+      "entry": "main-DVohYl6w.js",
+      "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-24/font-scale-reading-579-after-bundle/bin/ui",
+      "qualification": "Completed current production Node Vite build with private passive capture/resolve metadata; native CLI /ui"
+    },
+    "position": {
+      "capture": {
+        "at": 41710.5,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYn1Dr400aVXO3GoJ3",
+          "textIndex": 0,
+          "blockIndex": 1,
+          "textOffset": 208,
+          "offset": -7.953125
+        },
+        "character": {
+          "textOffset": 208,
+          "offset": -7.953125
+        },
+        "width": 380,
+        "height": 576,
+        "top": 20314,
+        "scale": "1.000"
+      },
+      "follow": "false",
+      "height": 576,
+      "top": 20314,
+      "width": 380
+    },
+    "scaled": {
+      "capture": {
+        "at": 55033.09999990463,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYn1Dr400aVXO3GoJ3",
+          "textIndex": 0,
+          "blockIndex": 1,
+          "textOffset": 208,
+          "offset": -7.96875
+        },
+        "character": {
+          "textOffset": 204,
+          "offset": -7.96875
+        },
+        "width": 448,
+        "height": 440,
+        "top": 41782,
+        "scale": "1.600"
+      },
+      "follow": "false",
+      "height": 440,
+      "resolve": {
+        "at": 55032.7000002861,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYn1Dr400aVXO3GoJ3",
+          "textIndex": 0,
+          "blockIndex": 1,
+          "textOffset": 208,
+          "offset": -7.953125
+        },
+        "top": 41781.984375,
+        "width": 448,
+        "height": 440,
+        "scale": "1.600"
+      },
+      "top": 41782,
+      "width": 448
+    },
+    "fixedWidthBefore": {
+      "capture": {
+        "at": 150247.2000002861,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYn1Dr400aVXO3GoJ3",
+          "textIndex": 0,
+          "blockIndex": 1,
+          "textOffset": 208,
+          "offset": -7.953125
+        },
+        "character": {
+          "textOffset": 208,
+          "offset": -7.953125
+        },
+        "width": 380,
+        "height": 576,
+        "top": 20314,
+        "scale": "1.000"
+      },
+      "follow": "false",
+      "height": 576,
+      "resolve": {
+        "at": 150246.7000002861,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYn1Dr400aVXO3GoJ3",
+          "textIndex": 0,
+          "blockIndex": 1,
+          "textOffset": 208,
+          "offset": -7.890625
+        },
+        "top": 20313.9375,
+        "width": 380,
+        "height": 576,
+        "scale": "1.000"
+      },
+      "top": 20314,
+      "width": 380
+    },
+    "fixedWidthAfter": {
+      "capture": {
+        "at": 167583.59999990463,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYn1Dr400aVXO3GoJ3",
+          "textIndex": 0,
+          "blockIndex": 1,
+          "textOffset": 208,
+          "offset": -7.6875
+        },
+        "character": {
+          "textOffset": 207,
+          "offset": -7.6875
+        },
+        "width": 380,
+        "height": 569,
+        "top": 22457,
+        "scale": "1.050"
+      },
+      "follow": "false",
+      "height": 569,
+      "resolve": {
+        "at": 167583.2000002861,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYn1Dr400aVXO3GoJ3",
+          "textIndex": 0,
+          "blockIndex": 1,
+          "textOffset": 208,
+          "offset": -7.953125
+        },
+        "top": 22457.265625,
+        "width": 380,
+        "height": 569,
+        "scale": "1.050"
+      },
+      "top": 22457,
+      "width": 380
+    },
+    "sourceBefore": {
+      "capture": {
+        "at": 195252.80000019073,
+        "anchor": {
+          "kind": "source",
+          "sourceIdentity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYx2r1y00VGC049Rqk\",\"e84bb5bfb116fa834ec62ae0d6af530f0c6586d8d2671c7834b97c6d857997ec\"]",
+          "messageID": "msg_g0VYx2r1y00VGC049Rqk",
+          "offset": 271.75
+        },
+        "width": 380,
+        "height": 569,
+        "top": 31409,
+        "scale": "1.050"
+      },
+      "follow": "false",
+      "height": 569,
+      "resolve": {
+        "at": 167583.2000002861,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VYn1Dr400aVXO3GoJ3",
+          "textIndex": 0,
+          "blockIndex": 1,
+          "textOffset": 208,
+          "offset": -7.953125
+        },
+        "top": 22457.265625,
+        "width": 380,
+        "height": 569,
+        "scale": "1.050"
+      },
+      "top": 31409,
+      "width": 380
+    },
+    "sourceAfter": {
+      "capture": {
+        "at": 216636.09999990463,
+        "anchor": {
+          "kind": "source",
+          "sourceIdentity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYx2r1y00VGC049Rqk\",\"e84bb5bfb116fa834ec62ae0d6af530f0c6586d8d2671c7834b97c6d857997ec\"]",
+          "messageID": "msg_g0VYx2r1y00VGC049Rqk",
+          "offset": 271.640625
+        },
+        "width": 448,
+        "height": 440,
+        "top": 58464,
+        "scale": "1.600"
+      },
+      "follow": "false",
+      "height": 440,
+      "resolve": {
+        "at": 216635.7000002861,
+        "anchor": {
+          "kind": "source",
+          "sourceIdentity": "[\"source-url\",\"ses_hHpC127wALpwIiSOX86d\",\"msg_g0VYx2r1y00VGC049Rqk\",\"e84bb5bfb116fa834ec62ae0d6af530f0c6586d8d2671c7834b97c6d857997ec\"]",
+          "messageID": "msg_g0VYx2r1y00VGC049Rqk",
+          "offset": 271.75
+        },
+        "top": 58463.890625,
+        "width": 448,
+        "height": 440,
+        "scale": "1.600"
+      },
+      "top": 58464,
+      "width": 448
+    },
+    "lifecycle": {
+      "originalExec": 57636,
+      "originalExecJoinedExit": 0,
+      "at": "2026-10-24T09:05:24.206Z",
+      "authCopied": false,
+      "providerRequests": 0,
+      "catalogRetired": 1,
+      "publicShutdown": 200,
+      "reserveMs": 857464,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "exactProcessChain": "dead_or_reused"
+    },
+    "closedPreservation": {
+      "at": "2026-10-24T09:05:27.168Z",
+      "sourceSchema": 6,
+      "targetSchema": 7,
+      "originalTables": 90,
+      "originalRows": 207330,
+      "originalFieldDifferences": [],
+      "integrity": "ok",
+      "sourceBytes": 95682560,
+      "sourceModifiedAtMs": 1792828797672.7832,
+      "canonicalConfiguration": "Exact original",
+      "qualification": "Full original field/row verification after original native exit and physical/output/request closure"
+    },
+    "business": {
+      "taskID": "tsk_g00VYlyopB00h7w27eIw",
+      "sessionID": "ses_hHpC127wALpwIiSOX86d",
+      "messages": 33,
+      "parts": 107,
+      "sources": 9,
+      "assistant": {
+        "plan": {
+          "partID": "prt_g0VYx2s6Z00tS7K6at5e",
+          "messageID": "msg_g0VYx2r1y00VGC049Rqk",
+          "characters": 1517
+        },
+        "final": {
+          "partID": "prt_g0VYx3Lfe00yPWtixOdI",
+          "messageID": "msg_g0VYx3HfM00NfkvlRPw3",
+          "characters": 1775
+        },
+        "role": "assistant",
+        "ordering": "Real assistant plan precedes the admitted webfetch Part; real final assistant output follows it"
+      },
+      "attachment": {
+        "status": 200,
+        "bytes": 643,
+        "identity": "Original immutable PNG"
+      }
+    }
+  },
+  "verification": {
+    "overlayTypecheck": "exit0",
+    "builds": [
+      "68s before",
+      "57.81s after"
+    ],
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "visual": "Seven actual screenshots personally viewed; passive attributes only support manual review, no UI automated test",
+    "qualified": [
+      "Same original paragraph baseline is exactly character208 at -7.953125px",
+      "Original implementation scale160 moved visible text208→106 while retaining only paragraph top",
+      "Fixed implementation preserves character208 at -7.96875px through scale160",
+      "Fixed380px width, height576→569 with scale105 preserves character208 at -7.6875px",
+      "Focused Tabs Source identity and offset271.75→271.640625 preserved at scale160",
+      "Original90 tables207330 rows and all original fields/times/config/source bytes/mtime preserved after both native closures"
+    ],
+    "limitations": [
+      "Main virtual conversation and Side Chat were not separately exercised in this batch",
+      "Dedicated code/media/disclosure blocks, extremely short viewport and physical778px desktop remain unqualified",
+      "Original high-frequency Rendering root cause remains unknown",
+      "Initial startup member-open attempt did not retain Dock before recovery settled; no control-flow diagnosis yet",
+      "End remained in View when pointer was moved onto slider first; no proven keyboard propagation defect"
+    ]
+  }
+}

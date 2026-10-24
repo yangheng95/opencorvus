@@ -100,6 +100,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   let restoration = opts.initialPosition.kind === "position" ? opts.initialPosition : undefined
   let restoreTop = restoration?.top ?? null
   let viewportWidth = el.clientWidth
+  let viewportHeight = el.clientHeight
   let restoreGeometry = ""
   let stableRestoreFrames = 0
   let observedContentElements = new Set<Element>()
@@ -290,8 +291,10 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   function scheduleFollowScroll() {
     if (disposed) return
     const width = el.clientWidth
-    if (width > 0 && width !== viewportWidth) {
+    const height = el.clientHeight
+    if (width > 0 && height > 0 && (width !== viewportWidth || height !== viewportHeight)) {
       viewportWidth = width
+      viewportHeight = height
       const position = !opts.isTracking() ? opts.onViewportResize?.() : undefined
       if (position) {
         restoration = position
@@ -371,7 +374,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   return {
     readingPosition: () => ({ top: restoreTop ?? el.scrollTop, following: opts.isTracking() }),
     hasScrollInput: () => pointerScrollIntent || Boolean(inputIntent && performance.now() <= inputIntent.expiresAt),
-    hasViewportResize: () => el.clientWidth !== viewportWidth,
+    hasViewportResize: () => el.clientWidth !== viewportWidth || el.clientHeight !== viewportHeight,
     cleanup: () => {
       disposed = true
       retirePositionRestore()

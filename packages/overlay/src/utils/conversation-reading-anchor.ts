@@ -1,7 +1,7 @@
 export type TextReadingAnchor = { textOffset: number; offset: number }
 
 export type ConversationReadingAnchor = { messageID: string; offset: number } & (
-  | { kind: "text"; textIndex: number; blockIndex: number }
+  | { kind: "text"; textIndex: number; blockIndex: number; textOffset: number }
   | { kind: "source"; sourceIdentity: string }
   | { kind: "tool-payload"; payloadIdentity: string; textOffset: number }
 )
@@ -107,12 +107,17 @@ export function captureConversationReadingAnchor(container: HTMLElement, previou
     })
     const messageID = candidate.dataset.quotationMessage
     if (blockIndex < 0 || !messageID) continue
+    const textIndex = quotes.filter(node => node.dataset.quotationMessage === messageID).indexOf(candidate)
+    const previousText = previous?.kind === "text" && previous.messageID === messageID &&
+      previous.textIndex === textIndex && previous.blockIndex === blockIndex ? previous : undefined
+    const text = captureTextReadingAnchor(blocks[blockIndex]!, viewport, previousText)
+    if (!text) continue
     return {
       kind: "text",
       messageID,
-      textIndex: quotes.filter(node => node.dataset.quotationMessage === messageID).indexOf(candidate),
+      textIndex,
       blockIndex,
-      offset: blocks[blockIndex]!.getBoundingClientRect().top - viewport.top,
+      ...text,
     }
   }
 }
@@ -126,6 +131,7 @@ export function resolveConversationReadingTop(container: HTMLElement, anchor: Co
   const owner = conversationReadingAnchorOwner(container, anchor)
   if (anchor.kind === "tool-payload") return owner ? resolveTextReadingTop(container, anchor, owner) : null
   const element = anchor.kind === "text" ? owner?.querySelectorAll<HTMLElement>(".md-frozen-block")[anchor.blockIndex] : owner
+  if (anchor.kind === "text") return element ? resolveTextReadingTop(container, anchor, element) : null
   const rect = element && readingRect(element)
   if (!rect) return null
   return Math.max(0, container.scrollTop + rect.top - container.getBoundingClientRect().top - anchor.offset)
