@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [成员侧栏加载与正文连续性复核](records/2026-10/2026-10-24-member-dock-loading.md)：571慢读取下原成员/Source与真实加载反馈。
+
 - [文件编辑、保存与来源往返](records/2026-10/2026-10-24-file-editor-roundtrip.md)：570真实新文件、保存中编辑和模型Source闭环。
 
 - [文件工作台的文件名优先标题](records/2026-10/2026-10-24-source-file-title.md)：569深目录来源的文件名与无障碍标题。

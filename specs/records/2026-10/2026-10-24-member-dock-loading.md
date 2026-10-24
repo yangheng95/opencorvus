@@ -1,0 +1,52 @@
+# 成员侧栏加载与正文连续性复核
+
+## Recall
+
+571继续单agent自主迭代，后续禁止子agent覆盖旧Goal三个Astra文字。570为progress：0a9205935ee3836aa33ae1e1106182b0d6c121a4正常推送、fresh0/0，修复无range显式文件打开的键盘交接；19实图、真实保存/重载/409冲突、Sol实际read及Source持久化闭环。两个原exec/native/launcher、物理/输出/请求完整闭合，7个Sol原reader EOF，配对auth/models均退休，源schema5/完整90表/canonical/库字节mtime保持，目标真实业务变化逐项保留。用户18571未操作。开始只有171原无关删除、.bun/和packages/opencorvus/bun/未跟踪、无暂存，当前HEAD为该提交；全部保留，不branch/worktree、不发布。整体Goal active，不委托开发agent。
+
+用户要求优先Sources显示和侧栏Rendering反复闪烁，不能以文件编辑通过代替。沿既有computer-use/benchmark-debug-template，禁止UI自动化；所有页面交互/实图需亲自查看。已读570 Recall/结果、当前App固定进度条/main taskSwitching同步/CSS、boardStore、成员资源storage/live reconcile/刷新controller与TextPart Rendering分支，以及539/541/567当前原事实及限制。541已证明其一轮原B新Source插入保持正文owner，不能由此证明当前所有刷新、切换和加载入口。未重新委托或制造成员。
+
+## 修改前分析与未知
+
+570辅助树偶尔出现“正在加载Task”，当前代码明确来自App始终挂载的taskSwitchProgress，固定workspace.loading_task label、初始aria-busy/data-active=false；main effect按boardStore.taskSwitching同步，CSS opacity控制两像素绝对进度条。它不是成员正文Rendering节点；标签存在不能直接证明可见闪烁或实际Task排队。需实页同时核对真实data-active/aria-busy、计算样式和截图，判断是否仅隐藏节点、是否在Session加载时误称Task、忙闲反馈能否被正确感知。不能只凭命名或最后状态改控制流。
+
+成员正文当前只在pending且frozenHtml空时显示Rendering，已有HTML应跨增量保留。SubagentConversationPanel用真实targetKey绑定resource、原storage承接可用正文、实时投影和合并，正常current request才接受新值；刷新controller按原transcript revision/读状态协调。旧539已治冗余snapshot全文回读，541纠正了私有诊断cleanup读响应式props引起的重入，并有一轮真实活跃新增Source证据。当前尚无新可修复根因。需继续看目标选择/隐藏重开、冷读/刷新、原成员执行更新与正文owner/块数，不能隐藏Rendering、伪造消息、清历史或新建简化任务代替原场景。
+
+影响面包括Main/Side/Task/Mission/Session的共享加载反馈、成员Dock资源/读位、CardParts与Markdown owner；目前只是UI候选，不推断调度故障。若观察任何队列、唤醒、恢复、并发或终态收敛异常，立即按全部生产入口/Task-Mission-Session occurrence、正常终态、重试重启、串并行和多项目横审，再定位数据或投影根因。非UI变更需聚焦正向真实合同；纯UI只实页/截图，不新增或运行DOM/组件/文案/截图测试。
+
+## 实施前调查方案
+
+1. 只读已完全关闭的570-after完整原SQLite，核对539/541原Task tsk_g00VYlyopB00h7w27eIw、原B ses_hHpC127wALpwIiSOX86d及现有参与者、目录/模型/终态、原Source/附件身份是否确实仍在当前链。缺失处标未知，不猜测Project目录、深链接、附件namespace，不改SQL业务事实。原任务和资产资格不满足时先修复本地验收材料/调用链，不能伪造Source或另造小任务。
+2. 根据真实元数据准备member-dock-loading-571-before隔离开发CLI `/ui`，冻结570正式main-DEA9gO_a.js；若要正文owner诊断，只复用541已纠正低频私有构建，最后正常快照供cleanup读取，禁止cleanup再读响应式props。诊断不改资源请求/状态/排序/渲染算法，不建UI断言。代码定义/调用/同语义/旧决策全仓查清后，任何修改先补具体根因/影响再实施。
+3. 完整90表/所有原行字段时间/schema5真实对象/integrity/canonical和源库bytesmtime保持；原物理文件与实际资产按明确生产者/namespace配对复制，公共读取确认原字节。只使用自有服务/新页，用户18571不操作。20分钟原生边界、180秒启动无活动，至少五分钟主动收尾；每scope最大32、全批最大64原Sol请求，包含预检、业务、编排与记忆，不重启重置预算。
+4. 需要Provider时完整auth/models成对使用，分别证明凭据usable/目标gpt-6.1-sol projected/实际请求一致，全部流式。先实页冷开原任务、成员及Sources、切换与隐藏重开、活跃/空闲加载反馈；以实际当前控件和原截图操作，不把AX存在当可见。必要受控读取时序只延迟原真实请求，不替换响应或增设轮询。
+5. 若原Task/原B和模型/owner完整资格成立，可通过原任务真实UI提交一条有界续写责任，仅原B在原Session继续，单一公开W3C页面读取、前后有限正文与Source，不新增Task/Goal/成员或开发子agent；真实工具选择由模型和当前上下文决定，权限按实际精确scope核对。观察前先打开低频日志，保留原Part/owner/已呈现块与真实流时序，主动导航/正常关闭导致dispose不当异常。Task与后台原reader自然结算后再关闭，错误/取消按原事实保留。
+6. 若有失败，补现象/触发/控制流/旧路径遗漏、公共合同/数据/测试文档/交付风险后才修当前唯一实现；条件after同原路径实证。不以一次通过穷尽Rendering，不以预检替代真实业务。闭合原公开shutdown/exec/native/launcher/物理输出请求/出生链、完整数据/原件/实际请求终态后配对退休。归档实际图与最小安全证据、更新三索引/目录README/docs:check，精确index提交、fetch完成/merge upstream/完整待推集合/正常hooks push/fresh一致；整体Goal active。
+
+## 原渲染用例资格与数据选择
+
+只读初稿误用task表导致no such table；查当前engine/task及541原checker后，修正为真实engine_task并原命令重跑。修正后的570-after查询证明指定Task、A、B及其Source都不在这条数据链，不据初稿错误宣称Task丢失。541原闭合after完整SQLite中同Task与两成员均在，A/B同Project且parent_id指向原编排Session，7个真实Source（A2/B5）；原Task标题“双成员来源与正文追加537”。本批因此使用原541完整历史副本，恢复原用例资格，不向570数据链拼接任务或伪造成员。
+
+原541为schema3，当前正式目标5；实际交付迁移4增加两条消息转移/Part移除索引，5新增历史Permission记忆投递资格校验且沿同DDL，不清理/猜测重放原数据。不可只凭迁移命名推断行为。本次先以当前只读校验确认旧历史是否可升级，再完整复制其原90表/schema3/canonical并保留源bytesmtime；Node UI构建前后检查副本仍schema3/原bytesmtime，只有之后启动隔离当前CLI才按既有自动迁移升到5，验证真实对象与所有源原行。若历史校验不满足，保留真实阻塞，禁止改迁移或SQL伪造成功。构建不得导入当前用户数据库。ProjectRuntimePaths仅依node:path与Identifier纯标识模块，附件引用解析依纯路径/URL，不从配置/Storage打开默认库；资产准备只使用明确原Project和source/target DB路径。
+
+复用541纠正后的低频TextPart/Part/Source诊断，仅改私有构建tag/输出namespace，不改生产源码、资源请求或渲染算法。cleanup只读取最后正常快照；数据观察不注入UI断言。真实Task资产按其原Tool引用与ProjectRuntimePaths对应的源DB namespace复制原PNG/metadata，再以公共attachment接口读回原内容地址字节；该SHA是已有不可变资源协议身份，不是可变源码摘要验收。模型在原TaskProject完整配置与当前完整auth/models上重新预检，原541十三个Sol reader及物理/输出/请求/配对退休先验证，不使用旧凭据。
+
+## 571实测与条件恢复方案
+
+初scope私有构建Windows outDir字符串未正确转义，Node完成构建但输出进了Source下面的drive-relative目录，随后发布失败而编排仍误启动。实际HTTP资源头证明native冻结了旧main-DXPgQK57，不冒充诊断UI通过。恢复准确已构建资源后正常关闭原scope，2次预检EOF计入总64；发布成功及exact entry在launch前验证。此为本地诊断工具链错误，已改为forward-slash+JSON字符串并修复依赖顺序；生产构建没有因此改动。构建前后原schema3及完整192812行/库bytesmtime保持，只有隔离native启动迁移3→5，原完整90表行保持。
+
+ready完整复制前scope，schema5/193247原行；使用同原Task/A/B，两个预检后通过真实UI提交一次原B有限续写（约300字计划、单次W3C读取、约500字说明及三行表格）。9张截图逐张人工查看，冷读8秒有明确加载反馈，正文/Source随后正常呈现；原Part owner15—28跨责任开始、Source新增和结算保持，Source复制返回准确URL，隐藏重开后仍直接显示正文。当前一轮未复现旧Rendering，不宣称根因已穷尽或所有场景修复。业务公共conversation经生产parser，新增Source与真实SQLite内容、关系ID及生产timelineOrderKey一致；原PNG公开路由200/643字节与真实内容地址原件一致。checker初稿错误地比较了SQL内容与包含关系ID/orderKey的API envelope，按当前message-store真实映射修正并原命令重跑通过。
+
+04:00:09公开shutdown200、原exec/native/launcher均0、物理/输出/请求清理完整，距固定deadline保留418319毫秒；18571未操作。但本agent未先等全部后台请求结束，取消了最后一个Memory Organizer reader。严格原retire检查正确失败：ready13个200流式Sol中12EOF、1个aborted，后者原Session为orchestrator且终止时间与shutdown相差1毫秒。原产品Task及B已自然完成，不能据Task终态宣称后台EOF。独立闭合检查明确记录该失败，在已证物理/请求终态后才清退配对凭据，不把aborted改记EOF。
+
+当前代码project-memory-organizer通过runInstanceBackgroundWork接收instance取消信号，catch释放Organizer lease到retry_wait；serve shutdown进入统一process settlement与Instance.disposeAll，后者取消后台工作；Provider当前合同保留aborted而非EOF。只凭该显式关闭事件尚无调度异常根因。条件after从刚关闭的完整ready数据继续，固定32请求上限（2+13+32≤64），只验证原pending记忆在正常打开Project后的持久恢复、原Task/B/Source冷开、原资产和UI加载反馈；不新增用户责任、成员、Task或Goal，不为观察超时重启。启动后必须直接核对真实provider reader和memory待处理状态，在原20分钟边界与五分钟收尾储备内自然结算后才关闭；若仍未结算保留真实未达，不改业务状态或旧数据。
+
+## 条件恢复与交付结果
+
+after完整复制ready schema5/90表/196775行，已保存原请求终态和retry_wait。正常Project打开后，当前唯一Organizer读取原pending `interaction_reply:int_g0VYw5ocX00xPKzi7DUR`；原Project、原Task、原orchestrator Session关系均一致，文档revision18/retry_wait经真实流式Sol候选提交推进为revision19/idle，recentCoveredOccurrenceIDs恰好追加这一个原occurrence，原pending file/chunk按当前commit合同被消费。不是改SQL清记录，不是重建任务。单一恢复请求original source-reader EOF，连同两个预检共3次200流式Sol且全部EOF。该正常shutdown取消与持久恢复符合当前共享instance/background/Provider合同，未观察到新的调度、队列或终态异常；不能将正常取消最后状态当成产品故障。
+
+after真实冷开同一Task/B，8秒Loading conversation后呈现同一最终正文、表格和W3C Source；英文UI的来源复制准确，模型/用户中文原文保留。第10张实际截图已完成Task加载，不冒充冷读中；第11张明确捕获成员冷读，第12/13张为加载完成与复制。共13张实图逐张人工查看。after公共conversation/board和SQLite/生产timelineOrderKey/原PNG200/643字节原checker通过。
+
+三scope实际Sol请求2+13+3=18，17EOF、1ready显式shutdown-aborted，低于全批64。after原exec41093/native/launcher均0，公开shutdown200距固定deadline922058毫秒，物理/输出/请求清理完整，配对auth/models均已退休；三scope均无存活服务/页面。原源库与canonical全量保持、每scope90表/真实schema对象/integrity逐项比较；ready只改原记忆文档、三个实际参与Session更新时间和两个容量租约，after只改同原文档、已真实覆盖pending file/chunk和两个租约，均有真实业务出处。源catalog9155406字节与mtime保持。
+
+本批没有发现可据实实施的产品Rendering补丁；原14个历史Markdown owner在本次活跃新增Source窗口保持，旧Rendering未复现，禁止据此宣布全场景治愈。全reader EOF在ready未达的事实不会被after成功覆盖。私有本地工具已修复构建路径/发布先后、API envelope checker和只读摘要语法问题并重跑原验收；不把工具错误当产品根因。尚未穷尽不同成员切换、所有来源类型与所有执行入口，后续继续实际体验；不为了提交修改唯一产品实现。当前文档检查通过346ops/26groups。交付仅本调查、证据与三索引，保留171原无关删除及两个未跟踪目录，正常提交和上游合并推送后记录实际结果。整体Goal保持active，仅单agent。

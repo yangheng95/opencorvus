@@ -1,0 +1,744 @@
+{
+  "at": "2026-10-24T04:05:44.352Z",
+  "scope": "571",
+  "productSourceChange": false,
+  "qualification": "One real original-member continuation with one new Source, bounded delayed reads, manual screenshots; no claim of complete Rendering reproduction or fix",
+  "task": {
+    "id": "tsk_g00VYlyopB00h7w27eIw",
+    "status": "completed",
+    "sessionID": "ses_-zURE1Aonzzko22HlxqB",
+    "memberSessionID": "ses_hHpC127wALpwIiSOX86d"
+  },
+  "source": {
+    "id": "prt_g0VYw5di9006lIRDJaPY",
+    "sessionID": "ses_hHpC127wALpwIiSOX86d",
+    "messageID": "msg_g0VYw5S9R00KTvl7hokv",
+    "orderKey": "v1:0001792814191173:0000000000000031:0000000000000000:part:prt_g0VYw5di9006lIRDJaPY",
+    "type": "source-url",
+    "sourceId": "83a68d506f994765fbe142e28b835a56a0d655e23dab70d9347fb16df84b2804",
+    "url": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/",
+    "title": "Dialog (Modal) Pattern | APG | WAI | W3C",
+    "provider": "opencorvus-webfetch",
+    "toolPartID": "prt_g0VYw5VDX00G7EFNcP5z"
+  },
+  "persistence": {
+    "partID": "prt_g0VYw5di9006lIRDJaPY",
+    "messageID": "msg_g0VYw5S9R00KTvl7hokv",
+    "source": "Exact original public Source matches SQLite"
+  },
+  "attachment": {
+    "status": 200,
+    "mime": "image/png",
+    "bytes": 643,
+    "identity": "Exact original published PNG"
+  },
+  "provider": {
+    "at": "2026-10-24T04:02:03.672Z",
+    "authRetired": 1,
+    "catalogRetired": 1,
+    "requests": 13,
+    "streaming200OriginalReaderEOF": 12,
+    "shutdownAbortedMemoryReader": 1,
+    "allReaderEOFQualification": "FAILED; original strict retirement rejection preserved. Safe credential retirement follows physical terminal closure; aborted is not EOF.",
+    "terminal": [
+      {
+        "number": 1,
+        "agentID": "memory",
+        "sessionID": "ses_hzPIJSNiS2ntybWbflcT",
+        "kind": "eof",
+        "at": 1792813653136
+      },
+      {
+        "number": 2,
+        "agentID": "chat",
+        "sessionID": "ses_hzPIJSNiS2ntybWbflcT",
+        "kind": "eof",
+        "at": 1792813653239
+      },
+      {
+        "number": 3,
+        "agentID": "memory",
+        "sessionID": "ses_-zURE1Aonzzko22HlxqB",
+        "kind": "eof",
+        "at": 1792814170579
+      },
+      {
+        "number": 4,
+        "agentID": "orchestrator",
+        "sessionID": "ses_-zURE19wozzlTmx3ixXd",
+        "kind": "eof",
+        "at": 1792814110264
+      },
+      {
+        "number": 5,
+        "agentID": "base-researcher",
+        "sessionID": "ses_hHpC127wALpwIiSOX86d",
+        "kind": "eof",
+        "at": 1792814146457
+      },
+      {
+        "number": 6,
+        "agentID": "base-researcher",
+        "sessionID": "ses_hHpC127wALpwIiSOX86d",
+        "kind": "eof",
+        "at": 1792814160853
+      },
+      {
+        "number": 7,
+        "agentID": "memory",
+        "sessionID": "ses_-zURE1Aonzzko22HlxqB",
+        "kind": "eof",
+        "at": 1792814256383
+      },
+      {
+        "number": 8,
+        "agentID": "base-researcher",
+        "sessionID": "ses_hHpC127wALpwIiSOX86d",
+        "kind": "eof",
+        "at": 1792814204987
+      },
+      {
+        "number": 9,
+        "agentID": "orchestrator",
+        "sessionID": "ses_-zURE19wozzlTmx3ixXd",
+        "kind": "eof",
+        "at": 1792814213312
+      },
+      {
+        "number": 10,
+        "agentID": "orchestrator",
+        "sessionID": "ses_-zURE19wozzlTmx3ixXd",
+        "kind": "eof",
+        "at": 1792814219607
+      },
+      {
+        "number": 11,
+        "agentID": "orchestrator",
+        "sessionID": "ses_-zURE19wozzlTmx3ixXd",
+        "kind": "eof",
+        "at": 1792814233099
+      },
+      {
+        "number": 12,
+        "agentID": "memory",
+        "sessionID": "ses_hHpC127wALpwIiSOX86d",
+        "kind": "eof",
+        "at": 1792814331430
+      },
+      {
+        "number": 13,
+        "agentID": "memory",
+        "sessionID": "ses_-zURE19wozzlTmx3ixXd",
+        "kind": "aborted",
+        "at": 1792814409358
+      }
+    ],
+    "sourceCatalog": {
+      "bytes": 9155406,
+      "modifiedAtMs": 1791128890137.9968,
+      "content": "Exact original"
+    },
+    "publicShutdown": 200,
+    "reserveMs": 418319,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "exactProcessChain": "dead_or_reused"
+  },
+  "privateDiagnostic": {
+    "tag": "MT571",
+    "events": 93,
+    "counts": {
+      "part-binding": 17,
+      "body-mount": 17,
+      "body-state": 41,
+      "source-group-binding": 6,
+      "source-binding": 6,
+      "source-mount": 6
+    },
+    "existingBodyOwners": [
+      {
+        "owner": 15,
+        "messageID": "msg_g0VYlz7Ip00T8hfkxlJc",
+        "partID": "prt_g0VYlz8dd00pWcuVkoZF",
+        "textLength": 79
+      },
+      {
+        "owner": 16,
+        "messageID": "msg_g0VYlzNHF00KE9pPvzmq",
+        "partID": "prt_g0VYlzNy200G9j4TgB2N",
+        "textLength": 209
+      },
+      {
+        "owner": 17,
+        "messageID": "msg_g0VYm1k2300mHdtrLYyw",
+        "partID": "prt_g0VYm1lEs00O2KijUi86",
+        "textLength": 209
+      },
+      {
+        "owner": 18,
+        "messageID": "msg_g0VYmMZ4H00k2M4LXePB",
+        "partID": "prt_g0VYmMab300GY28UWAJt",
+        "textLength": 135
+      },
+      {
+        "owner": 19,
+        "messageID": "msg_g0VYmMbPE00dysER56z0",
+        "partID": "prt_g0VYmMcJU00PFeeyJf7k",
+        "textLength": 4529
+      },
+      {
+        "owner": 20,
+        "messageID": "msg_g0VYmULtS00eCE1XQTs4",
+        "partID": "prt_g0VYmUNau00ka4jsGLu7",
+        "textLength": 99
+      },
+      {
+        "owner": 21,
+        "messageID": "msg_g0VYmUOVB0012dG1c1pk",
+        "partID": "prt_g0VYmUPS300JPqmNLo2D",
+        "textLength": 2171
+      },
+      {
+        "owner": 22,
+        "messageID": "msg_g0VYmUqhk00EpT8PKb3j",
+        "partID": "prt_g0VYmUrRH00iG2zOFlhG",
+        "textLength": 3090
+      },
+      {
+        "owner": 23,
+        "messageID": "msg_g0VYmZzrh002aaO3I7Gb",
+        "partID": "prt_g0VYma1AT004jdIyz0bP",
+        "textLength": 84
+      },
+      {
+        "owner": 24,
+        "messageID": "msg_g0VYma20K00NMix5Hzs1",
+        "partID": "prt_g0VYma2wD003owRu5m9l",
+        "textLength": 2120
+      },
+      {
+        "owner": 25,
+        "messageID": "msg_g0VYmaLzr00YbB7uU14g",
+        "partID": "prt_g0VYmaNTs00F3UDN30bC",
+        "textLength": 2980
+      },
+      {
+        "owner": 26,
+        "messageID": "msg_g0VYn0qE200VQT2dc3zP",
+        "partID": "prt_g0VYn0rha005V1KlZppe",
+        "textLength": 70
+      },
+      {
+        "owner": 27,
+        "messageID": "msg_g0VYn0sTy00K0FROE4Oh",
+        "partID": "prt_g0VYn0tPU00GJfPCOkag",
+        "textLength": 1643
+      },
+      {
+        "owner": 28,
+        "messageID": "msg_g0VYn1Dr400aVXO3GoJ3",
+        "partID": "prt_g0VYn1Ezt00aQBqYLfgw",
+        "textLength": 2358
+      }
+    ],
+    "existingBodyLastObserved": [
+      {
+        "owner": 15,
+        "blocks": 0,
+        "pending": true
+      },
+      {
+        "owner": 16,
+        "blocks": 0,
+        "pending": true
+      },
+      {
+        "owner": 17,
+        "blocks": 0,
+        "pending": true
+      },
+      {
+        "owner": 18,
+        "blocks": 0,
+        "pending": true
+      },
+      {
+        "owner": 19,
+        "blocks": 0,
+        "pending": true
+      },
+      {
+        "owner": 20,
+        "blocks": 0,
+        "pending": true
+      },
+      {
+        "owner": 21,
+        "blocks": 0,
+        "pending": true
+      },
+      {
+        "owner": 22,
+        "blocks": 0,
+        "pending": true
+      },
+      {
+        "owner": 23,
+        "blocks": 0,
+        "pending": true
+      },
+      {
+        "owner": 24,
+        "blocks": 0,
+        "pending": true
+      },
+      {
+        "owner": 25,
+        "blocks": 0,
+        "pending": true
+      },
+      {
+        "owner": 26,
+        "blocks": 0,
+        "pending": true
+      },
+      {
+        "owner": 27,
+        "blocks": 0,
+        "pending": true
+      },
+      {
+        "owner": 28,
+        "blocks": 0,
+        "pending": true
+      },
+      {
+        "owner": 15,
+        "blocks": 1,
+        "pending": true
+      },
+      {
+        "owner": 16,
+        "blocks": 1,
+        "pending": true
+      },
+      {
+        "owner": 17,
+        "blocks": 1,
+        "pending": true
+      },
+      {
+        "owner": 18,
+        "blocks": 1,
+        "pending": true
+      },
+      {
+        "owner": 19,
+        "blocks": 1,
+        "pending": true
+      },
+      {
+        "owner": 20,
+        "blocks": 1,
+        "pending": true
+      },
+      {
+        "owner": 21,
+        "blocks": 1,
+        "pending": true
+      },
+      {
+        "owner": 22,
+        "blocks": 1,
+        "pending": true
+      },
+      {
+        "owner": 23,
+        "blocks": 1,
+        "pending": true
+      },
+      {
+        "owner": 24,
+        "blocks": 1,
+        "pending": true
+      },
+      {
+        "owner": 25,
+        "blocks": 1,
+        "pending": true
+      },
+      {
+        "owner": 26,
+        "blocks": 1,
+        "pending": true
+      },
+      {
+        "owner": 27,
+        "blocks": 1,
+        "pending": true
+      },
+      {
+        "owner": 28,
+        "blocks": 1,
+        "pending": true
+      }
+    ],
+    "boundary": "No disposal events in captured active window; explicit hide/reopen is separate navigation. metadata only, no automatic UI assertions"
+  },
+  "sourcePreservation": {
+    "tables": 90,
+    "rows": 193247,
+    "source": {
+      "allOriginalRows": "Exact rowid/primary key/all fields/times",
+      "bytes": 92295168,
+      "modifiedAtMs": 1792813524442.9062
+    },
+    "schema": {
+      "sourceVersion": 5,
+      "targetVersion": 5,
+      "extraObjects": [],
+      "integrity": "ok"
+    },
+    "canonical": "Complete source bytes exact",
+    "targetOriginalRowDifferences": [
+      {
+        "table": "memory_chunk",
+        "identity": "mck_hd2PLf49sorereyDu9w0",
+        "fields": [
+          "content",
+          "token_count",
+          "time_updated"
+        ]
+      },
+      {
+        "table": "memory_file",
+        "identity": "mem_h6r23eQkVxF8ppMaNuxh",
+        "fields": [
+          "time_updated"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "identity": "[1]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "identity": "[2]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "session",
+        "identity": "ses_-zURE1Aonzzko22HlxqB",
+        "fields": [
+          "time_updated"
+        ]
+      },
+      {
+        "table": "session",
+        "identity": "ses_-zURE19wozzlTmx3ixXd",
+        "fields": [
+          "time_updated"
+        ]
+      },
+      {
+        "table": "session",
+        "identity": "ses_hHpC127wALpwIiSOX86d",
+        "fields": [
+          "time_updated"
+        ]
+      }
+    ]
+  },
+  "failedInitialScope": {
+    "retirement": {
+      "at": "2026-10-24T03:45:29.668Z",
+      "authRetired": 1,
+      "catalogRetired": 1,
+      "authCopied": true,
+      "modelRequests": 2,
+      "model": "gpt-6.1-sol",
+      "streaming200OriginalReaderEOF": 2,
+      "sourceCatalog": {
+        "bytes": 9155406,
+        "modifiedAtMs": 1791128890137.9968,
+        "content": "Exact original"
+      },
+      "publicShutdown": 200,
+      "reserveMs": 872831,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "exactProcessChain": "dead_or_reused"
+    },
+    "uiDelivery": {
+      "ObservedAt": "2026-10-24T03:43:57.5519076Z",
+      "Status": 200,
+      "Assets": "assets/CommandMenuSurface-9Ez69chO.css,assets/CommandMenuSurface-CN3W_QEU.js,assets/main-BsycnqGN.css,assets/main-DXPgQK57.js",
+      "Source": "directory",
+      "Expected": "main-CuVGOzYY.js"
+    },
+    "buildPreservation": {
+      "at": "2026-10-24T03:39:53.744Z",
+      "phase": "After Node UI build and attachment preparation, before any owned native service",
+      "schema": 3,
+      "allTables": 90,
+      "allOriginalRows": 192812,
+      "targetBytes": 92295168,
+      "targetModifiedAtMs": 1792813029648.3213,
+      "allOriginalData": "Exact all fields/times/identities",
+      "sourceBytes": 92295168,
+      "sourceModifiedAtMs": 1792680701201.259,
+      "canonical": "Exact complete source bytes"
+    }
+  },
+  "memoryAfterShutdown": [
+    {
+      "id": "mem_h6r23eQkVxF8ppMaNuxh",
+      "key": "project-memory-document",
+      "chunkID": "mck_hd2PLf49sorereyDu9w0",
+      "characters": 25350,
+      "keys": [
+        "version",
+        "revision",
+        "markdown",
+        "tokenCount",
+        "status",
+        "recentCoveredOccurrenceIDs",
+        "droppedPendingCount",
+        "availabilityGeneration",
+        "timeCreated",
+        "timeUpdated"
+      ],
+      "envelope": {
+        "status": "retry_wait",
+        "revision": 18
+      }
+    },
+    {
+      "id": "mem_hSUBSxPzrBhLqcOhszrT",
+      "key": "interaction_reply:int_g0VYw5ocX00xPKzi7DUR",
+      "chunkID": "mck_hbWPkd8FYkCsATd4VNOh",
+      "characters": 2614,
+      "keys": [
+        "version",
+        "occurrenceKind",
+        "occurrenceID",
+        "projectID",
+        "sessionID",
+        "taskID",
+        "ownerKind",
+        "ownerID",
+        "ownerNameAtCapture",
+        "surface",
+        "timeCreated",
+        "text",
+        "structured",
+        "attachments",
+        "context"
+      ],
+      "envelope": {}
+    }
+  ],
+  "notAchieved": [
+    "All original reader EOF in ready scope: 12 EOF and 1 explicitly shutdown-aborted memory reader",
+    "Exhaustive Rendering root cause/reproduction across all entry points; this active Source addition stayed stable"
+  ],
+  "conditionalAfter": {
+    "recovery": {
+      "at": "2026-10-24T04:08:14.692Z",
+      "projectID": "prj_hp1ir9XEheMHTOMlkSL8",
+      "taskID": "tsk_g00VYlyopB00h7w27eIw",
+      "sessionID": "ses_-zURE19wozzlTmx3ixXd",
+      "before": {
+        "status": "retry_wait",
+        "revision": 18,
+        "pending": {
+          "fileID": "mem_hSUBSxPzrBhLqcOhszrT",
+          "chunkID": "mck_hbWPkd8FYkCsATd4VNOh",
+          "kind": "interaction_reply",
+          "occurrenceID": "int_g0VYw5ocX00xPKzi7DUR"
+        }
+      },
+      "after": {
+        "status": "idle",
+        "revision": 19,
+        "newlyCoveredOccurrenceID": "int_g0VYw5ocX00xPKzi7DUR",
+        "markdownCharacters": 25289
+      },
+      "model": {
+        "actual": "gpt-6.1-sol",
+        "streaming200OriginalReaderEOF": 3,
+        "resumedSession": "ses_-zURE19wozzlTmx3ixXd"
+      },
+      "qualification": "Real original persisted pending occurrence resumed by normal project open, production candidate commit and original source reader EOF. Prior aborted scope remains separately failed."
+    },
+    "retirement": {
+      "at": "2026-10-24T04:08:36.525Z",
+      "authRetired": 1,
+      "catalogRetired": 1,
+      "authCopied": true,
+      "modelRequests": 3,
+      "model": "gpt-6.1-sol",
+      "streaming200OriginalReaderEOF": 3,
+      "sourceCatalog": {
+        "bytes": 9155406,
+        "modifiedAtMs": 1791128890137.9968,
+        "content": "Exact original"
+      },
+      "publicShutdown": 200,
+      "reserveMs": 922058,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "exactProcessChain": "dead_or_reused"
+    },
+    "task": {
+      "id": "tsk_g00VYlyopB00h7w27eIw",
+      "status": "completed",
+      "sessionID": "ses_-zURE1Aonzzko22HlxqB"
+    },
+    "source": {
+      "id": "prt_g0VYw5di9006lIRDJaPY",
+      "sessionID": "ses_hHpC127wALpwIiSOX86d",
+      "messageID": "msg_g0VYw5S9R00KTvl7hokv",
+      "orderKey": "v1:0001792814191173:0000000000000031:0000000000000000:part:prt_g0VYw5di9006lIRDJaPY",
+      "type": "source-url",
+      "sourceId": "83a68d506f994765fbe142e28b835a56a0d655e23dab70d9347fb16df84b2804",
+      "url": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/",
+      "title": "Dialog (Modal) Pattern | APG | WAI | W3C",
+      "provider": "opencorvus-webfetch",
+      "toolPartID": "prt_g0VYw5VDX00G7EFNcP5z"
+    },
+    "persistence": {
+      "partID": "prt_g0VYw5di9006lIRDJaPY",
+      "messageID": "msg_g0VYw5S9R00KTvl7hokv",
+      "source": "Exact original public Source matches SQLite"
+    },
+    "attachment": {
+      "status": 200,
+      "mime": "image/png",
+      "bytes": 643,
+      "identity": "Exact original published PNG"
+    },
+    "sourcePreservation": {
+      "tables": 90,
+      "rows": 196775,
+      "source": {
+        "allOriginalRows": "Exact rowid/primary key/all fields/times",
+        "bytes": 92295168,
+        "modifiedAtMs": 1792814409376.514
+      },
+      "schema": {
+        "sourceVersion": 5,
+        "targetVersion": 5,
+        "extraObjects": [],
+        "integrity": "ok"
+      },
+      "canonical": "Complete source bytes exact",
+      "targetOriginalRowDifferences": [
+        {
+          "table": "memory_chunk",
+          "identity": "mck_hd2PLf49sorereyDu9w0",
+          "fields": [
+            "content",
+            "token_count",
+            "time_updated"
+          ]
+        },
+        {
+          "table": "memory_chunk",
+          "identity": "mck_hbWPkd8FYkCsATd4VNOh",
+          "fields": [
+            "rowid",
+            "id",
+            "file_id",
+            "project_id",
+            "content",
+            "token_count",
+            "time_created",
+            "time_updated"
+          ]
+        },
+        {
+          "table": "memory_file",
+          "identity": "mem_h6r23eQkVxF8ppMaNuxh",
+          "fields": [
+            "time_updated"
+          ]
+        },
+        {
+          "table": "memory_file",
+          "identity": "mem_hSUBSxPzrBhLqcOhszrT",
+          "fields": [
+            "rowid",
+            "id",
+            "project_id",
+            "title",
+            "source",
+            "kind",
+            "key",
+            "importance",
+            "confidence",
+            "time_created",
+            "time_updated"
+          ]
+        },
+        {
+          "table": "runtime_execution_capacity_lease",
+          "identity": "[1]",
+          "fields": [
+            "lease_id",
+            "owner_id",
+            "time_acquired",
+            "expires_at"
+          ]
+        },
+        {
+          "table": "runtime_execution_capacity_lease",
+          "identity": "[2]",
+          "fields": [
+            "lease_id",
+            "owner_id",
+            "time_acquired",
+            "expires_at"
+          ]
+        }
+      ],
+      "consumedPending": "Original interaction_reply:int_g0VYw5ocX00xPKzi7DUR pending file/chunk consumed by actual production commit into revision 19, exact covered occurrence verified"
+    }
+  },
+  "batch": {
+    "actualRequests": 18,
+    "streaming200OriginalReaderEOF": 17,
+    "shutdownAbortedMemoryReader": 1,
+    "maximumBatchRequests": 64,
+    "scopeRequests": [
+      2,
+      13,
+      3
+    ],
+    "allOwnedScopesClosed": true,
+    "pairedCredentialCopiesRetired": 3,
+    "user18571": "Untouched",
+    "screenshots": 13,
+    "productSourceChange": false
+  }
+}

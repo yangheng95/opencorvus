@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [成员侧栏加载与正文连续性复核](2026-10-24-member-dock-loading/README.md)：571实页、原流和完整运行结算。
+
 - [文件编辑、保存与来源往返](2026-10-24-file-editor-roundtrip/README.md)：570实际编辑、原数据和运行收敛。
 
 - [文件工作台的文件名优先标题](2026-10-24-source-file-title/README.md)：569原文件名标题、焦点及完整运行收敛。
