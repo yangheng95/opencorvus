@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [持续目标的流中暂停与恢复](2026-10-24-goal-live-pause/README.md)：566真实桌面交互与Goal/Provider/数据闭合事实。
+
 - [持续目标的首次读取与后台刷新](2026-10-24-goal-refresh-readiness/README.md)：565真实八秒路由条件、Goal入口实图和完整保留/闭合事实。
 
 - [长回复中的阅读意图与原 Sources](2026-10-24-side-chat-long-reading/README.md)：564实际进行中/终态截图、原Source身份与完整运行结算。

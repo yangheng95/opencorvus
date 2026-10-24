@@ -1,0 +1,156 @@
+{
+  "batch": 566,
+  "at": "2026-10-24T01:09:53.502Z",
+  "result": "Real Chat flow passed; no new product defect established and no product implementation changed.",
+  "scope": "Global Home create, pause during the first real stream, resume, accepted-turn budget, operator completion, new Goal identity and completion before the original stream/usage settle.",
+  "ui": {
+    "entry": "main-D5Ah_P6W.js",
+    "source": "Previously built and qualified full 565 publication; actual source CLI /ui, no isolated Vite, no injected request latency.",
+    "screenshots": [
+      "01-home.png",
+      "02-home-confirm-goal.png",
+      "03-paused-during-stream.png",
+      "04-paused-first-reply-ended.png",
+      "05-paused-details.png",
+      "06-resumed.png",
+      "07-second-turn-budget.png",
+      "08-goal-completed.png",
+      "09-late-goal-streaming.png",
+      "10-completed-while-streaming.png",
+      "11-completed-after-settlement.png"
+    ],
+    "method": "Manual IAB interaction, screenshots actually presented and visually inspected. No UI automation."
+  },
+  "goals": [
+    {
+      "id": "pev_g0VYvMpUG00RmhjAsQQq",
+      "status": "complete",
+      "tokensUsed": 75959,
+      "turnsAccepted": 2,
+      "turnBudget": 2
+    },
+    {
+      "id": "pev_g0VYvOGuo00zC974B6k5",
+      "status": "complete",
+      "tokensUsed": 43845,
+      "turnsAccepted": 1,
+      "turnBudget": 1
+    }
+  ],
+  "facts": {
+    "firstPauseToAssistantCompletionMs": 55825,
+    "firstCompletionAfterSecondAssistantMs": 17253,
+    "lateCompletionToAssistantCompletionMs": 23886,
+    "lateCompletionToUsageMs": 23862
+  },
+  "goalWrites": [
+    {
+      "at": "2026-10-24T00:58:31.676Z",
+      "method": "POST",
+      "path": "/continuous-goal/chat/ses_-zUR4dB1AzzBKBy02oXz"
+    },
+    {
+      "at": "2026-10-24T00:58:54.501Z",
+      "method": "PATCH",
+      "path": "/continuous-goal/chat/ses_-zUR4dB1AzzBKBy02oXz"
+    },
+    {
+      "at": "2026-10-24T01:00:38.679Z",
+      "method": "PATCH",
+      "path": "/continuous-goal/chat/ses_-zUR4dB1AzzBKBy02oXz"
+    },
+    {
+      "at": "2026-10-24T01:02:11.868Z",
+      "method": "PATCH",
+      "path": "/continuous-goal/chat/ses_-zUR4dB1AzzBKBy02oXz"
+    },
+    {
+      "at": "2026-10-24T01:04:15.438Z",
+      "method": "POST",
+      "path": "/continuous-goal/chat/ses_-zUR4dB1AzzBKBy02oXz"
+    },
+    {
+      "at": "2026-10-24T01:05:52.819Z",
+      "method": "PATCH",
+      "path": "/continuous-goal/chat/ses_-zUR4dB1AzzBKBy02oXz"
+    }
+  ],
+  "data": {
+    "source": {
+      "allOriginalRows": "Exact rowid/primary key/all fields/times",
+      "bytes": 81195008,
+      "modifiedAtMs": 1792802812076.989,
+      "tables": 90,
+      "originalRows": 177254,
+      "canonical": "Complete source bytes exact"
+    },
+    "schema": {
+      "sourceVersion": 5,
+      "targetVersion": 5,
+      "extraObjects": [],
+      "integrity": "ok"
+    },
+    "targetOriginalRowDifferences": [
+      {
+        "table": "runtime_execution_capacity_lease",
+        "identity": "[1]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "identity": "[2]",
+        "fields": [
+          "lease_id",
+          "owner_id",
+          "time_acquired",
+          "expires_at"
+        ]
+      }
+    ],
+    "providerActivities": {
+      "original": 434,
+      "current": 438
+    }
+  },
+  "provider": {
+    "maximumRequests": 8,
+    "maximumBatchRequests": 16,
+    "actualRequests": 5,
+    "model": "gpt-6.1-sol",
+    "streaming200OriginalReaderEOF": 5,
+    "optionalAfterScope": "Not launched."
+  },
+  "closure": {
+    "at": "2026-10-24T01:07:06.417Z",
+    "authRetired": 1,
+    "catalogRetired": 1,
+    "authCopied": true,
+    "modelRequests": 5,
+    "model": "gpt-6.1-sol",
+    "streaming200OriginalReaderEOF": 5,
+    "sourceCatalog": {
+      "bytes": 9155406,
+      "modifiedAtMs": 1791128890137.9968,
+      "content": "Exact original"
+    },
+    "publicShutdown": 200,
+    "reserveMs": 606870,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "exactProcessChain": "dead_or_reused"
+  },
+  "limits": [
+    "Execution qualification is for this real Chat owner; Task/Mission/Side execution and process-restart recovery were not newly exercised.",
+    "The first Goal completion was after EOF; late-settlement qualification comes from the second distinct Goal.",
+    "Eleven discrete screenshots are not a continuous flicker video.",
+    "No UI automation, new product patch, version bump or release in this batch."
+  ]
+}

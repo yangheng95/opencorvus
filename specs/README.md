@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [持续目标的流中暂停与恢复](records/2026-10/2026-10-24-goal-live-pause.md)：566真实流中操作、恢复与预算/完成反馈。
+
 - [持续目标的首次读取与后台刷新](records/2026-10/2026-10-24-goal-refresh-readiness.md)：565实际慢读取、目标表单与背景刷新收敛。
 
 - [长回复中的阅读意图与原 Sources](records/2026-10/2026-10-24-side-chat-long-reading.md)：564真实长流中上翻、完成边界与既有成员来源实页复核。
