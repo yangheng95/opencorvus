@@ -4,7 +4,7 @@ import z from "zod"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { Global } from "@/global"
 
-export const PROJECT_DELETION_CLEANUP_FORMAT = "opencorvus.project-deletion-cleanup.v6"
+export { PROJECT_DELETION_CLEANUP_FORMAT } from "./deletion-cleanup-identity"
 
 // This projection retains Project ownership even when recovery cannot interpret
 // the payload version. It grants no filesystem mutation authority.

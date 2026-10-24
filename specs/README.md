@@ -44,6 +44,8 @@
 
 - [专家团机制抽样](records/2026-10/2026-10-24-expert-squad-mechanism-cases.md)：三个原包真实端到端、共享恢复与权限记忆原子投递、旧源升级和独立裁定。
 
+- [旧权限记忆存量恢复](records/2026-10/2026-10-24-permission-memory-stock-recovery.md)：先只读真实存量，再以原始证据设计保留数据的恢复与真实升级验收。
+
 - [持续目标加号入口](records/2026-10/2026-10-24-goal-composer-menu.md)：按用户要求收起首页与无目标常驻区域，复用原目标表单。
 
 - [剪贴板路径对照](records/2026-10/2026-10-24-clipboard-path-investigation.md)：555已知标记校准、三次真实复制粘贴通过；旧43字符异常未复现，0模型/原数据保持。

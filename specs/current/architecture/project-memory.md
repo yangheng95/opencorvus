@@ -331,8 +331,7 @@ admission after the pending inbox has been consumed. Historical copies retain
 their original provenance and `copySources` evidence, and are classified as
 `copied_context`; fresh human input in either a fork or independent side Session
 has its own Message identity and ordinary admission. Previously accepted pending
-inputs continue through the same Organizer. Entry and document formats remain
-unchanged, and canonical history stays intact.
+inputs continue through the same Organizer, and canonical history stays intact.
 
 Question replies and rejections admit their human input in the same transaction
 that first appends the immutable interaction outcome. Permission replies admit
@@ -344,16 +343,64 @@ interaction. A failed transaction rolls back admission and receipt together;
 recovery of a committed delivery retains its original receipt after the
 Organizer consumes the inbox. A later human input owns a new occurrence.
 
-Version five establishes this atomic delivery boundary before recovery. An old
-human Task reply without an attempted delivery can continue from its original
-outbox; an existing successful receipt keeps its original meaning. Historical
-settled effects are preserved, not reconstructed retroactively from that receipt.
-It does not prove that an old implementation captured every memory input.
-Attempts without success cannot prove whether their inbox was already consumed.
-They return `SCHEMA_MIGRATION_REQUIRED`, retaining the database, version and
-pre-upgrade backup for evidence-based repair. Bounded recent coverage is not a
-permanent admission receipt, and the upgrade does not guess or replay those
-ambiguous inputs.
+Version five's immutable guard establishes the atomic delivery boundary.
+Version six prepares data before that guard in the same exclusive upgrade
+transaction and original backup, then executes the original guard normally.
+It validates each original human Task reply without a successful exact delivery
+receipt against its immutable ledger and owner. A complete pending Entry is
+retained byte for byte, including its actual old name and context. Positive
+coverage in the original document confirms consumption and preserves that
+document. Missing coverage, including an expired 500-entry window, proves
+neither a missing capture nor consumption.
+
+When old consumption remains unknown, version six actually registers the
+original input into the existing inbox once. Its optional `recovery` provenance
+records `schemaVersion: 6`, the original `publicationID`, the actual `recoveredAt`
+and `previousCapture: unknown`. It retains the original decision time, surface,
+sanitized text and structured evidence, uses an empty historical context and
+the name available at this actual recovery. The Organizer treats it as
+historical evidence that may already be reflected in the current document and
+merges it conservatively, rather than interpreting it as a new execution command.
+This provenance is never a completion or deduplication authority. The ordinary
+exact success receipt is written at the actual recovery time in that same
+transaction. It proves this repair completed, not that the old attempt succeeded.
+All original publications, receipts, attempts, leases and documents are retained;
+existing success keeps its original meaning and is not used to reconstruct old
+memory. Canonical owner retirement is respected without resurrecting a Task or
+Project. Conflicting source/owner data remains an explicit integrity error.
+The normal Project-open organization request drives recovered pending evidence.
+
+Physical Project deletion is evidenced by its existing active/completed cleanup
+manifest, bound to the same database authority and Project. A registered root
+must contain the original publication directory under the shared filesystem
+contract; a similar string prefix is insufficient. These original maintenance
+files are required alongside the database for that retirement proof.
+
+When the current Project exists but its original Task or Session is missing,
+the ledger cannot establish the current generation's ownership. Recovery retains
+the original pending bytes, or saves the original input in the same protected
+inbox with `recovery.ownerResolution: unresolved`. It validates and reuses an
+existing original interaction identity; only an absent interaction uses the
+original publication identity. No historical context or missing title is invented.
+
+One inbox projection also identifies old entries whose canonical owner or source
+Session is missing or durably retired, without rewriting those entries. These
+unresolved inputs remain fully readable, while organization requests, pending
+counts, FIFO selection, commit and capacity deletion operate on the organizable
+projection. The current Project's new human input continues normally. Source or
+owner Project conflicts are integrity errors. A missing Task-bound model root
+with a valid source Session retains the ordinary unavailable-model contract.
+
+Project reads expose `unresolvedCount`, `unresolvedOffset`,
+`unresolvedNextOffset` and up to 50 `unresolvedOccurrences`. HTTP uses
+`unresolvedOffset`; `memory.project_read` uses `recoveryListOffset` for this
+list and `recoveryOccurrenceID` plus `offset`/`limit` for the canonical body.
+Body pages contain at most 4,000 UTF-16 code units with exact offsets and a
+continuation cursor. JSON preserves split surrogate units; concatenating pages
+reconstructs the complete original body. A page endpoint need not be a complete
+code point. Project scope is checked against the same stored Entry. Existing old
+pending entries may have no publication ID. No separate archive or processed
+state exists, and generic semantic-memory writes cannot adopt these inputs.
 
 Pending occurrence IDs are deterministic and replay must match the full canonical payload. Secrets, private-key blocks, inline payloads, and unsafe attachment references are redacted or omitted before persistence. `user_message` is an inbox, not a permanent archive: an accepted Organizer commit atomically consumes its exact ordered prefix. The Session transcript remains authoritative raw history.
 

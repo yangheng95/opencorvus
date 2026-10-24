@@ -2618,10 +2618,21 @@ export class ProjectMemory extends HeyApiClient {
   public get<ThrowOnError extends boolean = false>(
     parameters?: {
       directory?: string
+      unresolvedOffset?: number
     },
     options?: Options<never, ThrowOnError>,
   ) {
-    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "query", key: "unresolvedOffset" },
+          ],
+        },
+      ],
+    )
     return (options?.client ?? this.client).get<ExperimentalProjectMemoryGetResponses, unknown, ThrowOnError>({
       url: "/experimental/project-memory",
       ...options,

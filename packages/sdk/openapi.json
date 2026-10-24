@@ -28299,6 +28299,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "unresolvedOffset",
+            "schema": {
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -28344,6 +28353,57 @@
                       "type": "number"
                     },
                     "tokenCount": {
+                      "maximum": 9007199254740991,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "unresolvedCount": {
+                      "maximum": 9007199254740991,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "unresolvedNextOffset": {
+                      "anyOf": [
+                        {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "unresolvedOccurrences": {
+                      "items": {
+                        "properties": {
+                          "occurrenceID": {
+                            "type": "string"
+                          },
+                          "originalSessionID": {
+                            "type": "string"
+                          },
+                          "originalTaskID": {
+                            "type": "string"
+                          },
+                          "ownerResolution": {
+                            "const": "unresolved",
+                            "type": "string"
+                          },
+                          "publicationID": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "occurrenceID",
+                          "ownerResolution"
+                        ],
+                        "type": "object"
+                      },
+                      "maxItems": 50,
+                      "type": "array"
+                    },
+                    "unresolvedOffset": {
                       "maximum": 9007199254740991,
                       "minimum": 0,
                       "type": "integer"

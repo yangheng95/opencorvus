@@ -1,0 +1,339 @@
+{
+  "audit": {
+    "began": "2026-10-24T06:25:48.992Z",
+    "finished": "2026-10-24T06:27:08.052Z",
+    "total": 720,
+    "status": {
+      "read": 720
+    },
+    "versions": {
+      "0": 492,
+      "1": 12,
+      "2": 3,
+      "3": 180,
+      "4": 16,
+      "5": 17
+    },
+    "blockedDatabases": 1,
+    "blockedRows": 1,
+    "uniqueAuthorities": 338,
+    "knownOriginalsAndBackupsAdded": 9,
+    "totalKnownPaths": 729,
+    "actualBusinessBlocked": 0,
+    "controlledSameGapCopies": 5,
+    "uniqueHumanReplied": 108,
+    "uniqueTaskReplied": 82,
+    "ignoredTaskRows": 0,
+    "coverage": "explicit default root, retained product-iteration roots, repo temporary DBs, exact controlled before.json original runtime/backup references",
+    "credentialsRead": false,
+    "originalsOpenedByApplication": false,
+    "preBaselineVersionZero": "retained read-only; outside the delivered v1+ migration baseline",
+    "clonesAreNotIndependentUsers": true
+  },
+  "upgrades": [
+    {
+      "case": "gap-current",
+      "mode": "gap",
+      "sourceVersion": {
+        "user_version": 4
+      },
+      "targetVersion": 6,
+      "originalTables": 90,
+      "originalRows": 3044,
+      "originalRowsPreserved": true,
+      "backupRowsEqual": true,
+      "newRecoveryReceipts": 1,
+      "recoveredUnknown": 1,
+      "recoveryTimeCurrent": true,
+      "restartIdentityPreserved": true,
+      "realBusRedelivery": true,
+      "realOrganizerCommit": true,
+      "consumedRedeliveryPending": 0,
+      "freshHumanPending": 1
+    },
+    {
+      "case": "pending-final",
+      "mode": "pending",
+      "sourceVersion": {
+        "user_version": 4
+      },
+      "targetVersion": 6,
+      "originalTables": 90,
+      "originalRows": 40,
+      "originalRowsPreserved": true,
+      "backupRowsEqual": true,
+      "newRecoveryReceipts": 1,
+      "recoveredUnknown": 0,
+      "recoveryTimeCurrent": true,
+      "restartIdentityPreserved": true,
+      "realBusRedelivery": true,
+      "realOrganizerCommit": true,
+      "consumedRedeliveryPending": 0,
+      "freshHumanPending": 1
+    },
+    {
+      "case": "known-covered-final",
+      "mode": "known-covered",
+      "sourceVersion": {
+        "user_version": 4
+      },
+      "targetVersion": 6,
+      "originalTables": 90,
+      "originalRows": 38,
+      "originalRowsPreserved": true,
+      "backupRowsEqual": true,
+      "newRecoveryReceipts": 1,
+      "recoveredUnknown": 0,
+      "recoveryTimeCurrent": true,
+      "restartIdentityPreserved": true
+    },
+    {
+      "case": "ready",
+      "mode": "ready",
+      "sourceVersion": {
+        "user_version": 4
+      },
+      "targetVersion": 6,
+      "originalTables": 90,
+      "originalRows": 33,
+      "originalRowsPreserved": true,
+      "backupRowsEqual": true,
+      "newRecoveryReceipts": 1,
+      "recoveredUnknown": 1,
+      "recoveryTimeCurrent": true,
+      "restartIdentityPreserved": true,
+      "realBusRedelivery": true,
+      "realOrganizerCommit": true,
+      "consumedRedeliveryPending": 0
+    },
+    {
+      "case": "covered",
+      "mode": "covered",
+      "sourceVersion": {
+        "user_version": 4
+      },
+      "targetVersion": 6,
+      "originalTables": 90,
+      "originalRows": 51,
+      "originalRowsPreserved": true,
+      "backupRowsEqual": true,
+      "newRecoveryReceipts": 0,
+      "recoveredUnknown": 0,
+      "recoveryTimeCurrent": true,
+      "restartIdentityPreserved": true
+    },
+    {
+      "case": "business-v3",
+      "mode": "business-v3",
+      "sourceVersion": {
+        "user_version": 3
+      },
+      "targetVersion": 6,
+      "originalTables": 90,
+      "originalRows": 171548,
+      "originalRowsPreserved": true,
+      "backupRowsEqual": true,
+      "newRecoveryReceipts": 0,
+      "recoveredUnknown": 0,
+      "recoveryTimeCurrent": true,
+      "restartIdentityPreserved": true
+    },
+    {
+      "case": "business-v5",
+      "mode": "business-v5",
+      "sourceVersion": {
+        "user_version": 5
+      },
+      "targetVersion": 6,
+      "originalTables": 90,
+      "originalRows": 203799,
+      "originalRowsPreserved": true,
+      "backupRowsEqual": true,
+      "newRecoveryReceipts": 0,
+      "recoveredUnknown": 0,
+      "recoveryTimeCurrent": true,
+      "restartIdentityPreserved": true
+    },
+    {
+      "case": "default-v3",
+      "mode": "default-v3",
+      "sourceVersion": {
+        "user_version": 3
+      },
+      "targetVersion": 6,
+      "originalTables": 90,
+      "originalRows": 9,
+      "originalRowsPreserved": true,
+      "backupRowsEqual": true,
+      "newRecoveryReceipts": 0,
+      "recoveredUnknown": 0,
+      "recoveryTimeCurrent": true,
+      "restartIdentityPreserved": true
+    },
+    {
+      "case": "project-retired-current",
+      "mode": "project-retired",
+      "sourceVersion": {
+        "user_version": 4
+      },
+      "targetVersion": 6,
+      "originalTables": 90,
+      "originalRows": 47,
+      "originalRowsPreserved": true,
+      "backupRowsEqual": true,
+      "newRecoveryReceipts": 1,
+      "recoveredUnknown": 0,
+      "recoveryTimeCurrent": true,
+      "restartIdentityPreserved": true
+    },
+    {
+      "case": "project-recreated-current",
+      "mode": "project-recreated",
+      "sourceVersion": {
+        "user_version": 4
+      },
+      "targetVersion": 6,
+      "originalTables": 90,
+      "originalRows": 79,
+      "originalRowsPreserved": true,
+      "backupRowsEqual": true,
+      "newRecoveryReceipts": 1,
+      "recoveredUnknown": 1,
+      "recoveryTimeCurrent": true,
+      "restartIdentityPreserved": true,
+      "unresolvedOwnerPreserved": true,
+      "pagedMemoryToolRead": true,
+      "newGenerationConsumed": true,
+      "originalInputRetainedAfterCommit": true,
+      "realBusRedelivery": true
+    },
+    {
+      "case": "project-strict-descendant-current",
+      "mode": "project-descendant",
+      "sourceVersion": {
+        "user_version": 4
+      },
+      "targetVersion": 6,
+      "originalTables": 90,
+      "originalRows": 47,
+      "originalRowsPreserved": true,
+      "backupRowsEqual": true,
+      "newRecoveryReceipts": 1,
+      "recoveredUnknown": 0,
+      "recoveryTimeCurrent": true,
+      "restartIdentityPreserved": true,
+      "strictDescendantPublication": true,
+      "registeredDirectoryCount": 1,
+      "sourceProjectMatchesManifest": true
+    },
+    {
+      "case": "project-strict-prefix-current",
+      "mode": "project-wrong-directory",
+      "sourceVersion": {
+        "user_version": 4
+      },
+      "observedCode": "SCHEMA_MIGRATION_REQUIRED",
+      "originalRowsPreserved": true,
+      "backupRowsEqual": true,
+      "adjacentPrefixRejected": true
+    }
+  ],
+  "concurrent": {
+    "contract": "real-gap-failure-concurrent-upgrade",
+    "faultRollbackVersion": 4,
+    "faultRowsEqual": true,
+    "originalTables": 90,
+    "retainedRows": 3044,
+    "backupCount": 2,
+    "allBackupsEqual": true,
+    "initial": [
+      {
+        "contract": "concurrent-upgrade-child",
+        "outcome": "current",
+        "receipts": 1,
+        "pending": 1,
+        "version": 6
+      },
+      {
+        "contract": "concurrent-upgrade-child",
+        "outcome": "busy",
+        "code": "SQLITE_BUSY"
+      },
+      {
+        "contract": "concurrent-upgrade-child",
+        "outcome": "current",
+        "receipts": 1,
+        "pending": 1,
+        "version": 6
+      }
+    ],
+    "children": [
+      {
+        "contract": "concurrent-upgrade-child",
+        "outcome": "current",
+        "receipts": 1,
+        "pending": 1,
+        "version": 6
+      },
+      {
+        "contract": "concurrent-upgrade-child",
+        "outcome": "current",
+        "receipts": 1,
+        "pending": 1,
+        "version": 6
+      },
+      {
+        "contract": "concurrent-upgrade-child",
+        "outcome": "current",
+        "receipts": 1,
+        "pending": 1,
+        "version": 6
+      }
+    ],
+    "identitiesConverged": true,
+    "busyReopenedInNewProcess": true
+  },
+  "contracts": [
+    {
+      "file": "test/storage/permission-memory-recovery.test.ts",
+      "pass": 20,
+      "assertions": 101
+    },
+    {
+      "file": "test/memory/project-memory-recovery-read.test.ts",
+      "pass": 4,
+      "assertions": 46
+    },
+    {
+      "file": "test/storage/schema-migration.test.ts",
+      "pass": 25
+    },
+    {
+      "file": "test/memory/project-memory.test.ts",
+      "pass": 25,
+      "assertions": 143
+    },
+    {
+      "file": "test/memory/interaction-memory-replay.test.ts",
+      "pass": 9,
+      "assertions": 74
+    }
+  ],
+  "independentReview": {
+    "agent": "/root/independent_judge",
+    "scope": "read-only source, original databases, backups, source identities, logs and strict path proofs",
+    "result": "implementation and bounded recovery acceptance passed; final delivery verification pending"
+  },
+  "limitations": [
+    "No new uncontrolled user ambiguity was found in the audited paths. Controlled failures remain explicitly controlled.",
+    "Unknown previous capture/consumption remains unknown; only the present repair is confirmed.",
+    "Real Organizer commit path was tested without a model request; no semantic generation claim.",
+    "Malformed ownership or ignored terminal still has an explicit integrity error; valid historical ambiguity is upgraded and recovered."
+  ],
+  "checkerCorrections": [
+    "Nested directory naming alone was not a strict descendant test. Actual registered parent/sandbox history now proves the boundary.",
+    "Appending .neighbor to a registered root checked ordinary mismatch only. Truncating the basename now proves startsWith=true with an out-of-directory relative path.",
+    "The original all-first-opens-success assertion ignored the existing SQLite busy contract. Actual busy is retained, followed by a new process reopening after initial processes exit.",
+    "Old source probe requires the explicit existing native supervisor binding. Preliminary rebuild failures did not produce upgrade input."
+  ]
+}

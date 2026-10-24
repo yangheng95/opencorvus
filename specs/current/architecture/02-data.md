@@ -75,7 +75,7 @@ PASSIVE的busy/部分进度在下次周期继续；非暂态回写错误进入�
 
 ## 数据库版本化迁移
 
-当前版本为5，从新建的不可改写版本1基线开始支持自动迁移。唯一 registry 位于
+当前版本为6，从新建的不可改写版本1基线开始支持自动迁移。唯一 registry 位于
 `src/storage/migrations/index.ts`，每版保存完整、不可改写的目标 SQL；后续结构或持久
 payload 语义变更必须追加连续版本。`PRAGMA user_version` 是唯一已完成版本，当前
 `SCHEMA_DDL` 与 typed schema 继续定义唯一业务 reader/writer。`check:database-migrations`
@@ -129,6 +129,29 @@ conversation身份时补canonical Work metadata，其他metadata、Session/Messa
 exact phase已绕过该subscriber却无success时，无法判断原inbox是否曾被消费，返回
 `SCHEMA_MIGRATION_REQUIRED`并保留原库、版本与备份。最近500条覆盖、时钟和rowid不能
 替代永久效果证明；不猜补输入、不造成功回执，也不要求清空数据库。
+
+版本6为上述保留的旧歧义提供自动恢复。后续版本可显式声明同步prepare及其较早的
+beforeVersion，须满足2≤beforeVersion<本版本；在该旧版本的前驱完成后、原版本执行前，
+仍在同一独占锁、原始备份和整条链事务内执行。版本6在原版本5前完成本次真实恢复，
+原版本5校验照常执行；从版本5开库则在版本6执行同一个修复函数。任何切点失败整笔回滚，
+不改已交付版本1–5、不catch跳过旧校验、不提前写完成版本。
+
+恢复只处理原human Task Replied且缺精确成功回执的publication：校验原ledger决定、
+Project/Session/Task/source和原human输入。仍pending的完整canonical Entry逐字保留；
+原MEMORY.MD明确覆盖原interaction时保留已消费效果。证据未知则把原输入实际重新登记
+到同一个inbox，添加仅说明来源的recovery字段（migration6、原publication、实际恢复时刻、
+previousCapture=unknown），不虚构旧上下文，不把该字段作为去重依据。现时真实成功receipt
+证明此次验证/登记完成，不表示旧attempt当时成功；原source、attempt、failure、lease和
+文档全部保留。幂等仍由原delivery成功receipt和现有inbox身份保证。
+合法task.deleted/session.deleted原事实继续退休语义，不复活owner。整Project物理删除
+使用同数据库authority绑定的原active/completed清理manifest，按登记根包含原投递目录
+核退休；备份迁移时需一并保留这些现有文件。当前Project存在而原owner缺失时，原输入
+保存在同一protected inbox，原interaction审计行存在则验证并复用，否则引用原publication。
+原pending字节保持，新增Entry明确ownerResolution=unresolved；单一inbox投影也从当前
+owner与原source Session的缺失/退休识别旧Entry。此类输入可分页完整审阅，不进入当前
+Organizer或容量丢弃，新输入正常消费。归属冲突、缺Project且缺合法退休证据或不合法
+ignored终态返回明确完整性合同。恢复不执行原批准工具或模型。
+新恢复pending由正常Project打开时的持久OrganizationRequested进入同一个Organizer。
 
 非空版本0返回 `SCHEMA_BASELINE_REQUIRED`，不属于本基线的升级范围；高于当前版本返回
 `SCHEMA_VERSION_AHEAD`。当前版本出现未声明结构漂移或有损转换返回

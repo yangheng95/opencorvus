@@ -15,6 +15,7 @@ import { ProjectRuntimePaths } from "./runtime-paths"
 import { McpAuth } from "@/mcp/auth"
 import { PROJECT_DELETION_CLEANUP_FORMAT, projectDeletionCleanupRoot } from "./deletion-cleanup-admission"
 import { ProjectDirectoryAdmission } from "./directory-admission"
+import { ProjectDeletionIdentity, CompletedNumericReceipt } from "./deletion-cleanup-identity"
 
 const CleanupTarget = z.object({
   source: z.string().min(1),
@@ -27,12 +28,8 @@ const RegisteredDirectory = z.object({
   physicalPath: z.string().min(1).nullable(),
 })
 
-const CleanupManifest = z.object({
+const CleanupManifest = ProjectDeletionIdentity.extend({
   format: z.literal(PROJECT_DELETION_CLEANUP_FORMAT),
-  operationID: z.string().uuid(),
-  databaseInstanceID: z.string().uuid(),
-  projectID: z.string().min(1),
-  projectGeneration: z.string().uuid(),
   projectKind: z.enum(["ordinary", "anonymous"]),
   directory: z.string().min(1),
   registeredDirectories: z.array(RegisteredDirectory).min(1).max(256),
@@ -42,13 +39,6 @@ const CleanupManifest = z.object({
 
 // A completed receipt is historical evidence, not authority to interpret old
 // numeric filesystem identities. Only its immutable envelope is projected.
-const CompletedNumericReceipt = CleanupManifest.pick({
-  operationID: true,
-  databaseInstanceID: true,
-  projectID: true,
-  projectGeneration: true,
-}).extend({ format: z.literal("opencorvus.project-deletion-cleanup.v5") })
-
 export type ProjectDeletionCleanupManifest = z.infer<typeof CleanupManifest>
 export type ProjectDeletionCleanupPlan = {
   manifest: ProjectDeletionCleanupManifest

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [旧权限记忆存量恢复](2026-10-24-permission-memory-stock-recovery/README.md)：原件只读审计、真实升级、回滚与并发收敛。
+
 - [成员侧栏恢复时的正文身份](2026-10-24-member-reconnect-rendering/README.md)：576真实服务更换和Sources实图。
 
 - [持续目标的输入命令](2026-10-24-goal-composer-command/README.md)：575中英文实图、原模型流和完整数据结算。

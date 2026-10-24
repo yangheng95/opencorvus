@@ -53,6 +53,59 @@ function run(value: ReturnType<typeof fixture>, migrations: SchemaMigration[], v
   return migrateSchema({ ...value, migrations, currentDDL: migrations.at(-1)!.ddl, validate })
 }
 
+test("a later preparation runs between its declared predecessor and the unchanged historical guard", () => {
+  using value = fixture()
+  value.sqlite.exec("INSERT INTO note(id,body) VALUES('original','uncertain')")
+  const calls: string[] = []
+  const receipt = run(value, [
+    { version: 1, name: "baseline", ddl: first },
+    {
+      version: 2,
+      name: "historical guard",
+      ddl: first,
+      migrate: (db) => {
+        calls.push("historical guard")
+        expect(read(db, "SELECT id,body FROM note")).toEqual([{ id: "original", body: "preserved recovery" }])
+      },
+    },
+    {
+      version: 3,
+      name: "published recovery",
+      ddl: first,
+      prepare: {
+        beforeVersion: 2,
+        run: (db) => {
+          calls.push("preparation")
+          db.exec("UPDATE note SET body='preserved recovery'")
+        },
+      },
+      migrate: () => {
+        calls.push("recovery revision")
+      },
+    },
+  ])
+  expect({ calls, version: schemaVersion(value.sqlite) }).toEqual({
+    calls: ["preparation", "historical guard", "recovery revision"],
+    version: 3,
+  })
+  using backup = new SQLite(receipt.backupPath!, { readonly: true })
+  expect(read(backup, "SELECT id,body FROM note")).toEqual([{ id: "original", body: "uncertain" }])
+})
+
+test("an invalid preparation boundary returns the explicit registry contract", () => {
+  using value = fixture()
+  expect(() =>
+    run(value, [
+      { version: 1, name: "baseline", ddl: first },
+      { version: 2, name: "invalid preparation", ddl: first, prepare: { beforeVersion: 2, run() {} } },
+    ]),
+  ).toThrow("Migration 2 preparation must precede an existing earlier migration after its predecessor.")
+  expect({ version: schemaVersion(value.sqlite), rows: read(value.sqlite, "SELECT * FROM note") }).toEqual({
+    version: 1,
+    rows: [],
+  })
+})
+
 test("the immutable migration target constructs the current application schema", () => {
   using value = fixture(SCHEMA_DDL)
   const reference = new SQLite(":memory:")

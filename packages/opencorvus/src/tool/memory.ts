@@ -18,7 +18,7 @@ Before answering about prior work, decisions, dates, or project history, search 
 
 Actions:
 - **session_read**: Read the current Session MEMORY.MD.
-- **project_read**: Read the organized Project MEMORY.MD context and Organizer status.
+- **project_read**: Read the organized Project MEMORY.MD context and Organizer status. If unresolved historical owner evidence is listed, supply its recoveryOccurrenceID to review its original protected input in bounded pages; this does not assign it to a new owner or execute it.
 - **project_organize**: Ask the dedicated Memory Organizer agent to consolidate pending inputs. The calling agent never edits MEMORY.MD itself.
 - **search**: Search reusable project semantic memory.
 - **get**: Retrieve a project semantic-memory file by ID.
@@ -34,6 +34,30 @@ export const MemoryTool = Tool.define("memory", {
     }),
     z.object({
       action: z.literal("project_read"),
+      recoveryListOffset: z
+        .number()
+        .int()
+        .nonnegative()
+        .optional()
+        .describe("Unresolved source-list offset; continue at document.unresolvedNextOffset until null"),
+      recoveryOccurrenceID: z
+        .string()
+        .min(1)
+        .optional()
+        .describe("Original unresolved occurrence from Project memory status"),
+      offset: z
+        .number()
+        .int()
+        .nonnegative()
+        .optional()
+        .describe("UTF-16 code-unit offset within that original canonical evidence; continue at nextOffset"),
+      limit: z
+        .number()
+        .int()
+        .min(1)
+        .max(4000)
+        .optional()
+        .describe("Maximum evidence UTF-16 code units per page (4000 by default)"),
     }),
     z.object({
       action: z.literal("project_organize"),
@@ -42,7 +66,10 @@ export const MemoryTool = Tool.define("memory", {
       action: z.literal("search"),
       query: z.string().describe("Keywords, phrases, or a question about reusable project knowledge"),
       maxResults: z
-        .preprocess((value) => (typeof value === "string" ? Number(value) : value), z.number().int().min(1).max(50).optional())
+        .preprocess(
+          (value) => (typeof value === "string" ? Number(value) : value),
+          z.number().int().min(1).max(50).optional(),
+        )
         .describe("Maximum number of ranked memory search results to return"),
       minScore: z
         .preprocess((value) => (typeof value === "string" ? Number(value) : value), z.number().min(0).max(1).optional())
@@ -81,7 +108,20 @@ export const MemoryTool = Tool.define("memory", {
       }
 
       case "project_read": {
-        const document = ProjectMemory.read(projectId)
+        if (params.recoveryOccurrenceID) {
+          return {
+            title: "Historical Project input awaiting owner resolution",
+            output: JSON.stringify(
+              ProjectMemory.readRecovery(projectId, {
+                occurrenceID: params.recoveryOccurrenceID,
+                offset: params.offset,
+                limit: params.limit,
+              }),
+            ),
+            metadata: {},
+          }
+        }
+        const document = ProjectMemory.read(projectId, { unresolvedOffset: params.recoveryListOffset })
         return {
           title: ProjectMemory.filename,
           output: JSON.stringify({ scope: "project", document }),

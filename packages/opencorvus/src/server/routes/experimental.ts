@@ -445,6 +445,21 @@ export const ExperimentalRoutes = lazy(() =>
                     tokenCount: z.number().int().nonnegative(),
                     status: z.string(),
                     pendingCount: z.number().int().nonnegative(),
+                    unresolvedCount: z.number().int().nonnegative().optional(),
+                    unresolvedOffset: z.number().int().nonnegative().optional(),
+                    unresolvedNextOffset: z.number().int().nonnegative().nullable().optional(),
+                    unresolvedOccurrences: z
+                      .array(
+                        z.object({
+                          occurrenceID: z.string(),
+                          originalTaskID: z.string().optional(),
+                          originalSessionID: z.string().optional(),
+                          publicationID: z.string().optional(),
+                          ownerResolution: z.literal("unresolved"),
+                        }),
+                      )
+                      .max(50)
+                      .optional(),
                     droppedPendingCount: z.number().int().nonnegative(),
                     notice: z.unknown().optional(),
                     timeCreated: z.number(),
@@ -456,7 +471,8 @@ export const ExperimentalRoutes = lazy(() =>
           },
         },
       }),
-      async (c) => c.json(ProjectMemory.read(Instance.project.id)),
+      validator("query", z.object({ unresolvedOffset: z.coerce.number().int().nonnegative().optional() })),
+      async (c) => c.json(ProjectMemory.read(Instance.project.id, c.req.valid("query"))),
     )
     .post(
       "/project-memory/organize",

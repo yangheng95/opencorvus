@@ -3,18 +3,32 @@ import z from "zod"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { Database, and, asc, desc, eq, inArray, lt, or } from "@/storage/db"
 import { MemoryChunkTable, MemoryFileTable } from "./memory.sql"
-import type { HostOwnedMemoryKind } from "./types"
 import { MessageTable, PartTable, SessionTable } from "@/session/session.sql"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { Message } from "@/session/message"
 import { AttachmentStore } from "@/storage/attachment-store"
-import { redactInlinePayloads } from "@/util/inline-base64"
-import { ProviderError } from "@/provider/error"
 import { deriveTitle } from "@/title/derive"
 import { Bus } from "@/bus"
 import { BusEvent } from "@/bus/bus-event"
 import { Identifier } from "@/id/id"
+import { ProtocolEventTable } from "@/protocol/protocol.sql"
 export { InteractionUserInput } from "./interaction-user-input"
+export { ProjectMemoryInvariantError } from "./project-memory-entry"
+export type { Entry } from "./project-memory-entry"
+import {
+  Entry,
+  Attachment,
+  Snapshot,
+  ProjectMemoryInvariantError,
+  fileID,
+  chunkID,
+  assertFileOwnership,
+  assertChunkOwnership,
+  sanitizeText,
+  sanitizeJSON,
+  safeMetadata,
+  insertEntry,
+} from "./project-memory-entry"
 
 const EXTRA_KEY = "project_memory_user_input"
 const SEMANTIC_VERSION = 1 as const
@@ -54,41 +68,6 @@ const Provenance = z
     literalText: z.string(),
   })
   .strict()
-
-const Attachment = z.object({
-  filename: z.string(),
-  mime: z.string(),
-  reference: z.string(),
-  size: z.number().int().nonnegative().optional(),
-})
-
-const Snapshot = z.object({
-  messageID: z.string(),
-  role: z.enum(["user", "assistant"]),
-  author: z.string(),
-  text: z.string(),
-  structured: z.record(z.string(), z.json()).optional(),
-  attachments: z.array(Attachment),
-})
-
-const Entry = z.object({
-  version: z.literal(SEMANTIC_VERSION),
-  occurrenceKind: z.enum(["message", "task_create", "interaction_reply", "interaction_reject"]),
-  occurrenceID: z.string().min(1),
-  projectID: z.string().min(1),
-  sessionID: z.string().optional(),
-  taskID: z.string().optional(),
-  ownerKind: z.enum(["task", "conversation"]),
-  ownerID: z.string().min(1),
-  ownerNameAtCapture: z.string().min(1),
-  surface: z.string().min(1),
-  timeCreated: z.number().int().nonnegative(),
-  text: z.string(),
-  structured: z.record(z.string(), z.json()).optional(),
-  attachments: z.array(Attachment),
-  context: z.array(Snapshot).max(2),
-})
-export type Entry = z.infer<typeof Entry>
 
 const OrganizerStatus = z.enum([
   "idle",
@@ -131,11 +110,6 @@ const DocumentEnvelope = z.object({
 })
 export type DocumentEnvelope = z.infer<typeof DocumentEnvelope>
 
-export const ProjectMemoryInvariantError = NamedError.create(
-  "ProjectMemoryInvariantError",
-  z.object({ message: z.string(), occurrenceID: z.string(), fileID: z.string() }),
-)
-
 export const ProtectedProjectMemoryError = NamedError.create(
   "ProtectedProjectMemoryError",
   z.object({
@@ -144,14 +118,6 @@ export const ProtectedProjectMemoryError = NamedError.create(
     fileID: z.string(),
   }),
 )
-
-function fileID(projectID: string, kind: Entry["occurrenceKind"], occurrenceID: string) {
-  return Identifier.deterministic("memory", `project-user-input\0${projectID}\0${kind}\0${occurrenceID}`)
-}
-
-function chunkID(id: string) {
-  return Identifier.deterministic("memchunk", `project-user-input\0${id}`)
-}
 
 function documentFileID(projectID: string) {
   return Identifier.deterministic("memory", `project-context\0${projectID}`)
@@ -188,47 +154,6 @@ function initialEnvelope(now = Date.now()): DocumentEnvelope {
     timeCreated: now,
     timeUpdated: now,
   })
-}
-
-function assertFileOwnership(
-  row: typeof MemoryFileTable.$inferSelect | undefined,
-  expected: {
-    id: string
-    projectID: string
-    source: "user" | "reflection"
-    // Restating the pair here made this the third place that decided what the
-    // Host owns; `HOST_OWNED_MEMORY_KINDS` is the one that does.
-    kind: HostOwnedMemoryKind
-    key: string
-    occurrenceID: string
-  },
-) {
-  if (
-    row &&
-    (row.project_id !== expected.projectID ||
-      row.source !== expected.source ||
-      row.kind !== expected.kind ||
-      row.key !== expected.key)
-  ) {
-    throw new ProjectMemoryInvariantError({
-      message: `Project memory identity ${expected.id} is owned by incompatible file metadata`,
-      occurrenceID: expected.occurrenceID,
-      fileID: expected.id,
-    })
-  }
-}
-
-function assertChunkOwnership(
-  row: typeof MemoryChunkTable.$inferSelect | undefined,
-  expected: { id: string; fileID: string; projectID: string; occurrenceID: string },
-) {
-  if (row && (row.file_id !== expected.fileID || row.project_id !== expected.projectID)) {
-    throw new ProjectMemoryInvariantError({
-      message: `Project memory chunk identity ${expected.id} is owned by an incompatible file`,
-      occurrenceID: expected.occurrenceID,
-      fileID: expected.fileID,
-    })
-  }
 }
 
 function envelopeInTransaction(db: Database.TxOrDb, projectID: string): DocumentEnvelope {
@@ -301,7 +226,7 @@ function writeEnvelope(db: Database.TxOrDb, projectID: string, envelope: Documen
     .run()
 }
 
-function pendingRows(db: Database.TxOrDb, projectID: string) {
+function inboxRows(db: Database.TxOrDb, projectID: string) {
   return db
     .select({ id: MemoryFileTable.id, content: MemoryChunkTable.content })
     .from(MemoryFileTable)
@@ -309,29 +234,88 @@ function pendingRows(db: Database.TxOrDb, projectID: string) {
     .where(and(eq(MemoryFileTable.project_id, projectID), eq(MemoryFileTable.kind, "user_message")))
     .orderBy(asc(MemoryFileTable.time_created), asc(MemoryFileTable.id))
     .all()
-    .map((row) => ({ fileID: row.id, entry: Entry.parse(JSON.parse(row.content)) }))
+    .map((row) => {
+      const entry = Entry.parse(JSON.parse(row.content))
+      if (entry.projectID !== projectID)
+        throw new ProjectMemoryInvariantError({
+          message: `Project memory occurrence ${entry.occurrenceID} has a conflicting source Project`,
+          occurrenceID: entry.occurrenceID,
+          fileID: row.id,
+        })
+      const owner =
+        entry.ownerKind === "task"
+          ? db
+              .select({ projectID: EngineTaskTable.project_id })
+              .from(EngineTaskTable)
+              .where(eq(EngineTaskTable.id, entry.ownerID))
+              .get()
+          : db
+              .select({ projectID: SessionTable.project_id })
+              .from(SessionTable)
+              .where(eq(SessionTable.id, entry.ownerID))
+              .get()
+      if (owner && owner.projectID !== projectID)
+        throw new ProjectMemoryInvariantError({
+          message: `Project memory occurrence ${entry.occurrenceID} has a conflicting owner Project`,
+          occurrenceID: entry.occurrenceID,
+          fileID: row.id,
+        })
+      const deleted =
+        entry.ownerKind === "task" &&
+        db
+          .select({ id: ProtocolEventTable.id })
+          .from(ProtocolEventTable)
+          .where(
+            and(
+              eq(ProtocolEventTable.aggregate_type, "task"),
+              eq(ProtocolEventTable.aggregate_id, entry.ownerID),
+              eq(ProtocolEventTable.type, "task.deleted"),
+            ),
+          )
+          .get()
+      const sessionIDs = new Set(
+        [entry.sessionID, ...(entry.ownerKind === "conversation" ? [entry.ownerID] : [])].filter((id): id is string =>
+          Boolean(id),
+        ),
+      )
+      let sourceSessionUnavailable = false
+      for (const id of sessionIDs) {
+        const source = db
+          .select({ projectID: SessionTable.project_id })
+          .from(SessionTable)
+          .where(eq(SessionTable.id, id))
+          .get()
+        if (source && source.projectID !== projectID)
+          throw new ProjectMemoryInvariantError({
+            message: `Project memory occurrence ${entry.occurrenceID} has a conflicting source Session Project`,
+            occurrenceID: entry.occurrenceID,
+            fileID: row.id,
+          })
+        const tombstone = db
+          .select({ id: ProtocolEventTable.id })
+          .from(ProtocolEventTable)
+          .where(
+            and(
+              eq(ProtocolEventTable.aggregate_type, "session"),
+              eq(ProtocolEventTable.aggregate_id, id),
+              eq(ProtocolEventTable.type, "session.deleted"),
+            ),
+          )
+          .get()
+        sourceSessionUnavailable ||= !source || Boolean(tombstone)
+      }
+      return {
+        fileID: row.id,
+        content: row.content,
+        entry,
+        unresolved:
+          entry.recovery?.ownerResolution === "unresolved" || !owner || Boolean(deleted) || sourceSessionUnavailable,
+      }
+    })
 }
 
-function sanitizeText(input: string) {
-  let value = redactInlinePayloads(ProviderError.redactSensitiveProviderText(input))
-  value = value.replace(
-    /-----BEGIN [A-Z0-9 ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z0-9 ]*PRIVATE KEY-----/gi,
-    "<redacted>",
-  )
-  value = value.replace(
-    /\b(password|passwd|pwd|token|access[_ -]?token|refresh[_ -]?token|client[_ -]?secret|private[_ -]?key|credential)s?(["']?\s*[:=]\s*["']?)([^\s,;"'}]+)/gi,
-    "$1$2<redacted>",
-  )
-  return value
-}
-
-function sanitizeJSON(input: z.infer<typeof z.json>): z.infer<typeof z.json> {
-  if (typeof input === "string") return sanitizeText(input)
-  if (Array.isArray(input)) return input.map(sanitizeJSON)
-  if (input && typeof input === "object") {
-    return Object.fromEntries(Object.entries(input).map(([key, value]) => [sanitizeText(key), sanitizeJSON(value)]))
-  }
-  return input
+function pendingRows(db: Database.TxOrDb, projectID: string) {
+  return inboxRows(db, projectID).filter((row) => !row.unresolved)
 }
 
 function safeAttachment(
@@ -467,77 +451,10 @@ function owner(db: Database.TxOrDb, input: { sessionID?: string; taskID?: string
   }
 }
 
-function safeMetadata(input: string, fallback: string) {
-  const value = sanitizeText(input)
-    .replace(/[\r\n\t]+/g, " ")
-    .replace(/\s{2,}/g, " ")
-    .trim()
-  return value || fallback
-}
-
-function canonical(entry: Entry) {
-  return JSON.stringify(Entry.parse(entry))
-}
-
 function insert(db: Database.TxOrDb, entry: Entry) {
-  const payload = canonical(entry)
-  const id = fileID(entry.projectID, entry.occurrenceKind, entry.occurrenceID)
-  const cid = chunkID(id)
-  const existingFile = db.select().from(MemoryFileTable).where(eq(MemoryFileTable.id, id)).get()
-  const existingChunk = db.select().from(MemoryChunkTable).where(eq(MemoryChunkTable.id, cid)).get()
-  assertFileOwnership(existingFile, {
-    id,
-    projectID: entry.projectID,
-    source: "user",
-    kind: "user_message",
-    key: `${entry.occurrenceKind}:${entry.occurrenceID}`,
-    occurrenceID: entry.occurrenceID,
-  })
-  assertChunkOwnership(existingChunk, { id: cid, fileID: id, projectID: entry.projectID, occurrenceID: entry.occurrenceID })
-  const existed = Boolean(existingFile)
-  db.insert(MemoryFileTable)
-    .values({
-      id,
-      project_id: entry.projectID,
-      title: entry.ownerNameAtCapture,
-      source: "user",
-      kind: "user_message",
-      key: `${entry.occurrenceKind}:${entry.occurrenceID}`,
-      importance: 100,
-      confidence: 100,
-      time_created: entry.timeCreated,
-      time_updated: entry.timeCreated,
-    })
-    .onConflictDoNothing()
-    .run()
-  db.insert(MemoryChunkTable)
-    .values({
-      id: cid,
-      file_id: id,
-      project_id: entry.projectID,
-      content: payload,
-      token_count: Token.estimate(payload),
-      time_created: entry.timeCreated,
-      time_updated: entry.timeCreated,
-    })
-    .onConflictDoNothing()
-    .run()
-  const stored = db
-    .select({ content: MemoryChunkTable.content })
-    .from(MemoryChunkTable)
-    .where(and(eq(MemoryChunkTable.id, cid), eq(MemoryChunkTable.file_id, id)))
-    .get()
-  if (!stored || stored.content !== payload) {
-    throw new ProjectMemoryInvariantError({
-      message: `Project memory occurrence ${entry.occurrenceID} changed its canonical payload`,
-      occurrenceID: entry.occurrenceID,
-      fileID: id,
-    })
-  }
-  if (!existed) {
-    Bus.publishOwnedInTransaction(OrganizationRequested, { projectID: entry.projectID })
-  }
-  return { classification: "user_input" as const, fileID: id, occurrenceID: entry.occurrenceID }
+  const { created, ...result } = insertEntry(db, entry)
+  if (created) Bus.publishOwnedInTransaction(OrganizationRequested, { projectID: entry.projectID })
+  return result
 }
 
 function provenance(info: Message.Info) {
@@ -568,7 +485,8 @@ export namespace ProjectMemory {
   ) {
     const marker = provenance(input.info)
     if (!marker) return { classification: "runtime_internal" as const, messageID: input.info.id }
-    if (input.info.copySources !== undefined) return { classification: "copied_context" as const, messageID: input.info.id }
+    if (input.info.copySources !== undefined)
+      return { classification: "copied_context" as const, messageID: input.info.id }
     const session = db.select().from(SessionTable).where(eq(SessionTable.id, input.info.sessionID)).get()
     if (!session) throw new Error(`Project memory Session not found: ${input.info.sessionID}`)
     const literal = marker.literalText
@@ -632,17 +550,20 @@ export namespace ProjectMemory {
     )
   }
 
-  export function read(projectID: string) {
-    return Database.transaction((db) => readInTransaction(db, projectID))
+  export function read(projectID: string, input: { unresolvedOffset?: number } = {}) {
+    return Database.transaction((db) => readInTransaction(db, projectID, input))
   }
 
-  export function readInTransaction(db: Database.TxOrDb, projectID: string) {
+  export function readInTransaction(db: Database.TxOrDb, projectID: string, input: { unresolvedOffset?: number } = {}) {
+    const unresolvedOffset = z
+      .number()
+      .int()
+      .nonnegative()
+      .parse(input.unresolvedOffset ?? 0)
     const envelope = envelopeInTransaction(db, projectID)
-    const pendingCount = db
-      .select({ id: MemoryFileTable.id })
-      .from(MemoryFileTable)
-      .where(and(eq(MemoryFileTable.project_id, projectID), eq(MemoryFileTable.kind, "user_message")))
-      .all().length
+    const inbox = inboxRows(db, projectID)
+    const unresolved = inbox.filter((row) => row.unresolved)
+    const pendingCount = inbox.length - unresolved.length
     return {
       filename,
       scope,
@@ -651,6 +572,20 @@ export namespace ProjectMemory {
       tokenCount: envelope.tokenCount,
       status: envelope.status,
       pendingCount,
+      ...(unresolved.length
+        ? {
+            unresolvedCount: unresolved.length,
+            unresolvedOffset,
+            unresolvedNextOffset: unresolvedOffset + 50 < unresolved.length ? unresolvedOffset + 50 : null,
+            unresolvedOccurrences: unresolved.slice(unresolvedOffset, unresolvedOffset + 50).map(({ entry }) => ({
+              occurrenceID: entry.occurrenceID,
+              originalTaskID: entry.taskID,
+              originalSessionID: entry.sessionID,
+              publicationID: entry.recovery?.publicationID,
+              ownerResolution: "unresolved" as const,
+            })),
+          }
+        : {}),
       droppedPendingCount: envelope.droppedPendingCount,
       notice: envelope.notice,
       timeCreated: envelope.timeCreated,
@@ -662,10 +597,39 @@ export namespace ProjectMemory {
     return Database.use((db) => pendingRows(db, projectID).map((item) => item.entry))
   }
 
-  export function requestOrganizationInTransaction(
-    db: Database.TxOrDb,
-    input: { projectID: string },
-  ) {
+  /** Read the same protected inbox evidence without assigning an unknown old
+   * owner to the current Project generation. Pages bound ordinary Tool output. */
+  export function readRecovery(projectID: string, input: { occurrenceID: string; offset?: number; limit?: number }) {
+    const offset = z
+      .number()
+      .int()
+      .nonnegative()
+      .parse(input.offset ?? 0)
+    const limit = z
+      .number()
+      .int()
+      .min(1)
+      .max(4000)
+      .parse(input.limit ?? 4000)
+    return Database.use((db) => {
+      const row = inboxRows(db, projectID).find(
+        (row) => row.entry.occurrenceID === input.occurrenceID && row.unresolved,
+      )
+      if (!row) return { status: "not_found" as const, occurrenceID: input.occurrenceID }
+      const end = Math.min(row.content.length, offset + limit)
+      return {
+        status: "available" as const,
+        occurrenceID: input.occurrenceID,
+        ownerResolution: "unresolved" as const,
+        offset,
+        totalCharacters: row.content.length,
+        content: row.content.slice(offset, end),
+        nextOffset: end < row.content.length ? end : null,
+      }
+    })
+  }
+
+  export function requestOrganizationInTransaction(db: Database.TxOrDb, input: { projectID: string }) {
     if (pendingRows(db, input.projectID).length === 0) return false
     Bus.publishOwnedInTransaction(OrganizationRequested, input)
     return true

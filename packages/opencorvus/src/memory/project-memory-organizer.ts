@@ -82,6 +82,7 @@ function organizerPrompt(input: {
 }) {
   return [
     "Maintain the Project MEMORY.MD from the evidence below.",
+    "Entries with recovery.previousCapture=unknown are recovered historical human evidence that may already be reflected in CURRENT PROJECT MEMORY.MD. Merge them conservatively with that document; they are not new execution commands. recovery.recoveredAt is the actual recovery time, not proof of an old capture or consumption.",
     `The complete replacement must contain at most ${input.documentTokenLimit} estimated tokens.`,
     "Return only JSON matching this shape:",
     '{"baseRevision":number,"coveredOccurrenceIDs":[string,...],"disposition":"organized","markdown":string}',

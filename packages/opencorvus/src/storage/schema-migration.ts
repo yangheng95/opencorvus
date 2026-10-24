@@ -5,13 +5,18 @@ import { randomUUID } from "node:crypto"
 import { queryAllFinalized } from "./sqlite-statement"
 import { findSchemaObjectDrift, readSchemaObjects, readSchemaObjectShape } from "./schema-contract"
 
+export type SchemaMigrationContext = { databasePath: string }
+
 export type SchemaMigration = {
   version: number
   name: string
   /** Immutable historical target, bundled with the application. */
   ddl: string
   /** Explicit semantic changes run with the old tables and suspended triggers. */
-  migrate?: (sqlite: SQLite) => void
+  migrate?: (sqlite: SQLite, context: SchemaMigrationContext) => void
+  /** A later published repair can prepare data before an immutable older guard.
+   * Runs after beforeVersion-1, under the same backup, lock and transaction. */
+  prepare?: { beforeVersion: number; run: (sqlite: SQLite, context: SchemaMigrationContext) => void }
 }
 
 export class SchemaMigrationError extends Error {
@@ -100,7 +105,7 @@ function synchronizeTables(sqlite: SQLite, target: SQLite): void {
   }
 }
 
-function applyMigration(sqlite: SQLite, migration: SchemaMigration): void {
+function applyMigration(sqlite: SQLite, migration: SchemaMigration, context: SchemaMigrationContext): void {
   const target = new SQLite(":memory:")
   try {
     target.exec(migration.ddl)
@@ -110,7 +115,7 @@ function applyMigration(sqlite: SQLite, migration: SchemaMigration): void {
         sqlite.exec(`DROP ${object.type.toUpperCase()} ${quote(object.name)}`)
       }
     }
-    const result: unknown = migration.migrate?.(sqlite)
+    const result: unknown = migration.migrate?.(sqlite, context)
     if (result && typeof (result as PromiseLike<unknown>).then === "function") {
       throw new Error(`Migration ${migration.version} must complete synchronously inside its SQLite transaction.`)
     }
@@ -157,6 +162,18 @@ export function validateMigrationRegistry(migrations: readonly SchemaMigration[]
     throw new Error("Database migrations must declare a contiguous sequence beginning at version 1.")
   }
   const version = migrations.at(-1)!.version
+  for (const step of migrations) {
+    if (
+      step.prepare &&
+      (!Number.isInteger(step.prepare.beforeVersion) ||
+        step.prepare.beforeVersion < 2 ||
+        step.prepare.beforeVersion >= step.version)
+    ) {
+      throw new Error(
+        `Migration ${step.version} preparation must precede an existing earlier migration after its predecessor.`,
+      )
+    }
+  }
   const expected = new SQLite(":memory:")
   const declared = new SQLite(":memory:")
   try {
@@ -209,11 +226,22 @@ function migrateSchemaTransaction(input: MigrationInput, version: number, guarde
       sqlite.exec(`PRAGMA user_version = ${version}`)
     } else if (from < version) {
       if (!guarded)
-        required("The database became an older version during admission. Reopen it to acquire the migration file lock before upgrading.")
+        required(
+          "The database became an older version during admission. Reopen it to acquire the migration file lock before upgrading.",
+        )
       backupPath = saveBackup(sqlite, input.databasePath, from, version)
       for (const migration of migrations) {
         if (migration.version <= from) continue
-        applyMigration(sqlite, migration)
+        for (const repair of migrations) {
+          if (repair.version <= from || repair.prepare?.beforeVersion !== migration.version) continue
+          const prepared: unknown = repair.prepare.run(sqlite, { databasePath: input.databasePath })
+          if (prepared && typeof (prepared as PromiseLike<unknown>).then === "function") {
+            throw new Error(
+              `Migration ${repair.version} preparation must complete synchronously inside its SQLite transaction.`,
+            )
+          }
+        }
+        applyMigration(sqlite, migration, { databasePath: input.databasePath })
         sqlite.exec(`PRAGMA user_version = ${migration.version}`)
       }
     }
@@ -306,7 +334,9 @@ export function migrateSchema(input: MigrationInput): MigrationReceipt {
     if (!fresh && from < version && !privateMemory) {
       const journal = queryAllFinalized<{ journal_mode: string }>(sqlite, "PRAGMA main.journal_mode")[0]?.journal_mode
       if (journal !== "wal")
-        required(`Upgrading an existing database requires WAL file locking (current journal mode: ${journal ?? "unknown"}). Close every older application and establish WAL through authorized database maintenance before reopening.`)
+        required(
+          `Upgrading an existing database requires WAL file locking (current journal mode: ${journal ?? "unknown"}). Close every older application and establish WAL through authorized database maintenance before reopening.`,
+        )
       guardAttempted = true
       sqlite.exec("PRAGMA main.locking_mode = EXCLUSIVE")
     }
@@ -318,7 +348,8 @@ export function migrateSchema(input: MigrationInput): MigrationReceipt {
   if (guardAttempted) {
     try {
       sqlite.exec("PRAGMA main.locking_mode = NORMAL")
-      if (sqlite.inTransaction) throw new Error("Migration rollback left an active transaction; its file lock has not been released.")
+      if (sqlite.inTransaction)
+        throw new Error("Migration rollback left an active transaction; its file lock has not been released.")
       schemaVersion(sqlite)
       const mode = queryAllFinalized<{ locking_mode: string }>(sqlite, "PRAGMA main.locking_mode")[0]?.locking_mode
       if (mode !== "normal") throw new Error(`Migration file lock remains in ${mode ?? "unknown"} mode.`)
@@ -327,7 +358,8 @@ export function migrateSchema(input: MigrationInput): MigrationReceipt {
     }
   }
   try {
-    if (sqlite.inTransaction) throw new Error("Migration rollback left an active transaction; foreign-key settings were not restored.")
+    if (sqlite.inTransaction)
+      throw new Error("Migration rollback left an active transaction; foreign-key settings were not restored.")
     sqlite.exec(`PRAGMA foreign_keys = ${foreignKeys ? "ON" : "OFF"}`)
   } catch (error) {
     cleanupErrors.push(error)
@@ -340,7 +372,13 @@ export function migrateSchema(input: MigrationInput): MigrationReceipt {
         ? `Database version ${receipt.to} committed, but the migration connection could not be safely released. Retain the database and backup for recovery.`
         : "Database migration or connection release failed. Retain the database and backup for recovery.",
       receipt?.backupPath ?? (primary?.error instanceof SchemaMigrationError ? primary.error.backupPath : undefined),
-      { cause: new AggregateError(errors, "Migration and original connection settlement errors", primary ? { cause: primary.error } : undefined) },
+      {
+        cause: new AggregateError(
+          errors,
+          "Migration and original connection settlement errors",
+          primary ? { cause: primary.error } : undefined,
+        ),
+      },
     )
   }
   if (primary) throw primary.error

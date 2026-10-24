@@ -8807,6 +8807,7 @@ export type ExperimentalProjectMemoryGetData = {
      * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
      */
     directory?: string
+    unresolvedOffset?: number
   }
   url: "/experimental/project-memory"
 }
@@ -8827,6 +8828,16 @@ export type ExperimentalProjectMemoryGetResponses = {
     timeCreated: number
     timeUpdated: number
     tokenCount: number
+    unresolvedCount?: number
+    unresolvedNextOffset?: number | null
+    unresolvedOccurrences?: Array<{
+      occurrenceID: string
+      originalSessionID?: string
+      originalTaskID?: string
+      ownerResolution: "unresolved"
+      publicationID?: string
+    }>
+    unresolvedOffset?: number
   }
 }
 
